@@ -438,7 +438,7 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="exsl:node-set($flag-result)/img" xmlns:exsl="http://exslt.org/common">
+      <xsl:when test="$flag-result/img">
         <xsl:copy-of select="$flag-result"/>
       </xsl:when>
       <xsl:otherwise>

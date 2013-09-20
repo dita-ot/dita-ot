@@ -34,13 +34,10 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:exsl="http://exslt.org/common"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    extension-element-prefixes="exsl"
-    exclude-result-prefixes="xs exsl opentopic exslf opentopic-func ot-placeholder"
+    exclude-result-prefixes="xs opentopic opentopic-func ot-placeholder"
     version="2.0">
   
     <xsl:variable name="map" select="//opentopic:map"/>
@@ -253,7 +250,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:choose>
         </xsl:variable>
 
-        <xsl:if test="count(exsl:node-set($toc)/*) > 0">
+        <xsl:if test="count($toc/*) > 0">
             <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="__force__page__count">
 
                 <xsl:call-template name="insertTocStaticContents"/>
@@ -266,7 +263,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
                           </xsl:call-template>
                         </fo:marker>
-                        <xsl:copy-of select="exsl:node-set($toc)"/>
+                        <xsl:copy-of select="$toc"/>
                     </fo:block>
                 </fo:flow>
 

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:exsl="http://exslt.org/common"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-    exclude-result-prefixes="xsl opentopic-func exsl exslf"
+    exclude-result-prefixes="xsl opentopic-func"
     xmlns:suitesol="http://suite-sol.com/namespaces/mapcounts"
     version="2.0">
 
@@ -88,7 +86,7 @@
       <xsl:param name="flagrules" />
 
       <xsl:if test="$flagrules">
-         <xsl:for-each select="exsl:node-set($flagrules)/*[@changebar]">
+         <xsl:for-each select="$flagrules/*[@changebar]">
             
             <xsl:element name="{concat('suitesol:changebar-',$pi-name)}">
                <xsl:attribute name="id">
@@ -513,23 +511,23 @@
             </xsl:if>
 
          </xsl:when>
-         <xsl:when test="$conflictexist='false' and exsl:node-set($flagrules)/*[@color or @backcolor]">
+         <xsl:when test="$conflictexist='false' and $flagrules/*[@color or @backcolor]">
 
-            <xsl:if test="exsl:node-set($flagrules)/*[@color]">
+            <xsl:if test="$flagrules/*[@color]">
                <xsl:value-of select="$colorprop"/>
-               <xsl:value-of select="exsl:node-set($flagrules)/*[@color]/@color"/>
+               <xsl:value-of select="$flagrules/*[@color]/@color"/>
                <xsl:text>;</xsl:text>
             </xsl:if>
-            <xsl:if test="exsl:node-set($flagrules)/*[@backcolor]">
+            <xsl:if test="$flagrules/*[@backcolor]">
                <xsl:value-of select="$back-colorprop"/>
-               <xsl:value-of select="exsl:node-set($flagrules)/*[@backcolor]/@backcolor"/>
+               <xsl:value-of select="$flagrules/*[@backcolor]/@backcolor"/>
                <xsl:text>;</xsl:text>
             </xsl:if>
 
          </xsl:when>
       </xsl:choose>
       
-      <xsl:for-each select="exsl:node-set($flagrules)/*[@style]">
+      <xsl:for-each select="$flagrules/*[@style]">
             <xsl:choose>
                <xsl:when test="./@style='bold'">
                   <xsl:text>font-weight:</xsl:text>
@@ -558,7 +556,7 @@
 
    <xsl:template name="start-flagit">
       <xsl:param name="flagrules" />
-      <xsl:apply-templates select="exsl:node-set($flagrules)/*[1]" mode="start-flagit"/>
+      <xsl:apply-templates select="$flagrules/*[1]" mode="start-flagit"/>
    </xsl:template>
 
    <xsl:template match="prop|revprop" mode="start-flagit">
@@ -598,7 +596,7 @@
       <xsl:param name="flagrules">
          <!--xsl:call-template name="getrules"/-->
       </xsl:param>
-      <xsl:apply-templates select="exsl:node-set($flagrules)/*[last()]" mode="end-flagit"/>
+      <xsl:apply-templates select="$flagrules/*[last()]" mode="end-flagit"/>
    </xsl:template>
 
    <xsl:template match="prop|revprop" mode="end-flagit">

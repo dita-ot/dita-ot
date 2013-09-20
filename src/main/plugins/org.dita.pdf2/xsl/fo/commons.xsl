@@ -35,13 +35,10 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
-    xmlns:exsl="http://exslt.org/common"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
-    extension-element-prefixes="exsl"
-    exclude-result-prefixes="opentopic exsl opentopic-index exslf opentopic-func dita2xslfo xs"
+    exclude-result-prefixes="opentopic opentopic-index opentopic-func dita2xslfo xs"
     version="2.0">
 
     <xsl:key name="id" match="*[@id]" use="@id"/>
@@ -2216,11 +2213,11 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' topic/data ')]" mode="insert-text"/>
     <xsl:template match="*[contains(@class, ' topic/data-about ')]"/>
 
-    <exslf:function name="opentopic-func:determineTopicType">
+    <xsl:function name="opentopic-func:determineTopicType">
       <xsl:variable name="topicType">
         <xsl:call-template name="determineTopicType"/>
       </xsl:variable>
-      <exslf:result select="string($topicType)"/>
-    </exslf:function>
+      <xsl:value-of select="string($topicType)"/>
+    </xsl:function>
 
 </xsl:stylesheet>

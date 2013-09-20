@@ -35,14 +35,11 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:rx="http://www.renderx.com/XSL/Extensions"
-    xmlns:exsl="http://exslt.org/common"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:comparer="com.idiominc.ws.opentopic.xsl.extension.CompareStrings"
-    extension-element-prefixes="exsl"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    exclude-result-prefixes="xs opentopic-index exsl comparer rx opentopic-func exslf">
+    exclude-result-prefixes="xs opentopic-index comparer rx opentopic-func">
 
   <xsl:template match="/" mode="index-postprocess">
     <fo:block xsl:use-attribute-sets="__index__label" id="{$id.index}">

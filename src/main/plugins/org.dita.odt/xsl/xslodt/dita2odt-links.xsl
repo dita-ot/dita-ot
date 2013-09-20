@@ -28,10 +28,8 @@
 	xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
 	xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
 	xmlns:opentopic-mapmerge="http://www.idiominc.com/opentopic/mapmerge"
-	xmlns:exsl="http://exslt.org/common"
-	xmlns:exslf="http://exslt.org/functions"
 	xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-	exclude-result-prefixes="opentopic-mapmerge opentopic-func exslf exsl dita-ot"
+	exclude-result-prefixes="opentopic-mapmerge opentopic-func dita-ot"
 	version="2.0">
 	
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
@@ -621,17 +619,7 @@
             </xsl:apply-templates>
     </xsl:template>
 
-    <exslf:function name="opentopic-func:getDestinationId">
-        <xsl:param name="href"/>
-        <xsl:variable name="destination">
-            <xsl:call-template name="getDestinationIdImpl">
-                <xsl:with-param name="href" select="$href"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <exslf:result select="$destination"/>
-    </exslf:function>
-
-    <xsl:function version="2.0" name="opentopic-func:getDestinationId">
+    <xsl:function name="opentopic-func:getDestinationId">
         <xsl:param name="href"/>
         <xsl:call-template name="getDestinationIdImpl">
             <xsl:with-param name="href" select="$href"/>

@@ -3,9 +3,7 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
-  xmlns:exsl="http://exslt.org/common"
-  xmlns:exslf="http://exslt.org/functions"
-  exclude-result-prefixes="exsl exslf opentopic-func xs dita2xslfo"
+  exclude-result-prefixes="opentopic-func xs dita2xslfo"
   version="2.0">
 
     <xsl:variable name="tableAttrs" select="'../../cfg/fo/attrs/tables-attr.xsl'"/>
@@ -294,19 +292,7 @@
         <xsl:apply-templates select="@platform | @product | @audience | @otherprops | @importance | @rev | @status"/>
     </xsl:template>
 
-    <exslf:function name="opentopic-func:getSortString">
-        <xsl:param name="text"/>
-        <xsl:choose>
-            <xsl:when test="contains($text, '[') and contains($text, ']')">
-                <exslf:result select="substring-before(substring-after($text, '['),']')"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <exslf:result select="$text"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </exslf:function>
-
-    <xsl:function version="2.0" name="opentopic-func:getSortString">
+    <xsl:function name="opentopic-func:getSortString">
         <xsl:param name="text"/>
         <xsl:choose>
             <xsl:when test="contains($text, '[') and contains($text, ']')">
@@ -318,17 +304,7 @@
         </xsl:choose>
     </xsl:function>
 
-    <exslf:function name="opentopic-func:fetchValueableText">
-        <xsl:param name="node"/>
-
-        <xsl:variable name="res">
-            <xsl:apply-templates select="$node" mode="insert-text"/>
-        </xsl:variable>
-
-        <exslf:result select="$res"/>
-    </exslf:function>
-
-    <xsl:function version="2.0" name="opentopic-func:fetchValueableText">
+    <xsl:function name="opentopic-func:fetchValueableText">
         <xsl:param name="node"/>
 
         <xsl:variable name="res">
@@ -416,7 +392,7 @@
 
         <xsl:choose>
             <xsl:when test="not($scale = '')">
-                <xsl:apply-templates select="exsl:node-set($table)" mode="setTableEntriesScale"/>
+                <xsl:apply-templates select="$table" mode="setTableEntriesScale"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy-of select="$table"/>
