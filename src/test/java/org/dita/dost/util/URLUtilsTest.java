@@ -117,4 +117,21 @@ public class URLUtilsTest {
         assertEquals(new URI("foo%20bar.txt"), URLUtils.toURI(new File("foo bar.txt")));
         assertEquals(new URI("foo/bar.txt"), URLUtils.toURI(new File("foo" + File.separator + "bar.txt")));
     }
+
+    @Test
+    public void testGetRelativePathFromMap() throws URISyntaxException {
+        assertEquals(new URI("../a.dita"), URLUtils.getRelativePath(new URI("file:/map/map.ditamap"), new URI("file:/a.dita")));
+        assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map.ditamap"), new URI("file:/a.dita")));
+        assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map2/map.ditamap"), new URI("file:/map1/map2/a.dita")));
+        assertEquals(new URI("../topic/a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map.ditamap"), new URI("file:/topic/a.dita")));
+        try {
+            URLUtils.getRelativePath(new URI("/map.ditamap"), new URI("file://a.dita"));
+            fail();
+        } catch (final IllegalArgumentException e) {}
+        try {
+            URLUtils.getRelativePath(new URI("http://localhost/map.ditamap"), new URI("file://a.dita"));
+            fail();
+        } catch (final IllegalArgumentException e) {}
+    }
+
 }
