@@ -8,6 +8,7 @@ import static java.util.Arrays.asList;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Job.*;
+import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.writer.GenListModuleFilter.*;
 
@@ -90,35 +91,35 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     /** File info map. */
     private final Map<String, FileInfo.Builder> fileInfoMap = new HashMap<String, FileInfo.Builder>();
     /** Set of all dita files */
-    private final Set<String> ditaSet = new HashSet<String>();
+    private final Set<File> ditaSet = new HashSet<File>();
     /** Set of all topic files */
-    private final Set<String> fullTopicSet = new HashSet<String>();
+    private final Set<File> fullTopicSet = new HashSet<File>();
     /** Set of href topic files with anchor ID */
-    private final Set<String> hrefWithIDSet = new HashSet<String>();
+    private final Set<File> hrefWithIDSet = new HashSet<File>();
     /** Set of all images */
-    private final Set<String> imageSet = new HashSet<String>();
+    private final Set<File> imageSet = new HashSet<File>();
     /** Set of all images used for flagging */
-    private final Set<String> flagImageSet = new HashSet<String>();
+    private final Set<File> flagImageSet = new HashSet<File>();
     /** Set of all html files */
-    private final Set<String> htmlSet = new HashSet<String>();
+    private final Set<File> htmlSet = new HashSet<File>();
     /** Set of all the copy-to sources */
-    private Set<String> copytoSourceSet = new HashSet<String>();
+    private Set<File> copytoSourceSet = new HashSet<File>();
     /** Set of all the non-conref targets */
-    private final Set<String> nonConrefCopytoTargetSet = new HashSet<String>();
+    private final Set<File> nonConrefCopytoTargetSet = new HashSet<File>();
     /** Set of sources of those copy-to that were ignored */
-    private final Set<String> ignoredCopytoSourceSet = new HashSet<String>();
+    private final Set<File> ignoredCopytoSourceSet = new HashSet<File>();
     /** Set of relative flag image files */
-    private final Set<String> relFlagImagesSet = new HashSet<String>();
+    private final Set<File> relFlagImagesSet = new HashSet<File>();
     /** Map of all copy-to (target,source) */
-    private Map<String, String> copytoMap = new HashMap<String, String>();
+    private Map<File, File> copytoMap = new HashMap<File, File>();
     /** List of files waiting for parsing. Values are relative system paths. */
     private final Queue<URI> waitList = new ConcurrentLinkedQueue<URI>();
     /** List of parsed files */
     private final Queue<URI> doneList = new ConcurrentLinkedQueue<URI>();
     /** Set of outer dita files */
-    private final Set<String> outDitaFilesSet = new HashSet<String>();
+    private final Set<File> outDitaFilesSet = new HashSet<File>();
     /** Set of files with "@processing-role=resource-only" */
-    private final Set<String> resourceOnlySet = new HashSet<String>();
+    private final Set<File> resourceOnlySet = new HashSet<File>();
     /** Map of all key definitions */
     private final Map<String, KeyDef> keysDefMap = new HashMap<String, KeyDef>();
     /** Absolute basedir for processing */
@@ -291,7 +292,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
             ditaValReader.initXMLReader(true/*setSystemid*/);
-            ditaValReader.read(ditavalFile.getAbsolutePath());
+            ditaValReader.read(ditavalFile.getAbsoluteFile());
             // Store filter map for later use
             filterUtils.setFilterMap(ditaValReader.getFilterMap());
             // Store flagging image used for image copying
@@ -571,16 +572,16 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
 
     private void processParseResult() {
         for (final FileInfo i: listFilter.getFileInfo()) {
-            getOrCreateBuilder(i.file).add(i);
+            getOrCreateBuilder(i.file.getPath()).add(i);
         }
 
-        final Map<String, String> cpMap = listFilter.getCopytoMap();
+        final Map<File, File> cpMap = listFilter.getCopytoMap();
         final Map<String, KeyDef> kdMap = listFilter.getKeysDMap();
         // the reader's reset method will clear the map.
 
         // Category non-copyto result and update uplevels accordingly
         for (final Reference file: listFilter.getNonCopytoResult()) {
-            if (isAccessible(file.filename)) {
+            if (isAccessible(new File(file.filename))) {
                 categorizeResultFile(file);
 //                updateUplevels(file.filename);
             }
@@ -588,11 +589,11 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
 
         // Update uplevels for copy-to targets, and store copy-to map.
         // Note: same key(target) copy-to will be ignored.
-        for (final String key: cpMap.keySet()) {
-            final String value = cpMap.get(key);
+        for (final File key: cpMap.keySet()) {
+            final File value = cpMap.get(key);
 
             if (copytoMap.containsKey(key)) {
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", value, key).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", value.getPath(), key.getPath()).toString());
                 ignoredCopytoSourceSet.add(value);
             } else {
                 if (isAccessible(key)) {
@@ -618,7 +619,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
         outDitaFilesSet.addAll(listFilter.getOutFilesSet());
         resourceOnlySet.addAll(listFilter.getResourceOnlySet());
         
-        ditaSet.add(currentFile.getPath());
+        ditaSet.add(toFile(currentFile));
     }
 
     /**
@@ -628,8 +629,8 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
      * @param file path relative to base directory
      * @return
      */
-    private boolean isAccessible(final String file) {
-        final URI f = baseInputDir.resolve(file);
+    private boolean isAccessible(final File file) {
+        final URI f = baseInputDir.resolve(file.getPath());
         final boolean res = directoryContains(baseInputDir, f);
         if (!res) {
             logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ036W",
@@ -664,7 +665,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     private Builder getOrCreateBuilder(final String file) {
         FileInfo.Builder b = fileInfoMap.get(file);
         if (b == null) {
-            b = new FileInfo.Builder().file(file);
+            b = new FileInfo.Builder().file(new File(file));
             fileInfoMap.put(file, b);
         }
         return b;
@@ -687,10 +688,10 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
         } else if (!FileUtils.isSupportedImageFile(lcasefn)) {
             // FIXME: Treating all non-image extensions as HTML/resource files is not correct if HTML/resource files
             //        are defined by the file extension. Correct behaviour would be to remove this else block.
-            htmlSet.add(file.filename);
+            htmlSet.add(new File(file.filename));
         }
         if (FileUtils.isSupportedImageFile(lcasefn)) {
-            imageSet.add(file.filename);        	      	
+            imageSet.add(new File(file.filename));        	      	
             final URI image = baseInputDir.resolve(file.filename).normalize(); 
             if ("file".equals(image.getScheme()) && !new File(image).exists()){
                 logger.logWarn(MessageUtils.getInstance().getMessage("DOTX008W", image.toString()).toString());
@@ -698,7 +699,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
         }
 
         if (FileUtils.isHTMLFile(lcasefn) || FileUtils.isResourceFile(lcasefn)) {
-            htmlSet.add(file.filename);
+            htmlSet.add(new File(file.filename));
         }
     }
 
@@ -827,10 +828,10 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
      * Handle copy-to topics.
      */
     private void handleCopyto() {
-        final Map<String, String> tempMap = new HashMap<String, String>();
+        final Map<File, File> tempMap = new HashMap<File, File>();
         // Validate copy-to map, remove those without valid sources
-        for (final String dst: copytoMap.keySet()) {
-            final String src = copytoMap.get(dst);
+        for (final File dst: copytoMap.keySet()) {
+            final File src = copytoMap.get(dst);
             //if (new File(baseInputDir + File.separator + prefix, src).exists()) {
             if (prop.getFileInfoMap().containsKey(dst)) {
                 tempMap.put(dst, src);
@@ -841,7 +842,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
 //                }
                 final FileInfo orig = prop.getFileInfoMap().get(src);
                 final FileInfo.Builder b = new FileInfo.Builder(orig);
-                b.uri(toURI(new File(dst)));
+                b.uri(toURI(dst));
                 final FileInfo f = b.build();
                 prop.add(f);
             }
@@ -853,11 +854,11 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
         fullTopicSet.addAll(copytoMap.keySet());
 
         // Get pure copy-to sources
-        final Set<String> totalCopytoSources = new HashSet<String>(INT_128);
+        final Set<File> totalCopytoSources = new HashSet<File>(INT_128);
         totalCopytoSources.addAll(copytoMap.values());
         totalCopytoSources.addAll(ignoredCopytoSourceSet);
-        final Set<String> pureCopytoSources = new HashSet<String>(INT_128);
-        for (final String src: totalCopytoSources) {
+        final Set<File> pureCopytoSources = new HashSet<File>(INT_128);
+        for (final File src: totalCopytoSources) {
             if (!nonConrefCopytoTargetSet.contains(src) && !copytoMap.keySet().contains(src)) {
                 pureCopytoSources.add(src);
             }
@@ -923,25 +924,25 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
         // output problem
         prop.setProperty("tempdirToinputmapdir.relative.value", formatRelativeValue(prefix));
         prop.setProperty("uplevels", getUpdateLevels());
-        for (final String file: addPrefix(outDitaFilesSet)) {
+        for (final File file: addFilePrefix(outDitaFilesSet)) {
             prop.getOrCreateFileInfo(file).isOutDita = true;
         }
-        for (final String file: addPrefix(imageSet)) {
+        for (final File file: addFilePrefix(imageSet)) {
             prop.getOrCreateFileInfo(file).format = "image";
         }
-        for (final String file: addPrefix(flagImageSet)) {
+        for (final File file: addFilePrefix(flagImageSet)) {
             prop.getOrCreateFileInfo(file).isFlagImage = true;
         }
-        for (final String file: addPrefix(htmlSet)) {
+        for (final File file: addFilePrefix(htmlSet)) {
             prop.getOrCreateFileInfo(file).format = "html";
         }
-        for (final String file: addPrefix(hrefWithIDSet)) {
+        for (final File file: addFilePrefix(hrefWithIDSet)) {
             prop.getOrCreateFileInfo(file).isNonConrefTarget = true;
         }
-        for (final String file: addPrefix(copytoSourceSet)) {
+        for (final File file: addFilePrefix(copytoSourceSet)) {
             prop.getOrCreateFileInfo(file).isCopyToSource = true;
         }
-        for (final String file: addPrefix(resourceOnlySet)) {
+        for (final File file: addFilePrefix(resourceOnlySet)) {
             prop.getOrCreateFileInfo(file).isResourceOnly = true;
         }
 
@@ -1018,12 +1019,12 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     /**
      * Write a list of strings to a file, each string per line.
      */
-    private void writeListToFile(final File output, final Collection<String> list) {
+    private void writeListToFile(final File output, final Collection<? extends Object> list) {
         Writer bufferedWriter = null;
         try {
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output)));
-            for(final Iterator<String> i = list.iterator(); i.hasNext();) {
-                bufferedWriter.write(i.next());
+            for(final Iterator<? extends Object> i = list.iterator(); i.hasNext();) {
+                bufferedWriter.write(i.next().toString());
                 if (i.hasNext()) {
                     bufferedWriter.write('\n');
                 }
@@ -1054,9 +1055,27 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
         final Set<String> newSet = new HashSet<String>(set.size());
         for (final String file: set) {
             if (new File(file).isAbsolute()) {
+                newSet.add(FileUtils.normalize(file).getPath());
+            } else {
+                newSet.add(FileUtils.normalize(prefix + file).getPath());
+            }
+        }
+        return newSet;
+    }
+    
+    /**
+     * Add file prefix. For absolute paths the prefix is not added.
+     * 
+     * @param set file paths
+     * @return file paths with prefix
+     */
+    private Set<File> addFilePrefix(final Set<File> set) {
+        final Set<File> newSet = new HashSet<File>(set.size());
+        for (final File file: set) {
+            if (file.isAbsolute()) {
                 newSet.add(FileUtils.normalize(file));
             } else {
-                newSet.add(FileUtils.normalize(prefix + file));
+                newSet.add(FileUtils.normalize(new File(prefix + file)));
             }
         }
         return newSet;
@@ -1068,20 +1087,21 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
      * @param map map of file paths
      * @return file path map with prefix
      */
-    private Map<String, String> addPrefix(final Map<String, String> map) {
-        final Map<String, String> newMap = new HashMap<String, String>(map.size());
-        for (final Map.Entry<String, String> e: map.entrySet()) {
-            String to = e.getKey();
-            if (new File(to).isAbsolute()) {
+
+    private Map<File, File> addPrefix(final Map<File, File> map) {
+        final Map<File, File> newMap = new HashMap<File, File>(map.size());
+        for (final Map.Entry<File, File> e: map.entrySet()) {
+            File to = e.getKey();
+            if (to.isAbsolute()) {
                 to = FileUtils.normalize(to);
             } else {
-                to = FileUtils.normalize(prefix + to);
+                to = FileUtils.normalize(new File(prefix + to));
             }
-            String source = e.getValue();
-            if (new File(source).isAbsolute()) {
+            File source = e.getValue();
+            if (source.isAbsolute()) {
                 source = FileUtils.normalize(source);
             } else {
-                source = FileUtils.normalize(prefix + source);
+                source = FileUtils.normalize(new File(prefix + source));
             }
             newMap.put(to, source);
         }
@@ -1132,10 +1152,10 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
      * @param key list name
      * @param set relative flag image files
      */
-    private void addFlagImagesSetToProperties(final Job prop, final String key, final Set<String> set) {
-        final Set<String> newSet = new LinkedHashSet<String>(INT_128);
-        for (final String file: set) {
-            if (new File(file).isAbsolute()) {
+    private void addFlagImagesSetToProperties(final Job prop, final String key, final Set<File> set) {
+        final Set<File> newSet = new LinkedHashSet<File>(INT_128);
+        for (final File file: set) {
+            if (file.isAbsolute()) {
                 // no need to append relative path before absolute paths
                 newSet.add(FileUtils.normalize(file));
             } else {
@@ -1446,15 +1466,15 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
      * Execute copy-to task, generate copy-to targets base on sources
      */
     private void performCopytoTask(final File tempDir) {
-        final Map<String, String> copytoMap  = prop.getCopytoMap();
+        final Map<File, File> copytoMap  = prop.getCopytoMap();
 
-        for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
-            final String copytoTarget = entry.getKey();
-            final String copytoSource = entry.getValue();
-            final File srcFile = new File(tempDir, copytoSource);
-            final File targetFile = new File(tempDir, copytoTarget);
+        for (final Map.Entry<File, File> entry: copytoMap.entrySet()) {
+            final File copytoTarget = entry.getKey();
+            final File copytoSource = entry.getValue();
+            final File srcFile = new File(tempDir, copytoSource.getPath());
+            final File targetFile = new File(tempDir, copytoTarget.getPath());
             if (targetFile.exists()) {
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
             }else{
                 final String inputMapInTemp = new File(tempDir, prop.getInputMap()).getAbsolutePath();
                 logger.logInfo("copy-to: " + copytoSource + " -> " + copytoTarget);
@@ -1471,7 +1491,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
      * @param copytoTargetFilename
      * @param inputMapInTemp
      */
-    public void copyFileWithPIReplaced(final File src, final File target, final String copytoTargetFilename, final String inputMapInTemp ) {
+    public void copyFileWithPIReplaced(final File src, final File target, final File copytoTargetFilename, final String inputMapInTemp ) {
         if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
             logger.logError("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
         }

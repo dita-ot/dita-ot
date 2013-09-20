@@ -46,7 +46,7 @@ public class ProfilingFilterTest {
 		
 		final FilterUtils filterUtils = new FilterUtils();
 		final DitaValReader filterReader = new DitaValReader();
-		filterReader.read(new File(getClass().getClassLoader().getResource("ProfilingFilterTest/src/topic1.ditaval").toURI()).getAbsolutePath());
+		filterReader.read(new File(getClass().getClassLoader().getResource("ProfilingFilterTest/src/topic1.ditaval").toURI()).getAbsoluteFile());
         filterUtils.setFilterMap(filterReader.getFilterMap());
 		filterUtils.setLogger(new TestUtils.TestLogger());
         test(filterUtils, "topic.dita", "topic1.dita", null);

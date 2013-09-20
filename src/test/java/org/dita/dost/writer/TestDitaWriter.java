@@ -102,10 +102,9 @@ public class TestDitaWriter {
 
     @Test
     public void testWrite() throws DITAOTException, ParserConfigurationException, SAXException, IOException {
-        String ditavalFile = pipelineInput.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
-        ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
+        final String ditavalFile = pipelineInput.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         final DitaValReader filterReader = new DitaValReader();
-        filterReader.read(ditavalFile);
+        filterReader.read(new File(baseDir, ditavalFile).getAbsoluteFile());
         
         final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.loadSubjectScheme(new File(inputDir, "subject_scheme.ditamap").getPath());

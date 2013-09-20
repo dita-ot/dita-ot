@@ -124,13 +124,13 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
         topicList = new ArrayList<String>();
         for (final FileInfo f: prop.getFileInfo()) {
             if ("dita".equals(f.format) && f.isActive && !f.isResourceOnly) {
-                topicList.add(f.file);
+                topicList.add(f.file.getPath());
             }
         }
         ditamapList = new ArrayList<String>();
         for (final FileInfo f: prop.getFileInfo()) {
             if ("ditamap".equals(f.format) && f.isActive && !f.isResourceOnly) {
-                ditamapList.add(f.file);
+                ditamapList.add(f.file.getPath());
             }
         }
 
@@ -170,7 +170,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
                 String targetPathFromMapWithoutExt;
                 handler.reset();
                 target = topicList.get(i);
-                targetPathFromMap = FileUtils.getRelativePath(
+                targetPathFromMap = FileUtils.getRelativeUnixPath(
                         inputMap, target);
                 targetPathFromMapWithoutExt = targetPathFromMap
                         .substring(0, targetPathFromMap.lastIndexOf("."));
@@ -199,7 +199,7 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
 
             for (int j = 0; j < ditamapNum; j++) {
                 final String ditamap = ditamapList.get(j);
-                final String currentMapPathName = FileUtils.getRelativePath(
+                final String currentMapPathName = FileUtils.getRelativeUnixPath(
                         inputMap, ditamap);
                 String mapPathFromInputMap = "";
 

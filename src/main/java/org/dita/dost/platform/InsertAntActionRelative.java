@@ -41,7 +41,7 @@ final class InsertAntActionRelative extends InsertAction {
                 final File targetFile = new File(
                         new File(currentFile).getParentFile(),
                         attributes.getValue(i));
-                value = FileUtils.getRelativePath(
+                value = FileUtils.getRelativeUnixPath(
                         paramTable.get(FileGenerator.PARAM_TEMPLATE),
                         targetFile.toString());
             }

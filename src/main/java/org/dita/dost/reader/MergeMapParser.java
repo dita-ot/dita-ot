@@ -192,7 +192,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                         //parse the topic
                         String p = null;
                         try {
-                            p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8));
+                            p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8)).getPath();
                         } catch (final UnsupportedEncodingException e) {
                         	throw new RuntimeException(e);
                         }
@@ -235,9 +235,9 @@ public final class MergeMapParser extends XMLFilterImpl {
             final Job job = new Job(tempdir);
             for (final FileInfo f: job.getFileInfo()) {
                 if (f.isTarget) {
-                    String element = f.file;
+                    String element = f.file.getPath();
                     if (!dirPath.equals(tempdir)) {
-                        element = FileUtils.getRelativePath(new File(dirPath,"a.ditamap").getAbsolutePath(),
+                        element = FileUtils.getRelativeUnixPath(new File(dirPath,"a.ditamap").getAbsolutePath(),
                                                                    new File(tempdir, element).getAbsolutePath());
                     }
                     if (!util.isVisited(element)) {

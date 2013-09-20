@@ -50,9 +50,9 @@ public final class JobTest {
 
     @Test
     public void testGetCopytoMap() {
-        final Map<String, String> exp = new HashMap<String, String>();
-        exp.put("foo", "bar");
-        exp.put("baz", "qux");
+        final Map<File, File> exp = new HashMap<File, File>();
+        exp.put(new File("foo"), new File("bar"));
+        exp.put(new File("baz"), new File("qux"));
         assertEquals(exp, job.getCopytoMap());
     }
 

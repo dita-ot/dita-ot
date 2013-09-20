@@ -76,7 +76,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
         for(final FileInfo f: job.getFileInfo()){
             if (f.isActive && "ditamap".equals(f.format)) {
                 //FIXME: this reader needs parent directory for further process
-                indexReader.read(new File(tempDir, f.file).getAbsolutePath());
+                indexReader.read(new File(tempDir, f.file.getPath()).getAbsoluteFile());
             }
         }
 
@@ -93,7 +93,7 @@ final class MoveIndexModule implements AbstractPipelineModule {
                 indexInserter.setContent(content);
                 if (FileUtils.fileExists(entry.getKey())) {
                     logger.logInfo("Processing " + targetFileName);
-                    indexInserter.write(entry.getKey());
+                    indexInserter.write(new File(entry.getKey()));
                 } else {
                     logger.logError("File " + entry.getKey() + " does not exist");
                 }

@@ -31,6 +31,7 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.URLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -53,13 +54,13 @@ public final class DitaValReader extends AbstractXMLReader {
 
     private XMLReader reader;
 
-    private final List<String> imageList;
+    private final List<File> imageList;
 
-    private String ditaVal = null;
+    private File ditaVal = null;
 
     private Map<String, Map<String, Set<Element>>> bindingMap;
     
-    private final List<String> relFlagImageList;
+    private final List<File> relFlagImageList;
 
     private boolean setSystemid = true;
 
@@ -70,8 +71,8 @@ public final class DitaValReader extends AbstractXMLReader {
         super();
         filterMap = new HashMap<FilterKey, Action>();
         content = null;
-        imageList = new ArrayList<String>(INT_256);
-        relFlagImageList= new ArrayList<String>(INT_256);
+        imageList = new ArrayList<File>(INT_256);
+        relFlagImageList= new ArrayList<File>(INT_256);
 
         try {
             reader = StringUtils.getXMLReader();
@@ -92,18 +93,17 @@ public final class DitaValReader extends AbstractXMLReader {
     }
 
     @Override
-    public void read(final String input) {
+    public void read(final File input) {
         ditaVal = input;
 
         try {
 
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal, logger));
-            final File file = new File(input);
-            final InputSource is = new InputSource(new FileInputStream(file));
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal.getPath(), logger));
+            final InputSource is = new InputSource(new FileInputStream(input));
             //Set the system ID
             if(setSystemid) {
                 //is.setSystemId(URLUtil.correct(file).toString());
-                is.setSystemId(file.toURI().toURL().toString());
+                is.setSystemId(input.toURI().toURL().toString());
             }
             reader.parse(is);
 
@@ -163,16 +163,15 @@ public final class DitaValReader extends AbstractXMLReader {
          * Parse image files for flagging
          */
         if (flagImage != null && flagImage.trim().length() > 0) {
+            final File f = URLUtils.toFile(URLUtils.toURI(flagImage));
             if (new File(flagImage).isAbsolute()) {
-                imageList.add(flagImage);
-                relFlagImageList.add(FileUtils.getRelativePath(ditaVal, flagImage));
-                return;
+                imageList.add(f);
+                relFlagImageList.add(FileUtils.getRelativePath(ditaVal, f));
+            } else {
+                final File filterDir = ditaVal.getParentFile();
+                imageList.add(new File(filterDir, f.getPath()));
+                relFlagImageList.add(f);
             }
-
-            // img is a relative path to the .ditaval file
-            final String filterDir = new File(ditaVal).getParent();
-            imageList.add(new File(filterDir, flagImage).getAbsolutePath());
-            relFlagImageList.add(flagImage);
         }
     }
     
@@ -266,7 +265,7 @@ public final class DitaValReader extends AbstractXMLReader {
      * Return the image list.
      * @return image list
      */
-    public List<String> getImageList() {
+    public List<File> getImageList() {
         return imageList;
     }
 
@@ -293,7 +292,7 @@ public final class DitaValReader extends AbstractXMLReader {
      * get image list relative to the .ditaval file.
      * @return image list
      */
-    public List<String> getRelFlagImageList(){
+    public List<File> getRelFlagImageList(){
         return relFlagImageList;
     }
 

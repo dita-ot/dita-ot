@@ -77,19 +77,19 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     }
 
     @Override
-    public void write(final String filename) {
-        if (filename == null || !new File(filename).exists()) {
+    public void write(final File filename) {
+        if (filename == null || !filename.exists()) {
             return;
         }
         curMatchTopic = topicSet.contains(SHARP) ? SHARP : null;
         topicIdStack = new ArrayDeque<String>();
-        final File inputFile = new File(filename);
-        final File outputFile = new File(filename + FILE_EXTENSION_TEMP);
+        final File inputFile = filename;
+        final File outputFile = new File(filename.getPath() + FILE_EXTENSION_TEMP);
         FileOutputStream fileOutput = null;
         try {
             fileOutput = new FileOutputStream(outputFile);
             output = new OutputStreamWriter(fileOutput, UTF8);
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename, logger));
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
             reader.parse(inputFile.toURI().toString());
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e);

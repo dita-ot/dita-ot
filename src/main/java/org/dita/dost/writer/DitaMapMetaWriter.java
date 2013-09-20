@@ -596,8 +596,8 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     }
 
     @Override
-    public void write(final String outputFilename) {
-        String filename = outputFilename;
+    public void write(final File outputFilename) {
+        String filename = outputFilename.getPath();
         String file = null;
         String topic = null;
         File inputFile = null;

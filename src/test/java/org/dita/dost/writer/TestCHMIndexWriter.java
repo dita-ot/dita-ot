@@ -69,7 +69,7 @@ public class TestCHMIndexWriter {
         final CHMIndexWriter indexWriter = new CHMIndexWriter();
         indexWriter.setContent(content);
         final File outFile = new File(tempDir, "index.hhk");
-        indexWriter.write(outFile.getAbsolutePath());
+        indexWriter.write(outFile.getAbsoluteFile());
 
         assertXMLEqual(new InputSource(new File(expDir, "index.hhk").toURI().toString()),
                 new InputSource(outFile.toURI().toString()));

@@ -252,7 +252,7 @@ public final class IndexTermCollection {
         content.setCollection(this.getTermList());
         abstractWriter.setLogger(javaLogger);
         abstractWriter.setContent(content);
-        abstractWriter.write(buff.toString());
+        abstractWriter.write(new File(buff.toString()));
         //}
     }
 

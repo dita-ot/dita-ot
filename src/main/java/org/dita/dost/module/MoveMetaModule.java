@@ -87,18 +87,17 @@ final class MoveMetaModule implements AbstractPipelineModule {
         metaReader.setLogger(logger);
         for (final FileInfo f: job.getFileInfo()) {
             if (f.isActive && "ditamap".equals(f.format)) {
-                String mapFile = new File(tempDir, f.file).getAbsolutePath();
+                final File mapFile = new File(tempDir, f.file.getPath());
                 logger.logInfo("Reading " + mapFile);
                 //FIXME: this reader gets the parent path of input file
                 metaReader.read(mapFile);
-                final File oldMap = new File(mapFile);
                 final File newMap = new File(mapFile+".temp");
                 if (newMap.exists()) {
-                    if (!oldMap.delete()) {
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", oldMap.getPath(), newMap.getAbsolutePath()+".chunk").toString());
+                    if (!mapFile.delete()) {
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", mapFile.getPath(), newMap.getAbsolutePath()+".chunk").toString());
                     }
-                    if (!newMap.renameTo(oldMap)) {
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", oldMap.getPath(), newMap.getAbsolutePath()+".chunk").toString());
+                    if (!newMap.renameTo(mapFile)) {
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", mapFile.getPath(), newMap.getAbsolutePath()+".chunk").toString());
                     }
                 }
             }
@@ -117,7 +116,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
                 mapInserter.setContent(content);
                 if (FileUtils.fileExists(entry.getKey())) {
                     logger.logInfo("Processing " + entry.getKey());
-                    mapInserter.write(entry.getKey());
+                    mapInserter.write(new File(entry.getKey()));
                 } else {
                     logger.logError("File " + entry.getKey() + " does not exist");
                 }
@@ -136,7 +135,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
                 topicInserter.setContent(content);
                 if (FileUtils.fileExists(entry.getKey())) {
                     logger.logInfo("Processing " + entry.getKey());
-                    topicInserter.write(entry.getKey());
+                    topicInserter.write(new File(entry.getKey()));
                 } else {
                     logger.logError("File " + entry.getKey() + " does not exist");
                 }

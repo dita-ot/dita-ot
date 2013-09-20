@@ -87,14 +87,14 @@ public final class ConrefPushReader extends AbstractXMLReader {
      * @param filename filename
      */
     @Override
-    public void read(final String filename) {
-        filePath = new File(filename).getParentFile().getAbsolutePath();
-        parsefilename = new File(filename).getName();
+    public void read(final File filename) {
+        filePath = filename.getParentFile().getAbsolutePath();
+        parsefilename = filename.getName();
         start = false;
         pushcontent = new StringBuffer(INT_256);
         pushType = null;
         try{
-            reader.parse(new File(filename).toURI().toString());
+            reader.parse(filename.toURI().toString());
         }catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }
@@ -300,9 +300,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 value.startsWith(SHARP)){
             return value;
         }else{
-            final String source = FileUtils.resolveFile(filePath, target);
+            final String source = FileUtils.resolveFile(filePath, target).getPath();
             final String urltarget = FileUtils.resolveTopic(filePath, value);
-            return FileUtils.getRelativePath(source, urltarget);
+            return FileUtils.getRelativeUnixPath(source, urltarget);
 
 
         }
@@ -327,7 +327,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             target= parsefilename+target;
             sharpIndex = target.indexOf(SHARP);
         }
-        final String key = FileUtils.resolveFile(filePath, target);
+        final String key = FileUtils.resolveFile(filePath, target).getPath();
         Hashtable<String, String> table = null;
         if (pushtable.containsKey(key)){
             //if there is something else push to the same file

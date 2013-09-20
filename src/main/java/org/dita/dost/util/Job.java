@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.dita.dost.util.Job.FileInfo.Filter;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -167,7 +169,7 @@ public final class Job {
     
     private final Map<String, Object> prop;
     private final File tempDir;
-    private final ConcurrentMap<String, FileInfo> files = new ConcurrentHashMap<String, FileInfo>();
+    private final ConcurrentMap<File, FileInfo> files = new ConcurrentHashMap<File, FileInfo>();
 
     /**
      * Create new job configuration instance. Initialise by reading temporary configuration files.
@@ -213,14 +215,14 @@ public final class Job {
     private final static class JobHandler extends DefaultHandler {
 
         private final Map<String, Object> prop;
-        private final Map<String, FileInfo> files;
+        private final Map<File, FileInfo> files;
         private StringBuilder buf;
         private String name;
         private String key;
         private Set<String> set;
         private Map<String, String> map;
         
-        JobHandler(final Map<String, Object> prop, final Map<String, FileInfo> files) {
+        JobHandler(final Map<String, Object> prop, final Map<File, FileInfo> files) {
             this.prop = prop;
             this.files = files;
         }
@@ -260,7 +262,7 @@ public final class Job {
                     throw new RuntimeException(e);
                 }
                 final String path = atts.getValue(ATTRIBUTE_PATH);
-                final FileInfo i = uri != null ? new FileInfo(uri) : new FileInfo(path);
+                final FileInfo i = uri != null ? new FileInfo(uri) : new FileInfo(new File(path));
                 i.format = atts.getValue(ATTRIBUTE_FORMAT);
                 try {
                     for (Map.Entry<String, Field> e: attrToFieldMap.entrySet()) {
@@ -269,7 +271,7 @@ public final class Job {
                 } catch (final IllegalAccessException ex) {
                     throw new RuntimeException(ex);
                 }
-                files.put(path, i);
+                files.put(i.file, i);
             }
         }
         
@@ -352,7 +354,7 @@ public final class Job {
             for (final FileInfo i: files.values()) {
                 out.writeStartElement(ELEMENT_FILE);
                 out.writeAttribute(ATTRIBUTE_URI, i.uri.toString());
-                out.writeAttribute(ATTRIBUTE_PATH, i.file);
+                out.writeAttribute(ATTRIBUTE_PATH, i.file.getPath());
                 if (i.format != null) {
                 	out.writeAttribute(ATTRIBUTE_FORMAT, i.format);
                 }
@@ -450,20 +452,24 @@ public final class Job {
      * 
      * @return copy-to map, empty map if no mapping is defined 
      */
-    public Map<String, String> getCopytoMap() {
-        final Object value = prop.get(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
+    public Map<File, File> getCopytoMap() {
+        final Map<String, String> value = (Map<String, String>) prop.get(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
         if (value == null) {
             return Collections.emptyMap();
         } else {
-            return Collections.unmodifiableMap((Map<String, String>) value);
+            final Map<File, File> res = new HashMap<File, File>();
+            for (final Map.Entry<String, String> e: value.entrySet()) {
+                res.put(new File(e.getKey()), new File(e.getValue()));
+            }
+            return Collections.unmodifiableMap(res);
         }
     }
     
     /**
      * Set copy-to map.
      */
-    public void setCopytoMap(final Map<String, String> value) {
-        prop.put(COPYTO_TARGET_TO_SOURCE_MAP_LIST, new HashMap<String, String>(value));
+    public void setCopytoMap(final Map<File, File> value) {
+        prop.put(COPYTO_TARGET_TO_SOURCE_MAP_LIST, new HashMap<File, File>(value));
     }
 
     /**
@@ -490,7 +496,11 @@ public final class Job {
      * @return map of file info objects, where the key is the {@link FileInfo#file} value. May be empty
      */
     public Map<String, FileInfo> getFileInfoMap() {
-        return Collections.unmodifiableMap(new HashMap<String, FileInfo>(files));
+        final Map<String, FileInfo> ret = new HashMap<String, FileInfo>();
+        for (final Map.Entry<File, FileInfo> e: files.entrySet()) {
+            ret.put(e.getKey().getPath(), e.getValue());
+        }
+        return Collections.unmodifiableMap(ret);
     }
     
     /**
@@ -505,26 +515,82 @@ public final class Job {
     }
     
     /**
+     * Get file info objects that pass the filter
+     * 
+     * @param filter filter file info object must pass
+     * @return collection of file info objects that pass the filter, may be empty
+     */
+    public Collection<FileInfo> getFileInfo(final Filter filter) {
+        final Collection<FileInfo> ret = new ArrayList<FileInfo>();
+        for (final FileInfo f: files.values()) {
+            if (filter.accept(f)) {
+                ret.add(f);
+            }
+        }
+        return Collections.unmodifiableCollection(ret);
+    }
+
+    
+    /**
      * Get file info object
      * 
      * @param file file system path
      * @return file info object
      */
+    @Deprecated
     public FileInfo getFileInfo(final String file) {
-        final String f = FileUtils.normalize(file);
-        return files.get(f);
+        return getFileInfo(FileUtils.normalize(file));
+    }
+    
+    /**
+     * Get file info object
+     * 
+     * @param file file system path
+     * @return file info object
+     */
+    public FileInfo getFileInfo(final File file) {
+        return files.get(file);
     }
     
     /**
      * Get or create FileInfo for given path.
      * @param file system path
      */
+    @Deprecated
     public FileInfo getOrCreateFileInfo(final String file) {
-        final String f = FileUtils.normalize(file);
+        final File f = FileUtils.normalize(file);
         FileInfo i = files.get(f); 
         if (i == null) {
             i = new FileInfo(f);
-            files.put(f, i);
+            files.put(i.file, i);
+        }
+        return i;
+    }
+    
+    /**
+     * Get or create FileInfo for given path.
+     * @param file system path
+     */
+    public FileInfo getOrCreateFileInfo(final URI file) {
+        final File f = FileUtils.normalize(toFile(file));
+        FileInfo i = files.get(f); 
+        if (i == null) {
+            i = new FileInfo(f);
+            files.put(i.file, i);
+        }
+        return i;
+    }
+    
+    /**
+     * Get or create FileInfo for given path.
+     * @param file system path
+     */
+    public FileInfo getOrCreateFileInfo(final File file) {
+        final File f = FileUtils.normalize(file);
+        FileInfo i = files.get(f); 
+        if (i == null) {
+            i = new FileInfo(f);
+            files.put(i.file, i);
         }
         return i;
     }
@@ -548,7 +614,7 @@ public final class Job {
         /** File URI. */
         public final URI uri;
         /** File path. */
-        public final String file;
+        public final File file;
         /** File format. */
     	public String format;
     	/** File has a conref. */
@@ -590,18 +656,24 @@ public final class Job {
         FileInfo(final URI uri) {
             if (uri == null) throw new IllegalArgumentException(new NullPointerException());
             this.uri = uri;
-            this.file = toFile(uri).getPath();
+            this.file = toFile(uri);
         }
-        FileInfo(final String file) {
+        FileInfo(final File file) {
             if (file == null) throw new IllegalArgumentException(new NullPointerException());
-            this.uri =  toURI(new File(file));
+            this.uri =  toURI(file);
             this.file = file;
+        }
+        
+        public static interface Filter {
+            
+            public boolean accept(FileInfo f);
+            
         }
         
         public static class Builder {
             
             private URI uri;
-            private String file;
+            private File file;
             private String format;
             private boolean hasConref;
             private boolean isChunked;
@@ -676,7 +748,7 @@ public final class Job {
             }
             
             public Builder uri(final URI uri) { this.uri = uri; return this; }
-            public Builder file(final String file) { this.file = file; return this; }
+            public Builder file(final File file) { this.file = file; return this; }
             public Builder format(final String format) { this.format = format; return this; }
             public Builder hasConref(final boolean hasConref) { this.hasConref = hasConref; return this; }
             public Builder isChunked(final boolean isChunked) { this.isChunked = isChunked; return this; }

@@ -8,6 +8,7 @@
  */
 package org.dita.dost.writer;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,7 +17,6 @@ import java.util.List;
 import javax.xml.transform.Transformer;
 
 import org.xml.sax.SAXException;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
@@ -33,7 +33,7 @@ import org.dita.dost.util.XMLSerializer;
 public final class CHMIndexWriter extends AbstractExtendDitaWriter {
 
     @Override
-    public void write(final String filename) throws DITAOTException {
+    public void write(final File filename) throws DITAOTException {
         OutputStream out = null;
         try {
             out = new FileOutputStream(filename);

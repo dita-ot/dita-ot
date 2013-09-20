@@ -43,7 +43,7 @@ public class CoderefResolverTest {
 
         final CoderefResolver filter = new CoderefResolver();
         filter.setLogger(new TestUtils.TestLogger());
-        filter.write(f.getAbsolutePath());
+        filter.write(f.getAbsoluteFile());
 
         TestUtils.resetXMLUnit();
         XMLUnit.setIgnoreWhitespace(false);

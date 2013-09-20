@@ -66,10 +66,10 @@ final class ConrefPushModule implements AbstractPipelineModule {
         reader.setLogger(logger);
         for(final FileInfo f: job.getFileInfo()) {
             if (f.isConrefPush) {
-                final File file = new File(tempDir, f.file);
+                final File file = new File(tempDir, f.file.getPath());
                 logger.logInfo("Reading  " + file.getAbsolutePath());
                 //FIXME: this reader calculate parent directory
-                reader.read(file.getAbsolutePath());
+                reader.read(file.getAbsoluteFile());
             }
         }
 
@@ -85,7 +85,7 @@ final class ConrefPushModule implements AbstractPipelineModule {
             //pass the tempdir to ConrefPushParser
             parser.setTempDir(tempDir.getAbsoluteFile());
             //FIXME:This writer creates and renames files, have to
-            parser.write(entry.getKey());
+            parser.write(new File(entry.getKey()));
         }
 
         return null;

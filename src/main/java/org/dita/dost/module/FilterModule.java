@@ -60,10 +60,10 @@ final class FilterModule implements AbstractPipelineModule {
         writer.setTranstype(input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE));
         for (final FileInfo f: files) {
             if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                final File file = new File(tempDir, f.file);
+                final File file = new File(tempDir, f.file.getPath());
                 logger.logInfo("Processing " + file.getAbsolutePath());
                 try {
-                    writer.write(file.getAbsolutePath());
+                    writer.write(file.getAbsoluteFile());
                     if (!writer.hasElementOutput()) {
                         logger.logInfo("All content in " + file.getAbsolutePath() + " was filtered out");
                         job.remove(f);
@@ -99,7 +99,7 @@ final class FilterModule implements AbstractPipelineModule {
             ditaValReader.setLogger(logger);
             ditaValReader.initXMLReader(true);
 
-            ditaValReader.read(new File(ditavalFile).getAbsolutePath());
+            ditaValReader.read(new File(ditavalFile).getAbsoluteFile());
             filterUtils.setFilterMap(ditaValReader.getFilterMap());
         } else {
             filterUtils.setFilterMap(null);

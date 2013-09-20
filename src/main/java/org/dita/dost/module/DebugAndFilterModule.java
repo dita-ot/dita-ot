@@ -149,7 +149,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype));
             filterUtils.setLogger(logger);
             if (ditavalFile != null){
-                filterReader.read(ditavalFile.getAbsolutePath());
+                filterReader.read(ditavalFile.getAbsoluteFile());
                 filterUtils.setFilterMap(filterReader.getFilterMap());
             }
             final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
@@ -183,7 +183,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             for (final FileInfo f: job.getFileInfo()) {
                 if ((f.isActive && ("dita".equals(f.format) || "ditamap".equals(f.format)))
                         || f.isConrefTarget || f.isCopyToSource) {
-                    final String filename = f.file;
+                    final String filename = f.file.getPath();
                     final File currentFile = new File(inputDir, filename);
                     logger.logInfo("Processing " + currentFile.getAbsolutePath());
     
@@ -199,7 +199,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                         if (ditavalFile != null){
                             filterReader.filterReset();
                             filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
-                            filterReader.read(ditavalFile.getAbsolutePath());
+                            filterReader.read(ditavalFile.getAbsoluteFile());
                             final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
                             fm.putAll(filterReader.getFilterMap());
                             fm.putAll(filterUtils.getFilterMap());
@@ -307,7 +307,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     continue;
                 }
                 visitedSet.add(parent);
-                String tmprel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), parent);
+                String tmprel = FileUtils.getRelativeUnixPath(inputMap.getAbsolutePath(), parent);
                 tmprel = FileUtils.resolveFile(tempDir.getAbsolutePath(), tmprel) + SUBJECT_SCHEME_EXTENSION;
                 Document parentRoot = null;
                 if (!FileUtils.fileExists(tmprel)) {
@@ -319,14 +319,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     for (final String childpath: children) {
                         final Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
                         mergeScheme(parentRoot, childRoot);
-                        String rel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), childpath);
+                        String rel = FileUtils.getRelativeUnixPath(inputMap.getAbsolutePath(), childpath);
                         rel = FileUtils.resolveFile(tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
                         generateScheme(rel, childRoot);
                     }
                 }
 
                 //Output parent scheme
-                String rel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), parent);
+                String rel = FileUtils.getRelativeUnixPath(inputMap.getAbsolutePath(), parent);
                 rel = FileUtils.resolveFile(tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
                 generateScheme(rel, parentRoot);
             }
@@ -477,20 +477,20 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * Execute copy-to task, generate copy-to targets base on sources
      */
     private void performCopytoTask(final File tempDir, final Job job) {
-        final Map<String, String> copytoMap  = job.getCopytoMap();
+        final Map<File, File> copytoMap = job.getCopytoMap();
         
-        for (final Map.Entry<String, String> entry: copytoMap.entrySet()) {
-            final String copytoTarget = entry.getKey();
-            final String copytoSource = entry.getValue();
-            final File srcFile = new File(tempDir, copytoSource);
-            final File targetFile = new File(tempDir, copytoTarget);
+        for (final Map.Entry<File, File> entry: copytoMap.entrySet()) {
+            final File copytoTarget = entry.getKey();
+            final File copytoSource = entry.getValue();
+            final File srcFile = new File(tempDir, copytoSource.getPath());
+            final File targetFile = new File(tempDir, copytoTarget.getPath());
 
             if (targetFile.exists()) {
                 /*logger
                         .logWarn(new StringBuffer("Copy-to task [copy-to=\"")
                                 .append(copytoTarget)
                                 .append("\"] which points to an existed file was ignored.").toString());*/
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
             }else{
                 final String inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsolutePath();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
@@ -507,7 +507,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * @param copytoTargetFilename
      * @param inputMapInTemp
      */
-    public void copyFileWithPIReplaced(final File src, final File target, final String copytoTargetFilename, final String inputMapInTemp ) {
+    public void copyFileWithPIReplaced(final File src, final File target, final File copytoTargetFilename, final String inputMapInTemp ) {
         if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
             logger.logError("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
         }

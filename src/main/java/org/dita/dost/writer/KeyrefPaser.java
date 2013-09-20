@@ -224,8 +224,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * @throws DITAOTException if key reference resolution failed
      */
     @Override
-    public void write(final String filename) throws DITAOTException {
-        super.write(new File(tempDir, inputFile.getPath()).getAbsolutePath());
+    public void write(final File filename) throws DITAOTException {
+        super.write(new File(tempDir, inputFile.getPath()).getAbsoluteFile());
     }
         
     // XML filter methods ------------------------------------------------------
@@ -427,14 +427,14 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 //                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
 //                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
 //                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                            target_output = toURI(normalizeHrefValue(FileUtils.getRelativePath(inputFile.getPath(), target_output.toString()), elementId));
+                            target_output = toURI(normalizeHrefValue(FileUtils.getRelativeUnixPath(inputFile.getPath(), target_output.toString()), elementId));
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                         } else if (("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)) &&
                                 ("".equals(formatValue) || ATTR_FORMAT_VALUE_DITA.equals(formatValue)  || ATTR_FORMAT_VALUE_DITAMAP.equals(formatValue))){
-                            final File topicFile = new File(FileUtils.resolveFile(tempDir.getAbsolutePath(), URLUtils.decode(target.toString())));
+                            final File topicFile = FileUtils.resolveFile(tempDir.getAbsolutePath(), URLUtils.decode(target.toString()));
                             if (topicFile.exists()) {  
                                 final String topicId = this.getFirstTopicId(topicFile);
-                                target_output = toURI(FileUtils.getRelativePath(new File(tempDir, inputFile.getPath()).getAbsolutePath(), new File(tempDir.toURI().resolve(target)).getAbsolutePath()));
+                                target_output = toURI(FileUtils.getRelativeUnixPath(new File(tempDir, inputFile.getPath()).getAbsolutePath(), new File(tempDir.toURI().resolve(target)).getAbsolutePath()));
                                 valid = true;
 //                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
 //                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
@@ -443,8 +443,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 target_output = toURI(normalizeHrefValue(target_output.toString(), elementId, topicId));
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
-                                    // FIXME: This should be a relative to base directory, not current file
-                                    normalProcessingRoleTargets.add(FileUtils.stripFragment(target_output.toString()));
+                                    final URI f = toURI(inputFile).resolve(target_output);
+                                    normalProcessingRoleTargets.add(URLUtils.toFile(f).getPath());
                                 }
                             } else {
                                 // referenced file does not exist, emits a message.

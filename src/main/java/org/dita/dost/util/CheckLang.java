@@ -89,7 +89,7 @@ public final class CheckLang extends Task {
                 //parse topic files
                 for (final FileInfo f: job.getFileInfo()){
                     if (f.isActive && ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
-                        final File topicFile = new File(tempdir, f.file);
+                        final File topicFile = new File(tempdir, f.file.getPath());
                         if(topicFile.exists()){
                             saxParser.parse(topicFile, parser);
                             langCode = parser.getLangCode();

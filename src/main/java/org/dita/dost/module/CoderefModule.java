@@ -70,7 +70,7 @@ final class CoderefModule implements AbstractPipelineModule {
         for (final FileInfo f: job.getFileInfo()) {
             if (f.hasCoderef) {
                 //FIXME:This writer deletes and renames files, have to
-                writer.write(new File(tempDir, f.file).getAbsolutePath());
+                writer.write(new File(tempDir, f.file.getPath()).getAbsoluteFile());
             }
         }
 

@@ -132,10 +132,9 @@ public final class MapMetaReader implements AbstractReader {
      * @param filename filename
      */
     @Override
-    public void read(final String filename) {
-        final File inputFile = new File(filename);
-        filePath = inputFile.getParent();
-        inputFile.getPath();
+    public void read(final File filename) {
+        filePath = filename.getParent();
+        filename.getPath();
 
         //clear the history on global metadata table
         globalMeta.clear();
@@ -145,8 +144,8 @@ public final class MapMetaReader implements AbstractReader {
             final DocumentBuilderFactory factory = DocumentBuilderFactory
                     .newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            builder.setErrorHandler(new DITAOTXMLErrorHandler(filename, logger));
-            doc = builder.parse(inputFile);
+            builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
+            doc = builder.parse(filename);
 
             final Element root = doc.getDocumentElement();
             final NodeList list = root.getChildNodes();
@@ -180,7 +179,7 @@ public final class MapMetaReader implements AbstractReader {
 
             FileOutputStream file = null;
             try {
-                file = new FileOutputStream(inputFile.getCanonicalPath()+ ".temp");
+                file = new FileOutputStream(filename.getCanonicalPath()+ ".temp");
                 final StreamResult res = new StreamResult(file);
                 final DOMSource ds = new DOMSource(doc);
                 final TransformerFactory tff = TransformerFactory.newInstance();
@@ -265,7 +264,7 @@ public final class MapMetaReader implements AbstractReader {
         }
 
         if (!current.isEmpty() && hrefAttr != null){// prevent the metadata is empty
-            if (copytoAttr != null && new File(FileUtils.resolveFile(filePath, URLUtils.decode(copytoAttr.getNodeValue()))).exists()){
+            if (copytoAttr != null && FileUtils.resolveFile(filePath, URLUtils.decode(copytoAttr.getNodeValue())).exists()){
                 // if there is @copy-to and the file exists, @copy-to will take the place of @href
                 topicPath = FileUtils.resolveTopic(filePath, URLUtils.decode(copytoAttr.getNodeValue()));
             }else{

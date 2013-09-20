@@ -52,7 +52,7 @@ public class MapMetaReaderTest {
         reader.setLogger(new TestUtils.TestLogger());
 
         final File mapFile = new File(tempDir, "test.ditamap");
-        reader.read(mapFile.getAbsolutePath());
+        reader.read(mapFile.getAbsoluteFile());
     }
 
     @Test
