@@ -208,13 +208,13 @@ final public class ChunkModule implements AbstractPipelineModule {
         }
         for (String t : hrefTopics) {
             t = stripFragment(t);
-            t = getRelativeUnixPath(xmlDitalist.getAbsolutePath(), resolveFile(tempDir.getAbsolutePath(), t).getPath());
+            t = getRelativePath(xmlDitalist.getAbsolutePath(), resolveFile(tempDir.getAbsolutePath(), t).getPath(), File.separator);
             topicList.add(t);
             if (oldTopicList.contains(t)) {
                 oldTopicList.remove(t);
             }
         }
-
+        
         final Set<String> chunkedTopicSet = new LinkedHashSet<String>(INT_128);
         final Set<String> chunkedDitamapSet = new LinkedHashSet<String>(INT_128);
         final Set<String> ditamapList = new HashSet<String>();
@@ -228,7 +228,7 @@ final public class ChunkModule implements AbstractPipelineModule {
             if (entry.getValue().equals(oldFile)) {
                 // newly chunked file
                 String newChunkedFile = entry.getValue();
-                newChunkedFile = getRelativeUnixPath(xmlDitalist.getAbsolutePath(), newChunkedFile);
+                newChunkedFile = getRelativePath(xmlDitalist.getAbsolutePath(), newChunkedFile, File.separator);
                 final String extName = getExtension(newChunkedFile);
                 if (extName != null && !extName.equalsIgnoreCase("DITAMAP")) {
                     chunkedTopicSet.add(newChunkedFile);
@@ -274,9 +274,9 @@ final public class ChunkModule implements AbstractPipelineModule {
                     if (!fileExists(target.getAbsolutePath())) {
                         // newly chunked file
                         final File from = new File(entry.getValue());
-                        String relativePath = getRelativeUnixPath(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());
-                        final String relativeTargetPath = getRelativeUnixPath(xmlDitalist.getAbsolutePath(),
-                                target.getAbsolutePath());
+                        String relativePath = getRelativePath(xmlDitalist.getAbsolutePath(), from.getAbsolutePath(), File.separator);
+                        final String relativeTargetPath = getRelativePath(xmlDitalist.getAbsolutePath(),
+                                target.getAbsolutePath(), File.separator);
                         if (relativeTargetPath.lastIndexOf(SLASH) != -1) {
                             relativePath2fix.put(relativeTargetPath,
                                     relativeTargetPath.substring(0, relativeTargetPath.lastIndexOf(SLASH) + 1));
@@ -291,7 +291,7 @@ final public class ChunkModule implements AbstractPipelineModule {
                         if (chunkedTopicSet.contains(relativePath)) {
                             chunkedTopicSet.remove(relativePath);
                         }
-                        relativePath = getRelativeUnixPath(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());
+                        relativePath = getRelativePath(xmlDitalist.getAbsolutePath(), target.getAbsolutePath(), File.separator);
                         topicList.add(relativePath);
                         chunkedTopicSet.add(relativePath);
                     } else {
