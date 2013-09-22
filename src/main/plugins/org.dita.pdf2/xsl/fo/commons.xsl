@@ -87,7 +87,10 @@ See the accompanying license.txt file for applicable licenses.
         <fo:block xsl:use-attribute-sets="topic">
             <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                 <fo:marker marker-class-name="current-topic-number">
-                    <xsl:number format="1"/>
+                  <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                  <xsl:for-each select="$topicref">
+                    <xsl:apply-templates select="." mode="topicTitleNumber"/>
+                  </xsl:for-each>
                 </fo:marker>
             </xsl:if>
             <xsl:apply-templates select="." mode="commonTopicProcessing"/>
@@ -198,7 +201,10 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:variable>
                     <xsl:if test="$level eq 1">
                         <fo:marker marker-class-name="current-topic-number">
-                            <xsl:number format="1"/>
+                          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                          <xsl:for-each select="$topicref">
+                            <xsl:apply-templates select="." mode="topicTitleNumber"/>
+                          </xsl:for-each>
                         </fo:marker>
                         <fo:marker marker-class-name="current-header">
                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
@@ -253,7 +259,7 @@ See the accompanying license.txt file for applicable licenses.
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
                             <xsl:for-each select="$topicref">
-                              <xsl:number count="*[contains(@class,' bookmap/appendix ')]" format="1"/>
+                              <xsl:apply-templates select="." mode="topicTitleNumber"/>
                             </xsl:for-each>
                         </fo:marker>
                         <fo:marker marker-class-name="current-header">
@@ -304,7 +310,10 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:call-template name="commonattributes"/>
           <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
             <fo:marker marker-class-name="current-topic-number">
-              <xsl:number format="I"/>
+              <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+              <xsl:for-each select="$topicref">
+                <xsl:apply-templates select="." mode="topicTitleNumber"/>
+              </xsl:for-each>
             </fo:marker>
             <fo:marker marker-class-name="current-header">
               <xsl:for-each select="*[contains(@class,' topic/title ')]">
@@ -369,7 +378,10 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:call-template name="commonattributes"/>
                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
-                            <xsl:number format="I"/>
+                          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                          <xsl:for-each select="$topicref">
+                            <xsl:apply-templates select="." mode="topicTitleNumber"/>
+                          </xsl:for-each>
                         </fo:marker>
                         <fo:marker marker-class-name="current-header">
                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
@@ -435,7 +447,10 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:call-template name="commonattributes"/>
                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
-                            <xsl:number format="1"/>
+                          <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)"/>
+                          <xsl:for-each select="$topicref">
+                            <xsl:apply-templates select="." mode="topicTitleNumber"/>
+                          </xsl:for-each>
                         </fo:marker>
                         <fo:marker marker-class-name="current-header">
                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
@@ -559,7 +574,16 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' bookmap/chapter ')] |
                          opentopic:map/*[contains(@class, ' map/topicref ')]" mode="topicTitleNumber" priority="-1">
-      <xsl:number format="1" count="*[contains(@class, ' bookmap/chapter ')]"/>
+      <xsl:variable name="chapters">
+        <xsl:document>
+          <xsl:for-each select="$map/descendant::*[contains(@class, ' bookmap/chapter ')]">
+            <xsl:sequence select="."/>
+          </xsl:for-each>
+        </xsl:document>>
+      </xsl:variable>
+      <xsl:for-each select="$chapters/*[current()/@id = @id]">
+        <xsl:number format="1" count="*[contains(@class, ' bookmap/chapter ')]"/>
+      </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="topicTitleNumber">
