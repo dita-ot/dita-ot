@@ -19,8 +19,12 @@
     </booklists>
   </frontmatter>
   <chapter format="ditamap" href="quickstart.ditamap"/>
-  <chapter href="readme.ditamap" format="ditamap"/>
-  <chapter navtitle="Developer Reference" href="dev_ref/dev_ref.ditamap" format="ditamap"/>
+  <part navtitle="User Guide" href="readme/DITA-readme.xml">
+    <chapter href="readme.ditamap" format="ditamap"/>  
+  </part>
+  <part navtitle="Developer Reference" href="dev_ref/developer-reference.dita">
+    <chapter navtitle="Developer Reference" href="dev_ref/dev_ref.ditamap" format="ditamap"/>
+  </part>
   <appendix navtitle="Project Management" href="admin/project-management.ditamap" format="ditamap"/>
   <appendix href="dita-resources.ditamap" format="ditamap"/>
 </bookmap>

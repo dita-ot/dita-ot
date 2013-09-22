@@ -5,8 +5,12 @@
   <mapref href="keyrefs.ditamap" processing-role="resource-only"/>
   <topicref href="DITA-OTProjectHome.xml"/>
   <mapref href="quickstart.ditamap"/>
+    <topicref href="readme/DITA-readme.xml">
   <mapref href="readme.ditamap"/>
-  <mapref href="dev_ref/dev_ref.ditamap" format="ditamap"/>
+  </topicref>
+  <topicref href="dev_ref/developer-reference.dita">
+    <mapref href="dev_ref/dev_ref.ditamap" format="ditamap"/>
+  </topicref>
   <mapref href="admin/project-management.ditamap" format="ditamap"/>
   <mapref href="dita-resources.ditamap" format="ditamap"/>
   <mapref href="subjectscheme.ditamap" type="subjectScheme" processing-role="resource-only"/>
