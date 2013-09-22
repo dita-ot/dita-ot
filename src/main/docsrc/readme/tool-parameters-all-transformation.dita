@@ -16,93 +16,83 @@
     </metadata>
   </prolog>
   <refbody>
-    <table frame="all" colsep="1" rowsep="1">
-      <title>Command-line tool parameters: All transformations</title>
-      <tgroup cols="2">
-        <colspec colname="COLSPEC0" colwidth="1.50*"/>
-        <colspec colname="COLSPEC3" colwidth="4*"/>
-        <thead>
-          <row>
-            <entry>Parameters</entry>
-            <entry>Description</entry>
-          </row>
-        </thead>
-        <tbody>
-          <row>
-            <entry><parmname>basedir</parmname></entry>
-            <entry id="basedir.desc">The directory where your project's ant build script resides.
+    <section>
+      <fig>
+        <title>Command-line tool parameters: All transformations</title>
+        <parml>
+          <plentry>
+            <pt><parmname>basedir</parmname></pt>
+            <pd id="basedir.desc">The directory where your project's ant build script resides.
               The DITA-OT will look for your .dita files relative to this directory. DITA-OT's
               default build script sets this as an attribute of the project, but you can also define
-              it as a project property.</entry>
-          </row>
-          <row>
-            <entry><parmname>cleantemp</parmname></entry>
-            <entry
+              it as a project property.</pd>
+          </plentry>
+          <plentry>
+            <pt><parmname>cleantemp</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/clean.temp.desc"/>
-          </row>
-          <row>
-            <entry><parmname>debug</parmname></entry>
-            <entry
+          </plentry>
+          <plentry>
+            <pt><parmname>debug</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/args.debug.desc"/>
-          </row>
-          <row>
-            <entry><parmname>ditadir</parmname></entry>
-            <entry
+          </plentry>
+          <plentry>
+            <pt><parmname>ditadir</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/dita.dir.desc"/>
-          </row>
-          <row>
-            <entry><parmname>ditalocale</parmname></entry>
-            <entry conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.dita.locale.desc"/>
-          </row>
-<row>
-            <entry><parmname>draft</parmname></entry>
-            <entry
+          </plentry>
+          <plentry>
+            <pt><parmname>ditalocale</parmname></pt>
+            <pd conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/args.dita.locale.desc"/>
+          </plentry>
+<plentry>
+            <pt><parmname>draft</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/args.draft.desc"/>
-</row>
-          <row>
-            <entry><parmname>filter</parmname></entry>
-            <entry
+</plentry>
+          <plentry>
+            <pt><parmname>filter</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/dita.input.valfile.desc"/>
-          </row>
-          <row>
-            <entry><parmname>grammarcache</parmname></entry>
-            <entry
+          </plentry>
+          <plentry>
+            <pt><parmname>grammarcache</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/args.grammar.cache.desc"/>
-          </row>
-          <row>
-            <entry><parmname>i</parmname></entry>
-            <entry
+          </plentry>
+          <plentry>
+            <pt><parmname>i</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/args.input.desc"/>
-          </row>
-          <row>
-            <entry><parmname>logdir</parmname></entry>
-            <entry
+          </plentry>
+          <plentry>
+            <pt><parmname>logdir</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/args.logdir.desc"/>
-          </row>
-          <row>
-            <entry><parmname>outdir</parmname></entry>
-            <entry
+          </plentry>
+          <plentry>
+            <pt><parmname>outdir</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/output.dir.desc"/>
-          </row>
-          <row>
-            <entry><parmname>tempdir</parmname></entry>
-            <entry
+          </plentry>
+          <plentry>
+            <pt><parmname>tempdir</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/dita.temp.dir.desc"/>
-          </row>
-
-
-          <row>
-            <entry><parmname>transtype</parmname></entry>
-            <entry
+          </plentry>
+          <plentry>
+            <pt><parmname>transtype</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/transtype.desc"/>
-          </row>
-          <row>
-            <entry><parmname>validate</parmname></entry>
-            <entry
+          </plentry>
+          <plentry>
+            <pt><parmname>validate</parmname></pt>
+            <pd
               conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/validate.desc"/>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+          </plentry>
+        </parml>    
+      </fig>
+    </section>
   </refbody>
 </reference>

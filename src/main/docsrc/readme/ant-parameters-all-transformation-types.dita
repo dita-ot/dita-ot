@@ -17,27 +17,19 @@
     </metadata>
   </prolog>
   <refbody>
-    <table colsep="1" frame="all" rowsep="1">
-      <title>Ant parameters: All transformations</title>
-      <tgroup cols="2">
-        <colspec colname="COLSPEC0" colwidth="1.50*"/>
-        <colspec colname="COLSPEC3" colwidth="4*"/>
-        <thead>
-          <row>
-            <entry>Parameters</entry>
-            <entry>Description</entry>
-          </row>
-        </thead>
-        <tbody>
-          <row id="args.debug">
-            <entry><parmname>args.debug</parmname></entry>
-            <entry id="args.debug.desc">Specifies whether debugging information is included in the
+    <section>
+      <fig>
+        <title>Ant parameters: All transformations</title>
+        <parml>
+          <plentry id="args.debug">
+            <pt><parmname>args.debug</parmname></pt>
+            <pd id="args.debug.desc">Specifies whether debugging information is included in the
               log. The allowed values are <option>yes</option> and <option>no</option>; the default
-              value is <option>no</option>.</entry>
-          </row>
-          <row id="args.draft">
-            <entry><parmname>args.draft</parmname></entry>
-            <entry id="args.draft.desc">Specifies whether the content of &lt;draft-comment> and
+              value is <option>no</option>.</pd>
+          </plentry>
+          <plentry id="args.draft">
+            <pt><parmname>args.draft</parmname></pt>
+            <pd id="args.draft.desc">Specifies whether the content of &lt;draft-comment> and
               &lt;required-cleanup> elements is included in the output. The allowed values are
                 <option>yes</option> and <option>no</option>; the default value is
                 <option>no</option>. <ph audience="xslt-customizer">Corresponds to XSLT parameter
@@ -45,91 +37,92 @@
                 output, setting the <parmname>args.draft</parmname> parameter to
                   <option>yes</option> causes the contents of the &lt;titlealts> element to be
                 rendered below the title.</note>
-            </entry>
-          </row>
-          <row id="args.figurelink.style">
-            <entry colname="COLSPEC0"><parmname>args.figurelink.style</parmname></entry>
-            <entry id="args.figurelink.style.desc" colname="COLSPEC3">Specifies how cross references
+            </pd>
+          </plentry>
+          <plentry id="args.figurelink.style">
+            <pt><parmname>args.figurelink.style</parmname></pt>
+            <pd id="args.figurelink.style.desc">Specifies how cross references
               to figures are styled in output. The allowed values are <option>NUMBER</option> and
                 <option>TITLE</option>. Specifying <option>NUMBER</option> results in "Figure 5";
               specifying <option>TITLE</option> results in the title of the figure. <ph
                 audience="xslt-customizer">Corresponds to the XSLT parameter
                   <parmname>FIGURELINK</parmname>.</ph><note>This parameter is not available for the
-                PDF transformation.</note></entry>
-          </row>
-          <row id="args.filter" rev="1.6">
-            <entry colname="COLSPEC0"><parmname>args.filter</parmname></entry>
-            <entry id="args.filter.desc">Specifies a filter file to be used to include, exclude, or
-              flag content. Filter files must have a .ditaval or .DITAVAL extension.</entry>
-          </row>
-          <row id="args.grammar.cache">
-            <entry colname="COLSPEC0"><parmname>args.grammar.cache</parmname></entry>
-            <entry id="args.grammar.cache.desc" colname="COLSPEC3">Specifies whether the
+                PDF transformation.</note></pd>
+          </plentry>
+          <plentry id="args.filter" rev="1.6">
+            <pt><parmname>args.filter</parmname></pt>
+            <pd id="args.filter.desc">Specifies a filter file to be used to include, exclude, or
+              flag content. Filter files must have a .ditaval or .DITAVAL extension.</pd>
+          </plentry>
+          <plentry id="args.grammar.cache">
+            <pt><parmname>args.grammar.cache</parmname></pt>
+            <pd id="args.grammar.cache.desc">Specifies whether the
               grammar-caching feature of the XML parser is used. The allowed values are
                 <option>yes</option> and <option>no</option>; the default value is
                 <option>no</option>.<note>This option dramatically speeds up processing time.
                 However, there is a known problem with using this feature for documents that use XML
                 entities. If your build fails with parser errors about entity resolution, set this
-                parameter to <option>no</option>.</note></entry>
-          </row>
-          <row id="args.input">
-            <entry><parmname>args.input</parmname></entry>
-            <entry id="args.input.desc">Specifies the master file for your documentation project.
+                parameter to <option>no</option>.</note></pd>
+          </plentry>
+          <plentry id="args.input">
+            <pt><parmname>args.input</parmname></pt>
+            <pd id="args.input.desc">Specifies the master file for your documentation project.
               Typically this is a DITA map, however it also can be a DITA topic if you want to
               transform a single DITA file. The path can be absolute, relative to <parmname>args.input.dir</parmname>,
               or relative to the directory where your project's ant build script resides
               if <parmname>args.input.dir</parmname> is not defined. 
-            </entry>
-          </row>
-          <row id="args.input.dir">
-            <entry><parmname>args.input.dir</parmname></entry>
-            <entry id="args.input.dir.desc">Specifies the base directory for your documentation project.
-              The default value is the parent directory of the file specified by <parmname>args.input</parmname>.</entry>
-          </row>
-          <row id="args.logdir">
-            <entry><parmname>args.logdir</parmname></entry>
-            <entry id="args.logdir.desc">Specifies the location where the DITA-OT places log files
-              for your project.</entry>
-          </row>
-          <row conref="conref-dita-ot-parameters.dita#conref-dita-ot-parameters/args.rellinks">
-            <entry/>
-          </row>
-          <row id="args.tablelink.style">
-            <entry colname="COLSPEC0"><parmname>args.tablelink.style</parmname></entry>
-            <entry id="args.tablelink.style.desc" colname="COLSPEC3">Specifies how cross references
+            </pd>
+          </plentry>
+          <plentry id="args.input.dir">
+            <pt><parmname>args.input.dir</parmname></pt>
+            <pd id="args.input.dir.desc">Specifies the base directory for your documentation project.
+              The default value is the parent directory of the file specified by <parmname>args.input</parmname>.</pd>
+          </plentry>
+          <plentry id="args.logdir">
+            <pt><parmname>args.logdir</parmname></pt>
+            <pd id="args.logdir.desc">Specifies the location where the DITA-OT places log files
+              for your project.</pd>
+          </plentry>
+          <plentry conref="conref-dita-ot-parameters.dita#conref-dita-ot-parameters/args.rellinks">
+            <pt/>
+            <pd/>
+          </plentry>
+          <plentry id="args.tablelink.style">
+            <pt><parmname>args.tablelink.style</parmname></pt>
+            <pd id="args.tablelink.style.desc">Specifies how cross references
               to tables are styled. Specifying <option>NUMBER</option> results in "Table 5";
               specifying <option>TITLE</option> results in the title of the table. <ph
                 audience="xslt-customizer">Corresponds to the XSLT parameter
                   <parmname>TABLELINK</parmname>.</ph><note>This parameter is not available for the
-                PDF transformation.</note></entry>
-          </row>
-          <row id="cleantemp">
-            <entry><parmname>clean.temp</parmname></entry>
-            <entry id="clean.temp.desc">Specifies whether the DITA-OT deletes the files in the
+                PDF transformation.</note></pd>
+          </plentry>
+          <plentry id="cleantemp">
+            <pt><parmname>clean.temp</parmname></pt>
+            <pd id="clean.temp.desc">Specifies whether the DITA-OT deletes the files in the
               temporary directory after it finishes a build. The allowed values are
               <option>yes</option> and <option>no</option>; the default value is
-              <option>yes</option>.</entry>
-          </row>
-          <row id="dita.dir">
-            <entry><parmname>dita.dir</parmname></entry>
-            <entry id="dita.dir.desc">Specifies where the DITA-OT is installed.</entry>
-          </row>
-          <row id="dita.temp.dir">
-            <entry><parmname>dita.temp.dir</parmname></entry>
-            <entry id="dita.temp.dir.desc">Specifies the location of the temporary directory. The
+              <option>yes</option>.</pd>
+          </plentry>
+          <plentry id="dita.dir">
+            <pt><parmname>dita.dir</parmname></pt>
+            <pd id="dita.dir.desc">Specifies where the DITA-OT is installed.</pd>
+          </plentry>
+          <plentry id="dita.temp.dir">
+            <pt><parmname>dita.temp.dir</parmname></pt>
+            <pd id="dita.temp.dir.desc">Specifies the location of the temporary directory. The
               temporary directory is where the DITA-OT writes temporary files that are generated
-              during the transformation process.</entry>
-          </row>
-          <row id="dita.input.valfile" importance="deprecated">
-            <entry colname="COLSPEC0"><parmname>dita.input.valfile</parmname></entry>
-            <entry id="dita.input.valfile.desc" colname="COLSPEC3">Specifies a filter file to be
+              during the transformation process.</pd>
+          </plentry>
+          <plentry id="dita.input.valfile" importance="deprecated">
+            <pt><parmname>dita.input.valfile</parmname></pt>
+            <pd id="dita.input.valfile.desc">Specifies a filter file to be
               used to include, exclude, or flag content. Filter files must have a .ditaval or
               .DITAVAL extension.<note type="notice">Deprecated in favor of the
-                  <parmname>args.filter</parmname> parameter.</note></entry>
-          </row>
-          <row id="generate.copy.outer">
-            <entry colname="COLSPEC0"><parmname>generate.copy.outer</parmname></entry>
-            <entry id="generate.copy.outer.desc" colname="COLSPEC3">Specifies whether to generate
+                  <parmname>args.filter</parmname> parameter.</note></pd>
+          </plentry>
+          <plentry id="generate.copy.outer">
+            <pt><parmname>generate.copy.outer</parmname></pt>
+            <pd id="generate.copy.outer.desc">Specifies whether to generate
               output files for content that is not located in or beneath the directory containing
               the DITA map file. The following values are supported:<ul>
                 <li><option>1</option> (default) – Do not generate output for content that is
@@ -138,18 +131,18 @@
                   DITA map directory.</li>
                 <li><option>3</option> – Shift the output directory so that it contains all output
                   for the publication.</li>
-              </ul><p>See <xref href="generate-copy-outer.dita"/> for more information.</p></entry>
-          </row>
-          <row id="onlytopic.in.map">
-            <entry colname="COLSPEC0"><parmname>onlytopic.in.map</parmname></entry>
-            <entry id="onlytopic.in.map.desc" colname="COLSPEC3">Specifies whether files that are
+              </ul><p>See <xref href="generate-copy-outer.dita"/> for more information.</p></pd>
+          </plentry>
+          <plentry id="onlytopic.in.map">
+            <pt><parmname>onlytopic.in.map</parmname></pt>
+            <pd id="onlytopic.in.map.desc">Specifies whether files that are
               linked to, or referenced with a @conref attribute, generate output. If set to
               <option>yes</option>, only files that are referenced directly from the map will
-              generate output.</entry>
-          </row>
-          <row id="outer.control">
-            <entry colname="COLSPEC0"><parmname>outer.control</parmname></entry>
-            <entry id="outer.control.desc" colname="COLSPEC3">Specifies how the DITA OT handles
+              generate output.</pd>
+          </plentry>
+          <plentry id="outer.control">
+            <pt><parmname>outer.control</parmname></pt>
+            <pd id="outer.control.desc">Specifies how the DITA OT handles
               content files that are located in or below the directory containing the master DITA
               map. The following values are supported:<ul>
                 <li><option>fail</option> – Fail quickly if files are going to be generated or
@@ -165,17 +158,17 @@
                 documentation projects that use outer content. The content files must reside in or
                 below the directory containing the master DITA map file, and the map file cannot
                 specify ".." at the start of the @href attributes for &lt;topicref> elements.</note>
-            </entry>
-          </row>
-          <row id="output.dir">
-            <entry><parmname>output.dir</parmname></entry>
-            <entry id="output.dir.desc">Specifies the name and location of the output directory. By
+            </pd>
+          </plentry>
+          <plentry id="output.dir">
+            <pt><parmname>output.dir</parmname></pt>
+            <pd id="output.dir.desc">Specifies the name and location of the output directory. By
               default, the output is written to
-              <filepath><varname>DITA-dir</varname>\out</filepath>.</entry>
-          </row>
-          <row id="transtype">
-            <entry><parmname>transtype</parmname></entry>
-            <entry id="transtype.desc">Specifies the output format. You can create plug-ins to add
+              <filepath><varname>DITA-dir</varname>\out</filepath>.</pd>
+          </plentry>
+          <plentry id="transtype">
+            <pt><parmname>transtype</parmname></pt>
+            <pd id="transtype.desc">Specifies the output format. You can create plug-ins to add
               new values for this parameter; by default, the following values are available:<ul>
                 <li>docbook</li>
                 <li>eclipsehelp</li>
@@ -189,16 +182,16 @@
                 <li>troff</li>
                 <li>xhtml</li>
               </ul>
-            </entry>
-          </row>
-          <row id="validate">
-            <entry><parmname>validate</parmname></entry>
-            <entry id="validate.desc">Specifies whether the DITA-OT validates the content. The
+            </pd>
+          </plentry>
+          <plentry id="validate">
+            <pt><parmname>validate</parmname></pt>
+            <pd id="validate.desc">Specifies whether the DITA-OT validates the content. The
               allowed values are <option>true</option> and <option>false</option>; the default value is
-                <option>true</option>.</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+                <option>true</option>.</pd>
+          </plentry>
+        </parml>
+      </fig>
+    </section>
   </refbody>
 </reference>
