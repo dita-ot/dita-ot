@@ -79,4 +79,13 @@
     <xsl:attribute name="display-align">after</xsl:attribute>
   </xsl:attribute-set>
     
+  <!-- Glossary -->
+  <xsl:attribute-set name="region-glossary.odd" use-attribute-sets="region-body.odd">
+      <xsl:attribute name="column-count">2</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="region-glossary.even" use-attribute-sets="region-body.even">
+      <xsl:attribute name="column-count">2</xsl:attribute>
+  </xsl:attribute-set>
+
 </xsl:stylesheet>

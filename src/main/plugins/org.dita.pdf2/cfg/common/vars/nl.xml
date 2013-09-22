@@ -126,4 +126,29 @@
   <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
   <variable id="#quote-start">“</variable>
   <variable id="#quote-end">”</variable>
+    <!--Glossary Variables-->
+    <!-- The footer that appears on the odd-numbered glossary pages. -->
+    <variable id="Glossary odd footer"/>
+
+    <!-- The footer that appears on the even-numbered glossary pages. -->
+    <variable id="Glossary even footer"/>
+
+    <!-- The header that appears on the odd-numbered glossary pages. -->
+    <variable id="Glossary odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<variable id="Glossary"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+
+    <!-- The header that appears on the even-numbered glossary pages. -->
+    <variable id="Glossary even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<variable id="Glossary"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+
+     <!-- The heading string to put at the top of the Glossary -->
+     <variable id="Glossary">Termenlijst</variable>
+
+     <!-- The string to put before the acronym list -->
+     <variable id="Acronyms">Acroniemen: </variable>
+
+     <!-- The string to put before the Abbreviation list -->
+     <variable id="Abbrevs">Afkortingen: </variable>
+
+     <!-- The string to put before the Abbreviation list -->
+     <variable id="Synonyms">Synoniemen: </variable>
+
 </vars>
