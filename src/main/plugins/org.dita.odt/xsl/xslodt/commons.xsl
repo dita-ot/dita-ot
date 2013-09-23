@@ -27,21 +27,19 @@
     xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
-    xmlns:exsl="http://exslt.org/common"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
-    extension-element-prefixes="exsl"
-    exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo"
+    exclude-result-prefixes="opentopic opentopic-index dita2xslfo"
     version="2.0">
     
     <xsl:template name="determineTopicType">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
         <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
-        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+        <xsl:variable name="topicNumber" select="count($topicNumbers/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
         <xsl:variable name="mapTopic">
             <xsl:copy-of select="$map//*[@id = $id]"/>
         </xsl:variable>
         <xsl:variable name="foundTopicType">
-            <xsl:apply-templates select="exsl:node-set($mapTopic)/*[position() = $topicNumber]" mode="determineTopicType"/>
+            <xsl:apply-templates select="$mapTopic/*[position() = $topicNumber]" mode="determineTopicType"/>
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="$foundTopicType!=''"><xsl:value-of select="$foundTopicType"/></xsl:when>

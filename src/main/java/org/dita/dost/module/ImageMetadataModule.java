@@ -15,6 +15,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.ImageMetadataFilter;
 
 /**
@@ -61,16 +62,14 @@ final class ImageMetadataModule implements AbstractPipelineModule {
             throw new DITAOTException(e);
         }
 
-        final Set<String> imagelist = job.getSet(FULL_DITA_TOPIC_LIST);
-        imagelist.removeAll(job.getSet(RESOURCE_ONLY_LIST));
-        imagelist.addAll(job.getSet(CHUNKED_TOPIC_LIST));
-        imagelist.addAll(job.getSet(CHUNKED_DITAMAP_LIST));
         final ImageMetadataFilter writer = new ImageMetadataFilter(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)),
                                                                        tempDir,
                                                                        job.getProperty("uplevels"));
         writer.setLogger(logger);
-        for (final String fileName: imagelist) {
-            writer.write(new File(tempDir,fileName).getAbsolutePath());
+        for (final FileInfo f: job.getFileInfo()) {
+            if (!f.isResourceOnly && ((f.isActive && "dita".equals(f.format)) || f.isChunked || f.isChunkedDitaMap)) {
+                writer.write(new File(tempDir, f.file.getPath()).getAbsoluteFile());
+            }
         }
 
         return null;

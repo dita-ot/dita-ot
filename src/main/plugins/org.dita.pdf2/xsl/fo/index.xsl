@@ -34,14 +34,11 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:exsl="http://exslt.org/common"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:comparer="com.idiominc.ws.opentopic.xsl.extension.CompareStrings"
-    extension-element-prefixes="exsl"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    exclude-result-prefixes="xs opentopic-index exsl comparer opentopic-func exslf ot-placeholder">
+    exclude-result-prefixes="xs opentopic-index comparer opentopic-func ot-placeholder">
 
   <xsl:variable name="index.continued-enabled" select="true()"/>
 
@@ -559,17 +556,7 @@ See the accompanying license.txt file for applicable licenses.
     </fo:block>
   </xsl:template>
 
-  <exslf:function name="opentopic-func:getIndexEntry">
-    <xsl:param name="value"/>
-    <xsl:param name="refID"/>
-
-    <xsl:for-each select="$index-entries">
-      <xsl:variable name="entries" select="key('index-key',$value)"/>
-      <exslf:result select="$entries[opentopic-index:refID/@value = $refID]"/>
-    </xsl:for-each>
-  </exslf:function>
-  
-  <xsl:function version="2.0" name="opentopic-func:getIndexEntry">
+  <xsl:function name="opentopic-func:getIndexEntry">
     <xsl:param name="value"/>
     <xsl:param name="refID"/>
 
@@ -596,7 +583,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:if test="count(exsl:node-set($index)/*) > 0">
+            <xsl:if test="count($index/*) > 0">
                 <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="__force__page__count">
 
                     <xsl:call-template name="insertIndexStaticContents"/>

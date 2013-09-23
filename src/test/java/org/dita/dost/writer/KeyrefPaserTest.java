@@ -64,7 +64,7 @@ public class KeyrefPaserTest {
         parser.setCurrentFile(new File("a.xml"));
         parser.setTempDir(tempDir);
         parser.setKeyMap(keymap);
-        parser.write(new File("a.xml").getPath());
+        parser.write(new File("a.xml"));
 
         assertXMLEqual(new InputSource(new File(expDir, "a.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "a.xml").toURI().toString()));
@@ -78,7 +78,7 @@ public class KeyrefPaserTest {
         parser.setCurrentFile(new File("b.ditamap"));
         parser.setTempDir(tempDir);
         parser.setKeyMap(keymap);
-        parser.write(new File("b.ditamap").getPath());
+        parser.write(new File("b.ditamap"));
 
         assertXMLEqual(new InputSource(new File(expDir, "b.ditamap").toURI().toString()),
                 new InputSource(new File(tempDir, "b.ditamap").toURI().toString()));

@@ -140,7 +140,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ARGUMENT_MAPPING.put("/cssroot", new StringArgument("args.cssroot"));
         ARGUMENT_MAPPING.put("/css", new StringArgument("args.css"));
         ARGUMENT_MAPPING.put("/filter", new FileArgument("args.filter"));
-        // ARGUMENT_MAPPING.put("/ditaext", new StringArgument("dita.extname"));
         ARGUMENT_MAPPING.put("/outdir", new FileArgument("output.dir"));
         ARGUMENT_MAPPING.put("/transtype", new StringArgument("transtype"));
         ARGUMENT_MAPPING.put("/indexshow", new StringArgument("args.indexshow"));

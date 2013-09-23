@@ -6,7 +6,7 @@
 <?Pub Inc?>
 <concept id="dita1.2specification" xml:lang="en-us">
 <title>DITA 1.2 Specification Support</title><?Pub Caret -2?>
-  <shortdesc>DITA Open Toolkit <keyword keyref="release.version"/> supports the
+  <shortdesc>DITA Open Toolkit <keyword keyref="release"/> supports the
 DITA 1.2 specification. Initial support for this specification was
 added in version 1.5 of the toolkit; versions 1.5.1 and 1.5.2 contain
 minor modifications to keep up with the latest drafts. The specification

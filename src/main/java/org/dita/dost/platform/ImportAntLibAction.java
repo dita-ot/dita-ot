@@ -29,7 +29,7 @@ final class ImportAntLibAction extends ImportAction {
         final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
         for (final String value: valueSet) {
             retBuf.append(LINE_SEPARATOR);
-            final String resolvedValue = FileUtils.getRelativePath(
+            final String resolvedValue = FileUtils.getRelativeUnixPath(
                     templateFilePath, value);
             if(FileUtils.isAbsolutePath(resolvedValue)){
                 // if resolvedValue is absolute path

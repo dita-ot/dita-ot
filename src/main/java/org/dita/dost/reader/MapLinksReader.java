@@ -247,14 +247,14 @@ public final class MapLinksReader extends AbstractXMLReader {
     }
 
     @Override
-    public void read(final String filename) {
+    public void read(final File filename) {
         if (matchList.isEmpty()) {
             throw new IllegalStateException("matchList not initialized");
         }
 
         match = false;
         needResolveEntity = true;
-        inputFile = new File(filename);
+        inputFile = filename;
         filePath = inputFile.getParent();
         inputFile.getPath();
         if(indexEntries.length() != 0){
@@ -263,8 +263,8 @@ public final class MapLinksReader extends AbstractXMLReader {
         }
 
         try {
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename, logger));
-            final InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
+            final InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename.getPath(), null));
             reader.parse(source);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;

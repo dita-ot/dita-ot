@@ -107,9 +107,6 @@
      default is 'no')-->
 <xsl:param name="DBG" select="'no'"/> <!-- "no" and "yes" are valid values; non-'yes' is ignored -->
 
-<!-- DITAEXT file extension name of dita topic file -->
-<xsl:param name="DITAEXT" select="'.xml'"/>
-
 <!-- Switch to enable or disable the generation of default meta message in html header -->
 <xsl:param name="genDefMeta" select="'no'"/>
 

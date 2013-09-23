@@ -13,6 +13,18 @@
     <reason>Build stopped. Problems occured during Index preprocess task. Please check the messages above.</reason>
     <response/>
   </message>
+  <message id="XEPJ001W" type="WARN">
+    <reason>%1</reason>
+    <response/>
+  </message>
+  <message id="XEPJ002E" type="ERROR">
+    <reason>%1</reason>
+    <response/>
+  </message>
+  <message id="XEPJ003E" type="ERROR">
+    <reason>%1</reason>
+    <response/>
+  </message>
   <!-- XSLT -->
   <message id="PDFX001W" type="WARN">
     <reason>There is no index entry found which closing range for ID="%1".</reason>

@@ -29,7 +29,7 @@ public class TestDitaValReader {
     public void testRead() throws DITAOTException{
         final File ditavalFile = new File(resourceDir, "src" + File.separator + "DITAVAL_1.ditaval");
         DitaValReader reader = new DitaValReader();
-        reader.read(ditavalFile.getAbsolutePath());
+        reader.read(ditavalFile.getAbsoluteFile());
         final Map<FilterKey, Action> map = reader.getFilterMap();
         assertEquals(Action.INCLUDE, map.get(new FilterKey("audience", "Cindy")));
         assertEquals(Action.FLAG, map.get(new FilterKey("produt", "p1")));

@@ -55,46 +55,46 @@ public class GenListModuleFilterTest {
     public static Collection<Object[]> getFiles() {
         final List<List<FileInfo>> files = new ArrayList<List<FileInfo>>();
         files.add(asList(new FileInfo[] {
-                new Builder().file("test.ditamap").format("ditamap").hasLink(false).build(),
-                new Builder().file("plain.dita").format("dita").isTarget(true).isNonConrefTarget(true).build(),
-                new Builder().file("keyword-keyref.dita").format("dita").isTarget(true).isNonConrefTarget(true).build(),
-                new Builder().file("topic.dita").format("dita").isTarget(true).isNonConrefTarget(true).build(),
-                new Builder().file("plain-copy-to.dita").isNonConrefTarget(true).build(),
-                new Builder().file("to-content.dita").format("dita").isTarget(true).isSkipChunk(true).build(),
-                new Builder().file("copy-to-to-content.dita").format("dita").isTarget(true).isSkipChunk(true).build(),
-                new Builder().file("to-content-copy-to.dita").isSkipChunk(true).build()
+                new Builder().file(new File("test.ditamap")).format("ditamap").hasLink(false).build(),
+                new Builder().file(new File("plain.dita")).format("dita").isTarget(true).isNonConrefTarget(true).build(),
+                new Builder().file(new File("keyword-keyref.dita")).format("dita").isTarget(true).isNonConrefTarget(true).build(),
+                new Builder().file(new File("topic.dita")).format("dita").isTarget(true).isNonConrefTarget(true).build(),
+                new Builder().file(new File("plain-copy-to.dita")).isNonConrefTarget(true).build(),
+                new Builder().file(new File("to-content.dita")).format("dita").isTarget(true).isSkipChunk(true).build(),
+                new Builder().file(new File("copy-to-to-content.dita")).format("dita").isTarget(true).isSkipChunk(true).build(),
+                new Builder().file(new File("to-content-copy-to.dita")).isSkipChunk(true).build()
                 }));
         files.add(asList(new FileInfo[] {
-                new Builder().file("topic.dita").format("dita").isTarget(true).isNonConrefTarget(true).hasLink(true).build(),
-                new Builder().file("local.dita").format("dita").isTarget(true).isNonConrefTarget(true).build(),
-//                new Builder().file("peer.dita").format("dita").isTarget(true).isNonConrefTarget(true).build(),
-//                new Builder().file("external.dita").format("dita").isTarget(true).isNonConrefTarget(true).build(),
-//                new Builder().file("local.html").format("html").isTarget(true).isNonConrefTarget(true).build(),
-//                new Builder().file("peer.html").format("html").isTarget(true).isNonConrefTarget(true).build(),
-//                new Builder().file("external.html").format("html").isTarget(true).isNonConrefTarget(true).build()
+                new Builder().file(new File("topic.dita")).format("dita").isTarget(true).isNonConrefTarget(true).hasLink(true).build(),
+                new Builder().file(new File("local.dita")).format("dita").isTarget(true).isNonConrefTarget(true).build(),
+//                new Builder().file(new File("peer.dita")).format("dita").isTarget(true).isNonConrefTarget(true).build(),
+//                new Builder().file(new File("external.dita")).format("dita").isTarget(true).isNonConrefTarget(true).build(),
+//                new Builder().file(new File("local.html")).format("html").isTarget(true).isNonConrefTarget(true).build(),
+//                new Builder().file(new File("peer.html")).format("html").isTarget(true).isNonConrefTarget(true).build(),
+//                new Builder().file(new File("external.html")).format("html").isTarget(true).isNonConrefTarget(true).build()
                 }));
         files.add(asList(new FileInfo[] {
-                new Builder().file("plain.dita").format("dita").build()
+                new Builder().file(new File("plain.dita")).format("dita").build()
                 }));
         files.add(asList(new FileInfo[] {
-                new Builder().file("keyword-keyref.dita").format("dita").hasKeyref(true).build()
+                new Builder().file(new File("keyword-keyref.dita")).format("dita").hasKeyref(true).build()
                 }));
         files.add(asList(new FileInfo[] {
-                new Builder().file("coderef.dita").format("dita").hasCoderef(true).build(),
-                new Builder().file("code.txt").isSubtarget(true).format("code").build()
+                new Builder().file(new File("coderef.dita")).format("dita").hasCoderef(true).build(),
+                new Builder().file(new File("code.txt")).isSubtarget(true).format("code").build()
                 }));
         files.add(asList(new FileInfo[] {
-                new Builder().file("conref.dita").format("dita").hasConref(true).build(),
-                new Builder().file("conref-library.dita").isConrefTarget(true).build()
+                new Builder().file(new File("conref.dita")).format("dita").hasConref(true).build(),
+                new Builder().file(new File("conref-library.dita")).isConrefTarget(true).build()
                 }));
         files.add(asList(new FileInfo[] {
-                new Builder().file("conaction.dita").format("dita").isConrefPush(true).hasConref(true).build(),
-                new Builder().file("conction-target.dita").isConrefTarget(true).build()
+                new Builder().file(new File("conaction.dita")).format("dita").isConrefPush(true).hasConref(true).build(),
+                new Builder().file(new File("conction-target.dita")).isConrefTarget(true).build()
                 }));
         files.add(asList(new FileInfo[] {
-                new Builder().file("resource-only.ditamap").format("ditamap").hasLink(false).build(),
-                new Builder().file("normal.dita").format("dita").isTarget(true).isNonConrefTarget(true).build(),
-                new Builder().file("resource-only.dita").format("dita").isTarget(true).isNonConrefTarget(true).isResourceOnly(true).build(),
+                new Builder().file(new File("resource-only.ditamap")).format("ditamap").hasLink(false).build(),
+                new Builder().file(new File("normal.dita")).format("dita").isTarget(true).isNonConrefTarget(true).build(),
+                new Builder().file(new File("resource-only.dita")).format("dita").isTarget(true).isNonConrefTarget(true).isResourceOnly(true).build(),
                 }));
         
         final List<Object[]> params = new ArrayList<Object[]>(files.size());
@@ -126,7 +126,7 @@ public class GenListModuleFilterTest {
 
     @Test
     public void testFilter() throws Exception {
-        final File srcFile = new File(srcDir, expFileInfos.get(0).file);
+        final File srcFile = new File(srcDir, expFileInfos.get(0).file.getPath());
         
         listFilter = new GenListModuleFilter();
         listFilter.setLogger(new TestUtils.TestLogger());
@@ -146,7 +146,7 @@ public class GenListModuleFilterTest {
         TransformerFactory.newInstance().newTransformer().transform(source, result);
         
         
-        final Set<String> resourceOnly = listFilter.getResourceOnlySet();
+        final Set<File> resourceOnly = listFilter.getResourceOnlySet();
         final List<FileInfo> actFileInfos = listFilter.getFileInfo();        
         assertEquals(expFileInfos.size(), actFileInfos.size());
         for (final FileInfo actFileInfo: actFileInfos) {
@@ -174,12 +174,12 @@ public class GenListModuleFilterTest {
         }
         
         final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        final Document expDoc = documentBuilder.parse(new File(expDir, expFileInfos.get(0).file));
+        final Document expDoc = documentBuilder.parse(new File(expDir, expFileInfos.get(0).file.getPath()));
         
         assertXMLEqual(expDoc, (Document) result.getNode());
     }
 
-    private FileInfo findFileInfo(final String file) {
+    private FileInfo findFileInfo(final File file) {
         for (final FileInfo f: expFileInfos) {
             if (f.file.equals(file)) {
                 return f;

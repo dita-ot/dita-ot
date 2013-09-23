@@ -19,10 +19,16 @@ See the accompanying license.txt file for applicable licenses.
   <keydef format="html" keys="download.oracle-jdk" scope="external"
     href="http://www.oracle.com/technetwork/java/javase/downloads/index.html"/>
   <keydef format="html" keys="download.saxon" scope="external" href="http://saxon.sourceforge.net/"/>
-  <keydef format="html" keys="download.xalan" scope="external"
-    href="http://xml.apache.org/xalan-j/downloads.html"/>
   <!--VERSION NUMBERS: DITA-OT-->
-  <keydef keys="release.stable-version">
+  <keydef keys="stable-version">
+    <!-- DITA-OT: Latest stable version -->
+    <topicmeta>
+      <keywords>
+        <keyword>1.8.2</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="stable-release">
     <!-- DITA-OT: Latest stable version -->
     <topicmeta>
       <keywords>
@@ -30,11 +36,19 @@ See the accompanying license.txt file for applicable licenses.
       </keywords>
     </topicmeta>
   </keydef>
-  <keydef keys="release.version">
+  <keydef keys="version">
     <!-- DITA-OT: Latest test version -->
     <topicmeta>
       <keywords>
         <keyword>2.0.M1</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="release">
+    <!-- DITA-OT: Latest test version -->
+    <topicmeta>
+      <keywords>
+        <keyword>2.0</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -92,14 +106,6 @@ See the accompanying license.txt file for applicable licenses.
     <topicmeta>
       <keywords>
         <keyword>2.11.0</keyword>
-      </keywords>
-    </topicmeta>
-  </keydef>
-  <keydef keys="tool.xalan.version">
-    <!-- Xalan: Minimum version -->
-    <topicmeta>
-      <keywords>
-        <keyword>2.7.1</keyword>
       </keywords>
     </topicmeta>
   </keydef>

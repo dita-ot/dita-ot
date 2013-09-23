@@ -3,7 +3,6 @@
  "map.dtd">
 <map xml:lang="en-us">
   <title>Developer's Reference</title>
-  <topicref href="developer-reference.dita">
     <topicref href="DITA-OTArchitecture.dita" navtitle="Architecture of the DITA-OT">
       <topicref href="processing-structure.dita"/>
       <topicref href="processing-pipeline-modules.dita"/>
@@ -79,7 +78,6 @@
     no longer referenced. The topic should be cleaned up or removed. It is also commented 
     out of the TOC below. -->
 <!-- <topicref href="DITA-OTGenListModule.xml" navtitle="Java Module Architecture"/> -->
-</topicref>
 <reltable>
 <relrow>
 <relcell>

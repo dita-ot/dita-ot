@@ -8,6 +8,8 @@
  */
 package org.dita.dost.writer;
 
+import java.io.File;
+
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
@@ -31,10 +33,10 @@ public interface AbstractWriter {
     /**
      * Call the writer to write or rewrite the file.
      * 
-     * @param filename system path to process, may contain a pseudo-fragment part
+     * @param filename system path to process
      * @throws DITAOTException DITAOTException
      */
-    void write(String filename) throws DITAOTException;
+    void write(File filename) throws DITAOTException;
 
     /**
      * Set logger for module.

@@ -10,9 +10,7 @@
                     <li>Ant, version <keyword keyref="tool.ant.version.min"/> or later</li>
                     <li>Java runtime environment or development kit, version <keyword
                             keyref="tool.java.version"/> or later</li>
-                    <li>XSLT processor. You can use either Saxon, version <keyword
-                            keyref="tool.saxon.version"/> or later, or Xalan-J, version <keyword
-                            keyref="tool.xalan.version"/> or later.</li>
+                    <li>XSLT 2.0 processor. You can use Saxon, version <keyword keyref="tool.saxon.version"/> or later.</li>
                 </ul></p>
             <p>In addition, determine the specific DITA-OT transformations that you intend to
                 support and ensure that you have the prerequisite software installed for them.</p>

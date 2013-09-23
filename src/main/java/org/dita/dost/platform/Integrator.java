@@ -298,7 +298,7 @@ public final class Integrator {
             }
 
             for (final String templateName : pluginFeatures.getAllTemplates()) {
-                templateSet.add(FileUtils.getRelativePath(ditaDir + File.separator + "dummy",
+                templateSet.add(FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy",
                         pluginFeatures.getLocation() + File.separator + templateName));
             }
             loadedPlugin.add(plugin);

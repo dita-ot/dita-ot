@@ -57,7 +57,6 @@
               classpathref="dost.class.path"
               style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelptoc.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"
                     from="*${dita.input.filename}"
@@ -76,7 +75,6 @@
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelptoc.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"
                 from="${user.input.file}"
@@ -95,7 +93,6 @@
               classpathref="dost.class.path"
               style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpmap.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"
                     from="*${dita.input.filename}"
@@ -114,7 +111,6 @@
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpmap.xsl">
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"
                 from="${user.input.file}"

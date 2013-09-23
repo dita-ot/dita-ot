@@ -8,7 +8,9 @@
  */
 package org.dita.dost.reader;
 
+import java.io.File;
 import java.io.IOException;
+
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
@@ -50,7 +52,7 @@ ContentHandler, LexicalHandler, EntityResolver {
     protected DITAOTLogger logger;
 
     @Override
-    public void read(final String filename) {
+    public void read(final File filename) {
         // NOOP
     }
 

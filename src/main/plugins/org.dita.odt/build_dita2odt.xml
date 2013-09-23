@@ -90,7 +90,6 @@
           filedirparameter="FILEDIR">
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="TEMPDIR" expression="${dita.temp.dir}"/>
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
@@ -118,7 +117,6 @@
           filedirparameter="FILEDIR">
       <param name="BASEDIR" expression="${basedir}"/>
       <param name="TEMPDIR" expression="${dita.temp.dir}"/>
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />

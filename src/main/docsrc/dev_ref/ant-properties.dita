@@ -22,8 +22,6 @@ artworkPrefixUrl
 axf.cmd
 axf.formatter.output-format
 axf.path
-chunkedditamapfile
-chunkedtopicfile
 clean-temp.skip
 clean.temp
 collator
@@ -37,8 +35,6 @@ customization.dir.url
 default.locale
 dita.dir
 dita.eclipsehelp.index.class
-dita.ext
-dita.extname
 dita.input
 dita.input.dirname
 dita.input.filename

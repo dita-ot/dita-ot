@@ -14,20 +14,10 @@
                 <li>Navigate to the directory of the migration tool.</li>
                 <li>(Optional) If the input HTML file contains namespace, 
                   you can remove it by hand, or running the command below:
-                  <p>enter the following command when using Saxon: 
-                    <codeblock>java com.icl.saxon.StyleSheet mytask.htm preprocess.xsl > mytask.htm</codeblock>
-                  </p>
-                  <p>enter the following command when using Xalan: 
-                    <codeblock>java org.apache.xalan.xslt.Process -in mytask.htm -xsl preprocess.xsl -out mytask.htm</codeblock>
-                  </p>
+                  <codeblock>java com.icl.saxon.StyleSheet mytask.htm preprocess.xsl > mytask.htm</codeblock>
                 </li>
-                <li>Use Saxon or Xalan directory to run the migration, on the command line, 
-                    <p>enter the following command when using Saxon: 
-                        <codeblock>java com.icl.saxon.StyleSheet mytask.htm h2d.xsl infotype=task > mytask.dita</codeblock>
-                    </p>
-                    <p>enter the following command when using Xalan: 
-                        <codeblock>java org.apache.xalan.xslt.Process -in mytask.htm -xsl h2d.xsl -out mytask.dita -param infortype task</codeblock>
-                    </p>
+                <li>Use Saxon directory to run the migration, on the command line, 
+                  <codeblock>java com.icl.saxon.StyleSheet mytask.htm h2d.xsl infotype=task > mytask.dita</codeblock>
                 </li>
             </ol>
             <p>You can also add other parameters to this properties file. See 

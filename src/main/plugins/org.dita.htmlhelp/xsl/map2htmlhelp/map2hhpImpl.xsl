@@ -24,9 +24,7 @@
 
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="2.0"
-                xmlns:exsl="http://exslt.org/common"
-                extension-element-prefixes="exsl">
+                version="2.0">
 
 <!-- Include error message template -->
 <xsl:include href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
@@ -44,7 +42,6 @@
 <xsl:param name="INCLUDEFILE" />
 <xsl:param name="HELPALIAS" />
 <xsl:param name="HELPMAP" />
-<xsl:param name="DITAEXT" select="'.xml'"/>
 
 
 <!-- Is there a way to prevent re-issuing the same filename, using keys? Doubt it... -->
@@ -192,7 +189,7 @@ Default topic=</xsl:text>
 
 [FILES]
 </xsl:text>
-  <xsl:apply-templates select="exsl:node-set($temp)/filelist/*" mode="tempfile">
+  <xsl:apply-templates select="$temp/filelist/*" mode="tempfile">
     <xsl:sort select="@href"/>
   </xsl:apply-templates>
   <xsl:if test="string-length($INCLUDEFILE)>0">

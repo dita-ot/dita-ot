@@ -58,8 +58,6 @@ this document.</p><codeblock>&lt;?xml version="1.0" encoding="utf-8"?>
   &lt;property name="DITA_DIR" value="${env.DITA_DIR}"/>
   &lt;property name="args.logdir" value="logs"/>
 
-  &lt;property name="dita.extname" value=".dita"/>
-    
   &lt;property name="outdir" location ="output"/>
   &lt;property name="clean.temp" value="no"/>
   

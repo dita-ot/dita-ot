@@ -34,10 +34,8 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:opentopic-mapmerge="http://www.idiominc.com/opentopic/mapmerge"
-    xmlns:exsl="http://exslt.org/common"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-    exclude-result-prefixes="opentopic-mapmerge opentopic-func exslf exsl"
+    exclude-result-prefixes="opentopic-mapmerge opentopic-func"
     version="2.0">
 	
 	<xsl:import href="../../../../xsl/common/output-message.xsl"/>
@@ -531,17 +529,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-    <exslf:function name="opentopic-func:getDestinationId">
-        <xsl:param name="href"/>
-        <xsl:variable name="destination">
-            <xsl:call-template name="getDestinationIdImpl">
-                <xsl:with-param name="href" select="$href"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <exslf:result select="$destination"/>
-    </exslf:function>
-
-    <xsl:function version="2.0" name="opentopic-func:getDestinationId">
+    <xsl:function name="opentopic-func:getDestinationId">
         <xsl:param name="href"/>
         <xsl:call-template name="getDestinationIdImpl">
             <xsl:with-param name="href" select="$href"/>

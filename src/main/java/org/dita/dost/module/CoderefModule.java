@@ -19,6 +19,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.CoderefResolver;
 /**
  * Coderef Module class.
@@ -64,12 +65,13 @@ final class CoderefModule implements AbstractPipelineModule {
             throw new DITAOTException(e);
         }
 
-        final Set<String> codereflist=job.getSet(CODEREF_LIST);
         final CoderefResolver writer = new CoderefResolver();
         writer.setLogger(logger);
-        for (final String fileName : codereflist) {
-            //FIXME:This writer deletes and renames files, have to
-            writer.write(new File(tempDir,fileName).getAbsolutePath());
+        for (final FileInfo f: job.getFileInfo()) {
+            if (f.hasCoderef) {
+                //FIXME:This writer deletes and renames files, have to
+                writer.write(new File(tempDir, f.file.getPath()).getAbsoluteFile());
+            }
         }
 
         return null;

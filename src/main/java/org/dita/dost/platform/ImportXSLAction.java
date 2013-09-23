@@ -31,7 +31,7 @@ final class ImportXSLAction extends ImportAction {
             retBuf.append(LINE_SEPARATOR);
             retBuf.append("<xsl:import href=\"");
             retBuf.append(StringUtils.escapeXML(
-                    FileUtils.getRelativePath(
+                    FileUtils.getRelativeUnixPath(
                             templateFilePath, value)));
             retBuf.append("\"/>");
         }

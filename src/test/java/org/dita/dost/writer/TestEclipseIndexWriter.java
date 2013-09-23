@@ -57,7 +57,7 @@ public class TestEclipseIndexWriter {
         final EclipseIndexWriter indexWriter = new EclipseIndexWriter();
         indexWriter.setContent(content);
         final File outFile = new File(tempDir, "index.xml");
-        indexWriter.write(outFile.getAbsolutePath());
+        indexWriter.write(outFile.getAbsoluteFile());
 
         XMLUnit.setIgnoreWhitespace(true);
         assertXMLEqual(new InputSource(new File(expDir, "index.xml").toURI().toString()),

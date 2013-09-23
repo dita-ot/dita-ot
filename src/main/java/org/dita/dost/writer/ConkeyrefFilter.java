@@ -17,6 +17,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.KeyDef;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -83,9 +84,9 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
      * @return updated href URI
      */
     private URI getRelativePath(final URI href) {
-        final String filePath = new File(tempDir, inputFile.getPath()).getAbsolutePath();
-        final String keyValue = new File(tempDir.toURI().resolve(stripFragment(href))).getAbsolutePath();
-        return toURI(FileUtils.getRelativePath(filePath, keyValue));
+        final URI filePath = new File(tempDir, inputFile.getPath()).toURI();
+        final URI keyValue = tempDir.toURI().resolve(stripFragment(href));
+        return URLUtils.getRelativePath(filePath, keyValue);
     }
 
 }

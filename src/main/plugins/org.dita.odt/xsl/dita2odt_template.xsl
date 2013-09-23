@@ -111,9 +111,6 @@
 <!--embedding images as binary data -->
 <xsl:param name="ODTIMGEMBED" select="'yes'"/>
 
-<!-- DITAEXT file extension name of dita topic file -->
-<xsl:param name="DITAEXT" select="'.xml'"/>
-
 <!-- Name of the keyref file that contains key definitions -->
 <xsl:param name="KEYREF-FILE" select="concat($WORKDIR,$PATH2PROJ,'keydef.xml')"/>
 

@@ -4,14 +4,12 @@
 <?Pub Sty _display FontColor="red"?>
 <map id="mainDITAreadme" title="DITA-OT Readme map" xml:lang="en-us">
 <title>User Guide</title>
-<topicref href="readme/DITA-readme.xml">
 <mapref href="readme/overview.ditamap" format="ditamap"/>
 <mapref href="readme/installing.ditamap" format="ditamap"/>
 <mapref href="readme/publishing.ditamap" format="ditamap"/>
 <mapref href="readme/globalizing.ditamap" format="ditamap"/>
 <mapref href="readme/troubleshooting.ditamap" format="ditamap"/>
 <topicref href="readme/reference.ditamap" format="ditamap"/>
-</topicref>
 <reltable>
 <title>CTR: Ant topics</title>
 <relheader>

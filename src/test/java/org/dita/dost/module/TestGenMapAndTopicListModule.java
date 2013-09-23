@@ -36,6 +36,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -81,7 +82,6 @@ public class TestGenMapAndTopicListModule {
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR, outDir.getPath());
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_TEMPDIR, tempDir.getPath());
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, new File("src" + File.separator + "main").getAbsolutePath());
-        pipelineInput.setAttribute(ANT_INVOKER_PARAM_DITAEXT, ".xml");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_INDEXTYPE, "xhtml");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ENCODING, "en-US");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT, ".html");
@@ -169,8 +169,8 @@ public class TestGenMapAndTopicListModule {
                     "maps/root-map-01.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
         
-        final Properties ditaProps = readProperties(new File(tempDirParallel, FILE_NAME_DITA_LIST));
-        assertEquals(".." + File.separator, ditaProps.getProperty("uplevels"));
+        final Job job = new Job(tempDirParallel);
+        assertEquals(".." + File.separator, job.getProperty("uplevels"));
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder builder = factory.newDocumentBuilder();
@@ -178,10 +178,10 @@ public class TestGenMapAndTopicListModule {
         final Element elem = document.getDocumentElement();
         final NodeList nodeList = elem.getElementsByTagName("keydef");
         final Map<String, List<String>> expKeyDef = new HashMap<String, List<String>>();
-        expKeyDef.put("target_topic_2", Arrays.asList("target_topic_2", "topics" + UNIX_SEPARATOR + "target-topic-c.xml", "maps" + UNIX_SEPARATOR + "root-map-01.ditamap"));
-        expKeyDef.put("target_topic_1", Arrays.asList("target_topic_1", "topics" + UNIX_SEPARATOR + "target-topic%20a.xml", "maps" + UNIX_SEPARATOR + "root-map-01.ditamap"));
-        expKeyDef.put("target_topic_3", Arrays.asList("target_topic_3", "topics" + UNIX_SEPARATOR + "target-topic-c.xml", "maps" + UNIX_SEPARATOR + "root-map-01.ditamap"));
-        expKeyDef.put("target_topic_4", Arrays.asList("target_topic_4", "http://www.example.com/?foo=bar&baz=qux#quxx", "maps" + UNIX_SEPARATOR + "root-map-01.ditamap"));
+        expKeyDef.put("target_topic_2", Arrays.asList("target_topic_2", "topics" + URI_SEPARATOR + "target-topic-c.xml", "maps" + URI_SEPARATOR + "root-map-01.ditamap"));
+        expKeyDef.put("target_topic_1", Arrays.asList("target_topic_1", "topics" + URI_SEPARATOR + "target-topic%20a.xml", "maps" + URI_SEPARATOR + "root-map-01.ditamap"));
+        expKeyDef.put("target_topic_3", Arrays.asList("target_topic_3", "topics" + URI_SEPARATOR + "target-topic-c.xml", "maps" + URI_SEPARATOR + "root-map-01.ditamap"));
+        expKeyDef.put("target_topic_4", Arrays.asList("target_topic_4", "http://www.example.com/?foo=bar&baz=qux#quxx", "maps" + URI_SEPARATOR + "root-map-01.ditamap"));
         for(int i = 0; i< nodeList.getLength();i++){
             final Element el = (Element) nodeList.item(i);
             final List<String> exp = expKeyDef.get(el.getAttribute("keys"));
@@ -259,8 +259,8 @@ public class TestGenMapAndTopicListModule {
                     "root-map-02.ditamap")),
                 readLines(new File(e, "usr.input.file.list")));
                 
-        final Properties ditaProps = readProperties(new File(tempDirAbove, FILE_NAME_DITA_LIST));
-        assertEquals("", ditaProps.getProperty("uplevels"));
+        final Job job = new Job(tempDirAbove);
+        assertEquals("", job.getProperty("uplevels"));
         
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder builder = factory.newDocumentBuilder();
@@ -268,9 +268,9 @@ public class TestGenMapAndTopicListModule {
         final Element elem = document.getDocumentElement();
         final NodeList nodeList = elem.getElementsByTagName("keydef");
         final Map<String, List<String>> expKeyDef = new HashMap<String, List<String>>();
-        expKeyDef.put("target_topic_2", Arrays.asList("target_topic_2", "topics" + File.separator + "target-topic-c.xml", "root-map-02.ditamap"));
-        expKeyDef.put("target_topic_1", Arrays.asList("target_topic_1", "topics" + File.separator + "target-topic%20a.xml", "root-map-02.ditamap"));
-        expKeyDef.put("target_topic_3", Arrays.asList("target_topic_3", "topics" + File.separator + "target-topic-c.xml", "root-map-02.ditamap"));
+        expKeyDef.put("target_topic_2", Arrays.asList("target_topic_2", "topics" + URI_SEPARATOR + "target-topic-c.xml", "root-map-02.ditamap"));
+        expKeyDef.put("target_topic_1", Arrays.asList("target_topic_1", "topics" + URI_SEPARATOR + "target-topic%20a.xml", "root-map-02.ditamap"));
+        expKeyDef.put("target_topic_3", Arrays.asList("target_topic_3", "topics" + URI_SEPARATOR + "target-topic-c.xml", "root-map-02.ditamap"));
         expKeyDef.put("target_topic_4", Arrays.asList("target_topic_4", "http://www.example.com/?foo=bar&baz=qux#quxx", "root-map-02.ditamap"));
         for(int i = 0; i< nodeList.getLength();i++){
             final Element el = (Element) nodeList.item(i);

@@ -40,7 +40,6 @@
 <xsl:param name="FILEREF" select="'file://'"/>
 <xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
 <xsl:param name="WORKDIR" select="'./'"/>
-<xsl:param name="DITAEXT" select="'.xml'"/>
 
 <!-- *********************************************************************************
      Setup the HTML wrapper for the table of contents
@@ -303,12 +302,6 @@
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">
                 <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>
               </xsl:when>
-              <!--<xsl:when test="not(@href) or @href=''">
-                <xsl:variable name="parentHREF" select="parent::*[contains(@class, ' map/topicref ')]/@href"/>
-                <xsl:if test="$parentHREF!=''">
-                  <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before($parentHREF, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
-                </xsl:if>
-              </xsl:when>-->
               <xsl:otherwise> <!-- If non-DITA, keep the href as-is -->
                 <xsl:attribute name="value"><xsl:value-of select="@href"/></xsl:attribute>
               </xsl:otherwise>

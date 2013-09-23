@@ -539,13 +539,13 @@
     <move file="${doc.out.dir}/html/userguide.html" tofile="${doc.out.dir}/html/index.html"/>
     -->
     <ant antfile="${src.dir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme/changes/rel2.0.xml"/>
+      <property name="args.input" location="${doc.dir}/readme/changes/rel${otrelease}.xml"/>
       <property name="output.dir" location="${work.dir}/relnotes"/>
       <property name="args.csspath" value="resource"/>
       <property name="transtype" value="xhtml"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <copy file="${work.dir}/relnotes/rel1.8.html" tofile="${out.dir}/relnotes.html"/>
+    <copy file="${work.dir}/relnotes/rel${otrelease}.html" tofile="${out.dir}/relnotes.html"/>
     
     <delete failonerror="yes" includeemptydirs="true">
       <fileset dir="${doc.out.dir}">
@@ -582,7 +582,6 @@
            source="1.6" target="1.6">
       <src>
         <pathelement location="${test.java.dir}"/>
-        <pathelement location="${test.suite.dir}/src/main/java"/>
       </src>
       <classpath>
         <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
@@ -626,7 +625,29 @@
     </junit>
   </target>
   
-  <target name="integration-test" depends="compile, test-compile" description="Run integration tests">
+  <property name="integration-test.bin.dir" location="${basedir}/target/integration-test-classes"/>
+  
+  <target name="integration-test-compile" depends="compile, test-compile">
+    <delete failonerror="false">
+      <fileset dir="${integration-test.bin.dir}" erroronmissingdir="false"/>
+    </delete>
+    <mkdir dir="${integration-test.bin.dir}"/>
+    <javac destdir="${integration-test.bin.dir}"
+           debug="on"
+           source="1.6" target="1.6">
+      <src>
+        <pathelement location="${test.suite.dir}/src/main/java"/>
+      </src>
+      <classpath>
+        <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
+        <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
+        <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
+        <pathelement location="${test.bin.dir}"/>
+      </classpath>
+    </javac>
+  </target>
+  
+  <target name="integration-test" depends="compile, test-compile, integration-test-compile" description="Run integration tests">
     <condition property="only-test.name" value="${only-test}" else="">
       <isset property="only-test"/>
     </condition>
@@ -636,6 +657,7 @@
     <mkdir dir="${test.log.dir}"/>
     <junit printsummary="false" haltonfailure="yes" showoutput="false" logfailedtests="true">
       <classpath>
+        <pathelement location="${integration-test.bin.dir}"/>
         <pathelement location="${test.bin.dir}"/>
         <pathelement location="${test.src.dir}/resources"/>
         <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
@@ -658,10 +680,11 @@
     </junit>
   </target>
 
-  <target name="clean">
+  <target name="clean" depends="clean-java">
     <delete includeemptydirs="true" failonerror="false">
       <fileset dir="${test.bin.dir}" erroronmissingdir="false"/>
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
+      <fileset dir="${integration-test.bin.dir}" erroronmissingdir="false"/>
     </delete>
   </target>
 

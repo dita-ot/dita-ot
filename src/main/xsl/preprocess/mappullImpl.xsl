@@ -44,7 +44,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:param name="WORKDIR" select="'./'"/>
   <!-- Deprecated -->
   <xsl:param name="FILEREF" select="'file://'"/>
-  <xsl:param name="DITAEXT" select="'.xml'"/>
   <!-- If converting to PDF, never try to pull info from targets with print="no" -->
   <xsl:param name="FINALOUTPUTTYPE" select="''"/>
   
@@ -450,9 +449,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="$scope='external' or $scope='peer' or $type='external' or not($format='#none#' or $format='dita' or $format='DITA')">
             <!-- do nothing - type is unavailable-->
           </xsl:when>
-          <!--xsl:when test="not(contains($file,$DITAEXT))">
-            <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
-          </xsl:when-->
 
           <!--finding type based on name of the target element in a particular topic in another file-->
           <xsl:when test="$topicpos='otherfile'">
@@ -590,10 +586,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <xsl:apply-templates select="." mode="mappull:get-navtitle-for-non-dita"/>
       </xsl:when>
       <xsl:when test="@href=''"/>
-      <!--xsl:when test="not(contains($file,$DITAEXT))">
-        <xsl:value-of select="@href"/>
-        <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
-      </xsl:when-->
       <!--grabbing text from a particular topic in another file-->
       <xsl:when test="$topicpos='otherfile'">
         <xsl:variable name="target" select="$doc//*[@id=$topicid]"/>
@@ -839,10 +831,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
               <xsl:apply-templates select="." mode="mappull:get-linktext-for-non-dita"/>
             </xsl:when>
             <xsl:when test="@href=''">#none#</xsl:when>
-            <!--xsl:when test="not(contains($file,$DITAEXT))">
-              <xsl:text>#none#</xsl:text>
-              <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
-            </xsl:when-->
 
             <!--grabbing text from a particular topic in another file-->
             <xsl:when test="$topicpos='otherfile'">

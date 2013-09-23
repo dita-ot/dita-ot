@@ -172,7 +172,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
      * @throws DITAOTException exception
      */
     @Override
-    public void write(final String filename) throws DITAOTException {
+    public void write(final File filename) throws DITAOTException {
         hasConref = false;
         isReplaced = false;
         hasPushafter = false;
@@ -183,17 +183,17 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         levelForPushAfterStack = new Stack<Integer>();
         contentForPushAfterStack = new Stack<String>();
         try {
-            final File inputFile = new File(filename);
+            final File inputFile = filename;
             final File outputFile = new File(filename+".cnrfpush");
             output = new OutputStreamWriter(new FileOutputStream(outputFile),UTF8);
-            parser.parse(filename);
+            parser.parse(filename.toURI().toString());
             if(!movetable.isEmpty()){
                 final Properties prop = new Properties();
                 String key = null;
                 final Iterator<String> iterator = movetable.keySet().iterator();
                 while(iterator.hasNext()){
                     key = iterator.next();
-                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ043W", key.substring(0, key.indexOf(STICK)), filename).toString());
+                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ043W", key.substring(0, key.indexOf(STICK)), filename.getPath()).toString());
                 }
             }
             if(hasConref){
@@ -223,30 +223,33 @@ public final class ConrefPushParser extends AbstractXMLWriter {
      * 
      * @param filename filename
      */
-    private void updateList(final String filename){
+    private void updateList(final File filename){
         // this is used to update the conref.list file.
         BufferedWriter bufferedWriter =null;
         try{
             final Job job = new Job(tempDir);
 
-            final Set<String> conreflist = job.getSet(CONREF_LIST);
             // get the reletivePath from tempDir
-            final String reletivePath = filename.substring(FileUtils.normalize(tempDir.toString()).length() + 1);
-            for(final String str: conreflist){
-                if(str.equals(reletivePath)){
-                    return;
+            final String reletivePath = filename.getAbsolutePath().substring(FileUtils.normalize(tempDir.toString()).getPath().length() + 1);
+            for (final FileInfo f: job.getFileInfo()) {
+                final String str = f.file.getPath();
+                if (f.hasConref) {
+                    if(str.equals(reletivePath)){
+                        return;
+                    }
                 }
             }
-            final Set<String> stringBuffer = new HashSet<String>(job.getSet(CONREF_LIST));
-            stringBuffer.add(reletivePath);
-            job.setSet(CONREF_LIST, stringBuffer);
+            job.getOrCreateFileInfo(reletivePath).hasConref = true;
             
             job.write();
 
             try {
                 bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(tempDir, CONREF_LIST_FILE))));
-                for(final String str: conreflist){
-                    bufferedWriter.append(str).append("\n");
+                for (final FileInfo f: job.getFileInfo()) {
+                    final String str = f.file.getPath();
+                    if (f.hasConref) {
+                        bufferedWriter.append(str).append("\n");
+                    }
                 }
                 bufferedWriter.append(reletivePath);
             } finally {

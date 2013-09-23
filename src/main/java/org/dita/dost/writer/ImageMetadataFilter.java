@@ -67,13 +67,13 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     }
 
     @Override
-    public void write(final String filename) throws DITAOTException {
+    public void write(final File filename) throws DITAOTException {
         // ignore in-exists file
-        if (filename == null || !new File(filename).exists()) {
+        if (filename == null || !filename.exists()) {
             return;
         }
-        currentFile = new File(filename);
-        logger.logInfo("Processing " + filename);
+        currentFile = filename;
+        logger.logInfo("Processing " + filename.getAbsolutePath());
         super.write(filename);
     } 
     

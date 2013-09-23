@@ -35,9 +35,9 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:exsl="http://exslt.org/common"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
- 	            extension-element-prefixes="exsl">
+                exclude-result-prefixes="xs">
 
     <xsl:output indent="no"/>
 
@@ -82,23 +82,21 @@ See the accompanying license.txt file for applicable licenses.
 					<xsl:with-param name="parentId" select="generate-id()"/>
 				</xsl:apply-templates>
 			</xsl:when>
-			<xsl:when test="(normalize-space(@href) = '') and 
-                            (normalize-space(@navtitle) != '' or *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')])">
-          <xsl:variable name="isNotTopicRef">
-              <xsl:call-template name="isNotTopicRef">
-                  <xsl:with-param name="class" select="@class"/>
-              </xsl:call-template>
+			<xsl:when test="contains(@class, ' bookmap/part ') or
+			                (normalize-space(@navtitle) != '' or *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')])">
+          <xsl:variable name="isNotTopicRef" as="xs:boolean">
+              <xsl:call-template name="isNotTopicRef"/>
           </xsl:variable>
-          <xsl:if test="contains($isNotTopicRef,'false')">
-              <topic id="{generate-id()}" class="- topic/topic ">
-                  <title class=" topic/title ">
+          <xsl:if test="not($isNotTopicRef)">
+              <topic id="{generate-id()}" class="+ topic/topic pdf2-d/placeholder ">
+                  <title class="- topic/title ">
                       <xsl:choose>
                           <xsl:when test="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]">
                               <xsl:copy-of select="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]/node()"/>
                           </xsl:when>
-                          <xsl:otherwise>
+                          <xsl:when test="@navtitle">
                               <xsl:value-of select="@navtitle"/>
-                          </xsl:otherwise>
+                          </xsl:when>
                       </xsl:choose>
                   </title>
                   <!--body class=" topic/body "/-->
@@ -301,25 +299,17 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:attribute>
     </xsl:template>
 
-	<xsl:template name="isNotTopicRef">
-		<xsl:param name="class"/>
-		<xsl:choose>
-			<xsl:when test="contains($class,' bookmap/abbrevlist ')"/>
-			<xsl:when test="contains($class,' bookmap/amendments ')"/>
-			
-			<xsl:when test="contains($class,' bookmap/bookabstract ')"/>
-			<xsl:when test="contains($class,' bookmap/booklist ')"/>
-            
-			<xsl:when test="contains($class,' bookmap/colophon ')"/>
-			<xsl:when test="contains($class,' bookmap/dedication ')"/>
-			<xsl:when test="contains($class,' bookmap/tablelist ')"/>
-			<xsl:when test="contains($class,' bookmap/trademarklist ')"/>
-            <xsl:when test="contains($class,' bookmap/figurelist ')"/>
-            
-			<xsl:otherwise>
-				<xsl:value-of select="'false'"/>
-			</xsl:otherwise>
-		</xsl:choose>
+	<xsl:template name="isNotTopicRef" as="xs:boolean">
+	  <xsl:param name="class" select="@class"/>
+		<xsl:sequence select="contains($class,' bookmap/abbrevlist ')
+    			             or contains($class,' bookmap/amendments ')
+    			             or contains($class,' bookmap/bookabstract ')
+    			             or contains($class,' bookmap/booklist ')
+    			             or contains($class,' bookmap/colophon ')
+    			             or contains($class,' bookmap/dedication ')
+    			             or contains($class,' bookmap/tablelist ')
+    			             or contains($class,' bookmap/trademarklist ')
+    			             or contains($class,' bookmap/figurelist ')"/>
 	</xsl:template>
 
     <xsl:template match="*[contains(@class, ' map/reltable ')]" mode="build-tree"/>

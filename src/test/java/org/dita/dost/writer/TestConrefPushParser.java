@@ -103,7 +103,7 @@ public class TestConrefPushParser {
         final ConrefPushParser parser = new ConrefPushParser();
         final ConrefPushReader reader = new ConrefPushReader();
 
-        reader.read(inputFile.getAbsolutePath());
+        reader.read(inputFile.getAbsoluteFile());
         final Map<String, Hashtable<String, String>> pushSet = reader.getPushMap();
         final Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.entrySet().iterator();
         if(iter.hasNext()){
@@ -114,7 +114,7 @@ public class TestConrefPushParser {
             final Content content = new ContentImpl();
             content.setValue(entry.getValue());
             parser.setContent(content);
-            parser.write(entry.getKey());
+            parser.write(new File(entry.getKey()));
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
             final Document document = builder.parse(new File(entry.getKey()));

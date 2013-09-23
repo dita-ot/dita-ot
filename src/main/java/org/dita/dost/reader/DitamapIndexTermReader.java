@@ -190,8 +190,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                 buffer.append(SLASH);
             }
             buffer.append(href);
-            targetURI = FileUtils.normalize(buffer
-                    .toString());
+            targetURI = FileUtils.normalize(buffer.toString()).getPath();
         }else{
             targetURI = href;
         }

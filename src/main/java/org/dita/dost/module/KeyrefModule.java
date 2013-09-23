@@ -32,6 +32,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ConkeyrefFilter;
@@ -68,13 +69,11 @@ final class KeyrefModule implements AbstractPipelineModule {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
 
-        final String extName = input.getAttribute(ANT_INVOKER_PARAM_DITAEXT);
-
         Job job = null;
         try{
             job = new Job(tempDir);
         }catch(final Exception e){
-            logger.logError(e.getMessage(), e) ;
+            throw new DITAOTException(e) ;
         }
 
         // maps of keyname and target
@@ -106,18 +105,16 @@ final class KeyrefModule implements AbstractPipelineModule {
             reader.read(mapFile);
         }
         final Map<String, Element> keyDefinition = reader.getKeyDefinition();
-        //get files which have keyref attr
-        final Map<String, FileInfo> files = job.getFileInfo();
-        final Set<String> parseList = new HashSet<String>();
-        for (final FileInfo f: files.values()) {
-	        //Conref Module will change file's content, it is possible that tags with @keyref are copied in
-	        //while keyreflist is hard update with xslt.
-        	if (f.hasKeyref || f.hasConref) {
-        		parseList.add(f.file);
-        	}
-        }
-        for(final String file: parseList){
-            logger.logInfo("Processing " + new File(tempDir, file).getAbsolutePath());
+        final Set<String> normalProcessingRole = new HashSet<String>();
+        for (final FileInfo f: job.getFileInfo(new Filter() {
+            public boolean accept(final FileInfo f) {
+                //Conref Module will change file's content, it is possible that tags with @keyref are copied in
+                //while keyreflist is hard update with xslt.
+                return f.hasKeyref || f.hasConref;
+            }
+        })) {
+            final File file = f.file;
+            logger.logInfo("Processing " + new File(tempDir, file.getPath()).getAbsolutePath());
             
             final List<XMLFilter> filters = new ArrayList<XMLFilter>();
             
@@ -125,27 +122,32 @@ final class KeyrefModule implements AbstractPipelineModule {
             conkeyrefFilter.setLogger(logger);
             conkeyrefFilter.setKeyDefinitions(keydefs);
             conkeyrefFilter.setTempDir(tempDir);
-            conkeyrefFilter.setCurrentFile(new File(file));
+            conkeyrefFilter.setCurrentFile(file);
             filters.add(conkeyrefFilter);
             
             final KeyrefPaser parser = new KeyrefPaser();
             parser.setLogger(logger);
             parser.setKeyDefinition(keyDefinition);
             parser.setTempDir(tempDir);
-            parser.setCurrentFile(new File(file));
+            parser.setCurrentFile(file);
             parser.setKeyMap(keymap);
             filters.add(parser);
             
-            XMLUtils.transform(new File(tempDir, file), filters);
+            XMLUtils.transform(new File(tempDir, file.getPath()), filters);
             
             // validate resource-only list
             for (final String t: parser.getNormalProcessingRoleTargets()) {
-                if (files.containsKey(t)) {
-                    files.get(t).isResourceOnly = false;
-                }
+                normalProcessingRole.add(t);
             }
         }
-        job.addAll(files.values());
+        for (final String file: normalProcessingRole) {
+            final FileInfo f = job.getFileInfo(file);
+            if (f != null) {
+                f.isResourceOnly = false;
+                job.add(f);
+            }
+        }
+
         try {
             job.write();
         } catch (final IOException e) {

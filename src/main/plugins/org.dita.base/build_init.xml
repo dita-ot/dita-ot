@@ -128,9 +128,8 @@
     <classpath refid="dost.jar.path" />
   </taskdef>
 	
-  <taskdef name="xmlpropertyreader"
-  	classname="org.dita.dost.platform.XmlPropertyTask">
-  	<classpath refid="dost.jar.path"/>
+  <taskdef name="job-property" classname="org.dita.dost.platform.JobPropertyTask">
+    <classpath refid="dost.jar.path"/>
   </taskdef>
 	
   <typedef name="isabsolute"
@@ -434,7 +433,6 @@
     <echo level="info">* transtype = ${transtype}</echo>
     <echo level="info">* tempdir = ${dita.temp.dir}</echo>
     <echo level="info">* outputdir = ${output.dir}</echo>
-    <!--echo level="info">* extname = ${dita.ext}</echo-->
     <echo level="info">* clean.temp = ${clean.temp}</echo>
     <echo level="info">* DITA-OT version = ${otversion}</echo>
     <echo level="info">* XML parser = ${xml.parser}</echo>

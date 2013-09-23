@@ -8,13 +8,12 @@
   xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
   xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
   xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
-  xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
-  xmlns:exsl="http://exslt.org/common" 
+  xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" 
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
   xmlns:styleUtils="org.dita.dost.util.StyleUtils"
   xmlns:stringUtils="org.dita.dost.util.StringUtils" 
   xmlns:imgUtils="org.dita.dost.util.ImgUtils"
-  exclude-result-prefixes="exsl ditamsg styleUtils imgUtils stringUtils">
+  exclude-result-prefixes="ditamsg styleUtils imgUtils stringUtils">
   
   <!-- =========== TEMPLATES FOR ODT FLAGGING =========== -->
   <xsl:template name="create_flagging_styles">
@@ -200,19 +199,19 @@
             </xsl:attribute>
             <xsl:attribute name="style:family">text</xsl:attribute>
             <xsl:choose>
-              <xsl:when test="exsl:node-set($prop)/@style = 'underline'">
+              <xsl:when test="$prop/@style = 'underline'">
                 <xsl:attribute name="style:parent-style-name">underline</xsl:attribute>
               </xsl:when>
-              <xsl:when test="exsl:node-set($prop)/@style = 'bold'">
+              <xsl:when test="$prop/@style = 'bold'">
                 <xsl:attribute name="style:parent-style-name">bold</xsl:attribute>
               </xsl:when>
-              <xsl:when test="exsl:node-set($prop)/@style = 'italics'">
+              <xsl:when test="$prop/@style = 'italics'">
                 <xsl:attribute name="style:parent-style-name">italic</xsl:attribute>
               </xsl:when>
-              <xsl:when test="exsl:node-set($prop)/@style = 'double-underline'">
+              <xsl:when test="$prop/@style = 'double-underline'">
                 <xsl:attribute name="style:parent-style-name">double-underline</xsl:attribute>
               </xsl:when>
-              <xsl:when test="exsl:node-set($prop)/@style = 'overline'">
+              <xsl:when test="$prop/@style = 'overline'">
                 <xsl:attribute name="style:parent-style-name">overline</xsl:attribute>
               </xsl:when>
               <xsl:otherwise>
@@ -221,14 +220,14 @@
             </xsl:choose>
             
             <xsl:element name="style:text-properties">
-              <xsl:if test="exsl:node-set($prop)/@backcolor and not(exsl:node-set($prop)/@backcolor = '')">
+              <xsl:if test="$prop/@backcolor and not($prop/@backcolor = '')">
                 <xsl:attribute name="fo:background-color">
-                  <xsl:value-of select="styleUtils:getColor(exsl:node-set($prop)/@backcolor)"/>
+                  <xsl:value-of select="styleUtils:getColor($prop/@backcolor)"/>
                 </xsl:attribute>
               </xsl:if>
-              <xsl:if test="exsl:node-set($prop)/@color and not(exsl:node-set($prop)/@color = '')">
+              <xsl:if test="$prop/@color and not($prop/@color = '')">
                 <xsl:attribute name="fo:color">
-                  <xsl:value-of select="styleUtils:getColor(exsl:node-set($prop)/@color)"/>
+                  <xsl:value-of select="styleUtils:getColor($prop/@color)"/>
                 </xsl:attribute>
               </xsl:if>
             </xsl:element>
@@ -240,14 +239,14 @@
             </xsl:attribute>
             <xsl:attribute name="style:family">table</xsl:attribute>
             <xsl:element name="style:table-properties">
-              <xsl:if test="exsl:node-set($prop)/@backcolor and not(exsl:node-set($prop)/@backcolor = '')">
+              <xsl:if test="$prop/@backcolor and not($prop/@backcolor = '')">
                 <xsl:attribute name="fo:background-color">
-                  <xsl:value-of select="styleUtils:getColor(exsl:node-set($prop)/@backcolor)"/>
+                  <xsl:value-of select="styleUtils:getColor($prop/@backcolor)"/>
                 </xsl:attribute>
               </xsl:if>
-              <xsl:if test="exsl:node-set($prop)/@color and not(exsl:node-set($prop)/@color = '')">
+              <xsl:if test="$prop/@color and not($prop/@color = '')">
                 <xsl:attribute name="fo:color">
-                  <xsl:value-of select="styleUtils:getColor(exsl:node-set($prop)/@color)"/>
+                  <xsl:value-of select="styleUtils:getColor($prop/@color)"/>
                 </xsl:attribute>
               </xsl:if>
             </xsl:element>
@@ -424,10 +423,10 @@
       <xsl:call-template name="getrules"/>
     </xsl:variable>
     <!-- current node has flagging attribute add images-->
-    <xsl:if test="exsl:node-set($flagRulesOfCurrentNode)">
+    <xsl:if test="$flagRulesOfCurrentNode">
       <!-- for table/list flagging styles images should be rendered in p tag-->
       <xsl:if test="$family != '' and $family != '_table_attr' and 
-        (exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
+        ($flagrules/prop[1]/startflag/@imageref or $revtest = 1)">
         <!-- render p and span tag -->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
       </xsl:if>
@@ -452,7 +451,7 @@
       
       <!-- for table/list flagging styles images should be rendered in p tag-->
       <xsl:if test="$family != '' and $family != '_table_attr' and 
-        (exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
+        ($flagrules/prop[1]/startflag/@imageref or $revtest = 1)">
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
       </xsl:if>
     </xsl:if>
@@ -475,7 +474,7 @@
     </xsl:variable>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="$family != '' and (exsl:node-set($flagrules)/prop[last()]/endflag/@imageref or $revtest = 1)">
+    <xsl:if test="$family != '' and ($flagrules/prop[last()]/endflag/@imageref or $revtest = 1)">
       <!-- render p and span tag -->
       <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
     </xsl:if>
@@ -499,7 +498,7 @@
     </xsl:if>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="$family != '' and (exsl:node-set($flagrules)/prop[last()]/endflag/@imageref or $revtest = 1)">
+    <xsl:if test="$family != '' and ($flagrules/prop[last()]/endflag/@imageref or $revtest = 1)">
       <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
     </xsl:if>
     
@@ -521,7 +520,7 @@
       </xsl:variable>
       
       <!-- for table/list flagging styles -->
-      <xsl:if test="(exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
+      <xsl:if test="($flagrules/prop[1]/startflag/@imageref or $revtest = 1)">
         <!-- render p and span tag -->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
       </xsl:if>
@@ -536,7 +535,7 @@
       </xsl:call-template>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="(exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
+    <xsl:if test="($flagrules/prop[1]/startflag/@imageref or $revtest = 1)">
       <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
     </xsl:if>
     
@@ -556,7 +555,7 @@
     </xsl:variable>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="(exsl:node-set($flagrules)/prop[last()]/endflag/@imageref or $revtest = 1)">
+    <xsl:if test="($flagrules/prop[last()]/endflag/@imageref or $revtest = 1)">
       <!-- render p and span tag -->
       <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
     </xsl:if>
@@ -571,7 +570,7 @@
       </xsl:call-template>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="(exsl:node-set($flagrules)/prop[last()]/endflag/@imageref or $revtest = 1)">
+    <xsl:if test="($flagrules/prop[last()]/endflag/@imageref or $revtest = 1)">
       <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
     </xsl:if>
     
@@ -767,7 +766,7 @@
     <xsl:param name="flagrules">
       <xsl:call-template name="getrules"/>
     </xsl:param>
-    <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[1]" mode="start-revflagit"/>
+    <xsl:apply-templates select="$flagrules/revprop[1]" mode="start-revflagit"/>
   </xsl:template>
   
   <xsl:template match="revprop" mode="start-revflagit">
@@ -1061,8 +1060,8 @@
       <xsl:call-template name="getrules"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="exsl:node-set($flaggingRules) or not(parent::*)">
-        <xsl:copy-of select="exsl:node-set($flaggingRules)"/>
+      <xsl:when test="$flaggingRules or not(parent::*)">
+        <xsl:copy-of select="$flaggingRules"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="parent::*" mode="getFlaggingRules"/>

@@ -22,11 +22,9 @@
           </dlentry>
           <dlentry>
             <dt>XSLT processor</dt>
-            <dd>Provides the main transformation services. It must be compliant with XSLT 1.0. The
-              DITA-OT is tested with both Saxon and Xalan-J. You can download Saxon, version
-                <keyword keyref="tool.saxon.version"/> from <xref keyref="download.saxon"/> and
-              Xalan-J, version <keyword keyref="tool.xalan.version"/> or later from <xref
-                keyref="download.xalan"/>.</dd>
+            <dd>Provides the main transformation services. It must be compliant with XSLT 2.0. The
+              DITA-OT is tested with Saxon. You can download Saxon, version
+                <keyword keyref="tool.saxon.version"/> from <xref keyref="download.saxon"/>.</dd>
           </dlentry>
         </dl></p>
     </section>

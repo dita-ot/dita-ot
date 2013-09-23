@@ -3,7 +3,7 @@
  Sourceforge.net. See the accompanying license.txt file for 
  applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2007 All Rights Reserved. -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="exsl">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 
  <!-- ========== Flagging with flags & revisions ========== -->
  
@@ -408,7 +408,7 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="exsl:node-set($flag-result)/prop">
+      <xsl:when test="$flag-result/prop">
         <xsl:copy-of select="$flag-result"/>
       </xsl:when>
       <xsl:otherwise>
@@ -578,8 +578,8 @@
  <xsl:template match="*" mode="conflict-check">
   <xsl:param name="flagrules"/>
   <xsl:choose>
-   <xsl:when test="exsl:node-set($flagrules)/*">
-    <xsl:apply-templates select="exsl:node-set($flagrules)/*[1]" mode="conflict-check"/>
+   <xsl:when test="$flagrules/*">
+    <xsl:apply-templates select="$flagrules/*[1]" mode="conflict-check"/>
    </xsl:when>
    <xsl:otherwise>
     <xsl:value-of select="'false'"/>

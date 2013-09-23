@@ -58,7 +58,6 @@ public final class CommandLineInvoker {
         pm.put("/cssroot", "args.cssroot");
         pm.put("/css", "args.css");
         pm.put("/filter", "args.filter");
-        pm.put("/ditaext", "dita.extname");
         pm.put("/outdir", "output.dir");
         pm.put("/transtype", "transtype");
         pm.put("/indexshow", "args.indexshow");
@@ -361,7 +360,6 @@ public final class CommandLineInvoker {
         System.out.println("  /outdir:               specify the output directory");
         System.out.println("  /tempdir:              specify the temporary directory");
         System.out.println("  /logdir:               specify the log directory");
-        System.out.println("  /ditaext:              specify the file extension name to be used in the temp directory. Default is \".xml\"");
         System.out.println("  /filter:               specify the name of the file that contains the filter/flaggin/revision information");
         System.out.println("  /draft:                specify whether to output draft info. Valid values are \"no\" and \"yes\". Default is \"no\" (hide them).");
         System.out.println("  /artlbl:               specify whether to output artwork filenames. Valid values are \"no\" and \"yes\"");

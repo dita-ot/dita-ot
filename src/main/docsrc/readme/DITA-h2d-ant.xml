@@ -71,14 +71,6 @@
                             <entry colname="col3">No.</entry>
                         </row>
                         <row>
-                            <entry colname="col1">args.dita.ext</entry>
-                            <entry colname="col2">The extension of generated 
-                                DITA files. This extension also used to convert 
-                                links that go to other DITA topic. ".dita" and 
-                                ".xml" are valid values. Default is ".dita".</entry>
-                            <entry colname="col3">No.</entry>
-                        </row>
-                        <row>
                             <entry colname="col1">args.xsl</entry>
                             <entry colname="col2">The xsl file to replace the 
                                 default xsl file.</entry>

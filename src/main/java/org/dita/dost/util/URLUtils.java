@@ -424,20 +424,27 @@ public final class URLUtils {
     
     /**
      * Convert URI reference to system file path.
+     * 
+     * @filename URI to convert to system file path, may be relative or absolute
+     * @return file path, {@code null} if input was {@code null}
      */
     public static File toFile(final URI filename) {
-        if ("file".equals(filename.getScheme()) && filename.getPath() != null) {
-            return new File(filename);
+        if (filename == null) {
+            return null;
+        }
+        final URI f = stripFragment(filename);
+        if ("file".equals(f.getScheme()) && f.getPath() != null && f.isAbsolute()) {
+            return new File(f);
         } else {
-            return toFile(filename.toString());
+            return toFile(f.toString());
         }
     }
     
     /**
-     * Convert URI references to file paths.
+     * Convert URI or chimera references to file paths.
      * 
      * @param filename file reference
-     * @return file path
+     * @return file path, {@code null} if input was {@code null}
      */
     public static File toFile(final String filename) {
         if (filename == null) {
@@ -449,17 +456,22 @@ public final class URLUtils {
         } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        if (processingMode == Mode.LAX) {
-            f = f.replace(WINDOWS_SEPARATOR, File.separator);
-        }
-        f = f.replace(URI_SEPARATOR, File.separator);
+        f = f.replace(WINDOWS_SEPARATOR, File.separator).replace(UNIX_SEPARATOR, File.separator);
         return new File(f);
     }
 
     /**
-     * Covert file reference to URI.
+     * Covert file reference to URI. The difference between this method and
+     * {@link java.uri.URI(java.io.File)} constructor is that this
+     * method doesn't make the URI absolute.
+     * 
+     * @param file system path to convert to a URI, may be {@code null}
+     * @return file URI, {@code null} if input was {@code null}
      */
     public static URI toURI(final File file) {
+        if (file == null) {
+            return null;
+        }
         if (file.isAbsolute()) {
             return file.toURI();
         } else {
@@ -517,14 +529,16 @@ public final class URLUtils {
      * @return path without path
      */
     public static URI stripFragment(final URI path) {
-        final int i = path.toString().indexOf(SHARP);
-        if (i != -1) {
-           return toURI(path.toString().substring(0, i));
-        } else {
-           return path;
-        }
+        return setFragment(path, null);
     }
     
+    /**
+     * Create new URI with a given fragment.
+     * 
+     * @param path URI to set fragment on
+     * @param fragment new fragment, {@code null} for no fragment
+     * @return new URI instance with given fragment 
+     */
     public static URI setFragment(final URI path, final String fragment) {
         try {
             return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), path.getQuery(), fragment);
@@ -533,4 +547,27 @@ public final class URLUtils {
         }
     }
 
+    /**
+     * Resolves absolute URI against another absolute URI.
+     * 
+     * @param basePath absolute base file URI
+     * @param refPath absolute reference file URI
+     * @return relative URI
+     */
+    public static URI getRelativePath(final URI basePath, final URI refPath) {
+        if (!basePath.isAbsolute()) {
+            throw new IllegalArgumentException();
+        }
+        if (!refPath.isAbsolute()) {
+            throw new IllegalArgumentException();
+        }
+        if (!basePath.getScheme().equals("file")) {
+            throw new IllegalArgumentException();
+        }
+        if (!refPath.getScheme().equals("file")) {
+            throw new IllegalArgumentException();
+        }
+        return toURI(FileUtils.getRelativeUnixPath(basePath.getPath(), refPath.getPath()));
+    }
+    
 }

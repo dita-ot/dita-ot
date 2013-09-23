@@ -59,7 +59,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:param name="FILEREF">file://</xsl:param>
   <!-- The directory where the topic resides, starting with root -->
   <xsl:param name="WORKDIR" select="'./'"/>
-  <xsl:param name="DITAEXT" select="'.xml'"/>  
   <xsl:param name="DBG" select="'no'"/>
 
   <!-- Set the format for generated text for links to tables and figures.   -->
@@ -635,11 +634,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:when test="$scope='external' or $scope='peer' or not($format='#none#' or $format='dita' or $format='DITA')"><xsl:text>#none#</xsl:text><!--type is unavailable--></xsl:when>
       <!-- If this is an empty href, ignore it; we already put out a message -->
       <xsl:when test="@href=''"/>
-      <!--check whether file extension is correct, for targets in other files-->
-      <!--xsl:when test="not($topicpos='samefile') and not(contains($file,$DITAEXT))">
-        <xsl:text>#none#</xsl:text>
-        <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
-      </xsl:when-->
 
       <!--grab from target topic-->
       <xsl:when test="$elemid='#none#'">
@@ -945,12 +939,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:when test="$scope='peer' or $scope='external'">#none#</xsl:when>
             <xsl:when test="@href=''">#none#</xsl:when>
 
-            <!--when format is DITA, it's a different file, and file extension 
-              is wrong, use the href and generate an error -->
-            <!--xsl:when test="not($topicpos='samefile') and not(contains($file,$DITAEXT))">
-              <xsl:value-of select="@href"/>
-              <xsl:apply-templates select="." mode="ditamsg:unknown-extension"/>
-            </xsl:when-->
             <!-- otherwise pull text from the target -->
             <xsl:otherwise>
               <xsl:apply-templates select="." mode="topicpull:getlinktext">

@@ -8,6 +8,7 @@
  */
 package org.dita.dost.writer;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.dita.dost.exception.DITAOTException;
@@ -124,7 +125,7 @@ ContentHandler, LexicalHandler, EntityResolver {
     }
 
     @Override
-    public abstract void write(String filename) throws DITAOTException;
+    public abstract void write(File filename) throws DITAOTException;
 
     @Override
     public final void setLogger(final DITAOTLogger logger) {

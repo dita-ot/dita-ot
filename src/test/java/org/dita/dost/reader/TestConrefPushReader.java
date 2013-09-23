@@ -52,7 +52,7 @@ public class TestConrefPushReader {
          */
         final File filename = new File(srcDir, "conrefpush_stub.xml");
         final ConrefPushReader pushReader = new ConrefPushReader();
-        pushReader.read(filename.getAbsolutePath());
+        pushReader.read(filename.getAbsoluteFile());
         final Content content = pushReader.getContent();
         final Map<String, Hashtable<String,String>> pushSet = pushReader.getPushMap();
         final Iterator<Map.Entry<String, Hashtable<String,String>>> it= pushSet.entrySet().iterator();

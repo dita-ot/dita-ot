@@ -14,37 +14,30 @@
     </metadata>
   </prolog>
   <refbody>
-    <table frame="all" colsep="1" rowsep="1">
-      <title>Ant parameters: XHTML transformation</title>
-      <tgroup cols="2">
-        <colspec colname="COLSPEC0" colwidth="1.50*"/>
-        <colspec colname="COLSPEC3" colwidth="4*"/>
-        <thead>
-          <row>
-            <entry colname="col1" valign="bottom">Parameters</entry>
-            <entry colname="col3" valign="bottom">Description</entry>
-          </row>
-        </thead>
-        <tbody>
-          <row id="args.xhtml.contenttarget">
-            <entry><parmname>args.xhtml.contenttarget</parmname></entry>
-            <entry id="args.xhtml.contenttarget.desc">Specifies the value of the @target attribute
+    <section>
+      <fig>
+        <title>Ant parameters: XHTML transformation</title>
+        <parml>
+          <plentry id="args.xhtml.contenttarget">
+            <pt><parmname>args.xhtml.contenttarget</parmname></pt>
+            <pd id="args.xhtml.contenttarget.desc">Specifies the value of the @target attribute
               on the &lt;base> element in the TOC file. The default value is
-                <option>contentwin</option>.</entry>
-          </row>
-          <row id="args.xhtml.toc">
-            <entry colname="col1"><parmname>args.xhtml.toc</parmname></entry>
-            <entry id="args.xhtml.toc.desc" colname="col3">Specifies the base name of the TOC file.
-              The default value is <option>index</option>.</entry>
-          </row>
-          <row id="args.xhtml.toc.class">
-            <entry><parmname>args.xhtml.toc.class</parmname></entry>
-            <entry id="args.xhtml.toc.class.desc">Specifies the value of the @class attribute on the
+                <option>contentwin</option>.</pd>
+          </plentry>
+          <plentry id="args.xhtml.toc">
+            <pt><parmname>args.xhtml.toc</parmname></pt>
+            <pd id="args.xhtml.toc.desc">Specifies the base name of the TOC file.
+              The default value is <option>index</option>.</pd>
+          </plentry>
+          <plentry id="args.xhtml.toc.class">
+            <pt><parmname>args.xhtml.toc.class</parmname></pt>
+            <pd id="args.xhtml.toc.class.desc">Specifies the value of the @class attribute on the
               &lt;body> element in the TOC file. <ph audience="xslt-customizer">Found in
-                  <filepath>map2htmltoc.xsl</filepath>.</ph></entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+                  <filepath>map2htmltoc.xsl</filepath>.</ph></pd>
+          </plentry>
+        </parml>
+      
+    </fig>
+    </section>
   </refbody>
 </reference>

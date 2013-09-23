@@ -47,7 +47,7 @@ merged files. A sample usage of this module is as follows.</p>
       style=${dita.dir}${file.separator}xsl${file.separator}pretty.xsl" /&gt; 
   &lt;/target&gt;
 &lt;/project&gt;</codeblock></p>
-  <p>Then, you need to type <codeph>ant -f sample.xml merge -Dinput="C:\DITA-OT<keyword keyref="release.version"/>\test.ditamap</codeph>"
+  <p>Then, you need to type <codeph>ant -f sample.xml merge -Dinput="C:\DITA-OT<keyword keyref="version"/>\test.ditamap</codeph>"
 in the command window.<note>The path for -Dinput must be an absolute path</note></p>
 </conbody>
 </concept>

@@ -74,7 +74,6 @@ public class TestDitaWriter {
         pipelineInput.setAttribute("outputdir", outDir.getAbsolutePath());
         pipelineInput.setAttribute("tempDir", tempDir.getAbsolutePath());
         pipelineInput.setAttribute("ditadir", new File("src" + File.separator + "main").getAbsolutePath());
-        pipelineInput.setAttribute("ditaext", ".dita");
         pipelineInput.setAttribute("indextype", "xhtml");
         pipelineInput.setAttribute("encoding", "en-US");
         pipelineInput.setAttribute("targetext", ".html");
@@ -103,10 +102,9 @@ public class TestDitaWriter {
 
     @Test
     public void testWrite() throws DITAOTException, ParserConfigurationException, SAXException, IOException {
-        String ditavalFile = pipelineInput.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
-        ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
+        final String ditavalFile = pipelineInput.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         final DitaValReader filterReader = new DitaValReader();
-        filterReader.read(ditavalFile);
+        filterReader.read(new File(baseDir, ditavalFile).getAbsoluteFile());
         
         final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.loadSubjectScheme(new File(inputDir, "subject_scheme.ditamap").getPath());
@@ -137,7 +135,6 @@ public class TestDitaWriter {
         writer.setOutputUtils(outputUtils);
         writer.setTempDir(tempDir.getAbsoluteFile());
         writer.setKeyDefinitions(Collections.EMPTY_LIST);
-        writer.setExtName(".dita");
         writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), "keyword.dita");
 
         compareKeyword(new File(baseDir, new File(inputDir, "keyword.dita").getPath()),

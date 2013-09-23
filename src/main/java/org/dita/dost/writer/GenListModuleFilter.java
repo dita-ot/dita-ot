@@ -71,9 +71,9 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     /** Set of all the non-conref and non-copyto targets refered in current parsing file */
     private final Set<Reference> nonConrefCopytoTargets;
     /** Set of sources of those copy-to that were ignored */
-    private final Set<String> ignoredCopytoSourceSet;
+    private final Set<File> ignoredCopytoSourceSet;
     /** Map of copy-to target to souce */
-    private final Map<String, String> copytoMap;
+    private final Map<File, File> copytoMap;
     /** Map of key definitions */
     private final Map<String, KeyDef> keysDefMap;
     /** Map to store multi-level keyrefs */
@@ -88,7 +88,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     private int topicGroupLevel = 0;
     /** Flag used to mark if current file is still valid after filtering */
     /** Set of outer dita files */
-    private final Set<String> outDitaFilesSet;
+    private final Set<File> outDitaFilesSet;
     /** Absolute system path to file being processed */
     private URI currentFile = null;
     /** System path to file being processed, relative to base directory. */
@@ -97,9 +97,9 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     /** Stack of inherited attributes. */
     private final Deque<AttributesImpl> inheritedAttsStack;
     /** Topics with processing role of "resource-only" */
-    private final Set<String> resourceOnlySet;
+    private final Set<File> resourceOnlySet;
     /** Topics with processing role of "normal" */
-    private final Set<String> normalProcessingSet;
+    private final Set<File> normalProcessingSet;
 //    private final List<ExportAnchor> resultList = new ArrayList<ExportAnchor>();
 //    private ExportAnchor currentExportAnchor;
 //    /** Flag to show whether a file has <exportanchors> tag */
@@ -141,16 +141,16 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      */
     public GenListModuleFilter() {
         nonConrefCopytoTargets = new HashSet<Reference>(INT_64);
-        copytoMap = new HashMap<String, String>(INT_16);
-        ignoredCopytoSourceSet = new HashSet<String>(INT_16);
-        outDitaFilesSet = new HashSet<String>(INT_64);
+        copytoMap = new HashMap<File, File>(INT_16);
+        ignoredCopytoSourceSet = new HashSet<File>(INT_16);
+        outDitaFilesSet = new HashSet<File>(INT_64);
         keysDefMap = new HashMap<String, KeyDef>();
         keysRefMap = new HashMap<String, String>();
 //        processRoleLevel = 0;
 //        processRoleStack = new Stack<String>();
         inheritedAttsStack = new ArrayDeque<AttributesImpl>();
-        resourceOnlySet = new HashSet<String>(INT_32);
-        normalProcessingSet = new HashSet<String>(INT_32);
+        resourceOnlySet = new HashSet<File>(INT_32);
+        normalProcessingSet = new HashSet<File>(INT_32);
 //        topicMetaSet = new HashSet<String>(INT_16);
         validBranches = new HashMap<String, List<String>>(INT_32);
         counterMap = new HashMap<String, Integer>();
@@ -239,7 +239,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return out file set
      */
-    public Set<String> getOutFilesSet() {
+    public Set<File> getOutFilesSet() {
         return outDitaFilesSet;
     }
 
@@ -248,8 +248,8 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return the resource-only set
      */
-    public Set<String> getResourceOnlySet() {
-        final Set<String> res = new HashSet<String>(resourceOnlySet);
+    public Set<File> getResourceOnlySet() {
+        final Set<File> res = new HashSet<File>(resourceOnlySet);
         res.removeAll(normalProcessingSet);
         return res;
     }
@@ -266,14 +266,14 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         for (final Builder b: fileInfoMap.values()) {
             final FileInfo f = b.build();
             if (f.isConrefTarget) {
-                nonCopytoSet.add(new Reference(f.file, f.format));
+                nonCopytoSet.add(new Reference(f.file.getPath(), f.format));
             }
         }
-        for (final String f : copytoMap.values()) {
-            nonCopytoSet.add(new Reference(f, fileInfoMap.get(f).build().format));
+        for (final File f : copytoMap.values()) {
+            nonCopytoSet.add(new Reference(f.getPath(), fileInfoMap.get(f.getPath()).build().format));
         }
-        for (final String f : ignoredCopytoSourceSet) {
-            nonCopytoSet.add(new Reference(f, fileInfoMap.get(f).build().format));
+        for (final File f : ignoredCopytoSourceSet) {
+            nonCopytoSet.add(new Reference(f.getPath(), fileInfoMap.get(f.getPath()).build().format));
         }
 //        for (final String filename : subsidiarySet) {
 //            // only activated on /generateout:3 & is out file.
@@ -290,7 +290,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return Returns the outditafileslist.
      */
-    public Set<String> getOutDitaFilesSet() {
+    public Set<File> getOutDitaFilesSet() {
         return outDitaFilesSet;
     }
 
@@ -299,10 +299,10 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return Returns the nonConrefCopytoTargets.
      */
-    public Set<String> getNonConrefCopytoTargets() {
-        final Set<String> res = new HashSet<String>(nonConrefCopytoTargets.size());
+    public Set<File> getNonConrefCopytoTargets() {
+        final Set<File> res = new HashSet<File>(nonConrefCopytoTargets.size());
         for (final Reference r : nonConrefCopytoTargets) {
-            res.add(r.filename);
+            res.add(new File(r.filename));
         }
         return res;
     }
@@ -312,7 +312,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return Returns the ignoredCopytoSourceSet.
      */
-    public Set<String> getIgnoredCopytoSourceSet() {
+    public Set<File> getIgnoredCopytoSourceSet() {
         return ignoredCopytoSourceSet;
     }
 
@@ -321,7 +321,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return copy-to map
      */
-    public Map<String, String> getCopytoMap() {
+    public Map<File, File> getCopytoMap() {
         return copytoMap;
     }
 
@@ -400,7 +400,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     @Override
     public void startDocument() throws SAXException {
         currentFileRelative = inputDir.relativize(currentFile);
-        path2Project = getPathtoProject(currentFileRelative.getPath(), toFile(currentFile.toString()), outputUtils.getInputMapPathName().getAbsolutePath());
+        path2Project = getPathtoProject(toFile(currentFileRelative), toFile(currentFile.toString()), outputUtils.getInputMapPathName().getAbsolutePath());
         fileInfo = getOrCreateBuilder(currentFileRelative);
         
         super.startDocument();
@@ -437,7 +437,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
         if (path2Project != null) {
             getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project);
-            getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, correct(path2Project, true));
+            getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, toURI(path2Project).toString());
         } else {
             getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, "");
             getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, "." + UNIX_SEPARATOR);
@@ -628,23 +628,22 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     private void handleTopicRef(final String localName, final Attributes atts) {
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
         if (MAP_TOPICREF.matches(classValue) && outputUtils.getOnlyTopicInMap() && isStartDocument) {
-            String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
+            URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
             if (hrefValue == null) {
-                hrefValue = atts.getValue(ATTRIBUTE_NAME_CONREF);
+                hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
             }
             if (hrefValue != null) {
                 if (isExternal(hrefValue, getInherited(ATTRIBUTE_NAME_SCOPE))) {
                     return;
                 }
                 // normalize href value.
-                final File target = new File(hrefValue);
+                final File target = toFile(hrefValue);
                 // caculate relative path for href value.
                 String fileName = null;
                 if (target.isAbsolute()) {
-                    fileName = FileUtils.getRelativePath(inputFile.toString(), hrefValue);
+                    fileName = FileUtils.getRelativeUnixPath(inputFile.toString(), hrefValue.toString());
                 }
-                fileName = FileUtils.normalizeDirectory(currentDir.toString(), hrefValue);
-                fileName = FileUtils.separatorsToUnix(fileName);
+                fileName = FileUtils.separatorsToUnix(FileUtils.normalizeDirectory(currentDir.toString(), hrefValue.toString()).getPath());
 
                 final boolean canParse = parseBranch(atts, hrefValue, fileName);
                 if (!canParse) {
@@ -661,7 +660,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         final String scope = inheritedAttsStack.peekFirst().getValue(ATTRIBUTE_NAME_SCOPE);
         if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
             final String processingRole = getInherited(ATTRIBUTE_NAME_PROCESSING_ROLE);
-            final String target = FileUtils.resolveFile(currentDir.toString(), href);
+            final File target = FileUtils.resolveFile(currentDir.toString(), href);
             if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                 resourceOnlySet.add(target);
             } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processingRole)) {
@@ -751,7 +750,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         final String f = file.isEmpty() ? currentFileRelative.toString() : file;
         FileInfo.Builder b = fileInfoMap.get(f);
         if (b == null) {
-            b = new FileInfo.Builder().file(f);
+            b = new FileInfo.Builder().file(new File(f));
             fileInfoMap.put(f, b);
         }
         return b;
@@ -768,7 +767,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * @param fileName normalized file name(remove '#')
      * @return boolean
      */
-    private boolean parseBranch(final Attributes atts, final String hrefValue, final String fileName) {
+    private boolean parseBranch(final Attributes atts, final URI hrefValue, final String fileName) {
         // current file is primary ditamap file.
         // parse every branch.
         if (currentDir == null && isStartDocument) {
@@ -854,11 +853,11 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * @param hrefValue
      * @param fileName
      */
-    private void addReferredBranches(final String hrefValue, final String fileName) {
+    private void addReferredBranches(final URI hrefValue, final String fileName) {
         String branchId = null;
         // href value has branch id.
-        if (hrefValue.contains(SHARP)) {
-            branchId = hrefValue.substring(hrefValue.lastIndexOf(SHARP) + 1);
+        if (hrefValue.getFragment() != null) {
+            branchId = hrefValue.getFragment();
             // The map contains the file name
             if (validBranches.containsKey(fileName)) {
                 final List<String> branchIdList = validBranches.get(fileName);
@@ -881,7 +880,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * @param attrName attributes to process
      */
     private void parseLinkAttribute(final Attributes atts, final String attrName, final URI baseDir) throws SAXException, URISyntaxException {
-        String attValue = atts.getValue(attrName);
+        URI attValue = toURI(atts.getValue(attrName));
         if (attValue == null) {
             return;
         }
@@ -889,14 +888,14 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
             return;
         }
         
-        final URI linkUri = new URI(attValue);
+        final URI linkUri = attValue;
         // Ignore absolute paths for now
 //        if (new File(attrValue).isAbsolute() && // FIXME: cannot test for absolute here as the value is not a system path yet
 //                !ATTRIBUTE_NAME_DATA.equals(attrName)) {
 //            attrValue = FileUtils.getRelativePath(inputFile.getAbsolutePath(), attrValue);
 //        // for object tag bug:3052156
 //        } else
-        final File file = toFile(FileUtils.normalizeDirectory(baseDir.toString(), linkUri.getPath()));
+        final File file = FileUtils.normalizeDirectory(baseDir.toString(), linkUri.getPath());
 
         final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
         final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
@@ -949,10 +948,10 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     }
     
     private void handleHrefAttr(final Attributes atts, final URI baseDir) throws URISyntaxException, DITAOTException {
-        final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
+        final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         if (href != null) {
-            final URI linkUri = new URI(href);
-            final File file = toFile(FileUtils.normalizeDirectory(baseDir.toString(), linkUri.getPath()));
+            final URI linkUri = href;
+            final File file = FileUtils.normalizeDirectory(baseDir.toString(), linkUri.getPath());
             if (PR_D_CODEREF.matches(atts)) {
                 fileInfo.hasCoderef(true);
                 if (isExternal(href, getInherited(ATTRIBUTE_NAME_SCOPE))) {
@@ -988,33 +987,33 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     }
 
     // TODO: replace with reading from inheritedAttributes
-    private boolean isExternal(final String href, final String scope) {
+    private boolean isExternal(final URI href, final String scope) {
         return ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)
                 || ATTR_SCOPE_VALUE_PEER.equals(scope)
-                || href.indexOf(COLON_DOUBLE_SLASH) != -1
-                || href.startsWith(SHARP);
+                || href.toString().indexOf(COLON_DOUBLE_SLASH) != -1
+                || href.toString().startsWith(SHARP);
     }
     
     private void handleCopyToAttr(final Attributes atts, final URI baseDir) throws URISyntaxException, DITAOTException {
-        final String copyTo = atts.getValue(ATTRIBUTE_NAME_COPY_TO);
+        final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
         if (copyTo != null && !isExternal(copyTo, getInherited(ATTRIBUTE_NAME_SCOPE))) {
             final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
             if (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat)) {
-                final URI linkUri = new URI(copyTo);
-                final File file = toFile(FileUtils.normalizeDirectory(baseDir.toString(), linkUri.getPath()));
-                final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
-                final File value = toFile(FileUtils.normalizeDirectory(currentDir.toString(), href));
+                final URI linkUri = copyTo;
+                final File file = FileUtils.normalizeDirectory(baseDir.toString(), linkUri.getPath());
+                final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+                final File value = FileUtils.normalizeDirectory(toFile(currentDir), toFile(href));
     
                 if (copytoMap.containsKey(file)) {
                     if (!value.equals(copytoMap.get(file))) {
-                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", href, file.getPath()).toString());
+                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", href.getPath(), file.getPath()).toString());
                     }
-                    ignoredCopytoSourceSet.add(href);
+                    ignoredCopytoSourceSet.add(toFile(href));
                 } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content"))) {
-                    copytoMap.put(file.getPath(), value.getPath());
+                    copytoMap.put(file, value);
                 }
     
-                final String pathWithoutID = FileUtils.resolveFile(currentDir.toString(), toFile(linkUri.getPath()).getPath());
+                final String pathWithoutID = FileUtils.resolveFile(currentDir.toString(), toFile(linkUri.getPath()).getPath()).getPath();
                 final Builder b = getOrCreateBuilder(pathWithoutID);
                 if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
                     b.isSkipChunk(true);
@@ -1026,13 +1025,13 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     }
     
     private void handleConrefAttr(final Attributes atts, final URI baseDir) throws DITAOTException, URISyntaxException {
-        final String conref = atts.getValue(ATTRIBUTE_NAME_CONREF);
+        final URI conref = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
         final String conkeyref = atts.getValue(ATTRIBUTE_NAME_CONKEYREF);
         if (conref != null || conkeyref != null) {
             fileInfo.hasConref(true);
         }
         if (conref != null) {
-            final File file = toFile(FileUtils.normalizeDirectory(baseDir.toString(), new URI(conref).getPath()));
+            final File file = FileUtils.normalizeDirectory(baseDir.toString(), conref.getPath());
             getOrCreateBuilder(file.getPath()).isConrefTarget(true);
         }
     }
@@ -1051,39 +1050,39 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     private void handleKeysAttr(final Attributes atts) {
         final String attrValue = atts.getValue(ATTRIBUTE_NAME_KEYS);
         if (attrValue != null) {
-            String target = atts.getValue(ATTRIBUTE_NAME_HREF);
+            URI target = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
             final String attrScope = getInherited(ATTRIBUTE_NAME_SCOPE);
             final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
     
-            final String copyTo = atts.getValue(ATTRIBUTE_NAME_COPY_TO);
+            final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
             if (copyTo != null) {
                 target = copyTo;
             }
             // avoid NullPointException
-            if (target == null) {
-                target = "";
-            }
+//            if (target == null) {
+//                target = "";
+//            }
             // store the target
-            final String temp = target;
+            final URI temp = target;
     
             // Many keys can be defined in a single definition, like
             // keys="a b c", a, b and c are seperated by blank.
             for (final String key : attrValue.split(" ")) {
                 if (!keysDefMap.containsKey(key) && !key.equals("")) {
-                    if (target != null && target.length() != 0) {
+                    if (target != null && target.toString().length() != 0) {
                         if (attrScope != null && (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))) {
                             keysDefMap.put(key, new KeyDef(key, target, attrScope, null));
                         } else {
                             String tail = "";
-                            if (target.indexOf(SHARP) != -1) {
-                                tail = target.substring(target.indexOf(SHARP));
-                                target = target.substring(0, target.indexOf(SHARP));
+                            if (target.getFragment() != null) {
+                                tail = target.getFragment();
+                                target = stripFragment(target);
                             }
-                            if (new File(target).isAbsolute()) {
-                                target = FileUtils.getRelativePath(inputFile.toString(), target);
+                            if (toFile(target).isAbsolute()) {
+                                target = toURI(FileUtils.getRelativeUnixPath(inputFile.toString(), target.getPath()));
                             }
-                            target = FileUtils.normalizeDirectory(currentDir.toString(), target);
-                            keysDefMap.put(key, new KeyDef(key, target + tail, ATTR_SCOPE_VALUE_LOCAL, null));
+                            target = toURI(FileUtils.normalizeDirectory(currentDir.toString(), target.getPath()).getPath());
+                            keysDefMap.put(key, new KeyDef(key, setFragment(target, tail), ATTR_SCOPE_VALUE_LOCAL, null));
                         }
                     } else if (!StringUtils.isEmptyString(keyRef)) {
                         // store multi-level keys.
@@ -1094,7 +1093,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
                         keysDefMap.put(key, new KeyDef(key, (URI) null, null, (URI) null));
                     }
                 } else {
-                    logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target).toString());
+                    logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target.toString()).toString());
                 }
                 // restore target
                 target = temp;
@@ -1114,28 +1113,28 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         } 
     }
 
-    /**
-     * Convert URI references to file paths.
-     * 
-     * @param filename file reference
-     * @return file path
-     */
-    private File toFile(final String filename) {
-        if (filename == null) {
-            return null;
-        }
-        String f = filename;
-        try {
-            f = URLDecoder.decode(filename, UTF8);
-        } catch (final UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-        if (processingMode == Mode.LAX) {
-            f = f.replace(WINDOWS_SEPARATOR, File.separator);
-        }
-        f = f.replace(URI_SEPARATOR, File.separator);
-        return new File(f);
-    }
+//    /**
+//     * Convert URI references to file paths.
+//     * 
+//     * @param filename file reference
+//     * @return file path
+//     */
+//    private File toFile(final String filename) {
+//        if (filename == null) {
+//            return null;
+//        }
+//        String f = filename;
+//        try {
+//            f = URLDecoder.decode(filename, UTF8);
+//        } catch (final UnsupportedEncodingException e) {
+//            throw new RuntimeException(e);
+//        }
+//        if (processingMode == Mode.LAX) {
+//            f = f.replace(WINDOWS_SEPARATOR, File.separator);
+//        }
+//        f = f.replace(URI_SEPARATOR, File.separator);
+//        return new File(f);
+//    }
 
     /**
      * Get multi-level keys list
@@ -1242,7 +1241,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * @param inputMap absolute path to start file
      * @return path to base directory, {@code null} if not available
      */
-    public String getPathtoProject(final String filename, final File traceFilename, final String inputMap) {
+    public String getPathtoProject(final File filename, final File traceFilename, final String inputMap) {
         String path2Project = null;
 //        if (OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION) {
 //            if (isOutFile(traceFilename)) {
@@ -1255,7 +1254,11 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
 //                }
 //            }
 //        } else {
-            path2Project = FileUtils.getRelativePath(filename);
+            final File p = FileUtils.getRelativePath(filename); 
+            path2Project = p != null ? p.getPath() : null;
+            if (path2Project != null && !path2Project.endsWith(File.separator)) {
+                path2Project = path2Project + File.separator;
+            }
 //        }
          return path2Project;
     }

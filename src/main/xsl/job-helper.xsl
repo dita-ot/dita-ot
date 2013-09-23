@@ -15,12 +15,6 @@
       <xsl:when test="$property = 'canditopicslist'">
         <xsl:apply-templates select="job/files/file[@non-conref-target = 'true']"/>
       </xsl:when>
-      <xsl:when test="$property = 'chunkedditamaplist'">
-        <xsl:apply-templates select="job/files/file[@chunked-ditamap = 'true']"/>
-      </xsl:when>
-      <xsl:when test="$property = 'chunkedtopiclist'">
-        <xsl:apply-templates select="job/files/file[@chunked = 'true']"/>
-      </xsl:when>
       <xsl:when test="$property = 'codereflist'">
         <xsl:apply-templates select="job/files/file[@has-coderef = 'true']"/>
       </xsl:when>
@@ -68,9 +62,6 @@
       </xsl:when>
       <xsl:when test="$property = 'resourceonlylist'">
         <xsl:apply-templates select="job/files/file[@resource-only = 'true']"/>
-      </xsl:when>
-      <xsl:when test="$property = 'skipchunklist'">
-        <xsl:apply-templates select="job/files/file[@skip-chunk = 'true']"/>
       </xsl:when>
       <xsl:when test="$property = 'subjectschemelist'">
         <xsl:apply-templates select="job/files/file[@subjectscheme = 'true']"/>

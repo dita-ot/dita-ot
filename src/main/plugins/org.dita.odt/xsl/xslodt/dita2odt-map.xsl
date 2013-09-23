@@ -29,11 +29,10 @@
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
   xmlns:opentopic="http://www.idiominc.com/opentopic"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-  xmlns:exsl="http://exslt.org/common"
   version="2.0" 
   xmlns:random="org.dita.dost.util.RandomUtils"
   xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-  exclude-result-prefixes="random related-links dita-ot opentopic exsl">
+  exclude-result-prefixes="random related-links dita-ot opentopic">
   
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
@@ -169,7 +168,7 @@
         </text:index-title>
         <xsl:choose>
           <xsl:when test="$map and not($map = '')">
-            <xsl:apply-templates select="exsl:node-set($map)/child::*[contains(@class, ' map/topicref ')]" mode="toc"/>
+            <xsl:apply-templates select="$map/child::*[contains(@class, ' map/topicref ')]" mode="toc"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates select="child::*[contains(@class, ' topic/topic ')]" mode="toc"/>

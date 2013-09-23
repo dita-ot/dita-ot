@@ -68,12 +68,7 @@
             <sli>Saxon 9</sli>
             <sli>Saxon-B 9.1</sli>
             <sli>Saxon-PE/EE 9.3</sli>
-            <sli>Xalan-J 2.6</sli>
-            <sli>Xalan-J 2.7</sli>
-            <sli>Xalan-J 2.7.1</sli>
           </sl>
-          <note>The DITA-OT does not officially require XSLT 2.0, since some users are reliant on
-            Xalan.</note>
         </stentry>
       </strow>
     </simpletable>

@@ -61,7 +61,7 @@ public class TestJavaHelpIndexWriter {
         final JavaHelpIndexWriter javahelpindexwriter = new JavaHelpIndexWriter();
         javahelpindexwriter.setContent(content);
         final File outFile = new File(tempDir, "javahelpindexwriteroutput.xml");
-        javahelpindexwriter.write(outFile.getAbsolutePath());
+        javahelpindexwriter.write(outFile.getAbsoluteFile());
 
         final CatalogManager manager = new CatalogManager();
         manager.setIgnoreMissingProperties(true);

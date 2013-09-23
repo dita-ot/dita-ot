@@ -62,9 +62,7 @@
   	  filenameparameter="FILENAME"
   	  filedirparameter="FILEDIR">
       <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="TRANSTYPE" expression="${transtype}" />
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}"
         if="dita.input.valfile" />
       <param name="CSS" expression="${args.css.file}"
@@ -105,9 +103,7 @@
       filenameparameter="FILENAME"
       filedirparameter="FILEDIR">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="TRANSTYPE" expression="${transtype}" />
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}"
         if="dita.input.valfile" />
       <param name="CSS" expression="${args.css.file}"
@@ -166,7 +162,6 @@
       filedirparameter="FILEDIR">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="TRANSTYPE" expression="${transtype}" />
-      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}"
         if="dita.input.valfile" />
       <param name="CSS" expression="${args.css.file}"

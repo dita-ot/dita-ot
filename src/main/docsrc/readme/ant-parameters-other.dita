@@ -13,22 +13,27 @@
             parameters? (Other than if they need to reduce Java memory consumption.) The use cases
             are not clear from the current description.</li>
         </ul></draft-comment>
-      <table>
+      <fig>
         <title>Ant parameters: Other</title>
-        <tgroup cols="2">
-          <colspec colwidth="1.5*"/>
-          <colspec colwidth="4.0*"/>
-          <thead>
-            <row>
-              <entry>Parameter</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row id="dita.preprocess.reloadstylesheet">
-              <entry><parmname>dita.preprocess.reloadstylesheet</parmname>
-              </entry>
-              <entry id="dita.preprocess.reloadstylesheet.desc" morerows="5">Specifies whether the
+          <parml>
+            <plentry>
+              <pt id="dita.preprocess.reloadstylesheet"><parmname>dita.preprocess.reloadstylesheet</parmname></pt>
+              <pt id="dita.preprocess.reloadstylesheet.conref">
+                <parmname>dita.preprocess.reloadstylesheet.conref</parmname>
+              </pt>
+              <pt id="dita.preprocess.reloadstylesheet.mapref">
+                <parmname>dita.preprocess.reloadstylesheet.mapref</parmname>
+              </pt>
+              <pt id="dita.preprocess.reloadstylesheet.mappull">
+                <parmname>dita.preprocess.reloadstylesheet.mappull</parmname>
+              </pt>
+              <pt id="dita.preprocess.reloadstylesheet.maplink">
+                <parmname>dita.preprocess.reloadstylesheet.maplink</parmname>
+              </pt>
+              <pt id="dita.preprocess.reloadstylesheet.topicpull">
+                <parmname>dita.preprocess.reloadstylesheet.topicpull</parmname>
+              </pt>
+              <pd id="dita.preprocess.reloadstylesheet.desc">Specifies whether the
                 DITA-OT reloads the XSL style sheets that are used for the transformation. The
                 allowed values are <option>true</option> and <option>false</option>; the default
                 value is <option>false</option>.<note type="tip">Set the parameter to
@@ -37,36 +42,12 @@
                   that generate Java out-of-memory errors during transformation. Alternatively, you
                   can adjust the size of your Java memory heap if setting
                     <codeph>dita.preprocess.reloadstylesheet</codeph> for this
-                reason.</note></entry>
-            </row>
-            <row id="dita.preprocess.reloadstylesheet.conref">
-              <entry>
-                <parmname>dita.preprocess.reloadstylesheet.conref</parmname>
-              </entry>
-            </row>
-            <row id="dita.preprocess.reloadstylesheet.mapref">
-              <entry>
-                <parmname>dita.preprocess.reloadstylesheet.mapref</parmname>
-              </entry>
-            </row>
-            <row id="dita.preprocess.reloadstylesheet.mappull">
-              <entry>
-                <parmname>dita.preprocess.reloadstylesheet.mappull</parmname>
-              </entry>
-            </row>
-            <row id="dita.preprocess.reloadstylesheet.maplink">
-              <entry>
-                <parmname>dita.preprocess.reloadstylesheet.maplink</parmname>
-              </entry>
-            </row>
-            <row id="dita.preprocess.reloadstylesheet.topicpull">
-              <entry>
-                <parmname>dita.preprocess.reloadstylesheet.topicpull</parmname>
-              </entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
+                reason.</note></pd>
+            </plentry>
+            
+          </parml>
+        
+      </fig>
     </section>
   </refbody>
 </reference>

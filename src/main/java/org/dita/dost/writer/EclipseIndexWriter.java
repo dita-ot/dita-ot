@@ -69,7 +69,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     }
 
     @Override
-    public void write(final String filename) throws DITAOTException {
+    public void write(final File filename) throws DITAOTException {
         OutputStream out = null;
         XMLStreamWriter serializer = null;
         try {

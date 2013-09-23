@@ -31,7 +31,7 @@ final class ImportStringsAction extends ImportAction {
             retBuf.append(LINE_SEPARATOR);
             retBuf.append("<stringfile>");
             retBuf.append(StringUtils.escapeXML(
-                    FileUtils.getRelativePath(
+                    FileUtils.getRelativeUnixPath(
                             templateFilePath, value)));
             retBuf.append("</stringfile>");
         }

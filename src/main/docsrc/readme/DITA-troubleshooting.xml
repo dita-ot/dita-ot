@@ -31,9 +31,6 @@ not being available in Ant claspath.</p>
     <p>In some cases, you might receive a message stating the build
 has failed due to an <msgph>Out of Memory</msgph> error. Try the following
 approaches to resolve the problem:</p>       <ol id="ol_rfb_c2p_qg">
-<li>(For custom-configured environments, not the DITA-OT Full Easy
-Install) If you use Xalan as             the default XSLT processor,
-switch to Saxon.</li>
 <li>Increase the memory available to Java; see <xref
 href="increasing-the-jvm.dita"></xref>.</li>
 <li>Reduce memory consumption by setting the <option>generate-debug-attributes</option> 

@@ -56,10 +56,10 @@ final class InsertCatalogActionRelative extends InsertAction {
                 // Rewrite URI to be local to its final resting place.
                 if (index == -1){
                     //If there are no xml:base attributes, then we need to split
-                    final String path = FileUtils.getFullPathNoEndSeparator(FileUtils.getRelativePath(
+                    final String path = FileUtils.getFullPathNoEndSeparator(FileUtils.getRelativeUnixPath(
                             paramTable.get(FileGenerator.PARAM_TEMPLATE),
                             targetFile.toString())) + "/";
-                    final String filename = FileUtils.getName(FileUtils.getRelativePath(
+                    final String filename = FileUtils.getName(FileUtils.getRelativeUnixPath(
                             paramTable.get(FileGenerator.PARAM_TEMPLATE),
                             targetFile.toString()));
                     attrBuf.addAttribute("http://www.w3.org/XML/1998/namespace", "base",
@@ -76,7 +76,7 @@ final class InsertCatalogActionRelative extends InsertAction {
             }
             else if(i==index){
                 //We've found xml:base.  Need to add parent plugin directory to the original value.
-                value = FileUtils.getFullPathNoEndSeparator(FileUtils.getRelativePath(
+                value = FileUtils.getFullPathNoEndSeparator(FileUtils.getRelativeUnixPath(
                         paramTable.get(FileGenerator.PARAM_TEMPLATE),
                         targetFile.toString())) + "/" + attributes.getValue(i);
                 attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i),

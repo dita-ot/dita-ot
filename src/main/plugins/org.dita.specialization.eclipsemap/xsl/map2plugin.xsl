@@ -18,7 +18,6 @@
   <xsl:param name="PLUGINFILE" select="'plugin.xml'"/>
   <xsl:param name="DITAMAPEXT" select="'.ditamap'"/>
   <xsl:param name="indexFilename" select="'index.xml'"/>  
-  <xsl:param name="DITAEXT" select="'.dita'"/>
   
 
   <xsl:param name="DEFAULTINDEX" select="''"/>

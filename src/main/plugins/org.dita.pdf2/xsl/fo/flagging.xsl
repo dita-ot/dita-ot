@@ -30,14 +30,11 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:exsl="http://exslt.org/common"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
-    extension-element-prefixes="exsl"
     xmlns:suitesol="http://suite-sol.com/namespaces/mapcounts"
-    exclude-result-prefixes="suitesol exsl opentopic-func exslf dita2xslfo">
+    exclude-result-prefixes="suitesol opentopic-func dita2xslfo">
    
   <xsl:template match="suitesol:flagging-inside">
       <xsl:call-template name="parseFlagStyle">

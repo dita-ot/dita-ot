@@ -29,9 +29,9 @@ abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter
     public abstract void setContent(Content content);
 
     @Override
-    public void write(final String filename) throws DITAOTException {
+    public void write(final File filename) throws DITAOTException {
         try {
-            XMLUtils.transform(new File(filename), asList((XMLFilter) this));
+            XMLUtils.transform(filename, asList((XMLFilter) this));
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }

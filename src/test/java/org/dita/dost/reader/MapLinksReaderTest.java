@@ -43,7 +43,7 @@ public class MapLinksReaderTest {
                 .append(SLASH).append(TOPIC_LINKLIST.localName)
                 .toString());
 
-        reader.read(new File(srcDir, "maplinks.unordered").getAbsolutePath());
+        reader.read(new File(srcDir, "maplinks.unordered").getAbsoluteFile());
     }
 
     @Test

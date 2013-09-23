@@ -10,6 +10,7 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.writer.DitaWriter.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,23 +18,23 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-
 /**
- * TopicRefWriter which updates the linking elements' value according to the mapping table.
+ * TopicRefWriter which updates the linking elements' value according to the
+ * mapping table.
  * 
- * <p>TODO: Refactor to be a SAX filter.</p>
+ * <p>
+ * TODO: Refactor to be a SAX filter.
+ * </p>
  * 
  * @author wxzhang
  * 
@@ -50,14 +51,14 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     private boolean needResolveEntity;
     private boolean insideCDATA;
     private File currentFilePath = null;
-    private File currentFilePathName=null;
+    private File currentFilePathName = null;
     /** XMLReader instance for parsing dita file */
     private final XMLReader reader;
 
     /**
      * using for rectify relative path of xml
      */
-    private String fixpath= null;
+    private String fixpath = null;
 
     /**
      * 
@@ -70,7 +71,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
-            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
+            reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
@@ -78,14 +79,15 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
     }
+
     /**
      * Set up class.
+     * 
      * @param conflictTable conflictTable
      */
-    public void setup(final Hashtable<String,String> conflictTable) {
+    public void setup(final Hashtable<String, String> conflictTable) {
         this.conflictTable = conflictTable;
     }
-
 
     @Override
     public void startEntity(final String name) throws SAXException {
@@ -95,49 +97,44 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                 output.write(StringUtils.getEntity(name));
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError(e.getMessage(), e);
         }
 
     }
 
     @Override
-    public void processingInstruction(final String target, String data)
-            throws SAXException {
+    public void processingInstruction(final String target, String data) throws SAXException {
         String pi;
         try {
-            if (fixpath!=null&&target.equalsIgnoreCase(PI_WORKDIR_TARGET)){
-                final String tmp = fixpath.substring(0,fixpath.lastIndexOf(SLASH));
-                if (!data.endsWith(tmp)){
-                    data = data+File.separator+tmp;
+            if (fixpath != null && target.equalsIgnoreCase(PI_WORKDIR_TARGET)) {
+                final String tmp = fixpath.substring(0, fixpath.lastIndexOf(SLASH));
+                if (!data.endsWith(tmp)) {
+                    data = data + File.separator + tmp;
                 }
-            } else if (fixpath != null && target.equals(PI_WORKDIR_TARGET_URI)){
+            } else if (fixpath != null && target.equals(PI_WORKDIR_TARGET_URI)) {
                 final String tmp = fixpath.substring(0, fixpath.lastIndexOf(URI_SEPARATOR) + 1);
-                if (!data.endsWith(tmp)){
+                if (!data.endsWith(tmp)) {
                     data = data + tmp;
                 }
             }
-            pi = (data != null) ? target + STRING_BLANK + data
-                    : target;
-            output.write(LESS_THAN + QUESTION + pi
-                    + QUESTION + GREATER_THAN);
+            pi = (data != null) ? target + STRING_BLANK + data : target;
+            output.write(LESS_THAN + QUESTION + pi + QUESTION + GREATER_THAN);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError(e.getMessage(), e);
         }
     }
 
     @Override
-    public void ignorableWhitespace(final char[] ch, final int start, final int length)
-            throws SAXException {
+    public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
         try {
             output.write(ch, start, length);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError(e.getMessage(), e);
         }
     }
 
     @Override
-    public void characters(final char[] ch, final int start, final int length)
-            throws SAXException {
+    public void characters(final char[] ch, final int start, final int length) throws SAXException {
         if (needResolveEntity) {
             try {
                 if (insideCDATA) {
@@ -146,7 +143,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                     output.write(StringUtils.escapeXML(ch, start, length));
                 }
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.logError(e.getMessage(), e);
             }
         }
     }
@@ -164,7 +161,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         try {
             output.write(CDATA_END);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError(e.getMessage(), e);
         }
     }
 
@@ -173,18 +170,16 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         try {
             output.flush();
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError(e.getMessage(), e);
         }
     }
 
     @Override
-    public void endElement(final String uri, final String localName, final String qName)
-            throws SAXException {
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         try {
-            output.write(LESS_THAN + SLASH + qName
-                    + GREATER_THAN);
+            output.write(LESS_THAN + SLASH + qName + GREATER_THAN);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError(e.getMessage(), e);
         }
     }
 
@@ -192,8 +187,8 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     public void setContent(final Content content) {
         throw new UnsupportedOperationException();
     }
-    
-    public void setChangeTable(final Map<String,String> changeTable) {
+
+    public void setChangeTable(final Map<String, String> changeTable) {
         this.changeTable = changeTable;
     }
 
@@ -203,31 +198,31 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             insideCDATA = true;
             output.write(CDATA_HEAD);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError(e.getMessage(), e);
         }
     }
 
     @Override
     public void startDocument() throws SAXException {
         super.startDocument();
-        try{
+        try {
             output.write(XML_HEAD);
             output.write(LINE_SEPARATOR);
-        }catch(final IOException io){
-            logger.logError(io.getMessage(), io) ;
+        } catch (final IOException io) {
+            logger.logError(io.getMessage(), io);
         }
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName,
-            final Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+            throws SAXException {
 
         try {
             copyElementName(qName, atts);
             copyElementAttribute(atts);
             output.write(GREATER_THAN);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError(e.getMessage(), e);
         }// try
 
     }
@@ -237,10 +232,8 @@ public final class TopicRefWriter extends AbstractXMLWriter {
      * @param attValue
      * @throws IOException
      */
-    private void copyAttribute(final String attQName, final String attValue)
-            throws IOException {
-        output.write(new StringBuffer().append(STRING_BLANK).append(
-                attQName).append(EQUAL).append(QUOTATION)
+    private void copyAttribute(final String attQName, final String attValue) throws IOException {
+        output.write(new StringBuffer().append(STRING_BLANK).append(attQName).append(EQUAL).append(QUOTATION)
                 .append(attValue).append(QUOTATION).toString());
     }
 
@@ -269,6 +262,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
     /**
      * Check whether the attributes contains references
+     * 
      * @param atts
      * @return true/false
      */
@@ -279,8 +273,8 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
 
         if (classValue == null
-                || (!TOPIC_XREF.matches(classValue)
-                        && !TOPIC_LINK.matches(classValue) && !MAP_TOPICREF.matches(classValue))) {
+                || (!TOPIC_XREF.matches(classValue) && !TOPIC_LINK.matches(classValue) && !MAP_TOPICREF
+                        .matches(classValue))) {
             return false;
         }
 
@@ -291,8 +285,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             formatValue = ATTR_FORMAT_VALUE_DITA;
         }
 
-        if (scopeValue.equalsIgnoreCase(ATTR_SCOPE_VALUE_LOCAL)
-                && formatValue.equalsIgnoreCase(ATTR_FORMAT_VALUE_DITA)) {
+        if (scopeValue.equalsIgnoreCase(ATTR_SCOPE_VALUE_LOCAL) && formatValue.equalsIgnoreCase(ATTR_FORMAT_VALUE_DITA)) {
             return true;
         }
 
@@ -313,141 +306,115 @@ public final class TopicRefWriter extends AbstractXMLWriter {
              * replace all the backslash with slash in all href and conref
              * attribute
              */
-            attValue = FileUtils.separatorsToUnix(attValue);
+            attValue = separatorsToUnix(attValue);
         } else {
             return null;
         }
 
-        if (fixpath!=null && attValue.startsWith(fixpath)){
+        if (fixpath != null && attValue.startsWith(fixpath)) {
             attValue = attValue.substring(fixpath.length());
         }
 
-        if(changeTable==null || changeTable.isEmpty()) {
+        if (changeTable == null || changeTable.isEmpty()) {
             return attValue;
         }
 
         if (checkDITAHREF(atts)) {
             // replace the href value if it's referenced topic is extracted.
-            final File rootPathName=currentFilePathName;
-            String changeTargetkey = FileUtils.resolveFile(currentFilePath,
-                    attValue);
+            final File rootPathName = currentFilePathName;
+            String changeTargetkey = resolveFile(currentFilePath, attValue).getPath();
             String changeTarget = changeTable.get(changeTargetkey);
 
-            final int sharpIndex = attValue.lastIndexOf(SHARP);
-            if (sharpIndex != -1) {
-                final int slashIndex = attValue.indexOf(SLASH,
-                        sharpIndex);
-                if (slashIndex != -1) {
-                    changeTargetkey = changeTargetkey
-                            + attValue.substring(sharpIndex, slashIndex);
-                } else {
-                    changeTargetkey = changeTargetkey
-                            + attValue.substring(sharpIndex);
-                }
-                final String changeTarget_with_elemt = changeTable
-                        .get(changeTargetkey);
+            final String topicID = getTopicID(attValue);
+            if (topicID != null) {
+                changeTargetkey = setFragment(changeTargetkey, topicID);
+                final String changeTarget_with_elemt = changeTable.get(changeTargetkey);
                 if (changeTarget_with_elemt != null) {
                     changeTarget = changeTarget_with_elemt;
                 }
             }
 
-            final String elementID=getElementID(attValue);
-            final String pathtoElem =
-                    attValue.contains(SHARP) ? attValue.substring(attValue.indexOf(SHARP)+1) : "";
+            final String elementID = getElementID(attValue);
+            final String pathtoElem = getFragment(attValue, "");
 
-                    if (StringUtils.isEmptyString(changeTarget)) {
-                        String absolutePath = FileUtils.resolveTopic(currentFilePath, attValue);
-                        if (absolutePath.contains(SHARP) &&
-                                absolutePath.substring(absolutePath.indexOf(SHARP)).contains(SLASH)){
-                            absolutePath = absolutePath.substring(0, absolutePath.indexOf(SLASH, absolutePath.indexOf(SHARP)));
+            if (StringUtils.isEmptyString(changeTarget)) {
+                String absolutePath = resolveTopic(currentFilePath, attValue);
+                absolutePath = setElementID(absolutePath, null);
+                changeTarget = changeTable.get(absolutePath);
+            }
+
+            if (!notTopicFormat(atts, attValue)) {
+                if (changeTarget == null) {
+                    return attValue;// no change
+                } else {
+                    final String conTarget = conflictTable.get(stripFragment(changeTarget));
+                    if (!StringUtils.isEmptyString(conTarget)) {
+                        if (elementID == null) {
+                            final String idpath = getElementID(changeTarget);
+                            return setFragment(getRelativeUnixPath(rootPathName, conTarget), idpath);
+                        } else {
+                            if (getFragment(conTarget) != null) {
+                                // conTarget points to topic
+                                if (!pathtoElem.contains(SLASH)) {
+                                    // if pathtoElem does no have '/' slash. it
+                                    // means elementID is topic id
+                                    return getRelativeUnixPath(rootPathName, conTarget);
+                                } else {
+                                    return setElementID(getRelativeUnixPath(rootPathName, conTarget), elementID);
+                                }
+
+                            } else {
+                                return setFragment(getRelativeUnixPath(rootPathName, conTarget), pathtoElem);
+                            }
                         }
-                        changeTarget = changeTable.get(absolutePath);
-                    }
-
-
-
-                    if(!notTopicFormat(atts,attValue)){
-                        if(changeTarget == null) {
-                            return attValue;//no change
-                        }else{
-                            final String conTarget = conflictTable.get(removeAnchor(changeTarget));
-                            if (!StringUtils.isEmptyString(conTarget)) {
-                                if (elementID == null) {
-                                    final String idpath = getElementID(changeTarget);
-                                    return FileUtils.getRelativePath(
-                                            rootPathName, conTarget) + (idpath != null ? SHARP + idpath : "");
-                                }else {
-                                    if (conTarget.contains(SHARP)){
-                                        //conTarget points to topic
-                                        if (!pathtoElem.contains(SLASH)){
-                                            //if pathtoElem does no have '/' slash. it means elementID is topic id
-                                            return FileUtils.getRelativePath(
-                                                    rootPathName, conTarget);
-                                        }else{
-                                            return FileUtils.getRelativePath(
-                                                    rootPathName, conTarget) + SLASH + elementID;
-                                        }
-
-                                    }else{
-                                        return FileUtils.getRelativePath(
-                                                rootPathName, conTarget) + SHARP + pathtoElem;
-                                    }
+                    } else {
+                        if (elementID == null) {
+                            return getRelativeUnixPath(rootPathName, changeTarget);
+                        } else {
+                            if (getFragment(changeTarget) != null) {
+                                // changeTarget points to topic
+                                if (!pathtoElem.contains(SLASH)) {
+                                    // if pathtoElem does no have '/' slash. it
+                                    // means elementID is topic id
+                                    return getRelativeUnixPath(rootPathName, changeTarget);
+                                } else {
+                                    return setElementID(getRelativeUnixPath(rootPathName, changeTarget), elementID);
                                 }
                             } else {
-                                if (elementID == null){
-                                    return FileUtils.getRelativePath(
-                                            rootPathName, changeTarget);
-                                }else{
-                                    if (changeTarget.contains(SHARP)){
-                                        //changeTarget points to topic
-                                        if(!pathtoElem.contains(SLASH)){
-                                            //if pathtoElem does no have '/' slash. it means elementID is topic id
-                                            return FileUtils.getRelativePath(
-                                                    rootPathName, changeTarget);
-                                        }else{
-                                            return FileUtils.getRelativePath(
-                                                    rootPathName, changeTarget) + SLASH + elementID;
-                                        }
-                                    }else{
-                                        return FileUtils.getRelativePath(
-                                                rootPathName, changeTarget) + SHARP + pathtoElem;
-                                    }
-                                }
+                                return setFragment(getRelativeUnixPath(rootPathName, changeTarget), pathtoElem);
                             }
                         }
                     }
+                }
+            }
         }
         return attValue;
     }
 
-    private String removeAnchor(final String s) {
-        if (s.lastIndexOf(SHARP) != -1) {
-            return s.substring(0, s.lastIndexOf(SHARP));
-        } else {
-            return s;
-        }
-    }
-
     /**
-     * Retrieve the element ID from the path
+     * Retrieve the element ID from the path. If there is no element ID, return topic ID.
+     * 
      * @param relativePath
      * @return String
      */
-    private String getElementID(final String relativePath){
-        String elementID=null;
-        String topicWithelement=null;
-        if(relativePath.indexOf(SHARP)!=-1){
-            topicWithelement=relativePath.substring(relativePath.lastIndexOf(SHARP)+1);
-            if(topicWithelement.lastIndexOf(SLASH)!=-1) {
-                elementID=topicWithelement.substring(topicWithelement.lastIndexOf(SLASH)+1);
+    private String getElementID(final String relativePath) {
+        String elementID = null;
+        String topicWithelement = null;
+        final String fragment = getFragment(relativePath);
+        if (fragment != null) {
+            topicWithelement = getFragment(relativePath);
+            if (topicWithelement.lastIndexOf(SLASH) != -1) {
+                elementID = topicWithelement.substring(topicWithelement.lastIndexOf(SLASH) + 1);
             } else {
                 elementID = topicWithelement;
             }
         }
         return elementID;
     }
+
     /**
      * Check whether it is a local URL
+     * 
      * @param valueOfURL
      * @return boolean
      */
@@ -461,6 +428,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
     /**
      * Check whether it is a Topic format
+     * 
      * @param attrs attributes to check
      * @param valueOfHref href attribute value
      * @return boolean
@@ -468,12 +436,11 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     private boolean notTopicFormat(final Attributes attrs, final String valueOfHref) {
         final String hrefValue = valueOfHref;
         final String formatValue = attrs.getValue(ATTRIBUTE_NAME_FORMAT);
-        final String extOfHref = FileUtils.getExtension(valueOfHref);
+        final String extOfHref = getExtension(valueOfHref);
         if (notLocalURL(hrefValue)) {
             return true;
         } else {
-            if (formatValue == null && extOfHref != null
-                    && !extOfHref.equalsIgnoreCase("DITA")
+            if (formatValue == null && extOfHref != null && !extOfHref.equalsIgnoreCase("DITA")
                     && !extOfHref.equalsIgnoreCase("XML")) {
                 return true;
             }
@@ -482,55 +449,37 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         return false;
     }
 
-
     /**
      * @param qName
      * @param atts
      * @throws IOException
      */
-    private void copyElementName(final String qName, final Attributes atts)
-            throws IOException {
+    private void copyElementName(final String qName, final Attributes atts) throws IOException {
         // copy the element name
         output.write(LESS_THAN + qName);
     }
 
-
-
-    public void write (final File tempDir, final File topicfile,final Map relativePath2fix) throws DITAOTException{
-        if (relativePath2fix.containsKey(topicfile)){
-            fixpath= (String)relativePath2fix.get(topicfile);
+    public void write(final File tempDir, final File topicfile, final Map relativePath2fix) throws DITAOTException {
+        if (relativePath2fix.containsKey(topicfile)) {
+            fixpath = (String) relativePath2fix.get(topicfile);
         }
-        write(new File(tempDir,topicfile.getPath()).getAbsoluteFile());
-        fixpath= null;
+        write(new File(tempDir, topicfile.getPath()).getAbsoluteFile());
+        fixpath = null;
     }
 
     @Override
-    public void write(final String outputFilename) throws DITAOTException {
-        throw new UnsupportedOperationException();
-    }
-    
     public void write(final File outputFilename) throws DITAOTException {
         String filename = outputFilename.getPath();
         String file = null;
-        currentFilePathName= outputFilename.getAbsoluteFile();
+        currentFilePathName = outputFilename.getAbsoluteFile();
         currentFilePath = outputFilename.getParentFile();
         File inputFile = null;
         File outputFile = null;
         FileOutputStream fileOutput = null;
-        needResolveEntity=true;
+        needResolveEntity = true;
 
         try {
-            if (filename.endsWith(SHARP)) {
-                // prevent the empty topic id causing error
-                filename = filename.substring(0, filename.length() - 1);
-            }
-
-            if (filename.lastIndexOf(SHARP) != -1) {
-                file = filename.substring(0, filename
-                        .lastIndexOf(SHARP));
-            } else {
-                file = filename;
-            }
+            file = stripFragment(filename);
             inputFile = new File(file);
             if (!inputFile.exists()) {
                 logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", file).toString());
@@ -545,19 +494,21 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
             output.close();
             if (!inputFile.delete()) {
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
+                logger.logError(MessageUtils.getInstance()
+                        .getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
             }
             if (!outputFile.renameTo(inputFile)) {
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
+                logger.logError(MessageUtils.getInstance()
+                        .getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError(e.getMessage(), e);
         } finally {
             if (fileOutput != null) {
                 try {
                     fileOutput.close();
                 } catch (final Exception e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.logError(e.getMessage(), e);
                 }
             }
         }

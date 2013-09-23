@@ -25,12 +25,12 @@
                     </chhead>
                     <chrow platform="linux">
                         <choption>Linux or Mac OSX</choption>
-                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                        <chdesc><filepath>DITA-OT<keyword keyref="version"
                                 />_full_easy_install_bin.tar.gz</filepath></chdesc>
                     </chrow>
                     <chrow platform="windows">
                         <choption>Windows</choption>
-                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                        <chdesc><filepath>DITA-OT<keyword keyref="version"
                                 />_full_easy_install_bin.zip</filepath></chdesc>
                     </chrow>
                 </choicetable>

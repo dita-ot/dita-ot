@@ -8,6 +8,8 @@
  */
 package org.dita.dost.reader;
 
+import java.io.File;
+
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.Content;
 
@@ -24,7 +26,7 @@ public interface AbstractReader {
      * 
      * @param filename filename
      */
-    void read(String filename);
+    void read(File filename);
 
     /**
      * Get the result from reader after parsing.

@@ -72,12 +72,12 @@ public final class CoderefResolver extends AbstractXMLFilter {
     }
 
     @Override
-    public void write(final String filename) throws DITAOTException {
+    public void write(final File filename) throws DITAOTException {
         // ignore in-exists file
-        if (filename == null || !new File(filename).exists()) {
+        if (filename == null || !filename.exists()) {
             return;
         }
-        currentFile = new File(filename);
+        currentFile = filename;
         super.write(filename);
     }
 
@@ -96,7 +96,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
             try{
                 final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
                 if (hrefValue != null){
-                    final String codeFile = FileUtils.normalizeDirectory(currentFile.getParentFile().getAbsolutePath(), hrefValue);
+                    final String codeFile = FileUtils.normalizeDirectory(currentFile.getParentFile().getAbsolutePath(), hrefValue).getPath();
                     if (new File(codeFile).exists()){
                         final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT));
                         BufferedReader codeReader = null;

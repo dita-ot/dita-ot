@@ -8,11 +8,11 @@
  */
 package org.dita.dost.reader;
 
-import static org.dita.dost.util.Constants.*;
 import static javax.xml.XMLConstants.*;
 import static org.dita.dost.reader.MergeMapParser.*;
-import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.net.URI;
@@ -20,16 +20,14 @@ import java.net.URI;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Configuration;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
-
 import org.xml.sax.Attributes;
-import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
@@ -39,7 +37,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * Instances are reusable but not thread-safe.
  */
 public final class MergeTopicParser extends XMLFilterImpl {
-        
+
     private File dirPath = null;
     private String filePath = null;
     private boolean isFirstTopic = false;
@@ -58,15 +56,15 @@ public final class MergeTopicParser extends XMLFilterImpl {
      */
     public MergeTopicParser(final MergeUtils util) {
         this.util = util;
-        try{
+        try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        }catch (final Exception e){
+        } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
     }
-    
+
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -79,7 +77,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     public String getFirstTopicId() {
         return firstTopicId;
     }
-    
+
     @Override
     public void endDocument() throws SAXException {
         // NOOP
@@ -93,7 +91,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         }
         getContentHandler().endElement(uri, localName, qName);
     }
-    
+
     /**
      * Get new value for topic id attribute.
      * 
@@ -115,7 +113,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     /**
      * Rewrite local DITA href value.
-     *
+     * 
      * @param attValue href attribute value
      * @return rewritten href value
      */
@@ -126,31 +124,33 @@ public final class MergeTopicParser extends XMLFilterImpl {
         String retAttValue = attValue;
         if (sharpIndex != -1) { // href value refer to an id in a topic
             if (sharpIndex == 0) {
-                pathFromMap = FileUtils.separatorsToUnix(filePath);
+                pathFromMap = separatorsToUnix(filePath);
             } else {
-                pathFromMap = FileUtils.separatorsToUnix(FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)));
+                pathFromMap = separatorsToUnix(resolveTopic(new File(filePath).getParent(),
+                        attValue.substring(0, sharpIndex)));
             }
             pathFromMap = URLUtils.decode(pathFromMap);
-            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap + attValue.substring(sharpIndex), false));
+            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF,
+                    URLUtils.clean(pathFromMap + attValue.substring(sharpIndex), false));
             final String topicId = pathFromMap + getElementID(SHARP + getFragment(attValue));
             final int index = attValue.indexOf(SLASH, sharpIndex);
-            final String elementId = index != -1 ? attValue.substring(index) : "";            
+            final String elementId = index != -1 ? attValue.substring(index) : "";
             if (util.findId(topicId)) {// topicId found
                 retAttValue = SHARP + util.getIdValue(topicId) + elementId;
-            } else {//topicId not found
+            } else {// topicId not found
                 retAttValue = SHARP + util.addId(topicId) + elementId;
             }
         } else { // href value refer to a topic
-            pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
+            pathFromMap = resolveTopic(new File(filePath).getParent(), attValue);
             pathFromMap = URLUtils.decode(pathFromMap);
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap, false));
             if (util.findId(pathFromMap)) {
                 retAttValue = SHARP + util.getIdValue(pathFromMap);
             } else {
-                final String fileId = MergeUtils.getFirstTopicId(pathFromMap, dirPath , false);
+                final String fileId = MergeUtils.getFirstTopicId(pathFromMap, dirPath, false);
                 final String key = pathFromMap + SHARP + fileId;
                 if (util.findId(key)) {
-                    util.addId(pathFromMap,util.getIdValue(key));
+                    util.addId(pathFromMap, util.getIdValue(key));
                     retAttValue = SHARP + util.getIdValue(key);
                 } else {
                     retAttValue = SHARP + util.addId(pathFromMap);
@@ -161,7 +161,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         }
         return toURI(retAttValue);
     }
-    
+
     private String getElementID(final String fragment) {
         final int slashIndex = fragment.indexOf(SLASH);
         return slashIndex != -1 ? fragment.substring(0, slashIndex) : fragment;
@@ -173,14 +173,14 @@ public final class MergeTopicParser extends XMLFilterImpl {
      * @param filename relative topic system path, may contain a fragment part
      * @param dir topic directory system path
      */
-    public void parse(final String filename,final File dir){
-        filePath = FileUtils.stripFragment(filename);
+    public void parse(final String filename, final File dir) {
+        filePath = stripFragment(filename);
         dirPath = dir;
-        try{
+        try {
             final File f = new File(dir, filePath);
             reader.setErrorHandler(new DITAOTXMLErrorHandler(f.getAbsolutePath(), logger));
             reader.parse(f.toURI().toString());
-        } catch (final Exception e){
+        } catch (final Exception e) {
             throw new RuntimeException("Failed to parse " + filename + ": " + e.getMessage(), e);
         }
     }
@@ -193,7 +193,8 @@ public final class MergeTopicParser extends XMLFilterImpl {
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
+    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
+            throws SAXException {
         // Skip redundant <dita> tags.
         if (ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
             rootLang = attributes.getValue(XML_NS_URI, "lang");
@@ -206,8 +207,8 @@ public final class MergeTopicParser extends XMLFilterImpl {
         if (TOPIC_TOPIC.matches(classValue)) {
             if (isFirstTopic) {
                 if (atts.getIndex(XML_NS_URI, "lang") == -1) {
-                    atts.addAttribute(XML_NS_URI, "lang", XML_NS_PREFIX + ":lang", "CDATA",
-                                      rootLang != null ? rootLang : Configuration.configuration.get("default.language"));
+                    atts.addAttribute(XML_NS_URI, "lang", XML_NS_PREFIX + ":lang", "CDATA", rootLang != null ? rootLang
+                            : Configuration.configuration.get("default.language"));
                     rootLang = null;
                 }
                 isFirstTopic = false;
@@ -218,7 +219,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
             }
         }
         handleHref(classValue, atts);
-        
+
         getContentHandler().startElement(uri, localName, qName, atts);
     }
 
@@ -235,15 +236,16 @@ public final class MergeTopicParser extends XMLFilterImpl {
             if ((scopeValue == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
                     && attValue.getScheme() == null) {
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-                //The scope for @href is local
+                // The scope for @href is local
                 if ((TOPIC_XREF.matches(classValue) || TOPIC_LINK.matches(classValue)
-                			// term and keyword are resolved as keyref can make them links
-                			|| TOPIC_TERM.matches(classValue) || TOPIC_KEYWORD.matches(classValue))
+                // term and keyword are resolved as keyref can make them links
+                        || TOPIC_TERM.matches(classValue) || TOPIC_KEYWORD.matches(classValue))
                         && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))) {
-                    //local xref or link that refers to dita file
+                    // local xref or link that refers to dita file
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, handleLocalDita(attValue, atts).toString());
                 } else {
-                    //local @href other than local xref and link that refers to dita file
+                    // local @href other than local xref and link that refers to
+                    // dita file
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, handleLocalHref(attValue).toString());
                 }
             }
@@ -267,7 +269,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
                 ret.append(URI_SEPARATOR);
             }
             ret.append(attValue.toString());
-            return toURI(FileUtils.normalize(ret.toString(), URI_SEPARATOR));
+            return toURI(normalize(ret.toString(), URI_SEPARATOR));
         } else {
             return attValue;
         }

@@ -22,6 +22,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.util.Job.FileInfo;
 
 /**
  * This class is for get the first xml:lang value set in ditamap/topic files
@@ -85,16 +86,17 @@ public final class CheckLang extends Task {
             if(!StringUtils.isEmptyString(langCode)){
                 setActiveProjectProperty("htmlhelp.locale", langCode);
             }else{
-                final Set<String> topicList = job.getSet(FULL_DITA_TOPIC_LIST);
                 //parse topic files
-                for(final String topicFileName : topicList){
-                    final File topicFile = new File(tempdir, topicFileName);
-                    if(topicFile.exists()){
-                        saxParser.parse(topicFile, parser);
-                        langCode = parser.getLangCode();
-                        if(!StringUtils.isEmptyString(langCode)){
-                            setActiveProjectProperty("htmlhelp.locale", langCode);
-                            break;
+                for (final FileInfo f: job.getFileInfo()){
+                    if (f.isActive && ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
+                        final File topicFile = new File(tempdir, f.file.getPath());
+                        if(topicFile.exists()){
+                            saxParser.parse(topicFile, parser);
+                            langCode = parser.getLangCode();
+                            if(!StringUtils.isEmptyString(langCode)){
+                                setActiveProjectProperty("htmlhelp.locale", langCode);
+                                break;
+                            }
                         }
                     }
                 }

@@ -37,7 +37,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <xsl:param name="DBG" select="'no'"/>
   <xsl:param name="DRAFT" select="'no'"/>
-  <xsl:param name="DITAEXT" select="'.dita'"/>
   <xsl:param name="FILTERFILEURL"/>
   <xsl:param name="PATH2PROJ">
       <xsl:apply-templates select="/processing-instruction('path2project-uri')[1]" mode="get-path2project"/>

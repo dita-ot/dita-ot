@@ -13,7 +13,6 @@
   <!-- output type -->
   <xsl:param name="FINALOUTPUTTYPE" select="''"/>
   <xsl:param name="INPUTMAP" select="''"/>
-  <xsl:param name="DITAEXT" select="'.xml'"/>
   <!-- Deprecated -->
   <xsl:param name="FILEREF">file://</xsl:param>
   <xsl:param name="WORKDIR">

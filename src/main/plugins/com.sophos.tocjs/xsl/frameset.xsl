@@ -25,7 +25,6 @@
 
   <xsl:param name="CSSPATH"/>
   <xsl:param name="OUTEXT" select="'.html'"/>
-  <xsl:param name="DITAEXT" select="'.xml'"/>
 
   <xsl:variable name="firsttopic">
     <xsl:variable name="f" select="/*/*[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href][not(@processing-role='resource-only')]"/>
