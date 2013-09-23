@@ -168,7 +168,11 @@
     </xsl:choose>
   </xsl:variable>
   
-<xsl:variable name="FILTERDOC" select="document($FILTERFILEURL,/)"/>
+<xsl:variable name="FILTERDOC">
+  <xsl:if test="string-length($FILTERFILEURL)>0">
+    <xsl:copy-of select="document($FILTERFILEURL,/)"/>
+  </xsl:if>
+</xsl:variable>
 
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
