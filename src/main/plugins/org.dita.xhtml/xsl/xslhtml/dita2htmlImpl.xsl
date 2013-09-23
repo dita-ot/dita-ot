@@ -165,7 +165,10 @@
     </xsl:choose>
   </xsl:variable>
   
-<xsl:variable name="FILTERDOC" select="document($FILTERFILEURL,/)"/>
+<xsl:variable name="FILTERDOC"
+              select="if (string-length($FILTERFILEURL) > 0)
+                      then document($FILTERFILEURL, /)
+                      else ()"/>
 
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
