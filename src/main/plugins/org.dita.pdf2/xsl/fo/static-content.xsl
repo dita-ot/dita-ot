@@ -175,6 +175,9 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Body first header'"/>
                     <xsl:with-param name="theParameters">
+                        <prodname>
+                          <xsl:value-of select="$productName"/>
+                        </prodname>
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__first__header__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -523,6 +526,9 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Preface first header'"/>
                     <xsl:with-param name="theParameters">
+                        <prodname>
+                          <xsl:value-of select="$productName"/>
+                        </prodname>
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__first__header__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
