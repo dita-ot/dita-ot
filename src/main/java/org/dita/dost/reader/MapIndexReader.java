@@ -125,14 +125,6 @@ public final class MapIndexReader extends AbstractXMLReader {
     }
 
     @Override
-    public void endCDATA() throws SAXException {
-        if (match && validHref){
-            indexEntries.append(CDATA_END);
-        }
-
-    }
-
-    @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
 
@@ -241,14 +233,6 @@ public final class MapIndexReader extends AbstractXMLReader {
                 matchList.add(matchPattern.substring(index, end));
                 index = end + 1;
             }
-        }
-
-    }
-
-    @Override
-    public void startCDATA() throws SAXException {
-        if (match && validHref){
-            indexEntries.append(CDATA_HEAD);
         }
 
     }

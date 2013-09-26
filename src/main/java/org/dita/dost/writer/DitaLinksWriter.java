@@ -9,9 +9,11 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -122,7 +125,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
         try {
-            output.append(StringUtils.escapeXML(ch, start, length));
+            writeCharacters(ch, start, length);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e);
         }
@@ -152,15 +155,14 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             // Using the same type of logic that's used in DITAIndexWriter.
             if (curMatchTopic != null && topicSpecList.contains(localName)) {
                 // if <prolog> don't exist
-                output.append(RELATED_LINKS_HEAD)
-                      .append(indexEntries.get(curMatchTopic))
-                      .append(RELATED_LINKS_END);
+                final AttributesImpl atts = new AttributesImpl();
+                addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString());
+                writeStartElement(TOPIC_RELATED_LINKS.localName, atts);
+                output.write(indexEntries.get(curMatchTopic));
+                writeEndElement(TOPIC_RELATED_LINKS.localName);
                 curMatchTopic = null;
             }
-            output.append(LESS_THAN)
-                  .append(SLASH)
-                  .append(qName)
-                  .append(GREATER_THAN);
+            writeEndElement(qName);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e);
         }
@@ -169,7 +171,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
         try {
-            output.write(ch, start, length);
+            writeCharacters(ch, start, length);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e);
         }
@@ -177,15 +179,9 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
 
     @Override
     public void processingInstruction(final String target, final String data) throws SAXException {
-        String pi;
         try {
-            pi = (data != null) ? target + STRING_BLANK + data : target;
-            output.append(LESS_THAN)
-                  .append(QUESTION)
-                  .append(pi)
-                  .append(QUESTION)
-                  .append(GREATER_THAN);
-        } catch (final Exception e) {
+            writeProcessingInstruction(target, data);
+        } catch (final IOException e) {
             logger.logError(e.getMessage(), e);
         }
     }
@@ -207,9 +203,11 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             topicIdStack.addFirst(atts.getValue(ATTRIBUTE_NAME_ID));
             if (curMatchTopic != null && !firstTopic) {
                 try {
-                    output.append(RELATED_LINKS_HEAD)
-                          .append(indexEntries.get(curMatchTopic))
-                          .append(RELATED_LINKS_END);
+                    final AttributesImpl relAtts = new AttributesImpl();
+                    addOrSetAttribute(relAtts, ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString());
+                    writeStartElement(TOPIC_RELATED_LINKS.localName, relAtts);
+                    output.write(indexEntries.get(curMatchTopic));
+                    writeEndElement(TOPIC_RELATED_LINKS.localName);
                     curMatchTopic = null;
                 } catch (final Exception e) {
                     logger.logError(e.getMessage(), e);
@@ -226,19 +224,9 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             }
         }
         try {
-            output.append(LESS_THAN);
-            output.append(qName);
-            for (int i = 0; i < atts.getLength(); i++) {
-                output.append(STRING_BLANK)
-                      .append(atts.getQName(i))
-                      .append(EQUAL)
-                      .append(QUOTATION)
-                      .append(StringUtils.escapeXML(atts.getValue(i)))
-                      .append(QUOTATION);
-            }
-            output.append(GREATER_THAN);
+            writeStartElement(qName, atts);
             if (TOPIC_RELATED_LINKS.matches(atts) && curMatchTopic != null) {
-                output.append(indexEntries.get(curMatchTopic));
+                output.write(indexEntries.get(curMatchTopic));
                 curMatchTopic = null;
             }
         } catch (final Exception e) {
@@ -246,4 +234,32 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         }
     }
 
+    // SAX serializer methods
+    
+    private void writeStartElement(final String qName, final Attributes atts) throws IOException {
+        final int attsLen = atts.getLength();
+        output.write(LESS_THAN + qName);
+        for (int i = 0; i < attsLen; i++) {
+            final String attQName = atts.getQName(i);
+            final String attValue = StringUtils.escapeXML(atts.getValue(i));
+            output.write(new StringBuffer().append(STRING_BLANK)
+                    .append(attQName).append(EQUAL).append(QUOTATION)
+                    .append(attValue).append(QUOTATION).toString());
+        }
+        output.write(GREATER_THAN);
+    }
+    
+    private void writeEndElement(final String qName) throws IOException {
+        output.write(LESS_THAN + SLASH + qName + GREATER_THAN);
+    }
+    
+    private void writeCharacters(final char[] ch, final int start, final int length) throws IOException {
+        output.write(StringUtils.escapeXML(ch, start, length));
+    }
+
+    private void writeProcessingInstruction(final String target, final String data) throws IOException {
+        final String pi = data != null ? target + STRING_BLANK + data : target;
+        output.write(LESS_THAN + QUESTION + pi + QUESTION + GREATER_THAN);
+    }
+    
 }

@@ -11,6 +11,7 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,6 +28,7 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * TopicRefWriter which updates the linking elements' value according to the
@@ -48,8 +50,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     private Hashtable<String, String> conflictTable = null;
     private OutputStreamWriter output;
     private OutputStreamWriter ditaFileOutput;
-    private boolean needResolveEntity;
-    private boolean insideCDATA;
     private File currentFilePath = null;
     private File currentFilePathName = null;
     /** XMLReader instance for parsing dita file */
@@ -66,15 +66,14 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     public TopicRefWriter() {
         super();
         output = null;
-        insideCDATA = false;
 
         try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+//            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+//            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -87,19 +86,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
      */
     public void setup(final Hashtable<String, String> conflictTable) {
         this.conflictTable = conflictTable;
-    }
-
-    @Override
-    public void startEntity(final String name) throws SAXException {
-        try {
-            needResolveEntity = StringUtils.checkEntity(name);
-            if (!needResolveEntity) {
-                output.write(StringUtils.getEntity(name));
-            }
-        } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
-        }
-
     }
 
     @Override
@@ -117,9 +103,8 @@ public final class TopicRefWriter extends AbstractXMLWriter {
                     data = data + tmp;
                 }
             }
-            pi = (data != null) ? target + STRING_BLANK + data : target;
-            output.write(LESS_THAN + QUESTION + pi + QUESTION + GREATER_THAN);
-        } catch (final Exception e) {
+            writeProcessingInstruction(target, data);
+        } catch (final IOException e) {
             logger.logError(e.getMessage(), e);
         }
     }
@@ -127,39 +112,16 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
         try {
-            output.write(ch, start, length);
-        } catch (final Exception e) {
+            writeCharacters(ch, start, length);
+        } catch (final IOException e) {
             logger.logError(e.getMessage(), e);
         }
     }
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (needResolveEntity) {
-            try {
-                if (insideCDATA) {
-                    output.write(ch, start, length);
-                } else {
-                    output.write(StringUtils.escapeXML(ch, start, length));
-                }
-            } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
-            }
-        }
-    }
-
-    @Override
-    public void endEntity(final String name) throws SAXException {
-        if (!needResolveEntity) {
-            needResolveEntity = true;
-        }
-    }
-
-    @Override
-    public void endCDATA() throws SAXException {
-        insideCDATA = false;
         try {
-            output.write(CDATA_END);
+            writeCharacters(ch, start, length);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e);
         }
@@ -177,7 +139,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         try {
-            output.write(LESS_THAN + SLASH + qName + GREATER_THAN);
+            writeEndElement(qName);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e);
         }
@@ -190,16 +152,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
     public void setChangeTable(final Map<String, String> changeTable) {
         this.changeTable = changeTable;
-    }
-
-    @Override
-    public void startCDATA() throws SAXException {
-        try {
-            insideCDATA = true;
-            output.write(CDATA_HEAD);
-        } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
-        }
     }
 
     @Override
@@ -216,47 +168,22 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
-
         try {
-            copyElementName(qName, atts);
-            copyElementAttribute(atts);
-            output.write(GREATER_THAN);
+            final AttributesImpl res = new AttributesImpl();
+            final int attsLen = atts.getLength();
+            for (int i = 0; i < attsLen; i++) {
+                final String attQName = atts.getQName(i);
+                String attValue;
+                if (ATTRIBUTE_NAME_HREF.equals(attQName)) {
+                    attValue = updateHref(attQName, atts);
+                } else {
+                    attValue = atts.getValue(i);
+                }
+                addOrSetAttribute(res, attQName, attValue);
+            }
+            writeStartElement(qName, res);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e);
-        }// try
-
-    }
-
-    /**
-     * @param attQName
-     * @param attValue
-     * @throws IOException
-     */
-    private void copyAttribute(final String attQName, final String attValue) throws IOException {
-        output.write(new StringBuffer().append(STRING_BLANK).append(attQName).append(EQUAL).append(QUOTATION)
-                .append(attValue).append(QUOTATION).toString());
-    }
-
-    /**
-     * @param atts
-     * @throws IOException
-     */
-    private void copyElementAttribute(final Attributes atts) throws IOException {
-        // copy the element's attributes
-        final int attsLen = atts.getLength();
-        for (int i = 0; i < attsLen; i++) {
-            final String attQName = atts.getQName(i);
-            String attValue;
-
-            if (ATTRIBUTE_NAME_HREF.equals(attQName)) {
-                attValue = updateHref(attQName, atts);
-            } else {
-                attValue = atts.getValue(i);
-            }
-            // consider whether the attvalue needs to be escaped
-            attValue = StringUtils.escapeXML(attValue);
-            // output all attributes
-            copyAttribute(attQName, attValue);
         }
     }
 
@@ -449,16 +376,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         return false;
     }
 
-    /**
-     * @param qName
-     * @param atts
-     * @throws IOException
-     */
-    private void copyElementName(final String qName, final Attributes atts) throws IOException {
-        // copy the element name
-        output.write(LESS_THAN + qName);
-    }
-
     public void write(final File tempDir, final File topicfile, final Map relativePath2fix) throws DITAOTException {
         if (relativePath2fix.containsKey(topicfile)) {
             fixpath = (String) relativePath2fix.get(topicfile);
@@ -476,7 +393,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         File inputFile = null;
         File outputFile = null;
         FileOutputStream fileOutput = null;
-        needResolveEntity = true;
 
         try {
             file = stripFragment(filename);
@@ -514,4 +430,32 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         }
     }
 
+    // SAX serializer methods
+    
+    private void writeStartElement(final String qName, final Attributes atts) throws IOException {
+        final int attsLen = atts.getLength();
+        output.write(LESS_THAN + qName);
+        for (int i = 0; i < attsLen; i++) {
+            final String attQName = atts.getQName(i);
+            final String attValue = StringUtils.escapeXML(atts.getValue(i));
+            output.write(new StringBuffer().append(STRING_BLANK)
+                    .append(attQName).append(EQUAL).append(QUOTATION)
+                    .append(attValue).append(QUOTATION).toString());
+        }
+        output.write(GREATER_THAN);
+    }
+    
+    private void writeEndElement(final String qName) throws IOException {
+        output.write(LESS_THAN + SLASH + qName + GREATER_THAN);
+    }
+    
+    private void writeCharacters(final char[] ch, final int start, final int length) throws IOException {
+        output.write(StringUtils.escapeXML(ch, start, length));
+    }
+
+    private void writeProcessingInstruction(final String target, final String data) throws IOException {
+        final String pi = data != null ? target + STRING_BLANK + data : target;
+        output.write(LESS_THAN + QUESTION + pi + QUESTION + GREATER_THAN);
+    }
+    
 }

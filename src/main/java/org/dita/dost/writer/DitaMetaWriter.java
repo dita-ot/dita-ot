@@ -10,6 +10,7 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 import static java.util.Arrays.*;
+import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,7 +26,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,6 +35,7 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.reader.MapMetaReader;
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -47,6 +48,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * DitaMetaWriter reads dita topic file and insert the metadata information into it.
@@ -59,7 +61,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     private Hashtable<String, Node> metaTable;
     /** topic path that topicIdList need to match */
     private List<String> matchList;
-    private boolean needResolveEntity;
     private Writer output;
     private OutputStreamWriter ditaFileOutput;
     private StringWriter strOutput;
@@ -72,7 +73,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     private boolean hasWritten;
     /** array list that is used to keep the hierarchy of topic id */
     private final List<String> topicIdList;
-    private boolean insideCDATA;
     private final ArrayList<String> topicSpecList;
 
     private static final Map<String, List<String>> moveTable;
@@ -140,18 +140,16 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 
         metaTable = null;
         matchList = null;
-        needResolveEntity = false;
         output = null;
         startTopic = false;
-        insideCDATA = false;
 
         try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+            //reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+            //reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -162,16 +160,10 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
-        if(needResolveEntity){
-            try {
-                if(insideCDATA) {
-                    output.write(ch, start, length);
-                } else {
-                    output.write(StringUtils.escapeXML(ch, start, length));
-                }
-            } catch (final Exception e) {
-                logger.logError(e.getMessage(), e) ;
-            }
+        try {
+            writeCharacters(ch, start, length);
+        } catch (final Exception e) {
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -186,16 +178,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         final int ancestorSize = topicIdList.size();
         final List<String> tail = topicIdList.subList(ancestorSize - matchSize, ancestorSize);
         return matchList.equals(tail);
-    }
-
-    @Override
-    public void endCDATA() throws SAXException {
-        insideCDATA = false;
-        try{
-            output.write(CDATA_END);
-        }catch(final Exception e){
-            logger.logError(e.getMessage(), e) ;
-        }
     }
 
     @Override
@@ -214,12 +196,11 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         if (!startTopic){
             topicIdList.remove(topicIdList.size() - 1);
         }
-
         try {
             if (startTopic && topicSpecList.contains(qName)){
                 if (startDOM){
                     startDOM = false;
-                    output.write("</topic>");
+                    writeEndElement(TOPIC_TOPIC.localName);
                     output = ditaFileOutput;
                     processDOM();
                 }else if (!hasWritten){
@@ -227,11 +208,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                     processDOM();
                 }
             }
-
-            output.write(LESS_THAN + SLASH + qName
-                    + GREATER_THAN);
-
-
+            writeEndElement(qName);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }
@@ -269,7 +246,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         hasWritten = true;
     }
 
-
     private void outputMeta(final Node root) throws IOException {
         final NodeList children = root.getChildNodes();
         Node child = null;
@@ -285,49 +261,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             }
         }
 
-    }
-
-    private void output(final ProcessingInstruction instruction) throws IOException{
-        output.write("<?"+instruction.getTarget()+" "+instruction.getData()+"?>");
-    }
-
-
-    private void output(final Text text) throws IOException{
-        output.write(StringUtils.escapeXML(text.getData()));
-    }
-
-
-    private void output(final Element elem) throws IOException{
-        output.write("<"+elem.getNodeName());
-        final NamedNodeMap attrMap = elem.getAttributes();
-        for (int i = 0; i<attrMap.getLength(); i++){
-            //edited on 2010-08-04 for bug:3038941 start
-            //get node name
-            final String nodeName = attrMap.item(i).getNodeName();
-            //escape entity to avoid entity resolving
-            final String nodeValue = StringUtils.escapeXML(attrMap.item(i).getNodeValue());
-            //write into target file
-            output.write(" "+ nodeName
-                    +"=\""+ nodeValue
-                    +"\"");
-            //edited on 2010-08-04 for bug:3038941 end
-        }
-        output.write(">");
-        final NodeList children = elem.getChildNodes();
-        Node child;
-        for (int j = 0; j<children.getLength(); j++){
-            child = children.item(j);
-            switch (child.getNodeType()){
-            case Node.TEXT_NODE:
-                output((Text) child); break;
-            case Node.PROCESSING_INSTRUCTION_NODE:
-                output((ProcessingInstruction) child); break;
-            case Node.ELEMENT_NODE:
-                output((Element) child); break;
-            }
-        }
-
-        output.write("</"+elem.getNodeName()+">");
     }
 
     private void moveMeta(final Entry<String, Node> entry, final Node root) {
@@ -388,7 +321,8 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                 // if there is no such child under current element,
                 // create one
                 child = parent.getOwnerDocument().createElement(next);
-                ((Element)child).setAttribute(ATTRIBUTE_NAME_CLASS,"- topic/"+next+" ");
+                final DitaClass cls = new DitaClass("- topic/" + next + " ");
+                ((Element)child).setAttribute(ATTRIBUTE_NAME_CLASS, cls.toString());
 
                 if (current == null ||
                         currentIndex == null ||
@@ -423,19 +357,11 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 
     }
 
-
-    @Override
-    public void endEntity(final String name) throws SAXException {
-        if(!needResolveEntity){
-            needResolveEntity = true;
-        }
-    }
-
     @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length)
             throws SAXException {
         try {
-            output.write(ch, start, length);
+            writeCharacters(ch, start, length);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }
@@ -444,12 +370,9 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
     @Override
     public void processingInstruction(final String target, final String data)
             throws SAXException {
-        String pi;
         try {
-            pi = (data != null) ? target + STRING_BLANK + data : target;
-            output.write(LESS_THAN + QUESTION
-                    + pi + QUESTION + GREATER_THAN);
-        } catch (final Exception e) {
+            writeProcessingInstruction(target, data);
+        } catch (final IOException e) {
             logger.logError(e.getMessage(), e) ;
         }
     }
@@ -470,7 +393,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         int index = 0;
         matchList = new ArrayList<String>(INT_16);
 
-        firstMatchTopic = (match.indexOf(SLASH) != -1) ? match.substring(0, match.indexOf('/')) : match;
+        firstMatchTopic = (match.indexOf(SLASH) != -1) ? match.substring(0, match.indexOf(SLASH)) : match;
 
         while (index != -1) {
             final int end = match.indexOf(SLASH, index);
@@ -482,25 +405,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                 matchList.add(match.substring(index, end));
                 index = end + 1;
             }
-        }
-    }
-
-    @Override
-    public void skippedEntity(final String name) throws SAXException {
-        try {
-            output.write(StringUtils.getEntity(name));
-        } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
-        }
-    }
-
-    @Override
-    public void startCDATA() throws SAXException {
-        insideCDATA = true;
-        try{
-            output.write(CDATA_HEAD);
-        }catch(final Exception e){
-            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -526,7 +430,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                             )){
                 startDOM = true;
                 output = strOutput;
-                output.write("<topic>");
+                writeStartElement(TOPIC_TOPIC.localName, new AttributesImpl());
             }
 
             if ( startTopic && classAttrValue != null && !hasWritten &&(
@@ -536,7 +440,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                     )){
                 if (startDOM){
                     startDOM = false;
-                    output.write("</topic>");
+                    writeEndElement(TOPIC_TOPIC.localName);
                     output = ditaFileOutput;
                     processDOM();
                 }else{
@@ -559,40 +463,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                 }
             }
 
-            outputElement(qName, atts);
-        } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
-        }
-    }
-
-    private void outputElement(final String qName, final Attributes atts) throws IOException {
-        final int attsLen = atts.getLength();
-        output.write(LESS_THAN + qName);
-        for (int i = 0; i < attsLen; i++) {
-            final String attQName = atts.getQName(i);
-            String attValue;
-            attValue = atts.getValue(i);
-
-            // replace '&' with '&amp;'
-            //if (attValue.indexOf('&') > 0) {
-            //	attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
-            //}
-            attValue = StringUtils.escapeXML(attValue);
-
-            output.write(new StringBuffer().append(STRING_BLANK)
-                    .append(attQName).append(EQUAL).append(QUOTATION)
-                    .append(attValue).append(QUOTATION).toString());
-        }
-        output.write(GREATER_THAN);
-    }
-
-    @Override
-    public void startEntity(final String name) throws SAXException {
-        try {
-            needResolveEntity = StringUtils.checkEntity(name);
-            if(!needResolveEntity){
-                output.write(StringUtils.getEntity(name));
-            }
+            writeStartElement(qName, atts);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }
@@ -623,7 +494,6 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                 matchList = null;
                 startTopic = false;
             }
-            needResolveEntity = true;
             hasWritten = false;
             startDOM = false;
             inputFile = new File(file);
@@ -653,4 +523,70 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             }
         }
     }
+    
+    // DOM to SAX conversion methods
+    
+    private void output(final ProcessingInstruction instruction) throws IOException{
+        String data = instruction.getData();
+        if (data != null && data.isEmpty()) {
+            data = null;
+        }
+        writeProcessingInstruction(instruction.getTarget(), data);
+    }
+
+    private void output(final Text text) throws IOException{
+        final char[] cs = text.getData().toCharArray();
+        writeCharacters(cs, 0, cs.length);
+    }
+
+    private void output(final Element elem) throws IOException{
+        final AttributesImpl atts = new AttributesImpl();
+        final NamedNodeMap attrMap = elem.getAttributes();
+        for (int i = 0; i<attrMap.getLength(); i++){
+            addOrSetAttribute(atts, attrMap.item(i)); 
+        }
+        writeStartElement(elem.getNodeName(), atts);
+        final NodeList children = elem.getChildNodes();
+        for (int j = 0; j<children.getLength(); j++){
+            final Node child = children.item(j);
+            switch (child.getNodeType()){
+            case Node.TEXT_NODE:
+                output((Text) child); break;
+            case Node.PROCESSING_INSTRUCTION_NODE:
+                output((ProcessingInstruction) child); break;
+            case Node.ELEMENT_NODE:
+                output((Element) child); break;
+            }
+        }
+        writeEndElement(elem.getNodeName());
+    }
+    
+    // SAX serializer methods
+    
+    private void writeStartElement(final String qName, final Attributes atts) throws IOException {
+        final int attsLen = atts.getLength();
+        output.write(LESS_THAN + qName);
+        for (int i = 0; i < attsLen; i++) {
+            final String attQName = atts.getQName(i);
+            final String attValue = StringUtils.escapeXML(atts.getValue(i));
+            output.write(new StringBuffer().append(STRING_BLANK)
+                    .append(attQName).append(EQUAL).append(QUOTATION)
+                    .append(attValue).append(QUOTATION).toString());
+        }
+        output.write(GREATER_THAN);
+    }
+    
+    private void writeEndElement(final String qName) throws IOException {
+        output.write(LESS_THAN + SLASH + qName + GREATER_THAN);
+    }
+    
+    private void writeCharacters(final char[] ch, final int start, final int length) throws IOException {
+        output.write(StringUtils.escapeXML(ch, start, length));
+    }
+
+    private void writeProcessingInstruction(final String target, final String data) throws IOException {
+        final String pi = data != null ? target + STRING_BLANK + data : target;
+        output.write(LESS_THAN + QUESTION + pi + QUESTION + GREATER_THAN);
+    }
+    
 }

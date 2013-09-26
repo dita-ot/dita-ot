@@ -10,10 +10,12 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
+import org.dita.dost.util.XMLUtils.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.HashSet;
@@ -60,8 +62,6 @@ public final class ConrefPushParser extends AbstractXMLWriter {
     private final XMLReader parser;
     /**output.*/
     private OutputStreamWriter output = null;
-    /**whether an entity needs to be resolved or not flag. */
-    private boolean needResolveEntity = true;
 
     /**topicSpecSet is used to store all kinds of names for elements which is
 	specialized from <topic>. It is useful in endElement(...) because we don't
@@ -134,7 +134,6 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         topicSpecSet = new HashSet<String>();
         levelForPushAfterStack = new Stack<Integer>();
         contentForPushAfterStack = new Stack<String>();
-        needResolveEntity = true;
         try{
             parser = StringUtils.getXMLReader();
             parser.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -266,10 +265,10 @@ public final class ConrefPushParser extends AbstractXMLWriter {
     @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
-        if (!isReplaced && needResolveEntity){
+        if (!isReplaced){
             try{
-                output.write(StringUtils.escapeXML(ch, start, length));
-            }catch (final Exception e) {
+                writeCharacters(ch, start, length);
+            }catch (final IOException e) {
                 logger.logError(e.getMessage(), e) ;
             }
         }
@@ -287,10 +286,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         }else{
             //write the end tag
             try{
-                output.write(LESS_THAN);
-                output.write(SLASH);
-                output.write(name);
-                output.write(GREATER_THAN);
+                writeEndElement(name);
             }catch (final Exception e) {
                 logger.logError(e.getMessage(), e) ;
             }
@@ -328,10 +324,8 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             throws SAXException {
         if (!isReplaced) {
             try {
-                final String pi = (data != null) ? target + STRING_BLANK + data : target;
-                output.write(LESS_THAN + QUESTION
-                        + pi + QUESTION + GREATER_THAN);
-            } catch (final Exception e) {
+                writeProcessingInstruction(target, data);
+            } catch (final IOException e) {
                 logger.logError(e.getMessage(), e) ;
             }
         }
@@ -391,6 +385,8 @@ public final class ConrefPushParser extends AbstractXMLWriter {
      * @param string string
      * @return string
      */
+    // TODO
+    //private void replaceElementName(final String targetClassAttribute, String string, final OutputStreamWriter out){
     private String replaceElementName(final String targetClassAttribute, String string){
         InputSource inputSource = null;
         Document document = null;
@@ -472,6 +468,8 @@ public final class ConrefPushParser extends AbstractXMLWriter {
      * @param elem element
      * @return string
      */
+    //TODO
+    //private void replaceSubElementName(final String type, final Element elem, final OutputStreamWriter out){
     private String replaceSubElementName(final String type, final Element elem){
         final StringBuffer stringBuffer = new StringBuffer();
         final String classValue = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
@@ -622,18 +620,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                 //we still need to check here because isReplaced might be turn on.
                 if (!isReplaced){
                     //output the element
-                    output.write(LESS_THAN);
-                    output.write(name);
-                    for(int index = 0; index < atts.getLength(); index++){
-                        output.write(STRING_BLANK);
-                        output.write(atts.getQName(index));
-                        output.write("=\"");
-                        String value =  atts.getValue(index);
-                        value =  StringUtils.escapeXML(value);
-                        output.write(value);
-                        output.write("\"");
-                    }
-                    output.write(GREATER_THAN);
+                    writeStartElement(name, atts);
                 }
             }catch (final Exception e) {
                 logger.logError(e.getMessage(), e) ;
@@ -663,8 +650,8 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             throws SAXException {
         if(!isReplaced){
             try{
-                output.write(ch, start, length);
-            }catch (final Exception e) {
+                writeCharacters(ch, start, length);
+            }catch (final IOException e) {
                 logger.logError(e.getMessage(), e) ;
             }
         }
@@ -675,23 +662,32 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         super.startDocument();
     }
 
-    @Override
-    public void startEntity(final String name) throws SAXException {
-        try {
-            needResolveEntity = StringUtils.checkEntity(name);
-            if(!needResolveEntity){
-                output.write(StringUtils.getEntity(name));
-            }
-        } catch (final Exception e) {
-            //logger.logError(e.getMessage(), e) ;
+    // SAX serializer methods
+    
+    private void writeStartElement(final String qName, final Attributes atts) throws IOException {
+        final int attsLen = atts.getLength();
+        output.write(LESS_THAN + qName);
+        for (int i = 0; i < attsLen; i++) {
+            final String attQName = atts.getQName(i);
+            final String attValue = StringUtils.escapeXML(atts.getValue(i));
+            output.write(new StringBuffer().append(STRING_BLANK)
+                    .append(attQName).append(EQUAL).append(QUOTATION)
+                    .append(attValue).append(QUOTATION).toString());
         }
+        output.write(GREATER_THAN);
+    }
+    
+    private void writeEndElement(final String qName) throws IOException {
+        output.write(LESS_THAN + SLASH + qName + GREATER_THAN);
+    }
+    
+    private void writeCharacters(final char[] ch, final int start, final int length) throws IOException {
+        output.write(StringUtils.escapeXML(ch, start, length));
     }
 
-    @Override
-    public void endEntity(final String name) throws SAXException {
-        if(!needResolveEntity){
-            needResolveEntity = true;
-        }
+    private void writeProcessingInstruction(final String target, final String data) throws IOException {
+        final String pi = data != null ? target + STRING_BLANK + data : target;
+        output.write(LESS_THAN + QUESTION + pi + QUESTION + GREATER_THAN);
     }
-
+    
 }

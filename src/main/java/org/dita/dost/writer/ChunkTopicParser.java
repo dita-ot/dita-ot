@@ -140,8 +140,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+//            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+//            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -239,17 +239,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     @Override
     public void setContent(final Content content) {
         // NOOP
-    }
-
-    @Override
-    public void skippedEntity(final String name) throws SAXException {
-        if (include) {
-            try {
-                output.write(StringUtils.getEntity(name));
-            } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
-            }
-        }
     }
 
     @Override

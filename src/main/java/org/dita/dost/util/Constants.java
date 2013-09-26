@@ -905,18 +905,6 @@ public final class Constants {
     public static final String CDATA_END = "]]>";
     /**DOCTYPE_HEAD.*/
     public static final String DOCTYPE_HEAD = "<!DOCTYPE ";
-    /**META_HEAD.*/
-    public static final String META_HEAD = "<metadata class=\"- topic/metadata \">";
-    /**META_END.*/
-    public static final String META_END = "</metadata>";
-    /**PROLOG_HEAD.*/
-    public static final String PROLOG_HEAD = "<prolog class=\"- topic/prolog \">";
-    /**PROLOG_END.*/
-    public static final String PROLOG_END = "</prolog>";
-    /**RELATED_LINKS_HEAD.*/
-    public static final String RELATED_LINKS_HEAD = "<related-links class=\"- topic/related-links \">";
-    /**RELATED_LINKS_END.*/
-    public static final String RELATED_LINKS_END = "</related-links>";
     /**XML_HEAD.*/
     public static final String XML_HEAD = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
     /**STRING_BLANK.*/
