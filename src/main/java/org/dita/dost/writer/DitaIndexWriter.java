@@ -21,7 +21,6 @@ import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -219,17 +218,9 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             logger.logError(e.getMessage(), e) ;
         }
     }
-
     
-    /**
-     * @param content value {@code String}
-     */
-    @Override
-    public void setContent(final Content content) {
-        indexEntries = (String) content.getValue();
-        if (indexEntries == null) {
-            throw new IllegalArgumentException("Content value must be non-null String");
-        }
+    public void setIndexEntries(final String indexEntries) {
+        this.indexEntries = indexEntries;
     }
     
     private void setMatch(final String match) {

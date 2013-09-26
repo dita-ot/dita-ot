@@ -12,7 +12,6 @@ import java.io.File;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.Content;
 
 /**
  * AbstractWriter defines the method every writer class should implement.
@@ -21,14 +20,6 @@ import org.dita.dost.module.Content;
  * 
  */
 public interface AbstractWriter {
-
-    /**
-     * Set the result from reader to writer.
-     * 
-     * @param content container
-     * 
-     */
-    void setContent(Content content);
 
     /**
      * Call the writer to write or rewrite the file.

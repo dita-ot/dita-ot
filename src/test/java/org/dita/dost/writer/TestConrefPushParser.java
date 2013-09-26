@@ -27,8 +27,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.reader.ConrefPushReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
@@ -111,9 +109,10 @@ public class TestConrefPushParser {
             // initialize the parsed file
             FileUtils.copyFile(new File(srcDir, "conrefpush_stub2_backup.xml"),
                     new File(entry.getKey()));
-            final Content content = new ContentImpl();
-            content.setValue(entry.getValue());
-            parser.setContent(content);
+//            final Content content = new ContentImpl();
+//            content.setValue(entry.getValue());
+//            parser.setContent(content);
+            parser.setMoveTable(entry.getValue());
             parser.write(new File(entry.getKey()));
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();

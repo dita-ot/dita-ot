@@ -18,8 +18,6 @@ import java.util.Locale;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.writer.AbstractExtendDitaWriter;
 import org.dita.dost.writer.AbstractWriter;
@@ -183,7 +181,6 @@ public final class IndexTermCollection {
         StringBuffer buff = new StringBuffer(outputFileRoot);
         AbstractWriter abstractWriter = null;
         IDitaTranstypeIndexWriter indexWriter = null;
-        final Content content = new ContentImpl();
 
         if (indexClass != null && indexClass.length() > 0) {
             //Instantiate the class value
@@ -249,9 +246,8 @@ public final class IndexTermCollection {
         //if (!getTermList().isEmpty()){
         //Even if there is no term in the list create an empty index file
         //otherwise the compiler will report error.
-        content.setCollection(this.getTermList());
         abstractWriter.setLogger(javaLogger);
-        abstractWriter.setContent(content);
+        ((IDitaTranstypeIndexWriter) abstractWriter).setTermList(this.getTermList());
         abstractWriter.write(new File(buff.toString()));
         //}
     }

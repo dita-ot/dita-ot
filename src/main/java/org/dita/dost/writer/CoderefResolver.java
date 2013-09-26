@@ -24,7 +24,6 @@ import org.xml.sax.SAXException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.FileUtils;
 
 /**
@@ -65,11 +64,6 @@ public final class CoderefResolver extends AbstractXMLFilter {
     }
 
     // AbstractWriter methods --------------------------------------------------
-
-    @Override
-    public void setContent(final Content content) {
-        // NOOP
-    }
 
     @Override
     public void write(final File filename) throws DITAOTException {

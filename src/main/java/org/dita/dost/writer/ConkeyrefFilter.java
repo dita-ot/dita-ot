@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.URLUtils;
@@ -32,10 +31,6 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
     private File tempDir;
     private File inputFile;
     private Map<String, KeyDef> keys;
-
-    public void setContent(final Content content) {
-        throw new UnsupportedOperationException();
-    }
 
     public void setKeyDefinitions(final Collection<KeyDef> keydefs) {
         keys = new HashMap<String, KeyDef>();

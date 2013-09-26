@@ -10,7 +10,6 @@ import java.io.File;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -24,9 +23,6 @@ import org.xml.sax.helpers.XMLFilterImpl;
 abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter {
 
     protected DITAOTLogger logger;
-
-    @Override
-    public abstract void setContent(Content content);
 
     @Override
     public void write(final File filename) throws DITAOTException {

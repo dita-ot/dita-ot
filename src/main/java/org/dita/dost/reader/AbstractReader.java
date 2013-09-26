@@ -11,7 +11,6 @@ package org.dita.dost.reader;
 import java.io.File;
 
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.Content;
 
 /**
  * AbstractReader defines the methods that every reader class should implement.
@@ -27,13 +26,6 @@ public interface AbstractReader {
      * @param filename filename
      */
     void read(File filename);
-
-    /**
-     * Get the result from reader after parsing.
-     * 
-     * @return Content
-     */
-    Content getContent();
 
     /**
      * Set logger for module.

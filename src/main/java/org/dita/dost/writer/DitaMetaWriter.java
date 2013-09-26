@@ -33,7 +33,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.StringUtils;
@@ -58,7 +57,7 @@ import org.xml.sax.helpers.AttributesImpl;
 public final class DitaMetaWriter extends AbstractXMLWriter {
     private String firstMatchTopic;
     private String lastMatchTopic;
-    private Hashtable<String, Node> metaTable;
+    private Hashtable<String, Element> metaTable;
     /** topic path that topicIdList need to match */
     private List<String> matchList;
     private Writer output;
@@ -229,12 +228,12 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                 doc.appendChild(doc.createElement("topic"));
             }
 
-            final Node root = doc.getDocumentElement();
+            final Element root = doc.getDocumentElement();
 
-            final Iterator<Map.Entry<String, Node>> iter = metaTable.entrySet().iterator();
+            final Iterator<Map.Entry<String, Element>> iter = metaTable.entrySet().iterator();
 
             while (iter.hasNext()){
-                final Map.Entry<String, Node> entry = iter.next();
+                final Map.Entry<String, Element> entry = iter.next();
                 moveMeta(entry,root);
             }
 
@@ -263,7 +262,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 
     }
 
-    private void moveMeta(final Entry<String, Node> entry, final Node root) {
+    private void moveMeta(final Entry<String, Element> entry, final Element root) {
         final List<String> metaPath = moveTable.get(entry.getKey());
         if (metaPath == null){
             // for the elements which doesn't need to be moved to topic
@@ -376,17 +375,9 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             logger.logError(e.getMessage(), e) ;
         }
     }
-
-    /**
-     * @param content value {@code Hashtable<String, Node>}
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public void setContent(final Content content) {
-        metaTable = (Hashtable<String, Node>) content.getValue();
-        if (metaTable == null) {
-            throw new IllegalArgumentException("Content value must be non-null Hashtable<String, Node>");
-        }
+    
+    public void setMetaTable(final Hashtable<String, Element> metaTable) {
+        this.metaTable = metaTable;
     }
     
     private void setMatch(final String match) {

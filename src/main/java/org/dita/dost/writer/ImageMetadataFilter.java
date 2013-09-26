@@ -18,7 +18,6 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
@@ -60,11 +59,6 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     }
 
     // AbstractWriter methods --------------------------------------------------
-
-    @Override
-    public void setContent(final Content content) {
-        // NOOP
-    }
 
     @Override
     public void write(final File filename) throws DITAOTException {

@@ -60,7 +60,6 @@ public class TestGenListModuleReader {
         //String inputMap = inputDir + "/root-map-01.ditamap";
 
         reader.parse(new File(rootFile.getPath()));
-        reader.getContent();
         final Set<File> conref = reader.getConrefTargets();
         final Set<File> chunk = reader.getChunkTopicSet();
         final Map<File, File> copytoMap = reader.getCopytoMap();

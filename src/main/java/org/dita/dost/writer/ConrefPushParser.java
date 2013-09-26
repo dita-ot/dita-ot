@@ -30,7 +30,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
@@ -147,16 +146,8 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         }
     }
     
-    /**
-     * @param content value {@code Hashtable<String, String>}
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public void setContent(final Content content) {
-        movetable = (Hashtable<String, String>)content.getValue();
-        if (movetable == null) {
-            throw new IllegalArgumentException("Content value must be non-null Hashtable<String, String>");
-        }
+    public void setMoveTable(final Hashtable<String, String> movetable) {
+        this.movetable = movetable;
     }
     
     /**

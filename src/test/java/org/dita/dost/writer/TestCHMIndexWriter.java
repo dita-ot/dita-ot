@@ -13,25 +13,23 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
+
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 
 public class TestCHMIndexWriter {
 
@@ -54,7 +52,7 @@ public class TestCHMIndexWriter {
 
     @Test
     public void testWrite() throws DITAOTException, SAXException, IOException {
-        final Content content = new ContentImpl();
+//        final Content content = new ContentImpl();
         final IndexTerm indexterm1 = new IndexTerm();
         indexterm1.setTermName("name1");
         indexterm1.setTermKey("indexkey1");
@@ -62,12 +60,13 @@ public class TestCHMIndexWriter {
         indexterm2.setTermName("name2");
         indexterm2.setTermKey("indexkey2");
         indexterm1.addSubTerm(indexterm2);
-        final Collection<IndexTerm> collection = new ArrayList<IndexTerm>();
+        final List<IndexTerm> collection = new ArrayList<IndexTerm>();
         collection.add(indexterm1);
-        content.setCollection(collection);
+//        content.setCollection(collection);
 
         final CHMIndexWriter indexWriter = new CHMIndexWriter();
-        indexWriter.setContent(content);
+//        indexWriter.setContent(content);
+        indexWriter.setTermList(collection);
         final File outFile = new File(tempDir, "index.hhk");
         indexWriter.write(outFile.getAbsoluteFile());
 

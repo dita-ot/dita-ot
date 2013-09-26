@@ -27,7 +27,6 @@ import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.Configuration.Mode;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FileUtils;
@@ -1361,10 +1360,5 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
 //            this.file = file;
 //        }
 //    }
-
-    @Override
-    public void setContent(final Content content) {
-        throw new UnsupportedOperationException();
-    }
 
 }

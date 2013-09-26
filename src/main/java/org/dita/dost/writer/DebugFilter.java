@@ -11,7 +11,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.dita.dost.module.Content;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
@@ -35,11 +34,6 @@ public final class DebugFilter extends AbstractXMLFilter {
 	private Locator locator;
 	private final Map<String, Integer> counterMap = new HashMap<String, Integer>();
 	private int foreignLevel;
-	
-	@Override
-	public void setContent(final Content content) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * Set input file.

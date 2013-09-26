@@ -42,7 +42,7 @@ import org.dita.dost.writer.DitaMetaWriter;
  */
 final class MoveMetaModule implements AbstractPipelineModule {
 
-    private final ContentImpl content;
+//    private final ContentImpl content;
     private DITAOTLogger logger;
 
     /**
@@ -50,7 +50,7 @@ final class MoveMetaModule implements AbstractPipelineModule {
      */
     public MoveMetaModule() {
         super();
-        content = new ContentImpl();
+//        content = new ContentImpl();
     }
 
     @Override
@@ -112,8 +112,9 @@ final class MoveMetaModule implements AbstractPipelineModule {
             String targetFileName = entry.getKey();
             targetFileName = stripFragment(targetFileName);
             if (targetFileName.endsWith(FILE_EXTENSION_DITAMAP )) {
-                content.setValue(entry.getValue());
-                mapInserter.setContent(content);
+//                content.setValue(entry.getValue());
+//                mapInserter.setContent(content);
+                mapInserter.setMetaTable(entry.getValue());
                 if (FileUtils.fileExists(entry.getKey())) {
                     logger.logInfo("Processing " + entry.getKey());
                     mapInserter.write(new File(entry.getKey()));
@@ -131,8 +132,9 @@ final class MoveMetaModule implements AbstractPipelineModule {
             String targetFileName = entry.getKey();
             targetFileName = stripFragment(targetFileName);
             if (targetFileName.endsWith(FILE_EXTENSION_DITA) || targetFileName.endsWith(FILE_EXTENSION_XML)) {
-                content.setValue(entry.getValue());
-                topicInserter.setContent(content);
+//                content.setValue(entry.getValue());
+//                topicInserter.setContent(content);
+                topicInserter.setMetaTable(entry.getValue());
                 if (FileUtils.fileExists(entry.getKey())) {
                     logger.logInfo("Processing " + entry.getKey());
                     topicInserter.write(new File(entry.getKey()));

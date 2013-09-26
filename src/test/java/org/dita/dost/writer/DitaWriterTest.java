@@ -52,8 +52,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.TestLogger;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;

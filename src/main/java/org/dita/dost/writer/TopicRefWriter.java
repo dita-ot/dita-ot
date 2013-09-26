@@ -23,7 +23,6 @@ import java.util.Map;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -143,11 +142,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e);
         }
-    }
-
-    @Override
-    public void setContent(final Content content) {
-        throw new UnsupportedOperationException();
     }
 
     public void setChangeTable(final Map<String, String> changeTable) {

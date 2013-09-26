@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Deque;
 
-import org.dita.dost.module.Content;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -79,11 +78,6 @@ public final class NormalizeFilter extends AbstractXMLFilter {
         columnNumberEndStack = new ArrayDeque<Integer>();
         rowsMapStack = new ArrayDeque<Map<String, Integer>>();
         colSpanMapStack = new ArrayDeque<Map<String, Integer>>();
-    }
-
-    @Override
-    public void setContent(final Content content) {
-        throw new UnsupportedOperationException();
     }
 
     // SAX methods

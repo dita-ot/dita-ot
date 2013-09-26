@@ -32,7 +32,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
@@ -443,15 +442,6 @@ public final class MapMetaReader implements AbstractReader {
             }
         }
 
-    }
-
-    /**
-     * @deprecated use {@link #getMapping()} instead
-     */
-    @Override
-    @Deprecated
-    public Content getContent() {
-        throw new UnsupportedOperationException();
     }
 
     /**

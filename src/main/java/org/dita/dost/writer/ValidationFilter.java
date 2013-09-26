@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
@@ -40,11 +39,6 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	 */
 	public ValidationFilter() {
 		super();
-	}
-	
-	@Override
-	public void setContent(final Content content) {
-		throw new UnsupportedOperationException();
 	}
 
     /**

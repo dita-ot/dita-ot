@@ -25,7 +25,6 @@ import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
@@ -177,10 +176,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         keyMap = new HashMap<String, URI>();
         elemName = new Stack<String>();
         hasSubElem = new Stack<Boolean>();
-    }
-    
-    public void setContent(final Content content) {
-        throw new UnsupportedOperationException();
     }
     
     public void setKeyDefinition(final Map<String, Element> definitionMap) {

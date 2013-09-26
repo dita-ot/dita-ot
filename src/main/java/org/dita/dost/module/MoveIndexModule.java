@@ -88,9 +88,10 @@ final class MoveIndexModule implements AbstractPipelineModule {
             String targetFileName = entry.getKey();
             targetFileName = stripFragment(targetFileName);
             if (targetFileName.endsWith(FILE_EXTENSION_DITA) || targetFileName.endsWith(FILE_EXTENSION_XML)){
-                final ContentImpl content = new ContentImpl();
-                content.setValue(entry.getValue());
-                indexInserter.setContent(content);
+//                final ContentImpl content = new ContentImpl();
+//                content.setValue(entry.getValue());
+//                indexInserter.setContent(content);
+                indexInserter.setIndexEntries(entry.getValue());
                 if (FileUtils.fileExists(entry.getKey())) {
                     logger.logInfo("Processing " + targetFileName);
                     indexInserter.write(new File(entry.getKey()));

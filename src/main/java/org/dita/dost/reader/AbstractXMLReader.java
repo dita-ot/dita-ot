@@ -13,7 +13,6 @@ import java.io.IOException;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.Content;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
@@ -54,11 +53,6 @@ ContentHandler, LexicalHandler, EntityResolver {
     @Override
     public void read(final File filename) {
         // NOOP
-    }
-
-    @Override
-    public Content getContent() {
-        return null;
     }
 
     @Override

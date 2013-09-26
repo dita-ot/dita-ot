@@ -36,7 +36,6 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
-import org.dita.dost.module.Content;
 import org.dita.dost.writer.ChunkTopicParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -509,18 +508,6 @@ public final class ChunkMapReader implements AbstractReader {
                 }
             }
         }
-    }
-
-    /**
-     * get content.
-     * 
-     * @return content value {@code LinkedHashMap<String, String>}
-     * @deprecated use {@link #getChangeTable()} instead
-     */
-    @Override
-    @Deprecated
-    public Content getContent() {
-        throw new UnsupportedOperationException();
     }
 
     /**

@@ -7,7 +7,6 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -38,11 +37,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	 */
 	public ProfilingFilter() {
 		super();
-	}
-	
-	@Override
-	public void setContent(final Content content) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**

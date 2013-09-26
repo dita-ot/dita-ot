@@ -24,7 +24,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 
-import org.dita.dost.module.Content;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.StringUtils;
@@ -110,11 +109,6 @@ public final class KeyrefReader extends AbstractXMLReader {
                 }
             }
         }
-    }
-
-    @Override
-    public Content getContent() {
-        throw new UnsupportedOperationException();
     }
     
     /**

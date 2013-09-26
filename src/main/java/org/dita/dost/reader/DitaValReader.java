@@ -24,8 +24,6 @@ import java.util.Set;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils.Action;
@@ -50,8 +48,6 @@ import org.xml.sax.XMLReader;
 public final class DitaValReader extends AbstractXMLReader {
     private final Map<FilterKey, Action> filterMap;
 
-    private ContentImpl content;
-
     private XMLReader reader;
 
     private final List<File> imageList;
@@ -70,7 +66,6 @@ public final class DitaValReader extends AbstractXMLReader {
     public DitaValReader() {
         super();
         filterMap = new HashMap<FilterKey, Action>();
-        content = null;
         imageList = new ArrayList<File>(INT_256);
         relFlagImageList= new ArrayList<File>(INT_256);
 
@@ -110,16 +105,6 @@ public final class DitaValReader extends AbstractXMLReader {
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }
-    }
-
-    /**
-     * @return content collection {@code Set<Entry<String, String>>}
-     */
-    @Override
-    public Content getContent() {
-        content = new ContentImpl();
-        content.setCollection(filterMap.entrySet());
-        return content;
     }
 
     @Override
