@@ -142,8 +142,6 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            //reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            //reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }

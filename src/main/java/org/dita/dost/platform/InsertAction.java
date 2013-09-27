@@ -38,7 +38,6 @@ class InsertAction extends DefaultHandler2 implements IAction {
     protected final StringBuffer retBuf;
     protected final Hashtable<String,String> paramTable;
     protected int elemLevel = 0;
-    protected boolean inCdataSection = false;
     /** Current processing file. */
     protected String currentFile;
     /**
@@ -54,9 +53,6 @@ class InsertAction extends DefaultHandler2 implements IAction {
             reader.setContentHandler(this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
-
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
         }
@@ -118,12 +114,8 @@ class InsertAction extends DefaultHandler2 implements IAction {
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (inCdataSection) {
-            retBuf.append(ch, start, length);
-        } else {
-            final char[] esc = StringUtils.escapeXML(ch, start, length).toCharArray();
-            retBuf.append(esc, 0, esc.length);
-        }
+        final char[] esc = StringUtils.escapeXML(ch, start, length).toCharArray();
+        retBuf.append(esc, 0, esc.length);
     }
 
     @Override
@@ -152,19 +144,6 @@ class InsertAction extends DefaultHandler2 implements IAction {
     @Override
     public void comment(final char[] ch, final int start, final int length) throws SAXException {
         retBuf.append("<!--").append(ch, start, length).append("-->");
-    }
-
-    @Override
-    public void startCDATA() throws SAXException {
-        inCdataSection = true;
-        retBuf.append(CDATA_HEAD);
-
-    }
-
-    @Override
-    public void endCDATA() throws SAXException {
-        retBuf.append(CDATA_END);
-        inCdataSection = false;
     }
 
 }

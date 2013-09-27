@@ -899,12 +899,6 @@ public final class Constants {
     public static final String DOUBLE_BACK_SLASH = "\\\\";
     /**COLON_DOUBLE_SLASH.*/
     public static final String COLON_DOUBLE_SLASH = "://";
-    /**CDATA_HEAD.*/
-    public static final String CDATA_HEAD = "<![CDATA[";
-    /**CDATA_END.*/
-    public static final String CDATA_END = "]]>";
-    /**DOCTYPE_HEAD.*/
-    public static final String DOCTYPE_HEAD = "<!DOCTYPE ";
     /**XML_HEAD.*/
     public static final String XML_HEAD = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
     /**STRING_BLANK.*/

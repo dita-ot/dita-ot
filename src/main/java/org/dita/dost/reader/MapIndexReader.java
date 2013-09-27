@@ -35,23 +35,9 @@ import org.xml.sax.XMLReader;
  * @author Zhang, Yuan Peng
  */
 public final class MapIndexReader extends AbstractXMLReader {
+
     private static final String INTERNET_LINK_MARK = COLON_DOUBLE_SLASH;
 
-    /**
-     * Check whether the index entries we got is meaningfull and valid.
-     */
-    private static boolean verifyIndexEntries(final StringBuffer str) {
-        if (str.length() == 0) {
-            return false;
-        }
-        final int start = str.indexOf(GREATER_THAN); // start from first tag's end
-        final int end = str.lastIndexOf(LESS_THAN); // end at last tag's start
-        final String temp = str.substring(start + 1, end);
-        if (temp.trim().length() != 0) {
-            return true;
-        }
-        return false;
-    }
     private final List<String> ancestorList;
     private String filePath = null;
     private String firstMatchElement;
@@ -64,7 +50,6 @@ public final class MapIndexReader extends AbstractXMLReader {
 
     /** Meta shows whether the event is in metadata when using sax to parse ditmap file. */
     private final List<String> matchList;
-    private boolean needResolveEntity;
     private XMLReader reader;
     private String topicPath;
     /** Whether the current href target is internal dita topic file. */
@@ -85,7 +70,6 @@ public final class MapIndexReader extends AbstractXMLReader {
         level = 0;
         match = false;
         validHref = true;
-        needResolveEntity = false;
         topicPath = null;
         inputFile = null;
 
@@ -93,8 +77,6 @@ public final class MapIndexReader extends AbstractXMLReader {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }
@@ -105,7 +87,7 @@ public final class MapIndexReader extends AbstractXMLReader {
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
 
-        if (match && needResolveEntity && validHref) {
+        if (match && validHref) {
             final String temp = new String(ch, start, length);
             indexEntries.append(StringUtils.escapeXML(temp));
 
@@ -162,13 +144,6 @@ public final class MapIndexReader extends AbstractXMLReader {
         }
     }
 
-    @Override
-    public void endEntity(final String name) throws SAXException {
-        if(!needResolveEntity){
-            needResolveEntity = true;
-        }
-    }
-
     /**
      * Get index entries for topics
      * 
@@ -196,7 +171,6 @@ public final class MapIndexReader extends AbstractXMLReader {
         }
         
         match = false;
-        needResolveEntity = true;
         inputFile = filename;
         filePath = inputFile.getParent();
         if(indexEntries.length() != 0){
@@ -235,12 +209,6 @@ public final class MapIndexReader extends AbstractXMLReader {
             }
         }
 
-    }
-
-    @Override
-    public void startDTD(final String name, final String publicId, final String systemId)
-            throws SAXException {
-        // NOOP
     }
 
     @Override
@@ -298,13 +266,21 @@ public final class MapIndexReader extends AbstractXMLReader {
             level++;
         }
     }
-
-    @Override
-    public void startEntity(final String name) throws SAXException {
-        needResolveEntity = StringUtils.checkEntity(name);
-        if (match && !needResolveEntity && validHref) {
-            indexEntries.append(StringUtils.getEntity(name));
-
+    
+    /**
+     * Check whether the index entries we got is meaningfull and valid.
+     */
+    private boolean verifyIndexEntries(final StringBuffer str) {
+        if (str.length() == 0) {
+            return false;
         }
+        final int start = str.indexOf(GREATER_THAN); // start from first tag's end
+        final int end = str.lastIndexOf(LESS_THAN); // end at last tag's start
+        final String temp = str.substring(start + 1, end);
+        if (temp.trim().length() != 0) {
+            return true;
+        }
+        return false;
     }
+
 }

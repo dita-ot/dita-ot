@@ -42,8 +42,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
     private final Hashtable<String, Hashtable<String, String>> pushtable;
     /** push table.*/
     private final XMLReader reader;
-    /**whether an entity needs to be resolved or not flag. */
-    private boolean needResolveEntity = true;
 
     /**keep the file path of current file under parse
 	filePath is useful to get the absolute path of the target file.*/
@@ -110,9 +108,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
             reader.setFeature(FEATURE_NAMESPACE, true);
 
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
-            needResolveEntity = true;
             reader.setContentHandler(this);
         }catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
@@ -361,7 +356,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
     @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
-        if (this.start && needResolveEntity){
+        if (this.start){
             pushcontent.append(StringUtils.escapeXML(ch, start, length));
         }
     }
@@ -387,25 +382,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     pushType = null;
                 }
             }
-        }
-    }
-
-    @Override
-    public void startEntity(final String name) throws SAXException {
-        try {
-            needResolveEntity = StringUtils.checkEntity(name);
-            if(!needResolveEntity){
-                pushcontent.append(StringUtils.getEntity(name));
-            }
-        } catch (final Exception e) {
-            //logger.logError(e.getMessage(), e) ;
-        }
-    }
-
-    @Override
-    public void endEntity(final String name) throws SAXException {
-        if(!needResolveEntity){
-            needResolveEntity = true;
         }
     }
 

@@ -83,7 +83,6 @@ public final class MapLinksReader extends AbstractXMLReader {
 
     /** Meta shows whether the event is in metadata when using sax to parse ditamap file. */
     private final List<String> matchList;
-    private boolean needResolveEntity;
     private XMLReader reader;
     private String topicPath;
     /** Whether the current href target is internal dita topic file. */
@@ -104,7 +103,6 @@ public final class MapLinksReader extends AbstractXMLReader {
         level = 0;
         match = false;
         validHref = true;
-        needResolveEntity = false;
         topicPath = null;
         inputFile = null;
 
@@ -112,8 +110,6 @@ public final class MapLinksReader extends AbstractXMLReader {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
             reader.setFeature("http://xml.org/sax/features/namespaces", false);
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
@@ -125,7 +121,7 @@ public final class MapLinksReader extends AbstractXMLReader {
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
 
-        if (match && needResolveEntity && validHref) {
+        if (match && validHref) {
             final String temp = new String(ch, start, length);
             indexEntries.append(StringUtils.escapeXML(temp));
 
@@ -151,14 +147,6 @@ public final class MapLinksReader extends AbstractXMLReader {
             }
         }
         return true;
-    }
-
-    @Override
-    public void endCDATA() throws SAXException {
-        if (match && validHref){
-            indexEntries.append(CDATA_END);
-        }
-
     }
 
     @Override
@@ -219,13 +207,6 @@ public final class MapLinksReader extends AbstractXMLReader {
         }
     }
 
-    @Override
-    public void endEntity(final String name) throws SAXException {
-        if(!needResolveEntity){
-            needResolveEntity = true;
-        }
-    }
-
     /**
      * Get links for topics
      * 
@@ -253,7 +234,6 @@ public final class MapLinksReader extends AbstractXMLReader {
         }
 
         match = false;
-        needResolveEntity = true;
         inputFile = filename;
         filePath = inputFile.getParent();
         inputFile.getPath();
@@ -299,20 +279,6 @@ public final class MapLinksReader extends AbstractXMLReader {
             sb.append(it.next() + STRING_BLANK);
         }
         matchList.add(sb.toString());
-    }
-
-    @Override
-    public void startCDATA() throws SAXException {
-        if (match && validHref){
-            indexEntries.append(CDATA_HEAD);
-        }
-
-    }
-
-    @Override
-    public void startDTD(final String name, final String publicId, final String systemId)
-            throws SAXException {
-        // NOOP
     }
 
     @Override
@@ -390,21 +356,12 @@ public final class MapLinksReader extends AbstractXMLReader {
     }
 
     @Override
-    public void startEntity(final String name) throws SAXException {
-        needResolveEntity = StringUtils.checkEntity(name);
-        if (match && !needResolveEntity && validHref) {
-            indexEntries.append(StringUtils.getEntity(name));
-
-        }
-    }
-
-    @Override
     public void processingInstruction(final String target, final String data)
             throws SAXException {
 
         final String pi = (data != null) ? target + STRING_BLANK + data : target;
 
-        if (match && needResolveEntity && validHref) {
+        if (match && validHref) {
             final String temp = LESS_THAN + QUESTION
                     + StringUtils.escapeXML(pi) + QUESTION + GREATER_THAN;
             indexEntries.append(temp);

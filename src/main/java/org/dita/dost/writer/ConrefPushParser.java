@@ -139,8 +139,6 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             parser.setFeature(FEATURE_NAMESPACE, true);
             parser.setContentHandler(this);
             parser.setProperty(LEXICAL_HANDLER_PROPERTY,this);
-            parser.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            parser.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
         }catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
