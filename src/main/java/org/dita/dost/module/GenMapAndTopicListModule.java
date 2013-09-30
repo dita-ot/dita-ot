@@ -58,7 +58,6 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.TimingUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -198,10 +197,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
     private final Map<String, URI> exKeyDefMap;
 
-    private static final String moduleStartMsg = "GenMapAndTopicListModule.execute(): Starting...";
-
-    private static final String moduleEndMsg = "GenMapAndTopicListModule.execute(): Execution time: ";
-
     /** use grammar pool cache */
     private boolean gramcache = true;
 
@@ -259,10 +254,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        final Date startTime = TimingUtils.getNowTime();
 
         try {
-            logger.logInfo(moduleStartMsg);
             parseInputParameters(input);
 
             // set grammar pool flag
@@ -289,10 +282,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             throw new DITAOTException(e.getMessage(), e);
         } catch (final Exception e) {
             throw new DITAOTException(e.getMessage(), e);
-        } finally {
-
-            logger.logInfo(moduleEndMsg + TimingUtils.reportElapsedTime(startTime));
-
         }
 
         return null;

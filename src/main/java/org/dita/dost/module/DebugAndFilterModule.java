@@ -55,7 +55,6 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.TimingUtils;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.w3c.dom.Document;
@@ -112,9 +111,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        final Date executeStartTime = TimingUtils.getNowTime();
-        logger.logInfo("DebugAndFilterModule.execute(): Starting...");
-
         try {
             final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
             tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
@@ -230,8 +226,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
-        } finally {
-            logger.logInfo("Execution time: " + TimingUtils.reportElapsedTime(executeStartTime));
         }
 
         return null;

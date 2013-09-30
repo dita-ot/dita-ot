@@ -129,6 +129,7 @@ public final class ExtensibleAntInvoker extends Task {
             }
         }
 
+        long start, end;
         final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
         logger.setTask(this);
         pipeline.setLogger(logger);
@@ -167,7 +168,9 @@ public final class ExtensibleAntInvoker extends Task {
                             x.setParam(p.getName(), p.getValue());
                         }
                     }
+                    start = System.currentTimeMillis();
                     pipeline.execute(x, pipelineInput);
+                    end = System.currentTimeMillis();
                 } else {
                     for (final Param p : m.params) {
                         if (!p.isValid()) {
@@ -180,8 +183,11 @@ public final class ExtensibleAntInvoker extends Task {
                             pipelineInput.setAttribute(p.getName(), p.getValue());
                         }
                     }
+                    start = System.currentTimeMillis();
                     pipeline.execute(m.getImplementation(), pipelineInput);
+                    end = System.currentTimeMillis();
                 }
+                logger.logDebug("Module processing took " + (end - start) + " ms");
             }
         } catch (final DITAOTException e) {
             throw new BuildException("Failed to run pipeline: " + e.getMessage(), e);
