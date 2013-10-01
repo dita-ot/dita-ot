@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.xml.sax.SAXException;
@@ -222,6 +223,17 @@ public final class Integrator {
         }
         configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.assembleString(printTranstypes, CONF_LIST_SEPARATOR));
 
+        for (final Entry<String, Features> e: pluginTable.entrySet()) {
+            final Features f = e.getValue();
+            final String name = "dita.plugin."+ e.getKey() + ".dir";
+            final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
+            if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
+                configuration.put(name, ditaDir.getAbsolutePath());
+            } else {
+                configuration.put(name, f.getLocation().getAbsolutePath());
+            }
+        }
+        
         OutputStream out = null;
         try {
             final File outFile = new File(ditaDir, "lib" + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);

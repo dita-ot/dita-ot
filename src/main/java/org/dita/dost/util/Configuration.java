@@ -136,4 +136,17 @@ public final class Configuration {
         printTranstype = Collections.unmodifiableList(types);
     }
 
+    /** Map of plug-in resource directories. */
+    public static final Map<String, File> pluginResourceDirs;
+    static {
+        final Map<String, File> ps = new HashMap<String, File>();
+        for (final Map.Entry<String, String> e: configuration.entrySet()) {
+            final String key = e.getKey();
+            if (key.startsWith("dita.plugin.") && key.endsWith(".dir")) {
+                ps.put(key.substring(12, key.length() - 4), new File(e.getValue()));
+            }
+        }
+        pluginResourceDirs = Collections.unmodifiableMap(ps);
+    }
+    
 }
