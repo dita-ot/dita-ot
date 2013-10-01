@@ -88,8 +88,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
     /** Absolute input map path. */
     private File inputMap = null;
-    /** Absolute DITA-OT base path. */
-    private File ditaDir = null;
     /** Absolute input directory path. */
     private File inputDir = null;
 
@@ -117,7 +115,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             if (!tempDir.isAbsolute()) {
                 throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
             }
-            ditaDir=new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             File ditavalFile = null;
             if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null ) {
@@ -155,7 +152,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             fileWriter.setLogger(logger);
             try{
                 final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
-                fileWriter.initXMLReader(ditaDir.getAbsoluteFile(),xmlValidate, setSystemid);
+                fileWriter.initXMLReader(xmlValidate, setSystemid);
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);
             }

@@ -42,13 +42,10 @@ public class TestGenListModuleReader {
 
     @BeforeClass
     public static void setUp() throws Exception{
-        //parser = new ConrefPushParser();
-        File ditaDir = new File("src" + File.separator + "main").getAbsoluteFile();
-
         final boolean validate = false;
         reader = new GenListModuleReader();
         reader.setLogger(new TestUtils.TestLogger());
-        reader.initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalFile(), true);
+        reader.initXMLReader(validate, new File(rootFile.getPath()).getCanonicalFile(), true);
         reader.setFilterUtils(new FilterUtils());
         reader.setOutputUtils(new OutputUtils());
     }

@@ -29,22 +29,11 @@ public final class CatalogUtils {
     private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
     /**apache catalogResolver.*/
     private static CatalogResolver catalogResolver = null;
-    /** Absolute directory to find catalog-dita.xml.*/
-    private static File ditaDir;
     /**
      * Instances should NOT be constructed in standard programming.
      */
     private CatalogUtils() {
         // leave blank as designed
-    }
-
-    /**
-     * Set directory to find catalog-dita.xml.
-     * @param ditaDir ditaDir
-     */
-    public static synchronized void setDitaDir(final File ditaDir){
-        catalogResolver=null;
-        CatalogUtils.ditaDir=ditaDir;
     }
 
     /**
@@ -61,7 +50,7 @@ public final class CatalogUtils {
             //manager.setVerbosity(10);
             catalogResolver = new CatalogResolver(manager);
 
-            final File catalogFilePath = new File(ditaDir, FILE_NAME_CATALOG);
+            final File catalogFilePath = new File(Configuration.pluginResourceDirs.get("org.dita.base"), FILE_NAME_CATALOG);
 
             final Catalog catalog = catalogResolver.getCatalog();
             try {

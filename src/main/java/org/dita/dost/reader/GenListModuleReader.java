@@ -514,13 +514,12 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /**
      * Init xml reader used for pipeline parsing.
      * 
-     * @param ditaDir absolute path to DITA-OT directory
      * @param validate whether validate input file
      * @param rootFile absolute path to input file
      * @throws SAXException parsing exception
      * @throws IOException if getting canonical file path fails
      */
-    public void initXMLReader(final File ditaDir, final boolean validate, final File rootFile,
+    public void initXMLReader(final boolean validate, final File rootFile,
             final boolean arg_setSystemid) throws SAXException, IOException {
         // to check whether the current parsing file's href value is out of inputmap.dir
         rootDir = rootFile.getParentFile().getCanonicalFile();
@@ -540,7 +539,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
         final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
         setGrammarPool(reader, grammarPool);
 
-        CatalogUtils.setDitaDir(ditaDir);
         setSystemid = arg_setSystemid;
 
         reader.setEntityResolver(CatalogUtils.getCatalogResolver());

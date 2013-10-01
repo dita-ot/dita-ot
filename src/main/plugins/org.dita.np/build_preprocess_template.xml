@@ -77,7 +77,6 @@
       <module class="org.dita.dost.module.GenMapAndTopicListDebugAndFilterModule">
         <param name="inputmap.uri" value="${args.input.uri}" if="args.input.uri"/>
         <param name="inputdir.uri" value="${args.input.dir.uri}" if="args.input.dir.uri"/>
-        <param name="ditadir" location="${dita.dir}"/>
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
@@ -166,7 +165,6 @@
               inputmap="${args.input}"
               tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.FilterModule">
-        <param name="ditadir" location="${dita.dir}"/>
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
         <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
         <param name="outputdir" location="${output.dir}"/>
