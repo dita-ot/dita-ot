@@ -23,6 +23,7 @@ import org.xml.sax.InputSource;
 /**
  * URIResolverAdapter class, convert source into inputsteam.
  */
+@Deprecated
 public final class URIResolverAdapter {
     
     /**

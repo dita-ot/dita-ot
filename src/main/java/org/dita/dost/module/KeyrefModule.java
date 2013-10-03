@@ -102,7 +102,7 @@ final class KeyrefModule implements AbstractPipelineModule {
         for(final URI mapFile: maps.keySet()){
             logger.logInfo("Reading " + tempDir.toURI().resolve(mapFile).toString());
             reader.setKeys(maps.get(mapFile));
-            reader.read(mapFile);
+            reader.read(tempDir.toURI().resolve(mapFile));
         }
         final Map<String, Element> keyDefinition = reader.getKeyDefinition();
         final Set<String> normalProcessingRole = new HashSet<String>();

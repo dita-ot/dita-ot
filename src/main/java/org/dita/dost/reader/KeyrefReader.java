@@ -120,12 +120,15 @@ public final class KeyrefReader extends AbstractXMLReader {
         return Collections.unmodifiableMap(keyDefTable);
     }
 
+    /**
+     * Read key definitions
+     * 
+     * @param filename absolute URI to DITA map with key definitions
+     */
     public void read(final URI filename) {
         keyDefs = new Stack<KeyDef>();
         try {
-            /* filename = tempDir + File.separator + filename; */
-            final InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename.toString(), null));
-            reader.parse(source);
+            reader.parse(new InputSource(filename.toString()));
         } catch (final Exception ex) {
             logger.logError(ex.getMessage(), ex) ;
         } finally {
