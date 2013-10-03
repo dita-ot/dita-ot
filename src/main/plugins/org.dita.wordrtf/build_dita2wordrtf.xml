@@ -6,7 +6,15 @@
 <project name="dita2wordrtf">
 
   <target name="dita2wordrtf"
-    depends="build-init, preprocess, map2wordrtf, topic2wordrtf">
+    depends="build-init, preprocess, wordrtf.image-metadata, map2wordrtf, topic2wordrtf">
+  </target>
+
+  <target name="wordrtf.image-metadata" description="Read image metadata">
+    <pipeline message="Read image metadata." taskname="image-metadata" tempdir="${dita.temp.dir}">
+      <module class="org.dita.dost.module.ImageMetadataModule">
+        <param name="outputdir" location="${output.dir}"/>
+      </module>
+    </pipeline>
   </target>
 
   <target name="topic2wordrtf" if="noMap">
