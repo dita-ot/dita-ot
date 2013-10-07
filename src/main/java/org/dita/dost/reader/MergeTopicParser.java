@@ -48,7 +48,8 @@ public final class MergeTopicParser extends XMLFilterImpl {
     private String firstTopicId = null;
     private final MergeUtils util;
     private DITAOTLogger logger;
-
+    private File output;
+    
     /**
      * Default Constructor.
      * 
@@ -67,6 +68,15 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+    }
+
+    /**
+     * Set merge output file
+     * 
+     * @param outputFile merge output file
+     */
+    public void setOutput(File output) {
+        this.output = output;
     }
 
     /**
@@ -259,20 +269,10 @@ public final class MergeTopicParser extends XMLFilterImpl {
      * @return rewritten href value
      */
     private URI handleLocalHref(final URI attValue) {
-        final File parentFile = new File(filePath).getParentFile();
-        if (parentFile != null) {
-            final URI d = dirPath.toURI();
-            final URI p = new File(dirPath, filePath).getParentFile().toURI();
-            final String b = d.relativize(p).toASCIIString();
-            final StringBuilder ret = new StringBuilder(b);
-            if (!b.endsWith(URI_SEPARATOR)) {
-                ret.append(URI_SEPARATOR);
-            }
-            ret.append(attValue.toString());
-            return toURI(normalize(ret.toString(), URI_SEPARATOR));
-        } else {
-            return attValue;
-        }
+        final URI current = new File(dirPath, filePath).toURI().normalize();
+        final URI reference = current.resolve(attValue);
+        final URI merge = output.toURI();
+        return getRelativePath(merge, reference);
     }
 
 }

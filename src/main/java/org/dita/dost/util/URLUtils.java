@@ -555,19 +555,72 @@ public final class URLUtils {
      * @return relative URI
      */
     public static URI getRelativePath(final URI basePath, final URI refPath) {
-        if (!basePath.isAbsolute()) {
-            throw new IllegalArgumentException();
-        }
-        if (!refPath.isAbsolute()) {
+        if (!basePath.isAbsolute() && basePath.getPath() != null) {
             throw new IllegalArgumentException();
         }
         if (!basePath.getScheme().equals("file")) {
             throw new IllegalArgumentException();
         }
-        if (!refPath.getScheme().equals("file")) {
+        if (refPath.getScheme() != null && !refPath.getScheme().equals(basePath.getScheme())) {
             throw new IllegalArgumentException();
         }
-        return toURI(FileUtils.getRelativeUnixPath(basePath.getPath(), refPath.getPath()));
+        
+        URI rel = null;
+        if (basePath.getPath().equals(refPath.getPath()) && refPath.getFragment() != null) {
+            rel = toURI("");
+        } else {
+            final StringBuffer upPathBuffer = new StringBuffer(INT_128);
+            final StringBuffer downPathBuffer = new StringBuffer(INT_128);
+            final StringTokenizer mapTokenizer = new StringTokenizer(
+                    FileUtils.normalize(FileUtils.separatorsToUnix(basePath.getPath()), UNIX_SEPARATOR),
+                    UNIX_SEPARATOR);
+            final StringTokenizer topicTokenizer = new StringTokenizer(
+                    FileUtils.normalize(FileUtils.separatorsToUnix(refPath.getPath()), UNIX_SEPARATOR),
+                    UNIX_SEPARATOR);
+    
+            while (mapTokenizer.countTokens() > 1
+                    && topicTokenizer.countTokens() > 1) {
+                final String mapToken = mapTokenizer.nextToken();
+                final String topicToken = topicTokenizer.nextToken();
+                boolean equals = false;
+                if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) != -1){
+                    //if OS is Windows, we need to ignore case when comparing path names.
+                    equals = mapToken.equalsIgnoreCase(topicToken);
+                }else{
+                    equals = mapToken.equals(topicToken);
+                }
+    
+                if (!equals) {
+                    if(mapToken.endsWith(COLON) ||
+                            topicToken.endsWith(COLON)){
+                        //the two files are in different disks under Windows
+                        return refPath;
+                    }
+                    upPathBuffer.append("..");
+                    upPathBuffer.append(URI_SEPARATOR);
+                    downPathBuffer.append(topicToken);
+                    downPathBuffer.append(URI_SEPARATOR);
+                    break;
+                }
+            }
+    
+            while (mapTokenizer.countTokens() > 1) {
+                mapTokenizer.nextToken();
+    
+                upPathBuffer.append("..");
+                upPathBuffer.append(URI_SEPARATOR);
+            }
+    
+            while (topicTokenizer.hasMoreTokens()) {
+                downPathBuffer.append(topicTokenizer.nextToken());
+                if (topicTokenizer.hasMoreTokens()) {
+                    downPathBuffer.append(URI_SEPARATOR);
+                }
+            }
+            rel = toURI(upPathBuffer.append(downPathBuffer).toString());
+        }
+        
+        return setFragment(rel, refPath.getFragment());
     }
     
 }

@@ -123,7 +123,12 @@ public class URLUtilsTest {
         assertEquals(new URI("../a.dita"), URLUtils.getRelativePath(new URI("file:/map/map.ditamap"), new URI("file:/a.dita")));
         assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map.ditamap"), new URI("file:/a.dita")));
         assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map2/map.ditamap"), new URI("file:/map1/map2/a.dita")));
+        assertEquals(new URI("map2/a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map.ditamap"), new URI("file:/map1/map2/a.dita")));
         assertEquals(new URI("../topic/a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map.ditamap"), new URI("file:/topic/a.dita")));
+        assertEquals(new URI("a.dita#bar"), URLUtils.getRelativePath(new URI("file:/map.ditamap#foo"), new URI("file:/a.dita#bar")));
+        assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/a.dita"), new URI("file:/a.dita")));
+        assertEquals(new URI("#bar"), URLUtils.getRelativePath(new URI("file:/a.dita#foo"), new URI("file:/a.dita#bar")));
+        assertEquals(new URI("#bar"), URLUtils.getRelativePath(new URI("file:/a.dita"), new URI("#bar")));
         try {
             URLUtils.getRelativePath(new URI("/map.ditamap"), new URI("file://a.dita"));
             fail();

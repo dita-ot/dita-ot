@@ -100,6 +100,15 @@ public final class MergeMapParser extends XMLFilterImpl {
     }
 
     /**
+     * Set merge output file
+     * 
+     * @param outputFile merge output file
+     */
+    public void setOutput(final File outputFile) {
+        topicParser.setOutput(outputFile);
+    }
+    
+    /**
      * Set output.
      * 
      * @param output output stream

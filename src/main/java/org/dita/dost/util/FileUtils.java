@@ -281,17 +281,6 @@ public final class FileUtils {
         }
         return false;
     }
-
-    /**
-     * Resolves a path reference against a base path.
-     * 
-     * @param basePath base path
-     * @param refPath reference path
-     * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
-     */
-    public static URI getRelativePath(final URI basePath, final URI refPath) {
-        return URLUtils.toURI(getRelativePath(basePath.toString(), refPath.toString(), URI_SEPARATOR));
-    }
     
     /**
      * Resolves a path reference against a base path.

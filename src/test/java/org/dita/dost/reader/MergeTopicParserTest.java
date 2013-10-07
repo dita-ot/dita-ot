@@ -61,6 +61,7 @@ public class MergeTopicParserTest {
         s.setResult(new StreamResult(output));
         parser.setContentHandler(s);
         parser.setLogger(new TestUtils.TestLogger());
+        parser.setOutput(new File(srcDir, "test.xml"));
         s.startDocument();
         parser.parse("test.xml", srcDir.getAbsoluteFile());
         s.endDocument();
@@ -77,6 +78,8 @@ public class MergeTopicParserTest {
         final MergeTopicParser parser = new MergeTopicParser(new MergeUtils());
         parser.setContentHandler(new DefaultHandler());
         parser.setLogger(new TestUtils.TestLogger());
+        parser.setOutput(new File(srcDir, "test.xml"));
+        parser.parse("test.xml", srcDir.getAbsoluteFile());
         final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", URI.class);
         method.setAccessible(true);
         
@@ -88,10 +91,11 @@ public class MergeTopicParserTest {
         assertEquals(new URI("images/test.jpg#foo"), method.invoke(parser, new URI("images/test.jpg#foo")));
         assertEquals(new URI("../test.jpg"), method.invoke(parser, new URI("../test.jpg")));
         
-        parser.parse("src/test.xml", resourceDir.getAbsoluteFile());
-        assertEquals(new URI("src/test.jpg"), method.invoke(parser, new URI("test.jpg")));
-        assertEquals(new URI("src/images/test.jpg"), method.invoke(parser, new URI("images/test.jpg")));
-        assertEquals(new URI("test.jpg"), method.invoke(parser, new URI("../test.jpg")));
+        parser.setOutput(new File(srcDir, "test.xml"));
+        parser.parse("src" + File.separator + "test.xml", resourceDir.getAbsoluteFile());
+        assertEquals(new URI("test.jpg"), method.invoke(parser, new URI("test.jpg")));
+        assertEquals(new URI("images/test.jpg"), method.invoke(parser, new URI("images/test.jpg")));
+        assertEquals(new URI("../test.jpg"), method.invoke(parser, new URI("../test.jpg")));
     }
     
 }
