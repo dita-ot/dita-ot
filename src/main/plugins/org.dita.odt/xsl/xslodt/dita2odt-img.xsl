@@ -34,8 +34,9 @@
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" 
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   version="2.0" 
-  xmlns:java="org.dita.dost.util.ImgUtils" exclude-result-prefixes="java">
+  xmlns:java="org.dita.dost.util.ImgUtils" exclude-result-prefixes="java dita-ot">
 
 <xsl:output method="xml"/>
 <xsl:output indent="yes"/>
@@ -85,7 +86,7 @@
           </xsl:choose>
         </xsl:when>
         <xsl:when test="not(contains(@href,'://'))">
-          <xsl:value-of select="number(java:getHeight($OUTPUTDIR, string(@href)) div 96) * $scale"/>
+          <xsl:value-of select="number(@dita-ot:image-height div 96) * $scale"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -122,7 +123,7 @@
           </xsl:choose>
         </xsl:when>
         <xsl:when test="not(contains(@href,'://'))">
-          <xsl:value-of select="number(java:getWidth($OUTPUTDIR, string(@href)) div 96) * $scale"/>
+          <xsl:value-of select="number(@dita-ot:image-width div 96) * $scale"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>

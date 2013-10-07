@@ -5,13 +5,13 @@
 <project name="dita2odt">
 	
   <target name="set_odt_output_tempdir">
-    <condition property="odt.output.tempdir" value="${dita.map.output.dir}/temp">
+    <condition property="odt.output.tempdir" value="${dita.map.output.dir}/${uplevels}temp">
       <not>
         <isset property="odt.output.tempdir"/>
       </not>
     </condition>
     <copy todir="${odt.output.tempdir}">
-      <fileset dir="${dita.map.output.dir}">
+      <fileset dir="${dita.map.output.dir}/${uplevels}">
         <exclude name="**/*.list"/>
         <exclude name="**/*.log"/>
         <exclude name="**/*.temp"/>
@@ -27,7 +27,7 @@
   </target>
 
   <target name="dita2odt"
-    depends="dita2odt.init, build-init, preprocess, set_odt_output_tempdir, dita.odt.package.topic, dita.odt.package.map, move-output-file, clean_output_tempdir">
+    depends="dita2odt.init, build-init, preprocess, odt.image-metadata, set_odt_output_tempdir, dita.odt.package.topic, dita.odt.package.map, move-output-file, clean_output_tempdir">
   </target>
 
   <target name="dita2odt.init">
@@ -40,6 +40,14 @@
         <isset property="args.odt.img.embed"/>
       </not>
     </condition>
+  </target>
+  
+  <target name="odt.image-metadata" description="Read image metadata">
+    <pipeline message="Read image metadata." taskname="image-metadata" tempdir="${dita.temp.dir}">
+      <module class="org.dita.dost.module.ImageMetadataModule">
+        <param name="outputdir" location="${output.dir}"/>
+      </module>
+    </pipeline>
   </target>
 
   <target name="map2odt" unless="noMap">
@@ -170,7 +178,7 @@
    </target>
 
   <target name="move-output-file">
-    <move todir="${dita.map.output.dir}">
+    <move todir="${dita.map.output.dir}/${uplevels}">
       <fileset dir="${odt.output.tempdir}">
         <include name="**/*.list"/>
         <include name="**/*.log"/>
