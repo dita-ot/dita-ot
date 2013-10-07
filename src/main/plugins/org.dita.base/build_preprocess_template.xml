@@ -184,7 +184,8 @@
     <job-helper file="canditopics.list" property="canditopicslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-property dir="${dita.temp.dir}"/>
-    <dirname property="dita.map.output.dir" file="${output.dir}/${user.input.file}" />
+    <dirname property="_dita.map.output.dir" file="${output.dir}/${user.input.file}" />
+    <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
     <condition property="noConref">
       <length file="${dita.temp.dir}/${conreffile}" length="0"/>
     </condition>
