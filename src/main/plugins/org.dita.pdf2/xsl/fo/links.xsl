@@ -432,8 +432,8 @@ See the accompanying license.txt file for applicable licenses.
     	<xsl:param name="format" select="@format"/>
         <xsl:param name="href" select="@href"/>
         <xsl:choose>
-            <xsl:when test="(contains(@href, '://') and not(starts-with(@href, 'file://')))
-            or starts-with(@href, '/') or $scope = 'external' or $format = 'html'">
+            <xsl:when test="(contains($href, '://') and not(starts-with($href, 'file://')))
+            or starts-with($href, '/') or $scope = 'external' or $format = 'html'">
                 <xsl:attribute name="external-destination">
                     <xsl:value-of select="concat('url(', $href, ')')"/>
                 </xsl:attribute>
