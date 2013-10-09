@@ -1011,7 +1011,7 @@ public final class DitaWriter extends AbstractXMLFilter {
      */
     public String getPathtoProject (final File filename, final File traceFilename, final String inputMap) {
     	String path2Project = null;
-    	if(OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION){
+    	if(outputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION){
             if(isOutFile(traceFilename)){
                 
                 path2Project = getRelativePathFromOut(traceFilename.getAbsolutePath());
@@ -1040,7 +1040,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         final File mapPathName = outputUtils.getInputMapPathName();
         final File currFilePathName = new File(overflowingFile);
         final String relativePath = FileUtils.getRelativeUnixPath( mapPathName.toString(),currFilePathName.toString());
-        final String outputDir = OutputUtils.getOutputDir().getAbsolutePath();
+        final String outputDir = outputUtils.getOutputDir().getAbsolutePath();
         final StringBuffer outputPathName = new StringBuffer(outputDir).append(File.separator).append("index.html");
         final String finalOutFilePathName = FileUtils.resolveFile(outputDir,relativePath).getPath();
         final String finalRelativePathName = FileUtils.getRelativeUnixPath(finalOutFilePathName,outputPathName.toString());

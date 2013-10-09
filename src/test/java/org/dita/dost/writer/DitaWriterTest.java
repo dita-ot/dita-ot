@@ -210,6 +210,70 @@ public class DitaWriterTest {
         assertEquals("foo.bar", w.invoke("foo.bar"));
     }
     
+    @Test
+    public void testGetPathtoProject() {
+        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.NOT_GENERATEOUTTER, new File(srcDir, "main.ditamap"));
+        assertEquals(".." + File.separator, 
+                dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
+                                    new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
+                                    new File(srcDir, "main.ditamap").getAbsolutePath()));
+        assertEquals(null, 
+                dw.getPathtoProject(new File("topic.dita"),
+                                    new File(srcDir, "topic.dita").getAbsoluteFile(),
+                                    new File(srcDir, "main.ditamap").getAbsolutePath()));
+    }
+    
+    @Test
+    public void testGetPathtoProjectSibling() {
+        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.NOT_GENERATEOUTTER, new File(srcDir, "maps" + File.separator + "main.ditamap"));
+        assertEquals(".." + File.separator + "org.dita.dost.writer.DitaWriterTest" + File.separator, 
+                dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
+                                    new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
+                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsolutePath()));
+        assertEquals("org.dita.dost.writer.DitaWriterTest" + File.separator, 
+                dw.getPathtoProject(new File("topic.dita"),
+                                    new File(srcDir, "topic.dita").getAbsoluteFile(),
+                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsolutePath()));
+    }
+    
+    @Test
+    public void testGetPathtoProjectUplevels() {
+        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.OLDSOLUTION, new File(srcDir, "main.ditamap"));
+        assertEquals(".." + File.separator, 
+                dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
+                                    new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
+                                    new File(srcDir, "main.ditamap").getAbsolutePath()));
+        assertEquals(null, 
+                dw.getPathtoProject(new File("topic.dita"),
+                                    new File(srcDir, "topic.dita").getAbsoluteFile(),
+                                    new File(srcDir, "main.ditamap").getAbsolutePath()));
+    }
+    
+    @Test
+    public void testGetPathtoProjectSiblingUplevels() {
+        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.OLDSOLUTION, new File(srcDir, "maps" + File.separator + "main.ditamap"));
+        assertEquals(".." + File.separator, 
+                dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
+                                    new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
+                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsolutePath()));
+        assertEquals(null, 
+                dw.getPathtoProject(new File("topic.dita"),
+                                    new File(srcDir, "topic.dita").getAbsoluteFile(),
+                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsolutePath()));
+    }
+
+    private DitaWriter configureDitaWriter(final OutputUtils.Generate outerCopy, final File map) {
+        final OutputUtils outputUtils = new OutputUtils();
+        outputUtils.setGeneratecopyouter(Integer.toString(outerCopy.type));
+        outputUtils.setOutterControl(OutputUtils.OutterControl.FAIL.toString());
+        outputUtils.setOnlyTopicInMap(Boolean.toString(true));
+        outputUtils.setInputMapPathName(map);
+        outputUtils.setOutputDir(tempDir);
+        final DitaWriter dw = new DitaWriter();
+        dw.setOutputUtils(outputUtils);
+        return dw;
+    }
+    
     @AfterClass
     public static void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
