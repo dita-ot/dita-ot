@@ -1055,7 +1055,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     public String getPathtoProject (final String filename, final File traceFilename, final String inputMap) {
     	String path2Project = null;
     	if(OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION){
-            if(isOutFile(traceFilename)){
+            if(isOutFile(traceFilename, inputMap)){
                 
                 path2Project = getRelativePathFromOut(traceFilename.getAbsolutePath());
             }else{
@@ -1096,11 +1096,12 @@ public final class DitaWriter extends AbstractXMLFilter {
     /**
      * Check if path falls outside start document directory
      * 
-     * @param filePathName path to test
+     * @param filePathName absolute path to test
+     * @param inputMap absolute input map path
      * @return {@code true} if outside start directory, otherwise {@code false}
      */
-    private boolean isOutFile(final File filePathName){
-        final String relativePath = FileUtils.getRelativePath(outputUtils.getInputMapPathName().getAbsolutePath(), filePathName.getPath());
+    private boolean isOutFile(final File filePathName, final String inputMap){
+        final String relativePath = FileUtils.getRelativePath(inputMap, filePathName.getAbsolutePath());
         if(relativePath == null || relativePath.length() == 0 || !relativePath.startsWith("..")){
             return false;
         }
