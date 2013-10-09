@@ -216,11 +216,11 @@ public class DitaWriterTest {
         assertEquals(".." + File.separator, 
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
-                                    new File(srcDir, "main.ditamap").getAbsolutePath()));
+                                    new File(srcDir, "main.ditamap").getAbsoluteFile()));
         assertEquals(null, 
                 dw.getPathtoProject(new File("topic.dita"),
                                     new File(srcDir, "topic.dita").getAbsoluteFile(),
-                                    new File(srcDir, "main.ditamap").getAbsolutePath()));
+                                    new File(srcDir, "main.ditamap").getAbsoluteFile()));
     }
     
     @Test
@@ -229,11 +229,11 @@ public class DitaWriterTest {
         assertEquals(".." + File.separator + "org.dita.dost.writer.DitaWriterTest" + File.separator, 
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
-                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsolutePath()));
+                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
         assertEquals("org.dita.dost.writer.DitaWriterTest" + File.separator, 
                 dw.getPathtoProject(new File("topic.dita"),
                                     new File(srcDir, "topic.dita").getAbsoluteFile(),
-                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsolutePath()));
+                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
     }
     
     @Test
@@ -242,11 +242,11 @@ public class DitaWriterTest {
         assertEquals(".." + File.separator, 
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
-                                    new File(srcDir, "main.ditamap").getAbsolutePath()));
+                                    new File(srcDir, "main.ditamap").getAbsoluteFile()));
         assertEquals(null, 
                 dw.getPathtoProject(new File("topic.dita"),
                                     new File(srcDir, "topic.dita").getAbsoluteFile(),
-                                    new File(srcDir, "main.ditamap").getAbsolutePath()));
+                                    new File(srcDir, "main.ditamap").getAbsoluteFile()));
     }
     
     @Test
@@ -255,11 +255,11 @@ public class DitaWriterTest {
         assertEquals(".." + File.separator, 
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
-                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsolutePath()));
+                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
         assertEquals(null, 
                 dw.getPathtoProject(new File("topic.dita"),
                                     new File(srcDir, "topic.dita").getAbsoluteFile(),
-                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsolutePath()));
+                                    new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
     }
 
     private DitaWriter configureDitaWriter(final OutputUtils.Generate outerCopy, final File map) {

@@ -938,7 +938,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             traceFilename = new File(baseDir, inputFile);
             File outputFile = new File(tempDir, inputFile);
 
-            path2Project = getPathtoProject(new File(inputFile), traceFilename, outputUtils.getInputMapPathName().getAbsolutePath());            
+            path2Project = getPathtoProject(new File(inputFile), traceFilename, outputUtils.getInputMapPathName().getAbsoluteFile());            
             counterMap = new HashMap<String, Integer>();
             final File dirFile = outputFile.getParentFile();
             if (!dirFile.exists()) {
@@ -1009,14 +1009,14 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @param inputMap absolute path to start file
      * @return path to base directory, {@code null} if not available
      */
-    public String getPathtoProject (final File filename, final File traceFilename, final String inputMap) {
+    public String getPathtoProject (final File filename, final File traceFilename, final File inputMap) {
     	String path2Project = null;
     	if(outputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION){
             if(isOutFile(traceFilename)){
                 
                 path2Project = getRelativePathFromOut(traceFilename.getAbsolutePath());
             }else{
-                 path2Project = FileUtils.getRelativeUnixPath(traceFilename.getAbsolutePath(),inputMap);
+                 path2Project = FileUtils.getRelativeUnixPath(traceFilename.getAbsolutePath(),inputMap.getAbsolutePath());
                 path2Project = new File(path2Project).getParent();
                 if(path2Project != null && path2Project.length()>0){
                     path2Project = path2Project+File.separator;

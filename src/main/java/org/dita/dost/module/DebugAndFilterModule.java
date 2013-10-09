@@ -483,7 +483,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                                 .append("\"] which points to an existed file was ignored.").toString());*/
                 logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
             }else{
-                final String inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsolutePath();
+                final File inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsoluteFile();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
             }
         }
@@ -498,7 +498,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * @param copytoTargetFilename
      * @param inputMapInTemp
      */
-    public void copyFileWithPIReplaced(final File src, final File target, final File copytoTargetFilename, final String inputMapInTemp ) {
+    public void copyFileWithPIReplaced(final File src, final File target, final File copytoTargetFilename, final File inputMapInTemp ) {
         if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
             logger.logError("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
         }
