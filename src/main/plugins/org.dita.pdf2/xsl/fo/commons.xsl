@@ -1570,24 +1570,25 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
+    <xsl:template match="*[contains(@class,' topic/note ')]" mode="setNoteImagePath">
+      <xsl:variable name="noteType">
+          <xsl:choose>
+              <xsl:when test="@type">
+                  <xsl:value-of select="@type"/>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:value-of select="'note'"/>
+              </xsl:otherwise>
+          </xsl:choose>
+      </xsl:variable>
+      <xsl:call-template name="insertVariable">
+          <xsl:with-param name="theVariableID" select="concat($noteType, ' Note Image Path')"/>
+      </xsl:call-template>
+    </xsl:template>
+
     <xsl:template match="*[contains(@class,' topic/note ')]">
-        <xsl:variable name="noteType">
-            <xsl:choose>
-                <xsl:when test="@type = 'other' and @othertype">
-                    <xsl:value-of select="@othertype"/>
-                </xsl:when>
-                <xsl:when test="@type">
-                    <xsl:value-of select="@type"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="'note'"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
         <xsl:variable name="noteImagePath">
-            <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="concat($noteType, ' Note Image Path')"/>
-            </xsl:call-template>
+            <xsl:apply-templates select="." mode="setNoteImagePath"/>
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="not($noteImagePath = '')">
