@@ -703,7 +703,8 @@
       <property name="output.dir" location="${basedir}/target/site"/>
       <property name="transtype" value="net.sourceforge.dita-ot.html"/>
       <property name="base.temp.dir" location="${work.dir}"/>
-      <property name="args.rellinks" value="nofamily"/>
+      <property name="args.rellinks" value="all"/>
+      <property name="args.gen.task.lbl" value="YES"/>
     </ant>
     <!--ant antfile="${basedir}/src/main/build.xml">
       <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
