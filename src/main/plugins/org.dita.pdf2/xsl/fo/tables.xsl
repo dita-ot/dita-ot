@@ -145,6 +145,15 @@
         </fo:table-cell>
     </xsl:template>
 
+    <!-- DITA-OT flagging preprocess may add flag info directly into simpletable; account for that and
+         skip to next row. Currently known to match ditaval-startprop when flagging used on simpletable
+         as well as suitesol:changebar-start when revision bar used on sthead or stentry. -->
+    <xsl:template match="*" mode="count-max-simpletable-cells">
+      <xsl:param name="maxcount" select="0" as="xs:integer"/>
+      <xsl:apply-templates select="following-sibling::*[1]" mode="count-max-simpletable-cells">
+        <xsl:with-param name="maxcount" select="$maxcount"/>
+      </xsl:apply-templates>
+    </xsl:template>
     <!-- SourceForge bug tracker item 2872988:
          Count the max number of cells in any row of a simpletable -->
     <xsl:template match="*[contains(@class, ' topic/sthead ')] | *[contains(@class, ' topic/strow ')]" mode="count-max-simpletable-cells">
