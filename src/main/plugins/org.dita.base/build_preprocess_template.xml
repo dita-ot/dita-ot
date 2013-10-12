@@ -97,6 +97,7 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
         <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
+        <param name="ditadir" location="${dita.dir}"/>
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
@@ -163,6 +164,7 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.DebugAndFilterModule">
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
+        <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>

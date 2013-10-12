@@ -382,10 +382,11 @@ public final class DitaWriter extends AbstractXMLFilter {
     
     /**
      * Initialize XML reader used for pipeline parsing.
+     * @param ditaDir ditaDir
      * @param validate whether validate
      * @throws SAXException SAXException
      */
-    public void initXMLReader(final boolean validate, final boolean arg_setSystemid) throws SAXException {
+    public void initXMLReader(final File ditaDir, final boolean validate, final boolean arg_setSystemid) throws SAXException {
         try {
             reader = StringUtils.getXMLReader();
             if(validate == true){
@@ -405,6 +406,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             throw new SAXException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
         setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
+        CatalogUtils.setDitaDir(ditaDir);
         setSystemid= arg_setSystemid;
     }
     

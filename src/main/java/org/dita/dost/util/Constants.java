@@ -833,6 +833,8 @@ public final class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_OUTPUT = "output";
     /**Constants for extensive params used in ant invoker(input).*/
     public static final String ANT_INVOKER_EXT_PARAM_INPUT = "input";
+    /**Constants for extensive params used in ant invoker(ditadir).*/
+    public static final String ANT_INVOKER_EXT_PARAM_DITADIR = "ditadir";
     /**Constants for extensive params used in ant invoker(inputdir).*/
     public static final String ANT_INVOKER_EXT_PARAM_INPUTDIR = "inputdir";
     /**Constants for extensive params used in ant invoker(style).*/

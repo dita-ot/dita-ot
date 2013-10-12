@@ -28,6 +28,10 @@
 	  -->
 	<property name="maxJavaMemory" value="500m"/>
   
+  <!-- Read configuration properties -->
+  <property file="${dita.dir}/lib/org.dita.dost.platform/plugin.properties"/>
+  <property file="${dita.dir}/lib/configuration.properties"/>
+  
   <xmlcatalog id="dita.catalog">
     <catalogpath path="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
   </xmlcatalog>

@@ -19,11 +19,7 @@
       <isset property="dita.dir" />
     </not>
   </condition>
-  
-  <!-- Read configuration properties -->
-  <property file="${dita.dir}/lib/org.dita.dost.platform/plugin.properties"/>
-  <property file="${dita.dir}/lib/configuration.properties"/>
-  
+    
   <path id="dost.class.path">
     <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction"/>
     <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
@@ -53,6 +49,7 @@
     </antcall>
   </target>
   
+  <dita:extension id="dita.conductor.plugin" behavior="org.dita.dost.platform.ImportPluginInfoAction"/>
   <dita:extension id="dita.conductor.target" behavior="org.dita.dost.platform.InsertAction"/>
   <dita:extension id="dita.conductor.target.relative" behavior="org.dita.dost.platform.InsertAntActionRelative"/>
   

@@ -165,6 +165,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     /** Absolute tempdir path for processing */
     private File tempDir;
 
+    /** Absolute ditadir for processing */
+    private File ditaDir;
     /** Input file name. */
     private File inputFile;
     /** Absolute path for filter file. */
@@ -261,7 +263,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
             reader = new GenListModuleReader();
             reader.setLogger(logger);
-            reader.initXMLReader(xmlValidate, rootFile, setSystemid);
+            reader.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
             final FilterUtils filterUtils = parseFilterFile();
             reader.setFilterUtils(filterUtils);
             reader.setOutputUtils(outputUtils);
@@ -287,6 +289,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
     private void parseInputParameters(final AbstractPipelineInput input) throws IOException {
         tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
+        ditaDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
         if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
             ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
         }
@@ -342,6 +345,11 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         } else {
             tempDir = tempDir.getCanonicalFile();
+        }
+        if (!ditaDir.isAbsolute()) {
+            throw new IllegalArgumentException("DITA-OT installation directory " + tempDir + " must be absolute");
+        } else {
+            ditaDir = ditaDir.getCanonicalFile();
         }
         if (ditavalFile != null && !ditavalFile.isAbsolute()) {
             // XXX Shouldn't this be resolved to current directory, not Ant script base directory?

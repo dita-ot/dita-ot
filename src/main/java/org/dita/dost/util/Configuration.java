@@ -142,8 +142,8 @@ public final class Configuration {
         final Map<String, File> ps = new HashMap<String, File>();
         for (final Map.Entry<String, String> e: configuration.entrySet()) {
             final String key = e.getKey();
-            if (key.startsWith("dita.plugin.") && key.endsWith(".dir")) {
-                ps.put(key.substring(12, key.length() - 4), new File(e.getValue()));
+            if (key.startsWith("plugin.") && key.endsWith(".dir")) {
+                ps.put(key.substring(7, key.length() - 4), new File(e.getValue()));
             }
         }
         pluginResourceDirs = Collections.unmodifiableMap(ps);

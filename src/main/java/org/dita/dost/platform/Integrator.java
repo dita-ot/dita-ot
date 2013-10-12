@@ -225,12 +225,13 @@ public final class Integrator {
 
         for (final Entry<String, Features> e: pluginTable.entrySet()) {
             final Features f = e.getValue();
-            final String name = "dita.plugin."+ e.getKey() + ".dir";
+            final String name = "plugin."+ e.getKey() + ".dir";
             final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
             if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
-                configuration.put(name, ditaDir.getAbsolutePath());
+                //configuration.put(name, ditaDir.getAbsolutePath());
+                configuration.put(name, ".");
             } else {
-                configuration.put(name, f.getLocation().getAbsolutePath());
+                configuration.put(name, FileUtils.getRelativePath(new File(ditaDir, "dummy"), f.getLocation()).getPath());
             }
         }
         

@@ -72,7 +72,7 @@ public class DitaWriterTest {
         final DitaWriter writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
         writer.setTempDir(tempDir.getAbsoluteFile());
-        writer.initXMLReader(false, true);
+        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
         writer.setTranstype("xhtml");
         final FilterUtils fu = new FilterUtils();
         fu.setLogger(new TestUtils.TestLogger());

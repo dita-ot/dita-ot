@@ -126,6 +126,8 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     private URI baseInputDir;
     /** Absolute tempdir path for processing */
     private File tempDir;
+    /** Absolute ditadir for processing */
+    private File ditaDir;
     /** Relative input file */
     private URI inputFile;
     /** Absolute path for filter file. */
@@ -169,7 +171,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             parseInputParameters(input);
             
             initFilters();
-            initXMLReader(xmlValidate, rootFile);
+            initXMLReader(ditaDir, xmlValidate, rootFile);
             
             addToWaitList(inputFile);
             processWaitList();
@@ -187,6 +189,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             if (!tempDir.isAbsolute()) {
                 throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
             }
+            ditaDir=new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             File ditavalFile = null;
             if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null ) {
@@ -215,7 +218,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             fileWriter.setLogger(logger);
             try{
                 final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
-                fileWriter.initXMLReader(xmlValidate, setSystemid);
+                fileWriter.initXMLReader(ditaDir.getAbsoluteFile(),xmlValidate, setSystemid);
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);
             }
@@ -311,12 +314,13 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     /**
      * Init xml reader used for pipeline parsing.
      * 
+     * @param ditaDir absolute path to DITA-OT directory
      * @param validate whether validate input file
      * @param rootFile absolute path to input file
      * @throws SAXException parsing exception
      * @throws IOException if getting canonical file path fails
      */
-    private void initXMLReader(final boolean validate, final URI rootFile) throws SAXException, IOException {
+    private void initXMLReader(final File ditaDir, final boolean validate, final URI rootFile) throws SAXException, IOException {
         reader = StringUtils.getXMLReader();
         // to check whether the current parsing file's href value is out of inputmap.dir
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -342,6 +346,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
                 logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
             }
         }
+        CatalogUtils.setDitaDir(ditaDir);
         reader.setEntityResolver(CatalogUtils.getCatalogResolver());
     }
     
@@ -351,6 +356,11 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
         tempDir = tempDir.getCanonicalFile();
+        ditaDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
+        if (!ditaDir.isAbsolute()) {
+            throw new IllegalArgumentException("DITA-OT installation directory " + tempDir + " must be absolute");
+        }
+        ditaDir = ditaDir.getCanonicalFile();
         if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
             ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
             if (!ditavalFile.isAbsolute()) {
