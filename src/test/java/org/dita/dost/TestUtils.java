@@ -34,6 +34,7 @@ import org.apache.xml.resolver.tools.CatalogResolver;
 import org.custommonkey.xmlunit.XMLUnit;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 
 import org.xml.sax.Attributes;
@@ -149,6 +150,7 @@ public class TestUtils {
             in = new BufferedInputStream(new FileInputStream(file));
             final Transformer t = TransformerFactory.newInstance().newTransformer();
             XMLReader p = XMLReaderFactory.createXMLReader();
+            p.setEntityResolver(CatalogUtils.getCatalogResolver());
             if (normalize) {
                 t.setOutputProperty(OutputKeys.INDENT, "yes");
                 p = new NormalizingXMLFilterImpl(p);
@@ -258,9 +260,10 @@ public class TestUtils {
      * @throws Exception if parsing or serializing failed
      */
     public static void normalize(final File src, final File dst) throws Exception {
+        CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
         final Transformer serializer = TransformerFactory.newInstance().newTransformer();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
-        parser.setEntityResolver(new CatalogResolver());
+        parser.setEntityResolver(CatalogUtils.getCatalogResolver());
         InputStream in = null;
         OutputStream out = null;
         try {

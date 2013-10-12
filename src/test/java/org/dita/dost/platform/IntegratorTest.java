@@ -55,8 +55,8 @@ public class IntegratorTest {
         i.execute();
 
         final Properties expProperties = getProperties(new File(expDir, "lib" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));
-        expProperties.setProperty("dita.plugin.base.dir", new File(tempDir, "plugins" + File.separator + "base").getAbsolutePath());
-        expProperties.setProperty("dita.plugin.dummy.dir", new File(tempDir, "plugins" + File.separator + "dummy").getAbsolutePath());
+        expProperties.setProperty("plugin.base.dir", new File("plugins" + File.separator + "base").getPath());
+        expProperties.setProperty("plugin.dummy.dir", new File("plugins" + File.separator + "dummy").getPath());
         assertEquals(expProperties,
                 getProperties(new File(tempDir, "lib" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES)));
         TestUtils.resetXMLUnit();

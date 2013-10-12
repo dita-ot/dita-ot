@@ -27,6 +27,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import org.dita.dost.TestUtils;
+import org.dita.dost.util.CatalogUtils;
 
 public class KeyrefPaserTest {
 
@@ -41,10 +42,11 @@ public class KeyrefPaserTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
+        CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
         tempDir = TestUtils.createTempDir(KeyrefPaserTest.class);
         TestUtils.normalize(new File(srcDir, "a.xml"), new File(tempDir, "a.xml"));
         TestUtils.normalize(new File(srcDir, "b.ditamap"), new File(tempDir, "b.ditamap"));
-        resolver = new CatalogResolver();
+        resolver = CatalogUtils.getCatalogResolver();
 
         TestUtils.resetXMLUnit();
         XMLUnit.setControlEntityResolver(resolver);

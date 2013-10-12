@@ -27,6 +27,7 @@ import org.xml.sax.SAXException;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.CatalogUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,6 +44,7 @@ public class MapMetaReaderTest {
 
     @BeforeClass
     public static void setUp() throws Exception{
+        CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
         tempDir = TestUtils.createTempDir(MapMetaReaderTest.class);
         for (final File f: srcDir.listFiles()) {
             TestUtils.normalize(f, new File(tempDir, f.getName()));
@@ -58,7 +60,7 @@ public class MapMetaReaderTest {
     @Test
     public void testRead() throws DITAOTException, SAXException, IOException, ParserConfigurationException{
         final DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        db.setEntityResolver(new CatalogResolver());
+        db.setEntityResolver(CatalogUtils.getCatalogResolver());
 
         XMLUnit.setNormalizeWhitespace(true);
         XMLUnit.setIgnoreWhitespace(true);

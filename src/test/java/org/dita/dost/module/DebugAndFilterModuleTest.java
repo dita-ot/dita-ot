@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -34,6 +35,7 @@ import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.resolver.DitaURIResolverFactory;
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 
@@ -45,6 +47,11 @@ public class DebugAndFilterModuleTest {
     private File tmpDir;
     private File inputDir;
 
+    @BeforeClass
+    public static void setUpClass() {
+        CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
+    }
+    
     @Before
     public void setUp() throws IOException, DITAOTException {
         tempDir = TestUtils.createTempDir(getClass());
@@ -98,6 +105,7 @@ public class DebugAndFilterModuleTest {
         copyto.put(new File("topics", "copy-to.xml"), new File("topics", "xreffin-topic-1.xml"));
         final TestHandler handler = new TestHandler();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
+        parser.setEntityResolver(CatalogUtils.getCatalogResolver());
         parser.setContentHandler(handler);
         for (final File f: files) {
             InputStream in = null;
