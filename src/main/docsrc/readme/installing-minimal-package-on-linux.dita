@@ -103,7 +103,7 @@ export CLASSPATH=$DITA_HOME/lib/commons-codec-<keyword keyref="tool.codec.versio
             </step>
             <step importance="optional">
                 <cmd>For PDF output, set up the XSL-FO processor:</cmd>
-                <choicetable relcolwidth="1.0* 4.0*">
+                <choicetable relcolwidth=".75* 4.25*">
                     <chhead>
                         <choptionhd>Processor</choptionhd>
                         <chdeschd>Action</chdeschd>

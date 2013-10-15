@@ -5,6 +5,8 @@
   <titlealts>
     <navtitle>Other</navtitle>
   </titlealts>
+  <shortdesc>These Ant parameters enable you to reload style sheets that the DITA-OT uses for
+    specific pre-processing stages.</shortdesc>
   <refbody>
     <section>
       <draft-comment author="Kristen James Eberlein" time="11 August 2012">I've made no attempt to
