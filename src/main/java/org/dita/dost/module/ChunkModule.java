@@ -98,8 +98,8 @@ final public class ChunkModule implements AbstractPipelineModule {
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            final String mapFile = new File(tempDir, job.getProperty(INPUT_DITAMAP)).getAbsolutePath();
-            final Document doc = builder.parse(new File(mapFile));
+            final File mapFile = new File(tempDir, job.getProperty(INPUT_DITAMAP)).getAbsoluteFile();
+            final Document doc = builder.parse(mapFile);
             final Element root = doc.getDocumentElement();
             if (root.getAttribute(ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ")
                     && transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
@@ -109,7 +109,7 @@ final public class ChunkModule implements AbstractPipelineModule {
                     }
                 }
             } else {
-                mapReader.read(new File(mapFile));
+                mapReader.read(mapFile);
             }
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e);
@@ -147,7 +147,7 @@ final public class ChunkModule implements AbstractPipelineModule {
             for (final FileInfo f : job.getFileInfo()) {
                 if (f.isActive
                         && (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format))) {
-                    topicRefWriter.write(tempDir.getAbsoluteFile(), new File(f.file.getPath()), relativePath2fix);
+                    topicRefWriter.write(tempDir.getAbsoluteFile(), f.file, relativePath2fix);
                 }
             }
         } catch (final DITAOTException ex) {

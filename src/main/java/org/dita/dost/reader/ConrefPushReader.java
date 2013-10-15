@@ -9,6 +9,7 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.util.Collections;
@@ -260,12 +261,12 @@ public final class ConrefPushReader extends AbstractXMLReader {
         if(ATTR_CONACTION_VALUE_PUSHREPLACE.equals(pushType) &&
                 atts.getValue(ATTRIBUTE_NAME_ID) == null &&
                 level == 1){
-            final int sharpIndex = target.indexOf(SHARP);
-            if (sharpIndex == -1){
+            final String fragment = getFragment(target);
+            if (fragment == null){
                 //if there is no '#' in target string, report error
                 logger.logError(MessageUtils.getInstance().getMessage("DOTJ041E", target).toString());
             }else{
-                final String targetLoc = target.substring(sharpIndex + 1);
+                final String targetLoc = fragment;
                 String id = "";
                 //has element id
                 if(targetLoc.contains(SLASH)){

@@ -9,6 +9,7 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -276,7 +277,7 @@ public final class IndexTermReader extends AbstractXMLReader {
             target.setTargetName(targetFile);
         }
         if(fragment != null) {
-            target.setTargetURI(targetFile + SHARP + fragment);
+            target.setTargetURI(setFragment(targetFile, fragment));
         } else {
             target.setTargetURI(targetFile);
         }

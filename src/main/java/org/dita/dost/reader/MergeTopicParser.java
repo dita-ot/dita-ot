@@ -111,7 +111,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         String idValue = atts.getValue(ATTRIBUTE_NAME_ID);
         if (idValue != null) {
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OID, idValue);
-            final String value = filePath + SHARP + idValue;
+            final String value = setFragment(filePath, idValue);
             if (util.findId(value)) {
                 idValue = util.getIdValue(value);
             } else {
@@ -158,7 +158,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
                 retAttValue = SHARP + util.getIdValue(pathFromMap);
             } else {
                 final String fileId = MergeUtils.getFirstTopicId(pathFromMap, dirPath, false);
-                final String key = pathFromMap + SHARP + fileId;
+                final String key = setFragment(pathFromMap, fileId);
                 if (util.findId(key)) {
                     util.addId(pathFromMap, util.getIdValue(key));
                     retAttValue = SHARP + util.getIdValue(key);

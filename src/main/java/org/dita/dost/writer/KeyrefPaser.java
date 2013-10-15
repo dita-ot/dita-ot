@@ -11,6 +11,7 @@ package org.dita.dost.writer;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.net.URI;
@@ -635,7 +636,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         //Insert first topic id only when topicid is not set in keydef
         //and keyref has elementid
         if(sharpIndex == -1 && !"".equals(tail)){
-            return fileName + SHARP + topicId + tail;
+            return setFragment(fileName, topicId + tail);
         }
         return fileName + tail;
     }
