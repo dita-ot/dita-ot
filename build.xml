@@ -690,14 +690,8 @@
 
   <!-- Site -->
   
-  <condition property="type-class" value="milestone" else="">
-    <contains string="${otversion}" substring="M" casesensitive="true"/>
-  </condition>
-  <condition property="version-id" value="dev" else="${otversion}">
-    <contains string="${otversion}" substring="M" casesensitive="true"/>
-  </condition>
-
   <target name="site" description="Build project website">
+    <ant antfile="${basedir}/src/main/docsrc/build.xml" target="generate-msg-topic" dir="${basedir}/src/main"/>
     <ant antfile="${basedir}/src/main/build.xml">
       <property name="args.input" location="${doc.dir}/site.ditamap"/>
       <property name="output.dir" location="${basedir}/target/site"/>
@@ -706,61 +700,6 @@
       <property name="args.rellinks" value="all"/>
       <property name="args.gen.task.lbl" value="YES"/>
     </ant>
-    <!--ant antfile="${basedir}/src/main/build.xml">
-      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
-      <property name="output.dir" location="${basedir}/target/site/${version-id}"/>
-      <property name="transtype" value="tocjs"/>
-      <property name="args.css" value="dita-ot-doc.css"/>
-      <property name="args.csspath" value="css"/>
-      <property name="args.cssroot" value="${doc.dir}/resource"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-      <property name="args.hide.parent.link" value="yes"/>
-      <property name="args.gen.task.lbl" value="YES"/>
-    </ant-->
-    <!--echoxml file="${basedir}/target/site/${otversion}/header.html">
-      <html>
-        <head>
-          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-          <title>DITA Open Toolkit ${otversion} Documentation</title>
-          <link rel="stylesheet" type="text/css" href="../css/header.css"/>
-        </head>
-        <body>
-          <h1 class="${type-class}">DITA Open Toolkit ${otversion} Documentation</h1>
-        </body>
-      </html>
-    </echoxml-->
-    <!--echoxml file="${basedir}/target/site/${version-id}/index.html">
-      <html>
-        <head>
-          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-          <title>DITA Open Toolkit ${otversion} Documentation</title>
-          <link rel="stylesheet" type="text/css" href="commonltr.css"/>
-        </head>
-        <frameset rows="40,*">
-          <frame name="tocwin" src="/header.php?version=${version-id}" scrolling="no" frameborder="0"/>
-          <frameset cols="300,*">
-            <frame name="tocwin" src="tocnav.html" frameborder="0"/>
-            <frame name="contentwin" src="DITA-OTProjectHome.html" frameborder="0"/>
-          </frameset>
-        </frameset>
-      </html>
-    </echoxml-->
-    <!--echo append="true" file="${basedir}/target/site/${version-id}/css/commonltr.css">
-      @import url('http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold');
-      
-      body {
-        font-family: 'Droid Sans', Helvetica, Arial, serif;
-      }
-      h1, h2, h3, h4, h5, h6,
-      .relinfo > strong {
-        font-family: sans-serif;
-      }
-      .codeblock {
-        background-color: #EEE;
-        padding: 5px;
-      }
-    </echo-->
-  </target>
-  
+  </target>  
 
 </project>
