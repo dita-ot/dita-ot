@@ -13,6 +13,7 @@
   <xsl:import href="../../cfg/fo/attrs/toc-attr_fop.xsl"/>
   <xsl:import href="root-processing_fop.xsl"/>
   <xsl:import href="index_fop.xsl"/>
+  <xsl:import href="flagging_fop.xsl"/>
 
   <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
