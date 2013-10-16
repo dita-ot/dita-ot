@@ -10,8 +10,10 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
@@ -46,10 +48,10 @@ public final class ConrefPushReader extends AbstractXMLReader {
 
     /**keep the file path of current file under parse
 	filePath is useful to get the absolute path of the target file.*/
-    private String filePath = null;
+    private File fileDir = null;
 
     /**keep the file name of  current file under parse */
-    private String parsefilename = null;
+    private File parsefilename = null;
     /**pushcontent is used to store the content copied to target
 	 in pushcontent href will be resolved if it is relative path
 	 if @conref is in pushconref the target name should be recorded so that it
@@ -67,7 +69,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
     /**target is used to record the target of the conref push
 	 if we reach pushafter action but there is no target recorded before, we need
 	 to report error.*/
-    private String target = null;
+    private URI target = null;
 
     /**pushType is used to record the current type of push
 	 it is used in endElement(....) to tell whether it is pushafter or replace.*/
@@ -87,8 +89,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
      */
     @Override
     public void read(final File filename) {
-        filePath = filename.getParentFile().getAbsolutePath();
-        parsefilename = filename.getName();
+        fileDir = filename.getParentFile().getAbsoluteFile();
+        parsefilename = new File(filename.getName());
         start = false;
         pushcontent = new StringBuffer(INT_256);
         pushType = null;
@@ -153,7 +155,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 start = true;
                 level = 0;
                 level ++;
-                target = atts.getValue(ATTRIBUTE_NAME_CONREF);
+                target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
                 if (target == null){
                     logger.logError(MessageUtils.getInstance().getMessage("DOTJ040E", atts.getValue(ATTRIBUTE_NAME_XTRF), atts.getValue(ATTRIBUTE_NAME_XTRC)).toString());
                 }else{
@@ -162,7 +164,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 }
 
             }else if (ATTR_CONACTION_VALUE_MARK.equalsIgnoreCase(conactValue)){
-                target = atts.getValue(ATTRIBUTE_NAME_CONREF);
+                target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
                 if (target != null &&
                         pushcontent != null && pushcontent.length() > 0 &&
                         ATTR_CONACTION_VALUE_PUSHBEFORE.equals(pushType)){
@@ -261,10 +263,10 @@ public final class ConrefPushReader extends AbstractXMLReader {
         if(ATTR_CONACTION_VALUE_PUSHREPLACE.equals(pushType) &&
                 atts.getValue(ATTRIBUTE_NAME_ID) == null &&
                 level == 1){
-            final String fragment = getFragment(target);
+            final String fragment = target.getFragment();
             if (fragment == null){
                 //if there is no '#' in target string, report error
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ041E", target).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ041E", target.toString()).toString());
             }else{
                 final String targetLoc = fragment;
                 String id = "";
@@ -296,8 +298,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 value.startsWith(SHARP)){
             return value;
         }else{
-            final String source = FileUtils.resolveFile(filePath, target).getPath();
-            final String urltarget = FileUtils.resolveTopic(filePath, value);
+            final String source = FileUtils.resolveFile(fileDir, target).getPath();
+            final String urltarget = FileUtils.resolveTopic(fileDir, value);
             return FileUtils.getRelativeUnixPath(source, urltarget);
 
 
@@ -310,20 +312,18 @@ public final class ConrefPushReader extends AbstractXMLReader {
      * @param pushcontent content
      * @param type push type
      */
-    private void addtoPushTable(String target, final String pushcontent, final String type) {
-        int sharpIndex = target.indexOf(SHARP);
-        if (sharpIndex == -1){
+    private void addtoPushTable(URI target, final String pushcontent, final String type) {
+        if (target.getFragment() == null){
             //if there is no '#' in target string, report error
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ041E", target).toString());
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ041E", target.toString()).toString());
             return;
         }
 
-        if (sharpIndex == 0){
+        if (target.getPath().isEmpty()) {
             //means conref the file itself
-            target= parsefilename+target;
-            sharpIndex = target.indexOf(SHARP);
+            target = toURI(parsefilename.getPath() + target);
         }
-        final String key = FileUtils.resolveFile(filePath, target).getPath();
+        final String key = FileUtils.resolveFile(fileDir, target).getPath();
         Hashtable<String, String> table = null;
         if (pushtable.containsKey(key)){
             //if there is something else push to the same file
@@ -334,7 +334,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             pushtable.put(key, table);
         }
 
-        final String targetLoc = target.substring(sharpIndex);
+        final String targetLoc = SHARP + target.getFragment();
         final String addon = STICK+type;
 
         if (table.containsKey(targetLoc+addon)){
@@ -342,7 +342,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             //append content if type is 'pushbefore' or 'pushafter'
             //report error if type is 'replace'
             if (ATTR_CONACTION_VALUE_PUSHREPLACE.equalsIgnoreCase(type)){
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ042E", target).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ042E", target.toString()).toString());
                 return;
             }else{
                 table.put(targetLoc+addon, table.get(targetLoc+addon)+pushcontent);
