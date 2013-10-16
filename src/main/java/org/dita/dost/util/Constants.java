@@ -16,38 +16,6 @@ package org.dita.dost.util;
  * @author Wu, Zhi Qiang
  */
 public final class Constants {
-    /**INT 0.*/
-    public static final int INT_0 = 0;
-    /**INT 1.*/
-    public static final int INT_1 = 1;
-    /**INT 2.*/
-    public static final int INT_2 = 2;
-    /**INT 4.*/
-    public static final int INT_4 = 4;
-    /**INT 8.*/
-    public static final int INT_8 = 8;
-    /**INT 16.*/
-    public static final int INT_16 = 16;
-    /**INT 32.*/
-    public static final int INT_32 = 32;
-    /**INT 64.*/
-    public static final int INT_64 = 64;
-    /**INT 128.*/
-    public static final int INT_128 = 128;
-    /**INT 256.*/
-    public static final int INT_256 = 256;
-    /**INT 512.*/
-    public static final int INT_512 = 512;
-    /**INT 1024.*/
-    public static final int INT_1024 = 1024;
-    /**INT 2048.*/
-    public static final int INT_2048 = 2048;
-    /**INT 4096.*/
-    public static final int INT_4096 = 4096;
-    /**INT 17.*/
-    public static final int INT_17 = 17;
-    /**INT 37.*/
-    public static final int INT_37 = 37;
 
     /**.gif extension.*/
     public static final String FILE_EXTENSION_GIF = ".gif";

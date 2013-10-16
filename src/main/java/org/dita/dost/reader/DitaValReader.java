@@ -66,8 +66,8 @@ public final class DitaValReader extends AbstractXMLReader {
     public DitaValReader() {
         super();
         filterMap = new HashMap<FilterKey, Action>();
-        imageList = new ArrayList<File>(INT_256);
-        relFlagImageList= new ArrayList<File>(INT_256);
+        imageList = new ArrayList<File>(256);
+        relFlagImageList= new ArrayList<File>(256);
 
         try {
             reader = StringUtils.getXMLReader();

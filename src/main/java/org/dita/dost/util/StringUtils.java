@@ -52,7 +52,7 @@ public final class StringUtils {
      */
     @SuppressWarnings("rawtypes")
     public static String assembleString(final Collection coll, final String delim) {
-        final StringBuffer buff = new StringBuffer(INT_256);
+        final StringBuffer buff = new StringBuffer(256);
         Iterator iter = null;
 
         if ((coll == null) || coll.isEmpty()) {
@@ -214,7 +214,7 @@ public final class StringUtils {
 		InputStreamReader reader = new InputStreamReader(byteIS,"UTF-8");
 		char [] cbuf = new char[INT_128];
 		int count = reader.read(cbuf);*/
-        final StringBuffer ret = new StringBuffer(INT_1024);
+        final StringBuffer ret = new StringBuffer(1024);
         String strByte = null;
         for (final byte element : input) {
             ret.append("\\\'");
@@ -250,7 +250,7 @@ public final class StringUtils {
         while (propsStart != -1 && propsEnd != -1){
             final String propPath = domains.substring(propsStart+2,propsEnd).trim();
             final StringTokenizer propPathTokenizer = new StringTokenizer(propPath, STRING_BLANK);
-            final List<String> propList = new ArrayList<String>(INT_128);
+            final List<String> propList = new ArrayList<String>(128);
             while(propPathTokenizer.hasMoreTokens()){
                 propList.add(propPathTokenizer.nextToken());
             }

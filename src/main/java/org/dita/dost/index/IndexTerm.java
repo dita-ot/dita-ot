@@ -61,7 +61,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     //initialization for rtlLocaleList
     static{
-        rtlLocaleList = new ArrayList<String>(INT_2);
+        rtlLocaleList = new ArrayList<String>(2);
         rtlLocaleList.add("ar_EG");
         rtlLocaleList.add("he_IL");
     }
@@ -70,8 +70,8 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * Constructor.
      */
     public IndexTerm() {
-        subTerms = new ArrayList<IndexTerm>(INT_1);
-        targetList = new ArrayList<IndexTermTarget>(INT_1);
+        subTerms = new ArrayList<IndexTerm>(1);
+        targetList = new ArrayList<IndexTermTarget>(1);
     }
 
     /**
@@ -255,12 +255,12 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      */
     @Override
     public int hashCode() {
-        int result = INT_17;
+        int result = 17;
 
-        result = INT_37 * result + termName.hashCode();
-        result = INT_37 * result + termKey.hashCode();
-        result = INT_37 * result + targetList.hashCode();
-        result = INT_37 * result + subTerms.hashCode();
+        result = 37 * result + termName.hashCode();
+        result = 37 * result + termKey.hashCode();
+        result = 37 * result + targetList.hashCode();
+        result = 37 * result + subTerms.hashCode();
 
         return result;
     }
@@ -344,7 +344,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      */
     @Override
     public String toString() {
-        final StringBuffer buffer = new StringBuffer(INT_128);
+        final StringBuffer buffer = new StringBuffer(128);
 
         buffer.append("{Term name: ").append(termName); //$NON-NLS-1$
         buffer.append(", Term key: ").append(termKey); //$NON-NLS-1$

@@ -62,9 +62,9 @@ public final class MapIndexReader extends AbstractXMLReader {
     public MapIndexReader() {
         super();
         map = new HashMap<String, String>();
-        ancestorList = new ArrayList<String>(INT_16);
-        matchList = new ArrayList<String>(INT_16);
-        indexEntries = new StringBuffer(INT_1024);
+        ancestorList = new ArrayList<String>(16);
+        matchList = new ArrayList<String>(16);
+        indexEntries = new StringBuffer(1024);
         firstMatchElement = null;
         lastMatchElement = null;
         level = 0;
@@ -139,7 +139,7 @@ public final class MapIndexReader extends AbstractXMLReader {
             } else {
                 map.put(topicPath, indexEntries.toString());
             }
-            indexEntries = new StringBuffer(INT_1024);
+            indexEntries = new StringBuffer(1024);
 
         }
     }
@@ -175,7 +175,7 @@ public final class MapIndexReader extends AbstractXMLReader {
         filePath = inputFile.getParent();
         if(indexEntries.length() != 0){
             //delete all the content in indexEntries
-            indexEntries = new StringBuffer(INT_1024);
+            indexEntries = new StringBuffer(1024);
         }
 
         try {
@@ -222,7 +222,7 @@ public final class MapIndexReader extends AbstractXMLReader {
             if (verifyIndexEntries(indexEntries) && topicPath != null) {
                 final String origin = map.get(topicPath);
                 map.put(topicPath, StringUtils.setOrAppend(origin, indexEntries.toString(), false));
-                indexEntries = new StringBuffer(INT_1024);
+                indexEntries = new StringBuffer(1024);
             }
             topicPath = null;
             if (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1

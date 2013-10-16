@@ -173,26 +173,26 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * Constructor.
      */
     public GenListModuleReader() {
-        nonConrefCopytoTargets = new HashSet<Reference>(INT_64);
-        hrefTargets = new HashSet<File>(INT_32);
-        hrefTopicSet = new HashSet<File>(INT_32);
-        chunkTopicSet = new HashSet<File>(INT_32);
-        schemeSet = new HashSet<File>(INT_32);
-        schemeRefSet = new HashSet<File>(INT_32);
-        conrefTargets = new HashSet<File>(INT_32);
-        copytoMap = new HashMap<File, File>(INT_16);
-        subsidiarySet = new HashSet<File>(INT_16);
-        ignoredCopytoSourceSet = new HashSet<File>(INT_16);
-        outDitaFilesSet = new HashSet<File>(INT_64);
+        nonConrefCopytoTargets = new HashSet<Reference>(64);
+        hrefTargets = new HashSet<File>(32);
+        hrefTopicSet = new HashSet<File>(32);
+        chunkTopicSet = new HashSet<File>(32);
+        schemeSet = new HashSet<File>(32);
+        schemeRefSet = new HashSet<File>(32);
+        conrefTargets = new HashSet<File>(32);
+        copytoMap = new HashMap<File, File>(16);
+        subsidiarySet = new HashSet<File>(16);
+        ignoredCopytoSourceSet = new HashSet<File>(16);
+        outDitaFilesSet = new HashSet<File>(64);
         keysDefMap = new HashMap<String, KeyDef>();
         keysRefMap = new HashMap<String, String>();
         exKeysDefMap = new HashMap<String, URI>();
         processRoleLevel = 0;
         processRoleStack = new Stack<String>();
-        resourceOnlySet = new HashSet<File>(INT_32);
-        crossSet = new HashSet<File>(INT_32);
-        topicMetaSet = new HashSet<String>(INT_16);
-        vaildBranches = new HashMap<String, List<String>>(INT_32);
+        resourceOnlySet = new HashSet<File>(32);
+        crossSet = new HashSet<File>(32);
+        topicMetaSet = new HashSet<String>(16);
+        vaildBranches = new HashMap<String, List<String>>(32);
         level = 0;
         topicrefStack = new Stack<String>();
         props = null;
@@ -377,7 +377,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
      *         {@link org.dita.dost.util.Constants#STICK STICK}
      */
     public Set<Reference> getNonCopytoResult() {
-        final Set<Reference> nonCopytoSet = new HashSet<Reference>(INT_128);
+        final Set<Reference> nonCopytoSet = new HashSet<Reference>(128);
 
         nonCopytoSet.addAll(nonConrefCopytoTargets);
         for (final File f : conrefTargets) {

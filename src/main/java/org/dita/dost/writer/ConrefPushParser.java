@@ -401,7 +401,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                         NodeList nList = null;
                         final String clazz = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
                         // get type of the target element
-                        type = targetClassAttribute.substring(INT_1, targetClassAttribute.indexOf("/")).trim();
+                        type = targetClassAttribute.substring(1, targetClassAttribute.indexOf("/")).trim();
                         if(!clazz.equalsIgnoreCase(targetClassAttribute) && clazz.contains(targetClassAttribute)){
                             // Specializing the pushing content is not handled here
                             // but we can catch such a situation to emit a warning by comparing the class values.

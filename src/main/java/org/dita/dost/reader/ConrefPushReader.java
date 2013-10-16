@@ -92,7 +92,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         fileDir = filename.getParentFile().getAbsoluteFile();
         parsefilename = new File(filename.getName());
         start = false;
-        pushcontent = new StringBuffer(INT_256);
+        pushcontent = new StringBuffer(256);
         pushType = null;
         try{
             reader.parse(filename.toURI().toString());
@@ -172,7 +172,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     //we need to add target and content to pushtable
                     replaceContent();
                     addtoPushTable(target, pushcontent.toString(), pushType);
-                    pushcontent = new StringBuffer(INT_256);
+                    pushcontent = new StringBuffer(256);
                     target = null;
                     pushType = null;
                 }
@@ -194,7 +194,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         int nextindex = 0;
         int hrefindex = pushcontent.indexOf("href=\"", index);
         int conrefindex = pushcontent.indexOf("conref=\"", index);
-        final StringBuffer resultBuffer = new StringBuffer(INT_256);
+        final StringBuffer resultBuffer = new StringBuffer(256);
         if(hrefindex < 0 && conrefindex < 0){
             return;
         }
@@ -378,7 +378,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 //if target == null we have already reported error in startElement;
                 if(target != null){
                     addtoPushTable(target, pushcontent.toString(), pushType);
-                    pushcontent = new StringBuffer(INT_256);
+                    pushcontent = new StringBuffer(256);
                     target = null;
                     pushType = null;
                 }

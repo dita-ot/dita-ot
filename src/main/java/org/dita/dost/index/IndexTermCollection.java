@@ -37,7 +37,7 @@ public final class IndexTermCollection {
     /** The collection of index terms. */
     private static IndexTermCollection collection = null;
     /** The list of all index term. */
-    private final List<IndexTerm> termList = new ArrayList<IndexTerm>(INT_16);
+    private final List<IndexTerm> termList = new ArrayList<IndexTerm>(16);
 
     /** The type of index term. */
     private String indexType = null;

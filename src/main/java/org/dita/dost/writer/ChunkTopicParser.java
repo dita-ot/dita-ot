@@ -127,7 +127,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      */
     public ChunkTopicParser() {
         super();
-        topicSpecSet = new HashSet<String>(INT_16);
+        topicSpecSet = new HashSet<String>(16);
         fileWriterStack = new Stack<Writer>();
         stubStack = new Stack<Element>();
         outputFileNameStack = new Stack<File>();

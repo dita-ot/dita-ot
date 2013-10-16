@@ -46,7 +46,7 @@ import org.w3c.dom.NodeList;
 public final class MapMetaReader implements AbstractReader {
     private static final String INTERNET_LINK_MARK = COLON_DOUBLE_SLASH;
 
-    private final Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(INT_16);
+    private final Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(16);
 
     public static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<String>(asList(
             TOPIC_CRITDATES.matcher,
@@ -123,7 +123,7 @@ public final class MapMetaReader implements AbstractReader {
      */
     public MapMetaReader() {
         super();
-        globalMeta = new Hashtable<String, Element>(INT_16);
+        globalMeta = new Hashtable<String, Element>(16);
         resultTable.clear();
     }
     /**
@@ -309,7 +309,7 @@ public final class MapMetaReader implements AbstractReader {
         }
     }
     private Hashtable<String, Element> cloneElementMap(final Hashtable<String, Element> current) {
-        final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(INT_16);
+        final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(16);
         for (final Entry<String, Element> topicMetaItem: current.entrySet()) {
             final Element inheritStub = doc.createElement(ELEMENT_STUB);
             final Node currentStub = topicMetaItem.getValue();
@@ -327,7 +327,7 @@ public final class MapMetaReader implements AbstractReader {
 
     private Hashtable<String, Element> handleMeta(final Node meta, final Hashtable<String, Element> inheritance) {
 
-        final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(INT_16);
+        final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(16);
 
         getMeta(meta, topicMetaTable);
 
@@ -373,7 +373,7 @@ public final class MapMetaReader implements AbstractReader {
         // Otherwise enableSet should be metaSet in order to merge all
         // metadata.
         if (topicMetaTable == null){
-            topicMetaTable = new Hashtable<String, Element>(INT_16);
+            topicMetaTable = new Hashtable<String, Element>(16);
         }
         Node item = null;
         final Iterator<String> iter = enableSet.iterator();

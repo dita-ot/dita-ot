@@ -8,8 +8,6 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.INT_1024;
-import static org.dita.dost.util.Constants.INT_16;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.awt.image.BufferedImage;
@@ -102,7 +100,7 @@ public final class ImgUtils {
         FileInputStream binInput = null;
         try{
             String binStr = null;
-            final StringBuffer ret = new StringBuffer(INT_16*INT_1024);
+            final StringBuffer ret = new StringBuffer(16*1024);
             binInput = new FileInputStream(imgInput);
             int bin = binInput.read();
             while (bin != -1){

@@ -854,10 +854,10 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
         fullTopicSet.addAll(copytoMap.keySet());
 
         // Get pure copy-to sources
-        final Set<File> totalCopytoSources = new HashSet<File>(INT_128);
+        final Set<File> totalCopytoSources = new HashSet<File>(128);
         totalCopytoSources.addAll(copytoMap.values());
         totalCopytoSources.addAll(ignoredCopytoSourceSet);
-        final Set<File> pureCopytoSources = new HashSet<File>(INT_128);
+        final Set<File> pureCopytoSources = new HashSet<File>(128);
         for (final File src: totalCopytoSources) {
             if (!nonConrefCopytoTargetSet.contains(src) && !copytoMap.keySet().contains(src)) {
                 pureCopytoSources.add(src);
@@ -1153,7 +1153,7 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
      * @param set relative flag image files
      */
     private void addFlagImagesSetToProperties(final Job prop, final String key, final Set<File> set) {
-        final Set<File> newSet = new LinkedHashSet<File>(INT_128);
+        final Set<File> newSet = new LinkedHashSet<File>(128);
         for (final File file: set) {
             if (file.isAbsolute()) {
                 // no need to append relative path before absolute paths

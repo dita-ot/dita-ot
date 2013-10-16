@@ -326,8 +326,8 @@ public final class FileUtils {
      * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
      */
     public static String getRelativePath(final String basePath, final String refPath, final String sep) {
-        final StringBuffer upPathBuffer = new StringBuffer(INT_128);
-        final StringBuffer downPathBuffer = new StringBuffer(INT_128);
+        final StringBuffer upPathBuffer = new StringBuffer(128);
+        final StringBuffer downPathBuffer = new StringBuffer(128);
         final StringTokenizer mapTokenizer = new StringTokenizer(
                 normalize(FileUtils.separatorsToUnix(basePath),
                         UNIX_SEPARATOR),

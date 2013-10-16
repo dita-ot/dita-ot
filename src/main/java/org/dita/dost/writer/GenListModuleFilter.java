@@ -139,19 +139,19 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * Constructor.
      */
     public GenListModuleFilter() {
-        nonConrefCopytoTargets = new HashSet<Reference>(INT_64);
-        copytoMap = new HashMap<File, File>(INT_16);
-        ignoredCopytoSourceSet = new HashSet<File>(INT_16);
-        outDitaFilesSet = new HashSet<File>(INT_64);
+        nonConrefCopytoTargets = new HashSet<Reference>(64);
+        copytoMap = new HashMap<File, File>(16);
+        ignoredCopytoSourceSet = new HashSet<File>(16);
+        outDitaFilesSet = new HashSet<File>(64);
         keysDefMap = new HashMap<String, KeyDef>();
         keysRefMap = new HashMap<String, String>();
 //        processRoleLevel = 0;
 //        processRoleStack = new Stack<String>();
         inheritedAttsStack = new ArrayDeque<AttributesImpl>();
-        resourceOnlySet = new HashSet<File>(INT_32);
-        normalProcessingSet = new HashSet<File>(INT_32);
+        resourceOnlySet = new HashSet<File>(32);
+        normalProcessingSet = new HashSet<File>(32);
 //        topicMetaSet = new HashSet<String>(INT_16);
-        validBranches = new HashMap<String, List<String>>(INT_32);
+        validBranches = new HashMap<String, List<String>>(32);
         counterMap = new HashMap<String, Integer>();
         level = 0;
         topicrefStack = new Stack<String>();
@@ -259,7 +259,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * @return set of target file path references
      */
     public Set<Reference> getNonCopytoResult() {
-        final Set<Reference> nonCopytoSet = new HashSet<Reference>(INT_128);
+        final Set<Reference> nonCopytoSet = new HashSet<Reference>(128);
 
         nonCopytoSet.addAll(nonConrefCopytoTargets);
         for (final Builder b: fileInfoMap.values()) {

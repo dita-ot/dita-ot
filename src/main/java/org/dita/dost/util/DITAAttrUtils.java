@@ -112,7 +112,7 @@ public final class DITAAttrUtils {
      */
     public String getText(final Node root){
 
-        final StringBuffer result = new StringBuffer(INT_1024);
+        final StringBuffer result = new StringBuffer(1024);
 
         if(root == null){
             return "";

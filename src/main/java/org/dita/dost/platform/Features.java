@@ -49,10 +49,10 @@ final class Features {
         this.location = location;
         this.ditaDir = ditaDir;
         extensionPoints= new HashMap<String, ExtensionPoint>();
-        featureTable = new Hashtable<String, List<String>>(INT_16);
-        requireList = new ArrayList<PluginRequirement>(INT_8);
-        metaTable = new Hashtable<String,String>(INT_16);
-        templateList = new ArrayList<String>(INT_8);
+        featureTable = new Hashtable<String, List<String>>(16);
+        requireList = new ArrayList<PluginRequirement>(8);
+        metaTable = new Hashtable<String,String>(16);
+        templateList = new ArrayList<String>(8);
     }
 
     /**

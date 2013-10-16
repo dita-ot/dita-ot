@@ -633,7 +633,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             rowsMap = new HashMap<String, Integer>();
             colSpanMap = new HashMap<String, Integer>();
             //new table initialize the col list
-            colSpec = new ArrayList<String>(INT_16);
+            colSpec = new ArrayList<String>(16);
             //new table initialize the col list
             rowNumber = 0;
         }else if(TOPIC_ROW.matches(cls)) {

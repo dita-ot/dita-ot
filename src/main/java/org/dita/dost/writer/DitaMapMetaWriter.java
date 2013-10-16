@@ -76,7 +76,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
 
     private static final Map<String, List<String>> moveTable;
     static{
-        final Map<String, List<String>> mt = new HashMap<String, List<String>>(INT_32);
+        final Map<String, List<String>> mt = new HashMap<String, List<String>>(32);
         mt.put(MAP_SEARCHTITLE.matcher, asList(MAP_TOPICMETA.localName, MAP_SEARCHTITLE.localName));
         mt.put(TOPIC_AUDIENCE.matcher, asList(MAP_TOPICMETA.localName, TOPIC_AUDIENCE.localName));
         mt.put(TOPIC_AUTHOR.matcher, asList(MAP_TOPICMETA.localName, TOPIC_AUTHOR.localName));
@@ -99,7 +99,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
 
     private static final Map<String, Integer> compareTable;
     static{
-        final Map<String, Integer> ct = new HashMap<String, Integer>(INT_32);
+        final Map<String, Integer> ct = new HashMap<String, Integer>(32);
         ct.put(MAP_TOPICMETA.localName, 1);
         ct.put(TOPIC_SEARCHTITLE.localName, 2);
         ct.put(TOPIC_SHORTDESC.localName, 3);
@@ -129,8 +129,8 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
      */
     public DitaMapMetaWriter() {
         super();
-        topicIdList = new ArrayList<String>(INT_16);
-        topicSpecList = new ArrayList<String>(INT_16);
+        topicIdList = new ArrayList<String>(16);
+        topicSpecList = new ArrayList<String>(16);
 
         metaTable = null;
         matchList = null;
@@ -376,7 +376,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     
     private void setMatch(final String match) {
         int index = 0;
-        matchList = new ArrayList<String>(INT_16);
+        matchList = new ArrayList<String>(16);
 
         firstMatchTopic = (match.indexOf(SLASH) != -1) ? match.substring(0, match.indexOf('/')) : match;
 

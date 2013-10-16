@@ -44,9 +44,9 @@ class InsertAction extends DefaultHandler2 implements IAction {
      * Default Constructor.
      */
     public InsertAction() {
-        fileNameSet = new LinkedHashSet<String>(INT_16);
+        fileNameSet = new LinkedHashSet<String>(16);
         logger = new DITAOTJavaLogger();
-        retBuf = new StringBuffer(INT_4096);
+        retBuf = new StringBuffer(4096);
         paramTable = new Hashtable<String,String>();
         try {
             reader = StringUtils.getXMLReader();

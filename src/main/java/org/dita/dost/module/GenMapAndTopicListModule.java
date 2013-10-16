@@ -209,39 +209,39 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @throws SAXException never throw such exception
      */
     public GenMapAndTopicListModule() throws SAXException, ParserConfigurationException {
-        ditaSet = new HashSet<File>(INT_128);
-        fullTopicSet = new HashSet<File>(INT_128);
-        fullMapSet = new HashSet<File>(INT_128);
-        hrefTopicSet = new HashSet<File>(INT_128);
-        hrefWithIDSet = new HashSet<File>(INT_128);
-        chunkTopicSet = new HashSet<File>(INT_128);
-        schemeSet = new HashSet<File>(INT_128);
-        hrefMapSet = new HashSet<File>(INT_128);
-        conrefSet = new HashSet<File>(INT_128);
-        imageSet = new HashSet<File>(INT_128);
-        flagImageSet = new LinkedHashSet<File>(INT_128);
-        htmlSet = new HashSet<File>(INT_128);
-        hrefTargetSet = new HashSet<File>(INT_128);
-        subsidiarySet = new HashSet<File>(INT_16);
+        ditaSet = new HashSet<File>(128);
+        fullTopicSet = new HashSet<File>(128);
+        fullMapSet = new HashSet<File>(128);
+        hrefTopicSet = new HashSet<File>(128);
+        hrefWithIDSet = new HashSet<File>(128);
+        chunkTopicSet = new HashSet<File>(128);
+        schemeSet = new HashSet<File>(128);
+        hrefMapSet = new HashSet<File>(128);
+        conrefSet = new HashSet<File>(128);
+        imageSet = new HashSet<File>(128);
+        flagImageSet = new LinkedHashSet<File>(128);
+        htmlSet = new HashSet<File>(128);
+        hrefTargetSet = new HashSet<File>(128);
+        subsidiarySet = new HashSet<File>(16);
         waitList = new LinkedList<File>();
         doneList = new LinkedList<File>();
-        conrefTargetSet = new HashSet<File>(INT_128);
-        nonConrefCopytoTargetSet = new HashSet<File>(INT_128);
+        conrefTargetSet = new HashSet<File>(128);
+        nonConrefCopytoTargetSet = new HashSet<File>(128);
         copytoMap = new HashMap<File, File>();
-        copytoSourceSet = new HashSet<File>(INT_128);
-        ignoredCopytoSourceSet = new HashSet<File>(INT_128);
-        outDitaFilesSet = new HashSet<File>(INT_128);
-        relFlagImagesSet = new LinkedHashSet<File>(INT_128);
-        conrefpushSet = new HashSet<File>(INT_128);
+        copytoSourceSet = new HashSet<File>(128);
+        ignoredCopytoSourceSet = new HashSet<File>(128);
+        outDitaFilesSet = new HashSet<File>(128);
+        relFlagImagesSet = new LinkedHashSet<File>(128);
+        conrefpushSet = new HashSet<File>(128);
         keysDefMap = new HashMap<String, KeyDef>();
         exKeyDefMap = new HashMap<String, URI>();
-        keyrefSet = new HashSet<File>(INT_128);
-        coderefSet = new HashSet<File>(INT_128);
+        keyrefSet = new HashSet<File>(128);
+        coderefSet = new HashSet<File>(128);
 
         schemeDictionary = new HashMap<File, Set<File>>();
 
         // @processing-role
-        resourceOnlySet = new HashSet<File>(INT_128);
+        resourceOnlySet = new HashSet<File>(128);
     }
 
     @Override
@@ -812,8 +812,8 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      */
     private void handleCopyto() {
         final Map<File, File> tempMap = new HashMap<File, File>();
-        final Set<File> pureCopytoSources = new HashSet<File>(INT_128);
-        final Set<File> totalCopytoSources = new HashSet<File>(INT_128);
+        final Set<File> pureCopytoSources = new HashSet<File>(128);
+        final Set<File> totalCopytoSources = new HashSet<File>(128);
 
         // Validate copy-to map, remove those without valid sources
         for (final File key: copytoMap.keySet()) {
@@ -855,7 +855,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      */
     private void handleConref() {
         // Get pure conref targets
-        final Set<File> pureConrefTargets = new HashSet<File>(INT_128);
+        final Set<File> pureConrefTargets = new HashSet<File>(128);
         for (final File target: conrefTargetSet) {
             if (!nonConrefCopytoTargetSet.contains(target)) {
                 pureConrefTargets.add(target);
@@ -1243,7 +1243,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
      * @param set relative flag image files
      */
     private void addFlagImagesSetToProperties(final Job prop, final String key, final Set<File> set) {
-        final Set<File> newSet = new LinkedHashSet<File>(INT_128);
+        final Set<File> newSet = new LinkedHashSet<File>(128);
         for (final File file: set) {
             if (file.isAbsolute()) {
                 // no need to append relative path before absolute paths

@@ -75,7 +75,7 @@ public final class Integrator {
 
     /** Plugin table which contains detected plugins. */
     private final Map<String, Features> pluginTable;
-    private final Set<String> templateSet = new HashSet<String>(INT_16);
+    private final Set<String> templateSet = new HashSet<String>(16);
     private File ditaDir;
     /** Plugin configuration file. */
     private final Set<File> descSet;
@@ -480,10 +480,10 @@ public final class Integrator {
      * Default Constructor.
      */
     public Integrator() {
-        pluginTable = new HashMap<String, Features>(INT_16);
-        descSet = new HashSet<File>(INT_16);
-        loadedPlugin = new HashSet<String>(INT_16);
-        featureTable = new Hashtable<String, List<String>>(INT_16);
+        pluginTable = new HashMap<String, Features>(16);
+        descSet = new HashSet<File>(16);
+        loadedPlugin = new HashSet<String>(16);
+        featureTable = new Hashtable<String, List<String>>(16);
         extensionPoints = new HashSet<String>();
         try {
             reader = StringUtils.getXMLReader();

@@ -264,7 +264,7 @@ public final class CommandLineInvoker {
      * @throws IOException IOException
      */
     public void startAnt() throws IOException {
-        final List<String> cmd = new ArrayList<String>(INT_8);
+        final List<String> cmd = new ArrayList<String>(8);
         cmd.add(getCommandRunner());
         cmd.add("-f");
         cmd.add(antBuildFile);

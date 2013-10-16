@@ -86,9 +86,9 @@ public final class ChunkMapReader implements AbstractReader {
     public ChunkMapReader() {
         super();
         chunkByTopic = false;// By default, processor should chunk by document.
-        changeTable = new LinkedHashMap<String, String>(INT_128);
-        refFileSet = new HashSet<String>(INT_128);
-        conflictTable = new Hashtable<String, String>(INT_128);
+        changeTable = new LinkedHashMap<String, String>(128);
+        refFileSet = new HashSet<String>(128);
+        conflictTable = new Hashtable<String, String>(128);
     }
 
     /**

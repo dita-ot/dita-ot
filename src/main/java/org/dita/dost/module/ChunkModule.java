@@ -199,7 +199,7 @@ final public class ChunkModule implements AbstractPipelineModule {
             }
         }
 
-        final Set<String> topicList = new LinkedHashSet<String>(INT_128);
+        final Set<String> topicList = new LinkedHashSet<String>(128);
         final Set<String> oldTopicList = new HashSet<String>();
         for (final FileInfo f : job.getFileInfo()) {
             if (f.isActive && ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
@@ -215,8 +215,8 @@ final public class ChunkModule implements AbstractPipelineModule {
             }
         }
         
-        final Set<String> chunkedTopicSet = new LinkedHashSet<String>(INT_128);
-        final Set<String> chunkedDitamapSet = new LinkedHashSet<String>(INT_128);
+        final Set<String> chunkedTopicSet = new LinkedHashSet<String>(128);
+        final Set<String> chunkedDitamapSet = new LinkedHashSet<String>(128);
         final Set<String> ditamapList = new HashSet<String>();
         for (final FileInfo f : job.getFileInfo()) {
             if (f.isActive && ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {

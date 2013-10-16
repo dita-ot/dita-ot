@@ -569,8 +569,8 @@ public final class URLUtils {
         if (basePath.getPath().equals(refPath.getPath()) && refPath.getFragment() != null) {
             rel = toURI("");
         } else {
-            final StringBuffer upPathBuffer = new StringBuffer(INT_128);
-            final StringBuffer downPathBuffer = new StringBuffer(INT_128);
+            final StringBuffer upPathBuffer = new StringBuffer(128);
+            final StringBuffer downPathBuffer = new StringBuffer(128);
             final StringTokenizer mapTokenizer = new StringTokenizer(
                     FileUtils.normalize(FileUtils.separatorsToUnix(basePath.getPath()), UNIX_SEPARATOR),
                     UNIX_SEPARATOR);

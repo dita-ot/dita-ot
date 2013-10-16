@@ -90,10 +90,10 @@ public final class IndexTermTarget {
      */
     @Override
     public int hashCode() {
-        int result = INT_17;
+        int result = 17;
 
-        result = INT_37 * result + targetName.hashCode();
-        result = INT_37 * result + targetURI.hashCode();
+        result = 37 * result + targetName.hashCode();
+        result = 37 * result + targetURI.hashCode();
 
         return result;
     }
