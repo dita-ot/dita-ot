@@ -315,6 +315,73 @@
     <block indent="9" compact="yes"><xsl:call-template name="debug"/><xsl:apply-templates/></block>
 </xsl:template>
 
+<!-- Table formatting based off of DL formatting; first column aligns to start of 'page',
+     second and following columns indent -->
+<xsl:template match="*[contains(@class,' topic/simpletable ') or contains(@class,' topic/table ')]">
+  <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+</xsl:template>
+
+<!-- strow and sthead do not need to create additional blocks; children will get blocks. -->
+<xsl:template match="*[contains(@class,' topic/strow ')]|*[contains(@class,' topic/sthead ')]">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' topic/tgroup ') or contains(@class,' topic/thead ') or contains(@class,' topic/tbody ') or
+                       contains(@class,' topic/row ')]">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' topic/stentry ')]">
+  <xsl:choose>
+    <xsl:when test="preceding-sibling::*[contains(@class,' topic/stentry ')]">
+      <block indent="9" compact="no">
+        <xsl:call-template name="debug"/>
+        <xsl:choose>
+          <xsl:when test="parent::*[contains(@class,' topic/sthead ')]">
+            <text style="bold"><xsl:call-template name="debug"/><xsl:apply-templates/></text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </block>
+    </xsl:when>
+    <xsl:otherwise>
+      <block indent="3"><xsl:call-template name="debug"/>
+        <text style="bold"><xsl:call-template name="debug"/>
+          <xsl:apply-templates/>
+        </text>
+      </block>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
+<xsl:template match="*[contains(@class,' topic/entry ')]">
+  <xsl:choose>
+    <xsl:when test="preceding-sibling::*[contains(@class,' topic/entry ')]">
+      <block indent="9" compact="no">
+        <xsl:call-template name="debug"/>
+        <xsl:choose>
+          <xsl:when test="parent::*/parent::*[contains(@class,' topic/thead ')]">
+            <text style="bold"><xsl:call-template name="debug"/><xsl:apply-templates/></text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </block>
+    </xsl:when>
+    <xsl:otherwise>
+      <block indent="3"><xsl:call-template name="debug"/>
+        <text style="bold"><xsl:call-template name="debug"/>
+          <xsl:apply-templates/>
+        </text>
+      </block>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="output-alt-text">
   <xsl:choose>
       <xsl:when test="*"><xsl:apply-templates/></xsl:when>
