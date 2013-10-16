@@ -33,13 +33,13 @@ import org.xml.sax.XMLReader;
 public final class ConrefPushReader extends AbstractXMLReader {
     
     /** Conaction mark value */
-    private static final String ATTR_CONACTION_VALUE_MARK = "mark";
+    public static final String ATTR_CONACTION_VALUE_MARK = "mark";
     /** Conaction push after value */
-    private static final String ATTR_CONACTION_VALUE_PUSHAFTER = "pushafter";
+    public static final String ATTR_CONACTION_VALUE_PUSHAFTER = "pushafter";
     /** Conaction push before value */
-    private static final String ATTR_CONACTION_VALUE_PUSHBEFORE = "pushbefore";
+    public static final String ATTR_CONACTION_VALUE_PUSHBEFORE = "pushbefore";
     /** Conaction push replace value */
-    private static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
+    public static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
     
     /** push table.*/
     private final Hashtable<String, Hashtable<String, String>> pushtable;

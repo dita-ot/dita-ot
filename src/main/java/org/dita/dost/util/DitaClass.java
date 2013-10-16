@@ -8,6 +8,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.util.regex.Pattern;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
@@ -52,6 +53,46 @@ public final class DitaClass {
         stringValue = sb.toString();
     }
 
+    /**
+     * Get class instance.
+     * @param cls DITA class, may be {@code null}
+     * @return DITA class, {@code null} if the input was {@code null} 
+     */
+    public static DitaClass getInstance(final String cls) {
+        if (cls == null) {
+            return null;
+        }
+        return new DitaClass(cls);
+    }
+    
+    /**
+     * Get class instance.
+     * @param atts attributes, may be {@code null}
+     * @return DITA class, {@code null} if the input didn't contains a class
+     */
+    public static DitaClass getInstance(final Attributes atts) {
+        if (atts == null) {
+            return null;
+        }
+        return getInstance(atts.getValue(ATTRIBUTE_NAME_CLASS));
+    }
+    
+    /**
+     * Get class instance.
+     * @param elem element, may be {@code null}
+     * @return DITA class, {@code null} if the input didn't contains a class
+     */
+    public static DitaClass getInstance(final Element elem) {
+        if (elem == null) {
+            return null;
+        }
+        final Attr attr = elem.getAttributeNode(ATTRIBUTE_NAME_CLASS);
+        if (attr == null) {
+            return null;
+        }
+        return getInstance(attr.getNodeValue());
+    }
+    
     // Public methods
 
     @Override
