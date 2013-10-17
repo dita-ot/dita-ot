@@ -184,18 +184,6 @@ public final class DITAOTFailTask extends Exit {
     }
 
     /**
-     * Set a multiline message.
-     * @param msg the message to display
-     */
-    @Override
-    public void addText(final String msg) {
-        if (message == null) {
-            message = "";
-        }
-        message += getProject().replaceProperties(msg);
-    }
-
-    /**
      * Add a condition element.
      * @return <code>ConditionBase</code>.
      * @since Ant 1.6.2

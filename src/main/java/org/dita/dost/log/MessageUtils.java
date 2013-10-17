@@ -13,8 +13,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,7 +43,6 @@ public final class MessageUtils {
     // Variables
 
     private final Hashtable<String, MessageBean> hashTable = new Hashtable<String, MessageBean>();;
-    private final DITAOTLogger logger = new DITAOTJavaLogger();
     private static MessageUtils utils;
 
     // Constructors
@@ -151,14 +148,10 @@ public final class MessageUtils {
         }
 
         final MessageBean hashMessage = hashTable.get(id);
-        if (hashMessage != null) {
-            return new MessageBean(hashMessage);
+        if (hashMessage == null) {
+            throw new IllegalArgumentException("Message for ID '" + id + "' not found");
         }
-
-        // return a empty message when no message found,
-        // and notify the user with a warning message.
-        logger.logWarn("  Can't find message for id: " + id);
-        return new MessageBean(id, "", "", "");
+        return new MessageBean(hashMessage);
     }
     
     /**
