@@ -38,6 +38,7 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
+    xmlns:suitesol="http://suite-sol.com/namespaces/mapcounts"
     exclude-result-prefixes="opentopic opentopic-index opentopic-func dita2xslfo xs suitesol"
     version="2.0">
 
