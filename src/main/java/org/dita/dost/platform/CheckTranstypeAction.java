@@ -22,9 +22,13 @@ final class CheckTranstypeAction extends ImportAction {
     @Override
     public String getResult() {
         final StringBuilder retBuf = new StringBuilder();
+        final String property = paramTable.get("property");
         for (final String value: valueSet) {
-            retBuf.append("<not><equals arg1=\"${transtype}\" arg2=\"")
-            .append(StringUtils.escapeXML(value)).append("\" casesensitive=\"false\"/></not>");
+            retBuf.append("<not><equals arg1=\"${")
+                .append(StringUtils.escapeXML(property))
+                .append("}\" arg2=\"")
+                .append(StringUtils.escapeXML(value))
+                .append("\" casesensitive=\"false\"/></not>");
         }
         return retBuf.toString();
     }

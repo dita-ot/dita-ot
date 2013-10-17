@@ -29,7 +29,8 @@
     <dita-ot-fail id="DOTA001F">
       <condition>
         <and>
-          <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.CheckTranstypeAction"/>
+          <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.CheckTranstypeAction"
+                          property="transtype"/>
         </and>
       </condition>
       <param name="1" value="${transtype}"/>

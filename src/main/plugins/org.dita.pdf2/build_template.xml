@@ -37,13 +37,8 @@ with those set forth herein.
       <condition>
         <and>
           <isset property="pdf.formatter"/>
-          <not>
-            <or>
-              <equals arg1="${pdf.formatter}" arg2="fop"/>
-              <equals arg1="${pdf.formatter}" arg2="xep"/>
-              <equals arg1="${pdf.formatter}" arg2="ah"/>
-            </or>
-          </not>
+          <dita:extension id="dita.conductor.pdf2.formatter.check" behavior="org.dita.dost.platform.CheckTranstypeAction"
+                          property="pdf.formatter"/>
         </and>
       </condition>
       <param name="1" value="${pdf.formatter}"/>
