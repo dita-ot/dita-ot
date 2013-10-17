@@ -278,14 +278,14 @@ See the accompanying license.txt file for applicable licenses.
               <xsl:with-param name="entryCol" select="1"/>
             </xsl:apply-templates>
           </xsl:when>
-          <xsl:otherwise>
+          <xsl:when test="../*[contains(@class,' reference/property ')]/*[contains(@class,' reference/proptype ')]">
             <xsl:call-template name="createEmptyPropertyHeadEntry">
               <xsl:with-param name="entryCol" select="1"/>
               <xsl:with-param name="keyCol" select="$keyCol"/>
               <xsl:with-param name="hasVerticalBorder" select="'yes'"/>
               <xsl:with-param name="frame" select="$frame"/>
             </xsl:call-template>
-          </xsl:otherwise>
+          </xsl:when>
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="*[contains(@class, ' reference/propvaluehd ')]">
@@ -293,14 +293,14 @@ See the accompanying license.txt file for applicable licenses.
               <xsl:with-param name="entryCol" select="2"/>
             </xsl:apply-templates>
           </xsl:when>
-          <xsl:otherwise>
+          <xsl:when test="../*[contains(@class,' reference/property ')]/*[contains(@class,' reference/propvalue ')]">
             <xsl:call-template name="createEmptyPropertyHeadEntry">
               <xsl:with-param name="entryCol" select="2"/>
               <xsl:with-param name="keyCol" select="$keyCol"/>
               <xsl:with-param name="hasVerticalBorder" select="'yes'"/>
               <xsl:with-param name="frame" select="$frame"/>
             </xsl:call-template>
-          </xsl:otherwise>
+          </xsl:when>
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="*[contains(@class, ' reference/propdeschd ')]">
@@ -308,14 +308,14 @@ See the accompanying license.txt file for applicable licenses.
               <xsl:with-param name="entryCol" select="3"/>
             </xsl:apply-templates>
           </xsl:when>
-          <xsl:otherwise>
+          <xsl:when test="../*[contains(@class,' reference/property ')]/*[contains(@class,' reference/propdesc ')]">
             <xsl:call-template name="createEmptyPropertyHeadEntry">
               <xsl:with-param name="entryCol" select="3"/>
               <xsl:with-param name="keyCol" select="$keyCol"/>
               <xsl:with-param name="hasVerticalBorder" select="'no'"/>
               <xsl:with-param name="frame" select="$frame"/>
             </xsl:call-template>
-          </xsl:otherwise>
+          </xsl:when>
         </xsl:choose>
       </fo:table-row>
     </fo:table-header>
