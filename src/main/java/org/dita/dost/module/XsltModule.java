@@ -18,9 +18,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.FileUtils;
-
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.StringUtils;
@@ -39,11 +37,10 @@ import org.xml.sax.XMLReader;
  * </ul>
  *  
  */
-public final class XsltModule implements AbstractPipelineModule {
+public final class XsltModule extends AbstractPipelineModuleImpl {
 
     private Templates templates;
     private Map<String, String> params = new HashMap<String, String>();
-    private DITAOTLogger logger;
     private File style;
     private File in;
     private File out;
@@ -142,10 +139,6 @@ public final class XsltModule implements AbstractPipelineModule {
     
     public void setStyle(final File style) {
     	this.style = style;
-    }
-
-    public void setLogger(DITAOTLogger logger) {
-        this.logger = logger;
     }
 
     public void setParam(final String key, final String value) {

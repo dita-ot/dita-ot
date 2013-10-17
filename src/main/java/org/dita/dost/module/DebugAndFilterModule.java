@@ -39,7 +39,6 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -75,7 +74,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * 
  * @author Zhang, Yuan Peng
  */
-final class DebugAndFilterModule implements AbstractPipelineModule {
+final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     
     /** Subject scheme file extension */
     private static final String SUBJECT_SCHEME_EXTENSION = ".subm";
@@ -84,8 +83,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
 
     private final OutputUtils outputUtils = new OutputUtils();
     
-    private DITAOTLogger logger;
-
     /** Absolute input map path. */
     private File inputMap = null;
     /** Absolute DITA-OT base path. */
@@ -99,11 +96,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * Default Construtor.
      */
     public DebugAndFilterModule(){
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
     }
 
     @Override

@@ -27,7 +27,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ChunkMapReader;
@@ -43,9 +42,7 @@ import org.w3c.dom.Element;
  * The chunking module class.
  * 
  */
-final public class ChunkModule implements AbstractPipelineModule {
-
-    private DITAOTLogger logger;
+final public class ChunkModule extends AbstractPipelineModuleImpl {
 
     /**
      * using to save relative path when do rename action for newly chunked file
@@ -57,11 +54,6 @@ final public class ChunkModule implements AbstractPipelineModule {
      */
     public ChunkModule() {
         super();
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
     }
 
     /**

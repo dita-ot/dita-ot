@@ -18,21 +18,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 
 /**
  * This class replace all non-ASCII characters to their RTF Unicode-escaped forms.
  */
-final class EscapeUnicodeModule implements AbstractPipelineModule {
-
-    private DITAOTLogger logger;
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
-    }
+final class EscapeUnicodeModule extends AbstractPipelineModuleImpl {
 
     /**
      * Entry point of EscapeUnicodeModule.

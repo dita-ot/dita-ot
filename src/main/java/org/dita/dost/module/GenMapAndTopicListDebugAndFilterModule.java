@@ -45,7 +45,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -79,7 +78,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
 /**
  * Walk through input files and normalize them into the temporary directory. 
  */
-public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPipelineModule {
+public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipelineModuleImpl {
 
     // Constants
 
@@ -134,7 +133,6 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     private File ditavalFile;
     /** Prefix path. Either an empty string or a path which ends in {@link java.io.File#separator File.separator}. */
     private final String prefix = "";
-    private DITAOTLogger logger;
     private GenListModuleFilter listFilter;
     /** Output utilities */
     private OutputUtils outputUtils;
@@ -156,11 +154,6 @@ public final class GenMapAndTopicListDebugAndFilterModule implements AbstractPip
     private Job prop = null;
 
     // Constructor
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
-    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {

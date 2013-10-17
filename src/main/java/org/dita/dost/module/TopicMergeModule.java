@@ -25,7 +25,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -34,9 +33,7 @@ import org.dita.dost.reader.MergeMapParser;
 /**
  * The module handles topic merge in issues as PDF.
  */
-final class TopicMergeModule implements AbstractPipelineModule {
-
-    private DITAOTLogger logger;
+final class TopicMergeModule extends AbstractPipelineModuleImpl {
 
     /**
      * Default Constructor.
@@ -44,11 +41,6 @@ final class TopicMergeModule implements AbstractPipelineModule {
      */
     public TopicMergeModule() {
         super();
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
     }
 
     /**

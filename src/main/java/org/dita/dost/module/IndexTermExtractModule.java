@@ -21,7 +21,6 @@ import java.util.Set;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -44,7 +43,7 @@ import org.xml.sax.XMLReader;
  * 
  * @author Wu, Zhi Qiang
  */
-final class IndexTermExtractModule implements AbstractPipelineModule {
+final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
     /** The input map */
     private String inputMap = null;
 
@@ -60,18 +59,12 @@ final class IndexTermExtractModule implements AbstractPipelineModule {
     /** The list of ditamap files */
     private List<String> ditamapList = null;
 
-    private DITAOTLogger logger;
     private IndexTermCollection indexTermCollection;
 
     /**
      * Create a default instance.
      */
     public IndexTermExtractModule() {
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
     }
 
     @Override

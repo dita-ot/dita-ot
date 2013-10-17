@@ -20,9 +20,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.w3c.dom.Element;
-
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -40,10 +38,9 @@ import org.dita.dost.writer.DitaMetaWriter;
  * 
  * @author Zhang, Yuan Peng
  */
-final class MoveMetaModule implements AbstractPipelineModule {
+final class MoveMetaModule extends AbstractPipelineModuleImpl {
 
 //    private final ContentImpl content;
-    private DITAOTLogger logger;
 
     /**
      * Default constructor of MoveMetaModule class.
@@ -51,11 +48,6 @@ final class MoveMetaModule implements AbstractPipelineModule {
     public MoveMetaModule() {
         super();
 //        content = new ContentImpl();
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
     }
 
     /**

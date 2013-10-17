@@ -42,7 +42,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -70,7 +69,7 @@ import org.xml.sax.SAXParseException;
  * 
  * @author Wu, Zhi Qiang
  */
-public final class GenMapAndTopicListModule implements AbstractPipelineModule {
+public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     public static final String ELEMENT_STUB = "stub";
     private static final String ATTRIUBTE_SOURCE = "source";
@@ -176,8 +175,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
     /** Prefix path. Either an empty string or a path which ends in {@link java.io.File#separator File.separator}. */
     private String prefix = "";
 
-    private DITAOTLogger logger;
-
     private GenListModuleReader reader;
     /** Output utilities */
     private OutputUtils outputUtils;
@@ -242,11 +239,6 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
 
         // @processing-role
         resourceOnlySet = new HashSet<File>(128);
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
     }
 
     @Override

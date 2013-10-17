@@ -16,7 +16,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ConrefPushReader;
@@ -28,14 +27,7 @@ import org.dita.dost.writer.ConrefPushParser;
  * 
  *
  */
-final class ConrefPushModule implements AbstractPipelineModule {
-
-    private DITAOTLogger logger;
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
-    }
+final class ConrefPushModule extends AbstractPipelineModuleImpl {
 
     /**
      * @param input input
