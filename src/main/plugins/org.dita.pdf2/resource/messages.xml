@@ -70,4 +70,8 @@
     <reason>Both index-see and %1 defined for index entry '%2'.</reason>
     <response>Recovering by treating the index-see as an index-see-also.</response>
   </message>
+  <message id="PDFX012F" type="FATAL">
+    <reason>Unrecognized PDF formatter '%1'.</reason>
+    <response>Use "fop" for FOP, "xep" for RenderX XEP, or "ah" for AH Formatter.</response>
+  </message>
 </messages>  

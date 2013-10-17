@@ -33,6 +33,21 @@ with those set forth herein.
   <import file="${dita.plugin.org.dita.pdf2.dir}/build_xep.xml"/>
 
   <target name="dita2pdf2.init">
+    <dita-ot-fail id="PDFX012F">
+      <condition>
+        <and>
+          <isset property="pdf.formatter"/>
+          <not>
+            <or>
+              <equals arg1="${pdf.formatter}" arg2="fop"/>
+              <equals arg1="${pdf.formatter}" arg2="xep"/>
+              <equals arg1="${pdf.formatter}" arg2="ah"/>
+            </or>
+          </not>
+        </and>
+      </condition>
+      <param name="1" value="${pdf.formatter}"/>
+    </dita-ot-fail>
     <dita-ot-fail id="DOTA066F">
       <condition>
         <and>
