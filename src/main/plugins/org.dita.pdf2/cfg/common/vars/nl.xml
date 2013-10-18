@@ -52,7 +52,9 @@
   <variable id="Danger">Gevaar!</variable>
   <variable id="Restriction">Beperking</variable>
   <variable id="Figure">Figuur <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Figure Number">Figuur <param ref-name="number"/></variable>
   <variable id="Table">Tabel <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Table Number">Tabel <param ref-name="number"/></variable>
   <variable id="Related Links">Verwante onderwerpen</variable>
   <variable id="Cross-Reference">Verwijzing naar:</variable>
   <variable id="Content-Reference">Verwijzing naar:</variable>
