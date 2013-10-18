@@ -126,5 +126,5 @@ ContentHandler, LexicalHandler, EntityResolver {
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-
+    
 }

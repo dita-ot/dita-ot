@@ -50,13 +50,6 @@ final class CoderefModule extends AbstractPipelineModuleImpl {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
 
-        Job job = null;
-        try{
-            job = new Job(tempDir);
-        }catch(final IOException e){
-            throw new DITAOTException(e);
-        }
-
         final CoderefResolver writer = new CoderefResolver();
         writer.setLogger(logger);
         for (final FileInfo f: job.getFileInfo()) {

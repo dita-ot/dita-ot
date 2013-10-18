@@ -119,8 +119,6 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 }
 
             }
-
-            final Job job = new Job(tempDir);
             
             inputDir = new File(job.getInputDir());
             if (!inputDir.isAbsolute()) {
@@ -214,7 +212,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             }
 
             // reload the property for processing of copy-to
-            performCopytoTask(tempDir, new Job(tempDir));
+            performCopytoTask(tempDir, job);
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);

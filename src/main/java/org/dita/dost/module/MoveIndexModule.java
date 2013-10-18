@@ -51,13 +51,6 @@ final class MoveIndexModule extends AbstractPipelineModuleImpl {
         if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
-        
-        Job job = null;
-        try{
-            job = new Job(tempDir);
-        } catch(final IOException e) {
-            throw new DITAOTException(e);
-        }
 
         final MapIndexReader indexReader = new MapIndexReader();
         indexReader.setLogger(logger);

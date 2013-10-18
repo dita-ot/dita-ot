@@ -871,17 +871,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             dir.mkdirs();
         }
         
-        Job prop = null;
-        try {
-            prop = new Job(dir);
-        } catch (final IOException e) {
-            throw new DITAOTException("Failed to create empty job: " + e.getMessage(), e);
-        }
+        // assume empty Job
         
-        prop.setProperty(INPUT_DIR, baseInputDir.getAbsolutePath());
-        prop.setProperty(INPUT_DITAMAP, prefix + inputFile);
+        job.setProperty(INPUT_DIR, baseInputDir.getAbsolutePath());
+        job.setProperty(INPUT_DITAMAP, prefix + inputFile);
 
-        prop.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
+        job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
         final File inputfile = new File(tempDir, USER_INPUT_FILE_LIST_FILE);
         Writer bufferedWriter = null;
         try {
@@ -904,10 +899,10 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         // add out.dita.files,tempdirToinputmapdir.relative.value to solve the
         // output problem
-        prop.setProperty("tempdirToinputmapdir.relative.value", formatRelativeValue(prefix));
-        prop.setProperty("uplevels", getUpdateLevels());
+        job.setProperty("tempdirToinputmapdir.relative.value", formatRelativeValue(prefix));
+        job.setProperty("uplevels", getUpdateLevels());
         for (final File file: addFilePrefix(outDitaFilesSet)) {
-            prop.getOrCreateFileInfo(file).isOutDita = true;
+            job.getOrCreateFileInfo(file).isOutDita = true;
         }
 //        // XXX: This loop is probably redundant
 //        for (FileInfo f: prop.getFileInfo().values()) {
@@ -916,73 +911,73 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 //            }
 //        }
         for (final File file: addFilePrefix(fullTopicSet)) {
-            final FileInfo ff = prop.getOrCreateFileInfo(file);
+            final FileInfo ff = job.getOrCreateFileInfo(file);
             ff.format = "dita";
             ff.isActive = true;
         }
         for (final File file: addFilePrefix(fullMapSet)) {
-            final FileInfo ff = prop.getOrCreateFileInfo(file);
+            final FileInfo ff = job.getOrCreateFileInfo(file);
             ff.format = "ditamap";
             ff.isActive = true;
         }        
         for (final File file: addFilePrefix(hrefTopicSet)) {
-            prop.getOrCreateFileInfo(file).hasLink = true;
+            job.getOrCreateFileInfo(file).hasLink = true;
         }
         for (final File file: addFilePrefix(conrefSet)) {
-            prop.getOrCreateFileInfo(file).hasConref = true;
+            job.getOrCreateFileInfo(file).hasConref = true;
         }
         for (final File file: addFilePrefix(imageSet)) {
-            prop.getOrCreateFileInfo(file).format = "image";
+            job.getOrCreateFileInfo(file).format = "image";
         }
         for (final File file: addFilePrefix(flagImageSet)) {
-            prop.getOrCreateFileInfo(file).isFlagImage = true;
+            job.getOrCreateFileInfo(file).isFlagImage = true;
         }
         for (final File file: addFilePrefix(htmlSet)) {
-            prop.getOrCreateFileInfo(file).format = "html";
+            job.getOrCreateFileInfo(file).format = "html";
         }
         for (final File file: addFilePrefix(hrefTargetSet)) {
-            prop.getOrCreateFileInfo(file).isTarget = true;
+            job.getOrCreateFileInfo(file).isTarget = true;
         }
         for (final File file: addFilePrefix(hrefWithIDSet)) {
-            prop.getOrCreateFileInfo(file).isNonConrefTarget = true;
+            job.getOrCreateFileInfo(file).isNonConrefTarget = true;
         }
         for (final File file: addFilePrefix(chunkTopicSet)) {
-            prop.getOrCreateFileInfo(file).isSkipChunk = true;
+            job.getOrCreateFileInfo(file).isSkipChunk = true;
         }
         for (final File file: addFilePrefix(schemeSet)) {
-            prop.getOrCreateFileInfo(file).isSubjectScheme = true;
+            job.getOrCreateFileInfo(file).isSubjectScheme = true;
         }
         for (final File file: addFilePrefix(conrefTargetSet)) {
-            prop.getOrCreateFileInfo(file).isConrefTarget = true;
+            job.getOrCreateFileInfo(file).isConrefTarget = true;
         }
         for (final File file: addFilePrefix(copytoSourceSet)) {
-            prop.getOrCreateFileInfo(file).isCopyToSource = true;
+            job.getOrCreateFileInfo(file).isCopyToSource = true;
         }
         for (final File file: addFilePrefix(subsidiarySet)) {
-            prop.getOrCreateFileInfo(file).isSubtarget = true;
+            job.getOrCreateFileInfo(file).isSubtarget = true;
         }
         for (final File file: addFilePrefix(conrefpushSet)) {
-            prop.getOrCreateFileInfo(file).isConrefPush = true;
+            job.getOrCreateFileInfo(file).isConrefPush = true;
         }
         for (final File file: addFilePrefix(keyrefSet)) {
-            prop.getOrCreateFileInfo(file).hasKeyref = true;
+            job.getOrCreateFileInfo(file).hasKeyref = true;
         }
         for (final File file: addFilePrefix(coderefSet)) {
-            prop.getOrCreateFileInfo(file).hasCoderef = true;
+            job.getOrCreateFileInfo(file).hasCoderef = true;
         }
         for (final File file: addFilePrefix(resourceOnlySet)) {
-            prop.getOrCreateFileInfo(file).isResourceOnly = true;
+            job.getOrCreateFileInfo(file).isResourceOnly = true;
         }
         
-        addFlagImagesSetToProperties(prop, REL_FLAGIMAGE_LIST, relFlagImagesSet);
+        addFlagImagesSetToProperties(job, REL_FLAGIMAGE_LIST, relFlagImagesSet);
 
         // Convert copyto map into set and output
-        prop.setCopytoMap(addFilePrefix(copytoMap));
-        addKeyDefSetToProperties(prop, keysDefMap);
+        job.setCopytoMap(addFilePrefix(copytoMap));
+        addKeyDefSetToProperties(job, keysDefMap);
 
         try {
             logger.logInfo("Serializing job specification");
-            prop.write();
+            job.write();
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
         }

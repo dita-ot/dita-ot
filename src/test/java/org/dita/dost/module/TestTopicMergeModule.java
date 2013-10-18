@@ -20,6 +20,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.TopicMergeModule;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +40,7 @@ public class TestTopicMergeModule {
     private PipelineHashIO pipelineInput;
     final File ditalistfile = new File (resourceDir, "compare.xml");
     File tobecomparefile;
+    File temporaryDir;
 
     @Before
     public void setUp() throws IOException {
@@ -50,7 +52,7 @@ public class TestTopicMergeModule {
         //		facade = new PipelineFacade();
         pipelineInput = new PipelineHashIO();
         
-        final File temporaryDir = new File(tempDir, "temp");
+        temporaryDir = new File(tempDir, "temp");
         TestUtils.copy(new File(resourceDir, "temp"), temporaryDir);
 
         final File inputMap = new File(temporaryDir, "test.ditamap");
@@ -82,6 +84,7 @@ public class TestTopicMergeModule {
     {
         final TopicMergeModule topicmergemodule = new TopicMergeModule();
         topicmergemodule.setLogger(new TestUtils.TestLogger());
+        topicmergemodule.setJob(new Job(temporaryDir));
         topicmergemodule.execute(pipelineInput);
         
         assertXMLEqual(new InputSource(ditalistfile.toURI().toString()),

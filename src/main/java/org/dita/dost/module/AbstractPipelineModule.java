@@ -12,6 +12,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Job;
 
 /**
  * Abstract class for Modules which contains the method that every module class
@@ -41,4 +42,6 @@ public interface AbstractPipelineModule {
      */
     public void setLogger(DITAOTLogger logger);
 
+    public void setJob(Job job);
+    
 }

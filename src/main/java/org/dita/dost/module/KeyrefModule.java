@@ -60,13 +60,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
 
-        Job job = null;
-        try{
-            job = new Job(tempDir);
-        }catch(final Exception e){
-            throw new DITAOTException(e) ;
-        }
-
         // maps of keyname and target
         final Map<String, URI> keymap =new HashMap<String, URI>();
         // store the key name defined in a map(keyed by ditamap file)

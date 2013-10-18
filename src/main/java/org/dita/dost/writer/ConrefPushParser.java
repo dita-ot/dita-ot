@@ -130,6 +130,8 @@ public final class ConrefPushParser extends AbstractXMLWriter {
     private boolean hasConref = false;
     /**tempDir.*/
     private File tempDir;
+    private Job job;
+    
     /**
      * Constructor.
      */
@@ -146,6 +148,10 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
+    }
+    
+    public void setJob(final Job job) {
+        this.job = job;
     }
     
     public void setMoveTable(final Hashtable<String, String> movetable) {
@@ -218,8 +224,6 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         // this is used to update the conref.list file.
         BufferedWriter bufferedWriter =null;
         try {
-            final Job job = new Job(tempDir);
-
             // get the reletivePath from tempDir
             final String reletivePath = filename.getAbsolutePath().substring(FileUtils.normalize(tempDir.toString()).getPath().length() + 1);
             for (final FileInfo f: job.getFileInfo()) {

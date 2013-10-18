@@ -30,6 +30,7 @@ import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.util.Job;
 
 /**
  * Ant task for executing pipeline modules.
@@ -46,6 +47,8 @@ public final class ExtensibleAntInvoker extends Task {
     private final ArrayList<Param> pipelineParams;
     /** Nested modules. */
     private final ArrayList<Module> modules;
+    /** Temporary directory. */
+    private File tempDir;
 
     /**
      * Constructor.
@@ -78,6 +81,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @param tempdir temporary directory
      */
     public void setTempdir(final File tempdir) {
+        this.tempDir = tempdir.getAbsoluteFile();
         attrs.put(ANT_INVOKER_PARAM_TEMPDIR, tempdir.getAbsolutePath());
     }
 
@@ -133,6 +137,11 @@ public final class ExtensibleAntInvoker extends Task {
         final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
         logger.setTask(this);
         pipeline.setLogger(logger);
+        try {
+            pipeline.setJob(new Job(tempDir));
+        } catch (final IOException ioe) {
+            throw new BuildException(ioe);
+        }        
         try {
             for (final Module m: modules) {
                 final PipelineHashIO pipelineInput = new PipelineHashIO();

@@ -67,13 +67,6 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
-        
-        Job job = null;
-        try{
-            job = new Job(tempDir);
-        } catch (final IOException e) {
-            throw new DITAOTException(e);
-        }
 
         final MapMetaReader metaReader = new MapMetaReader();
         metaReader.setLogger(logger);

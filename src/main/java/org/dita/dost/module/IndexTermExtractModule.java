@@ -104,24 +104,18 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         inputMap = input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
         targetExt = input.getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
         baseInputDir = tempDir.getAbsolutePath();
-        final Job prop;
-        try {
-            prop = new Job(tempDir);
-        } catch (final Exception e) {
-            throw new DITAOTException("Failed to load job: " + e.getMessage(), e);
-        }
 
         /*
          * Parse topic list and ditamap list from the input dita.list file
          */
         topicList = new ArrayList<String>();
-        for (final FileInfo f: prop.getFileInfo()) {
+        for (final FileInfo f: job.getFileInfo()) {
             if ("dita".equals(f.format) && f.isActive && !f.isResourceOnly) {
                 topicList.add(f.file.getPath());
             }
         }
         ditamapList = new ArrayList<String>();
-        for (final FileInfo f: prop.getFileInfo()) {
+        for (final FileInfo f: job.getFileInfo()) {
             if ("ditamap".equals(f.format) && f.isActive && !f.isResourceOnly) {
                 ditamapList.add(f.file.getPath());
             }

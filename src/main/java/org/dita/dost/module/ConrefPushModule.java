@@ -45,13 +45,6 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
         if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
-        
-        Job job = null;
-        try{
-            job = new Job(tempDir);
-        }catch(final IOException e){
-            logger.logError(e.getMessage(), e) ;
-        }
 
         final ConrefPushReader reader = new ConrefPushReader();
         reader.setLogger(logger);
@@ -69,6 +62,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
         for (final Map.Entry<String, Hashtable<String,String>> entry: pushSet.entrySet()) {
             logger.logInfo("Processing " + new File(entry.getKey()).getAbsolutePath());
             final ConrefPushParser parser = new ConrefPushParser();
+            parser.setJob(job);
             parser.setLogger(logger);
             parser.setMoveTable(entry.getValue());
             //pass the tempdir to ConrefPushParser

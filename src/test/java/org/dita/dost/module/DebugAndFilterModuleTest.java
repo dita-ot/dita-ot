@@ -89,6 +89,7 @@ public class DebugAndFilterModuleTest {
 
         final AbstractFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
+        facade.setJob(new Job(tmpDir));
         facade.execute("DebugAndFilter", pipelineInput);
     }
 

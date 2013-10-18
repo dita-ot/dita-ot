@@ -121,6 +121,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     private static final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
 
     private ChunkFilenameGenerator chunkFilenameGenerator;
+    private Job job;
 
     /**
      * Constructor.
@@ -143,6 +144,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
+    }
+    
+    public void setJob(final Job job) {
+        this.job = job;
     }
 
     @Override
@@ -556,7 +561,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         try {
             // XXX: This may have to use new
             // File(FileUtils.resolveFile(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
-            final Job job = new Job(filePath);
             final Map<File, File> copytotarget2sourcemaplist = job.getCopytoMap();
             copytotarget2source.putAll(copytotarget2sourcemaplist);
             for (final String file : copytoSource) {

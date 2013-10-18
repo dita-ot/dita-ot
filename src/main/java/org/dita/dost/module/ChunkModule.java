@@ -79,14 +79,9 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         // change to xml property
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(logger);
+        mapReader.setJob(job);
         mapReader.setup(transtype);
 
-        Job job = null;
-        try {
-            job = new Job(tempDir);
-        } catch (final IOException ioe) {
-            throw new DITAOTException(ioe);
-        }
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
@@ -125,12 +120,6 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
-        Job job = null;
-        try {
-            job = new Job(tempDir);
-        } catch (final IOException io) {
-            logger.logError(io.getMessage());
-        }
         final TopicRefWriter topicRefWriter = new TopicRefWriter();
         topicRefWriter.setLogger(logger);
         topicRefWriter.setChangeTable(changeTable);
@@ -155,12 +144,6 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
         final File xmlDitalist = new File(tempDir, "dummy.xml");
-        Job job = null;
-        try {
-            job = new Job(tempDir);
-        } catch (final IOException ex) {
-            logger.logError(ex.getMessage(), ex);
-        }
 
         final Set<String> hrefTopics = new HashSet<String>();
         for (final FileInfo f : job.getFileInfo()) {

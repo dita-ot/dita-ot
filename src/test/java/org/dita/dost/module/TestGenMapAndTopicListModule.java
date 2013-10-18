@@ -74,7 +74,7 @@ public class TestGenMapAndTopicListModule {
         generate(inputDirAbove, inputMapAbove, outDirAbove, tempDirAbove);
     }
 
-    private static void generate(final File inputDir, final File inputMap, final File outDir, final File tempDir) throws DITAOTException {
+    private static void generate(final File inputDir, final File inputMap, final File outDir, final File tempDir) throws DITAOTException, IOException {
         final PipelineHashIO pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_INPUTMAP, inputMap.getPath());
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_BASEDIR, srcDir.getAbsolutePath());
@@ -95,6 +95,7 @@ public class TestGenMapAndTopicListModule {
 
         final AbstractFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
+        facade.setJob(new Job(tempDir));
         facade.execute("GenMapAndTopicList", pipelineInput);
     }
         

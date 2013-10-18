@@ -47,13 +47,6 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
 
-        Job job = null;
-        try{
-            job = new Job(tempDir);
-        }catch(final IOException e){
-            throw new DITAOTException(e);
-        }
-
         final ImageMetadataFilter writer = new ImageMetadataFilter(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)),
                                                                        tempDir,
                                                                        job.getProperty("uplevels"));
