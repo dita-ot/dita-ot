@@ -46,8 +46,9 @@
                 <option>TITLE</option>. Specifying <option>NUMBER</option> results in "Figure 5";
               specifying <option>TITLE</option> results in the title of the figure. <ph
                 audience="xslt-customizer">Corresponds to the XSLT parameter
-                  <parmname>FIGURELINK</parmname>.</ph><note>This parameter is not available for the
-                PDF transformation.</note></pd>
+                  <parmname>FIGURELINK</parmname>.</ph><note rev="2.0">Support for PDF was added
+              in DITA-OT 2.0. By default PDF uses the value <option>NUMTITLE</option>, which is not
+              supported for other transform types; this results in "Figure 5. Title".</note></pd>
           </plentry>
           <plentry id="args.filter" rev="1.6">
             <pt><parmname>args.filter</parmname></pt>
@@ -93,8 +94,9 @@
               to tables are styled. Specifying <option>NUMBER</option> results in "Table 5";
               specifying <option>TITLE</option> results in the title of the table. <ph
                 audience="xslt-customizer">Corresponds to the XSLT parameter
-                  <parmname>TABLELINK</parmname>.</ph><note>This parameter is not available for the
-                PDF transformation.</note></pd>
+                  <parmname>TABLELINK</parmname>.</ph><note rev="2.0">Support for PDF was added
+              in DITA-OT 2.0. By default PDF uses the value <option>NUMTITLE</option>, which is not
+              supported for other transform types; this results in "Table 5. Title".</note></pd>
           </plentry>
           <plentry id="cleantemp">
             <pt><parmname>clean.temp</parmname></pt>
