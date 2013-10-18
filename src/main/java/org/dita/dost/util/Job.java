@@ -469,7 +469,11 @@ public final class Job {
      * Set copy-to map.
      */
     public void setCopytoMap(final Map<File, File> value) {
-        prop.put(COPYTO_TARGET_TO_SOURCE_MAP_LIST, new HashMap<File, File>(value));
+        final Map<String, String> res = new HashMap<String, String>();
+        for (final Map.Entry<File, File> e: value.entrySet()) {
+            res.put(e.getKey().toString(), e.getValue().toString());
+        }
+        prop.put(COPYTO_TARGET_TO_SOURCE_MAP_LIST, res);
     }
 
     /**
