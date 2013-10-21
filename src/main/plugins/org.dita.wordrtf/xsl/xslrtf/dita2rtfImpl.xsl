@@ -47,26 +47,35 @@
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
-    <xsl:call-template name="gen-id"/>\par \plain\f4\fs36\b <xsl:apply-templates/>
-\par \plain\f2\fs24
+    <xsl:call-template name="gen-id"/>
+    \par \plain\f4\fs36\b 
+    <xsl:apply-templates/>
+    \par \plain\f2\fs24
   </xsl:template>
 
   <xsl:template match="synsect">
-\par \plain\f4\fs36\b Syntax 
-\par \plain\f2\fs24 
+    \par \plain\f4\fs36\b Syntax 
     <xsl:apply-templates/>
+    \par \plain\f2\fs24 
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/section ')]">
-    <xsl:call-template name="gen-id"/>\par \pard \s0\f2\fs24 <xsl:apply-templates/>
+    <xsl:call-template name="gen-id"/>
+    \par \pard \s0\f2\fs24 
+    <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/example ')]">
-    <xsl:call-template name="gen-id"/>\par \pard \s0\f2\fs24 <xsl:apply-templates/>
+    <xsl:call-template name="gen-id"/>
+    \par \pard \s0\f2\fs24 
+    <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]">
-    <xsl:call-template name="gen-id"/>\plain\f4\fs24\b <xsl:apply-templates/>\par \plain\f2\fs24 
+    <xsl:call-template name="gen-id"/>
+    \plain\f4\fs24\b 
+    <xsl:apply-templates/>
+    \par \plain\f2\fs24 
   </xsl:template>
 
   <!-- =========== block things ============ -->
