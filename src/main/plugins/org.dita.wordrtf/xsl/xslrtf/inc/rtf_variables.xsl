@@ -12,12 +12,8 @@ RTF ignores line breaks but usually not white space!
  -->	
 <xsl:variable name="rtf:prolog">{\rtf1 \ansi \deff0 \deflang1033 
 {\fonttbl
-{\f0\fswiss MS Sans Serif;}
-{\f1\froman\fcharset2 Symbol;}
 {\f2\froman Times New Roman;}
-{\f3\froman Times New Roman;}
 {\f4\fswiss Arial;}
-{\f5\fmono Courier New;}
 }
 {\colortbl
 ;
