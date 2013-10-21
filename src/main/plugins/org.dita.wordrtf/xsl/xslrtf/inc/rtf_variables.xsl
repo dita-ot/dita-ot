@@ -12,8 +12,9 @@ RTF ignores line breaks but usually not white space!
  -->	
 <xsl:variable name="rtf:prolog">{\rtf1 \ansi \deff0 \deflang1033 
 {\fonttbl
-{\f2\froman Times New Roman;}
-{\f4\fswiss Arial;}
+{\f0\froman Times New Roman;}
+{\f1\fswiss Arial;}
+{\f2 \fmodern Courier New;}
 }
 {\colortbl
 ;
@@ -24,16 +25,16 @@ RTF ignores line breaks but usually not white space!
 \red0\green255\blue0;
 }
 {\stylesheet
-{\s0 \f2\fs24 Normal;}
-{\s1 \f4\fs48\b heading 1;}
-{\s2 \f4\fs36\b heading 2;}
-{\s3 \f4\fs24\b heading 3;}
-{\s4 \f4\fs20\b heading 4;}
-{\s5 \f4\fs18\b heading 5;}
-{\s6 \f4\fs16\b heading 6;}
-{\s7 \f4\fs24\b table header;}
-{\s8 \f2\fs24 link;}
-{\s9 \f4\fs24\b table title;}
+{\s0 \f0\fs24 Normal;}
+{\s1 \f1\fs48\b heading 1;}
+{\s2 \f1\fs36\b heading 2;}
+{\s3 \f1\fs24\b heading 3;}
+{\s4 \f1\fs20\b heading 4;}
+{\s5 \f1\fs18\b heading 5;}
+{\s6 \f1\fs16\b heading 6;}
+{\s7 \f1\fs24\b table header;}
+{\s8 \f0\fs24 link;}
+{\s9 \f1\fs24\b table title;}
 {\*\cs1 Default Paragraph Font;}
 }
 </xsl:variable>
