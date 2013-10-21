@@ -16,6 +16,9 @@ import org.dita.dost.util.Job;
 /**
  * AbstractFacade defines the method of executing each module.
  * 
+ * If a module makes modifications to the provided job configuration, it <em>must</em> serialize
+ * the job configuration before finishing execution.
+ * 
  * @author Lian, Li
  * 
  */

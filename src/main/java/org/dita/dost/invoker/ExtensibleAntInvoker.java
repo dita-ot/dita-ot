@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Mapper;
 import org.apache.tools.ant.types.XMLCatalog;
@@ -38,7 +39,7 @@ import org.dita.dost.util.Job;
  * @author Deborah Pickett
  */
 public final class ExtensibleAntInvoker extends Task {
-
+    
     /** Pipeline. */
     private final PipelineFacade pipeline;
     /** Pipeline attributes and parameters */
@@ -137,11 +138,7 @@ public final class ExtensibleAntInvoker extends Task {
         final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
         logger.setTask(this);
         pipeline.setLogger(logger);
-        try {
-            pipeline.setJob(new Job(tempDir));
-        } catch (final IOException ioe) {
-            throw new BuildException(ioe);
-        }        
+        pipeline.setJob(getJob(tempDir, getProject()));
         try {
             for (final Module m: modules) {
                 final PipelineHashIO pipelineInput = new PipelineHashIO();
@@ -201,6 +198,30 @@ public final class ExtensibleAntInvoker extends Task {
         } catch (final DITAOTException e) {
             throw new BuildException("Failed to run pipeline: " + e.getMessage(), e);
         }
+    }
+    
+    /**
+     * Get job configuration from Ant project reference or create new.
+     *    
+     * @param tempDir configuration directory 
+     * @param project Ant project
+     * @return job configuration
+     */
+    public static Job getJob(final File tempDir, final Project project) {
+        Job job = (Job) project.getReference(ANT_REFERENCE_JOB);
+        if (job != null && job.isStale(tempDir)) {
+            project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
+            job = null;
+        }
+        if (job == null) {
+            try {
+                job = new Job(tempDir);
+            } catch (final IOException ioe) {
+                throw new BuildException(ioe);
+            }
+            project.addReference(ANT_REFERENCE_JOB, job);
+        }
+        return job;
     }
     
     private Set<File> readListFile(final List<Xslt.IncludesFile> includes, final DITAOTAntLogger logger) {

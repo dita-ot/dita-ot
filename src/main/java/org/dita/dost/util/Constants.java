@@ -975,6 +975,9 @@ public final class Constants {
     /** Property name for template files. */
     public static final String CONF_TEMPLATES = "templates";
 
+    /** Project reference name for job configuration object. */
+    public static final String ANT_REFERENCE_JOB = "job";
+    
     /**
      * Instances should NOT be constructed in standard programming.
      */
