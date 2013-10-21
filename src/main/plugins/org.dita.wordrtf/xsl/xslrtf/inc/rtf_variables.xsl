@@ -18,8 +18,6 @@ RTF ignores line breaks but usually not white space!
 {\f3\froman Times New Roman;}
 {\f4\fswiss Arial;}
 {\f5\fmono Courier New;}
-{\f10\fnil\fcharset2{\*\panose 05000000000000000000}Wingdings;}
-{\f13\fnil\fcharset134 \'cb\'ce\'cc\'e5{\*\falt SimSun};}
 }
 {\colortbl\red0\green0\blue0;\red0\green0\blue255;\red128\green128\blue128;\red255\green0\blue0;\red0\green255\blue0;}
 {\stylesheet{\s0 \f2\fs24 Normal;}
