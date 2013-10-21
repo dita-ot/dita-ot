@@ -19,8 +19,16 @@ RTF ignores line breaks but usually not white space!
 {\f4\fswiss Arial;}
 {\f5\fmono Courier New;}
 }
-{\colortbl\red0\green0\blue0;\red0\green0\blue255;\red128\green128\blue128;\red255\green0\blue0;\red0\green255\blue0;}
-{\stylesheet{\s0 \f2\fs24 Normal;}
+{\colortbl
+;
+\red0\green0\blue0;
+\red0\green0\blue255;
+\red128\green128\blue128;
+\red255\green0\blue0;
+\red0\green255\blue0;
+}
+{\stylesheet
+{\s0 \f2\fs24 Normal;}
 {\s1 \f4\fs48\b heading 1;}
 {\s2 \f4\fs36\b heading 2;}
 {\s3 \f4\fs24\b heading 3;}
@@ -30,6 +38,7 @@ RTF ignores line breaks but usually not white space!
 {\s7 \f4\fs24\b table header;}
 {\s8 \f2\fs24 link;}
 {\s9 \f4\fs24\b table title;}
+{\*\cs1 Default Paragraph Font;}
 }
 </xsl:variable>
 
