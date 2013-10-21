@@ -126,14 +126,18 @@
 
   <!-- standard RTF library mapped to formatting objects -->
 
-  <xsl:template name="root">{\rtf1\ansi\ansicpg<xsl:value-of select="$code-page"/>\deff0\deftab720\deflang1033\deflangfe2052{\fonttbl{\f0\fswiss MS Sans Serif;}
+  <xsl:template name="root">
+{\rtf1\ansi\ansicpg<xsl:value-of select="$code-page"/>\deff0\deftab720\deflang1033\deflangfe2052
+{\fonttbl
+{\f0\fswiss MS Sans Serif;}
 {\f1\froman\fcharset2 Symbol;}
 {\f2\froman Times New Roman;}
 {\f3\froman Times New Roman;}
 {\f4\fswiss Arial;}
 {\f5\fmono Courier New;}
 {\f10\fnil\fcharset2{\*\panose 05000000000000000000}Wingdings;}
-{\f13\fnil\fcharset134 \'cb\'ce\'cc\'e5{\*\falt SimSun};}}
+{\f13\fnil\fcharset134 \'cb\'ce\'cc\'e5{\*\falt SimSun};}
+}
 {\colortbl\red0\green0\blue0;\red0\green0\blue255;\red128\green128\blue128;\red255\green0\blue0;\red0\green255\blue0;}
 {\stylesheet{\s0 \f2\fs24 Normal;}
 {\s1 \f4\fs48\b heading 1;}
@@ -144,7 +148,9 @@
 {\s6 \f4\fs16\b heading 6;}
 {\s7 \f4\fs24\b table header;}
 {\s8 \f2\fs24 link;}
-{\s9 \f4\fs24\b table title;}}<xsl:call-template name="gen-list-table"/>
+{\s9 \f4\fs24\b table title;}
+}
+<xsl:call-template name="gen-list-table"/>
     <xsl:apply-templates/>}</xsl:template>
 
   <xsl:template name="block-title">
