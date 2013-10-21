@@ -10,7 +10,7 @@ The RTF prolog must be at the very beginning of the document,
 otherwise the RTF format won't be recognised.
 RTF ignores line breaks but usually not white space!
  -->	
-<xsl:variable name="rtf:prolog">{\rtf1\ansi\ansicpg<xsl:value-of select="$code-page"/>\deff0\deftab720\deflang1033\deflangfe2052
+<xsl:variable name="rtf:prolog">{\rtf1\ansi\ansicpg<xsl:value-of select="$code-page"/>\deff0\deflang1033
 {\fonttbl
 {\f0\fswiss MS Sans Serif;}
 {\f1\froman\fcharset2 Symbol;}
