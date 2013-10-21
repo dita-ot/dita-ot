@@ -191,8 +191,9 @@
      space-before.optimum="16pt"
      space-after.optimum="12pt" -->
   <xsl:template name="block-title-h1">
-\par \pard\plain\s1\f4\fs48\b <xsl:apply-templates/>
-\par \plain\f2\fs24
+    \par \pard\plain\s1\f4\fs48\b 
+    <xsl:apply-templates/>
+    \par \plain\f2\fs24
   </xsl:template>
 
   <!-- font-size="16pt"
@@ -200,28 +201,33 @@
      space-before.optimum="14pt"
      space-after.optimum="14pt" \pard\li720\fi-360-->
   <xsl:template name="block-title-h2">
-\par \plain\s2\f4\fs36\b <xsl:apply-templates/> 
-\par \plain\f2\fs24 
+    \par \plain\s2\f4\fs36\b 
+     <xsl:apply-templates/> 
+    \par \plain\f2\fs24 
   </xsl:template>
 
   <xsl:template name="block-title-h3">
-\par \plain\s3\f4\fs24\b <xsl:apply-templates/> 
-\par \plain\f2\fs24 
+    \par \plain\s3\f4\fs24\b 
+     <xsl:apply-templates/> 
+     \par \plain\f2\fs24 
   </xsl:template>
 
   <xsl:template name="block-title-h4">
-\par \plain\s4\f4\fs20\b <xsl:apply-templates/> 
-\par \plain\f2\fs24 
+    \par \plain\s4\f4\fs20\b 
+    <xsl:apply-templates/> 
+    \par \plain\f2\fs24 
   </xsl:template>
 
   <xsl:template name="block-title-h5">
-\par \plain\s5\f4\fs18\b <xsl:apply-templates/> 
-\par \plain\f2\fs24 
+    \par \plain\s5\f4\fs18\b 
+    <xsl:apply-templates/> 
+    \par \plain\f2\fs24 
   </xsl:template>
 
   <xsl:template name="block-title-h6">
-\par \plain\s6\f4\fs16\b <xsl:apply-templates/> 
-\par \plain\f2\fs24 
+    \par \plain\s6\f4\fs16\b 
+    <xsl:apply-templates/> 
+    \par \plain\f2\fs24 
   </xsl:template>
 
 
@@ -319,14 +325,21 @@ select="$href-value"/>"}}{\fldrslt {\s8 \f2\fs24\ul\cf1 <xsl:choose>
       </xsl:when>
       <xsl:when test="@reftitle and not(@reftitle='')">
         <!-- Insert citation text -->
-\par\pard\plain\qr\f2\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or
-contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+        \par\pard\plain\qr\f2\fs24
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or
+contains(@class,' topic/simpletable ')]">
+        \intbl 
+        </xsl:if>
         <xsl:call-template
   name="get-ascii">
           <xsl:with-param name="txt">
             <xsl:value-of select="@reftitle"/>
           </xsl:with-param>
-        </xsl:call-template>\par\pard\ql\f2\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+        </xsl:call-template>
+          \par\pard\ql\f2\fs24
+          <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
+          \intbl 
+          </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <!--nop - do nothing-->
@@ -339,7 +352,11 @@ contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
   <xsl:template name="inline-em">{\b <xsl:apply-templates/>}</xsl:template>
 
   <!-- link-like -->
-  <xsl:template name="inline-link">\plain\f2\fs24\cf1\ul <xsl:apply-templates/>\plain\f2\fs24 </xsl:template>
+  <xsl:template name="inline-link">
+    \plain\f2\fs24\cf1\ul 
+    <xsl:apply-templates/>
+    \plain\f2\fs24 
+    </xsl:template>
 
   <xsl:template name="gen-id">
     <xsl:choose>
@@ -355,7 +372,8 @@ contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
     <xsl:param name="name">
       <xsl:value-of select="."/>
     </xsl:param>
-{\bkmkstart <xsl:value-of select="$name"/>}{\bkmkend <xsl:value-of select="$name"/>}
+    {\bkmkstart <xsl:value-of select="$name"/>}
+    {\bkmkend <xsl:value-of select="$name"/>}
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/xref ')]|*[contains(@class,' topic/link ')]">
