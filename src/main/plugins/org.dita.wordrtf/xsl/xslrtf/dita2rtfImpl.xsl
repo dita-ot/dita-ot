@@ -160,15 +160,13 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template name="block-title-h1">\par \pard\s1\f1\fs48\b <xsl:apply-templates/>
+  <xsl:template name="block-title-h1">{\pard \s1 H1: <xsl:apply-templates/> \par}</xsl:template>
+
+  <xsl:template name="block-title-h2">\par \s2\f1\fs36\b H2: <xsl:apply-templates/>
 \par \f0\fs24
   </xsl:template>
 
-  <xsl:template name="block-title-h2">\par \s2\f1\fs36\b <xsl:apply-templates/>
-\par \f0\fs24
-  </xsl:template>
-
-  <xsl:template name="block-title-h3">\par \s3\f1\fs24\b <xsl:apply-templates/>
+  <xsl:template name="block-title-h3">\par \s3\f1\fs24\b H3: <xsl:apply-templates/>
 \par \f0\fs24
   </xsl:template>
 
@@ -303,11 +301,7 @@ contains(@class,' topic/simpletable ')]">
   <xsl:template name="inline-em">{\b <xsl:apply-templates/>}</xsl:template>
 
   <!-- link-like -->
-  <xsl:template name="inline-link">
-    \f0\fs24\cf2\ul
-    <xsl:apply-templates/>
-    \f0\fs24
-    </xsl:template>
+  <xsl:template name="inline-link">\f0\fs24\cf2\ul<xsl:apply-templates/>\f0\fs24</xsl:template>
 
   <xsl:template name="gen-id">
     <xsl:choose>
@@ -323,9 +317,7 @@ contains(@class,' topic/simpletable ')]">
     <xsl:param name="name">
       <xsl:value-of select="."/>
     </xsl:param>
-    {\bkmkstart <xsl:value-of select="$name"/>}
-    {\bkmkend <xsl:value-of select="$name"/>}
-  </xsl:template>
+    {\pard{\bkmkstart <xsl:value-of select="$name"/>}Bookmark{\bkmkend <xsl:value-of select="$name"/>}\par}</xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/xref ')]|*[contains(@class,' topic/link ')]">
     <xsl:variable name="samefile">
@@ -379,14 +371,11 @@ name="gen-linktxt"/>\s8 \f0\fs24\ul\cf2}}}\s8
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/cite ')]">
-    <xsl:text>{\i </xsl:text>
-    <xsl:apply-templates/>
-    <xsl:text>}</xsl:text>
+    <xsl:text>{\i </xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/desc ')]">
-    <xsl:if test="../@role='child'">\par \s0\f1\fs24 <xsl:apply-templates/>
-\s0\f0\fs24 </xsl:if>
+    <xsl:if test="../@role='child'">{\pard <xsl:apply-templates/>\par}</xsl:if>
   </xsl:template>
 
   <xsl:template name="gen-linktxt">

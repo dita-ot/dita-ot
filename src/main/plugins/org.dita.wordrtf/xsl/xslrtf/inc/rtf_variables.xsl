@@ -10,7 +10,7 @@ The RTF prolog must be at the very beginning of the document,
 otherwise the RTF format won't be recognised.
 RTF ignores line breaks but usually not white space!
  -->	
-<xsl:variable name="rtf:prolog">{\rtf1 \ansi \deff0 \deflang1033 
+<xsl:variable name="rtf:prolog">{\rtf1 \ansi \deff0 \deflang1033 \plain
 {\fonttbl
 {\f0\froman Times New Roman;}
 {\f1\fswiss Arial;}
@@ -25,6 +25,7 @@ RTF ignores line breaks but usually not white space!
 \red0\green255\blue0;
 }
 {\stylesheet
+{\*\cs0 Default Paragraph Font;}
 {\s0 \f0\fs24 Normal;}
 {\s1 \f1\fs48\b heading 1;}
 {\s2 \f1\fs36\b heading 2;}
@@ -35,7 +36,6 @@ RTF ignores line breaks but usually not white space!
 {\s7 \f1\fs24\b table header;}
 {\s8 \f0\fs24 link;}
 {\s9 \f1\fs24\b table title;}
-{\*\cs1 Default Paragraph Font;}
 }
 </xsl:variable>
 
