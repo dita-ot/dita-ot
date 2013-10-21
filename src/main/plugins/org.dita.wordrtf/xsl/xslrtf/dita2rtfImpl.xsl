@@ -252,9 +252,9 @@
       <xsl:when test="@href and not(@href='')">
         <!-- Insert citation as link, use @href as-is -->
 \par\pard\plain\qr\f2\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or
-contains(@class,' topic/simpletable ')]">\intbl </xsl:if>{\field{\*\fldinst {\s8 \f2\fs24\ul\cf1
+contains(@class,' topic/simpletable ')]">\intbl </xsl:if>{\field{\*\fldinst {\s8 \f2\fs24\ul\cf2
 HYPERLINK <xsl:if test="$samefile='true'">\\l</xsl:if> "<xsl:value-of
-select="$href-value"/>"}}{\fldrslt {\s8 \f2\fs24\ul\cf1 <xsl:choose>
+select="$href-value"/>"}}{\fldrslt {\s8 \f2\fs24\ul\cf2 <xsl:choose>
           <xsl:when
   test="@reftitle">
             <xsl:call-template name="get-ascii">
@@ -272,7 +272,7 @@ select="$href-value"/>"}}{\fldrslt {\s8 \f2\fs24\ul\cf1 <xsl:choose>
               </xsl:with-param>
             </xsl:call-template>
           </xsl:otherwise>
-        </xsl:choose>\s8 \f2\fs24\ul\cf1}}}\par\pard\ql\f2\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+        </xsl:choose>\s8 \f2\fs24\ul\cf2}}}\par\pard\ql\f2\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
       </xsl:when>
       <xsl:when test="@reftitle and not(@reftitle='')">
         <!-- Insert citation text -->
@@ -304,7 +304,7 @@ contains(@class,' topic/simpletable ')]">
 
   <!-- link-like -->
   <xsl:template name="inline-link">
-    \plain\f2\fs24\cf1\ul
+    \plain\f2\fs24\cf2\ul
     <xsl:apply-templates/>
     \plain\f2\fs24
     </xsl:template>
@@ -362,9 +362,9 @@ contains(@class,' topic/simpletable ')]">
     <xsl:choose>
       <xsl:when test="@href and not(@href='')">
         <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/link ')]) and contains(@class,' topic/link ')">\par </xsl:if>
-{\field{\*\fldinst {\s8 \f2\fs24\ul\cf1 HYPERLINK <xsl:if test="$samefile='true'">\\l</xsl:if>
-"<xsl:value-of select="$href-value"/>"}}{\fldrslt {\s8 \f2\fs24\ul\cf1 <xsl:call-template
-name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
+{\field{\*\fldinst {\s8 \f2\fs24\ul\cf2 HYPERLINK <xsl:if test="$samefile='true'">\\l</xsl:if>
+"<xsl:value-of select="$href-value"/>"}}{\fldrslt {\s8 \f2\fs24\ul\cf2 <xsl:call-template
+name="gen-linktxt"/>\s8 \f2\fs24\ul\cf2}}}\s8
         <xsl:if test="contains(@class,' topic/link ')">
           <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>\par </xsl:if>
       </xsl:when>
@@ -729,13 +729,13 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/boolean ')]">
-    <xsl:text>{\plain\s0\f4\fs24\cf4 boolean: </xsl:text>
+    <xsl:text>{\plain\s0\f4\fs24\cf5 boolean: </xsl:text>
     <xsl:value-of select="@state"/>
     <xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/state ')]">
-    <xsl:text>{\plain\s0\f4\fs24\cf3 </xsl:text>
+    <xsl:text>{\plain\s0\f4\fs24\cf4 </xsl:text>
     <xsl:value-of select="name()"/>
     <xsl:text>: </xsl:text>
     <xsl:value-of select="@name"/>
