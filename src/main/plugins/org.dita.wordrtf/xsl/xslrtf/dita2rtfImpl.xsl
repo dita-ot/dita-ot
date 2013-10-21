@@ -712,7 +712,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf2}}}\s8
 
   <xsl:template match="*[contains(@class,' topic/draft-comment ')]">
     <xsl:if test="$DRAFT='yes'">
-      <xsl:text>\par \plain\s0\f4\fs24\cb3\b </xsl:text>
+      <xsl:text>\par \plain\s0\f4\fs24\cb4\b </xsl:text>
       <xsl:call-template name="getStringRTF">
         <xsl:with-param name="stringName" select="'Draft comment'"/>
       </xsl:call-template>
@@ -720,7 +720,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf2}}}\s8
         <xsl:with-param name="stringName" select="'ColonSymbol'"/>
       </xsl:call-template>
       <xsl:text/>
-      <xsl:text>\pard \plain\s0\f4\fs24\cb3</xsl:text>
+      <xsl:text>\pard \plain\s0\f4\fs24\cb4</xsl:text>
       <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl</xsl:if>
       <xsl:text/>
       <xsl:apply-templates/>
@@ -764,7 +764,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf2}}}\s8
   <xsl:template
     match="*[contains(@class,' topic/required-cleanup ')]">
     <xsl:if test="$DRAFT='yes'">
-      <xsl:text>\par \plain\s0\f4\fs24\cb3\b</xsl:text>
+      <xsl:text>\par \plain\s0\f4\fs24\cb4\b</xsl:text>
       <xsl:call-template name="getStringRTF">
         <xsl:with-param name="stringName" select="'Required cleanup'" />
       </xsl:call-template>
@@ -772,7 +772,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf2}}}\s8
         <xsl:with-param name="stringName" select="'ColonSymbol'" />
       </xsl:call-template>
       <xsl:text/>
-      <xsl:text>\pard \plain\s0\f4\fs24\cb3</xsl:text>
+      <xsl:text>\pard \plain\s0\f4\fs24\cb4</xsl:text>
       <xsl:if
         test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
         \intbl
