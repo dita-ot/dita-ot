@@ -127,7 +127,6 @@
     <job-helper file="subtargets.list" property="subtargetslist"/>
     <job-helper file="conrefpush.list" property="conrefpushlist"/>
     <job-helper file="keyref.list" property="keyreflist"/>
-    <job-helper file="coderef.list" property="codereflist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <property name="outditafilesfile" value="outditafiles.list"/>
     <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
@@ -146,7 +145,6 @@
     <property name="subtargetsfile" value="subtargets.list"/>
     <property name="conrefpushfile" value="conrefpush.list"/>
     <property name="keyreffile" value="keyref.list"/>
-    <property name="codereffile" value="coderef.list"/>
     <property name="resourceonlyfile" value="resourceonly.list"/>
   </target>
 
@@ -208,9 +206,6 @@
     </condition>
     <condition property="noKeyref">
       <length file="${dita.temp.dir}/${keyreffile}" length="0"/>
-    </condition>
-    <condition property="noCoderef">
-      <length file="${dita.temp.dir}/${codereffile}" length="0"/>
     </condition>
   </target>
   
@@ -289,7 +284,7 @@
   
   <!-- coderef -->
   <target name="coderef"
-    dita:depends="{depend.preprocess.coderef.pre},coderef-check"
+    dita:depends="{depend.preprocess.coderef.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.coderef.skip"
     description="Resolve coderef in input files">
@@ -298,13 +293,7 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.CoderefModule"/>
     </pipeline>
-      
-  </target>
-  
-  <target name="coderef-check">
-    <condition property="preprocess.coderef.skip">
-      <isset property="noCoderef"/>
-    </condition>
+    
   </target>
   
   <!-- mapref

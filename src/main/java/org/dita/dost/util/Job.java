@@ -168,7 +168,7 @@ public final class Job {
     }
     
     private final Map<String, Object> prop;
-    private final File tempDir;
+    public final File tempDir;
     private final ConcurrentMap<File, FileInfo> files = new ConcurrentHashMap<File, FileInfo>();
     private long lastModified;
     
@@ -180,6 +180,9 @@ public final class Job {
      * @throws IllegalStateException if configuration files are missing
      */
     public Job(final File tempDir) throws IOException {
+        if (!tempDir.isAbsolute()) {
+            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
+        }
         this.tempDir = tempDir;
         prop = new HashMap<String, Object>();
         read();
