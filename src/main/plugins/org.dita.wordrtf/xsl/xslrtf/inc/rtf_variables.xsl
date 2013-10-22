@@ -27,12 +27,12 @@ RTF ignores line breaks but usually not white space!
 {\stylesheet
 {\*\cs0 Default Paragraph Font;}
 {\s0 \f0\fs24 Normal;}
-{\s1 \f1\fs48\b Heading 1;}
-{\s2 \f1\fs36\b Heading 2;}
-{\s3 \f1\fs24\b Heading 3;}
-{\s4 \f1\fs20\b Heading 4;}
-{\s5 \f1\fs18\b Heading 5;}
-{\s6 \f1\fs16\b Heading 6;}
+{\s1 \f1\fs48\b\sa240 Heading 1;}
+{\s2 \f1\fs36\b\sa180 Heading 2;}
+{\s3 \f1\fs24\b\sa120 Heading 3;}
+{\s4 \f1\fs20\b\sa100 Heading 4;}
+{\s5 \f1\fs18\b\sa90 Heading 5;}
+{\s6 \f1\fs16\b\sa80 Heading 6;}
 {\s7 \f1\fs24\b Table Header;}
 {\s8 \f0\fs24 Link;}
 {\s9 \f1\fs24\b Table Title;}

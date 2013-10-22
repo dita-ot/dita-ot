@@ -123,7 +123,7 @@ select="substring-after($word,$cr)"/>
 </xsl:template>
 
 <xsl:template name="root">
-<!-- Include RTF prolog from external file -->
+<!-- Include RTF prolog from external file inc\rtf_variables.xsl -->
 <xsl:value-of select="$rtf:prolog"/>
 <xsl:call-template name="gen-list-table"/>
 <xsl:apply-templates/>}</xsl:template>
@@ -152,20 +152,20 @@ select="substring-after($word,$cr)"/>
 </xsl:choose>
 </xsl:template>
 
-<xsl:template name="block-title-h1">{\pard \s1 \f1\fs48\b <xsl:apply-templates/> \par}</xsl:template>
+<xsl:template name="block-title-h1">{\pard \s1 \f1\fs48\b\sa240 <xsl:apply-templates/> \par}</xsl:template>
 
-<xsl:template name="block-title-h2">{\pard \s2 \f1\fs36\b <xsl:apply-templates/>\par}  </xsl:template>
+<xsl:template name="block-title-h2">{\pard \s2 \f1\fs36\b\sa180 <xsl:apply-templates/>\par}  </xsl:template>
 
-<xsl:template name="block-title-h3">{\pard \s3 \f1\fs24\b <xsl:apply-templates/>\par}
+<xsl:template name="block-title-h3">{\pard \s3 \f1\fs24\b\sa120 <xsl:apply-templates/>\par}
 </xsl:template>
 
-<xsl:template name="block-title-h4">{\pard \s4 \f1\fs20\b <xsl:apply-templates/>\par}
+<xsl:template name="block-title-h4">{\pard \s4 \f1\fs20\b\sa100 <xsl:apply-templates/>\par}
 </xsl:template>
 
-<xsl:template name="block-title-h5">{\pard \s5 \f1\fs18\b <xsl:apply-templates/>\par}
+<xsl:template name="block-title-h5">{\pard \s5 \f1\fs18\b\sa90 <xsl:apply-templates/>\par}
 </xsl:template>
 
-<xsl:template name="block-title-h6">{\pard \s6 \f1\fs16\b <xsl:apply-templates/>\par} </xsl:template>
+<xsl:template name="block-title-h6">{\pard \s6 \f1\fs16\b\sa80 <xsl:apply-templates/>\par} </xsl:template>
 
 <xsl:template name="block-p">
 <!-- Tagsmiths: Suppress \par \pard when the context is first p in li -->
@@ -255,7 +255,10 @@ name="get-ascii">
 </xsl:with-param>
 </xsl:call-template>
 </xsl:otherwise>
-</xsl:choose>\s8 \f0\fs24\ul\cf2}}}\par\pard\ql\f0\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+</xsl:choose>\s8 \f0\fs24\ul\cf2}
+}
+}
+\par\pard\ql\f0\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
 </xsl:when>
 <xsl:when test="@reftitle and not(@reftitle='')">
 <!-- Insert citation text -->
@@ -286,7 +289,7 @@ name="get-ascii">
 <xsl:template name="inline-em">{\b <xsl:apply-templates/>}</xsl:template>
 
 <!-- link-like -->
-<xsl:template name="inline-link">{\cf2\ul<xsl:apply-templates/>}</xsl:template>
+<xsl:template name="inline-link">{\cf2\ul <xsl:apply-templates/>}</xsl:template>
 
 <xsl:template name="gen-id">
 <xsl:choose>
