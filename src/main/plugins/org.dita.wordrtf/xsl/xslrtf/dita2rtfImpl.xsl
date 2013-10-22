@@ -125,6 +125,7 @@ select="substring-after($word,$cr)"/>
 <xsl:template name="root">
 <!-- Include RTF prolog from external file inc\rtf_variables.xsl -->
 <xsl:value-of select="$rtf:prolog"/>
+
 <xsl:call-template name="gen-list-table"/>
 <xsl:apply-templates/>}</xsl:template>
 
@@ -153,18 +154,13 @@ select="substring-after($word,$cr)"/>
 </xsl:template>
 
 <xsl:template name="block-title-h1">{\pard \s1 \f1\fs48\b\sa240 <xsl:apply-templates/> \par}</xsl:template>
-
 <xsl:template name="block-title-h2">{\pard \s2 \f1\fs36\b\sa180 <xsl:apply-templates/>\par}  </xsl:template>
-
 <xsl:template name="block-title-h3">{\pard \s3 \f1\fs24\b\sa120 <xsl:apply-templates/>\par}
 </xsl:template>
-
 <xsl:template name="block-title-h4">{\pard \s4 \f1\fs20\b\sa100 <xsl:apply-templates/>\par}
 </xsl:template>
-
 <xsl:template name="block-title-h5">{\pard \s5 \f1\fs18\b\sa90 <xsl:apply-templates/>\par}
 </xsl:template>
-
 <xsl:template name="block-title-h6">{\pard \s6 \f1\fs16\b\sa80 <xsl:apply-templates/>\par} </xsl:template>
 
 <xsl:template name="block-p">

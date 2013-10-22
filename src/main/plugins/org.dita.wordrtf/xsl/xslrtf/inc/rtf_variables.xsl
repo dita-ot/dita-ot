@@ -10,7 +10,7 @@ The RTF prolog must be at the very beginning of the document,
 otherwise the RTF format won't be recognised.
 RTF ignores line breaks but usually not white space!
  -->	
-<xsl:variable name="rtf:prolog">{\rtf1 \ansi \deff0 \deflang1033 \plain
+<xsl:variable name="rtf:prolog">{\rtf1 \ansi \deff0 
 {\fonttbl 
 {\f0\froman Times New Roman;} 
 {\f1\fswiss Arial;} 
@@ -37,6 +37,7 @@ RTF ignores line breaks but usually not white space!
 {\s8 \f0\fs24 Link;}
 {\s9 \f1\fs24\b Table Title;}
 }
+\deflang1033 \plain \fs24 \ql \fi0 \li0
 </xsl:variable>
 
 <xsl:variable name="rtf:xml_declaration"><xsl:text disable-output-escaping="yes">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</xsl:text>
