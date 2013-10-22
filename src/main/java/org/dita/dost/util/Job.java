@@ -168,9 +168,10 @@ public final class Job {
     }
     
     private final Map<String, Object> prop;
-    private final File tempDir;
+    public final File tempDir;
     private final ConcurrentMap<File, FileInfo> files = new ConcurrentHashMap<File, FileInfo>();
-
+    private long lastModified;
+    
     /**
      * Create new job configuration instance. Initialise by reading temporary configuration files.
      *  
@@ -179,11 +180,24 @@ public final class Job {
      * @throws IllegalStateException if configuration files are missing
      */
     public Job(final File tempDir) throws IOException {
+        if (!tempDir.isAbsolute()) {
+            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
+        }
         this.tempDir = tempDir;
         prop = new HashMap<String, Object>();
         read();
     }
 
+    /**
+     * Test if serialized configuration file has been updated.
+     * @param file job configuration directory
+     * @return {@code true} if configuration file has been update after this object has been created or serialized
+     */
+    public boolean isStale(final File tempDir) {
+        final File jobFile = new File(tempDir, JOB_FILE);
+        return jobFile.lastModified() > lastModified;
+    }
+    
     /**
      * Read temporary configuration files. If configuration files are not found,
      * assume an empty job object is being created.
@@ -194,6 +208,7 @@ public final class Job {
      */
     private void read() throws IOException {
         final File jobFile = new File(tempDir, JOB_FILE);
+        lastModified = jobFile.lastModified();
         if (jobFile.exists()) {
         	InputStream in = null;
             try {
@@ -308,10 +323,11 @@ public final class Job {
      * @throws IOException if writing configuration files failed
      */
     public void write() throws IOException {
+        final File f = new File(tempDir, JOB_FILE);
     	OutputStream outStream = null;
         XMLStreamWriter out = null;
         try {
-        	outStream = new FileOutputStream(new File(tempDir, JOB_FILE));
+        	outStream = new FileOutputStream(f);
             out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream, "UTF-8");
             out.writeStartDocument();
             out.writeStartElement(ELEMENT_JOB);
@@ -392,7 +408,8 @@ public final class Job {
                     throw new IOException("Failed to close file: " + e.getMessage());
                 }
             }
-        }        
+        }
+        lastModified = f.lastModified();
     }
     
     /**

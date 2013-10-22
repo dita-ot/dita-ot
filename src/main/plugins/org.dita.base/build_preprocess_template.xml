@@ -125,9 +125,6 @@
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
     <job-helper file="subtargets.list" property="subtargetslist"/>
-    <job-helper file="conrefpush.list" property="conrefpushlist"/>
-    <job-helper file="keyref.list" property="keyreflist"/>
-    <job-helper file="coderef.list" property="codereflist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <property name="outditafilesfile" value="outditafiles.list"/>
     <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
@@ -144,9 +141,6 @@
     <property name="conreftargetsfile" value="conreftargets.list"/>
     <property name="copytosourcefile" value="copytosource.list"/>
     <property name="subtargetsfile" value="subtargets.list"/>
-    <property name="conrefpushfile" value="conrefpush.list"/>
-    <property name="keyreffile" value="keyref.list"/>
-    <property name="codereffile" value="coderef.list"/>
     <property name="resourceonlyfile" value="resourceonly.list"/>
   </target>
 
@@ -181,8 +175,6 @@
     <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
-    <job-helper file="conrefpush.list" property="conrefpushlist"/>
-    <job-helper file="keyref.list" property="keyreflist"/>
     <job-helper file="canditopics.list" property="canditopicslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-property dir="${dita.temp.dir}"/>
@@ -203,21 +195,12 @@
     <condition property="noSublist">
       <length file="${dita.temp.dir}/${subtargetsfile}" length="0"/>
     </condition>
-    <condition property="noConrefPush">
-      <length file="${dita.temp.dir}/${conrefpushfile}" length="0"/>
-    </condition>
-    <condition property="noKeyref">
-      <length file="${dita.temp.dir}/${keyreffile}" length="0"/>
-    </condition>
-    <condition property="noCoderef">
-      <length file="${dita.temp.dir}/${codereffile}" length="0"/>
-    </condition>
   </target>
   
   <!-- conref push
       Push information to the specified target -->
   <target name="conrefpush"
-    dita:depends="{depend.preprocess.conrefpush.pre},conrefpush-check"
+    dita:depends="{depend.preprocess.conrefpush.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.conrefpush.skip"
     description="Resolve conref push">
@@ -225,12 +208,6 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.ConrefPushModule"/>
     </pipeline>
-  </target>
-  
-  <target name="conrefpush-check">
-    <condition property="preprocess.conrefpush.skip">
-      <isset property="noConrefPush"/>
-    </condition>
   </target>
   
   <!-- move-meta-entries
@@ -289,7 +266,7 @@
   
   <!-- coderef -->
   <target name="coderef"
-    dita:depends="{depend.preprocess.coderef.pre},coderef-check"
+    dita:depends="{depend.preprocess.coderef.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.coderef.skip"
     description="Resolve coderef in input files">
@@ -298,13 +275,7 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.CoderefModule"/>
     </pipeline>
-      
-  </target>
-  
-  <target name="coderef-check">
-    <condition property="preprocess.coderef.skip">
-      <isset property="noCoderef"/>
-    </condition>
+    
   </target>
   
   <!-- mapref
@@ -346,7 +317,7 @@
   <!-- keyref
        Resolve keyref using key definition in ditamap-->
   <target name="keyref"
-    dita:depends="{depend.preprocess.keyref.pre},keyref-check"
+    dita:depends="{depend.preprocess.keyref.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
@@ -357,12 +328,6 @@
     </pipeline>
   </target>
   
-  <target name="keyref-check">
-    <condition property="preprocess.keyref.skip">
-      <isset property="noKeyref"/>
-    </condition>
-  </target>
-    
   <!-- mappull
       Pull metadata (such as navtitle) into the map from the referenced topics. -->
   <target name="mappull"
