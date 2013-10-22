@@ -151,8 +151,8 @@ select="substring-after($word,$cr)"/>
 </xsl:choose>
 </xsl:template>
 
-<xsl:template name="block-title-h1">{\pard \s1 \f1\fs48\b\sa240 <xsl:apply-templates/> \par}</xsl:template>
-<xsl:template name="block-title-h2">{\pard \s2 \f1\fs36\b\sa180 <xsl:apply-templates/>\par}  </xsl:template>
+<xsl:template name="block-title-h1">{\pard \s1 \f1\fs48\b\sb120\sa240 <xsl:apply-templates/> \par}</xsl:template>
+<xsl:template name="block-title-h2">{\pard \s2 \f1\fs36\b\sb90\sa180 <xsl:apply-templates/>\par}  </xsl:template>
 <xsl:template name="block-title-h3">{\pard \s3 \f1\fs24\b\sa120 <xsl:apply-templates/>\par}
 </xsl:template>
 <xsl:template name="block-title-h4">{\pard \s4 \f1\fs20\b\sa100 <xsl:apply-templates/>\par}

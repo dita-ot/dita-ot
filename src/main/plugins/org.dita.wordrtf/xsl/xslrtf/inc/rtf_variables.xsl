@@ -27,8 +27,8 @@ RTF ignores line breaks but usually not white space!
 {\stylesheet
 {\*\cs0 Default Paragraph Font;}
 {\s0 \f0\fs24 Normal;}
-{\s1 \f1\fs48\b\sa240 Heading 1;}
-{\s2 \f1\fs36\b\sa180 Heading 2;}
+{\s1 \f1\fs48\b\sb120\sa240 Heading 1;}
+{\s2 \f1\fs36\b\sb90\sa180 Heading 2;}
 {\s3 \f1\fs24\b\sa120 Heading 3;}
 {\s4 \f1\fs20\b\sa100 Heading 4;}
 {\s5 \f1\fs18\b\sa90 Heading 5;}
@@ -38,7 +38,9 @@ RTF ignores line breaks but usually not white space!
 {\s9 \f1\fs24\b Table Title;}
 }
 \deflang1033 \plain \fs24 \ql \fi0 \li0 \widowctrl \hyphauto \ftnbj
-{\header \pard \qr \plain \f0 \fs16 \chpgn \par}
+{\header \pard\qc\plain\f1\fs20 
+[ Doc Titel Here /  p. \chpgn ] 
+\par}
 </xsl:variable>
 
 <xsl:variable name="rtf:xml_declaration"><xsl:text disable-output-escaping="yes">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</xsl:text>
