@@ -1,4 +1,0 @@
-This is just a test file to see whether symlinks are working correctly 
-and I'm pushing to the correct repository on GitHub.
-
-Frank Ralf
