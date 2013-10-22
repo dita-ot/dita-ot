@@ -49,9 +49,7 @@ xmlns:rtf="rtf_namespace">
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
-<xsl:call-template name="gen-id"/>
-{\pard <xsl:apply-templates/>\par}
-</xsl:template>
+<xsl:call-template name="gen-id"/>{\pard <xsl:apply-templates/>\par}</xsl:template>
 
 <xsl:template match="synsect">
 {\pard Syntax <xsl:apply-templates/>\par}
@@ -188,7 +186,6 @@ the same values used in by p in other contexts. -->
 </xsl:if>
 </xsl:template>
 
-
 <xsl:template name="block-lq">
 \par \pard\li720\fi-360\f0\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
 <xsl:apply-templates/>
@@ -301,7 +298,13 @@ name="get-ascii">
 <xsl:param name="name">
 <xsl:value-of select="."/>
 </xsl:param>
-{\pard{\bkmkstart <xsl:value-of select="$name"/>} Bookmark {\bkmkend <xsl:value-of select="$name"/>}\par}</xsl:template>
+<!-- Don't show bookmarks in output
+{\pard
+{\bkmkstart <xsl:value-of select="$name"/>}
+{\bkmkend <xsl:value-of select="$name"/>}
+\par }
+ -->
+</xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/xref ')]|*[contains(@class,' topic/link ')]">
 <xsl:variable name="samefile">
@@ -412,7 +415,7 @@ name="gen-linktxt"/>\s8 \f0\fs24\ul\cf2}}}\s8
 <!-- Added for DITA 1.1 "Shortdesc proposal" -->
 <xsl:template match="*[contains(@class,' topic/abstract ')]">{\pard \sa240 <xsl:apply-templates/>\par}</xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/shortdesc ')]">{\pard \sa240<xsl:apply-templates/>\par}</xsl:template>
+<xsl:template match="*[contains(@class,' topic/shortdesc ')]">{\pard \sa240 <xsl:apply-templates/>\par}</xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note">
 <xsl:choose>
