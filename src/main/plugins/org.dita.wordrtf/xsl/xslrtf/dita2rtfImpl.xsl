@@ -286,7 +286,7 @@ contains(@class,' topic/simpletable ')]">
   <xsl:template name="inline-em">{\b <xsl:apply-templates/>}</xsl:template>
 
   <!-- link-like -->
-  <xsl:template name="inline-link">\f0\fs24\cf2\ul<xsl:apply-templates/>\f0\fs24</xsl:template>
+  <xsl:template name="inline-link">{\cf2\ul<xsl:apply-templates/>}</xsl:template>
 
   <xsl:template name="gen-id">
     <xsl:choose>
@@ -302,7 +302,7 @@ contains(@class,' topic/simpletable ')]">
     <xsl:param name="name">
       <xsl:value-of select="."/>
     </xsl:param>
-    {\pard{\bkmkstart <xsl:value-of select="$name"/>}Bookmark{\bkmkend <xsl:value-of select="$name"/>}\par}</xsl:template>
+    {\pard{\bkmkstart <xsl:value-of select="$name"/>} Bookmark {\bkmkend <xsl:value-of select="$name"/>}\par}</xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/xref ')]|*[contains(@class,' topic/link ')]">
     <xsl:variable name="samefile">
@@ -411,9 +411,9 @@ name="gen-linktxt"/>\s8 \f0\fs24\ul\cf2}}}\s8
   <xsl:template match="*[contains(@class,' topic/titlealts ')]"/>
 
   <!-- Added for DITA 1.1 "Shortdesc proposal" -->
-  <xsl:template match="*[contains(@class,' topic/abstract ')]"><xsl:apply-templates/>\par</xsl:template>
+  <xsl:template match="*[contains(@class,' topic/abstract ')]">{\pard <xsl:apply-templates/>\par}</xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/shortdesc ')]"><xsl:apply-templates/>\par</xsl:template>
+  <xsl:template match="*[contains(@class,' topic/shortdesc ')]">{\pard <xsl:apply-templates/>\par}</xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note">
     <xsl:choose>
