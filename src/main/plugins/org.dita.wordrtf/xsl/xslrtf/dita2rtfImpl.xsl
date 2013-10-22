@@ -181,11 +181,11 @@
       <xsl:when test="parent::*[contains(@class,' topic/li ')] and position() = 1">
         <!-- Tagsmiths: this next line resets the style, font, and size to
         the same values used in by p in other contexts. -->
-        <xsl:text>\s0\f0\fs24 </xsl:text>
+        <!-- <xsl:text>\s0\f0\fs24 </xsl:text> -->
       </xsl:when>
       <xsl:otherwise>
         <!-- Tagsmiths: this next line used to appear unconditionally -->
-        <xsl:text>\par \pard \s0\f0\fs24</xsl:text>
+        <!-- <xsl:text>\par \pard \s0\f0\fs24</xsl:text> -->
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl</xsl:if>
@@ -196,7 +196,7 @@
     <xsl:apply-templates/>
     <!-- Tagsmiths: make the next rtf string conditional, suppressing it for first p in li -->
     <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
-      <xsl:text>\par</xsl:text>
+      <!-- <xsl:text>\par</xsl:text> -->
     </xsl:if>
   </xsl:template>
 
