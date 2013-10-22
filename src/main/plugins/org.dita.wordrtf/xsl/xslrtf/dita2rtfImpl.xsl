@@ -160,27 +160,20 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template name="block-title-h1">{\pard \s1 H1: <xsl:apply-templates/> \par}</xsl:template>
+  <xsl:template name="block-title-h1">{\pard \s1 \f1\fs48\b <xsl:apply-templates/> \par}</xsl:template>
 
-  <xsl:template name="block-title-h2">\par \s2\f1\fs36\b H2: <xsl:apply-templates/>
-\par \f0\fs24
+  <xsl:template name="block-title-h2">{\pard \s2 \f1\fs36\b <xsl:apply-templates/>\par}  </xsl:template>
+
+  <xsl:template name="block-title-h3">{\pard \s3 \f1\fs24\b <xsl:apply-templates/>\par}
   </xsl:template>
 
-  <xsl:template name="block-title-h3">\par \s3\f1\fs24\b H3: <xsl:apply-templates/>
-\par \f0\fs24
+  <xsl:template name="block-title-h4">{\pard \s4 \f1\fs20\b <xsl:apply-templates/>\par}
   </xsl:template>
 
-  <xsl:template name="block-title-h4">\par \s4\f1\fs20\b <xsl:apply-templates/>
-\par \f0\fs24
+  <xsl:template name="block-title-h5">{\pard \s5 \f1\fs18\b <xsl:apply-templates/>\par}
   </xsl:template>
 
-  <xsl:template name="block-title-h5">\par \s5\f1\fs18\b <xsl:apply-templates/>
-\par \f0\fs24
-  </xsl:template>
-
-  <xsl:template name="block-title-h6">\par \s6\f1\fs16\b <xsl:apply-templates/>
-\par \f0\fs24
-  </xsl:template>
+  <xsl:template name="block-title-h6">{\pard \s6 \f1\fs16\b <xsl:apply-templates/>\par} </xsl:template>
 
   <xsl:template name="block-p">
     <!-- Tagsmiths: Suppress \par \pard when the context is first p in li -->
