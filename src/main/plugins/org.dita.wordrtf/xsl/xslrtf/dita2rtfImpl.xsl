@@ -104,7 +104,7 @@ xmlns:rtf="rtf_namespace">
 <xsl:param name="word"/>
 <!-- </xsl:text> on next line on purpose to get newline -->
 <xsl:variable name="cr">
-<xsl:text>\n
+<xsl:text>\line
 </xsl:text>
 </xsl:variable>
 <xsl:choose>
