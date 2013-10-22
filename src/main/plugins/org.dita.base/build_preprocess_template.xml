@@ -125,7 +125,6 @@
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
     <job-helper file="subtargets.list" property="subtargetslist"/>
-    <job-helper file="conrefpush.list" property="conrefpushlist"/>
     <job-helper file="keyref.list" property="keyreflist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <property name="outditafilesfile" value="outditafiles.list"/>
@@ -143,7 +142,6 @@
     <property name="conreftargetsfile" value="conreftargets.list"/>
     <property name="copytosourcefile" value="copytosource.list"/>
     <property name="subtargetsfile" value="subtargets.list"/>
-    <property name="conrefpushfile" value="conrefpush.list"/>
     <property name="keyreffile" value="keyref.list"/>
     <property name="resourceonlyfile" value="resourceonly.list"/>
   </target>
@@ -179,7 +177,6 @@
     <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
-    <job-helper file="conrefpush.list" property="conrefpushlist"/>
     <job-helper file="keyref.list" property="keyreflist"/>
     <job-helper file="canditopics.list" property="canditopicslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
@@ -201,9 +198,6 @@
     <condition property="noSublist">
       <length file="${dita.temp.dir}/${subtargetsfile}" length="0"/>
     </condition>
-    <condition property="noConrefPush">
-      <length file="${dita.temp.dir}/${conrefpushfile}" length="0"/>
-    </condition>
     <condition property="noKeyref">
       <length file="${dita.temp.dir}/${keyreffile}" length="0"/>
     </condition>
@@ -212,7 +206,7 @@
   <!-- conref push
       Push information to the specified target -->
   <target name="conrefpush"
-    dita:depends="{depend.preprocess.conrefpush.pre},conrefpush-check"
+    dita:depends="{depend.preprocess.conrefpush.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.conrefpush.skip"
     description="Resolve conref push">
@@ -220,12 +214,6 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.ConrefPushModule"/>
     </pipeline>
-  </target>
-  
-  <target name="conrefpush-check">
-    <condition property="preprocess.conrefpush.skip">
-      <isset property="noConrefPush"/>
-    </condition>
   </target>
   
   <!-- move-meta-entries
