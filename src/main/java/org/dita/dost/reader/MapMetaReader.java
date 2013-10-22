@@ -14,6 +14,7 @@ import static org.dita.dost.module.GenMapAndTopicListModule.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -32,6 +33,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
@@ -39,11 +41,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 /**
- * MapMetaReader class which reads map meta data.
+ * MapMetaReader class which reads and modifies map meta data.
  *
  */
 public final class MapMetaReader implements AbstractReader {
+    
     private static final String INTERNET_LINK_MARK = COLON_DOUBLE_SLASH;
 
     private final Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(16);
@@ -110,13 +114,9 @@ public final class MapMetaReader implements AbstractReader {
             ));
 
     private DITAOTLogger logger;
-
     private final Hashtable<String, Element> globalMeta;
-
     private Document doc = null;
-
     private String filePath = null;
-
 
     /**
      * Constructor.
@@ -137,61 +137,71 @@ public final class MapMetaReader implements AbstractReader {
 
         //clear the history on global metadata table
         globalMeta.clear();
-
-
         try{
-            final DocumentBuilderFactory factory = DocumentBuilderFactory
-                    .newInstance();
+            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
             doc = builder.parse(filename);
-
-            final Element root = doc.getDocumentElement();
-            final NodeList list = root.getChildNodes();
-            for (int i = 0; i < list.getLength(); i++){
-                final Node node = list.item(i);
-                Node classAttr = null;
-                if (node.getNodeType() == Node.ELEMENT_NODE){
-                    classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
-                }
-                if(classAttr != null && MAP_TOPICMETA.matches(classAttr.getNodeValue())){
-                    //if this node is topicmeta node under root
-                    handleGlobalMeta(node);
-                }else if(classAttr != null && MAP_TOPICREF.matches(classAttr.getNodeValue())){
-                    //if this node is topicref node under root
-                    handleTopicref(node, globalMeta);
+        } catch (final Exception e) {
+            logger.logError("Failed to parse " + filename.getAbsolutePath() + ":" + e.getMessage(), e);
+            return;
+        }
+        
+        final Element root = doc.getDocumentElement();
+        final NodeList list = root.getChildNodes();
+        for (int i = 0; i < list.getLength(); i++) {
+            final Node node = list.item(i);
+            Node classAttr = null;
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
+            }
+            if (classAttr != null && MAP_TOPICMETA.matches(classAttr.getNodeValue())) {
+                //if this node is topicmeta node under root
+                handleGlobalMeta(node);
+            } else if (classAttr != null && MAP_TOPICREF.matches(classAttr.getNodeValue())) {
+                //if this node is topicref node under root
+                handleTopicref(node, globalMeta);
+            }
+        }
+        // Indexterm elements with either start or end attribute should not been
+        // move to referenced dita file's prolog section.
+        // <!--start
+        for (final Hashtable<String, Element> resultTableEntry : resultTable.values()) {
+            for (final Map.Entry<String, Element> mapEntry : resultTableEntry.entrySet()) {
+                final String key = mapEntry.getKey();
+                if (TOPIC_KEYWORDS.matcher.equals(key)) {
+                    removeIndexTermRecursive(mapEntry.getValue());
                 }
             }
-
-            // Indexterm elements with either start or end attribute should not been
-            // move to referenced dita file's prolog section.
-            // <!--start
-            for (final Hashtable<String, Element> resultTableEntry : resultTable.values()) {
-                for (final Map.Entry<String, Element> mapEntry : resultTableEntry.entrySet()) {
-                    final String key = mapEntry.getKey();
-                    if (TOPIC_KEYWORDS.matcher.equals(key)) {
-                        removeIndexTermRecursive(mapEntry.getValue());
-                    }
-                }
-            }
-            // end -->
-
-            FileOutputStream file = null;
-            try {
-                file = new FileOutputStream(filename.getCanonicalPath()+ ".temp");
-                final StreamResult res = new StreamResult(file);
-                final DOMSource ds = new DOMSource(doc);
-                final TransformerFactory tff = TransformerFactory.newInstance();
-                final Transformer tf = tff.newTransformer();
-                tf.transform(ds, res);
-            } finally {
-                if (file != null) {
+        }
+        // end -->
+        
+        final File newMap = new File(filename.getAbsolutePath() + ".temp");
+        FileOutputStream file = null;
+        try {
+            file = new FileOutputStream(newMap);
+            final StreamResult res = new StreamResult(file);
+            final DOMSource ds = new DOMSource(doc);
+            final TransformerFactory tff = TransformerFactory.newInstance();
+            final Transformer tf = tff.newTransformer();
+            tf.transform(ds, res);
+        } catch (final Exception e) {
+            logger.logError("Failed to serialize " + newMap.getAbsolutePath() + ": " + e.getMessage(), e) ;
+        } finally {
+            if (file != null) {
+                try {
                     file.close();
+                } catch (final IOException e) {
+                    // NOOP
                 }
             }
-
-        }catch (final Exception e){
-            logger.logError(e.getMessage(), e) ;
+            if (newMap.exists()) {
+                try {
+                    FileUtils.moveFile(newMap, filename);
+                } catch (final IOException e) {
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", filename.getPath(), newMap.getAbsolutePath()+".chunk").toString());
+                }
+            }
         }
     }
 
@@ -212,15 +222,14 @@ public final class MapMetaReader implements AbstractReader {
         final NodeList children = parent.getChildNodes();
         Element child = null;
         for (int i = 0; i < children.getLength(); i++) {
-            if(children.item(i).getNodeType() == Node.ELEMENT_NODE){
+            if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 child = (Element) children.item(i);
                 final boolean isIndexTerm = TOPIC_INDEXTERM.matches(child.getAttribute(ATTRIBUTE_NAME_CLASS));
                 final boolean hasStart = !StringUtils.isEmptyString(child.getAttribute(ATTRIBUTE_NAME_START));
                 final boolean hasEnd = !StringUtils.isEmptyString(child.getAttribute(ATTRIBUTE_NAME_END));
-
-                if(isIndexTerm && (hasStart || hasEnd)){
+                if (isIndexTerm && (hasStart || hasEnd)) {
                     parent.removeChild(child);
-                } else{
+                } else {
                     removeIndexTermRecursive(child);
                 }
             }
@@ -233,58 +242,51 @@ public final class MapMetaReader implements AbstractReader {
         final Node scopeAttr = topicref.getAttributes().getNamedItem(ATTRIBUTE_NAME_SCOPE);
         final Node formatAttr = topicref.getAttributes().getNamedItem(ATTRIBUTE_NAME_FORMAT);
         Hashtable<String, Element> current = mergeMeta(null,inheritance,cascadeSet);
-        String topicPath = null;
         Node metaNode = null;
 
         final NodeList children = topicref.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++){
+        for (int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
             Node classAttr = null;
-            if(node.getNodeType() == Node.ELEMENT_NODE){
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
                 classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
             }
-
-            if(classAttr != null && hrefAttr != null &&
+            if (classAttr != null && hrefAttr != null &&
                     MAP_TOPICMETA.matches(classAttr.getNodeValue()) &&
                     hrefAttr != null && hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1
                     && (scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
                     && ((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))
-                            || (formatAttr == null || ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(formatAttr.getNodeValue())))
-                    ){
+                            || (formatAttr == null || ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(formatAttr.getNodeValue())))) {
                 //if this node is topicmeta and the parent topicref refers to a valid dita topic
                 metaNode = node;
                 current = handleMeta(node, inheritance);
-
-            }else if(classAttr != null &&
-                    MAP_TOPICREF.matches(classAttr.getNodeValue())){
+            } else if (classAttr != null &&
+                    MAP_TOPICREF.matches(classAttr.getNodeValue())) {
                 //if this node is topicref node under topicref
                 handleTopicref(node, current);
             }
         }
 
-        if (!current.isEmpty() && hrefAttr != null){// prevent the metadata is empty
-            if (copytoAttr != null && FileUtils.resolveFile(filePath, URLUtils.decode(copytoAttr.getNodeValue())).exists()){
+        String topicPath = null;
+        if (!current.isEmpty() && hrefAttr != null) {// prevent the metadata is empty
+            if (copytoAttr != null && FileUtils.resolveFile(filePath, URLUtils.decode(copytoAttr.getNodeValue())).exists()) {
                 // if there is @copy-to and the file exists, @copy-to will take the place of @href
                 topicPath = FileUtils.resolveTopic(filePath, URLUtils.decode(copytoAttr.getNodeValue()));
-            }else{
+            } else {
                 // if there is no copy-to attribute in current element
                 topicPath = FileUtils.resolveTopic(filePath, URLUtils.decode(hrefAttr.getNodeValue()));
             }
-
-            if(((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))||(formatAttr == null || ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(formatAttr.getNodeValue())))
+            if (((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))||(formatAttr == null || ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(formatAttr.getNodeValue())))
                     &&(scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
-                    &&(hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1)){
-                if(resultTable.containsKey(topicPath)){
+                    &&(hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1)) {
+                if (resultTable.containsKey(topicPath)) {
                     //if the result table already contains some result
                     //metadata for current topic path.
                     final Hashtable<String, Element> previous = resultTable.get(topicPath);
                     resultTable.put(topicPath, mergeMeta(previous, current, metaSet));
-                }else{
-
+                } else {
                     resultTable.put(topicPath, cloneElementMap(current));
-
                 }
-
                 final Hashtable<String, Element> metas = resultTable.get(topicPath);
                 if (!metas.isEmpty()) {
                     if (metaNode != null) {
@@ -301,9 +303,7 @@ public final class MapMetaReader implements AbstractReader {
                             }
                         }
                     }
-                    topicref.insertBefore(
-                            newMeta,
-                            topicref.getFirstChild());
+                    topicref.insertBefore(newMeta, topicref.getFirstChild());
                 }
             }
         }
@@ -314,7 +314,7 @@ public final class MapMetaReader implements AbstractReader {
             final Element inheritStub = doc.createElement(ELEMENT_STUB);
             final Node currentStub = topicMetaItem.getValue();
             final NodeList stubChildren = currentStub.getChildNodes();
-            for (int i = 0; i < stubChildren.getLength(); i++){
+            for (int i = 0; i < stubChildren.getLength(); i++) {
                 Node item = stubChildren.item(i).cloneNode(true);
                 item = inheritStub.getOwnerDocument().importNode(item, true);
                 inheritStub.appendChild(item);
@@ -326,35 +326,31 @@ public final class MapMetaReader implements AbstractReader {
 
 
     private Hashtable<String, Element> handleMeta(final Node meta, final Hashtable<String, Element> inheritance) {
-
         final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(16);
-
         getMeta(meta, topicMetaTable);
-
         return mergeMeta(topicMetaTable, inheritance, cascadeSet);
-
     }
 
-    private void getMeta(final Node meta, final Hashtable<String, Element> topicMetaTable){
+    private void getMeta(final Node meta, final Hashtable<String, Element> topicMetaTable) {
         final NodeList children = meta.getChildNodes();
-        for(int i = 0; i < children.getLength(); i++){
+        for(int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
             Node attr = null;
-            if(node.getNodeType() == Node.ELEMENT_NODE){
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
                 attr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
             }
-            if (attr != null){
+            if (attr != null) {
                 final String attrValue = attr.getNodeValue();
                 // int number 1 is used to remove the first "-" or "+" character in class attribute
                 final String metaKey = attrValue.substring(1,
                         attrValue.indexOf(STRING_BLANK,attrValue.indexOf(SLASH))+1 );
-                if (TOPIC_METADATA.matches(attrValue)){
+                if (TOPIC_METADATA.matches(attrValue)) {
                     getMeta(node, topicMetaTable);
-                }else if(topicMetaTable.containsKey(metaKey)){
+                } else if (topicMetaTable.containsKey(metaKey)) {
                     //append node to the list if it exist in topic meta table
                     //use clone here to prevent the node is removed from original DOM tree;
                     topicMetaTable.get(metaKey).appendChild(node.cloneNode(true));
-                } else{
+                } else {
                     final Element stub = doc.createElement(ELEMENT_STUB);
                     // use clone here to prevent the node is removed from original DOM tree;
                     stub.appendChild(node.cloneNode(true));
@@ -366,40 +362,37 @@ public final class MapMetaReader implements AbstractReader {
 
     private Hashtable<String, Element> mergeMeta(Hashtable<String, Element> topicMetaTable,
             final Hashtable<String, Element> inheritance, final Set<String> enableSet) {
-
         // When inherited metadata need to be merged into current metadata
         // enableSet should be cascadeSet so that only metadata that can
         // be inherited are merged.
         // Otherwise enableSet should be metaSet in order to merge all
         // metadata.
-        if (topicMetaTable == null){
+        if (topicMetaTable == null) {
             topicMetaTable = new Hashtable<String, Element>(16);
         }
         Node item = null;
         final Iterator<String> iter = enableSet.iterator();
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             final String key = iter.next();
-            if (inheritance.containsKey(key)){
-                if(uniqueSet.contains(key) ){
-                    if(!topicMetaTable.containsKey(key)){
+            if (inheritance.containsKey(key)) {
+                if (uniqueSet.contains(key) ) {
+                    if (!topicMetaTable.containsKey(key)) {
                         topicMetaTable.put(key, inheritance.get(key));
                     }
-
-                }else{  // not unique metadata
-
-                    if(!topicMetaTable.containsKey(key)){
+                } else {  // not unique metadata
+                    if (!topicMetaTable.containsKey(key)) {
                         topicMetaTable.put(key, inheritance.get(key));
-                    }else{
+                    } else {
                         //not necessary to do node type check here
                         //because inheritStub doesn't contains any node
                         //other than Element.
                         final Node stub = topicMetaTable.get(key);
                         final Node inheritStub = inheritance.get(key);
-                        if (stub != inheritStub){
+                        if (stub != inheritStub) {
                             // Merge the value if stub does not equal to inheritStub
                             // Otherwise it will get into infinitive loop
                             final NodeList children = inheritStub.getChildNodes();
-                            for(int i = 0; i < children.getLength(); i++){
+                            for(int i = 0; i < children.getLength(); i++) {
                                 item = children.item(i).cloneNode(true);
                                 item = stub.getOwnerDocument().importNode(item,true);
                                 stub.appendChild(item);
@@ -415,33 +408,31 @@ public final class MapMetaReader implements AbstractReader {
     }
 
     private void handleGlobalMeta(final Node metadata) {
-
         final NodeList children = metadata.getChildNodes();
-        for(int i = 0; i < children.getLength(); i++){
+        for(int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
             Node attr = null;
-            if (node.getNodeType() == Node.ELEMENT_NODE){
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
                 attr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
             }
-            if (attr != null){
+            if (attr != null) {
                 final String attrValue = attr.getNodeValue();
                 final String metaKey = attrValue.substring(1,
                         attrValue.indexOf(STRING_BLANK,attrValue.indexOf(SLASH))+1 );
-                if (TOPIC_METADATA.matches(attrValue)){
+                if (TOPIC_METADATA.matches(attrValue)) {
                     //proceed the metadata in <metadata>
                     handleGlobalMeta(node);
-                }else if(cascadeSet.contains(metaKey) && globalMeta.containsKey(metaKey)){
+                } else if (cascadeSet.contains(metaKey) && globalMeta.containsKey(metaKey)) {
                     //append node to the list if it exist in global meta table
                     //use clone here to prevent the node is removed from original DOM tree;
                     globalMeta.get(metaKey).appendChild(node.cloneNode(true));
-                } else if(cascadeSet.contains(metaKey)){
+                } else if (cascadeSet.contains(metaKey)) {
                     final Element stub = doc.createElement(ELEMENT_STUB);
                     stub.appendChild(node.cloneNode(true));
                     globalMeta.put(metaKey, stub);
                 }
             }
         }
-
     }
 
     /**

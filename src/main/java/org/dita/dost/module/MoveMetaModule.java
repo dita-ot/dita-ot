@@ -73,18 +73,9 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         for (final FileInfo f: job.getFileInfo()) {
             if (f.isActive && "ditamap".equals(f.format)) {
                 final File mapFile = new File(tempDir, f.file.getPath());
-                logger.logInfo("Reading " + mapFile);
+                logger.logInfo("Processing " + mapFile);
                 //FIXME: this reader gets the parent path of input file
                 metaReader.read(mapFile);
-                final File newMap = new File(mapFile+".temp");
-                if (newMap.exists()) {
-                    if (!mapFile.delete()) {
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", mapFile.getPath(), newMap.getAbsolutePath()+".chunk").toString());
-                    }
-                    if (!newMap.renameTo(mapFile)) {
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", mapFile.getPath(), newMap.getAbsolutePath()+".chunk").toString());
-                    }
-                }
             }
         }
 

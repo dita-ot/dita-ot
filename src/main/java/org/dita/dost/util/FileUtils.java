@@ -1011,5 +1011,21 @@ public final class FileUtils {
             return c.getPath().startsWith(d.getPath());
         }
     }
+
+    /**
+     * Move file.
+     * 
+     * @param srcFile source file
+     * @param destFile destination
+     * @throws IOException if moving failed
+     */
+    public static void moveFile(File srcFile, File destFile) throws IOException {
+        if (destFile.exists() && !destFile.delete()) {
+            throw new IOException("Failed to remove " + destFile.getAbsolutePath());
+        }
+        if (!srcFile.renameTo(destFile)) {
+            throw new IOException("Failed to move " + srcFile.getAbsolutePath() + " tp " + destFile.getAbsolutePath());
+        }
+    }
     
 }
