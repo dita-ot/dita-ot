@@ -181,7 +181,7 @@ the same values used in by p in other contexts. -->
 <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
 <xsl:text/>
 </xsl:if>
-<xsl:apply-templates/>
+\sa240 <xsl:apply-templates/>
 <!-- Tagsmiths: make the next rtf string conditional, suppressing it for first p in li -->
 <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
 <!-- <xsl:text>\par</xsl:text> -->
@@ -410,9 +410,9 @@ name="gen-linktxt"/>\s8 \f0\fs24\ul\cf2}}}\s8
 <xsl:template match="*[contains(@class,' topic/titlealts ')]"/>
 
 <!-- Added for DITA 1.1 "Shortdesc proposal" -->
-<xsl:template match="*[contains(@class,' topic/abstract ')]">{\pard <xsl:apply-templates/>\par}</xsl:template>
+<xsl:template match="*[contains(@class,' topic/abstract ')]">{\pard \sa240 <xsl:apply-templates/>\par}</xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/shortdesc ')]">{\pard <xsl:apply-templates/>\par}</xsl:template>
+<xsl:template match="*[contains(@class,' topic/shortdesc ')]">{\pard \sa240<xsl:apply-templates/>\par}</xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note">
 <xsl:choose>
