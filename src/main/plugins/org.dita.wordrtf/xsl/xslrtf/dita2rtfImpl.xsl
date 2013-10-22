@@ -179,7 +179,7 @@ the same values used in by p in other contexts. -->
 <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
 <xsl:text/>
 </xsl:if>
-\sa240 <xsl:apply-templates/>
+{\pard \sa240 <xsl:apply-templates/>\par}
 <!-- Tagsmiths: make the next rtf string conditional, suppressing it for first p in li -->
 <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
 <!-- <xsl:text>\par</xsl:text> -->
