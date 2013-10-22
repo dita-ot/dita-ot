@@ -125,7 +125,6 @@
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
     <job-helper file="subtargets.list" property="subtargetslist"/>
-    <job-helper file="keyref.list" property="keyreflist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <property name="outditafilesfile" value="outditafiles.list"/>
     <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
@@ -142,7 +141,6 @@
     <property name="conreftargetsfile" value="conreftargets.list"/>
     <property name="copytosourcefile" value="copytosource.list"/>
     <property name="subtargetsfile" value="subtargets.list"/>
-    <property name="keyreffile" value="keyref.list"/>
     <property name="resourceonlyfile" value="resourceonly.list"/>
   </target>
 
@@ -177,7 +175,6 @@
     <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
-    <job-helper file="keyref.list" property="keyreflist"/>
     <job-helper file="canditopics.list" property="canditopicslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-property dir="${dita.temp.dir}"/>
@@ -197,9 +194,6 @@
     </condition>
     <condition property="noSublist">
       <length file="${dita.temp.dir}/${subtargetsfile}" length="0"/>
-    </condition>
-    <condition property="noKeyref">
-      <length file="${dita.temp.dir}/${keyreffile}" length="0"/>
     </condition>
   </target>
   
@@ -323,7 +317,7 @@
   <!-- keyref
        Resolve keyref using key definition in ditamap-->
   <target name="keyref"
-    dita:depends="{depend.preprocess.keyref.pre},keyref-check"
+    dita:depends="{depend.preprocess.keyref.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
@@ -334,12 +328,6 @@
     </pipeline>
   </target>
   
-  <target name="keyref-check">
-    <condition property="preprocess.keyref.skip">
-      <isset property="noKeyref"/>
-    </condition>
-  </target>
-    
   <!-- mappull
       Pull metadata (such as navtitle) into the map from the referenced topics. -->
   <target name="mappull"
