@@ -5,8 +5,37 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 
-  <!-- single-part lists -->
+
+<xsl:template name="steps">
+    <xsl:for-each select="step">
+    {\pard <xsl:number count="step" level="any" format="1" />) <xsl:apply-templates/>\par}
+    </xsl:for-each>
+  </xsl:template>
+
+ <xsl:template match="*[contains(@class,' task/context ')]">
+ Context found!
+ <xsl:apply-templates/>
+  </xsl:template>  
+
+ <xsl:template match="*[contains(@class, 'task/steps ')]">
+ Steps found!
+ <xsl:apply-templates/>
+  </xsl:template>  
+
+ <xsl:template match="*[contains(@class,' task/stepsection ')]">
+ Stepsection found!
+ <xsl:apply-templates/>
+  </xsl:template>  
+  
+   <xsl:template match="*[contains(@class,' task/cmd ')]">
+ Command found!
+ <xsl:apply-templates/>
+  </xsl:template>  
+  
+
   <!-- copied from dita2rtf-lists.xsl -->
+
+  <!-- single-part lists -->
 
   <xsl:template match="*[contains(@class,' topic/ul ')]">
     <xsl:call-template name="gen-id"/>
@@ -16,40 +45,37 @@
 
   <xsl:template match="*[contains(@class,' topic/li ')]">
     <xsl:call-template name="gen-id"/>
-    <xsl:call-template name="block-li"/>
+    <!-- <xsl:call-template name="block-li"/> -->
+    <xsl:call-template name="steps"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/ol ')]">
     <xsl:call-template name="gen-id"/>
+    [topic/ol] 
+    <xsl:call-template name="steps"/>
     <xsl:apply-templates/>
-    <xsl:if test="not(ancestor::*[contains(@class,' topic/li ')])">\par\pard\li360\fi-180</xsl:if>    
+    <!-- <xsl:if test="not(ancestor::*[contains(@class,' topic/li ')])">
+    [Unnecessary] \par\pard\li360\fi-180
+    </xsl:if>  -->   
   </xsl:template>
 
-
-  <xsl:template match="steps">
-    <p />
-    <xsl:for-each select="step">
-      <xsl:number count="step" level="any" format="1" />) <xsl:apply-templates/>
-      <br />
-    </xsl:for-each>
-  </xsl:template>
 
   <!-- block-list -->
   <xsl:template name="block-list">
     <xsl:param name="depth">0</xsl:param>
     <xsl:variable name="li-num" select="720 + ($depth * 360)"/>
 \par \pard\li<xsl:value-of select="$li-num"/>\fi-360{\*\pn\pnlvlblt\pnf1\pnindent180{\pntxtb\'b7}}\plain\f2\fs24
-    <xsl:apply-templates/>
+    [Block-List:] <xsl:apply-templates/>
 \pard\li360\fi-180 \par
   </xsl:template>
 
-  <xsl:template name="block-ol">
+  <!-- <xsl:template name="block-ol">
     <xsl:param name="depth">0</xsl:param>
     <xsl:variable name="li-num" select="720 + ($depth * 360)"/>
 \par \pard\li<xsl:value-of select="$li-num"/>\fi-360{\*\pn\pnlvlbody\pndec\pnstart1\pnf1\pnindent180}\plain\f2\fs24
-    <xsl:apply-templates/>
+    [Block-OL:] <xsl:apply-templates/>
 \pard\li360\fi-180 \par 
-  </xsl:template>
+  </xsl:template> -->
 
   <xsl:template name="block-li">
     <xsl:variable name="depth">
@@ -80,9 +106,12 @@
       </xsl:call-template>
       <xsl:text/>
     </xsl:if>
-    <xsl:apply-templates/>
+    [Block-LI:] <xsl:apply-templates/>
   </xsl:template>
 
+  
+  
+  
   <!-- Here starts the original code -->
 
   <!-- <xsl:template match="*[contains(@class,' task/choicetable ')]" name="topic.task.choicetable">
