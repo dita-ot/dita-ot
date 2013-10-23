@@ -447,7 +447,7 @@ public final class FileUtils {
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
      * from the file path, with no change to substring behind "#".
      * 
-     * @param rootPath root path
+     * @param rootPath root directory path
      * @param relativePath relative path
      * @return resolved topic file
      */
@@ -461,7 +461,7 @@ public final class FileUtils {
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
      * from the file path, with no change to substring behind "#".
      * 
-     * @param rootPath root path
+     * @param rootPath root directory path
      * @param relativePath relative path
      * @return resolved topic file
      */
@@ -474,7 +474,7 @@ public final class FileUtils {
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
      * from the file path, with no change to substring behind "#".
      * 
-     * @param rootPath root path
+     * @param rootPath root directory path
      * @param relativePath relative path
      * @return resolved topic file
      */
@@ -496,7 +496,7 @@ public final class FileUtils {
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
      * from the file path.
      * 
-     * @param rootPath root path
+     * @param rootPath root directory path
      * @param relativePath relative path
      * @return resolved topic file
      */
@@ -510,7 +510,7 @@ public final class FileUtils {
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
      * from the file path.
      * 
-     * @param rootPath root path
+     * @param rootPath root directory path
      * @param relativePath relative path
      * @return resolved topic file
      */
@@ -524,7 +524,7 @@ public final class FileUtils {
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
      * from the file path.
      * 
-     * @param rootPath root path
+     * @param rootPath root directory path
      * @param relativePath relative path
      * @return resolved topic file
      */
@@ -537,7 +537,7 @@ public final class FileUtils {
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
      * from the file path.
      * 
-     * @param rootPath root path
+     * @param rootPath root directory path
      * @param relativePath relative path
      * @return resolved topic file
      */

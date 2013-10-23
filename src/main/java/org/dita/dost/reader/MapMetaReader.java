@@ -15,6 +15,7 @@ import static org.dita.dost.module.GenMapAndTopicListModule.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -50,7 +51,7 @@ public final class MapMetaReader implements AbstractReader {
     
     private static final String INTERNET_LINK_MARK = COLON_DOUBLE_SLASH;
 
-    private final Hashtable<String, Hashtable<String, Element>> resultTable = new Hashtable<String, Hashtable<String, Element>>(16);
+    private final Hashtable<File, Hashtable<String, Element>> resultTable = new Hashtable<File, Hashtable<String, Element>>(16);
 
     public static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<String>(asList(
             TOPIC_CRITDATES.matcher,
@@ -116,7 +117,7 @@ public final class MapMetaReader implements AbstractReader {
     private DITAOTLogger logger;
     private final Hashtable<String, Element> globalMeta;
     private Document doc = null;
-    private String filePath = null;
+    private File filePath = null;
 
     /**
      * Constructor.
@@ -132,7 +133,7 @@ public final class MapMetaReader implements AbstractReader {
      */
     @Override
     public void read(final File filename) {
-        filePath = filename.getParent();
+        filePath = filename.getParentFile();
         filename.getPath();
 
         //clear the history on global metadata table
@@ -166,8 +167,8 @@ public final class MapMetaReader implements AbstractReader {
         // Indexterm elements with either start or end attribute should not been
         // move to referenced dita file's prolog section.
         // <!--start
-        for (final Hashtable<String, Element> resultTableEntry : resultTable.values()) {
-            for (final Map.Entry<String, Element> mapEntry : resultTableEntry.entrySet()) {
+        for (final Hashtable<String, Element> resultTableEntry: resultTable.values()) {
+            for (final Map.Entry<String, Element> mapEntry: resultTableEntry.entrySet()) {
                 final String key = mapEntry.getKey();
                 if (TOPIC_KEYWORDS.matcher.equals(key)) {
                     removeIndexTermRecursive(mapEntry.getValue());
@@ -267,14 +268,15 @@ public final class MapMetaReader implements AbstractReader {
             }
         }
 
-        String topicPath = null;
+        File topicPath = null;
         if (!current.isEmpty() && hrefAttr != null) {// prevent the metadata is empty
-            if (copytoAttr != null && FileUtils.resolveFile(filePath, URLUtils.decode(copytoAttr.getNodeValue())).exists()) {
-                // if there is @copy-to and the file exists, @copy-to will take the place of @href
-                topicPath = FileUtils.resolveTopic(filePath, URLUtils.decode(copytoAttr.getNodeValue()));
-            } else {
-                // if there is no copy-to attribute in current element
-                topicPath = FileUtils.resolveTopic(filePath, URLUtils.decode(hrefAttr.getNodeValue()));
+            if (copytoAttr != null) {
+                final URI copyToUri = URLUtils.stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
+                topicPath = URLUtils.toFile(FileUtils.resolveFile(filePath.toURI(), copyToUri));
+            }
+            if (topicPath == null || !topicPath.exists()) {
+                final URI hrefUri = URLUtils.stripFragment(URLUtils.toURI(hrefAttr.getNodeValue()));
+                topicPath = URLUtils.toFile(FileUtils.resolveFile(filePath.toURI(), hrefUri));
             }
             if (((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))||(formatAttr == null || ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(formatAttr.getNodeValue())))
                     &&(scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
@@ -440,7 +442,7 @@ public final class MapMetaReader implements AbstractReader {
      * 
      * @return map of metadata by topic path
      */
-    public Map<String, Hashtable<String, Element>> getMapping() {
+    public Map<File, Hashtable<String, Element>> getMapping() {
     	return Collections.unmodifiableMap(resultTable);
     } 
 

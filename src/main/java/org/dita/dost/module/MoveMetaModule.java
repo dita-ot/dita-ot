@@ -79,21 +79,18 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        final Map<String, Hashtable<String, Element>> mapSet = metaReader.getMapping();
+        final Map<File, Hashtable<String, Element>> mapSet = metaReader.getMapping();
         
         //process map first
         final DitaMapMetaWriter mapInserter = new DitaMapMetaWriter();
         mapInserter.setLogger(logger);
-        for (final Entry<String, Hashtable<String, Element>> entry: mapSet.entrySet()) {
-            String targetFileName = entry.getKey();
-            targetFileName = stripFragment(targetFileName);
-            if (targetFileName.endsWith(FILE_EXTENSION_DITAMAP )) {
-//                content.setValue(entry.getValue());
-//                mapInserter.setContent(content);
+        for (final Entry<File, Hashtable<String, Element>> entry: mapSet.entrySet()) {
+            final File targetFileName = entry.getKey();
+            if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITAMAP )) {
                 mapInserter.setMetaTable(entry.getValue());
-                if (FileUtils.fileExists(entry.getKey())) {
+                if (entry.getKey().exists()) {
                     logger.logInfo("Processing " + entry.getKey());
-                    mapInserter.write(new File(entry.getKey()));
+                    mapInserter.write(entry.getKey());
                 } else {
                     logger.logError("File " + entry.getKey() + " does not exist");
                 }
@@ -104,16 +101,15 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         //process topic
         final DitaMetaWriter topicInserter = new DitaMetaWriter();
         topicInserter.setLogger(logger);
-        for (final Map.Entry<String, Hashtable<String, Element>> entry: mapSet.entrySet()) {
-            String targetFileName = entry.getKey();
-            targetFileName = stripFragment(targetFileName);
-            if (targetFileName.endsWith(FILE_EXTENSION_DITA) || targetFileName.endsWith(FILE_EXTENSION_XML)) {
+        for (final Map.Entry<File, Hashtable<String, Element>> entry: mapSet.entrySet()) {
+            final File targetFileName = entry.getKey();
+            if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITA) || targetFileName.getPath().endsWith(FILE_EXTENSION_XML)) {
 //                content.setValue(entry.getValue());
 //                topicInserter.setContent(content);
                 topicInserter.setMetaTable(entry.getValue());
-                if (FileUtils.fileExists(entry.getKey())) {
+                if (entry.getKey().exists()) {
                     logger.logInfo("Processing " + entry.getKey());
-                    topicInserter.write(new File(entry.getKey()));
+                    topicInserter.write(entry.getKey());
                 } else {
                     logger.logError("File " + entry.getKey() + " does not exist");
                 }
