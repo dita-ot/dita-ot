@@ -19,6 +19,7 @@ xmlns:rtf="rtf_namespace">
 <xsl:import href="ui-d.xsl"/>
 <xsl:import href="sw-d.xsl"/>
 <xsl:import href="dita2rtf-task.xsl"/>
+<xsl:import href="dita2rtf-step.xsl"/>
 <xsl:include href="inc/rtf_variables.xsl"/>
 <xsl:output method="text"/>
 
