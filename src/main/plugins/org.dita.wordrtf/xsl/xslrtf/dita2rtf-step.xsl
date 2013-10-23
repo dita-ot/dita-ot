@@ -6,7 +6,7 @@
 <!-- 20090904 RDA: Add support for stepsection; combine duplicated logic
                    for main steps and steps-unordered templates. -->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<!-- <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
   xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
   xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
@@ -31,7 +31,11 @@
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
   version="2.0"
-  exclude-result-prefixes="xs related-links dita2html ditamsg">
+  exclude-result-prefixes="xs related-links dita2html ditamsg"> -->
+  
+  <xsl:stylesheet
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	version="2.0" xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefixes="random">
 
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
