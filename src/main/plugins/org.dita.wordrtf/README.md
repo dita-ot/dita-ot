@@ -21,16 +21,29 @@ Improving the RTF output of DITA content means basically the following:
 RTF breaks down into four basic categories: commands, escapes, groups, and plaintext.
 
 #### Commands
-RTF commands consist of a backslash, some lowercase letters, maybe an integer, and then maybe a meaningless space character. Examples: `\pard`, `\fs24`.
+RTF commands consist of a backslash, some lowercase letters, maybe an integer, and then maybe a meaningless space character. Examples: `\pard`, `\fs24`. Commands take effect until the next closing curly bracket.
 
 #### Escapes
 Examples: `\~`(nonbreaking space),  `\uc1\u26412*` (Unicode character 本)
 
 #### Groups
-Groups are enclosed in {curly brackets}.
+Groups are enclosed in {curly brackets}. The prevent formatting to spill over to the next section so the most maintainable way to enclose a paragraph in RTF is `{\pard ... \par}`.
 
 #### Plaintext
 All other characters will be treated as plaintext by RTF, usually also all space characters (but not line breaks).
+
+### Sample RTF File
+Here's the barest of a valid RTF file:
+
+```
+{\rtf
+{\fonttbl 
+{\f0 Times New Roman;}
+}
+\f0\fs60 
+Hello, World!
+} 
+```
 
 ## RTF Resources
 
