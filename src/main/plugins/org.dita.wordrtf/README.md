@@ -25,16 +25,16 @@ RTF breaks down into four basic categories:
 3. groups 
 4. plaintext
 
-#### Commands
+#### 1. Commands
 RTF commands consist of a backslash, some lowercase letters, maybe an integer, and then maybe a meaningless space character. Examples: `\pard`, `\fs24`. Commands take effect until the next closing curly bracket.
 
-#### Escapes
+#### 2. Escapes
 Examples: `\~`(nonbreaking space),  `\uc1\u26412*` (Unicode character 本)
 
-#### Groups
+#### 3. Groups
 Groups are enclosed in `{`curly brackets`}`. They prevent formatting to spill over to the next section so the most maintainable way to enclose a paragraph in RTF is `{\pard ... \par}`.
 
-#### Plaintext
+#### 4. Plaintext
 All other characters will be treated as plaintext by RTF, usually also all space characters (but not line breaks).
 
 ### Sample RTF File
