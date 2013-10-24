@@ -18,7 +18,11 @@ Improving the RTF output of DITA content means basically the following:
 - Whereas DITA is all about structuring content semantically, RTF is mostly concerned with formatting. For example, there isn't even a concept of "heading" in RTF. A heading is just a paragraph with a different and larger font in bold.
 
 ### Basic Syntax
-RTF breaks down into four basic categories: commands, escapes, groups, and plaintext.
+RTF breaks down into four basic categories: 
+1. commands
+2. escapes 
+3. groups 
+4. plaintext
 
 #### Commands
 RTF commands consist of a backslash, some lowercase letters, maybe an integer, and then maybe a meaningless space character. Examples: `\pard`, `\fs24`. Commands take effect until the next closing curly bracket.
