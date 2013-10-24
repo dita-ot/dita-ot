@@ -8,49 +8,36 @@
  */
 package org.dita.dost.reader;
 
-import static java.util.Arrays.*;
-import static org.dita.dost.util.Constants.*;
+import static java.util.Arrays.asList;
 import static org.dita.dost.module.GenMapAndTopicListModule.*;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
+import org.dita.dost.writer.AbstractDomFilter;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * MapMetaReader class which reads and modifies map meta data.
- *
+ * Cascade map metadata to child topic references.
  */
-public final class MapMetaReader implements AbstractReader {
+public final class MapMetaReader extends AbstractDomFilter {
     
-    private static final String INTERNET_LINK_MARK = COLON_DOUBLE_SLASH;
-
     private final Hashtable<File, Hashtable<String, Element>> resultTable = new Hashtable<File, Hashtable<String, Element>>(16);
 
     public static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<String>(asList(
@@ -114,7 +101,6 @@ public final class MapMetaReader implements AbstractReader {
             DELAY_D_EXPORTANCHORS.matcher
             ));
 
-    private DITAOTLogger logger;
     private final Hashtable<String, Element> globalMeta;
     private Document doc = null;
     private File filePath = null;
@@ -138,35 +124,31 @@ public final class MapMetaReader implements AbstractReader {
 
         //clear the history on global metadata table
         globalMeta.clear();
-        try{
-            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder builder = factory.newDocumentBuilder();
-            builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
-            doc = builder.parse(filename);
-        } catch (final Exception e) {
-            logger.logError("Failed to parse " + filename.getAbsolutePath() + ":" + e.getMessage(), e);
-            return;
-        }
-        
-        final Element root = doc.getDocumentElement();
-        final NodeList list = root.getChildNodes();
+        super.read(filename);
+    }
+    
+    @Override
+    public void process(final Document doc) {
+        this.doc = doc;
+        final NodeList list = doc.getDocumentElement().getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
             final Node node = list.item(i);
-            Node classAttr = null;
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
-            }
-            if (classAttr != null && MAP_TOPICMETA.matches(classAttr.getNodeValue())) {
-                //if this node is topicmeta node under root
-                handleGlobalMeta(node);
-            } else if (classAttr != null && MAP_TOPICREF.matches(classAttr.getNodeValue())) {
-                //if this node is topicref node under root
-                handleTopicref(node, globalMeta);
+                final Element elem = (Element) node;
+                final Attr classAttr = elem.getAttributeNode(ATTRIBUTE_NAME_CLASS);
+                if (classAttr != null) {
+                    // if this node is topicmeta node under root
+                    if (MAP_TOPICMETA.matches(classAttr.getNodeValue())) {
+                        handleGlobalMeta(elem);
+                    // if this node is topicref node under root
+                    } else if (MAP_TOPICREF.matches(classAttr.getNodeValue())) {
+                        handleTopicref(elem, globalMeta);
+                    }
+                }
             }
         }
         // Indexterm elements with either start or end attribute should not been
         // move to referenced dita file's prolog section.
-        // <!--start
         for (final Hashtable<String, Element> resultTableEntry: resultTable.values()) {
             for (final Map.Entry<String, Element> mapEntry: resultTableEntry.entrySet()) {
                 final String key = mapEntry.getKey();
@@ -175,40 +157,6 @@ public final class MapMetaReader implements AbstractReader {
                 }
             }
         }
-        // end -->
-        
-        final File newMap = new File(filename.getAbsolutePath() + ".temp");
-        FileOutputStream file = null;
-        try {
-            file = new FileOutputStream(newMap);
-            final StreamResult res = new StreamResult(file);
-            final DOMSource ds = new DOMSource(doc);
-            final TransformerFactory tff = TransformerFactory.newInstance();
-            final Transformer tf = tff.newTransformer();
-            tf.transform(ds, res);
-        } catch (final Exception e) {
-            logger.logError("Failed to serialize " + newMap.getAbsolutePath() + ": " + e.getMessage(), e) ;
-        } finally {
-            if (file != null) {
-                try {
-                    file.close();
-                } catch (final IOException e) {
-                    // NOOP
-                }
-            }
-            if (newMap.exists()) {
-                try {
-                    FileUtils.moveFile(newMap, filename);
-                } catch (final IOException e) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", filename.getPath(), newMap.getAbsolutePath()+".chunk").toString());
-                }
-            }
-        }
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
     }
 
     /**
@@ -237,39 +185,36 @@ public final class MapMetaReader implements AbstractReader {
         }
     }
 
-    private void handleTopicref(final Node topicref, final Hashtable<String, Element> inheritance) {
-        final Node hrefAttr = topicref.getAttributes().getNamedItem(ATTRIBUTE_NAME_HREF);
-        final Node copytoAttr = topicref.getAttributes().getNamedItem(ATTRIBUTE_NAME_COPY_TO);
-        final Node scopeAttr = topicref.getAttributes().getNamedItem(ATTRIBUTE_NAME_SCOPE);
-        final Node formatAttr = topicref.getAttributes().getNamedItem(ATTRIBUTE_NAME_FORMAT);
-        Hashtable<String, Element> current = mergeMeta(null,inheritance,cascadeSet);
-        Node metaNode = null;
+    private void handleTopicref(final Element topicref, final Hashtable<String, Element> inheritance) {
+        final Attr hrefAttr = (Attr) topicref.getAttributeNode(ATTRIBUTE_NAME_HREF);
+        final Attr copytoAttr = (Attr) topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+        final Attr scopeAttr = (Attr) topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
+        final Attr formatAttr = (Attr) topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
+        Hashtable<String, Element> current = mergeMeta(null, inheritance, cascadeSet);
+        Element metaNode = null;
 
         final NodeList children = topicref.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
-            Node classAttr = null;
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                classAttr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
-            }
-            if (classAttr != null && hrefAttr != null &&
-                    MAP_TOPICMETA.matches(classAttr.getNodeValue()) &&
-                    hrefAttr != null && hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1
-                    && (scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
-                    && ((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))
-                            || (formatAttr == null || ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(formatAttr.getNodeValue())))) {
-                //if this node is topicmeta and the parent topicref refers to a valid dita topic
-                metaNode = node;
-                current = handleMeta(node, inheritance);
-            } else if (classAttr != null &&
-                    MAP_TOPICREF.matches(classAttr.getNodeValue())) {
-                //if this node is topicref node under topicref
-                handleTopicref(node, current);
+                final Element elem = (Element) node;
+                Attr classAttr = (Attr) elem.getAttributeNode(ATTRIBUTE_NAME_CLASS);
+                if (classAttr != null) {
+                    // if this node is topicmeta and the parent topicref refers to a valid dita topic
+                    if (MAP_TOPICMETA.matches(classAttr.getNodeValue()) &&
+                        hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr)) {
+                        metaNode = elem;
+                        current = handleMeta(elem, inheritance);
+                    // if this node is topicref node under topicref
+                    } else if (MAP_TOPICREF.matches(classAttr.getNodeValue())) {
+                        handleTopicref(elem, current);
+                    }
+                }
             }
         }
 
-        File topicPath = null;
         if (!current.isEmpty() && hrefAttr != null) {// prevent the metadata is empty
+            File topicPath = null;
             if (copytoAttr != null) {
                 final URI copyToUri = URLUtils.stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
                 topicPath = URLUtils.toFile(FileUtils.resolveFile(filePath.toURI(), copyToUri));
@@ -278,9 +223,7 @@ public final class MapMetaReader implements AbstractReader {
                 final URI hrefUri = URLUtils.stripFragment(URLUtils.toURI(hrefAttr.getNodeValue()));
                 topicPath = URLUtils.toFile(FileUtils.resolveFile(filePath.toURI(), hrefUri));
             }
-            if (((formatAttr == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))||(formatAttr == null || ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(formatAttr.getNodeValue())))
-                    &&(scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
-                    &&(hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1)) {
+            if (isDitaFormat(formatAttr) && isLocalScope(scopeAttr)) {
                 if (resultTable.containsKey(topicPath)) {
                     //if the result table already contains some result
                     //metadata for current topic path.
@@ -310,6 +253,17 @@ public final class MapMetaReader implements AbstractReader {
             }
         }
     }
+    
+    private boolean isLocalScope(final Attr scopeAttr) {
+        return scopeAttr == null || ATTR_SCOPE_VALUE_LOCAL.equals(scopeAttr.getNodeValue());
+    }
+    
+    private boolean isDitaFormat(final Attr formatAttr) {
+        return formatAttr == null ||
+            ATTR_FORMAT_VALUE_DITA.equals(formatAttr.getNodeValue()) ||
+            ATTR_FORMAT_VALUE_DITAMAP.equals(formatAttr.getNodeValue());
+    }
+    
     private Hashtable<String, Element> cloneElementMap(final Hashtable<String, Element> current) {
         final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(16);
         for (final Entry<String, Element> topicMetaItem: current.entrySet()) {
@@ -327,36 +281,33 @@ public final class MapMetaReader implements AbstractReader {
     }
 
 
-    private Hashtable<String, Element> handleMeta(final Node meta, final Hashtable<String, Element> inheritance) {
+    private Hashtable<String, Element> handleMeta(final Element meta, final Hashtable<String, Element> inheritance) {
         final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(16);
         getMeta(meta, topicMetaTable);
         return mergeMeta(topicMetaTable, inheritance, cascadeSet);
     }
 
-    private void getMeta(final Node meta, final Hashtable<String, Element> topicMetaTable) {
+    private void getMeta(final Element meta, final Hashtable<String, Element> topicMetaTable) {
         final NodeList children = meta.getChildNodes();
         for(int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
-            Node attr = null;
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                attr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
-            }
-            if (attr != null) {
-                final String attrValue = attr.getNodeValue();
-                // int number 1 is used to remove the first "-" or "+" character in class attribute
-                final String metaKey = attrValue.substring(1,
-                        attrValue.indexOf(STRING_BLANK,attrValue.indexOf(SLASH))+1 );
-                if (TOPIC_METADATA.matches(attrValue)) {
-                    getMeta(node, topicMetaTable);
-                } else if (topicMetaTable.containsKey(metaKey)) {
-                    //append node to the list if it exist in topic meta table
-                    //use clone here to prevent the node is removed from original DOM tree;
-                    topicMetaTable.get(metaKey).appendChild(node.cloneNode(true));
-                } else {
-                    final Element stub = doc.createElement(ELEMENT_STUB);
-                    // use clone here to prevent the node is removed from original DOM tree;
-                    stub.appendChild(node.cloneNode(true));
-                    topicMetaTable.put(metaKey, stub);
+                final Element elem = (Element) node;
+                final Attr classAttr = elem.getAttributeNode(ATTRIBUTE_NAME_CLASS);
+                if (classAttr != null) {
+                    final String classValue = classAttr.getNodeValue();
+                    // int number 1 is used to remove the first "-" or "+" character in class attribute
+                    final String metaKey = classValue.substring(1, classValue.indexOf(STRING_BLANK, classValue.indexOf(SLASH)) + 1);
+                    if (TOPIC_METADATA.matches(classValue)) {
+                        getMeta(elem, topicMetaTable);
+                    } else if (topicMetaTable.containsKey(metaKey)) {
+                        //append node to the list if it exist in topic meta table
+                        topicMetaTable.get(metaKey).appendChild(elem.cloneNode(true));
+                    } else {
+                        final Element stub = doc.createElement(ELEMENT_STUB);
+                        stub.appendChild(elem.cloneNode(true));
+                        topicMetaTable.put(metaKey, stub);
+                    }
                 }
             }
         }
@@ -372,7 +323,6 @@ public final class MapMetaReader implements AbstractReader {
         if (topicMetaTable == null) {
             topicMetaTable = new Hashtable<String, Element>(16);
         }
-        Node item = null;
         final Iterator<String> iter = enableSet.iterator();
         while (iter.hasNext()) {
             final String key = iter.next();
@@ -395,12 +345,11 @@ public final class MapMetaReader implements AbstractReader {
                             // Otherwise it will get into infinitive loop
                             final NodeList children = inheritStub.getChildNodes();
                             for(int i = 0; i < children.getLength(); i++) {
-                                item = children.item(i).cloneNode(true);
-                                item = stub.getOwnerDocument().importNode(item,true);
+                                Node item = children.item(i).cloneNode(true);
+                                item = stub.getOwnerDocument().importNode(item, true);
                                 stub.appendChild(item);
                             }
                         }
-
                         topicMetaTable.put(key, (Element)stub);
                     }
                 }
@@ -409,29 +358,27 @@ public final class MapMetaReader implements AbstractReader {
         return topicMetaTable;
     }
 
-    private void handleGlobalMeta(final Node metadata) {
+    private void handleGlobalMeta(final Element metadata) {
         final NodeList children = metadata.getChildNodes();
         for(int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
-            Node attr = null;
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                attr = node.getAttributes().getNamedItem(ATTRIBUTE_NAME_CLASS);
-            }
-            if (attr != null) {
-                final String attrValue = attr.getNodeValue();
-                final String metaKey = attrValue.substring(1,
-                        attrValue.indexOf(STRING_BLANK,attrValue.indexOf(SLASH))+1 );
-                if (TOPIC_METADATA.matches(attrValue)) {
-                    //proceed the metadata in <metadata>
-                    handleGlobalMeta(node);
-                } else if (cascadeSet.contains(metaKey) && globalMeta.containsKey(metaKey)) {
-                    //append node to the list if it exist in global meta table
-                    //use clone here to prevent the node is removed from original DOM tree;
-                    globalMeta.get(metaKey).appendChild(node.cloneNode(true));
-                } else if (cascadeSet.contains(metaKey)) {
-                    final Element stub = doc.createElement(ELEMENT_STUB);
-                    stub.appendChild(node.cloneNode(true));
-                    globalMeta.put(metaKey, stub);
+                final Element elem = (Element) node;
+                final Attr classAttr = elem.getAttributeNode(ATTRIBUTE_NAME_CLASS);
+                if (classAttr != null) {
+                    final String classValue = classAttr.getNodeValue();
+                    final String metaKey = classValue.substring(1, classValue.indexOf(STRING_BLANK, classValue.indexOf(SLASH))+1 );
+                    if (TOPIC_METADATA.matches(classValue)) {
+                        //proceed the metadata in <metadata>
+                        handleGlobalMeta(elem);
+                    } else if (cascadeSet.contains(metaKey) && globalMeta.containsKey(metaKey)) {
+                        //append node to the list if it exist in global meta table
+                        globalMeta.get(metaKey).appendChild(elem.cloneNode(true));
+                    } else if (cascadeSet.contains(metaKey)) {
+                        final Element stub = doc.createElement(ELEMENT_STUB);
+                        stub.appendChild(elem.cloneNode(true));
+                        globalMeta.put(metaKey, stub);
+                    }
                 }
             }
         }
