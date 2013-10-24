@@ -4,22 +4,33 @@
 
 Improving the RTF output of DITA content means basically the following:
 
-1. Streamlining the XSLT code which seems to be overly complex (at least in some parts).
-2. Reducing the generated RTF code to the minimum necessary to render the content appropriate to the semantic structure of the DITA files (the DITA perspective).
-3. For maximum backward and cross-platform compatibility only a necessary subset of mature RTF features should be used, i.e. those also available in older versions of the RTF standard.
-4. Formatting of semantically distinct elements should be provided using RTF styles which allow for consistent changing of the formatting with any RTF capable word processor.
+1. From the XSLT perspective: Streamlining the XSLT code which seems to be overly complex (at least in some parts).
+2. From the DITA perspective: Reducing the generated RTF code to the minimum necessary to render the content appropriate to the semantic structure of the DITA files.
+3. From the RTF perspective: For maximum backward and cross-platform compatibility only a necessary subset of mature RTF features should be used, i.e. those also available in older versions of the RTF standard (the RTF perspective).
+4. To allow for easy post-editing, formatting of semantically distinct elements should be provided using RTF styles.
 
 ## RTF Basics
 
 ### General Information
 - RTF is a text based format.
-- RTF files are ANSI encoded can usually only contain ASCII characters directly. All other characters (e.g. all Unicode characters) have to be escaped.
+- RTF files are ANSI encoded and can usually only contain ASCII characters directly. All other characters (e.g. all Unicode characters) have to be escaped.
 - RTF is mainly a format to be produced automatically. Usually the RTF code is not meant to be manipulated manually. 
 - Whereas DITA is all about structuring content semantically, RTF is mostly concerned with formatting. For example, there isn't even a concept of "heading" in RTF. A heading is just a paragraph with a different and larger font in bold.
 
 ### Basic Syntax
+RTF breaks down into four basic categories: commands, escapes, groups, and plaintext.
 
+#### Commands
+RTF commands consist of a backslash, some lowercase letters, maybe an integer, and then maybe a meaningless space character. Examples: `\pard`, `\fs24`.
 
+#### Escapes
+Examples: `\~`(nonbreaking space),  `\uc1\u26412*` (Unicode character 本)
+
+#### Groups
+Groups are enclosed in {curly brackets}.
+
+#### Plaintext
+All other characters will be treated as plaintext by RTF, usually also all space characters (but not line breaks).
 
 ## RTF Resources
 
