@@ -31,7 +31,7 @@ RTF commands consist of a backslash, some lowercase letters, maybe an integer, a
 Examples: `\~`(nonbreaking space),  `\uc1\u26412*` (Unicode character 本)
 
 #### Groups
-Groups are enclosed in {curly brackets}. The prevent formatting to spill over to the next section so the most maintainable way to enclose a paragraph in RTF is `{\pard ... \par}`.
+Groups are enclosed in `{`curly brackets`}`. They prevent formatting to spill over to the next section so the most maintainable way to enclose a paragraph in RTF is `{\pard ... \par}`.
 
 #### Plaintext
 All other characters will be treated as plaintext by RTF, usually also all space characters (but not line breaks).
