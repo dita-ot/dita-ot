@@ -19,6 +19,7 @@ Improving the RTF output of DITA content means basically the following:
 
 ### Basic Syntax
 RTF breaks down into four basic categories: 
+
 1. commands
 2. escapes 
 3. groups 
