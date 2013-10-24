@@ -5,54 +5,58 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 
-
-<xsl:template name="steps">
+<!-- Named templates -->
+<xsl:template name="ordered-steps">
     <xsl:for-each select="step">
     {\pard <xsl:number count="step" level="any" format="1" />) <xsl:apply-templates/>\par}
     </xsl:for-each>
   </xsl:template>
 
+<!-- Match templates -->
  <xsl:template match="*[contains(@class,' task/context ')]">
  Context found!
  <xsl:apply-templates/>
   </xsl:template>  
 
  <xsl:template match="*[contains(@class, 'task/steps ')]">
- Steps found!
- <xsl:apply-templates/>
-  </xsl:template>  
+ [Steps found!] 
+ <xsl:value-of select="stepsection" />
+ <!-- <xsl:apply-templates/> -->
+ <xsl:call-template name="ordered-steps" />
+ </xsl:template>  
 
- <xsl:template match="*[contains(@class,' task/stepsection ')]">
- Stepsection found!
+ <!-- <xsl:template match="*[contains(@class,' task/stepsection ')]">
+ [Stepsection found!]
  <xsl:apply-templates/>
-  </xsl:template>  
+  </xsl:template>   -->
   
    <xsl:template match="*[contains(@class,' task/cmd ')]">
- Command found!
+ [Command found!] 
  <xsl:apply-templates/>
   </xsl:template>  
   
 
-  <!-- copied from dita2rtf-lists.xsl -->
+  
+  <!-- Original code copied from dita2rtf-lists.xsl -->
 
   <!-- single-part lists -->
 
-  <xsl:template match="*[contains(@class,' topic/ul ')]">
+  <!-- <xsl:template match="*[contains(@class,' topic/ul ')]">
     <xsl:call-template name="gen-id"/>
     <xsl:apply-templates/>
     <xsl:if test="not(ancestor::*[contains(@class,' topic/li ')])">\par\pard\li360\fi-180</xsl:if>
-  </xsl:template>
+  </xsl:template> -->
 
   <xsl:template match="*[contains(@class,' topic/li ')]">
     <xsl:call-template name="gen-id"/>
     <!-- <xsl:call-template name="block-li"/> -->
-    <xsl:call-template name="steps"/>
+    <xsl:call-template name="ordered-steps"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/ol ')]">
     <xsl:call-template name="gen-id"/>
-    [topic/ol] 
-    <xsl:call-template name="steps"/>
+    {\pard [topic/ol]  \par}
+    <xsl:call-template name="ordered-steps"/>
     <xsl:apply-templates/>
     <!-- <xsl:if test="not(ancestor::*[contains(@class,' topic/li ')])">
     [Unnecessary] \par\pard\li360\fi-180
@@ -61,13 +65,13 @@
 
 
   <!-- block-list -->
-  <xsl:template name="block-list">
+  <!-- <xsl:template name="block-list">
     <xsl:param name="depth">0</xsl:param>
     <xsl:variable name="li-num" select="720 + ($depth * 360)"/>
 \par \pard\li<xsl:value-of select="$li-num"/>\fi-360{\*\pn\pnlvlblt\pnf1\pnindent180{\pntxtb\'b7}}\plain\f2\fs24
     [Block-List:] <xsl:apply-templates/>
 \pard\li360\fi-180 \par
-  </xsl:template>
+  </xsl:template> -->
 
   <!-- <xsl:template name="block-ol">
     <xsl:param name="depth">0</xsl:param>
