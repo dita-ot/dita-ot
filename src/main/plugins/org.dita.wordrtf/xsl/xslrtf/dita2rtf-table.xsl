@@ -497,7 +497,7 @@ Table " --><xsl:when test="( (string-length($ancestorlang)=5 and contains($ances
     <xsl:variable name="width">
       <xsl:choose>
         <xsl:when test="@colwidth and not(@colwidth='' or @colwidth='*')">
-          <xsl:value-of select="substring-before(@colwidth,'*')"/>
+          <xsl:value-of select="substring-before(@colwidth,'pt')"/>
         </xsl:when>
         <xsl:otherwise>1</xsl:otherwise>
       </xsl:choose>
