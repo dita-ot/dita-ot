@@ -10,30 +10,38 @@
   <!-- single-part lists -->
 
   <xsl:template match="*[contains(@class,' topic/ul ')]">
-    <xsl:call-template name="gen-id"/><xsl:apply-templates/><xsl:if test="not(ancestor::*[contains(@class,' topic/li ')])">\par\pard\li360\fi-180</xsl:if>
+    <xsl:call-template name="gen-id"/>
+    <xsl:apply-templates/>
+    <!-- <xsl:if test="not(ancestor::*[contains(@class,' topic/li ')])">\par\pard\li360\fi-180</xsl:if> -->
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/li ')]">
-    <xsl:call-template name="gen-id"/><xsl:call-template name="block-li"/>
+    <xsl:call-template name="gen-id"/>
+    <xsl:call-template name="block-li"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/ol ')]">
-    <xsl:call-template name="gen-id"/><xsl:apply-templates/><xsl:if test="not(ancestor::*[contains(@class,' topic/li ')])">\par\pard\li360\fi-180</xsl:if>    
+    <xsl:call-template name="gen-id"/>
+    <xsl:apply-templates/>
+    <!-- <xsl:if test="not(ancestor::*[contains(@class,' topic/li ')])">\par\pard\li360\fi-180</xsl:if>     -->
   </xsl:template>
 
 
   <!-- definition list -->
 
   <xsl:template match="*[contains(@class,' topic/dl ')]">
-    <xsl:call-template name="gen-id"/><xsl:call-template name="block-lq"/>
+    <xsl:call-template name="gen-id"/>
+    <xsl:call-template name="block-lq"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/dt ')]">
-    <xsl:call-template name="gen-id"/><xsl:call-template name="inline-em"/>
+    <xsl:call-template name="gen-id"/>
+    <xsl:call-template name="inline-em"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/dd ')]">
-    <xsl:call-template name="gen-id"/><xsl:call-template name="block-p"/>
+    <xsl:call-template name="gen-id"/>
+    <xsl:call-template name="block-p"/>
   </xsl:template>
 
   <!-- parameter list -->
