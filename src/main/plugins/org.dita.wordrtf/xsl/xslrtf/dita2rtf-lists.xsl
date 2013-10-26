@@ -170,10 +170,10 @@
 {\listoverride\listid<xsl:value-of select="$listid"/>
 \listoverridecount0\ls<xsl:value-of select="$listnum"/>}</xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/ul ')]" mode="gen-list-table">
-    <xsl:variable name="templateid" select="random:getRandomNum()"/>
-    <xsl:variable name="listid" select="random:getRandomNum()"/>
-    <xsl:variable name="listnum" select="count(preceding::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')][not(ancestor::*[contains(@class,' topic/li ')])]) + 1"/>
+<xsl:template match="*[contains(@class,' topic/ul ')]" mode="gen-list-table">
+<xsl:variable name="templateid" select="random:getRandomNum()"/>
+<xsl:variable name="listid" select="random:getRandomNum()"/>
+<xsl:variable name="listnum" select="count(preceding::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')][not(ancestor::*[contains(@class,' topic/li ')])]) + 1"/>
 {\list\listtemplateid<xsl:value-of select="$templateid"/> \listhybrid{\listlevel \levelnfc23 \levelnfcn23 <!-- \leveljc0 \leveljcn0 \levelfollow0
  \levelstartat1 \levelspace0 \levelindent0
 {\leveltext \'01
@@ -212,13 +212,11 @@
 {\leveltext \'01
 {\uc1 \u-3979 ?};} -->
 {\levelnumbers;} \f10 \fbias0  \fi-420 \li3780 \jclisttab \tx3780 \lin3780 }
-{\listname ;} \listid<xsl:value-of select="$listid"/>}
-    <xsl:choose>
-      <xsl:when test="following::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')]">
-        <xsl:apply-templates select="following::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')][1]" mode="gen-list-table"/>
-      </xsl:when>
-      <xsl:otherwise>
-}{\*\listoverridetable</xsl:otherwise>
+{\listname ;}\listid<xsl:value-of select="$listid"/>}<xsl:choose>
+<xsl:when test="following::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')]">
+<xsl:apply-templates select="following::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')][1]" mode="gen-list-table"/>
+</xsl:when>
+<xsl:otherwise>}{\*\listoverridetable</xsl:otherwise>
 </xsl:choose>
 {\listoverride\listid<xsl:value-of select="$listid"/>\listoverridecount0\ls<xsl:value-of select="$listnum"/>}</xsl:template>
 
