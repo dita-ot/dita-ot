@@ -340,12 +340,18 @@ name="get-ascii">
 <xsl:call-template name="gen-id"/>
 <xsl:choose>
 <xsl:when test="@href and not(@href='')">
-<xsl:if test="not(preceding-sibling::*[contains(@class,' topic/link ')]) and contains(@class,' topic/link ')">\par </xsl:if>
-{\field{\*\fldinst {\s8 \f0\fs24\ul\cf2 HYPERLINK <xsl:if test="$samefile='true'">\\l</xsl:if>
-"<xsl:value-of select="$href-value"/>"}}{\fldrslt {\s8 \f0\fs24\ul\cf2 <xsl:call-template
-name="gen-linktxt"/>\s8 \f0\fs24\ul\cf2}}}\s8
-<xsl:if test="contains(@class,' topic/link ')">
-<xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>\par </xsl:if>
+<!-- <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/link ')]) and contains(@class,' topic/link ')">\par </xsl:if> -->
+{\pard 
+{\field{\*\fldinst {HYPERLINK 
+<!-- <xsl:if test="$samefile='true'">\\l</xsl:if> -->
+"<xsl:value-of select="$href-value"/>"
+}}{\fldrslt {\s8 \f0\fs24\ul\cf2 
+<xsl:call-template name="gen-linktxt"/>
+}}}
+\par}
+<!-- <xsl:if test="contains(@class,' topic/link ')">
+<xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>\par 
+</xsl:if> -->
 </xsl:when>
 <xsl:otherwise>
 <xsl:call-template name="output-message">
