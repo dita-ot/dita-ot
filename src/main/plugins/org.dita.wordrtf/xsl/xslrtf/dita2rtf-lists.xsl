@@ -159,7 +159,7 @@ version="2.0" xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefi
 {\listlevel \levelnfc2 \levelnfcn2 \leveljc2 \leveljcn2 \levelfollow0 \levelstartat1 \levelspace0 \levelindent0
 {\leveltext \'02 \'08.;}
 {\levelnumbers \'01;} \fi-420 \li3780 \jclisttab \tx3780 \lin3780 } -->
-{\listname ;}\listid<xsl:value-of select="$listid"/>}<xsl:choose>
+{\listname}\listid<xsl:value-of select="$listid"/>}<xsl:choose>
 <!--xsl:when test="descendant::*[contains(@class,' topic/ol ')]">
 <xsl:apply-templates select="descendant::*[contains(@class,' topic/ol ')][1]" mode="gen-list-table"/>
 </xsl:when-->
@@ -211,8 +211,8 @@ version="2.0" xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefi
 {\listlevel \levelnfc23 \levelnfcn23 \leveljc0 \leveljcn0 \levelfollow0 \levelstartat1 \levelspace0 \levelindent0
 {\leveltext \'01
 {\uc1 \u-3979 ?};} -->
-{\levelnumbers;} \f10 \fbias0  \fi-420 \li3780 \jclisttab \tx3780 \lin3780 }
-{\listname ;}\listid<xsl:value-of select="$listid"/>}<xsl:choose>
+{\levelnumbers} \f10 \fbias0  \fi-420 \li3780 \jclisttab \tx3780 \lin3780 }
+{\listname}\listid<xsl:value-of select="$listid"/>}<xsl:choose>
 <xsl:when test="following::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')]">
 <xsl:apply-templates select="following::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')][1]" mode="gen-list-table"/>
 </xsl:when>
