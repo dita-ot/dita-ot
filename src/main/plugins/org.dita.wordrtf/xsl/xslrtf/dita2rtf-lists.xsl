@@ -91,7 +91,7 @@
     <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl
     </xsl:if>
 <!-- \jclisttab\tx<xsl:value-of select="$li-num"/> -->
-{\pard \ls<xsl:value-of select="$listnum"/>
+{\pard \ls<xsl:value-of select="$listnum"/> \'b7 
     <xsl:if test="$depth &gt; 0">
 <!-- \ilvl<xsl:value-of select="$depth"/> -->
     </xsl:if>
