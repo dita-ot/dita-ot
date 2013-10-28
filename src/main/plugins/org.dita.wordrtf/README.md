@@ -65,5 +65,5 @@ The definitive authority regarding RTF is Sean M. Burke.
 ## Still to be done
 - Provide separate RTF styles for all DITA elements which might be rendered distinctly. These styles can later easily be changed with any RTF capable word processor without touching the RTF code.
 - More robust whitespace handling. RTF ignores new lines but generally not spaces.
-- All features not covered by the hierarchy sample (e.g. tables).
-- Support for meta data.
+- All features not covered by the hierarchy sample (e.g. tables). EDIT: Table support doesn't seem to be broke, see https://github.com/dita-ot/dita-ot/issues/1190
+- Document level transformations, e.g. front matter, meta data.
