@@ -29,8 +29,9 @@ Page \chpgn
 \par}
 
 <!-- Front page -->
-{\pard \pvmrg\phmrg\posxc\posyc \qc
-\f1\fs72 <xsl:value-of select="$maptitle"/>\par}
+{\pard \pvmrg\phmrg\posxc\posyc \qc \widctlpar
+\f1\fs72 <xsl:value-of select="$maptitle"/>
+\par}
 {\pard \page \par}
   </xsl:template>
 
