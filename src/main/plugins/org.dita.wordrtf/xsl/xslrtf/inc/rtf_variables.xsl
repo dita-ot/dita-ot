@@ -38,9 +38,6 @@ RTF ignores line breaks but usually not white space!
 {\s9 \f1\fs24\b Table Title;}
 }
 \deflang1033 \plain \fs24 \ql \fi0 \li0 \widowctrl \hyphauto \ftnbj
-{\header \pard\qc\plain\f1\fs20 
-[ Doc Titel Here /  p. \chpgn ] 
-\par}
 </xsl:variable>
 
 <xsl:variable name="rtf:xml_declaration"><xsl:text disable-output-escaping="yes">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</xsl:text>
