@@ -50,6 +50,10 @@ Hello, World!
 } 
 ```
 
+### Caveat
+If you want to have a look under the hood of the generated RTF file you can open it with any text editor. And better keep a copy of your file because just opening and saving the file with Microsoft Word or any other word processor will terribly bloat it with additional RTF code. For example the generated "hierarchy.rft" will grow from 25 KB to more than 500 KB that way!
+
+
 ## RTF Resources
 
 ### RTF Specification
