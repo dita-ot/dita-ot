@@ -194,6 +194,7 @@ the same values used in by p in other contexts. -->
 
 <!-- Citation links -->
 <xsl:template match="*[contains(@class,' topic/lq ')]" name="topic.lq">
+
 <xsl:variable name="samefile">
 <xsl:choose>
 <xsl:when test="@href and starts-with(@href,'#')">
@@ -204,6 +205,7 @@ the same values used in by p in other contexts. -->
 </xsl:otherwise>
 </xsl:choose>
 </xsl:variable>
+
 <xsl:variable name="href-value">
 <xsl:choose>
 <xsl:when test="@href and starts-with(@href,'#')">
@@ -294,20 +296,20 @@ name="get-ascii">
 </xsl:choose>
 </xsl:template>
 
+<!-- Bookmarks (internal links) -->
 <xsl:template name="gen-bookmark">
 <xsl:param name="name">
 <xsl:value-of select="."/>
 </xsl:param>
-<!-- Don't show bookmarks in output
-{\pard
-{\bkmkstart <xsl:value-of select="$name"/>}
-{\bkmkend <xsl:value-of select="$name"/>}
-\par }
--->
+{
+{\*\bkmkstart <xsl:value-of select="$name"/>}
+{\*\bkmkend <xsl:value-of select="$name"/>}
+}
 </xsl:template>
 
 <!-- Hyperlinks -->
 <xsl:template match="*[contains(@class,' topic/xref ')]|*[contains(@class,' topic/link ')]">
+
 <xsl:variable name="samefile">
 <xsl:choose>
 <xsl:when test="@href and starts-with(@href,'#')">
@@ -318,6 +320,7 @@ name="get-ascii">
 </xsl:otherwise>
 </xsl:choose>
 </xsl:variable>
+
 <xsl:variable name="href-value">
 <xsl:choose>
 <xsl:when test="@href and starts-with(@href,'#')">
@@ -338,13 +341,14 @@ name="get-ascii">
 </xsl:when>
 </xsl:choose>
 </xsl:variable>
+
 <xsl:call-template name="gen-id"/>
 <xsl:choose>
 <xsl:when test="@href and not(@href='')">
 <!-- <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/link ')]) and contains(@class,' topic/link ')">\par </xsl:if> -->
 {\pard 
 {\field{\*\fldinst {HYPERLINK 
-<!-- <xsl:if test="$samefile='true'">\\l</xsl:if> -->
+<xsl:if test="$samefile='true'">\\l</xsl:if>
 "<xsl:value-of select="$href-value"/>"
 }}{\fldrslt {\s8 \f0\fs24\ul\cf2 
 <xsl:call-template name="gen-linktxt"/>
