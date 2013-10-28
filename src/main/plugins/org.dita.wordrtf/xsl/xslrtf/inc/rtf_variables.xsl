@@ -34,7 +34,7 @@ RTF ignores line breaks but usually not white space!
 {\s5 \f1\fs18\b\sa90 Heading 5;}
 {\s6 \f1\fs16\b\sa80 Heading 6;}
 {\s7 \f1\fs24\b Table Header;}
-{\s8 \f0\fs24 Link;}
+{\s8 \f0\fs24\ul\cf2 Link;}
 {\s9 \f1\fs24\b Table Title;}
 }
 \deflang1033 \plain \fs24 \ql \fi0 \li0 \widowctrl \hyphauto \ftnbj
