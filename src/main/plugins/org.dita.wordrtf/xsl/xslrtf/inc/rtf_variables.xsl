@@ -10,7 +10,7 @@ Defining the most important components of a valid RTF file.
 NOTE: 
 * The RTF prolog must be at the very beginning of the document, 
 otherwise the RTF format won't be recognised.
-* RTF ignores line breaks but usually not white space!
+* RTF ignores line breaks but usually not whitespace!
  -->	
 <xsl:variable name="rtf:prolog">
 {\rtf1 \ansi \deff0 
