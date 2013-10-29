@@ -50,6 +50,10 @@ Hello, World!
 } 
 ```
 
+### Caveat
+If you want to have a look under the hood of the generated RTF file you can open it with any text editor. And better keep a copy of your file because just opening and saving the file with Microsoft Word or any other word processor will terribly bloat it with additional RTF code. For example the generated "hierarchy.rft" will grow from 25 KB to more than 500 KB that way!
+
+
 ## RTF Resources
 
 ### RTF Specification
@@ -65,5 +69,5 @@ The definitive authority regarding RTF is Sean M. Burke.
 ## Still to be done
 - Provide separate RTF styles for all DITA elements which might be rendered distinctly. These styles can later easily be changed with any RTF capable word processor without touching the RTF code.
 - More robust whitespace handling. RTF ignores new lines but generally not spaces.
-- All features not covered by the hierarchy sample (e.g. tables).
-- Support for meta data.
+- All features not covered by the hierarchy sample (e.g. tables). EDIT: Table support doesn't seem to be broke, see https://github.com/dita-ot/dita-ot/issues/1190
+- Document level transformations, e.g. front matter, meta data.
