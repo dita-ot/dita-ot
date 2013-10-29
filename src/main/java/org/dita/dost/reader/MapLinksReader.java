@@ -78,7 +78,7 @@ public final class MapLinksReader extends AbstractXMLReader {
     private File inputFile;
     private final Set<String> lastMatchElement;
     private int level;
-    private final Map<String, Map<String,String> > map;
+    private final Map<File, Map<String,String> > map;
     private boolean match;
 
     /** Meta shows whether the event is in metadata when using sax to parse ditamap file. */
@@ -94,7 +94,7 @@ public final class MapLinksReader extends AbstractXMLReader {
      */
     public MapLinksReader() {
         super();
-        map = new HashMap<String, Map<String,String> >();
+        map = new HashMap<File, Map<String,String> >();
         ancestorList = new ArrayList<String>(16);
         matchList = new ArrayList<String>(16);
         indexEntries = new StringBuffer(1024);
@@ -194,14 +194,14 @@ public final class MapLinksReader extends AbstractXMLReader {
                 //remove the "#" in topic file path
                 t = t.substring(0, t.indexOf(SHARP));
             }
-            Map<String, String> m = map.get(t);
+            Map<String, String> m = map.get(new File(t));
             if (m != null) {
                 final String orig = m.get(frag);
                 m.put(frag, StringUtils.setOrAppend(orig, indexEntries.toString(), false));
             } else {
                 m = new HashMap<String, String>(16);
                 m.put(frag, indexEntries.toString());
-                map.put(t, m);
+                map.put(new File(t), m);
             }
             indexEntries = new StringBuffer(1024);
         }
@@ -212,7 +212,7 @@ public final class MapLinksReader extends AbstractXMLReader {
      * 
      * @return map of links by topic path
      */
-    public Map<String, Map<String, String>> getMapping() {
+    public Map<File, Map<String, String>> getMapping() {
     	return Collections.unmodifiableMap(map);
     }
     
@@ -301,14 +301,14 @@ public final class MapLinksReader extends AbstractXMLReader {
                             SHARP : t.substring(t.indexOf(SHARP) + 1);
                     t = t.substring(0, t.indexOf(SHARP));
                 }
-                Map<String, String> m = map.get(t);
+                Map<String, String> m = map.get(new File(t));
                 if (m != null) {
                     final String orig = m.get(frag);
                     m.put(frag, StringUtils.setOrAppend(orig, indexEntries.toString(), false));
                 } else {
                     m = new HashMap<String, String>(16);
                     m.put(frag, indexEntries.toString());
-                    map.put(t, m);
+                    map.put(new File(t), m);
                 }
                 indexEntries = new StringBuffer(1024);
             }

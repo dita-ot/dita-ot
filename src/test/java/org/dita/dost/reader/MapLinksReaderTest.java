@@ -51,16 +51,16 @@ public class MapLinksReaderTest {
         final DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         db.setEntityResolver(new CatalogResolver());
         
-        final Map<String, Document> expMap = readExpected(db);
+        final Map<File, Document> expMap = readExpected(db);
 
         XMLUnit.setNormalizeWhitespace(true);
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
         XMLUnit.setIgnoreComments(true);
 
-        final Map<String, Map<String, String>> mapSet = reader.getMapping();
+        final Map<File, Map<String, String>> mapSet = reader.getMapping();
         
-        for (final Map.Entry<String, Map<String, String>> e: mapSet.entrySet()) {
+        for (final Map.Entry<File, Map<String, String>> e: mapSet.entrySet()) {
             for (final Map.Entry<String, String> ee: e.getValue().entrySet()) {
                 assertEquals(SHARP, ee.getKey());
                 assertXMLEqual(expMap.get(e.getKey()),
@@ -69,9 +69,9 @@ public class MapLinksReaderTest {
         }
     }
 
-    private Map<String, Document> readExpected(final DocumentBuilder db) throws SAXException, IOException {
+    private Map<File, Document> readExpected(final DocumentBuilder db) throws SAXException, IOException {
         final Document expDoc = db.parse(new File(srcDir, "maplinks.unordered").toURI().toString());
-        final Map<String, Document> expMap = new HashMap<String, Document>();
+        final Map<File, Document> expMap = new HashMap<File, Document>();
         final NodeList maplinks = expDoc.getElementsByTagName(ELEMENT_NAME_MAPLINKS);
         for (int i = 0; i < maplinks.getLength(); i++) {
             final Element m = (Element) maplinks.item(i);
@@ -83,7 +83,7 @@ public class MapLinksReaderTest {
                     d.appendChild(d.importNode(c, true));
                 }
             }
-            expMap.put(new File(srcDir, m.getAttribute(ATTRIBUTE_NAME_HREF)).getAbsolutePath(), d);
+            expMap.put(new File(srcDir, m.getAttribute(ATTRIBUTE_NAME_HREF)), d);
         }
         return expMap;
     }
