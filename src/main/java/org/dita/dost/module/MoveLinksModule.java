@@ -37,11 +37,10 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        if (logger == null) {
-            throw new IllegalStateException("Logger not set");
-        }
-        
         final File maplinksFile = new File(input.getAttribute(ANT_INVOKER_PARAM_MAPLINKS));
+        if (!maplinksFile.exists()) {
+            return null;
+        }
         
         final MapLinksReader indexReader = new MapLinksReader();
         indexReader.setLogger(logger);
@@ -52,12 +51,14 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         indexReader.read(maplinksFile.getAbsoluteFile());
         final Map<String, Map<String, String>> mapSet = indexReader.getMapping();
         
-        final DitaLinksWriter indexInserter = new DitaLinksWriter();
-        indexInserter.setLogger(logger);
-        for (final Map.Entry<String, Map<String, String>> entry: mapSet.entrySet()) {
-            logger.logInfo("Processing " + entry.getKey());
-            indexInserter.setLinks(entry.getValue());
-            indexInserter.write(new File(entry.getKey()));
+        if (!mapSet.isEmpty()) {
+            final DitaLinksWriter indexInserter = new DitaLinksWriter();
+            indexInserter.setLogger(logger);
+            for (final Map.Entry<String, Map<String, String>> entry: mapSet.entrySet()) {
+                logger.logInfo("Processing " + entry.getKey());
+                indexInserter.setLinks(entry.getValue());
+                indexInserter.write(new File(entry.getKey()));
+            }
         }
         return null;
     }

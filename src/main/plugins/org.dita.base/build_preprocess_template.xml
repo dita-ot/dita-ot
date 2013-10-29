@@ -431,7 +431,7 @@
       Push links from maplinks.unordered file into
       <related-links> sections of the corresponding topics. -->
   <target name="move-links"
-    dita:depends="{depend.preprocess.move-links.pre},move-links-check"
+    dita:depends="{depend.preprocess.move-links.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-links.skip"
     description="Move the related link information to topics">
@@ -441,12 +441,6 @@
         <param name="maplinks" location="${maplink.workdir}/maplinks.unordered"/>
       </module>
     </pipeline>
-  </target>
-
-  <target name="move-links-check">
-    <condition property="preprocess.move-links.skip">
-      <isset property="noMap"/>
-    </condition>
   </target>
   
   <!-- topicpull
