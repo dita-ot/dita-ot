@@ -169,17 +169,17 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testGetMaxFive() {
-        assertEquals(Integer.valueOf(5), StringUtils.getMax("1", "2", "3", "4", "5"));
-        assertEquals(Integer.valueOf(5), StringUtils.getMax("5", "4", "3", "2", "1"));
-        assertEquals(Integer.valueOf(5), StringUtils.getMax("5", "5", "5", "5", "5"));
+    public void testNormalizeAndCollapseWhitespace() {
+        assertEquals("foo bar baz", runNormalizeAndCollapseWhitespace("foo bar baz"));
+        assertEquals(" foo bar baz ", runNormalizeAndCollapseWhitespace(" foo bar baz "));
+        assertEquals(" foo bar baz ", runNormalizeAndCollapseWhitespace("  foo  bar  baz  "));
+        assertEquals(" foo bar baz ", runNormalizeAndCollapseWhitespace("\nfoo\nbar\nbaz\n"));
     }
-
-    @Test
-    public void testGetMaxSix() {
-        assertEquals(Integer.valueOf(6), StringUtils.getMax("1", "2", "3", "4", "5", "6"));
-        assertEquals(Integer.valueOf(6), StringUtils.getMax("6", "5", "4", "3", "2", "1"));
-        assertEquals(Integer.valueOf(6), StringUtils.getMax("6", "6", "6", "6", "6", "6"));
+    
+    private String runNormalizeAndCollapseWhitespace(final String text) {
+        final StringBuilder sb = new StringBuilder(text);
+        StringUtils.normalizeAndCollapseWhitespace(sb);
+        return sb.toString();
     }
-
+    
 }

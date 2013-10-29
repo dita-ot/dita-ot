@@ -92,12 +92,7 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
             for (int i = 0; i < targetNum; i++) {
                 final IndexTermTarget target = targets.get(i);
                 String targetURL = target.getTargetURI();
-                // Remove file extension from targetName, and replace all the
-                // file seperator with '_'.
-                targetURL = targetURL.substring(0, targetURL.lastIndexOf("."));
-                targetURL = targetURL.replace('\\', '_');
-                targetURL = targetURL.replace('/', '_');
-                targetURL = targetURL.replace('.', '_');
+                targetURL = targetURL.substring(0, targetURL.lastIndexOf(".")).replace('\\', '_').replace('/', '_').replace('.', '_');
 
                 serializer.writeStartElement("indexitem");
                 serializer.writeAttribute("text", term.getTermFullName());

@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.StringUtils.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,6 @@ import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -140,15 +140,15 @@ public final class IndexTermReader extends AbstractXMLReader {
             if (!insideSortingAs && !termStack.empty()) {
                 final IndexTerm indexTerm = termStack.peek();
                 temp = trimSpaceAtStart(temp, indexTerm.getTermName());
-                indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, false));
+                indexTerm.setTermName(setOrAppend(indexTerm.getTermName(), temp, false));
             } else if (insideSortingAs && temp.length() > 0) {
                 final IndexTerm indexTerm = termStack.peek();
                 temp = trimSpaceAtStart(temp, indexTerm.getTermKey());
-                indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, false));
+                indexTerm.setTermKey(setOrAppend(indexTerm.getTermKey(), temp, false));
             } else if (inTitleElement) {
                 temp = trimSpaceAtStart(temp, title);
                 //Always append space if: <title>abc<ph/>df</title>
-                title = StringUtils.setOrAppend(title, temp, false);
+                title = setOrAppend(title, temp, false);
             }
         }
     }
@@ -320,7 +320,7 @@ public final class IndexTermReader extends AbstractXMLReader {
                     .getValue(ATTRIBUTE_NAME_XML_LANG);
 
             if (xmlLang != null) {
-                IndexTerm.setTermLocale(StringUtils.getLocale(xmlLang));
+                IndexTerm.setTermLocale(getLocale(xmlLang));
             }
         }
 
@@ -501,31 +501,6 @@ public final class IndexTermReader extends AbstractXMLReader {
         }
     }
 
-    /** Whitespace normalization state. */
-    private enum WhiteSpaceState { WORD, SPACE };
-
-    /**
-     * Normalize and collapse whitespaces from string buffer.
-     * 
-     * @param strBuffer The string buffer.
-     */
-    private void normalizeAndCollapseWhitespace(final StringBuilder strBuffer){
-        WhiteSpaceState currentState = WhiteSpaceState.WORD;
-        for (int i = strBuffer.length() - 1; i >= 0; i--) {
-            final char currentChar = strBuffer.charAt(i);
-            if (Character.isWhitespace(currentChar)) {
-                if (currentState == WhiteSpaceState.SPACE) {
-                    strBuffer.delete(i, i + 1);
-                } else if(currentChar != ' ') {
-                    strBuffer.replace(i, i + 1, " ");
-                }
-                currentState = WhiteSpaceState.SPACE;
-            } else {
-                currentState = WhiteSpaceState.WORD;
-            }
-        }
-    }
-
     /**
      * Trim whitespace from start of the string. If last character of termName and
      * first character of temp is a space character, remove leading string from temp 
@@ -534,7 +509,7 @@ public final class IndexTermReader extends AbstractXMLReader {
      * @param termName
      * @return trimmed temp value
      */
-    private String trimSpaceAtStart(final String temp, final String termName) {
+    private static String trimSpaceAtStart(final String temp, final String termName) {
         if(termName != null && termName.charAt(termName.length() - 1) == ' ') {
             if(temp.charAt(0) == ' ') {
                 return temp.substring(1);

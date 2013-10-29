@@ -480,69 +480,30 @@ public final class StringUtils {
             return input;
         }
     }
+    
+    /** Whitespace normalization state. */
+    private enum WhiteSpaceState { WORD, SPACE };
 
     /**
-     * Get max value.
+     * Normalize and collapse whitespaces from string buffer.
+     * 
+     * @param strBuffer The string buffer.
      */
-    @Deprecated
-    public static Integer getMax(final String ul_depth, final String ol_depth, final String sl_depth,
-            final String dl_depth, final String table_depth, final String stable_depth){
-
-        final int unDepth = Integer.parseInt(ul_depth);
-        final int olDepth = Integer.parseInt(ol_depth);
-        final int slDepth = Integer.parseInt(sl_depth);
-        final int dlDepth = Integer.parseInt(dl_depth);
-        final int tableDepth = Integer.parseInt(table_depth);
-        final int stableDepth = Integer.parseInt(stable_depth);
-
-        int max = unDepth;
-        if(olDepth > max){
-            max = olDepth;
+    public static void normalizeAndCollapseWhitespace(final StringBuilder strBuffer){
+        WhiteSpaceState currentState = WhiteSpaceState.WORD;
+        for (int i = strBuffer.length() - 1; i >= 0; i--) {
+            final char currentChar = strBuffer.charAt(i);
+            if (Character.isWhitespace(currentChar)) {
+                if (currentState == WhiteSpaceState.SPACE) {
+                    strBuffer.delete(i, i + 1);
+                } else if(currentChar != ' ') {
+                    strBuffer.replace(i, i + 1, " ");
+                }
+                currentState = WhiteSpaceState.SPACE;
+            } else {
+                currentState = WhiteSpaceState.WORD;
+            }
         }
-        if(slDepth > max){
-            max = slDepth;
-        }
-        if(dlDepth > max){
-            max = dlDepth;
-        }
-        if(tableDepth > max){
-            max = tableDepth;
-        }
-        if(stableDepth > max){
-            max = stableDepth;
-        }
-
-        return max;
-
     }
 
-    /**
-     * Get max value.
-     */
-    @Deprecated
-    public static Integer getMax(final String fn_depth, final String list_depth, final String dlist_depth, final String table_depth, final String stable_depth){
-
-        final int fnDepth = Integer.parseInt(fn_depth);
-        final int listDepth = Integer.parseInt(list_depth);
-        final int dlistDepth = Integer.parseInt(dlist_depth);
-        final int tableDepth = Integer.parseInt(table_depth);
-        final int stableDepth = Integer.parseInt(stable_depth);
-
-        int max = fnDepth;
-        if(listDepth > max){
-            max = listDepth;
-        }
-        if(dlistDepth > max){
-            max = dlistDepth;
-        }
-        if(tableDepth > max){
-            max = tableDepth;
-        }
-        if(stableDepth > max){
-            max = stableDepth;
-        }
-
-        return max;
-
-    }
 }

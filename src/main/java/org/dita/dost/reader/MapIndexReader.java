@@ -88,9 +88,7 @@ public final class MapIndexReader extends AbstractXMLReader {
             throws SAXException {
 
         if (match && validHref) {
-            final String temp = new String(ch, start, length);
-            indexEntries.append(StringUtils.escapeXML(temp));
-
+            indexEntries.append(StringUtils.escapeXML(new String(ch, start, length)));
         }
     }
 
@@ -248,16 +246,15 @@ public final class MapIndexReader extends AbstractXMLReader {
 
         if (match) {
             if (validHref){
-                indexEntries.append(LESS_THAN + qName + STRING_BLANK);
+                indexEntries.append(LESS_THAN).append(qName);
 
                 for (int i = 0; i < attsLen; i++) {
+                    indexEntries.append(STRING_BLANK);
                     indexEntries.append(atts.getQName(i));
                     indexEntries.append(EQUAL);
                     indexEntries.append(QUOTATION);
                     indexEntries.append(StringUtils.escapeXML(atts.getValue(i)));
                     indexEntries.append(QUOTATION);
-                    indexEntries.append(STRING_BLANK);
-
                 }
 
                 indexEntries.append(GREATER_THAN);
