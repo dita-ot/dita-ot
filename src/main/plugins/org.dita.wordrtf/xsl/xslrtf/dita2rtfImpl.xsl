@@ -523,7 +523,8 @@ the same values used in by p in other contexts. -->
         </xsl:call-template>
         <xsl:text>\pard \s0\f1\fs24 </xsl:text>
         <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
-          <xsl:text>\intbl </xsl:text></xsl:if>
+          <xsl:text>\intbl </xsl:text>
+        </xsl:if>
         <xsl:apply-templates/>
         <xsl:text>\par \s0\f0\fs24 </xsl:text>
       </xsl:when>

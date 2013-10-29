@@ -9,7 +9,7 @@ applicable licenses.-->
   xmlns:random="org.dita.dost.util.RandomUtils" 
   exclude-result-prefixes="random">
 
- <!-- Get rid of whitespace only nodes -->
+  <!-- Get rid of whitespace only nodes -->
   <xsl:strip-space elements="*"/>
 
   <!-- single-part lists -->
@@ -96,7 +96,8 @@ applicable licenses.-->
       <xsl:text>\intbl </xsl:text>
     </xsl:if>
     <!-- \jclisttab\tx<xsl:value-of select="$li-num"/> -->
-    <xsl:text>{\pard \ls</xsl:text><xsl:value-of select="$listnum"/>
+    <xsl:text>{\pard \ls</xsl:text>
+    <xsl:value-of select="$listnum"/>
     <xsl:text> \'b7\'20</xsl:text>
     <xsl:if test="$depth &gt; 0">
       <!-- \ilvl<xsl:value-of select="$depth"/> -->
