@@ -174,32 +174,32 @@ applicable licenses.-->
   </xsl:template>
 
   <xsl:template name="block-title-h1">
-    <xsl:text>{\pard \s1 \f1\fs48\b\sb120\sa240 </xsl:text>
+    <xsl:text>{\pard \keepn \s1 \f1\fs48\b\sb120\sa240 </xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\par}</xsl:text>
   </xsl:template>
   <xsl:template name="block-title-h2">
-    <xsl:text>{\pard \s2 \f1\fs36\b\sb90\sa180 </xsl:text>
+    <xsl:text>{\pard \keepn \s2 \f1\fs36\b\sb90\sa180 </xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\par}</xsl:text>
   </xsl:template>
   <xsl:template name="block-title-h3">
-    <xsl:text>{\pard \s3 \f1\fs24\b\sa120 </xsl:text>
+    <xsl:text>{\pard \keepn \s3 \f1\fs24\b\sa120 </xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\par}</xsl:text>
   </xsl:template>
   <xsl:template name="block-title-h4">
-    <xsl:text>{\pard \s4 \f1\fs20\b\sa100 </xsl:text>
+    <xsl:text>{\pard \keepn \s4 \f1\fs20\b\sa100 </xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\par}</xsl:text>
   </xsl:template>
   <xsl:template name="block-title-h5">
-    <xsl:text>{\pard \s5 \f1\fs18\b\sa90 </xsl:text>
+    <xsl:text>{\pard \keepn \s5 \f1\fs18\b\sa90 </xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\par}</xsl:text>
   </xsl:template>
   <xsl:template name="block-title-h6">
-    <xsl:text>{\pard \s6 \f1\fs16\b\sa80 </xsl:text>
+    <xsl:text>{\pard \keepn \s6 \f1\fs16\b\sa80 </xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\par}</xsl:text>
   </xsl:template>
@@ -536,67 +536,90 @@ the same values used in by p in other contexts. -->
           <xsl:with-param name="stringName" select="'ColonSymbol'"/>
         </xsl:call-template>
         <xsl:text>\pard \s0\f1\fs24 </xsl:text>
-        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
+          <xsl:text>\intbl </xsl:text>
+        </xsl:if>
         <xsl:apply-templates/>
-        \par \s0\f0\fs24
+        <xsl:text>\par \s0\f0\fs24 </xsl:text>
       </xsl:when>
       <xsl:when test="@type='remember'">
-        \par \s0\f1\fs24\b <xsl:call-template name="getStringRTF">
+        <xsl:text>\par \s0\f1\fs24\b </xsl:text>
+        <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'Remember'"/>
         </xsl:call-template>
         <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'ColonSymbol'"/>
         </xsl:call-template>
-        <xsl:text/>\pard \s0\f1\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+        <xsl:text>\pard \s0\f1\fs24 </xsl:text>
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
+          <xsl:text>\intbl </xsl:text>
+        </xsl:if>
         <xsl:apply-templates/>
-        \par \s0\f0\fs24
+        <xsl:text>\par \s0\f0\fs24 </xsl:text>
       </xsl:when>
       <xsl:when test="@type='restriction'">
-        \par \s0\f1\fs24\b <xsl:call-template name="getStringRTF">
+        <xsl:text>\par \s0\f1\fs24\b </xsl:text>
+        <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'Restriction'"/>
         </xsl:call-template>
         <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'ColonSymbol'"/>
         </xsl:call-template>
-        <xsl:text/>\pard \s0\f1\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+        <xsl:text>\pard \s0\f1\fs24</xsl:text>
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
+          <xsl:text>\intbl </xsl:text>
+        </xsl:if>
         <xsl:apply-templates/>
-        \par \s0\f0\fs24
+        <xsl:text>\par \s0\f0\fs24 </xsl:text>
       </xsl:when>
       <xsl:when test="@type='attention'">
-        \par \s0\f1\fs24\b <xsl:call-template name="getStringRTF">
+        <xsl:text>\par \s0\f1\fs24\b </xsl:text>
+        <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'Attention'"/>
         </xsl:call-template>
         <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'ColonSymbol'"/>
         </xsl:call-template>
-        <xsl:text/>\pard \s0\f1\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+        <xsl:text>\pard \s0\f1\fs24 </xsl:text>
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
+          <xsl:text>\intbl </xsl:text>
+        </xsl:if>
         <xsl:apply-templates/>
-        \par \s0\f0\fs24
+        <xsl:text>\par \s0\f0\fs24 </xsl:text>
       </xsl:when>
       <xsl:when test="@type='caution'">
-        \par \s0\f1\fs24\b <xsl:call-template name="getStringRTF">
+        <xsl:text>\par \s0\f1\fs24\b </xsl:text>
+        <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'Caution'"/>
         </xsl:call-template>
         <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'ColonSymbol'"/>
         </xsl:call-template>
-        <xsl:text/>\pard \s0\f1\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+        <xsl:text>\pard \s0\f1\fs24 </xsl:text>
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
+          <xsl:text>\intbl </xsl:text>
+        </xsl:if>
         <xsl:apply-templates/>
-        \par \s0\f0\fs24
+        <xsl:text>\par \s0\f0\fs24 </xsl:text>
       </xsl:when>
       <xsl:when test="@type='danger'">
-        \par \s0\f1\fs24\b <xsl:call-template name="getStringRTF">
+        <xsl:text>\par \s0\f1\fs24\b </xsl:text>
+        <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'Danger'"/>
         </xsl:call-template>
         <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'ColonSymbol'"/>
         </xsl:call-template>
-        <xsl:text/>\pard \s0\f1\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+        <xsl:text>\pard \s0\f1\fs24 </xsl:text>
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
+          <xsl:text>\intbl </xsl:text>
+        </xsl:if>
         <xsl:apply-templates/>
-        \par \s0\f0\fs24
+        <xsl:text>\par \s0\f0\fs24 </xsl:text>
       </xsl:when>
       <xsl:when test="@type='other'">
-        \par \s0\f1\fs24\b <xsl:choose>
+        <xsl:text>\par \s0\f1\fs24\b  </xsl:text>
+        <xsl:choose>
           <xsl:when test="@othertype and
             not(@othertype='')">
             <xsl:call-template name="get-ascii">
@@ -612,9 +635,12 @@ the same values used in by p in other contexts. -->
         <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'ColonSymbol'"/>
         </xsl:call-template>
-        <xsl:text/>\pard \s0\f1\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+        <xsl:text>\pard \s0\f1\fs24 </xsl:text>
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
+          <xsl:text>\intbl </xsl:text>
+        </xsl:if>
         <xsl:apply-templates/>
-        \par \s0\f0\fs24
+        <xsl:text>\par \s0\f0\fs24 </xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates/>
