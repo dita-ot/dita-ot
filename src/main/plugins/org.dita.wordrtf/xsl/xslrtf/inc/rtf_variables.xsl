@@ -40,13 +40,4 @@ RTF ignores line breaks but usually not white space!
 \deflang1033 \plain \fs24 \ql \fi0 \li0 \widowctrl \hyphauto \ftnbj
 </xsl:variable>
 
-<xsl:variable name="rtf:xml_declaration"><xsl:text disable-output-escaping="yes">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</xsl:text>
-</xsl:variable>
-
-<xsl:variable name="rtf:line_break">
-\line 
-</xsl:variable>
-
-<xsl:variable name="rtf:closing_bracket">}</xsl:variable>
-
 </xsl:stylesheet>
