@@ -124,6 +124,10 @@ select="substring-after($word,$cr)"/>
 <xsl:template name="root">
 <!-- Include RTF prolog from external file inc\rtf_variables.xsl -->
 <xsl:value-of select="$rtf:prolog"/>
+<xsl:value-of select="$rtf:font_table"/>
+<xsl:value-of select="$rtf:color_table"/>
+<xsl:value-of select="$rtf:stylesheet"/>
+<xsl:value-of select="$rtf:preliminaries"/>
 <xsl:call-template name="createFrontMatter"/>
 <!-- <xsl:call-template name="gen-list-table"/> -->
 <xsl:apply-templates/>}</xsl:template>
