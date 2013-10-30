@@ -135,8 +135,8 @@ public final class DitaWriter extends AbstractXMLFilter {
             formatValue = ATTR_FORMAT_VALUE_DITA;
         }
 
-        if (scopeValue.equalsIgnoreCase(ATTR_SCOPE_VALUE_LOCAL)
-                && formatValue.equalsIgnoreCase(ATTR_FORMAT_VALUE_DITA)){
+        if (scopeValue.equals(ATTR_SCOPE_VALUE_LOCAL)
+                && formatValue.equals(ATTR_FORMAT_VALUE_DITA)){
             return true;
         }
 
@@ -448,7 +448,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                 continue;
             } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
-                        atts.getValue(ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase(ATTR_SCOPE_VALUE_LOCAL)){
+                        atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)){
                     attValue = replaceHREF(attQName, atts);
                 }
                 XMLUtils.addOrSetAttribute(res, attQName, attValue);

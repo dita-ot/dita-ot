@@ -638,7 +638,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 if (href != null) {
                     resourceOnlySet.add(FileUtils.resolveFile(currentDir, toFile(href).getPath()));
                 }
-            } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equalsIgnoreCase(processingRole)) {
+            } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processingRole)) {
                 if (href != null) {
                     crossSet.add(FileUtils.resolveFile(currentDir, toFile(href).getPath()));
                 }
@@ -646,11 +646,11 @@ public final class GenListModuleReader extends AbstractXMLReader {
         } else if (processRoleLevel > 0) {
             processRoleLevel++;
             if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
-            } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleStack.peek())) {
+            } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleStack.peek())) {
                 if (href != null) {
                     resourceOnlySet.add(FileUtils.resolveFile(currentDir, toFile(href).getPath()));
                 }
-            } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equalsIgnoreCase(processRoleStack.peek())) {
+            } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processRoleStack.peek())) {
                 if (href != null) {
                     crossSet.add(FileUtils.resolveFile(currentDir, toFile(href).getPath()));
                 }
@@ -877,7 +877,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 if (hrefValue != null && !hrefValue.toString().isEmpty()) {
                     // exclude external resources
                     final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                    if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(attrScope) || ATTR_SCOPE_VALUE_PEER.equalsIgnoreCase(attrScope)
+                    if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
                             || hrefValue.toString().indexOf(COLON_DOUBLE_SLASH) != -1 || hrefValue.toString().startsWith(SHARP)) {
                         break topicref;
                     }
@@ -903,7 +903,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
                     // exclude external resources
                     final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                    if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(attrScope) || ATTR_SCOPE_VALUE_PEER.equalsIgnoreCase(attrScope)
+                    if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
                             || conrefValue.toString().indexOf(COLON_DOUBLE_SLASH) != -1 || conrefValue.toString().startsWith(SHARP)) {
                         break topicref;
                     }
@@ -1217,7 +1217,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
         // external resource is filtered here.
-        if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(attrScope) || ATTR_SCOPE_VALUE_PEER.equalsIgnoreCase(attrScope)
+        if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
                 || attrValue.indexOf(COLON_DOUBLE_SLASH) != -1 || attrValue.startsWith(SHARP)) {
             return;
         }

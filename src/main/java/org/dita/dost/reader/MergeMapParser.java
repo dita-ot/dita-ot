@@ -154,7 +154,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                 value = processStack.pop();
             }
             processLevel--;
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(value)) {
+            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(value)) {
                 return;
             }
         }
@@ -163,7 +163,7 @@ public final class MergeMapParser extends XMLFilterImpl {
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (processStack.empty() || !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())){
+        if (processStack.empty() || !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processStack.peek())){
             getContentHandler().characters(ch, start, length);
         }
     }
@@ -175,13 +175,13 @@ public final class MergeMapParser extends XMLFilterImpl {
             processStack.push(attrValue);
             processLevel++;
             // @processing-role='resource-only'
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(attrValue)) {
+            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(attrValue)) {
                 return;
             }
         } else if (processLevel > 0) {
             processLevel++;
             // Child of @processing-role='resource-only'
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())) {
+            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processStack.peek())) {
                 return;
             }
         }
@@ -192,8 +192,8 @@ public final class MergeMapParser extends XMLFilterImpl {
                 atts = new AttributesImpl(attributes);
                 final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-                if ((scopeValue == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
-                        && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))) {
+                if ((scopeValue == null || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue))
+                        && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equals(formatValue))) {
                     final String ohref = attValue;
                     final String copyToValue = atts.getValue(ATTRIBUTE_NAME_COPY_TO);
                     if (!StringUtils.isEmptyString(copyToValue)) {

@@ -17,7 +17,6 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.FileUtils;
@@ -103,14 +102,12 @@ public final class ConrefPushReader extends AbstractXMLReader {
     /**
      * Constructor.
      */
-    public ConrefPushReader(){
+    public ConrefPushReader() {
         pushtable = new Hashtable<File, Hashtable<MoveKey,String>>();
         try{
             reader = StringUtils.getXMLReader();
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             reader.setFeature(FEATURE_NAMESPACE, true);
-
-            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setContentHandler(this);
         }catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
@@ -120,64 +117,60 @@ public final class ConrefPushReader extends AbstractXMLReader {
     @Override
     public void startElement(final String uri, final String localName, final String name,
             final Attributes atts) throws SAXException {
-        if(start){
+        if (start) {
             //if start is true, we need to record content in pushcontent
             //also we need to add level to make sure start is turn off
             //at the corresponding end element
-            level ++;
+            level++;
             putElement(pushcontent, name, atts, false);
         }
 
         final String conactValue = atts.getValue(ATTRIBUTE_NAME_CONACTION);
-        if (!start && conactValue != null){
-            if (ATTR_CONACTION_VALUE_PUSHBEFORE.equalsIgnoreCase(conactValue)){
-                if(pushcontent.length() != 0){
+        if (!start && conactValue != null) {
+            if (ATTR_CONACTION_VALUE_PUSHBEFORE.equals(conactValue)) {
+                if (pushcontent.length() != 0) {
                     // there are redundant "pushbefore", create a new pushcontent and emit a warning message.
                     pushcontent = new StringBuffer();
                     logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ044W", atts.getValue(ATTRIBUTE_NAME_XTRF), atts.getValue(ATTRIBUTE_NAME_XTRC)).toString());
                 }
                 start = true;
-                level =0;
-                level ++;
+                level = 1;
                 putElement(pushcontent, name, atts, true);
                 pushType = ATTR_CONACTION_VALUE_PUSHBEFORE;
-            }else if (ATTR_CONACTION_VALUE_PUSHAFTER.equalsIgnoreCase(conactValue)){
+            } else if (ATTR_CONACTION_VALUE_PUSHAFTER.equals(conactValue)) {
                 start = true;
-                level = 0;
-                level ++;
-                if (target == null){
+                level = 1;
+                if (target == null) {
                     logger.logError(MessageUtils.getInstance().getMessage("DOTJ039E", atts.getValue(ATTRIBUTE_NAME_XTRF), atts.getValue(ATTRIBUTE_NAME_XTRC)).toString());
-                }else{
+                } else {
                     putElement(pushcontent, name, atts, true);
                     pushType = ATTR_CONACTION_VALUE_PUSHAFTER;
                 }
-            }else if (ATTR_CONACTION_VALUE_PUSHREPLACE.equalsIgnoreCase(conactValue)){
+            } else if (ATTR_CONACTION_VALUE_PUSHREPLACE.equals(conactValue)) {
                 start = true;
-                level = 0;
-                level ++;
+                level = 1;
                 target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
-                if (target == null){
+                if (target == null) {
                     logger.logError(MessageUtils.getInstance().getMessage("DOTJ040E", atts.getValue(ATTRIBUTE_NAME_XTRF), atts.getValue(ATTRIBUTE_NAME_XTRC)).toString());
-                }else{
+                } else {
                     pushType = ATTR_CONACTION_VALUE_PUSHREPLACE;
                     putElement(pushcontent, name, atts, true);
                 }
 
-            }else if (ATTR_CONACTION_VALUE_MARK.equalsIgnoreCase(conactValue)){
+            } else if (ATTR_CONACTION_VALUE_MARK.equals(conactValue)) {
                 target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
                 if (target != null &&
                         pushcontent != null && pushcontent.length() > 0 &&
-                        ATTR_CONACTION_VALUE_PUSHBEFORE.equals(pushType)){
+                        ATTR_CONACTION_VALUE_PUSHBEFORE.equals(pushType)) {
                     //pushcontent != null means it is pushbefore action
                     //we need to add target and content to pushtable
-                    replaceContent();
-                    addtoPushTable(target, pushcontent.toString(), pushType);
+                    addtoPushTable(target, replaceContent(pushcontent).toString(), pushType);
                     pushcontent = new StringBuffer(256);
                     target = null;
                     pushType = null;
                 }
             }
-        }//else if (pushcontent != null && pushcontent.length() > 0 && level == 0){
+        }//else if (pushcontent != null && pushcontent.length() > 0 && level == 0) {
         //if there is no element with conaction="mark" after
         //one with conaction="pushbefore", report syntax error
 
@@ -186,7 +179,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
     /**
      * replace content.
      */
-    private void replaceContent() {
+    private StringBuffer replaceContent(final StringBuffer pushcontent) {
         // replace all conref and href value in pushcontent according to target
         // this is useful to "pushbefore" action because it doesn't know the target
         // when processing these content
@@ -194,37 +187,35 @@ public final class ConrefPushReader extends AbstractXMLReader {
         int nextindex = 0;
         int hrefindex = pushcontent.indexOf("href=\"", index);
         int conrefindex = pushcontent.indexOf("conref=\"", index);
-        final StringBuffer resultBuffer = new StringBuffer(256);
-        if(hrefindex < 0 && conrefindex < 0){
-            return;
+        if (hrefindex < 0 && conrefindex < 0) {
+            return pushcontent;
         }
 
-        while (hrefindex >= 0 ||
-                conrefindex >= 0){
-
-            if (hrefindex > 0 && conrefindex > 0){
+        final StringBuffer resultBuffer = new StringBuffer(256);
+        while (hrefindex >= 0 || conrefindex >= 0) {
+            if (hrefindex > 0 && conrefindex > 0) {
                 nextindex = hrefindex < conrefindex ? hrefindex : conrefindex;
-            }else if(hrefindex > 0){
+            } else if (hrefindex > 0) {
                 nextindex = hrefindex;
-            }else if(conrefindex > 0){
+            } else if (conrefindex > 0) {
                 nextindex = conrefindex;
             }
 
-            final int valueindex = pushcontent.indexOf(QUOTATION,nextindex)+1;
+            final int valueindex = pushcontent.indexOf(QUOTATION, nextindex) + 1;
             resultBuffer.append(pushcontent.substring(index, valueindex));
             resultBuffer.append(replaceURL(pushcontent.substring(valueindex, pushcontent.indexOf(QUOTATION, valueindex))));
             index = pushcontent.indexOf(QUOTATION, valueindex);
 
-            if(hrefindex > 0){
+            if (hrefindex > 0) {
                 hrefindex = pushcontent.indexOf("href=\"", index);
             }
-            if(conrefindex > 0){
+            if (conrefindex > 0) {
                 conrefindex = pushcontent.indexOf("conref=\"", index);
             }
         }
 
         resultBuffer.append(pushcontent.substring(index));
-        pushcontent = resultBuffer;
+        return resultBuffer;
     }
     /**
      * 
@@ -239,47 +230,53 @@ public final class ConrefPushReader extends AbstractXMLReader {
         //conref information like @conref @conaction in current element
         //when copying it to pushcontent. True means remove and false means
         //not remove.
-        int index = 0;
-        buf.append(LESS_THAN).append(elemName);
-        for (index=0; index < atts.getLength(); index++){
+        buf.append(LESS_THAN)
+           .append(elemName);
+        for (int index = 0; index < atts.getLength(); index++) {
+            final String name = atts.getQName(index);
             if (!removeConref ||
-                    !ATTRIBUTE_NAME_CONREF.equals(atts.getQName(index))&&
-                    !ATTRIBUTE_NAME_CONACTION.equals(atts.getQName(index))){
-                buf.append(STRING_BLANK);
-                buf.append(atts.getQName(index)).append(EQUAL).append(QUOTATION);
+                    !ATTRIBUTE_NAME_CONREF.equals(name) &&
+                    !ATTRIBUTE_NAME_CONACTION.equals(name)) {
                 String value = atts.getValue(index);
-                value = StringUtils.escapeXML(value);
-                if (ATTRIBUTE_NAME_HREF.equals(atts.getQName(index)) ||
-                        ATTRIBUTE_NAME_CONREF.equals(atts.getQName(index))){
+                if (ATTRIBUTE_NAME_HREF.equals(name) ||
+                        ATTRIBUTE_NAME_CONREF.equals(name)) {
                     // adjust href for pushbefore and replace
                     value = replaceURL(value);
                 }
-                buf.append(value).append(QUOTATION);
+                buf.append(STRING_BLANK)
+                   .append(name)
+                   .append(EQUAL)
+                   .append(QUOTATION)
+                   .append(StringUtils.escapeXML(value))
+                   .append(QUOTATION);
             }
 
         }
         //id attribute should only be added to the starting element
         //which dosen't have id attribute set
-        if(ATTR_CONACTION_VALUE_PUSHREPLACE.equals(pushType) &&
+        if (ATTR_CONACTION_VALUE_PUSHREPLACE.equals(pushType) &&
                 atts.getValue(ATTRIBUTE_NAME_ID) == null &&
-                level == 1){
+                level == 1) {
             final String fragment = target.getFragment();
-            if (fragment == null){
+            if (fragment == null) {
                 //if there is no '#' in target string, report error
                 logger.logError(MessageUtils.getInstance().getMessage("DOTJ041E", target.toString()).toString());
-            }else{
+            } else {
                 final String targetLoc = fragment;
                 String id = "";
                 //has element id
-                if(targetLoc.contains(SLASH)){
+                if (targetLoc.contains(SLASH)) {
                     id = targetLoc.substring(targetLoc.lastIndexOf(SLASH) + 1);
-                }else{
+                } else {
                     id = targetLoc;
                 }
                 //add id attribute
-                buf.append(STRING_BLANK);
-                buf.append(ATTRIBUTE_NAME_ID).append(EQUAL).append(QUOTATION);
-                buf.append(id).append(QUOTATION);
+                buf.append(STRING_BLANK)
+                   .append(ATTRIBUTE_NAME_ID)
+                   .append(EQUAL)
+                   .append(QUOTATION)
+                   .append(StringUtils.escapeXML(id))
+                   .append(QUOTATION);
             }
         }
         buf.append(GREATER_THAN);
@@ -290,21 +287,18 @@ public final class ConrefPushReader extends AbstractXMLReader {
      * @return URL
      */
     private String replaceURL(final String value) {
-        if(value == null){
+        if (value == null) {
             return null;
-        }else if(target == null ||
+        } else if (target == null ||
                 FileUtils.isAbsolutePath(value) ||
                 value.contains(COLON_DOUBLE_SLASH) ||
-                value.startsWith(SHARP)){
+                value.startsWith(SHARP)) {
             return value;
-        }else{
+        } else {
             final String source = FileUtils.resolveFile(fileDir, target).getPath();
             final String urltarget = FileUtils.resolveTopic(fileDir, value);
             return FileUtils.getRelativeUnixPath(source, urltarget);
-
-
         }
-
     }
     /**
      * 
@@ -313,7 +307,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
      * @param type push type
      */
     private void addtoPushTable(URI target, final String pushcontent, final String type) {
-        if (target.getFragment() == null){
+        if (target.getFragment() == null) {
             //if there is no '#' in target string, report error
             logger.logError(MessageUtils.getInstance().getMessage("DOTJ041E", target.toString()).toString());
             return;
@@ -325,10 +319,10 @@ public final class ConrefPushReader extends AbstractXMLReader {
         }
         final File key = toFile(FileUtils.resolveFile(fileDir, target));
         Hashtable<MoveKey, String> table = null;
-        if (pushtable.containsKey(key)){
+        if (pushtable.containsKey(key)) {
             //if there is something else push to the same file
             table = pushtable.get(key);
-        }else{
+        } else {
             //if there is nothing else push to the same file
             table = new Hashtable<MoveKey, String>();
             pushtable.put(key, table);
@@ -336,18 +330,18 @@ public final class ConrefPushReader extends AbstractXMLReader {
 
         final MoveKey moveKey = new MoveKey(SHARP + target.getFragment(), type);
 
-        if (table.containsKey(moveKey)){
+        if (table.containsKey(moveKey)) {
             //if there is something else push to the same target
             //append content if type is 'pushbefore' or 'pushafter'
             //report error if type is 'replace'
-            if (ATTR_CONACTION_VALUE_PUSHREPLACE.equalsIgnoreCase(type)){
+            if (ATTR_CONACTION_VALUE_PUSHREPLACE.equals(type)) {
                 logger.logError(MessageUtils.getInstance().getMessage("DOTJ042E", target.toString()).toString());
                 return;
-            }else{
+            } else {
                 table.put(moveKey, table.get(moveKey) + pushcontent);
             }
 
-        }else{
+        } else {
             //if there is nothing else push to the same target
             table.put(moveKey, pushcontent);
         }
@@ -356,7 +350,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
     @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
-        if (this.start){
+        if (this.start) {
             pushcontent.append(StringUtils.escapeXML(ch, start, length));
         }
     }
@@ -364,18 +358,18 @@ public final class ConrefPushReader extends AbstractXMLReader {
     @Override
     public void endElement(final String uri, final String localName, final String name)
             throws SAXException {
-        if (start){
-            level --;
+        if (start) {
+            level--;
             pushcontent.append(LESS_THAN).append(SLASH).append(name).append(GREATER_THAN);
         }
-        if (level == 0){
+        if (level == 0) {
             //turn off start if we reach the end tag of staring element
             start = false;
             if (ATTR_CONACTION_VALUE_PUSHAFTER.equals(pushType) ||
-                    ATTR_CONACTION_VALUE_PUSHREPLACE.equals(pushType)){
+                    ATTR_CONACTION_VALUE_PUSHREPLACE.equals(pushType)) {
                 //if it is pushafter or replace, we need to record content in pushtable
                 //if target == null we have already reported error in startElement;
-                if(target != null){
+                if (target != null) {
                     addtoPushTable(target, pushcontent.toString(), pushType);
                     pushcontent = new StringBuffer(256);
                     target = null;

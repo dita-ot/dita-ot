@@ -89,7 +89,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     public void processingInstruction(final String target, String data) throws SAXException {
         String pi;
         try {
-            if (fixpath != null && target.equalsIgnoreCase(PI_WORKDIR_TARGET)) {
+            if (fixpath != null && target.equals(PI_WORKDIR_TARGET)) {
                 final String tmp = fixpath.substring(0, fixpath.lastIndexOf(SLASH));
                 if (!data.endsWith(tmp)) {
                     data = data + File.separator + tmp;
@@ -204,7 +204,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             formatValue = ATTR_FORMAT_VALUE_DITA;
         }
 
-        if (scopeValue.equalsIgnoreCase(ATTR_SCOPE_VALUE_LOCAL) && formatValue.equalsIgnoreCase(ATTR_FORMAT_VALUE_DITA)) {
+        if (scopeValue.equals(ATTR_SCOPE_VALUE_LOCAL) && formatValue.equals(ATTR_FORMAT_VALUE_DITA)) {
             return true;
         }
 

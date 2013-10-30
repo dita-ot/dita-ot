@@ -258,7 +258,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                     hasWritten = true;
                 }
             }
-            if ( !startTopic && !ELEMENT_NAME_DITA.equalsIgnoreCase(qName)){
+            if ( !startTopic && !ELEMENT_NAME_DITA.equals(qName)){
                 if (atts.getValue(ATTRIBUTE_NAME_ID) != null){
                     topicIdList.add(atts.getValue(ATTRIBUTE_NAME_ID));
                 }else{

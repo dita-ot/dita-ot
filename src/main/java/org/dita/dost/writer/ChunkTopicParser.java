@@ -229,8 +229,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
     @Override
     public void processingInstruction(final String target, final String data) throws SAXException {
-        if (include || PI_WORKDIR_TARGET.equalsIgnoreCase(target) || PI_WORKDIR_TARGET_URI.equals(target)
-                || PI_PATH2PROJ_TARGET.equalsIgnoreCase(target)) {
+        if (include || PI_WORKDIR_TARGET.equals(target) || PI_WORKDIR_TARGET_URI.equals(target)
+                || PI_PATH2PROJ_TARGET.equals(target)) {
             try {
                 writeProcessingInstruction(output, target, data);
             } catch (final Exception e) {
@@ -617,8 +617,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             }
         }
         try {
-            if (!StringUtils.isEmptyString(parseFilePath) && !ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(scopeValue)
-                    && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue)) {
+            if (!StringUtils.isEmptyString(parseFilePath) && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)
+                    && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                 // if the path to target file make sense
                 currentParsingFile = FileUtils.resolveFile(filePath, parseFilePath);
                 File outputFileName = null;
@@ -836,7 +836,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
             if (!StringUtils.isEmptyString(classValue)) {
                 if ((!MAPGROUP_D_TOPICGROUP.matches(classValue)) && (!StringUtils.isEmptyString(parseFilePath))
-                        && (!ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(scopeValue))) {
+                        && (!ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue))) {
                     // now the path to target file make sense
                     if (chunkValue.indexOf(ATTR_CHUNK_VALUE_TO_CONTENT) != -1) {
                         // if current element contains "to-content" in chunk
@@ -956,7 +956,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     final File tempPath = currentParsingFile;
                     currentParsingFile = FileUtils.resolveFile(filePath, parseFilePath);
 
-                    if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue)) {
+                    if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                         currentParsingFileTopicIDChangeTable = new HashMap<String, String>();
                         // TODO recursive point
                         reader.parse(currentParsingFile.toURI().toString());
@@ -1078,14 +1078,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     // Skip empty parents and @processing-role='resource-only'
                     // entries.
                     if (parentResult.length() > 0 && !StringUtils.isEmptyString(parseFilePath)
-                            && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue)) {
+                            && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                         int insertpoint = parentResult.lastIndexOf("</");
                         final int end = parentResult.indexOf(">", insertpoint);
 
                         if (insertpoint == -1 || end == -1) {
                             logger.logError(MessageUtils.getInstance().getMessage("DOTJ033E", hrefValue).toString());
                         } else {
-                            if (ELEMENT_NAME_DITA.equalsIgnoreCase(parentResult.substring(insertpoint, end).trim())) {
+                            if (ELEMENT_NAME_DITA.equals(parentResult.substring(insertpoint, end).trim())) {
                                 insertpoint = parentResult.lastIndexOf("</", insertpoint);
                             }
                             parentResult.insert(insertpoint, ((StringWriter) output).getBuffer());

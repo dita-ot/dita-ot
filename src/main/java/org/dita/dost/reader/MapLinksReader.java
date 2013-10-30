@@ -285,8 +285,8 @@ public final class MapLinksReader extends AbstractXMLReader {
             }
             topicPath = null;
             if (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1
-                    && (attrScope == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(attrScope))
-                    && (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat))) {
+                    && (attrScope == null || ATTR_SCOPE_VALUE_LOCAL.equals(attrScope))
+                    && (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat))) {
                 // If the href is internal dita topic file
                 topicPath = FileUtils.resolveTopic(filePath, hrefValue);
                 validHref = true;

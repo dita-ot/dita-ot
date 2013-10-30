@@ -96,7 +96,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         // Skip redundant <dita> tags.
-        if (ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
+        if (ELEMENT_NAME_DITA.equals(qName)) {
             return;
         }
         getContentHandler().endElement(uri, localName, qName);
@@ -206,7 +206,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
             throws SAXException {
         // Skip redundant <dita> tags.
-        if (ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
+        if (ELEMENT_NAME_DITA.equals(qName)) {
             rootLang = attributes.getValue(XML_NS_URI, "lang");
             return;
         }
@@ -243,14 +243,14 @@ public final class MergeTopicParser extends XMLFilterImpl {
         final URI attValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         if (attValue != null) {
             final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-            if ((scopeValue == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
+            if ((scopeValue == null || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue))
                     && attValue.getScheme() == null) {
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
                 // The scope for @href is local
                 if ((TOPIC_XREF.matches(classValue) || TOPIC_LINK.matches(classValue)
                 // term and keyword are resolved as keyref can make them links
                         || TOPIC_TERM.matches(classValue) || TOPIC_KEYWORD.matches(classValue))
-                        && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))) {
+                        && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equals(formatValue))) {
                     // local xref or link that refers to dita file
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, handleLocalDita(attValue, atts).toString());
                 } else {

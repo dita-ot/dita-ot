@@ -136,7 +136,7 @@ public final class IndexTermReader extends AbstractXMLReader {
          * For title info
          */
         if (processRoleStack.isEmpty() ||
-                !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleStack.peek())) {
+                !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleStack.peek())) {
             if (!insideSortingAs && !termStack.empty()) {
                 final IndexTerm indexTerm = termStack.peek();
                 temp = trimSpaceAtStart(temp, indexTerm.getTermName());
@@ -176,7 +176,7 @@ public final class IndexTermReader extends AbstractXMLReader {
             }
             processRoleLevel--;
             if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
-                    .equalsIgnoreCase(role)) {
+                    .equals(role)) {
                 return;
             }
         }
