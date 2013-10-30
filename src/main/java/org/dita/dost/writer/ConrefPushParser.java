@@ -54,7 +54,7 @@ import org.xml.sax.XMLReader;
 public final class ConrefPushParser extends AbstractXMLWriter {
 
     /**table containing conref push contents.*/
-    private Hashtable<String, String> movetable = null;
+    private Hashtable<MoveKey, String> movetable = null;
 
     /**topicId keep the current topic id value.*/
     private String topicId = null;
@@ -154,7 +154,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         this.job = job;
     }
     
-    public void setMoveTable(final Hashtable<String, String> movetable) {
+    public void setMoveTable(final Hashtable<MoveKey, String> movetable) {
         this.movetable = movetable;
     }
     
@@ -180,40 +180,32 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         topicSpecSet = new HashSet<String>();
         levelForPushAfterStack = new Stack<Integer>();
         contentForPushAfterStack = new Stack<String>();
+        
+        final File outputFile = new File(filename + ".cnrfpush");
         try {
-            final File inputFile = filename;
-            final File outputFile = new File(filename+".cnrfpush");
             output = new OutputStreamWriter(new FileOutputStream(outputFile),UTF8);
             parser.parse(filename.toURI().toString());
-            if (!movetable.isEmpty()) {
-                final Properties prop = new Properties();
-                final Iterator<String> iterator = movetable.keySet().iterator();
-                while(iterator.hasNext()) {
-                    final String key = iterator.next();
-                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ043W", key.substring(0, key.indexOf(STICK)), filename.getPath()).toString());
-                }
-            }
-            if (hasConref) {
-                updateList(filename);
-            }
-            output.close();
-            if (!inputFile.delete()) {
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-            }
-            if (!outputFile.renameTo(inputFile)) {
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
+            for (final MoveKey key: movetable.keySet()) {
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ043W", key.idPath, filename.getPath()).toString());
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError(e.getMessage(), e);
+            return;
         } finally {
             try {
                 output.close();
             } catch (final Exception ex) {
-                logger.logError(ex.getMessage(), ex) ;
+                logger.logError(ex.getMessage(), ex);
             }
         }
-
-
+        if (hasConref) {
+            updateList(filename);
+        }
+        try {
+            FileUtils.moveFile(outputFile, filename);
+        } catch (final IOException e) {
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", filename.getPath(), outputFile.getPath()).toString());
+        }
     }
     /**
      * Update conref list in job configuration and in conref list file.
@@ -393,14 +385,13 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                             // Specializing the pushing content is not handled here
                             // but we can catch such a situation to emit a warning by comparing the class values.
                             final String targetElementName = targetClassAttribute.toString().substring(targetClassAttribute.toString().indexOf("/") + 1 ).trim();
+                            if (!elem.getAttribute(ATTRIBUTE_NAME_CONREF).isEmpty()) {
+                                hasConref = true;
+                            }
                             stringBuffer.append(LESS_THAN).append(targetElementName);
                             final NamedNodeMap namedNodeMap = elem.getAttributes();
                             for (int t = 0; t < namedNodeMap.getLength(); t++) {
-                                //write the attributes to new generated element
                                 final Attr attr = (Attr) namedNodeMap.item(t);
-                                if (attr.getNodeName().equals(ATTRIBUTE_NAME_CONREF) && attr.getNodeValue().length() != 0) {
-                                    hasConref = true;
-                                }
                                 stringBuffer.append(STRING_BLANK)
                                     .append(attr.getNodeName())
                                     .append(EQUAL)
@@ -449,6 +440,9 @@ public final class ConrefPushParser extends AbstractXMLWriter {
     private String replaceSubElementName(final String type, final Element elem) {
         final StringBuffer stringBuffer = new StringBuffer();
         final DitaClass classValue = DitaClass.getInstance(elem);
+        if (!elem.getAttribute(ATTRIBUTE_NAME_CONREF).isEmpty()) {
+            hasConref = true;
+        }
         String generalizedElemName = elem.getNodeName();
         if (classValue != null) {
             if (classValue.toString().contains(type) && !type.equals(STRING_BLANK)) {
@@ -459,9 +453,6 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         final NamedNodeMap namedNodeMap = elem.getAttributes();
         for (int i = 0; i < namedNodeMap.getLength(); i++) {
             final Attr attr = (Attr) namedNodeMap.item(i);
-            if (attr.getNodeName().equals(ATTRIBUTE_NAME_CONREF) && attr.getNodeValue().length()!=0) {
-                hasConref = true;
-            }
             stringBuffer.append(STRING_BLANK)
                 .append(attr.getNodeName())
                 .append(EQUAL)
@@ -500,107 +491,117 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             level++;
         } else {
             try {
+                final String idValue = atts.getValue(ATTRIBUTE_NAME_ID);
                 final DitaClass classValue = DitaClass.getInstance(atts);
-                if (classValue != null && TOPIC_TOPIC.matches(classValue)) {
+                if (TOPIC_TOPIC.matches(classValue)) {
                     if (!topicSpecSet.contains(name)) {
                         //add the element name to topicSpecSet if the element
                         //is a topic specialization. This is used when push and pop
                         //topic ids in a stack
                         topicSpecSet.add(name);
                     }
-                    final String idValue = atts.getValue(ATTRIBUTE_NAME_ID);
                     if (idValue != null) {
                         if (topicId != null) {
                             idStack.push(topicId);
                         }
                         topicId = idValue;
                     }
-                } else if (atts.getValue(ATTRIBUTE_NAME_ID) != null) {
-                    String idPath = SHARP + topicId + SLASH + atts.getValue(ATTRIBUTE_NAME_ID);
-                    final String defaultidPath = SHARP + atts.getValue(ATTRIBUTE_NAME_ID);
-                    String containkey = null;
+                } else if (idValue != null) {
+                    String idPath = SHARP + topicId + SLASH + idValue;
+                    final String defaultidPath = SHARP + idValue;
                     //enable conref push at map level
-                    if (classValue != null && (MAP_TOPICREF.matches(classValue)
-                            || MAP_MAP.matches(classValue))) {
-                        final String mapId = atts.getValue(ATTRIBUTE_NAME_ID);
-                        idPath = SHARP + mapId;
-                        idStack.push(mapId);
+                    if (MAP_TOPICREF.matches(classValue) || MAP_MAP.matches(classValue)) {
+                        idPath = SHARP + idValue;
+                        idStack.push(idValue);
                     }
-                    boolean containpushbefore = false;
-                    if (movetable.containsKey(idPath + STICK + ATTR_CONACTION_VALUE_PUSHBEFORE)) {
-                        containkey = idPath + STICK + ATTR_CONACTION_VALUE_PUSHBEFORE;
-                        if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
-                            containpushbefore = true;
-                        }
-
-                    } else if (movetable.containsKey(defaultidPath + STICK + ATTR_CONACTION_VALUE_PUSHBEFORE)) {
-                        containkey = defaultidPath + STICK + ATTR_CONACTION_VALUE_PUSHBEFORE;
-                        if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
-                            containpushbefore = true;
-                        }
-                    }
-                    if (containpushbefore) {
-                        output.write(replaceElementName(classValue, movetable.remove(containkey)));
-                    }
-
-                    boolean containpushplace = false;
-                    if (movetable.containsKey(idPath + STICK + ATTR_CONACTION_VALUE_PUSHREPLACE)) {
-                        containkey = idPath + STICK + ATTR_CONACTION_VALUE_PUSHREPLACE;
-                        if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
-                            containpushplace= true;
-                        }
-                    } else if (movetable.containsKey(defaultidPath + STICK + ATTR_CONACTION_VALUE_PUSHREPLACE)) {
-                        containkey = defaultidPath + STICK + ATTR_CONACTION_VALUE_PUSHREPLACE;
-                        if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
-                            containpushplace= true;
-                        }
-                    }
-
-                    if (containpushplace) {
-                        output.write(replaceElementName(classValue, movetable.remove(containkey)));
-                        isReplaced = true;
-                        level = 0;
-                        level++;
-                    }
-
-                    boolean containpushafter = false;
-                    if  (movetable.containsKey(idPath + STICK + ATTR_CONACTION_VALUE_PUSHAFTER)) {
-                        containkey = idPath + STICK + ATTR_CONACTION_VALUE_PUSHAFTER;
-                        if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
-                            containpushafter = true;
-                        }
-                    } else if (movetable.containsKey(defaultidPath + STICK + ATTR_CONACTION_VALUE_PUSHAFTER)) {
-                        containkey = defaultidPath + STICK + ATTR_CONACTION_VALUE_PUSHAFTER;
-                        if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
-                            containpushafter = true;
-                        }
-                    }
-                    if (containpushafter) {
-                        if (hasPushafter && levelForPushAfter > 0) {
-                            //there is a "pushafter" action for an ancestor element.
-                            //we need to push the levelForPushAfter to stack before
-                            //initialize it.
-                            levelForPushAfterStack.push(levelForPushAfter);
-                            contentForPushAfterStack.push(contentForPushAfter);
-                        } else {
-                            hasPushafter = true;
-                        }
-                        levelForPushAfter = 0;
-                        levelForPushAfter++;
-                        contentForPushAfter = replaceElementName(classValue, movetable.remove(containkey));
-                        //The output for the pushcontent will be in endElement(...)
-                    }
+                    handlePushBefore(classValue, idPath, defaultidPath);
+                    handlePushReplace(classValue, idPath, defaultidPath);
+                    handlePushAfter(classValue, idPath, defaultidPath);
                 }
 
                 //although the if branch before checked whether isReplaced is true
                 //we still need to check here because isReplaced might be turn on.
                 if (!isReplaced) {
-                    //output the element
                     writeStartElement(name, atts);
                 }
             } catch (final Exception e) {
                 logger.logError(e.getMessage(), e) ;
             }
+        }
+    }
+
+    private void handlePushAfter(final DitaClass classValue, final String idPath, final String defaultidPath) {
+        MoveKey containkey = null;
+        boolean containpushafter = false;
+        if  (movetable.containsKey(new MoveKey(idPath, ATTR_CONACTION_VALUE_PUSHAFTER))) {
+            containkey = new MoveKey(idPath, ATTR_CONACTION_VALUE_PUSHAFTER);
+            if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
+                containpushafter = true;
+            }
+        } else if (movetable.containsKey(new MoveKey(defaultidPath, ATTR_CONACTION_VALUE_PUSHAFTER))) {
+            containkey = new MoveKey(defaultidPath, ATTR_CONACTION_VALUE_PUSHAFTER);
+            if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
+                containpushafter = true;
+            }
+        }
+        if (containpushafter) {
+            if (hasPushafter && levelForPushAfter > 0) {
+                //there is a "pushafter" action for an ancestor element.
+                //we need to push the levelForPushAfter to stack before
+                //initialize it.
+                levelForPushAfterStack.push(levelForPushAfter);
+                contentForPushAfterStack.push(contentForPushAfter);
+            } else {
+                hasPushafter = true;
+            }
+            levelForPushAfter = 0;
+            levelForPushAfter++;
+            contentForPushAfter = replaceElementName(classValue, movetable.remove(containkey));
+            //The output for the pushcontent will be in endElement(...)
+        }
+    }
+
+    private void handlePushReplace(final DitaClass classValue, final String idPath, final String defaultidPath)
+            throws IOException {
+        MoveKey containkey = null;
+        boolean containpushplace = false;
+        if (movetable.containsKey(new MoveKey(idPath, ATTR_CONACTION_VALUE_PUSHREPLACE))) {
+            containkey = new MoveKey(idPath, ATTR_CONACTION_VALUE_PUSHREPLACE);
+            if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
+                containpushplace = true;
+            }
+        } else if (movetable.containsKey(new MoveKey(defaultidPath, ATTR_CONACTION_VALUE_PUSHREPLACE))) {
+            containkey = new MoveKey(defaultidPath, ATTR_CONACTION_VALUE_PUSHREPLACE);
+            if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
+                containpushplace = true;
+            }
+        }
+        if (containpushplace) {
+            output.write(replaceElementName(classValue, movetable.remove(containkey)));
+            isReplaced = true;
+            level = 0;
+            level++;
+        }
+    }
+
+    private void handlePushBefore(final DitaClass classValue, final String idPath, final String defaultidPath)
+            throws IOException {
+        MoveKey containkey = null;
+        boolean containpushbefore = false;
+        if (movetable.containsKey(new MoveKey(idPath, ATTR_CONACTION_VALUE_PUSHBEFORE))) {
+            containkey = new MoveKey(idPath, ATTR_CONACTION_VALUE_PUSHBEFORE);
+            if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
+                containpushbefore = true;
+            }
+
+        } else if (movetable.containsKey(new MoveKey(defaultidPath, ATTR_CONACTION_VALUE_PUSHBEFORE))) {
+            containkey = new MoveKey(defaultidPath, ATTR_CONACTION_VALUE_PUSHBEFORE);
+            if (isPushedTypeMatch(classValue, movetable.get(containkey))) {
+                containpushbefore = true;
+            }
+        }
+        if (containpushbefore) {
+            output.write(replaceElementName(classValue, movetable.remove(containkey)));
         }
     }
 

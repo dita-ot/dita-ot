@@ -17,6 +17,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ConrefPushReader;
+import org.dita.dost.reader.ConrefPushReader.MoveKey;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.ConrefPushParser;
@@ -44,9 +45,9 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
                 //FIXME: this reader calculate parent directory
                 reader.read(file.getAbsoluteFile());
             }            
-            final Map<String, Hashtable<String, String>> pushSet = reader.getPushMap();
-            for (final Map.Entry<String, Hashtable<String,String>> entry: pushSet.entrySet()) {
-                logger.logInfo("Processing " + new File(entry.getKey()).getAbsolutePath());
+            final Map<File, Hashtable<MoveKey, String>> pushSet = reader.getPushMap();
+            for (final Map.Entry<File, Hashtable<MoveKey, String>> entry: pushSet.entrySet()) {
+                logger.logInfo("Processing " + entry.getKey().getAbsolutePath());
                 final ConrefPushParser parser = new ConrefPushParser();
                 parser.setJob(job);
                 parser.setLogger(logger);
@@ -54,7 +55,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
                 //pass the tempdir to ConrefPushParser
                 parser.setTempDir(job.tempDir.getAbsoluteFile());
                 //FIXME:This writer creates and renames files, have to
-                parser.write(new File(entry.getKey()));
+                parser.write(entry.getKey());
             }
         }
         return null;

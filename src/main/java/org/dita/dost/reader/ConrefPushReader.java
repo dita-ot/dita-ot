@@ -42,7 +42,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
     public static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
     
     /** push table.*/
-    private final Hashtable<String, Hashtable<String, String>> pushtable;
+    private final Hashtable<File, Hashtable<MoveKey, String>> pushtable;
     /** push table.*/
     private final XMLReader reader;
 
@@ -80,7 +80,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
      * 
      * @return unmodifiable push table
      */
-    public Map<String, Hashtable<String, String>> getPushMap() {
+    public Map<File, Hashtable<MoveKey, String>> getPushMap() {
     	return Collections.unmodifiableMap(pushtable);
     }
     
@@ -104,7 +104,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
      * Constructor.
      */
     public ConrefPushReader(){
-        pushtable = new Hashtable<String, Hashtable<String,String>>();
+        pushtable = new Hashtable<File, Hashtable<MoveKey,String>>();
         try{
             reader = StringUtils.getXMLReader();
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -323,21 +323,20 @@ public final class ConrefPushReader extends AbstractXMLReader {
             //means conref the file itself
             target = toURI(parsefilename.getPath() + target);
         }
-        final String key = FileUtils.resolveFile(fileDir, target).getPath();
-        Hashtable<String, String> table = null;
+        final File key = toFile(FileUtils.resolveFile(fileDir, target));
+        Hashtable<MoveKey, String> table = null;
         if (pushtable.containsKey(key)){
             //if there is something else push to the same file
             table = pushtable.get(key);
         }else{
             //if there is nothing else push to the same file
-            table = new Hashtable<String, String>();
+            table = new Hashtable<MoveKey, String>();
             pushtable.put(key, table);
         }
 
-        final String targetLoc = SHARP + target.getFragment();
-        final String addon = STICK+type;
+        final MoveKey moveKey = new MoveKey(SHARP + target.getFragment(), type);
 
-        if (table.containsKey(targetLoc+addon)){
+        if (table.containsKey(moveKey)){
             //if there is something else push to the same target
             //append content if type is 'pushbefore' or 'pushafter'
             //report error if type is 'replace'
@@ -345,12 +344,12 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 logger.logError(MessageUtils.getInstance().getMessage("DOTJ042E", target.toString()).toString());
                 return;
             }else{
-                table.put(targetLoc+addon, table.get(targetLoc+addon)+pushcontent);
+                table.put(moveKey, table.get(moveKey) + pushcontent);
             }
 
         }else{
             //if there is nothing else push to the same target
-            table.put(targetLoc+addon, pushcontent);
+            table.put(moveKey, pushcontent);
         }
     }
 
@@ -386,4 +385,53 @@ public final class ConrefPushReader extends AbstractXMLReader {
         }
     }
 
+    public static class MoveKey {
+        public final String idPath;
+        public final String action;
+        public MoveKey(final String idPath, final String action) {
+            this.idPath = idPath;
+            this.action = action;
+        }
+        @Override
+        public String toString() {
+            return idPath + STICK + action;
+        }
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((action == null) ? 0 : action.hashCode());
+            result = prime * result + ((idPath == null) ? 0 : idPath.hashCode());
+            return result;
+        }
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof MoveKey)) {
+                return false;
+            }
+            MoveKey other = (MoveKey) obj;
+            if (action == null) {
+                if (other.action != null) {
+                    return false;
+                }
+            } else if (!action.equals(other.action)) {
+                return false;
+            }
+            if (idPath == null) {
+                if (other.idPath != null) {
+                    return false;
+                }
+            } else if (!idPath.equals(other.idPath)) {
+                return false;
+            }
+            return true;
+        }
+    }
+    
 }

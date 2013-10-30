@@ -20,7 +20,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.AfterClass;
-
 import org.junit.BeforeClass;
 
 import static org.junit.Assert.assertEquals;
@@ -28,6 +27,7 @@ import static org.junit.Assert.assertEquals;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.reader.ConrefPushReader;
+import org.dita.dost.reader.ConrefPushReader.MoveKey;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.writer.ConrefPushParser;
@@ -102,21 +102,20 @@ public class TestConrefPushParser {
         final ConrefPushReader reader = new ConrefPushReader();
 
         reader.read(inputFile.getAbsoluteFile());
-        final Map<String, Hashtable<String, String>> pushSet = reader.getPushMap();
-        final Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.entrySet().iterator();
+        final Map<File, Hashtable<MoveKey, String>> pushSet = reader.getPushMap();
+        final Iterator<Map.Entry<File, Hashtable<MoveKey,String>>> iter = pushSet.entrySet().iterator();
         if(iter.hasNext()){
-            final Map.Entry<String, Hashtable<String,String>> entry = iter.next();
+            final Map.Entry<File, Hashtable<MoveKey,String>> entry = iter.next();
             // initialize the parsed file
-            FileUtils.copyFile(new File(srcDir, "conrefpush_stub2_backup.xml"),
-                    new File(entry.getKey()));
+            FileUtils.copyFile(new File(srcDir, "conrefpush_stub2_backup.xml"), entry.getKey());
 //            final Content content = new ContentImpl();
 //            content.setValue(entry.getValue());
 //            parser.setContent(content);
             parser.setMoveTable(entry.getValue());
-            parser.write(new File(entry.getKey()));
+            parser.write(entry.getKey());
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            final Document document = builder.parse(new File(entry.getKey()));
+            final Document document = builder.parse(entry.getKey());
             final Element elem = document.getDocumentElement();
             NodeList nodeList = elem.getChildNodes();
             // according to the structure, it comes to the <li> after 2 iterations.
