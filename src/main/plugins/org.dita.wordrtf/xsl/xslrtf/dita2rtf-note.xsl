@@ -8,157 +8,30 @@ applicable licenses.-->
   <!-- Get rid of whitespace only nodes -->
   <xsl:strip-space elements="*"/>
 
-  <!-- Note -->
   <xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note">
     <xsl:choose>
-      <!-- Note -->
-      <xsl:when test="@type='note'">
-      <!-- Read attribut value and capitalize first character -->
+      <!-- Generic solution for all defined note types -->
+      <xsl:when test="not(@type='other')">
         <xsl:text>{\pard </xsl:text>
+        <xsl:variable name="mytype">
+          <xsl:call-template name="firstUpperCase" />
+        </xsl:variable>
         <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'Note'"/>
+          <xsl:with-param name="stringName" select="$mytype"/>
         </xsl:call-template>
         <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'ColonSymbol'"/>
         </xsl:call-template>
-        <!-- <xsl:text>\par}</xsl:text> -->
         <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
           <xsl:text>\intbl </xsl:text>
         </xsl:if>
         <xsl:apply-templates/>
         <xsl:text>\par}</xsl:text>
       </xsl:when>
-      <!-- Tip -->
-      <xsl:when test="@type='tip'">
-        <xsl:text>{\pard </xsl:text>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'Tip'"/>
-        </xsl:call-template>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-        </xsl:call-template>
-        <!-- <xsl:text>\par}</xsl:text> -->
-        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
-          <xsl:text>\intbl </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates/>
-        <xsl:text>\par}</xsl:text>
-      </xsl:when>
-      <!-- Fastpath -->
-      <xsl:when test="@type='fastpath'">
-        <xsl:text>{\pard </xsl:text>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'Fastpath'"/>
-        </xsl:call-template>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-        </xsl:call-template>
-        <!-- <xsl:text>\par}</xsl:text> -->
-        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
-          <xsl:text>\intbl </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates/>
-        <xsl:text>\par}</xsl:text>
-      </xsl:when>
-      <!-- Important -->
-      <xsl:when test="@type='important'">
-        <xsl:text>{\pard </xsl:text>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'Important'"/>
-        </xsl:call-template>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-        </xsl:call-template>
-        <!-- <xsl:text>\par}</xsl:text> -->
-        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
-          <xsl:text>\intbl </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates/>
-        <xsl:text>\par}</xsl:text>
-      </xsl:when>
-      <!-- Remember -->
-      <xsl:when test="@type='remember'">
-        <xsl:text>{\pard </xsl:text>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'Remember'"/>
-        </xsl:call-template>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-        </xsl:call-template>
-        <!-- <xsl:text>\par}</xsl:text> -->
-        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
-          <xsl:text>\intbl </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates/>
-        <xsl:text>\par}</xsl:text>
-      </xsl:when>
-      <!-- Restriction -->
-      <xsl:when test="@type='restriction'">
-        <xsl:text>{\pard </xsl:text>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'Restriction'"/>
-        </xsl:call-template>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-        </xsl:call-template>
-        <xsl:text>\pard \s0\f1\fs24</xsl:text>
-        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
-          <xsl:text>\intbl </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates/>
-        <xsl:text>\par}</xsl:text>
-      </xsl:when>
-      <!-- Attention -->
-      <xsl:when test="@type='attention'">
-        <xsl:text>{\pard </xsl:text>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'Attention'"/>
-        </xsl:call-template>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-        </xsl:call-template>
-        <!-- <xsl:text>\par}</xsl:text> -->
-        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
-          <xsl:text>\intbl </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates/>
-        <xsl:text>\par}</xsl:text>
-      </xsl:when>
-      <!-- Caution -->
-      <xsl:when test="@type='caution'">
-        <xsl:text>{\pard </xsl:text>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'Caution'"/>
-        </xsl:call-template>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-        </xsl:call-template>
-        <!-- <xsl:text>\par}</xsl:text> -->
-        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
-          <xsl:text>\intbl </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates/>
-        <xsl:text>\par}</xsl:text>
-      </xsl:when>
-      <!-- Danger -->
-      <xsl:when test="@type='danger'">
-        <xsl:text>{\pard </xsl:text>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'Danger'"/>
-        </xsl:call-template>
-        <xsl:call-template name="getStringRTF">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-        </xsl:call-template>
-        <!-- <xsl:text>\par}</xsl:text> -->
-        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
-          <xsl:text>\intbl </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates/>
-        <xsl:text>\par}</xsl:text>
-      </xsl:when>
+
       <!-- Other -->
       <xsl:when test="@type='other'">
-        <xsl:text>{\pard  </xsl:text>
+        <xsl:text>{\pard </xsl:text>
         <xsl:choose>
           <xsl:when test="@othertype and not(@othertype='')">
             <xsl:call-template name="get-ascii">
@@ -174,7 +47,6 @@ applicable licenses.-->
         <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'ColonSymbol'"/>
         </xsl:call-template>
-        <!-- <xsl:text>\par}</xsl:text> -->
         <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
           <xsl:text>\intbl </xsl:text>
         </xsl:if>
@@ -185,6 +57,19 @@ applicable licenses.-->
         <xsl:apply-templates/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <!-- Capitalize first character of note type.
+(If keys for translation functions were lower case by default this function wouldn't be needed.)
+-->
+  <xsl:template name="firstUpperCase">
+    <xsl:variable name="note_type" >
+      <xsl:value-of select="@type" />
+    </xsl:variable>
+    <xsl:value-of select="concat(translate(substring($note_type, 1, 1),
+      'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'),
+      substring($note_type, 2))"
+    />
   </xsl:template>
 
 </xsl:stylesheet>
