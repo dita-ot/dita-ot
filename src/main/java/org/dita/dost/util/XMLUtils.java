@@ -266,6 +266,16 @@ public final class XMLUtils {
         }
         
         /**
+         * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
+         * 
+         * @param attr DOM attribute node
+         * @return this builder
+         */
+        public AttributesBuilder add(final Attr attr) {
+            return add(attr.getNodeName(), attr.getNodeValue());
+        }
+        
+        /**
          * Add or set all attributes.
          * 
          * @param attrs attributes to add or set

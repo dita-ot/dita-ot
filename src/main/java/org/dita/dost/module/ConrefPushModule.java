@@ -21,6 +21,7 @@ import org.dita.dost.reader.ConrefPushReader.MoveKey;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.ConrefPushParser;
+import org.w3c.dom.DocumentFragment;
 
 /**
  * Conref push module.
@@ -45,8 +46,8 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
                 //FIXME: this reader calculate parent directory
                 reader.read(file.getAbsoluteFile());
             }            
-            final Map<File, Hashtable<MoveKey, String>> pushSet = reader.getPushMap();
-            for (final Map.Entry<File, Hashtable<MoveKey, String>> entry: pushSet.entrySet()) {
+            final Map<File, Hashtable<MoveKey, DocumentFragment>> pushSet = reader.getPushMap();
+            for (final Map.Entry<File, Hashtable<MoveKey, DocumentFragment>> entry: pushSet.entrySet()) {
                 logger.logInfo("Processing " + entry.getKey().getAbsolutePath());
                 final ConrefPushParser parser = new ConrefPushParser();
                 parser.setJob(job);

@@ -33,6 +33,7 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.writer.ConrefPushParser;
 import org.junit.Test;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -102,10 +103,10 @@ public class TestConrefPushParser {
         final ConrefPushReader reader = new ConrefPushReader();
 
         reader.read(inputFile.getAbsoluteFile());
-        final Map<File, Hashtable<MoveKey, String>> pushSet = reader.getPushMap();
-        final Iterator<Map.Entry<File, Hashtable<MoveKey,String>>> iter = pushSet.entrySet().iterator();
+        final Map<File, Hashtable<MoveKey, DocumentFragment>> pushSet = reader.getPushMap();
+        final Iterator<Map.Entry<File, Hashtable<MoveKey, DocumentFragment>>> iter = pushSet.entrySet().iterator();
         if(iter.hasNext()){
-            final Map.Entry<File, Hashtable<MoveKey,String>> entry = iter.next();
+            final Map.Entry<File, Hashtable<MoveKey, DocumentFragment>> entry = iter.next();
             // initialize the parsed file
             FileUtils.copyFile(new File(srcDir, "conrefpush_stub2_backup.xml"), entry.getKey());
 //            final Content content = new ContentImpl();

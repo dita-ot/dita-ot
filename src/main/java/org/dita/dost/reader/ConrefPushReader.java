@@ -13,15 +13,25 @@ import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
@@ -41,9 +51,12 @@ public final class ConrefPushReader extends AbstractXMLReader {
     public static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
     
     /** push table.*/
-    private final Hashtable<File, Hashtable<MoveKey, String>> pushtable;
+    private final Hashtable<File, Hashtable<MoveKey, DocumentFragment>> pushtable;
+    /** Document used to construct push table DocumentFragments. */
+    private final Document pushDocument;
     /** push table.*/
     private final XMLReader reader;
+    private final DocumentBuilder documentBuilder;
 
     /**keep the file path of current file under parse
 	filePath is useful to get the absolute path of the target file.*/
@@ -79,7 +92,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
      * 
      * @return unmodifiable push table
      */
-    public Map<File, Hashtable<MoveKey, String>> getPushMap() {
+    public Map<File, Hashtable<MoveKey, DocumentFragment>> getPushMap() {
     	return Collections.unmodifiableMap(pushtable);
     }
     
@@ -103,7 +116,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
      * Constructor.
      */
     public ConrefPushReader() {
-        pushtable = new Hashtable<File, Hashtable<MoveKey,String>>();
+        pushtable = new Hashtable<File, Hashtable<MoveKey,DocumentFragment>>();
         try{
             reader = StringUtils.getXMLReader();
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -112,6 +125,13 @@ public final class ConrefPushReader extends AbstractXMLReader {
         }catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
+        
+        try {
+            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
+        }
+        pushDocument = documentBuilder.newDocument();
     }
 
     @Override
@@ -318,13 +338,13 @@ public final class ConrefPushReader extends AbstractXMLReader {
             target = toURI(parsefilename.getPath() + target);
         }
         final File key = toFile(FileUtils.resolveFile(fileDir, target));
-        Hashtable<MoveKey, String> table = null;
+        Hashtable<MoveKey, DocumentFragment> table = null;
         if (pushtable.containsKey(key)) {
             //if there is something else push to the same file
             table = pushtable.get(key);
         } else {
             //if there is nothing else push to the same file
-            table = new Hashtable<MoveKey, String>();
+            table = new Hashtable<MoveKey, DocumentFragment>();
             pushtable.put(key, table);
         }
 
@@ -338,13 +358,35 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 logger.logError(MessageUtils.getInstance().getMessage("DOTJ042E", target.toString()).toString());
                 return;
             } else {
-                table.put(moveKey, table.get(moveKey) + pushcontent);
+                table.put(moveKey, parsePushContent(pushcontent, table.get(moveKey)));
             }
 
         } else {
             //if there is nothing else push to the same target
-            table.put(moveKey, pushcontent);
+            table.put(moveKey, parsePushContent(pushcontent, null));
         }
+    }
+    
+    private DocumentFragment parsePushContent(final String pushcontent, final DocumentFragment target) {
+        Document d = null;
+        try {
+            d = documentBuilder.parse(new InputSource(new StringReader("<wrapper>" + pushcontent + "</wrapper>")));
+        } catch (SAXException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        DocumentFragment df = target;
+        if (df == null) {
+            df = pushDocument.createDocumentFragment();
+        }
+        final NodeList children = d.getDocumentElement().getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            df.appendChild(pushDocument.importNode(children.item(i), true));
+        }
+        return df;
     }
 
     @Override

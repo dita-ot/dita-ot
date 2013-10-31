@@ -27,6 +27,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
+import javax.naming.OperationNotSupportedException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -36,8 +37,11 @@ import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Attr;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -46,6 +50,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.AttributesImpl;
 /**
  * This class is for writing conref push contents into
  * specific files.
@@ -54,7 +59,7 @@ import org.xml.sax.XMLReader;
 public final class ConrefPushParser extends AbstractXMLWriter {
 
     /**table containing conref push contents.*/
-    private Hashtable<MoveKey, String> movetable = null;
+    private Hashtable<MoveKey, DocumentFragment> movetable = null;
 
     /**topicId keep the current topic id value.*/
     private String topicId = null;
@@ -113,7 +118,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	to "pushafter" action because we don't know the value of id when processing the
 	end tag of an element. That's why we need to store the content for push after
 	into variable in startElement(...)*/
-    private String contentForPushAfter = null;
+    private DocumentFragment contentForPushAfter = null;
 
     /**contentForPushAfterStack is used to store the history value of contentForPushAfter
 	It is possible that we have pushafter action for both parent and child element.
@@ -121,7 +126,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	before getting value contentForPushAfter for child element from movetable. When we
 	finished pushafter action for child element, we need to restore the original value for
 	parent. */
-    private Stack<String> contentForPushAfterStack = null;
+    private Stack<DocumentFragment> contentForPushAfterStack = null;
 
     /**if the pushcontent has @conref, it should be paid attention to it. Because the current
 	file may not contain any @conref attribute, it will not resolved by the conref.xsl,
@@ -138,7 +143,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
     public ConrefPushParser() {
         topicSpecSet = new HashSet<String>();
         levelForPushAfterStack = new Stack<Integer>();
-        contentForPushAfterStack = new Stack<String>();
+        contentForPushAfterStack = new Stack<DocumentFragment>();
         try {
             parser = StringUtils.getXMLReader();
             parser.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -154,7 +159,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         this.job = job;
     }
     
-    public void setMoveTable(final Hashtable<MoveKey, String> movetable) {
+    public void setMoveTable(final Hashtable<MoveKey, DocumentFragment> movetable) {
         this.movetable = movetable;
     }
     
@@ -179,7 +184,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         idStack = new Stack<String>();
         topicSpecSet = new HashSet<String>();
         levelForPushAfterStack = new Stack<Integer>();
-        contentForPushAfterStack = new Stack<String>();
+        contentForPushAfterStack = new Stack<DocumentFragment>();
         
         final File outputFile = new File(filename + ".cnrfpush");
         try {
@@ -286,7 +291,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                 //write the pushcontent after the end tag
                 try {
                     if (contentForPushAfter != null) {
-                        output.write(contentForPushAfter);
+                        writeNode(contentForPushAfter);
                     }
                 } catch (final Exception e) {
                     logger.logError(e.getMessage(), e) ;
@@ -325,19 +330,12 @@ public final class ConrefPushParser extends AbstractXMLWriter {
      * @param string pushedContent
      * @return boolean: if type match, return true, else return false
      */
-    private boolean isPushedTypeMatch(final DitaClass targetClassAttribute, final String content) {
+    private boolean isPushedTypeMatch(final DitaClass targetClassAttribute, final DocumentFragment content) {
         DitaClass clazz = null;
-        //add stub to serve as the root element
-        final String string = "<stub>" + content + "</stub>";
-        final InputSource inputSource = new InputSource(new StringReader(string));
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         try {
-            final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-            final Document document = documentBuilder.parse(inputSource);
-            final Element element = document.getDocumentElement();
-            if (element.hasChildNodes()) {
-                final NodeList nodeList = element.getChildNodes();
+            if (content.hasChildNodes()) {
+                final NodeList nodeList = content.getChildNodes();
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     final Node node = nodeList.item(i);
                     if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -362,18 +360,10 @@ public final class ConrefPushParser extends AbstractXMLWriter {
      * @param string string
      * @return string
      */
-    private String replaceElementName(final DitaClass targetClassAttribute, final String content) {        
-        //add stub to serve as the root element
-        final String string = "<stub>" + content + "</stub>";
-        final InputSource inputSource = new InputSource(new StringReader(string));
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        final StringBuffer stringBuffer = new StringBuffer();
+    private DocumentFragment replaceElementName(final DitaClass targetClassAttribute, final DocumentFragment content) {        
         try {
-            final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-            final Document document = documentBuilder.parse(inputSource);
-            final Element element = document.getDocumentElement();
-            if (element.hasChildNodes()) {
-                final NodeList nodeList = element.getChildNodes();
+            if (content.hasChildNodes()) {
+                final NodeList nodeList = content.getChildNodes();
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     final Node node = nodeList.item(i);
                     if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -388,57 +378,35 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                             if (!elem.getAttribute(ATTRIBUTE_NAME_CONREF).isEmpty()) {
                                 hasConref = true;
                             }
-                            stringBuffer.append(LESS_THAN).append(targetElementName);
-                            final NamedNodeMap namedNodeMap = elem.getAttributes();
-                            for (int t = 0; t < namedNodeMap.getLength(); t++) {
-                                final Attr attr = (Attr) namedNodeMap.item(t);
-                                stringBuffer.append(STRING_BLANK)
-                                    .append(attr.getNodeName())
-                                    .append(EQUAL)
-                                    .append(QUOTATION)
-                                    .append(StringUtils.escapeXML(attr.getNodeValue()))
-                                    .append(QUOTATION);
-                            }
-                            stringBuffer.append(GREATER_THAN);
+                            elem.getOwnerDocument().renameNode(elem, elem.getNamespaceURI(), targetElementName);                            
                             // process the child nodes of the current node
                             final NodeList nList = elem.getChildNodes();
                             for (int j = 0; j < nList.getLength(); j++) {
                                 final Node subNode = nList.item(j);
                                 if (subNode.getNodeType() == Node.ELEMENT_NODE) {
                                     //replace the subElement Name
-                                    stringBuffer.append(replaceSubElementName(type, (Element)subNode));
-                                }
-                                if (subNode.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
-                                    stringBuffer.append("<?").append(subNode.getNodeName()).append("?>");
-                                }
-                                if (subNode.getNodeType() == Node.TEXT_NODE) {
-                                    //stringBuffer.append(subNode.getNodeValue());
-                                    stringBuffer.append(StringUtils.escapeXML(subNode.getNodeValue()));
+                                    replaceSubElementName(type, (Element) subNode);
                                 }
                             }
-                            stringBuffer.append("</").append(targetElementName).append(GREATER_THAN);
                         } else {
-                            stringBuffer.append(replaceSubElementName(STRING_BLANK, elem));
+                            replaceSubElementName(STRING_BLANK, elem);
                         }
                     }
                 }
-                return stringBuffer.toString();
-            } else {
-                return string;
             }
         } catch (final Exception e) {
             e.printStackTrace();
-            return string;
         }
+        return content;
     }
+    
     /**
      * 
      * @param type pushtype
      * @param elem element
      * @return string
      */
-    private String replaceSubElementName(final String type, final Element elem) {
-        final StringBuffer stringBuffer = new StringBuffer();
+    private void replaceSubElementName(final String type, final Element elem) {
         final DitaClass classValue = DitaClass.getInstance(elem);
         if (!elem.getAttribute(ATTRIBUTE_NAME_CONREF).isEmpty()) {
             hasConref = true;
@@ -449,35 +417,14 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                 generalizedElemName = classValue.toString().substring(classValue.toString().indexOf("/") + 1, classValue.toString().indexOf(STRING_BLANK, classValue.toString().indexOf("/"))).trim();
             }
         }
-        stringBuffer.append(LESS_THAN).append(generalizedElemName);
-        final NamedNodeMap namedNodeMap = elem.getAttributes();
-        for (int i = 0; i < namedNodeMap.getLength(); i++) {
-            final Attr attr = (Attr) namedNodeMap.item(i);
-            stringBuffer.append(STRING_BLANK)
-                .append(attr.getNodeName())
-                .append(EQUAL)
-                .append(QUOTATION)
-                .append(StringUtils.escapeXML(attr.getNodeValue()))
-                .append(QUOTATION);
-        }
-        stringBuffer.append(GREATER_THAN);
+        elem.getOwnerDocument().renameNode(elem, elem.getNamespaceURI(), generalizedElemName);
         final NodeList nodeList = elem.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             final Node node = nodeList.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                // If the type of current node is ELEMENT_NODE, process current node.
-                stringBuffer.append(replaceSubElementName(type, (Element)node));
-            }
-            if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
-                stringBuffer.append("<?").append(node.getNodeName()).append("?>");
-            }
-            if (node.getNodeType() == Node.TEXT_NODE) {
-                //stringBuffer.append(node.getNodeValue());
-                stringBuffer.append(StringUtils.escapeXML(node.getNodeValue()));
+                replaceSubElementName(type, (Element) node);
             }
         }
-        stringBuffer.append("</").append(generalizedElemName).append(GREATER_THAN);
-        return stringBuffer.toString();
     }
 
 
@@ -577,7 +524,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             }
         }
         if (containpushplace) {
-            output.write(replaceElementName(classValue, movetable.remove(containkey)));
+            writeNode(replaceElementName(classValue, movetable.remove(containkey)));
             isReplaced = true;
             level = 0;
             level++;
@@ -601,7 +548,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             }
         }
         if (containpushbefore) {
-            output.write(replaceElementName(classValue, movetable.remove(containkey)));
+            writeNode(replaceElementName(classValue, movetable.remove(containkey)));
         }
     }
 
@@ -674,6 +621,41 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         output.write(pi);
         output.write(QUESTION);
         output.write(GREATER_THAN);
+    }
+    
+    private void writeNode(final Node node) throws IOException {
+        switch(node.getNodeType()) {
+        case Node.DOCUMENT_FRAGMENT_NODE: {
+            final NodeList children = node.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                writeNode(children.item(i));
+            }
+            break;
+        }
+        case Node.ELEMENT_NODE:
+            final Element e = (Element) node;
+            final AttributesBuilder b = new AttributesBuilder();
+            final NamedNodeMap atts = e.getAttributes();
+            for (int i = 0; i < atts.getLength(); i++) {
+                b.add((Attr) atts.item(i));
+            }
+            writeStartElement(node.getNodeName(), b.build());
+            final NodeList children = e.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                writeNode(children.item(i));
+            }
+            writeEndElement(node.getNodeName());
+            break;
+        case Node.TEXT_NODE:
+            final char[] data = node.getNodeValue().toCharArray();
+            writeCharacters(data, 0, data.length);
+            break;
+        case Node.PROCESSING_INSTRUCTION_NODE:
+            writeProcessingInstruction(node.getNodeName(), node.getNodeValue());
+            break;
+        default:
+            throw new UnsupportedOperationException();
+        }
     }
     
 }
