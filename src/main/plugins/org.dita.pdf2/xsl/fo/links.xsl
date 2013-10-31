@@ -229,7 +229,7 @@ See the accompanying license.txt file for applicable licenses.
 			</xsl:call-template>
 
 			<xsl:choose>
-				<xsl:when test="not(@scope = 'external' or @format = 'html') and not($referenceTitle = '')">
+				<xsl:when test="not(@scope = 'external' or @format = 'html') and not(empty($referenceTitle))">
 					<xsl:copy-of select="$referenceTitle"/>
 				</xsl:when>
 				<xsl:when test="not(@scope = 'external' or @format = 'html')">
