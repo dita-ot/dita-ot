@@ -69,7 +69,9 @@ The definitive authority regarding RTF is Sean M. Burke.
 - Additional information can be found on his website http://interglacial.com/rtf/.
  
 ### DITA2Go User Guide
-The DITA2Go User Guide also provides detailled information on converting DITA to RTF: http://www.dita2go.com/download/ug
+The DITA2Go User Guide also provides detailled information on RTF in chapter 15. "Converting to print RTF".
+- Online: http://www.dita2go.com/ohug/_ugdita2go.htm
+- Download: http://www.dita2go.com/download/ug
 
 
 ## Still to be done
