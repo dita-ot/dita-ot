@@ -53,6 +53,8 @@ Hello, World!
 ### Caveat
 If you want to have a look under the hood of the generated RTF file you can open it with any text editor. And better keep a copy of your file because just opening and saving the file with Microsoft Word or any other word processor will terribly bloat it with additional RTF code. For example the generated "hierarchy.rft" will grow from 25 KB to more than 500 KB that way!
 
+Unfortunately, this makes it nearly impossible to learn about RTF by merely looking at the source code of a document generated with Word or the like because it's very hard to separate the wheat from the chaff.
+
 
 ## RTF Resources
 
@@ -65,6 +67,10 @@ The definitive authority regarding RTF is Sean M. Burke.
 - The best reference is his ["RTF Pocket Guide"](http://shop.oreilly.com/product/9780596004750.do) from O'Reilly.  
 - Basic information on RTF is also available from his [RTF Cookbook - RTF overview and quick reference](http://search.cpan.org/~sburke/RTF-Writer/lib/RTF/Cookbook.pod) (part of the RTF-Writer Perl module).
 - Additional information can be found on his website http://interglacial.com/rtf/.
+ 
+### DITA2Go User Guide
+The DITA2Go User Guide also provides detailled information on converting DITA to RTF: http://www.dita2go.com/download/ug
+
 
 ## Still to be done
 - Provide separate RTF styles for all DITA elements which might be rendered distinctly. These styles can later easily be changed with any RTF capable word processor without touching the RTF code.
