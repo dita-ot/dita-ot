@@ -34,8 +34,10 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:opentopic-mapmerge="http://www.idiominc.com/opentopic/mapmerge"
+    xmlns:exsl="http://exslt.org/common"
+    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-    exclude-result-prefixes="opentopic-mapmerge opentopic-func"
+    exclude-result-prefixes="opentopic-mapmerge opentopic-func exslf exsl"
     version="2.0">
 	
 	<xsl:import href="../../../../xsl/common/output-message.xsl"/>
@@ -212,7 +214,7 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
 		<xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
 
-		<xsl:variable name="referenceTitle">
+		<xsl:variable name="referenceTitle" as="node()*">
 			<xsl:apply-templates select="." mode="insertReferenceTitle">
 				<xsl:with-param name="href" select="@href"/>
 				<xsl:with-param name="titlePrefix" select="''"/>
@@ -229,7 +231,7 @@ See the accompanying license.txt file for applicable licenses.
 			</xsl:call-template>
 
 			<xsl:choose>
-				<xsl:when test="not(@scope = 'external' or @format = 'html') and not($referenceTitle = '')">
+				<xsl:when test="not(@scope = 'external' or @format = 'html') and not(empty($referenceTitle))">
 					<xsl:copy-of select="$referenceTitle"/>
 				</xsl:when>
 				<xsl:when test="not(@scope = 'external' or @format = 'html')">
@@ -259,7 +261,7 @@ See the accompanying license.txt file for applicable licenses.
 				</xsl:if>
 		-->
 
-    	<xsl:if test="not(@scope = 'external' or @format = 'html') and not($referenceTitle = '') and not($element[contains(@class, ' topic/fn ')])">
+    	<xsl:if test="not(@scope = 'external' or @format = 'html') and not(empty($referenceTitle)) and not($element[contains(@class, ' topic/fn ')])">
             <!-- SourceForge bug 1880097: should not include page number when xref includes author specified text -->
             <xsl:if test="not(processing-instruction()[name()='ditaot'][.='usertext'])">
                 <xsl:call-template name="insertPageNumberCitation">
@@ -366,7 +368,7 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
 		<xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
 
-		<xsl:variable name="referenceTitle">
+		<xsl:variable name="referenceTitle" as="node()*">
             <xsl:apply-templates select="." mode="insertReferenceTitle">
                 <xsl:with-param name="href" select="@href"/>
                 <xsl:with-param name="titlePrefix" select="''"/>
@@ -387,7 +389,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:with-param name="href" select="@href"/>
                     </xsl:call-template>
                     <xsl:choose>
-                        <xsl:when test="not($linkScope = 'external') and not($referenceTitle = '')">
+                    	<xsl:when test="not($linkScope = 'external') and not(empty($referenceTitle))">
                             <xsl:copy-of select="$referenceTitle"/>
                         </xsl:when>
                         <xsl:when test="not($linkScope = 'external')">
@@ -403,7 +405,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:choose>
                 </fo:basic-link>
             </fo:inline>
-            <xsl:if test="not($linkScope = 'external') and not($referenceTitle = '')">
+        	<xsl:if test="not($linkScope = 'external') and not(empty($referenceTitle))">
                 <xsl:call-template name="insertPageNumberCitation">
 					<xsl:with-param name="destination" select="$destination"/>
 					<xsl:with-param name="element" select="$element"/>
@@ -432,8 +434,8 @@ See the accompanying license.txt file for applicable licenses.
     	<xsl:param name="format" select="@format"/>
         <xsl:param name="href" select="@href"/>
         <xsl:choose>
-            <xsl:when test="(contains($href, '://') and not(starts-with($href, 'file://')))
-            or starts-with($href, '/') or $scope = 'external' or $format = 'html'">
+            <xsl:when test="(contains(@href, '://') and not(starts-with(@href, 'file://')))
+            or starts-with(@href, '/') or $scope = 'external' or $format = 'html'">
                 <xsl:attribute name="external-destination">
                     <xsl:value-of select="concat('url(', $href, ')')"/>
                 </xsl:attribute>
@@ -529,7 +531,17 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-    <xsl:function name="opentopic-func:getDestinationId">
+    <exslf:function name="opentopic-func:getDestinationId">
+        <xsl:param name="href"/>
+        <xsl:variable name="destination">
+            <xsl:call-template name="getDestinationIdImpl">
+                <xsl:with-param name="href" select="$href"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <exslf:result select="$destination"/>
+    </exslf:function>
+
+    <xsl:function version="2.0" name="opentopic-func:getDestinationId">
         <xsl:param name="href"/>
         <xsl:call-template name="getDestinationIdImpl">
             <xsl:with-param name="href" select="$href"/>
@@ -562,6 +574,7 @@ See the accompanying license.txt file for applicable licenses.
 
 		</xsl:for-each>
 -->
+		<xsl:if test="$disableRelatedLinks = 'no'">
 			<xsl:variable name="parentCollectionType">
 				<xsl:call-template name="getCollectionType">
 					<xsl:with-param name="nodeType" select="'parent'"/>
@@ -756,6 +769,7 @@ See the accompanying license.txt file for applicable licenses.
 					</xsl:choose>
 				</xsl:when>
 			</xsl:choose>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template name="getCollectionType">
