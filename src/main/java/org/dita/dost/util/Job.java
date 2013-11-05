@@ -532,7 +532,7 @@ public final class Job {
     public Collection<FileInfo> getFileInfo() {
         // FIXME: For some reason, integration test 3308775 fails if the implementation is e.g.
         // return Collections.unmodifiableCollection(new ArrayList<FileInfo>(files.values()));
-        return getFileInfoMap().values();
+        return new ArrayList<FileInfo>(getFileInfoMap().values());
     }
     
     /**
@@ -548,7 +548,7 @@ public final class Job {
                 ret.add(f);
             }
         }
-        return Collections.unmodifiableCollection(ret);
+        return ret;
     }
 
     

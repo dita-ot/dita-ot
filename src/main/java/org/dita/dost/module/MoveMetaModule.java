@@ -9,24 +9,19 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
 
 import org.w3c.dom.Element;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.DitaMapMetaWriter;
 import org.dita.dost.writer.DitaMetaWriter;
@@ -40,14 +35,11 @@ import org.dita.dost.writer.DitaMetaWriter;
  */
 final class MoveMetaModule extends AbstractPipelineModuleImpl {
 
-//    private final ContentImpl content;
-
     /**
      * Default constructor of MoveMetaModule class.
      */
     public MoveMetaModule() {
         super();
-//        content = new ContentImpl();
     }
 
     /**
@@ -59,61 +51,57 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        if (logger == null) {
-            throw new IllegalStateException("Logger not set");
-        }
-        
-        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
-        }
-
-        final MapMetaReader metaReader = new MapMetaReader();
-        metaReader.setLogger(logger);
+        final Collection<FileInfo> fis = new ArrayList<FileInfo>(); 
         for (final FileInfo f: job.getFileInfo()) {
             if (f.isActive && "ditamap".equals(f.format)) {
-                final File mapFile = new File(tempDir, f.file.getPath());
+                fis.add(f);
+            }
+        }
+        if (!fis.isEmpty()) {
+            final MapMetaReader metaReader = new MapMetaReader();
+            metaReader.setLogger(logger);
+            for (final FileInfo f: fis) {
+                final File mapFile = new File(job.tempDir, f.file.getPath());
                 logger.logInfo("Processing " + mapFile);
                 //FIXME: this reader gets the parent path of input file
                 metaReader.read(mapFile);
             }
-        }
-
-        final Map<File, Hashtable<String, Element>> mapSet = metaReader.getMapping();
+            final Map<File, Hashtable<String, Element>> mapSet = metaReader.getMapping();
+            
+            if (!mapSet.isEmpty()) {
+                //process map first
+                final DitaMapMetaWriter mapInserter = new DitaMapMetaWriter();
+                mapInserter.setLogger(logger);
+                for (final Entry<File, Hashtable<String, Element>> entry: mapSet.entrySet()) {
+                    final File targetFileName = entry.getKey();
+                    if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITAMAP )) {
+                        mapInserter.setMetaTable(entry.getValue());
+                        if (entry.getKey().exists()) {
+                            logger.logInfo("Processing " + entry.getKey());
+                            mapInserter.write(entry.getKey());
+                        } else {
+                            logger.logError("File " + entry.getKey() + " does not exist");
+                        }
         
-        //process map first
-        final DitaMapMetaWriter mapInserter = new DitaMapMetaWriter();
-        mapInserter.setLogger(logger);
-        for (final Entry<File, Hashtable<String, Element>> entry: mapSet.entrySet()) {
-            final File targetFileName = entry.getKey();
-            if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITAMAP )) {
-                mapInserter.setMetaTable(entry.getValue());
-                if (entry.getKey().exists()) {
-                    logger.logInfo("Processing " + entry.getKey());
-                    mapInserter.write(entry.getKey());
-                } else {
-                    logger.logError("File " + entry.getKey() + " does not exist");
+                    }
                 }
-
-            }
-        }
-
-        //process topic
-        final DitaMetaWriter topicInserter = new DitaMetaWriter();
-        topicInserter.setLogger(logger);
-        for (final Map.Entry<File, Hashtable<String, Element>> entry: mapSet.entrySet()) {
-            final File targetFileName = entry.getKey();
-            if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITA) || targetFileName.getPath().endsWith(FILE_EXTENSION_XML)) {
-//                content.setValue(entry.getValue());
-//                topicInserter.setContent(content);
-                topicInserter.setMetaTable(entry.getValue());
-                if (entry.getKey().exists()) {
-                    logger.logInfo("Processing " + entry.getKey());
-                    topicInserter.write(entry.getKey());
-                } else {
-                    logger.logError("File " + entry.getKey() + " does not exist");
+        
+                //process topic
+                final DitaMetaWriter topicInserter = new DitaMetaWriter();
+                topicInserter.setLogger(logger);
+                for (final Map.Entry<File, Hashtable<String, Element>> entry: mapSet.entrySet()) {
+                    final File targetFileName = entry.getKey();
+                    if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITA) || targetFileName.getPath().endsWith(FILE_EXTENSION_XML)) {
+                        topicInserter.setMetaTable(entry.getValue());
+                        if (entry.getKey().exists()) {
+                            logger.logInfo("Processing " + entry.getKey());
+                            topicInserter.write(entry.getKey());
+                        } else {
+                            logger.logError("File " + entry.getKey() + " does not exist");
+                        }
+        
+                    }
                 }
-
             }
         }
         return null;

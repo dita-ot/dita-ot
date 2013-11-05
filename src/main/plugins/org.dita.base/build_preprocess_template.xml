@@ -213,7 +213,7 @@
   <!-- move-meta-entries
       Push information from <topicmeta> in the map into the corresponding topics. -->
   <target name="move-meta-entries" 
-    dita:depends="{depend.preprocess.move-meta-entries.pre},move-meta-entries-check"
+    dita:depends="{depend.preprocess.move-meta-entries.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-meta-entries.skip"
     description="Move metadata entries">
@@ -222,12 +222,6 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.MoveMetaModule"/>
     </pipeline>
-  </target>
-
-  <target name="move-meta-entries-check">
-    <condition property="preprocess.move-meta-entries.skip">
-      <isset property="noMap"/>
-    </condition>
   </target>
   
   <!-- conref
