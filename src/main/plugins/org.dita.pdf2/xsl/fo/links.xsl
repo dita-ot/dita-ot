@@ -212,7 +212,7 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
 		<xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
 
-		<xsl:variable name="referenceTitle">
+		<xsl:variable name="referenceTitle" as="node()*">
 			<xsl:apply-templates select="." mode="insertReferenceTitle">
 				<xsl:with-param name="href" select="@href"/>
 				<xsl:with-param name="titlePrefix" select="''"/>
@@ -229,7 +229,7 @@ See the accompanying license.txt file for applicable licenses.
 			</xsl:call-template>
 
 			<xsl:choose>
-				<xsl:when test="not(@scope = 'external' or @format = 'html') and not($referenceTitle = '')">
+				<xsl:when test="not(@scope = 'external' or @format = 'html') and exists($referenceTitle)">
 					<xsl:copy-of select="$referenceTitle"/>
 				</xsl:when>
 				<xsl:when test="not(@scope = 'external' or @format = 'html')">
@@ -259,7 +259,7 @@ See the accompanying license.txt file for applicable licenses.
 				</xsl:if>
 		-->
 
-    	<xsl:if test="not(@scope = 'external' or @format = 'html') and not($referenceTitle = '') and not($element[contains(@class, ' topic/fn ')])">
+    	<xsl:if test="not(@scope = 'external' or @format = 'html') and exists($referenceTitle) and not($element[contains(@class, ' topic/fn ')])">
             <!-- SourceForge bug 1880097: should not include page number when xref includes author specified text -->
             <xsl:if test="not(processing-instruction()[name()='ditaot'][.='usertext'])">
                 <xsl:call-template name="insertPageNumberCitation">
@@ -366,7 +366,7 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
 		<xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
 
-		<xsl:variable name="referenceTitle">
+		<xsl:variable name="referenceTitle" as="node()*">
             <xsl:apply-templates select="." mode="insertReferenceTitle">
                 <xsl:with-param name="href" select="@href"/>
                 <xsl:with-param name="titlePrefix" select="''"/>
@@ -387,7 +387,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:with-param name="href" select="@href"/>
                     </xsl:call-template>
                     <xsl:choose>
-                        <xsl:when test="not($linkScope = 'external') and not($referenceTitle = '')">
+                    	<xsl:when test="not($linkScope = 'external') and exists($referenceTitle)">
                             <xsl:copy-of select="$referenceTitle"/>
                         </xsl:when>
                         <xsl:when test="not($linkScope = 'external')">
@@ -403,7 +403,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:choose>
                 </fo:basic-link>
             </fo:inline>
-            <xsl:if test="not($linkScope = 'external') and not($referenceTitle = '')">
+        	<xsl:if test="not($linkScope = 'external') and exists($referenceTitle)">
                 <xsl:call-template name="insertPageNumberCitation">
 					<xsl:with-param name="destination" select="$destination"/>
 					<xsl:with-param name="element" select="$element"/>
