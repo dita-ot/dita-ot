@@ -16,8 +16,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +25,6 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Transformer;
@@ -34,7 +33,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.util.Job;
@@ -68,7 +66,7 @@ public final class ChunkMapReader implements AbstractReader {
     private File filePath = null;
     private LinkedHashMap<String, String> changeTable = null;
 
-    private Hashtable<String, String> conflictTable = null;
+    private Map<String, String> conflictTable = null;
 
     private Set<String> refFileSet = null;
 
@@ -91,7 +89,7 @@ public final class ChunkMapReader implements AbstractReader {
         chunkByTopic = false;// By default, processor should chunk by document.
         changeTable = new LinkedHashMap<String, String>(128);
         refFileSet = new HashSet<String>(128);
-        conflictTable = new Hashtable<String, String>(128);
+        conflictTable = new HashMap<String, String>(128);
     }
 
     public void setJob(final Job job) {
@@ -541,7 +539,7 @@ public final class ChunkMapReader implements AbstractReader {
      * 
      * @return conflict table
      */
-    public Hashtable<String, String> getConflicTable() {
+    public Map<String, String> getConflicTable() {
         return conflictTable;
     }
 

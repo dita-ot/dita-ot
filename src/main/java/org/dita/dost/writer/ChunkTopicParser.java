@@ -24,7 +24,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -66,7 +65,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     private static final String ATTR_CHUNK_VALUE_SELECT_DOCUMENT = "select-document";
     /** Keys and values are chimera paths, i.e. systems paths with fragments */
     private LinkedHashMap<String, String> changeTable = null;
-    private Hashtable<String, String> conflictTable = null;
+    private Map<String, String> conflictTable = null;
 
     private Element elem = null;
 
@@ -1169,7 +1168,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      * @param separate separate
      * @param chunkByTopic chunkByTopic
      */
-    public void setup(final LinkedHashMap<String, String> changeTable, final Hashtable<String, String> conflictTable,
+    public void setup(final LinkedHashMap<String, String> changeTable, final Map<String, String> conflictTable,
             final Set<String> refFileSet, final Element elem, final boolean separate, final boolean chunkByTopic,
             final ChunkFilenameGenerator chunkFilenameGenerator) {
         // Initialize ChunkTopicParser

@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Hashtable;
 import java.util.Map;
 
 import org.dita.dost.exception.DITAOTException;
@@ -46,7 +45,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     private static final String NOT_LOCAL_URL = COLON_DOUBLE_SLASH;
 
     private Map<String, String> changeTable = null;
-    private Hashtable<String, String> conflictTable = null;
+    private Map<String, String> conflictTable = null;
     private OutputStreamWriter output;
     private OutputStreamWriter ditaFileOutput;
     private File currentFilePath = null;
@@ -81,7 +80,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
      * 
      * @param conflictTable conflictTable
      */
-    public void setup(final Hashtable<String, String> conflictTable) {
+    public void setup(final Map<String, String> conflictTable) {
         this.conflictTable = conflictTable;
     }
 

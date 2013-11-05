@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -25,18 +24,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ChunkMapReader;
 import org.dita.dost.util.Configuration;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.TopicRefWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  * The chunking module class.
@@ -67,15 +67,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        if (logger == null) {
-            throw new IllegalStateException("Logger not set");
-        }
-        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
         final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
-        }
         // change to xml property
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(logger);
@@ -83,16 +75,11 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         mapReader.setup(transtype);
 
         try {
-            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder builder = factory.newDocumentBuilder();
-            final File mapFile = new File(tempDir, job.getProperty(INPUT_DITAMAP)).getAbsoluteFile();
-            final Document doc = builder.parse(mapFile);
-            final Element root = doc.getDocumentElement();
-            if (root.getAttribute(ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ")
-                    && transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
+            final File mapFile = new File(job.tempDir, job.getProperty(INPUT_DITAMAP)).getAbsoluteFile();
+            if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile)) {
                 for (final FileInfo f : job.getFileInfo()) {
                     if (f.isActive && ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                        mapReader.read(new File(tempDir, f.file.getPath()).getAbsoluteFile());
+                        mapReader.read(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
                     }
                 }
             } else {
@@ -103,23 +90,38 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
 
         final Map<String, String> changeTable = mapReader.getChangeTable();
-        if (changeTable != null) {
+        if (!changeTable.isEmpty()) {
             // update dita.list to include new generated files
-            updateList(changeTable, mapReader.getConflicTable(), input);
+            updateList(changeTable, mapReader.getConflicTable());
             // update references in dita files
-            updateRefOfDita(changeTable, mapReader.getConflicTable(), input);
+            updateRefOfDita(changeTable, mapReader.getConflicTable());
         }
 
         return null;
     }
+    
+    private boolean isEclipseMap(final File mapFile) throws DITAOTException {
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (final ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+        Document doc;
+        try {
+            doc = builder.parse(mapFile);
+        } catch (final SAXException e) {
+            throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
+        }
+        final Element root = doc.getDocumentElement();
+        return root.getAttribute(ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ");
+    }
 
     // update the href in ditamap and topic files
-    private void updateRefOfDita(final Map<String, String> changeTable, final Hashtable<String, String> conflictTable,
-            final AbstractPipelineInput input) {
-        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
-        }
+    private void updateRefOfDita(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
         final TopicRefWriter topicRefWriter = new TopicRefWriter();
         topicRefWriter.setLogger(logger);
         topicRefWriter.setChangeTable(changeTable);
@@ -128,7 +130,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             for (final FileInfo f : job.getFileInfo()) {
                 if (f.isActive
                         && (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format))) {
-                    topicRefWriter.write(tempDir.getAbsoluteFile(), f.file, relativePath2fix);
+                    topicRefWriter.write(job.tempDir.getAbsoluteFile(), f.file, relativePath2fix);
                 }
             }
         } catch (final DITAOTException ex) {
@@ -137,13 +139,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
 
     }
 
-    private void updateList(final Map<String, String> changeTable, final Hashtable<String, String> conflictTable,
-            final AbstractPipelineInput input) {
-        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
-        }
-        final File xmlDitalist = new File(tempDir, "dummy.xml");
+    private void updateList(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
+        final File xmlDitalist = new File(job.tempDir, "dummy.xml");
 
         final Set<String> hrefTopics = new HashSet<String>();
         for (final FileInfo f : job.getFileInfo()) {
@@ -161,8 +158,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     final Iterator<String> hrefit = hrefTopics.iterator();
                     while (hrefit.hasNext()) {
                         final String ent = hrefit.next();
-                        if (resolveFile(tempDir.getAbsolutePath(), ent).getPath().equals(
-                                resolveFile(tempDir.getAbsolutePath(), s).getPath())) {
+                        if (resolveFile(job.tempDir.getAbsolutePath(), ent).getPath().equals(
+                                resolveFile(job.tempDir.getAbsolutePath(), s).getPath())) {
                             // The entry in hrefTopics points to the same target
                             // as entry in chunkTopics, it should be removed.
                             hrefit.remove();
@@ -181,9 +178,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 oldTopicList.add(f.file.getPath());
             }
         }
-        for (String t : hrefTopics) {
-            t = stripFragment(t);
-            t = getRelativePath(xmlDitalist.getAbsolutePath(), resolveFile(tempDir.getAbsolutePath(), t).getPath(), File.separator);
+        for (final String hrefTopic : hrefTopics) {
+            final String t = getRelativePath(xmlDitalist.getAbsolutePath(), resolveFile(job.tempDir.getAbsolutePath(), stripFragment(hrefTopic)).getPath(), File.separator);
             topicList.add(t);
             if (oldTopicList.contains(t)) {
                 oldTopicList.remove(t);
@@ -205,7 +201,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 String newChunkedFile = entry.getValue();
                 newChunkedFile = getRelativePath(xmlDitalist.getAbsolutePath(), newChunkedFile, File.separator);
                 final String extName = getExtension(newChunkedFile);
-                if (extName != null && !extName.equalsIgnoreCase("DITAMAP")) {
+                if (extName != null && !extName.equalsIgnoreCase(ATTR_FORMAT_VALUE_DITAMAP)) {
                     chunkedTopicSet.add(newChunkedFile);
                     if (!topicList.contains(newChunkedFile)) {
                         topicList.add(newChunkedFile);
@@ -229,7 +225,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         // removed extra topic files
         for (final String s : oldTopicList) {
             if (!StringUtils.isEmptyString(s)) {
-                final File f = new File(tempDir, s);
+                final File f = new File(job.tempDir, s);
                 if (f.exists()) {
                     f.delete();
                 }
