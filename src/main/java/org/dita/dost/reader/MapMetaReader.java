@@ -38,7 +38,7 @@ import org.w3c.dom.NodeList;
  */
 public final class MapMetaReader extends AbstractDomFilter {
     
-    private final Hashtable<File, Hashtable<String, Element>> resultTable = new Hashtable<File, Hashtable<String, Element>>(16);
+    private final Hashtable<URI, Hashtable<String, Element>> resultTable = new Hashtable<URI, Hashtable<String, Element>>(16);
 
     public static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<String>(asList(
             TOPIC_CRITDATES.matcher,
@@ -214,14 +214,14 @@ public final class MapMetaReader extends AbstractDomFilter {
         }
 
         if (!current.isEmpty() && hrefAttr != null) {// prevent the metadata is empty
-            File topicPath = null;
+            URI topicPath = null;
             if (copytoAttr != null) {
-                final URI copyToUri = URLUtils.stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
-                topicPath = URLUtils.toFile(FileUtils.resolveFile(filePath.toURI(), copyToUri));
+                final URI copyToUri = URLUtils.toURI(copytoAttr.getNodeValue());
+                topicPath = FileUtils.resolveFile(filePath.toURI(), copyToUri);
             }
-            if (topicPath == null || !topicPath.exists()) {
-                final URI hrefUri = URLUtils.stripFragment(URLUtils.toURI(hrefAttr.getNodeValue()));
-                topicPath = URLUtils.toFile(FileUtils.resolveFile(filePath.toURI(), hrefUri));
+            if (topicPath == null || !URLUtils.toFile(URLUtils.stripFragment(topicPath)).exists()) {
+                final URI hrefUri = URLUtils.toURI(hrefAttr.getNodeValue());
+                topicPath = FileUtils.resolveFile(filePath.toURI(), hrefUri);
             }
             if (isDitaFormat(formatAttr) && isLocalScope(scopeAttr)) {
                 if (resultTable.containsKey(topicPath)) {
@@ -389,7 +389,7 @@ public final class MapMetaReader extends AbstractDomFilter {
      * 
      * @return map of metadata by topic path
      */
-    public Map<File, Hashtable<String, Element>> getMapping() {
+    public Map<URI, Hashtable<String, Element>> getMapping() {
     	return Collections.unmodifiableMap(resultTable);
     } 
 

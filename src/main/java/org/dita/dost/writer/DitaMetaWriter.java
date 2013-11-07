@@ -11,6 +11,8 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 import static java.util.Arrays.*;
 import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +38,7 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.DitaClass;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -458,35 +462,31 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         }
     }
 
+    /**
+     * @deprecated use {@link #write(URI)} instead
+     */
+    @Deprecated
     @Override
     public void write(final File outputFilename) {
-        String filename = outputFilename.getAbsolutePath();
-        String file = null;
-        String topic = null;
+        throw new UnsupportedOperationException();
+    }
+    
+    public void write(final URI outputFilename) {
         File inputFile = null;
         File outputFile = null;
         FileOutputStream fileOutput = null;
 
         try {
-            if(filename.endsWith(SHARP)){
-                // prevent the empty topic id causing error
-                filename = filename.substring(0, filename.length()-1);
-            }
-
-            if(filename.lastIndexOf(SHARP)!=-1){
-                file = filename.substring(0,filename.lastIndexOf(SHARP));
-                topic = filename.substring(filename.lastIndexOf(SHARP)+1);
-                setMatch(topic);
-                startTopic = false;
+            if(outputFilename.getFragment() != null){
+                setMatch(outputFilename.getFragment());
             }else{
-                file = filename;
                 matchList = null;
-                startTopic = false;
             }
+            startTopic = false;
             hasWritten = false;
             startDOM = false;
-            inputFile = new File(file);
-            outputFile = new File(file + FILE_EXTENSION_TEMP);
+            inputFile = toFile(outputFilename);
+            outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
             fileOutput = new FileOutputStream(outputFile);
             ditaFileOutput = new OutputStreamWriter(fileOutput, UTF8);
             strOutput = new StringWriter();
@@ -494,22 +494,24 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 
             topicIdList.clear();
             reader.parse(inputFile.toURI().toString());
-
-            output.close();
-            if(!inputFile.delete()){
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-            }
-            if(!outputFile.renameTo(inputFile)){
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-            }
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }finally {
             try{
-                fileOutput.close();
+                output.close();
             } catch (final Exception e) {
                 logger.logError(e.getMessage(), e) ;
             }
+            try{
+                ditaFileOutput.close();
+            } catch (final Exception e) {
+                logger.logError(e.getMessage(), e) ;
+            }
+        }
+        try {
+            FileUtils.moveFile(outputFile, inputFile);
+        } catch (final Exception e) {
+            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
         }
     }
     
