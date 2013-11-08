@@ -7,21 +7,27 @@
 <xsl:stylesheet version="2.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:output method="text"/>
+  <xsl:output method="text"/>
 
-<xsl:template match="*[contains(@class,' pr-d/codeph ')]">
+  <xsl:template match="*[contains(@class,' pr-d/codeph ')]">
 {\f2 <xsl:apply-templates/>}
-</xsl:template>
+  </xsl:template>
 
-<xsl:template match="*[contains(@class,' pr-d/codeblock ')]">
-<xsl:call-template name="gen-id"/><xsl:if test="@spectitle and not(@spectitle='')">\par
-  \plain\f1\fs24\b <xsl:call-template name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="@spectitle"/></xsl:with-param></xsl:call-template></xsl:if>
+  <xsl:template match="*[contains(@class,' pr-d/codeblock ')]">
+    <xsl:call-template name="gen-id"/>
+    <xsl:if test="@spectitle and not(@spectitle='')">\par
+  \plain\f1\fs24\b <xsl:call-template name="get-ascii">
+        <xsl:with-param name="txt">
+          <xsl:value-of select="@spectitle"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
 \par {\plain\f2\fs24
-<xsl:apply-templates/>}
-</xsl:template>
+    <xsl:apply-templates/>}
+  </xsl:template>
 
-<xsl:template match="*[contains(@class,' pr-d/var ')]">
+  <xsl:template match="*[contains(@class,' pr-d/var ')]">
 {\i <xsl:apply-templates/>}
-</xsl:template>
+  </xsl:template>
 
 </xsl:stylesheet>
