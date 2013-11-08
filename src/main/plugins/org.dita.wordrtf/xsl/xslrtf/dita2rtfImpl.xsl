@@ -520,16 +520,15 @@ the same values used in by p in other contexts. -->
   <!-- Text generating templates -->
   <xsl:template name="gen-txt">
     <xsl:param name="txt"/>
-    <xsl:variable name="newline">
-      <xsl:text>
-      </xsl:text>
+    <xsl:variable name="newline"><xsl:text>
+</xsl:text>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="ancestor::*[contains(@class,' topic/pre ')] or ancestor::*[contains(@class,' topic/lines ')]">
         <xsl:choose>
           <xsl:when test="contains($txt,$newline)">
             <xsl:value-of select="substring-before($txt,$newline)"/>
-            <xsl:text>\par </xsl:text>
+            <xsl:text>\line </xsl:text> 
             <xsl:call-template name="gen-txt">
               <xsl:with-param name="txt" select="substring-after($txt,$newline)"/>
             </xsl:call-template>
