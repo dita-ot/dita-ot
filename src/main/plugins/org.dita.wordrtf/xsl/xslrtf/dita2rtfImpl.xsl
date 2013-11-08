@@ -55,9 +55,7 @@ xmlns:rtf="rtf_namespace">
 
   <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
     <xsl:call-template name="gen-id"/>
-    <xsl:text>{\pard </xsl:text>
-    <xsl:apply-templates/>
-    <xsl:text>\par}</xsl:text>
+    <xsl:call-template name="block-title-h2"/>
   </xsl:template>
 
   <xsl:template match="synsect">
