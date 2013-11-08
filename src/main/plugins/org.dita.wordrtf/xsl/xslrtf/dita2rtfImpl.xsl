@@ -97,9 +97,6 @@ xmlns:rtf="rtf_namespace">
 </xsl:template-->
 
   <!-- Phrases -->
-  <xsl:template match="*[contains(@class,' hi-d/tt ')]">
-    <xsl:call-template name="inline-em"/>
-  </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/q ')]">
     <xsl:call-template name="gen-id"/>
@@ -686,8 +683,7 @@ the same values used in by p in other contexts. -->
   </xsl:template>
 
   <!-- Formatting templates -->
-  <!-- font-weight="bold" -->
-  <xsl:template name="inline-em">{\b <xsl:apply-templates/>}</xsl:template>
+
   <!-- link-like -->
   <xsl:template name="inline-link">{\cf2\ul <xsl:apply-templates/>}</xsl:template>
 

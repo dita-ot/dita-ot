@@ -41,7 +41,9 @@ applicable licenses.-->
 
   <xsl:template match="*[contains(@class,' topic/dt ')]">
     <xsl:call-template name="gen-id"/>
-    <xsl:call-template name="inline-em"/>
+    <xsl:text>{\b </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/dd ')]">
@@ -58,7 +60,9 @@ applicable licenses.-->
 
   <xsl:template match="plentry/synph">
     <!-- plentry not found -->
-    <xsl:call-template name="inline-em"/>
+    <xsl:text>{\b </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="plentry/li">
