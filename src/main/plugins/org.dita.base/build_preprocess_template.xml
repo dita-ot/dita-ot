@@ -235,21 +235,17 @@
       <not><isset property="dita.preprocess.reloadstylesheet.conref"/></not>
     </condition>
     <makeurl property="exportfile.url" file="${dita.temp.dir}/export.xml" validate="false"/>
-    <xslt basedir="${dita.temp.dir}" taskname="conref"
-      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}/${conreffile}"
-      classpathref="dost.class.path"
-      reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
-      <mapper type="glob" from="*" to="*.cnrf" />
-      <param name="EXPORTFILE" expression="${exportfile.url}"/>
-      <param name="TRANSTYPE" expression="${transtype}"/>
-      <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-    <move todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.cnrf" />
-      <mapper type="glob" from="*.cnrf" to="*" />
-    </move>
+    <pipeline message="Resolve conref in input files" taskname="conref">
+      <xslt basedir="${dita.temp.dir}"
+        reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
+        <includesfile name="${dita.temp.dir}/${conreffile}"/>
+        <param name="EXPORTFILE" expression="${exportfile.url}"/>
+        <param name="TRANSTYPE" expression="${transtype}"/>
+        <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
   </target>
   
   <target name="conref-check">
@@ -284,22 +280,16 @@
       <not><isset property="dita.preprocess.reloadstylesheet.mapref"/></not>
     </condition>
     <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
-    <xslt taskname="mapref"
-    	basedir="${dita.temp.dir}"
-    	destdir="${dita.temp.dir}"
-        includesfile="${dita.temp.dir}/${fullditamapfile}"
-    	extension=".ditamap.ref"
-        classpathref="dost.class.path"
-        reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
-      <param name="TRANSTYPE" expression="${transtype}" />
-      <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-    <move overwrite="true" todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.ditamap.ref" />
-      <mapper type="glob" from="*.ditamap.ref" to="*.ditamap" />
-    </move>
+    <pipeline message="Resolve mapref in ditamap" taskname="mapref">
+      <xslt basedir="${dita.temp.dir}"
+          reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
+        <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
+        <param name="TRANSTYPE" expression="${transtype}" />
+        <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
   </target>
 
   <target name="mapref-check">
@@ -333,22 +323,16 @@
     <condition property="dita.preprocess.reloadstylesheet.mappull" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.mappull"/></not>
     </condition>
-    <xslt taskname="mappull"
-  	    basedir="${dita.temp.dir}"
-    	destdir="${dita.temp.dir}"
-        includesfile="${dita.temp.dir}/${fullditamapfile}"
-    	extension=".ditamap.pull"
-        classpathref="dost.class.path"
-        reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
-      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl">
-      <param name="TRANSTYPE" expression="${transtype}" />
-      <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-    <move overwrite="true" todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.ditamap.pull" />
-      <mapper type="glob" from="*.ditamap.pull" to="*.ditamap" />
-    </move>
+    <pipeline message="Pull the navtitle and topicmeta from topics to ditamap" taskname="mappull">
+      <xslt basedir="${dita.temp.dir}"
+          reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl">
+        <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
+        <param name="TRANSTYPE" expression="${transtype}" />
+        <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
   </target>
   
   <target name="mappull-check">
@@ -447,22 +431,18 @@
     <condition property="dita.preprocess.reloadstylesheet.topicpull" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.topicpull"/></not>
     </condition>
-    <xslt taskname="topicpull" basedir="${dita.temp.dir}"
-      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}/${fullditatopicfile}"
-      classpathref="dost.class.path"
-      reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
-      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
-      <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
-      <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
-      <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
-      <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <mapper type="glob" from="*" to="*.pull" />
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-    <move todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.pull" />
-      <mapper type="glob" from="*.pull" to="*" />
-    </move>
+    <pipeline message="Pull metadata for link and xref element" taskname="topicpull">
+      <xslt basedir="${dita.temp.dir}"
+        reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
+        <includesfile name="${dita.temp.dir}/${fullditatopicfile}"/>
+        <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
+        <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
+        <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
+        <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
   </target>
 
   <target name="topicpull-check">
@@ -480,32 +460,24 @@
     <condition property="dita.preprocess.reloadstylesheet.flag-module" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.flag-module"></isset></not>
     </condition>
-    <xslt taskname="preprocess_flag" 
-        basedir="${dita.temp.dir}" 
-        destdir="${dita.temp.dir}" 
-        includesfile="${dita.temp.dir}/${fullditatopicfile}" 
-        classpathref="dost.class.path" 
-        reloadstylesheet="${dita.preprocess.reloadstylesheet.flag-module}" 
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/flag.xsl"
-        filenameparameter="FILENAME" 
-        filedirparameter="FILEDIR">
-      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"></excludesfile>
-
-      <param name="TRANSTYPE" expression="${transtype}"></param>
-      <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"></param>
-      <param name="DRAFT" expression="${args.draft}" if="args.draft"></param>
-      <param name="BASEDIR" expression="${basedir}"></param>
-      <param name="OUTPUTDIR" expression="${output.dir}"></param>
-      <param name="DBG" expression="${args.debug}" if="args.debug"></param>
-      <dita:extension id="dita.preprocess.flag-module.param" behavior="org.dita.dost.platform.InsertAction"/>
-
-      <mapper type="glob" from="*" to="*.flag"></mapper>
-      <xmlcatalog refid="dita.catalog"></xmlcatalog>
-    </xslt>
-    <move todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.flag"></fileset>
-      <mapper type="glob" from="*.flag" to="*"></mapper>
-    </move>
+    <pipeline message="Add flagging information to topics" taskname="preprocess_flag">
+      <xslt basedir="${dita.temp.dir}" 
+          reloadstylesheet="${dita.preprocess.reloadstylesheet.flag-module}" 
+          style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/flag.xsl"
+          filenameparameter="FILENAME" 
+          filedirparameter="FILEDIR">
+        <includesfile name="${dita.temp.dir}/${fullditatopicfile}"/>
+        <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+        <param name="TRANSTYPE" expression="${transtype}"/>
+        <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"/>
+        <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
+        <param name="BASEDIR" expression="${basedir}"/>
+        <param name="OUTPUTDIR" expression="${output.dir}"/>
+        <param name="DBG" expression="${args.debug}" if="args.debug"/>
+        <dita:extension id="dita.preprocess.flag-module.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
   </target>
 
   <target name="flag-module-check">
