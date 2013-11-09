@@ -9,8 +9,10 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,9 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.resolver.DitaURIResolverFactory;
-import org.dita.dost.resolver.URIResolverAdapter;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -39,19 +38,18 @@ public final class MapIndexReader extends AbstractXMLReader {
     private static final String INTERNET_LINK_MARK = COLON_DOUBLE_SLASH;
 
     private final List<String> ancestorList;
-    private String filePath = null;
+    private URI filePath = null;
     private String firstMatchElement;
     private StringBuffer indexEntries;
-    private File inputFile;
     private String lastMatchElement;
     private int level;
-    private final Map<String, String> map;
+    private final Map<URI, String> map;
     private boolean match;
 
     /** Meta shows whether the event is in metadata when using sax to parse ditmap file. */
     private final List<String> matchList;
     private XMLReader reader;
-    private String topicPath;
+    private URI topicPath;
     /** Whether the current href target is internal dita topic file. */
     private boolean validHref;
 
@@ -61,7 +59,7 @@ public final class MapIndexReader extends AbstractXMLReader {
      */
     public MapIndexReader() {
         super();
-        map = new HashMap<String, String>();
+        map = new HashMap<URI, String>();
         ancestorList = new ArrayList<String>(16);
         matchList = new ArrayList<String>(16);
         indexEntries = new StringBuffer(1024);
@@ -71,7 +69,6 @@ public final class MapIndexReader extends AbstractXMLReader {
         match = false;
         validHref = true;
         topicPath = null;
-        inputFile = null;
 
         try {
             reader = StringUtils.getXMLReader();
@@ -147,7 +144,7 @@ public final class MapIndexReader extends AbstractXMLReader {
      * 
      * @return map of index entries by topic path
      */
-    public Map<String, String> getMapping() {
+    public Map<URI, String> getMapping() {
     	return Collections.unmodifiableMap(map);
     }
     
@@ -169,15 +166,14 @@ public final class MapIndexReader extends AbstractXMLReader {
         }
         
         match = false;
-        inputFile = filename;
-        filePath = inputFile.getParent();
+        filePath = toURI(filename.getParentFile());
         if(indexEntries.length() != 0){
             //delete all the content in indexEntries
             indexEntries = new StringBuffer(1024);
         }
 
+        reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
         try {
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
             reader.parse(new InputSource(filename.toURI().toString()));
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
@@ -216,18 +212,18 @@ public final class MapIndexReader extends AbstractXMLReader {
         final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
 
         if (qName.equals(firstMatchElement)) {
-            final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
+            final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
             if (verifyIndexEntries(indexEntries) && topicPath != null) {
                 final String origin = map.get(topicPath);
                 map.put(topicPath, StringUtils.setOrAppend(origin, indexEntries.toString(), false));
                 indexEntries = new StringBuffer(1024);
             }
             topicPath = null;
-            if (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1
+            if (hrefValue != null && hrefValue.toString().indexOf(INTERNET_LINK_MARK) == -1
                     && (attrScope == null || ATTR_SCOPE_VALUE_LOCAL.equals(attrScope))
                     && (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat))) {
                 // If the href is internal dita topic file
-                topicPath = FileUtils.resolveTopic(filePath, hrefValue);
+                topicPath = resolveTopic(filePath, hrefValue);
                 validHref = true;
             }else{
                 //set up the boolean to prevent the invalid href's metadata inserted into indexEntries.
