@@ -546,6 +546,21 @@ public final class URLUtils {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
+    
+    /**
+     * Create new URI with a given path.
+     * 
+     * @param path URI to set path on
+     * @param fragment new paht, {@code null} for no path
+     * @return new URI instance with given path
+     */
+    public static URI setPath(final URI orig, final String path) {
+        try {
+            return new URI(orig.getScheme(), orig.getUserInfo(), orig.getHost(), orig.getPort(), path, orig.getQuery(), orig.getFragment());
+        } catch (final URISyntaxException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
 
     /**
      * Resolves absolute URI against another absolute URI.
@@ -621,6 +636,73 @@ public final class URLUtils {
         }
         
         return setFragment(rel, refPath.getFragment());
+    }
+ 
+    /**
+     * Normalize topic path base on current directory and href value, by
+     * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
+     * from the file path, with no change to substring behind "#".
+     * 
+     * @param rootPath root directory path, may be {@code null}
+     * @param relativePath relative path
+     * @return resolved topic file
+     */
+    public static URI resolveTopic(final URI rootPath, final URI relativePath) {
+        final String r = FileUtils.resolveTopic(rootPath != null ? rootPath.getPath() : null,
+                                                relativePath.getPath());
+        return setFragment(toURI(r), relativePath.getFragment());
+    }
+ 
+    /**
+     * Normalize topic path base on current directory and href value, by
+     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
+     * from the file path.
+     * 
+     * @param rootPath root directory path, may be {@code null}
+     * @param relativePath relative path
+     * @return resolved topic file
+     */
+    public static URI resolveFile(final URI rootPath, final URI relativePath) {
+        final String basedir = rootPath != null ? rootPath.getPath() : null;        
+        final URI pathname = normalize(relativePath);
+        if (basedir == null || basedir.length() == 0) {
+            return pathname;
+        }
+        final String normilizedPath = new File(basedir, pathname.getPath()).getPath();
+        return toURI(FileUtils.normalize(normilizedPath, URI_SEPARATOR));
+    }
+    
+    /**
+     * Remove redundant names ".." and "." from the given path.
+     * 
+     * @param path input path
+     * @return processed path
+     */
+    public static URI normalize(final URI path) {
+        return setPath(path, FileUtils.normalize(path.getPath(), URI_SEPARATOR));
+    }
+ 
+    /**
+     * Get relative path to base path.
+     * 
+     * <p>For {@code foo/bar/baz.txt} return {@code ../../}</p>
+     * 
+     * @param relativePath relative URI
+     * @return relative URI to base path, {@code null} if reference path was a single file
+     */
+    public static URI getRelativePath(final URI relativePath) {
+        final StringTokenizer tokenizer = new StringTokenizer(relativePath.toString(), URI_SEPARATOR);
+        final StringBuffer buffer = new StringBuffer();
+        if (tokenizer.countTokens() == 1){
+            return null;
+        }else{
+            while(tokenizer.countTokens() > 1){
+                tokenizer.nextToken();
+                buffer.append("..");
+                buffer.append(URI_SEPARATOR);
+            }
+            return toURI(buffer.toString());
+        }
     }
     
 }

@@ -392,18 +392,6 @@ public final class FileUtils {
     public static String getRelativeUnixPath(final String relativePath) {
         return getRelativePathForPath(relativePath, UNIX_SEPARATOR);
     }
-
-    /**
-     * Get relative path to base path.
-     * 
-     * <p>For {@code foo/bar/baz.txt} return {@code ../../}</p>
-     * 
-     * @param relativePath relative URI
-     * @return relative URI to base path, {@code null} if reference path was a single file
-     */
-    public static URI getRelativePath(final URI relativePath) {
-        return URLUtils.toURI(getRelativePathForPath(relativePath.toString(), URI_SEPARATOR));
-    }
     
     /**
      * Get relative path to base path.
@@ -465,19 +453,6 @@ public final class FileUtils {
      * @param relativePath relative path
      * @return resolved topic file
      */
-    public static URI resolveTopic(final URI rootPath, final URI relativePath) {
-        return URLUtils.toURI(resolveTopic(rootPath.getPath(), relativePath.getPath()));
-    }
-    
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
-     * from the file path, with no change to substring behind "#".
-     * 
-     * @param rootPath root directory path
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
     @Deprecated
     public static String resolveTopic(final String rootPath, final String relativePath) {
         String begin = relativePath;
@@ -516,19 +491,6 @@ public final class FileUtils {
      */
     @Deprecated
     public static URI resolveFile(final File rootPath, final URI relativePath) {
-        return URLUtils.toURI(resolveFile(rootPath != null ? rootPath.getPath() : null, relativePath.getPath()));
-    }
-    
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
-     * from the file path.
-     * 
-     * @param rootPath root directory path
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
-    public static URI resolveFile(final URI rootPath, final URI relativePath) {
         return URLUtils.toURI(resolveFile(rootPath != null ? rootPath.getPath() : null, relativePath.getPath()));
     }
     
@@ -600,16 +562,6 @@ public final class FileUtils {
      */
     public static File normalize(final File path) {
         return new File(normalize(path.getPath(), File.separator));
-    }
-
-    /**
-     * Remove redundant names ".." and "." from the given path.
-     * 
-     * @param path input path
-     * @return processed path
-     */
-    public static URI normalize(final URI path) {
-        return URLUtils.toURI(normalize(path.getPath(), URI_SEPARATOR));
     }
     
     /**

@@ -217,11 +217,11 @@ public final class MapMetaReader extends AbstractDomFilter {
             URI topicPath = null;
             if (copytoAttr != null) {
                 final URI copyToUri = URLUtils.toURI(copytoAttr.getNodeValue());
-                topicPath = FileUtils.resolveFile(filePath.toURI(), copyToUri);
+                topicPath = URLUtils.resolveFile(filePath.toURI(), copyToUri);
             }
             if (topicPath == null || !URLUtils.toFile(URLUtils.stripFragment(topicPath)).exists()) {
                 final URI hrefUri = URLUtils.toURI(hrefAttr.getNodeValue());
-                topicPath = FileUtils.resolveFile(filePath.toURI(), hrefUri);
+                topicPath = URLUtils.resolveFile(filePath.toURI(), hrefUri);
             }
             if (isDitaFormat(formatAttr) && isLocalScope(scopeAttr)) {
                 if (resultTable.containsKey(topicPath)) {
