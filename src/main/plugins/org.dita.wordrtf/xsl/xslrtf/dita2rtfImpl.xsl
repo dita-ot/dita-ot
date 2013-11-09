@@ -180,23 +180,24 @@ xmlns:rtf="rtf_namespace">
     <xsl:text>\par}</xsl:text>
   </xsl:template>
 
+  <!-- Block paragraphs -->
   <xsl:template name="block-p">
     <!-- Tagsmiths: Suppress \par \pard when the context is first p in li -->
     <xsl:choose>
       <xsl:when test="parent::*[contains(@class,' topic/li ')] and position() = 1">
         <!-- Tagsmiths: this next line resets the style, font, and size to
 the same values used in by p in other contexts. -->
-        <!-- <xsl:text>\s0\f0\fs24 </xsl:text> -->
+        <!-- <xsl:text>[190] \s0\f0\fs24 </xsl:text> -->
       </xsl:when>
       <xsl:otherwise>
         <!-- Tagsmiths: this next line used to appear unconditionally -->
-        <!-- <xsl:text>\par \pard \s0\f0\fs24</xsl:text> -->
+        <!-- <xsl:text>[194] \par \pard \s0\f0\fs24</xsl:text> -->
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl</xsl:if>
     <!-- Tagsmiths: make the inserted space conditional, suppressing it for first p in li -->
     <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
-      <xsl:text/>
+      <!-- <xsl:text> </xsl:text> -->
     </xsl:if>
     <xsl:text>{\pard \sa240 </xsl:text>
     <xsl:apply-templates/>
@@ -207,6 +208,7 @@ the same values used in by p in other contexts. -->
     </xsl:if>
   </xsl:template>
 
+<!-- Block lq -->
   <xsl:template name="block-lq">
     <xsl:text>\par \pard\li720\fi-360\f0\fs24 </xsl:text>
     <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
@@ -343,7 +345,9 @@ the same values used in by p in other contexts. -->
         <!-- <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/link ')]) and contains(@class,' topic/link ')">\par </xsl:if> -->
         <xsl:text>{\field{\*\fldinst {HYPERLINK </xsl:text>
         <xsl:if test="$samefile='true'">\\l</xsl:if>
-"<xsl:value-of select="$href-value"/>"
+<xsl:text>"</xsl:text>
+<xsl:value-of select="$href-value"/>
+<xsl:text>"</xsl:text>
         <xsl:text>}}{\fldrslt {\s8 \f0\fs24\ul\cf2  </xsl:text>
         <xsl:call-template name="gen-linktxt"/>
         <xsl:text>}}}</xsl:text>
@@ -394,7 +398,6 @@ the same values used in by p in other contexts. -->
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
-
     <xsl:apply-templates/>
     <xsl:choose>
       <xsl:when test="@href and not(@href='')">
@@ -402,8 +405,12 @@ the same values used in by p in other contexts. -->
         <!-- \par\pard\qr\f0\fs24 -->
         <!-- <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if> -->
         <xsl:text>{\field {\*\fldinst {HYPERLINK </xsl:text>
-        <xsl:if test="$samefile='true'">\\l</xsl:if>
-"<xsl:value-of select="$href-value"/>"
+        <xsl:if test="$samefile='true'">
+        <xsl:text>\\l</xsl:text>
+        </xsl:if>
+        <xsl:text>"</xsl:text>
+        <xsl:value-of select="$href-value"/>
+        <xsl:text>"</xsl:text>
         <xsl:text>}}{\fldrslt {\s8 \f0\fs24\ul\cf2 </xsl:text>
         <xsl:choose>
           <xsl:when test="@reftitle">
