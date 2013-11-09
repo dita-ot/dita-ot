@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -37,17 +38,17 @@ public final class MapIndexReader extends AbstractXMLReader {
 
     private static final String INTERNET_LINK_MARK = COLON_DOUBLE_SLASH;
 
-    private final List<String> ancestorList;
+    private final List<DitaClass> ancestorList;
     private URI filePath = null;
-    private String firstMatchElement;
+    private DitaClass firstMatchElement;
     private StringBuffer indexEntries;
-    private String lastMatchElement;
+    private DitaClass lastMatchElement;
     private int level;
     private final Map<URI, String> map;
     private boolean match;
 
     /** Meta shows whether the event is in metadata when using sax to parse ditmap file. */
-    private final List<String> matchList;
+    private List<DitaClass> matchList;
     private XMLReader reader;
     private URI topicPath;
     /** Whether the current href target is internal dita topic file. */
@@ -60,11 +61,8 @@ public final class MapIndexReader extends AbstractXMLReader {
     public MapIndexReader() {
         super();
         map = new HashMap<URI, String>();
-        ancestorList = new ArrayList<String>(16);
-        matchList = new ArrayList<String>(16);
+        ancestorList = new ArrayList<DitaClass>(16);
         indexEntries = new StringBuffer(1024);
-        firstMatchElement = null;
-        lastMatchElement = null;
         level = 0;
         match = false;
         validHref = true;
@@ -97,8 +95,17 @@ public final class MapIndexReader extends AbstractXMLReader {
     private boolean checkMatch() {
         final int matchSize = matchList.size();
         final int ancestorSize = ancestorList.size();
-        final List<String> tail = ancestorList.subList(ancestorSize - matchSize, ancestorSize);
-        return matchList.equals(tail);
+        if (ancestorSize < matchSize) {
+            return false;
+        }
+        final List<DitaClass> tail = ancestorList.subList(ancestorSize - matchSize, ancestorSize);
+        final int length = matchSize;
+        for (int i = 0; i < length; i++) {
+            if (!matchList.get(i).matches(tail.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -116,7 +123,7 @@ public final class MapIndexReader extends AbstractXMLReader {
             level--;
         }
 
-        if (qName.equals(lastMatchElement) && level == 0) {
+        if (qName.equals(lastMatchElement.localName) && level == 0) {
             if (match) {
                 match = false;
             }
@@ -125,7 +132,7 @@ public final class MapIndexReader extends AbstractXMLReader {
             ancestorList.remove(ancestorList.size() - 1);
         }
 
-        if (qName.equals(firstMatchElement) && verifyIndexEntries(indexEntries) && topicPath != null) {
+        if (qName.equals(firstMatchElement.localName) && verifyIndexEntries(indexEntries) && topicPath != null) {
             // if the href is not valid, topicPath will be null. We don't need to set the condition
             // to check validHref at here.
             final String origin = map.get(topicPath);
@@ -185,23 +192,11 @@ public final class MapIndexReader extends AbstractXMLReader {
      * current element can be include in the result of parsing.
      * 
      * @param matchPattern the match pattern
-     */
-    public void setMatch(final String matchPattern) {
-        int index = 0;
-        firstMatchElement = (matchPattern.indexOf(SLASH) != -1) ? matchPattern.substring(0, matchPattern.indexOf(SLASH)) : matchPattern;
-
-        while (index != -1) {
-            final int end = matchPattern.indexOf(SLASH, index);
-            if (end == -1) {
-                matchList.add(matchPattern.substring(index));
-                lastMatchElement = matchPattern.substring(index);
-                index = end;
-            } else {
-                matchList.add(matchPattern.substring(index, end));
-                index = end + 1;
-            }
-        }
-
+     */    
+    public void setMatch(final List<DitaClass> matchPattern) {
+        matchList = Collections.unmodifiableList(new ArrayList<DitaClass>(matchPattern));
+        firstMatchElement = matchPattern.get(0);
+        lastMatchElement = matchPattern.get(matchPattern.size() - 1);
     }
 
     @Override
@@ -211,7 +206,7 @@ public final class MapIndexReader extends AbstractXMLReader {
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
 
-        if (qName.equals(firstMatchElement)) {
+        if (qName.equals(firstMatchElement.localName)) {
             final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
             if (verifyIndexEntries(indexEntries) && topicPath != null) {
                 final String origin = map.get(topicPath);
@@ -232,8 +227,8 @@ public final class MapIndexReader extends AbstractXMLReader {
             }
         }
         if (!match) {
-            ancestorList.add(qName);
-            if (qName.equals(lastMatchElement) && checkMatch()) {
+            ancestorList.add(DitaClass.getInstance(atts));
+            if (qName.equals(lastMatchElement.localName) && checkMatch()) {
 
                 match = true;
                 level = 0;

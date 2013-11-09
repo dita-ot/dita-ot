@@ -15,6 +15,7 @@ import static org.dita.dost.util.URLUtils.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -23,6 +24,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapIndexReader;
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -56,10 +58,7 @@ final class MoveIndexModule extends AbstractPipelineModuleImpl {
         if (!fis.isEmpty()) {
             final MapIndexReader indexReader = new MapIndexReader();
             indexReader.setLogger(logger);
-            indexReader.setMatch(new StringBuffer()
-                    .append(MAP_TOPICREF.localName).append(SLASH)
-                    .append(MAP_TOPICMETA.localName).append(SLASH)
-                    .append(TOPIC_KEYWORDS.localName).toString());
+            indexReader.setMatch(Arrays.asList(MAP_TOPICREF, MAP_TOPICMETA, TOPIC_KEYWORDS));
     
             for(final FileInfo f: fis){
                 //FIXME: this reader needs parent directory for further process
