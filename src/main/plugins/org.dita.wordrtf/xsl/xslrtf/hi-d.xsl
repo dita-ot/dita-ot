@@ -10,27 +10,39 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="text"/>
 
   <xsl:template match="*[contains(@class,' hi-d/b ')]">
-{\b <xsl:apply-templates/>}
+    <xsl:text>{\b </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' hi-d/i ')]">
-{\i <xsl:apply-templates/>}
+    <xsl:text>{\i </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' hi-d/u ')]">
-{\ul <xsl:apply-templates/>}
+    <xsl:text>{\ul </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' hi-d/tt ')]">
-{\f2 <xsl:apply-templates/>}
+    <xsl:text>{\f2 </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' hi-d/sup ')]">
-{\super <xsl:apply-templates/>}
+    <xsl:text>{\super </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' hi-d/sub ')]">
-{\sub <xsl:apply-templates/>}
+    <xsl:text>{\sub </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
   </xsl:template>
 
 </xsl:stylesheet>
