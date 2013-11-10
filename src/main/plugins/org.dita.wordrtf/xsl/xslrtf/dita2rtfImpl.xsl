@@ -475,7 +475,8 @@ the same values used in by p in other contexts. -->
     <xsl:text>\par}</xsl:text>
   </xsl:template>
 
-  <!-- Text processing templates  - Escaping of RTF special characters -->
+  <!-- Text processing templates -->
+  <!-- Normalizing whitespace -->
   <xsl:template match="text()">
     <xsl:choose>
       <xsl:when test="ancestor::*[contains(@class,' topic/pre ')] or ancestor::*[contains(@class,' topic/lines ')]">
@@ -485,7 +486,7 @@ the same values used in by p in other contexts. -->
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="normalize-space(substring(., 1, 1))='' and not(normalize-space(.)='')">
-          <xsl:text/>
+          <xsl:text> </xsl:text>
         </xsl:if>
         <xsl:call-template name="get-ascii">
           <xsl:with-param name="txt">
@@ -493,12 +494,13 @@ the same values used in by p in other contexts. -->
           </xsl:with-param>
         </xsl:call-template>
         <xsl:if test="normalize-space(substring(., string-length(.), 1))='' and not(normalize-space(.)='')">
-          <xsl:text/>
+          <xsl:text> </xsl:text>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
+<!-- Escaping of RTF special characters -->
   <xsl:template match="text()[contains(.,'\') or contains(.,'{') or contains(.,'}')]">
     <xsl:variable name="gentext">
       <xsl:call-template name="gen-txt1">
