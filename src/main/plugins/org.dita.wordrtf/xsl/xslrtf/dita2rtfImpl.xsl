@@ -208,7 +208,7 @@ the same values used in by p in other contexts. -->
     </xsl:if>
   </xsl:template>
 
-<!-- Block lq -->
+  <!-- Block lq -->
   <xsl:template name="block-lq">
     <xsl:text>\par \pard\li720\fi-360\f0\fs24 </xsl:text>
     <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
@@ -345,9 +345,9 @@ the same values used in by p in other contexts. -->
         <!-- <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/link ')]) and contains(@class,' topic/link ')">\par </xsl:if> -->
         <xsl:text>{\field{\*\fldinst {HYPERLINK </xsl:text>
         <xsl:if test="$samefile='true'">\\l</xsl:if>
-<xsl:text>"</xsl:text>
-<xsl:value-of select="$href-value"/>
-<xsl:text>"</xsl:text>
+        <xsl:text>"</xsl:text>
+        <xsl:value-of select="$href-value"/>
+        <xsl:text>"</xsl:text>
         <xsl:text>}}{\fldrslt {\s8 \f0\fs24\ul\cf2  </xsl:text>
         <xsl:call-template name="gen-linktxt"/>
         <xsl:text>}}}</xsl:text>
@@ -406,7 +406,7 @@ the same values used in by p in other contexts. -->
         <!-- <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if> -->
         <xsl:text>{\field {\*\fldinst {HYPERLINK </xsl:text>
         <xsl:if test="$samefile='true'">
-        <xsl:text>\\l</xsl:text>
+          <xsl:text>\\l</xsl:text>
         </xsl:if>
         <xsl:text>"</xsl:text>
         <xsl:value-of select="$href-value"/>
@@ -500,7 +500,7 @@ the same values used in by p in other contexts. -->
     </xsl:choose>
   </xsl:template>
 
-<!-- Escaping of RTF special characters -->
+  <!-- Escaping of RTF special characters -->
   <xsl:template match="text()[contains(.,'\') or contains(.,'{') or contains(.,'}')]">
     <xsl:variable name="gentext">
       <xsl:call-template name="gen-txt1">
@@ -526,15 +526,15 @@ the same values used in by p in other contexts. -->
   <!-- Text generating templates -->
   <xsl:template name="gen-txt">
     <xsl:param name="txt"/>
-    <xsl:variable name="newline"><xsl:text>
-</xsl:text>
+    <xsl:variable name="newline">
+      <xsl:text>&#xA;</xsl:text>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="ancestor::*[contains(@class,' topic/pre ')] or ancestor::*[contains(@class,' topic/lines ')]">
         <xsl:choose>
           <xsl:when test="contains($txt,$newline)">
             <xsl:value-of select="substring-before($txt,$newline)"/>
-            <xsl:text>\line </xsl:text> 
+            <xsl:text>\line </xsl:text>
             <xsl:call-template name="gen-txt">
               <xsl:with-param name="txt" select="substring-after($txt,$newline)"/>
             </xsl:call-template>
