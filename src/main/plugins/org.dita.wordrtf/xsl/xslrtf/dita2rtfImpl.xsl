@@ -197,7 +197,7 @@ the same values used in by p in other contexts. -->
     <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl</xsl:if>
     <!-- Tagsmiths: make the inserted space conditional, suppressing it for first p in li -->
     <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
-      <!-- <xsl:text> </xsl:text> -->
+      <!-- <xsl:text>\'20</xsl:text> -->
     </xsl:if>
     <xsl:text>{\pard \sa240 </xsl:text>
     <xsl:apply-templates/>
@@ -486,7 +486,7 @@ the same values used in by p in other contexts. -->
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="normalize-space(substring(., 1, 1))='' and not(normalize-space(.)='')">
-          <xsl:text> </xsl:text>
+          <xsl:text>\'20</xsl:text>
         </xsl:if>
         <xsl:call-template name="get-ascii">
           <xsl:with-param name="txt">
@@ -494,7 +494,7 @@ the same values used in by p in other contexts. -->
           </xsl:with-param>
         </xsl:call-template>
         <xsl:if test="normalize-space(substring(., string-length(.), 1))='' and not(normalize-space(.)='')">
-          <xsl:text> </xsl:text>
+          <xsl:text>\'20</xsl:text>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
@@ -513,11 +513,11 @@ the same values used in by p in other contexts. -->
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="starts-with($gentext,' ')">
-          <xsl:text/>
+          <xsl:text>\'20</xsl:text>
         </xsl:if>
         <xsl:value-of select="normalize-space($gentext)"/>
         <xsl:if test="substring($gentext,string-length($gentext))=' '">
-          <xsl:text/>
+          <xsl:text>\'20</xsl:text>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
