@@ -46,7 +46,7 @@ otherwise the RTF format won't be recognised.
 {\s5 \f1\fs18\b\sa90 Heading 5;}
 {\s6 \f1\fs16\b\sa80 Heading 6;}
 {\s7 \f1\fs24\b Table Header;}
-{\s8 \f0\fs24\ul\cf2 Link;}
+{\s8 \ul\cf2 Hyperlink;}
 {\s9 \f1\fs24\b Table Title;}
 }
 </xsl:variable>

@@ -350,7 +350,7 @@ the same values used in by p in other contexts. -->
         <xsl:text>"</xsl:text>
         <xsl:value-of select="$href-value"/>
         <xsl:text>"</xsl:text>
-        <xsl:text>}}{\fldrslt {\s8 \f0\fs24\ul\cf2 </xsl:text>
+        <xsl:text>}}{\fldrslt {\s8 \ul\cf2 </xsl:text>
         <xsl:call-template name="gen-linktxt"/>
         <xsl:text>}}}</xsl:text>
         <xsl:if test="contains(@class,' topic/link ')">
@@ -409,12 +409,12 @@ the same values used in by p in other contexts. -->
         <!-- <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if> -->
         <xsl:text>{\field {\*\fldinst {HYPERLINK </xsl:text>
         <xsl:if test="$samefile='true'">
-          <xsl:text>\\l</xsl:text>
+          <xsl:text>\\l </xsl:text>
         </xsl:if>
         <xsl:text>"</xsl:text>
         <xsl:value-of select="$href-value"/>
         <xsl:text>"</xsl:text>
-        <xsl:text>}}{\fldrslt {\s8 \f0\fs24\ul\cf2 </xsl:text>
+        <xsl:text>}}{\fldrslt {\s8 \ul\cf2 </xsl:text>
         <xsl:choose>
           <xsl:when test="@reftitle">
             <xsl:call-template name="get-ascii">
