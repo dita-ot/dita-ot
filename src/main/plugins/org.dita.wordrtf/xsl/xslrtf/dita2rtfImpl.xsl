@@ -342,18 +342,21 @@ the same values used in by p in other contexts. -->
     <xsl:call-template name="gen-id"/>
     <xsl:choose>
       <xsl:when test="@href and not(@href='')">
-        <!-- <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/link ')]) and contains(@class,' topic/link ')">\par </xsl:if> -->
+        <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/link ')]) and contains(@class,' topic/link ')">
+          <xsl:text>\line </xsl:text>
+        </xsl:if>
         <xsl:text>{\field{\*\fldinst {HYPERLINK </xsl:text>
-        <xsl:if test="$samefile='true'">\\l</xsl:if>
+        <xsl:if test="$samefile='true'">\\l </xsl:if>
         <xsl:text>"</xsl:text>
         <xsl:value-of select="$href-value"/>
         <xsl:text>"</xsl:text>
-        <xsl:text>}}{\fldrslt {\s8 \f0\fs24\ul\cf2  </xsl:text>
+        <xsl:text>}}{\fldrslt {\s8 \f0\fs24\ul\cf2 </xsl:text>
         <xsl:call-template name="gen-linktxt"/>
         <xsl:text>}}}</xsl:text>
-        <!-- <xsl:if test="contains(@class,' topic/link ')">
-<xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>\par
-</xsl:if> -->
+        <xsl:if test="contains(@class,' topic/link ')">
+          <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
+          <xsl:text>\par </xsl:text>
+        </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="output-message">
