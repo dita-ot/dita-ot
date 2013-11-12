@@ -13,7 +13,6 @@ import java.util.Set;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.ImageMetadataFilter;
 
@@ -47,9 +46,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
 
-        final ImageMetadataFilter writer = new ImageMetadataFilter(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)),
-                                                                       tempDir,
-                                                                       job.getProperty("uplevels"));
+        final ImageMetadataFilter writer = new ImageMetadataFilter(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)), job);
         writer.setLogger(logger);
         for (final FileInfo f: job.getFileInfo()) {
             if (!f.isResourceOnly && ((f.isActive && "dita".equals(f.format)) || f.isChunked || f.isChunkedDitaMap)) {

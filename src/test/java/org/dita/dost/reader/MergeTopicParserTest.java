@@ -27,7 +27,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.MergeUtils;
-import org.dita.dost.util.OutputUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.junit.Test;
 

@@ -30,10 +30,10 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration.Mode;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
@@ -64,7 +64,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     }
     
     /** Output utilities */
-    private OutputUtils outputUtils;
+    private Job job;
     /** Basedir of the current parsing file */
     private URI currentDir = null;
     /** Set of all the non-conref and non-copyto targets refered in current parsing file */
@@ -227,10 +227,10 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     /**
      * Set output utilities.
      * 
-     * @param outputUtils output utils
+     * @param job output utils
      */
-    public void setOutputUtils(final OutputUtils outputUtils) {
-        this.outputUtils = outputUtils;
+    public void setJob(final Job job) {
+        this.job = job;
     }
 
     /**
@@ -399,7 +399,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     @Override
     public void startDocument() throws SAXException {
         currentFileRelative = inputDir.relativize(currentFile);
-        path2Project = getPathtoProject(toFile(currentFileRelative), toFile(currentFile.toString()), outputUtils.getInputMapPathName().getAbsolutePath());
+        path2Project = getPathtoProject(toFile(currentFileRelative), toFile(currentFile.toString()), job.getInputMapPathName().getAbsolutePath());
         fileInfo = getOrCreateBuilder(currentFileRelative);
         
         super.startDocument();
@@ -626,7 +626,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
 
     private void handleTopicRef(final String localName, final Attributes atts) {
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        if (MAP_TOPICREF.matches(classValue) && outputUtils.getOnlyTopicInMap() && isStartDocument) {
+        if (MAP_TOPICREF.matches(classValue) && job.getOnlyTopicInMap() && isStartDocument) {
             URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
             if (hrefValue == null) {
                 hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
@@ -1205,7 +1205,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * Check if current file is a map or if not only topics in main map are processed 
      */
     private boolean canResolved() {
-        return !outputUtils.getOnlyTopicInMap() || rootClass != null && MAP_MAP.matches(rootClass);
+        return !job.getOnlyTopicInMap() || rootClass != null && MAP_MAP.matches(rootClass);
     }
 
 //    /**

@@ -33,7 +33,6 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.OutputUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.junit.After;
 import org.junit.Before;
@@ -59,14 +58,16 @@ public class TestDitaWriter {
     private DocumentBuilder builder;
 
     private PipelineHashIO pipelineInput;
+    private Job job = null;
 
     @Before
     public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(getClass());
-
+        job = new Job(tempDir);
+        
         final PipelineFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
-        facade.setJob(new Job(tempDir));
+        facade.setJob(job);
         pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute("inputmap", inputMap.getAbsolutePath());
         pipelineInput.setAttribute("basedir", baseDir.getAbsolutePath());
@@ -130,9 +131,9 @@ public class TestDitaWriter {
         filterUtils.setLogger(new TestUtils.TestLogger());
         filterUtils.setFilterMap(map);
         writer.setFilterUtils(filterUtils);
-        final OutputUtils outputUtils = new OutputUtils();
-        outputUtils.setInputMapPathName(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
-        writer.setOutputUtils(outputUtils);
+        final Job job = this.job;
+        job.setInputMapPathName(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
+        writer.setJob(job);
         writer.setTempDir(tempDir.getAbsoluteFile());
         writer.setKeyDefinitions(Collections.EMPTY_LIST);
         writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), "keyword.dita");

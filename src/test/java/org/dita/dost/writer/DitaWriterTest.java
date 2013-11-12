@@ -55,8 +55,8 @@ import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.XMLUtils;
 
 public class DitaWriterTest {
@@ -78,9 +78,9 @@ public class DitaWriterTest {
         fu.setLogger(new TestUtils.TestLogger());
         writer.setFilterUtils(fu);
         writer.setDelayConrefUtils(new DelayConrefUtils());
-        final OutputUtils outputUtils = new OutputUtils();
+        final Job outputUtils = new Job(tempDir);
         outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
-        writer.setOutputUtils(outputUtils);
+        writer.setJob(outputUtils);
         writer.setKeyDefinitions(Arrays.asList(new KeyDef("keydef", "keyword.dita", ATTR_SCOPE_VALUE_LOCAL, "main.ditamap")));
         
         FileUtils.copyFile(new File(srcDir, FILE_NAME_EXPORT_XML), new File(tempDir, FILE_NAME_EXPORT_XML));
@@ -211,8 +211,8 @@ public class DitaWriterTest {
     }
     
     @Test
-    public void testGetPathtoProject() {
-        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.NOT_GENERATEOUTTER, new File(srcDir, "main.ditamap"));
+    public void testGetPathtoProject() throws IOException {
+        final DitaWriter dw = configureDitaWriter(Job.Generate.NOT_GENERATEOUTTER, new File(srcDir, "main.ditamap"));
         assertEquals(".." + File.separator, 
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
@@ -224,8 +224,8 @@ public class DitaWriterTest {
     }
     
     @Test
-    public void testGetPathtoProjectSibling() {
-        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.NOT_GENERATEOUTTER, new File(srcDir, "maps" + File.separator + "main.ditamap"));
+    public void testGetPathtoProjectSibling() throws IOException {
+        final DitaWriter dw = configureDitaWriter(Job.Generate.NOT_GENERATEOUTTER, new File(srcDir, "maps" + File.separator + "main.ditamap"));
         assertEquals(".." + File.separator + "org.dita.dost.writer.DitaWriterTest" + File.separator, 
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
@@ -237,8 +237,8 @@ public class DitaWriterTest {
     }
     
     @Test
-    public void testGetPathtoProjectUplevels() {
-        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.OLDSOLUTION, new File(srcDir, "main.ditamap"));
+    public void testGetPathtoProjectUplevels() throws IOException {
+        final DitaWriter dw = configureDitaWriter(Job.Generate.OLDSOLUTION, new File(srcDir, "main.ditamap"));
         assertEquals(".." + File.separator, 
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
@@ -250,8 +250,8 @@ public class DitaWriterTest {
     }
     
     @Test
-    public void testGetPathtoProjectSiblingUplevels() {
-        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.OLDSOLUTION, new File(srcDir, "maps" + File.separator + "main.ditamap"));
+    public void testGetPathtoProjectSiblingUplevels() throws IOException {
+        final DitaWriter dw = configureDitaWriter(Job.Generate.OLDSOLUTION, new File(srcDir, "maps" + File.separator + "main.ditamap"));
         assertEquals(".." + File.separator, 
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
@@ -262,15 +262,15 @@ public class DitaWriterTest {
                                     new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
     }
 
-    private DitaWriter configureDitaWriter(final OutputUtils.Generate outerCopy, final File map) {
-        final OutputUtils outputUtils = new OutputUtils();
-        outputUtils.setGeneratecopyouter(Integer.toString(outerCopy.type));
-        outputUtils.setOutterControl(OutputUtils.OutterControl.FAIL.toString());
-        outputUtils.setOnlyTopicInMap(Boolean.toString(true));
-        outputUtils.setInputMapPathName(map);
-        outputUtils.setOutputDir(tempDir);
+    private DitaWriter configureDitaWriter(final Job.Generate outerCopy, final File map) throws IOException {
+        final Job job = new Job(tempDir);
+        job.setGeneratecopyouter(Integer.toString(outerCopy.type));
+        job.setOutterControl(Job.OutterControl.FAIL.toString());
+        job.setOnlyTopicInMap(Boolean.toString(true));
+        job.setInputMapPathName(map);
+        job.setOutputDir(tempDir);
         final DitaWriter dw = new DitaWriter();
-        dw.setOutputUtils(outputUtils);
+        dw.setJob(job);
         return dw;
     }
     
@@ -363,9 +363,9 @@ public class DitaWriterTest {
         public Invoker(final String m, final String attrName, final Class<?>... args) throws Exception {
             writer = new DitaWriter();
             writer.setLogger(new TestUtils.TestLogger(false));
-            final OutputUtils outputUtils = new OutputUtils();
-            outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
-            writer.setOutputUtils(outputUtils);        
+            final Job job = new Job(tempDir);
+            job.setInputMapPathName(new File(srcDir, "main.ditamap"));
+            writer.setJob(job);        
             method = DitaWriter.class.getDeclaredMethod(m, args);
             method.setAccessible(true);
             this.attrName = attrName;

@@ -24,8 +24,8 @@ import org.junit.Test;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.OutputUtils;
 
 /**
  * @author william
@@ -39,9 +39,11 @@ public class TestGenListModuleReader {
     private static final File srcDir = new File(baseDir, "src");
     private static final File inputDir = new File(srcDir, "maps");
     private static final File rootFile = new File(inputDir, "root-map-01.ditamap");
+    private static File tempDir;
 
     @BeforeClass
     public static void setUp() throws Exception{
+        tempDir = TestUtils.createTempDir(TestGenListModuleReader.class);
         //parser = new ConrefPushParser();
         File ditaDir = new File("src" + File.separator + "main").getAbsoluteFile();
 
@@ -50,7 +52,7 @@ public class TestGenListModuleReader {
         reader.setLogger(new TestUtils.TestLogger());
         reader.initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalFile(), true);
         reader.setFilterUtils(new FilterUtils());
-        reader.setOutputUtils(new OutputUtils());
+        reader.setJob(new Job(tempDir));
     }
 
     @Test

@@ -18,7 +18,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.util.OutputUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -46,16 +46,18 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private File currentFile = null;
     private int depth = 0;
     private final Map<File, Attributes> cache = new HashMap<File, Attributes>();
+    private final Job job;
 
     // Constructors ------------------------------------------------------------
 
     /**
      * Constructor.
      */
-    public ImageMetadataFilter(final File outputDir, final File tempDir, final String uplevels) {
+    public ImageMetadataFilter(final File outputDir, final Job job) {
         this.outputDir = outputDir;
-        this.tempDir = tempDir;
-        this.uplevels = uplevels;
+        this.job = job;
+        this.tempDir = job.tempDir;
+        this.uplevels = job.getProperty("uplevels");
     }
 
     // AbstractWriter methods --------------------------------------------------
@@ -148,7 +150,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private File getImageFile(final Attributes atts) {
         final String fileDir = tempDir.toURI().relativize(currentFile.getParentFile().toURI()).toASCIIString();
         final StringBuilder fileName = new StringBuilder(fileDir).append("./");
-        if (OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION) {
+        if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
             fileName.append(uplevels);
         }
         fileName.append(atts.getValue(ATTRIBUTE_NAME_HREF));

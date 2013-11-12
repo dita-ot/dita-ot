@@ -51,8 +51,8 @@ import org.dita.dost.util.Configuration;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
@@ -158,7 +158,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                 String relativePath;
                 final File target = new File(path);
                 if(target.isAbsolute()){
-                    relativePath = FileUtils.getRelativeUnixPath(outputUtils.getInputMapPathName().getAbsolutePath(), path);
+                    relativePath = FileUtils.getRelativeUnixPath(job.getInputMapPathName().getAbsolutePath(), path);
                     attValue = relativePath + topic;
                 }
 
@@ -166,7 +166,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         }else{
             final File target = new File(attValue);
             if(target.isAbsolute()){
-                attValue = FileUtils.getRelativeUnixPath(outputUtils.getInputMapPathName().getAbsolutePath(), attValue);
+                attValue = FileUtils.getRelativeUnixPath(job.getInputMapPathName().getAbsolutePath(), attValue);
             }
         }
         if (attValue != null && processingMode == Mode.LAX){
@@ -233,7 +233,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                     }
                     final File target = new File(path);
                     if(target.isAbsolute()){
-                        final String relativePath = FileUtils.getRelativeUnixPath(outputUtils.getInputMapPathName().getAbsolutePath(), path);
+                        final String relativePath = FileUtils.getRelativeUnixPath(job.getInputMapPathName().getAbsolutePath(), path);
                         attValue = relativePath + topic;
                     }
 
@@ -248,7 +248,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                 }
                 final File target = new File(attValue);
                 if(target.isAbsolute()){
-                    attValue = FileUtils.getRelativeUnixPath(outputUtils.getInputMapPathName().getAbsolutePath(), attValue);
+                    attValue = FileUtils.getRelativeUnixPath(job.getInputMapPathName().getAbsolutePath(), attValue);
                 }
             }
         } else {
@@ -304,7 +304,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     /** Delayed conref utils. */
     private DelayConrefUtils delayConrefUtils;
     /** Output utilities */
-    private OutputUtils outputUtils;
+    private Job job;
     /** XMLReader instance for parsing dita file */
     private XMLReader reader = null;
     
@@ -362,10 +362,10 @@ public final class DitaWriter extends AbstractXMLFilter {
     
     /**
      * Set output utilities.
-     * @param outputUtils output utils
+     * @param job output utils
      */
-    public void setOutputUtils(final OutputUtils outputUtils) {
-        this.outputUtils = outputUtils;
+    public void setJob(final Job job) {
+        this.job = job;
     }
     
     /**
@@ -940,7 +940,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             traceFilename = new File(baseDir, inputFile);
             File outputFile = new File(tempDir, inputFile);
 
-            path2Project = getPathtoProject(new File(inputFile), traceFilename, outputUtils.getInputMapPathName().getAbsoluteFile());            
+            path2Project = getPathtoProject(new File(inputFile), traceFilename, job.getInputMapPathName().getAbsoluteFile());            
             counterMap = new HashMap<String, Integer>();
             final File dirFile = outputFile.getParentFile();
             if (!dirFile.exists()) {
@@ -1013,7 +1013,7 @@ public final class DitaWriter extends AbstractXMLFilter {
      */
     public String getPathtoProject (final File filename, final File traceFilename, final File inputMap) {
     	String path2Project = null;
-    	if(outputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION){
+    	if(job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION){
             if(isOutFile(traceFilename, inputMap)){
                 
                 path2Project = getRelativePathFromOut(traceFilename.getAbsolutePath());
@@ -1039,10 +1039,10 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @return relative path to out
      */
     public String getRelativePathFromOut(final String overflowingFile){
-        final File mapPathName = outputUtils.getInputMapPathName();
+        final File mapPathName = job.getInputMapPathName();
         final File currFilePathName = new File(overflowingFile);
         final String relativePath = FileUtils.getRelativeUnixPath( mapPathName.toString(),currFilePathName.toString());
-        final String outputDir = outputUtils.getOutputDir().getAbsolutePath();
+        final String outputDir = job.getOutputDir().getAbsolutePath();
         final StringBuffer outputPathName = new StringBuffer(outputDir).append(File.separator).append("index.html");
         final String finalOutFilePathName = FileUtils.resolveFile(outputDir,relativePath).getPath();
         final String finalRelativePathName = FileUtils.getRelativeUnixPath(finalOutFilePathName,outputPathName.toString());

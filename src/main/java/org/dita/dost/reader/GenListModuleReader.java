@@ -38,11 +38,11 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -68,7 +68,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /** Filter utils */
     private FilterUtils filterUtils;
     /** Output utilities */
-    private OutputUtils outputUtils;
+    private Job job;
     /** Basedir of the current parsing file */
     private File currentDir = null;
     /** Flag for conref in parsing file */
@@ -257,10 +257,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /**
      * Set output utilities.
      * 
-     * @param outputUtils output utils
+     * @param job output utils
      */
-    public void setOutputUtils(final OutputUtils outputUtils) {
-        this.outputUtils = outputUtils;
+    public void setJob(final Job job) {
+        this.job = job;
     }
 
     /**
@@ -391,7 +391,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
         for (final File filename : subsidiarySet) {
             // only activated on /generateout:3 & is out file.
-            if (isOutFile(filename) && OutputUtils.getGeneratecopyouter() == OutputUtils.Generate.OLDSOLUTION) {
+            if (isOutFile(filename) && job.getGeneratecopyouter() == Job.Generate.OLDSOLUTION) {
                 nonCopytoSet.add(new Reference(filename.getPath()));
             }
         }
@@ -863,7 +863,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         }
 
         // onlyTopicInMap is on.
-        topicref: if (outputUtils.getOnlyTopicInMap() && this.canResolved()) {
+        topicref: if (job.getOnlyTopicInMap() && this.canResolved()) {
             // topicref(only defined in ditamap file.)
             if (MAP_TOPICREF.matches(classValue)) {
 
@@ -1468,7 +1468,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
 
     private boolean canResolved() {
-        if ((outputUtils.getOnlyTopicInMap() == false) || isMapFile()) {
+        if ((job.getOnlyTopicInMap() == false) || isMapFile()) {
             return true;
         } else {
             return false;
@@ -1484,13 +1484,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
     private void toOutFile(final File filename) throws SAXException {
         // the filename is a relative path from the dita input file
         final String[] prop = { FileUtils.normalizeDirectory(rootDir.getAbsolutePath(), filename.getPath()).getPath(), FileUtils.normalize(currentFile.getAbsolutePath()).getPath() };
-        if ((OutputUtils.getGeneratecopyouter() == OutputUtils.Generate.NOT_GENERATEOUTTER)
-                || (OutputUtils.getGeneratecopyouter() == OutputUtils.Generate.GENERATEOUTTER)) {
+        if ((job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER)
+                || (job.getGeneratecopyouter() == Job.Generate.GENERATEOUTTER)) {
             if (isOutFile(filename)) {
-                if (outputUtils.getOutterControl() == OutputUtils.OutterControl.FAIL) {
+                if (job.getOutterControl() == Job.OutterControl.FAIL) {
                     final MessageBean msgBean = MessageUtils.getInstance().getMessage("DOTJ035F", prop);
                     throw new SAXParseException(null, null, new DITAOTException(msgBean, null, msgBean.toString()));
-                } else if (outputUtils.getOutterControl() == OutputUtils.OutterControl.WARN) {
+                } else if (job.getOutterControl() == Job.OutterControl.WARN) {
                     final String message = MessageUtils.getInstance().getMessage("DOTJ036W", prop).toString();
                     logger.logWarn(message);
                 }
