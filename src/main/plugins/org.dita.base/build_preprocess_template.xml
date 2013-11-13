@@ -497,34 +497,18 @@
     dita:depends="{depend.preprocess.copy-files.pre},copy-image,copy-html,copy-flag,copy-subsidiary"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-files.skip" />
-
-	
-  <target name="copy-image-uplevels"
-		if="image.copy.uplevels"
-	    dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
-	    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-	    unless="preprocess.copy-image.skip"
-	    description="Copy image files">
-	    <copy todir="${output.dir}/${uplevels}">
-	      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />
-	    </copy>
-  </target>
-	
-  <target name="copy-image-noraml"
-	 	if="image.copy.normal"
-		dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
-		dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-		unless="preprocess.copy-image.skip"
-		description="Copy image files">
-		<copy todir="${output.dir}">
-		   <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />
-		</copy>
-  </target>
 		 
   <target name="copy-image"
-    dita:depends="{depend.preprocess.copy-image.pre},copy-image-uplevels,copy-image-noraml"
+    unless="preprocess.copy-image.skip"
+    dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
-    description="Copy image files">   
+    description="Copy image files">
+    <condition property="copy-image.todir" value="${output.dir}/${uplevels}" else="${output.dir}">
+      <equals arg1="${generate.copy.outer}" arg2="3"/>      
+    </condition>
+    <copy todir="${copy-image.todir}">
+      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />
+    </copy>
   </target>
   
   <target name="copy-image-check">
@@ -534,16 +518,6 @@
         <isset property="noImagelist"/>
       </or>
     </condition>
-  	<condition property="image.copy.uplevels">
-  	  <not>
-  	  	 <equals arg1="${generate.copy.outer}" arg2="3"></equals>
-  	  </not>
-  	 </condition>
-  	 <condition property="image.copy.normal">
-  	 	<and>
-  	     <equals arg1="${generate.copy.outer}" arg2="3"></equals>
-  	   </and>
-  	</condition> 	
   </target>
 
   <target name="copy-html"
