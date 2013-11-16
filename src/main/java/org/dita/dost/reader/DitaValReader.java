@@ -10,26 +10,26 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FilterUtils.DEFAULT;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.URLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -49,13 +49,13 @@ public final class DitaValReader extends AbstractXMLReader {
     private final Map<FilterKey, Action> filterMap;
 
     private XMLReader reader;
-
+    /** List of absolute flagging image paths. */
     private final List<File> imageList;
 
     private File ditaVal = null;
 
     private Map<String, Map<String, Set<Element>>> bindingMap;
-    
+    /** List of relative flagging image paths. */
     private final List<File> relFlagImageList;
 
     private boolean setSystemid = true;
@@ -110,13 +110,6 @@ public final class DitaValReader extends AbstractXMLReader {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
-        String flagImage = null;
-        if(atts.getValue(ATTRIBUTE_NAME_IMG)!=null){
-            flagImage = atts.getValue(ATTRIBUTE_NAME_IMG);
-        }else if(atts.getValue(ATTRIBUTE_NAME_IMAGEREF)!=null){
-            flagImage = atts.getValue(ATTRIBUTE_NAME_IMAGEREF);
-        }
-
         if (ELEMENT_NAME_PROP.equals(qName)) {
             final String attAction = atts.getValue(ELEMENT_NAME_ACTION);
             //first to check if the att attribute and val attribute are null
@@ -147,11 +140,17 @@ public final class DitaValReader extends AbstractXMLReader {
         /*
          * Parse image files for flagging
          */
-        if (flagImage != null && flagImage.trim().length() > 0) {
-            final File f = URLUtils.toFile(URLUtils.toURI(flagImage));
-            if (new File(flagImage).isAbsolute()) {
+        URI flagImage = null;
+        if(atts.getValue(ATTRIBUTE_NAME_IMG)!=null){
+            flagImage = toURI(atts.getValue(ATTRIBUTE_NAME_IMG));
+        }else if(atts.getValue(ATTRIBUTE_NAME_IMAGEREF)!=null){
+            flagImage = toURI(atts.getValue(ATTRIBUTE_NAME_IMAGEREF));
+        }
+        if (flagImage != null) {
+            final File f = toFile(flagImage);
+            if (f.isAbsolute()) {
                 imageList.add(f);
-                relFlagImageList.add(FileUtils.getRelativePath(ditaVal, f));
+                relFlagImageList.add(getRelativePath(ditaVal, f));
             } else {
                 final File filterDir = ditaVal.getParentFile();
                 imageList.add(new File(filterDir, f.getPath()));
@@ -192,7 +191,7 @@ public final class DitaValReader extends AbstractXMLReader {
             }
             if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
                 final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-                if (!StringUtils.isEmptyString(key)) {
+                if (key != null && !key.trim().isEmpty()) {
                     final FilterKey k = new FilterKey(attName, key);
                     if (!filterMap.containsKey(k)) {
                         filterMap.put(k, action);
