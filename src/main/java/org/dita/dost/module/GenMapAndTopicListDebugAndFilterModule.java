@@ -905,7 +905,9 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             job.getOrCreateFileInfo(file).format = "image";
         }
         for (final File file: addFilePrefix(flagImageSet)) {
-            job.getOrCreateFileInfo(file).isFlagImage = true;
+            final FileInfo f = job.getOrCreateFileInfo(file);
+            f.isFlagImage = true;
+            f.format = "image";
         }
         for (final File file: addFilePrefix(htmlSet)) {
             job.getOrCreateFileInfo(file).format = "html";

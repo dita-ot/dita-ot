@@ -916,7 +916,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             job.getOrCreateFileInfo(file).format = "image";
         }
         for (final File file: addFilePrefix(flagImageSet)) {
-            job.getOrCreateFileInfo(file).isFlagImage = true;
+            final FileInfo f = job.getOrCreateFileInfo(file);
+            f.isFlagImage = true;
+            f.format = "image";
         }
         for (final File file: addFilePrefix(htmlSet)) {
             job.getOrCreateFileInfo(file).format = "html";
@@ -1090,11 +1092,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
                     final String to = file.substring(0, index);
                     final String source = file.substring(index + 1);
                     
-                    newSet.add(FileUtils.normalize(new StringBuffer(prefix).append(to).toString()).getPath()
+                    newSet.add(FileUtils.normalize(prefix + to).getPath()
                             + EQUAL
-                            + FileUtils.normalize(new StringBuffer(prefix).append(source).toString()).getPath());
+                            + FileUtils.normalize(prefix + source).getPath());
                 } else {
-                    newSet.add(FileUtils.normalize(new StringBuffer(prefix).append(file).toString()).getPath());
+                    newSet.add(FileUtils.normalize(prefix + file).getPath());
                 }
             }
         }
@@ -1113,7 +1115,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             if (file.isAbsolute()) {
                 newSet.add(FileUtils.normalize(file));
             } else {
-                newSet.add(FileUtils.normalize(new StringBuffer(prefix).append(file).toString()));
+                newSet.add(FileUtils.normalize(prefix + file));
             }
         }
         return newSet;
@@ -1132,13 +1134,13 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             if (file.getKey().isAbsolute()) {
                 key = FileUtils.normalize(file.getKey());
             } else {
-                key = FileUtils.normalize(new StringBuffer(prefix).append(file.getKey()).toString());
+                key = FileUtils.normalize(prefix + file.getKey());
             }
             File value = null; 
             if (file.getValue().isAbsolute()) {
                 value = FileUtils.normalize(file.getValue());
             } else {
-                value = FileUtils.normalize(new StringBuffer(prefix).append(file.getValue()).toString());
+                value = FileUtils.normalize(prefix + file.getValue());
             }
             newSet.put(key, value);
         }
