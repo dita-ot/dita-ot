@@ -224,5 +224,14 @@ See the accompanying license.txt file for applicable licenses.
 
         </fo:root>
     </xsl:template>
+  
+  <xsl:template match="document-node()[*[contains(@class, ' topic/topic ')]]">
+    <fo:root xsl:use-attribute-sets="__fo__root">
+      <xsl:call-template name="createMetadata"/>
+      <xsl:call-template name="createLayoutMasters"/>      
+      <xsl:call-template name="createBookmarks"/>
+      <xsl:apply-templates/>
+    </fo:root>
+  </xsl:template>
 
 </xsl:stylesheet>
