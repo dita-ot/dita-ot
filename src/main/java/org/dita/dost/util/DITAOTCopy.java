@@ -10,14 +10,16 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.FileUtils;
 
@@ -29,6 +31,7 @@ import org.apache.tools.ant.util.FileUtils;
 public final class DITAOTCopy extends Task {
     
     private String includes = null;
+    private File includesFile = null;
     private String relativePaths = null;
     /** Destination directory */
     private File destDir = null;
@@ -47,6 +50,14 @@ public final class DITAOTCopy extends Task {
     public void setIncludes(final String incld) {
         includes = incld;
     }
+    
+    /**
+     * Set the copy files list file.
+     * @param includesFile list file for includes to set.
+     */
+    public void setIncludesfile(final File includesFile) {
+        this.includesFile = includesFile;
+    }
 
     /**
      * Set the destination directory.
@@ -61,7 +72,9 @@ public final class DITAOTCopy extends Task {
      * @param relPaths the relative path .
      */
     public void setRelativePaths(final String relPaths) {
-        relativePaths = relPaths;
+        if (!relPaths.trim().isEmpty()) {
+            relativePaths = relPaths;
+        }
     }
 
     /**
@@ -69,7 +82,7 @@ public final class DITAOTCopy extends Task {
      */
     @Override
     public void execute() throws BuildException {
-        if (includes == null) {
+        if (includes == null && includesFile == null) {
             return;
         }
         if (destDir == null) {
@@ -110,11 +123,30 @@ public final class DITAOTCopy extends Task {
         }
     }
 
-    private List<String> getIncludes() {
-        if (includes == null) {
+    private List<String> getIncludes() throws IOException {
+        if (includes == null && includesFile == null) {
             return Collections.emptyList();
         }
-        return Arrays.asList(includes.split(COMMA));
+        if (includesFile != null) {
+            final List<String> res = new ArrayList<String>();
+            BufferedReader r = null;
+            try {
+                r = new BufferedReader(new FileReader(includesFile));
+                String line = null;
+                while ((line = r.readLine()) != null) {
+                    if (!line.trim().isEmpty()) {
+                        res.add(line.trim());
+                    }
+                }
+            } finally {
+                if (r != null) {
+                    r.close();
+                }
+            }
+            return res;
+        } else {
+            return Arrays.asList(includes.split(COMMA));
+        }
     }
     
 }
