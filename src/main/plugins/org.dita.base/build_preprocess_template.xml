@@ -180,20 +180,11 @@
     <job-property dir="${dita.temp.dir}"/>
     <dirname property="_dita.map.output.dir" file="${output.dir}/${user.input.file}" />
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
-    <condition property="noConref">
-      <length file="${dita.temp.dir}/${conreffile}" length="0"/>
-    </condition>
     <condition property="noMap">
       <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
     </condition>
     <condition property="noImagelist">
       <length file="${dita.temp.dir}/${imagefile}" length="0"/>
-    </condition>
-    <condition property="noHtmllist">
-      <length file="${dita.temp.dir}/${htmlfile}" length="0"/>
-    </condition>
-    <condition property="noSublist">
-      <length file="${dita.temp.dir}/${subtargetsfile}" length="0"/>
     </condition>
   </target>
   
@@ -250,7 +241,7 @@
   
   <target name="conref-check">
     <condition property="preprocess.conref.skip">
-      <isset property="noConref"/>
+      <length file="${dita.temp.dir}/${conreffile}" length="0"/>
     </condition>
   </target>
   
@@ -534,7 +525,7 @@
     <condition property="preprocess.copy-html.skip">
       <or>
         <isset property="preprocess.copy-files.skip"/>
-        <isset property="noHtmllist"/>
+        <length file="${dita.temp.dir}/${htmlfile}" length="0"/>
       </or>
     </condition>
   </target>
@@ -571,7 +562,7 @@
     <condition property="preprocess.copy-subsidiary.skip">
       <or>
         <isset property="preprocess.copy-files.skip"/>
-        <isset property="noSublist"/>
+        <length file="${dita.temp.dir}/${subtargetsfile}" length="0"/>
       </or>
     </condition>
   </target>

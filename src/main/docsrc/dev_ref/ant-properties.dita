@@ -100,14 +100,9 @@ mappull.workdir
 mapref.workdir
 msg.deprecate
 noCoderef
-noConref
-noConrefPush
-noHtmllist
 noImagelist
-noKeyref
 noMap
 noPlugin
-noSublist
 noTopic
 odt.dir
 odt.output.tempdir

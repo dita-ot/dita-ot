@@ -132,29 +132,11 @@
     <property name="subtargetsfile" value="subtargets.list"/>
     <job-property dir="${dita.temp.dir}"/>
     <dirname property="dita.map.output.dir" file="${output.dir}/${user.input.file}" />
-    <condition property="noConref">
-      <length file="${dita.temp.dir}/${conreffile}" length="0"/>
-    </condition>
     <condition property="noMap">
       <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
     </condition>
     <condition property="noImagelist">
       <length file="${dita.temp.dir}/${imagefile}" length="0"/>
-    </condition>
-    <condition property="noHtmllist">
-      <length file="${dita.temp.dir}/${htmlfile}" length="0"/>
-    </condition>
-    <condition property="noSublist">
-      <length file="${dita.temp.dir}/${subtargetsfile}" length="0"/>
-    </condition>
-    <condition property="noConrefPush">
-      <length file="${dita.temp.dir}/${conrefpushfile}" length="0"/>
-    </condition>
-    <condition property="noKeyref">
-      <length file="${dita.temp.dir}/${keyreffile}" length="0"/>
-    </condition>
-    <condition property="noCoderef">
-      <length file="${dita.temp.dir}/${codereffile}" length="0"/>
     </condition>
   </target>
  
@@ -222,7 +204,7 @@
   
   <target name="np.conref-check">
     <condition property="preprocess.conref.skip">
-      <isset property="noConref"/>
+      <length file="${dita.temp.dir}/${conreffile}" length="0"/>      
     </condition>
   </target>
   
