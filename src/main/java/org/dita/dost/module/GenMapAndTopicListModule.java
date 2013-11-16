@@ -524,7 +524,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         ignoredCopytoSourceSet.addAll(reader.getIgnoredCopytoSourceSet());
         subsidiarySet.addAll(reader.getSubsidiaryTargets());
         outDitaFilesSet.addAll(reader.getOutFilesSet());
-        resourceOnlySet.addAll(reader.getResourceOnlySet());
 
         // Generate topic-scheme dictionary
         if (reader.getSchemeSet() != null && !reader.getSchemeSet().isEmpty()) {
@@ -782,6 +781,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     }
 
     private void refactoringResult() {
+        resourceOnlySet.addAll(reader.getResourceOnlySet());
         handleConref();
         handleCopyto();
     }

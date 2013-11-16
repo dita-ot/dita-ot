@@ -611,7 +611,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
      */
     @Override
     public void startDocument() throws SAXException {
-        final String href = FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(), currentFile.getAbsolutePath());
+        final File href = FileUtils.getRelativePath(rootFilePath.getAbsoluteFile(), currentFile.getAbsoluteFile());
         if (FileUtils.isDITAMapFile(currentFile.getName()) && resourceOnlySet.contains(href)
                 && !crossSet.contains(href)) {
             processRoleLevel++;
