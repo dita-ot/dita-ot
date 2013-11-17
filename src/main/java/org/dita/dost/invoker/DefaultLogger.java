@@ -147,7 +147,8 @@ public class DefaultLogger implements BuildLogger {
         if (i != -1) {
             msg = msg.substring(i + 1).trim();
         }
-        m.append(msg).append(lSep);
+        m.append(msg);
+//        m.append(lSep);
     }
 
     /**
@@ -167,7 +168,8 @@ public class DefaultLogger implements BuildLogger {
         } else {
             // message.append(StringUtils.LINE_SEP);
             // message.append(getBuildFailedMessage());
-            message.append(StringUtils.LINE_SEP);
+//            message.append(StringUtils.LINE_SEP);
+            message.append("Error: ");
             throwableMessage(message, error, Project.MSG_VERBOSE <= msgOutputLevel);
         }
         // message.append(StringUtils.LINE_SEP);
@@ -175,7 +177,7 @@ public class DefaultLogger implements BuildLogger {
         // message.append(formatTime(System.currentTimeMillis() - startTime));
 
         final String msg = message.toString();
-        if (error == null) {
+        if (error == null && !msg.trim().isEmpty()) {
             printMessage(msg, out, Project.MSG_VERBOSE);
         } else if (!msg.isEmpty()) {
             printMessage(msg, err, Project.MSG_ERR);
