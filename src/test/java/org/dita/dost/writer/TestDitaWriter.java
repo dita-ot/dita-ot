@@ -52,7 +52,7 @@ public class TestDitaWriter {
     private final File baseDir = new File(resourceDir, "DITA-OT1.5");
     private final File inputDir = new File("DITAVAL");
     private final File inputMap = new File(baseDir, "DITAVAL" + File.separator + "DITAVAL_testdata1.ditamap");
-    private final File outDir = new File(tempDir, "out");
+    private File outDir;
     private final File ditavalFile = new File(inputDir, "DITAVAL_1.ditaval");
 
     private DocumentBuilder builder;
@@ -63,6 +63,7 @@ public class TestDitaWriter {
     @Before
     public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(getClass());
+        outDir = new File(tempDir, "out");
         job = new Job(tempDir);
         
         final PipelineFacade facade = new PipelineFacade();

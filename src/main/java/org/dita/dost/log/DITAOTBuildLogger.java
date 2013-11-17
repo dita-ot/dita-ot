@@ -265,10 +265,12 @@ public final class DITAOTBuildLogger implements BuildLogger {
                 // shouldn't be possible
                 message.append(label).append(event.getMessage());
             } finally {
-                try {
-                    r.close();
-                } catch (final IOException ioe) {
-
+                if (r != null) {
+                    try {
+                        r.close();
+                    } catch (final IOException ioe) {
+    
+                    }
                 }
             }
         } else {

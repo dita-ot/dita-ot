@@ -25,7 +25,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -71,10 +70,6 @@ import org.xml.sax.SAXParseException;
 public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     public static final String ELEMENT_STUB = "stub";
-    private static final String ATTRIUBTE_SOURCE = "source";
-    private static final String ATTRIBUTE_HREF = "href";
-    private static final String ATTRIBUTE_KEYS = "keys";
-    private static final String ELEMENT_KEYDEF = "keydef";
 
     /** Set of all dita files */
     private final Set<File> ditaSet;
@@ -604,7 +599,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final String lcasefn = file.filename.toLowerCase();
 
         // avoid files referred by coderef being added into wait list
-        if (subsidiarySet.contains(lcasefn)) {
+        if (subsidiarySet.contains(toFile(file.filename))) {
             return;
         }
 

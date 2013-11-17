@@ -410,7 +410,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                 changeTable.put(setFragment(currentParsingFile.getPath(), idValue), setFragment(outputFile.getPath(), attrValue));
                             }
 
-                            tmpVal = changeTable.get(currentParsingFile);
+                            tmpVal = changeTable.get(currentParsingFile.getPath());
                             if (tmpVal != null && tmpVal.equalsIgnoreCase(setFragment(outputFile.getPath(), idValue))) {
                                 changeTable.put(currentParsingFile.getPath(), setFragment(outputFile.getPath(), attrValue));
                             }
@@ -425,8 +425,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         if (checkHREF(resAtts)) {
                             // if current @href value needs to be updated
                             String relative = FileUtils.getRelativeUnixPath(outputFile, currentParsingFile.getPath());
-                            if (conflictTable.containsKey(outputFile)) {
-                                final String realoutputfile = conflictTable.get(outputFile);
+                            if (conflictTable.containsKey(outputFile.getPath())) {
+                                final String realoutputfile = conflictTable.get(outputFile.getPath());
                                 relative = FileUtils.getRelativeUnixPath(realoutputfile, currentParsingFile.getPath());
                             }
                             if (attrValue.startsWith(SHARP)) {
@@ -1105,7 +1105,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     OutputStreamWriter ditaFileOutput = null;
                     try {
                         ditaFileOutput = new OutputStreamWriter(fileOutput, UTF8);
-                        if (outputFileName.equals(changeTable.get(outputFileName))) {
+                        if (outputFileName.getPath().equals(changeTable.get(outputFileName.getPath()))) {
                             // if the output file is newly generated file
                             // write the xml header and workdir PI into new file
                             writeStartDocument(ditaFileOutput);
@@ -1119,9 +1119,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toURI()
                                     .toString());
 
-                            if ((conflictTable.get(outputFileName) != null)) {
+                            if ((conflictTable.get(outputFileName.getPath()) != null)) {
                                 final String relativePath = FileUtils.getRelativeUnixPath(filePath + UNIX_SEPARATOR
-                                        + FILE_NAME_STUB_DITAMAP, conflictTable.get(outputFileName));
+                                        + FILE_NAME_STUB_DITAMAP, conflictTable.get(outputFileName.getPath()));
                                 String path2project = FileUtils.getRelativeUnixPath(relativePath);
                                 if (null == path2project) {
                                     path2project = "";

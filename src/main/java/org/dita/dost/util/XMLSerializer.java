@@ -319,7 +319,7 @@ public class XMLSerializer {
     }
 
     private void addNamespace(final String uri, final String prefix, final QName current) {
-        if (uri.equals(NULL_NS_URI) && !prefix.equals(DEFAULT_NS_PREFIX)) {
+        if (uri != null && uri.equals(NULL_NS_URI) && !prefix.equals(DEFAULT_NS_PREFIX)) {
             throw new IllegalArgumentException("Undeclaring prefix " + prefix + " not allowed");
         }
         if (uri != null) {

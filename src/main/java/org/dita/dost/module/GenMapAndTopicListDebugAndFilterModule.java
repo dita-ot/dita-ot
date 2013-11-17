@@ -627,7 +627,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      * @return existing or new file info
      */
     private Builder getOrCreateBuilder(final URI uri) {
-        FileInfo.Builder b = fileInfoMap.get(uri);
+        FileInfo.Builder b = fileInfoMap.get(toFile(uri).getPath());
         if (b == null) {
             b = new FileInfo.Builder().uri(uri);
             // FIXME: use URI as map key 
@@ -813,14 +813,14 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         for (final File dst: copytoMap.keySet()) {
             final File src = copytoMap.get(dst);
             //if (new File(baseInputDir + File.separator + prefix, src).exists()) {
-            if (job.getFileInfoMap().containsKey(dst)) {
+            if (job.getFileInfoMap().containsKey(dst.getPath())) {
                 tempMap.put(dst, src);
                 // Add the copy-to target to conreflist when its source has
                 // conref
 //                if (conrefSet.contains(src)) {
 //                    conrefSet.add(dst);
 //                }
-                final FileInfo orig = job.getFileInfoMap().get(src);
+                final FileInfo orig = job.getFileInfoMap().get(src.getPath());
                 final FileInfo.Builder b = new FileInfo.Builder(orig);
                 b.uri(toURI(dst));
                 final FileInfo f = b.build();

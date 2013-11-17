@@ -826,8 +826,8 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      */
     private boolean searchBrachesMap(final String id) {
         // seach the map with id & current file name.
-        if (validBranches.containsKey(currentFileRelative)) {
-            final List<String> branchIdList = validBranches.get(currentFileRelative);
+        if (validBranches.containsKey(currentFileRelative.getPath())) {
+            final List<String> branchIdList = validBranches.get(currentFileRelative.getPath());
             // the branch is referenced.
             if (branchIdList.contains(id)) {
 

@@ -237,7 +237,7 @@ public final class IndexTermReader extends AbstractXMLReader {
          */
         if (titleSpecList.contains(localName)) {
             inTitleElement = false;
-            if(!topicIdStack.empty() && !titleMap.containsKey(topicIdStack.empty())){
+            if(!topicIdStack.empty() && !titleMap.containsKey(topicIdStack.peek())){
                 //If this is the first topic title
                 if(titleMap.size() == 0) {
                     defaultTitle = title;

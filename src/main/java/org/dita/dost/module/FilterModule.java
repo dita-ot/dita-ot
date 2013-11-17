@@ -9,7 +9,7 @@ import static org.dita.dost.util.Constants.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Collections;
 
 import org.apache.tools.ant.util.FileUtils;
 import org.dita.dost.exception.DITAOTException;
@@ -17,7 +17,6 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.ProfilingFilter;
 
@@ -87,7 +86,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
             ditaValReader.read(new File(ditavalFile).getAbsoluteFile());
             filterUtils.setFilterMap(ditaValReader.getFilterMap());
         } else {
-            filterUtils.setFilterMap(null);
+            filterUtils.setFilterMap(Collections.EMPTY_MAP);
         }
         return filterUtils;
     }

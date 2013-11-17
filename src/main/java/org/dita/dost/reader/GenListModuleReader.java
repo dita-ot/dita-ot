@@ -623,10 +623,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
         String domains = null;
-        final Properties params = new Properties();
-
-        final String printValue = atts.getValue(ATTRIBUTE_NAME_PRINT);
-
         final String processingRole = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
         final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);

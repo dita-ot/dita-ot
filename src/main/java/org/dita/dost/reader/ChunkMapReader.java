@@ -465,7 +465,7 @@ public final class ChunkMapReader implements AbstractReader {
                 final String xtrfValue = currentElem.getAttribute(ATTRIBUTE_NAME_XTRF);
                 if (MAP_TOPICREF.matches(classValue)) {
                     if ((hrefValue.length() != 0 && !ATTR_XTRF_VALUE_GENERATED.equals(xtrfValue) && !resolveFile(
-                            filePath, hrefValue).equals(changeTable.get(resolveFile(filePath, hrefValue))))
+                            filePath, hrefValue).getPath().equals(changeTable.get(resolveFile(filePath, hrefValue).getPath())))
                             || MAPGROUP_D_TOPICHEAD.matches(classValue)) {
 
                         // make sure hrefValue make sense and target file
@@ -498,7 +498,7 @@ public final class ChunkMapReader implements AbstractReader {
     private void updateReltable(final Element elem) {
         final String hrefValue = elem.getAttribute(ATTRIBUTE_NAME_HREF);
         if (hrefValue.length() != 0) {
-            if (changeTable.containsKey(resolveFile(filePath, hrefValue))) {
+            if (changeTable.containsKey(resolveFile(filePath, hrefValue).getPath())) {
                 String resulthrefValue = null;
                 final String fragment = getFragment(hrefValue);
                 if (fragment != null) {
