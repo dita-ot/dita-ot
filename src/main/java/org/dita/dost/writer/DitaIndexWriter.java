@@ -21,6 +21,7 @@ import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -343,14 +344,9 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             }
         }
         try {
-            if(!inputFile.delete()){
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-            }
-            if(!outputFile.renameTo(inputFile)){
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-            }
+            FileUtils.moveFile(outputFile, inputFile);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError("Failed to replace " + inputFile + ": " + e.getMessage());
         }
     }
     

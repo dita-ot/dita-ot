@@ -187,12 +187,7 @@ public final class XMLUtils {
         }
         // replace original file
         try {
-            if (!inputFile.delete()) {
-                throw new DITAOTException("Failed to delete " + outputFile);
-            }
-            if (!outputFile.renameTo(inputFile)) {
-                throw new DITAOTException("Failed to move " + inputFile);
-            }
+            FileUtils.moveFile(outputFile, inputFile);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
         }

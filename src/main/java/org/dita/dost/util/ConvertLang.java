@@ -31,8 +31,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.tools.ant.Project;
-
 import org.apache.tools.ant.Task;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.log.MessageUtils;
@@ -289,16 +289,9 @@ public final class ConvertLang extends Task {
                 }
             }
             try {
-                //delete old file
-                if (!inputFile.delete()) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-                }
-                //rename newly created file to the old file
-                if (!outputFile.renameTo(inputFile)) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-                }
+                FileUtils.moveFile(outputFile, inputFile);
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.logError("Failed to replace " + inputFile + ": " + e.getMessage());
             }
         }
     }
@@ -407,16 +400,9 @@ public final class ConvertLang extends Task {
                 }
             }
             try {
-                //delete old file
-                if (!inputFile.delete()) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-                }
-                //rename newly created file to the old file
-                if (!outputFile.renameTo(inputFile)) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-                }
+                FileUtils.moveFile(outputFile, inputFile);
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.logError("Failed to replace " + inputFile + ": " + e.getMessage());
             }
         }
 
@@ -481,18 +467,9 @@ public final class ConvertLang extends Task {
             }
         }
         try {
-            //delete old file
-            if (!inputFile.delete()) {
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-            }
-            //rename newly created file to the old file
-            if (!outputFile.renameTo(inputFile)) {
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-            }
-
-
+            FileUtils.moveFile(outputFile, inputFile);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.logError("Failed to replace " + inputFile + ": " + e.getMessage());
         }
     }
 
