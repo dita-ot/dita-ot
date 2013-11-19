@@ -57,10 +57,13 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
     @Override
     public int hashCode(final XMLGrammarDescription desc) {
         if (desc instanceof XSDDescription) {
-//            final String systemId = ((XSDDescription) desc).getLiteralSystemId();
-//            return systemId == null ? 0 : systemId.hashCode();
+            final String systemId = ((XSDDescription) desc).getLiteralSystemId();          
+            
+            int hashcode = systemId == null ? 0 : systemId.hashCode();
+            
+            return hashcode;
         	// return -1 for XSD grammar hashcode because we want to disable XSD grammar caching
-        	return -1;
+//        	return -1;
         } else {
             return desc.hashCode();
         }
@@ -85,10 +88,10 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
         if (gramCache) {
             if (desc1 instanceof XSDDescription
                     && desc2 instanceof XSDDescription) {
-//                return desc1.getLiteralSystemId().equals(
-//                        desc2.getLiteralSystemId());
+                return desc1.getLiteralSystemId().equals(
+                        desc2.getLiteralSystemId());
             	// always return false for XSD grammar to disable XSD grammar caching
-            	return false;
+//            	return false;
             } else {
                 return desc1.equals(desc2);
             }
