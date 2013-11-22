@@ -199,7 +199,7 @@ the same values used in by p in other contexts. -->
     <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
       <!-- <xsl:text>\'20</xsl:text> -->
     </xsl:if>
-    <xsl:text>{\pard \sa240 </xsl:text>
+    <xsl:text>{\pard \sa240 [202]:</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\par}</xsl:text>
     <!-- Tagsmiths: make the next rtf string conditional, suppressing it for first p in li -->
@@ -406,7 +406,7 @@ the same values used in by p in other contexts. -->
       <xsl:when test="@href and not(@href='')">
         <!-- Insert citation as link, use @href as-is -->
         <!-- \par\pard\qr\f0\fs24 -->
-        <!-- <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if> -->
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
         <xsl:text>{\field {\*\fldinst {HYPERLINK </xsl:text>
         <xsl:if test="$samefile='true'">
           <xsl:text>\\l </xsl:text>
@@ -433,19 +433,19 @@ the same values used in by p in other contexts. -->
         </xsl:choose>
         <xsl:text>}}}</xsl:text>
         <!-- \par\pard\ql\f0\fs24 -->
-        <!-- <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if> -->
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
       </xsl:when>
       <xsl:when test="@reftitle and not(@reftitle='')">
         <!-- Insert citation text -->
         <!-- \par\pard\qr\f0\fs24 -->
-        <!-- <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if> -->
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
         <xsl:call-template name="get-ascii">
           <xsl:with-param name="txt">
             <xsl:value-of select="@reftitle"/>
           </xsl:with-param>
         </xsl:call-template>
         <!-- \par\pard\ql\f0\fs24 -->
-        <!-- <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if> -->
+        <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <!--nop - do nothing-->

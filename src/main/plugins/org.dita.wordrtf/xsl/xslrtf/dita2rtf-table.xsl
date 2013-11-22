@@ -28,27 +28,26 @@ applicable licenses.-->
     <xsl:call-template name="gen-id"/>
     <xsl:text>\pard \plain </xsl:text>
     <!-- <xsl:text>\s9 \qc\f4\fs24\b </xsl:text> -->
-    <xsl:choose>
+    <!-- <xsl:choose> -->
       <!-- Hungarian: "1. Table " -->
-      <xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'hu-hu')) or
-(string-length($ancestorlang)=2 and contains($ancestorlang,'hu')) )">
-        <xsl:value-of select="$tbl-count-actual"/>
+      <!-- <xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'hu-hu')) or (string-length($ancestorlang)=2 and contains($ancestorlang,'hu')) )"> -->
+        <!-- <xsl:value-of select="$tbl-count-actual"/>
         <xsl:text>. </xsl:text>
         <xsl:call-template name="getString">
           <xsl:with-param name="stringName" select="'Table'"/>
         </xsl:call-template>
         <xsl:text>
-        </xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
+        </xsl:text> -->
+      <!-- </xsl:when>
+      <xsl:otherwise> -->
         <xsl:call-template name="getStringRTF">
           <xsl:with-param name="stringName" select="'Table'"/>
         </xsl:call-template>
         <xsl:text/>
         <xsl:value-of select="$tbl-count-actual"/>
         <xsl:text>. </xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
+      <!-- </xsl:otherwise>
+    </xsl:choose> -->
     <xsl:call-template name="get-ascii">
       <xsl:with-param name="txt">
         <xsl:value-of select="."/>
@@ -662,10 +661,10 @@ or contains(@class,' topic/simpletable ')]/*[contains(@class,' topic/title ')])+
     <xsl:call-template name="gen-id"/>
     <xsl:text>\trowd \trgaph108 </xsl:text>
     <!-- <xsl:text>\trleft-108\trbrdrt\brdrs\brdrw10 \trhdr </xsl:text> -->
-    <xsl:text>\trbrdrl\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrh\brdrs\brdrw10 \trbrdrv\brdrs\brdrw10 \trftsWidth1\trautofit1\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3</xsl:text>
+    <!-- <xsl:text>\trbrdrl\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrh\brdrs\brdrw10 \trbrdrv\brdrs\brdrw10 \trftsWidth1\trautofit1\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3</xsl:text> -->
     <xsl:apply-templates mode="emit-cell-style"/>
     <xsl:text>\plain \s7\f4\fs24\b \qc</xsl:text>
-    <!-- <xsl:text>\li0\fi0\ri0\nowidctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0</xsl:text> -->
+    <xsl:text>\li0\fi0\ri0\nowidctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>}\row</xsl:text>
@@ -675,7 +674,7 @@ or contains(@class,' topic/simpletable ')]/*[contains(@class,' topic/title ')])+
     <xsl:call-template name="gen-id"/>
     <xsl:text>\trowd \trgaph108 </xsl:text>
     <!-- <xsl:text>\trleft-108\trbrdrt\brdrs\brdrw10 </xsl:text> -->
-    <xsl:text>\trbrdrl\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrh\brdrs\brdrw10 \trbrdrv\brdrs\brdrw10 \trftsWidth1\trautofit1\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3</xsl:text>
+    <!-- <xsl:text>\trbrdrl\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrh\brdrs\brdrw10 \trbrdrv\brdrs\brdrw10 \trftsWidth1\trautofit1\trpaddl108\trpaddr108\trpaddfl3\trpaddfr3</xsl:text> -->
     <xsl:apply-templates mode="emit-cell-style"/>
     <xsl:text>\plain \s0\f4\fs24 </xsl:text>
     <xsl:value-of select="$table-row-default-align"/>
