@@ -194,18 +194,18 @@ the same values used in by p in other contexts. -->
         <!-- <xsl:text>[194] \par \pard \s0\f0\fs24</xsl:text> -->
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl</xsl:if>
     <!-- Tagsmiths: make the inserted space conditional, suppressing it for first p in li -->
     <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
       <!-- <xsl:text>\'20</xsl:text> -->
     </xsl:if>
-    <xsl:text>{\pard \sa240 [202]:</xsl:text>
-    <xsl:apply-templates/>
-    <xsl:text>\par}</xsl:text>
     <!-- Tagsmiths: make the next rtf string conditional, suppressing it for first p in li -->
     <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
       <!-- <xsl:text>\par</xsl:text> -->
     </xsl:if>
+    <xsl:text>{\pard \sa240 </xsl:text>
+    <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+    <xsl:apply-templates/>
+    <xsl:text>\par}</xsl:text>
   </xsl:template>
 
   <!-- Block lq -->
