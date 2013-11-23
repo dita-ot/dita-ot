@@ -100,7 +100,6 @@
     <exclude name=".*"/>
     <exclude name="local.properties"/>
     <exclude name="build.log"/>
-    <exclude name="build.number"/>
     <exclude name="relnotes.txt"/>
     <exclude name="EvaluateOT.html"/>
     <exclude name="lib/commons-logging-1.1.1.jar"/>
@@ -459,24 +458,6 @@
       </antcall>
       <antcall target="package-binary-minimum">
         <param name="param.out.file" value="${binary-min}"/>
-      </antcall>
-    </sequential>
-  </target>
-
-  <target name="build-package-binary-with-buildnum" depends="jar, jar.plug-ins, update-doc">
-    <buildnumber/>
-    <tstamp>
-      <format property="build.time" pattern="yyyyMMddhhmm"/>
-    </tstamp>
-    <sequential>
-      <antcall target="package-binary-full">
-        <param name="param.out.file" value="${package.name.root}${otversion}b${build.number}_full_easy_install_bin.${build.time}"/>
-      </antcall>
-      <antcall target="package-binary-standard">
-        <param name="param.out.file" value="${package.name.root}${otversion}b${build.number}_standard_bin.${build.time}"/>
-      </antcall>
-      <antcall target="package-binary-minimum">
-        <param name="param.out.file" value="${package.name.root}${otversion}b${build.number}_minimal_bin.${build.time}"/>
       </antcall>
     </sequential>
   </target>
