@@ -34,7 +34,6 @@ import org.dita.dost.log.DITAOTFileLogger;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
@@ -67,7 +66,6 @@ public class DebugAndFilterModuleTest {
 
         DITAOTFileLogger.getInstance().setLogDir(tmpDir.getAbsolutePath());
         DITAOTFileLogger.getInstance().setLogFile(DebugAndFilterModuleTest.class.getSimpleName() + ".log");
-        DitaURIResolverFactory.setPath(tmpDir.getAbsolutePath());
 
         final PipelineHashIO pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute("inputmap", inputMap.getPath());

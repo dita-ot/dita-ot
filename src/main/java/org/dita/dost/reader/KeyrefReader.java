@@ -24,8 +24,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 
-import org.dita.dost.resolver.DitaURIResolverFactory;
-import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;

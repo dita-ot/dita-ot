@@ -22,8 +22,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.resolver.DitaURIResolverFactory;
-import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;

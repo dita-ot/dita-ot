@@ -107,11 +107,6 @@
     classname="org.dita.dost.log.LogConfigTask">
     <classpath refid="dost.jar.path" />
   </taskdef>
-
-  <taskdef name="config-URIResolver"
-  	classname="org.dita.dost.resolver.URIResolverConfigTask">
-  	<classpath refid="dost.jar.path"/>
-  </taskdef>
 	
   <taskdef name="dita-ot-echo"
     classname="org.dita.dost.log.DITAOTEchoTask">
@@ -160,7 +155,7 @@
   <!-- property values end -->
 
   <target name="build-init"
-    depends="start-process, init-logger, init-URIResolver, use-init, check-arg, output-msg" />
+    depends="start-process, init-logger, use-init, check-arg, output-msg" />
     
   <target name="start-process" description="Processing started" />
 
@@ -168,10 +163,6 @@
   <target name="init-logger"
     description="Initialize log directory and file name">
     <config-logger />
-  </target>
-  
-  <target name="init-URIResolver">
-  	<config-URIResolver tempdir="${dita.temp.dir}"/>
   </target>
   
   <target name="use-init">

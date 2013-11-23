@@ -30,7 +30,6 @@ import org.xml.sax.InputSource;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.junit.Test;
 
 public class TestKeyrefReader {
@@ -41,7 +40,6 @@ public class TestKeyrefReader {
     @Test
     public void testKeyrefReader() throws Exception {
         final String path = System.getProperty("user.dir");
-        DitaURIResolverFactory.setPath(path);
         final File filename = new File(srcDir, "keyrefreader.xml");
 
         final Set <String> set = new HashSet<String> ();
