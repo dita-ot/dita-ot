@@ -22,23 +22,32 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
-import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TopicIdParser;
 import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -283,7 +292,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 topicSpecSet.add(qName);
                 final String id = atts.getValue(ATTRIBUTE_NAME_ID);
                 // search node by id.
-                final Element element = DITAAttrUtils.getInstance().searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID,
+                final Element element = searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID,
                         TOPIC_TOPIC.matcher);
 
                 // only by topic
@@ -637,7 +646,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     } else if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_DOCUMENT)) {
                         firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath).getPath());
 
-                        topicDoc = DITAAttrUtils.getInstance().getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath).getPath());
+                        topicDoc = getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath).getPath());
 
                         if (!StringUtils.isEmptyString(firstTopicID)) {
                             outputFileName = FileUtils.resolveFile(filePath, firstTopicID + FILE_EXTENSION_DITA);
@@ -657,7 +666,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 } else {
                     firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath).getPath());
 
-                    topicDoc = DITAAttrUtils.getInstance().getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath).getPath());
+                    topicDoc = getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath).getPath());
 
                     if (!StringUtils.isEmptyString(firstTopicID)) {
                         outputFileName = FileUtils.resolveFile(filePath, firstTopicID + FILE_EXTENSION_DITA);
@@ -1002,15 +1011,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
                     // if topicref has child node or topicref has @navtitle
                     if (element.hasChildNodes() || !StringUtils.isEmptyString(navtitle)) {
-
-                        final DITAAttrUtils utils = DITAAttrUtils.getInstance();
-
                         String navtitleValue = null;
                         String shortDescValue = null;
                         // get navtitle value.
-                        navtitleValue = utils.getChildElementValueOfTopicmeta(element, TOPIC_NAVTITLE.matcher);
+                        navtitleValue = getChildElementValueOfTopicmeta(element, TOPIC_NAVTITLE.matcher);
                         // get shortdesc value
-                        shortDescValue = utils.getChildElementValueOfTopicmeta(element, MAP_SHORTDESC.matcher);
+                        shortDescValue = getChildElementValueOfTopicmeta(element, MAP_SHORTDESC.matcher);
                         // no navtitle tag exists.
                         if (navtitleValue == null) {
                             // use @navtitle
@@ -1236,8 +1242,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         topicmeta.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICMETA.toString());
         newChild.appendChild(topicmeta);
 
-        final DITAAttrUtils utils = DITAAttrUtils.getInstance();
-
         // iterate the node.
         if (element != null) {
             // search for title and navtitle tag
@@ -1289,14 +1293,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             // append navtitle node
             if (navtitle != null) {
                 // Get text value
-                final String text = utils.getText(navtitle);
+                final String text = getText(navtitle);
                 final Text titleText = elem.getOwnerDocument().createTextNode(text);
                 navtitleNode.appendChild(titleText);
                 topicmeta.appendChild(navtitleNode);
 
             } else {
                 // Get text value
-                final String text = utils.getText(title);
+                final String text = getText(title);
                 final Text titleText = elem.getOwnerDocument().createTextNode(text);
                 navtitleNode.appendChild(titleText);
                 topicmeta.appendChild(navtitleNode);
@@ -1310,7 +1314,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             final Element linkTextNode = elem.getOwnerDocument().createElement(TOPIC_LINKTEXT.localName);
             linkTextNode.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_LINKTEXT.toString());
             // Get text value
-            final String text = utils.getText(title);
+            final String text = getText(title);
             final Text textNode = elem.getOwnerDocument().createTextNode(text);
             linkTextNode.appendChild(textNode);
             topicmeta.appendChild(linkTextNode);
@@ -1323,7 +1327,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             final Element shortDescNode = elem.getOwnerDocument().createElement(TOPIC_SHORTDESC.localName);
             shortDescNode.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_SHORTDESC.toString());
             // Get text value
-            final String shortDescText = utils.getText(shortDesc);
+            final String shortDescText = getText(shortDesc);
             final Text shortDescTextNode = elem.getOwnerDocument().createTextNode(shortDescText);
             shortDescNode.appendChild(shortDescTextNode);
             topicmeta.appendChild(shortDescNode);
@@ -1331,4 +1335,167 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         }
     }
 
+    private static final List<String> excludeList;
+    static {
+        final List<String> el = new ArrayList<String>();
+        el.add(TOPIC_INDEXTERM.toString());
+        el.add(TOPIC_DRAFT_COMMENT.toString());
+        el.add(TOPIC_REQUIRED_CLEANUP.toString());
+        el.add(TOPIC_DATA.toString());
+        el.add(TOPIC_DATA_ABOUT.toString());
+        el.add(TOPIC_UNKNOWN.toString());
+        el.add(TOPIC_FOREIGN.toString());
+        excludeList = Collections.unmodifiableList(el);
+    }
+
+    /**
+     * Search for the special kind of node by specialized value.
+     * @param root place may have the node.
+     * @param searchKey keyword for search.
+     * @param attrName attribute name for search.
+     * @param classValue class value for search.
+     * @return element.
+     */
+    private Element searchForNode(final Element root, final String searchKey, final String attrName,
+            final String classValue) {
+        if (root == null || StringUtils.isEmptyString(searchKey)) {
+            return null;
+        }
+        final Queue<Element> queue = new LinkedList<Element>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            final Element pe = queue.poll();
+            final NodeList pchildrenList = pe.getChildNodes();
+            for (int i = 0; i < pchildrenList.getLength(); i++) {
+                final Node node = pchildrenList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    queue.offer((Element)node);
+                }
+            }
+            //whick kind of node to search
+            final String clazzValue = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
+            if (StringUtils.isEmptyString(clazzValue)
+                    || !clazzValue.contains(classValue)) {
+                continue;
+            }
+            final String value = pe.getAttribute(attrName);
+            if (StringUtils.isEmptyString(value)) {
+                continue;
+            }
+            if (searchKey.equals(value)){
+                return pe;
+            }else{
+                continue;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Get text value of a node.
+     * @param root root node
+     * @return text value.
+     */
+    private String getText(final Node root){
+        final StringBuffer result = new StringBuffer(1024);
+        if(root == null){
+            return "";
+        }else{
+            if(root.hasChildNodes()){
+                final NodeList list = root.getChildNodes();
+                for(int i = 0; i < list.getLength(); i++){
+                    final Node childNode = list.item(i);
+                    if(childNode.getNodeType() == Node.ELEMENT_NODE){
+                        final Element e = (Element)childNode;
+                        final String value = e.getAttribute(ATTRIBUTE_NAME_CLASS);
+                        if(!excludeList.contains(value)){
+                            final String s = getText(e);
+                            result.append(s);
+                        }else{
+                            continue;
+                        }
+                    }else if(childNode.getNodeType() == Node.TEXT_NODE){
+                        result.append(childNode.getNodeValue());
+                    }
+                }
+            }else if(root.getNodeType() == Node.TEXT_NODE){
+                result.append(root.getNodeValue());
+            }
+        }
+        return result.toString();
+    }
+
+    /**
+     * get the document node of a topic file.
+     * @param absolutePathToFile topic file
+     * @return element.
+     */
+    private Element getTopicDoc(final String absolutePathToFile){
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try {
+            builder = factory.newDocumentBuilder();
+            final Document doc = builder.parse(absolutePathToFile);
+            final Element root = doc.getDocumentElement();
+            return root;
+        } catch (final ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (final SAXException e) {
+            e.printStackTrace();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * get topicmeta's child(e.g navtitle, shortdesc) tag's value(text-only).
+     * @param element input element
+     * @return text value
+     */
+    private String getChildElementValueOfTopicmeta(final Element element, final String classValue) {
+        //navtitle
+        String returnValue = null;
+        //has child nodes
+        if(element.hasChildNodes()){
+            //Get topicmeta element node
+            final Element topicMeta = getElementNode(element, MAP_TOPICMETA.matcher);
+            //no topicmeta node
+            if(topicMeta == null){
+                return returnValue;
+            }
+            //Get element node
+            final Element elem = getElementNode(topicMeta, classValue);
+            //no navtitle node
+            if(elem == null){
+                return returnValue;
+            }
+            //get text value
+            returnValue = this.getText(elem);
+        }
+        return returnValue;
+    }
+
+    /**
+     * Get specific element node from child nodes.
+     * @param element parent node
+     * @param classValue @class
+     * @return element node.
+     */
+    private Element getElementNode(final Element element, final String classValue) {
+        final NodeList list = element.getChildNodes();
+        for(int i = 0; i < list.getLength(); i++){
+            final Node node = list.item(i);
+            if(node.getNodeType() == Node.ELEMENT_NODE){
+                final Element child = (Element) node;
+                //node found
+                if(child.getAttribute(ATTRIBUTE_NAME_CLASS).contains(classValue)){
+                    return child;
+                    //break;
+                }
+            }
+        }
+        return null;
+    }
+    
 }
