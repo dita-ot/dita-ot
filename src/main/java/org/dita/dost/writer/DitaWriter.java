@@ -10,6 +10,7 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -147,30 +148,23 @@ public final class DitaWriter extends AbstractXMLFilter {
      * replace all the backslash with slash in
      * all href and conref attribute
      */
-    private String replaceCONREF (final Attributes atts){
-        String attValue = atts.getValue(ATTRIBUTE_NAME_CONREF);
-        final int sharp_index = attValue.lastIndexOf(SHARP);
-        final int dot_index = attValue.lastIndexOf(DOT);
-        if(sharp_index != -1 && dot_index < sharp_index){
-            final String path = attValue.substring(0, sharp_index);
-            final String topic = attValue.substring(sharp_index);
-            if(path.length() != 0){
-                String relativePath;
-                final File target = new File(path);
+    private URI replaceCONREF (final Attributes atts){
+        URI attValue = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
+        final String fragment = attValue.getFragment();
+        if(fragment != null){
+            final URI path = stripFragment(attValue);
+            if(path.toString().length() != 0){
+                final File target = toFile(path);
                 if(target.isAbsolute()){
-                    relativePath = FileUtils.getRelativeUnixPath(job.getInputMapPathName().getAbsolutePath(), path);
-                    attValue = relativePath + topic;
+                    final URI relativePath = getRelativePath(job.getInputMapPathName().toURI(), path);
+                    attValue = setFragment(relativePath, fragment);
                 }
-
             }
         }else{
-            final File target = new File(attValue);
+            final File target = toFile(attValue);
             if(target.isAbsolute()){
-                attValue = FileUtils.getRelativeUnixPath(job.getInputMapPathName().getAbsolutePath(), attValue);
+                attValue = getRelativePath(job.getInputMapPathName().toURI(), attValue);
             }
-        }
-        if (attValue != null && processingMode == Mode.LAX){
-            attValue = FileUtils.separatorsToUnix(attValue);
         }
 
         return attValue;
@@ -211,44 +205,27 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @param atts attributes
      * @return attribute value
      */
-    private String replaceHREF (final String attName, final Attributes atts){
+    private URI replaceHREF(final String attName, final Attributes atts){
         if (attName == null){
             return null;
         }
 
-        String attValue = atts.getValue(attName);
+        URI attValue = toURI(atts.getValue(attName));
         if(attValue != null){
-            final int dot_index = attValue.lastIndexOf(DOT);
-            final int sharp_index = attValue.lastIndexOf(SHARP);
-            if(sharp_index != -1 && dot_index < sharp_index){
-                String path = attValue.substring(0, sharp_index);
-                final String topic = attValue.substring(sharp_index);
-                if(path.length() != 0){
-                    if(path.startsWith("file:/") && path.indexOf("file://") == -1){
-                        path = path.substring("file:/".length());
-                        //Unix like OS
-                        if(UNIX_SEPARATOR.equals(File.separator)){
-                            path = UNIX_SEPARATOR + path;
-                        }
-                    }
-                    final File target = new File(path);
+            final String fragment = attValue.getFragment();
+            if(fragment != null){
+                URI path = stripFragment(attValue);
+                if(path.toString().length() != 0){
+                    final File target = toFile(path);
                     if(target.isAbsolute()){
-                        final String relativePath = FileUtils.getRelativeUnixPath(job.getInputMapPathName().getAbsolutePath(), path);
-                        attValue = relativePath + topic;
+                        final URI relativePath = getRelativePath(job.getInputMapPathName().toURI(), path);
+                        attValue = setFragment(relativePath, fragment);
                     }
-
                 }
             }else{
-                if(attValue.startsWith("file:/") && attValue.indexOf("file://") == -1){
-                    attValue = attValue.substring("file:/".length());
-                    //Unix like OS
-                    if(UNIX_SEPARATOR.equals(File.separator)){
-                        attValue = UNIX_SEPARATOR + attValue;
-                    }
-                }
-                final File target = new File(attValue);
+                final File target = toFile(attValue);
                 if(target.isAbsolute()){
-                    attValue = FileUtils.getRelativeUnixPath(job.getInputMapPathName().getAbsolutePath(), attValue);
+                    attValue = getRelativePath(job.getInputMapPathName().toURI(), attValue);
                 }
             }
         } else {
@@ -449,7 +426,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
                         atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)){
-                    attValue = replaceHREF(attQName, atts);
+                    attValue = replaceHREF(attQName, atts).toString();
                 }
                 XMLUtils.addOrSetAttribute(res, attQName, attValue);
             } else if(ATTRIBUTE_NAME_CONKEYREF.equals(attQName) && attValue.length() != 0) { // replace conref with conkeyref(using key definition)
@@ -553,10 +530,9 @@ public final class DitaWriter extends AbstractXMLFilter {
                 XMLUtils.addOrSetAttribute(res, nsUri, atts.getLocalName(i), attQName, atts.getType(i), attValue);
             }
         }
-        String conref = atts.getValue(ATTRIBUTE_NAME_CONREF);
+        final String conref = atts.getValue(ATTRIBUTE_NAME_CONREF);
         if(conref != null && !conkeyrefValid){
-            conref = replaceCONREF(atts);
-            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, conref);
+            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, replaceCONREF(atts).toString());
         }
     }
 

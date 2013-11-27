@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -163,19 +164,19 @@ public class DitaWriterTest {
                 XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_LOCAL);
                 XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FORMAT, ATTR_FORMAT_VALUE_DITA);
                 XMLUtils.addOrSetAttribute(atts, attrName, value);
-                return (String) method.invoke(writer, attrName, atts);    
+                return ((URI) method.invoke(writer, attrName, atts)).toString();    
             }
         };
         // same directory path
-        assertEquals("foo +%25bar.dita", w.invoke("foo +%25bar.dita"));
+        assertEquals("foo%20+%25bar.dita", w.invoke("foo +%25bar.dita"));
         assertEquals("foo.dita#bar", w.invoke("foo.dita#bar"));
         // absolute same directory path
-        assertEquals("foo.dita", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath()));
-        assertEquals("foo.dita#bar", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath() + "#bar"));
+        assertEquals("foo.dita", w.invoke(new File(srcDir, "foo.dita").getAbsoluteFile().toURI().toString()));
+        assertEquals("foo.dita#bar", w.invoke(new File(srcDir, "foo.dita").getAbsoluteFile().toURI().toString() + "#bar"));
         final File sub = new File(srcDir, "sub" + File.separator + "foo +%bar.dita").getAbsoluteFile();
         // absolute sub directory path
-        assertEquals("sub/foo +%bar.dita", w.invoke(sub.getAbsolutePath()));
-        assertEquals("sub/foo +%bar.dita#bar", w.invoke(sub.getAbsolutePath() + "#bar"));
+        assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.getAbsoluteFile().toURI().toString()));
+        assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.getAbsoluteFile().toURI().toString() + "#bar"));
         // absolute sub directory URI
         assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.toURI().toASCIIString()));
         assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.toURI().toASCIIString() + "#bar"));
@@ -190,22 +191,22 @@ public class DitaWriterTest {
             public String invoke(final String value) throws Exception {
                 final AttributesImpl atts = new AttributesImpl();
                 XMLUtils.addOrSetAttribute(atts, attrName, value);
-                return (String) method.invoke(writer, atts);    
+                return ((URI) method.invoke(writer, atts)).toString();    
             }
         };
         // same directory path
-        assertEquals("foo +%25bar.dita", w.invoke("foo +%25bar.dita"));
+        assertEquals("foo%20+%25bar.dita", w.invoke("foo +%25bar.dita"));
         assertEquals("foo.dita#bar", w.invoke("foo.dita#bar"));
         // absolute same directory path
-        assertEquals("foo.dita", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath()));
-        assertEquals("foo.dita#bar", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath() + "#bar"));
+        assertEquals("foo.dita", w.invoke(new File(srcDir, "foo.dita").getAbsoluteFile().toURI().toString()));
+        assertEquals("foo.dita#bar", w.invoke(new File(srcDir, "foo.dita").getAbsoluteFile().toURI().toString() + "#bar"));
         final File sub = new File(srcDir, "sub" + File.separator + "foo +%bar.dita").getAbsoluteFile();
         // absolute sub directory path
-        assertEquals("sub/foo +%bar.dita", w.invoke(sub.getAbsolutePath()));
-        assertEquals("sub/foo +%bar.dita#bar", w.invoke(sub.getAbsolutePath() + "#bar"));
+        assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.toURI().toString()));
+        assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.toURI().toString() + "#bar"));
         // absolute sub directory URI
-        assertEquals(srcDir.toURI().toASCIIString() + "sub/foo%20+%25bar.dita", w.invoke(sub.toURI().toASCIIString()));
-        assertEquals(srcDir.toURI().toASCIIString() + "sub/foo%20+%25bar.dita#bar", w.invoke(sub.toURI().toASCIIString() + "#bar"));
+        assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.getAbsoluteFile().toURI().toString()));
+        assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.getAbsoluteFile().toURI().toString() + "#bar"));
         // unsupported extension
         assertEquals("foo.bar", w.invoke("foo.bar"));
     }
