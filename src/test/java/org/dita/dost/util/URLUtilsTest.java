@@ -174,5 +174,24 @@ public class URLUtilsTest {
         assertEquals(null, URLUtils.getRelativePath(new URI("map.ditamap")));
         assertEquals(new URI("../../"), URLUtils.getRelativePath(new URI("map1/map2/map.ditamap")));
     } 
+
+    @Test
+    public void testSetFragment() throws URISyntaxException {
+        assertEquals(new URI("foo#baz"), URLUtils.setFragment(new URI("foo#bar"), "baz"));
+        assertEquals(new URI("foo#baz"), URLUtils.setFragment(new URI("foo#"), "baz"));
+        assertEquals(new URI("foo#baz"), URLUtils.setFragment(new URI("foo"), "baz"));
+        assertEquals(new URI("#baz"), URLUtils.setFragment(new URI("#bar"), "baz"));
+        assertEquals(new URI("foo"), URLUtils.setFragment(new URI("foo#bar"), null));
+        assertEquals(new URI("foo"), URLUtils.setFragment(new URI("foo#"), null));
+        assertEquals(new URI("foo"), URLUtils.setFragment(new URI("foo"), null));
+        assertEquals(new URI(""), URLUtils.setFragment(new URI("#bar"), null));
+    }
     
+    @Test
+    public void testStripFragment() throws URISyntaxException {
+        assertEquals(new URI("foo"), URLUtils.stripFragment(new URI("foo#bar")));
+        assertEquals(new URI("foo"), URLUtils.stripFragment(new URI("foo#")));
+        assertEquals(new URI("foo"), URLUtils.stripFragment(new URI("foo")));
+    }
+
 }
