@@ -9,7 +9,6 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
@@ -22,7 +21,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
@@ -43,8 +41,6 @@ import org.xml.sax.helpers.AttributesImpl;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
@@ -105,50 +101,17 @@ public final class DitaWriter extends AbstractXMLFilter {
     public static final String PI_PATH2PROJ_TARGET_URI = "path2project-uri";
     public static final String PI_WORKDIR_TARGET = "workdir";
     public static final String PI_WORKDIR_TARGET_URI = "workdir-uri";
-    /** To check the URL of href in topicref attribute */
-    private static final String NOT_LOCAL_URL = COLON_DOUBLE_SLASH;
     
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private final boolean genDebugInfo;
     
     private boolean setSystemid = true;
 
-    private boolean checkDITAHREF(final Attributes atts){
-        final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-
-
-
-        if (classValue == null
-                || (!TOPIC_XREF.matches(classValue)
-                        && !TOPIC_LINK.matches(classValue)
-                        && !MAP_TOPICREF.matches(classValue))
-                        && !TOPIC_LONGDESCREF.matches(classValue))
-        {
-            return false;
-        }
-
-        if (scopeValue == null){
-            scopeValue = ATTR_SCOPE_VALUE_LOCAL;
-        }
-        if (formatValue == null){
-            formatValue = ATTR_FORMAT_VALUE_DITA;
-        }
-
-        if (scopeValue.equals(ATTR_SCOPE_VALUE_LOCAL)
-                && formatValue.equals(ATTR_FORMAT_VALUE_DITA)){
-            return true;
-        }
-
-        return false;
-    }
-
     /**
      * replace all the backslash with slash in
      * all href and conref attribute
      */
-    private URI replaceCONREF (final Attributes atts){
+    private URI replaceCONREF(final Attributes atts){
         URI attValue = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
         final String fragment = attValue.getFragment();
         if(fragment != null){
@@ -168,34 +131,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         }
 
         return attValue;
-    }
-    private static boolean notLocalURL(final String valueOfURL){
-        if(valueOfURL.indexOf(NOT_LOCAL_URL)==-1) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    private  static boolean warnOfNoneTopicFormat(final Attributes attrs,final String valueOfHref){
-        final String hrefValue = valueOfHref;
-        if(notLocalURL(hrefValue)){
-            return true;
-        }
-        else{
-            final String classValue = attrs.getValue(ATTRIBUTE_NAME_CLASS);
-            if(classValue != null && PR_D_CODEREF.matches(classValue)){
-                return true;
-            }
-            final String formatValue = attrs.getValue(ATTRIBUTE_NAME_FORMAT);
-            final String extOfHref = FileUtils.getExtension(valueOfHref);
-            if(formatValue == null && extOfHref != null && !extOfHref.equalsIgnoreCase("DITA") && !extOfHref.equalsIgnoreCase("XML") ){
-                final DITAOTLogger logger = new DITAOTJavaLogger();
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ028E", hrefValue).toString());
-                return true;
-            }
-        }
-
-        return false;
     }
     
     /**
@@ -417,8 +352,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             String attValue = getAttributeValue(qName, attQName, atts.getValue(i));
-            final String nsUri = atts.getURI(i);
-
             if (attQName.equals(ATTRIBUTE_NAME_XTRF) || attQName.equals(ATTRIBUTE_NAME_XTRC) ||
                     attQName.equals(ATTRIBUTE_NAME_COLNAME)|| attQName.equals(ATTRIBUTE_NAME_NAMEST) || attQName.equals(ATTRIBUTE_NAME_NAMEEND) ||
                     ATTRIBUTE_NAME_CONREF.equals(attQName)) {
@@ -527,7 +460,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                     logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", attValue).toString());
                 }
             } else {
-                XMLUtils.addOrSetAttribute(res, nsUri, atts.getLocalName(i), attQName, atts.getType(i), attValue);
+                XMLUtils.addOrSetAttribute(res, atts.getURI(i), atts.getLocalName(i), attQName, atts.getType(i), attValue);
             }
         }
         final String conref = atts.getValue(ATTRIBUTE_NAME_CONREF);
@@ -992,7 +925,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     	if(job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION){
             if(isOutFile(traceFilename, inputMap)){
                 
-                path2Project = getRelativePathFromOut(traceFilename.getAbsolutePath());
+                path2Project = getRelativePathFromOut(traceFilename.getAbsoluteFile());
             }else{
                  path2Project = FileUtils.getRelativeUnixPath(traceFilename.getAbsolutePath(),inputMap.getAbsolutePath());
                 path2Project = new File(path2Project).getParent();
@@ -1014,22 +947,17 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @param overflowingFile overflowingFile
      * @return relative path to out
      */
-    public String getRelativePathFromOut(final String overflowingFile){
-        final File mapPathName = job.getInputMapPathName();
-        final File currFilePathName = new File(overflowingFile);
-        final String relativePath = FileUtils.getRelativeUnixPath( mapPathName.toString(),currFilePathName.toString());
-        final String outputDir = job.getOutputDir().getAbsolutePath();
-        final StringBuffer outputPathName = new StringBuffer(outputDir).append(File.separator).append("index.html");
-        final String finalOutFilePathName = FileUtils.resolveFile(outputDir,relativePath).getPath();
-        final String finalRelativePathName = FileUtils.getRelativeUnixPath(finalOutFilePathName,outputPathName.toString());
-        final String parentDir = new File(finalRelativePathName).getParent();
-        final StringBuffer finalRelativePath = new StringBuffer(parentDir);
-        if(finalRelativePath.length() > 0){
-            finalRelativePath.append(File.separator);
-        }else{
-            finalRelativePath.append(".").append(File.separator);
+    public String getRelativePathFromOut(final File overflowingFile) {
+        final File relativePath = FileUtils.getRelativePath(job.getInputMapPathName(), overflowingFile);
+        final File outputDir = job.getOutputDir().getAbsoluteFile();
+        final File outputPathName = new File(outputDir, "index.html");
+        final File finalOutFilePathName = FileUtils.resolveFile(outputDir, relativePath.getPath());
+        final File finalRelativePathName = FileUtils.getRelativePath(finalOutFilePathName, outputPathName);
+        File parentDir = finalRelativePathName.getParentFile();
+        if (parentDir == null || parentDir.getPath().isEmpty()) {
+            parentDir = new File(".");
         }
-        return finalRelativePath.toString();
+        return parentDir.getPath() + File.separator;
     }
 
     /**
