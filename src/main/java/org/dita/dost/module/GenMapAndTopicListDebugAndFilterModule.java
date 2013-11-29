@@ -420,7 +420,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         inputFile = baseInputDir.relativize(inUri);
 
         // Set the mapDir
-        job.setInputMapPathName(toFile(inUri));
+        job.setInputFile(toFile(inUri));
     }
 
     /**

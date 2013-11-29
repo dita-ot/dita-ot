@@ -133,11 +133,11 @@ public class TestDitaWriter {
         filterUtils.setFilterMap(map);
         writer.setFilterUtils(filterUtils);
         final Job job = this.job;
-        job.setInputMapPathName(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
+        job.setInputFile(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
         writer.setJob(job);
         writer.setTempDir(tempDir.getAbsoluteFile());
         writer.setKeyDefinitions(Collections.EMPTY_LIST);
-        writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), "keyword.dita");
+        writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), new File("keyword.dita"));
 
         compareKeyword(new File(baseDir, new File(inputDir, "keyword.dita").getPath()),
                 new String[] {"prodname1", "prodname2", "prodname3"},

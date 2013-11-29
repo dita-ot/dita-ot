@@ -161,7 +161,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private File inputFile;
     /** Absolute path for filter file. */
     private File ditavalFile;
-
+    /** Number of directory levels base direcory is adjusted. */
     private int uplevels = 0;
     /** Prefix path. Either an empty string or a path which ends in {@link java.io.File#separator File.separator}. */
     private String prefix = "";
@@ -337,7 +337,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     	schemekeydefMap = new HashMap<String, KeyDef>();
 
         // Set the mapDir
-        job.setInputMapPathName(inFile);
+        job.setInputFile(inFile);
     }
 
     private void processWaitList() throws DITAOTException {
@@ -641,11 +641,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         if (f.getPath().contains(STICK)) {
             f = new File(f.getPath().substring(0, f.getPath().indexOf(STICK)));
         }
-
-        // for uplevels (../../)
-        // ".."-->"../"
-        final int lastIndex = FileUtils.separatorsToUnix(FileUtils.normalize(f).getPath())
-                .lastIndexOf("../");
+        final int lastIndex = FileUtils.normalize(f).getPath().lastIndexOf(".." + File.separator);
         if (lastIndex != -1) {
             final int newUplevels = lastIndex / 3 + 1;
             uplevels = newUplevels > uplevels ? newUplevels : uplevels;
@@ -670,9 +666,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private void updateBaseDirectory() {
         for (int i = uplevels; i > 0; i--) {
-            final File file = baseInputDir;
+            prefix = new StringBuffer(baseInputDir.getName()).append(File.separator).append(prefix).toString();
             baseInputDir = baseInputDir.getParentFile();
-            prefix = new StringBuffer(file.getName()).append(File.separator).append(prefix).toString();
         }
     }
 
@@ -682,11 +677,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @return path to up-level, e.g. {@code ../../}
      */
     private String getUpdateLevels() {
-        int current = uplevels;
         final StringBuffer buff = new StringBuffer();
-        while (current > 0) {
-            buff.append(".." + File.separator);
-            current--;
+        for (int current = uplevels; current > 0; current--) {
+            buff.append("..").append(File.separator);
         }
         return buff.toString();
     }
@@ -697,7 +690,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @param value input
      * @return input with regular expression special characters escaped
      */
-    private String formatRelativeValue(final String value) {
+    private String escapeRegExp(final String value) {
         final StringBuffer buff = new StringBuffer();
         if (value == null || value.length() == 0) {
             return "";
@@ -880,25 +873,25 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         // add out.dita.files,tempdirToinputmapdir.relative.value to solve the
         // output problem
-        job.setProperty("tempdirToinputmapdir.relative.value", formatRelativeValue(prefix));
+        job.setProperty("tempdirToinputmapdir.relative.value", escapeRegExp(prefix));
         job.setProperty("uplevels", getUpdateLevels());
         for (final File file: addFilePrefix(outDitaFilesSet)) {
             job.getOrCreateFileInfo(file).isOutDita = true;
         }
 //        // XXX: This loop is probably redundant
 //        for (FileInfo f: prop.getFileInfo().values()) {
-//            if ("dita".equals(f.format) || "ditamap".equals(f.format)) {
+//            if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
 //                f.isActive = false;
 //            }
 //        }
         for (final File file: addFilePrefix(fullTopicSet)) {
             final FileInfo ff = job.getOrCreateFileInfo(file);
-            ff.format = "dita";
+            ff.format = ATTR_FORMAT_VALUE_DITA;
             ff.isActive = true;
         }
         for (final File file: addFilePrefix(fullMapSet)) {
             final FileInfo ff = job.getOrCreateFileInfo(file);
-            ff.format = "ditamap";
+            ff.format = ATTR_FORMAT_VALUE_DITAMAP;
             ff.isActive = true;
         }        
         for (final File file: addFilePrefix(hrefTopicSet)) {

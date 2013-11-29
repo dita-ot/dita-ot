@@ -133,7 +133,7 @@ public class GenListModuleFilterTest {
         listFilter.setInputFile(srcFile.toURI());
         listFilter.setInputDir(srcDir.toURI());
         final Job job = new Job(tempDir);
-        job.setInputMapPathName(srcFile);
+        job.setInputFile(srcFile);
         listFilter.setJob(job);
 //        listFilter.setTranstype("xhtml");
         listFilter.setCurrentDir(new URI(""));

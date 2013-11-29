@@ -79,14 +79,14 @@ public class DitaWriterTest {
         writer.setFilterUtils(fu);
         writer.setDelayConrefUtils(new DelayConrefUtils());
         final Job outputUtils = new Job(tempDir);
-        outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
+        outputUtils.setInputFile(new File(srcDir, "main.ditamap"));
         writer.setJob(outputUtils);
         writer.setKeyDefinitions(Arrays.asList(new KeyDef("keydef", "keyword.dita", ATTR_SCOPE_VALUE_LOCAL, "main.ditamap")));
         
         FileUtils.copyFile(new File(srcDir, FILE_NAME_EXPORT_XML), new File(tempDir, FILE_NAME_EXPORT_XML));
 
         for (final String f: new String[] {"main.ditamap", "keyword.dita"}) {
-            writer.write(srcDir.getAbsoluteFile(), f);
+            writer.write(srcDir.getAbsoluteFile(), new File(f));
         }
         
         TestUtils.resetXMLUnit();
@@ -267,7 +267,7 @@ public class DitaWriterTest {
         job.setGeneratecopyouter(Integer.toString(outerCopy.type));
         job.setOutterControl(Job.OutterControl.FAIL.toString());
         job.setOnlyTopicInMap(Boolean.toString(true));
-        job.setInputMapPathName(map);
+        job.setInputFile(map);
         job.setOutputDir(tempDir);
         final DitaWriter dw = new DitaWriter();
         dw.setJob(job);
@@ -279,7 +279,7 @@ public class DitaWriterTest {
         {
             final DitaWriter w = new DitaWriter();
             final Job job = new Job(tempDir);
-            job.setInputMapPathName(new File(srcDir, "main.ditamap"));
+            job.setInputFile(new File(srcDir, "main.ditamap"));
             job.setOutputDir(new File(expDir, "out"));
             w.setJob(job);
             assertEquals("." + File.separator, w.getRelativePathFromOut(new File(srcDir, "a.dita").getAbsoluteFile()));
@@ -289,7 +289,7 @@ public class DitaWriterTest {
         {
             final DitaWriter w = new DitaWriter();
             final Job job = new Job(tempDir);
-            job.setInputMapPathName(new File(srcDir, "maps" + File.separator + "main.ditamap"));
+            job.setInputFile(new File(srcDir, "maps" + File.separator + "main.ditamap"));
             job.setOutputDir(new File(expDir, "out"));
             w.setJob(job);
             assertEquals("." + File.separator, w.getRelativePathFromOut(new File(srcDir, "maps" + File.separator + "a.dita").getAbsoluteFile()));
@@ -301,7 +301,7 @@ public class DitaWriterTest {
         {
             final DitaWriter w = new DitaWriter();
             final Job job = new Job(tempDir);
-            job.setInputMapPathName(new File(srcDir, "maps" + File.separator + "sub" + File.separator + "main.ditamap"));
+            job.setInputFile(new File(srcDir, "maps" + File.separator + "sub" + File.separator + "main.ditamap"));
             job.setOutputDir(new File(expDir, "out" + File.separator + "sub"));
             w.setJob(job);
             assertEquals("." + File.separator, w.getRelativePathFromOut(new File(srcDir, "maps" + File.separator + "sub" + File.separator + "a.dita").getAbsoluteFile()));
@@ -401,7 +401,7 @@ public class DitaWriterTest {
             writer = new DitaWriter();
             writer.setLogger(new TestUtils.TestLogger(false));
             final Job job = new Job(tempDir);
-            job.setInputMapPathName(new File(srcDir, "main.ditamap"));
+            job.setInputFile(new File(srcDir, "main.ditamap"));
             writer.setJob(job);        
             method = DitaWriter.class.getDeclaredMethod(m, args);
             method.setAccessible(true);

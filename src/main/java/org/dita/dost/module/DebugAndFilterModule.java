@@ -151,7 +151,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             job.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
             job.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
             job.setOnlyTopicInMap(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
-            job.setInputMapPathName(inputMap);
+            job.setInputFile(inputMap);
             job.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)));
             fileWriter.setJob(job);
 
@@ -160,11 +160,11 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             for (final FileInfo f: job.getFileInfo()) {
                 if ((f.isActive && ("dita".equals(f.format) || "ditamap".equals(f.format)))
                         || f.isConrefTarget || f.isCopyToSource) {
-                    final String filename = f.file.getPath();
-                    final File currentFile = new File(inputDir, filename);
+                    final File filename = f.file;
+                    final File currentFile = new File(inputDir, filename.getPath());
                     logger.logInfo("Processing " + currentFile.getAbsolutePath());
     
-                    final Set<String> schemaSet = dic.get(filename);
+                    final Set<String> schemaSet = dic.get(filename.getPath());
                     filterReader.reset();
                     if (schemaSet != null) {
                         subjectSchemeReader.reset();
@@ -192,7 +192,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                         fileWriter.setFilterUtils(filterUtils);
                     }
     
-                    if (!new File(inputDir, filename).exists()) {
+                    if (!currentFile.exists()) {
                         // This is an copy-to target file, ignore it
                         logger.logInfo("Ignoring a copy-to file " + filename);
                         continue;

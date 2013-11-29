@@ -927,19 +927,19 @@ public final class Job {
     }
 
     /**
-     * Get input map path.
-     * @return absolute input map path
+     * Get input file path.
+     * @return absolute input file path
      */
-    public File getInputMapPathName(){
+    public File getInputFile(){
         return new File(prop.get(PROPERTY_INPUT_MAP_DIR).toString());
     }
 
     /**
      * Set input map path.
-     * @param inputMapDir absolute input map path
+     * @param inputFile absolute input map path
      */
-    public void setInputMapPathName(final File inputMapDir){
-        prop.put(PROPERTY_INPUT_MAP_DIR, inputMapDir.getAbsolutePath());
+    public void setInputFile(final File inputFile){
+        prop.put(PROPERTY_INPUT_MAP_DIR, inputFile.getAbsolutePath());
     }
 
     

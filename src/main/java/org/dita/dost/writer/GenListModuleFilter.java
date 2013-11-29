@@ -399,7 +399,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     @Override
     public void startDocument() throws SAXException {
         currentFileRelative = inputDir.relativize(currentFile);
-        path2Project = getPathtoProject(toFile(currentFileRelative), toFile(currentFile.toString()), job.getInputMapPathName().getAbsolutePath());
+        path2Project = getPathtoProject(toFile(currentFileRelative), toFile(currentFile.toString()), job.getInputFile().getAbsolutePath());
         fileInfo = getOrCreateBuilder(currentFileRelative);
         
         super.startDocument();
