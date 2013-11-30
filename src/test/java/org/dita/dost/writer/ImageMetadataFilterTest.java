@@ -49,6 +49,24 @@ public class ImageMetadataFilterTest {
         assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
                 new InputSource(f.toURI().toString()));
     }
+    
+    @Test
+    public void testUplevelsWrite() throws DITAOTException, SAXException, IOException {
+        final File f = new File(tempDir, "sub" + File.separator + "test.dita");
+        f.getParentFile().mkdirs();
+        FileUtils.copyFile(new File(srcDir, "test.dita"), f);
+
+        final Job job = new Job(tempDir);
+        job.setProperty("uplevels", ".." + File.separator);
+        final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job);
+        filter.setLogger(new TestUtils.TestLogger());
+        filter.write(f.getAbsoluteFile());
+
+        TestUtils.resetXMLUnit();
+        XMLUnit.setIgnoreWhitespace(true);
+        assertXMLEqual(new InputSource(new File(expDir, "test.dita").toURI().toString()),
+                new InputSource(f.toURI().toString()));
+    }
 
     @AfterClass
     public static void teardown() throws IOException {

@@ -5,6 +5,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -80,14 +81,16 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             final Attributes atts) throws SAXException {
         if (TOPIC_IMAGE.matches(atts)) {
             final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder(atts);
-            final File imgInput = getImageFile(atts);
-            if (imgInput.exists()) {
-                Attributes m = cache.get(imgInput);
-                if (m == null) {
-                    m = readMetadata(imgInput);
-                    cache.put(imgInput, m);
+            if (atts.getValue(ATTRIBUTE_NAME_HREF) != null) {
+                final File imgInput = getImageFile(toURI(atts.getValue(ATTRIBUTE_NAME_HREF)));
+                if (imgInput.exists()) {
+                    Attributes m = cache.get(imgInput);
+                    if (m == null) {
+                        m = readMetadata(imgInput);
+                        cache.put(imgInput, m);
+                    }
+                    a.addAll(m);
                 }
-                a.addAll(m);
             }
             depth = 1;
             super.startPrefixMapping(DITA_OT_PREFIX , DITA_OT_NS);
@@ -147,14 +150,13 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         return a.build();
     }
 
-    private File getImageFile(final Attributes atts) {
-        final String fileDir = tempDir.toURI().relativize(currentFile.getParentFile().toURI()).toASCIIString();
-        final StringBuilder fileName = new StringBuilder(fileDir).append("./");
+    private File getImageFile(final URI href) {
+        URI fileDir = tempDir.toURI().relativize(currentFile.getParentFile().toURI());
         if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
-            fileName.append(uplevels);
+            fileDir = fileDir.resolve(uplevels.replace(File.separator, URI_SEPARATOR));
         }
-        fileName.append(atts.getValue(ATTRIBUTE_NAME_HREF));
-        final URI imgInputUri = outputDir.toURI().resolve(fileName.toString());
+        final URI fileName = fileDir.resolve(href);
+        final URI imgInputUri = outputDir.toURI().resolve(fileName);
         final File imgInput = new File(imgInputUri);
         return imgInput;
     }
