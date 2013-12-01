@@ -199,6 +199,7 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.ConrefPushModule"/>
     </pipeline>
+    <job-helper file="conref.list" property="conreflist"/>
   </target>
   
   <!-- move-meta-entries
