@@ -9,16 +9,12 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Configuration.*;
-import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 import java.util.Map.Entry;

@@ -8,7 +8,6 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Configuration.processingMode;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
@@ -20,8 +19,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.StringTokenizer;
-
-import org.dita.dost.util.Configuration.Mode;
 
 /**
  * Corrects the URLs.

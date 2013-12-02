@@ -16,8 +16,6 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Properties;
-import java.util.Set;
 import java.util.Stack;
 
 import javax.xml.transform.TransformerFactory;

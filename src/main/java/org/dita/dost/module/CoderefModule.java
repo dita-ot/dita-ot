@@ -8,17 +8,11 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Set;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.CoderefResolver;

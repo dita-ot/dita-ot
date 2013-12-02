@@ -8,7 +8,6 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
 
 import java.io.File;
@@ -29,7 +28,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.util.KeyDef;

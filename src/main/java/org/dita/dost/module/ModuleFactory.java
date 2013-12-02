@@ -8,8 +8,6 @@
  */
 package org.dita.dost.module;
 
-import java.util.Properties;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.log.MessageBean;

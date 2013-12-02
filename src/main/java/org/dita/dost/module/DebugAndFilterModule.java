@@ -18,7 +18,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -558,38 +557,6 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             getContentHandler().processingInstruction(target, d);
         }
         
-    }
-
-    /**
-     * Method for writing a map into xml file.
-     */
-    private void writeMapToXML(final Map<String, Set<String>> m, final String filename) {
-        if (m == null) {
-            return;
-        }
-        final Properties prop = new Properties();
-        for (final Map.Entry<String, Set<String>> entry: m.entrySet()) {
-            final String key = entry.getKey();
-            final String value = StringUtils.assembleString(entry.getValue(), COMMA);
-            prop.setProperty(key, value);
-        }
-        final File outputFile = new File(job.tempDir, filename);
-        FileOutputStream os = null;
-        try {
-            os = new FileOutputStream(outputFile, false);
-            prop.storeToXML(os, null);
-            os.close();
-        } catch (final IOException e) {
-            logger.logError(e.getMessage(), e) ;
-        } finally {
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
-                }
-            }
-        }
     }
 
 }

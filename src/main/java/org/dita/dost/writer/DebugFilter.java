@@ -96,12 +96,9 @@ public final class DebugFilter extends AbstractXMLFilter {
             }
             XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRC, xtrc.toString());
 		}
-	    indent++;
-		super.startElement(uri, localName, qName, res);
+	    super.startElement(uri, localName, qName, res);
 	}
 
-	private int indent = 0;;
-	
 	@Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
@@ -109,7 +106,6 @@ public final class DebugFilter extends AbstractXMLFilter {
             foreignLevel--;
         }
         super.endElement(uri, localName, qName);
-        indent--;
 	}
 	
 }

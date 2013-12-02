@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.writer.AbstractDomFilter;
@@ -186,10 +185,10 @@ public final class MapMetaReader extends AbstractDomFilter {
     }
 
     private void handleTopicref(final Element topicref, final Hashtable<String, Element> inheritance) {
-        final Attr hrefAttr = (Attr) topicref.getAttributeNode(ATTRIBUTE_NAME_HREF);
-        final Attr copytoAttr = (Attr) topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
-        final Attr scopeAttr = (Attr) topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
-        final Attr formatAttr = (Attr) topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
+        final Attr hrefAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_HREF);
+        final Attr copytoAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+        final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
+        final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
         Hashtable<String, Element> current = mergeMeta(null, inheritance, cascadeSet);
         Element metaNode = null;
 
@@ -198,7 +197,7 @@ public final class MapMetaReader extends AbstractDomFilter {
             final Node node = children.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 final Element elem = (Element) node;
-                Attr classAttr = (Attr) elem.getAttributeNode(ATTRIBUTE_NAME_CLASS);
+                Attr classAttr = elem.getAttributeNode(ATTRIBUTE_NAME_CLASS);
                 if (classAttr != null) {
                     // if this node is topicmeta and the parent topicref refers to a valid dita topic
                     if (MAP_TOPICMETA.matches(classAttr.getNodeValue()) &&

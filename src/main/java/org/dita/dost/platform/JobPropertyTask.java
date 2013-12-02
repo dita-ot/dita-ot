@@ -8,15 +8,12 @@
  */
 package org.dita.dost.platform;
 
-import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
 import static org.dita.dost.invoker.ExtensibleAntInvoker.getJob;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.dita.dost.util.Job;
 

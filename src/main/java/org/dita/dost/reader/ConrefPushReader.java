@@ -393,26 +393,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
         return df;
     }
 
-    @Deprecated
-    private DocumentFragment parsePushContent(final String pushcontent) {
-        Document d = null;
-        try {
-            d = documentBuilder.parse(new InputSource(new StringReader("<wrapper>" + pushcontent + "</wrapper>")));
-        } catch (SAXException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        final DocumentFragment f = pushDocument.createDocumentFragment();
-        final NodeList children = d.getDocumentElement().getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            f.appendChild(pushDocument.importNode(children.item(i), true));
-        } 
-        return f;
-    }
-
     @Override
     public void characters(final char[] ch, final int start, final int length)
             throws SAXException {

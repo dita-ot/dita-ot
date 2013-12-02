@@ -86,7 +86,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
     @Override
     public void processingInstruction(final String target, String data) throws SAXException {
-        String pi;
         try {
             if (fixpath != null && target.equals(PI_WORKDIR_TARGET)) {
                 final String tmp = fixpath.substring(0, fixpath.lastIndexOf(SLASH));

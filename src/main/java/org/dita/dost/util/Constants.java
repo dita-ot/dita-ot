@@ -712,71 +712,22 @@ public final class Constants {
     /** Constants for transform type(eclipsecontent).*/
     public static final String TRANS_TYPE_ECLIPSECONTENT = "eclipsecontent";
 
-    /** Constant for generated property file name(dita.list).*/
-    public static final String FILE_NAME_DITA_LIST = "dita.list";
-    /** Constant for generated property file name(dita.xml.properties).*/
-    public static final String FILE_NAME_DITA_LIST_XML="dita.xml.properties";
     /** Constant for generated property file name(catalog-dita.xml).*/
     public static final String FILE_NAME_CATALOG = "catalog-dita.xml";
     //store the scheme files refered by a scheme file in the form of Map<String Set<String>>
     /** Constant for generated property file name(subrelation.xml).*/
     public static final String FILE_NAME_SUBJECT_RELATION = "subrelation.xml";
 
-    /** Property name for href targets list file */
-    public static final String HREF_TARGET_LIST = "hreftargetslist";
-    /** Property name for candidate topics list file */
-    public static final String HREF_TOPIC_LIST = "canditopicslist";
-    /** Property name for skip chunk list file. List of topics that are part of chunk branch. */
-    public static final String CHUNK_TOPIC_LIST = "skipchunklist";
-    /** Property name for html list file */
-    public static final String HTML_LIST = "htmllist";
-    /** Property name for image list file */
-    public static final String IMAGE_LIST = "imagelist";
-    /** Property name for flag image list file */
-    public static final String FLAG_IMAGE_LIST = "flagimagelist";
-    /** Property name for conref list file */
-    public static final String CONREF_LIST = "conreflist";
-    /** Property name for href dita topic list file */
-    public static final String HREF_DITA_TOPIC_LIST = "hrefditatopiclist";
-    /** Property name for full dita topic list file */
-    public static final String FULL_DITA_TOPIC_LIST = "fullditatopiclist";
-    /** Property name for full dita map list file */
-    public static final String FULL_DITAMAP_LIST = "fullditamaplist";
     /** Property name for input file system path */
     public static final String INPUT_DITAMAP = "user.input.file";
     /** Property name for input file list file list file, i.e. file which points to a file which points to the input file */
     public static final String INPUT_DITAMAP_LIST_FILE_LIST = "user.input.file.listfile";
     /** Property name for input directory system path */
     public static final String INPUT_DIR = "user.input.dir";
-    /** Property name for full dita map and topic list file */
-    public static final String FULL_DITAMAP_TOPIC_LIST = "fullditamapandtopiclist";
-    /** Property name for conref targets list file */
-    public static final String CONREF_TARGET_LIST = "conreftargetslist";
-    /** Property name for copy-to source list file */
-    public static final String COPYTO_SOURCE_LIST = "copytosourcelist";
     /** Property name for copy-to target2sourcemap list file */
     public static final String COPYTO_TARGET_TO_SOURCE_MAP_LIST = "copytotarget2sourcemaplist";
-    /** Property name for subtargets list file */
-    public static final String SUBSIDIARY_TARGET_LIST = "subtargetslist";
-    /** Property name for chunked topic list file. List of topics that do not have a chunk attribute. */
-    public static final String CHUNKED_TOPIC_LIST="chunkedtopiclist";
-    /** Property name for chunked dita map list file */
-    public static final String CHUNKED_DITAMAP_LIST="chunkedditamaplist";
-    /** Property name for out dita files list file */
-    public static final String OUT_DITA_FILES_LIST="outditafileslist";
     /** Property name for relflag image list file */
     public static final String REL_FLAGIMAGE_LIST="relflagimagelist";
-    /** Property name for conref push list file */
-    public static final String CONREF_PUSH_LIST = "conrefpushlist";
-    /** Property name for keyref list file */
-    public static final String KEYREF_LIST = "keyreflist";
-    /** Property name for coderef list file */
-    public static final String CODEREF_LIST = "codereflist";
-    /** Property name for resource-only list file */
-    public static final String RESOURCE_ONLY_LIST = "resourceonlylist";
-    //list all of the scheme files
-    /** Property name for subject scheme list file */
-    public static final String SUBJEC_SCHEME_LIST = "subjectschemelist";
 
     /**Constants for common params used in ant invoker(tempDir).*/
     public static final String ANT_INVOKER_PARAM_TEMPDIR = "tempDir";

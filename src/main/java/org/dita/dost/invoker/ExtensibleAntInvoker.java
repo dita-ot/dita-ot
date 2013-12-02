@@ -285,7 +285,6 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public static class Xslt extends Module {
         
-        private String taskname;
         private File style;
         private File baseDir;
         private File destDir;
@@ -314,7 +313,6 @@ public final class ExtensibleAntInvoker extends Task {
         }
         
         public void setTaskname(final String taskname) {
-            this.taskname = taskname;
         }
         
         public void setClasspathref(final String classpath) {

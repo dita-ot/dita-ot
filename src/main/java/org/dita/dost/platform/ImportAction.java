@@ -8,8 +8,6 @@
  */
 package org.dita.dost.platform;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.List;

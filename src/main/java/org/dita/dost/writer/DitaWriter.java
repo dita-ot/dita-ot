@@ -863,7 +863,6 @@ public final class DitaWriter extends AbstractXMLFilter {
                 final ProfilingFilter profilingFilter = new ProfilingFilter();
                 profilingFilter.setLogger(logger);
                 profilingFilter.setFilterUtils(filterUtils);
-                profilingFilter.setTranstype(transtype);
                 profilingFilter.setParent(xmlSource);
                 profilingFilter.setEntityResolver(xmlSource.getEntityResolver());
                 xmlSource = profilingFilter;

@@ -41,7 +41,6 @@ final class FilterModule extends AbstractPipelineModuleImpl {
         writer.setLogger(logger);
         final FilterUtils filterUtils = parseFilterFile(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
         writer.setFilterUtils(filterUtils);
-        writer.setTranstype(input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE));
         for (final FileInfo f: files) {
             if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                 final File file = new File(tempDir, f.file.getPath());

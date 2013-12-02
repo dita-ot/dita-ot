@@ -7,9 +7,6 @@ package org.dita.dost.module;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Set;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;

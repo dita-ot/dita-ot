@@ -1066,37 +1066,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @param set file paths
      * @return file paths with prefix
      */
-    private Set<String> addPrefix(final Set<String> set) {
-        final Set<String> newSet = new HashSet<String>(set.size());
-        for (final String file: set) {
-            if (new File(file).isAbsolute()) {
-                newSet.add(FileUtils.normalize(file).getPath());
-            } else {
-                // In ant, all the file separator should be slash, so we need to
-                // replace all the back slash with slash.
-                final int index = file.indexOf(EQUAL);
-                if (index != -1) {
-                    // keyname
-                    final String to = file.substring(0, index);
-                    final String source = file.substring(index + 1);
-                    
-                    newSet.add(FileUtils.normalize(prefix + to).getPath()
-                            + EQUAL
-                            + FileUtils.normalize(prefix + source).getPath());
-                } else {
-                    newSet.add(FileUtils.normalize(prefix + file).getPath());
-                }
-            }
-        }
-        return newSet;
-    }
-    
-    /**
-     * Add file prefix. For absolute paths the prefix is not added.
-     * 
-     * @param set file paths
-     * @return file paths with prefix
-     */
     private Set<File> addFilePrefix(final Set<File> set) {
         final Set<File> newSet = new HashSet<File>(set.size());
         for (final File file: set) {
@@ -1133,32 +1102,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             newSet.put(key, value);
         }
         return newSet;
-    }
-    
-    /**
-     * Add file prefix. For absolute paths the prefix is no added.
-     * 
-     * @param map map of file paths
-     * @return file path map with prefix
-     */
-    private Map<String, String> addPrefix(final Map<String, String> map) {
-        final Map<String, String> newMap = new HashMap<String, String>(map.size());
-        for (final Map.Entry<String, String> e: map.entrySet()) {
-            String to = e.getKey();
-            if (new File(to).isAbsolute()) {
-                to = FileUtils.normalize(to).getPath();
-            } else {
-                to = FileUtils.normalize(prefix + to).getPath();
-            }
-            String source = e.getValue();
-            if (new File(source).isAbsolute()) {
-                source = FileUtils.normalize(source).getPath();
-            } else {
-                source = FileUtils.normalize(prefix + source).getPath();
-            }
-            newMap.put(to, source);
-        }
-        return newMap;
     }
     
     /**

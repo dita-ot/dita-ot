@@ -17,8 +17,6 @@ import org.xml.sax.SAXException;
  */
 public final class ProfilingFilter extends AbstractXMLFilter {
 
-	/** Transtype */
-	private String transtype;
 	/** when exclude is true the tag will be excluded. */
 	private boolean exclude;
 	/** foreign/unknown nesting level */
@@ -46,15 +44,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	 */
 	public void setFilterUtils(final FilterUtils filterUtils) {
 		this.filterUtils = filterUtils;
-	}
-
-	/**
-	 * Set transtype.
-	 * 
-	 * @param transtype the transtype to set
-	 */
-	public void setTranstype(final String transtype) {
-		this.transtype = transtype;
 	}
 	
 	/**

@@ -8,8 +8,6 @@
  */
 package org.dita.dost.log;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

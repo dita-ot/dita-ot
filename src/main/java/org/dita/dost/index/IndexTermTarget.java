@@ -8,8 +8,6 @@
  */
 package org.dita.dost.index;
 
-import static org.dita.dost.util.Constants.*;
-
 /**
  * This class represent the target of an index term.
  * 

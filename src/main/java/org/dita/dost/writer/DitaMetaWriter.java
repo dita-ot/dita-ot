@@ -12,8 +12,6 @@ import static org.dita.dost.util.Constants.*;
 import static java.util.Arrays.*;
 import static org.dita.dost.util.XMLUtils.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FileUtils.*;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

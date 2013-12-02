@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;

@@ -32,10 +32,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.DITAOTAntLogger;
-import org.dita.dost.log.MessageUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

@@ -8,8 +8,6 @@
  */
 package org.dita.dost.platform;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;

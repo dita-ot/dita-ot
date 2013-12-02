@@ -11,7 +11,6 @@ package org.dita.dost.log;
 import static org.dita.dost.log.MessageBean.*;
 
 import java.util.ArrayList;
-import java.util.Properties;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 import org.apache.tools.ant.taskdefs.condition.ConditionBase;
 
