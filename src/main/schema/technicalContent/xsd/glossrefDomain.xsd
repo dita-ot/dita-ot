@@ -72,13 +72,14 @@
    
    <xs:attributeGroup name="glossref.attributes">
      <xs:attribute name="navtitle" type="xs:string"/>
-    <xs:attribute name="href" type="xs:string" use="required"/>
-    <xs:attribute name="keys" type="xs:string" use="required"/>
-    <xs:attribute name="keyref" type="xs:string"/>
-    <xs:attribute name="query" type="xs:string"/>
-    <xs:attribute name="copy-to" type="xs:string"/>
-    <xs:attribute name="collection-type" type="collection-type.class"/>
+     <xs:attribute name="href" type="xs:string" use="required"/>
+     <xs:attribute name="keys" type="xs:string" use="required"/>
+     <xs:attribute name="keyref" type="xs:string"/>
+     <xs:attribute name="query" type="xs:string"/>
+     <xs:attribute name="copy-to" type="xs:string"/>
+     <xs:attribute name="collection-type" type="collection-type.class"/>
      <xs:attribute name="type" type="xs:string"/>
+     <xs:attribute name="processing-role" type="processing-role-att.class" />
      <xs:attribute name="scope" type="scope-att.class"/>
      <xs:attribute name="locktitle" type="yesno-att.class"/>
      <xs:attribute name="format" type="xs:string"/>
@@ -87,9 +88,9 @@
      <xs:attribute name="print" type="print-att.class" default="no"/>
      <xs:attribute name="search" type="yesno-att.class" default="no"/>
      <xs:attribute name="chunk" type="xs:string"/>
-    <xs:attributeGroup ref="univ-atts" />
-    <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attributeGroup ref="global-atts" />
+     <xs:attributeGroup ref="univ-atts" />
+     <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attributeGroup ref="global-atts" />
    </xs:attributeGroup>
 
 </xs:schema>

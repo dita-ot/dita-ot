@@ -134,7 +134,7 @@
         and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="msgph.class">
           <xs:attribute ref="class" default="+ topic/ph sw-d/msgph "/>
@@ -174,7 +174,7 @@
         software tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="msgnum.class">
           <xs:attribute ref="class" default="+ topic/keyword sw-d/msgnum "/>
@@ -216,7 +216,7 @@
         tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="varname.class">
           <xs:attribute ref="class" default="+ topic/keyword sw-d/varname "/>
@@ -257,7 +257,7 @@
         software tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="msgblock.class">
           <xs:attribute ref="class" default="+ topic/pre sw-d/msgblock "/>
@@ -298,7 +298,7 @@
         tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="cmdname.class">
           <xs:attribute ref="class" default="+ topic/keyword sw-d/cmdname "/>
@@ -339,7 +339,7 @@
         and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="filepath.class">
           <xs:attribute ref="class" default="+ topic/ph sw-d/filepath "/>
@@ -377,7 +377,7 @@
         designed to document software tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="userinput.class">
           <xs:attribute ref="class" default="+ topic/ph sw-d/userinput "/>
@@ -418,7 +418,7 @@
         tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="systemoutput.class">
           <xs:attribute ref="class" default="+ topic/ph sw-d/systemoutput "/>

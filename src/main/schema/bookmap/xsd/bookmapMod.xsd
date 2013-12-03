@@ -295,7 +295,7 @@
                 a person. Note that unlike the &lt;personname&gt; element, the &lt;person&gt; element
                 is not restricted to describing the names of authors. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="person.class">
                     <xs:attribute ref="class" default="- topic/data bookmap/person "/>
@@ -330,7 +330,7 @@
                 restricted to usage within &lt;authorinformation&gt;; it does not have to contain
                 the name of an authoring organization.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="organization.class">
                     <xs:attribute ref="class" default="- topic/data bookmap/organization "/>
@@ -439,7 +439,7 @@
                 a book event (such as &lt;approved&gt; or &lt;reviewed&gt;) or with the list of
                 copyrights for the book.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="summary.class">
                     <xs:attribute ref="class" default="- topic/ph bookmap/summary "/>
@@ -475,7 +475,7 @@
                 book was printed. Customarily, the content is restricted to the name of the
                 country. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="printlocation.class">
                     <xs:attribute ref="class" default="- topic/data bookmap/printlocation "/>
@@ -584,7 +584,7 @@
                 displayed. Common methods include using a dash, for example "-01". or a period,
                 such as ".01". </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="revisionid.class">
                     <xs:attribute ref="class" default="- topic/ph bookmap/revisionid "/>
@@ -716,7 +716,7 @@
         <xs:annotation>
             <xs:documentation>The &lt;year&gt; element denotes a year.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="year.class">
                     <xs:attribute ref="class" default="- topic/ph bookmap/year "/>
@@ -750,7 +750,7 @@
         <xs:annotation>
             <xs:documentation>The &lt;month&gt; element denotes a month of the year. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="month.class">
                     <xs:attribute ref="class" default="- topic/ph bookmap/month "/>
@@ -784,7 +784,7 @@
         <xs:annotation>
             <xs:documentation>The &lt;day&gt; element denotes a day of the month. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="day.class">
                     <xs:attribute ref="class" default="- topic/ph bookmap/day "/>
@@ -1059,7 +1059,7 @@
                 as 99F1234. This is generally the number that the publisher uses to identify
                 the book for tracking purposes. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="bookpartno.class">
                     <xs:attribute ref="class" default="- topic/data bookmap/bookpartno "/>
@@ -1093,7 +1093,7 @@
                 such as First Edition, or Third Edition, used by a publisher to identify a
                 book.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="edition.class">
                     <xs:attribute ref="class" default="- topic/data bookmap/edition "/>
@@ -1126,7 +1126,7 @@
             <xs:documentation>The &lt;isbn&gt; element contains the book's International Standard
                 Book Number (ISBN).</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="isbn.class">
                     <xs:attribute ref="class" default="- topic/data bookmap/isbn "/>
@@ -1159,7 +1159,7 @@
             <xs:documentation>The &lt;booknumber&gt; element contains the book's form number, such
                 as SC21-1920.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="booknumber.class">
                     <xs:attribute ref="class" default="- topic/data bookmap/booknumber "/>
@@ -1192,7 +1192,7 @@
             <xs:documentation>The &lt;volume&gt; element contains the book's volume number, such
                 as Volume <keyword>2</keyword>.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="volume.class">
                     <xs:attribute ref="class" default="- topic/data bookmap/volume "/>
@@ -1472,7 +1472,7 @@
                 a book. Library entries contain information about the series, library, or
                 collection of documents to which the book belongs. </xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="booklibrary.class">
                     <xs:attribute ref="class" default="- topic/ph bookmap/booklibrary "/>
@@ -1508,7 +1508,7 @@
             <xs:documentation>The &lt;mainbooktitle&gt; element contains the primary title information
                 for a book.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="mainbooktitle.class">
                     <xs:attribute ref="class" default="- topic/ph bookmap/mainbooktitle "/>
@@ -1544,7 +1544,7 @@
             <xs:documentation>The &lt;booktitlealt&gt; element contains the alternative title, subtitle,
                 or short title for a book.</xs:documentation>
         </xs:annotation>
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="booktitlealt.class">
                     <xs:attribute ref="class" default="- topic/ph bookmap/booktitlealt "/>

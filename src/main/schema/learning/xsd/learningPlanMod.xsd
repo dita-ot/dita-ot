@@ -98,7 +98,7 @@
         <xs:group ref="abstract" minOccurs="0"/>
       </xs:choice>
       <xs:group ref="prolog" minOccurs="0"/>
-      <xs:group ref="learningPlanbody" minOccurs="0"/>
+      <xs:group ref="learningPlanbody"/>
       <xs:group ref="related-links" minOccurs="0"/>
       <xs:group ref="learningPlan-info-types" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
@@ -144,7 +144,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcProject">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcProject.class">
           <xs:attribute ref="class"
@@ -186,7 +186,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcNeedsAnalysis">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcNeedsAnalysis.class">
           <xs:attribute ref="class"
@@ -223,7 +223,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcGapAnalysis">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcGapAnalysis.class">
           <xs:attribute ref="class"
@@ -257,7 +257,7 @@
   </xs:attributeGroup>
   
   <xs:element name="lcIntervention">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcIntervention.class">
           <xs:attribute ref="class"
@@ -291,7 +291,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcTechnical">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcTechnical.class">
           <xs:attribute ref="class"
@@ -338,7 +338,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcClient">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcClient.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcClient "/>
@@ -372,7 +372,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcPlanTitle">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcPlanTitle.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcPlanTitle "
@@ -407,7 +407,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcCIN">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcCIN.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcCIN "/>
@@ -441,7 +441,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcModDate">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcModDate.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcModDate "/>
@@ -475,7 +475,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcDelivDate">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcDelivDate.class">
           <xs:attribute ref="class"
@@ -510,7 +510,7 @@
   </xs:attributeGroup>
   
   <xs:element name="lcPlanSubject">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcPlanSubject.class">
           <xs:attribute ref="class"
@@ -545,7 +545,7 @@
   </xs:attributeGroup>
   
   <xs:element name="lcPlanDescrip">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcPlanDescrip.class">
           <xs:attribute ref="class"
@@ -580,7 +580,7 @@
   </xs:attributeGroup>
   
   <xs:element name="lcPlanPrereqs">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcPlanPrereqs.class">
           <xs:attribute ref="class"
@@ -615,7 +615,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcOrganizational">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcOrganizational.class">
           <xs:attribute ref="class"
@@ -654,7 +654,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcPlanAudience">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcPlanAudience.class">
           <xs:attribute ref="class"
@@ -696,7 +696,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcWorkEnv">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcWorkEnv.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcWorkEnv "/>
@@ -732,7 +732,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcTask">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcTask.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcTask "/>
@@ -769,7 +769,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcGapItem">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcGapItem.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcGapItem "/>
@@ -805,7 +805,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcInterventionItem">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcInterventionItem.class">
           <xs:attribute ref="class"
@@ -843,7 +843,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcLMS">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcLMS.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcLMS "/>
@@ -877,7 +877,7 @@
   </xs:attributeGroup>
   
   <xs:element name="lcNoLMS">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcNoLMS.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcNoLMS "/>
@@ -911,7 +911,7 @@
     </xs:attributeGroup>
 
   <xs:element name="lcHandouts">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcHandouts.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcHandouts "
@@ -946,7 +946,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcClassroom">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcClassroom.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcClassroom "
@@ -981,7 +981,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcOJT">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcOJT.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcOJT "/>
@@ -1015,7 +1015,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcConstraints">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcConstraints.class">
           <xs:attribute ref="class"
@@ -1050,7 +1050,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcW3C">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcW3C.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcW3C "/>
@@ -1085,7 +1085,7 @@
 
 
   <xs:element name="lcPlayers">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcPlayers.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcPlayers "/>
@@ -1119,7 +1119,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcGraphics">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcGraphics.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcGraphics "
@@ -1154,7 +1154,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcViewers">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcViewers.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcViewers "/>
@@ -1188,7 +1188,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcResolution">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcResolution.class">
           <xs:attribute ref="class"
@@ -1223,7 +1223,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcFileSizeLimitations">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcFileSizeLimitations.class">
           <xs:attribute ref="class"
@@ -1259,7 +1259,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcDownloadTime">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcDownloadTime.class">
           <xs:attribute ref="class"
@@ -1294,7 +1294,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcSecurity">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcSecurity.class">
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcSecurity "
@@ -1329,7 +1329,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcGeneralDescription">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcGeneralDescription.class">
           <xs:attribute ref="class"
@@ -1361,7 +1361,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcGoals">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcGoals.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcGoals "/>
@@ -1391,7 +1391,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcNeeds">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcNeeds.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcNeeds "/>
@@ -1421,7 +1421,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcValues">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcValues.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcValues "/>
@@ -1451,7 +1451,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcOrgConstraints">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcOrgConstraints.class">
           <xs:attribute ref="class"
@@ -1482,7 +1482,7 @@
   </xs:attributeGroup>
   
   <xs:element name="lcEdLevel">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcEdLevel.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcEdLevel "/>
@@ -1513,7 +1513,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcAge">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcAge.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcAge "/>
@@ -1543,7 +1543,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcBackground">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcBackground.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcBackground "/>
@@ -1574,7 +1574,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcSkills">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcSkills.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcSkills "/>
@@ -1604,7 +1604,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcKnowledge">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcKnowledge.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcKnowledge "/>
@@ -1634,7 +1634,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcMotivation">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcMotivation.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcMotivation "/>
@@ -1664,7 +1664,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcSpecChars">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcSpecChars.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcSpecChars "/>
@@ -1693,7 +1693,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcWorkEnvDescription">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcWorkEnvDescription.class">
           <xs:attribute ref="class"
@@ -1724,7 +1724,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcPlanResources">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcPlanResources.class">
           <xs:attribute ref="class"
@@ -1755,7 +1755,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcProcesses">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcProcesses.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcProcesses "/>
@@ -1785,7 +1785,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcTaskItem">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcTaskItem.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcTaskItem "/>
@@ -1815,7 +1815,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcAttitude">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcAttitude.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcAttitude "/>
@@ -1846,7 +1846,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcPlanObjective">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcPlanObjective.class">
           <xs:attribute ref="class"
@@ -1877,7 +1877,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcJtaItem">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcJtaItem.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcJtaItem "/>
@@ -1907,7 +1907,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcGapItemDelta">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcGapItemDelta.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcGapItemDelta "
@@ -1938,7 +1938,7 @@
   </xs:attributeGroup>
 
   <xs:element name="lcLearnStrat">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcLearnStrat.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcLearnStrat "/>
@@ -1969,7 +1969,7 @@
 
 
   <xs:element name="lcAssessment">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcAssessment.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcAssessment "/>
@@ -2000,7 +2000,7 @@
 
 
   <xs:element name="lcDelivery">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcDelivery.class">
           <xs:attribute ref="class" default="- topic/p learningBase/p  learningPlan/lcDelivery "/>

@@ -106,7 +106,7 @@
         domain.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="sup.class">
           <xs:attribute ref="class" default="+ topic/ph hi-d/sup "/>
@@ -146,7 +146,7 @@
         on your output process. This element is part of the DITA highlighting domain.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="sub.class">
           <xs:attribute ref="class" default="+ topic/ph hi-d/sub "/>
@@ -187,7 +187,7 @@
         This element is part of the DITA highlighting domain.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="tt.class">
           <xs:attribute ref="class" default="+ topic/ph hi-d/tt "/>
@@ -228,7 +228,7 @@
         This element is part of the DITA highlighting domain.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="b.class">
           <xs:attribute ref="class" default="+ topic/ph hi-d/b "/>
@@ -269,7 +269,7 @@
         This element is part of the DITA highlighting domain.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="u.class">
           <xs:attribute ref="class" default="+ topic/ph hi-d/u "/>
@@ -312,7 +312,7 @@
         part of the DITA highlighting domain.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="i.class">
           <xs:attribute ref="class" default="+ topic/ph hi-d/i "/>

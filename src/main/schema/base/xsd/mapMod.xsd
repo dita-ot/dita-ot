@@ -571,7 +571,7 @@
         reached, such as when it is a peer or external link.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="linktext.class">
           <xs:attribute ref="class" default="- map/linktext " />
@@ -612,7 +612,7 @@
         be as well optimized for search summaries)
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="searchtitle.class">
           <xs:attribute ref="class" default="- map/searchtitle " />
@@ -651,7 +651,7 @@
         searching.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="shortdesc.class">
           <xs:attribute ref="class" default="- map/shortdesc " />

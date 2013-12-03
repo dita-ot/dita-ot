@@ -104,7 +104,7 @@
           <xs:group ref="abstract" minOccurs="0"/>
         </xs:choice>
         <xs:group ref="prolog" minOccurs="0"/>
-        <xs:group ref="learningOverviewbody" minOccurs="0"/>
+        <xs:group ref="learningOverviewbody"/>
         <xs:group ref="related-links" minOccurs="0"/>
         <xs:group ref="learningOverview-info-types" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>

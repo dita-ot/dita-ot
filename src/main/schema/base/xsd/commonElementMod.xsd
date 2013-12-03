@@ -652,8 +652,8 @@
                 and &lt;<keyword>table</keyword>>.
             </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="title.class">
 					<xs:attribute ref="class" default="- topic/title "/>
 				</xs:extension>
@@ -688,8 +688,8 @@
                 or parameter, or a lookup key for a message (contrast with <xref href="term.xml">term</xref>).
             </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="keyword.class">
 					<xs:attribute ref="class" default="- topic/keyword "/>
 				</xs:extension>
@@ -723,8 +723,8 @@
                 the title.
             </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="desc.class">
 					<xs:attribute ref="class" default="- topic/desc "/>
 				</xs:extension>
@@ -756,8 +756,8 @@
         applies to a particular audience). It can be used by future specializations
         of DITA to apply specific processing or formatting to marked up phrases.</xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="ph.class">
 					<xs:attribute ref="class" default="- topic/ph "/>
 				</xs:extension>
@@ -795,8 +795,8 @@
         entries.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="term.class">
 					<xs:attribute ref="class" default="- topic/term "/>
 				</xs:extension>
@@ -827,8 +827,8 @@
 		<xs:attributeGroup ref="global-atts"/>
 	</xs:attributeGroup>
 	<xs:element name="text">
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="text.class">
 					<xs:attribute ref="class" default="- topic/text "/>
 				</xs:extension>
@@ -859,8 +859,8 @@
         registered trademarks, service marks, slogans and logos.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="tm.class">
 					<xs:attribute ref="class" default="- topic/tm "/>
 				</xs:extension>
@@ -967,8 +967,8 @@
         text containing a single main idea.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="p.class">
 					<xs:attribute ref="class" default="- topic/p "/>
 				</xs:extension>
@@ -1003,8 +1003,8 @@
         other sources. You can store a URL to the source of the quotation in the <keyword>href</keyword> attribute.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="lq.class">
 					<xs:attribute ref="class" default="- topic/lq "/>
 				</xs:extension>
@@ -1082,8 +1082,8 @@
         from the main text, which expands on or calls attention to a particular point.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="note.class">
 					<xs:attribute ref="class" default="- topic/note "/>
 				</xs:extension>
@@ -1137,8 +1137,8 @@
         from the surrounding text.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="q.class">
 					<xs:attribute ref="class" default="- topic/q "/>
 				</xs:extension>
@@ -1281,8 +1281,8 @@
         as a number (as in an ordered list) or bullet (as in an unordered list)..
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="sli.class">
 					<xs:attribute ref="class" default="- topic/sli "/>
 				</xs:extension>
@@ -1316,8 +1316,8 @@
         while bullets and dashes are usually output with list items in unordered lists.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="li.class">
 					<xs:attribute ref="class" default="- topic/li "/>
 				</xs:extension>
@@ -1349,8 +1349,8 @@
         of DITA. As a container element, it can be used to sub-divide or organize
         elements that occur inside a list item, definition, or parameter definition.</xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="itemgroup.class">
 					<xs:attribute ref="class" default="- topic/itemgroup "/>
 				</xs:extension>
@@ -1457,8 +1457,8 @@
         a definition list
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="ddhd.class">
 					<xs:attribute ref="class" default="- topic/ddhd "/>
 				</xs:extension>
@@ -1489,8 +1489,8 @@
         a definition list head (&lt;dlhead>) and provides an optional heading for
         the column of terms in a description list.</xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="dthd.class">
 					<xs:attribute ref="class" default="- topic/dthd "/>
 				</xs:extension>
@@ -1556,8 +1556,8 @@
         a term in a definition list entry.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="dt.class">
 					<xs:attribute ref="class" default="- topic/dt "/>
 				</xs:extension>
@@ -1589,8 +1589,8 @@
         contains the description of a term in a definition list entry.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="dd.class">
 					<xs:attribute ref="class" default="- topic/dd "/>
 				</xs:extension>
@@ -1714,8 +1714,8 @@
         on your output formatting processor).
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="pre.class">
 					<xs:attribute ref="class" default="- topic/pre "/>
 				</xs:extension>
@@ -1753,8 +1753,8 @@
         inside the lines are not preserved. 
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="lines.class">
 					<xs:attribute ref="class" default="- topic/lines "/>
 				</xs:extension>
@@ -1855,8 +1855,8 @@
         an XML editor and is more easily accessed than an attribute for translation.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="alt.class">
 					<xs:attribute ref="class" default="- topic/alt "/>
 				</xs:extension>
@@ -2087,8 +2087,8 @@
         rows of data).
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="stentry.class">
 					<xs:attribute ref="class" default="- topic/stentry "/>
 				</xs:extension>
@@ -2127,8 +2127,8 @@
                 the status of the comment, use the author, time or disposition attributes.
             </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="draft-comment.class">
 					<xs:attribute ref="class" default="- topic/draft-comment "/>
 				</xs:extension>
@@ -2167,8 +2167,8 @@
                 element. Authors should not insert this element into documents. 
             </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="required-cleanup.class">
 					<xs:attribute ref="class" default="- topic/required-cleanup "/>
 				</xs:extension>
@@ -2202,8 +2202,8 @@
                 for facts or other material used in the text.
             </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="fn.class">
 					<xs:attribute ref="class" default="- topic/fn "/>
 				</xs:extension>
@@ -2265,8 +2265,8 @@
                 (not supported yet). 
             </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="cite.class">
 					<xs:attribute ref="class" default="- topic/cite "/>
 				</xs:extension>
@@ -2302,8 +2302,8 @@
                 or URL.
             </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="xref.class">
 					<xs:attribute ref="class" default="- topic/xref "/>
 				</xs:extension>
@@ -2406,8 +2406,8 @@
           or specialized element to format properties as sidebars or other adornments
           or to harvest properties for automated processing. </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="data.class">
 					<xs:attribute ref="class" default="- topic/data "/>
 				</xs:extension>
@@ -2528,8 +2528,8 @@
         of topic content, only as part of the index.
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="indexterm.class">
 					<xs:attribute ref="class" default="- topic/indexterm "/>
 				</xs:extension>
@@ -2563,8 +2563,8 @@
 			<xs:documentation>The &lt;index-base&gt; element allows indexing extensions to be added by specializing off this
         element. It does not in itself have any meaning and should be ignored in processing.</xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="index-base.class">
 					<xs:attribute ref="class" default="- topic/index-base "/>
 				</xs:extension>
@@ -2690,8 +2690,8 @@
         stated in terse, imperative voice in the navigation).
       </xs:documentation>
 		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:complexContent mixed="true">
+		<xs:complexType>
+			<xs:complexContent>
 				<xs:extension base="navtitle.class">
 					<xs:attribute ref="class" default="- topic/navtitle "/>
 				</xs:extension>

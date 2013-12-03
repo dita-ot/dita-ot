@@ -324,7 +324,7 @@
         concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="codeph.class">
           <xs:attribute ref="class" default="+ topic/ph pr-d/codeph "/>
@@ -366,7 +366,7 @@
         information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="codeblock.class">
           <xs:attribute ref="class" default="+ topic/pre pr-d/codeblock "/>
@@ -443,7 +443,7 @@
         elements designed to document programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="option.class">
           <xs:attribute ref="class" default="+ topic/keyword pr-d/option "/>
@@ -483,7 +483,7 @@
         elements designed to document programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="var.class">
           <xs:attribute ref="class" default="+ topic/ph pr-d/var "/>
@@ -523,7 +523,7 @@
         to document programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="parmname.class">
           <xs:attribute ref="class" default="+ topic/keyword  pr-d/parmname "/>
@@ -564,7 +564,7 @@
         concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="synph.class">
           <xs:attribute ref="class" default="+ topic/ph pr-d/synph "/>
@@ -614,7 +614,7 @@
         reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="oper.class">
           <xs:attribute ref="class" default="+ topic/ph pr-d/oper "/>
@@ -655,7 +655,7 @@
         concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="delim.class">
           <xs:attribute ref="class" default="+ topic/ph pr-d/delim "/>
@@ -695,7 +695,7 @@
         document programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="sep.class">
           <xs:attribute ref="class" default="+ topic/ph pr-d/sep "/>
@@ -735,7 +735,7 @@
         information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="apiname.class">
           <xs:attribute ref="class" default="+ topic/keyword pr-d/apiname "/>
@@ -853,7 +853,7 @@
       programming tasks, concepts and reference information.
     </xs:documentation>
   </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="pt.class">
           <xs:attribute ref="class" default="+ topic/dt pr-d/pt "/>
@@ -891,7 +891,7 @@
         programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="pd.class">
           <xs:attribute ref="class" default="+ topic/dd pr-d/pd "/>
@@ -1233,7 +1233,7 @@
         concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="fragref.class">
           <xs:attribute ref="class" default="+ topic/xref pr-d/fragref "/>
@@ -1276,7 +1276,7 @@
         programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="synnote.class">
           <xs:attribute ref="class" default="+ topic/fn pr-d/synnote "/>
@@ -1347,7 +1347,7 @@
         information.
        </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="repsep.class">
           <xs:attribute ref="class" default="+ topic/ph pr-d/repsep "/>
@@ -1387,7 +1387,7 @@
         to document programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="kwd.class">
           <xs:attribute ref="class" default="+ topic/keyword pr-d/kwd "/>

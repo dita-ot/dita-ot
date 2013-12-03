@@ -80,7 +80,7 @@
       <xs:sequence>
         <xs:group ref="title" minOccurs="0"/>
         <xs:group ref="lcQuestionBase" />
-        <xs:group ref="fig.content" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:sequence>
   </xs:group>
@@ -95,7 +95,7 @@
     </xs:attributeGroup>
 
   <xs:element name="lcQuestionBase">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcQuestionBase.class">
           <xs:attribute ref="class" default="+ topic/p learningInteractionBase-d/lcQuestionBase "/>
