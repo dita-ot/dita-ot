@@ -729,7 +729,12 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:template match="*" mode="get-topic-level" as="xs:integer">
     <xsl:variable name="topicref" select="key('map-id', ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@id)"/>
     <xsl:sequence select="count(ancestor-or-self::*[contains(@class,' topic/topic ')]) -
-                          count($topicref/ancestor-or-self::*[contains(@class,' bookmap/part ') or
+                          count($topicref/ancestor-or-self::*[(contains(@class,' bookmap/part ') and
+                                                               ((exists(@navtitle) or
+                                                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/navtitle ')]) or
+                                                                (exists(@href) and
+                                                                 (empty(@format) or @format eq 'dita') and
+                                                                 (empty(@scope) or @scope eq 'local')))) or
                                                               (contains(@class,' bookmap/appendices ') and
                                                                exists(@href) and
                                                                (empty(@format) or @format eq 'dita') and

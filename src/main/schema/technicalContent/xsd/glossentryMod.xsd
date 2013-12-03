@@ -52,7 +52,7 @@
          <xs:annotation>
              <xs:documentation></xs:documentation>
          </xs:annotation>
-         <xs:complexType mixed="true">
+         <xs:complexType>
              <xs:complexContent>
                  <xs:extension base="glossterm.class">
                      <xs:attribute ref="class" default="- topic/title concept/title glossentry/glossterm "/>
@@ -65,7 +65,7 @@
          <xs:annotation>
              <xs:documentation></xs:documentation>
          </xs:annotation>
-         <xs:complexType mixed="true">
+         <xs:complexType>
              <xs:complexContent>
                  <xs:extension base="glossdef.class">
                      <xs:attribute ref="class" default="- topic/abstract concept/abstract glossentry/glossdef " />
@@ -207,7 +207,7 @@
          <xs:annotation>
              <xs:documentation></xs:documentation>
          </xs:annotation>
-         <xs:complexType mixed="true">
+         <xs:complexType>
              <xs:complexContent>
                  <xs:extension base="glossAbbreviation.class">
                      <xs:attribute ref="class" default="- topic/title concept/title glossentry/glossAbbreviation "/>
@@ -246,7 +246,7 @@
          <xs:annotation>
              <xs:documentation></xs:documentation>
          </xs:annotation>
-         <xs:complexType mixed="true">
+         <xs:complexType>
              <xs:complexContent>
                  <xs:extension base="glossAcronym.class">
                      <xs:attribute ref="class" default="- topic/title concept/title glossentry/glossAcronym "/>
@@ -285,9 +285,9 @@
          <xs:annotation>
              <xs:documentation></xs:documentation>
          </xs:annotation>
-         <xs:complexType mixed="true">
+         <xs:complexType>
              <xs:complexContent>
-                 <xs:extension base="glossAcronym.class">
+               <xs:extension base="glossShortForm.class">
                      <xs:attribute ref="class" default="- topic/title concept/title glossentry/glossShortForm "/>
                  </xs:extension>
              </xs:complexContent>
@@ -324,9 +324,9 @@
          <xs:annotation>
              <xs:documentation></xs:documentation>
          </xs:annotation>
-         <xs:complexType mixed="true">
+         <xs:complexType>
              <xs:complexContent>
-                 <xs:extension base="glossAcronym.class">
+               <xs:extension base="glossSynonym.class">
                      <xs:attribute ref="class" default="- topic/title concept/title glossentry/glossSynonym "/>
                  </xs:extension>
              </xs:complexContent>
@@ -425,7 +425,7 @@
       <xs:annotation>
         <xs:documentation></xs:documentation>
       </xs:annotation>
-      <xs:complexType mixed="true">
+      <xs:complexType>
         <xs:complexContent>
           <xs:extension base="glossProperty.class">
             <xs:attribute ref="class" default="- topic/data concept/data glossentry/glossProperty "/>
@@ -459,7 +459,7 @@
       <xs:documentation>
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="glossSurfaceForm.class">
           <xs:attribute ref="class" default="- topic/p concept/p glossentry/glossSurfaceForm "/>
@@ -495,7 +495,7 @@
       <xs:documentation>
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="glossUsage.class">
           <xs:attribute ref="class" default="- topic/note concept/note glossentry/glossUsage "/>          
@@ -531,7 +531,7 @@
       <xs:documentation>
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="glossScopeNote.class">
           <xs:attribute ref="class" default="- topic/note concept/note glossentry/glossScopeNote "/>          

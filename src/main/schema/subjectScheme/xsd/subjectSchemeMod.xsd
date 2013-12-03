@@ -669,7 +669,7 @@
     <xs:attribute name="query" type="xs:string"/>
     <xs:attribute name="copy-to" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attribute name="collection-type" type="collection-type.class"/>
+
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="scope" type="scope-att.class"/>
     <xs:attribute name="processing-role" type="processing-role-att.class" />

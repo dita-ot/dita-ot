@@ -163,6 +163,17 @@
           <li>#1532 Keyref link generated with backslash and %5C on Windows (maintenance 2)</li>
           <li>#1540 Add missing @class attribute to &lt;navref> in chunking phase (maintenance 2)</li>
           <li>#1547 startPageNumbering missing from some page sequence (maintenance 2)</li>
+          <li>#1073 Some elements are not handled correctly in troff transform (maintenance 3)</li>
+          <li>#1175 pdf2 plugin: PDF transform produces invalid FO doc with DITAVAL (flag on simpletable) (maintenance 3)</li>
+          <li>#1234 pdf2 plugin: Note image path broken for "other" note type (maintenance 3)</li>
+          <li>#1373 Cells of a Properties table misaligned in PDF output if Value column is missing (maintenance 3)</li>
+          <li>#1563 path2project generated PI is invalid in copy-to file (maintenance 3)</li>
+          <li>#1570 pdf2 plugin: 'Body first header' variable does not support 'prodname' parameter (maintenance 3)</li>
+          <li>#1571 pdf2 plugin: top level topic titles styled as normal text (maintenance 3)</li>
+          <li>#1581 pdf2 plugin: Change bars from DITAVAL crash FOP (maintenance 3)</li>
+          <li>#1584 Add basic table support to troff #1073 (maintenance 3)</li>
+          <li>#1585 Properties table cell misalligned if no value column #1373 (maintenance 3)</li>
+          <li>#1603 XSD schema for Machinery Task does not allow attributes in prelreqs element (maintenance 3)</li>
         </ul>
       </section>
     </refbody>

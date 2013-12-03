@@ -213,7 +213,7 @@
   
   <xs:element name="typeofhazard" >
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="typeofhazard.class">
           <xs:attribute ref="class" default="+ topic/li hazard-d/typeofhazard "/>
         </xs:extension>
@@ -246,7 +246,7 @@
   
   <xs:element name="consequence" >
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="consequence.class">
           <xs:attribute ref="class" default="+ topic/li hazard-d/consequence "/>
         </xs:extension>
@@ -279,7 +279,7 @@
   
   <xs:element name="howtoavoid" >
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="howtoavoid.class">
           <xs:attribute ref="class" default="+ topic/li hazard-d/howtoavoid "/>
         </xs:extension>

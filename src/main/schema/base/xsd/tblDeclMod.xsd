@@ -331,7 +331,7 @@
         in a table.        
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="entry.class">
           <xs:attribute ref="class" default="- topic/entry "/>

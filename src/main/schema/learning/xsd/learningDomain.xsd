@@ -517,7 +517,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lcInstructornote">
-        <xs:complexType mixed="true">
+        <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcInstructornote.class">
                 <xs:attribute ref="class" default="+ topic/note learningInteractionBase-d/note learning-d/lcInstructornote "/>            
@@ -552,7 +552,7 @@
     
     
     <xs:element name="lcQuestion">
-        <xs:complexType mixed="true">
+        <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcQuestion.class">
                 <xs:attribute ref="class" default="+ topic/p learningInteractionBase-d/p learning-d/lcQuestion "/>
@@ -582,7 +582,7 @@
     </xs:attributeGroup>
     
     <xs:element name="lcOpenAnswer">
-        <xs:complexType mixed="true">
+        <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcOpenAnswer.class">
                 <xs:attribute ref="class" default="+ topic/p learningInteractionBase-d/p learning-d/lcOpenAnswer "/>
@@ -652,7 +652,7 @@
         The shape element supports the basic functionality of the HTML <q>client-side</q> image map markup.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcAreaShape.class">
           <xs:attribute ref="class" default="+ topic/keyword learningInteractionBase-d/keyword learning-d/lcAreaShape "/>
@@ -689,7 +689,7 @@
         The coords element supports the basic functionality of the HTML <q>client-side</q> image map markup.
        </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcAreaCoords.class">
           <xs:attribute ref="class" default="+ topic/ph learningInteractionBase-d/ph learning-d/lcAreaCoords "/>
@@ -786,7 +786,7 @@
      </xs:attributeGroup>
         
     <xs:element name="lcFeedbackCorrect">
-        <xs:complexType mixed="true">
+        <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcFeedbackCorrect.class">
                 <xs:attribute ref="class" default="+ topic/p learningInteractionBase-d/p  learning-d/lcFeedbackCorrect "/>
@@ -816,7 +816,7 @@
      </xs:attributeGroup>
     
     <xs:element name="lcFeedbackIncorrect">
-        <xs:complexType mixed="true">
+        <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcFeedbackIncorrect.class">
                 <xs:attribute ref="class" default="+ topic/data learningInteractionBase-d/data  learning-d/lcFeedbackIncorrect "/>
@@ -878,7 +878,7 @@
      </xs:attributeGroup>
     
     <xs:element name="lcAnswerContent">
-        <xs:complexType mixed="true">
+        <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcAnswerContent.class">
                 <xs:attribute ref="class" default="+ topic/p learningInteractionBase-d/p  learning-d/lcAnswerContent "/>
@@ -972,7 +972,7 @@
      </xs:attributeGroup>
     
     <xs:element name="lcFeedback">
-        <xs:complexType mixed="true">
+        <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="lcFeedback.class">
                     <xs:attribute ref="class" default="+ topic/p learningInteractionBase-d/p learning-d/lcFeedback "/>
@@ -1096,7 +1096,7 @@
      </xs:attributeGroup>
     
     <xs:element name="lcItem">
-        <xs:complexType mixed="true">
+        <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcItem.class">
                 <xs:attribute ref="class" default="+ topic/stentry learningInteractionBase-d/stentry learning-d/lcItem "/>
@@ -1126,7 +1126,7 @@
      </xs:attributeGroup>
     
     <xs:element name="lcMatchingItem">
-        <xs:complexType mixed="true">
+        <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcMatchingItem.class">
                 <xs:attribute ref="class" default="+ topic/stentry learningInteractionBase-d/stentry learning-d/lcMatchingItem "/>
@@ -1156,7 +1156,7 @@
      </xs:attributeGroup>
     
   <xs:element name="lcMatchingItemFeedback">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="lcMatchingItemFeedback.class">
           <xs:attribute ref="class" default="+ topic/stentry learningInteractionBase-d/stentry learning-d/lcMatchingItemFeedback "/>
@@ -1213,9 +1213,7 @@
     </xs:group>
   
   <xs:attributeGroup name="lcHotspotMap.attributes">
-     <xs:attributeGroup ref="display-atts"/>
         <xs:attribute name="outputclass" type="xs:string"/>
-        <xs:attribute name="spectitle" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
@@ -1256,7 +1254,7 @@
     
     
     <xs:attributeGroup name="lcSequence.attributes">
-       <xs:attribute name="name" type="xs:string" default="lcSequence"/>
+        <xs:attribute name="name" type="xs:string" default="lcSequence"/>
         <xs:attribute name="value" type="xs:string" use="required"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>

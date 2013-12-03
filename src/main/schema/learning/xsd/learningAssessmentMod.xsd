@@ -110,7 +110,7 @@
         <xs:group ref="abstract" minOccurs="0"/>
       </xs:choice>
       <xs:group ref="prolog" minOccurs="0"/>
-      <xs:group ref="learningAssessmentbody" minOccurs="0"/>
+      <xs:group ref="learningAssessmentbody"/>
       <xs:group ref="related-links" minOccurs="0"/>
       <xs:group ref="learningAssessment-info-types" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>

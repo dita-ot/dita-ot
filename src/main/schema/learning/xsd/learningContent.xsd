@@ -59,14 +59,13 @@
                 <xs:group ref="hi-d-ph"/>
             </xs:choice>
         </xs:group>
-   
-    <xs:group name="fig">
-      <xs:choice>
-        <xs:group ref="fig"/>
-        <xs:group ref="ut-d-fig"/>
-      </xs:choice>
-    </xs:group>
-      
+ 
+        <xs:group name="fig">
+            <xs:choice>
+                <xs:group ref="fig"/>
+              <xs:group ref="ut-d-fig"/>
+            </xs:choice>
+        </xs:group>
         <xs:group name="index-base">
             <xs:choice>
                 <xs:group ref="index-base"/>
@@ -106,7 +105,7 @@
       <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningSummaryGrp.xsd:1.2"/>
       <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessmentGrp.xsd:1.2"/>    
     
-       <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2">
+    <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2">
         <xs:group name="topic-info-types">
             <xs:sequence>
                 <xs:group ref="info-types"/>
@@ -152,8 +151,6 @@
             </xs:sequence>
         </xs:group>
     </xs:redefine>
-     
-     
 
     <xs:redefine schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessmentMod.xsd:1.2">
         <xs:group name="learningAssessment-info-types">
@@ -174,14 +171,14 @@
     <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseMod.xsd:1.2"/>
 
 
-  <xs:group name="info-types">
-      <xs:choice>
+    <xs:group name="info-types">
+        <xs:choice>
         <xs:element ref="topic"/>
         <xs:element ref="task"/>
         <xs:element ref="concept"/>
         <xs:element ref="reference"/>
       </xs:choice>
-     </xs:group>
+    </xs:group>
 
     <xs:attributeGroup name="domains-att">
         <xs:attribute name="domains" type="xs:string"

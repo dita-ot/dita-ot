@@ -38,7 +38,6 @@
         </xs:sequence>
       </xs:sequence>
     </xs:group>  
-    
     <xs:group name="taskStep">
       <xs:sequence>
         <xs:choice minOccurs="0" maxOccurs="1">

@@ -192,29 +192,67 @@
       <xs:group minOccurs="0" ref="safety"/>
     </xs:sequence>
   </xs:complexType>
+  
   <xs:attributeGroup name="prelreqs.attributes">
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attribute name="outputclass"/>
   </xs:attributeGroup>
-  <xs:element name="prelreqs"/>
+  
+  <xs:element name="prelreqs">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="prelreqs.class">
+          <xs:attribute name="class" default="+ topic/section task/prereq taskreq-d/prelreqs "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="prelreqs.class">
+    <xs:sequence>
+      <xs:group ref="prelreqs.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="prelreqs.attributes"/>
+  </xs:complexType>
+  
+  
+  
   <xs:attributeGroup name="prelreqs.attlist">
     <xs:attributeGroup ref="prelreqs.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/section task/prereq taskreq-d/prelreqs "/>
   </xs:attributeGroup>
+  
   <!-- LONG NAME: Closing Requirements -->
   <xs:complexType name="closereqs.content">
     <xs:group ref="reqconds"/>
   </xs:complexType>
+  
   <xs:attributeGroup name="closereqs.attributes">
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attribute name="outputclass"/>
   </xs:attributeGroup>
-  <xs:element name="closereqs" />
+  
+  <xs:element name="closereqs" >
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="closereqs.class">
+          <xs:attribute name="class" default="+ topic/section task/postreq taskreq-d/closereqs "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="closereqs.class">
+    <xs:sequence>
+      <xs:group ref="closereqs.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="closereqs.attributes"/>
+  </xs:complexType>
+  
   <xs:attributeGroup name="closereqs.attlist">
     <xs:attributeGroup ref="closereqs.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/section task/postreq taskreq-d/closereqs "/>
+    
   </xs:attributeGroup>
   <!-- LONG NAME: Required Conditions -->
   <xs:complexType name="reqconds.content">
@@ -271,7 +309,7 @@
   </xs:attributeGroup>
   <xs:element name="reqcond">
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="reqcond.content">
           <xs:attributeGroup ref="reqcond.attlist"/>
         </xs:extension>
@@ -294,7 +332,7 @@
   </xs:attributeGroup>
   <xs:element name="reqcontp">
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="reqcontp.content">
           <xs:attributeGroup ref="reqcontp.attlist"/>
         </xs:extension>
@@ -347,7 +385,7 @@
   </xs:attributeGroup>
   <xs:element name="personnel">
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="personnel.content">
           <xs:attributeGroup ref="personnel.attlist"/>
         </xs:extension>
@@ -372,7 +410,7 @@
   </xs:attributeGroup>
   <xs:element name="perscat">
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="perscat.content">
           <xs:attributeGroup ref="perscat.attlist"/>
         </xs:extension>
@@ -395,7 +433,7 @@
   </xs:attributeGroup>
   <xs:element name="perskill">
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="perskill.content">
           <xs:attributeGroup ref="perskill.attlist"/>
         </xs:extension>
@@ -418,7 +456,7 @@
   </xs:attributeGroup>
   <xs:element name="esttime">
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="esttime.content">
           <xs:attributeGroup ref="esttime.attlist"/>
         </xs:extension>
@@ -515,7 +553,7 @@
   </xs:attributeGroup>
   <xs:element name="supequi">
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="supequi.content">
           <xs:attributeGroup ref="supequi.attlist"/>
         </xs:extension>
@@ -612,7 +650,7 @@
   </xs:attributeGroup>
   <xs:element name="supply">
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="supply.content">
           <xs:attributeGroup ref="supply.attlist"/>
         </xs:extension>
@@ -709,7 +747,7 @@
   </xs:attributeGroup>
   <xs:element name="spare">
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="spare.content">
           <xs:attributeGroup ref="spare.attlist"/>
         </xs:extension>
@@ -774,7 +812,7 @@
   </xs:attributeGroup>
   <xs:element name="safecond">
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="safecond.content">
           <xs:attributeGroup ref="safecond.attlist"/>
         </xs:extension>

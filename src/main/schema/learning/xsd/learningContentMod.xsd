@@ -91,7 +91,7 @@
   <xs:group name="learningContent-info-types">
     <xs:choice>
       <xs:group ref="no-topic-nesting"/>
-     <xs:group ref="info-types"/>
+      <xs:group ref="info-types"/>
     </xs:choice>
   </xs:group>
   
@@ -113,7 +113,7 @@
           <xs:group ref="abstract" minOccurs="0"/>
         </xs:choice>
         <xs:group ref="prolog" minOccurs="0"/>
-        <xs:group ref="learningContentbody" minOccurs="0"/>
+        <xs:group ref="learningContentbody"/>
         <xs:group ref="related-links" minOccurs="0"/>
         <xs:group ref="learningContent-info-types" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>

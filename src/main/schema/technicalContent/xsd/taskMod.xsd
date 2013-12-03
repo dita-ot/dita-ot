@@ -20,19 +20,19 @@
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
- <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
    <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
 
-    <xs:annotation>
+  <xs:annotation>
     <xs:appinfo>
       <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic task)</dita:domainsModule>
     </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>
-    </xs:annotation>
-   
+  </xs:annotation>
+
   <!-- Base type: univ-atts -->
   <xs:attributeGroup name="univ-atts-no-importance-task">
     <xs:attributeGroup ref="id-atts"/>
@@ -104,7 +104,7 @@
         section are added to the &lt;<keyword>prereq</keyword>> section.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="prereq.class">
           <xs:attribute ref="class" default="- topic/section  task/prereq "/>
@@ -124,7 +124,7 @@
         information
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="context.class">
           <xs:attribute ref="class" default="- topic/section  task/context "/>
@@ -140,7 +140,7 @@
         outcome for the task as a whole. 
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="result.class">
           <xs:attribute ref="class" default="- topic/section     task/result "/>
@@ -158,7 +158,7 @@
         section.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="postreq.class">
           <xs:attribute ref="class" default="- topic/section task/postreq "/>
@@ -174,7 +174,7 @@
         the user could accomplish the current step.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="choice.class">
           <xs:attribute ref="class" default="- topic/li     task/choice "/>
@@ -205,14 +205,14 @@
     </xs:complexType>
   </xs:element>
    
-   <xs:element name="stepsection">
+  <xs:element name="stepsection">
     <xs:annotation>
       <xs:documentation>
         
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="stepsection.class">
           <xs:attribute ref="class" default="- topic/li     task/stepsection "/>
         </xs:extension>
@@ -322,7 +322,7 @@
         the &lt;<keyword>cmd</keyword>> element inside an <xref href="info.xml">info</xref> element.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="cmd.class">
           <xs:attribute ref="class" default="- topic/ph     task/cmd "/>
@@ -339,7 +339,7 @@
         the step.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="info.class">
           <xs:attribute ref="class" default="- topic/itemgroup     task/info "/>
@@ -360,7 +360,7 @@
         that are being used outside of tutorials.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="tutorialinfo.class">
           <xs:attribute ref="class" default="- topic/itemgroup task/tutorialinfo "/>
@@ -377,7 +377,7 @@
         entire paragraph.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="stepxmp.class">
           <xs:attribute ref="class" default="- topic/itemgroup     task/stepxmp "/>
@@ -396,7 +396,7 @@
         but should not be used for every step, as this quickly becomes tedious.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="stepresult.class">
           <xs:attribute ref="class" default="- topic/itemgroup task/stepresult "/>
@@ -466,7 +466,7 @@
          The default label for options is <b>Option</b>.
        </xs:documentation>
      </xs:annotation>
-     <xs:complexType mixed="true">
+     <xs:complexType>
        <xs:complexContent>
          <xs:extension base="choptionhd.class">
            <xs:attribute ref="class" default="- topic/stentry task/choptionhd "/>
@@ -484,7 +484,7 @@
         is <b>Description</b>.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="chdeschd.class">
           <xs:attribute ref="class" default="- topic/stentry task/chdeschd "/>
@@ -501,7 +501,7 @@
         for example, this might be the name of radio button.
       </xs:documentation>
     </xs:annotation>
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="choption.class">
           <xs:attribute ref="class" default="- topic/stentry task/choption "/>
@@ -519,7 +519,7 @@
          of the choice when it is not immediately obvious.
        </xs:documentation>
      </xs:annotation>
-     <xs:complexType mixed="true">
+     <xs:complexType>
        <xs:complexContent>
          <xs:extension base="chdesc.class">
            <xs:attribute ref="class" default="- topic/stentry task/chdesc "/>
@@ -529,7 +529,7 @@
    </xs:element>
    
    <xs:element name="steps-informal">
-     <xs:complexType mixed="true">
+     <xs:complexType>
       <xs:complexContent>
         <xs:extension base="steps-informal.class">
           <xs:attribute ref="class" default="- topic/section task/steps-informal "/>
@@ -592,7 +592,7 @@
    </xs:group>
    
    <xs:attributeGroup name="task.attributes">
-     <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attribute name="id" type="xs:ID" use="required"/>
     <xs:attributeGroup ref="conref-atts" />
     <xs:attributeGroup ref="select-atts"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
@@ -785,7 +785,7 @@
    </xs:group>
    
     <xs:attributeGroup name="step.attributes">
-      <xs:attribute name="importance" type="importance-att-nodefault-task.class"/>
+    <xs:attribute name="importance" type="importance-att-nodefault-task.class"/>
      <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts-no-importance-task"/>
     <xs:attributeGroup ref="global-atts"/>

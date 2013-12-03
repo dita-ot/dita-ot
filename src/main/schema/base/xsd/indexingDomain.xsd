@@ -67,7 +67,7 @@
 
 
   <xs:element name="index-see">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="index-see.class">
           <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-see "/>
@@ -98,7 +98,7 @@
   </xs:attributeGroup>
 
   <xs:element name="index-see-also">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="index-see-also.class">
           <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-see-also "/>
@@ -129,7 +129,7 @@
   </xs:attributeGroup>
 
   <xs:element name="index-sort-as">
-    <xs:complexType mixed="true">
+    <xs:complexType>
       <xs:complexContent>
         <xs:extension base="index-sort-as.class">
           <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-sort-as "/>

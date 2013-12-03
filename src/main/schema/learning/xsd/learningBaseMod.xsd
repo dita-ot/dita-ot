@@ -21,7 +21,7 @@
 <!--             May 2007                                          -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
-<!--  EAS:  20080729 -  Updating the design pattern for the content models  -->
+<!--  EAS:  20090729 -  Updating the design pattern for the content models  -->
 <!-- ============================================================= -->
  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
@@ -86,7 +86,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcIntro.class">
           <xs:attribute ref="class" default="- topic/section  learningBase/lcIntro "/>
         </xs:extension>
@@ -116,7 +116,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcObjectivesStem.class">
           <xs:attribute ref="class" default="- topic/ph     learningBase/lcObjectivesStem "/>
         </xs:extension>
@@ -146,7 +146,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcObjective.class">
           <xs:attribute ref="class" default="- topic/li     learningBase/lcObjective "/>
         </xs:extension>
@@ -161,7 +161,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcAudience.class">
           <xs:attribute ref="class" default="- topic/section  learningBase/lcAudience "/>
         </xs:extension>
@@ -176,7 +176,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcDuration.class">
           <xs:attribute ref="class" default="- topic/section  learningBase/lcDuration "/>
         </xs:extension>
@@ -191,7 +191,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcTime.class">
           <xs:attribute ref="class" default="- topic/data  learningBase/lcTime "/>
         </xs:extension>
@@ -206,7 +206,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcPrereqs.class">
           <xs:attribute ref="class" default="- topic/section  learningBase/lcPrereqs "/>
         </xs:extension>
@@ -221,7 +221,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcSubject.class">
           <xs:attribute ref="class" default="- topic/section  learningBase/lcSubject "/>
         </xs:extension>
@@ -236,7 +236,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcAuthorInfo.class">
           <xs:attribute ref="class" default="- topic/section  learningBase/lcAuthorInfo "/>
         </xs:extension>
@@ -251,7 +251,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcSummary.class">
           <xs:attribute ref="class" default="- topic/section  learningBase/lcSummary "/>
         </xs:extension>
@@ -266,7 +266,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcNextSteps.class">
           <xs:attribute ref="class" default="- topic/section  learningBase/lcNextSteps "/>
         </xs:extension>
@@ -296,7 +296,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcReview.class">
           <xs:attribute ref="class" default="- topic/section  learningBase/lcReview "/>
         </xs:extension>
@@ -311,7 +311,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent mixed="true">
+      <xs:complexContent>
         <xs:extension base="lcResources.class">
           <xs:attribute ref="class" default="- topic/section  learningBase/lcResources "/>
         </xs:extension>
@@ -752,7 +752,7 @@
        </xs:documentation>
      </xs:annotation>
      <xs:complexType>
-       <xs:complexContent mixed="true">
+       <xs:complexContent>
          <xs:extension base="lcChallenge.class">
            <xs:attribute ref="class" default="- topic/section  learningBase/lcChallenge "/>
          </xs:extension>
@@ -789,7 +789,7 @@
        </xs:documentation>
      </xs:annotation>
      <xs:complexType>
-       <xs:complexContent mixed="true">
+       <xs:complexContent>
          <xs:extension base="lcInstruction.class">
            <xs:attribute ref="class" default="- topic/section  learningBase/lcInstruction "/>
          </xs:extension>
