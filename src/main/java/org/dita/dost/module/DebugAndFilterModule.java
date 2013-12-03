@@ -422,27 +422,30 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if generation fails
      */
     private void generateScheme(final String filename, final Document root) throws DITAOTException {
+        FileOutputStream out = null;
         try {
             final File f = new File(filename);
             final File p = f.getParentFile();
             if (!p.exists() && !p.mkdirs()) {
                 throw new IOException("Failed to make directory " + p.getAbsolutePath());
             }
-            final FileOutputStream file = new FileOutputStream(new File(filename));
-            final StreamResult res = new StreamResult(file);
+            out = new FileOutputStream(new File(filename));
+            final StreamResult res = new StreamResult(out);
             final DOMSource ds = new DOMSource(root);
             final TransformerFactory tff = TransformerFactory.newInstance();
             final Transformer tf = tff.newTransformer();
             tf.transform(ds, res);
-            if (res.getOutputStream() != null) {
-                res.getOutputStream().close();
-            }
-            if (file != null) {
-                file.close();
-            }
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
             throw new DITAOTException(e);
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    throw new DITAOTException(e);
+                }
+            }
         }
     }
 
