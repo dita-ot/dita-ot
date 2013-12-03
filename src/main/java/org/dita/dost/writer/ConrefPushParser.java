@@ -11,6 +11,7 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.reader.ConrefPushReader.*;
 
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
@@ -119,6 +120,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
 	while it may contain @conref after pushing. So the dita.list file should be updated, if
 	the pushcontent has @conref.*/
     private boolean hasConref = false;
+    private boolean hasKeyref = false;
     /**tempDir.*/
     private File tempDir;
     private Job job;
@@ -163,6 +165,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
     @Override
     public void write(final File filename) throws DITAOTException {
         hasConref = false;
+        hasKeyref = false;
         isReplaced = false;
         hasPushafter = false;
         level = 0;
@@ -189,7 +192,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                 logger.logError(ex.getMessage(), ex);
             }
         }
-        if (hasConref) {
+        if (hasConref || hasKeyref) {
             updateList(filename);
         }
         try {
@@ -206,7 +209,13 @@ public final class ConrefPushParser extends AbstractXMLWriter {
     private void updateList(final File filename) {
         try {
             final String reletivePath = filename.getAbsolutePath().substring(FileUtils.normalize(tempDir.toString()).getPath().length() + 1);
-            job.getOrCreateFileInfo(reletivePath).hasConref = true;
+            final FileInfo f = job.getOrCreateFileInfo(reletivePath);
+            if (hasConref) {
+                f.hasConref = true;
+            }
+            if (hasKeyref) {
+                f.hasKeyref = true;
+            }
             job.write();
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
@@ -333,8 +342,11 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                             // Specializing the pushing content is not handled here
                             // but we can catch such a situation to emit a warning by comparing the class values.
                             final String targetElementName = targetClassAttribute.toString().substring(targetClassAttribute.toString().indexOf("/") + 1 ).trim();
-                            if (!elem.getAttribute(ATTRIBUTE_NAME_CONREF).isEmpty()) {
+                            if (elem.getAttributeNode(ATTRIBUTE_NAME_CONREF) != null) {
                                 hasConref = true;
+                            }
+                            if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYREF) != null) {
+                                hasKeyref = true;
                             }
                             elem.getOwnerDocument().renameNode(elem, elem.getNamespaceURI(), targetElementName);                            
                             // process the child nodes of the current node
@@ -366,8 +378,11 @@ public final class ConrefPushParser extends AbstractXMLWriter {
      */
     private void replaceSubElementName(final String type, final Element elem) {
         final DitaClass classValue = DitaClass.getInstance(elem);
-        if (!elem.getAttribute(ATTRIBUTE_NAME_CONREF).isEmpty()) {
+        if (elem.getAttributeNode(ATTRIBUTE_NAME_CONREF) != null) {
             hasConref = true;
+        }
+        if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYREF) != null) {
+            hasKeyref = true;
         }
         String generalizedElemName = elem.getNodeName();
         if (classValue != null) {
