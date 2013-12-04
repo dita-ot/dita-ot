@@ -73,7 +73,7 @@
             <row>
               <entry><parmname>generateouter</parmname></entry>
               <entry
-                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/generate.copy.outer.desc"
+                conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/generate.copy.outer.desc"
               />
             </row>
             <row>
@@ -103,7 +103,7 @@
             <row>
               <entry><parmname>outercontrol</parmname></entry>
               <entry
-                conref="ant-parameters-common-html-transtypes.dita#ant-parameters-common-html-transtypes/outer.control.desc"
+                conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/outer.control.desc"
               />
             </row>
             <row>
