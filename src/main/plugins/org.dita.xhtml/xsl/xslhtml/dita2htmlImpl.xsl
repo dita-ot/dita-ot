@@ -1619,66 +1619,40 @@
 </xsl:template>
 
 <xsl:template name="topic-image">
-  <xsl:variable name="isSVG" select="ends-with(@href, '.svg') or ends-with(@href, '.svgz')"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <xsl:choose>
-      <xsl:when test="$isSVG">
-        <!--<object data="file.svg" type="image/svg+xml" width="500" height="200">-->
-        <!-- now invoke the actual content and its alt text -->
-        <embed>
-          <xsl:call-template name="commonattributes">
-            <xsl:with-param name="default-output-class">
-              <xsl:if test="@placement = 'break'">
-                <!--Align only works for break-->
-                <xsl:choose>
-                  <xsl:when test="@align = 'left'">imageleft</xsl:when>
-                  <xsl:when test="@align = 'right'">imageright</xsl:when>
-                  <xsl:when test="@align = 'center'">imagecenter</xsl:when>
-                </xsl:choose>
-              </xsl:if>
-            </xsl:with-param>
-          </xsl:call-template>
-          <xsl:call-template name="setid"/>
-          <xsl:attribute name="src"><xsl:value-of select="@href"/></xsl:attribute>
-          <xsl:apply-templates select="@height|@width"/>
-        </embed>
+  <img>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class">
+        <xsl:if test="@placement = 'break'"><!--Align only works for break-->
+          <xsl:choose>
+            <xsl:when test="@align = 'left'">imageleft</xsl:when>
+            <xsl:when test="@align = 'right'">imageright</xsl:when>
+            <xsl:when test="@align = 'center'">imagecenter</xsl:when>
+          </xsl:choose>
+        </xsl:if>
+      </xsl:with-param>
+    </xsl:call-template>
+    <xsl:call-template name="setid"/>
+    <xsl:choose>
+      <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
+        <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
       </xsl:when>
       <xsl:otherwise>
-        <img>
-          <xsl:call-template name="commonattributes">
-            <xsl:with-param name="default-output-class">
-              <xsl:if test="@placement = 'break'"><!--Align only works for break-->
-                <xsl:choose>
-                  <xsl:when test="@align = 'left'">imageleft</xsl:when>
-                  <xsl:when test="@align = 'right'">imageright</xsl:when>
-                  <xsl:when test="@align = 'center'">imagecenter</xsl:when>
-                </xsl:choose>
-              </xsl:if>
-            </xsl:with-param>
-          </xsl:call-template>
-          <xsl:call-template name="setid"/>
-          <xsl:choose>
-            <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
-              <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:apply-templates select="@longdescref"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:apply-templates select="@href|@height|@width"/>
-          <xsl:apply-templates select="@scale"/>
-          <xsl:choose>
-            <xsl:when test="*[contains(@class, ' topic/alt ')]">
-              <xsl:variable name="alt-content"><xsl:apply-templates select="*[contains(@class, ' topic/alt ')]" mode="text-only"/></xsl:variable>
-              <xsl:attribute name="alt"><xsl:value-of select="normalize-space($alt-content)"/></xsl:attribute>
-            </xsl:when>
-            <xsl:when test="@alt">
-              <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
-            </xsl:when>
-          </xsl:choose>
-        </img>
+        <xsl:apply-templates select="@longdescref"/>
       </xsl:otherwise>
-  </xsl:choose>
+    </xsl:choose>
+    <xsl:apply-templates select="@href|@height|@width"/>
+    <xsl:apply-templates select="@scale"/>
+    <xsl:choose>
+      <xsl:when test="*[contains(@class, ' topic/alt ')]">
+        <xsl:variable name="alt-content"><xsl:apply-templates select="*[contains(@class, ' topic/alt ')]" mode="text-only"/></xsl:variable>
+        <xsl:attribute name="alt"><xsl:value-of select="normalize-space($alt-content)"/></xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@alt">
+        <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
+      </xsl:when>
+    </xsl:choose>
+  </img>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
