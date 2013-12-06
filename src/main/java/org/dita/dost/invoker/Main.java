@@ -389,21 +389,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
 
     /**
-     * Sole constructor, which parses and deals with command line arguments.
-     * 
-     * @param args Command line arguments. Must not be <code>null</code>.
-     * 
-     * @exception BuildException if the specified build file doesn't exist or is
-     *                a directory.
-     * 
-     * @deprecated since 1.6.x
-     */
-    @Deprecated
-    protected Main(final String[] args) throws BuildException {
-        processArgs(args);
-    }
-
-    /**
      * Process command line arguments. When ant is started from Launcher,
      * launcher-only arguments do not get passed through to this routine.
      * 
@@ -499,7 +484,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 proxy = true;
             } else if (arg.startsWith("-") || arg.startsWith("/")) {
                 // we don't have any more args to recognize!
-                final String msg = "Unknown argument: " + arg;
+                final String msg = "Error: Unknown argument: " + arg;
                 System.err.println(msg);
                 printUsage();
                 throw new BuildException("");
@@ -520,8 +505,24 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 definedProps.put("plugin.id", uninstallId);
             }
         } else {
-            if (!definedProps.containsKey("transtype") || !definedProps.containsKey("args.input")) {
-                justPrintUsage = true;
+            if (!definedProps.containsKey("transtype")) {
+                System.err.println("Error: Transformation type not defined");
+                printUsage();
+                throw new BuildException("");
+                //justPrintUsage = true;
+            }
+            if (!definedProps.containsKey("args.input")) {
+                System.err.println("Error: Input file not defined");
+                printUsage();
+                throw new BuildException("");
+                //justPrintUsage = true;
+            }
+            // default values
+            if (!definedProps.containsKey("output.dir")) {
+                definedProps.put("output.dir", new File(new File("."), "out").getAbsolutePath());
+            }
+            if (!definedProps.containsKey("base.temp.dir") && !definedProps.containsKey("dita.temp.dir")) {
+                definedProps.put("base.temp.dir", new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
             }
         }
 
@@ -1087,7 +1088,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("  -i, -input <file>      input file" + lSep);
         msg.append("  -install <file>        install plug-in from a ZIP file" + lSep);
         msg.append("  -uninstall <id>        uninstall plug-in with the ID" + lSep);
-        msg.append("  -help, -h              print this message" + lSep);
+        msg.append("  -h, -help              print this message" + lSep);
         msg.append("  -version               print the version information and exit" + lSep);
         msg.append("Options: " + lSep);
         msg.append("  -o, -output <dir>      output directory" + lSep);   
@@ -1097,8 +1098,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("                         diagnose or report problems." +
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
-        msg.append("  -verbose, -v           be extra verbose" + lSep);
-        msg.append("  -debug, -d             print debugging information" + lSep);
+        msg.append("  -v, -verbose           verbose logging" + lSep);
+        msg.append("  -d, -debug             print debugging information" + lSep);
         // msg.append("  -emacs, -e             produce logging information without adornments"
         // + lSep);
         // msg.append("  -lib <path>            specifies a path to search for jars and classes"
