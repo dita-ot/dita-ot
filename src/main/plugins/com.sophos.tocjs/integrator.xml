@@ -22,7 +22,7 @@
   </target>
 
   <target name="tocjsInit">
-    <property name="html-version" value="xhtml"/>
+    <property name="html-version" value="html5"/>
     <condition property="dita.plugin.com.sophos.tocjs.copydefaults" value="true">
         <not>
             <isset property="output.file" />

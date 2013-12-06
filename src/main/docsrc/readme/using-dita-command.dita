@@ -26,7 +26,7 @@
     <example>
       <p>The following command generates XHTML output for the <filepath>sequence.ditamap</filepath>
         file and specifies the output is written to the <filepath>test</filepath> directory</p>
-      <codeblock>dita -i samples/sequence.ditamap -o test -t xhtml</codeblock>
+      <codeblock>dita -i samples/sequence.ditamap -o test -t html5</codeblock>
     </example>
   </taskbody>
 </task>

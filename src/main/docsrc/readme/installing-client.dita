@@ -42,8 +42,7 @@
       <step>
         <cmd>Add <filepath>bin</filepath> directory to <varname>PATH</varname> system
           variable.</cmd>
-        <stepresult>This defines the necessary environment variables to run the
-            <cmdname>dita</cmdname> command from the command-line.</stepresult>
+        <stepresult>This defines the necessary environment variable to run the <cmdname>dita</cmdname> command from the command-line.</stepresult>
       </step>
     </steps>
   </taskbody>

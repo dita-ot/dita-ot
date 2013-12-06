@@ -27,6 +27,7 @@
       <topicref href="XhtmlWithNavigation.dita">
         <topicref href="XhtmlCommon.dita"/>
         <topicref href="XhtmlDefault.dita"/>
+        <topicref href="html5.dita"/>
         <topicref href="XhtmlEclipse.dita"/>
         <topicref href="XhtmlTocjs.dita"/>
         <topicref href="XhtmlCHM.dita"/>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="reference_rv1_c4w_vg">
-  <title>Command-line tool parameters: XHTML transformation</title>
+  <title>Command-line tool parameters: HTML5 and XHTML transformation</title>
   <titlealts>
-    <navtitle>XHTML</navtitle>
+    <navtitle>HTML5 and XHTML</navtitle>
   </titlealts>
-  <shortdesc>Certain parameters are specific to the XHTML transformation.</shortdesc>
+  <shortdesc>Certain parameters are specific to the HTML5 and XHTML transformation.</shortdesc>
   <prolog>
     <metadata>
       <keywords>
@@ -17,7 +17,7 @@
   <refbody>
     <section>
       <fig>
-        <title>Command-line tool parameters: XTML transformation</title>
+        <title>Command-line tool parameters: HTML5 and XHTML transformation</title>
         <parml>
           <plentry>
             <pt><parmname>xhtmltoc</parmname></pt>

@@ -147,6 +147,11 @@ navtitle="Legacy PDF transformation"/>
 <linktext>XHTML transformation</linktext>
 </topicmeta>
 </topicref>
+  <topicref href="readme/dita2html5.dita">
+    <topicmeta>
+      <linktext>HTML5 transformation</linktext>
+    </topicmeta>
+  </topicref>
 </relcell>
 <relcell/>
 <relcell>
@@ -273,6 +278,11 @@ navtitle="JavaHelp transformation"/>
 <linktext>XHTML transformation</linktext>
 </topicmeta>
 </topicref>
+  <topicref href="readme/dita2html5.dita">
+    <topicmeta>
+      <linktext>HTML5 transformation</linktext>
+    </topicmeta>
+  </topicref>
 </relcell>
 <relcell/>
 <relcell>
