@@ -37,7 +37,7 @@
         <xsl:value-of select="$msgnum"/>
         <xsl:value-of select="$msgsev"/>
       </xsl:variable>
-      <xsl:variable name="msgdoc" select="document('../../resource/messages.xml')"/>
+      <xsl:variable name="msgdoc" select="document('plugin:org.dita.base:resource/messages.xml')"/>
       <xsl:variable name="msgcontent">
         <xsl:choose>
           <xsl:when test="$msg!='***'">

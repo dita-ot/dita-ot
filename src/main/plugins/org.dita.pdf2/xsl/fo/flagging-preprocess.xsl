@@ -7,8 +7,8 @@
     version="2.0">
 
    <xsl:import href="flag-rules.xsl"/>
-   <xsl:import href="../../../../xsl/common/dita-utilities.xsl"/>
-   <xsl:import href="../../../../xsl/common/output-message.xsl"/>
+   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
    <!--preserve the doctype-->
    <xsl:output method="xml" encoding="UTF-8" indent="no"></xsl:output>

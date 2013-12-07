@@ -38,7 +38,7 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic-mapmerge opentopic-func"
     version="2.0">
 	
-	<xsl:import href="../../../../xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 	<xsl:variable name="msgprefix">DOTX</xsl:variable>
 	
     <xsl:key name="key_anchor" match="*[@id][not(contains(@class,' map/topicref '))]" use="@id"/>

@@ -40,7 +40,7 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 exclude-result-prefixes="opentopic-i18n">
 
-  <xsl:import href="../../../../xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
     <xsl:param name="debug-enabled" select="'false'"/>
   <xsl:variable name="msgprefix" select="'PDFX'"/>
