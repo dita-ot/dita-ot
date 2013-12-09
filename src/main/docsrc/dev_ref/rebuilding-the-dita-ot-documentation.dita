@@ -20,8 +20,7 @@
                         <li>build-html</li>
                         <li>build-htmlhelp</li>
                         <li>build-pdf</li>
-                    </ul></p><p>If you do not specify an Ant target, all three output formats (XHTML, HTML help, and PDF) are
-                        generated.</p></info>
+                    </ul></p><p>If you do not specify an Ant target, all three output formats (HTML5, HTML help, and PDF) are generated.</p></info>
             </step>
         </steps>
     </taskbody>
