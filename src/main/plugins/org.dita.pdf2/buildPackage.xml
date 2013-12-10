@@ -12,15 +12,12 @@
   <property name="fo.lib.dir" location="demo/fo/lib"/>	
   
   <property name="fo.jar" location="${lib.dir}/fo.jar" />
-  <property name="resolver.jar" location="${lib.dir}/resolver.jar" />
-  <property name="icu4j.jar" location="${lib.dir}/icu4j.jar" />
-  <property name="xep.jar" location="${lib.dir}/xep/lib/xep.jar" />
 
   <path id="build.class.path">
     <pathelement location="${basedir}/../../lib/dost.jar" />
-    <pathelement location="${resolver.jar}" />
-    <pathelement location="${icu4j.jar}" />
-    <pathelement location="${xep.jar}" />
+    <pathelement location="${basedir}/../../lib/resolver.jar" />
+    <pathelement location="${basedir}/../../lib/icu4j.jar" />
+    <pathelement location="${lib.dir}/xep/lib/xep.jar" />
   </path>
 
   <!--We will only build the XEP classes if XEP is in the build.class.path-->
@@ -81,7 +78,6 @@
         <include name="cfg/**"/>
         <include name="lib/**"/>
         <exclude name="lib/xep/**"/>
-        <exclude name="lib/icu4j.jar"/>
         <include name="src/**"/>
         <include name="xsl/**"/>
         <include name="Customization/**"/>
