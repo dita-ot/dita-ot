@@ -9,7 +9,7 @@ Prerequisites
 To build and use DITA-OT, you’ll need:
 
 * Java Development Kit 6 or newer
-* Apache Ant 1.8.2 or newer
+* Apache Ant 1.9.2 or newer
 
    If Ant throws an error like `unknown protocol: plugin` or `unknown protocol: cfg`, your Ant installation may be outdated. Try installing [a newer version of Ant](http://ant.apache.org/).
 
@@ -23,10 +23,6 @@ Building
 2. In the root directory, compile the Java code:
 
         ant jar jar.plug-ins
-
-3. Add these files into the `CLASSPATH` environment variable:
-   * `src/main/lib/icu4j.jar`
-   * `src/main/lib/resolver.jar`
 
 3. Install plugins:
 

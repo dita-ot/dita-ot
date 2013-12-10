@@ -46,7 +46,7 @@
   <property name="win32.zip.suffix" value=".zip"/>
   <property name="linux.zip.suffix" value=".tar.gz"/>
 
-  <property name="tool.ant.version" value="1.8.4"/>
+  <property name="tool.ant.version" value="1.9.2"/>
 
   <target name="init-package" depends="clean-package">
     <mkdir dir="${package.output.dir}"/>
@@ -339,16 +339,16 @@
       </fileset>
     </copy>
     <!--copy todir="${temp.dist.dir}">
-      <zipfileset src="${basedir}/target/apache-ant-1.8.4-bin.zip">
-        <!- -exclude name="apache-ant-1.8.4/etc/**"/>
-        <exclude name="apache-ant-1.8.4/manual/**"/>
-        <include name="apache-ant-1.8.4/*"/>
-        <exclude name="apache-ant-1.8.4/bin/**"/- ->
-        <include name="apache-ant-1.8.4/lib/ant.jar"/>
-        <include name="apache-ant-1.8.4/lib/ant-launcher.jar"/>
-        <include name="apache-ant-1.8.4/lib/ant-apache-resolver.jar"/>
+      <zipfileset src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip">
+        <!- -exclude name="apache-ant-${tool.ant.version}/etc/**"/>
+        <exclude name="apache-ant-${tool.ant.version}/manual/**"/>
+        <include name="apache-ant-${tool.ant.version}/*"/>
+        <exclude name="apache-ant-${tool.ant.version}/bin/**"/- ->
+        <include name="apache-ant-${tool.ant.version}/lib/ant.jar"/>
+        <include name="apache-ant-${tool.ant.version}/lib/ant-launcher.jar"/>
+        <include name="apache-ant-${tool.ant.version}/lib/ant-apache-resolver.jar"/>
       </zipfileset>
-      <mapper type="glob" from="apache-ant-1.8.4/*" to="*"/>
+      <mapper type="glob" from="apache-ant-${tool.ant.version}/*" to="*"/>
     </copy-->
     <copy todir="${temp.dist.dir}/plugins">
       <fileset dir="${src.dir}/ext-plugins">
