@@ -73,7 +73,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Codec: Bundled version -->
     <topicmeta>
       <keywords>
-        <keyword>1.4</keyword>
+        <keyword>1.7</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -81,7 +81,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- ICU for Java: Bundled version -->
     <topicmeta>
       <keywords>
-        <keyword>49.1</keyword>
+        <keyword>51.1</keyword>
       </keywords>
     </topicmeta>
   </keydef>

@@ -126,13 +126,8 @@ with those set forth herein.
         
     <path id="project.class.path">
       <pathelement path="${java.class.path}"/>
-      <fileset dir="${lib.dir}/saxon">
-        <include name="**/*.jar"/>
-      </fileset>
-      <!--
-        <pathelement location="${lib.dir}/xml-apis.jar"/>
-        <pathelement location="${lib.dir}/xercesImpl.jar"/>
-      -->
+      <pathelement location="${lib.dir}/saxon.jar"/>
+      <pathelement location="${lib.dir}/saxon-dom.jar"/>
       <pathelement location="${lib.dir}/resolver.jar"/>
       <pathelement location="${lib.dir}/icu4j.jar"/>
       <pathelement location="${fo.lib.dir}/fo.jar"/>

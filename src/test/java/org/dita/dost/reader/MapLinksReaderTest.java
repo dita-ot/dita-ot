@@ -15,7 +15,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -49,7 +48,6 @@ public class MapLinksReaderTest {
     @Test
     public void testRead() throws ParserConfigurationException, SAXException, IOException {
         final DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        db.setEntityResolver(new CatalogResolver());
         
         final Map<File, Document> expMap = readExpected(db);
 
