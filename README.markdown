@@ -10,6 +10,7 @@ To build and use DITA-OT, you’ll need:
 
 * Java Development Kit 6 or newer
 * Apache Ant 1.9.2 or newer
+* Apache Ivy 2.3.0 or newer
 
    If Ant throws an error like `unknown protocol: plugin` or `unknown protocol: cfg`, your Ant installation may be outdated. Try installing [a newer version of Ant](http://ant.apache.org/).
 

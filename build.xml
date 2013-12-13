@@ -458,8 +458,9 @@
   </target>
 	
   <target name="jar.plug-ins" description="Build plug-in Java libraries">
-    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="package-java" inheritAll="false">
+    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="jar" inheritAll="false">
   	  <property name="basedir" value="${src.dir}/plugins/org.dita.pdf2"/>
+      <reference refid="compile.path" torefid="base.compile.path"/>
   	</ant>
   </target>
 
