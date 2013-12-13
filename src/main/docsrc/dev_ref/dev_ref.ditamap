@@ -94,5 +94,14 @@ scope="external">
 </topicref>
 </relcell>
 </relrow>
+  <relrow>
+    <relcell>
+      <topicref href="../readme/plugins-installing.dita" linking="targetonly"/>
+      <topicref href="../readme/plugins-removing.dita" linking="targetonly"/>
+    </relcell>
+    <relcell>
+      <topicref href="extending-the-ot.dita" linking="sourceonly"/>
+    </relcell>
+  </relrow>
 </reltable>
 </map>

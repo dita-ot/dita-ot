@@ -176,4 +176,10 @@ See the accompanying license.txt file for applicable licenses.
       <linktext>Common Public License</linktext>
     </topicmeta>
   </keydef>
+  
+  <keydef keys="rfc5147" href="http://tools.ietf.org/html/rfc5147" scope="external" format="html">
+    <topicmeta>
+      <linktext>RFC 5147</linktext>
+    </topicmeta>
+  </keydef>
 </map>
