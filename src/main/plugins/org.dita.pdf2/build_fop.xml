@@ -7,28 +7,6 @@
 
   <property name="fop.home" value="${dita.plugin.org.dita.pdf2.dir}/fop"/>
 
-  <condition property="hasFopLib">
-    <available classname="org.apache.fop.tools.anttasks.Fop">
-      <classpath id="project.classpath">
-        <fileset dir="${fop.home}">
-          <include name="build/fop.jar"/>
-          <include name="lib/*.jar"/>
-          <include name="build/fop-hyph.jar"/>
-        </fileset>
-      </classpath>
-    </available>
-  </condition>
-
-  <target name="checkFOPLib">
-    <dita-ot-fail id="DOTA010E">
-      <condition>
-        <and>
-          <not><isset property="hasFopLib"/></not>
-        </and>
-      </condition>
-    </dita-ot-fail>
-  </target>
-
   <target name="transform.fo2pdf.fop.test-use">
     <condition property="use.fop.pdf.formatter">
       <equals arg1="${pdf.formatter}" arg2="fop"/>
@@ -151,16 +129,11 @@
 
   <!--Run FOP-->
   <target name="transform.fo2pdf.fop" depends="transform.fo2pdf.fop.test-use, transform.fo2pdf.fop.init" if="use.fop.pdf.formatter">
-    <!--Check fop lib-->
-    <antcall target="checkFOPLib"/>
     <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
       <classpath>
-        <fileset dir="${fop.home}/lib">
-          <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${fop.home}/build">
-          <include name="fop.jar"/>
-          <include name="fop-hyph.jar"/>
+        <fileset dir="${fop.home}">
+          <include name="lib/*.jar"/>
+          <include name="build/fop.jar"/>
         </fileset>
       </classpath>
     </taskdef>

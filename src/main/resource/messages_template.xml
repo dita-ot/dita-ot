@@ -50,10 +50,10 @@
     <response>Please double check the value to ensure it is specified correctly.</response>
   </message>
   
-  <message id="DOTA010E" type="ERROR">
+  <!--message id="DOTA010E" type="ERROR">
     <reason>The Apache FOP program cannot be found in the default location.</reason>
     <response>Please place FOP into the default directory demo/fo/fop/ or update the build file to support your local configuration.</response>
-  </message>
+  </message-->
 
   <message id="DOTA011W" type="WARN">
     <reason>Argument "%1" is deprecated.</reason>
