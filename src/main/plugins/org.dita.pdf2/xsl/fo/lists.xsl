@@ -51,6 +51,8 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
+  
+    <xsl:template match="*[contains(@class, ' topic/ul ')][empty(*[contains(@class, ' topic/li ')])]" priority="10"/>
 
     <xsl:template match="*[contains(@class, ' topic/ol ')]">
         <fo:list-block xsl:use-attribute-sets="ol">
@@ -58,6 +60,8 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
+  
+    <xsl:template match="*[contains(@class, ' topic/ol ')][empty(*[contains(@class, ' topic/li ')])]" priority="10"/>
 
     <xsl:template match="*[contains(@class, ' topic/ul ')]/*[contains(@class, ' topic/li ')]">
         <fo:list-item xsl:use-attribute-sets="ul.li">
@@ -128,6 +132,8 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
+  
+    <xsl:template match="*[contains(@class, ' topic/sl ')][empty(*[contains(@class, ' topic/sli ')])]" priority="10"/>
 
     <xsl:template match="*[contains(@class, ' topic/sl ')]/*[contains(@class, ' topic/sli ')]">
         <fo:list-item xsl:use-attribute-sets="sl.sli">
