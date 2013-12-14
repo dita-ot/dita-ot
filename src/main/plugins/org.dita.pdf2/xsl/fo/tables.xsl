@@ -408,6 +408,8 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+  
+    <xsl:template match="*[contains(@class, ' topic/tgroup ')][empty(*[contains(@class, ' topic/tbody ')]//*[contains(@class, ' topic/row ')])]" priority="10"/>
 
     <xsl:template match="*[contains(@class, ' topic/colspec ')]">
         <fo:table-column>
@@ -1106,6 +1108,8 @@
 
         </fo:table>
     </xsl:template>
+  
+    <xsl:template match="*[contains(@class, ' topic/simpletable ')][empty(*)]" priority="10"/>
 
     <xsl:template name="createSimpleTableColumns">
         <xsl:param name="theColumnWidthes" select="'1*'"/>
