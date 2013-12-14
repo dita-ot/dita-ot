@@ -33,13 +33,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.Locator;
-
 import org.apache.xml.resolver.tools.CatalogResolver;
-
 import org.xml.sax.helpers.AttributesImpl;
-
-import org.apache.xerces.xni.grammars.XMLGrammarPool;
-
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.reader.GrammarPoolManager;
@@ -53,7 +48,6 @@ import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -318,7 +312,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         } catch (final Exception e) {
             throw new SAXException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
-        setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
+        setGrammarPool(reader);
         setSystemid= arg_setSystemid;
     }
     
@@ -328,11 +322,17 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @param reader
      * @param grammarPool
      */
-    public void setGrammarPool(final XMLReader reader, final XMLGrammarPool grammarPool) {
+    public void setGrammarPool(final XMLReader reader) {
         try {
-            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
+            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", GrammarPoolManager.getGrammarPool());
             logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
-        } catch (final Exception e) {
+        } catch (final NoClassDefFoundError e) {
+            logger.logDebug("Xerces not available, not using grammar caching");
+        } catch (final SAXNotRecognizedException e) {
+            e.printStackTrace();
+            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+        } catch (final SAXNotSupportedException e) {
+            e.printStackTrace();
             logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         }
     }

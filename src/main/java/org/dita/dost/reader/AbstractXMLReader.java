@@ -11,7 +11,6 @@ package org.dita.dost.reader;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.log.DITAOTLogger;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -19,6 +18,8 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 
@@ -37,13 +38,18 @@ ContentHandler, LexicalHandler, EntityResolver {
      * Sets the grammar pool on the parser. Note that this is a Xerces-specific
      * feature.
      * @param reader
-     * @param grammarPool
      */
-    public void setGrammarPool(final XMLReader reader, final XMLGrammarPool grammarPool) {
+    public void setGrammarPool(final XMLReader reader) {
         try {
-            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
+            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", GrammarPoolManager.getGrammarPool());
             logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
-        } catch (final Exception e) {
+        } catch (final NoClassDefFoundError e) {
+            logger.logDebug("Xerces not available, not using grammar caching");
+        } catch (final SAXNotRecognizedException e) {
+            e.printStackTrace();
+            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+        } catch (final SAXNotSupportedException e) {
+            e.printStackTrace();
             logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         }
     }

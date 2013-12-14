@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.Map.Entry;
 
-import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageBean;
@@ -532,8 +531,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
             final String msg = MessageUtils.getInstance().getMessage("DOTJ037W").toString();
             logger.logWarn(msg);
         }
-        final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
-        setGrammarPool(reader, grammarPool);
+        setGrammarPool(reader);
 
         CatalogUtils.setDitaDir(ditaDir);
         setSystemid = arg_setSystemid;

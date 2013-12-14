@@ -240,8 +240,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             parseInputParameters(input);
 
             // set grammar pool flag
-            GrammarPoolManager.setGramCache(gramcache);
-
+            try {
+                GrammarPoolManager.setGramCache(gramcache);
+            } catch (final NoClassDefFoundError e) {
+                logger.logDebug("Xerces not available, not using grammar caching");
+            }
+            
             reader = new GenListModuleReader();
             reader.setLogger(logger);
             reader.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);

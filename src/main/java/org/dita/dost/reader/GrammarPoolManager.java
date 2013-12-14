@@ -58,6 +58,6 @@ public final class GrammarPoolManager {
     public static void setGramCache(final boolean gramCache) {
         GrammarPoolManager.gramCache = gramCache;
     }
-
+    
 }
 
