@@ -56,7 +56,7 @@
     <delete dir="${package.output.dir}"/>
   </target>
 
-  <target name="init-java" depends="clean-java">
+  <target name="init-java" depends="clean-java, init-ivy">
     <mkdir dir="${lib.dir}"/>
     <mkdir dir="${bin.dir}"/>
     <ivy:retrieve pattern="${lib.dir}/[artifact](-[classifier]).[ext]" conf="compile"/>    
