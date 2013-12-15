@@ -796,6 +796,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
                 if (conrefSet.contains(value)) {
                     conrefSet.add(key);
                 }
+                if (keyrefSet.contains(value)) {
+                    keyrefSet.add(key);
+                }
             }
         }
 
