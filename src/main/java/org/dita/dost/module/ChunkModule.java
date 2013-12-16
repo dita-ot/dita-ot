@@ -31,6 +31,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ChunkMapReader;
 import org.dita.dost.util.Configuration;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.TopicRefWriter;
@@ -252,10 +253,13 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                             relativePath2fix.put(relativeTargetPath,
                                     relativeTargetPath.substring(0, relativeTargetPath.lastIndexOf(SLASH) + 1));
                         }
-                        // ensure the rename
-                        target.delete();
                         // ensure the newly chunked file to the old one
-                        from.renameTo(target);
+                        try {
+                            FileUtils.moveFile(from, target);
+                        } catch (final IOException e) {
+                            logger.logError("Failed to replace chunk topic: " + e.getMessage(), e);
+
+                        }
                         if (topicList.contains(relativePath)) {
                             topicList.remove(relativePath);
                         }
@@ -272,6 +276,19 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             }
         }
 
+        final Set<String> all = new HashSet<String>();
+        all.addAll(topicList);
+        all.addAll(ditamapList);
+        all.addAll(chunkedDitamapSet);
+        all.addAll(chunkedTopicSet);
+        
+        // remove redundant topic information
+        for (final String file: oldTopicList) {
+            if (!all.contains(file)) {
+                job.remove(job.getOrCreateFileInfo(file));
+            }
+        }
+        
         for (final FileInfo f : job.getFileInfo()) {
             if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                 f.isActive = false;
