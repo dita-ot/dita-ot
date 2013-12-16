@@ -79,7 +79,6 @@ public final class Job {
     private static final String ATTRIBUTE_FLAG_IMAGE_LIST = "flag-image";
     private static final String ATTRIBUTE_SUBSIDIARY_TARGET_LIST = "subtarget";
     private static final String ATTRIBUTE_CHUNK_TOPIC_LIST = "skip-chunk";
-    private static final String ATTRIBUTE_ACTIVE = "active";
     
     private static final String PROPERTY_OUTER_CONTROL = "outercontrol";
     private static final String PROPERTY_ONLY_TOPIC_IN_MAP = "onlytopicinmap";
@@ -115,7 +114,6 @@ public final class Job {
             attrToFieldMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
             attrToFieldMap.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getField("isSubtarget"));
             attrToFieldMap.put(ATTRIBUTE_CHUNK_TOPIC_LIST, FileInfo.class.getField("isSkipChunk"));
-            attrToFieldMap.put(ATTRIBUTE_ACTIVE, FileInfo.class.getField("isActive"));
         } catch (final NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
@@ -631,7 +629,6 @@ public final class Job {
         public boolean isOutDita;
         /** File is used only as a source of a copy-to. */
         public boolean isCopyToSource;
-        public boolean isActive;
         
         FileInfo(final URI uri) {
             if (uri == null) throw new IllegalArgumentException(new NullPointerException());
@@ -672,7 +669,6 @@ public final class Job {
             private boolean isChunkedDitaMap;
             private boolean isOutDita;
             private boolean isCopyToSource;
-            private boolean isActive;
         
             public Builder() {}
             public Builder(final FileInfo orig) {
@@ -696,7 +692,6 @@ public final class Job {
                 isChunkedDitaMap = orig.isChunkedDitaMap;
                 isOutDita = orig.isOutDita;
                 isCopyToSource = orig.isCopyToSource;
-                isActive = orig.isActive;
             }
             
             /**
@@ -723,7 +718,6 @@ public final class Job {
                 if (orig.isChunkedDitaMap) isChunkedDitaMap = orig.isChunkedDitaMap;
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
                 if (orig.isCopyToSource) isCopyToSource = orig.isCopyToSource;
-                if (orig.isActive) isActive = orig.isActive;
                 return this;
             }
             
@@ -747,7 +741,6 @@ public final class Job {
             public Builder isChunkedDitaMap(final boolean isChunkedDitaMap) { this.isChunkedDitaMap = isChunkedDitaMap; return this; }
             public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
             public Builder isCopyToSource(final boolean isCopyToSource) { this.isCopyToSource = isCopyToSource; return this; }
-            public Builder isActive(final boolean isActive) { this.isActive = isActive; return this; }
             
             public FileInfo build() {
                 if (uri == null && file == null) {
@@ -772,7 +765,6 @@ public final class Job {
                 fi.isChunkedDitaMap = isChunkedDitaMap;
                 fi.isOutDita = isOutDita;
                 fi.isCopyToSource = isCopyToSource;
-                fi.isActive = isActive;
                 return fi;
             }
             

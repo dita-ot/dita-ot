@@ -894,12 +894,10 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         for (final File file: addFilePrefix(fullTopicSet)) {
             final FileInfo ff = job.getOrCreateFileInfo(file);
             ff.format = ATTR_FORMAT_VALUE_DITA;
-            ff.isActive = true;
         }
         for (final File file: addFilePrefix(fullMapSet)) {
             final FileInfo ff = job.getOrCreateFileInfo(file);
             ff.format = ATTR_FORMAT_VALUE_DITAMAP;
-            ff.isActive = true;
         }        
         for (final File file: addFilePrefix(hrefTopicSet)) {
             job.getOrCreateFileInfo(file).hasLink = true;

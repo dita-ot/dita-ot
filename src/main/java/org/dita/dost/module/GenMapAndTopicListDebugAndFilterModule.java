@@ -885,9 +885,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         writeListToFile(new File(job.tempDir, USER_INPUT_FILE_LIST_FILE), asList(prefix + inputFile));
 
         for (final FileInfo.Builder b: fileInfoMap.values()) {
-            final FileInfo fileInfo = new FileInfo.Builder(b.build()).isActive(true).build();
-            //final FileInfo fileInfo = b.build();
-            job.add(fileInfo);
+            job.add(b.build());
         }
         
         handleCopyto();

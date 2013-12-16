@@ -45,7 +45,7 @@ final class MoveIndexModule extends AbstractPipelineModuleImpl {
         final Collection<FileInfo> fis = job.getFileInfo(new Filter() {
             @Override
             public boolean accept(FileInfo f) {
-                return f.isActive && "ditamap".equals(f.format);
+                return ATTR_FORMAT_VALUE_DITAMAP.equals(f.format);
             }
         });
         if (!fis.isEmpty()) {

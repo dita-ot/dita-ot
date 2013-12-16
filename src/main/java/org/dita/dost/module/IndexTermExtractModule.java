@@ -106,13 +106,13 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
          */
         topicList = new ArrayList<String>();
         for (final FileInfo f: job.getFileInfo()) {
-            if (ATTR_FORMAT_VALUE_DITA.equals(f.format) && f.isActive && !f.isResourceOnly) {
+            if (ATTR_FORMAT_VALUE_DITA.equals(f.format) && !f.isResourceOnly) {
                 topicList.add(f.file.getPath());
             }
         }
         ditamapList = new ArrayList<String>();
         for (final FileInfo f: job.getFileInfo()) {
-            if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format) && f.isActive && !f.isResourceOnly) {
+            if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format) && !f.isResourceOnly) {
                 ditamapList.add(f.file.getPath());
             }
         }

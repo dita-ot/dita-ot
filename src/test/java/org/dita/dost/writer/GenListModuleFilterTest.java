@@ -170,7 +170,6 @@ public class GenListModuleFilterTest {
             assertEquals(actFileInfo.file + ": ", expFileInfo.isChunkedDitaMap, actFileInfo.isChunkedDitaMap);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isOutDita, actFileInfo.isOutDita);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isCopyToSource, actFileInfo.isCopyToSource);
-            assertEquals(actFileInfo.file + ": ", expFileInfo.isActive, actFileInfo.isActive);
         }
         
         final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
