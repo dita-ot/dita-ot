@@ -173,6 +173,7 @@
                 <li>docbook</li>
                 <li>eclipsehelp</li>
                 <li>eclipsecontent</li>
+                <li>html5</li>
                 <li platform="windows">htmlhelp</li>
                 <li>javahelp</li>
                 <li>odt</li>

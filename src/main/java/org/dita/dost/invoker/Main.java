@@ -1089,7 +1089,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("  -install <file>        install plug-in from a ZIP file" + lSep);
         msg.append("  -uninstall <id>        uninstall plug-in with the ID" + lSep);
         msg.append("  -h, -help              print this message" + lSep);
-        msg.append("  -version               print the version information and exit" + lSep);
+        msg.append("  -version               print version information and exit" + lSep);
         msg.append("Options: " + lSep);
         msg.append("  -o, -output <dir>      output directory" + lSep);   
         // msg.append("  -projecthelp, -p       print project help information" + lSep);
@@ -1098,6 +1098,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("                         diagnose or report problems." +
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
+        msg.append("  -f, -filter <file>     filter and flagging file" + lSep);
+        msg.append("  -temp <dir>            temporary directory" + lSep);
         msg.append("  -v, -verbose           verbose logging" + lSep);
         msg.append("  -d, -debug             print debugging information" + lSep);
         // msg.append("  -emacs, -e             produce logging information without adornments"

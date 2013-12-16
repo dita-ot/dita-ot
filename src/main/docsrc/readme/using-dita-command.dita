@@ -20,7 +20,8 @@
             to <varname>PATH</varname> system variable, you can invoke the <cmdname>dita</cmdname>
             command without the absolute path.</p>
         </tutorialinfo>
-        <stepresult conref="conref-task.dita#conref-task/running-ditaot-results"/>
+        <stepresult id="running-ditaot-results">If you do not specify an output directory, by default, the DITA-OT writes the output to <filepath>out</filepath> subdirectory of current
+          directory.</stepresult>
       </step>
     </steps>
     <example>

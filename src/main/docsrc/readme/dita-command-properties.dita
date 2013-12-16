@@ -93,8 +93,19 @@
       <title>Options</title>
       <parml>
         <plentry>
-          <pt><parmname>-o</parmname>, <parmname>-output</parmname></pt>
-          <pd conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/output.dir.desc"/>
+          <pt><parmname>-o</parmname>, <parmname>-output</parmname>
+            <varname>dir</varname></pt>
+          <pd id="output.dir.desc">Specifies the name and location of the output directory. By default, the output is written to <filepath>out</filepath> subdirectory of the current directory.</pd>
+        </plentry>
+        <plentry>
+          <pt><parmname>-f</parmname>, <parmname>-filter</parmname>
+            <varname>file</varname></pt>
+          <pd conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/args.filter.desc"/>
+        </plentry>
+        <plentry>
+          <pt><parmname>-temp</parmname>
+            <varname>dir</varname></pt>
+          <pd conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/dita.temp.dir.desc"/>
         </plentry>
         <plentry>
           <pt><parmname>-v</parmname>, <parmname>-verbose</parmname></pt>
