@@ -1127,7 +1127,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         String filename = null;
         final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+        String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         final String attrType = atts.getValue(ATTRIBUTE_NAME_TYPE);
 
         final String codebase = atts.getValue(ATTRIBUTE_NAME_CODEBASE);
@@ -1267,6 +1267,10 @@ public final class GenListModuleReader extends AbstractXMLReader {
                     topicHref = null;
                     topicId = null;
                 }
+            }
+        } else if (TOPIC_IMAGE.matches(attrClass)) {
+            if (attrFormat == null) {
+                attrFormat = "image";
             }
         }
         // files referred by coderef won't effect the uplevels, code has already returned.
