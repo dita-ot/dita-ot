@@ -199,7 +199,7 @@
   </patternset>
   <patternset id="pattern.package.ext-plugins.full">
     <include name="h2d/**"/>
-    <include name="legacypdf/**"/>
+    <!--include name="legacypdf/**"/-->
   </patternset>
 
   <patternset id="pattern.package.standard">
@@ -234,7 +234,7 @@
   </patternset>
   <patternset id="pattern.package.ext-plugins.standard">
     <include name="h2d/**"/>
-    <include name="legacypdf/**"/>
+    <!--include name="legacypdf/**"/-->
   </patternset>
     
   <patternset id="pattern.package.doc">

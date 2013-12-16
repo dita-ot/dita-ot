@@ -15,8 +15,6 @@
    <topicref href="ant-parameters-html-help-transformation.dita" navtitle="HTML Help transformation"
     platform="windows"/>
    <topicref href="ant-parameters-javahelp-transformation.dita" navtitle="JavaHelp transformation"/>
-   <topicref href="ant-parameters-legacypdf-transformation.dita"
-    navtitle="Legacy PDF transformation"/>
    <topicref href="ant-parameters-odt-transformation.dita" navtitle="ODT transformation"/>
    <topicref href="ant-parameters-other.dita" navtitle="Other"/>
    <topicref href="ant-parameters-pdf2-transformation.dita" navtitle="PDF2 transformation"/>

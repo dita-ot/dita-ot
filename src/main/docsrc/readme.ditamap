@@ -106,20 +106,6 @@ navtitle="JavaHelp transformation"/>
 </relrow>
 <relrow>
 <relcell>
-<topicref href="readme/dita2legacypdf.dita" importance="deprecated">
-<topicmeta>
-<linktext>Legacy PDF transformation</linktext>
-</topicmeta>
-</topicref>
-</relcell>
-<relcell/>
-<relcell>
-<topicref href="readme/ant-parameters-legacypdf-transformation.dita"
-navtitle="Legacy PDF transformation"/>
-</relcell>
-</relrow>
-<relrow>
-<relcell>
 <topicref href="readme/dita2odt.dita">
 <topicmeta>
 <linktext>ODT transformation</linktext>
@@ -310,8 +296,6 @@ navtitle="Eclipse content transformation"/>
 navtitle="HTML Help transformation"/>
 <topicref href="readme/ant-parameters-javahelp-transformation.dita"
 navtitle="JavaHelp transformation"/>
-<topicref href="readme/ant-parameters-legacypdf-transformation.dita"
-navtitle="Legacy PDF transformation"/>
 <topicref href="readme/ant-parameters-odt-transformation.dita" navtitle="ODT transformation"/>
 <topicref href="readme/ant-parameters-pdf2-transformation.dita" navtitle="PDF2 transformation"/>
 <topicref href="readme/ant-parameters-xhtml-transformation.dita" navtitle="XHTML transformation"/>
