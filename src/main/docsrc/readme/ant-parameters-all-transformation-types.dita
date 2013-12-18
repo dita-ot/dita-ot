@@ -51,8 +51,7 @@
           </plentry>
           <plentry id="args.filter" rev="1.6">
             <pt><parmname>args.filter</parmname></pt>
-            <pd id="args.filter.desc">Specifies a filter file to be used to include, exclude, or
-              flag content. Filter files must have a .ditaval or .DITAVAL extension.</pd>
+            <pd id="args.filter.desc">Specifies a filter file to be used to include, exclude, or flag content.</pd>
           </plentry>
           <plentry id="args.grammar.cache">
             <pt><parmname>args.grammar.cache</parmname></pt>

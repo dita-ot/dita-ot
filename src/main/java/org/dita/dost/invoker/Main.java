@@ -116,13 +116,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     private static final Map<String, Argument> ARGUMENT_MAPPING = new HashMap<String, Argument>();
     static {
-        ARGUMENT_MAPPING.put("-t", new StringArgument("transtype"));
+        ARGUMENT_MAPPING.put("-f", new StringArgument("transtype"));
+        ARGUMENT_MAPPING.put("-format", new StringArgument("transtype"));
         ARGUMENT_MAPPING.put("-transtype", new StringArgument("transtype"));
         ARGUMENT_MAPPING.put("-i", new FileArgument("args.input"));
         ARGUMENT_MAPPING.put("-input", new FileArgument("args.input"));
         ARGUMENT_MAPPING.put("-o", new FileArgument("output.dir"));
         ARGUMENT_MAPPING.put("-output", new FileArgument("output.dir"));
-        ARGUMENT_MAPPING.put("-f", new FileArgument("args.filter"));
         ARGUMENT_MAPPING.put("-filter", new FileArgument("args.filter"));
         ARGUMENT_MAPPING.put("-temp", new FileArgument("dita.temp.dir"));
         // legacy
@@ -1078,13 +1078,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static void printUsage() {
         final String lSep = System.getProperty("line.separator");
         final StringBuffer msg = new StringBuffer();
-        msg.append("Usage: dita -t <name> -i <file> [options]" + lSep);
+        msg.append("Usage: dita -f <name> -i <file> [options]" + lSep);
         msg.append("   or: dita -install <file>" + lSep);
         msg.append("   or: dita -uninstall <id>" + lSep);
         msg.append("   or: dita -help" + lSep);
         msg.append("   or: dita -version" + lSep);        
         msg.append("Arguments: " + lSep);
-        msg.append("  -t, -transtype <name>  transformation type" + lSep);
+        msg.append("  -f, -format <name>     transformation type" + lSep);
         msg.append("  -i, -input <file>      input file" + lSep);
         msg.append("  -install <file>        install plug-in from a ZIP file" + lSep);
         msg.append("  -uninstall <id>        uninstall plug-in with the ID" + lSep);
@@ -1098,7 +1098,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("                         diagnose or report problems." +
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
-        msg.append("  -f, -filter <file>     filter and flagging file" + lSep);
+        msg.append("  -filter <file>         filter and flagging file" + lSep);
         msg.append("  -temp <dir>            temporary directory" + lSep);
         msg.append("  -v, -verbose           verbose logging" + lSep);
         msg.append("  -d, -debug             print debugging information" + lSep);

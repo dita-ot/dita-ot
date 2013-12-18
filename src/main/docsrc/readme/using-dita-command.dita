@@ -9,7 +9,7 @@
       <step>
         <cmd>From the command prompt, issue the following command:</cmd>
         <info>
-          <codeblock><varname>installation-directory</varname>\bin\dita -i <varname>input-file</varname> -t <varname>transformation-type</varname> -D<varname>parameter-name</varname>=<varname>value</varname></codeblock>
+          <codeblock><varname>installation-directory</varname>\bin\dita -i <varname>input-file</varname> -f <varname>transformation-type</varname> -D<varname>parameter-name</varname>=<varname>value</varname></codeblock>
           <p>where:</p>
           <ul conref="conref-task.dita#conref-task/basic-variables">
             <li/>
@@ -26,7 +26,7 @@
     </steps>
     <example>
       <p>The following command generates HTML5 output for the <filepath>sequence.ditamap</filepath> file and specifies the output is written to the <filepath>test</filepath> directory</p>
-      <codeblock>dita -i samples/sequence.ditamap -o test -t html5</codeblock>
+      <codeblock>dita -i samples/sequence.ditamap -o test -f html5</codeblock>
     </example>
   </taskbody>
 </task>

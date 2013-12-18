@@ -19,7 +19,7 @@
         <fragment>
           <groupseq>
             <kwd>dita</kwd>
-            <kwd>-t</kwd>
+            <kwd>-f</kwd>
             <var>name</var>
             <kwd>-i</kwd>
             <var>file</var>
@@ -60,7 +60,7 @@
       <title>Arguments</title>
       <parml>
         <plentry>
-          <pt><parmname>-t</parmname>, <parmname>-transtype</parmname>
+          <pt><parmname>-f</parmname>, <parmname>-format</parmname>
             <varname>name</varname></pt>
           <pd conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/transtype.desc"/>
         </plentry>
@@ -98,7 +98,7 @@
           <pd id="output.dir.desc">Specifies the name and location of the output directory. By default, the output is written to <filepath>out</filepath> subdirectory of the current directory.</pd>
         </plentry>
         <plentry>
-          <pt><parmname>-f</parmname>, <parmname>-filter</parmname>
+          <pt><parmname>-filter</parmname>
             <varname>file</varname></pt>
           <pd conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/args.filter.desc"/>
         </plentry>
