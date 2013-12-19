@@ -130,7 +130,7 @@
     <!-- If we have already followed a relative path, pick it up -->
     <xsl:param name="current-relative-path" as="xs:string" select="''"/>
     <xsl:param name="conref-source-topicid" as="xs:string?"/>
-    <xsl:param name="source-element" as="xs:string*"/>
+    <xsl:param name="source-attributes" as="xs:string*"/>
     <xsl:param name="conref-ids" as="xs:string*"/>
     <xsl:param name="WORKDIR" as="xs:string">
       <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
@@ -168,7 +168,7 @@
 
     <!-- Keep the source node in a variable, to pass to the target. It can be used to save 
        attributes that were specified locally. If for some reason somebody passes from
-       conref straight to conref, then just save the first one (in source-element) -->
+       conref straight to conref, then just save the first one (in source-attributes) -->
 
     <!--get element local name, parent topic's domains, and then file name, topic id, element id from conref value-->
     <xsl:variable name="element" select="local-name(.)"/>
@@ -311,10 +311,10 @@
                 <xsl:choose>
                   <xsl:when test="$target">
                     <xsl:apply-templates select="$target[1]" mode="conref-target">
-                      <xsl:with-param name="source-element" as="xs:string*">
+                      <xsl:with-param name="source-attributes" as="xs:string*">
                         <xsl:choose>
-                          <xsl:when test="exists($source-element)">
-                            <xsl:sequence select="$source-element"/>
+                          <xsl:when test="exists($source-attributes)">
+                            <xsl:sequence select="$source-attributes"/>
                           </xsl:when>
                           <xsl:otherwise>
                             <xsl:call-template name="get-source-attribute"/>
@@ -346,10 +346,10 @@
                       <xsl:choose>
                         <xsl:when test="$target">
                           <xsl:apply-templates select="$target[1]" mode="conref-target">
-                            <xsl:with-param name="source-element" as="xs:string*">
+                            <xsl:with-param name="source-attributes" as="xs:string*">
                               <xsl:choose>
-                                <xsl:when test="exists($source-element)">
-                                  <xsl:sequence select="$source-element"/>
+                                <xsl:when test="exists($source-attributes)">
+                                  <xsl:sequence select="$source-attributes"/>
                                 </xsl:when>
                                 <xsl:otherwise>
                                   <xsl:call-template name="get-source-attribute">
@@ -395,10 +395,10 @@
                 <xsl:choose>
                   <xsl:when test="$target">
                     <xsl:apply-templates select="$target[1]" mode="conref-target">
-                      <xsl:with-param name="source-element" as="xs:string*">
+                      <xsl:with-param name="source-attributes" as="xs:string*">
                         <xsl:choose>
-                          <xsl:when test="exists($source-element)">
-                            <xsl:sequence select="$source-element"/>
+                          <xsl:when test="exists($source-attributes)">
+                            <xsl:sequence select="$source-attributes"/>
                           </xsl:when>
                           <xsl:otherwise>
                             <xsl:call-template name="get-source-attribute"/>
@@ -430,10 +430,10 @@
                       <xsl:choose>
                         <xsl:when test="$target">
                           <xsl:apply-templates select="$target[1]" mode="conref-target">
-                            <xsl:with-param name="source-element" as="xs:string*">
+                            <xsl:with-param name="source-attributes" as="xs:string*">
                               <xsl:choose>
-                                <xsl:when test="exists($source-element)">
-                                  <xsl:sequence select="$source-element"/>
+                                <xsl:when test="exists($source-attributes)">
+                                  <xsl:sequence select="$source-attributes"/>
                                 </xsl:when>
                                 <xsl:otherwise>
                                   <xsl:call-template name="get-source-attribute">
@@ -493,10 +493,10 @@
                             <xsl:otherwise>
                               <!-- do the normal process -->
                               <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                <xsl:with-param name="source-element" as="xs:string*">
+                                <xsl:with-param name="source-attributes" as="xs:string*">
                                   <xsl:choose>
-                                    <xsl:when test="exists($source-element)">
-                                      <xsl:sequence select="$source-element"/>
+                                    <xsl:when test="exists($source-attributes)">
+                                      <xsl:sequence select="$source-attributes"/>
                                     </xsl:when>
                                     <xsl:otherwise>
                                       <xsl:call-template name="get-source-attribute">
@@ -544,10 +544,10 @@
                 <xsl:choose>
                   <xsl:when test="$target">
                     <xsl:apply-templates select="$target[1]" mode="conref-target">
-                      <xsl:with-param name="source-element" as="xs:string*">
+                      <xsl:with-param name="source-attributes" as="xs:string*">
                         <xsl:choose>
-                          <xsl:when test="exists($source-element)">
-                            <xsl:sequence select="$source-element"/>
+                          <xsl:when test="exists($source-attributes)">
+                            <xsl:sequence select="$source-attributes"/>
                           </xsl:when>
                           <xsl:otherwise>
                             <xsl:call-template name="get-source-attribute"/>
@@ -578,10 +578,10 @@
                       <xsl:choose>
                         <xsl:when test="$target">
                           <xsl:apply-templates select="$target[1]" mode="conref-target">
-                            <xsl:with-param name="source-element" as="xs:string*">
+                            <xsl:with-param name="source-attributes" as="xs:string*">
                               <xsl:choose>
-                                <xsl:when test="exists($source-element)">
-                                  <xsl:sequence select="$source-element"/>
+                                <xsl:when test="exists($source-attributes)">
+                                  <xsl:sequence select="$source-attributes"/>
                                 </xsl:when>
                                 <xsl:otherwise>
                                   <xsl:call-template name="get-source-attribute">
@@ -627,10 +627,10 @@
                 <xsl:choose>
                   <xsl:when test="$target">
                     <xsl:apply-templates select="($target)[1]" mode="conref-target">
-                      <xsl:with-param name="source-element" as="xs:string*">
+                      <xsl:with-param name="source-attributes" as="xs:string*">
                         <xsl:choose>
-                          <xsl:when test="exists($source-element)">
-                            <xsl:sequence select="$source-element"/>
+                          <xsl:when test="exists($source-attributes)">
+                            <xsl:sequence select="$source-attributes"/>
                           </xsl:when>
                           <xsl:otherwise>
                             <xsl:call-template name="get-source-attribute"/>
@@ -661,10 +661,10 @@
                       <xsl:choose>
                         <xsl:when test="$target">
                           <xsl:apply-templates select="$target[1]" mode="conref-target">
-                            <xsl:with-param name="source-element" as="xs:string*">
+                            <xsl:with-param name="source-attributes" as="xs:string*">
                               <xsl:choose>
-                                <xsl:when test="exists($source-element)">
-                                  <xsl:sequence select="$source-element"/>
+                                <xsl:when test="exists($source-attributes)">
+                                  <xsl:sequence select="$source-attributes"/>
                                 </xsl:when>
                                 <xsl:otherwise>
                                   <xsl:call-template name="get-source-attribute">
@@ -712,10 +712,10 @@
                     <!-- to resolve the problem of conref from map to topic -->
                     <xsl:when test="$target">
                       <xsl:apply-templates select="$target[1]" mode="conref-target">
-                        <xsl:with-param name="source-element" as="xs:string*">
+                        <xsl:with-param name="source-attributes" as="xs:string*">
                           <xsl:choose>
-                            <xsl:when test="exists($source-element)">
-                              <xsl:sequence select="$source-element"/>
+                            <xsl:when test="exists($source-attributes)">
+                              <xsl:sequence select="$source-attributes"/>
                             </xsl:when>
                             <xsl:otherwise>
                               <xsl:call-template name="get-source-attribute">
@@ -758,13 +758,13 @@
 
   <!-- When an element is the target of a conref, treat everything the same as any other element EXCEPT the attributes.
      Create the current element, and add all attributes except @id. Then go back to the original element
-     (passed in source-element). Process all attributes on that element, except @conref. They will
+     (passed in source-attributes). Process all attributes on that element, except @conref. They will
      replace values in the source. -->
   <xsl:template match="*" mode="conref-target">
     <xsl:param name="WORKDIR" as="xs:string"/>
     <xsl:param name="conref-source-topicid" as="xs:string?"/>
     <xsl:param name="conref-ids" as="xs:string*"/>
-    <xsl:param name="source-element" as="xs:string*"/>
+    <xsl:param name="source-attributes" as="xs:string*"/>
     <xsl:param name="current-relative-path" as="xs:string"/>
     <!-- File system path from original file to here -->
     <xsl:param name="conref-filename" as="xs:string?"/>
@@ -795,7 +795,7 @@
       <xsl:when test="@conref">
         <xsl:apply-templates select=".">
           <xsl:with-param name="original-element" select="$original-element"/>
-          <xsl:with-param name="source-element" select="$source-element"/>
+          <xsl:with-param name="source-attributes" select="$source-attributes"/>
           <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
           <xsl:with-param name="conref-ids" select="$conref-ids"/>
           <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
@@ -806,7 +806,7 @@
         <xsl:element name="{$original-element}">
           <xsl:apply-templates select="$original-attributes" mode="original-attributes"/>
           <xsl:for-each select="@*">
-            <xsl:if test="not(name() = 'id') and not(name() = $source-element)">
+            <xsl:if test="not(name() = 'id') and not(name() = $source-attributes)">
               <xsl:choose>
                 <xsl:when test="name() = 'href'">
                   <xsl:apply-templates select=".">
@@ -850,7 +850,7 @@
           <xsl:choose>
             <xsl:when test="@conref">
               <xsl:apply-templates select=".">
-                <xsl:with-param name="source-element" select="$source-element"/>
+                <xsl:with-param name="source-attributes" select="$source-attributes"/>
                 <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
                 <xsl:with-param name="conref-ids" select="$conref-ids"/>
                 <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
