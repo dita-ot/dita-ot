@@ -87,7 +87,7 @@
             <plentry>
               <pt><parmname>onlytopicinmap</parmname></pt>
               <pd
-                conref="ant-parameters-all-transformation-types.dita#/ant-parameters-all-transformation-types/onlytopic.in.map.desc"
+                conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/onlytopic.in.map.desc"
               />
             </plentry>
             <plentry>
