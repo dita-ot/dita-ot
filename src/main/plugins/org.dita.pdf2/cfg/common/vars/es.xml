@@ -187,10 +187,12 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Text to use for figure titles. Renders as part of <fig>/<title>
           elements. -->
     <variable id="Figure">Figura  <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Figure Number">Figura  <param ref-name="number"/></variable>
 
     <!-- Text to use for table titles. Renders as part of <table>/<title> 
          elements. -->
     <variable id="Table">Tabla <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Table Number">Tabla <param ref-name="number"/></variable>
 
     <!-- Text to use for related links label.
          Renders as part of <related-links> element. -->

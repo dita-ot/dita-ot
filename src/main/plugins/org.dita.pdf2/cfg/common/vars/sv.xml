@@ -53,7 +53,9 @@
   <variable id="Warning">Varning</variable>
   <variable id="Restriction">Begränsning</variable>
   <variable id="Figure">Figur <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Figure Number">Figur <param ref-name="number"/></variable>
   <variable id="Table">Tabell <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Table Number">Tabell <param ref-name="number"/></variable>
   <variable id="Related Links"><!--TODO:Related Links--></variable>
   <variable id="Cross-Reference"><!--TODO:Cross-Reference to:--></variable>
   <variable id="Content-Reference"><!--TODO:Content-Reference to:--></variable>
