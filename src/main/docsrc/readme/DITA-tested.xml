@@ -16,7 +16,7 @@
         <stentry>
           <sl>
             <sli>Ant 1.7.1</sli>
-            <sli>Ant 1.8.2, 1.8.3, 1.8.4, 1.9.2</sli>
+            <sli>Ant 1.8.2—1.8.4, 1.9.2</sli>
           </sl>
         </stentry>
       </strow>
@@ -43,8 +43,7 @@
         <stentry>Operating system</stentry>
         <stentry>
           <sl>
-            <sli>Mac OS X 10.6</sli>
-            <sli>Mac OS X 10.7</sli>
+            <sli>Mac OS X 10.6—10.9</sli>
             <sli>SLES 10</sli>
             <sli>Windows XP</sli>
             <sli>Windows 7</sli>

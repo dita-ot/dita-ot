@@ -15,10 +15,14 @@
                         <chdeschd>Parameters</chdeschd>
                     </chhead>
                     <chrow>
+                      <choption><cmdname>dita</cmdname> command</choption>
+                      <chdesc><parmname>-d</parmname> or <parmname>-debug</parmname></chdesc>
+                    </chrow>
+                    <chrow>
                         <choption>Ant</choption>
                         <chdesc><codeph>-v -Dargs.debug=yes</codeph></chdesc>
                     </chrow>
-                    <chrow>
+                    <chrow importance="deprecated">
                         <choption>Command-line tool</choption>
                         <chdesc><codeph>/d</codeph> or <codeph>-debug</codeph></chdesc>
                     </chrow>
