@@ -11,7 +11,6 @@ package org.dita.dost.writer;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.net.URI;
@@ -27,7 +26,6 @@ import java.util.Stack;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
@@ -419,24 +417,15 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         final String formatValue = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
                         if (TOPIC_IMAGE.matches(currentElement.type)) {
                             valid = true;
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                            target_output = toURI(normalizeHrefValue(FileUtils.getRelativeUnixPath(inputFile.getPath(), target_output.toString()), elementId));
+                            target_output = normalizeHrefValue(URLUtils.getRelativePath(tempDir.toURI().resolve(inputFile.getPath()), tempDir.toURI().resolve(target)), elementId);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                         } else if (("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)) &&
                                 ("".equals(formatValue) || ATTR_FORMAT_VALUE_DITA.equals(formatValue)  || ATTR_FORMAT_VALUE_DITAMAP.equals(formatValue))) {
-                            final File topicFile = FileUtils.resolveFile(tempDir.getAbsolutePath(), URLUtils.decode(target.toString()));
-                            if (topicFile.exists()) {  
-                                final String topicId = this.getFirstTopicId(topicFile);
-                                target_output = toURI(FileUtils.getRelativeUnixPath(new File(tempDir, inputFile.getPath()).getAbsolutePath(), new File(tempDir.toURI().resolve(target)).getAbsolutePath()));
+                            final File topicFile = toFile(resolveFile(tempDir.toURI(), target));
+                            if (topicFile.exists()) {   
                                 valid = true;
-//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                                target_output = toURI(normalizeHrefValue(target_output.toString(), elementId, topicId));
+                                final String topicId = getFirstTopicId(topicFile);
+                                target_output = normalizeHrefValue(URLUtils.getRelativePath(tempDir.toURI().resolve(inputFile.getPath()), tempDir.toURI().resolve(target)), elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
                                     final URI f = toURI(inputFile).resolve(target_output);
@@ -455,11 +444,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         // scope equals peer or external
                         else {
                             valid = true;
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                            target_output = toURI(normalizeHrefValue(target_output.toString(), elementId));
+                            target_output = normalizeHrefValue(target_output, elementId);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                         }
 
@@ -537,8 +522,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             }
 
             validKeyref.push(valid);
-
-
         }
 
         getContentHandler().startElement(uri, localName, name, resAtts);
@@ -610,12 +593,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /**
      * change elementId into topicId if there is no topicId in key definition.
      */
-    private static String normalizeHrefValue(final String keyName, final String tail) {
-        final int sharpIndex = keyName.indexOf(SHARP);
-        if (sharpIndex == -1) {
-            return keyName + tail.replaceAll(SLASH, SHARP);
+    private static URI normalizeHrefValue(final URI keyName, final String tail) {
+        if (keyName.getFragment() == null) {
+            return toURI(keyName + tail.replaceAll(SLASH, SHARP));
         }
-        return keyName + tail;
+        return toURI(keyName + tail);
     }
 
     /**
@@ -631,14 +613,13 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /**
      * Insert topic id into href
      */
-    private static String normalizeHrefValue(final String fileName, final String tail, final String topicId) {
-        final int sharpIndex = fileName.indexOf(SHARP);
+    private static URI normalizeHrefValue(final URI fileName, final String tail, final String topicId) {
         //Insert first topic id only when topicid is not set in keydef
         //and keyref has elementid
-        if (sharpIndex == -1 && !"".equals(tail)) {
+        if (fileName.getFragment() == null && !"".equals(tail)) {
             return setFragment(fileName, topicId + tail);
         }
-        return fileName + tail;
+        return toURI(fileName + tail);
     }
 
     // Inner classes -----------------------------------------------------------
