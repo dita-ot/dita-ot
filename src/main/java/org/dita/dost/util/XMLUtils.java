@@ -145,10 +145,30 @@ public final class XMLUtils {
      * Transform file with XML filters.
      * 
      * @param inputFile file to transform and replace
-     * @param filters XML filters to transform file with
+     * @param filters XML filters to transform file with, may be an empty list
      */
     public static void transform(final File inputFile, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
+        transform(inputFile, outputFile, filters);
+        try {
+            FileUtils.moveFile(outputFile, inputFile);
+        } catch (final Exception e) {
+            throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Transform file with XML filters.
+     * 
+     * @param inputFile input file
+     * @param outputFile output file
+     * @param filters XML filters to transform file with, may be an empty list
+     */
+    public static void transform(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
+        if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
+            throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
+        }
+        
         InputStream in = null;
         OutputStream out = null;
         try {
@@ -183,12 +203,6 @@ public final class XMLUtils {
                     // ignore
                 }
             }
-        }
-        // replace original file
-        try {
-            FileUtils.moveFile(outputFile, inputFile);
-        } catch (final Exception e) {
-            throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
         }
     }
     
