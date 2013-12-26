@@ -442,7 +442,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                     final String msg = "You must specify a log file when " + "using the -log argument";
                     throw new BuildException(msg);
                 }
-            } else if (arg.equals("-buildfile") || arg.equals("-file") || arg.equals("-f")) {
+            } else if (arg.equals("-buildfile") || arg.equals("-file")) { //|| arg.equals("-f")
                 i = handleArgBuildFile(args, i);
             } else if (arg.equals("-listener")) {
                 i = handleArgListener(args, i);
