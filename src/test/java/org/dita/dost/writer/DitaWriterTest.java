@@ -7,6 +7,7 @@ package org.dita.dost.writer;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -81,7 +82,7 @@ public class DitaWriterTest {
         final Job outputUtils = new Job(tempDir);
         outputUtils.setInputFile(new File(srcDir, "main.ditamap"));
         writer.setJob(outputUtils);
-        writer.setKeyDefinitions(Arrays.asList(new KeyDef("keydef", "keyword.dita", ATTR_SCOPE_VALUE_LOCAL, "main.ditamap")));
+        writer.setKeyDefinitions(Arrays.asList(new KeyDef("keydef", toURI("keyword.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
         
         FileUtils.copyFile(new File(srcDir, FILE_NAME_EXPORT_XML), new File(tempDir, FILE_NAME_EXPORT_XML));
 

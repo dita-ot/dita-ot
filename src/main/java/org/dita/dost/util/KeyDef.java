@@ -57,30 +57,6 @@ public class KeyDef {
         this.source = source;
     }
     
-    /**
-     * Construct new key definition.
-     * 
-     * @param keys key name
-     * @param href href URI, may be {@code null}
-     * @param scope link scope, may be {@code null}
-     * @param source key definition source, may be {@code null}
-     */
-    @Deprecated
-    public KeyDef(final String keys, final String href, final String scope, final String source) {
-        this.keys = keys;
-//        try {
-            this.href = href != null ? toURI(href) : null;
-//        } catch (final URISyntaxException e) {
-//            throw new IllegalArgumentException(e.getMessage(), e);
-//        }
-        this.scope = scope;
-//        try {
-            this.source = source != null ? toURI(source) : null;
-//        } catch (final URISyntaxException e) {
-//            throw new IllegalArgumentException(e.getMessage(), e);
-//        }
-    }
-    
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder().append(keys).append(EQUAL);
@@ -113,9 +89,9 @@ public class KeyDef {
                     final String n = localName != null ? localName : qName;
                     if (n.equals(ELEMENT_KEYDEF)) {
                         res.add(new KeyDef(atts.getValue(ATTRIBUTE_KEYS),
-                                           atts.getValue(ATTRIBUTE_HREF),
+                                           toURI(atts.getValue(ATTRIBUTE_HREF)),
                                            atts.getValue(ATTRIBUTE_SCOPE),
-                                           atts.getValue(ATTRIUBTE_SOURCE)));
+                                           toURI(atts.getValue(ATTRIUBTE_SOURCE))));
                     }
                 }
             });
