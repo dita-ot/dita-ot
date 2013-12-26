@@ -67,7 +67,7 @@ if [ -z "$DITA_HOME" -o ! -d "$DITA_HOME" ] ; then
 fi
 
 # Add build script to arguments
-ant_exec_args="$ant_exec_args \"-f\" \"$DITA_HOME/build.xml\" \"-main\" \"org.dita.dost.invoker.Main\""
+ant_exec_args="$ant_exec_args \"-buildfile\" \"$DITA_HOME/build.xml\" \"-main\" \"org.dita.dost.invoker.Main\""
 
 # For Cygwin and Mingw, ensure paths are in UNIX format before
 # anything is touched
