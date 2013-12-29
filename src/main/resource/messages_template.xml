@@ -385,6 +385,11 @@
     <reason>The id attribute value "%1" is not unique within the topic that contains it.</reason>
     <response></response>
   </message>
+  
+  <message id="DOTJ058E" type="ERROR">
+    <reason>Both %1 and %2 attributes defined.</reason>
+    <response>A single element may not contain both generalized and specialized values for the same attribute.</response>
+  </message>
     
   <!-- End of Java Messages -->
     

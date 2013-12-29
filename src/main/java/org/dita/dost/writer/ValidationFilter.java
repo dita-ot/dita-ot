@@ -10,7 +10,9 @@ import static org.dita.dost.util.Constants.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Deque;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,6 +35,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	private final Set<String> topicIds = new HashSet<String>();
 	private Map<String, Map<String, Set<String>>> validateMap = null;
 	private Locator locator;
+	private final Deque<String[][]> domains = new LinkedList<String[][]>();
 	
 	/**
 	 * Create new profiling filter.
@@ -65,16 +68,29 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	@Override
 	public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
 			throws SAXException {
+	    String d = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
+	    if (d != null) {
+	        domains.addFirst(StringUtils.getExtProps(d));
+	    } else {
+	        domains.addFirst(domains.peekFirst());
+	    } 
 		AttributesImpl modified = null;
 		modified = validateLang(atts, modified);
 		validateId(atts);
 		modified = validateHref(atts, modified);
 		validateKeys(atts);
 		validateAttributeValues(qName, atts);
+		validateAttributeGeneralization(atts);
 		getContentHandler().startElement(uri, localName, qName, modified != null ? modified : atts);
 	}
 
-	/**
+	@Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+        domains.removeFirst();
+        getContentHandler().endElement(uri, localName, qName);
+    }
+	
+    /**
 	 * Validate xml:lang attribute.
 	 * 
 	 * @return modified attributes, {@code null} if there have been no changes 
@@ -246,4 +262,28 @@ public final class ValidationFilter extends AbstractXMLFilter {
         return true;
     }
 	
+    /**
+     * Validate attribute generalization. A single element may not contain both generalized and specialized values for the same attribute.
+     * 
+     * @param atts attributes
+     * @see <a href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/attributegeneralize.html">DITA 1.2 specification</a>
+     */
+    private void validateAttributeGeneralization(final Attributes atts) {
+        final String[][] d = domains.peekFirst();
+        if (d != null) {
+            for (final String[] spec: d) {
+                for (int i = spec.length - 1; i > -1; i--) {
+                    if (atts.getValue(spec[i]) != null) {
+                        for (int j = i - 1; j > -1; j--) {
+                            if (atts.getValue(spec[j]) != null) {
+                                logger.logError(messageUtils.getMessage("DOTJ058E", spec[j], spec[i]).toString());
+                            }
+                        } 
+                    }
+                }
+            }
+        }
+    }
+
+    
 }
