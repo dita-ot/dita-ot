@@ -58,7 +58,7 @@
     </section>
     <section>
       <title>Client package</title>
-      <p>his package is designed for users who want the simplest installation experience. In
+      <p>This package is designed for users who want the simplest installation experience. In
         addition to the core DITA-OT code and the external libraries that are in the minimal and
         standard packages, it contains Apache Ant and FOP. The client package also
         contains scripts for a guided demo of the DITA-OT. The client package includes the
@@ -81,7 +81,7 @@
     </section>
     <section>
       <title>Full-easy-install package</title>
-      <p>his package is designed for users who want the simplest installation experience. In
+      <p>This package is designed for users who want the simplest installation experience. In
         addition to the core DITA-OT code and the external libraries that are in the minimal and
         standard packages, it contains Apache Ant and FOP. The full-easy-install package also
         contains batch files designed to set up a build environment using those tools, as well as a

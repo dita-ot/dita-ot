@@ -5,11 +5,11 @@
  <topicref href="DITA-installation.xml">
   <topicref href="distribution_packages.dita"/>
   <topicref href="prerequisite-software.dita" navtitle="Prerequisite software"/>
-  <topicref href="installing-client.dita"/>
-  <topicref href="installing-full-easy.dita" navtitle="Installing the full-easy package"/>
+   <topicref href="installing-client.dita" product="client"/>
+   <topicref href="installing-full-easy.dita" navtitle="Installing the full-easy package" product="full-easy"/>
   <topicref href="installing-minimal-package-on-linux.dita"
-   navtitle="Installing minimal package on Linux"/>
+   navtitle="Installing minimal package on Linux" product="minimal standard" platform="linux osx"/>
   <topicref href="installing-minimal-package-windows.dita"
-   navtitle="Installing minimal package on Windows"/>
+   navtitle="Installing minimal package on Windows" platform="windows" product="minimal standard"/>
  </topicref>
 </map>

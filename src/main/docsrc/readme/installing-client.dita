@@ -23,7 +23,7 @@
             <choptionhd>Operating system</choptionhd>
             <chdeschd>File name</chdeschd>
           </chhead>
-          <chrow platform="linux">
+          <chrow platform="linux osx">
             <choption>Linux or Mac OSX</choption>
             <chdesc><filepath>DITA-OT<keyword keyref="version"
                 />_client_bin.tar.gz</filepath></chdesc>

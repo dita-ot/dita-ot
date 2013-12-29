@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="installing-full-easy" platform="windows" xml:lang="en-us">
+<task id="installing-full-easy" xml:lang="en-us">
     <title>Installing the full-easy-install package</title>
     <shortdesc id="what-is-easyinstall">For the simplest installation experience, install the
         full-easy-install package. This package can be installed on Linux, Mac OSX, and Windows. It
@@ -23,7 +23,7 @@
                         <choptionhd>Operating system</choptionhd>
                         <chdeschd>File name</chdeschd>
                     </chhead>
-                    <chrow platform="linux">
+                    <chrow platform="linux osx">
                         <choption>Linux or Mac OSX</choption>
                         <chdesc><filepath>DITA-OT<keyword keyref="version"
                                 />_full_easy_install_bin.tar.gz</filepath></chdesc>

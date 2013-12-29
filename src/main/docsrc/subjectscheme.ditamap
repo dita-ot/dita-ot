@@ -16,4 +16,11 @@
       <subjectdef keys="linux"/>
     </subjectdef>
   </enumerationdef>
+  <enumerationdef>
+    <attributedef name="product"/>
+    <subjectdef keys="client"/>
+    <subjectdef keys="full-easy"/>
+    <subjectdef keys="standard"/>
+    <subjectdef keys="minimal"/>
+  </enumerationdef>
 </subjectScheme>

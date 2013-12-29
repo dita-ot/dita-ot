@@ -20,7 +20,7 @@
    <topicref href="ant-parameters-pdf2-transformation.dita" navtitle="PDF2 transformation"/>
    <topicref href="ant-parameters-xhtml-transformation.dita" navtitle="XHTML transformation"/>
   </topicref>
-  <topicref href="dita-command-properties.dita" navtitle="Dita command options and parameters"/>
+  <topicref href="dita-command-properties.dita" navtitle="Dita command options and parameters" product="client"/>
   <topicref href="dita-ot_java_properties.dita" navtitle="Command-line tool parameters">
    <topicref href="tool-parameters-all-transformation.dita" navtitle="All transformations"/>
    <topicref href="tool-parameters-common-html-transformation.dita"
