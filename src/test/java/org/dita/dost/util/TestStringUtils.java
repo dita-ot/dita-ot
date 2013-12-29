@@ -95,11 +95,11 @@ public class TestStringUtils {
 
     @Test
     public void testGetExtProps() {
-        assertArrayEquals(new String[][] {new String[] {"props", "foo"}, new String[] {"props", "bar"}},
+        assertArrayEquals(new String[][] {{"props", "foo"}, {"props", "bar"}},
                           StringUtils.getExtProps("a(props foo) a(props bar)"));
-        assertArrayEquals(new String[][] {new String[] {"props", "bar"}, new String[] {"props", "qux"}},
+        assertArrayEquals(new String[][] {{"props", "bar"}, {"props", "qux"}},
                           StringUtils.getExtProps("(topic foo) a(props bar) (topic baz) a(props qux)"));
-        assertArrayEquals(new String[][] {new String[] {"props", "foo"}},
+        assertArrayEquals(new String[][] {{"props", "foo"}},
                           StringUtils.getExtProps("  a(props   foo  )   "));
         assertArrayEquals(new String[0][0],
                           StringUtils.getExtProps("(topic task)"));

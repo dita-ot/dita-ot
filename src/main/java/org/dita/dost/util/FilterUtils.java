@@ -33,6 +33,15 @@ public final class FilterUtils {
         INCLUDE, EXCLUDE, PASSTHROUGH, FLAG
     }
 
+    private static final String[] PROFILE_ATTRIBUTES = {
+        ATTRIBUTE_NAME_AUDIENCE,
+        ATTRIBUTE_NAME_PLATFORM,
+        ATTRIBUTE_NAME_PRODUCT,
+        ATTRIBUTE_NAME_OTHERPROPS,
+        ATTRIBUTE_NAME_PROPS,
+        ATTRIBUTE_NAME_PRINT
+    };
+    
     public static final FilterKey DEFAULT = new FilterKey(DEFAULT_ACTION, null);
 
     private DITAOTLogger logger;
@@ -109,48 +118,43 @@ public final class FilterUtils {
         }
 
         boolean ret = false;
-        boolean extRet = false;
-
-        if (filterMap == null) {
-            return false;
+        for (final String attr: PROFILE_ATTRIBUTES) {
+            ret = checkExclude(attr, atts.getValue(attr));
+            if (ret) {
+                break;
+            }
         }
-
-        ret = checkExclude(ATTRIBUTE_NAME_AUDIENCE, atts.getValue(ATTRIBUTE_NAME_AUDIENCE))
-                || checkExclude(ATTRIBUTE_NAME_PLATFORM, atts.getValue(ATTRIBUTE_NAME_PLATFORM))
-                || checkExclude(ATTRIBUTE_NAME_PRODUCT, atts.getValue(ATTRIBUTE_NAME_PRODUCT))
-                || checkExclude(ATTRIBUTE_NAME_OTHERPROPS, atts.getValue(ATTRIBUTE_NAME_OTHERPROPS))
-                || checkExclude(ATTRIBUTE_NAME_PROPS, atts.getValue(ATTRIBUTE_NAME_PROPS))
-                || checkExclude(ATTRIBUTE_NAME_PRINT, atts.getValue(ATTRIBUTE_NAME_PRINT));
-
-        if (extProps == null) {
+        
+        if (extProps == null || extProps.length == 0) {
             return ret;
-        }
-
-        for (final String[] propList : extProps) {
-            int propListIndex = propList.length - 1;
-            final String propName = propList[propListIndex];
-            String propValue = atts.getValue(propName);
-
-            while (propValue == null && propListIndex > 0) {
-                propListIndex--;
-                final String attrPropsValue = atts.getValue(propList[propListIndex]);
-                if (attrPropsValue != null) {
-                    int propStart = -1;
-                    if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.indexOf(STRING_BLANK + propName + "(", 0) != -1) {
-                        propStart = attrPropsValue.indexOf(propName + "(");
-                    }
-                    if (propStart != -1) {
-                        propStart = propStart + propName.length() + 1;
-                    }
-                    final int propEnd = attrPropsValue.indexOf(")", propStart);
-                    if (propStart != -1 && propEnd != -1) {
-                        propValue = attrPropsValue.substring(propStart, propEnd).trim();
+        } else {
+            boolean extRet = false;
+            for (final String[] propList : extProps) {
+                int propListIndex = propList.length - 1;
+                final String propName = propList[propListIndex];
+                String propValue = atts.getValue(propName);
+    
+                while (propValue == null && propListIndex > 0) {
+                    propListIndex--;
+                    final String attrPropsValue = atts.getValue(propList[propListIndex]);
+                    if (attrPropsValue != null) {
+                        int propStart = -1;
+                        if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.indexOf(" " + propName + "(", 0) != -1) {
+                            propStart = attrPropsValue.indexOf(propName + "(");
+                        }
+                        if (propStart != -1) {
+                            propStart = propStart + propName.length() + 1;
+                        }
+                        final int propEnd = attrPropsValue.indexOf(")", propStart);
+                        if (propStart != -1 && propEnd != -1) {
+                            propValue = attrPropsValue.substring(propStart, propEnd).trim();
+                        }
                     }
                 }
+                extRet = extRet || extCheckExclude(propList, propValue);
             }
-            extRet = extRet || extCheckExclude(propList, propValue);
+            return ret || extRet;
         }
-        return ret || extRet;
     }
 
     /**
@@ -166,15 +170,11 @@ public final class FilterUtils {
             return false;
         }
 
-        int propListIndex = 0;
-        boolean hasNullAction = false;
-        boolean hasExcludeAction = false;
-
-        propListIndex = propList.length - 1;
+        int propListIndex = propList.length - 1;
         checkRuleMapping(propList[propListIndex], attValue);
         while (propListIndex >= 0) {
-            hasNullAction = false;
-            hasExcludeAction = false;
+            boolean hasNullAction = false;
+            boolean hasExcludeAction = false;
             final StringTokenizer tokenizer = new StringTokenizer(attValue, STRING_BLANK);
 
             final String attName = propList[propListIndex];
@@ -193,8 +193,8 @@ public final class FilterUtils {
                             return false;
                         } else {
                             hasExcludeAction = true;
-                            if (hasNullAction == true) {
-                                if (checkExcludeOfGlobalDefaultAction() == true) {
+                            if (hasNullAction) {
+                                if (checkExcludeOfGlobalDefaultAction()) {
                                     hasNullAction = false;
                                 } else {
                                     return false;
@@ -202,8 +202,8 @@ public final class FilterUtils {
                             }
                         }
                     } else {
-                        if (hasExcludeAction == true) {
-                            if (checkExcludeOfGlobalDefaultAction() == false) {
+                        if (hasExcludeAction) {
+                            if (!checkExcludeOfGlobalDefaultAction()) {
                                 return false;
                             }
                         } else {
@@ -212,8 +212,8 @@ public final class FilterUtils {
                     }
                 } else if (Action.EXCLUDE == filterAction) {
                     hasExcludeAction = true;
-                    if (hasNullAction == true) {
-                        if (checkExcludeOfGlobalDefaultAction() == true) {
+                    if (hasNullAction) {
+                        if (checkExcludeOfGlobalDefaultAction()) {
                             hasNullAction = false;
                         } else {
                             return false;
@@ -249,16 +249,12 @@ public final class FilterUtils {
 
     /**
      * Check the given attName to see if it was excluded.
-     * 
-     * Note: attName is case sensitive, action is case insensitive
-     * 
+     *  
      * @param attName
      * @param attValue
      * @return {@code true} if should be excluded, otherwise {@code false}
      */
     private boolean checkExclude(final String attName, final String attValue) {
-        StringTokenizer tokenizer;
-
         // for the special value :"" or " ",just ignore it
         if (attValue == null || attValue.trim().length() == 0) {
             return false;
@@ -270,7 +266,7 @@ public final class FilterUtils {
          * exclude; 2. only if all of those values were set to 'exclude', it can
          * be exclude.
          */
-        tokenizer = new StringTokenizer(attValue, STRING_BLANK);
+        StringTokenizer tokenizer = new StringTokenizer(attValue, STRING_BLANK);
         while (tokenizer.hasMoreTokens()) {
             final String attSubValue = tokenizer.nextToken();
             final FilterKey filterKey = new FilterKey(attName, attSubValue);
