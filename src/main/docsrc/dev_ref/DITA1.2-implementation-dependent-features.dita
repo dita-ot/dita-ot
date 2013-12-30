@@ -27,6 +27,7 @@
     </section>
     <section id="section_zaa_bgs_qc">
       <title>Filtering</title>
+      <p>Labeled groups in <codeph>otherprops</codeph> attribute are not supported, they are treated as simple strings.</p>
       <p>Error recovery:</p>
       <ul>
         <li>When there are multiple <codeph>revprop</codeph> elements with the same val attribute, no error or

@@ -113,21 +113,17 @@ public final class FilterUtils {
      *         'otherprops', 'props', or 'print' was excluded.
      */
     public boolean needExclude(final Attributes atts, final String[][] extProps) {
-        if (filterMap == null) {
+        if (filterMap == null || filterMap.isEmpty()) {
             return false;
         }
 
-        boolean ret = false;
         for (final String attr: PROFILE_ATTRIBUTES) {
-            ret = checkExclude(attr, atts.getValue(attr));
-            if (ret) {
-                break;
+            if (checkExclude(attr, atts.getValue(attr))) {
+                return true;
             }
         }
         
-        if (extProps == null || extProps.length == 0) {
-            return ret;
-        } else {
+        if (extProps != null && extProps.length != 0) {
             boolean extRet = false;
             for (final String[] propList : extProps) {
                 int propListIndex = propList.length - 1;
@@ -136,27 +132,39 @@ public final class FilterUtils {
     
                 while (propValue == null && propListIndex > 0) {
                     propListIndex--;
-                    final String attrPropsValue = atts.getValue(propList[propListIndex]);
-                    if (attrPropsValue != null) {
-                        int propStart = -1;
-                        if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.indexOf(" " + propName + "(", 0) != -1) {
-                            propStart = attrPropsValue.indexOf(propName + "(");
-                        }
-                        if (propStart != -1) {
-                            propStart = propStart + propName.length() + 1;
-                        }
-                        final int propEnd = attrPropsValue.indexOf(")", propStart);
-                        if (propStart != -1 && propEnd != -1) {
-                            propValue = attrPropsValue.substring(propStart, propEnd).trim();
-                        }
-                    }
+                    propValue = getLabelValue(propName, atts.getValue(propList[propListIndex]));
                 }
                 extRet = extRet || extCheckExclude(propList, propValue);
             }
-            return ret || extRet;
+            return extRet;
         }
+        return false;
     }
 
+    /**
+     * Get labelled props value.
+     * 
+     * @param propName attribute name
+     * @param attrPropsValue attribute value
+     * @return props value, {@code null} if not available
+     */
+    private String getLabelValue(final String propName, final String attrPropsValue) {
+        if (attrPropsValue != null) {
+            int propStart = -1;
+            if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.indexOf(" " + propName + "(", 0) != -1) {
+                propStart = attrPropsValue.indexOf(propName + "(");
+            }
+            if (propStart != -1) {
+                propStart = propStart + propName.length() + 1;
+            }
+            final int propEnd = attrPropsValue.indexOf(")", propStart);
+            if (propStart != -1 && propEnd != -1) {
+                return attrPropsValue.substring(propStart, propEnd).trim();
+            }
+        }
+        return null;
+    }
+    
     /**
      * Check the given extended attribute in propList to see if it was excluded.
      * 
