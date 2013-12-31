@@ -81,7 +81,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
-            reader.setTempDir(job.tempDir.getAbsolutePath());
             for(final URI mapFile: maps.keySet()){
                 logger.logInfo("Reading " + job.tempDir.toURI().resolve(mapFile).toString());
                 reader.setKeys(maps.get(mapFile));

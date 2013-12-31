@@ -10,103 +10,55 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.io.StringReader;
+import java.io.File;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
-
-import org.dita.dost.util.StringUtils;
-import org.xml.sax.Attributes;
+import org.w3c.dom.NodeList;
+import org.dita.dost.log.DITAOTLogger;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 /**
  * KeyrefReader class which reads DITA map file to collect key definitions. Instances are reusable but not thread-safe.
  */
-public final class KeyrefReader extends AbstractXMLReader {
+public final class KeyrefReader implements AbstractReader {
 
-    /** Key definition. */
-    protected static final class KeyDef {
-        
-        protected final String key;
-        protected final StringBuffer keyDefContent;
-        protected int keyDefLevel = 1;
-        
-        /**
-         * Construct a new key definition.
-         * 
-         * @param key key name
-         */
-        public KeyDef(final String key) {
-            this.key = key;
-            keyDefContent = new StringBuffer();
-        }
-        
-    }
-
-    private final XMLReader reader;
+    private DITAOTLogger logger;
+    private final DocumentBuilder builder;
     /** Key definition map, where map key is the key name and map value is XML definition */  
     private final Map<String, Element> keyDefTable;
-
-    private Stack<KeyDef> keyDefs;
 
     private Set<String> keys;
 
     /**
      * Constructor.
      */
-    public KeyrefReader(){
+    public KeyrefReader() {
         keyDefTable = new HashMap<String, Element>();
         try {
-            reader = StringUtils.getXMLReader();
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            reader.setFeature(FEATURE_NAMESPACE, true);
-            reader.setContentHandler(this);
-        } catch (final SAXException ex) {
-            throw new RuntimeException("Unable to initialize XML parser: " + ex.getMessage(), ex);
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (final ParserConfigurationException e) {
+            throw new RuntimeException("Unable to initialize XML parser: " + e.getMessage(), e);
         }
+    }
+    
+    @Override
+    public void read(final File filename) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void characters(final char[] ch, final int start, final int length)
-            throws SAXException {
-        if(!keyDefs.isEmpty()) {
-            keyDefAppend(StringUtils.escapeXML(ch, start, length));
-        }
-    }
-
-
-    @Override
-    public void endElement(final String uri, final String localName, final String name)
-            throws SAXException {
-        if(!keyDefs.isEmpty()){
-            keyDefs.peek().keyDefLevel--;
-            keyDefAppend(LESS_THAN);
-            keyDefAppend(SLASH);
-            keyDefAppend(name);
-            keyDefAppend(GREATER_THAN);
-            if(keyDefs.peek().keyDefLevel == 0){
-                // to the end of the key definition, set the flag false
-                // and put the key definition to table.
-                final KeyDef keyDef = keyDefs.pop();
-                for(final String keyName: keyDef.key.split(" ")){
-                    if(!keyName.equals("")) {
-                        keyDefTable.put(keyName, keyDefToDoc(keyDef.keyDefContent.toString()).getDocumentElement());
-                    }
-
-                }
-            }
-        }
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
     }
     
     /**
@@ -124,103 +76,38 @@ public final class KeyrefReader extends AbstractXMLReader {
      * @param filename absolute URI to DITA map with key definitions
      */
     public void read(final URI filename) {
-        keyDefs = new Stack<KeyDef>();
+        Document doc = null;
         try {
-            reader.parse(new InputSource(filename.toString()));
-        } catch (final Exception ex) {
-            logger.logError(ex.getMessage(), ex) ;
-        } finally {
-            keys = null;
-        }
-    }
-    
-    /**
-     * Set keys set for later comparison.
-     * 
-     * @param set keys set
-     */
-    public void setKeys(final Set<String> set){
-        keys = set;
-    }
-
-    @Override
-    public void startElement(final String uri, final String localName, final String name,
-            final Attributes atts) throws SAXException {
-        final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        final String keyName = atts.getValue(ATTRIBUTE_NAME_KEYS);
-        if(keyName!=null && MAP_TOPICREF.matches(classValue)){
-
-            // if it has @keys and is valid.
-            boolean hasKnownKey = false;
-            for (final String k: keyName.split(" ")) {
-                if(keys.contains(k)){
-                    hasKnownKey = true;
-                    break;
-                }
-            }
-            if(hasKnownKey && !keyDefTable.containsKey(keyName)){
-                keyDefs.push(new KeyDef(keyName));
-                putElement(name, atts);
-            }
-        }else if(!keyDefs.isEmpty()){
-            keyDefs.peek().keyDefLevel++;
-            putElement(name, atts);
-        }
-    }
-
-    private void putElement(final String elemName,
-            final Attributes atts) {
-        keyDefAppend(LESS_THAN);
-        keyDefAppend(elemName);
-        for (int index=0; index < atts.getLength(); index++){
-            keyDefAppend(STRING_BLANK);
-            keyDefAppend(atts.getQName(index));
-            keyDefAppend(EQUAL);
-            keyDefAppend(QUOTATION);
-            String value = atts.getValue(index);
-            value = StringUtils.escapeXML(value);
-            keyDefAppend(value);
-            keyDefAppend(QUOTATION);
-        }
-        keyDefAppend(GREATER_THAN);
-    }
-    
-    /**
-     * Set temporary directory.
-     * 
-     * @param tempDir temporary directory path
-     */
-    public void setTempDir(final String tempDir) {
-    }
-    
-    /**
-     * Append content to every key definition in the stack.
-     * 
-     * @param content XML content to add to key definitions
-     */
-    private void keyDefAppend(final String content) {
-        for (final KeyDef keyDef : keyDefs) {
-            keyDef.keyDefContent.append(content);
-        }
-    }
-    
-    /**
-     * Read key definition
-     * 
-     * @param key key definition XML string
-     * @return parsed key definition document
-     */
-    private Document keyDefToDoc(final String key) {
-        final InputSource inputSource = new InputSource(new StringReader(key));
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        Document document = null;
-        try {
-            final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-            document = documentBuilder.parse(inputSource);
+            doc = builder.parse(new InputSource(filename.toString()));
         } catch (final Exception e) {
-            logger.logError("Failed to parse key definition: " + e.getMessage(), e);
+            logger.logError("Failed to parse map: " + e.getMessage(), e);
+            return;
         }
-        return document;
+        final NodeList elems = doc.getDocumentElement().getElementsByTagName("*");
+        for (int i = 0; i < elems.getLength(); i++) {
+            final Element elem = (Element) elems.item(i);
+            final String classValue = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
+            final String keyName = elem.getAttribute(ATTRIBUTE_NAME_KEYS);
+            if (!keyName.isEmpty() && MAP_TOPICREF.matches(classValue)) {
+                for (final String key: keyName.trim().split("\\s+")) {
+                  if (keys.contains(key) && !keyDefTable.containsKey(key)){
+                      final Document d = builder.newDocument();
+                      final Element copy = (Element) d.importNode(elem, true);
+                      d.appendChild(copy);
+                      keyDefTable.put(key, copy);
+                  }
+              }
+            }
+        }
+    }
+    
+    /**
+     * Set keys to be read.
+     * 
+     * @param set key set
+     */
+    public void setKeys(final Set<String> keys){
+        this.keys = keys;
     }
     
 }
