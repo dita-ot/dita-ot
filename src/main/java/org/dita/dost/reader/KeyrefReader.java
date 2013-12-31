@@ -158,7 +158,7 @@ public final class KeyrefReader extends AbstractXMLReader {
                     break;
                 }
             }
-            if(hasKnownKey){
+            if(hasKnownKey && !keyDefTable.containsKey(keyName)){
                 keyDefs.push(new KeyDef(keyName));
                 putElement(name, atts);
             }
