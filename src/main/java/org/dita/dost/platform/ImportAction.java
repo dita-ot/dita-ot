@@ -8,7 +8,6 @@
  */
 package org.dita.dost.platform;
 
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -16,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * ImportAction implements IAction and import the resource
@@ -50,7 +51,7 @@ abstract class ImportAction implements IAction {
      * @return result
      */
     @Override
-    public abstract void getResult(Appendable output) throws IOException;
+    public abstract void getResult(ContentHandler output) throws SAXException;
 
     /**
      * set input.

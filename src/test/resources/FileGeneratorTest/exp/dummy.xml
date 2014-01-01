@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><dummy>
+<?xml version="1.0" encoding="utf-8"?><dummy xmlns:dita="http://dita-ot.sourceforge.net">
     
   <foo bar='baz'>quz</foo>
 

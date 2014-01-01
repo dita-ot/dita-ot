@@ -4,13 +4,13 @@
  */
 package org.dita.dost.platform;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.dita.dost.util.StringUtils;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * List transtypes integration action.
@@ -25,22 +25,23 @@ final class ListTranstypeAction extends ImportAction {
      * @return result
      */
     @Override
-    public String getResult() {
+    public void getResult(final ContentHandler buf) throws SAXException {
         final String separator = paramTable.containsKey("separator") ? paramTable.get("separator") : "|";
         final List<String> v = new ArrayList<String>(valueSet);
         Collections.sort(v);
         final StringBuilder retBuf = new StringBuilder();
         for (final Iterator<String> i = v.iterator(); i.hasNext(); ) {
-            retBuf.append(StringUtils.escapeXML(i.next()));
+            retBuf.append(i.next());
             if (i.hasNext()) {
                 retBuf.append(separator);
             }
         }
-        return retBuf.toString();
+        final char[] ret = retBuf.toString().toCharArray();
+        buf.characters(ret, 0, ret.length);
     }
     
     @Override
-    public void getResult(Appendable output) throws IOException {
+    public String getResult() {
         throw new UnsupportedOperationException();        
     }
 

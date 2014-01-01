@@ -4,13 +4,16 @@
  */
 package org.dita.dost.platform;
 
+import static javax.xml.XMLConstants.NULL_NS_URI;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils.AttributesBuilder;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * Integration action to output plugin information to Ant build.
@@ -25,7 +28,7 @@ final class ImportPluginInfoAction extends ImportAction {
     }
 
     @Override
-    public void getResult(final Appendable buf) throws IOException {
+    public void getResult(final ContentHandler buf) throws SAXException {
         // plugin properties
         for (final Entry<String, Features> e: featureTable.entrySet()) {
             final Features f = e.getValue();
@@ -43,11 +46,11 @@ final class ImportPluginInfoAction extends ImportAction {
             } else {
                 location.append(f.getLocation().getAbsolutePath());
             }
-            buf.append("<property name='")
-            .append(StringUtils.escapeXML(name))
-            .append("' location='")
-            .append(StringUtils.escapeXML(location.toString()))
-            .append("'/>");
+            buf.startElement(NULL_NS_URI, "property", "property", new AttributesBuilder()
+                .add("name", name)
+                .add("location", location.toString())
+                .build());
+            buf.endElement(NULL_NS_URI, "property", "property");
         }
     }
 

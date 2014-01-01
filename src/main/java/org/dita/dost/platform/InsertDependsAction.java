@@ -8,7 +8,6 @@
  */
 package org.dita.dost.platform;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -16,6 +15,8 @@ import java.util.Map;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.StringUtils;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * InsertDependsAction implements IAction.
@@ -39,7 +40,7 @@ final class InsertDependsAction implements IAction {
     }
     
     @Override
-    public void getResult(Appendable output) throws IOException {
+    public void getResult(final ContentHandler buf) throws SAXException {
         throw new UnsupportedOperationException();        
     }
     
@@ -49,36 +50,23 @@ final class InsertDependsAction implements IAction {
      */
     @Override
     public String getResult() {
-        final String localname = paramTable.get(FileGenerator.PARAM_LOCALNAME);
         final List<String> result = new ArrayList<String>();
-
         for (final String t: value) {
             final String token = t.trim();
             // Pieces which are surrounded with braces are extension points.
-            if (token.startsWith("{") && token.endsWith("}"))
-            {
+            if (token.startsWith("{") && token.endsWith("}")) {
                 final String extension = token.substring(1, token.length() - 1);
                 final String extensionInputs = Integrator.getValue(featureTable, extension);
-                if (extensionInputs != null)
-                {
+                if (extensionInputs != null) {
                     result.add(extensionInputs);
                 }
-            }
-            else
-            {
+            } else {
                 result.add(token);
             }
         }
-        if (!result.isEmpty())
-        {
-            final StringBuilder buf = new StringBuilder();
-
-            buf.append(" ").append(localname).append("=\"")
-            .append(StringUtils.escapeXML(StringUtils.assembleString(result, ","))).append("\"");
-            return buf.toString();
-        }
-        else
-        {
+        if (!result.isEmpty()){
+            return StringUtils.assembleString(result, ",");
+        } else {
             return "";
         }
     }

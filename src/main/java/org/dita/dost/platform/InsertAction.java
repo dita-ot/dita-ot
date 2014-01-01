@@ -8,34 +8,31 @@
  */
 package org.dita.dost.platform;
 
-import static org.dita.dost.util.Constants.*;
-
-import java.io.IOException;
-import java.nio.CharBuffer;
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.ext.DefaultHandler2;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
  * InsertAction implements IAction and insert the resource
  * provided by plug-ins into the xsl files, ant scripts and xml catalog.
  * @author Zhang, Yuan Peng
  */
-class InsertAction extends DefaultHandler2 implements IAction {
+class InsertAction extends XMLFilterImpl implements IAction {
 
     protected final XMLReader reader;
     protected DITAOTLogger logger;
     protected final Set<String> fileNameSet;
-    protected Appendable retBuf;
     protected final Hashtable<String,String> paramTable;
     protected int elemLevel = 0;
     /** Current processing file. */
@@ -50,13 +47,11 @@ class InsertAction extends DefaultHandler2 implements IAction {
         try {
             reader = StringUtils.getXMLReader();
             reader.setContentHandler(this);
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
         }
     }
-
+    
     @Override
     public void setInput(final List<String> input) {
         fileNameSet.addAll(input);
@@ -73,8 +68,8 @@ class InsertAction extends DefaultHandler2 implements IAction {
     }
     
     @Override
-    public void getResult(final Appendable retBuf) throws IOException {
-        this.retBuf = retBuf;
+    public void getResult(final ContentHandler retBuf) throws SAXException {
+        setContentHandler(retBuf);
         try{
             for (final String fileName: fileNameSet) {
                 currentFile = fileName;
@@ -94,80 +89,33 @@ class InsertAction extends DefaultHandler2 implements IAction {
         this.logger = logger;
     }
 
+    // XMLFilter methods
+    
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
-        try {
-            if (elemLevel != 0){
-                final int attLen = attributes.getLength();
-                retBuf.append(LINE_SEPARATOR);
-                retBuf.append("<").append(qName);
-                for (int i = 0; i < attLen; i++){
-                    retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-                    retBuf.append(StringUtils.escapeXML(attributes.getValue(i))).append("\"");
-                }
-                if (("public".equals(localName) ||
-                        "system".equals(localName) ||
-                        "uri".equals(localName))) {
-                    retBuf.append("/>");
-                }
-                else{
-                    retBuf.append(">");
-                }
-            }
-            elemLevel ++;
-        } catch (final IOException e) {
-            throw new SAXException(e);
+        if (elemLevel != 0){
+            getContentHandler().startElement(uri, localName, qName, attributes);
         }
-    }
-
-    @Override
-    public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        try {
-            final char[] esc = StringUtils.escapeXML(ch, start, length).toCharArray();
-            retBuf.append(CharBuffer.wrap(esc, 0, esc.length), 0, esc.length);
-        } catch (final IOException e) {
-            throw new SAXException(e);
-        }
+        elemLevel ++;
     }
 
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-        try {
-            elemLevel --;
-            if (elemLevel != 0 &&
-                    (!"public".equals(localName) &&
-                            !"system".equals(localName) &&
-                            !"uri".equals(localName))
-                    ) {
-                //retBuf.append(LINE_SEPARATOR);
-                retBuf.append("</").append(qName).append(">");
-            }
-        } catch (final IOException e) {
-            throw new SAXException(e);
-        }
-    }
-
-    @Override
-    public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
-        try {
-            retBuf.append(CharBuffer.wrap(ch, start, length), 0, length);
-        } catch (final IOException e) {
-            throw new SAXException(e);
+        elemLevel --;
+        if (elemLevel != 0) {
+            getContentHandler().endElement(uri, localName, qName);
         }
     }
 
     @Override
     public void startDocument() throws SAXException {
         elemLevel = 0;
+        // suppress
     }
-
+    
     @Override
-    public void comment(final char[] ch, final int start, final int length) throws SAXException {
-        try {
-            retBuf.append("<!--").append(CharBuffer.wrap(ch, start, length), 0, length).append("-->");
-        } catch (final IOException e) {
-            throw new SAXException(e);
-        }
+    public void endDocument() throws SAXException {
+        // suppress
     }
 
 }
