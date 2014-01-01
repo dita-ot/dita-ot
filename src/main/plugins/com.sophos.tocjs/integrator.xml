@@ -64,7 +64,7 @@
           dir="${dita.plugin.com.sophos.tocjs.dir}${file.separator}basefiles"><include name="**/*"/></fileset></copy>
   </target>
 
-  <target name="tocjsDefaultXhtmlOutput" depends="dita.map.xhtml, copy-revflag, copy-css , xhtml.topics">
+  <target name="tocjsDefaultXhtmlOutput" depends="dita.map.xhtml, copy-revflag, xhtml.topics, copy-css">
       <!-- Preprocess has already completed based on original dependencies;
            this target continues to XHTML for default output. Seems very 
            indirect way to create the XHTML, so would like something better,

@@ -23,8 +23,9 @@
 	
     <target name="dita2eclipsehelp"
             unless="noMap"
-        depends="build-init, dita.eclipsehelp.init, preprocess, copy-css, 
-                     xhtml.topics">
+        depends="build-init, dita.eclipsehelp.init, preprocess, 
+                 xhtml.topics,
+                 copy-css">
       <antcall target="dita.map.eclipse"></antcall>
     </target>
 

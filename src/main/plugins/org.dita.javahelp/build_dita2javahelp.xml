@@ -12,8 +12,9 @@
 
     <target name="dita2javahelp"
             unless="noMap"
-        depends="dita2javahelp.init, build-init, preprocess, copy-css, 
-                     xhtml.topics">
+            depends="dita2javahelp.init, build-init, preprocess, copy-css, 
+                     xhtml.topics,
+                     copy-css">
           <antcall target="dita.map.javahelp"></antcall>
           <antcall target="compile.Java.Help"></antcall>
     </target>

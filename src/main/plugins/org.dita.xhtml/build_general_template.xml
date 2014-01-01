@@ -6,6 +6,81 @@
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="build_generaltargets">
 
   <target name="xhtml.init">
+    <dita-ot-fail id="DOTA007E">
+      <condition>
+        <and>
+          <isset property="args.ftr" />
+          <not>
+            <available file="${args.ftr}" type="file"/>
+          </not>
+        </and>
+      </condition>
+      <param name="1" value="${args.ftr}"/>
+    </dita-ot-fail>
+    <dita-ot-fail id="DOTA008E">
+      <condition>
+        <and>
+          <isset property="args.hdr" />
+          <not>
+            <available file="${args.hdr}" type="file"/>
+          </not>
+        </and>
+      </condition>
+      <param name="1" value="${args.hdr}"/>
+    </dita-ot-fail>
+    <dita-ot-fail id="DOTA009E">
+      <condition>
+        <and>
+          <isset property="args.hdf" />
+          <not>
+            <available file="${args.hdf}" type="file"/>
+          </not>
+        </and>
+      </condition>
+      <param name="1" value="${args.hdf}"/>
+    </dita-ot-fail>
+    <!-- begin to check and init css relevant properties -->
+    <condition property="user.csspath.url">
+      <or>
+        <contains string="${args.csspath}" substring="http://" />
+        <contains string="${args.csspath}" substring="https://" />
+      </or>
+    </condition>
+    <condition property="args.csspath.absolute">
+      <isabsolute path="${args.csspath}" />
+    </condition>
+    <!-- Set the csspath as default empty directory when there is no user
+      input csspath or user input csspath is a local absolute path. -->
+    <condition property="user.csspath" value="">
+      <or>
+        <not>
+          <isset property="args.csspath" />
+        </not>
+        <isset property="args.csspath.absolute" />
+      </or>
+    </condition>
+    <condition property="user.csspath" value="${args.csspath}/">
+      <not>
+        <isset property="user.csspath" />
+      </not>
+    </condition>
+    <condition property="args.css.real" value="${args.cssroot}${file.separator}${args.css}">
+      <isset property="args.cssroot" />
+    </condition>
+    <condition property="args.css.real" value="${args.css}">
+      <not>
+        <isset property="args.cssroot" />
+      </not>
+    </condition>
+    <available file="${args.css.real}" property="args.css.present" type="file" />
+    <basename property="args.css.file.temp" file="${args.css}" />
+    <condition property="args.css.file" value="${args.css.file.temp}">
+      <or>
+        <isset property="args.css.present" />
+        <isset property="user.csspath.url" />
+      </or>
+    </condition>
+    <!-- end to check and init css relevant parameters -->
     <condition property="out.ext" value=".html">
       <not>
         <isset property="out.ext" />
@@ -27,7 +102,12 @@
     <condition property="dita.xhtml.reloadstylesheet" value="false">
       <not><isset property="dita.xhtml.reloadstylesheet"/></not>
     </condition>
+    <antcall target="output-css-warn-message"/>
   </target>
+  
+  <target name="output-css-warn-message" if="args.csspath.absolute">
+    <dita-ot-echo id="DOTA006W" />
+  </target>  
 
   <target name="xhtml.topics"
           depends="xhtml.init,

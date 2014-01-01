@@ -4,6 +4,11 @@
   See the accompanying license.txt file for applicable licenses.
 -->
 <messages>
+  <!-- Ant -->
+  <message id="DOTA066F" type="FATAL">
+    <reason>Cannot find the user specified XSLT stylesheet '%1'.</reason>
+    <response></response>
+  </message>
   <!-- Java -->
   <message id="PDFJ001E" type="ERROR">
     <reason>Index entry '%1' is dropped, because corresponding group is not found.</reason>
@@ -24,6 +29,16 @@
   <message id="XEPJ003E" type="ERROR">
     <reason>%1</reason>
     <response/>
+  </message>
+  <!-- DOTA067W and DOTA068W actually come from Java code inside the PDF plug-in.
+       DOTA prefix is innacurate. No reason to change at this point. -->
+  <message id="DOTA067W" type="WARN">
+    <reason>Ignoring index-see '%1' inside parent index entry '%2' because the parent indexterm contains indexterm children.</reason>
+    <response>According to the DITA Specification, the index-see element should be ignored if the parent indexterm contains other indexterm children.</response>
+  </message>
+  <message id="DOTA068W" type="WARN">
+    <reason>Ignoring index-see-also '%1' inside parent index entry '%2' because the parent indexterm contains indexterm children.</reason>
+    <response>According to the DITA Specification, the index-see-also element should be ignored if the parent indexterm contains other indexterm children.</response>
   </message>
   <!-- XSLT -->
   <message id="PDFX001W" type="WARN">

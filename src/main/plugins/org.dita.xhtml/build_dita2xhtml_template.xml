@@ -9,16 +9,24 @@
     <property name="html-version" value="html5"/>
   </target>
   <target name="dita2html5"
-          depends="dita2html5.init, build-init, preprocess, 
-                   copy-css, xhtml.topics, dita.map.xhtml"/>
+          depends="dita2html5.init,
+                   build-init,
+                   preprocess, 
+                   xhtml.topics,
+                   dita.map.xhtml,
+                   copy-css"/>
 
   <target name="dita2xhtml.init">
     <property name="html-version" value="xhtml"/>
   </target>
 	
     <target name="dita2xhtml"
-      depends="dita2xhtml.init, build-init, preprocess, 
-                     copy-css , xhtml.topics, dita.map.xhtml">
+            depends="dita2xhtml.init,
+                     build-init,
+                     preprocess, 
+                     xhtml.topics,
+                     dita.map.xhtml,
+                     copy-css">
     </target>
 
     <target name="dita.map.xhtml"

@@ -10,8 +10,8 @@
                    use-init.envhhcdir,
                    use-init.hhcdir,
                    preprocess,
-                   copy-css,
-                   xhtml.topics">
+                   xhtml.topics,
+                   copy-css">
     <antcall target="dita.map.htmlhelp"/>
     <antcall target="dita.htmlhelp.convertlang"/>
     <antcall target="compile.HTML.Help"/>

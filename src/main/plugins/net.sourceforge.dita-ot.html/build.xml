@@ -22,7 +22,6 @@
                    build-init,
                    preprocess,
                    copy-revflag, 
-                   copy-css,
                    net.sourceforge.dita-ot.html,
                    xhtml.topics">
     <copy todir="${output.dir}">
