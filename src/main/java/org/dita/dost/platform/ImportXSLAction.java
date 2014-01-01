@@ -10,6 +10,8 @@ package org.dita.dost.platform;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.IOException;
+
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 
@@ -22,10 +24,10 @@ final class ImportXSLAction extends ImportAction {
     /**
      * get result.
      * @return result
+     * @throws IOException 
      */
     @Override
-    public String getResult() {
-        final StringBuilder retBuf = new StringBuilder();
+    public void getResult(final Appendable retBuf) throws IOException {
         final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
         for (final String value: valueSet) {
             retBuf.append(LINE_SEPARATOR);
@@ -35,7 +37,6 @@ final class ImportXSLAction extends ImportAction {
                             templateFilePath, value)));
             retBuf.append("\"/>");
         }
-        return retBuf.toString();
     }
 
 }

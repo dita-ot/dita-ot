@@ -179,7 +179,7 @@ final class FileGenerator extends DefaultHandler2 {
                     action.setInput(featureTable.get(extension));
                 }
                 action.setFeatures(pluginTable);
-                output.write(action.getResult());
+                action.getResult(output);
             }else{
                 final int attLen = attributes.getLength();
                 output.write("<");

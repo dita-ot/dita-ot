@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,11 @@ public interface IAction {
      * @return result
      */
     String getResult();
+    /**
+     * Return the result.
+     * @param output output to write results to
+     */
+    void getResult(Appendable output) throws IOException;
     /**
      * Set the feature table.
      * @param h hastable

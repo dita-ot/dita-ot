@@ -4,6 +4,7 @@
  */
 package org.dita.dost.platform;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -36,6 +37,11 @@ final class ListTranstypeAction extends ImportAction {
             }
         }
         return retBuf.toString();
+    }
+    
+    @Override
+    public void getResult(Appendable output) throws IOException {
+        throw new UnsupportedOperationException();        
     }
 
 }

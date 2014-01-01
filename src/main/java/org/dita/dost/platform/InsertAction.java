@@ -10,6 +10,8 @@ package org.dita.dost.platform;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.IOException;
+import java.nio.CharBuffer;
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,7 +35,7 @@ class InsertAction extends DefaultHandler2 implements IAction {
     protected final XMLReader reader;
     protected DITAOTLogger logger;
     protected final Set<String> fileNameSet;
-    protected final StringBuffer retBuf;
+    protected Appendable retBuf;
     protected final Hashtable<String,String> paramTable;
     protected int elemLevel = 0;
     /** Current processing file. */
@@ -44,7 +46,6 @@ class InsertAction extends DefaultHandler2 implements IAction {
     public InsertAction() {
         fileNameSet = new LinkedHashSet<String>(16);
         logger = new DITAOTJavaLogger();
-        retBuf = new StringBuffer(4096);
         paramTable = new Hashtable<String,String>();
         try {
             reader = StringUtils.getXMLReader();
@@ -68,6 +69,12 @@ class InsertAction extends DefaultHandler2 implements IAction {
 
     @Override
     public String getResult() {
+        throw new UnsupportedOperationException();
+    }
+    
+    @Override
+    public void getResult(final Appendable retBuf) throws IOException {
+        this.retBuf = retBuf;
         try{
             for (final String fileName: fileNameSet) {
                 currentFile = fileName;
@@ -76,7 +83,6 @@ class InsertAction extends DefaultHandler2 implements IAction {
         } catch (final Exception e) {
             logger.logError(e.getMessage(), e) ;
         }
-        return retBuf.toString();
     }
 
     @Override
@@ -90,48 +96,64 @@ class InsertAction extends DefaultHandler2 implements IAction {
 
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
-        if(elemLevel != 0){
-            final int attLen = attributes.getLength();
-            retBuf.append(LINE_SEPARATOR);
-            retBuf.append("<").append(qName);
-            for (int i = 0; i < attLen; i++){
-                retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-                retBuf.append(StringUtils.escapeXML(attributes.getValue(i))).append("\"");
+        try {
+            if (elemLevel != 0){
+                final int attLen = attributes.getLength();
+                retBuf.append(LINE_SEPARATOR);
+                retBuf.append("<").append(qName);
+                for (int i = 0; i < attLen; i++){
+                    retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
+                    retBuf.append(StringUtils.escapeXML(attributes.getValue(i))).append("\"");
+                }
+                if (("public".equals(localName) ||
+                        "system".equals(localName) ||
+                        "uri".equals(localName))) {
+                    retBuf.append("/>");
+                }
+                else{
+                    retBuf.append(">");
+                }
             }
-            if(("public".equals(localName) ||
-                    "system".equals(localName) ||
-                    "uri".equals(localName))){
-                retBuf.append("/>");
-            }
-            else{
-                retBuf.append(">");
-            }
+            elemLevel ++;
+        } catch (final IOException e) {
+            throw new SAXException(e);
         }
-        elemLevel ++;
     }
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        final char[] esc = StringUtils.escapeXML(ch, start, length).toCharArray();
-        retBuf.append(esc, 0, esc.length);
+        try {
+            final char[] esc = StringUtils.escapeXML(ch, start, length).toCharArray();
+            retBuf.append(CharBuffer.wrap(esc, 0, esc.length), 0, esc.length);
+        } catch (final IOException e) {
+            throw new SAXException(e);
+        }
     }
 
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-        elemLevel --;
-        if(elemLevel != 0 &&
-                (!"public".equals(localName) &&
-                        !"system".equals(localName) &&
-                        !"uri".equals(localName))
-                ){
-            //retBuf.append(LINE_SEPARATOR);
-            retBuf.append("</").append(qName).append(">");
+        try {
+            elemLevel --;
+            if (elemLevel != 0 &&
+                    (!"public".equals(localName) &&
+                            !"system".equals(localName) &&
+                            !"uri".equals(localName))
+                    ) {
+                //retBuf.append(LINE_SEPARATOR);
+                retBuf.append("</").append(qName).append(">");
+            }
+        } catch (final IOException e) {
+            throw new SAXException(e);
         }
     }
 
     @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
-        retBuf.append(ch, start, length);
+        try {
+            retBuf.append(CharBuffer.wrap(ch, start, length), 0, length);
+        } catch (final IOException e) {
+            throw new SAXException(e);
+        }
     }
 
     @Override
@@ -141,7 +163,11 @@ class InsertAction extends DefaultHandler2 implements IAction {
 
     @Override
     public void comment(final char[] ch, final int start, final int length) throws SAXException {
-        retBuf.append("<!--").append(ch, start, length).append("-->");
+        try {
+            retBuf.append("<!--").append(CharBuffer.wrap(ch, start, length), 0, length).append("-->");
+        } catch (final IOException e) {
+            throw new SAXException(e);
+        }
     }
 
 }

@@ -5,6 +5,7 @@
 package org.dita.dost.platform;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -24,8 +25,7 @@ final class ImportPluginInfoAction extends ImportAction {
     }
 
     @Override
-    public String getResult() {
-        final StringBuffer buf = new StringBuffer();
+    public void getResult(final Appendable buf) throws IOException {
         // plugin properties
         for (final Entry<String, Features> e: featureTable.entrySet()) {
             final Features f = e.getValue();
@@ -49,7 +49,6 @@ final class ImportPluginInfoAction extends ImportAction {
             .append(StringUtils.escapeXML(location.toString()))
             .append("'/>");
         }
-        return buf.toString();
     }
 
 }

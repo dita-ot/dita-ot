@@ -96,7 +96,7 @@ public class FileGeneratorTest {
 
     public static class ElementAction extends AbstractAction {
         @Override
-        public String getResult() {
+        public void getResult(Appendable output) throws IOException {
             final Map<String, String> paramsExp = new HashMap<String, String>();
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
             paramsExp.put("id", "element");
@@ -105,7 +105,11 @@ public class FileGeneratorTest {
             final List<String> inputExp = Arrays.asList(new String[] {"foo", "bar", "baz"});
             assertEquals(inputExp, inputs);
             assertEquals(FileGeneratorTest.plugins, features);
-            return "<foo bar='baz'>quz</foo>";
+            output.append("<foo bar='baz'>quz</foo>");
+        }
+        @Override
+        public String getResult() {
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -120,6 +124,11 @@ public class FileGeneratorTest {
             assertEquals(inputExp, inputs);
             assertEquals(FileGeneratorTest.plugins, features);
             return " foo='bar'";
+        }
+
+        @Override
+        public void getResult(Appendable output) throws IOException {
+            throw new UnsupportedOperationException();
         }
     }
 

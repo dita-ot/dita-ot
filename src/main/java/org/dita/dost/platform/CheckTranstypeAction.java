@@ -8,6 +8,8 @@
  */
 package org.dita.dost.platform;
 
+import java.io.IOException;
+
 import org.dita.dost.util.StringUtils;
 /**
  * CheckTranstypeAction class.
@@ -20,8 +22,7 @@ final class CheckTranstypeAction extends ImportAction {
      * @return result
      */
     @Override
-    public String getResult() {
-        final StringBuilder retBuf = new StringBuilder();
+    public void getResult(final Appendable retBuf) throws IOException {
         final String property = paramTable.containsKey("property") ? paramTable.get("property") : "transtype";
         for (final String value: valueSet) {
             retBuf.append("<not><equals arg1=\"${")
@@ -30,7 +31,6 @@ final class CheckTranstypeAction extends ImportAction {
                 .append(StringUtils.escapeXML(value))
                 .append("\" casesensitive=\"false\"/></not>");
         }
-        return retBuf.toString();
     }
 
 }

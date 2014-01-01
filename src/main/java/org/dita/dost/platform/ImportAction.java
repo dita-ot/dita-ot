@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,12 +40,17 @@ abstract class ImportAction implements IAction {
         paramTable = new Hashtable<String,String>();
     }
 
+    @Override
+    public String getResult() {
+        throw new UnsupportedOperationException();
+    }
+    
     /**
      * get result.
      * @return result
      */
     @Override
-    public abstract String getResult();
+    public abstract void getResult(Appendable output) throws IOException;
 
     /**
      * set input.

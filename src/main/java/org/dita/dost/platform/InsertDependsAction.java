@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -36,6 +37,12 @@ final class InsertDependsAction implements IAction {
     public InsertDependsAction() {
         paramTable = new Hashtable<String,String>();
     }
+    
+    @Override
+    public void getResult(Appendable output) throws IOException {
+        throw new UnsupportedOperationException();        
+    }
+    
     /**
      * Get result.
      * @return result
