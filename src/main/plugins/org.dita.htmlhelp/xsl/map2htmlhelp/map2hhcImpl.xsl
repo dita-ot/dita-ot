@@ -37,7 +37,6 @@
 </xsl:text></xsl:variable>
 
 <!-- *************************** Command line parameters *********************** -->
-<xsl:param name="FILEREF" select="'file://'"/>
 <xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
 <xsl:param name="WORKDIR" select="'./'"/>
 

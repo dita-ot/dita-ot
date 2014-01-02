@@ -55,10 +55,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
-  <!-- Deprecated -->
-  <xsl:param name="FILEREF">file://</xsl:param>
-  <!-- The directory where the topic resides, starting with root -->
-  <xsl:param name="WORKDIR" select="'./'"/>
   <xsl:param name="DBG" select="'no'"/>
 
   <!-- Set the format for generated text for links to tables and figures.   -->
@@ -530,9 +526,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!-- Get the file name for a reference that goes out of the file -->
   <xsl:template match="*" mode="topicpull:get-stuff_file">
-    <!--xsl:param name="WORKDIR">
-      <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
-    </xsl:param-->
     <xsl:param name="WORKDIR">
 	    <xsl:choose>
 	        <xsl:when test="contains(@class, ' topic/link ')">

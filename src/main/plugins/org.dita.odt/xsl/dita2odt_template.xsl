@@ -123,7 +123,6 @@
 <xsl:variable name="tempfiledir">
   <xsl:choose>
     <xsl:when test="contains($TEMPDIR, ':\') or contains($TEMPDIR, ':/')">
-      <!--xsl:value-of select="concat($FILEREF,'/')"/-->
       <xsl:value-of select="'file:/'"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
     </xsl:when>
     <xsl:when test="starts-with($TEMPDIR, '/')">
@@ -133,7 +132,6 @@
       <xsl:value-of select="'file://'"/><xsl:value-of select="concat($BASEDIR, '/')"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
     </xsl:when>
     <xsl:otherwise>
-      <!--xsl:value-of select="concat($FILEREF,'/')"/-->
       <xsl:value-of select="'file:/'"/><xsl:value-of select="concat($BASEDIR, '/')"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
     </xsl:otherwise>
   </xsl:choose>

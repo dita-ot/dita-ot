@@ -15,11 +15,6 @@
     <!-- Define the error message prefix identifier -->
     <xsl:variable name="msgprefix">DOTX</xsl:variable>
     
-    <!-- Deprecated -->  
-    <xsl:param name="FILEREF">file://</xsl:param>
-    <!-- The directory where the topic resides, starting with root -->
-    <xsl:param name="WORKDIR" select="'./'"/>
-    
     <xsl:param name="file-being-processed"/>  
     
     <!-- list of attributes that can be overided. -->

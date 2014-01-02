@@ -15,19 +15,9 @@
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix" select="'DOTX'"/>
 
-
-  <!--xsl:param name="WORKDIR" select="'./'"/-->
-  <!-- Deprecated -->
-  <xsl:param name="BASEDIR"/>
-  <!-- Deprecated -->
-  <xsl:param name="TEMPDIR"/>
   <xsl:param name="EXPORTFILE"/>
   <xsl:param name="TRANSTYPE"/>
-  <!-- Deprecated -->
-  <xsl:param name="PROJDIR" select="'.'"/>
   <xsl:param name="DBG" select="no"/>
-  <!-- Deprecated -->
-  <xsl:param name="FILEREF">file://</xsl:param>
 
   <xsl:param name="file-being-processed"/>
 

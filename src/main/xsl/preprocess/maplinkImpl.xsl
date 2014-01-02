@@ -13,8 +13,6 @@
   <!-- output type -->
   <xsl:param name="FINALOUTPUTTYPE" select="''"/>
   <xsl:param name="INPUTMAP" select="''"/>
-  <!-- Deprecated -->
-  <xsl:param name="FILEREF">file://</xsl:param>
   <xsl:param name="WORKDIR">
     <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
   </xsl:param>

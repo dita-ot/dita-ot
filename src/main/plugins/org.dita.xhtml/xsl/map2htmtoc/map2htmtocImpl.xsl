@@ -35,7 +35,6 @@
 <!-- *************************** Command line parameters *********************** -->
 <xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
 <xsl:param name="WORKDIR" select="'./'"/>
-<xsl:param name="FILEREF" select="'file://'"/>
 <xsl:param name="contenttarget" select="'contentwin'"/>
 <xsl:param name="CSS"/>
 <xsl:param name="CSSPATH"/>

@@ -40,10 +40,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:import href="../common/dita-textonly.xsl"/>
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
-  <!-- The directory where the map resides, starting with root -->
-  <xsl:param name="WORKDIR" select="'./'"/>
-  <!-- Deprecated -->
-  <xsl:param name="FILEREF" select="'file://'"/>
   <!-- If converting to PDF, never try to pull info from targets with print="no" -->
   <xsl:param name="FINALOUTPUTTYPE" select="''"/>
   
