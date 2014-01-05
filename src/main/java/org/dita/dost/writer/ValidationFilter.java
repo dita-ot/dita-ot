@@ -123,7 +123,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
         if (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls)) {
 			topicIds.clear();
-        } else if (TOPIC_RESOURCEID.matches(cls)) {
+        } else if (TOPIC_RESOURCEID.matches(cls) || DELAY_D_ANCHORID.matches(cls)) {
             // not considered a normal element ID
         } else {
 			final String id = atts.getValue(ATTRIBUTE_NAME_ID);
