@@ -32,7 +32,10 @@
           <groupseq>
             <kwd>dita</kwd>
             <kwd>-install</kwd>
-            <var>file</var>
+            <groupchoice>
+              <var>file</var>
+              <var>url</var>
+            </groupchoice>
           </groupseq>
         </fragment>
         <fragment>
@@ -72,7 +75,9 @@
         <plentry>
           <pt><parmname>-install</parmname>
             <varname>file</varname></pt>
-          <pd>Install plug-in from a ZIP file.</pd>
+          <pt><parmname>-install</parmname>
+            <varname>url</varname></pt>
+          <pd>Install plug-in from a local ZIP file or from a URL.</pd>
         </plentry>
         <plentry>
           <pt><parmname>-uninstall</parmname>

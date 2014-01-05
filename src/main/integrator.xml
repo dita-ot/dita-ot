@@ -62,13 +62,7 @@
     </antcall>
   </target>
 
-  <target name="install" description="Install plug-in">
-    <fail unless="plugin.file"/>
-    <tstamp>
-      <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
-    </tstamp>
-    <property name="dita.temp.dir" location="${dita.dir}/temp/temp${current.date}" />
-    <unzip src="${plugin.file}" dest="${dita.temp.dir}"/>
+  <target name="install" description="Install plug-in" depends="install.init, install.local, install.download">
     <pathconvert property="temp.plugin.file">
       <first>
         <fileset dir="${dita.temp.dir}">
@@ -90,6 +84,24 @@
     <antcall target="integrate">
       <param name="strict" value="true"/>
     </antcall>
+  </target>
+  <target name="install.init">
+    <fail unless="plugin.file"/>
+    <available file="${plugin.file}" property="install.file.exists"/>
+    <tstamp>
+      <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
+    </tstamp>
+    <property name="dita.temp.dir" location="${dita.dir}/temp/temp${current.date}" />
+    <mkdir dir="${dita.temp.dir}"/>
+  </target>
+  <target name="install.local" if="install.file.exists">
+    <unzip src="${plugin.file}" dest="${dita.temp.dir}"/>
+  </target>
+  <target name="install.download" unless="install.file.exists">
+    <basename property="install.downlaod.file" file="${plugin.file}"/>
+    <get src="${plugin.file}" dest="${dita.temp.dir}/${install.downlaod.file}" ignoreerrors="false" verbose="on"/>
+    <unzip src="${dita.temp.dir}/${install.downlaod.file}" dest="${dita.temp.dir}"/>
+    <delete file="${dita.temp.dir}/${install.downlaod.file}"/>
   </target>
   
   <target name="uninstall" description="Uninstall plug-in">

@@ -185,8 +185,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /** File that we are using for configuration. */
     private File buildFile; /* null */
     
-    /** Plug-in installation file. */
-    private File installFile;
+    /** Plug-in installation file. May be either a system path or a URL. */
+    private String installFile;
     
     /** Plug-in uninstall ID. */
     private String uninstallId;
@@ -498,8 +498,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             buildFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
             targets.clear();
             if (installFile != null) {
-                targets.add("install");
-                definedProps.put("plugin.file", installFile.getAbsolutePath());
+                targets.add("install");                
+                final File f = new File(installFile.replace('/', File.separatorChar)).getAbsoluteFile();
+                if (f.exists()) {
+                    definedProps.put("plugin.file", f.getAbsolutePath());
+                } else {
+                    definedProps.put("plugin.file", installFile);
+                }
             } else {
                 targets.add("uninstall");
                 definedProps.put("plugin.id", uninstallId);
@@ -620,7 +625,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /** Handle the -install argument */
     private int handleArgInstall(final String[] args, int pos) {
         try {
-            installFile = new File(args[++pos].replace('/', File.separatorChar));
+            installFile = args[++pos];
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
             throw new BuildException("You must specify a installation package when using the -install argument");
         }

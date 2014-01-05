@@ -11,6 +11,7 @@
           <choice>Using the <cmdname>dita</cmdname> command line tool, run the installation command: <codeblock>dita -install <varname>plug-in-zip</varname></codeblock></choice>
           <choice>Using Ant, from the toolkit directory run the installation target: <codeblock>ant -f integrator.xml install -Dplugin.file=<varname>plug-in-zip</varname></codeblock></choice>
         </choices>
+        <info>The <varname>plug-in-zip</varname> can be either a local file path or a URL.</info>
       </step>
     </steps>
   </taskbody>
