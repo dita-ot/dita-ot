@@ -10,10 +10,9 @@
   xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
   xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" 
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  xmlns:styleUtils="org.dita.dost.util.StyleUtils"
-  xmlns:stringUtils="org.dita.dost.util.StringUtils" 
+  xmlns:styleUtils="org.dita.dost.util.StyleUtils" 
   xmlns:imgUtils="org.dita.dost.util.ImgUtils"
-  exclude-result-prefixes="ditamsg styleUtils imgUtils stringUtils">
+  exclude-result-prefixes="ditamsg styleUtils imgUtils">
   
   <!-- =========== TEMPLATES FOR ODT FLAGGING =========== -->
   <xsl:template name="create_flagging_styles">
@@ -934,10 +933,7 @@
     <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/table ')][1]/ancestor::*)"/>
     <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/simpletable ')][1]/ancestor::*)"/>
     <!-- get closest tag -->
-    <xsl:variable name="max_depth">
-      <xsl:value-of select="stringUtils:getMax(string($ul_depth), string($ol_depth), string($sl_depth), 
-        string($dl_depth), string($table_depth), string($stable_depth))"/>
-    </xsl:variable>
+    <xsl:variable name="max_depth" select="max(($ul_depth, $ol_depth, $sl_depth, $dl_depth, $table_depth, $stable_depth))"/>
     <xsl:if test="$max_depth != 0 ">
       <xsl:choose>
         <!-- closest tag is ul -->
@@ -1001,10 +997,7 @@
     <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/table ')][1]/ancestor::*)"/>
     <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/simpletable ')][1]/ancestor::*)"/>
     <!-- get closest tag -->
-    <xsl:variable name="max_depth">
-      <xsl:value-of select="stringUtils:getMax(string($ul_depth), string($ol_depth), string($sl_depth), 
-        string($dl_depth), string($table_depth), string($stable_depth))"/>
-    </xsl:variable>
+    <xsl:variable name="max_depth" select="max(($ul_depth, $ol_depth, $sl_depth, $dl_depth, $table_depth, $stable_depth))"/>
     <xsl:if test="$max_depth != 0 ">
       <xsl:choose>
         <!-- closest tag is ul -->

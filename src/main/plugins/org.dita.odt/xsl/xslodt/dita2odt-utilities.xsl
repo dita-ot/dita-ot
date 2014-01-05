@@ -350,29 +350,17 @@
       count(ancestor::*[contains(@class, ' topic/li ')][1]
       /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
     
-    <xsl:variable name="fn_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="fn_depth" select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="list_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="list_depth" select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="dlist_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="dlist_depth" select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="table_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="stable_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="max_depth">
-      <xsl:value-of select="stringUtils:getMax(string($fn_depth), string($list_depth), string($dlist_depth), string($table_depth), string($stable_depth))"/>
-    </xsl:variable>
+    <xsl:variable name="max_depth" select="max(($fn_depth, $list_depth, $dlist_depth, $table_depth, $stable_depth))"/>
     
     <!-- if the table is under p(direct child) -->
     <xsl:choose>
@@ -704,29 +692,17 @@
       count(ancestor::*[contains(@class, ' topic/li ')][1]
       /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
     
-    <xsl:variable name="fn_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="fn_depth" select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="list_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="list_depth" select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="dlist_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="dlist_depth" select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="table_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="stable_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="max_depth">
-      <xsl:value-of select="stringUtils:getMax(string($fn_depth), string($list_depth), string($dlist_depth), string($table_depth), string($stable_depth))"/>
-    </xsl:variable>
+    <xsl:variable name="max_depth" select="max(($fn_depth, $list_depth, $dlist_depth, $table_depth, $stable_depth))"/>
     
     
     <!-- if the table is under p(direct child) -->
