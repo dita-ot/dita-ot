@@ -20,7 +20,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * @since 1.5.4
  * @author Jarno Elovirta
  */
-abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter {
+public abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter {
 
     protected DITAOTLogger logger;
 

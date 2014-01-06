@@ -38,6 +38,7 @@ import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -55,10 +56,8 @@ import org.xml.sax.XMLReader;
  * {@link #reset()} between calls to {@link #parse(File)}.
  * </p>
  */
-public final class GenListModuleReader extends AbstractXMLReader {
+public final class GenListModuleReader extends AbstractXMLFilter {
     
-    /** XMLReader instance for parsing dita file */
-    private XMLReader reader = null;
     /** Filter utils */
     private FilterUtils filterUtils;
     /** Output utilities */
@@ -190,19 +189,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
         level = 0;
         topicrefStack = new Stack<String>();
         props = null;
-        try {
-            reader = StringUtils.getXMLReader();
-        } catch (final SAXException e) {
-            throw new RuntimeException("Unable to create XML parser: " + e.getMessage(), e);
-        }
-        reader.setContentHandler(this);
-        try {
-            reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
-        } catch (final SAXNotRecognizedException e1) {
-            logger.logError(e1.getMessage(), e1) ;
-        } catch (final SAXNotSupportedException e1) {
-            logger.logError(e1.getMessage(), e1) ;
-        }
     }
 
     /**
@@ -479,6 +465,34 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
 
     /**
+     * Set processing input directory absolute path.
+     * 
+     * @param inputFile absolute path to base directory
+     */
+    public void setInputDir(final File inputDir) {
+        this.rootDir = inputDir;
+    }
+
+    
+    /**
+     * Set processing input file absolute path.
+     * 
+     * @param inputFile absolute path to root file
+     */
+    public void setInputFile(final File inputFile) {
+        this.rootFilePath = inputFile;
+    }
+    
+    /**
+     * Set current file absolute path
+     * 
+     * @param currentFile absolute path to current file
+     */
+    public void setCurrentFile(final File currentFile) {
+        this.currentFile = currentFile;
+    }
+    
+    /**
      * Set the relative directory of current file.
      * 
      * @param dir dir
@@ -506,37 +520,23 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
 
     /**
-     * Init xml reader used for pipeline parsing.
-     * 
-     * @param ditaDir absolute path to DITA-OT directory
-     * @param validate whether validate input file
-     * @param rootFile absolute path to input file
-     * @throws SAXException parsing exception
-     * @throws IOException if getting canonical file path fails
+     * Sets the grammar pool on the parser. Note that this is a Xerces-specific
+     * feature.
+     * @param reader
      */
-    public void initXMLReader(final File ditaDir, final boolean validate, final File rootFile,
-            final boolean arg_setSystemid) throws SAXException, IOException {
-        // to check whether the current parsing file's href value is out of inputmap.dir
-        rootDir = rootFile.getParentFile().getCanonicalFile();
-        rootFilePath = rootFile.getCanonicalFile();
-        reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        if (validate == true) {
-            reader.setFeature(FEATURE_VALIDATION, true);
-            try {
-                reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
-            } catch (final SAXNotRecognizedException e) {
-                // Not Xerces, ignore exception
-            }
-        } else {
-            final String msg = MessageUtils.getInstance().getMessage("DOTJ037W").toString();
-            logger.logWarn(msg);
+    public void setGrammarPool(final XMLReader reader) {
+        try {
+            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", GrammarPoolManager.getGrammarPool());
+            logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
+        } catch (final NoClassDefFoundError e) {
+            logger.logDebug("Xerces not available, not using grammar caching");
+        } catch (final SAXNotRecognizedException e) {
+            e.printStackTrace();
+            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+        } catch (final SAXNotSupportedException e) {
+            e.printStackTrace();
+            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         }
-        setGrammarPool(reader);
-
-        CatalogUtils.setDitaDir(ditaDir);
-        setSystemid = arg_setSystemid;
-
-        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
     }
 
     /**
@@ -579,26 +579,6 @@ public final class GenListModuleReader extends AbstractXMLReader {
     }
 
     /**
-     * Parse input xml file.
-     * 
-     * @param file file
-     * @throws SAXException SAXException
-     * @throws IOException IOException
-     * @throws FileNotFoundException FileNotFoundException
-     */
-    public void parse(final File file) throws FileNotFoundException, IOException, SAXException {
-        currentFile = file.getAbsoluteFile();
-        reader.setErrorHandler(new DITAOTXMLErrorHandler(file.getName(), logger));
-        final InputSource is = new InputSource(new FileInputStream(file));
-        // Set the system ID
-        if (setSystemid) {
-            // is.setSystemId(URLUtil.correct(file).toString());
-            is.setSystemId(file.toURI().toURL().toString());
-        }
-        reader.parse(is);
-    }
-
-    /**
      * Check if the current file is a ditamap with
      * "@processing-role=resource-only".
      */
@@ -610,6 +590,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
             processRoleLevel++;
             processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
         }
+        
+        getContentHandler().startDocument();
     }
 
     @Override
@@ -919,6 +901,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
         parseAttribute(atts, ATTRIBUTE_NAME_CONKEYREF);
         parseAttribute(atts, ATTRIBUTE_NAME_KEYREF);
 
+        getContentHandler().startElement(uri, localName, qName, atts);
     }
 
     @Override
@@ -972,6 +955,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
             level--;
             topicrefStack.pop();
         }
+        
+        getContentHandler().endElement(uri, localName, qName);
     }
 
     /**
@@ -992,6 +977,8 @@ public final class GenListModuleReader extends AbstractXMLReader {
             }
         }
         checkMultiLevelKeys(keysDefMap, keysRefMap);
+        
+        getContentHandler().endDocument();
     }
 
     /**
