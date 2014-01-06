@@ -230,6 +230,7 @@
 
     <!-- create required directories -->
     <mkdir dir="${output.dir}" />
+    <delete dir="${dita.temp.dir}" quiet="false"/>
     <mkdir dir="${dita.temp.dir}" />
 
     <condition property="args.logdir" value="${output.dir}">
