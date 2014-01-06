@@ -136,7 +136,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
     /** Relationship graph between subject schema. Keys are paths of subject map files and values
      * are paths of subject scheme maps. A key {@code "ROOT"} contains all subject schemes. */
     private Map<File, Set<File>> schemeRelationGraph = null;
-    private final List<ExportAnchor> resultList = new ArrayList<ExportAnchor>();
+    private final List<ExportAnchor> exportAnchors = new ArrayList<ExportAnchor>();
     private ExportAnchor currentExportAnchor;
     /** Flag to show whether a file has <exportanchors> tag */
     private boolean hasExport = false;
@@ -236,7 +236,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
      * @return list of export anchors
      */
     public List<ExportAnchor> getExportAnchors() {
-        return resultList;
+        return exportAnchors;
     }
 
     /**
@@ -652,9 +652,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
 
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
-        // has class attribute
-        if (classValue != null) {
-
+        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // when meets topic tag
             if (TOPIC_TOPIC.matches(classValue)) {
                 topicId = atts.getValue(ATTRIBUTE_NAME_ID);
@@ -662,20 +660,16 @@ public final class GenListModuleReader extends AbstractXMLReader {
                 // Get relative file name
                 final String filename = FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(),
                         currentFile.getAbsolutePath());
-                for (final ExportAnchor e : resultList) {
+                for (final ExportAnchor e: exportAnchors) {
                     if (e.topicids.contains(filename + QUESTION)) {
                         e.topicids.add(topicId);
                         e.topicids.remove(filename + QUESTION);
                     }
                 }
-
             }
-            // WEK: As of 14 Dec 2009, transtype is sometimes null, not sure
-            // under what conditions.
-            // System.out.println(" + [DEBUG] transtype=" + transtype);
             // get plugin id only transtype = eclipsehelp
             if (FileUtils.isDITAMapFile(currentFile.getName()) && rootFilePath.equals(currentFile)
-                    && MAP_MAP.matches(classValue) && INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+                    && MAP_MAP.matches(classValue)) {
                 String pluginId = atts.getValue(ATTRIBUTE_NAME_ID);
                 if (pluginId == null) {
                     pluginId = "org.sample.help.doc";
@@ -688,64 +682,62 @@ public final class GenListModuleReader extends AbstractXMLReader {
             // Each <topicref> can only have one <topicmeta>.
             // Each <topic> can only have one <prolog>
             // and <metadata> can have more than one exportanchors
-            if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-                if (MAP_TOPICMETA.matches(classValue) || TOPIC_PROLOG.matches(classValue)) {
-                    topicMetaSet.add(qName);
-                }
-                // If the file has <exportanchors> tags only transtype = eclipsehelp
-                if (DELAY_D_EXPORTANCHORS.matches(classValue)) {
-                    hasExport = true;
-                    // If current file is a ditamap file
-                    if (FileUtils.isDITAMapFile(currentFile.getName())) {
-                        // if dita file's extension name is ".xml"
-                        URI editedHref = null;
-                        if (topicHref != null && topicHref.getPath().endsWith(FILE_EXTENSION_XML)) {
-                            // change the extension to ".dita" for latter compare
-                            editedHref = toURI(topicHref.toString().replace(FILE_EXTENSION_XML, FILE_EXTENSION_DITA));
-                        } else {
-                            editedHref = topicHref;
-                        }
-                        // editedHref = editedHref.replace(File.separator, "/");
-                        currentExportAnchor = new ExportAnchor(editedHref);
-                        // if <exportanchors> is defined in topicmeta(topicref), there is only one topic id
-                        currentExportAnchor.topicids.add(topicId);
-                        // If current file is topic file
-                    } else if (FileUtils.isDITATopicFile(currentFile.getName())) {
-                        URI filename = toURI(FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(),
-                                currentFile.getAbsolutePath()));
-                        // if dita file's extension name is ".xml"
-                        if (filename.toString().endsWith(FILE_EXTENSION_XML)) {
-                            // change the extension to ".dita" for latter compare
-                            filename = toURI(filename.toString().replace(FILE_EXTENSION_XML, FILE_EXTENSION_DITA));
-                        }
-                        currentExportAnchor = new ExportAnchor(filename);
-                        // if <exportanchors> is defined in metadata(topic), there can be many topic ids
-                        currentExportAnchor.topicids.add(topicId);
-                        shouldAppendEndTag = true;
+            if (MAP_TOPICMETA.matches(classValue) || TOPIC_PROLOG.matches(classValue)) {
+                topicMetaSet.add(qName);
+            }
+            // If the file has <exportanchors> tags only transtype = eclipsehelp
+            if (DELAY_D_EXPORTANCHORS.matches(classValue)) {
+                hasExport = true;
+                // If current file is a ditamap file
+                if (FileUtils.isDITAMapFile(currentFile.getName())) {
+                    // if dita file's extension name is ".xml"
+                    URI editedHref = null;
+                    if (topicHref != null && topicHref.getPath().endsWith(FILE_EXTENSION_XML)) {
+                        // change the extension to ".dita" for latter compare
+                        editedHref = toURI(topicHref.toString().replace(FILE_EXTENSION_XML, FILE_EXTENSION_DITA));
+                    } else {
+                        editedHref = topicHref;
                     }
-                    // meet <anchorkey> tag
-                } else if (DELAY_D_ANCHORKEY.matches(classValue)) {
-                    // create keyref element in the StringBuffer
-                    // TODO in topic file is no keys
-                    final String keyref = atts.getValue(ATTRIBUTE_NAME_KEYREF);
-                    currentExportAnchor.keys.add(keyref);
-                    // meet <anchorid> tag
-                } else if (DELAY_D_ANCHORID.matches(classValue)) {
-                    // create keyref element in the StringBuffer
-                    final String id = atts.getValue(ATTRIBUTE_NAME_ID);
-                    // If current file is a ditamap file
-                    // The id can only be element id within a topic
-                    if (FileUtils.isDITAMapFile(currentFile.getName())) {
-                        // id shouldn't be same as topic id in the case of duplicate insert
-                        if (!topicId.equals(id)) {
-                            currentExportAnchor.ids.add(id);
-                        }
-                    } else if (FileUtils.isDITATopicFile(currentFile.getName())) {
-                        // id shouldn't be same as topic id in the case of duplicate insert
-                        if (!topicId.equals(id)) {
-                            // topic id found
-                            currentExportAnchor.ids.add(id);
-                        }
+                    // editedHref = editedHref.replace(File.separator, "/");
+                    currentExportAnchor = new ExportAnchor(editedHref);
+                    // if <exportanchors> is defined in topicmeta(topicref), there is only one topic id
+                    currentExportAnchor.topicids.add(topicId);
+                    // If current file is topic file
+                } else if (FileUtils.isDITATopicFile(currentFile.getName())) {
+                    URI filename = toURI(FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(),
+                            currentFile.getAbsolutePath()));
+                    // if dita file's extension name is ".xml"
+                    if (filename.toString().endsWith(FILE_EXTENSION_XML)) {
+                        // change the extension to ".dita" for latter compare
+                        filename = toURI(filename.toString().replace(FILE_EXTENSION_XML, FILE_EXTENSION_DITA));
+                    }
+                    currentExportAnchor = new ExportAnchor(filename);
+                    // if <exportanchors> is defined in metadata(topic), there can be many topic ids
+                    currentExportAnchor.topicids.add(topicId);
+                    shouldAppendEndTag = true;
+                }
+                // meet <anchorkey> tag
+            } else if (DELAY_D_ANCHORKEY.matches(classValue)) {
+                // create keyref element in the StringBuffer
+                // TODO in topic file is no keys
+                final String keyref = atts.getValue(ATTRIBUTE_NAME_KEYREF);
+                currentExportAnchor.keys.add(keyref);
+                // meet <anchorid> tag
+            } else if (DELAY_D_ANCHORID.matches(classValue)) {
+                // create keyref element in the StringBuffer
+                final String id = atts.getValue(ATTRIBUTE_NAME_ID);
+                // If current file is a ditamap file
+                // The id can only be element id within a topic
+                if (FileUtils.isDITAMapFile(currentFile.getName())) {
+                    // id shouldn't be same as topic id in the case of duplicate insert
+                    if (!topicId.equals(id)) {
+                        currentExportAnchor.ids.add(id);
+                    }
+                } else if (FileUtils.isDITATopicFile(currentFile.getName())) {
+                    // id shouldn't be same as topic id in the case of duplicate insert
+                    if (!topicId.equals(id)) {
+                        // topic id found
+                        currentExportAnchor.ids.add(id);
                     }
                 }
             }
@@ -961,17 +953,19 @@ public final class GenListModuleReader extends AbstractXMLReader {
             }
             --excludedLevel;
         }
-        // <exportanchors> over should write </file> tag
-
-        if (topicMetaSet.contains(qName) && hasExport) {
-            // If current file is a ditamap file
-            if (FileUtils.isDITAMapFile(currentFile.getName())) {
-                resultList.add(currentExportAnchor);
-                currentExportAnchor = null;
-                // If current file is topic file
+        
+        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+            // <exportanchors> over should write </file> tag
+            if (topicMetaSet.contains(qName) && hasExport) {
+                // If current file is a ditamap file
+                if (FileUtils.isDITAMapFile(currentFile.getName())) {
+                    exportAnchors.add(currentExportAnchor);
+                    currentExportAnchor = null;
+                    // If current file is topic file
+                }
+                hasExport = false;
+                topicMetaSet.clear();
             }
-            hasExport = false;
-            topicMetaSet.clear();
         }
 
         if (!topicrefStack.isEmpty() && localName.equals(topicrefStack.peek())) {
@@ -989,11 +983,13 @@ public final class GenListModuleReader extends AbstractXMLReader {
             processRoleLevel--;
             processRoleStack.pop();
         }
-        if (FileUtils.isDITATopicFile(currentFile.getName()) && shouldAppendEndTag) {
-            resultList.add(currentExportAnchor);
-            currentExportAnchor = null;
-            // should reset
-            shouldAppendEndTag = false;
+        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+            if (FileUtils.isDITATopicFile(currentFile.getName()) && shouldAppendEndTag) {
+                exportAnchors.add(currentExportAnchor);
+                currentExportAnchor = null;
+                // should reset
+                shouldAppendEndTag = false;
+            }
         }
         checkMultiLevelKeys(keysDefMap, keysRefMap);
     }
