@@ -59,6 +59,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.ProfilingFilter;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -178,6 +179,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /** XMLReader instance for parsing dita file */
     private XMLReader reader;
     private GenListModuleReader listFilter;
+    private ExportAnchorsFilter exportAnchorsFilter;
     private boolean xmlValidate = true;
     private ContentHandler nullHandler;
     private FilterUtils filterUtils;
@@ -287,6 +289,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         listFilter.setInputFile(rootFile.getAbsoluteFile());
         listFilter.setInputDir(rootFile.getAbsoluteFile().getParentFile());//baseInputDir
         listFilter.setJob(job);
+        
+        exportAnchorsFilter = new ExportAnchorsFilter();
+        exportAnchorsFilter.setInputFile(rootFile.getAbsoluteFile());
         
         nullHandler = new DefaultHandler();
     }
@@ -403,8 +408,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     }
 
     private void processWaitList() throws DITAOTException {
-        listFilter.setTranstype(transtype);
-
         if (FileUtils.isDITAMapFile(inputFile.getPath())) {
             listFilter.setPrimaryDitamap(inputFile.getPath());
         }
@@ -426,8 +429,13 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             profilingFilter.setFilterUtils(filterUtils);
             pipe.add(profilingFilter);
         }
+        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+            exportAnchorsFilter.setCurrentDir(file.getParentFile());
+            exportAnchorsFilter.setCurrentFile(fileToParse);
+            exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+            pipe.add(exportAnchorsFilter);
+        }
         {
-            listFilter.setTranstype(transtype);
             listFilter.setCurrentDir(file.getParentFile());
             listFilter.setCurrentFile(fileToParse);
             listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
@@ -1059,7 +1067,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             // Output plugin id
             final File pluginIdFile = new File(job.tempDir, FILE_NAME_PLUGIN_XML);
             final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
-            delayConrefUtils.writeMapToXML(listFilter.getPluginMap(), pluginIdFile);
+            delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap(), pluginIdFile);
             OutputStream exportStream = null;
             XMLStreamWriter export = null;
             try {
@@ -1067,7 +1075,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             	export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream);
             	export.writeStartDocument();
             	export.writeStartElement("stub");
-            	for (final ExportAnchor e: listFilter.getExportAnchors()) {
+            	for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
             		export.writeStartElement("file");
             		export.writeAttribute("name", e.file.toString());
             		for (final String t: e.topicids) {

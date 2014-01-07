@@ -129,22 +129,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Relationship graph between subject schema. Keys are paths of subject map files and values
      * are paths of subject scheme maps. A key {@code "ROOT"} contains all subject schemes. */
     private Map<File, Set<File>> schemeRelationGraph = null;
-    private final List<ExportAnchor> exportAnchors = new ArrayList<ExportAnchor>();
-    private ExportAnchor currentExportAnchor;
-    /** Flag to show whether a file has <exportanchors> tag */
-    private boolean hasExport = false;
-    /** For topic/dita files whether a </file> tag should be added */
-    private boolean shouldAppendEndTag = false;
-    /** Store the href of topicref tag */
-    private URI topicHref;
-    /** Topicmeta set for merge multiple exportanchors into one. Each topicmeta/prolog can define many exportanchors */
-    private final Set<String> topicMetaSet;
-    /** Refered topic id */
-    private String topicId = "";
-    /** Map to store plugin id */
-    private final Map<String, Set<String>> pluginMap = new HashMap<String, Set<String>>();
-    /** Transtype */
-    private String transtype;
     /** Map to store referenced branches. */
     private final Map<String, List<String>> vaildBranches;
     /** Int to mark referenced nested elements. */
@@ -178,45 +162,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         processRoleStack = new Stack<String>();
         resourceOnlySet = new HashSet<File>(32);
         crossSet = new HashSet<File>(32);
-        topicMetaSet = new HashSet<String>(16);
         vaildBranches = new HashMap<String, List<String>>(32);
         level = 0;
         topicrefStack = new Stack<String>();
         props = null;
-    }
-
-    /**
-     * Get transtype.
-     * 
-     * @return the transtype
-     */
-    public String getTranstype() {
-        return transtype;
-    }
-
-    /**
-     * Set transtype.
-     * 
-     * @param transtype the transtype to set
-     */
-    public void setTranstype(final String transtype) {
-        this.transtype = transtype;
-    }
-
-    /**
-     * @return the pluginMap
-     */
-    public Map<String, Set<String>> getPluginMap() {
-        return pluginMap;
-    }
-
-    /**
-     * Get export anchors.
-     * 
-     * @return list of export anchors
-     */
-    public List<ExportAnchor> getExportAnchors() {
-        return exportAnchors;
     }
 
     /**
@@ -617,97 +566,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            // when meets topic tag
-            if (TOPIC_TOPIC.matches(classValue)) {
-                topicId = atts.getValue(ATTRIBUTE_NAME_ID);
-                // relpace place holder with first topic id
-                // Get relative file name
-                final String filename = FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(),
-                        currentFile.getAbsolutePath());
-                for (final ExportAnchor e: exportAnchors) {
-                    if (e.topicids.contains(filename + QUESTION)) {
-                        e.topicids.add(topicId);
-                        e.topicids.remove(filename + QUESTION);
-                    }
-                }
-            }
-            // get plugin id only transtype = eclipsehelp
-            if (FileUtils.isDITAMapFile(currentFile.getName()) && rootFilePath.equals(currentFile)
-                    && MAP_MAP.matches(classValue)) {
-                String pluginId = atts.getValue(ATTRIBUTE_NAME_ID);
-                if (pluginId == null) {
-                    pluginId = "org.sample.help.doc";
-                }
-                final Set<String> set = StringUtils.restoreSet(pluginId);
-                pluginMap.put("pluginId", set);
-            }
-
-            // merge multiple exportanchors into one
-            // Each <topicref> can only have one <topicmeta>.
-            // Each <topic> can only have one <prolog>
-            // and <metadata> can have more than one exportanchors
-            if (MAP_TOPICMETA.matches(classValue) || TOPIC_PROLOG.matches(classValue)) {
-                topicMetaSet.add(qName);
-            }
-            // If the file has <exportanchors> tags only transtype = eclipsehelp
-            if (DELAY_D_EXPORTANCHORS.matches(classValue)) {
-                hasExport = true;
-                // If current file is a ditamap file
-                if (FileUtils.isDITAMapFile(currentFile.getName())) {
-                    // if dita file's extension name is ".xml"
-                    URI editedHref = null;
-                    if (topicHref != null && topicHref.getPath().endsWith(FILE_EXTENSION_XML)) {
-                        // change the extension to ".dita" for latter compare
-                        editedHref = toURI(topicHref.toString().replace(FILE_EXTENSION_XML, FILE_EXTENSION_DITA));
-                    } else {
-                        editedHref = topicHref;
-                    }
-                    // editedHref = editedHref.replace(File.separator, "/");
-                    currentExportAnchor = new ExportAnchor(editedHref);
-                    // if <exportanchors> is defined in topicmeta(topicref), there is only one topic id
-                    currentExportAnchor.topicids.add(topicId);
-                    // If current file is topic file
-                } else if (FileUtils.isDITATopicFile(currentFile.getName())) {
-                    URI filename = toURI(FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(),
-                            currentFile.getAbsolutePath()));
-                    // if dita file's extension name is ".xml"
-                    if (filename.toString().endsWith(FILE_EXTENSION_XML)) {
-                        // change the extension to ".dita" for latter compare
-                        filename = toURI(filename.toString().replace(FILE_EXTENSION_XML, FILE_EXTENSION_DITA));
-                    }
-                    currentExportAnchor = new ExportAnchor(filename);
-                    // if <exportanchors> is defined in metadata(topic), there can be many topic ids
-                    currentExportAnchor.topicids.add(topicId);
-                    shouldAppendEndTag = true;
-                }
-                // meet <anchorkey> tag
-            } else if (DELAY_D_ANCHORKEY.matches(classValue)) {
-                // create keyref element in the StringBuffer
-                // TODO in topic file is no keys
-                final String keyref = atts.getValue(ATTRIBUTE_NAME_KEYREF);
-                currentExportAnchor.keys.add(keyref);
-                // meet <anchorid> tag
-            } else if (DELAY_D_ANCHORID.matches(classValue)) {
-                // create keyref element in the StringBuffer
-                final String id = atts.getValue(ATTRIBUTE_NAME_ID);
-                // If current file is a ditamap file
-                // The id can only be element id within a topic
-                if (FileUtils.isDITAMapFile(currentFile.getName())) {
-                    // id shouldn't be same as topic id in the case of duplicate insert
-                    if (!topicId.equals(id)) {
-                        currentExportAnchor.ids.add(id);
-                    }
-                } else if (FileUtils.isDITATopicFile(currentFile.getName())) {
-                    // id shouldn't be same as topic id in the case of duplicate insert
-                    if (!topicId.equals(id)) {
-                        // topic id found
-                        currentExportAnchor.ids.add(id);
-                    }
-                }
-            }
-        }
-
         // Generate Scheme relationship graph
         if (SUBJECTSCHEME_SUBJECTSCHEME.matches(classValue)) {
             if (schemeRelationGraph == null) {
@@ -900,20 +758,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (topicGroupLevel > 0) {
             topicGroupLevel--;
         }
-        
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            // <exportanchors> over should write </file> tag
-            if (topicMetaSet.contains(qName) && hasExport) {
-                // If current file is a ditamap file
-                if (FileUtils.isDITAMapFile(currentFile.getName())) {
-                    exportAnchors.add(currentExportAnchor);
-                    currentExportAnchor = null;
-                    // If current file is topic file
-                }
-                hasExport = false;
-                topicMetaSet.clear();
-            }
-        }
 
         if (!topicrefStack.isEmpty() && localName.equals(topicrefStack.peek())) {
             level--;
@@ -931,14 +775,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (processRoleLevel > 0) {
             processRoleLevel--;
             processRoleStack.pop();
-        }
-        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            if (FileUtils.isDITATopicFile(currentFile.getName()) && shouldAppendEndTag) {
-                exportAnchors.add(currentExportAnchor);
-                currentExportAnchor = null;
-                // should reset
-                shouldAppendEndTag = false;
-            }
         }
         checkMultiLevelKeys(keysDefMap, keysRefMap);
         
@@ -1187,33 +1023,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (MAP_TOPICREF.matches(attrClass)) {
             if (ATTR_TYPE_VALUE_SUBJECT_SCHEME.equalsIgnoreCase(attrType)) {
                 schemeSet.add(new File(filename));
-            }
-            // only transtype = eclipsehelp
-            if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-                // For only format of the href is dita topic
-                if (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat)) {
-                    if (attrName.equals(ATTRIBUTE_NAME_HREF)) {
-                        topicHref = toURI(filename);
-                        // attrValue has topicId
-                        if (attrValue.lastIndexOf(SHARP) != -1) {
-                            // get the topicId position
-                            final int position = attrValue.lastIndexOf(SHARP);
-                            topicId = attrValue.substring(position + 1);
-                        } else {
-                            // get the first topicId(vaild href file)
-                            if (FileUtils.isDITAFile(topicHref.getPath())) {
-                                // topicId =
-                                // MergeUtils.getInstance().getFirstTopicId(topicHref,
-                                // (new File(rootFilePath)).getParent(), true);
-                                // to be unique
-                                topicId = topicHref + QUESTION;
-                            }
-                        }
-                    }
-                } else {
-                    topicHref = null;
-                    topicId = null;
-                }
             }
         } else if (TOPIC_IMAGE.matches(attrClass)) {
             if (attrFormat == null) {
@@ -1500,7 +1309,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         public final Set<String> keys = new HashSet<String>();
         public final Set<String> ids = new HashSet<String>();
 
-        ExportAnchor(final URI file) {
+        public ExportAnchor(final URI file) {
             this.file = file;
         }
     }

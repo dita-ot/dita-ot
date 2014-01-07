@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
@@ -33,6 +34,9 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -49,8 +53,10 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GrammarPoolManager;
+import org.dita.dost.reader.GenListModuleReader.ExportAnchor;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Configuration;
+import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
@@ -61,6 +67,7 @@ import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.DitaWriter;
+import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.GenListModuleFilter;
 import org.dita.dost.writer.GenListModuleFilter.Reference;
 import org.dita.dost.writer.NormalizeFilter;
@@ -130,6 +137,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
     /** Prefix path. Either an empty string or a path which ends in {@link java.io.File#separator File.separator}. */
     private final String prefix = "";
     private GenListModuleFilter listFilter;
+    private ExportAnchorsFilter exportAnchorsFilter;
     private boolean xmlValidate = true;
     /** Absolute path to input file. */
     private URI rootFile;
@@ -294,6 +302,9 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         listFilter.setJob(job);
         listFilter.setTempDir(job.tempDir);
         listFilter.isStartDocument(true);
+        
+        exportAnchorsFilter = new ExportAnchorsFilter();
+        exportAnchorsFilter.setInputFile(new File(rootFile).getAbsoluteFile());
     }
     
     /**
@@ -537,6 +548,12 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             final NormalizeFilter normalizeFilter = new NormalizeFilter();
             normalizeFilter.setLogger(logger);
             pipe.add(normalizeFilter);
+        }
+        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+            exportAnchorsFilter.setCurrentDir(toFile(currentFile).getParentFile());
+            exportAnchorsFilter.setCurrentFile(new File(fileToParse));
+            exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+            pipe.add(exportAnchorsFilter);
         }
         {
 //            listFilter.setTranstype(transtype);
@@ -931,61 +948,61 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
         }
 
-//        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-//            // Output plugin id
-//            final File pluginIdFile = new File(job.tempDir, FILE_NAME_PLUGIN_XML);
-//            final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
-//            delayConrefUtils.writeMapToXML(listFilter.getPluginMap(), pluginIdFile);
-//            OutputStream exportStream = null;
-//            XMLStreamWriter export = null;
-//            try {
-//                exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML));
-//                export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream);
-//                export.writeStartDocument();
-//                export.writeStartElement("stub");
-//                for (final ExportAnchor e: listFilter.getExportAnchors()) {
-//                    export.writeStartElement("file");
-//                    export.writeAttribute("name", e.file);
-//                    for (final String t: e.topicids) {
-//                        export.writeStartElement("topicid");
-//                        export.writeAttribute("name", t);
-//                        export.writeEndElement();
-//                    }
-//                    for (final String i: e.ids) {
-//                        export.writeStartElement("id");
-//                        export.writeAttribute("name", i);
-//                        export.writeEndElement();
-//                    }
-//                    for (final String k: e.keys) {
-//                        export.writeStartElement("keyref");
-//                        export.writeAttribute("name", k);
-//                        export.writeEndElement();
-//                    }
-//                    export.writeEndElement();
-//                }
-//                export.writeEndElement();
-//                export.writeEndDocument();
-//            } catch (final FileNotFoundException e) {
-//                throw new DITAOTException("Failed to write export anchor file: " + e.getMessage(), e);
-//            } catch (final XMLStreamException e) {
-//                throw new DITAOTException("Failed to serialize export anchor file: " + e.getMessage(), e);
-//            } finally {
-//                if (export != null) {
-//                    try {
-//                        export.close();
-//                    } catch (final XMLStreamException e) {
-//                        logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
-//                    }
-//                }
-//                if (exportStream != null) {
-//                    try {
-//                        exportStream.close();
-//                    } catch (final IOException e) {
-//                        logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
-//                    }
-//                }
-//            }
-//        }
+        if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
+            // Output plugin id
+            final File pluginIdFile = new File(job.tempDir, FILE_NAME_PLUGIN_XML);
+            final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
+            delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap(), pluginIdFile);
+            OutputStream exportStream = null;
+            XMLStreamWriter export = null;
+            try {
+                exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML));
+                export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream);
+                export.writeStartDocument();
+                export.writeStartElement("stub");
+                for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
+                    export.writeStartElement("file");
+                    export.writeAttribute("name", e.file.toString());
+                    for (final String t: e.topicids) {
+                        export.writeStartElement("topicid");
+                        export.writeAttribute("name", t);
+                        export.writeEndElement();
+                    }
+                    for (final String i: e.ids) {
+                        export.writeStartElement("id");
+                        export.writeAttribute("name", i);
+                        export.writeEndElement();
+                    }
+                    for (final String k: e.keys) {
+                        export.writeStartElement("keyref");
+                        export.writeAttribute("name", k);
+                        export.writeEndElement();
+                    }
+                    export.writeEndElement();
+                }
+                export.writeEndElement();
+                export.writeEndDocument();
+            } catch (final FileNotFoundException e) {
+                throw new DITAOTException("Failed to write export anchor file: " + e.getMessage(), e);
+            } catch (final XMLStreamException e) {
+                throw new DITAOTException("Failed to serialize export anchor file: " + e.getMessage(), e);
+            } finally {
+                if (export != null) {
+                    try {
+                        export.close();
+                    } catch (final XMLStreamException e) {
+                        logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
+                    }
+                }
+                if (exportStream != null) {
+                    try {
+                        exportStream.close();
+                    } catch (final IOException e) {
+                        logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
+                    }
+                }
+            }
+        }
     }
 
     /**
