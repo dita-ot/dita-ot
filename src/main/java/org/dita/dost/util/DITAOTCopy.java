@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -44,7 +43,7 @@ public final class DITAOTCopy extends Task {
      * @param incld The includes to set.
      */
     public void setIncludes(final String incld) {
-        this.includes = incld;
+        includes = incld;
     }
 
     /**
@@ -52,7 +51,7 @@ public final class DITAOTCopy extends Task {
      * @param destdir the destination directory.
      */
     public void setTodir(final String destdir) {
-        this.destDir = destdir;
+        destDir = destdir;
     }
 
     /**
@@ -60,7 +59,7 @@ public final class DITAOTCopy extends Task {
      * @param relPaths the relative path .
      */
     public void setRelativePaths(final String relPaths) {
-        this.relativePaths = relPaths;
+        relativePaths = relPaths;
     }
 
     /**
@@ -86,7 +85,7 @@ public final class DITAOTCopy extends Task {
                     }
                 }
             } catch (final IOException e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }else{
             pathTokenizer = new StringTokenizer(relativePaths, COMMA);
@@ -115,7 +114,7 @@ public final class DITAOTCopy extends Task {
                     }
                 }
             } catch (final IOException e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }

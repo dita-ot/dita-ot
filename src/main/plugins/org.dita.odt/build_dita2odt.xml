@@ -35,9 +35,6 @@
     <condition property="args.rellinks" value="none">
       <not><isset property="args.rellinks"/></not>
     </condition>
-    <condition property="args.odt.include.rellinks" value="none">
-       <not><isset property="args.odt.include.rellinks"></isset></not>
-    </condition>
     <condition property="args.odt.img.embed" value="yes">
       <not>
         <isset property="args.odt.img.embed"/>
@@ -79,7 +76,7 @@
               tempdir="${dita.temp.dir.fullpath}">
   	  <module class="org.dita.dost.module.TopicMergeModule">
         <param name="output" location="${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml"/>
-        <param name="style" location="${dita.dir}/xsl/xslodt/common/topicmerge.xsl"/>
+  	    <param name="style" location="${dita.plugin.org.dita.odt.dir}/xsl/xslodt/common/topicmerge.xsl"/>
   	  </module>
   	</pipeline>
   	<!--create content.xml -->
@@ -97,7 +94,7 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
-      <param name="disableRelatedLinks" expression="${args.odt.include.rellinks}"/>
+      <param name="include.rellinks" expression="${include.rellinks}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
       <param name="ODTIMGEMBED" expression="${args.odt.img.embed}" if="args.odt.img.embed"/>
@@ -125,7 +122,7 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
-      <param name="disableRelatedLinks" expression="${args.odt.include.rellinks}"/>
+      <param name="include.rellinks" expression="${include.rellinks}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
       <param name="ODTIMGEMBED" expression="${args.odt.img.embed}" if="args.odt.img.embed"/>

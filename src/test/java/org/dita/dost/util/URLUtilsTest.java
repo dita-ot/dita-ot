@@ -62,5 +62,13 @@ public class URLUtilsTest {
         
         assertEquals("foo?bar=baz&qux=quxx", URLUtils.clean("foo?bar=baz&qux=quxx"));
     }
+    
+    @Test
+    public void testCleanASCII() {
+        assertEquals("foo.dita", URLUtils.clean("foo.dita", true));
+        assertEquals("f%C3%B6%C3%A5.dita", URLUtils.clean("f\u00f6\u00e5.dita", true));
+        assertEquals("foo.dita", URLUtils.clean("foo.dita", false));
+        assertEquals("f\u00f6\u00e5.dita", URLUtils.clean("f\u00f6\u00e5.dita", false));
+    }
 
 }

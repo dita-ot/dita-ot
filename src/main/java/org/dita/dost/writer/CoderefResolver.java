@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -17,7 +16,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -37,6 +37,13 @@ import org.dita.dost.util.FileUtils;
  * <p>If no charset if defined or the charset name is not recognized,
  * {@link java.nio.charset.Charset#defaultCharset() default charset} is used in
  * reading the code file.</p>
+ * 
+ * <p>The href attribute can contain an optional line range:</p>
+ * 
+ * <pre>uri ("#line-range(" start ("," end)? ")" )?</pre>
+ * 
+ * <p>Start and end line numbers start from 1 and are inclusive. If end range
+ * is omitted, range ends in last line.</p>
  */
 public final class CoderefResolver extends AbstractXMLFilter {
 
@@ -95,36 +102,26 @@ public final class CoderefResolver extends AbstractXMLFilter {
                         BufferedReader codeReader = null;
                         try {
                             codeReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(codeFile)), charset));
-                            String line = codeReader.readLine();
-                            while (line != null) {
-                                final char[] ch = line.toCharArray();
-                                super.characters(ch, 0, ch.length);
-                                line = codeReader.readLine();
-                                if (line != null) {
-                                    super.characters(XML_NEWLINE, 0, XML_NEWLINE.length);
-                                }
-                            }
+                            copyLines(codeReader, new Range(hrefValue));
                         } catch (final Exception e) {
-                            logger.logException(new Exception("Failed to process code reference " + codeFile));
+                            logger.logError("Failed to process code reference " + codeFile, e);
                         } finally {
                             if (codeReader != null) {
                                 try {
                                     codeReader.close();
                                 } catch (final IOException e) {
-                                    logger.logException(e);
+                                    logger.logError(e.getMessage(), e) ;
                                 }
                             }
                         }
                     } else {
-                        final Properties prop = new Properties();
-                        prop.put("%1", hrefValue);
-                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ051E",prop).setLocation(atts).toString());
+                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ051E", hrefValue).setLocation(atts).toString());
                     }
                 } else {
                     //logger.logDebug("Code reference target not defined");
                 }
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         } else {
             super.startElement(uri, localName, name, atts);
@@ -145,6 +142,52 @@ public final class CoderefResolver extends AbstractXMLFilter {
     // Private methods ---------------------------------------------------------
 
     /**
+     * Copy lines from reader to output
+     * 
+     * @param codeReader line reader
+     * @param range range of lines to copy
+     */
+    private void copyLines(final BufferedReader codeReader, final Range range) throws IOException, SAXException {
+        boolean first = true;
+        String line = codeReader.readLine();
+        for (int i = 1; line != null; i++) {
+            if (i >= range.start && i <= range.end) {
+                if (first) {
+                    first = false;
+                } else {
+                    super.characters(XML_NEWLINE, 0, XML_NEWLINE.length);
+                }
+                final char[] ch = line.toCharArray();
+                super.characters(ch, 0, ch.length);
+            }
+            line = codeReader.readLine();
+        }
+    }
+    
+    /**
+     * Line range tuple
+     */
+    private static class Range {
+        final int start;
+        final int end;
+        Range(final String uri) {
+            final Pattern p = Pattern.compile(".+#line-range\\((\\d+)(?:,\\s*(\\d+))?\\)");
+            final Matcher m = p.matcher(uri);
+            if (m.matches()) {
+                this.start = Integer.parseInt(m.group(1));
+                if (m.group(2) != null) {
+                    this.end = Integer.parseInt(m.group(2));
+                } else {
+                    this.end = Integer.MAX_VALUE;
+                }
+            } else {
+                this.start = 0;
+                this.end = Integer.MAX_VALUE;
+            }
+        }
+    }
+    
+    /**
      * Get code file charset.
      * 
      * @param value format attribute value, may be {@code null}
@@ -158,9 +201,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                 try {
                     c = Charset.forName(tokens[2].trim());
                 } catch (final RuntimeException e) {
-                    final Properties prop = new Properties();
-                    prop.put("%1", tokens[2].trim());
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ052E",prop).toString());
+                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ052E", tokens[2].trim()).toString());
                 }
             }
         }

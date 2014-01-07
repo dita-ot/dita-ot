@@ -166,9 +166,9 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:apply-templates>
           </xsl:if>
         </fo:block>
-        <fo:block xsl:use-attribute-sets="index.entry__content">
+        <!--fo:block xsl:use-attribute-sets="index.entry__content">
           <xsl:apply-templates mode="index-postprocess"/>
-        </fo:block>
+        </fo:block-->
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -201,11 +201,13 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:if test="not($no-page)">
         <xsl:if test="$idxs">
           <xsl:copy-of select="$index.separator"/>
-          <fo:index-page-citation-list>
-            <xsl:for-each select="$idxs">
-              <fo:index-key-reference ref-index-key="{@value}" xsl:use-attribute-sets="__index__page__link"/>
-            </xsl:for-each>
-          </fo:index-page-citation-list>
+          <fo:inline>
+            <fo:index-page-citation-list>
+              <xsl:for-each select="$idxs">
+                <fo:index-key-reference ref-index-key="{@value}" xsl:use-attribute-sets="__index__page__link"/>
+              </xsl:for-each>
+            </fo:index-page-citation-list>
+          </fo:inline>
         </xsl:if>
       </xsl:if>
       <xsl:if test="@no-page = 'true'">

@@ -5,7 +5,7 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="build_generaltargets">
 
-  <target name="dita.xhtml.init">
+  <target name="dita.xhtml.init" depends="xhtml.image-metadata">
     <condition property="out.ext" value=".html">
       <not>
         <isset property="out.ext" />
@@ -16,6 +16,21 @@
     while processing very large (thousands of files) document sets. -->
     <condition property="dita.xhtml.reloadstylesheet" value="false">
       <not><isset property="dita.xhtml.reloadstylesheet"/></not>
+    </condition>
+  </target>
+  
+  <target name="xhtml.image-metadata" depends="xhtml.image-metadata-check"
+          unless="xhtml.image-metadata.skip"
+          description="Read image metadata">
+    <pipeline message="Read image metadata." taskname="image-metadata" tempdir="${dita.temp.dir}">
+      <module class="org.dita.dost.module.ImageMetadataModule">
+        <param name="outputdir" location="${output.dir}"/>
+      </module>
+    </pipeline>
+  </target>
+  <target name="xhtml.image-metadata-check">
+    <condition property="xhtml.image-metadata.skip">
+      <isset property="noImagelist"/>
     </condition>
   </target>
 

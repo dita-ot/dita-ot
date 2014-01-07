@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -40,6 +39,7 @@ public final class PipelineFacade implements AbstractFacade {
      * @return AbstractPipelineOutput
      * @throws DITAOTException DITAOTException
      */
+    @Override
     public AbstractPipelineOutput execute(final String pipelineModuleName,
             final AbstractPipelineInput input) throws DITAOTException {
         /*
@@ -55,6 +55,7 @@ public final class PipelineFacade implements AbstractFacade {
         return null;
     }
     
+    @Override
     public AbstractPipelineOutput execute(final Class<? extends AbstractPipelineModule> moduleClass,
             final AbstractPipelineInput input) throws DITAOTException {
         final AbstractPipelineModule module = factory.createModule(moduleClass);
@@ -65,6 +66,7 @@ public final class PipelineFacade implements AbstractFacade {
         return null;
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }

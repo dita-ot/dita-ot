@@ -146,6 +146,7 @@ See the accompanying license.txt file for applicable licenses.
          chapter-level "mini-TOC" -->
     <variable id="Mini Toc">Topics: </variable>
 
+    <variable id="#note-separator">: </variable>
     <!-- Text to use for 'Note' label generated from <note> element. -->
     <variable id="Note">注</variable>
     <!-- Text to use for 'Notice' label generated from <note> element. -->

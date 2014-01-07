@@ -46,7 +46,7 @@
         <section id="overview"><p>Plug-ins may be used to add additional error messages into the toolkit;
 for more information, see the Developer reference section of the User Guide.</p></section>
         <simpletable>
-          <xsl:attribute name="relcolwidth">1* 1* 6* 4*</xsl:attribute>
+          <xsl:attribute name="relcolwidth">1.5* 1.8* 4* 4*</xsl:attribute>
           <sthead>
               <stentry>Message ID</stentry>
               <stentry>Severity</stentry>

@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -186,6 +185,7 @@ public final class XmlPropertyTask extends Task {
         }
     }
     private static class Resolver implements EntityResolver {
+        @Override
         public InputSource resolveEntity(final String pid, final String sid)
                 throws SAXException
                 {
@@ -200,12 +200,15 @@ public final class XmlPropertyTask extends Task {
     }
 
     private static class EH implements ErrorHandler {
+        @Override
         public void error(final SAXParseException x) throws SAXException {
             throw x;
         }
+        @Override
         public void fatalError(final SAXParseException x) throws SAXException {
             throw x;
         }
+        @Override
         public void warning(final SAXParseException x) throws SAXException {
             throw x;
         }
@@ -273,35 +276,35 @@ public final class XmlPropertyTask extends Task {
      * @return the file attribute.
      */
     protected File getFile() {
-        return this.src;
+        return src;
     }
 
     /**
      * @return the prefix attribute.
      */
     protected String getPrefix() {
-        return this.prefix;
+        return prefix;
     }
 
     /**
      * @return the validate attribute.
      */
     protected boolean getValidate() {
-        return this.validate;
+        return validate;
     }
 
     /**
      * @return the collapse attributes attribute.
      */
     protected boolean getCollapseAttributes() {
-        return this.collapseAttributes;
+        return collapseAttributes;
     }
 
     /**
      * @return the root directory attribute.
      */
     protected File getRootDirectory() {
-        return this.rootDirectory;
+        return rootDirectory;
     }
 
 }

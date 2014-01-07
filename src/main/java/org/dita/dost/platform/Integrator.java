@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -10,6 +9,7 @@
 package org.dita.dost.platform;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Configuration.*;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -50,6 +50,8 @@ import org.xml.sax.XMLReader;
  */
 public final class Integrator {
 
+    private static final String CONF_PLUGIN_IGNORES = "plugin.ignores";
+    private static final String CONF_PLUGIN_DIRS = "plugindirs";
     /** Feature name for supported image extensions. */
     public static final String FEAT_TOPIC_EXTENSIONS = "dita.topic.extensions";
     /** Feature name for supported image extensions. */
@@ -74,13 +76,13 @@ public final class Integrator {
     private final Map<String, Features> pluginTable;
     private final Set<String> templateSet = new HashSet<String>(INT_16);
     private File ditaDir;
-    private File basedir;
     /** Plugin configuration file. */
     private final Set<File> descSet;
     private final XMLReader reader;
     private DITAOTLogger logger;
     private final Set<String> loadedPlugin;
     private final Hashtable<String, String> featureTable;
+    @Deprecated
     private File propertiesFile;
     private final Set<String> extensionPoints;
     private boolean strict = false;
@@ -94,9 +96,6 @@ public final class Integrator {
         if (logger == null) {
             logger = new DITAOTJavaLogger();
         }
-        if (!ditaDir.isAbsolute()) {
-            ditaDir = new File(basedir, ditaDir.getPath());
-        }
 
         // Read the properties file, if it exists.
         properties = new Properties();
@@ -109,29 +108,31 @@ public final class Integrator {
                 if (strict) {
                     throw new RuntimeException(e);
                 } else {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             } finally {
                 if (propertiesStream != null) {
                     try {
                         propertiesStream.close();
                     } catch (final IOException e) {
-                        logger.logException(e);
+                        logger.logError(e.getMessage(), e) ;
                     }
                 }
             }
-        } else {
-            // Set reasonable defaults.
-            properties.setProperty("plugindirs", "plugins;demo");
-            properties.setProperty("plugin.ignores", "");
+        }
+        if (!properties.containsKey(CONF_PLUGIN_DIRS)) {
+            properties.setProperty(CONF_PLUGIN_DIRS, configuration.containsKey(CONF_PLUGIN_DIRS) ? configuration.get(CONF_PLUGIN_DIRS) : "plugins;demo");
+        }
+        if (!properties.containsKey(CONF_PLUGIN_IGNORES)) {
+            properties.setProperty(CONF_PLUGIN_IGNORES, configuration.containsKey(CONF_PLUGIN_IGNORES) ? configuration.get(CONF_PLUGIN_IGNORES) : "");
         }
 
         // Get the list of plugin directories from the properties.
-        final String[] pluginDirs = properties.getProperty("plugindirs").split(PARAM_VALUE_SEPARATOR);
+        final String[] pluginDirs = properties.getProperty(CONF_PLUGIN_DIRS).split(PARAM_VALUE_SEPARATOR);
 
         final Set<String> pluginIgnores = new HashSet<String>();
-        if (properties.getProperty("plugin.ignores") != null) {
-            pluginIgnores.addAll(Arrays.asList(properties.getProperty("plugin.ignores").split(PARAM_VALUE_SEPARATOR)));
+        if (properties.getProperty(CONF_PLUGIN_IGNORES) != null) {
+            pluginIgnores.addAll(Arrays.asList(properties.getProperty(CONF_PLUGIN_IGNORES).split(PARAM_VALUE_SEPARATOR)));
         }
 
         for (final String tmpl : properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
@@ -234,14 +235,14 @@ public final class Integrator {
             if (strict) {
                 throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
             } else {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         } finally {
             if (out != null) {
                 try {
                     out.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -297,7 +298,7 @@ public final class Integrator {
             }
 
             for (final String templateName : pluginFeatures.getAllTemplates()) {
-                templateSet.add(FileUtils.getRelativePath(getDitaDir() + File.separator + "dummy",
+                templateSet.add(FileUtils.getRelativePath(ditaDir + File.separator + "dummy",
                         pluginFeatures.getLocation() + File.separator + templateName));
             }
             loadedPlugin.add(plugin);
@@ -335,10 +336,7 @@ public final class Integrator {
             }
             if (!anyPluginFound && requirement.getRequired()) {
                 // not contain any plugin required by current plugin
-                final Properties prop = new Properties();
-                prop.put("%1", requirement.toString());
-                prop.put("%2", currentPlugin);
-                final String msg = MessageUtils.getInstance().getMessage("DOTJ020W", prop).toString();
+                final String msg = MessageUtils.getInstance().getMessage("DOTJ020W", requirement.toString(), currentPlugin).toString();
                 if (strict) {
                     throw new RuntimeException(msg);
                 } else {
@@ -372,12 +370,15 @@ public final class Integrator {
             final DescParser parser = new DescParser(descFile.getParentFile(), ditaDir);
             reader.setContentHandler(parser);
             reader.setErrorHandler(new ErrorHandler() {
+                @Override
                 public void error(final SAXParseException e) throws SAXException {
                     throw e;
                 }
+                @Override
                 public void fatalError(final SAXParseException e) throws SAXException {
                     throw e;
                 }
+                @Override
                 public void warning(final SAXParseException e) throws SAXException {
                     throw e;
                 }
@@ -394,13 +395,13 @@ public final class Integrator {
             if (strict) {
                 throw ex;
             } else {
-                logger.logException(ex);
+                logger.logError(ex.getMessage(), ex) ;
             }
         } catch (final Exception e) {
             if (strict) {
                 throw new RuntimeException(e);
             } else {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -479,49 +480,14 @@ public final class Integrator {
     }
 
     /**
-     * Return the basedir.
-     * 
-     * @return base directory
-     */
-    public File getBasedir() {
-        return basedir;
-    }
-
-    /**
-     * Set the basedir.
-     * 
-     * @param baseDir base directory
-     */
-    public void setBasedir(final File baseDir) {
-        this.basedir = baseDir;
-    }
-
-    /**
-     * Return the ditaDir.
-     * 
-     * @return dita directory
-     */
-    public File getDitaDir() {
-        return ditaDir;
-    }
-
-    /**
      * Set the ditaDir.
      * 
      * @param ditadir dita directory
      */
     public void setDitaDir(final File ditadir) {
-        this.ditaDir = ditadir;
+        ditaDir = ditadir;
     }
 
-    /**
-     * Return the properties file.
-     * 
-     * @return properties file
-     */
-    public File getProperties() {
-        return propertiesFile;
-    }
 
     /**
      * Set the properties file.
@@ -529,7 +495,7 @@ public final class Integrator {
      * @param propertiesfile properties file
      */
     public void setProperties(final File propertiesfile) {
-        this.propertiesFile = propertiesfile;
+        propertiesFile = propertiesfile;
     }
 
     /**

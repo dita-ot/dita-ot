@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -53,7 +52,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 
     private String mapPath = null;
 
-    private IndexTermCollection result;
+    private final IndexTermCollection result;
     // assumes index terms have been moved by preprocess
     private boolean indexMoved = true;
 
@@ -366,7 +365,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
      * @param mappath path of map file
      */
     public void setMapPath(final String mappath) {
-        this.mapPath = mappath;
+        mapPath = mappath;
     }
 
 }

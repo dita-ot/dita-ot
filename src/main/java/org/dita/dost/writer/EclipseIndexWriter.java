@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -29,7 +28,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.XMLSerializer;
 
 /**
  * This class extends AbstractWriter, used to output index term
@@ -59,7 +57,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      * @param filePath The file path to where the plugin are created.
      */
     public void setFilePath(final String filePath) {
-        this.filepath = filePath;
+        filepath = filePath;
     }
 
     /**
@@ -70,6 +68,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         return filepath;
     }
 
+    @Override
     public void write(final String filename) throws DITAOTException {
         OutputStream out = null;
         XMLStreamWriter serializer = null;
@@ -104,14 +103,14 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                 try {
                 	serializer.close();
                 } catch (final XMLStreamException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
 				}
             }
             if (out != null) {
                 try {
                 	out.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
 				}
             }
         }
@@ -166,6 +165,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      * @param outputFileRoot root path
      * @return index file name
      */
+    @Override
     public String getIndexFileName(final String outputFileRoot) {
         final File indexDir = new File(outputFileRoot).getParentFile();
         setFilePath(indexDir.getAbsolutePath());
@@ -257,9 +257,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                 }
             }//end for
             if (!foundIndexTerm && foundIndexsee && indexSeeRefTerm != null && !indexSeeRefTerm.equals("***")){
-                final Properties prop=new Properties();
-                prop.put("%1", indexSeeRefTerm.trim());
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ050W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ050W", indexSeeRefTerm.trim()).toString());
             }
         }
 

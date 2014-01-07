@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="plugin-configfile" xml:lang="en-us">
+<title>Plug-in configuration file</title>
+<shortdesc>The <filepath>plugin.xml</filepath> controls all aspects
+of a plug-in, making each extension visible to the rest of the toolkit.
+The file uses pre-defined extension points to locate changes, and
+integrates those changes into the core code.</shortdesc>
+<refbody>
+<section>       <p>The root element of the plugin.xml file is <codeph>&lt;plugin></codeph>,
+and must         specify an <codeph>id</codeph> attribute. The <codeph>id</codeph> attribute
+is used to         identify the plug-in, as well as to identify whether
+pre-requisite plug-ins are available. The           <codeph>id</codeph> attribute
+should follow the syntax rules:</p>       <codeblock>id    ::= token('.'token)*
+token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>       <p>The <codeph>&lt;plugin></codeph> element
+supports the following child elements: </p>       <ul>
+<li>           <p><codeph>&lt;feature></codeph> defines an <i>extension</i> to
+contribute to a defined               <i>extension point</i>. The
+following attributes are supported:</p>           <simpletable keycol="1">
+<sthead>
+<stentry>Attribute</stentry>
+<stentry>Description</stentry>
+<stentry>Required</stentry>
+</sthead>
+<strow>
+<stentry><codeph>extension</codeph></stentry>
+<stentry>extension point identifier</stentry>
+<stentry>yes</stentry>
+</strow>
+<strow>
+<stentry><codeph>value</codeph></stentry>
+<stentry>comma separated string value of the extension</stentry>
+<stentry>either <codeph>value</codeph> or <codeph>file</codeph></stentry>
+</strow>
+<strow>
+<stentry><codeph>file</codeph></stentry>
+<stentry>file path value of the extension, relative to           
+     <filepath>plugin.xml</filepath></stentry>
+<stentry>either <codeph>value</codeph> or <codeph>file</codeph></stentry>
+</strow>
+<strow>
+<stentry><codeph>type</codeph></stentry>
+<stentry>type of the <codeph>value</codeph> attribute</stentry>
+<stentry>no</stentry>
+</strow>
+</simpletable>         </li>
+  <li>
+    <p><codeph>extension-point</codeph> defines new a <i>extension point</i> that can be used by other plug-ins. The following attributes are supported:</p>
+    <simpletable keycol="1">
+      <sthead>
+        <stentry>Attribute</stentry>
+        <stentry>Description</stentry>
+        <stentry>Required</stentry>
+      </sthead>
+      <strow>
+        <stentry><codeph>id</codeph></stentry>
+        <stentry>extension point identifier</stentry>
+        <stentry>yes</stentry>
+      </strow>
+      <strow>
+        <stentry><codeph>name</codeph></stentry>
+        <stentry>extension point name</stentry>
+        <stentry>no</stentry>
+      </strow>
+    </simpletable>
+  </li>
+<li>           <p><codeph>&lt;require></codeph> defines plug-in dependencies.
+The following attributes             are supported:</p>           <simpletable
+keycol="1">
+<sthead>
+<stentry>Attribute</stentry>
+<stentry>Description</stentry>
+<stentry>Required</stentry>
+</sthead>
+<strow>
+<stentry><codeph>plugin</codeph></stentry>
+<stentry>vertical bar separated list of plug-ins that are required </stentry>
+<stentry>yes</stentry>
+</strow>
+<strow>
+<stentry><codeph>importance</codeph></stentry><?Pub Caret 11?>
+<stentry>flag whether plug-in is required or optional</stentry>
+<stentry>no</stentry>
+</strow>
+</simpletable>         </li>
+<li>           <p><codeph>&lt;template></codeph> defines files that
+should be treated as               <i>templates</i>. The following
+attributes are supported:</p>           <simpletable keycol="1">
+<sthead>
+<stentry>Attribute</stentry>
+<stentry>Description</stentry>
+<stentry>Required</stentry>
+</sthead>
+<strow>
+<stentry><codeph>file</codeph></stentry>
+<stentry>file path to the template, relative to <filepath>plugin.xml</filepath></stentry>
+<stentry>yes</stentry>
+</strow>
+</simpletable>         </li>
+<li>           <p><codeph>&lt;meta></codeph> defines metadata. The
+following attributes are             supported:</p>           <simpletable
+keycol="1">
+<sthead>
+<stentry>Attribute</stentry>
+<stentry>Description</stentry>
+<stentry>Required</stentry>
+</sthead>
+<strow>
+<stentry><codeph>type</codeph></stentry>
+<stentry>metadata name </stentry>
+<stentry>yes</stentry>
+</strow>
+<strow>
+<stentry><codeph>value</codeph></stentry>
+<stentry>metadata value</stentry>
+<stentry>yes</stentry>
+</strow>
+</simpletable>         </li>
+</ul>       <p>Any extension that is not recognized by the DITA-OT
+is ignored; all elements other than           <codeph>&lt;plugin></codeph> are
+optional. Since version 1.5.3 multiple extension         definitions
+within a plug-in configuration file are combined; in older versions
+only the last         extension definition is used. </p>       </section>
+</refbody>
+</reference>
+<?Pub *0000004256?>

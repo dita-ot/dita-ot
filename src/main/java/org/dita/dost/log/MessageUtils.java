@@ -145,7 +145,7 @@ public final class MessageUtils {
      * @param id message ID
      * @return messageBean
      */
-    public MessageBean getMessage(final String id) {
+    private MessageBean getMessage(final String id) {
         if (hashTable == null) {
         	throw new IllegalStateException("Messages have not been loaded");
         }
@@ -160,40 +160,6 @@ public final class MessageUtils {
         logger.logWarn("  Can't find message for id: " + id);
         return new MessageBean(id, "", "", "");
     }
-
-    /**
-     * Get the message respond to the given id with all of the parameters
-     * are replaced by those in the given 'prop', if no message found,
-     * an empty message with this id will be returned.
-     * 
-     * @param id id
-     * @param prop prop
-     * @return MessageBean
-     * @deprected use {@link #getMessage(String, String[])} instead
-     */
-    @Deprecated
-    public MessageBean getMessage(final String id, final Properties prop) {
-        final MessageBean messageBean = getMessage(id);
-
-        if (prop == null || prop.size() == 0) {
-            return messageBean;
-        }
-
-        String reason = messageBean.getReason();
-        String response = messageBean.getResponse();
-        final Iterator<Object> iter = prop.keySet().iterator();
-
-        while (iter.hasNext()) {
-            final String key = (String) iter.next();
-            final String replacement = prop.getProperty(key);
-            reason = StringUtils.replaceAll(reason, key, replacement);
-            if (response != null) {
-                response = StringUtils.replaceAll(response, key, replacement);
-            }
-        }
-
-        return new MessageBean(messageBean.getId(), messageBean.getType(), reason, response);
-    }
     
     /**
      * Get the message respond to the given id with all of the parameters
@@ -201,7 +167,7 @@ public final class MessageUtils {
      * an empty message with this id will be returned.
      * 
      * @param id id
-     * @param prop prop
+     * @param params message parameters
      * @return MessageBean
      */
     public MessageBean getMessage(final String id, final String... params) {

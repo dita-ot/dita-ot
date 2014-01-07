@@ -9,4 +9,4 @@ script: ant test integration-test
 env: CLASSPATH=src/main/lib/xercesImpl.jar:src/main/lib/xml-apis.jar:src/main/lib/resolver.jar:src/main/lib/commons-codec-1.4.jar:src/main/lib/icu4j.jar:src/main/lib/saxon/saxon9-dom.jar:src/main/lib/saxon/saxon9.jar:target/classes:src/main/:src/main/lib/:src/main/lib/dost.jar
 branches:
   only:
-    - /^(develop|hotfix\/)$/
+    - /^(develop|hotfix\/.*)$/

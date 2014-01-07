@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="pdfdefault" xml:lang="en-us">
+<title>PDF processing modules</title>
+<shortdesc>The <option>PDF</option> (formerly known as <option>PDF2</option>) transformation process
+runs the pre-processing routine and follows it by a series of additional targets. These steps work
+together to create a merged set of content, convert the merged content to XSL-FO, and then format
+the XSL-FO file to PDF.</shortdesc>
+<conbody>
+<section><p>The PDF process includes many Ant targets. During a typical conversion from map to PDF, the
+following targets are most significant.</p>
+<dl>
+<dlentry>
+<dt>map2pdf2</dt>
+<dd>Creates a merged file by calling a common Java merge module. It then calls the
+<codeph>publish.map.pdf</codeph> target to do the remainder of the work.</dd>
+</dlentry>
+<dlentry>
+<dt>publish.map.pdf</dt>
+<dd>Performs some initialization and then calls the <codeph>transform.topic2pdf</codeph> target to
+do the remainder of processing.</dd>
+</dlentry>
+<dlentry>
+<dt>transform.topic2pdf</dt>
+<dd>Converts the merged file to XSL-FO, generates the PDF, and deletes the
+<filepath>topic.fo</filepath> file, unless instructed to keep it. Uses the following targets to
+perform those tasks:<dl>
+<dlentry>
+<dt>transform.topic2fo</dt>
+<dd>Convert the merged file to an XSL-FO file. This process is composed of several Ant
+targets.<simpletable frame="all" relcolwidth="1.0* 1.0*">
+<sthead>
+<stentry>Ant target</stentry>
+<stentry>Description</stentry>
+</sthead>
+<strow>
+<stentry>transform.topic2fo.index</stentry>
+<stentry>Runs a Java process to set up index processing, based on the document language. This step
+generates the file <filepath>stage1.xml</filepath> in the temporary processing directory.</stentry>
+</strow>
+<strow>
+<stentry>transform.topic2fo.flagging</stentry>
+<stentry>Sets up preprocessing for flagging based on a DITAVAL file. This step generates the file
+<filepath>stage1a.xml</filepath> in the temporary processing directory.</stentry>
+</strow>
+<strow>
+<stentry>transform.topic2fo.main</stentry>
+<stentry>Does the bulk of the conversion from DITA to XSL-FO. It runs the XSLT based process that
+creates <filepath>stage2.fo</filepath> in the temporary processing directory</stentry>
+</strow>
+<strow>
+<stentry>transform.topic2fo.i18n</stentry>
+<stentry>Does additional localization processing on the FO file; it runs a Java process that
+converts <filepath>stage2.fo</filepath> into <filepath>stage3.fo</filepath>, followed by an XSLT
+process that converts <filepath>stage3.fo</filepath> into <filepath>topic.fo</filepath>.</stentry>
+</strow>
+<strow/>
+</simpletable></dd>
+</dlentry>
+<dlentry>
+<dt>transform.fo2pdf</dt>
+<dd>Converts the <filepath>topic.fo</filepath> file into PDF using the specified FO processor
+(Antenna House, XEP, or Apache FOP).</dd>
+</dlentry>
+<dlentry>
+<dt>delete.fo2pdf.topic.fo</dt>
+<dd>Deletes the <filepath>topic.fo</filepath> file, unless otherwise specified by setting an Ant
+property or command-line option.</dd>
+</dlentry>
+</dl></dd>
+</dlentry>
+</dl></section>
+</conbody>
+</concept>

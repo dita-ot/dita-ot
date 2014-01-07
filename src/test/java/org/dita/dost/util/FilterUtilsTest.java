@@ -124,5 +124,27 @@ public class FilterUtilsTest {
         XMLUtils.addOrSetAttribute(windows, "audience", "novice");
         assertTrue(f.needExclude(windows, new String[0][0]));
     }
+
+    @Test
+    public void testNeedExcludeDomainAttribute() {
+        final FilterUtils f = new FilterUtils();
+        f.setLogger(new TestUtils.TestLogger());
+        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
+        fm.put(new FilterKey("os", null), Action.EXCLUDE);        
+        f.setFilterMap(fm);
+
+        final AttributesImpl amigaUnix = new AttributesImpl();
+        XMLUtils.addOrSetAttribute(amigaUnix, "os", "amiga unix windows");
+        assertFalse(f.needExclude(amigaUnix, new String[][] {{"props", "os"}}));
+
+        final AttributesImpl amiga = new AttributesImpl();
+        XMLUtils.addOrSetAttribute(amiga, "os", "amiga windows");
+        assertFalse(f.needExclude(amiga, new String[][] {{"props", "os"}}));
+
+        final AttributesImpl windows = new AttributesImpl();
+        XMLUtils.addOrSetAttribute(windows, "os", "windows");
+        assertTrue(f.needExclude(windows, new String[][] {{"props", "os"}}));
+    }
     
 }

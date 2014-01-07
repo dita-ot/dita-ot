@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -57,6 +55,7 @@ final class ChunkModule implements AbstractPipelineModule {
         super();
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
@@ -70,6 +69,7 @@ final class ChunkModule implements AbstractPipelineModule {
      * @return null
      * @throws DITAOTException exception
      */
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
         if (logger == null) {
@@ -109,15 +109,15 @@ final class ChunkModule implements AbstractPipelineModule {
                 mapReader.read(mapFile);
             }
         }catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
-        final Content content = mapReader.getContent();
-        if(content.getValue()!=null){
+        final Map<String,String> changeTable = mapReader.getChangeTable();
+        if(changeTable != null){
             // update dita.list to include new generated files
-            updateList((LinkedHashMap<String,String>)content.getValue(), mapReader.getConflicTable(),input);
+            updateList(changeTable, mapReader.getConflicTable(),input);
             // update references in dita files
-            updateRefOfDita(content, mapReader.getConflicTable(),input);
+            updateRefOfDita(changeTable, mapReader.getConflicTable(),input);
         }
 
 
@@ -126,7 +126,7 @@ final class ChunkModule implements AbstractPipelineModule {
         return null;
     }
     //update the href in ditamap and topic files
-    private void updateRefOfDita(final Content changeTable, final Hashtable<String, String> conflictTable, final AbstractPipelineInput input){
+    private void updateRefOfDita(final Map<String,String> changeTable, final Hashtable<String, String> conflictTable, final AbstractPipelineInput input){
         final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
         if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
@@ -139,20 +139,20 @@ final class ChunkModule implements AbstractPipelineModule {
         }
         final TopicRefWriter topicRefWriter=new TopicRefWriter();
         topicRefWriter.setLogger(logger);
-        topicRefWriter.setContent(changeTable);
+        topicRefWriter.setChangeTable(changeTable);
         topicRefWriter.setup(conflictTable);
         try{
             for (final String f: job.getSet(FULL_DITAMAP_TOPIC_LIST)) {
-                topicRefWriter.write(tempDir.getAbsolutePath(), f, this.relativePath2fix);
+                topicRefWriter.write(tempDir.getAbsolutePath(), f, relativePath2fix);
             }
         }catch(final DITAOTException ex){
-            logger.logException(ex);
+            logger.logError(ex.getMessage(), ex) ;
         }
 
     }
 
 
-    private void updateList(final LinkedHashMap<String, String> changeTable, final Hashtable<String, String> conflictTable, final AbstractPipelineInput input){
+    private void updateList(final Map<String, String> changeTable, final Hashtable<String, String> conflictTable, final AbstractPipelineInput input){
         final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
         if (!tempDir.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
@@ -162,7 +162,7 @@ final class ChunkModule implements AbstractPipelineModule {
         try{
             job = new Job(tempDir);
         }catch(final IOException ex){
-            logger.logException(ex);
+            logger.logError(ex.getMessage(), ex) ;
         }
 
         final Set<String> hrefTopics = job.getSet(HREF_TOPIC_LIST);
@@ -289,26 +289,9 @@ final class ChunkModule implements AbstractPipelineModule {
         topicList.addAll(ditamapList);
         job.setSet(FULL_DITAMAP_TOPIC_LIST, topicList);
 
-        try {
-            job.writeList(FULL_DITA_TOPIC_LIST);
-            job.writeList(FULL_DITAMAP_LIST);
-            job.writeList(FULL_DITAMAP_TOPIC_LIST);
-        } catch (final FileNotFoundException e) {
-            logger.logException(e);
-        } catch (final IOException e) {
-            logger.logException(e);
-        }
-
         job.setProperty("chunkedditamapfile", CHUNKED_DITAMAP_LIST_FILE);
         job.setProperty("chunkedtopicfile", CHUNKED_TOPIC_LIST_FILE);
         job.setProperty("resourceonlyfile", RESOURCE_ONLY_LIST_FILE);
-        try {
-            job.writeList(CHUNKED_DITAMAP_LIST);
-            job.writeList(CHUNKED_TOPIC_LIST);
-            job.writeList(RESOURCE_ONLY_LIST);
-        } catch (final IOException e) {
-            logger.logError("Failed to write list file: " + e.getMessage(), e);
-        }
 
         job.setSet(CHUNKED_DITAMAP_LIST, chunkedDitamapSet);
         job.setSet(CHUNKED_TOPIC_LIST, chunkedTopicSet);
@@ -316,7 +299,7 @@ final class ChunkModule implements AbstractPipelineModule {
         try{
             job.write();
         }catch(final IOException ex){
-            logger.logException(ex);
+            logger.logError(ex.getMessage(), ex) ;
         }
     }
 

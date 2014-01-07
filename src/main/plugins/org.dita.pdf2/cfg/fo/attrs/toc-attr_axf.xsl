@@ -12,7 +12,6 @@
     <xsl:attribute-set name="__toc__mini__table">
         <xsl:attribute name="table-layout">fixed</xsl:attribute>
         <xsl:attribute name="width">100%</xsl:attribute>
-        <!-- Added 2007/10/15 -->
         <xsl:attribute name="page-break-after">always</xsl:attribute>
     </xsl:attribute-set>
 

@@ -1,15 +1,12 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.index;
-
-import static org.dita.dost.util.Constants.*;
 
 /**
  * This class represent the topicref element in ditamap.
@@ -48,7 +45,7 @@ public final class TopicrefElement {
      * @param formatValue The format to set.
      */
     public void setFormat(final String formatValue) {
-        this.format = formatValue;
+        format = formatValue;
     }
 
     /**
@@ -66,7 +63,7 @@ public final class TopicrefElement {
      * @param hrefValue The href to set.
      */
     public void setHref(final String hrefValue) {
-        this.href = hrefValue;
+        href = hrefValue;
     }
 
     /**

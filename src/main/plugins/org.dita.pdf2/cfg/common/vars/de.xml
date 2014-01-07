@@ -146,6 +146,7 @@ See the accompanying license.txt file for applicable licenses.
          chapter-level "mini-TOC" -->
     <variable id="Mini Toc">Themen: </variable>
 
+    <variable id="#note-separator">: </variable>
     <!-- Text to use for 'Note' label generated from <note> element. -->
     <variable id="Note">Hinweis</variable>
     <!-- Text to use for 'Notice' label generated from <note> element. -->
@@ -302,7 +303,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Forward button title">Vorwärts</variable>
 
     <!-- The title of the "main page" button in online-help output -->
-    <variable id="Main page button title">HauptcSeite</variable>
+    <variable id="Main page button title">Hauptseite</variable>
 
     <!-- The title of the "previous page" button in online-help output -->
     <variable id="Previous page button title">Vorige Seite</variable>

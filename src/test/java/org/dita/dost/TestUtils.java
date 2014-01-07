@@ -19,6 +19,7 @@ import java.io.Writer;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -323,18 +324,9 @@ public class TestUtils {
                 throw new AssertionError("Error message was thrown: " + msg);
             }
         }
-        
-        public void logFatal(final String msg) {
-            throw new AssertionError("Fatal message was thrown: " + msg);
-        }
 
         public void logDebug(final String msg) {
             //System.out.println(msg);
-        }
-
-        public void logException(final Throwable t) {
-            t.printStackTrace();
-            throw new AssertionError("Throwable was thrown: " + t.getMessage());
         }
 
     }
@@ -384,6 +376,10 @@ public class TestUtils {
                 this.message = message;
                 this.exception = exception;
             }
+        }
+        
+        public List<Message> getMessages() {
+        	return Collections.unmodifiableList(buf);
         }
         
     }

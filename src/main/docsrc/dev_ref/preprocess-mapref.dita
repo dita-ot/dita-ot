@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="preprocess-mapref" xml:lang="en-us">
+<title>Resolve map references (mapref)</title>
+<shortdesc>The <codeph>mapref</codeph> step resolves references from one DITA map to another. This
+        step is implemented in XSLT.</shortdesc>
+<conbody>
+<section><p>Maps reference other maps by using the following sorts of
+    markup:<codeblock>&lt;topicref href="other.ditamap" format="ditamap"/>
+...
+&lt;mapref href="other.ditamap"/></codeblock></p><p>As a result of the mapref step, the element that references another map is replaced by the topic
+    references from the other map. Relationship tables are pulled into the referencing map as a
+    child of the root element (&lt;map> or a specialization of &lt;map>).</p></section>
+</conbody>
+</concept>

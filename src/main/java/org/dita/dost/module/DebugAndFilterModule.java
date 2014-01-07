@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -11,6 +10,7 @@ package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.writer.DitaWriter.*;
+import static org.dita.dost.util.Job.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,6 +43,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
@@ -50,9 +51,11 @@ import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TimingUtils;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -109,11 +112,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             result.put(key, value);
         }
         property.setMap(listName, result);
-//        try {
-//            property.writeList(listName);
-//        } catch (final IOException e) {
-//            logger.logError("Failed to write list file: " + e.getMessage(), e);
-//        }
     }
     
     /**
@@ -138,11 +136,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             result.add(f);
         }
         property.setSet(listName, result);
-        try {
-            property.writeList(listName);
-        } catch (final IOException e) {
-            logger.logError("Failed to write list file: " + e.getMessage(), e);
-        }
     }
     
     /**
@@ -162,11 +155,6 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
         }
         property.setProperty(listName, propValue);
-        try {
-            property.writeList(listName);
-        } catch (final IOException e) {
-            logger.logError("Failed to write list file: " + e.getMessage(), e);
-        }
     }
     
     private DITAOTLogger logger;
@@ -186,10 +174,12 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     public DebugAndFilterModule(){
     }
 
+    @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
+    @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
@@ -219,8 +209,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             }
 
             final Job job = new Job(tempDir);
-
-            final Set<String> parseList = job.getReferenceList();
+            
+            final Set<String> parseList = new HashSet<String>();
+            parseList.addAll(job.getSet(FULL_DITAMAP_TOPIC_LIST));
+            parseList.addAll(job.getSet(CONREF_TARGET_LIST));
+            parseList.addAll(job.getSet(COPYTO_SOURCE_LIST));
             inputDir = new File(job.getInputDir());
             if (!inputDir.isAbsolute()) {
                 inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
@@ -233,12 +226,15 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             filterReader.setLogger(logger);
             filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
 
-            final FilterUtils filterUtils = new FilterUtils();
-            filterUtils.setLogger(logger);
+            FilterUtils filterUtils = null;
             if (ditavalFile!=null){
+            	filterUtils = new FilterUtils();
+            	filterUtils.setLogger(logger);
                 filterReader.read(ditavalFile.getAbsolutePath());
                 filterUtils.setFilterMap(filterReader.getFilterMap());
             }
+            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+            subjectSchemeReader.setLogger(logger);
             
             final DitaWriter fileWriter = new DitaWriter();
             fileWriter.setLogger(logger);
@@ -251,9 +247,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             fileWriter.setTempDir(tempDir);
             fileWriter.setExtName(extName);
             fileWriter.setTranstype(transtype);
-            fileWriter.setFilterUtils(filterUtils);
+            if (filterUtils != null) {
+            	fileWriter.setFilterUtils(filterUtils);
+            }
             fileWriter.setDelayConrefUtils(new DelayConrefUtils());
-            fileWriter.setKeyDefinitions(GenMapAndTopicListModule.readKeydef(new File(tempDir, "keydef.xml")));
+            fileWriter.setKeyDefinitions(KeyDef.readKeydef(new File(tempDir, KEYDEF_LIST_FILE)));
            
             outputUtils.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
             outputUtils.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
@@ -271,17 +269,18 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 final Set<String> schemaSet = dic.get(filename);
                 filterReader.reset();
                 if (schemaSet != null) {
+                    subjectSchemeReader.reset();
                     final FilterUtils fu = new FilterUtils();
                     fu.setLogger(logger);
                     for (final String schema: schemaSet) {
-                        filterReader.loadSubjectScheme(FileUtils.resolveFile(
-                                tempDir.getAbsolutePath(), schema) + SUBJECT_SCHEME_EXTENSION);
+                        subjectSchemeReader.loadSubjectScheme(FileUtils.resolveFile(tempDir.getAbsolutePath(), schema) + SUBJECT_SCHEME_EXTENSION);
                     }
                     if (ditavalFile!=null){
                         filterReader.filterReset();
+                        filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
                         filterReader.read(ditavalFile.getAbsolutePath());
                         final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
-                        fm.putAll(filterReader.getSchemeFilterMap());
+                        fm.putAll(filterReader.getFilterMap());
                         fm.putAll(filterUtils.getFilterMap());
                         fu.setFilterMap(Collections.unmodifiableMap(fm));
                     } else {
@@ -289,8 +288,8 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                     }
                     fileWriter.setFilterUtils(fu);
 
-                    fileWriter.setValidateMap(filterReader.getValidValuesMap());
-                    fileWriter.setDefaultValueMap(filterReader.getDefaultValueMap());
+                    fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
+                    fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
                 } else {
                     fileWriter.setFilterUtils(filterUtils);
                 }
@@ -323,7 +322,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     }
 
     /**
-     * Read XML properties file.
+     * Read a map from XML properties file. Values are split by {@link org.dita.dost.util.Constants#COMMA COMMA} into a set.
      * 
      * @param filename XML properties file path, relative to temporary directory
      */
@@ -340,13 +339,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             prop.loadFromXML(in);
             in.close();
         } catch (final IOException e) {
-            this.logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -416,7 +415,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 generateScheme(rel, parentRoot);
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
             throw new DITAOTException(e);
         }
 
@@ -534,6 +533,11 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      */
     private void generateScheme(final String filename, final Document root) throws DITAOTException {
         try {
+            final File f = new File(filename);
+            final File p = f.getParentFile();
+            if (!p.exists() && !p.mkdirs()) {
+                throw new IOException("Failed to make directory " + p.getAbsolutePath());
+            }
             final FileOutputStream file = new FileOutputStream(new File(filename));
             final StreamResult res = new StreamResult(file);
             final DOMSource ds = new DOMSource(root);
@@ -547,7 +551,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                 file.close();
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
             throw new DITAOTException(e);
         }
     }
@@ -570,9 +574,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
                         .logWarn(new StringBuffer("Copy-to task [copy-to=\"")
                                 .append(copytoTarget)
                                 .append("\"] which points to an existed file was ignored.").toString());*/
-                final Properties prop = new Properties();
-                prop.setProperty("%1", copytoTarget);
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", prop).toString());
+                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget).toString());
             }else{
                 final String inputMapInTemp = new File(tempDir + File.separator + job.getInputMap()).getAbsolutePath();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
@@ -590,6 +592,9 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
      * @param inputMapInTemp
      */
     public void copyFileWithPIReplaced(final File src, final File target, final String copytoTargetFilename, final String inputMapInTemp ) {
+        if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
+            logger.logError("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
+        }
         final DitaWriter dw = new DitaWriter();
         dw.setOutputUtils(outputUtils);
         final String path2project = dw.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
@@ -611,8 +616,14 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
     }
     
     /**
-     * XML filter to rewrite {@link #PI_WORKDIR_TARGET}, {@link #PI_WORKDIR_TARGET_URI}, and
-     * {@link #PI_PATH2PROJ_TARGET} to reflect copy-to location.
+     * XML filter to rewrite processing instructions to reflect copy-to location. The following processing-instructions are 
+     * 
+     * <ul>
+     * <li>{@link DitaWriter#PI_WORKDIR_TARGET PI_WORKDIR_TARGET}</li>
+     * <li>{@link DitaWriter#PI_WORKDIR_TARGET_URI PI_WORKDIR_TARGET_URI}</li>
+     * <li>{@link DitaWriter#PI_PATH2PROJ_TARGET PI_PATH2PROJ_TARGET}</li>
+     * <li>{@link DitaWriter#PI_PATH2PROJ_TARGET_URI PI_PATH2PROJ_TARGET_URI}</li>
+     * </ul>
      */
     private static final class CopyToFilter extends XMLFilterImpl {
         
@@ -625,6 +636,7 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             this.path2project = path2project;
         }
         
+        @Override
         public void processingInstruction(final String target, final String data) throws SAXException {
             String d = data;
             if(target.equals(PI_WORKDIR_TARGET)) {
@@ -646,6 +658,10 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             } else if (target.equals(PI_PATH2PROJ_TARGET)) {
                 if (path2project != null) {
                     d = path2project;
+                }
+            } else if (target.equals(PI_PATH2PROJ_TARGET_URI)) {
+                if (path2project != null) {
+                    d = URLUtils.correct(path2project, true);
                 }
             }            
             getContentHandler().processingInstruction(target, d);
@@ -729,13 +745,13 @@ final class DebugAndFilterModule implements AbstractPipelineModule {
             prop.storeToXML(os, null);
             os.close();
         } catch (final IOException e) {
-            this.logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         } finally {
             if (os != null) {
                 try {
                     os.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }

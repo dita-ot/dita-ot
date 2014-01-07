@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -33,6 +32,7 @@ import org.dita.dost.util.XMLSerializer;
  */
 public final class CHMIndexWriter extends AbstractExtendDitaWriter {
 
+    @Override
     public void write(final String filename) throws DITAOTException {
         OutputStream out = null;
         try {
@@ -72,7 +72,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
                 try {
                     out.close();
                 } catch (final IOException e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -161,6 +161,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
      * @param outputFileRoot root
      * @return index file name
      */
+    @Override
     public String getIndexFileName(final String outputFileRoot) {
         final StringBuffer indexFilename = new StringBuffer(outputFileRoot);
         indexFilename.append(".hhk");

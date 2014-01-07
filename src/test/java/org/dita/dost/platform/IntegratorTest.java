@@ -43,57 +43,6 @@ public class IntegratorTest {
     }
 
     @Test
-    public void testGetBasedir() {
-        final Integrator i = new Integrator();
-        assertNull(i.getBasedir());
-        i.setBasedir(new File("foo"));
-        assertEquals(new File("foo"), i.getBasedir());
-    }
-
-    @Test
-    public void testSetBasedir() {
-        final Integrator i = new Integrator();
-        i.setBasedir(new File("foo"));
-        assertEquals(new File("foo"), i.getBasedir());
-        i.setBasedir(null);
-        assertNull(i.getBasedir());
-    }
-
-    @Test
-    public void testGetDitaDir() {
-        final Integrator i = new Integrator();
-        assertNull(i.getDitaDir());
-        i.setDitaDir(new File("foo"));
-        assertEquals(new File("foo"), i.getDitaDir());
-    }
-
-    @Test
-    public void testSetDitaDir() {
-        final Integrator i = new Integrator();
-        i.setDitaDir(new File("foo"));
-        assertEquals(new File("foo"), i.getDitaDir());
-        i.setDitaDir(null);
-        assertNull(i.getDitaDir());
-    }
-
-    @Test
-    public void testGetProperties() {
-        final Integrator i = new Integrator();
-        assertNull(i.getProperties());
-        i.setProperties(new File("foo"));
-        assertEquals(new File("foo").getAbsolutePath(), i.getProperties().getAbsolutePath());
-    }
-
-    @Test
-    public void testSetProperties() {
-        final Integrator i = new Integrator();
-        i.setProperties(new File("foo"));
-        assertEquals(new File("foo").getAbsolutePath(), i.getProperties().getAbsolutePath());
-        i.setProperties(null);
-        assertNull(i.getProperties());
-    }
-
-    @Test
     public void testExecute() throws Exception {
         final File libDir = new File(tempDir, "lib");
         if (!libDir.exists() && !libDir.mkdirs()) {
@@ -101,7 +50,6 @@ public class IntegratorTest {
         }
 
         final Integrator i = new Integrator();
-        i.setBasedir(tempDir);
         i.setDitaDir(tempDir);
         i.setProperties(new File(tempDir, "integrator.properties"));
         i.execute();

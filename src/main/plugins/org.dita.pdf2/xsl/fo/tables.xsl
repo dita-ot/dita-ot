@@ -684,7 +684,7 @@
             </xsl:choose>
         </xsl:variable>
 
-        <xsl:variable name="width" select="normalize-space(translate($width-units, '+-0123456789.abcdefghijklmnopqrstuvwxyz', '+-0123456789.'))"/>
+        <xsl:variable name="width" select="normalize-space(translate($width-units, '+-0123456789.abcdefghijklmnopqrstuvwxyz%', '+-0123456789.'))"/>
 
         <xsl:if test="$width != ''">
             <xsl:text>proportional-column-width(</xsl:text>
@@ -720,9 +720,9 @@
             </xsl:choose>
         </xsl:variable>
 
-        <xsl:variable name="width" select="normalize-space(translate($width-units, '+-0123456789.abcdefghijklmnopqrstuvwxyz', '+-0123456789.'))"/>
+        <xsl:variable name="width" select="normalize-space(translate($width-units, '+-0123456789.abcdefghijklmnopqrstuvwxyz%', '+-0123456789.'))"/>
 
-        <xsl:variable name="units" select="normalize-space(translate($width-units, 'abcdefghijklmnopqrstuvwxyz+-0123456789.', 'abcdefghijklmnopqrstuvwxyz'))"/>
+        <xsl:variable name="units" select="normalize-space(translate($width-units, 'abcdefghijklmnopqrstuvwxyz%+-0123456789.', 'abcdefghijklmnopqrstuvwxyz%'))"/>
 
         <xsl:value-of select="$width"/>
 

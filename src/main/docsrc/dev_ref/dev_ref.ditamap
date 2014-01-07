@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "map.dtd">
+<map xml:lang="en-us">
+  <title>Developer's Reference</title>
+  <topicref href="developer-reference.dita">
+    <topicref href="DITA-OTArchitecture.dita" navtitle="Architecture of the DITA-OT">
+      <topicref href="processing-structure.dita"/>
+      <topicref href="processing-pipeline-modules.dita"/>
+      <topicref href="processing-order.dita"/>
+      <topicref collection-type="sequence" href="DITA-OTPreprocess.dita" id="preprocess"
+        navtitle="Pre-processing modules">
+        <topicref href="preprocess-genlist.dita"/>
+        <topicref href="preprocess-debugfilter.dita"/>
+        <topicref href="preprocess-copyfiles.dita"/>
+        <topicref href="preprocess-conrefpush.dita"/>
+        <topicref href="preprocess-conref.dita"/>
+        <topicref href="preprocess-metadata.dita"/>
+        <topicref href="preprocess-keyref.dita"/>
+        <topicref href="preprocess-coderef.dita"/>
+        <topicref href="preprocess-mapref.dita"/>
+        <topicref href="preprocess-mappull.dita"/>
+        <topicref href="preprocess-chunk.dita"/>
+        <topicref href="preprocess-maplink.dita"/>
+        <topicref href="preprocess-topicpull.dita"/>
+        <topicref href="preprocess-flagging.dita"/>
+      </topicref>
+      <topicref href="XhtmlWithNavigation.dita">
+        <topicref href="XhtmlCommon.dita"/>
+        <topicref href="XhtmlDefault.dita"/>
+        <topicref href="XhtmlEclipse.dita"/>
+        <topicref href="XhtmlTocjs.dita"/>
+        <topicref href="XhtmlCHM.dita"/>
+        <topicref href="XhtmlJavahelp.dita"/>
+      </topicref>
+      <topicref href="PdfDefault.dita"/>
+      <topicref href="OdtDefault.dita"/>
+    </topicref>
+    <topicref href="extending-the-ot.dita">
+      <topicref href="plugins-installing.dita"/>
+      <topicref href="plugins-removing.dita"/>
+      <topicref href="rebuilding-the-dita-ot-documentation.dita"/>
+    </topicref>
+    <topicref href="configuring-the-dita-ot.dita">
+      <topicref href="lib-org.dita.dost.platform-plugin.properties.dita"/>
+    </topicref>
+    <topicset href="plugins-overview.dita" id="plugins">
+      <topicref href="plugin-configfile.dita"/>
+      <topicref href="plugin-xmlcatalog.dita"/>
+      <topicref href="plugin-anttarget.dita"/>
+      <topicref href="plugin-antpreprocess.dita"/>
+      <topicref href="plugin-newtranstype.dita"/>
+      <topicref href="plugin-overridestyle.dita"/>
+      <topicref href="plugin-addgeneratedtext.dita"/>
+      <topicref href="plugin-xsltparams.dita"/>
+      <topicref href="plugin-javalib.dita"/>
+      <topicref href="plugin-messages.dita"/>
+      <topicref href="plugin-dependencies.dita"/>
+      <topicref href="plugin-support.dita"/>
+      <topicref href="plugin-newextensions.dita"/>
+      <topicref href="plugin-sample.dita"/>
+    </topicset>
+    <topichead navtitle="">
+      <topicmeta>
+        <navtitle>Migrating style sheets and XSLT overrides</navtitle>
+      </topicmeta>
+      <topicref rev="1.7" href="flagging-migration.dita"/>
+    </topichead>
+    <topicref href="../readme/dita2pdf-customization.dita"/>
+    <topicref href="ant-properties.dita"/>
+    <topicref href="DITA1.2-implementation-dependent-features.dita"/>
+    <topicref href="extended-functionality.dita"/>
+    <!-- XXX: is this obsolete? 2 April 2013: Commented out; high priority to write new topic about topic merge-->
+    <!--<topicref href="topicmerge.dita" navtitle="Topic merge"/>-->
+    <!--The following topic needs o be updated. robert to work with Eric. 2 April 2013: Commented out; low priority to write new topic about this-->
+    <!--<topicref href="workingwithdocplugin.dita" navtitle="Working with documentation plug-in"/>-->
+    <!-- To be cleaned up:
+    DITA-OTArchitecture.xml referenced DITA-OTGenListModule.dita, which is out of date and
+    no longer referenced. The topic should be cleaned up or removed. It is also commented 
+    out of the TOC below. -->
+<!-- <topicref href="DITA-OTGenListModule.xml" navtitle="Java Module Architecture"/> -->
+</topicref>
+<reltable>
+<relrow>
+<relcell>
+<topicref href="preprocess-chunk.dita"></topicref>
+</relcell>
+<relcell>
+<topicref format="html"
+href="http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/chunking.html"
+scope="external">
+<topicmeta>
+<navtitle>Chunking definition in the DITA 1.2 specification</navtitle>
+</topicmeta>
+</topicref>
+</relcell>
+</relrow>
+</reltable>
+</map>

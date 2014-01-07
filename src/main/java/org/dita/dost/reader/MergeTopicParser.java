@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -116,7 +115,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     /**
      * Rewrite local DITA href value.
      *
-     * <p>TODO: return type should be {@link java.util.URI}.</p>
+     * <p>TODO: return type should be {@link java.net.URI}.</p>
      *
      * @param sharpIndex hash char index
      * @param attValue href attribute value
@@ -132,7 +131,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
                 pathFromMap = FileUtils.separatorsToUnix(FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)));
             }
             pathFromMap = URLUtils.decode(pathFromMap);
-            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap + attValue.substring(sharpIndex)));
+            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap + attValue.substring(sharpIndex), false));
             String topicId = attValue.substring(sharpIndex);
             final int slashIndex = topicId.indexOf(SLASH);
             final int index = attValue.indexOf(SLASH, sharpIndex);
@@ -147,7 +146,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         } else { // href value refer to a topic
             pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
             pathFromMap = URLUtils.decode(pathFromMap);
-            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap));
+            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap, false));
             if (util.findId(pathFromMap)) {
                 retAttValue = SHARP + util.getIdValue(pathFromMap);
             } else {
@@ -163,7 +162,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
             }
         }
-        return URLUtils.clean(retAttValue);
+        return URLUtils.clean(retAttValue, false);
     }
 
     /**
@@ -237,7 +236,9 @@ public final class MergeTopicParser extends XMLFilterImpl {
                     && attValue.indexOf(COLON_DOUBLE_SLASH) == -1) {
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
                 //The scope for @href is local
-                if ((TOPIC_XREF.matches(classValue) || TOPIC_LINK.matches(classValue))
+                if ((TOPIC_XREF.matches(classValue) || TOPIC_LINK.matches(classValue)
+                			// term and keyword are resolved as keyref can make them links
+                			|| TOPIC_TERM.matches(classValue) || TOPIC_KEYWORD.matches(classValue))
                         && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))) {
                     //local xref or link that refers to dita file
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, handleLocalDita(sharpIndex, attValue, atts));
@@ -252,7 +253,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     /**
      * Rewrite local non-DITA href value.
      * 
-     * <p>TODO: return type should be {@link java.util.URI}.</p>
+     * <p>TODO: return type should be {@link java.net.URI}.</p>
      * 
      * @param attValue href attribute value
      * @return rewritten href value

@@ -1,0 +1,13 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" class="- topic/topic " 
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  id="topic_yvt_bmz_cj" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Topic title</title>
+  <body class="- topic/body ">
+    <image class="- topic/image " href="img.jpg" placement="inline"
+           dita-ot:image-height="95" dita-ot:image-width="135" dita-ot:horizontal-dpi="100"  dita-ot:vertical-dpi="100"/>
+    <image class="- topic/image " href="img.png" placement="inline"
+           dita-ot:image-height="95" dita-ot:image-width="135" dita-ot:horizontal-dpi="100"  dita-ot:vertical-dpi="100"/>
+    <image class="- topic/image " href="img.gif" placement="inline"
+           dita-ot:image-height="95" dita-ot:image-width="135"/>
+  </body>
+</topic>

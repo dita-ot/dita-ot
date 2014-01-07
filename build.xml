@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole binary package for DITA Open Toolkit -->
 <project name="build_DITA-OT_package" default="dist" basedir=".">
@@ -20,7 +19,7 @@
   <property name="src.dir" location="${basedir}/src/main"/>
   <property name="java.dir" location="${src.dir}/java/"/>
   <property name="lib.dir" location="${src.dir}/lib/"/>
-  <property name="doc.dir" location="${src.dir}/doc/"/>
+  <property name="doc.dir" location="${src.dir}/docsrc/"/>
   <property name="dtd.dir" location="${src.dir}/dtd/"/>
   <property name="schema.dir" location="${src.dir}/schema/"/>
   <property name="xsl.dir" location="${src.dir}/xsl/"/>
@@ -29,7 +28,7 @@
   <property name="resource.dir" location="${src.dir}/resource/"/>
 
   <property name="top.work.dir" location="${src.dir}"/>
-  <property name="package.output.dir" location="${basedir}/target"/>
+  <property name="package.output.dir" location="${basedir}/target/dist"/>
   <property name="bin.dir" location="${basedir}/target/classes"/>
   <tstamp>
     <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
@@ -45,6 +44,8 @@
   <property name="binary" value="DITA-OT${otversion}_standard_bin"/>
   <property name="win32.zip.suffix" value=".zip"/>
   <property name="linux.zip.suffix" value=".tar.gz"/>
+
+  <property name="tool.ant.version" value="1.8.4"/>
 
   <target name="init-package" depends="clean-package">
     <mkdir dir="${package.output.dir}"/>
@@ -105,20 +106,14 @@
     <exclude name="EvaluateOT.html"/>
     <exclude name="lib/commons-logging-1.1.1.jar"/>
     <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
+    <exclude name="plugins/org.dita.pdf2/bin/**"/>
+    <exclude name="plugins/org.dita.pdf2/lib/xep/**"/>
     <exclude name="buildSourceForge.xml"/>
-    <exclude name="doc/sourceforge/**"/>
-    <exclude name="doc/userguide-orig/**"/>
-    <exclude name="doc/ot-userguide/**"/>
-    <exclude name="doc/archive/**"/>
-    <exclude name="doc/langref-dita1.1/**"/>
-  </patternset>
-  
-  <patternset id="pattern.package.ant">
-    <exclude name="tools/ant/etc/**"/>
-    <exclude name="tools/ant/manual/**"/>
-    <include name="tools/ant/*"/>
-    <include name="tools/ant/bin/**"/>
-    <include name="tools/ant/lib/**"/>
+    <exclude name="docsrc/sourceforge/**"/>
+    <exclude name="docsrc/userguide-orig/**"/>
+    <exclude name="docsrc/ot-userguide/**"/>
+    <exclude name="docsrc/archive/**"/>
+    <exclude name="docsrc/langref-dita1.1/**"/>
   </patternset>
 
   <patternset id="pattern.package.minimum">
@@ -165,7 +160,7 @@
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/com.sophos.tocjs/**"/>
-    <include name="doc/**"/>
+    <include name="docsrc/**"/>
     <include name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -174,7 +169,6 @@
     <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>
-    <patternset refid="pattern.package.ant"/>
   </patternset>
   <patternset id="pattern.package.ext-plugins.full">
     <include name="h2d/**"/>
@@ -201,7 +195,7 @@
     <include name="plugins/org.dita.specialization.dita132/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/com.sophos.tocjs/**"/>
-    <include name="doc/**"/>
+    <include name="docsrc/**"/>
     <include name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -228,6 +222,14 @@
     <exclude name="**/*.temp"/>
     <exclude name="**/*.db"/>
   </patternset>
+
+  <target name="dependencies">
+    <get src="http://archive.apache.org/dist/ant/binaries/apache-ant-${tool.ant.version}-bin.zip"
+         dest="${basedir}/target/"
+         skipexisting="true"/>
+    <unzip src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip"
+           dest="${basedir}/src/main/tools"/>
+  </target>
 
   <target name="package-binary-minimum">
     <fail unless="param.out.file">param.out.file not defined</fail>
@@ -283,7 +285,7 @@
     </tar>
   </target>
 
-  <target name="package-binary-full">
+  <target name="package-binary-full" depends="dependencies">
     <fail unless="param.out.file">param.out.file not defined</fail>
     <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${otversion}"/>
     <delete dir="${temp.dist.dir}"/>
@@ -292,6 +294,32 @@
       <fileset dir="${src.dir}">
         <patternset refid="pattern.package.full"/>
       </fileset>
+    </copy>
+    <!--copy todir="${temp.dist.dir}/tools/ant">
+      <zipfileset src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip">
+        <exclude name="apache-ant-${tool.ant.version}/etc/**"/>
+        <exclude name="apache-ant-${tool.ant.version}/manual/**"/>
+        <exclude name="apache-ant-${tool.ant.version}/fetch.xml"/>
+        <exclude name="apache-ant-${tool.ant.version}/get-m2.xml"/>
+        <exclude name="apache-ant-${tool.ant.version}/lib/*.pom"/>
+        <include name="apache-ant-${tool.ant.version}/*"/>
+        <include name="apache-ant-${tool.ant.version}/bin/**"/>
+        <include name="apache-ant-${tool.ant.version}/lib/**"/>
+      </zipfileset>
+      <mapper type="glob" from="apache-ant-${tool.ant.version}${file.separator}*" to="*"/>
+    </copy-->
+    <mkdir dir="${temp.dist.dir}/tools/ant"/>
+    <copy todir="${temp.dist.dir}/tools/ant">
+      <fileset dir="${basedir}/src/main/tools/apache-ant-${tool.ant.version}">
+       <exclude name="etc/**"/>
+       <exclude name="manual/**"/>
+       <exclude name="fetch.xml"/>
+       <exclude name="get-m2.xml"/>
+       <exclude name="lib/*.pom"/>
+       <include name="*"/>
+       <include name="bin/**"/>
+       <include name="lib/**"/>
+     </fileset>
     </copy>
     <copy todir="${temp.dist.dir}/plugins">
       <fileset dir="${src.dir}/ext-plugins">
@@ -374,6 +402,9 @@
       <property name="output.dir" location="${work.dir}/htmlhelp"/>
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="preprocess.copy-generated-files.skip" value="true"/>
+      <property name="args.gen.task.lbl" value="YES"/>
+      <property name="args.css" value="dita-ot-doc.css"/>
+      <property name="args.cssroot" value="${doc.dir}/resource"/>
     </ant>
     <!--
     <ant antfile="${src.dir}/build.xml">
@@ -407,13 +438,13 @@
     <move file="${doc.out.dir}/html/userguide.html" tofile="${doc.out.dir}/html/index.html"/>
     -->
     <ant antfile="${src.dir}/build.xml">
-      <property name="args.input" location="${doc.dir}/readme/changes/rel1.6.xml"/>
+      <property name="args.input" location="${doc.dir}/readme/changes/rel1.8.xml"/>
       <property name="output.dir" location="${work.dir}/relnotes"/>
       <property name="args.csspath" value="resource"/>
       <property name="transtype" value="xhtml"/>
       <property name="base.temp.dir" location="${work.dir}"/>
     </ant>
-    <copy file="${work.dir}/relnotes/rel1.6.html" tofile="${out.dir}/relnotes.html"/>
+    <copy file="${work.dir}/relnotes/rel1.8.html" tofile="${out.dir}/relnotes.html"/>
     
     <delete failonerror="yes" includeemptydirs="true">
       <fileset dir="${doc.out.dir}">
@@ -495,6 +526,9 @@
   </target>
   
   <target name="integration-test" depends="compile, test-compile" description="Run integration tests">
+    <condition property="only-test.name" value="${only-test}" else="">
+      <isset property="only-test"/>
+    </condition>
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
@@ -516,6 +550,7 @@
       </classpath>
       <sysproperty key="dita.dir" value="${src.dir}"/>
       <sysproperty key="basedir" value="${test.suite.dir}"/>
+      <sysproperty key="only-test" value="${only-test.name}"/>
       <formatter type="plain" usefile="false"/>
       <formatter type="plain" usefile="true"/>
       <test name="org.dita.dost.IntegrationTest" fork="no" todir="${test.log.dir}"/>
@@ -540,19 +575,23 @@
 
   <target name="site" description="Build project website">
     <ant antfile="${basedir}/src/main/build.xml">
-      <property name="args.input" location="${doc.dir}/sourceforge/sourceforge.ditamap"/>
+      <property name="args.input" location="${doc.dir}/site.ditamap"/>
       <property name="output.dir" location="${basedir}/target/site"/>
       <property name="transtype" value="net.sourceforge.dita-ot.html"/>
       <property name="base.temp.dir" location="${work.dir}"/>
+      <property name="args.rellinks" value="nofamily"/>
     </ant>
-    <ant antfile="${basedir}/src/main/build.xml">
+    <!--ant antfile="${basedir}/src/main/build.xml">
       <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
       <property name="output.dir" location="${basedir}/target/site/${version-id}"/>
       <property name="transtype" value="tocjs"/>
+      <property name="args.css" value="dita-ot-doc.css"/>
       <property name="args.csspath" value="css"/>
+      <property name="args.cssroot" value="${doc.dir}/resource"/>
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="args.hide.parent.link" value="yes"/>
-    </ant>
+      <property name="args.gen.task.lbl" value="YES"/>
+    </ant-->
     <!--echoxml file="${basedir}/target/site/${otversion}/header.html">
       <html>
         <head>
@@ -565,7 +604,7 @@
         </body>
       </html>
     </echoxml-->
-    <echoxml file="${basedir}/target/site/${version-id}/index.html">
+    <!--echoxml file="${basedir}/target/site/${version-id}/index.html">
       <html>
         <head>
           <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -580,7 +619,7 @@
           </frameset>
         </frameset>
       </html>
-    </echoxml>
+    </echoxml-->
     <!--echo append="true" file="${basedir}/target/site/${version-id}/css/commonltr.css">
       @import url('http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold');
       

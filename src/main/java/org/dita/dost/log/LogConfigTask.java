@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -124,11 +123,8 @@ public final class LogConfigTask extends Task {
         dir = new File(logDir);
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
-                final Properties params = new Properties();
-                String msg = null;
-                params.put("%1", logDir);
-                final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ016F", params);
-                msg = msgBean.toString();
+                final MessageBean msgBean=MessageUtils.getInstance().getMessage("DOTJ016F", logDir);
+                final String msg = msgBean.toString();
                 throw new BuildException(msg,new DITAOTException(msgBean,null,msg));
             }
         }

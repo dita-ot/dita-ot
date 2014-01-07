@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="xhtmltocjs" xml:lang="en-us">
+<title>TocJS processing</title>
+<shortdesc>The <option>tocjs</option> transformation was originally created as a plug-in that
+distributed outside of the toolkit, but it now ships bundled in the default packages. This
+XHTML-based output type creates a JavaScript based frameset with TOC entries that expand and
+collapse.</shortdesc>
+<conbody>
+<section><p>The following Ant targets control most of the TocJS processing:<dl>
+<dlentry>
+<dt><codeph>tocjsInit</codeph></dt>
+<dd>Sets up default properties. This target detects whether builds have already specified a name for
+JavaScript control file; if not,  the default name <filepath>toctree.js</filepath> is used.</dd>
+</dlentry>
+<dlentry>
+<dt><codeph>map2tocjs</codeph></dt>
+<dd>Calls the <codeph>dita.map.tocjs</codeph> target, which generates the contents frame for TocJS
+output.</dd>
+</dlentry>
+<dlentry>
+<dt><codeph>tocjsDefaultOutput</codeph></dt>
+<dd>Ensures that the XHTML processing module is run. If scripts are missing required information,
+such as a name for the default frameset, this target copies default style and control files. This
+target was add to the DITA-OT in version 1.5.4; earlier versions of the TocJS transformation created
+only the JavaScript control file by default.</dd>
+</dlentry>
+</dl></p></section>
+</conbody>
+</concept>

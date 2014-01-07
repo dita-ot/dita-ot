@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2012 All Rights Reserved. -->
+<project name="build_DITA-OT_docs" default="all" basedir="..">
+  <description>Build User Guide for DITA Open Toolkit</description>
+  
+  <target name="init">
+    <condition property="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe">
+      <available file="C:\Program Files\HTML Help Workshop\hhc.exe"/>
+    </condition>
+    <condition property="HTMLHelpCompiler" value="C:\Program Files (x86)\HTML Help Workshop\hhc.exe">
+      <available file="C:\Program Files (x86)\HTML Help Workshop\hhc.exe"/>
+    </condition>
+    <property name="preprocess.copy-generated-files.skip" value="true"/>
+    <property name="doc.dir" location="${basedir}/docsrc"/>
+    <property name="css.dir" location="${basedir}/css"/>
+    <property name="resource.dir" location="${basedir}/resource"/>
+    <property name="message.xsl" location="${resource.dir}/messages.xsl"/>
+    <property name="message.input" location="${resource.dir}/messages.xml"/>
+    <property name="message.outputtopic" location="${doc.dir}/readme/DITA-messages.xml"/>
+    <property name="doc.out.dir" location="${basedir}/doc"/>
+  </target>
+  
+  <target name="generate-msg-topic" depends="init" description="Regenerate message file">
+    <ant antfile="${basedir}/integrator.xml"/>
+    <xslt in="${message.input}" out="${message.outputtopic}" style="${message.xsl}"/>
+  </target>
+  
+  <target name="generate-platform-filter" depends="init" description="Genrate platform filter file">
+    <condition property="platform" value="windows">
+      <and>
+        <os family="windows"/>
+        <not><isset property="platform"/></not>
+      </and>
+    </condition>
+    <condition property="platform" value="osx">
+      <and>
+        <os family="mac"/>
+        <not><isset property="platform"/></not>
+      </and>
+    </condition>
+    <condition property="platform" value="unix">
+      <and>
+        <os family="unix"/>
+        <not><isset property="platform"/></not>
+      </and>
+    </condition>
+    <echoxml file="${doc.dir}/platform.ditaval">
+      <val>
+        <prop action="include" att="platform" val="${platform}"/>
+        <prop action="exclude" att="platform"/>
+      </val>
+    </echoxml>
+  </target>
+  
+  <target name="filter-platform" depends="init, generate-platform-filter" description="Filter output by current platform">
+    <property name="args.filter" location="${doc.dir}/platform.ditaval"/>
+  </target>
+  
+  <target name="build-pdf" depends="generate-msg-topic" description="Build User Guide to PDF">
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/userguide-book.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="outputFile.base" value="userguide"/>
+      <property name="transtype" value="pdf"/>
+    </ant>
+  </target>
+  
+  <target name="build-htmlhelp" depends="generate-msg-topic" description="Build User Guide to CHM">
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}/htmlhelp"/>
+      <property name="args.gen.task.lbl" value="YES"/>
+      <property name="args.css" value="dita-ot-doc.css"/>
+      <property name="args.cssroot" value="${doc.dir}/resource"/>
+      <property name="args.copycss" value="yes"/>
+      <property name="transtype" value="htmlhelp"/>
+    </ant>
+    <move todir="${doc.out.dir}" failonerror="no">
+      <fileset dir="${doc.out.dir}/htmlhelp" includes="*.chm"/>
+    </move>
+    <delete dir="${doc.out.dir}/htmlhelp"/>
+  </target>
+  
+  <target name="build-html" depends="generate-msg-topic" description="Build User Guide to XHTML">
+    <ant antfile="${basedir}/build.xml">
+      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
+      <property name="output.dir" location="${doc.out.dir}"/>
+      <property name="outputFile.base" value="index"/>
+      <property name="args.gen.task.lbl" value="YES"/>
+      <property name="args.css" value="dita-ot-doc.css"/>
+      <property name="args.cssroot" value="${doc.dir}/resource"/>
+      <property name="args.copycss" value="yes"/>
+      <property name="transtype" value="tocjs"/>
+    </ant>
+    <move file="${doc.out.dir}/userguide.html" tofile="${doc.out.dir}/index.html"/>
+  </target>
+  
+  <target name="all" description="Build all documentation" depends="build-pdf, build-htmlhelp, build-html"/>
+  
+</project>

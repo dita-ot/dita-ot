@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -22,9 +21,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.dita.dost.TestUtils;
-import org.dita.dost.module.GenMapAndTopicListModule.KeyDef;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.OutputUtils;
 
 /**
@@ -114,13 +113,6 @@ public class TestGenListModuleReader {
         assertEquals(0, resourceOnlySet.size());
 
         assertEquals(0, subsidiaryTargets.size());
-    }
-    
-    @Test
-    public void testIsValidKeyName() {
-    	assertTrue(GenListModuleReader.isValidKeyName("A"));
-    	assertTrue(GenListModuleReader.isValidKeyName("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;="));
-    	assertFalse(GenListModuleReader.isValidKeyName("A/B"));
     }
     
 }

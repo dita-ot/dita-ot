@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -22,7 +21,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -172,7 +170,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                     output.write(StringUtils.escapeXML(ch, start, length));
                 }
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }
@@ -196,7 +194,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         try{
             output.write(CDATA_END);
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -206,7 +204,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         try {
             output.flush();
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -235,7 +233,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 
 
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -266,7 +264,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             outputMeta(root);
 
         } catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
         hasWritten = true;
     }
@@ -374,9 +372,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                     }
                     if(currentIndex==null){
                         // if there is no generalized tag corresponding this tag
-                        final Properties prop=new Properties();
-                        prop.put("%1", name);
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ038E", prop).toString());
+                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ038E", name).toString());
                         break;
                     }
                     if(currentIndex.compareTo(nextIndex) > 0){
@@ -441,7 +437,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         try {
             output.write(ch, start, length);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -454,7 +450,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
             output.write(LESS_THAN + QUESTION
                     + pi + QUESTION + GREATER_THAN);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -494,7 +490,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         try {
             output.write(StringUtils.getEntity(name));
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -504,7 +500,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         try{
             output.write(CDATA_HEAD);
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -565,7 +561,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 
             outputElement(qName, atts);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -598,7 +594,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                 output.write(StringUtils.getEntity(name));
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -642,24 +638,18 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 
             output.close();
             if(!inputFile.delete()){
-                final Properties prop = new Properties();
-                prop.put("%1", inputFile.getPath());
-                prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
             }
             if(!outputFile.renameTo(inputFile)){
-                final Properties prop = new Properties();
-                prop.put("%1", inputFile.getPath());
-                prop.put("%2", outputFile.getPath());
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", prop).toString());
+                logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
             }
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }finally {
             try{
                 fileOutput.close();
             } catch (final Exception e) {
-                logger.logException(e);
+                logger.logError(e.getMessage(), e) ;
             }
         }
     }

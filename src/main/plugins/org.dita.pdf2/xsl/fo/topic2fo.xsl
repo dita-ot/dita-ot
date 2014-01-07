@@ -85,6 +85,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="hi-domain.xsl"/>
     <xsl:import href="../../cfg/fo/attrs/ui-domain-attr.xsl"/>
     <xsl:import href="ui-domain.xsl"/>
+    <xsl:import href="abbrev-domain.xsl"/>
 
     <xsl:import href="../../cfg/fo/attrs/static-content-attr.xsl"/>
     <xsl:import href="static-content.xsl"/>
@@ -109,14 +110,12 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="output.dir.url"/>
     <xsl:param name="work.dir.url"/>
     <xsl:param name="input.dir.url"/>
-    <xsl:param name="disableRelatedLinks" select="'yes'"/>
     <xsl:param name="pdfFormatter" select="'fop'"/>
 
     <!-- Parameters in the following group are passed in from Ant only to
          change defaults for related XSLT parameters. -->
     <xsl:param name="antArgsBookmarkStyle"/>
     <xsl:param name="antArgsChapterLayout"/>
-    <xsl:param name="antArgsIncludeRelatedLinks"/>
     <xsl:param name="include.rellinks"/>
     <xsl:param name="antArgsGenerateTaskLabels"/>
 

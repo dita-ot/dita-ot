@@ -64,7 +64,7 @@
     <xslt in="${input}"
       out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.base.dir}/xsl/topicmerge.xsl">
+      style="${dita.plugin.org.dita.wordrtf.dir}/xsl/topicmerge.xsl">
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <xslt

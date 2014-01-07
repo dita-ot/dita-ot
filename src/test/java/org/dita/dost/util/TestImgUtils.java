@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -40,7 +39,7 @@ public class TestImgUtils {
     @BeforeClass
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(TestImgUtils.class);
-        final Job job = new Job(new Properties(), tempDir);
+        final Job job = new Job(tempDir);
         job.write();
         DitaURIResolverFactory.setPath(tempDir.getAbsolutePath());
     }

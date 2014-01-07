@@ -41,6 +41,7 @@
   <variable id="Preface title">Voorwoord</variable>
   <variable id="Notices title">Let op</variable>
   <variable id="Mini Toc">Onderwerpen: </variable>
+  <variable id="#note-separator">: </variable>
   <variable id="Note">Opmerking</variable>
   <variable id="Tip">Tip</variable>
   <variable id="Important">Belangrijk</variable>

@@ -4,10 +4,10 @@
 		licenses.
 	-->
     <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-    <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"><!-- Catalog for DITA -->
+    <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+             xmlns:dita="http://dita-ot.sourceforge.net"><!-- Catalog for DITA -->
 
-  <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
-                  id="dita.catalog.plugin-info"
+  <dita:extension id="dita.catalog.plugin-info"
                   behavior="org.dita.dost.platform.ImportPluginCatalogAction"/>
 
     <!-- DITA 1.2 DTD -->
@@ -2682,9 +2682,8 @@
   <!-- Java properties file DTD -->
   <system systemId="http://java.sun.com/dtd/properties.dtd" uri="dtd/properties.dtd"/>
 
-   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net" id="dita.specialization.catalog"
+   <dita:extension id="dita.specialization.catalog"
                    behavior="org.dita.dost.platform.InsertAction"/>
-   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
-                   id="dita.specialization.catalog.relative"
+   <dita:extension id="dita.specialization.catalog.relative"
                    behavior="org.dita.dost.platform.InsertCatalogActionRelative"/>
 </catalog>

@@ -57,19 +57,6 @@ with those set forth herein.
     </condition>
     
     <condition property="args.rellinks" value="none">
-      <or>
-        <equals arg1="${args.fo.include.rellinks}" arg2="none"/>
-        <not><isset property="args.fo.include.rellinks"/></not>
-        <istrue value="${disableRelatedLinks}"/>
-      </or>
-    </condition>
-    <condition property="args.rellinks" value="all">
-      <equals arg1="${args.fo.include.rellinks}" arg2="all"/>
-    </condition>
-    <condition property="args.rellinks" value="nofamily">
-      <equals arg1="${args.fo.include.rellinks}" arg2="nofamily"/>
-    </condition>
-    <condition property="args.rellinks" value="none">
       <not><isset property="args.rellinks"/></not>
     </condition>
   </target>
@@ -109,7 +96,6 @@ with those set forth herein.
     <property name="pdf.formatter" value="fop"/>
     
     <property name="artwork.dir" value="${pdf2.temp.dir}"/>
-    <property name="disableRelatedLinks" value="yes"/>
     
     <condition property="file.protocol.prefix" value="file://">
       <os family="unix"/>
@@ -253,10 +239,6 @@ with those set forth herein.
       <not><isset property="args.chapter.layout"/></not>
     </condition>
 
-    <condition property="args.fo.include.rellinks" value="">
-      <not><isset property="args.fo.include.rellinks"/></not>
-    </condition>
-
     <condition property="args.draft" value="no">
       <not><isset property="args.draft"/></not>
     </condition>
@@ -371,10 +353,8 @@ with those set forth herein.
       <param name="work.dir.url" expression="${work.dir.url}"/>
       <param name="artworkPrefix" expression="${artworkPrefixUrl}"/>
       <param name="publishRequiredCleanup" expression="${publish.required.cleanup}"/>
-      <param name="disableRelatedLinks" expression="${disableRelatedLinks}"/>
       <param name="antArgsBookmarkStyle" expression="${args.bookmark.style}"/>
       <param name="antArgsChapterLayout" expression="${args.chapter.layout}"/>
-      <param name="antArgsIncludeRelatedLinks" expression="${args.fo.include.rellinks}"/>
       <param name="include.rellinks" expression="${include.rellinks}"/>
       <param name="antArgsGenerateTaskLabels" expression="${args.gen.task.lbl}"/>
       <param name="pdfFormatter" expression="${pdf.formatter}"/>

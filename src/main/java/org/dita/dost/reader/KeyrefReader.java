@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -134,7 +133,7 @@ public final class KeyrefReader extends AbstractXMLReader {
             final InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
             reader.parse(source);
         } catch (final Exception ex) {
-            logger.logException(ex);
+            logger.logError(ex.getMessage(), ex) ;
         } finally {
             keys = null;
         }
@@ -146,7 +145,7 @@ public final class KeyrefReader extends AbstractXMLReader {
      * @param set keys set
      */
     public void setKeys(final Set<String> set){
-        this.keys = set;
+        keys = set;
     }
 
     @Override

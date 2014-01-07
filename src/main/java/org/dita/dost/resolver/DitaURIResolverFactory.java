@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -43,6 +42,7 @@ public final class DitaURIResolverFactory {
          * wrong while trying to open the file, null is returned.
          */
         resolver = new URIResolver() {
+            @Override
             public Source resolve(final String href, final String base) throws TransformerException {
                 File file = new File(href);
                 if (!file.isAbsolute()) {

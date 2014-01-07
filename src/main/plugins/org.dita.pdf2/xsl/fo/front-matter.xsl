@@ -77,45 +77,12 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-preface"/>
     </xsl:template>
 
-    <xsl:template name="processTopicAbstract">
-        <fo:block xsl:use-attribute-sets="topic" page-break-before="always">
-            <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
-                <fo:marker marker-class-name="current-topic-number">
-                    <xsl:number format="1"/>
-                </fo:marker>
-                <fo:marker marker-class-name="current-header">
-                    <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                        <xsl:apply-templates select="." mode="getTitle"/>
-                    </xsl:for-each>
-                </fo:marker>
-            </xsl:if>
-            <fo:inline>
-                <xsl:call-template name="commonattributes"/>
-            </fo:inline>
-            <fo:inline>
-                <xsl:attribute name="id">
-                    <xsl:call-template name="generate-toc-id"/>
-                </xsl:attribute>
-            </fo:inline>
-            <fo:block>
-                <xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
-                <xsl:attribute name="space-after">16.8pt</xsl:attribute>
-            </fo:block>
-            <fo:block xsl:use-attribute-sets="body__toplevel">
-                <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))]"/>
-            </fo:block>
-        </fo:block>
-    </xsl:template>
-
     <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-preface">
         <xsl:param name="include" select="'true'"/>
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
 
-        <xsl:if test="$topicType = 'topicAbstract'">
-            <xsl:call-template name="processTopicAbstract"/>
-        </xsl:if>
     </xsl:template>
 
     <xsl:variable name="map" select="//opentopic:map"/>

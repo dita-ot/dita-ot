@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="preprocess-copyfiles" xml:lang="en-us">
+<title>Copy related files (copy-files)</title>
+<shortdesc>The <codeph>copy-files</codeph> step copies non-DITA resources to the output directory,
+  such as HTML files that are referenced in a map or images that are referenced by a DITAVAL
+  file.</shortdesc>
+</concept>

@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -64,7 +63,7 @@ final class FileGenerator extends DefaultHandler2 {
      * @param featureTbl featureTbl
      */
     public FileGenerator(final Hashtable<String,String> featureTbl, final Map<String,Features> pluginTable) {
-        this.featureTable = featureTbl;
+        featureTable = featureTbl;
         this.pluginTable = pluginTable;
         output = null;
         templateFile = null;
@@ -106,13 +105,13 @@ final class FileGenerator extends DefaultHandler2 {
             output = new OutputStreamWriter(fileOutput, UTF8);
             reader.parse(fileName.toURI().toString());
         } catch (final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }finally {
             if (output != null) {
                 try {
                     output.close();
                 }catch (final Exception e) {
-                    logger.logException(e);
+                    logger.logError(e.getMessage(), e) ;
                 }
             }
         }
@@ -134,7 +133,7 @@ final class FileGenerator extends DefaultHandler2 {
         try{
             output.write(StringUtils.escapeXML(ch,start,length));
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -147,7 +146,7 @@ final class FileGenerator extends DefaultHandler2 {
                 output.write(">");
             }
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -156,7 +155,7 @@ final class FileGenerator extends DefaultHandler2 {
         try{
             output.write(ch,start,length);
         }catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -227,7 +226,7 @@ final class FileGenerator extends DefaultHandler2 {
             }
         }catch(final Exception e){
             e.printStackTrace();
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -237,7 +236,7 @@ final class FileGenerator extends DefaultHandler2 {
             output.flush();
             output.close();
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }
@@ -253,7 +252,7 @@ final class FileGenerator extends DefaultHandler2 {
             output.write(ch, start, length);
             output.write("-->");
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 
@@ -262,7 +261,7 @@ final class FileGenerator extends DefaultHandler2 {
         try{
             output.write(XML_HEAD);
         }catch(final Exception e){
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }

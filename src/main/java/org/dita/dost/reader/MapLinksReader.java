@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -23,9 +22,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
-import org.dita.dost.module.ContentImpl;
 import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.FileUtils;
@@ -120,7 +116,7 @@ public final class MapLinksReader extends AbstractXMLReader {
             reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
             reader.setFeature("http://xml.org/sax/features/namespaces", false);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
 
     }
@@ -231,19 +227,6 @@ public final class MapLinksReader extends AbstractXMLReader {
     }
 
     /**
-     * @return content collection {@code Set<Entry<String, Map<String, String>>>}
-     * @deprecated use {@link #getMapping()} instead
-     */
-    @Override
-    @Deprecated
-    public Content getContent() {
-
-        final ContentImpl result = new ContentImpl();
-        result.setCollection( map.entrySet());
-        return result;
-    }
-
-    /**
      * Get links for topics
      * 
      * @return map of links by topic path
@@ -284,7 +267,7 @@ public final class MapLinksReader extends AbstractXMLReader {
             final InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
             reader.parse(source);
         } catch (final Exception e) {
-            logger.logException(e);
+            logger.logError(e.getMessage(), e) ;
         }
     }
 

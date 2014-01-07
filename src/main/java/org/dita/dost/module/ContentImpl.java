@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -38,6 +37,7 @@ public class ContentImpl implements Content {
      * @return collection
      * 
      */
+    @Override
     @SuppressWarnings("rawtypes")
     public Collection getCollection() {
         return collection;
@@ -49,6 +49,7 @@ public class ContentImpl implements Content {
      * @return object
      * 
      */
+    @Override
     public Object getValue() {
         return object;
     }
@@ -58,9 +59,10 @@ public class ContentImpl implements Content {
      * Set the collection-like content.
      * @param col collection
      */
+    @Override
     @SuppressWarnings("rawtypes")
     public void setCollection(final Collection col) {
-        this.collection = col;
+        collection = col;
     }
 
 
@@ -68,7 +70,8 @@ public class ContentImpl implements Content {
      * Set the object-like content.
      * @param obj object
      */
+    @Override
     public void setValue(final Object obj) {
-        this.object = obj;
+        object = obj;
     }
 }

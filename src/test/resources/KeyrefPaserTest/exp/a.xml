@@ -71,32 +71,32 @@
   <topic id="link">
     <title>With href</title>
     <prolog>
-      <author href="a.xml" keyref="author_link">
+      <author keyref="author_link" scope="external" href="a.xml" type="dead" format="dead">
         <keyword>author keyword</keyword>
       </author>
-      <source href="a.xml" keyref="source_link">
+      <source keyref="source_link" scope="external" href="a.xml" type="dead" format="dead">
         <keyword>source keyword</keyword>
       </source>
-      <publisher href="a.xml" keyref="publisher_link">
+      <publisher keyref="publisher_link" scope="external" href="a.xml" type="dead" format="dead">
         <keyword>publisher keyword</keyword>
       </publisher>
-      <data href="a.xml" keyref="data_link">
+      <data keyref="data_link" scope="external" href="a.xml" type="dead" format="dead">
         <keyword>data keyword</keyword>
       </data>
-      <data-about href="a.xml" keyref="data-about_link">
+      <data-about keyref="data-about_link" scope="external" href="a.xml" type="dead" format="dead">
         <data>data-about data-about</data>
       </data-about>
     </prolog>
     <body>
-      <image href="b.gif" keyref="image_link" placement="inline"/>
+      <image keyref="image_link" placement="inline" scope="external" href="b.gif"/>
       <p>
-        <xref href="a.xml" keyref="xref_link">
+        <xref keyref="xref_link" scope="external" href="a.xml" type="dead" format="dead">
           <keyword>xref keyword</keyword>
         </xref>
         <cite keyref="cite_link">cite keyword</cite>
-        <keyword keyref="keyword_link">keyword keyword</keyword>
+        <keyword keyref="keyword_link" href="a.xml">keyword keyword</keyword>
         <ph keyref="ph_link">ph keyword</ph>
-        <term keyref="term_link">term keyword</term>
+        <term keyref="term_link" href="a.xml">term keyword</term>
         <indexterm keyref="indexterm_link">indexterm keyword</indexterm>
         <indexterm>
           <index-base keyref="index-base_link">index-base keyword</index-base>
@@ -109,14 +109,14 @@
           <dd/>
         </dlentry>
       </dl>
-      <lq href="a.xml" keyref="lq_link">
+      <lq keyref="lq_link" scope="external" href="a.xml" type="dead" format="dead">
         <keyword>lq keyword</keyword>
       </lq>
       <p>
-        <keyword keyref="keyword_link">original</keyword>
-        <keyword keyref="keyword_link"><text>original</text></keyword>
-        <keyword keyref="keyword_link">keyword keyword</keyword>
-        <keyword keyref="keyword_link"><?original?>keyword keyword</keyword>
+        <keyword keyref="keyword_link" href="a.xml">original</keyword>
+        <keyword keyref="keyword_link" href="a.xml"><text>original</text></keyword>
+        <keyword keyref="keyword_link" href="a.xml">keyword keyword</keyword>
+        <keyword keyref="keyword_link" href="a.xml"><?original?>keyword keyword</keyword>
       </p>
       <p>
         <xref href="a.xml" keyref="missing" scope="external" type="dead" format="dead">missing</xref>
@@ -124,7 +124,7 @@
       </p>
     </body>
     <related-links>
-      <link href="a.xml" keyref="link_link">
+      <link keyref="link_link" scope="external" href="a.xml" type="dead" format="dead">
         <linktext>
           <keyword>link keyword</keyword>
         </linktext>

@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -115,8 +114,7 @@ public final class FilePathToURI {
             try {
                 bytes = path.substring(i).getBytes("UTF-8");
             } catch (final java.io.UnsupportedEncodingException e) {
-                // Should never happen
-                return path;
+                throw new RuntimeException(e);
             }
             len = bytes.length;
 

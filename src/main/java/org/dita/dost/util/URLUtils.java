@@ -1,7 +1,6 @@
 /*
- * This file is part of the DITA Open Toolkit project hosted on
- * Sourceforge.net. See the accompanying license.txt file for
- * applicable licenses.
+ * This file is part of the DITA Open Toolkit project.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /*
@@ -67,7 +66,7 @@ public final class URLUtils {
     /**
      * Decodes a application/x-www-form-urlencoded string using UTF-8 encoding scheme.
      * 
-     * Convenience method for {@link java.util.URLDecoder#decode(String,String) URLDecoder}:
+     * Convenience method for {@link java.net.URLDecoder#decode(String,String) URLDecoder}:
      * use UTF-8 and do not throw {@link java.io.UnsupportedEncodingException UnsupportedEncodingException}.
      * 
      * @param s the string to decode
@@ -335,6 +334,17 @@ public final class URLUtils {
      * @return cleaned URI
      */
     public static String clean(final String path) {
+        return clean(path, true);
+    }
+    
+    /**
+     * Try to clean an invalid URI.
+     * 
+     * @param path URI to be escaped.
+     * @param ascii encode non-ASCII characters to ASCII
+     * @return cleaned URI
+     */
+    public static String clean(final String path, final boolean ascii) {
         int len = path.length(), ch;
         final StringBuffer buffer = new StringBuffer(len*3);
         // Change C:/something to /C:/something
@@ -350,10 +360,10 @@ public final class URLUtils {
         for (; i < len; i++) {
             ch = path.charAt(i);
             // If it's not an ASCII character, break here, and use UTF-8 encoding
-            if (ch >= 128) {
+            if (ch >= 128 && ascii) {
                 break;
             }
-            if (gNeedEscaping[ch]) {
+            if (ch <  gNeedEscaping.length && gNeedEscaping[ch]) {
                 buffer.append('%');
                 buffer.append(gAfterEscaping1[ch]);
                 buffer.append(gAfterEscaping2[ch]);
@@ -365,15 +375,14 @@ public final class URLUtils {
         }
 
         // We saw some non-ASCII character
-        if (i < len) {
+        if (i < len && ascii) {
             // Get UTF-8 bytes for the remaining sub-string
             byte[] bytes;
             byte b;
             try {
                 bytes = path.substring(i).getBytes("UTF-8");
             } catch (final java.io.UnsupportedEncodingException e) {
-                // Should never happen
-                return path;
+            	throw new RuntimeException(e);
             }
             len = bytes.length;
 
