@@ -59,6 +59,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.writer.ProfilingFilter;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
@@ -179,7 +180,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private GenListModuleReader listFilter;
     private boolean xmlValidate = true;
     private ContentHandler nullHandler;
-
+    private FilterUtils filterUtils;
+    
     /** Absolute path to input file. */
     private File rootFile;
     /** File currently being processed */
@@ -281,8 +283,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
 //        listFilter.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
-        final FilterUtils filterUtils = parseFilterFile();
-        listFilter.setFilterUtils(filterUtils);
+        filterUtils = parseFilterFile();
         listFilter.setInputFile(rootFile.getAbsoluteFile());
         listFilter.setInputDir(rootFile.getAbsoluteFile().getParentFile());//baseInputDir
         listFilter.setJob(job);
@@ -419,10 +420,14 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private List<XMLFilter> getProcessingPipe(final File fileToParse, final File file) {
         final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
+        if (filterUtils != null) {
+            final ProfilingFilter profilingFilter = new ProfilingFilter();
+            profilingFilter.setLogger(logger);
+            profilingFilter.setFilterUtils(filterUtils);
+            pipe.add(profilingFilter);
+        }
         {
             listFilter.setTranstype(transtype);
-//            listFilter.setCurrentDir(FileUtils.getRelativePath(rootFile.getAbsoluteFile(), fileToParse.getAbsoluteFile()).getParentFile());
-//            listFilter.setCurrentDir(new File(FileUtils.getRelativeUnixPath(rootFile.getAbsoluteFile(), fileToParse.getPath())).getParentFile());
             listFilter.setCurrentDir(file.getParentFile());
             listFilter.setCurrentFile(fileToParse);
             listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
@@ -469,11 +474,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             XMLReader xmlSource = reader;
             for (final XMLFilter f: getProcessingPipe(fileToParse, file)) {
                 f.setParent(xmlSource);
+                f.setEntityResolver(CatalogUtils.getCatalogResolver());
                 xmlSource = f;
             }
             
-            xmlSource.setContentHandler(new DefaultHandler());
-            xmlSource.setEntityResolver(CatalogUtils.getCatalogResolver());
+            xmlSource.setContentHandler(nullHandler);            
             
             xmlSource.parse(fileToParse.toURI().toString());
 

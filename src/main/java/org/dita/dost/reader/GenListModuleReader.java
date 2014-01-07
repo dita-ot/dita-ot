@@ -58,8 +58,6 @@ import org.xml.sax.XMLReader;
  */
 public final class GenListModuleReader extends AbstractXMLFilter {
     
-    /** Filter utils */
-    private FilterUtils filterUtils;
     /** Output utilities */
     private Job job;
     /** Basedir of the current parsing file */
@@ -96,10 +94,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Map<String, String> keysRefMap;
     /** Flag for conrefpush */
     private boolean hasconaction = false;
-    /** Flag used to mark if parsing entered into excluded element */
-    private boolean insideExcludedElement = false;
-    /** Used to record the excluded level */
-    private int excludedLevel = 0;
     /** foreign/unknown nesting level */
     private int foreignLevel = 0;
     /** chunk nesting level */
@@ -223,15 +217,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     public List<ExportAnchor> getExportAnchors() {
         return exportAnchors;
-    }
-
-    /**
-     * Set content filter.
-     * 
-     * @param filterUtils filter utils
-     */
-    public void setFilterUtils(final FilterUtils filterUtils) {
-        this.filterUtils = filterUtils;
     }
 
     /**
@@ -549,8 +534,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         hasHref = false;
         hasCodeRef = false;
         currentDir = null;
-        insideExcludedElement = false;
-        excludedLevel = 0;
         foreignLevel = 0;
         chunkLevel = 0;
         relTableLevel = 0;
@@ -797,18 +780,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
         }
 
-        if (insideExcludedElement) {
-            ++excludedLevel;
-            return;
-        }
-
-        // Ignore element that has been filtered out.
-        if (filterUtils.needExclude(atts, props)) {
-            insideExcludedElement = true;
-            ++excludedLevel;
-            return;
-        }
-
         /*
          * For ditamap, set it to valid if element <map> or extended from <map>
          * was found, this kind of element's class attribute must contains
@@ -928,13 +899,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
         if (topicGroupLevel > 0) {
             topicGroupLevel--;
-        }
-        if (insideExcludedElement) {
-            // end of the excluded element, mark the flag as false
-            if (excludedLevel == 1) {
-                insideExcludedElement = false;
-            }
-            --excludedLevel;
         }
         
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
