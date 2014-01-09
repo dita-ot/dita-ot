@@ -1046,29 +1046,23 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         final String attrValue = atts.getValue(ATTRIBUTE_NAME_KEYS);
         if (attrValue != null) {
             URI target = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-            final String attrScope = getInherited(ATTRIBUTE_NAME_SCOPE);
             final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
     
             final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
             if (copyTo != null) {
                 target = copyTo;
             }
-            // avoid NullPointException
-//            if (target == null) {
-//                target = "";
-//            }
-            // store the target
-            final URI temp = target;
     
             // Many keys can be defined in a single definition, like
             // keys="a b c", a, b and c are seperated by blank.
-            for (final String key : attrValue.split(" ")) {
-                if (!keysDefMap.containsKey(key) && !key.equals("")) {
+            for (final String key : attrValue.trim().split("\\s+")) {
+                if (!keysDefMap.containsKey(key)) {
                     if (target != null && target.toString().length() != 0) {
+                        final String attrScope = getInherited(ATTRIBUTE_NAME_SCOPE);
                         if (attrScope != null && (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))) {
                             keysDefMap.put(key, new KeyDef(key, target, attrScope, null));
                         } else {
-                            String tail = "";
+                            String tail = null;
                             if (target.getFragment() != null) {
                                 tail = target.getFragment();
                                 target = stripFragment(target);
@@ -1090,8 +1084,6 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
                 } else {
                     logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target.toString()).toString());
                 }
-                // restore target
-                target = temp;
             }
         }
     } 

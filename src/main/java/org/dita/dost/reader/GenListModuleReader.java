@@ -726,7 +726,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
         parseAttribute(atts, ATTRIBUTE_NAME_IMG);
         parseAttribute(atts, ATTRIBUTE_NAME_CONACTION);
-        parseAttribute(atts, ATTRIBUTE_NAME_KEYS);
+        handleKeysAttr(atts);
         parseAttribute(atts, ATTRIBUTE_NAME_CONKEYREF);
         parseAttribute(atts, ATTRIBUTE_NAME_KEYREF);
 
@@ -898,7 +898,62 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             vaildBranches.put(fileName, new ArrayList<String>());
         }
     }
+    
+    /**
+     * Parse the keys attributes.
+     * 
+     * @param atts all attributes
+     */
+    private void handleKeysAttr(final Attributes atts) throws SAXException {
+        String attrValue = atts.getValue(ATTRIBUTE_NAME_KEYS);
+        if (attrValue == null || attrValue.isEmpty()) {
+            return;
+        }
 
+        URI target = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+        final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
+        if (copyTo != null) {
+            target = copyTo;
+        }
+
+        final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
+
+        // Many keys can be defined in a single definition, like
+        // keys="a b c", a, b and c are seperated by blank.
+        for (final String key : attrValue.trim().split("\\s+")) {
+            if (!keysDefMap.containsKey(key)) {
+                if (target != null && !target.toString().isEmpty()) {
+                    final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+                    if (attrScope != null && (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))) {
+                        // store external or peer resources.
+                        exKeysDefMap.put(key, target);
+                        keysDefMap.put(key, new KeyDef(key, target, attrScope, null));
+                    } else {
+                        String tail = null;
+                        if (target.getFragment() != null) {
+                            tail = target.getFragment();
+                            target = stripFragment(target);
+                        }
+                        if (toFile(target).isAbsolute()) {
+                            target = toURI(FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(), target.getPath()));
+                        }
+                        target = toURI(FileUtils.separatorsToUnix(FileUtils.normalizeDirectory(currentDir, target.getPath()).getPath()));
+                        keysDefMap.put(key, new KeyDef(key, setFragment(target, tail), ATTR_SCOPE_VALUE_LOCAL, null));
+                    }
+                } else if (keyRef != null && !keyRef.isEmpty()) {
+                    // store multi-level keys.
+                    keysRefMap.put(key, keyRef);
+                } else {
+                    // target is null or empty, it is useful in the future
+                    // when consider the content of key definition
+                    keysDefMap.put(key, new KeyDef(key, (URI) null, (String) null, (URI) null));
+                }
+            } else {
+                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target != null ? target.toString() : null).toString());
+            }
+        }
+    }
+    
     /**
      * Parse the input attributes for needed information.
      * 
@@ -932,60 +987,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
         } else if (ATTRIBUTE_NAME_KEYREF.equals(attrName)) {
             hasKeyRef = true;
-        }
-
-        // collect the key definitions
-        if (ATTRIBUTE_NAME_KEYS.equals(attrName) && !attrValue.isEmpty()) {
-            URI target = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-
-            final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
-
-            final URI copy_to = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
-            if (copy_to != null && !copy_to.toString().isEmpty()) {
-                target = copy_to;
-            }
-            // avoid NullPointException
-//            if (target == null) {
-//                target = "";
-//            }
-            // store the target
-            final URI temp = target;
-
-            // Many keys can be defined in a single definition, like
-            // keys="a b c", a, b and c are seperated by blank.
-            for (final String key : attrValue.split(" ")) {
-                if (!keysDefMap.containsKey(key) && !key.equals("")) {
-                    if (target != null && !target.toString().isEmpty()) {
-                        if (attrScope != null && (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))) {
-                            // store external or peer resources.
-                            exKeysDefMap.put(key, target);
-                            keysDefMap.put(key, new KeyDef(key, target, attrScope, null));
-                        } else {
-                            String tail = "";
-                            if (target.getFragment() != null) {
-                                tail = SHARP + target.getFragment();
-                                target = stripFragment(target);
-                            }
-                            if (toFile(target).isAbsolute()) {
-                                target = toURI(FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(), target.getPath()));
-                            }
-                            target = toURI(FileUtils.separatorsToUnix(FileUtils.normalizeDirectory(currentDir, target.getPath()).getPath()));
-                            keysDefMap.put(key, new KeyDef(key, toURI(target + tail), ATTR_SCOPE_VALUE_LOCAL, null));
-                        }
-                    } else if (!StringUtils.isEmptyString(keyRef)) {
-                        // store multi-level keys.
-                        keysRefMap.put(key, keyRef);
-                    } else {
-                        // target is null or empty, it is useful in the future
-                        // when consider the content of key definition
-                        keysDefMap.put(key, new KeyDef(key, (URI) null, (String) null, (URI) null));
-                    }
-                } else {
-                    logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target != null ? target.toString() : null).toString());
-                }
-                // restore target
-                target = temp;
-            }
         }
 
         // external resource is filtered here.
