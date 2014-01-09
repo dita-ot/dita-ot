@@ -9,5 +9,15 @@
     keys="target_topic_1"/>
   <topicref
     href="../topics/target-topic-c.xml"
-    keys="target_topic_2"/>
+    keys="target_topic_2" scope="local"/>
+  <topicref
+    href="../topics/peer.xml"
+    keys="peer" scope="peer"/>
+  <topicref
+    href="http://www.example.com/external.xml"
+    keys="external" scope="external"/>
+  <topicref
+    keys="target_topic_3" keyref="target_topic_1"/>
+  <topicref
+    keys="target_topic_4" keyref="target_topic_3"/>
 </map>

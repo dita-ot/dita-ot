@@ -12,14 +12,13 @@ package org.dita.dost.reader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-import static org.dita.dost.util.Constants.FEATURE_NAMESPACE_PREFIX;
-import static org.dita.dost.util.Constants.FEATURE_VALIDATION;
-import static org.dita.dost.util.Constants.FEATURE_VALIDATION_SCHEMA;
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -90,6 +89,7 @@ public class TestGenListModuleReader {
         final Set<File> hrefTopic =reader.getHrefTopicSet();
         final Set<File> copytoSet = reader.getIgnoredCopytoSourceSet();
         final Map<String, KeyDef> keyDMap = reader.getKeysDMap();
+        final Map<String, URI> extKeyDMap = reader.getExKeysDefMap();
         final Set<File> nonConref = reader.getNonConrefCopytoTargets();
         final Set<Reference> nonCopyTo = reader.getNonCopytoResult();
         final Set<File> outDita = reader.getOutDitaFilesSet();
@@ -113,9 +113,19 @@ public class TestGenListModuleReader {
 
         assertEquals(0, copytoSet.size());
 
-        assertEquals(toURI(".." + File.separator + "topics" + File.separator + "target-topic-c.xml") ,keyDMap.get("target_topic_2").href);
-        assertEquals(toURI(".." + File.separator + "topics" + File.separator + "target-topic-a.xml") ,keyDMap.get("target_topic_1").href);
-
+        final Map<String, KeyDef> expKeyDefMap = new HashMap<String, KeyDef>();
+        expKeyDefMap.put("target_topic_1", new KeyDef("target_topic_1", toURI(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"), ATTR_SCOPE_VALUE_LOCAL, null));
+        expKeyDefMap.put("target_topic_2", new KeyDef("target_topic_2", toURI(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"), ATTR_SCOPE_VALUE_LOCAL, null));
+        expKeyDefMap.put("target_topic_3", new KeyDef("target_topic_1", toURI(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"), ATTR_SCOPE_VALUE_LOCAL, null));
+        expKeyDefMap.put("target_topic_4", new KeyDef("target_topic_1", toURI(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"), ATTR_SCOPE_VALUE_LOCAL, null));
+        expKeyDefMap.put("peer", new KeyDef("peer", toURI(".." + File.separator + "topics" + File.separator + "peer.xml"), ATTR_SCOPE_VALUE_PEER, null));
+        expKeyDefMap.put("external", new KeyDef("external", toURI("http://www.example.com/external.xml"), ATTR_SCOPE_VALUE_EXTERNAL, null));
+        assertEquals(expKeyDefMap, keyDMap);
+                
+        assertEquals(2, extKeyDMap.size());
+        assertEquals(toURI(".." + File.separator + "topics" + File.separator + "peer.xml") , extKeyDMap.get("peer"));
+        assertEquals(toURI("http://www.example.com/external.xml") , extKeyDMap.get("external"));
+        
         assertTrue(nonConref.contains(new File(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
         assertTrue(nonConref.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
         assertTrue(nonConref.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
