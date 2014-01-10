@@ -68,6 +68,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <!-- used for mapref target to see whether @linking should be override by the source of mapref -->
     <xsl:param name="parent-toc">#none#</xsl:param>
     <!-- used for mapref target to see whether @toc should be override by the source of mapref -->
+    
     <xsl:param name="parent-processing-role">#none#</xsl:param>
     
     <!--need to create these variables regardless, for passing as a parameter to get-stuff template-->
@@ -584,8 +585,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
         </xsl:choose>
       </xsl:when>
       <!-- skip resource-only image files -->
-      <xsl:when test="($format='jpg' or $format='jpeg' or $format='tiff' or $format='gif'
-        or $format='eps' or $format='svg' or $format='tif') and @processing-role='resource-only'"/>
+      <xsl:when test="not($format='dita' or $format = '') and 
+        (ancestor-or-self::*[@processing-role='resource-only'])"/>
       <xsl:when test="not($format='#none#' or $format='dita' or $format='DITA')">
         <xsl:apply-templates select="." mode="mappull:get-navtitle-for-non-dita"/>
       </xsl:when>
@@ -833,8 +834,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
               <xsl:apply-templates select="." mode="mappull:get-linktext_peer-dita"/>
             </xsl:when>
             <!-- skip resource-only image files -->
-            <xsl:when test="($format='jpg' or $format='jpeg' or $format='tiff' or $format='gif'
-              or $format='eps' or $format='svg' or $format='tif') and @processing-role='resource-only'"/>
+            <xsl:when test="not($format='dita' or $format = '') and 
+              (ancestor-or-self::*[@processing-role='resource-only'])"
+            />
             <xsl:when test="not($format='#none#' or $format='dita' or $format='DITA')">
               <xsl:apply-templates select="." mode="mappull:get-linktext-for-non-dita"/>
             </xsl:when>
