@@ -54,6 +54,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.reader.GenListModuleReader.ExportAnchor;
+import org.dita.dost.reader.KeydefFilter;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.DelayConrefUtils;
@@ -137,6 +138,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
     /** Prefix path. Either an empty string or a path which ends in {@link java.io.File#separator File.separator}. */
     private final String prefix = "";
     private GenListModuleFilter listFilter;
+    private KeydefFilter keydefFilter;
     private ExportAnchorsFilter exportAnchorsFilter;
     private boolean xmlValidate = true;
     /** Absolute path to input file. */
@@ -302,6 +304,11 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         listFilter.setJob(job);
         listFilter.setTempDir(job.tempDir);
         listFilter.isStartDocument(true);
+        
+        keydefFilter = new KeydefFilter();
+        keydefFilter.setLogger(logger);
+        keydefFilter.setInputFile(rootFile);
+        keydefFilter.setJob(job);
         
         exportAnchorsFilter = new ExportAnchorsFilter();
         exportAnchorsFilter.setInputFile(new File(rootFile).getAbsoluteFile());
@@ -518,10 +525,13 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
 
         doneList.add(currentFile);
         listFilter.reset();
+        keydefFilter.reset();
     }
     
     /**
      * Get pipe line filters
+     * 
+     * @param fileToParse absolute URI to current file being processed
      */
     private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
         final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
@@ -550,10 +560,15 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             pipe.add(normalizeFilter);
         }
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            exportAnchorsFilter.setCurrentDir(toFile(currentFile).getParentFile());
+            exportAnchorsFilter.setCurrentDir(toFile(currentFile.resolve(".")));
             exportAnchorsFilter.setCurrentFile(new File(fileToParse));
             exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
             pipe.add(exportAnchorsFilter);
+        }
+        {
+            keydefFilter.setCurrentDir(currentFile.resolve("."));
+            keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+            pipe.add(keydefFilter);
         }
         {
 //            listFilter.setTranstype(transtype);
@@ -571,7 +586,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         }
 
         final Map<File, File> cpMap = listFilter.getCopytoMap();
-        final Map<String, KeyDef> kdMap = listFilter.getKeysDMap();
+        final Map<String, KeyDef> kdMap = keydefFilter.getKeysDMap();
         // the reader's reset method will clear the map.
 
         // Category non-copyto result and update uplevels accordingly

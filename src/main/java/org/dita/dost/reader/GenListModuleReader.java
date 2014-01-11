@@ -88,10 +88,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Set<File> ignoredCopytoSourceSet;
     /** Map of copy-to target to souce */
     private final Map<File, File> copytoMap;
-    /** Map of key definitions */
-    private final Map<String, KeyDef> keysDefMap;
-    /** Map to store multi-level keyrefs */
-    private final Map<String, String> keysRefMap;
     /** Flag for conrefpush */
     private boolean hasconaction = false;
     /** foreign/unknown nesting level */
@@ -137,8 +133,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Stack<String> topicrefStack;
     /** Store the primary ditamap file name. */
     private String primaryDitamap = "";
-    /** Store the external/peer keydefs */
-    private final Map<String, URI> exKeysDefMap;
 
     /**
      * Constructor.
@@ -155,9 +149,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         subsidiarySet = new HashSet<File>(16);
         ignoredCopytoSourceSet = new HashSet<File>(16);
         outDitaFilesSet = new HashSet<File>(64);
-        keysDefMap = new HashMap<String, KeyDef>();
-        keysRefMap = new HashMap<String, String>();
-        exKeysDefMap = new HashMap<String, URI>();
         processRoleLevel = 0;
         processRoleStack = new Stack<String>();
         resourceOnlySet = new HashSet<File>(32);
@@ -381,24 +372,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * Get the Key definitions.
-     * 
-     * @return Key definitions map
-     */
-    public Map<String, KeyDef> getKeysDMap() {
-        return keysDefMap;
-    }
-
-    /**
-     * Map of external/peek key references.
-     * 
-     * @return map of keys to targets
-     */
-    public Map<String, URI> getExKeysDefMap() {
-        return exKeysDefMap;
-    }
-
-    /**
      * Set processing input directory absolute path.
      * 
      * @param inputFile absolute path to base directory
@@ -498,9 +471,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         copytoMap.clear();
         ignoredCopytoSourceSet.clear();
         outDitaFilesSet.clear();
-        keysDefMap.clear();
-        keysRefMap.clear();
-        exKeysDefMap.clear();
         schemeSet.clear();
         schemeRefSet.clear();
         level = 0;
@@ -726,7 +696,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
         parseAttribute(atts, ATTRIBUTE_NAME_IMG);
         parseAttribute(atts, ATTRIBUTE_NAME_CONACTION);
-        handleKeysAttr(atts);
         parseAttribute(atts, ATTRIBUTE_NAME_CONKEYREF);
         parseAttribute(atts, ATTRIBUTE_NAME_KEYREF);
 
@@ -776,7 +745,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             processRoleLevel--;
             processRoleStack.pop();
         }
-        checkMultiLevelKeys(keysDefMap, keysRefMap);
         
         getContentHandler().endDocument();
     }
@@ -896,61 +864,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             // href value has no branch id
         } else {
             vaildBranches.put(fileName, new ArrayList<String>());
-        }
-    }
-    
-    /**
-     * Parse the keys attributes.
-     * 
-     * @param atts all attributes
-     */
-    private void handleKeysAttr(final Attributes atts) throws SAXException {
-        String attrValue = atts.getValue(ATTRIBUTE_NAME_KEYS);
-        if (attrValue == null || attrValue.isEmpty()) {
-            return;
-        }
-
-        URI target = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-        final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
-        if (copyTo != null) {
-            target = copyTo;
-        }
-
-        final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
-
-        // Many keys can be defined in a single definition, like
-        // keys="a b c", a, b and c are seperated by blank.
-        for (final String key : attrValue.trim().split("\\s+")) {
-            if (!keysDefMap.containsKey(key)) {
-                if (target != null && !target.toString().isEmpty()) {
-                    final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                    if (attrScope != null && (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))) {
-                        // store external or peer resources.
-                        exKeysDefMap.put(key, target);
-                        keysDefMap.put(key, new KeyDef(key, target, attrScope, null));
-                    } else {
-                        String tail = null;
-                        if (target.getFragment() != null) {
-                            tail = target.getFragment();
-                            target = stripFragment(target);
-                        }
-                        if (toFile(target).isAbsolute()) {
-                            target = toURI(FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(), target.getPath()));
-                        }
-                        target = toURI(FileUtils.separatorsToUnix(FileUtils.normalizeDirectory(currentDir, target.getPath()).getPath()));
-                        keysDefMap.put(key, new KeyDef(key, setFragment(target, tail), ATTR_SCOPE_VALUE_LOCAL, null));
-                    }
-                } else if (keyRef != null && !keyRef.isEmpty()) {
-                    // store multi-level keys.
-                    keysRefMap.put(key, keyRef);
-                } else {
-                    // target is null or empty, it is useful in the future
-                    // when consider the content of key definition
-                    keysDefMap.put(key, new KeyDef(key, (URI) null, (String) null, (URI) null));
-                }
-            } else {
-                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target != null ? target.toString() : null).toString());
-            }
         }
     }
     
@@ -1136,58 +1049,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 //        f = f.replace(URI_SEPARATOR, File.separator);
 //        return f;
 //    }
-
-    /**
-     * Get multi-level keys list
-     */
-    private List<String> getKeysList(final String key, final Map<String, String> keysRefMap) {
-        final List<String> list = new ArrayList<String>();
-        // Iterate the map to look for multi-level keys
-        final Iterator<Entry<String, String>> iter = keysRefMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, String> entry = iter.next();
-            // Multi-level key found
-            if (entry.getValue().equals(key)) {
-                // add key into the list
-                final String entryKey = entry.getKey();
-                list.add(entryKey);
-                // still have multi-level keys
-                if (keysRefMap.containsValue(entryKey)) {
-                    // rescuive point
-                    final List<String> tempList = getKeysList(entryKey, keysRefMap);
-                    list.addAll(tempList);
-                }
-            }
-        }
-        return list;
-    }
-
-    /**
-     * Update keysDefMap for multi-level keys
-     */
-    private void checkMultiLevelKeys(final Map<String, KeyDef> keysDefMap, final Map<String, String> keysRefMap) {
-        String key = null;
-        KeyDef value = null;
-        // tempMap storing values to avoid ConcurrentModificationException
-        final Map<String, KeyDef> tempMap = new HashMap<String, KeyDef>();
-        final Iterator<Entry<String, KeyDef>> iter = keysDefMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, KeyDef> entry = iter.next();
-            key = entry.getKey();
-            value = entry.getValue();
-            // there is multi-level keys exist.
-            if (keysRefMap.containsValue(key)) {
-                // get multi-level keys
-                final List<String> keysList = getKeysList(key, keysRefMap);
-                for (final String multikey : keysList) {
-                    // update tempMap
-                    tempMap.put(multikey, value);
-                }
-            }
-        }
-        // update keysDefMap.
-        keysDefMap.putAll(tempMap);
-    }
 
     /**
      * Check if path walks up in parent directories

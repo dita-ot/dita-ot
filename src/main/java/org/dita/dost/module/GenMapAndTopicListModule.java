@@ -51,6 +51,7 @@ import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.reader.GenListModuleReader.ExportAnchor;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.GrammarPoolManager;
+import org.dita.dost.reader.KeydefFilter;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
@@ -179,6 +180,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /** XMLReader instance for parsing dita file */
     private XMLReader reader;
     private GenListModuleReader listFilter;
+    private KeydefFilter keydefFilter;
     private ExportAnchorsFilter exportAnchorsFilter;
     private boolean xmlValidate = true;
     private ContentHandler nullHandler;
@@ -195,8 +197,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /** Subject scheme usage. Key is relative file path, value is set of applicable subject schemes. */
     private final Map<File, Set<File>> schemeDictionary;
     private String transtype;
-
-    private final Map<String, URI> exKeyDefMap;
 
     /** use grammar pool cache */
     private boolean gramcache = true;
@@ -235,7 +235,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         relFlagImagesSet = new LinkedHashSet<File>(128);
         conrefpushSet = new HashSet<File>(128);
         keysDefMap = new HashMap<String, KeyDef>();
-        exKeyDefMap = new HashMap<String, URI>();
         keyrefSet = new HashSet<File>(128);
         coderefSet = new HashSet<File>(128);
 
@@ -292,6 +291,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         
         exportAnchorsFilter = new ExportAnchorsFilter();
         exportAnchorsFilter.setInputFile(rootFile.getAbsoluteFile());
+        
+        keydefFilter = new KeydefFilter();
+        keydefFilter.setLogger(logger);
+        keydefFilter.setInputFile(rootFile.getAbsoluteFile().toURI());
+        keydefFilter.setJob(job);
         
         nullHandler = new DefaultHandler();
     }
@@ -420,6 +424,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     
     /**
      * Get pipe line filters
+     * 
+     * @param fileToParse absolute path to current file being processed
+     * @param file relative path to current file being processed, relative to start document parent directory
      */
     private List<XMLFilter> getProcessingPipe(final File fileToParse, final File file) {
         final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
@@ -434,6 +441,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             exportAnchorsFilter.setCurrentFile(fileToParse);
             exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
             pipe.add(exportAnchorsFilter);
+        }
+        {
+            keydefFilter.setCurrentDir(toURI(file.getParentFile()));
+            keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+            pipe.add(keydefFilter);
         }
         {
             listFilter.setCurrentDir(file.getParentFile());
@@ -535,15 +547,13 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         doneList.add(file);
         listFilter.reset();
+        keydefFilter.reset();
 
     }
 
     private void processParseResult(final File currentFile) {
         final Map<File, File> cpMap = listFilter.getCopytoMap();
-        final Map<String, KeyDef> kdMap = listFilter.getKeysDMap();
-        // the reader's reset method will clear the map.
-        final Map<String, URI> exKdMap = listFilter.getExKeysDefMap();
-        exKeyDefMap.putAll(exKdMap);
+        final Map<String, KeyDef> kdMap = keydefFilter.getKeysDMap();
 
         // Category non-copyto result and update uplevels accordingly
         for (final Reference file: listFilter.getNonCopytoResult()) {
@@ -1223,7 +1233,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
                     //href = FileUtils.separatorsToUnix(FileUtils.normalize(prefix));
                     source = toURI(FileUtils.normalize(prefix + source.toString()));
                 } else {
-                    if (!exKeyDefMap.containsKey(file.keys)) {
+                    if (ATTR_SCOPE_VALUE_LOCAL.equals(file.scope)) {
                         href = toURI(FileUtils.normalize(prefix + href.toString()));
                     }
                     source = toURI(FileUtils.normalize(prefix + source.toString()));

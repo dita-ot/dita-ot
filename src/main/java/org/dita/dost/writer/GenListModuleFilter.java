@@ -69,10 +69,6 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     private final Set<File> ignoredCopytoSourceSet;
     /** Map of copy-to target to souce */
     private final Map<File, File> copytoMap;
-    /** Map of key definitions */
-    private final Map<String, KeyDef> keysDefMap;
-    /** Map to store multi-level keyrefs */
-    private final Map<String, String> keysRefMap;
     /** chunk nesting level */
     private int chunkLevel = 0;
     /** mark topics in reltables */
@@ -139,8 +135,6 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         copytoMap = new HashMap<File, File>(16);
         ignoredCopytoSourceSet = new HashSet<File>(16);
         outDitaFilesSet = new HashSet<File>(64);
-        keysDefMap = new HashMap<String, KeyDef>();
-        keysRefMap = new HashMap<String, String>();
 //        processRoleLevel = 0;
 //        processRoleStack = new Stack<String>();
         inheritedAttsStack = new ArrayDeque<AttributesImpl>();
@@ -168,8 +162,6 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         copytoMap.clear();
         ignoredCopytoSourceSet.clear();
         outDitaFilesSet.clear();
-        keysDefMap.clear();
-        keysRefMap.clear();
         level = 0;
         topicrefStack.clear();
 //        processRoleLevel = 0;
@@ -318,15 +310,6 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      */
     public Map<File, File> getCopytoMap() {
         return copytoMap;
-    }
-
-    /**
-     * Get the Key definitions.
-     * 
-     * @return Key definitions map
-     */
-    public Map<String, KeyDef> getKeysDMap() {
-        return keysDefMap;
     }
 
     /**
@@ -594,7 +577,6 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
             logger.logError("Failed to process link: " + e.getMessage(), e);
         }
         handleConactionAttr(atts);
-        handleKeysAttr(atts);
         handleKeyrefAttr(atts);
         
         super.startElement(uri, localName, qName, atts);
@@ -730,7 +712,6 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
 //            // should reset
 //            shouldAppendEndTag = false;
 //        }
-        checkMultiLevelKeys(keysDefMap, keysRefMap);
         
         super.endDocument();
     }
@@ -1037,56 +1018,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         if (keyref != null || conkeyref != null) {
             fileInfo.hasKeyref(true);
         }
-    }
-    
-    /**
-     * Collect the key definitions.
-     */
-    private void handleKeysAttr(final Attributes atts) {
-        final String attrValue = atts.getValue(ATTRIBUTE_NAME_KEYS);
-        if (attrValue != null) {
-            URI target = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-            final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
-    
-            final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
-            if (copyTo != null) {
-                target = copyTo;
-            }
-    
-            // Many keys can be defined in a single definition, like
-            // keys="a b c", a, b and c are seperated by blank.
-            for (final String key : attrValue.trim().split("\\s+")) {
-                if (!keysDefMap.containsKey(key)) {
-                    if (target != null && target.toString().length() != 0) {
-                        final String attrScope = getInherited(ATTRIBUTE_NAME_SCOPE);
-                        if (attrScope != null && (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))) {
-                            keysDefMap.put(key, new KeyDef(key, target, attrScope, null));
-                        } else {
-                            String tail = null;
-                            if (target.getFragment() != null) {
-                                tail = target.getFragment();
-                                target = stripFragment(target);
-                            }
-                            if (toFile(target).isAbsolute()) {
-                                target = toURI(FileUtils.getRelativeUnixPath(inputFile.toString(), target.getPath()));
-                            }
-                            target = toURI(FileUtils.normalizeDirectory(currentDir.toString(), target.getPath()).getPath());
-                            keysDefMap.put(key, new KeyDef(key, setFragment(target, tail), ATTR_SCOPE_VALUE_LOCAL, null));
-                        }
-                    } else if (!StringUtils.isEmptyString(keyRef)) {
-                        // store multi-level keys.
-                        keysRefMap.put(key, keyRef);
-                    } else {
-                        // target is null or empty, it is useful in the future
-                        // when consider the content of key definition
-                        keysDefMap.put(key, new KeyDef(key, (URI) null, null, (URI) null));
-                    }
-                } else {
-                    logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target.toString()).toString());
-                }
-            }
-        }
-    } 
+    }   
     
     /**
      * Collect the conaction source topic file
