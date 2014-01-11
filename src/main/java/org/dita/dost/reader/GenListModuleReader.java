@@ -1165,15 +1165,4 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
     }
 
-    public static class ExportAnchor {
-        public final URI file;
-        public final Set<String> topicids = new HashSet<String>();
-        public final Set<String> keys = new HashSet<String>();
-        public final Set<String> ids = new HashSet<String>();
-
-        public ExportAnchor(final URI file) {
-            this.file = file;
-        }
-    }
-
 }

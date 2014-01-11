@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.reader.GenListModuleReader.ExportAnchor;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
@@ -273,5 +272,16 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         
         getContentHandler().endDocument();
     }
-	
+
+    public static class ExportAnchor {
+        public final URI file;
+        public final Set<String> topicids = new HashSet<String>();
+        public final Set<String> keys = new HashSet<String>();
+        public final Set<String> ids = new HashSet<String>();
+
+        public ExportAnchor(final URI file) {
+            this.file = file;
+        }
+    }
+    
 }
