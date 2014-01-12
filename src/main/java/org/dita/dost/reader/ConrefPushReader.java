@@ -329,7 +329,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 value.startsWith(SHARP)) {
             return value;
         } else {
-            final String source = FileUtils.resolveFile(fileDir, target).getPath();
+            final String source = FileUtils.resolve(fileDir, target).getPath();
             final String urltarget = FileUtils.resolveTopic(fileDir, value);
             return FileUtils.getRelativeUnixPath(source, urltarget);
         }
@@ -351,7 +351,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             //means conref the file itself
             target = toURI(parsefilename.getPath() + target);
         }
-        final File key = toFile(FileUtils.resolveFile(fileDir, target));
+        final File key = toFile(FileUtils.resolve(fileDir, target));
         Hashtable<MoveKey, DocumentFragment> table = null;
         if (pushtable.containsKey(key)) {
             //if there is something else push to the same file

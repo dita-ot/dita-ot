@@ -175,7 +175,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
                             if (toFile(target).isAbsolute()) {
                                 target = toURI(FileUtils.getRelativeUnixPath(inputFile.toString(), target.getPath()));
                             }
-                            target = toURI(FileUtils.normalizeDirectory(toFile(currentDir), target.getPath()).getPath());
+                            target = toURI(FileUtils.resolve(toFile(currentDir), target.getPath()).getPath());
                             keysDefMap.put(key, new KeyDef(key, setFragment(target, tail), ATTR_SCOPE_VALUE_LOCAL, null));
                         }
                     } else if (!StringUtils.isEmptyString(keyRef)) {

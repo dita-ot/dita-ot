@@ -935,7 +935,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         final File relativePath = FileUtils.getRelativePath(job.getInputFile(), overflowingFile);
         final File outputDir = job.getOutputDir().getAbsoluteFile();
         final File outputPathName = new File(outputDir, "index.html");
-        final File finalOutFilePathName = FileUtils.resolveFile(outputDir, relativePath.getPath());
+        final File finalOutFilePathName = FileUtils.resolve(outputDir, relativePath.getPath());
         final File finalRelativePathName = FileUtils.getRelativePath(finalOutFilePathName, outputPathName);
         File parentDir = finalRelativePathName.getParentFile();
         if (parentDir == null || parentDir.getPath().isEmpty()) {

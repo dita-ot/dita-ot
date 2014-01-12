@@ -620,7 +620,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
                 if (target.isAbsolute()) {
                     fileName = FileUtils.getRelativeUnixPath(inputFile.toString(), hrefValue.toString());
                 }
-                fileName = FileUtils.separatorsToUnix(FileUtils.normalizeDirectory(currentDir.toString(), hrefValue.toString()).getPath());
+                fileName = FileUtils.separatorsToUnix(FileUtils.resolve(currentDir.toString(), hrefValue.toString()).getPath());
 
                 final boolean canParse = parseBranch(atts, hrefValue, fileName);
                 if (!canParse) {
@@ -637,7 +637,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         final String scope = inheritedAttsStack.peekFirst().getValue(ATTRIBUTE_NAME_SCOPE);
         if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
             final String processingRole = getInherited(ATTRIBUTE_NAME_PROCESSING_ROLE);
-            final File target = FileUtils.resolveFile(currentDir.toString(), href);
+            final File target = FileUtils.resolve(currentDir.toString(), href);
             if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                 resourceOnlySet.add(target);
             } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processingRole)) {
@@ -871,7 +871,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
 //            attrValue = FileUtils.getRelativePath(inputFile.getAbsolutePath(), attrValue);
 //        // for object tag bug:3052156
 //        } else
-        final File file = FileUtils.normalizeDirectory(baseDir.toString(), linkUri.getPath());
+        final File file = FileUtils.resolve(baseDir.toString(), linkUri.getPath());
 
         final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
         final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
@@ -927,7 +927,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         if (href != null) {
             final URI linkUri = href;
-            final File file = FileUtils.normalizeDirectory(baseDir.toString(), linkUri.getPath());
+            final File file = FileUtils.resolve(baseDir.toString(), linkUri.getPath());
             if (PR_D_CODEREF.matches(atts)) {
                 fileInfo.hasCoderef(true);
                 if (isExternal(href, getInherited(ATTRIBUTE_NAME_SCOPE))) {
@@ -976,9 +976,9 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
             final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
             if (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat)) {
                 final URI linkUri = copyTo;
-                final File file = FileUtils.normalizeDirectory(baseDir.toString(), linkUri.getPath());
+                final File file = FileUtils.resolve(baseDir.toString(), linkUri.getPath());
                 final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-                final File value = FileUtils.normalizeDirectory(toFile(currentDir), toFile(href));
+                final File value = FileUtils.resolve(toFile(currentDir), toFile(href));
     
                 if (copytoMap.containsKey(file)) {
                     if (!value.equals(copytoMap.get(file))) {
@@ -989,7 +989,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
                     copytoMap.put(file, value);
                 }
     
-                final String pathWithoutID = FileUtils.resolveFile(currentDir.toString(), toFile(linkUri.getPath()).getPath()).getPath();
+                final String pathWithoutID = FileUtils.resolve(currentDir.toString(), toFile(linkUri.getPath()).getPath()).getPath();
                 final Builder b = getOrCreateBuilder(pathWithoutID);
                 if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
                     b.isSkipChunk(true);
@@ -1007,7 +1007,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
             fileInfo.hasConref(true);
         }
         if (conref != null) {
-            final File file = FileUtils.normalizeDirectory(baseDir.toString(), conref.getPath());
+            final File file = FileUtils.resolve(baseDir.toString(), conref.getPath());
             getOrCreateBuilder(file.getPath()).isConrefTarget(true);
         }
     }
@@ -1207,7 +1207,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
 //        final String relativePath = FileUtils.getRelativePath( mapPathName.toString(),currFilePathName.toString());
 //        final String outputDir = OutputUtils.getOutputDir().getAbsolutePath();
 //        final String outputPathName = outputDir + File.separator + "index.html";
-//        final String finalOutFilePathName = FileUtils.resolveFile(outputDir,relativePath);
+//        final String finalOutFilePathName = FileUtils.resolve(outputDir,relativePath);
 //        final String finalRelativePathName = FileUtils.getRelativePath(finalOutFilePathName,outputPathName.toString());
 //        final String parentDir = new File(finalRelativePathName).getParent();
 //        final StringBuffer finalRelativePath = new StringBuffer(parentDir);

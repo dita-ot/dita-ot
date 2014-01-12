@@ -1283,7 +1283,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
 //                }
 //                visitedSet.add(parent);
 //                String tmprel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), parent);
-//                tmprel = FileUtils.resolveFile(job.tempDir.getAbsolutePath(), tmprel) + SUBJECT_SCHEME_EXTENSION;
+//                tmprel = FileUtils.resolve(job.tempDir.getAbsolutePath(), tmprel) + SUBJECT_SCHEME_EXTENSION;
 //                Document parentRoot = null;
 //                if (!FileUtils.fileExists(tmprel)) {
 //                    parentRoot = builder.parse(new InputSource(new FileInputStream(parent)));
@@ -1295,14 +1295,14 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
 //                        final Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
 //                        mergeScheme(parentRoot, childRoot);
 //                        String rel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), childpath);
-//                        rel = FileUtils.resolveFile(job.tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
+//                        rel = FileUtils.resolve(job.tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
 //                        generateScheme(rel, childRoot);
 //                    }
 //                }
 //
 //                //Output parent scheme
 //                String rel = FileUtils.getRelativePath(inputMap.getAbsolutePath(), parent);
-//                rel = FileUtils.resolveFile(job.tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
+//                rel = FileUtils.resolve(job.tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
 //                generateScheme(rel, parentRoot);
 //            }
 //        } catch (final Exception e) {

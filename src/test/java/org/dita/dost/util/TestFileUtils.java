@@ -198,34 +198,36 @@ public class TestFileUtils {
     @Test
     public void testResolveFile() {
         if (File.separator.equals(SEPARATOR_WINDOWS)) {
-            assertEquals(new File("c:\\dir\\file.xml"), FileUtils.resolveFile("c:\\dir","file.xml"));
-            assertEquals(new File("c:\\dir\\file.xml"), FileUtils.resolveFile("c:\\dir","file.xml#topicid"));
-            assertEquals(new File("c:\\file.xml"), FileUtils.resolveFile("c:\\dir","..\\file.xml"));
-            assertEquals(new File("file.xml"), FileUtils.resolveFile("","file.xml"));
-            assertEquals(new File("file.xml"), FileUtils.resolveFile((String) null,"file.xml"));
+            assertEquals(new File("c:\\dir\\file.xml"), FileUtils.resolve("c:\\dir","file.xml"));
+            assertEquals(new File("c:\\dir\\file.xml"), FileUtils.resolve("c:\\dir","file.xml#topicid"));
+            assertEquals(new File("c:\\file.xml"), FileUtils.resolve("c:\\dir","..\\file.xml"));
+            assertEquals(new File("file.xml"), FileUtils.resolve("","file.xml"));
+            assertEquals(new File("file.xml"), FileUtils.resolve((String) null,"file.xml"));
         } else {
-            assertEquals(new File("/dir/file.xml"), FileUtils.resolveFile("/dir","file.xml"));
-            assertEquals(new File("/dir/file.xml"), FileUtils.resolveFile("/dir","file.xml#topicid"));
-            assertEquals(new File("/file.xml"), FileUtils.resolveFile("/dir","../file.xml"));
-            assertEquals(new File("file.xml"), FileUtils.resolveFile("","file.xml"));
-            assertEquals(new File("file.xml"), FileUtils.resolveFile((String) null,"file.xml"));
+            assertEquals(new File("/dir/file.xml"), FileUtils.resolve("/dir","file.xml"));
+            assertEquals(new File("/dir/file.xml"), FileUtils.resolve("/dir","file.xml#topicid"));
+            assertEquals(new File("/file.xml"), FileUtils.resolve("/dir","../file.xml"));
+            assertEquals(new File("file.xml"), FileUtils.resolve("","file.xml"));
+            assertEquals(new File("file.xml"), FileUtils.resolve((String) null,"file.xml"));
         }
     }
 
     @Test
     public void testNormalizeDirectory() {
         if (File.separator.equals(SEPARATOR_WINDOWS)) {
-            assertEquals(new File("c:\\dir1\\dir2\\file.xml"),FileUtils.normalizeDirectory("c:\\dir1", "dir2\\file.xml"));
-            assertEquals(new File("c:\\dir1\\file.xml"),FileUtils.normalizeDirectory("c:\\dir1\\dir2", "..\\file.xml"));
-            assertEquals(new File("\\file.xml"),FileUtils.normalizeDirectory("", "\\file.xml#topicid"));
-            assertEquals(new File("c:\\file.xml"),FileUtils.normalizeDirectory("", "c:\\file.xml"));
-            assertEquals(new File("c:\\file.xml"),FileUtils.normalizeDirectory((String) null, "c:\\file.xml#topicid"));
+            assertEquals(new File("c:\\dir1\\dir2\\file.xml"),FileUtils.resolve("c:\\dir1", "dir2\\file.xml"));
+            assertEquals(new File("c:\\dir1\\file.xml"),FileUtils.resolve("c:\\dir1\\dir2", "..\\file.xml"));
+            assertEquals(new File("\\file.xml"),FileUtils.resolve("", "\\file.xml#topicid"));
+            assertEquals(new File("c:\\file.xml"),FileUtils.resolve("", "c:\\file.xml"));
+            assertEquals(new File("c:\\file.xml"),FileUtils.resolve((String) null, "c:\\file.xml#topicid"));
         } else {
-            assertEquals(new File("/dir1/dir2/file.xml"),FileUtils.normalizeDirectory("/dir1", "dir2/file.xml"));
-            assertEquals(new File("/dir1/file.xml"),FileUtils.normalizeDirectory("/dir1/dir2", "../file.xml"));
-            assertEquals(new File("/file.xml"),FileUtils.normalizeDirectory("", "/file.xml#topicid"));
-            assertEquals(new File("/file.xml"),FileUtils.normalizeDirectory("", "/file.xml"));
-            assertEquals(new File("/file.xml"),FileUtils.normalizeDirectory((String) null, "/file.xml#topicid"));
+            assertEquals(new File("/dir1/dir2/file.xml"),FileUtils.resolve("/dir1", "dir2/file.xml"));
+            assertEquals(new File("/dir1/file.xml"),FileUtils.resolve("/dir1/dir2", "../file.xml"));
+            assertEquals(new File("/file.xml"),FileUtils.resolve("", "/file.xml#topicid"));
+            assertEquals(new File("/file.xml"),FileUtils.resolve("", "/file.xml"));
+            assertEquals(new File("/file.xml"),FileUtils.resolve((String) null, "/file.xml#topicid"));
+            assertEquals(new File("file.xml"), FileUtils.resolve("","file.xml"));
+            assertEquals(new File("file.xml"), FileUtils.resolve((String) null,"file.xml"));
         }
     }
 

@@ -171,7 +171,7 @@ public final class ChunkMapReader implements AbstractReader {
                 if (newFile.exists()) {
                     newFilename = chunkFilenameGenerator.generateFilename("Chunk", FILE_EXTENSION_DITA);
                     final String oldpath = newFile.getAbsolutePath();
-                    newFile = resolveFile(inputFile.getParentFile().getAbsolutePath(), newFilename);
+                    newFile = resolve(inputFile.getParentFile().getAbsolutePath(), newFilename);
                     // Mark up the possible name changing, in case that
                     // references might be updated.
                     conflictTable.put(newFile.getAbsolutePath(), normalize(oldpath).getPath());
@@ -360,7 +360,7 @@ public final class ChunkMapReader implements AbstractReader {
         }
 
         if (ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(scopeValue)
-                || (hrefValue != null && !resolveFile(filePath, hrefValue).exists())
+                || (hrefValue != null && !resolve(filePath, hrefValue).exists())
                 || (MAPGROUP_D_TOPICHEAD.matches(classValue) && chunkValue == null) ||
                 // //support topicref without href attribute
                 (MAP_TOPICREF.matches(classValue) && chunkValue == null && hrefValue == null)) {
@@ -403,7 +403,7 @@ public final class ChunkMapReader implements AbstractReader {
             node.getParentNode().replaceChild(navref, node);
             root.appendChild(node);
             // generate new file
-            final File navmap = resolveFile(filePath, newMapFile);
+            final File navmap = resolve(filePath, newMapFile);
             changeTable.put(navmap.getPath(), navmap.getPath());
             outputMapFile(navmap, buildOutputDocument(root));
             // chunk "by-topic"
@@ -417,9 +417,9 @@ public final class ChunkMapReader implements AbstractReader {
         } else {
             String currentPath = null;
             if (copytoValue != null) {
-                currentPath = resolveFile(filePath, copytoValue).getPath();
+                currentPath = resolve(filePath, copytoValue).getPath();
             } else if (hrefValue != null) {
-                currentPath = resolveFile(filePath, hrefValue).getPath();
+                currentPath = resolve(filePath, hrefValue).getPath();
             }
             if (currentPath != null) {
                 if (changeTable.containsKey(currentPath)) {
@@ -464,8 +464,8 @@ public final class ChunkMapReader implements AbstractReader {
                 final String hrefValue = currentElem.getAttribute(ATTRIBUTE_NAME_HREF);
                 final String xtrfValue = currentElem.getAttribute(ATTRIBUTE_NAME_XTRF);
                 if (MAP_TOPICREF.matches(classValue)) {
-                    if ((hrefValue.length() != 0 && !ATTR_XTRF_VALUE_GENERATED.equals(xtrfValue) && !resolveFile(
-                            filePath, hrefValue).getPath().equals(changeTable.get(resolveFile(filePath, hrefValue).getPath())))
+                    if ((hrefValue.length() != 0 && !ATTR_XTRF_VALUE_GENERATED.equals(xtrfValue) && !resolve(
+                            filePath, hrefValue).getPath().equals(changeTable.get(resolve(filePath, hrefValue).getPath())))
                             || MAPGROUP_D_TOPICHEAD.matches(classValue)) {
 
                         // make sure hrefValue make sense and target file
@@ -498,16 +498,16 @@ public final class ChunkMapReader implements AbstractReader {
     private void updateReltable(final Element elem) {
         final String hrefValue = elem.getAttribute(ATTRIBUTE_NAME_HREF);
         if (hrefValue.length() != 0) {
-            if (changeTable.containsKey(resolveFile(filePath, hrefValue).getPath())) {
+            if (changeTable.containsKey(resolve(filePath, hrefValue).getPath())) {
                 String resulthrefValue = null;
                 final String fragment = getFragment(hrefValue);
                 if (fragment != null) {
                     resulthrefValue = getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
-                            resolveFile(filePath, hrefValue).getPath())
+                            resolve(filePath, hrefValue).getPath())
                             + fragment;
                 } else {
                     resulthrefValue = getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
-                            resolveFile(filePath, hrefValue).getPath());
+                            resolve(filePath, hrefValue).getPath());
                 }
                 elem.setAttribute(ATTRIBUTE_NAME_HREF, resulthrefValue);
             }

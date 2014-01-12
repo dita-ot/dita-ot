@@ -642,50 +642,6 @@ public final class URLUtils {
     }
  
     /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
-     * from the file path, with no change to substring behind "#".
-     * 
-     * @param rootPath root directory path, may be {@code null}
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
-    public static URI resolveTopic(final URI rootPath, final URI relativePath) {
-        final String r = FileUtils.resolveTopic(rootPath != null ? rootPath.getPath() : null,
-                                                relativePath.getPath());
-        return setFragment(toURI(r), relativePath.getFragment());
-    }
- 
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
-     * from the file path.
-     * 
-     * @param rootPath root directory path, may be {@code null}
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
-    public static URI resolveFile(final URI rootPath, final URI relativePath) {
-        final String basedir = rootPath != null ? rootPath.getPath() : null;        
-        final URI pathname = normalize(relativePath);
-        if (basedir == null || basedir.length() == 0) {
-            return pathname;
-        }
-        final String normilizedPath = new File(basedir, pathname.getPath()).getPath();
-        return toURI(FileUtils.normalize(normilizedPath, URI_SEPARATOR));
-    }
-    
-    /**
-     * Remove redundant names ".." and "." from the given path.
-     * 
-     * @param path input path
-     * @return processed path
-     */
-    public static URI normalize(final URI path) {
-        return setPath(path, FileUtils.normalize(path.getPath(), URI_SEPARATOR));
-    }
- 
-    /**
      * Get relative path to base path.
      * 
      * <p>For {@code foo/bar/baz.txt} return {@code ../../}</p>

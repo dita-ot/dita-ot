@@ -509,11 +509,11 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
             } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                 if (href != null) {
-                    resourceOnlySet.add(FileUtils.resolveFile(currentDir, toFile(href).getPath()));
+                    resourceOnlySet.add(FileUtils.resolve(currentDir, toFile(href).getPath()));
                 }
             } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processingRole)) {
                 if (href != null) {
-                    crossSet.add(FileUtils.resolveFile(currentDir, toFile(href).getPath()));
+                    crossSet.add(FileUtils.resolve(currentDir, toFile(href).getPath()));
                 }
             }
         } else if (processRoleLevel > 0) {
@@ -521,16 +521,16 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
             } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleStack.peek())) {
                 if (href != null) {
-                    resourceOnlySet.add(FileUtils.resolveFile(currentDir, toFile(href).getPath()));
+                    resourceOnlySet.add(FileUtils.resolve(currentDir, toFile(href).getPath()));
                 }
             } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processRoleStack.peek())) {
                 if (href != null) {
-                    crossSet.add(FileUtils.resolveFile(currentDir, toFile(href).getPath()));
+                    crossSet.add(FileUtils.resolve(currentDir, toFile(href).getPath()));
                 }
             }
         } else {
             if (href != null) {
-                crossSet.add(FileUtils.resolveFile(currentDir, toFile(href).getPath()));
+                crossSet.add(FileUtils.resolve(currentDir, toFile(href).getPath()));
             }
         }
 
@@ -557,7 +557,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 schemeRelationGraph.put(currentFile.getAbsoluteFile(), children);
             }
             if (href != null) {
-                children.add(FileUtils.resolveFile(rootDir.getAbsoluteFile(), toFile(href).getPath()));
+                children.add(FileUtils.resolve(rootDir.getAbsoluteFile(), toFile(href).getPath()));
             }
         }
 
@@ -650,7 +650,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                     if (target.isAbsolute()) {
                         fileName = FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(), toFile(hrefValue).getPath());
                     }
-                    fileName = FileUtils.normalizeDirectory(currentDir, toFile(hrefValue).getPath()).getPath();
+                    fileName = FileUtils.resolve(currentDir, toFile(hrefValue).getPath()).getPath();
                     // change '\' to '/' for comparsion.
                     fileName = FileUtils.separatorsToUnix(fileName);
 
@@ -676,7 +676,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                     if (target.isAbsolute()) {
                         fileName = FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(), toFile(conrefValue).getPath());
                     }
-                    fileName = FileUtils.normalizeDirectory(currentDir, toFile(conrefValue).getPath()).getPath();
+                    fileName = FileUtils.resolve(currentDir, toFile(conrefValue).getPath()).getPath();
 
                     // change '\' to '/' for comparsion.
                     fileName = FileUtils.separatorsToUnix(fileName);
@@ -922,13 +922,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             // for object tag bug:3052156
         } else if (ATTRIBUTE_NAME_DATA.equals(attrName)) {
             if (!StringUtils.isEmptyString(codebase)) {
-                filename = FileUtils.normalizeDirectory(codebase, attrValue).getPath();
+                filename = FileUtils.resolve(codebase, attrValue).getPath();
             } else {
-                filename = FileUtils.normalizeDirectory(currentDir, attrValue).getPath();
+                filename = FileUtils.resolve(currentDir, attrValue).getPath();
             }
         } else {
             // noraml process.
-            filename = FileUtils.normalizeDirectory(currentDir, attrValue).getPath();
+            filename = FileUtils.resolve(currentDir, attrValue).getPath();
         }
 
         filename = toFile(filename).getPath();
@@ -992,7 +992,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (ATTRIBUTE_NAME_COPY_TO.equals(attrName) && FileUtils.isDITATopicFile(filename)) {
             final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
             if (href != null) {
-                final File value = FileUtils.normalizeDirectory(currentDir, toFile(href).getPath());
+                final File value = FileUtils.resolve(currentDir, toFile(href).getPath());
     
                 if (href == null || href.toString().isEmpty()) {
                     final StringBuffer buff = new StringBuffer();
@@ -1011,7 +1011,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 }
             }
             
-            final File pathWithoutID = FileUtils.resolveFile(currentDir, toFile(attrValue).getPath());
+            final File pathWithoutID = FileUtils.resolve(currentDir, toFile(attrValue).getPath());
             if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
                 chunkTopicSet.add(pathWithoutID);
             } else {
@@ -1094,7 +1094,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     private void toOutFile(final File filename) throws SAXException {
         // the filename is a relative path from the dita input file
-        final String[] prop = { FileUtils.normalizeDirectory(rootDir.getAbsolutePath(), filename.getPath()).getPath(), FileUtils.normalize(currentFile.getAbsolutePath()).getPath() };
+        final String[] prop = { FileUtils.resolve(rootDir.getAbsolutePath(), filename.getPath()).getPath(), FileUtils.normalize(currentFile.getAbsolutePath()).getPath() };
         if ((job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER)
                 || (job.getGeneratecopyouter() == Job.Generate.GENERATEOUTTER)) {
             if (isOutFile(filename)) {

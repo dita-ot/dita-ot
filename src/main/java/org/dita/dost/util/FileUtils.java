@@ -441,7 +441,7 @@ public final class FileUtils {
      */
     @Deprecated
     public static String resolveTopic(final File rootPath, final String relativePath) {
-        return resolveTopic(rootPath.getPath(), relativePath);
+        return setFragment(resolve(rootPath, stripFragment(relativePath)).getPath(), getFragment(relativePath));
     }
 
     /**
@@ -455,74 +455,26 @@ public final class FileUtils {
      */
     @Deprecated
     public static String resolveTopic(final String rootPath, final String relativePath) {
-        String begin = relativePath;
-        String end = "";
-
-        if (relativePath.indexOf(SHARP) != -1) {
-            begin = relativePath.substring(0, relativePath.indexOf('#'));
-            end = relativePath.substring(relativePath.indexOf('#'));
-        }
-
-        return normalizeDirectory(rootPath, begin) + end;
-    }
-
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
-     * from the file path.
-     * 
-     * @param rootPath root directory path
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
-    @Deprecated
-    public static File resolveFile(final File rootPath, final String relativePath) {
-        return resolveFile(rootPath != null ? rootPath.getPath() : null, relativePath);
+        return setFragment(resolve(rootPath, stripFragment(relativePath)).getPath(), getFragment(relativePath));
     }
     
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
-     * from the file path.
-     * 
-     * @param rootPath root directory path
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
     @Deprecated
-    public static URI resolveFile(final File rootPath, final URI relativePath) {
-        return URLUtils.toURI(resolveFile(rootPath != null ? rootPath.getPath() : null, relativePath.getPath()));
-    }
-    
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
-     * from the file path.
-     * 
-     * @param rootPath root directory path
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
-    @Deprecated
-    public static File resolveFile(final String rootPath, final String relativePath) {
-        final String begin = stripFragment(relativePath);
-        return normalizeDirectory(rootPath, begin);
+    public static URI resolve(final File rootPath, final URI relativePath) {
+        return URLUtils.toURI(resolve(rootPath != null ? rootPath.getPath() : null, relativePath.getPath()));
     }
 
     /**
-     * Normalize the input file path, by replacing all the '\\', '/' with
+     * Resolve file path against a base directory path. Normalize the input file path, by replacing all the '\\', '/' with
      * File.seperator, and removing '..' from the directory.
      * 
      * <p>Note: the substring behind "#" will be removed.</p>
-     * 
-     * TODO: Return File
-     * 
-     * @param basedir base dir
+     *  
+     * @param basedir base dir, may be {@code null}
      * @param filepath file path
      * @return normalized path
      */
     @Deprecated
-    public static File normalizeDirectory(final String basedir, final String filepath) {
+    public static File resolve(final String basedir, final String filepath) {
         final File pathname = FileUtils.normalize(stripFragment(filepath));
         if (basedir == null || basedir.length() == 0) {
             return pathname;
@@ -532,20 +484,18 @@ public final class FileUtils {
     }
     
     @Deprecated
-    public static File normalizeDirectory(final File basedir, final String filepath) {
-        return normalizeDirectory(basedir != null ? basedir.getPath() : null, filepath);
+    public static File resolve(final File basedir, final String filepath) {
+        return resolve(basedir != null ? basedir.getPath() : null, filepath);
     }
 
-    public static File normalizeDirectory(final File basedir, final File filepath) {
-        return normalizeDirectory(basedir != null ? basedir.getPath() : null, filepath.getPath());
+    public static File resolve(final File basedir, final File filepath) {
+        return resolve(basedir != null ? basedir.getPath() : null, filepath.getPath());
     }
     
     /**
      * Remove redundant names ".." and "." from the given path.
      * Use platform directory separator.
-     * 
-     * TODO: Return File
-     * 
+     *
      * @param path input path
      * @return processed path
      */

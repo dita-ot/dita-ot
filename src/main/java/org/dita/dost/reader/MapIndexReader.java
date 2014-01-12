@@ -218,7 +218,7 @@ public final class MapIndexReader extends AbstractXMLReader {
                     && (attrScope == null || ATTR_SCOPE_VALUE_LOCAL.equals(attrScope))
                     && (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat))) {
                 // If the href is internal dita topic file
-                topicPath = resolveTopic(filePath, hrefValue);
+                topicPath = filePath.resolve(hrefValue);
                 validHref = true;
             }else{
                 //set up the boolean to prevent the invalid href's metadata inserted into indexEntries.

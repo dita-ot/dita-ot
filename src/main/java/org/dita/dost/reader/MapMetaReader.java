@@ -11,6 +11,7 @@ package org.dita.dost.reader;
 import static java.util.Arrays.asList;
 import static org.dita.dost.module.GenMapAndTopicListModule.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.net.URI;
@@ -215,12 +216,12 @@ public final class MapMetaReader extends AbstractDomFilter {
         if (!current.isEmpty() && hrefAttr != null) {// prevent the metadata is empty
             URI topicPath = null;
             if (copytoAttr != null) {
-                final URI copyToUri = URLUtils.toURI(copytoAttr.getNodeValue());
-                topicPath = URLUtils.resolveFile(filePath.toURI(), copyToUri);
+                final URI copyToUri = stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
+                topicPath = filePath.toURI().resolve(copyToUri);
             }
             if (topicPath == null || !URLUtils.toFile(URLUtils.stripFragment(topicPath)).exists()) {
-                final URI hrefUri = URLUtils.toURI(hrefAttr.getNodeValue());
-                topicPath = URLUtils.resolveFile(filePath.toURI(), hrefUri);
+                final URI hrefUri = stripFragment(URLUtils.toURI(hrefAttr.getNodeValue()));
+                topicPath = filePath.toURI().resolve(hrefUri);
             }
             if (isDitaFormat(formatAttr) && isLocalScope(scopeAttr)) {
                 if (resultTable.containsKey(topicPath)) {

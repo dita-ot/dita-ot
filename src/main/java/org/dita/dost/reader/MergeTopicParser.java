@@ -136,7 +136,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
             if (sharpIndex == 0) {
                 pathFromMap = separatorsToUnix(filePath);
             } else {
-                pathFromMap = separatorsToUnix(resolveTopic(new File(filePath).getParent(),
+                pathFromMap = separatorsToUnix(resolveTopic(new File(filePath).getParentFile(),
                         attValue.substring(0, sharpIndex)));
             }
             pathFromMap = URLUtils.decode(pathFromMap);

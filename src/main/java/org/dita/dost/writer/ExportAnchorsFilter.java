@@ -216,7 +216,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
             if (target.isAbsolute()) {
                 attrValue = FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(), attrValue);
             } else {
-                filename = FileUtils.normalizeDirectory(currentDir, attrValue).getPath();
+                filename = FileUtils.resolve(currentDir, attrValue).getPath();
             }
     
             filename = toFile(filename).getPath();

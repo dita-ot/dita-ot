@@ -140,35 +140,6 @@ public class URLUtilsTest {
     }
 
     @Test
-    public void testResolveTopic() throws URISyntaxException {
-        assertEquals(new URI("/dir/file.xml"), URLUtils.resolveTopic(new URI("/dir"), new URI("file.xml")));
-        assertEquals(new URI("/dir/file.xml#topicid"), URLUtils.resolveTopic(new URI("/dir"), new URI("file.xml#topicid")));
-        assertEquals(new URI("/file.xml"), URLUtils.resolveTopic(new URI("/dir"), new URI("../file.xml")));
-        assertEquals(new URI("file.xml"), URLUtils.resolveTopic(new URI(""), new URI("file.xml")));
-        assertEquals(new URI("file.xml"), URLUtils.resolveTopic((URI) null, new URI("file.xml")));
-    }
-
-    @Test
-    public void testResolveFile() throws URISyntaxException {
-        assertEquals(new URI("/dir/file.xml"), URLUtils.resolveFile(new URI("/dir"), new URI("file.xml")));
-        assertEquals(new URI("/dir/file.xml"), URLUtils.resolveFile(new URI("/dir"), new URI("file.xml#topicid")));
-        assertEquals(new URI("/file.xml"), URLUtils.resolveFile(new URI("/dir"), new URI("../file.xml")));
-        assertEquals(new URI("file.xml"), URLUtils.resolveFile(new URI(""), new URI("file.xml")));
-        assertEquals(new URI("file.xml"), URLUtils.resolveFile((URI) null, new URI("file.xml")));
-    }
-
-    @Test
-    public void testNormalize() throws URISyntaxException {
-        assertEquals(new URI("a/c/file.xml"), URLUtils.normalize(new URI("a/b/../c/file.xml")));
-        assertEquals(new URI("a/b/file.xml"), URLUtils.normalize(new URI("a/./b/./file.xml")));
-        assertEquals(new URI("../a/file.xml"), URLUtils.normalize(new URI("../a/file.xml")));
-        assertEquals(new URI("../file.xml"), URLUtils.normalize(new URI("a/../../file.xml")));
-        assertEquals(new URI("file.xml"), URLUtils.normalize(new URI("a/b/../../file.xml")));
-        assertEquals(new URI("/a/b/file.xml"), URLUtils.normalize(new URI("/a/./b/c/../file.xml")));
-        assertEquals(new URI("//server/dir/file.xml"), URLUtils.normalize(new URI("//server/a/../dir/file.xml")));
-    }
-
-    @Test
     public void testGetRelativePath() throws URISyntaxException {
         assertEquals(new URI("../"), URLUtils.getRelativePath(new URI("map/map.ditamap")));
         assertEquals(null, URLUtils.getRelativePath(new URI("map.ditamap")));

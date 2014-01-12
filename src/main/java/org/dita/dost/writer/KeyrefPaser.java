@@ -421,7 +421,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                         } else if (("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)) &&
                                 ("".equals(formatValue) || ATTR_FORMAT_VALUE_DITA.equals(formatValue)  || ATTR_FORMAT_VALUE_DITAMAP.equals(formatValue))) {
-                            final File topicFile = toFile(resolveFile(tempDir.toURI(), target));
+                            final File topicFile = toFile(tempDir.toURI().resolve(stripFragment(target)));
                             if (topicFile.exists()) {   
                                 valid = true;
                                 final String topicId = getFirstTopicId(topicFile);

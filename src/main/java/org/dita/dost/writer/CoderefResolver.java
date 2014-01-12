@@ -91,7 +91,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
             try{
                 final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
                 if (hrefValue != null){
-                    final File codeFile = FileUtils.normalizeDirectory(currentFile.getParentFile().getAbsoluteFile(), toFile(hrefValue));
+                    final File codeFile = FileUtils.resolve(currentFile.getParentFile().getAbsoluteFile(), toFile(hrefValue));
                     if (codeFile.exists()){
                         final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT));
                         BufferedReader codeReader = null;

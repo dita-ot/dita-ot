@@ -158,8 +158,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     final Iterator<String> hrefit = hrefTopics.iterator();
                     while (hrefit.hasNext()) {
                         final String ent = hrefit.next();
-                        if (resolveFile(job.tempDir.getAbsolutePath(), ent).getPath().equals(
-                                resolveFile(job.tempDir.getAbsolutePath(), s).getPath())) {
+                        if (resolve(job.tempDir.getAbsolutePath(), ent).getPath().equals(
+                                resolve(job.tempDir.getAbsolutePath(), s).getPath())) {
                             // The entry in hrefTopics points to the same target
                             // as entry in chunkTopics, it should be removed.
                             hrefit.remove();
@@ -179,7 +179,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             }
         }
         for (final String hrefTopic : hrefTopics) {
-            final String t = getRelativePath(xmlDitalist.getAbsolutePath(), resolveFile(job.tempDir.getAbsolutePath(), stripFragment(hrefTopic)).getPath(), File.separator);
+            final String t = getRelativePath(xmlDitalist.getAbsolutePath(), resolve(job.tempDir.getAbsolutePath(), stripFragment(hrefTopic)).getPath(), File.separator);
             topicList.add(t);
             if (oldTopicList.contains(t)) {
                 oldTopicList.remove(t);

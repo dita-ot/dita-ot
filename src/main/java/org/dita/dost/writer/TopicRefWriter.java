@@ -239,7 +239,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         if (checkDITAHREF(atts)) {
             // replace the href value if it's referenced topic is extracted.
             final File rootPathName = currentFilePathName;
-            String changeTargetkey = resolveFile(currentFilePath, attValue).getPath();
+            String changeTargetkey = resolve(currentFilePath, attValue).getPath();
             String changeTarget = changeTable.get(changeTargetkey);
 
             final String topicID = getTopicID(attValue);
