@@ -658,7 +658,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:variable name="file">
       <xsl:call-template name="replace-blank">
         <xsl:with-param name="file-origin">
-          <xsl:value-of select="translate($file-origin,'\','/')"/>
+          <xsl:value-of select="$file-origin"/>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>

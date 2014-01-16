@@ -314,7 +314,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:variable name="file">
       <xsl:call-template name="replace-blank">
         <xsl:with-param name="file-origin">
-          <xsl:value-of select="translate($file-origin,'\','/')"/>
+          <xsl:value-of select="$file-origin"/>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
@@ -436,7 +436,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:variable name="file">
       <xsl:call-template name="replace-blank">
         <xsl:with-param name="file-origin">
-          <xsl:value-of select="translate($file-origin,'\','/')"/>
+          <xsl:value-of select="$file-origin"/>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>

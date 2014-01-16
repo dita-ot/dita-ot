@@ -48,10 +48,10 @@
     <xsl:param name="remainingpath" as="xs:string">
       <xsl:choose>
         <xsl:when test="contains(@conref, '#')">
-          <xsl:value-of select="translate(substring-before(@conref, '#'), '\', '/')"/>
+          <xsl:value-of select="substring-before(@conref, '#')"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="translate(@conref, '\', '/')"/>
+          <xsl:value-of select="@conref"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:param>
@@ -176,16 +176,16 @@
     <xsl:variable name="file" as="xs:string">
       <xsl:call-template name="replace-blank">
         <xsl:with-param name="file-origin">
-          <xsl:value-of select="translate($file-origin, '\', '/')"/>
+          <xsl:value-of select="$file-origin"/>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
     <!-- get domains attribute in the target file -->
-    <xsl:variable name="domains" select="document($file, /)/*/@domains | /dita/*[@domains][1]/@domains"/>
+    <xsl:variable name="domains" select="document($file, /)/*/@domains | document($file, /)/dita/*[@domains][1]/@domains"/>
     <!--the file name is useful to href when resolveing conref -->
     <xsl:variable name="conref-filename" as="xs:string">
       <xsl:call-template name="replace-blank">
-        <xsl:with-param name="file-origin" select="translate(substring-after(substring-after($file-origin, $file-prefix), $add-relative-path), '\', '/')"/>
+        <xsl:with-param name="file-origin" select="substring-after(substring-after($file-origin, $file-prefix), $add-relative-path)"/>
       </xsl:call-template>
     </xsl:variable>
 

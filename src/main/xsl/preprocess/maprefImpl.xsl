@@ -122,7 +122,7 @@
                 </xsl:variable>
               <xsl:variable name="fileurl">
                 <xsl:call-template name="replace-blank">
-                  <xsl:with-param name="file-origin" select="translate($fileurl-origin,'\','/')"/>
+                  <xsl:with-param name="file-origin" select="$fileurl-origin"/>
                 </xsl:call-template>
               </xsl:variable>
                 <xsl:variable name="file" select="document($fileurl,/)"/>
@@ -928,7 +928,7 @@
                     <xsl:variable name="update-id-path" select="concat($mapref-id-path,' ',generate-id(.),' ')"/>
                   <xsl:variable name="href">
                       <xsl:call-template name="replace-blank">
-                        <xsl:with-param name="file-origin" select="translate(@href,'\','/')"/>
+                        <xsl:with-param name="file-origin" select="@href"/>
                       </xsl:call-template>
                   </xsl:variable>
                     <xsl:apply-templates select="document($href,/)/*[contains(@class,' map/map ')]" mode="mapref">
