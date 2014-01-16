@@ -393,7 +393,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                             boolean keyrefExported = false;
                             List<Boolean> list = null;
                             if(transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                                list = delayConrefUtils.checkExport(href.toString(), id, key, tempDir);
+                                list = delayConrefUtils.checkExport(stripFragment(href).toString(), id, key, tempDir);
                                 idExported = list.get(0).booleanValue();
                                 keyrefExported = list.get(1).booleanValue();
                             }

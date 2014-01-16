@@ -148,11 +148,6 @@ public final class DelayConrefUtils {
                 }
                 root = builder.parse(new InputSource(new FileInputStream(exportFile)));
             }
-            //if dita file's extension name is ".xml"
-            if(href.endsWith(FILE_EXTENSION_XML)){
-                //change the extension to ".dita"
-                href = href.replace(FILE_EXTENSION_XML, FILE_EXTENSION_DITA);
-            }
             //get file node which contains the export node
             final Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
             if(fileNode!=null){
