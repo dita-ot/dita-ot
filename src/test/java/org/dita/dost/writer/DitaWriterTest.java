@@ -74,7 +74,7 @@ public class DitaWriterTest {
         writer.setLogger(new TestUtils.TestLogger());
         writer.setTempDir(tempDir.getAbsoluteFile());
         writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
-        writer.setTranstype("xhtml");
+        writer.setTranstype("eclipsehelp");
         final FilterUtils fu = new FilterUtils();
         fu.setLogger(new TestUtils.TestLogger());
         writer.setFilterUtils(fu);
@@ -82,7 +82,10 @@ public class DitaWriterTest {
         final Job outputUtils = new Job(tempDir);
         outputUtils.setInputFile(new File(srcDir, "main.ditamap"));
         writer.setJob(outputUtils);
-        writer.setKeyDefinitions(Arrays.asList(new KeyDef("keydef", toURI("keyword.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
+        writer.setKeyDefinitions(Arrays.asList(
+                new KeyDef("keydef", toURI("keyword.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap")),
+                new KeyDef("keyword", toURI("keyword.dita#keyword"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))
+                ));
         
         FileUtils.copyFile(new File(srcDir, FILE_NAME_EXPORT_XML), new File(tempDir, FILE_NAME_EXPORT_XML));
 

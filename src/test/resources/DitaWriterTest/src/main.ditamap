@@ -14,4 +14,5 @@
   <topicref href="key%20word.dita" scope="peer" navtitle="peer"/>
   
   <keydef keys="keydef" href="keyword.dita"/>
+  <keydef keys="keyword" href="keyword.dita#keyword"/>
 </map>

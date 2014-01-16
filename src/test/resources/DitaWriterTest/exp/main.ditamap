@@ -11,4 +11,5 @@
   <topicref href="key%20word.dita" scope="peer" navtitle="peer"/>
   
   <keydef keys="keydef" href="keyword.dita" processing-role="resource-only"/>
+  <keydef keys="keyword" href="keyword.dita#keyword" processing-role="resource-only"/>
 </map>

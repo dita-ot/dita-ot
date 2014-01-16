@@ -43,6 +43,13 @@
               <entry colname="col1" namest="col1" nameend="col2"/>
               <entry colname="col3"/>
             </row>
+            <row conkeyref="keyword/row">
+              <entry colname="col1"/>
+            </row>
+            <!-- FIXME: should be #keyword/other -->
+            <row conref="#other">
+              <entry colname="col1"/>
+            </row>
           </tbody>
         </tgroup>
       </table>
