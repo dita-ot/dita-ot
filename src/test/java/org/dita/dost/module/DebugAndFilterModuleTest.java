@@ -4,6 +4,7 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -84,6 +85,7 @@ public class DebugAndFilterModuleTest {
         pipelineInput.setAttribute("ditalist", new File(tmpDir, "dita.list").getPath());
         pipelineInput.setAttribute("maplinks", new File(tmpDir, "maplinks.unordered").getPath());
         pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "yes");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "xhtml");
 
         final AbstractFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());

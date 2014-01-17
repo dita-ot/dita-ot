@@ -74,7 +74,6 @@ public class DitaWriterTest {
         writer.setLogger(new TestUtils.TestLogger());
         writer.setTempDir(tempDir.getAbsoluteFile());
         writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
-        writer.setTranstype("eclipsehelp");
         final FilterUtils fu = new FilterUtils();
         fu.setLogger(new TestUtils.TestLogger());
         writer.setFilterUtils(fu);

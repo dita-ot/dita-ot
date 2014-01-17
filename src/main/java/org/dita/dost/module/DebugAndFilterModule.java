@@ -145,11 +145,12 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 throw new DITAOTException(e.getMessage(), e);
             }
             fileWriter.setTempDir(job.tempDir);
-            fileWriter.setTranstype(transtype);
             if (filterUtils != null) {
             	fileWriter.setFilterUtils(filterUtils);
             }
-            fileWriter.setDelayConrefUtils(new DelayConrefUtils());
+            if (transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
+                fileWriter.setDelayConrefUtils(new DelayConrefUtils());
+            }
             fileWriter.setKeyDefinitions(KeyDef.readKeydef(new File(job.tempDir, KEYDEF_LIST_FILE)));
            
             job.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));

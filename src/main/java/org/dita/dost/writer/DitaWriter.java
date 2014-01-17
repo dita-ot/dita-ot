@@ -189,8 +189,6 @@ public final class DitaWriter extends AbstractXMLFilter {
     /** store morerows attribute */
     private Map<String, Integer> rowsMap;
     private Map<String, Integer> colSpanMap;
-    /** Transtype */
-    private String transtype;
 
     private Map<String, Integer> counterMap;
     private int foreignLevel; // foreign/unknown nesting level
@@ -348,7 +346,6 @@ public final class DitaWriter extends AbstractXMLFilter {
     private void processAttributes(final String qName, final Attributes atts, final AttributesImpl res) throws IOException {
         // copy the element's attributes
         final int attsLen = atts.getLength();
-        boolean conkeyrefValid = false;
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             String attValue = getAttributeValue(qName, attQName, atts.getValue(i));
@@ -362,108 +359,12 @@ public final class DitaWriter extends AbstractXMLFilter {
                     attValue = replaceHREF(attQName, atts).toString();
                 }
                 XMLUtils.addOrSetAttribute(res, attQName, attValue);
-            } else if(ATTRIBUTE_NAME_CONKEYREF.equals(attQName) && attValue.length() != 0) { // replace conref with conkeyref(using key definition)
-                final int sharpIndex = attValue.indexOf(SHARP);
-                final int slashIndex = attValue.indexOf(SLASH);
-                int keyIndex = -1;
-                if(sharpIndex != -1){
-                    keyIndex = sharpIndex;
-                }else if(slashIndex != -1){
-                    keyIndex = slashIndex;
-                }
-                //conkeyref only accept values such as "key" or "key/id"
-                if(sharpIndex == -1){
-                    if(keyIndex != -1){
-                        //get keyref value
-                        final String key = attValue.substring(0,keyIndex);
-                        URI target;
-                        if(key.length() != 0 && keys.containsKey(key)){
-                        	
-                            //target = FileUtils.replaceExtName(target);
-                            //get key's href
-                            final KeyDef value = keys.get(key);
-                            final URI href = value.href;
-                            
-                            final URI updatedHref = updateHref(href);
-
-                            //get element/topic id
-                            final String id = attValue.substring(keyIndex+1);
-
-                            boolean idExported = false;
-                            boolean keyrefExported = false;
-                            List<Boolean> list = null;
-                            if(transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                                list = delayConrefUtils.checkExport(stripFragment(href).toString(), id, key, tempDir);
-                                idExported = list.get(0).booleanValue();
-                                keyrefExported = list.get(1).booleanValue();
-                            }
-                            //both id and key are exported and transtype is eclipsehelp
-                            if(idExported && keyrefExported
-                                    && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                                //remain the conkeyref attribute.
-                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONKEYREF, attValue);
-                            }else {
-                                //normal process
-                                target = updatedHref;
-                                String tail ;
-                                if(sharpIndex == -1 ){
-                                    if(target.getFragment() == null) {
-                                        //change to topic id
-                                        tail = attValue.substring(keyIndex + 1).replaceAll(SLASH, SHARP);
-                                    } else {
-                                        //change to element id
-                                        tail = attValue.substring(keyIndex + 1);
-                                    }
-                                }else {
-                                    //change to topic id
-                                    tail = attValue.substring(keyIndex + 1);
-                                    //replace the topic id defined in the key's href
-                                    if(target.getFragment() != null){
-                                        target = stripFragment(target);
-                                    }
-                                }
-                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, setFragment(target, tail).toString());
-                                conkeyrefValid = true;
-                            }
-                        }else{
-                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", attValue).toString());
-                        }
-                    }else{
-                        //conkeyref just has keyref
-                        if(keys.containsKey(attValue)){
-                            //get key's href
-                            final KeyDef value = keys.get(attValue);
-                            final URI href = value.href;
-
-                            final URI updatedHref = updateHref(href);
-
-                            final String id = null;
-
-                            final List<Boolean> list = delayConrefUtils.checkExport(href.toString(), id, attValue, tempDir);
-                            final boolean keyrefExported = list.get(1).booleanValue();
-                            //key is exported and transtype is eclipsehelp
-                            if(keyrefExported && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                                //remain the conkeyref attribute.
-                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONKEYREF, attValue);
-                            }else{
-                                //e.g conref = c.xml
-                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, updatedHref.toString());
-                                conkeyrefValid = true;
-                            }
-                        }else{
-                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", attValue).toString());
-                        }
-                    }
-                }else{
-                    //invalid conkeyref value
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", attValue).toString());
-                }
             } else {
                 XMLUtils.addOrSetAttribute(res, atts.getURI(i), atts.getLocalName(i), attQName, atts.getType(i), attValue);
             }
         }
         final String conref = atts.getValue(ATTRIBUTE_NAME_CONREF);
-        if(conref != null && !conkeyrefValid){
+        if(conref != null){
             XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, replaceCONREF(atts).toString());
         }
     }
@@ -876,6 +777,16 @@ public final class DitaWriter extends AbstractXMLFilter {
 				xmlSource = validationFilter;
             }
             {
+                final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
+                conkeyrefFilter.setLogger(logger);
+                conkeyrefFilter.setKeyDefinitions(keys.values());
+                conkeyrefFilter.setTempDir(job.tempDir);
+                conkeyrefFilter.setCurrentFile(inFile);
+                conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
+                conkeyrefFilter.setParent(xmlSource);
+                xmlSource = conkeyrefFilter;
+            }
+            {
 	        	this.setParent(xmlSource);
 	        	xmlSource = this;
             }
@@ -978,22 +889,6 @@ public final class DitaWriter extends AbstractXMLFilter {
      */
     public void setDefaultValueMap(final Map<String, Map<String, String>> defaultMap) {
         defaultValueMap  = defaultMap;
-    }
-
-    /**
-     * Get transtype.
-     * @return the transtype
-     */
-    public String getTranstype() {
-        return transtype;
-    }
-
-    /**
-     * Set transtype.
-     * @param transtype the transtype to set
-     */
-    public void setTranstype(final String transtype) {
-        this.transtype = transtype;
     }
 
     // Locator methods
