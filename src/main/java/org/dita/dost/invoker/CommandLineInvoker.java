@@ -39,7 +39,7 @@ import org.dita.dost.util.Configuration;
 public final class CommandLineInvoker {
 
     /**logger.*/
-    private static DITAOTLogger logger = new DITAOTJavaLogger();
+    private static final DITAOTLogger logger = new DITAOTJavaLogger();
     /** Map to store input parameters.*/
     private static final Map<String, String> paramMap;
     static {

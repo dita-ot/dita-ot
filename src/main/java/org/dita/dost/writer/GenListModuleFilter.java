@@ -553,7 +553,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         if (chunkToNavLevel > 0) {
             chunkToNavLevel++;
         } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null
-                && atts.getValue(ATTRIBUTE_NAME_CHUNK).indexOf("to-navigation") != -1) {
+                && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-navigation")) {
             chunkToNavLevel++;
         }
 
@@ -623,9 +623,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
                 fileName = FileUtils.separatorsToUnix(FileUtils.resolve(currentDir.toString(), hrefValue.toString()).getPath());
 
                 final boolean canParse = parseBranch(atts, hrefValue, fileName);
-                if (!canParse) {
-                    return;
-                } else {
+                if (canParse) {
                     topicrefStack.push(localName);
                 }
             }
@@ -809,14 +807,9 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
             if (branchIdList.contains(id)) {
 
                 return true;
-            } else if (branchIdList.size() == 0) {
-                // the whole map is referenced
-
-                return true;
-            } else {
-                // the branch is not referred
-                return false;
-            }
+            } else // the whole map is referenced
+// the branch is not referred
+                return branchIdList.size() == 0;
         } else {
             // current file is not refered
             return false;

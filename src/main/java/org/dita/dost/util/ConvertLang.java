@@ -195,9 +195,7 @@ public final class ConvertLang extends Task {
     private String replaceXmlTag(final String source,final String tag){
         final int startPos = source.indexOf(tag);
         final int endPos = startPos + tag.length();
-        final StringBuilder sb = new StringBuilder();
-        sb.append(source.substring(0,startPos)).append(source.substring(endPos));
-        return sb.toString();
+        return source.substring(0, startPos) + source.substring(endPos);
     }
 
     private void convertHtmlCharset() {

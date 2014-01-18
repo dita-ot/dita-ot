@@ -63,7 +63,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
     private final Document pushDocument;
     /** push table.*/
     private final XMLReader reader;
-    private final DocumentBuilder documentBuilder;
 
     /**keep the file path of current file under parse
 	filePath is useful to get the absolute path of the target file.*/
@@ -146,7 +145,8 @@ public final class ConrefPushReader extends AbstractXMLReader {
         }catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
-        
+
+        DocumentBuilder documentBuilder;
         try {
             documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         } catch (ParserConfigurationException e) {
@@ -370,7 +370,6 @@ public final class ConrefPushReader extends AbstractXMLReader {
             //report error if type is 'replace'
             if (ATTR_CONACTION_VALUE_PUSHREPLACE.equals(type)) {
                 logger.logError(MessageUtils.getInstance().getMessage("DOTJ042E", target.toString()).toString());
-                return;
             } else {
                 table.put(moveKey, appendPushContent(pushcontent, table.get(moveKey)));
             }

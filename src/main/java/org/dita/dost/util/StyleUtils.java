@@ -25,10 +25,10 @@ public final class StyleUtils {
 
 
     //list for style name in xslt for hi-d tags
-    private static List<String> hiStyleNameList = new ArrayList<String>();
+    private static final List<String> hiStyleNameList = new ArrayList<String>();
 
     //map for storing flagging style names.
-    private static Map<String, String> flagStyleNameMap = new HashMap<String, String>();
+    private static final Map<String, String> flagStyleNameMap = new HashMap<String, String>();
 
     /**
      * Default Constructor
@@ -48,10 +48,8 @@ public final class StyleUtils {
                 if(cp1.equals(cp2)){
                     return "true";
                 }else{
-                    continue;
                 }
             }else{
-                continue;
             }
         }
         //It is a new style name and add it to a list.
@@ -71,10 +69,8 @@ public final class StyleUtils {
                 if(cp1.equals(cp2)){
                     return item;
                 }else{
-                    continue;
                 }
             }else{
-                continue;
             }
         }
         //It is a new style name and add it to a list.
@@ -124,7 +120,7 @@ public final class StyleUtils {
         final Map<String, String> colorMap = new HashMap<String, String>();
         //Store all css colors
         colorMap.put("aliceblue", "f0f8ff");
-        colorMap.put("antiquewhite",  "#faebd7");;
+        colorMap.put("antiquewhite",  "#faebd7");
         colorMap.put("aqua",  "#00ffff");
         colorMap.put("aquamarine",  "#7fffd4");
         colorMap.put("azure",   "#f0ffff");

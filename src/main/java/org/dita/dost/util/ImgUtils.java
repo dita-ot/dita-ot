@@ -100,7 +100,7 @@ public final class ImgUtils {
         FileInputStream binInput = null;
         try{
             String binStr = null;
-            final StringBuffer ret = new StringBuffer(16*1024);
+            final StringBuilder ret = new StringBuilder(16*1024);
             binInput = new FileInputStream(imgInput);
             int bin = binInput.read();
             while (bin != -1){

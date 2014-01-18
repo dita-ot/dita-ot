@@ -202,11 +202,8 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             formatValue = ATTR_FORMAT_VALUE_DITA;
         }
 
-        if (scopeValue.equals(ATTR_SCOPE_VALUE_LOCAL) && formatValue.equals(ATTR_FORMAT_VALUE_DITA)) {
-            return true;
-        }
+        return scopeValue.equals(ATTR_SCOPE_VALUE_LOCAL) && formatValue.equals(ATTR_FORMAT_VALUE_DITA);
 
-        return false;
     }
 
     private String updateHref(final String attQName, final Attributes atts) {
@@ -336,11 +333,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
      * @return boolean
      */
     private boolean notLocalURL(final String valueOfURL) {
-        if (valueOfURL.indexOf(NOT_LOCAL_URL) == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return valueOfURL.indexOf(NOT_LOCAL_URL) != -1;
     }
 
     /**
@@ -416,9 +409,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             final String attValue = StringUtils.escapeXML(atts.getValue(i));
-            output.write(new StringBuffer().append(STRING_BLANK)
-                    .append(attQName).append(EQUAL).append(QUOTATION)
-                    .append(attValue).append(QUOTATION).toString());
+            output.write(STRING_BLANK + attQName + EQUAL + QUOTATION + attValue + QUOTATION);
         }
         output.write(GREATER_THAN);
     }

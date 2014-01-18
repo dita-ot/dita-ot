@@ -147,23 +147,21 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         try {
             xmlReader.setContentHandler(handler);
 
-            for (int i = 0; i < topicNum; i++) {
+            for (String aTopicList : topicList) {
                 String target;
                 String targetPathFromMap;
                 String targetPathFromMapWithoutExt;
                 handler.reset();
-                target = topicList.get(i);
+                target = aTopicList;
                 targetPathFromMap = FileUtils.getRelativeUnixPath(
                         inputMap, target);
                 targetPathFromMapWithoutExt = targetPathFromMap
                         .substring(0, targetPathFromMap.lastIndexOf("."));
-                handler.setTargetFile(new StringBuffer(
-                        targetPathFromMapWithoutExt).append(targetExt)
-                        .toString());
+                handler.setTargetFile(targetPathFromMapWithoutExt + targetExt);
 
                 try {
                     /*if(!new File(baseInputDir, target).exists()){
-						logger.logWarn("Cannot find file "+ target);
+                        logger.logWarn("Cannot find file "+ target);
 						continue;
 					}*/
                     inputStream = new FileInputStream(
@@ -171,7 +169,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                     xmlReader.parse(new InputSource(inputStream));
                     inputStream.close();
                 } catch (final Exception e) {
-                    final StringBuffer buff=new StringBuffer();
+                    final StringBuffer buff = new StringBuffer();
                     String msg = null;
                     msg = MessageUtils.getInstance().getMessage("DOTJ013E", target).toString();
                     logger.logError(buff.append(msg).append(e.getMessage()).toString());
@@ -180,8 +178,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
 
             xmlReader.setContentHandler(ditamapIndexTermReader);
 
-            for (int j = 0; j < ditamapNum; j++) {
-                final String ditamap = ditamapList.get(j);
+            for (final String ditamap : ditamapList) {
                 final String currentMapPathName = FileUtils.getRelativeUnixPath(
                         inputMap, ditamap);
                 String mapPathFromInputMap = "";
@@ -194,17 +191,17 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                 ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
                 try {
                     /*if(!new File(baseInputDir, ditamap).exists()){
-						logger.logWarn("Cannot find file "+ ditamap);
+                        logger.logWarn("Cannot find file "+ ditamap);
 						continue;
 					}*/
                     inputStream = new FileInputStream(new File(baseInputDir,
                             ditamap));
                     xmlReader.parse(new InputSource(inputStream));
                     inputStream.close();
-                } 	catch (final Exception e) {
+                } catch (final Exception e) {
                     String msg = null;
                     msg = MessageUtils.getInstance().getMessage("DOTJ013E", ditamap).toString();
-                    logger.logError(msg, e) ;
+                    logger.logError(msg, e);
                 }
             }
         } finally {

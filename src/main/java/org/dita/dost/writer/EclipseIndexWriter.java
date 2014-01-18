@@ -88,8 +88,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
             //Clone the list of indexterms so we can look for see references
             termCloneList = cloneIndextermList(termList);
             final int termNum = termList.size();
-            for (int i = 0; i < termNum; i++) {
-                final IndexTerm term = termList.get(i);
+            for (final IndexTerm term : termList) {
                 outputIndexTerm(term, serializer, indexsee);
             }
             serializer.writeEndElement(); // index
@@ -127,8 +126,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         final int subTermNum = subTerms.size();
         outputIndexTermStartElement(term, serializer, indexsee);
         if (subTerms != null && subTermNum > 0) {
-            for (int i = 0; i < subTermNum; i++) {
-                final IndexTerm subTerm = subTerms.get(i);
+            for (final IndexTerm subTerm : subTerms) {
                 outputIndexTerm(subTerm, serializer, indexsee);
             }
         }
@@ -167,8 +165,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     public String getIndexFileName(final String outputFileRoot) {
         final File indexDir = new File(outputFileRoot).getParentFile();
         setFilePath(indexDir.getAbsolutePath());
-        final StringBuffer indexFilename = new StringBuffer(new File(indexDir, "index.xml").getAbsolutePath());
-        return indexFilename.toString();
+        return new File(indexDir, "index.xml").getAbsolutePath();
     }
 
     /*

@@ -261,13 +261,13 @@ public class DefaultLogger implements BuildLogger {
         // Filter out messages based on priority
         if (priority <= msgOutputLevel) {
 
-            final StringBuffer message = new StringBuffer();
+            final StringBuilder message = new StringBuilder();
             if (event.getTask() != null && !emacsMode) {
                 // Print out the name of the task if we're in one
                 final String name = event.getTask().getTaskName();
                 String label = "[" + name + "] ";
                 final int size = LEFT_COLUMN_SIZE - label.length();
-                final StringBuffer tmp = new StringBuffer();
+                final StringBuilder tmp = new StringBuilder();
                 for (int i = 0; i < size; i++) {
                     tmp.append(" ");
                 }

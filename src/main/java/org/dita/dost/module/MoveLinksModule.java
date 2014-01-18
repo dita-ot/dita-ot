@@ -44,10 +44,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         
         final MapLinksReader indexReader = new MapLinksReader();
         indexReader.setLogger(logger);
-        indexReader.setMatch(new StringBuffer(ELEMENT_NAME_MAPLINKS)
-                .append(SLASH).append(TOPIC_LINKPOOL.localName)
-                .append(SLASH).append(TOPIC_LINKLIST.localName)
-                .toString());
+        indexReader.setMatch(ELEMENT_NAME_MAPLINKS + SLASH + TOPIC_LINKPOOL.localName + SLASH + TOPIC_LINKLIST.localName);
         indexReader.read(maplinksFile.getAbsoluteFile());
         final Map<File, Map<String, String>> mapSet = indexReader.getMapping();
         

@@ -173,7 +173,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
     @Override
     public void buildFinished(final BuildEvent event) {
         final Throwable error = event.getException();
-        final StringBuffer message = new StringBuffer();
+        final StringBuilder message = new StringBuilder();
 
         message.append("Processing ended.");
         message.append(LINE_SEP);
@@ -239,12 +239,11 @@ public final class DITAOTBuildLogger implements BuildLogger {
             return;
         }
 
-        final StringBuffer message = new StringBuffer();
+        final StringBuilder message = new StringBuilder();
         final Task eventTask = event.getTask();
         if (eventTask != null) {
             // Print out the name of the task if we're in one
-            final String label = new StringBuffer().append("  [").append(
-                    eventTask.getTaskName()).append("] ").toString();
+            final String label = "  [" + eventTask.getTaskName() + "] ";
 
             BufferedReader r = null;
             try {
@@ -285,7 +284,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
             // filter out message came from XSLT in console,
             // except those contains [DOTXxxx]
             if (eventTask != null && "xslt".equals(eventTask.getTaskName())
-                    && msg.indexOf("DOTX") == -1) {
+                    && !msg.contains("DOTX")) {
                 flag = true;
             }
 
@@ -302,7 +301,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
             logger.logInfo(msg);
         } else {
         	//for error msg return from CHM compiler, such as "[exec] Result: 1", just log it, not count it
-            if(eventTask!=null && "exec".equals(eventTask.getTaskName()) && msg.indexOf("ERROR") == -1) {
+            if(eventTask!=null && "exec".equals(eventTask.getTaskName()) && !msg.contains("ERROR")) {
             	logger.logError(msg);
             } else {
             	printMessage(msg, err, priority);
@@ -418,7 +417,6 @@ public final class DITAOTBuildLogger implements BuildLogger {
 
             if(!chkThrowableAlreadyCaptured(buildEx)){
                 numOfErrors.incrementAndGet();
-                return;
             }
 
         }else{
@@ -465,7 +463,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
             }
         }
 
-        if (captured == false) {
+        if (!captured) {
             exceptionsCaptured.add(parent);
         }
 
@@ -479,7 +477,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
             return;
         }
         final String upperMessage=message.toUpperCase();
-        if(upperMessage.indexOf("HHC")!=-1 && upperMessage.indexOf("ERROR:")!=-1){
+        if(upperMessage.contains("HHC") && upperMessage.contains("ERROR:")){
             numOfErrors.incrementAndGet();
         }
     }

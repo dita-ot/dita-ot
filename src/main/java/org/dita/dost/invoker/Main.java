@@ -802,7 +802,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             throw new BuildException("Unrecognized niceness value: " + args[pos]);
         }
 
-        if (threadPriority.intValue() < Thread.MIN_PRIORITY || threadPriority.intValue() > Thread.MAX_PRIORITY) {
+        if (threadPriority < Thread.MIN_PRIORITY || threadPriority > Thread.MAX_PRIORITY) {
             throw new BuildException("Niceness value is out of the range 1-10");
         }
         return pos;
@@ -948,7 +948,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 if (threadPriority != null) {
                     try {
                         project.log("Setting Ant's thread priority to " + threadPriority, Project.MSG_VERBOSE);
-                        Thread.currentThread().setPriority(threadPriority.intValue());
+                        Thread.currentThread().setPriority(threadPriority);
                     } catch (final SecurityException swallowed) {
                         // we cannot set the priority here.
                         project.log("A security manager refused to set the -nice value");
@@ -1115,7 +1115,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      */
     private static void printUsage() {
         final String lSep = System.getProperty("line.separator");
-        final StringBuffer msg = new StringBuffer();
+        final StringBuilder msg = new StringBuilder();
         msg.append("Usage: dita -f <name> -i <file> [options]" + lSep);
         msg.append("   or: dita -install <file>" + lSep);
         msg.append("   or: dita -uninstall <id>" + lSep);
@@ -1215,8 +1215,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      */
     private static Map<String, Target> removeDuplicateTargets(final Map<String, Target> targets) {
         final Map<Location, Target> locationMap = new HashMap<Location, Target>();
-        for (final Iterator<Map.Entry<String, Target>> i = targets.entrySet().iterator(); i.hasNext();) {
-            final Map.Entry<String, Target> entry = i.next();
+        for (final Map.Entry<String, Target> entry : targets.entrySet()) {
             final String name = entry.getKey();
             final Target target = entry.getValue();
             final Target otherTarget = locationMap.get(target.getLocation());
@@ -1226,12 +1225,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             // (an imported target will have a name. prefix)
             if (otherTarget == null || otherTarget.getName().length() > name.length()) {
                 locationMap.put(target.getLocation(), target); // Smallest name
-                                                               // wins
+                // wins
             }
         }
         final Map<String, Target> ret = new HashMap<String, Target>();
-        for (final Iterator<Target> i = locationMap.values().iterator(); i.hasNext();) {
-            final Target target = i.next();
+        for (final Target target : locationMap.values()) {
             ret.put(target.getName(), target);
         }
         return ret;
@@ -1261,8 +1259,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final Vector<String> subNames = new Vector<String>();
         final Vector<Enumeration<String>> subDependencies = new Vector<Enumeration<String>>();
 
-        for (final Iterator<Target> i = ptargets.values().iterator(); i.hasNext();) {
-            currentTarget = i.next();
+        for (Target target : ptargets.values()) {
+            currentTarget = target;
             targetName = currentTarget.getName();
             if (targetName.equals("")) {
                 continue;

@@ -64,10 +64,7 @@ public final class MapLinksReader extends AbstractXMLReader {
         final int start = str.indexOf(GREATER_THAN); // start from first tag's end
         final int end = str.lastIndexOf(LESS_THAN); // end at last tag's start
         final String temp = str.substring(start + 1, end);
-        if (temp.trim().length() != 0) {
-            return true;
-        }
-        return false;
+        return temp.trim().length() != 0;
     }
     private final List<String> ancestorList;
     private String filePath = null;
@@ -236,7 +233,7 @@ public final class MapLinksReader extends AbstractXMLReader {
      */
     public void setMatch(final String matchPattern) {
         int index = 0;
-        firstMatchElement = (matchPattern.indexOf(SLASH) != -1) ? matchPattern.substring(0, matchPattern.indexOf(SLASH)) : matchPattern;
+        firstMatchElement = (matchPattern.contains(SLASH)) ? matchPattern.substring(0, matchPattern.indexOf(SLASH)) : matchPattern;
 
         while (index != -1) {
             final int start = matchPattern.indexOf(SLASH, index);
@@ -251,9 +248,9 @@ public final class MapLinksReader extends AbstractXMLReader {
         }
         matchList.add(firstMatchElement);
         final Iterator<String> it = lastMatchElement.iterator();
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         while(it.hasNext()){
-            sb.append(it.next() + STRING_BLANK);
+            sb.append(it.next()).append(STRING_BLANK);
         }
         matchList.add(sb.toString());
     }
@@ -282,7 +279,7 @@ public final class MapLinksReader extends AbstractXMLReader {
                 indexEntries = new StringBuffer(1024);
             }
             topicPath = null;
-            if (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1
+            if (hrefValue != null && !hrefValue.contains(INTERNET_LINK_MARK)
                     && (attrScope == null || ATTR_SCOPE_VALUE_LOCAL.equals(attrScope))
                     && (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat))) {
                 // If the href is internal dita topic file

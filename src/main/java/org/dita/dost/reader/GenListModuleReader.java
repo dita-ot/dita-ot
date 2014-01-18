@@ -56,6 +56,7 @@ import org.xml.sax.XMLReader;
  * {@link #reset()} between calls to {@link #parse(File)}.
  * </p>
  */
+@SuppressWarnings("RedundantIfStatement")
 public final class GenListModuleReader extends AbstractXMLFilter {
     
     /** Output utilities */
@@ -584,7 +585,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (chunkToNavLevel > 0) {
             chunkToNavLevel++;
         } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null
-                && atts.getValue(ATTRIBUTE_NAME_CHUNK).indexOf("to-navigation") != -1) {
+                && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-navigation")) {
             chunkToNavLevel++;
         }
 
@@ -640,7 +641,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                     // exclude external resources
                     final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                     if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
-                            || hrefValue.toString().indexOf(COLON_DOUBLE_SLASH) != -1 || hrefValue.toString().startsWith(SHARP)) {
+                            || hrefValue.toString().contains(COLON_DOUBLE_SLASH) || hrefValue.toString().startsWith(SHARP)) {
                         break topicref;
                     }
                     // normalize href value.
@@ -666,7 +667,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                     // exclude external resources
                     final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                     if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
-                            || conrefValue.toString().indexOf(COLON_DOUBLE_SLASH) != -1 || conrefValue.toString().startsWith(SHARP)) {
+                            || conrefValue.toString().contains(COLON_DOUBLE_SLASH) || conrefValue.toString().startsWith(SHARP)) {
                         break topicref;
                     }
                     // normalize href value.
@@ -828,14 +829,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (branchIdList.contains(id)) {
 
                 return true;
-            } else if (branchIdList.size() == 0) {
-                // the whole map is referenced
-
-                return true;
-            } else {
-                // the branch is not referred
-                return false;
-            }
+            } else // the whole map is referenced
+// the branch is not referred
+                return branchIdList.size() == 0;
         } else {
             // current file is not refered
             return false;
@@ -904,10 +900,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         // external resource is filtered here.
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
-                || attrValue.indexOf(COLON_DOUBLE_SLASH) != -1 || attrValue.startsWith(SHARP)) {
+                || attrValue.contains(COLON_DOUBLE_SLASH) || attrValue.startsWith(SHARP)) {
             return;
         }
-        if (attrValue.startsWith("file:/") && attrValue.indexOf("file://") == -1) {
+        if (attrValue.startsWith("file:/") && !attrValue.contains("file://")) {
             attrValue = attrValue.substring("file:/".length());
             // Unix like OS
             if (UNIX_SEPARATOR.equals(File.separator)) {
@@ -995,11 +991,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 final File value = FileUtils.resolve(currentDir, toFile(href).getPath());
     
                 if (href == null || href.toString().isEmpty()) {
-                    final StringBuffer buff = new StringBuffer();
-                    buff.append("[WARN]: Copy-to task [href=\"\" copy-to=\"");
-                    buff.append(filename);
-                    buff.append("\"] was ignored.");
-                    logger.logWarn(buff.toString());
+                    logger.logWarn("[WARN]: Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
                 } else if (copytoMap.get(new File(filename)) != null) {
                     if (!value.equals(copytoMap.get(new File(filename)))) {
                         logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", href.toString(), filename).toString());
@@ -1057,11 +1049,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * @return {@code true} if path walks up, otherwise {@code false}
      */
     private boolean isOutFile(final File toCheckPath) {
-        if (!toCheckPath.getPath().startsWith("..")) {
-            return false;
-        } else {
-            return true;
-        }
+        return toCheckPath.getPath().startsWith("..");
     }
 
     /**
@@ -1071,19 +1059,11 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     private boolean isMapFile() {
         final String current = FileUtils.normalize(currentFile.getAbsolutePath()).getPath();
-        if (FileUtils.isDITAMapFile(current)) {
-            return true;
-        } else {
-            return false;
-        }
+        return FileUtils.isDITAMapFile(current);
     }
 
     private boolean canResolved() {
-        if ((job.getOnlyTopicInMap() == false) || isMapFile()) {
-            return true;
-        } else {
-            return false;
-        }
+        return (!job.getOnlyTopicInMap()) || isMapFile();
     }
 
     private void addToOutFilesSet(final File hrefedFile) {

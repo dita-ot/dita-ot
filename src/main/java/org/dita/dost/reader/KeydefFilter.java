@@ -184,7 +184,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
                     } else {
                         // target is null or empty, it is useful in the future
                         // when consider the content of key definition
-                        keysDefMap.put(key, new KeyDef(key, (URI) null, null, (URI) null));
+                        keysDefMap.put(key, new KeyDef(key, null, null, null));
                     }
                 } else {
                     logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ045I", key, target != null ? target.toString() : null).toString());
@@ -199,9 +199,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
     private List<String> getKeysList(final String key, final Map<String, String> keysRefMap) {
         final List<String> list = new ArrayList<String>();
         // Iterate the map to look for multi-level keys
-        final Iterator<Entry<String, String>> iter = keysRefMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, String> entry = iter.next();
+        for (Entry<String, String> entry : keysRefMap.entrySet()) {
             // Multi-level key found
             if (entry.getValue().equals(key)) {
                 // add key into the list
@@ -226,9 +224,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
         KeyDef value = null;
         // tempMap storing values to avoid ConcurrentModificationException
         final Map<String, KeyDef> tempMap = new HashMap<String, KeyDef>();
-        final Iterator<Entry<String, KeyDef>> iter = keysDefMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, KeyDef> entry = iter.next();
+        for (Entry<String, KeyDef> entry : keysDefMap.entrySet()) {
             key = entry.getKey();
             value = entry.getValue();
             // there is multi-level keys exist.

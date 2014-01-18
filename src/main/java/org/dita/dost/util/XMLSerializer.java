@@ -273,7 +273,7 @@ public class XMLSerializer {
             throw new IllegalStateException("Current state does not allow Character writing");
         }
         processStartElement();
-        transformer.characters(ch, 0, ch.length);
+        transformer.characters(ch, start, length);
     }
 
     /**

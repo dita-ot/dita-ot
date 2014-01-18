@@ -85,7 +85,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
         final char[] chars = temp.toCharArray();
         char flag = '\n';
         //used for store the new String
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         for(final char c : chars){
             //when a whitespace is met
             if(c==' '){
@@ -97,7 +97,6 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                     flag = c;
                 }else{
                     //abundant space, ignore it
-                    continue;
                 }
                 //the consecutive whitespace is interrupted
             }else{
@@ -183,7 +182,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 
         final String href = topicref.getHref();
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
         if (!href.contains(COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)){
             if (mapPath != null && mapPath.length() != 0) {
                 buffer.append(mapPath);

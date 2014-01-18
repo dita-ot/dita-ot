@@ -239,8 +239,8 @@ public final class MapMetaReader extends AbstractDomFilter {
                     }
                     final Element newMeta = doc.createElement(MAP_TOPICMETA.localName);
                     newMeta.setAttribute(ATTRIBUTE_NAME_CLASS, "-" + MAP_TOPICMETA.matcher);
-                    for (int i = 0; i < metaPos.size(); i++) {
-                        final Node stub = metas.get(metaPos.get(i));
+                    for (String metaPo : metaPos) {
+                        final Node stub = metas.get(metaPo);
                         if (stub != null) {
                             final NodeList clist = stub.getChildNodes();
                             for (int j = 0; j < clist.getLength(); j++) {

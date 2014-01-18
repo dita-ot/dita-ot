@@ -97,7 +97,7 @@ public final class URLUtils {
             // Optimization, nothing to uncorrect here
             return s;
         }
-        final StringBuffer sbuf = new StringBuffer();
+        final StringBuilder sbuf = new StringBuilder();
         final int l = s.length();
         int ch = -1;
         int b = 0, sumb = 0;
@@ -220,7 +220,7 @@ public final class URLUtils {
         final String initialUrl = url;
 
         // If there is a % that means the URL was already corrected.
-        if (!forceCorrection && url.indexOf("%") != -1) {
+        if (!forceCorrection && url.contains("%")) {
             return initialUrl;
         }
 
@@ -321,8 +321,8 @@ public final class URLUtils {
                 };
         final int len = escChs.length;
         char ch;
-        for (int i = 0; i < len; i++) {
-            ch = escChs[i];
+        for (char escCh : escChs) {
+            ch = escCh;
             gNeedEscaping[ch] = true;
             gAfterEscaping1[ch] = gHexChs[ch >> 4];
             gAfterEscaping2[ch] = gHexChs[ch & 0xf];

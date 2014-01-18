@@ -174,8 +174,7 @@ public final class Job {
             	if (in != null) {
             		in.close();
             	}
-            } 
-            return;
+            }
         } else {
             // defaults
             prop.put(PROPERTY_GENERATE_COPY_OUTER, Generate.NOT_GENERATEOUTTER.toString());

@@ -179,7 +179,7 @@ public final class DITAOTFailTask extends Exit {
      */
     @Override
     public void setStatus(final int i) {
-        status = new Integer(i);
+        status = i;
     }
 
     /**

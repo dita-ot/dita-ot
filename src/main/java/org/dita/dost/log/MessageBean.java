@@ -153,7 +153,7 @@ public final class MessageBean {
      */
     @Override
     public String toString() {
-        final StringBuffer buff = new StringBuffer(256);
+        final StringBuilder buff = new StringBuilder(256);
 
         if (srcFile != null) {
             buff.append(srcFile);

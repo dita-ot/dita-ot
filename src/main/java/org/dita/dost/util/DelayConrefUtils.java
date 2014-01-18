@@ -183,8 +183,8 @@ public final class DelayConrefUtils {
             e.printStackTrace();
         }
         final List<Boolean> list = new ArrayList<Boolean>();
-        list.add(Boolean.valueOf(idExported));
-        list.add(Boolean.valueOf(keyrefExported));
+        list.add(idExported);
+        list.add(keyrefExported);
         return list;
     }
     /**
@@ -237,9 +237,7 @@ public final class DelayConrefUtils {
             return;
         }
         final Properties prop = new Properties();
-        final Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, Set<String>> entry = iter.next();
+        for (Map.Entry<String, Set<String>> entry : m.entrySet()) {
             final String key = entry.getKey();
             final String value = StringUtils.assembleString(entry.getValue(),
                     COMMA);
@@ -259,9 +257,8 @@ public final class DelayConrefUtils {
                 .createElement("properties"));
 
         final Set<Object> keys = prop.keySet();
-        final Iterator<Object> i = keys.iterator();
-        while (i.hasNext()) {
-            final String key = (String) i.next();
+        for (Object key1 : keys) {
+            final String key = (String) key1;
             final Element entry = (Element) properties.appendChild(doc
                     .createElement("entry"));
             entry.setAttribute("key", key);

@@ -52,7 +52,7 @@ public final class StringUtils {
      */
     @SuppressWarnings("rawtypes")
     public static String assembleString(final Collection coll, final String delim) {
-        final StringBuffer buff = new StringBuffer(256);
+        final StringBuilder buff = new StringBuilder(256);
         Iterator iter = null;
 
         if ((coll == null) || coll.isEmpty()) {
@@ -86,7 +86,7 @@ public final class StringUtils {
         final StringBuilder buf = new StringBuilder();
         for (final Iterator<Map.Entry<String, String>> i = value.entrySet().iterator(); i.hasNext();) {
             final Map.Entry<String, String> e = i.next();
-            buf.append(e.getKey().toString()).append(EQUAL).append(e.getValue().toString());
+            buf.append(e.getKey()).append(EQUAL).append(e.getValue());
             if (i.hasNext()) {
                 buf.append(delim);
             }
@@ -114,7 +114,7 @@ public final class StringUtils {
      * @return escaped value
      */
     public static String escapeXML(final char[] chars, final int offset, final int length){
-        final StringBuffer escaped = new StringBuffer();
+        final StringBuilder escaped = new StringBuilder();
 
         final int end = offset + length;
         for (int i = offset; i < end; ++i) {
@@ -163,13 +163,10 @@ public final class StringUtils {
      */
     public static boolean checkEntity(final String name) {
         // check whether this entity need resolve
-        if (NOT_RESOLVE_ENTITY_LIST.indexOf(STICK + name.trim()
+        return !(NOT_RESOLVE_ENTITY_LIST.indexOf(STICK + name.trim()
                 + STICK) != -1 ||
                 NOT_RESOLVE_ENTITY_CHAR.indexOf(STICK + name.trim()
-                        + STICK) != -1 ) {
-            return false;
-        }
-        return true;
+                        + STICK) != -1);
 
     }
 
@@ -187,7 +184,7 @@ public final class StringUtils {
      */
     public static String replaceAll(final String input,
             final String pattern, final String replacement) {
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         int startIndex = 0;
         int newIndex = 0;
 
@@ -214,7 +211,7 @@ public final class StringUtils {
 		InputStreamReader reader = new InputStreamReader(byteIS,"UTF-8");
 		char [] cbuf = new char[INT_128];
 		int count = reader.read(cbuf);*/
-        final StringBuffer ret = new StringBuffer(1024);
+        final StringBuilder ret = new StringBuilder(1024);
         String strByte = null;
         for (final byte element : input) {
             ret.append("\\\'");
@@ -482,7 +479,7 @@ public final class StringUtils {
     }
     
     /** Whitespace normalization state. */
-    private enum WhiteSpaceState { WORD, SPACE };
+    private enum WhiteSpaceState { WORD, SPACE }
 
     /**
      * Normalize and collapse whitespaces from string buffer.

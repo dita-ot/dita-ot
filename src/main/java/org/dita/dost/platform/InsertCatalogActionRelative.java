@@ -52,7 +52,7 @@ final class InsertCatalogActionRelative extends InsertAction {
                             "delegatePublic".equals(localName)) && "catalog".equals(attributes.getQName(i)) ||
                             ("rewriteSystem".equals(localName) ||
                                     "rewriteURI".equals(localName)) && "rewritePrefix".equals(attributes.getQName(i)))
-                                    && attributes.getValue(i).indexOf(COLON) == -1) {
+                                    && !attributes.getValue(i).contains(COLON)) {
                 // Rewrite URI to be local to its final resting place.
                 if (index == -1){
                     //If there are no xml:base attributes, then we need to split

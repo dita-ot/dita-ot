@@ -72,7 +72,7 @@ final class EscapeUnicodeModule extends AbstractPipelineModuleImpl {
                     if (codePoint < 128) {
                         fw.append(data.charAt(i));
                     } else {
-                        fw.append("\\u").append("" + codePoint).append(" ?");
+                        fw.append("\\u").append("").append(Integer.toString(codePoint)).append(" ?");
                     }
                 }
                 //fw.append(transliterator.transliterate(data));

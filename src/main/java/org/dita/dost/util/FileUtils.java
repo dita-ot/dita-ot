@@ -40,7 +40,7 @@ public final class FileUtils {
     private FileUtils(){
     }
 
-    private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    private static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 
     /**
      * Supported DITA topic extensions. File extensions contain a leading dot.
@@ -50,9 +50,7 @@ public final class FileUtils {
         final List<String> ste = new ArrayList<String>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_TOPIC_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
-            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                ste.add(ext);
-            }
+            Collections.addAll(ste, extensions.split(CONF_LIST_SEPARATOR));
         } else {
             logger.logError("Failed to read supported DITA topic extensions from configuration, using defaults.");
             ste.add(FILE_EXTENSION_DITA);
@@ -69,9 +67,7 @@ public final class FileUtils {
         final List<String> sme = new ArrayList<String>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_MAP_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
-            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                sme.add(ext);
-            }
+            Collections.addAll(sme, extensions.split(CONF_LIST_SEPARATOR));
         } else {
             logger.logError("Failed to read supported DITA map extensions from configuration, using defaults.");
             sme.add(FILE_EXTENSION_DITAMAP);
@@ -87,9 +83,7 @@ public final class FileUtils {
         final List<String> sie = new ArrayList<String>();
         final String imageExtensions = Configuration.configuration.get(CONF_SUPPORTED_IMAGE_EXTENSIONS);
         if (imageExtensions != null && imageExtensions.length()>0) {
-            for (final String ext: imageExtensions.split(CONF_LIST_SEPARATOR)) {
-                sie.add(ext);
-            }
+            Collections.addAll(sie, imageExtensions.split(CONF_LIST_SEPARATOR));
         } else {
             logger.logError("Failed to read supported image extensions from configuration, using defaults.");
             sie.add(FILE_EXTENSION_JPG);
@@ -112,9 +106,7 @@ public final class FileUtils {
         final List<String> she = new ArrayList<String>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_HTML_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
-            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                she.add(ext);
-            }
+            Collections.addAll(she, extensions.split(CONF_LIST_SEPARATOR));
         } else {
             logger.logError("Failed to read supported HTML extensions from configuration, using defaults.");
             she.add(FILE_EXTENSION_HTML);
@@ -131,9 +123,7 @@ public final class FileUtils {
         final List<String> sre = new ArrayList<String>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_RESOURCE_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
-            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                sre.add(ext);
-            }
+            Collections.addAll(sre, extensions.split(CONF_LIST_SEPARATOR));
         } else {
             logger.logError("Failed to read supported resource file extensions from configuration, using defaults.");
             sre.add(FILE_EXTENSION_SWF);
@@ -326,8 +316,8 @@ public final class FileUtils {
      * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
      */
     public static String getRelativePath(final String basePath, final String refPath, final String sep) {
-        final StringBuffer upPathBuffer = new StringBuffer(128);
-        final StringBuffer downPathBuffer = new StringBuffer(128);
+        final StringBuilder upPathBuffer = new StringBuilder(128);
+        final StringBuilder downPathBuffer = new StringBuilder(128);
         final StringTokenizer mapTokenizer = new StringTokenizer(
                 normalize(FileUtils.separatorsToUnix(basePath),
                         UNIX_SEPARATOR),
@@ -417,7 +407,7 @@ public final class FileUtils {
      */
     private static String getRelativePathForPath(final String relativePath, final String sep) {
         final StringTokenizer tokenizer = new StringTokenizer(separatorsToUnix(relativePath), UNIX_SEPARATOR);
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
         if (tokenizer.countTokens() == 1){
             return null;
         }else{
@@ -553,7 +543,7 @@ public final class FileUtils {
         }
 
         // restore the directory.
-        final StringBuffer buff = new StringBuffer(p.length());
+        final StringBuilder buff = new StringBuilder(p.length());
         if (p.startsWith(separator + separator)) {
             buff.append(separator).append(separator);
         } else if (p.startsWith(separator)) {
@@ -715,11 +705,8 @@ public final class FileUtils {
                         : filename;
 
 
-                if (new File(filename).exists()){
-                    return true;
-                }
+        return new File(filename).exists();
 
-                return false;
     }
 
     /**
@@ -763,10 +750,7 @@ public final class FileUtils {
      */
     public static boolean isWindows() {
         final String osName = System.getProperty("os.name");
-        if (osName.startsWith("Win")) {
-            return true;
-        }
-        return false;
+        return osName.startsWith("Win");
 
     }
 

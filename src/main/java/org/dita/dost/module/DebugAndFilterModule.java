@@ -84,12 +84,6 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     
     /** Absolute input map path. */
     private File inputMap = null;
-    /** Absolute DITA-OT base path. */
-    private File ditaDir = null;
-    /** Absolute input directory path. */
-    private File inputDir = null;
-
-    private final boolean setSystemid = true;
 
     /**
      * Default Construtor.
@@ -104,7 +98,8 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         }
         try {
             final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-            ditaDir=new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
+            /* Absolute DITA-OT base path. */
+            File ditaDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             File ditavalFile = null;
             if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null ) {
@@ -115,7 +110,8 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
             }
             
-            inputDir = new File(job.getInputDir());
+            /* Absolute input directory path. */
+            File inputDir = new File(job.getInputDir());
             if (!inputDir.isAbsolute()) {
                 inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
             }
@@ -140,6 +136,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             fileWriter.setLogger(logger);
             try{
                 final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
+                boolean setSystemid = true;
                 fileWriter.initXMLReader(ditaDir.getAbsoluteFile(),xmlValidate, setSystemid);
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);

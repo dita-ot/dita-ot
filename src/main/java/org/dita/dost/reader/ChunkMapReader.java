@@ -78,7 +78,7 @@ public final class ChunkMapReader implements AbstractReader {
     private ProcessingInstruction path2projUrl = null;
 
     private String processingRole = ATTR_PROCESSING_ROLE_VALUE_NORMAL;
-    private ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
+    private final ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
     private Job job;
 
     /**
@@ -160,7 +160,7 @@ public final class ChunkMapReader implements AbstractReader {
             // chunk module will change its @class attribute to "topicref"
             // and process it as if it were a normal topicref wich
             // @chunk="to-content"
-            if (rootChunkValue != null && rootChunkValue.indexOf(CHUNK_TO_CONTENT) != -1) {
+            if (rootChunkValue != null && rootChunkValue.contains(CHUNK_TO_CONTENT)) {
                 // if to-content is specified on map element
 
                 // create the reference to the new file on root element.
@@ -378,12 +378,12 @@ public final class ChunkMapReader implements AbstractReader {
         } else if (chunkValue != null
                 &&
                 // edited on 20100818 for bug:3042978
-                chunkValue.indexOf(CHUNK_TO_CONTENT) != -1
+                chunkValue.contains(CHUNK_TO_CONTENT)
                 && (hrefAttr != null || copytoAttr != null || node.hasChildNodes())) {
             // if this is the start point of the content chunk
             // TODO very important start point(to-content).
             processChunk(node, false, chunkByTopic);
-        } else if (chunkValue != null && chunkValue.indexOf(CHUNK_TO_NAVIGATION) != -1
+        } else if (chunkValue != null && chunkValue.contains(CHUNK_TO_NAVIGATION)
                 && INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // if this is the start point of the navigation chunk
             if (chunkValue != null && (chunkValue.contains(CHUNK_BY_TOPIC) || chunkValue.contains(CHUNK_BY_DOCUMENT))) {

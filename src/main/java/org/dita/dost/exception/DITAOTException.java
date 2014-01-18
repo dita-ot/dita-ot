@@ -29,7 +29,7 @@ public final class DITAOTException extends Exception {
      * as its detail message.
      */
     public DITAOTException() {
-        this((String) null, null);
+        this(null, null);
     }
 
     /**
@@ -47,7 +47,7 @@ public final class DITAOTException extends Exception {
      * @param cause the cause
      */
     public DITAOTException(final Throwable cause) {
-        this((String) null, cause);
+        this(null, cause);
     }
 
     /**

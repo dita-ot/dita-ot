@@ -196,13 +196,13 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         // external resource is filtered here.
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
-                || attrValue.indexOf(COLON_DOUBLE_SLASH) != -1 || attrValue.startsWith(SHARP)) {
+                || attrValue.contains(COLON_DOUBLE_SLASH) || attrValue.startsWith(SHARP)) {
             return;
         }
         // For only format of the href is dita topic
         String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         if (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat)) {
-            if (attrValue.startsWith("file:/") && attrValue.indexOf("file://") == -1) {
+            if (attrValue.startsWith("file:/") && !attrValue.contains("file://")) {
                 attrValue = attrValue.substring("file:/".length());
                 // Unix like OS
                 if (UNIX_SEPARATOR.equals(File.separator)) {

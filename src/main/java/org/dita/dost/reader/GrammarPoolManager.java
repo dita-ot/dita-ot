@@ -35,7 +35,7 @@ public final class GrammarPoolManager {
         return pool;
     }
 
-    private static ThreadLocal<XMLGrammarPool> grammarPool = new ThreadLocal<XMLGrammarPool>() {
+    private static final ThreadLocal<XMLGrammarPool> grammarPool = new ThreadLocal<XMLGrammarPool>() {
 
 
     };

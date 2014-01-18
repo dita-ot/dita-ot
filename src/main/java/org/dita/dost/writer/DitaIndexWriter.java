@@ -158,10 +158,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         //if there is <prolog> element and there is no <metadata> element before
         //and current element is <resourceid>, then there is no <metadata> in current
         //<prolog> element. return false.
-        if(hasPrologTillNow && !hasMetadataTillNow && TOPIC_RESOURCEID.localName.equals(qName)){
-            return false;
-        }
-        return true;
+        return !(hasPrologTillNow && !hasMetadataTillNow && TOPIC_RESOURCEID.localName.equals(qName));
     }
 
     private boolean hasProlog(final Attributes atts){
@@ -171,13 +168,13 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
 
         if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null){
             if (!hasPrologTillNow){
-                if (atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(TOPIC_BODY.matcher) != -1){
+                if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_BODY.matcher)){
                     return false;
                 }
-                else if (atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(TOPIC_RELATED_LINKS.matcher) != -1){
+                else if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_RELATED_LINKS.matcher)){
                     return false;
                 }
-                else if (atts.getValue(ATTRIBUTE_NAME_CLASS).indexOf(TOPIC_TOPIC.matcher) != -1){
+                else if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_TOPIC.matcher)){
 
                     if (topicLevel > 0){
                         topicLevel++;
@@ -222,7 +219,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         int index = 0;
         matchList = new ArrayList<String>(16);
 
-        firstMatchTopic = (match.indexOf(SLASH) != -1) ? match.substring(0, match.indexOf('/')) : match;
+        firstMatchTopic = (match.contains(SLASH)) ? match.substring(0, match.indexOf('/')) : match;
 
         while (index != -1) {
             final int end = match.indexOf(SLASH, index);
@@ -279,14 +276,12 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             
             if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null){
 
-                if (atts.getValue(ATTRIBUTE_NAME_CLASS)
-                        .indexOf(TOPIC_METADATA.matcher) != -1 && startTopic && !hasWritten) {
+                if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_METADATA.matcher) && startTopic && !hasWritten) {
                     hasMetadataTillNow = true;
                     output.write(indexEntries);
                     hasWritten = true;
                 }
-                if (atts.getValue(ATTRIBUTE_NAME_CLASS)
-                        .indexOf(TOPIC_PROLOG.matcher) != -1) {
+                if (atts.getValue(ATTRIBUTE_NAME_CLASS).contains(TOPIC_PROLOG.matcher)) {
                     hasPrologTillNow = true;
                 }
             }
@@ -354,9 +349,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             final String attValue = StringUtils.escapeXML(atts.getValue(i));
-            output.write(new StringBuffer().append(STRING_BLANK)
-                    .append(attQName).append(EQUAL).append(QUOTATION)
-                    .append(attValue).append(QUOTATION).toString());
+            output.write(STRING_BLANK + attQName + EQUAL + QUOTATION + attValue + QUOTATION);
         }
         output.write(GREATER_THAN);
     }

@@ -230,11 +230,8 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
 
             final Element root = doc.getDocumentElement();
 
-            final Iterator<Map.Entry<String, Element>> iter = metaTable.entrySet().iterator();
-
-            while (iter.hasNext()){
-                final Map.Entry<String, Element> entry = iter.next();
-                moveMeta(entry,root);
+            for (Entry<String, Element> entry : metaTable.entrySet()) {
+                moveMeta(entry, root);
             }
 
             outputMeta(root);
@@ -384,7 +381,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         int index = 0;
         matchList = new ArrayList<String>(16);
 
-        firstMatchTopic = (match.indexOf(SLASH) != -1) ? match.substring(0, match.indexOf(SLASH)) : match;
+        firstMatchTopic = (match.contains(SLASH)) ? match.substring(0, match.indexOf(SLASH)) : match;
 
         while (index != -1) {
             final int end = match.indexOf(SLASH, index);
@@ -558,9 +555,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             final String attValue = StringUtils.escapeXML(atts.getValue(i));
-            output.write(new StringBuffer().append(STRING_BLANK)
-                    .append(attQName).append(EQUAL).append(QUOTATION)
-                    .append(attValue).append(QUOTATION).toString());
+            output.write(STRING_BLANK + attQName + EQUAL + QUOTATION + attValue + QUOTATION);
         }
         output.write(GREATER_THAN);
     }

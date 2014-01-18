@@ -536,7 +536,7 @@ public final class Integrator {
      * @param extension extension ID
      * @return combined extension value, {@code null} if no value available
      */
-    static final String getValue(final Map<String, Features> featureTable, final String extension) {
+    static String getValue(final Map<String, Features> featureTable, final String extension) {
         final List<String> buf = new ArrayList<String>();
         for (final Features f : featureTable.values()) {
             final List<String> v = f.getFeature(extension);

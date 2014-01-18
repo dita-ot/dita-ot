@@ -103,7 +103,6 @@ public final class IndexTermTarget {
      */
     @Override
     public String toString() {
-        return new StringBuffer("{Target name: ").append(targetName).append(
-                ", Target URL: ").append(targetURI).append("}").toString();
+        return "{Target name: " + targetName + ", Target URL: " + targetURI + "}";
     }
 }

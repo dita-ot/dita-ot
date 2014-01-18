@@ -73,12 +73,8 @@ public final class DITAOTFileLogger implements DITAOTLogger {
             }
 
             if (tmpLogFile.renameTo(log)) {
-                final StringBuffer buff = new StringBuffer(256);
-                buff.append("Log file '").append(logFile);
-                buff.append("' was generated successfully in directory '");
-                buff.append(logDir).append("'.");
 
-                javaLogger.logInfo(buff.toString());
+                javaLogger.logInfo("Log file '" + logFile + "' was generated successfully in directory '" + logDir + "'.");
                 return;
             }
         }

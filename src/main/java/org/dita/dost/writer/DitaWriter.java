@@ -294,7 +294,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         CatalogUtils.setDitaDir(ditaDir);
         try {
             reader = StringUtils.getXMLReader();
-            if(validate == true){
+            if(validate){
                 reader.setFeature(FEATURE_VALIDATION, true);
                 try {
                     reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
@@ -352,7 +352,6 @@ public final class DitaWriter extends AbstractXMLFilter {
             if (attQName.equals(ATTRIBUTE_NAME_XTRF) || attQName.equals(ATTRIBUTE_NAME_XTRC) ||
                     attQName.equals(ATTRIBUTE_NAME_COLNAME)|| attQName.equals(ATTRIBUTE_NAME_NAMEST) || attQName.equals(ATTRIBUTE_NAME_NAMEEND) ||
                     ATTRIBUTE_NAME_CONREF.equals(attQName)) {
-                continue;
             } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
                         atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)){
@@ -487,10 +486,10 @@ public final class DitaWriter extends AbstractXMLFilter {
                             final String pos = String.valueOf(row) +"-"+ String.valueOf(currentCol);
                             if(rowsMap.containsKey(pos)){
                                 //get total span rows
-                                final int totalSpanRows = rowsMap.get(pos).intValue();
+                                final int totalSpanRows = rowsMap.get(pos);
                                 if(rowNumber <= totalSpanRows){
                                     //offset ++;
-                                	offset += colSpanMap.get(pos).intValue();
+                                	offset += colSpanMap.get(pos);
                                 }
                             }
                         }
@@ -510,7 +509,7 @@ public final class DitaWriter extends AbstractXMLFilter {
                         //total span rows
                         final int total = Integer.parseInt(atts.getValue(ATTRIBUTE_NAME_MOREROWS))+
                                 rowNumber;
-                        rowsMap.put(pos, Integer.valueOf(total));
+                        rowsMap.put(pos, total);
                         colSpanMap.put(pos, getColumnSpan(atts));
 
                     }
@@ -567,9 +566,9 @@ public final class DitaWriter extends AbstractXMLFilter {
             if(!colSpecStack.isEmpty()){
 
                 colSpec = colSpecStack.peek();
-                rowNumber = rowNumStack.peek().intValue();
-                columnNumber = columnNumberStack.peek().intValue();
-                columnNumberEnd = columnNumberEndStack.peek().intValue();
+                rowNumber = rowNumStack.peek();
+                columnNumber = columnNumberStack.peek();
+                columnNumberEnd = columnNumberEndStack.peek();
                 rowsMap = rowsMapStack.peek();
                 colSpanMap = colSpanMapStack.peek();
 
@@ -608,7 +607,7 @@ public final class DitaWriter extends AbstractXMLFilter {
 
     private int getStartNumber(final Attributes atts, final int previousEnd) {
         if (atts.getValue(ATTRIBUTE_NAME_COLNUM) != null){
-            return new Integer(atts.getValue(ATTRIBUTE_NAME_COLNUM)).intValue();
+            return Integer.parseInt(atts.getValue(ATTRIBUTE_NAME_COLNUM));
         }else if(atts.getValue(ATTRIBUTE_NAME_NAMEST) != null){
             final int ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEST)) + 1;
             if(ret == 0){
@@ -642,7 +641,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     public void startDocument() throws SAXException {
         try {
             getContentHandler().startDocument();
-            if(OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS)==-1)
+            if(!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS))
             {
                 getContentHandler().processingInstruction(PI_WORKDIR_TARGET, absolutePath.getCanonicalPath());
             }else{
@@ -864,10 +863,7 @@ public final class DitaWriter extends AbstractXMLFilter {
      */
     private boolean isOutFile(final File filePathName, final File inputMap){
         final File relativePath = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
-        if(relativePath == null || relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith("..")){
-            return false;
-        }
-        return true;
+        return !(relativePath == null || relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
     }
 
     /**

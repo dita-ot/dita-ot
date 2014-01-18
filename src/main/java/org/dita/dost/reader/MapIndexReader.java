@@ -214,7 +214,7 @@ public final class MapIndexReader extends AbstractXMLReader {
                 indexEntries = new StringBuffer(1024);
             }
             topicPath = null;
-            if (hrefValue != null && hrefValue.toString().indexOf(INTERNET_LINK_MARK) == -1
+            if (hrefValue != null && !hrefValue.toString().contains(INTERNET_LINK_MARK)
                     && (attrScope == null || ATTR_SCOPE_VALUE_LOCAL.equals(attrScope))
                     && (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat))) {
                 // If the href is internal dita topic file
@@ -264,10 +264,7 @@ public final class MapIndexReader extends AbstractXMLReader {
         final int start = str.indexOf(GREATER_THAN); // start from first tag's end
         final int end = str.lastIndexOf(LESS_THAN); // end at last tag's start
         final String temp = str.substring(start + 1, end);
-        if (temp.trim().length() != 0) {
-            return true;
-        }
-        return false;
+        return temp.trim().length() != 0;
     }
 
 }

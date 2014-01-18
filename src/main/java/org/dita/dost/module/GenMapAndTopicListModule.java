@@ -313,7 +313,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         reader = StringUtils.getXMLReader();
         // to check whether the current parsing file's href value is out of inputmap.dir
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        if (validate == true) {
+        if (validate) {
             reader.setFeature(FEATURE_VALIDATION, true);
             try {
                 reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
@@ -524,7 +524,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params), sax, msg);
             }
             final String buff = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + LINE_SEPARATOR + sax.getMessage();
-            logger.logError(buff.toString(), sax);
+            logger.logError(buff, sax);
         } catch (final Exception e) {
             if (file.equals(inputFile)) {
                 // stop the build if exception thrown when parsing input file.
@@ -536,7 +536,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
 
         if (!listFilter.isValidInput() && file.equals(inputFile)) {
-            if (xmlValidate == true) {
+            if (xmlValidate) {
                 // stop the build if all content in the input file was filtered out.
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ022F", params).toString());
             } else {
@@ -775,7 +775,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private void updateBaseDirectory() {
         for (int i = uplevels; i > 0; i--) {
-            prefix = new StringBuffer(baseInputDir.getName()).append(File.separator).append(prefix).toString();
+            prefix = baseInputDir.getName() + File.separator + prefix;
             baseInputDir = baseInputDir.getParentFile();
         }
     }
@@ -786,7 +786,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @return path to up-level, e.g. {@code ../../}
      */
     private String getUpdateLevels() {
-        final StringBuffer buff = new StringBuffer();
+        final StringBuilder buff = new StringBuilder();
         for (int current = uplevels; current > 0; current--) {
             buff.append("..").append(File.separator);
         }
@@ -800,7 +800,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @return input with regular expression special characters escaped
      */
     private String escapeRegExp(final String value) {
-        final StringBuffer buff = new StringBuffer();
+        final StringBuilder buff = new StringBuilder();
         if (value == null || value.length() == 0) {
             return "";
         }
@@ -1055,7 +1055,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             job.getOrCreateFileInfo(file).isResourceOnly = true;
         }
         
-        addFlagImagesSetToProperties(job, REL_FLAGIMAGE_LIST, relFlagImagesSet);
+        addFlagImagesSetToProperties(job, relFlagImagesSet);
 
         // Convert copyto map into set and output
         job.setCopytoMap(addFilePrefix(copytoMap));
@@ -1253,12 +1253,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /**
      * add FlagImangesSet to Properties, which needn't to change the dir level,
      * just ouput to the ouput dir.
-     * 
+     *
      * @param prop job configuration
-     * @param key list name
      * @param set relative flag image files
      */
-    private void addFlagImagesSetToProperties(final Job prop, final String key, final Set<File> set) {
+    private void addFlagImagesSetToProperties(final Job prop, final Set<File> set) {
         final Set<File> newSet = new LinkedHashSet<File>(128);
         for (final File file: set) {
             if (file.isAbsolute()) {
@@ -1272,8 +1271,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
 
         // write list attribute to file
-        final String fileKey = key.substring(0, key.lastIndexOf("list")) + "file";
-        prop.setProperty(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
+        final String fileKey = org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.substring(0, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
+        prop.setProperty(fileKey, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.substring(0, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
         final File list = new File(job.tempDir, prop.getProperty(fileKey));
         Writer bufferedWriter = null;
         try {
@@ -1301,7 +1300,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        prop.setProperty(key, StringUtils.assembleString(newSet, COMMA));
+        prop.setProperty(org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST, StringUtils.assembleString(newSet, COMMA));
     }
     
 }

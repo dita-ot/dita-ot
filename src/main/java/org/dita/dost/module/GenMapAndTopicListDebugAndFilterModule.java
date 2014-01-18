@@ -327,7 +327,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         reader = StringUtils.getXMLReader();
         // to check whether the current parsing file's href value is out of inputmap.dir
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        if (validate == true) {
+        if (validate) {
             reader.setFeature(FEATURE_VALIDATION, true);
             try {
                 reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
@@ -504,7 +504,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params), sax, msg);
             }
             final String buff = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + LINE_SEPARATOR + sax.getMessage();
-            logger.logError(buff.toString());
+            logger.logError(buff);
         } catch (final Throwable e) {
             if (currentFile.equals(inputFile)) {
                 final String msg = MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage();
@@ -516,7 +516,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         }
 
         if (!isValidInput && currentFile.equals(inputFile)) {
-            if (xmlValidate == true) {
+            if (xmlValidate) {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ022F", params).toString());
             } else {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ034F", params).toString());
@@ -950,7 +950,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             job.getOrCreateFileInfo(file).isResourceOnly = true;
         }
 
-        addFlagImagesSetToProperties(job, REL_FLAGIMAGE_LIST, relFlagImagesSet);
+        addFlagImagesSetToProperties(job, relFlagImagesSet);
 
         // Convert copyto map into set and output
         job.setCopytoMap(addPrefix(copytoMap));
@@ -1133,12 +1133,11 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
     /**
      * add FlagImangesSet to Properties, which needn't to change the dir level,
      * just ouput to the ouput dir.
-     * 
+     *
      * @param prop job configuration
-     * @param key list name
      * @param set relative flag image files
      */
-    private void addFlagImagesSetToProperties(final Job prop, final String key, final Set<File> set) {
+    private void addFlagImagesSetToProperties(final Job prop, final Set<File> set) {
         final Set<File> newSet = new LinkedHashSet<File>(128);
         for (final File file: set) {
             if (file.isAbsolute()) {
@@ -1152,11 +1151,11 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         }
 
         // write list attribute to file
-        final String fileKey = key.substring(0, key.lastIndexOf("list")) + "file";
-        prop.setProperty(fileKey, key.substring(0, key.lastIndexOf("list")) + ".list");
+        final String fileKey = org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.substring(0, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
+        prop.setProperty(fileKey, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.substring(0, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
         writeListToFile(new File(job.tempDir, prop.getProperty(fileKey)), newSet);
 
-        prop.setProperty(key, StringUtils.assembleString(newSet, COMMA));
+        prop.setProperty(org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST, StringUtils.assembleString(newSet, COMMA));
     }
 
 //    /**

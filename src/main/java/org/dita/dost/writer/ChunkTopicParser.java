@@ -312,7 +312,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     output = new OutputStreamWriter(new FileOutputStream(newFileName), UTF8);
                     // write xml header and workdir PI to the new generated file
                     writeStartDocument(output);
-                    if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) == -1) {
+                    if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
                         writeProcessingInstruction(output, PI_WORKDIR_TARGET, filePath.getAbsolutePath());
                     } else {
                         writeProcessingInstruction(output, PI_WORKDIR_TARGET, UNIX_SEPARATOR + filePath);
@@ -446,7 +446,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                 // be update again
                                 // to the new location.
                                 value = relative + attrValue;
-                            } else if (relative.indexOf(SLASH) != -1) {
+                            } else if (relative.contains(SLASH)) {
                                 // if new file is not under the same directory
                                 // with current file
                                 // add path information to the @href value
@@ -846,7 +846,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 if ((!MAPGROUP_D_TOPICGROUP.matches(classValue)) && (!StringUtils.isEmptyString(parseFilePath))
                         && (!ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue))) {
                     // now the path to target file make sense
-                    if (chunkValue.indexOf(ATTR_CHUNK_VALUE_TO_CONTENT) != -1) {
+                    if (chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)) {
                         // if current element contains "to-content" in chunk
                         // attribute
                         // we need to create new buffer and flush the buffer to
@@ -941,7 +941,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         targetTopicId = getFragment(parseFilePath);
                     }
 
-                    if (chunkValue.indexOf("select") != -1) {
+                    if (chunkValue.contains("select")) {
                         final int endIndex = chunkValue.indexOf(STRING_BLANK, chunkValue.indexOf("select"));
                         if (endIndex == -1) {
                             // if there is no space after select-XXXX in chunk
@@ -1033,7 +1033,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             element.setAttribute(ATTRIBUTE_NAME_HREF, toURI(FileUtils.getRelativePath(new File(filePath,
                                     FILE_NAME_STUB_DITAMAP), outputFileName)).toString());
                             // manually create a new topic chunk
-                            final StringBuffer buffer = new StringBuffer();
+                            final StringBuilder buffer = new StringBuilder();
                             buffer.append("<topic id=\"topic\" class=\"- topic/topic \">")
                                     .append("<title class=\"- topic/title \">").append(navtitleValue)
                                     .append("</title>");
@@ -1073,7 +1073,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     for (int i = 0; i < children.getLength(); i++) {
                         final Node current = children.item(i);
                         if (current.getNodeType() == Node.ELEMENT_NODE
-                                && ((Element) current).getAttribute(ATTRIBUTE_NAME_CLASS).indexOf(MAP_TOPICREF.matcher) != -1) {
+                                && ((Element) current).getAttribute(ATTRIBUTE_NAME_CLASS).contains(MAP_TOPICREF.matcher)) {
                             processChunk((Element) current, outputFileName);
                         }
                     }
@@ -1103,7 +1103,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
                 }
 
-                if (chunkValue.indexOf(ATTR_CHUNK_VALUE_TO_CONTENT) != -1) {
+                if (chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)) {
                     // flush the buffer to file after processing is finished
                     // and restore back original output
 
@@ -1116,7 +1116,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             // write the xml header and workdir PI into new file
                             writeStartDocument(ditaFileOutput);
                             final File workDir = outputFileName.getParentFile().getAbsoluteFile();
-                            if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) == -1) {
+                            if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
                                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, workDir.getAbsolutePath());
                             } else {
                                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET,
@@ -1188,18 +1188,15 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     /** Check whether current href needs to be updated */
     private boolean checkHREF(final Attributes atts) {
         final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
-        if (hrefValue == null || hrefValue.indexOf(COLON_DOUBLE_SLASH) != -1) {
+        if (hrefValue == null || hrefValue.contains(COLON_DOUBLE_SLASH)) {
             return false;
         }
         String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (scopeValue == null) {
             scopeValue = ATTR_SCOPE_VALUE_LOCAL;
         }
-        if (scopeValue != null && scopeValue.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
-            return false;
-        }
+        return !(scopeValue != null && scopeValue.equals(ATTR_SCOPE_VALUE_EXTERNAL));
 
-        return true;
     }
 
     /**
@@ -1384,8 +1381,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             }
             if (searchKey.equals(value)){
                 return pe;
-            }else{
-                continue;
             }
         }
         return null;
@@ -1397,7 +1392,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      * @return text value.
      */
     private String getText(final Node root){
-        final StringBuffer result = new StringBuffer(1024);
+        final StringBuilder result = new StringBuilder(1024);
         if(root == null){
             return "";
         }else{
@@ -1411,8 +1406,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         if(!excludeList.contains(value)){
                             final String s = getText(e);
                             result.append(s);
-                        }else{
-                            continue;
                         }
                     }else if(childNode.getNodeType() == Node.TEXT_NODE){
                         result.append(childNode.getNodeValue());

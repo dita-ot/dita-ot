@@ -265,7 +265,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                 }
                 if (!levelForPushAfterStack.isEmpty() &&
                         !contentForPushAfterStack.isEmpty()) {
-                    levelForPushAfter = levelForPushAfterStack.pop().intValue();
+                    levelForPushAfter = levelForPushAfterStack.pop();
                     contentForPushAfter = contentForPushAfterStack.pop();
                 } else {
                     hasPushafter = false;

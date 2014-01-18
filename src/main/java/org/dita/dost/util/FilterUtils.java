@@ -174,7 +174,7 @@ public final class FilterUtils {
      */
     private boolean extCheckExclude(final String[] propList, final String attValue) {
         // to check if the value is just only "" or " ",ignore it
-        if (attValue == null || attValue.trim().length() == 0 || propList.length == 0 || attValue.indexOf("(") != -1) {
+        if (attValue == null || attValue.trim().length() == 0 || propList.length == 0 || attValue.contains("(")) {
             return false;
         }
 
@@ -291,7 +291,7 @@ public final class FilterUtils {
                         return false;
                     }
                 } else {
-                    if (checkExcludeOfGlobalDefaultAction() == false) {
+                    if (!checkExcludeOfGlobalDefaultAction()) {
                         return false;
                     }
                 }
@@ -310,11 +310,7 @@ public final class FilterUtils {
         if (defaultAction == null) {
             return false;
         } else {
-            if (Action.EXCLUDE != defaultAction) {
-                return false;
-            } else {
-                return true;
-            }
+            return Action.EXCLUDE == defaultAction;
         }
     }
 

@@ -235,9 +235,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             final String attValue = StringUtils.escapeXML(atts.getValue(i));
-            output.write(new StringBuffer().append(STRING_BLANK)
-                    .append(attQName).append(EQUAL).append(QUOTATION)
-                    .append(attValue).append(QUOTATION).toString());
+            output.write(STRING_BLANK + attQName + EQUAL + QUOTATION + attValue + QUOTATION);
         }
         output.write(GREATER_THAN);
     }
