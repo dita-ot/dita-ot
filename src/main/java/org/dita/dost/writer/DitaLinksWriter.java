@@ -89,27 +89,27 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
             reader.parse(inputFile.toURI().toString());
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         } finally {
             try {
                 if (fileOutput != null) {
                     fileOutput.close();
                 }
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
             try {
                 if (output != null) {
                     output.close();
                 }
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
         }
         try {
             FileUtils.moveFile(outputFile, inputFile);
         } catch (final Exception e) {
-            logger.logError("Failed to replace " + inputFile + ": " + e.getMessage());
+            logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
         }
     }
 
@@ -120,7 +120,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         try {
             writeCharacters(ch, start, length);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -129,7 +129,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         try {
             output.flush();
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -157,7 +157,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             }
             writeEndElement(qName);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -166,7 +166,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         try {
             writeCharacters(ch, start, length);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -175,7 +175,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         try {
             writeProcessingInstruction(target, data);
         } catch (final IOException e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -203,7 +203,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
                     writeEndElement(TOPIC_RELATED_LINKS.localName);
                     curMatchTopic = null;
                 } catch (final Exception e) {
-                    logger.logError(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
             }
             final String t = StringUtils.assembleString(topicIdStack, SLASH);
@@ -223,7 +223,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
                 curMatchTopic = null;
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 

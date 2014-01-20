@@ -116,7 +116,7 @@ public final class DelayConrefUtils {
             return false;
 
         } catch (final Exception e) {
-            logger.logError("Failed to read document: " + e.getMessage(), e);
+            logger.error("Failed to read document: " + e.getMessage(), e);
         }
         return false;
     }
@@ -281,13 +281,13 @@ public final class DelayConrefUtils {
             final StreamResult sr = new StreamResult(out);
             t.transform(doms, sr);
         } catch (final Exception e) {
-            logger.logError("Failed to process map: " + e.getMessage(), e);
+            logger.error("Failed to process map: " + e.getMessage(), e);
         } finally {
             if (out != null) {
                 try {
                     out.close();
                 } catch (final IOException e) {
-                    logger.logError("Failed to close output stream: " + e.getMessage());
+                    logger.error("Failed to close output stream: " + e.getMessage());
                 }
             }
         }

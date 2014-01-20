@@ -42,15 +42,15 @@ ContentHandler, LexicalHandler, EntityResolver {
     public void setGrammarPool(final XMLReader reader) {
         try {
             reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", GrammarPoolManager.getGrammarPool());
-            logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
+            logger.info("Using Xerces grammar pool for DTD and schema caching.");
         } catch (final NoClassDefFoundError e) {
-            logger.logDebug("Xerces not available, not using grammar caching");
+            logger.debug("Xerces not available, not using grammar caching");
         } catch (final SAXNotRecognizedException e) {
             e.printStackTrace();
-            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+            logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         } catch (final SAXNotSupportedException e) {
             e.printStackTrace();
-            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+            logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         }
     }
 

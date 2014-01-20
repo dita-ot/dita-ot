@@ -264,7 +264,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             performCopytoTask(job.tempDir);
             
             try {
-                logger.logInfo("Serializing job specification");
+                logger.info("Serializing job specification");
                 job.write();
             } catch (final IOException e) {
                 throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
@@ -336,7 +336,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             }
         } else {
             final String msg = MessageUtils.getInstance().getMessage("DOTJ037W").toString();
-            logger.logWarn(msg);
+            logger.warn(msg);
         }
         // set grammar pool flag
         if (gramcache) {
@@ -344,9 +344,9 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
             try {
                 reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
-                logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
+                logger.info("Using Xerces grammar pool for DTD and schema caching.");
             } catch (final Exception e) {
-                logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+                logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
             }
         }
         CatalogUtils.setDitaDir(ditaDir);
@@ -459,11 +459,11 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      */
     private void processFile(final URI currentFile) throws DITAOTException {
         final URI fileToParse = baseInputDir.resolve(currentFile.getPath()).normalize();
-        logger.logInfo("Processing " + fileToParse);
+        logger.info("Processing " + fileToParse);
         final String[] params = { fileToParse.toString() };
 
         if ("file".equals(fileToParse.getScheme()) &&  !new File(fileToParse).exists()) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
+            logger.error(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
             return;
         }
         boolean isValidInput = false;
@@ -483,7 +483,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             if (!outFile.getParentFile().exists() && !outFile.getParentFile().mkdirs()) {
                 throw new IOException("Failed to create temporary directory " + outFile.getParentFile().getAbsolutePath());
             }
-            logger.logDebug("Writing " + outFile.getAbsolutePath());
+            logger.debug("Writing " + outFile.getAbsolutePath());
             final Result result = new StreamResult(outFile);
             final TransformerFactory tf = TransformerFactory.newInstance();
             tf.setURIResolver(CatalogUtils.getCatalogResolver());
@@ -496,7 +496,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         } catch (final TransformerException sax) {
             final Throwable inner = sax.getException();
             if (inner != null && inner instanceof DITAOTException) {
-                logger.logInfo(inner.getMessage());
+                logger.info(inner.getMessage());
                 throw (DITAOTException) inner;
             }
             if (currentFile.equals(inputFile)) {
@@ -504,7 +504,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params), sax, msg);
             }
             final String buff = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + LINE_SEPARATOR + sax.getMessage();
-            logger.logError(buff);
+            logger.error(buff);
         } catch (final Throwable e) {
             if (currentFile.equals(inputFile)) {
                 final String msg = MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage();
@@ -512,7 +512,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             }
             final String buff = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + LINE_SEPARATOR + e.getMessage();
             e.printStackTrace();
-            logger.logError(buff);
+            logger.error(buff);
         }
 
         if (!isValidInput && currentFile.equals(inputFile)) {
@@ -603,7 +603,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             final File value = cpMap.get(key);
 
             if (copytoMap.containsKey(key)) {
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", value.getPath(), key.getPath()).toString());
+                logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", value.getPath(), key.getPath()).toString());
                 ignoredCopytoSourceSet.add(value);
             } else {
                 if (isAccessible(key)) {
@@ -643,7 +643,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         final URI f = baseInputDir.resolve(file.getPath());
         final boolean res = directoryContains(baseInputDir, f);
         if (!res) {
-            logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ036W",
+            logger.warn(MessageUtils.getInstance().getMessage("DOTJ036W",
                                                                  f.toString(),
                                                                  currentFile.toString()).toString());
         }
@@ -693,7 +693,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             try {
                 addToWaitList(new URI(file.filename));
             } catch (final URISyntaxException e) {
-                logger.logError(e.getMessage());
+                logger.error(e.getMessage());
             }
         } else if (!FileUtils.isSupportedImageFile(lcasefn)) {
             // FIXME: Treating all non-image extensions as HTML/resource files is not correct if HTML/resource files
@@ -704,7 +704,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             imageSet.add(new File(file.filename));        	      	
             final URI image = baseInputDir.resolve(file.filename).normalize(); 
             if ("file".equals(image.getScheme()) && !new File(image).exists()){
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX008W", image.toString()).toString());
+                logger.warn(MessageUtils.getInstance().getMessage("DOTX008W", image.toString()).toString());
             }
         }
 
@@ -957,7 +957,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         addKeyDefSetToProperties(job, keysDefMap);
         
         try {
-            logger.logInfo("Serializing job specification");
+            logger.info("Serializing job specification");
             job.write();
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
@@ -1006,14 +1006,14 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
                     try {
                         export.close();
                     } catch (final XMLStreamException e) {
-                        logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
+                        logger.error("Failed to close export anchor file: " + e.getMessage(), e);
                     }
                 }
                 if (exportStream != null) {
                     try {
                         exportStream.close();
                     } catch (final IOException e) {
-                        logger.logError("Failed to close export anchor file: " + e.getMessage(), e);
+                        logger.error("Failed to close export anchor file: " + e.getMessage(), e);
                     }
                 }
             }
@@ -1035,15 +1035,15 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             }
             bufferedWriter.flush();
         } catch (final FileNotFoundException e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         } catch (final IOException e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         } finally {
             if (bufferedWriter != null) {
                 try {
                     bufferedWriter.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -1126,7 +1126,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         try {
             KeyDef.writeKeydef(new File(job.tempDir, KEYDEF_LIST_FILE), updated);
         } catch (final DITAOTException e) {
-            logger.logError("Failed to write key definition file: " + e.getMessage(), e);
+            logger.error("Failed to write key definition file: " + e.getMessage(), e);
         }
     }
 
@@ -1459,10 +1459,10 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             final File srcFile = new File(tempDir, copytoSource.getPath());
             final File targetFile = new File(tempDir, copytoTarget.getPath());
             if (targetFile.exists()) {
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
+                logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
             }else{
                 final String inputMapInTemp = new File(tempDir, job.getInputMap()).getAbsolutePath();
-                logger.logInfo("copy-to: " + copytoSource + " -> " + copytoTarget);
+                logger.info("copy-to: " + copytoSource + " -> " + copytoTarget);
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
             }
         }
@@ -1478,7 +1478,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      */
     public void copyFileWithPIReplaced(final File src, final File target, final File copytoTargetFilename, final String inputMapInTemp ) {
         if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
-            logger.logError("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
+            logger.error("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
         }
         final String path2project = listFilter.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
         final File workdir = target.getParentFile();
@@ -1489,7 +1489,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
                     new SAXSource(filter, new InputSource(src.toURI().toString())),
                     new StreamResult(target));
         } catch (final Exception e) {
-            logger.logError("Failed to rewrite copy-to file: " + e.getMessage(), e);
+            logger.error("Failed to rewrite copy-to file: " + e.getMessage(), e);
         }
     }
 

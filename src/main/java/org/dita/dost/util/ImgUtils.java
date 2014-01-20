@@ -56,7 +56,7 @@ public final class ImgUtils {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getWidth();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
             return -1;
         }
     }
@@ -79,7 +79,7 @@ public final class ImgUtils {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getHeight();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
             return -1;
         }
     }
@@ -113,15 +113,15 @@ public final class ImgUtils {
             }
             return ret.toString();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logError(e.getMessage(), e) ;
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
+            logger.error(e.getMessage(), e) ;
             return null;
         }finally{
             if (binInput != null) {
                 try{
                     binInput.close();
                 }catch(final IOException ioe){
-                    logger.logError(ioe.getMessage(), ioe) ;
+                    logger.error(ioe.getMessage(), ioe) ;
                 }
             }
         }
@@ -150,19 +150,19 @@ public final class ImgUtils {
             final String ret = encoder.encodeToString(buff);
             return ret;
         } catch (final FileNotFoundException e) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logError(e.getMessage(), e) ;
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
+            logger.error(e.getMessage(), e) ;
             return null;
         } catch (final IOException e) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logError(e.getMessage(), e) ;
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
+            logger.error(e.getMessage(), e) ;
             return null;
         }finally{
             if (file != null) {
                 try{
                     file.close();
                 }catch(final IOException ioe){
-                    logger.logError(ioe.getMessage(), ioe) ;
+                    logger.error(ioe.getMessage(), ioe) ;
                 }
             }
         }

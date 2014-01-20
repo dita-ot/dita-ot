@@ -68,10 +68,10 @@ final class MoveIndexModule extends AbstractPipelineModuleImpl {
                     if (targetFileName.endsWith(FILE_EXTENSION_DITA) || targetFileName.endsWith(FILE_EXTENSION_XML)){
                         indexInserter.setIndexEntries(entry.getValue());
                         if (toFile(entry.getKey()).exists()) {
-                            logger.logInfo("Processing " + targetFileName);
+                            logger.info("Processing " + targetFileName);
                             indexInserter.write(new File(entry.getKey()));
                         } else {
-                            logger.logError("File " + entry.getKey() + " does not exist");
+                            logger.error("File " + entry.getKey() + " does not exist");
                         }
         
                     }

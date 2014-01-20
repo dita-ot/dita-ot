@@ -99,24 +99,24 @@ public final class CoderefResolver extends AbstractXMLFilter {
                             codeReader = new BufferedReader(new InputStreamReader(new FileInputStream(codeFile), charset));
                             copyLines(codeReader, new Range(hrefValue));
                         } catch (final Exception e) {
-                            logger.logError("Failed to process code reference " + codeFile, e);
+                            logger.error("Failed to process code reference " + codeFile, e);
                         } finally {
                             if (codeReader != null) {
                                 try {
                                     codeReader.close();
                                 } catch (final IOException e) {
-                                    logger.logError(e.getMessage(), e) ;
+                                    logger.error(e.getMessage(), e) ;
                                 }
                             }
                         }
                     } else {
-                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ051E", hrefValue.toString()).setLocation(atts).toString());
+                        logger.warn(MessageUtils.getInstance().getMessage("DOTJ051E", hrefValue.toString()).setLocation(atts).toString());
                     }
                 } else {
                     //logger.logDebug("Code reference target not defined");
                 }
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             }
         } else {
             super.startElement(uri, localName, name, atts);
@@ -221,7 +221,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                 try {
                     c = Charset.forName(tokens[2].trim());
                 } catch (final RuntimeException e) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ052E", tokens[2].trim()).toString());
+                    logger.error(MessageUtils.getInstance().getMessage("DOTJ052E", tokens[2].trim()).toString());
                 }
             }
         }

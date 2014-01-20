@@ -31,7 +31,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
             builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
             doc = builder.parse(filename);
         } catch (final Exception e) {
-            logger.logError("Failed to parse " + filename.getAbsolutePath() + ":" + e.getMessage(), e);
+            logger.error("Failed to parse " + filename.getAbsolutePath() + ":" + e.getMessage(), e);
             return;
         }
 
@@ -45,7 +45,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
             final Transformer tf = TransformerFactory.newInstance().newTransformer();
             tf.transform(ds, res);
         } catch (final Exception e) {
-            logger.logError("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
+            logger.error("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
         } finally {
             if (file != null) {
                 try {

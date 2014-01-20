@@ -100,7 +100,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             }
             writeProcessingInstruction(target, data);
         } catch (final IOException e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -109,7 +109,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         try {
             writeCharacters(ch, start, length);
         } catch (final IOException e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -118,7 +118,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         try {
             writeCharacters(ch, start, length);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -127,7 +127,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         try {
             output.flush();
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -136,7 +136,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         try {
             writeEndElement(qName);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -151,7 +151,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             output.write(XML_HEAD);
             output.write(LINE_SEPARATOR);
         } catch (final IOException io) {
-            logger.logError(io.getMessage(), io);
+            logger.error(io.getMessage(), io);
         }
     }
 
@@ -173,7 +173,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             }
             writeStartElement(qName, res);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -373,7 +373,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
         currentFilePath = outputFilename.getParentFile();
         final File inputFile = new File(stripFragment(outputFilename.getPath()));
         if (!inputFile.exists()) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", inputFile.getPath()).toString());
+            logger.error(MessageUtils.getInstance().getMessage("DOTX008E", inputFile.getPath()).toString());
             return;
         }
         final File outputFile = new File(inputFile.getPath() + FILE_EXTENSION_TEMP);
@@ -384,20 +384,20 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             reader.setErrorHandler(new DITAOTXMLErrorHandler(inputFile.getPath(), logger));
             reader.parse(inputFile.toURI().toString());
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         } finally {
             if (output != null) {
                 try {
                     output.close();
                 } catch (final Exception e) {
-                    logger.logError(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
             }
         }
         try {
             FileUtils.moveFile(outputFile, inputFile);
         } catch (final Exception e) {
-            logger.logError("Failed to replace " + inputFile + ": " + e.getMessage());
+            logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
         }
     }
 

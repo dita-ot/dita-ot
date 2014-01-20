@@ -435,15 +435,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     public void setGrammarPool(final XMLReader reader) {
         try {
             reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", GrammarPoolManager.getGrammarPool());
-            logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
+            logger.info("Using Xerces grammar pool for DTD and schema caching.");
         } catch (final NoClassDefFoundError e) {
-            logger.logDebug("Xerces not available, not using grammar caching");
+            logger.debug("Xerces not available, not using grammar caching");
         } catch (final SAXNotRecognizedException e) {
             e.printStackTrace();
-            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+            logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         } catch (final SAXNotSupportedException e) {
             e.printStackTrace();
-            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+            logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         }
     }
 
@@ -597,13 +597,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         if (classValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
-            logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
+            logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
         }
 
         if (classValue != null && TOPIC_TOPIC.matches(classValue)) {
             domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains == null) {
-                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
             } else {
                 props = StringUtils.getExtProps(domains);
             }
@@ -991,10 +991,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 final File value = FileUtils.resolve(currentDir, toFile(href).getPath());
     
                 if (href == null || href.toString().isEmpty()) {
-                    logger.logWarn("[WARN]: Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
+                    logger.warn("[WARN]: Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
                 } else if (copytoMap.get(new File(filename)) != null) {
                     if (!value.equals(copytoMap.get(new File(filename)))) {
-                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", href.toString(), filename).toString());
+                        logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.toString(), filename).toString());
                     }
                     ignoredCopytoSourceSet.add(toFile(href));
                 } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
@@ -1083,7 +1083,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                     throw new SAXParseException(null, null, new DITAOTException(msgBean, null, msgBean.toString()));
                 } else if (job.getOutterControl() == Job.OutterControl.WARN) {
                     final String message = MessageUtils.getInstance().getMessage("DOTJ036W", prop).toString();
-                    logger.logWarn(message);
+                    logger.warn(message);
                 }
                 addToOutFilesSet(filename);
             }

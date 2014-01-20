@@ -166,10 +166,10 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     final File currentFile = new File(inputDir, filename.getPath());
                     if (!currentFile.exists()) {
                         // Assuming this is an copy-to target file, ignore it
-                        logger.logDebug("Ignoring a copy-to file " + filename);
+                        logger.debug("Ignoring a copy-to file " + filename);
                         continue;
                     }
-                    logger.logInfo("Processing " + currentFile.getAbsolutePath());
+                    logger.info("Processing " + currentFile.getAbsolutePath());
     
                     final Set<String> schemaSet = dic.get(filename.getPath());
                     filterReader.reset();
@@ -231,13 +231,13 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             prop.loadFromXML(in);
             in.close();
         } catch (final IOException e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -307,7 +307,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 generateScheme(rel, parentRoot);
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);
         }
 
@@ -438,7 +438,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             final Transformer tf = tff.newTransformer();
             tf.transform(ds, res);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);
         } finally {
             if (out != null) {
@@ -469,7 +469,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                         .logWarn(new StringBuffer("Copy-to task [copy-to=\"")
                                 .append(copytoTarget)
                                 .append("\"] which points to an existed file was ignored.").toString());*/
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
+                logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
             }else{
                 final File inputMapInTemp = new File(tempDir, job.getInputMap()).getAbsoluteFile();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
@@ -488,7 +488,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      */
     public void copyFileWithPIReplaced(final File src, final File target, final File copytoTargetFilename, final File inputMapInTemp) {
         if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
-            logger.logError("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
+            logger.error("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
             return;
         }
         final DitaWriter dw = new DitaWriter();
@@ -497,11 +497,11 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         final File workdir = target.getParentFile();
         XMLFilter filter = new CopyToFilter(workdir, path2project);
         
-        logger.logInfo("Processing " + target.getAbsolutePath());
+        logger.info("Processing " + target.getAbsolutePath());
         try {
             XMLUtils.transform(src, target, Arrays.asList(filter));
         } catch (final DITAOTException e) {
-            logger.logError("Failed to write copy-to file: " + e.getMessage(), e);
+            logger.error("Failed to write copy-to file: " + e.getMessage(), e);
         }
     }
     

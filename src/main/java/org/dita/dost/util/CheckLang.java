@@ -49,7 +49,7 @@ public final class CheckLang extends Task {
     @Override
     public void execute(){
         logger = new DITAOTAntLogger(getProject());
-        logger.logInfo(message);
+        logger.info(message);
 
         new Properties();
         //ensure tempdir is absolute

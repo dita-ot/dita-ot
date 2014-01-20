@@ -193,7 +193,7 @@ public final class ExtensibleAntInvoker extends Task {
                     pipeline.execute(m.getImplementation(), pipelineInput);
                     end = System.currentTimeMillis();
                 }
-                logger.logDebug("Module processing took " + (end - start) + " ms");
+                logger.debug("Module processing took " + (end - start) + " ms");
             }
         } catch (final DITAOTException e) {
             throw new BuildException("Failed to run pipeline: " + e.getMessage(), e);
@@ -237,7 +237,7 @@ public final class ExtensibleAntInvoker extends Task {
                     inc.add(new File(l));
                 }
             } catch (IOException e) {
-                logger.logError("Failed to read includes file " + i.file + ": " + e.getMessage() , e);
+                logger.error("Failed to read includes file " + i.file + ": " + e.getMessage() , e);
             } finally {
                 if (r != null) {
                     try {

@@ -84,7 +84,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
                 XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target.toString());
                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_CONKEYREF);
             } else {
-                logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", conkeyref).toString());
+                logger.error(MessageUtils.getInstance().getMessage("DOTJ046E", conkeyref).toString());
             }
         }
         getContentHandler().startElement(uri, localName, name, resAtts != null ? resAtts : atts);

@@ -180,16 +180,16 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             output = new OutputStreamWriter(new FileOutputStream(outputFile),UTF8);
             parser.parse(filename.toURI().toString());
             for (final MoveKey key: movetable.keySet()) {
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ043W", key.idPath, filename.getPath()).toString());
+                logger.warn(MessageUtils.getInstance().getMessage("DOTJ043W", key.idPath, filename.getPath()).toString());
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             return;
         } finally {
             try {
                 output.close();
             } catch (final Exception ex) {
-                logger.logError(ex.getMessage(), ex);
+                logger.error(ex.getMessage(), ex);
             }
         }
         if (hasConref || hasKeyref) {
@@ -198,7 +198,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
         try {
             FileUtils.moveFile(outputFile, filename);
         } catch (final IOException e) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", filename.getPath(), outputFile.getPath()).toString());
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ009E", filename.getPath(), outputFile.getPath()).toString());
         }
     }
     /**
@@ -218,7 +218,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             }
             job.write();
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 
@@ -229,7 +229,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             try {
                 writeCharacters(ch, start, length);
             } catch (final IOException e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             }
         }
     }
@@ -248,7 +248,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             try {
                 writeEndElement(name);
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             }
         }
 
@@ -261,7 +261,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                         writeNode(contentForPushAfter);
                     }
                 } catch (final Exception e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
                 if (!levelForPushAfterStack.isEmpty() &&
                         !contentForPushAfterStack.isEmpty()) {
@@ -286,7 +286,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             try {
                 writeProcessingInstruction(target, data);
             } catch (final IOException e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             }
         }
     }
@@ -445,7 +445,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
                     writeStartElement(name, atts);
                 }
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             }
         }
     }
@@ -532,12 +532,12 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             output.flush();
             output.close();
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         } finally {
             try {
                 output.close();
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             }
         }
     }
@@ -549,7 +549,7 @@ public final class ConrefPushParser extends AbstractXMLWriter {
             try {
                 writeCharacters(ch, start, length);
             } catch (final IOException e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             }
         }
     }

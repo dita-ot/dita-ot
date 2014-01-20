@@ -77,7 +77,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
             indexTermCollection.sort();
             indexTermCollection.outputTerms();
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
 
         return null;
@@ -172,7 +172,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                     final StringBuffer buff = new StringBuffer();
                     String msg = null;
                     msg = MessageUtils.getInstance().getMessage("DOTJ013E", target).toString();
-                    logger.logError(buff.append(msg).append(e.getMessage()).toString());
+                    logger.error(buff.append(msg).append(e.getMessage()).toString());
                 }
             }
 
@@ -201,7 +201,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                 } catch (final Exception e) {
                     String msg = null;
                     msg = MessageUtils.getInstance().getMessage("DOTJ013E", ditamap).toString();
-                    logger.logError(msg, e);
+                    logger.error(msg, e);
                 }
             }
         } finally {
@@ -209,7 +209,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                 try {
                     inputStream.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
 
             }

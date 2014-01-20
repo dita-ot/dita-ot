@@ -18,21 +18,21 @@ public interface DITAOTLogger {
      * 
      * @param msg message
      */
-    public void logInfo(final String msg);
+    public void info(final String msg);
 
     /**
      * Log a warning message.
      * 
      * @param msg message
      */
-    public void logWarn(final String msg);
+    public void warn(final String msg);
 
     /**
      * Log an error message.
      * 
      * @param msg message
      */
-    public void logError(final String msg);
+    public void error(final String msg);
 
     /**
      * Log an error message with cause exception.
@@ -40,13 +40,13 @@ public interface DITAOTLogger {
      * @param msg message
      * @param t exception
      */
-    public void logError(final String msg, final Throwable t);
+    public void error(final String msg, final Throwable t);
 
     /**
      * Log a debug message.
      * 
      * @param msg message
      */
-    public void logDebug(final String msg);
+    public void debug(final String msg);
 
 }

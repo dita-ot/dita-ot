@@ -336,7 +336,7 @@ public final class FilterUtils {
     }
 
     private void showInfoOfNoRuleMapping(final FilterKey notMappingKey) {
-        logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ031I", notMappingKey.toString()).toString());
+        logger.info(MessageUtils.getInstance().getMessage("DOTJ031I", notMappingKey.toString()).toString());
     }
 
     private boolean alreadyShowed(final FilterKey notMappingKey) {

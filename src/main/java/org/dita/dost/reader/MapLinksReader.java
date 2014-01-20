@@ -107,7 +107,7 @@ public final class MapLinksReader extends AbstractXMLReader {
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature("http://xml.org/sax/features/namespaces", false);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
 
     }
@@ -221,7 +221,7 @@ public final class MapLinksReader extends AbstractXMLReader {
             reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
             reader.parse(new InputSource(filename.toURI().toString()));
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 

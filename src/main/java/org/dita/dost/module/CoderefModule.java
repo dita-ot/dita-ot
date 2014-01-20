@@ -49,7 +49,7 @@ final class CoderefModule extends AbstractPipelineModuleImpl {
             writer.setLogger(logger);
             for (final FileInfo fi: fis) {
                 final File f = new File(job.tempDir, fi.file.getPath());
-                logger.logInfo("Processing " + f.getAbsolutePath());
+                logger.info("Processing " + f.getAbsolutePath());
                 writer.write(f);
             }
         }

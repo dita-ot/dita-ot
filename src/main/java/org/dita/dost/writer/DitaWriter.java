@@ -323,15 +323,15 @@ public final class DitaWriter extends AbstractXMLFilter {
     public void setGrammarPool(final XMLReader reader) {
         try {
             reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", GrammarPoolManager.getGrammarPool());
-            logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
+            logger.info("Using Xerces grammar pool for DTD and schema caching.");
         } catch (final NoClassDefFoundError e) {
-            logger.logDebug("Xerces not available, not using grammar caching");
+            logger.debug("Xerces not available, not using grammar caching");
         } catch (final SAXNotRecognizedException e) {
             e.printStackTrace();
-            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+            logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         } catch (final SAXNotSupportedException e) {
             e.printStackTrace();
-            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+            logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         }
     }
 
@@ -545,7 +545,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         try {
             getContentHandler().endDocument();
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
         classStack.clear();
     }
@@ -660,7 +660,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
         } catch (final Exception e) {
             e.printStackTrace();
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 
@@ -674,7 +674,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         }else if( foreignLevel == 0){
             final String attrValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
             if(attrValue == null && !ELEMENT_NAME_DITA.equals(localName)){
-                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
             }
             if (attrValue != null &&
                     (TOPIC_FOREIGN.matches(attrValue) ||
@@ -712,7 +712,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             
             getContentHandler().startElement(uri, localName, qName, res);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
     
@@ -794,13 +794,13 @@ public final class DitaWriter extends AbstractXMLFilter {
             serializer.transform(source, result);
         } catch (final Exception e) {
             e.printStackTrace();
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }finally {
             if (out != null) {
                 try {
                     out.close();
                 }catch (final Exception e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }

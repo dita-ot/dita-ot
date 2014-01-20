@@ -572,9 +572,9 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
             parseLinkAttribute(atts, ATTRIBUTE_NAME_COPY_TO, currentDir);
             handleCopyToAttr(atts, currentDir);
         } catch (final URISyntaxException e) {
-            logger.logError("Failed to parse URI: " + e.getMessage(), e);
+            logger.error("Failed to parse URI: " + e.getMessage(), e);
         } catch (DITAOTException e) {
-            logger.logError("Failed to process link: " + e.getMessage(), e);
+            logger.error("Failed to process link: " + e.getMessage(), e);
         }
         handleConactionAttr(atts);
         handleKeyrefAttr(atts);
@@ -975,7 +975,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     
                 if (copytoMap.containsKey(file)) {
                     if (!value.equals(copytoMap.get(file))) {
-                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTX065W", href.getPath(), file.getPath()).toString());
+                        logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.getPath(), file.getPath()).toString());
                     }
                     ignoredCopytoSourceSet.add(toFile(href));
                 } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content"))) {

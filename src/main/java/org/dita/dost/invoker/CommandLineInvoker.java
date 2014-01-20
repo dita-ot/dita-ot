@@ -316,7 +316,7 @@ public final class CommandLineInvoker {
                 try {
                     outReader.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -332,7 +332,7 @@ public final class CommandLineInvoker {
                 try {
                     errReader.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -417,7 +417,7 @@ public final class CommandLineInvoker {
                 invoker.startAnt();
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 

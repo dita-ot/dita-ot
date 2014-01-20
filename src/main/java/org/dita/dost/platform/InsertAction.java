@@ -76,7 +76,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
                 reader.parse(currentFile);
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 

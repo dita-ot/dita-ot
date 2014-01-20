@@ -75,7 +75,7 @@ public final class ConvertLang extends Task {
     @Override
     public void execute(){
         logger = new DITAOTAntLogger(getProject());
-        logger.logInfo(message);
+        logger.info(message);
 
         //ensure outdir is absolute
         if (!new File(outputdir).isAbsolute()) {
@@ -263,31 +263,31 @@ public final class ConvertLang extends Task {
                     value = reader.readLine();
                 }
             } catch (final FileNotFoundException e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             } catch (final UnsupportedEncodingException e) {
             	throw new RuntimeException(e);
             } catch (final IOException e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             } finally {
                 if (reader != null) {
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        logger.logError("Failed to close input stream: " + e.getMessage());
+                        logger.error("Failed to close input stream: " + e.getMessage());
                     }
                 }
                 if (writer != null) {
                     try {
                         writer.close();
                     } catch (final IOException e) {
-                        logger.logError("Failed to close output stream: " + e.getMessage());
+                        logger.error("Failed to close output stream: " + e.getMessage());
                     }
                 }
             }
             try {
                 FileUtils.moveFile(outputFile, inputFile);
             } catch (final Exception e) {
-                logger.logError("Failed to replace " + inputFile + ": " + e.getMessage());
+                logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
             }
         }
     }
@@ -374,31 +374,31 @@ public final class ConvertLang extends Task {
                     value = reader.readLine();
                 }
             } catch (final FileNotFoundException e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             } catch (final UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             } catch (final IOException e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             } finally {
                 if (reader != null) {
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        logger.logError("Failed to close input stream: " + e.getMessage());
+                        logger.error("Failed to close input stream: " + e.getMessage());
                     }
                 }
                 if (writer != null) {
                     try {
                         writer.close();
                     } catch (final IOException e) {
-                        logger.logError("Failed to close output stream: " + e.getMessage());
+                        logger.error("Failed to close output stream: " + e.getMessage());
                     }
                 }
             }
             try {
                 FileUtils.moveFile(outputFile, inputFile);
             } catch (final Exception e) {
-                logger.logError("Failed to replace " + inputFile + ": " + e.getMessage());
+                logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
             }
         }
 
@@ -441,31 +441,31 @@ public final class ConvertLang extends Task {
                 charCode = reader.read();
             }
         } catch (final FileNotFoundException e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         } catch (final UnsupportedEncodingException e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         } catch (final IOException e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    logger.logError("Failed to close input stream: " + e.getMessage());
+                    logger.error("Failed to close input stream: " + e.getMessage());
                 }
             }
             if (writer != null) {
                 try {
                     writer.close();
                 } catch (final IOException e) {
-                    logger.logError("Failed to close output stream: " + e.getMessage());
+                    logger.error("Failed to close output stream: " + e.getMessage());
                 }
             }
         }
         try {
             FileUtils.moveFile(outputFile, inputFile);
         } catch (final Exception e) {
-            logger.logError("Failed to replace " + inputFile + ": " + e.getMessage());
+            logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
         }
     }
 

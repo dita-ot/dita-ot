@@ -66,12 +66,12 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         mapParser.setOutput(out.getAbsoluteFile());
 
         if (ditaInput == null || !ditaInput.exists()){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ025E").toString());
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ025E").toString());
             return null;
         }
 
         if ( out == null ){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ026E").toString());
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ026E").toString());
             return null;
         }
 
@@ -92,7 +92,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
                 try {
                     midBuffer.close();
                 } catch (final IOException e) {
-                    logger.logError("Failed to close output buffer: " + e.getMessage(), e);
+                    logger.error("Failed to close output buffer: " + e.getMessage(), e);
                 }
             }
         }
@@ -121,7 +121,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
                     output.close();
                 }
             }catch (final Exception e){
-                logger.logError("Failed to close output buffer: " + e.getMessage(), e);
+                logger.error("Failed to close output buffer: " + e.getMessage(), e);
             }
         }
 

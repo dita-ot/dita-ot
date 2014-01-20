@@ -70,7 +70,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             return;
         }
         currentFile = filename;
-        logger.logInfo("Processing " + filename.getAbsolutePath());
+        logger.info("Processing " + filename.getAbsolutePath());
         super.write(filename);
     } 
     
@@ -117,13 +117,13 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     // Private methods ---------------------------------------------------------
     
     private Attributes readMetadata(final File imgInput) {
-        logger.logInfo("Reading " + imgInput);
+        logger.info("Reading " + imgInput);
         final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder();
         try {
             final ImageInputStream iis = ImageIO.createImageInputStream(imgInput);
             final Iterator<ImageReader> i = ImageIO.getImageReaders(iis);
             if (!i.hasNext()) {
-                logger.logInfo("Image " + imgInput + " format not supported");
+                logger.info("Image " + imgInput + " format not supported");
             } else {
                 final ImageReader r = i.next();
                 r.setInput(iis);
@@ -145,7 +145,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
                 }
             }
         } catch (final Exception e) {
-            logger.logError("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);
+            logger.error("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);
         }
         return a.build();
     }

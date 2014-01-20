@@ -42,13 +42,13 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
             reader.setLogger(logger);
             for(final FileInfo f: fis) {
                 final File file = new File(job.tempDir, f.file.getPath());
-                logger.logInfo("Reading  " + file.getAbsolutePath());
+                logger.info("Reading  " + file.getAbsolutePath());
                 //FIXME: this reader calculate parent directory
                 reader.read(file.getAbsoluteFile());
             }            
             final Map<File, Hashtable<MoveKey, DocumentFragment>> pushSet = reader.getPushMap();
             for (final Map.Entry<File, Hashtable<MoveKey, DocumentFragment>> entry: pushSet.entrySet()) {
-                logger.logInfo("Processing " + entry.getKey().getAbsolutePath());
+                logger.info("Processing " + entry.getKey().getAbsolutePath());
                 final ConrefPushParser parser = new ConrefPushParser();
                 parser.setJob(job);
                 parser.setLogger(logger);

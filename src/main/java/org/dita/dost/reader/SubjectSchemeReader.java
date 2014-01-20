@@ -103,7 +103,7 @@ public class SubjectSchemeReader {
         if (!FileUtils.fileExists(scheme)) {
             return;
         }
-        logger.logDebug("Load subject scheme " + scheme);
+        logger.debug("Load subject scheme " + scheme);
 
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -177,7 +177,7 @@ public class SubjectSchemeReader {
                 }
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
     

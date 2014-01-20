@@ -82,7 +82,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
             for(final URI mapFile: maps.keySet()){
-                logger.logInfo("Reading " + job.tempDir.toURI().resolve(mapFile).toString());
+                logger.info("Reading " + job.tempDir.toURI().resolve(mapFile).toString());
                 reader.setKeys(maps.get(mapFile));
                 reader.read(job.tempDir.toURI().resolve(mapFile));
             }
@@ -91,7 +91,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final Set<String> normalProcessingRole = new HashSet<String>();
             for (final FileInfo f: fis) {
                 final File file = f.file;
-                logger.logInfo("Processing " + new File(job.tempDir, file.getPath()).getAbsolutePath());
+                logger.info("Processing " + new File(job.tempDir, file.getPath()).getAbsolutePath());
                 
                 final List<XMLFilter> filters = new ArrayList<XMLFilter>();
                 

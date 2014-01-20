@@ -52,7 +52,7 @@ public final class FileUtils {
         if (extensions != null && extensions.length()>0) {
             Collections.addAll(ste, extensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.logError("Failed to read supported DITA topic extensions from configuration, using defaults.");
+            logger.error("Failed to read supported DITA topic extensions from configuration, using defaults.");
             ste.add(FILE_EXTENSION_DITA);
             ste.add(FILE_EXTENSION_XML);
         }
@@ -69,7 +69,7 @@ public final class FileUtils {
         if (extensions != null && extensions.length()>0) {
             Collections.addAll(sme, extensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.logError("Failed to read supported DITA map extensions from configuration, using defaults.");
+            logger.error("Failed to read supported DITA map extensions from configuration, using defaults.");
             sme.add(FILE_EXTENSION_DITAMAP);
         }
         supportedMapExtensions = Collections.unmodifiableList(sme);
@@ -85,7 +85,7 @@ public final class FileUtils {
         if (imageExtensions != null && imageExtensions.length()>0) {
             Collections.addAll(sie, imageExtensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.logError("Failed to read supported image extensions from configuration, using defaults.");
+            logger.error("Failed to read supported image extensions from configuration, using defaults.");
             sie.add(FILE_EXTENSION_JPG);
             sie.add(FILE_EXTENSION_GIF);
             sie.add(FILE_EXTENSION_EPS);
@@ -108,7 +108,7 @@ public final class FileUtils {
         if (extensions != null && extensions.length()>0) {
             Collections.addAll(she, extensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.logError("Failed to read supported HTML extensions from configuration, using defaults.");
+            logger.error("Failed to read supported HTML extensions from configuration, using defaults.");
             she.add(FILE_EXTENSION_HTML);
             she.add(FILE_EXTENSION_HTM);
         }
@@ -125,7 +125,7 @@ public final class FileUtils {
         if (extensions != null && extensions.length()>0) {
             Collections.addAll(sre, extensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.logError("Failed to read supported resource file extensions from configuration, using defaults.");
+            logger.error("Failed to read supported resource file extensions from configuration, using defaults.");
             sre.add(FILE_EXTENSION_SWF);
             sre.add(FILE_EXTENSION_PDF);
         }
@@ -608,20 +608,20 @@ public final class FileUtils {
             fos = new FileOutputStream(target);
             copy(fis, fos);
         } catch (final IOException ex) {
-            logger.logError(ex.getMessage(), ex) ;
+            logger.error(ex.getMessage(), ex) ;
         } finally {
             if (fis != null) {
                 try {
                     fis.close();
                 } catch (final Exception e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
             if (fos != null) {
                 try {
                     fos.close();
                 } catch (final Exception e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }

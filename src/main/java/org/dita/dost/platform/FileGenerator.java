@@ -89,7 +89,7 @@ final class FileGenerator extends XMLFilterImpl {
             final List<XMLFilter> filters = Arrays.asList((XMLFilter) this);
             XMLUtils.transform(fileName, outputFile, filters);
         } catch (final Exception e){
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 
@@ -166,7 +166,7 @@ final class FileGenerator extends XMLFilterImpl {
             }
         } catch(final Exception e) {
             e.printStackTrace();
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 

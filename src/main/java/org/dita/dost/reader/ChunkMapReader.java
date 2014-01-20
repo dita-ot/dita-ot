@@ -113,7 +113,7 @@ public final class ChunkMapReader implements AbstractReader {
             final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             doc = builder.parse(inputFile);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             return;
         }
         
@@ -122,7 +122,7 @@ public final class ChunkMapReader implements AbstractReader {
         try {
             outputMapFile(inputFile, doc);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
 
     }
@@ -196,14 +196,14 @@ public final class ChunkMapReader implements AbstractReader {
                     o.close();
                     newFileWriter.flush();
                 } catch (final Exception e) {
-                    logger.logError(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 } finally {
                     try {
                         if (newFileWriter != null) {
                             newFileWriter.close();
                         }
                     } catch (final Exception e) {
-                        logger.logError(e.getMessage(), e);
+                        logger.error(e.getMessage(), e);
                     }
                 }
 
@@ -250,7 +250,7 @@ public final class ChunkMapReader implements AbstractReader {
             
             return buildOutputDocument(root);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             return null;
         }
     }
@@ -267,14 +267,14 @@ public final class ChunkMapReader implements AbstractReader {
             final Transformer t = TransformerFactory.newInstance().newTransformer();
             t.transform(new DOMSource(doc), new StreamResult(output));
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         } finally {
             try {
                 if (output != null) {
                     output.close();
                 }
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
         }
     }
@@ -491,7 +491,7 @@ public final class ChunkMapReader implements AbstractReader {
                     chunkFilenameGenerator);
             chunkParser.write(filePath);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 

@@ -80,7 +80,7 @@ public final class KeyrefReader implements AbstractReader {
         try {
             doc = builder.parse(new InputSource(filename.toString()));
         } catch (final Exception e) {
-            logger.logError("Failed to parse map: " + e.getMessage(), e);
+            logger.error("Failed to parse map: " + e.getMessage(), e);
             return;
         }
         final NodeList elems = doc.getDocumentElement().getElementsByTagName("*");

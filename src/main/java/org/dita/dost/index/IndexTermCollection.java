@@ -195,8 +195,8 @@ public final class IndexTermCollection {
                     ((AbstractExtendDitaWriter) abstractWriter).setPipelineHashIO(this.getPipelineHashIO());
 
                 }catch (final ClassCastException e){
-                    javaLogger.logInfo(e.getMessage());
-                    javaLogger.logInfo(e.toString());
+                    javaLogger.info(e.getMessage());
+                    javaLogger.info(e.toString());
                     e.printStackTrace();
 
                 }

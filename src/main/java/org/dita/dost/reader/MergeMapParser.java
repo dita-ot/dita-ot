@@ -136,12 +136,12 @@ public final class MergeMapParser extends XMLFilterImpl {
             dirPath = filename.getParentFile();
             reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getAbsolutePath(), logger));
             topicParser.getContentHandler().startDocument();
-            logger.logInfo("Processing " + filename.getAbsolutePath());
+            logger.info("Processing " + filename.getAbsolutePath());
             reader.parse(filename.toURI().toString());
             topicParser.getContentHandler().endDocument();
             output.write(topicBuffer.toByteArray());
         }catch(final Exception e){
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 
@@ -228,7 +228,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                                 XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId);
                             } else {
                                 final String fileName = new File(dirPath, attValue).getAbsolutePath();
-                                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
+                                logger.error(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
                             }
                         }
                         }
@@ -261,14 +261,14 @@ public final class MergeMapParser extends XMLFilterImpl {
                                 topicParser.parse(element, dirPath);
                             } else {
                                 final String fileName = file.getAbsolutePath();
-                                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
+                                logger.error(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
                             }
                         }
                     }
                 }
             }
         }catch (final Exception e){
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
         
         getContentHandler().endDocument();

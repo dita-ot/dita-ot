@@ -64,7 +64,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
             metaReader.setLogger(logger);
             for (final FileInfo f: fis) {
                 final File mapFile = new File(job.tempDir, f.file.getPath());
-                logger.logInfo("Processing " + mapFile);
+                logger.info("Processing " + mapFile);
                 //FIXME: this reader gets the parent path of input file
                 metaReader.read(mapFile);
             }
@@ -79,10 +79,10 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                     if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITAMAP )) {
                         mapInserter.setMetaTable(entry.getValue());
                         if (toFile(targetFileName).exists()) {
-                            logger.logInfo("Processing " + targetFileName);
+                            logger.info("Processing " + targetFileName);
                             mapInserter.write(targetFileName);
                         } else {
-                            logger.logError("File " + targetFileName + " does not exist");
+                            logger.error("File " + targetFileName + " does not exist");
                         }
         
                     }
@@ -96,10 +96,10 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                     if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITA) || targetFileName.getPath().endsWith(FILE_EXTENSION_XML)) {
                         topicInserter.setMetaTable(entry.getValue());
                         if (toFile(targetFileName).exists()) {
-                            logger.logInfo("Processing " + targetFileName);
+                            logger.info("Processing " + targetFileName);
                             topicInserter.write(targetFileName);
                         } else {
-                            logger.logError("File " + targetFileName + " does not exist");
+                            logger.error("File " + targetFileName + " does not exist");
                         }
         
                     }

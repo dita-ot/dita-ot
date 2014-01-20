@@ -44,16 +44,16 @@ final class FilterModule extends AbstractPipelineModuleImpl {
         for (final FileInfo f: files) {
             if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                 final File file = new File(tempDir, f.file.getPath());
-                logger.logInfo("Processing " + file.getAbsolutePath());
+                logger.info("Processing " + file.getAbsolutePath());
                 try {
                     writer.write(file.getAbsoluteFile());
                     if (!writer.hasElementOutput()) {
-                        logger.logInfo("All content in " + file.getAbsolutePath() + " was filtered out");
+                        logger.info("All content in " + file.getAbsolutePath() + " was filtered out");
                         job.remove(f);
                         FileUtils.delete(file);
                     }
                 } catch (final Exception e) {
-                    logger.logError("Failed to profile " + file.getAbsolutePath() + ": " + e.getMessage());
+                    logger.error("Failed to profile " + file.getAbsolutePath() + ": " + e.getMessage());
                 }
             }
         }

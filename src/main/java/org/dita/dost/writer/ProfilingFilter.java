@@ -63,12 +63,12 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 		} else if (foreignLevel == 0) {
 			final String classAttr = atts.getValue(ATTRIBUTE_NAME_CLASS);
 			if (classAttr == null && !ELEMENT_NAME_DITA.equals(localName)) {
-				logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
+				logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
 			}
 			if (classAttr != null && (TOPIC_TOPIC.matches(classAttr) || MAP_MAP.matches(classAttr))) {
 				final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
 				if (domains == null) {
-					logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
+					logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
 				} else {
 					props = StringUtils.getExtProps(domains);
 				}

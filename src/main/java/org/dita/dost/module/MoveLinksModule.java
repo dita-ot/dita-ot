@@ -52,7 +52,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             final DitaLinksWriter indexInserter = new DitaLinksWriter();
             indexInserter.setLogger(logger);
             for (final Map.Entry<File, Map<String, String>> entry: mapSet.entrySet()) {
-                logger.logInfo("Processing " + entry.getKey());
+                logger.info("Processing " + entry.getKey());
                 indexInserter.setLinks(entry.getValue());
                 indexInserter.write(entry.getKey());
             }

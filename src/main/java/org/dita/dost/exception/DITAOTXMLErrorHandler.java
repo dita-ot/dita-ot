@@ -65,7 +65,7 @@ public final class DITAOTXMLErrorHandler implements ErrorHandler {
     @Override
     public void warning(final SAXParseException saxException) throws SAXException {
         final String msg = new SAXExceptionWrapper(filePath, saxException).getMessage();
-        logger.logWarn(msg);
+        logger.warn(msg);
     }
 
 }

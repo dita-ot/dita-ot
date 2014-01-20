@@ -66,13 +66,13 @@ public final class DITAOTEchoTask extends Echo {
         if (msgBean != null) {
             final String type = msgBean.getType();
             if(ERROR.equals(type)){
-                logger.logError(msgBean.toString());
+                logger.error(msgBean.toString());
             } else if(WARN.equals(type)){
-                logger.logWarn(msgBean.toString());
+                logger.warn(msgBean.toString());
             } else if(INFO.equals(type)){
-                logger.logInfo(msgBean.toString());
+                logger.info(msgBean.toString());
             } else if(DEBUG.equals(type)){
-                logger.logDebug(msgBean.toString());
+                logger.debug(msgBean.toString());
             }
         }
     }

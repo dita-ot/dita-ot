@@ -129,10 +129,10 @@ public final class DITAOTBuildLogger implements BuildLogger {
             numOfWarnings.incrementAndGet();
             if(!message.contains("[WARN]")) {
             	stream.println("Extra warnings counted");
-            	logger.logInfo("Extra warnings counted");
+            	logger.info("Extra warnings counted");
             } else {
             	stream.println("Normal warnings counted");
-            	logger.logInfo("Normal warnings counted");
+            	logger.info("Normal warnings counted");
             }
             break;
         case Project.MSG_INFO:
@@ -206,12 +206,12 @@ public final class DITAOTBuildLogger implements BuildLogger {
 
         if (error == null) {
             printMessage(msg, out, Project.MSG_INFO);
-            logger.logInfo(msg);
+            logger.info(msg);
         } else {
             //fix the block problem which caused by the printMessage to err in java -jar lib/dost.jar ...
             //printMessage(msg, err, Project.MSG_ERR);
             printMessage(msg, out, Project.MSG_ERR);
-            logger.logError(msg);
+            logger.error(msg);
         }
 
         logger.closeLogger();
@@ -298,14 +298,14 @@ public final class DITAOTBuildLogger implements BuildLogger {
             }
 
             // always log to log file
-            logger.logInfo(msg);
+            logger.info(msg);
         } else {
         	//for error msg return from CHM compiler, such as "[exec] Result: 1", just log it, not count it
             if(eventTask!=null && "exec".equals(eventTask.getTaskName()) && !msg.contains("ERROR")) {
-            	logger.logError(msg);
+            	logger.error(msg);
             } else {
             	printMessage(msg, err, priority);
-            	logger.logError(msg);
+            	logger.error(msg);
             }
         }
     }
@@ -372,7 +372,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
                 return;
             }
             printMessage(msg, out, Project.MSG_INFO);
-            logger.logInfo(msg);
+            logger.info(msg);
         }
     }
 
@@ -494,7 +494,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
             } else if (WARN.equals(type)) {
                 numOfWarnings.incrementAndGet();
                 out.println("Extra warnings counted");
-                logger.logInfo("Extra warnings counted");
+                logger.info("Extra warnings counted");
 
             } else if (INFO.equals(type)) {
                 numOfInfo.incrementAndGet();

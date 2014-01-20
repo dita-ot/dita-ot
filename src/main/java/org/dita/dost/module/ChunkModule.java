@@ -87,7 +87,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 mapReader.read(mapFile);
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
 
         final Map<String, String> changeTable = mapReader.getChangeTable();
@@ -134,7 +134,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 }
             }
         } catch (final DITAOTException ex) {
-            logger.logError(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         }
 
     }
@@ -256,7 +256,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         try {
                             FileUtils.moveFile(from, target);
                         } catch (final IOException e) {
-                            logger.logError("Failed to replace chunk topic: " + e.getMessage(), e);
+                            logger.error("Failed to replace chunk topic: " + e.getMessage(), e);
 
                         }
                         if (topicList.contains(relativePath)) {
@@ -311,7 +311,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         try {
             job.write();
         } catch (final IOException ex) {
-            logger.logError(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         }
     }
 

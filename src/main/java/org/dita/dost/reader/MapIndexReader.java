@@ -73,7 +73,7 @@ public final class MapIndexReader extends AbstractXMLReader {
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
 
     }
@@ -183,7 +183,7 @@ public final class MapIndexReader extends AbstractXMLReader {
         try {
             reader.parse(new InputSource(filename.toURI().toString()));
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 
