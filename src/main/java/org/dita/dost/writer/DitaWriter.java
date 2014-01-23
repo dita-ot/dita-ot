@@ -349,8 +349,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             String attValue = getAttributeValue(qName, attQName, atts.getValue(i));
-            if (attQName.equals(ATTRIBUTE_NAME_XTRF) || attQName.equals(ATTRIBUTE_NAME_XTRC) ||
-                    attQName.equals(ATTRIBUTE_NAME_COLNAME)|| attQName.equals(ATTRIBUTE_NAME_NAMEST) || attQName.equals(ATTRIBUTE_NAME_NAMEEND) ||
+            if (attQName.equals(ATTRIBUTE_NAME_COLNAME)|| attQName.equals(ATTRIBUTE_NAME_NAMEST) || attQName.equals(ATTRIBUTE_NAME_NAMEEND) ||
                     ATTRIBUTE_NAME_CONREF.equals(attQName)) {
             } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
@@ -696,19 +695,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         try {
             final AttributesImpl res = copyElementName(qName, atts);
             processAttributes(qName, atts, res);
-            if (foreignLevel <= 1){
-                if (genDebugInfo) {
-                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRF, traceFilename.getAbsolutePath());
-                    final StringBuilder xtrc = new StringBuilder(qName).append(COLON).append(nextValue.toString());
-                    if (locator != null) {                                
-                        xtrc.append(';')
-                            .append(Integer.toString(locator.getLineNumber()))
-                            .append(COLON)
-                            .append(Integer.toString(locator.getColumnNumber()));
-                    }
-                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRC, xtrc.toString());
-                }
-            }
             
             getContentHandler().startElement(uri, localName, qName, res);
         } catch (final Exception e) {
@@ -759,6 +745,14 @@ public final class DitaWriter extends AbstractXMLFilter {
             final TransformerFactory tf = TransformerFactory.newInstance();
             final Transformer serializer = tf.newTransformer();
             XMLReader xmlSource = reader;
+            if (genDebugInfo) {
+                final DebugFilter debugFilter = new DebugFilter();
+                debugFilter.setLogger(logger);
+                debugFilter.setInputFile(traceFilename);
+                debugFilter.setParent(xmlSource);
+                debugFilter.setEntityResolver(xmlSource.getEntityResolver());
+                xmlSource = debugFilter;
+            }
             if (filterUtils != null) {
                 final ProfilingFilter profilingFilter = new ProfilingFilter();
                 profilingFilter.setLogger(logger);
