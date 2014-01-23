@@ -51,6 +51,7 @@ import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.ext.LexicalHandler;
@@ -737,52 +738,18 @@ public final class DitaWriter extends AbstractXMLFilter {
             if(setSystemid) {
                 is.setSystemId(traceFilename.toURI().toString());
             }
-
-            // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
-            // when reusing filter with multiple Transformers.
-            setContentHandler(null);
             
             final TransformerFactory tf = TransformerFactory.newInstance();
             final Transformer serializer = tf.newTransformer();
             XMLReader xmlSource = reader;
-            if (genDebugInfo) {
-                final DebugFilter debugFilter = new DebugFilter();
-                debugFilter.setLogger(logger);
-                debugFilter.setInputFile(traceFilename);
-                debugFilter.setParent(xmlSource);
-                debugFilter.setEntityResolver(xmlSource.getEntityResolver());
-                xmlSource = debugFilter;
+            for (final XMLFilter f: getProcessingPipe(traceFilename, inFile)) {
+                f.setParent(xmlSource);
+                xmlSource = f;
             }
-            if (filterUtils != null) {
-                final ProfilingFilter profilingFilter = new ProfilingFilter();
-                profilingFilter.setLogger(logger);
-                profilingFilter.setFilterUtils(filterUtils);
-                profilingFilter.setParent(xmlSource);
-                profilingFilter.setEntityResolver(xmlSource.getEntityResolver());
-                xmlSource = profilingFilter;
-            }
-            {
-				final ValidationFilter validationFilter = new ValidationFilter();
-				validationFilter.setLogger(logger);
-				validationFilter.setParent(xmlSource);
-				validationFilter.setEntityResolver(xmlSource.getEntityResolver());
-				validationFilter.setValidateMap(validateMap);
-				xmlSource = validationFilter;
-            }
-            {
-                final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
-                conkeyrefFilter.setLogger(logger);
-                conkeyrefFilter.setKeyDefinitions(keys.values());
-                conkeyrefFilter.setTempDir(job.tempDir);
-                conkeyrefFilter.setCurrentFile(inFile);
-                conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
-                conkeyrefFilter.setParent(xmlSource);
-                xmlSource = conkeyrefFilter;
-            }
-            {
-	        	this.setParent(xmlSource);
-	        	xmlSource = this;
-            }
+            // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
+            // when reusing filter with multiple Transformers.
+            xmlSource.setContentHandler(null);
+
             final Source source = new SAXSource(xmlSource, is);
             final Result result = new StreamResult(out);
             serializer.transform(source, result);
@@ -798,6 +765,47 @@ public final class DitaWriter extends AbstractXMLFilter {
                 }
             }
         }
+    }
+    
+    /**
+     * Get pipe line filters
+     * 
+     * @param fileToParse absolute path to current file being processed
+     * @param inFile relative file path
+     */
+    private List<XMLFilter> getProcessingPipe(final File fileToParse, final File inFile) {
+        final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
+        if (genDebugInfo) {
+            final DebugFilter debugFilter = new DebugFilter();
+            debugFilter.setLogger(logger);
+            debugFilter.setInputFile(fileToParse);
+            pipe.add(debugFilter);
+        }
+        if (filterUtils != null) {
+            final ProfilingFilter profilingFilter = new ProfilingFilter();
+            profilingFilter.setLogger(logger);
+            profilingFilter.setFilterUtils(filterUtils);
+            pipe.add(profilingFilter);
+        }
+        {
+            final ValidationFilter validationFilter = new ValidationFilter();
+            validationFilter.setLogger(logger);
+            validationFilter.setValidateMap(validateMap);
+            pipe.add(validationFilter);
+        }
+        {
+            final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
+            conkeyrefFilter.setLogger(logger);
+            conkeyrefFilter.setKeyDefinitions(keys.values());
+            conkeyrefFilter.setTempDir(job.tempDir);
+            conkeyrefFilter.setCurrentFile(inFile);
+            conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
+            pipe.add(conkeyrefFilter);
+        }
+        {
+            pipe.add(this);
+        }
+        return pipe;
     }
 
     /**
