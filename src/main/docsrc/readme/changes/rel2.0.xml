@@ -13,7 +13,14 @@
     <title>General Enhancements and Changes</title>
     <refbody>
       <section>
-        <draft-comment author="jelovirt">TODO</draft-comment>
+        <draft-comment author="jelovirt">
+          <p>TODO:</p>
+          <ul>
+            <li>New command line tool</li>
+            <li>XSLT stylesheets have been converted to XSLT 2.0</li>
+            <li>Processing order of keys and conrefs has been changed</li>
+          </ul>
+        </draft-comment>
       </section>
     </refbody>
   </reference>

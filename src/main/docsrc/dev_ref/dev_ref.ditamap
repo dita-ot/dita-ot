@@ -12,10 +12,10 @@
         <topicref href="preprocess-genlist.dita"/>
         <topicref href="preprocess-debugfilter.dita"/>
         <topicref href="preprocess-copyfiles.dita"/>
+        <topicref href="preprocess-keyref.dita"/>
         <topicref href="preprocess-conrefpush.dita"/>
         <topicref href="preprocess-conref.dita"/>
         <topicref href="preprocess-metadata.dita"/>
-        <topicref href="preprocess-keyref.dita"/>
         <topicref href="preprocess-coderef.dita"/>
         <topicref href="preprocess-mapref.dita"/>
         <topicref href="preprocess-mappull.dita"/>
