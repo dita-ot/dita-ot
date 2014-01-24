@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="ditaot-preprocess">
 
@@ -12,7 +11,24 @@
   </condition>
 
   <target name="preprocess"
-    dita:depends="{depend.preprocess.pre},preprocess.init,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,flag-module,{depend.preprocess.post}"
+    dita:depends="{depend.preprocess.pre},
+                  preprocess.init,
+                  gen-list,
+                  debug-filter,
+                  copy-files,
+                  conrefpush,
+                  conref,
+                  move-meta-entries,
+                  keyref,
+                  coderef,
+                  mapref,
+                  mappull,
+                  chunk,
+                  maplink,
+                  move-links,
+                  topicpull,
+                  flag-module,
+                  {depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
   
@@ -355,9 +371,9 @@
     <job-helper file="copytosource.list" property="copytosourcelist"/>
     <job-helper file="copytotarget2sourcemap.list" property="copytotarget2sourcemaplist"/>
     <job-property dir="${dita.temp.dir}"/>
-  	<condition property="noTopic">
-  	    <length file="${dita.temp.dir}/${fullditatopicfile}" length="0"/>
-  	</condition>
+    <condition property="noTopic">
+        <length file="${dita.temp.dir}/${fullditatopicfile}" length="0"/>
+    </condition>
   </target>
 
   <target name="chunk-check">
@@ -489,7 +505,7 @@
     dita:depends="{depend.preprocess.copy-files.pre},copy-image,copy-html,copy-flag,copy-subsidiary"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-files.skip" />
-		 
+     
   <target name="copy-image"
     unless="preprocess.copy-image.skip"
     dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
