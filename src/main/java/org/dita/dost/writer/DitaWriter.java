@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -89,9 +88,6 @@ import org.xml.sax.ext.LexicalHandler;
  */
 public final class DitaWriter extends AbstractXMLFilter {
 
-    private static final String ATTRIBUTE_NAME_COLNAME = "colname";
-    private static final String ATTRIBUTE_NAME_COLNUM = "colnum";
-    private static final String COLUMN_NAME_COL = "col";
     public static final String PI_PATH2PROJ_TARGET = "path2project";
     public static final String PI_PATH2PROJ_TARGET_URI = "path2project-uri";
     public static final String PI_WORKDIR_TARGET = "workdir";
@@ -164,39 +160,13 @@ public final class DitaWriter extends AbstractXMLFilter {
 
         return attValue;
     }
-    private File absolutePath;
-    private List<String> colSpec;
-    private int columnNumber; // columnNumber is used to adjust column name
-    private int columnNumberEnd; //columnNumberEnd is the end value for current entry
-    /** Stack to store colspec list */
-    private final Stack<List<String>> colSpecStack;
-    /** Stack for element classes */
-    private final Stack<String> classStack;
-    /** Stack to store rowNum */
-    private final Stack<Integer> rowNumStack;
-    /** Stack to store columnNumber */
-    private final Stack<Integer> columnNumberStack;
-    /** Stack to store columnNumberEnd */
-    private final Stack<Integer> columnNumberEndStack;
-    /** Stack to store rowsMap */
-    private final Stack<Map<String, Integer>> rowsMapStack;
-    /** Stack to store colSpanMap */
-    private final Stack<Map<String, Integer>> colSpanMapStack;
+    private File outputFile;
 
-    /** Store row number */
-    private int rowNumber;
-    /** Store total column count */
-    private int totalColumns;
-    /** store morerows attribute */
-    private Map<String, Integer> rowsMap;
-    private Map<String, Integer> colSpanMap;
-
-    private Map<String, Integer> counterMap;
     private int foreignLevel; // foreign/unknown nesting level
     private String path2Project;
 
     private File tempDir;
-    private File traceFilename;
+    private File currentFile;
 
     private Map<String, KeyDef> keys;
 
@@ -224,30 +194,10 @@ public final class DitaWriter extends AbstractXMLFilter {
         
         genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
         
-        columnNumber = 1;
-        columnNumberEnd = 0;
-        //initialize row number
-        rowNumber = 0;
-        //initialize total column count
-        totalColumns = 0;
-        //initialize the map
-        rowsMap = new HashMap<String, Integer>();
-        colSpanMap = new HashMap<String, Integer>();
-        absolutePath = null;
         path2Project = null;
-        counterMap = null;
-        traceFilename = null;
+        currentFile = null;
         foreignLevel = 0;
         tempDir = null;
-        colSpec = null;
-        //initial the stack
-        classStack = new Stack<String>();
-        colSpecStack = new Stack<List<String>>();
-        rowNumStack = new Stack<Integer>();
-        columnNumberStack = new Stack<Integer>();
-        columnNumberEndStack = new Stack<Integer>();
-        rowsMapStack = new Stack<Map<String,Integer>>();
-        colSpanMapStack = new Stack<Map<String,Integer>>();
 
         validateMap = null;
     }
@@ -312,7 +262,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             throw new SAXException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
         setGrammarPool(reader);
-        setSystemid= arg_setSystemid;
+        setSystemid = arg_setSystemid;
     }
     
     /**
@@ -350,8 +300,8 @@ public final class DitaWriter extends AbstractXMLFilter {
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             String attValue = getAttributeValue(qName, attQName, atts.getValue(i));
-            if (attQName.equals(ATTRIBUTE_NAME_COLNAME)|| attQName.equals(ATTRIBUTE_NAME_NAMEST) || attQName.equals(ATTRIBUTE_NAME_NAMEEND) ||
-                    ATTRIBUTE_NAME_CONREF.equals(attQName)) {
+            if (ATTRIBUTE_NAME_CONREF.equals(attQName)) {
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, replaceCONREF(atts).toString());
             } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
                         atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)){
@@ -361,10 +311,6 @@ public final class DitaWriter extends AbstractXMLFilter {
             } else {
                 XMLUtils.addOrSetAttribute(res, atts.getURI(i), atts.getLocalName(i), attQName, atts.getType(i), attValue);
             }
-        }
-        final String conref = atts.getValue(ATTRIBUTE_NAME_CONREF);
-        if(conref != null){
-            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, replaceCONREF(atts).toString());
         }
     }
 
@@ -402,143 +348,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         final URI updatedHref = URLUtils.getRelativePath(filePath, keyValue);
         return updatedHref;
     }
-
-    /**
-     * @param qName
-     * @param atts
-     * @throws IOException
-     */
-    private AttributesImpl copyElementName(final String qName, final Attributes atts) throws IOException {
-        final AttributesImpl res = new AttributesImpl();
-        final String cls = classStack.peek();
-        if (TOPIC_TGROUP.matches(cls)){
-
-            //push into the stack.
-            if(colSpec != null){
-                colSpecStack.push(colSpec);
-                rowNumStack.push(rowNumber);
-                columnNumberStack.push(columnNumber);
-                columnNumberEndStack.push(columnNumberEnd);
-                rowsMapStack.push(rowsMap);
-                colSpanMapStack.push(colSpanMap);
-            }
-
-            columnNumber = 1; // initialize the column number
-            columnNumberEnd = 0;//totally columns
-            rowsMap = new HashMap<String, Integer>();
-            colSpanMap = new HashMap<String, Integer>();
-            //new table initialize the col list
-            colSpec = new ArrayList<String>(16);
-            //new table initialize the col list
-            rowNumber = 0;
-        }else if(TOPIC_ROW.matches(cls)) {
-            columnNumber = 1; // initialize the column number
-            columnNumberEnd = 0;
-            //store the row number
-            rowNumber++;
-        }else if(TOPIC_COLSPEC.matches(cls)){
-            columnNumber = columnNumberEnd +1;
-            if(atts.getValue(ATTRIBUTE_NAME_COLNAME) != null){
-                colSpec.add(atts.getValue(ATTRIBUTE_NAME_COLNAME));
-            }else{
-                colSpec.add(COLUMN_NAME_COL+columnNumber);
-            }
-            columnNumberEnd = columnNumber;
-            //change the col name of colspec
-            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
-            //total columns count
-            totalColumns = columnNumberEnd;
-        }else if(TOPIC_ENTRY.matches(cls)){
-
-            /*columnNumber = getStartNumber(atts, columnNumberEnd);
-			if(columnNumber > columnNumberEnd){
-				copyAttribute(ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
-				if (atts.getValue(ATTRIBUTE_NAME_NAMEST) != null){
-					copyAttribute(ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
-				}
-				if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null){
-					copyAttribute(ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
-				}
-			}
-			columnNumberEnd = getEndNumber(atts, columnNumber);*/
-
-            columnNumber = getStartNumber(atts, columnNumberEnd);
-
-
-            if(columnNumber > columnNumberEnd){
-                //The first row
-                if(rowNumber == 1){
-                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
-                    if (atts.getValue(ATTRIBUTE_NAME_NAMEST) != null){
-                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + columnNumber);
-                    }
-                    if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null){
-                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(atts, columnNumber));
-                    }
-                    //other row
-                }else{
-                    int offset = 0;
-                    int currentCol = columnNumber;
-                    while(currentCol<=totalColumns) {
-                        int previous_offset = offset;
-                        //search from first row
-                        for(int row = 1;row<rowNumber;row++){
-                            final String pos = String.valueOf(row) +"-"+ String.valueOf(currentCol);
-                            if(rowsMap.containsKey(pos)){
-                                //get total span rows
-                                final int totalSpanRows = rowsMap.get(pos);
-                                if(rowNumber <= totalSpanRows){
-                                    //offset ++;
-                                	offset += colSpanMap.get(pos);
-                                }
-                            }
-                        }
-
-                        if(offset>previous_offset) {
-                            currentCol = columnNumber + offset;
-                            previous_offset = offset;
-                        } else {
-                            break;
-                        }
-
-                    }
-                    columnNumber = columnNumber+offset;
-                    //if has morerows attribute
-                    if(atts.getValue(ATTRIBUTE_NAME_MOREROWS) != null){
-                        final String pos = String.valueOf(rowNumber) + "-" + String.valueOf(columnNumber);
-                        //total span rows
-                        final int total = Integer.parseInt(atts.getValue(ATTRIBUTE_NAME_MOREROWS))+
-                                rowNumber;
-                        rowsMap.put(pos, total);
-                        colSpanMap.put(pos, getColumnSpan(atts));
-
-                    }
-
-                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
-                    if (atts.getValue(ATTRIBUTE_NAME_NAMEST) != null){
-                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + columnNumber);
-                    }
-                    if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null){
-                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(atts, columnNumber));
-                    }
-                }
-            }
-            columnNumberEnd = getEndNumber(atts, columnNumber);
-        }
-        return res;
-    }
-
-   private int getColumnSpan(final Attributes atts) {
-        if ((atts.getValue(ATTRIBUTE_NAME_NAMEST) == null)||(atts.getValue(ATTRIBUTE_NAME_NAMEEND) == null)){
-            return 1;
-        }else{
-            final int ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEEND)) - colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEST))+1;
-            if(ret <= 0){
-                return 1;
-            }
-            return ret;
-        }
-    }
     
     @Override
     public void endDocument() throws SAXException {
@@ -547,7 +356,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
-        classStack.clear();
     }
 
 
@@ -558,72 +366,9 @@ public final class DitaWriter extends AbstractXMLFilter {
             foreignLevel --;
         }
         getContentHandler().endElement(uri, localName, qName);
-        //note the tag shouldn't be excluded by filter file(bug:2925636 )
-        if(TOPIC_TGROUP.matches(classStack.peek())){
-            //colSpecStack.pop();
-            //rowNumStack.pop();
-            //has tgroup tag
-            if(!colSpecStack.isEmpty()){
-
-                colSpec = colSpecStack.peek();
-                rowNumber = rowNumStack.peek();
-                columnNumber = columnNumberStack.peek();
-                columnNumberEnd = columnNumberEndStack.peek();
-                rowsMap = rowsMapStack.peek();
-                colSpanMap = colSpanMapStack.peek();
-
-                colSpecStack.pop();
-                rowNumStack.pop();
-                columnNumberStack.pop();
-                columnNumberEndStack.pop();
-                rowsMapStack.pop();
-                colSpanMapStack.pop();
-
-            }else{
-                //no more tgroup tag
-                colSpec = null;
-                rowNumber = 0;
-                columnNumber = 1;
-                columnNumberEnd = 0;
-                rowsMap = null;
-                colSpanMap = null;
-            }
-        }
-        classStack.pop();
     }
 
-    private int getEndNumber(final Attributes atts, final int columnStart) {
-        int ret;
-        if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) == null){
-            return columnStart;
-        }else{
-            ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEEND)) + 1;
-            if(ret == 0){
-                return columnStart;
-            }
-            return ret;
-        }
-    }
-
-    private int getStartNumber(final Attributes atts, final int previousEnd) {
-        if (atts.getValue(ATTRIBUTE_NAME_COLNUM) != null){
-            return Integer.parseInt(atts.getValue(ATTRIBUTE_NAME_COLNUM));
-        }else if(atts.getValue(ATTRIBUTE_NAME_NAMEST) != null){
-            final int ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_NAMEST)) + 1;
-            if(ret == 0){
-                return previousEnd + 1;
-            }
-            return ret;
-        }else if(atts.getValue(ATTRIBUTE_NAME_COLNAME) != null){
-            final int ret = colSpec.indexOf(atts.getValue(ATTRIBUTE_NAME_COLNAME)) + 1;
-            if(ret == 0){
-                return previousEnd + 1;
-            }
-            return ret;
-        }else{
-            return previousEnd + 1;
-        }
-    }
+    
 
     /**
      * Set temporary directory
@@ -639,16 +384,17 @@ public final class DitaWriter extends AbstractXMLFilter {
     
     @Override
     public void startDocument() throws SAXException {
+        path2Project = getPathtoProject(inputFile, currentFile, job.getInputFile().getAbsoluteFile());            
         try {
             getContentHandler().startDocument();
             if(!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS))
             {
-                getContentHandler().processingInstruction(PI_WORKDIR_TARGET, absolutePath.getCanonicalPath());
+                getContentHandler().processingInstruction(PI_WORKDIR_TARGET, outputFile.getParentFile().getCanonicalPath());
             }else{
-                getContentHandler().processingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + absolutePath.getCanonicalPath());
+                getContentHandler().processingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + outputFile.getParentFile().getCanonicalPath());
             }
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
-            getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, absolutePath.toURI().toASCIIString());
+            getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, outputFile.getParentFile().toURI().toASCIIString());
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
             if(path2Project != null){
                 getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project);
@@ -668,7 +414,6 @@ public final class DitaWriter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
-        classStack.push(atts.getValue(ATTRIBUTE_NAME_CLASS));
         if (foreignLevel > 0){
             foreignLevel ++;
         }else if( foreignLevel == 0){
@@ -683,18 +428,8 @@ public final class DitaWriter extends AbstractXMLFilter {
             }
         }
 
-        Integer value;
-        Integer nextValue;
-        if (counterMap.containsKey(qName)) {
-            value = counterMap.get(qName);
-            nextValue = value + 1;
-        } else {
-            nextValue = 1;
-        }
-        counterMap.put(qName, nextValue);
-
         try {
-            final AttributesImpl res = copyElementName(qName, atts);
+            final AttributesImpl res = new AttributesImpl();
             processAttributes(qName, atts, res);
             
             getContentHandler().startElement(uri, localName, qName, res);
@@ -719,30 +454,28 @@ public final class DitaWriter extends AbstractXMLFilter {
 
         OutputStream out = null;
         try {
-            traceFilename = new File(baseDir, inputFile.getPath());
-            File outputFile = new File(tempDir, inputFile.getPath());
+            currentFile = new File(baseDir, inputFile.getPath());
+            outputFile = new File(tempDir, inputFile.getPath());
 
-            path2Project = getPathtoProject(inputFile, traceFilename, job.getInputFile().getAbsoluteFile());            
-            counterMap = new HashMap<String, Integer>();
-            final File dirFile = outputFile.getParentFile();
-            if (!dirFile.exists()) {
-                dirFile.mkdirs();
+            final File outputDir = outputFile.getParentFile();
+            if (!outputDir.exists()) {
+                outputDir.mkdirs();
             }
-            absolutePath = dirFile;
+            
             out = new FileOutputStream(outputFile);
 
             // start to parse the file and direct to output in the temp
             // directory
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename.getAbsolutePath(), logger));
-            final InputSource is = new InputSource(traceFilename.toURI().toString());
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.getAbsolutePath(), logger));
+            final InputSource is = new InputSource(currentFile.toURI().toString());
             if(setSystemid) {
-                is.setSystemId(traceFilename.toURI().toString());
+                is.setSystemId(currentFile.toURI().toString());
             }
             
             final TransformerFactory tf = TransformerFactory.newInstance();
             final Transformer serializer = tf.newTransformer();
             XMLReader xmlSource = reader;
-            for (final XMLFilter f: getProcessingPipe(traceFilename, inFile)) {
+            for (final XMLFilter f: getProcessingPipe(currentFile, inFile)) {
                 f.setParent(xmlSource);
                 xmlSource = f;
             }
@@ -792,6 +525,11 @@ public final class DitaWriter extends AbstractXMLFilter {
             validationFilter.setLogger(logger);
             validationFilter.setValidateMap(validateMap);
             pipe.add(validationFilter);
+        }
+        {
+            final NormalizeFilter normalizeFilter = new NormalizeFilter();
+            normalizeFilter.setLogger(logger);
+            pipe.add(normalizeFilter);
         }
         {
             final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();

@@ -85,12 +85,6 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     /** Absolute input map path. */
     private File inputMap = null;
 
-    /**
-     * Default Construtor.
-     */
-    public DebugAndFilterModule(){
-    }
-
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
