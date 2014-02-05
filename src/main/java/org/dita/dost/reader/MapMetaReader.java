@@ -59,11 +59,13 @@ public final class MapMetaReader implements AbstractReader {
     private static final Set<String> cascadeSet = Collections.unmodifiableSet(new HashSet<String>(asList(
             TOPIC_AUDIENCE.matcher,
             TOPIC_AUTHOR.matcher,
+            TOPIC_SOURCE.matcher,
             TOPIC_CATEGORY.matcher,
             TOPIC_COPYRIGHT.matcher,
             TOPIC_CRITDATES.matcher,
             TOPIC_PERMISSIONS.matcher,
             TOPIC_PRODINFO.matcher,
+            TOPIC_OTHERMETA.matcher,
             TOPIC_PUBLISHER.matcher
             )));
     private static final Set<String> metaSet = Collections.unmodifiableSet(new HashSet<String>(asList(

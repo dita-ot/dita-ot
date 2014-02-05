@@ -580,20 +580,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             // XXX: This may have to use new File(FileUtils.resolveFile(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
             final Job job = new Job(new File(filePath));
             final Set<String> copytosourcelist = job.getSet(COPYTO_SOURCE_LIST);
-            final Set<String> copytotarget2sourcemaplist = job.getSet(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
+            final Map<String, String> copytotarget2sourcemaplist  = job.getCopytoMap();
             //in the following, all the 4 arrays are updated according to the set copyto and
             //map copytotarget2source.
 
-            //			//copy all the file name in copytosourcelist to a new set
-            for(final String source:copytosourcelist){
-                copytoSource.add(source);
-            }
+            //copy all the file name in copytosourcelist to a new set
+            copytoSource.addAll(copytosourcelist);
             //copy all the copytotarget2sourcemaplist to a new hashmap
-            for(final String target2source:copytotarget2sourcemaplist){
-                if(target2source.indexOf(EQUAL)!=-1) {
-                    copytotarget2source.put(target2source.substring(0, target2source.indexOf(EQUAL)), target2source.substring(target2source.indexOf(EQUAL)-1));
-                }
-            }
+            copytotarget2source.putAll(copytotarget2sourcemaplist);
             //in the case of chunk='to-content' and copy-to='*.dita'
             //the @href value are added in fullditatopic and fullditamapandtopic,
             //while they are not supposed to be contained, so should be be removed
