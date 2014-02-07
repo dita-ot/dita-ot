@@ -19,6 +19,7 @@
             <li>New command line tool</li>
             <li>XSLT stylesheets have been converted to XSLT 2.0</li>
             <li>Processing order of keys and conrefs has been changed</li>
+            <li>Intial preview support for DITA 1.3</li>
           </ul>
         </draft-comment>
       </section>

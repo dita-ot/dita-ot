@@ -14,6 +14,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 
+import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
 import org.junit.Test;
@@ -49,18 +50,9 @@ public class FilterUtilsTest {
         f.setFilterMap(fm);
 
         assertFalse(f.needExclude(new AttributesImpl(), new String[0][0]));
-
-        final AttributesImpl amigaUnix = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amigaUnix, "platform", "amiga unix windows");
-        assertFalse(f.needExclude(amigaUnix, new String[0][0]));
-
-        final AttributesImpl amiga = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amiga, "platform", "amiga windows");
-        assertTrue(f.needExclude(amiga, new String[0][0]));
-
-        final AttributesImpl windows = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(windows, "platform", "windows");
-        assertTrue(f.needExclude(windows, new String[0][0]));
+        assertFalse(f.needExclude(attr("platform", "amiga unix windows"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "amiga windows"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "windows"), new String[0][0]));
     }
 
     @Test
@@ -71,17 +63,9 @@ public class FilterUtilsTest {
         fm.put(new FilterKey("platform", null), Action.INCLUDE);
         f.setFilterMap(fm);
 
-        final AttributesImpl amigaUnix = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amigaUnix, "platform", "amiga unix windows");
-        assertFalse(f.needExclude(amigaUnix, new String[0][0]));
-
-        final AttributesImpl amiga = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amiga, "platform", "amiga windows");
-        assertFalse(f.needExclude(amiga, new String[0][0]));
-
-        final AttributesImpl windows = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(windows, "platform", "windows");
-        assertTrue(f.needExclude(windows, new String[0][0]));
+        assertFalse(f.needExclude(attr("platform", "amiga unix windows"), new String[0][0]));
+        assertFalse(f.needExclude(attr("platform", "amiga windows"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "windows"), new String[0][0]));
     }
 
     @Test
@@ -90,17 +74,9 @@ public class FilterUtilsTest {
         f.setLogger(new TestUtils.TestLogger());
         f.setFilterMap(filterMap);
 
-        final AttributesImpl amigaUnix = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amigaUnix, "platform", "amiga unix windows");
-        assertFalse(f.needExclude(amigaUnix, new String[0][0]));
-
-        final AttributesImpl amiga = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amiga, "platform", "amiga windows");
-        assertFalse(f.needExclude(amiga, new String[0][0]));
-
-        final AttributesImpl windows = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(windows, "platform", "windows");
-        assertTrue(f.needExclude(windows, new String[0][0]));
+        assertFalse(f.needExclude(attr("platform", "amiga unix windows"), new String[0][0]));
+        assertFalse(f.needExclude(attr("platform", "amiga windows"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "windows"), new String[0][0]));
     }
 
     @Test
@@ -134,17 +110,11 @@ public class FilterUtilsTest {
         fm.put(new FilterKey("os", null), Action.EXCLUDE);        
         f.setFilterMap(fm);
 
-        final AttributesImpl amigaUnix = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amigaUnix, "os", "amiga unix windows");
-        assertFalse(f.needExclude(amigaUnix, new String[][] {{"props", "os"}}));
-
-        final AttributesImpl amiga = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amiga, "os", "amiga windows");
-        assertFalse(f.needExclude(amiga, new String[][] {{"props", "os"}}));
-
-        final AttributesImpl windows = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(windows, "os", "windows");
-        assertTrue(f.needExclude(windows, new String[][] {{"props", "os"}}));
+        assertFalse(f.needExclude(attr("os", "amiga unix windows"), new String[][] {{"props", "os"}}));
+        assertFalse(f.needExclude(attr("os", "amiga windows"), new String[][] {{"props", "os"}}));
+        assertFalse(f.needExclude(attr("os", "amiga windows"), new String[][] {{"props", "os", "gui"}}));
+        assertFalse(f.needExclude(attr("gui", "amiga windows"),new String[][] {{"props", "os", "gui"}}));
+        assertTrue(f.needExclude(attr("os", "windows"), new String[][] {{"props", "os"}}));
     }
     
     @Test
@@ -156,21 +126,11 @@ public class FilterUtilsTest {
         fm.put(new FilterKey("os", null), Action.EXCLUDE);        
         f.setFilterMap(fm);
 
-        final AttributesImpl amigaUnix = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amigaUnix, "props", "os(amiga unix windows)");
-        assertFalse(f.needExclude(amigaUnix, new String[][] {{"props", "os"}}));
-        
-        final AttributesImpl amiga = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amiga, "props", "os(amiga windows)");
-        assertFalse(f.needExclude(amiga, new String[][] {{"props", "os", "gui"}}));
-
-        final AttributesImpl windows = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(windows, "props", "os(windows)");
-        assertTrue(f.needExclude(windows, new String[][] {{"props", "os"}}));
-        
-        final AttributesImpl whitespace = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(whitespace, "props", "   os(   windows   )   ");
-        assertTrue(f.needExclude(whitespace, new String[][] {{"props", "os"}}));
+        assertFalse(f.needExclude(attr("props", "os(amiga unix windows)"), new String[][] {{"props", "os"}}));
+        assertFalse(f.needExclude(attr("props", "os(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
+        assertFalse(f.needExclude(attr("props", "gui(amiga windows)"), new String[][] {{"props", "os", "gui"}}));
+        assertTrue(f.needExclude(attr("props", "os(windows)"), new String[][] {{"props", "os"}}));
+        assertTrue(f.needExclude(attr("props", "   os(   windows   )   "), new String[][] {{"props", "os"}}));
     }
     
     @Test
@@ -182,17 +142,53 @@ public class FilterUtilsTest {
         fm.put(new FilterKey("os", null), Action.EXCLUDE);        
         f.setFilterMap(fm);
 
-        final AttributesImpl amigaUnix = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amigaUnix, "otherprops", "os(amiga unix windows)");
-        assertFalse(f.needExclude(amigaUnix, new String[0][0]));
-        
-        final AttributesImpl amiga = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(amiga, "otherprops", "os(amiga windows)");
-        assertFalse(f.needExclude(amiga, new String[0][0]));
-
-        final AttributesImpl windows = new AttributesImpl();
-        XMLUtils.addOrSetAttribute(windows, "otherprops", "os(windows)");
-        assertFalse(f.needExclude(windows, new String[0][0]));
+        assertFalse(f.needExclude(attr("otherprops", "os(amiga unix windows)"), new String[0][0]));
+        assertFalse(f.needExclude(attr("otherprops", "os(amiga windows)"), new String[0][0]));
+        assertTrue(f.needExclude(attr("otherprops", "os(windows)"), new String[0][0]));
     }
-                
+
+    // DITA 1.3
+    
+    @Test
+    public void testNeedExcludeGroup() {
+        final FilterUtils f = new FilterUtils();
+        f.setLogger(new TestUtils.TestLogger());
+        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
+        fm.put(new FilterKey("os", null), Action.EXCLUDE);
+        fm.put(new FilterKey("platform", null), Action.EXCLUDE);        
+        f.setFilterMap(fm);
+
+        assertFalse(f.needExclude(attr("platform", "os(amiga unix windows)"), new String[0][0]));
+        assertFalse(f.needExclude(attr("platform", "os(amiga windows)"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "gui(amiga windows)"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "os(windows)"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "   os(   windows   )   "), new String[0][0]));
+    }
+    
+
+    @Test
+    public void testNeedExcludeGroupMultiple() {
+        final FilterUtils f = new FilterUtils();
+        f.setLogger(new TestUtils.TestLogger());
+        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        fm.put(new FilterKey("os", "amiga"), Action.EXCLUDE);
+        fm.put(new FilterKey("os", "windows"), Action.EXCLUDE);
+        fm.put(new FilterKey("os", null), Action.INCLUDE);
+        fm.put(new FilterKey("platform", null), Action.INCLUDE);        
+        f.setFilterMap(fm);
+
+        assertFalse(f.needExclude(attr("platform", "os(amiga unix windows) database(mongo)"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "os(amiga windows) database(mongo)"), new String[0][0]));
+        assertFalse(f.needExclude(attr("platform", "gui(amiga windows) database(mongo)"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "os(windows) database(mongo)"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "   os(   windows   )   database(  mongo  )   "), new String[0][0]));
+    }
+    
+    private Attributes attr(final String name, final String value) {
+        final AttributesImpl res = new AttributesImpl();
+        XMLUtils.addOrSetAttribute(res, name, value);
+        return res;
+    }
+    
 }
