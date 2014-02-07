@@ -115,9 +115,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:attribute name="processing-role">resource-only</xsl:attribute>
           </xsl:if>
           <xsl:if test="not(@processing-role) and not($parent-processing-role='resource-only')">
-            <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute">
-          	  <xsl:with-param name="attrib">processing-role</xsl:with-param>
-            </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">processing-role</xsl:with-param></xsl:apply-templates>
       	  </xsl:if>
           <xsl:if test="not(@print) and $print!='#none#'">
             <xsl:attribute name="print"><xsl:value-of select="$print"/></xsl:attribute>
@@ -126,8 +124,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">search</xsl:with-param></xsl:apply-templates>
           </xsl:if>
           <xsl:if test="not(@format) and $format!='#none#'">
-              <!-- Already present in a variable, but this will generate the warning if necessary -->
-              <xsl:apply-templates select="." mode="mappull:inherit-and-set-format-attribute"/>
+            <xsl:attribute name="format"><xsl:value-of select="$format"/></xsl:attribute>
           </xsl:if>
           <xsl:if test="not(@scope) and $scope!='#none#'">
             <xsl:attribute name="scope"><xsl:value-of select="$scope"/></xsl:attribute>
@@ -214,25 +211,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:variable>
     <xsl:if test="$inherited-value!='#none#'">
       <xsl:attribute name="{$attrib}"><xsl:value-of select="$inherited-value"/></xsl:attribute>
-    </xsl:if>
-  </xsl:template>
-
-  <!-- Same as above, but for @format only. Allows us to warn if the inherited value seems wrong. -->
-  <xsl:template match="*" mode="mappull:inherit-and-set-format-attribute">
-    <xsl:variable name="inherited-value">
-      <xsl:apply-templates select="." mode="mappull:inherit-from-self-then-ancestor">
-        <xsl:with-param name="attrib" select="'format'"/>
-      </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:if test="$inherited-value!='#none#'">
-      <xsl:attribute name="format"><xsl:value-of select="$inherited-value"/></xsl:attribute>
-      <!-- Warn if non-dita format was inherited, and this is dita.
-           Only warn if this was actually inherited (not set locally).  -->
-      <!--xsl:if test="not(@format) and $inherited-value!='dita' and @href">        
-        <xsl:apply-templates select="." mode="ditamsg:incorect-inherited-format">
-          <xsl:with-param name="format" select="$inherited-value"/>
-        </xsl:apply-templates>
-      </xsl:if-->
     </xsl:if>
   </xsl:template>
 
