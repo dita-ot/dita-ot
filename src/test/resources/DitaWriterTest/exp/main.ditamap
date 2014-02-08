@@ -1,4 +1,4 @@
-<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xml:lang="en-US" ditaarch:DITAArchVersion="1.2" title="Title &amp;&lt;&quot;&apos;">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xml:lang="en-US" ditaarch:DITAArchVersion="1.2" title="Title &amp;&lt;&quot;&apos;" cascade="nomerge">
   <topicref href="keyword.dita">
     <topicmeta>
       <exportanchors>

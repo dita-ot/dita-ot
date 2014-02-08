@@ -91,62 +91,62 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <!--copy inheritable attributes that aren't already explicitly defined-->
           <!--@type|@importance|@linking|@toc|@print|@search|@format|@scope-->
           <!--need to create type variable regardless, for passing as a parameter to getstuff template-->
-          <xsl:if test="not(@type) and $type!='#none#'">
+          <xsl:if test="(:not(@type) and :)$type!='#none#'">
             <xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
           </xsl:if>
-          <xsl:if test="not(@importance)">
+          <!--xsl:if test="not(@importance)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">importance</xsl:with-param></xsl:apply-templates>
-          </xsl:if>
+          <!--/xsl:if-->
           <!-- if it's in target of mapref override the current linking attribute when parent linking is none -->
           <xsl:if test="$parent-linking='none'">
             <xsl:attribute name="linking">none</xsl:attribute>
           </xsl:if>
-          <xsl:if test="not(@linking) and not($parent-linking='none')">
+          <xsl:if test="(:not(@linking) and :)not($parent-linking='none')">
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">linking</xsl:with-param></xsl:apply-templates>
           </xsl:if>
           <!-- if it's in target of mapref override the current toc attribute when parent toc is no -->
           <xsl:if test="$parent-toc='no'">
             <xsl:attribute name="toc">no</xsl:attribute>
           </xsl:if>
-          <xsl:if test="not(@toc) and not($parent-toc='no')">
+          <xsl:if test="(:not(@toc) and :)not($parent-toc='no')">
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">toc</xsl:with-param></xsl:apply-templates>
           </xsl:if>
           <xsl:if test="$parent-processing-role='resource-only'">
             <xsl:attribute name="processing-role">resource-only</xsl:attribute>
           </xsl:if>
-          <xsl:if test="not(@processing-role) and not($parent-processing-role='resource-only')">
+          <xsl:if test="(:not(@processing-role) and :)not($parent-processing-role='resource-only')">
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">processing-role</xsl:with-param></xsl:apply-templates>
       	  </xsl:if>
-          <xsl:if test="not(@print) and $print!='#none#'">
+          <xsl:if test="(:not(@print) and :)$print!='#none#'">
             <xsl:attribute name="print"><xsl:value-of select="$print"/></xsl:attribute>
           </xsl:if>
-          <xsl:if test="not(@search)">
+          <!--xsl:if test="not(@search)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">search</xsl:with-param></xsl:apply-templates>
-          </xsl:if>
-          <xsl:if test="not(@format) and $format!='#none#'">
+          <!--/xsl:if-->
+          <xsl:if test="(:not(@format) and :)$format!='#none#'">
             <xsl:attribute name="format"><xsl:value-of select="$format"/></xsl:attribute>
           </xsl:if>
-          <xsl:if test="not(@scope) and $scope!='#none#'">
+          <xsl:if test="(:not(@scope) and :)$scope!='#none#'">
             <xsl:attribute name="scope"><xsl:value-of select="$scope"/></xsl:attribute>
           </xsl:if>
-          <xsl:if test="not(@audience)">
+          <!--xsl:if test="not(@audience)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">audience</xsl:with-param></xsl:apply-templates>
-          </xsl:if>
-          <xsl:if test="not(@platform)">
+          <!--/xsl:if-->
+          <!--xsl:if test="not(@platform)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">platform</xsl:with-param></xsl:apply-templates>
-          </xsl:if>
-          <xsl:if test="not(@product)">
+          <!--/xsl:if-->
+          <!--xsl:if test="not(@product)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">product</xsl:with-param></xsl:apply-templates>
-          </xsl:if>
-          <xsl:if test="not(@rev)">
+          <!--/xsl:if-->
+          <!--xsl:if test="not(@rev)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">rev</xsl:with-param></xsl:apply-templates>
-          </xsl:if>
-          <xsl:if test="not(@otherprops)">
+          <!--/xsl:if-->
+          <!--xsl:if test="not(@otherprops)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">otherprops</xsl:with-param></xsl:apply-templates>
-          </xsl:if>
-          <xsl:if test="not(@props)">
+          <!--/xsl:if-->
+          <!--xsl:if test="not(@props)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">props</xsl:with-param></xsl:apply-templates>
-          </xsl:if>
+          <!--/xsl:if-->
           <!--grab type, text and metadata, as long there's an href to grab from, and it's not inaccessible-->
           <xsl:choose>
             <xsl:when test="@href=''">
@@ -232,15 +232,51 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="attrib"/>
     <xsl:variable name="attrib-here" select="@*[local-name()=$attrib]"/>
     <xsl:choose>
-      <!-- Any time the attribute is specified on this element, use it -->
-      <xsl:when test="$attrib-here!=''"><xsl:value-of select="$attrib-here"/></xsl:when>
-      <!-- Otherwise, use normal inheritance fallback -->
+      <xsl:when test="ancestor-or-self::*[@cascade][1]/@cascade = 'nomerge'">
+        <xsl:choose>
+          <!-- Any time the attribute is specified on this element, use it -->
+          <xsl:when test="$attrib-here!=''"><xsl:value-of select="$attrib-here"/></xsl:when>
+          <!-- Otherwise, use normal inheritance fallback -->
+          <xsl:otherwise>
+            <xsl:apply-templates select="." mode="mappull:inherit-attribute">
+              <xsl:with-param name="attrib" select="$attrib"/>
+            </xsl:apply-templates>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="." mode="mappull:inherit-attribute">
-          <xsl:with-param name="attrib" select="$attrib"/>
-        </xsl:apply-templates>
+        <xsl:variable name="inherited">
+          <xsl:apply-templates select="." mode="mappull:merge-inherit-attribute">
+            <xsl:with-param name="attrib" select="$attrib"/>
+          </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:variable name="values" select="distinct-values(tokenize(normalize-space($inherited), '\s'))"/>
+        <xsl:value-of select="if (exists($values)) then string-join($values, ' ') else '#none#'"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="*" mode="mappull:merge-inherit-attribute">
+    <xsl:param name="attrib"/>
+    <xsl:value-of select="@*[local-name() = $attrib]"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="parent::*" mode="mappull:merge-inherit-attribute">
+      <xsl:with-param name="attrib" select="$attrib"/>
+    </xsl:apply-templates>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' map/relcell ')]" mode="mappull:merge-inherit-attribute">
+    <xsl:param name="attrib"/>
+    <xsl:value-of select="@*[local-name() = $attrib]"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="parent::*" mode="mappull:merge-inherit-attribute">
+      <xsl:with-param name="attrib" select="$attrib"/>
+    </xsl:apply-templates>
+    <xsl:text> </xsl:text>
+    <xsl:variable name="position" select="1 + count(preceding-sibling::*)"/>
+    <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][$position ]" mode="mappull:merge-inherit-attribute">
+      <xsl:with-param name="attrib" select="$attrib"/>
+    </xsl:apply-templates>
   </xsl:template>
 
   <!-- Match an element when trying to inherit an attribute. Put the value of the attribute in $attrib-here.

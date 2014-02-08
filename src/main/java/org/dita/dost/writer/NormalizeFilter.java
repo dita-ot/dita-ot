@@ -5,6 +5,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Configuration.configuration;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -177,6 +178,13 @@ public final class NormalizeFilter extends AbstractXMLFilter {
                 }
             }
             columnNumberEnd = getEndNumber(atts, columnNumber);
+        } else if (MAP_MAP.matches(cls)) {
+            if (res.getIndex(ATTRIBUTE_NAME_CASCADE) == -1) {
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CASCADE,
+                        configuration.containsKey("default.cascade")
+                        ? configuration.get("default.cascade")
+                        : ATTRIBUTE_CASCADE_VALUE_MERGE); 
+            }
         }
         getContentHandler().startElement(uri, localName, qName, res);
     }
