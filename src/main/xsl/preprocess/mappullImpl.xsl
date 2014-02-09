@@ -250,7 +250,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:with-param name="attrib" select="$attrib"/>
           </xsl:apply-templates>
         </xsl:variable>
-        <xsl:variable name="values" select="distinct-values(tokenize(normalize-space($inherited), '\s'))"/>
+        <xsl:variable name="values" select="tokenize(normalize-space($inherited), '\s')"/>
         <xsl:value-of select="if (exists($values)) then string-join($values, ' ') else '#none#'"/>
       </xsl:otherwise>
     </xsl:choose>
