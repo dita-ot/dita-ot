@@ -6,8 +6,10 @@ package org.dita.dost.util;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.dita.dost.TestUtils;
@@ -183,6 +185,62 @@ public class FilterUtilsTest {
         assertFalse(f.needExclude(attr("platform", "gui(amiga windows) database(mongo)"), new String[0][0]));
         assertTrue(f.needExclude(attr("platform", "os(windows) database(mongo)"), new String[0][0]));
         assertTrue(f.needExclude(attr("platform", "   os(   windows   )   database(  mongo  )   "), new String[0][0]));
+    }
+    
+    @Test
+    public void testNeedExcludeMixedGroups() {
+        final FilterUtils f = new FilterUtils();
+        f.setLogger(new TestUtils.TestLogger());
+        final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+        fm.put(new FilterKey("platform", "unix"), Action.EXCLUDE);
+        fm.put(new FilterKey("platform", "windows"), Action.EXCLUDE);
+        fm.put(new FilterKey("platform", null), Action.INCLUDE);        
+        f.setFilterMap(fm);
+
+        assertFalse(f.needExclude(attr("platform", "windows database(mongodb couchbase) unix osx"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "windows database(mongodb couchbase) unix"), new String[0][0]));
+        assertTrue(f.needExclude(attr("platform", "database(mongodb couchbase) unix"), new String[0][0]));
+    }
+    
+    @Test
+    public void testGetUngroupedValue() {
+        final FilterUtils f = new FilterUtils();
+        
+        {
+            final Map<String, List<String>> exp = new HashMap<String, List<String>>();
+            exp.put(null, Arrays.asList("foo", "bar", "bax"));
+            assertEquals(exp, f.getGroups("foo bar bax"));
+        }
+        {
+            final Map<String, List<String>> exp = new HashMap<String, List<String>>();
+            exp.put(null, Arrays.asList("foo", "bar"));
+            exp.put("group", Arrays.asList("a", "b", "c"));
+            assertEquals(exp, f.getGroups("foo group(a b c) bar"));
+        }
+        {
+            final Map<String, List<String>> exp = new HashMap<String, List<String>>();
+            exp.put(null, Arrays.asList("foo"));
+            exp.put("group", Arrays.asList("a", "b", "c"));
+            assertEquals(exp, f.getGroups("foo group(a b c)"));
+        }
+        {
+            final Map<String, List<String>> exp = new HashMap<String, List<String>>();
+            exp.put(null, Arrays.asList("bar"));
+            exp.put("group", Arrays.asList("a", "b", "c"));
+            assertEquals(exp, f.getGroups("group(a b c) bar"));
+        }
+        {
+            final Map<String, List<String>> exp = new HashMap<String, List<String>>();
+            exp.put(null, Arrays.asList("foo", "bar", "baz"));
+            exp.put("group1", Arrays.asList("a", "b", "c"));
+            exp.put("group2", Arrays.asList("d", "e", "f"));
+            assertEquals(exp, f.getGroups("foo group1(a b c) bar group2(d e f) baz"));
+        }
+        {
+            final Map<String, List<String>> exp = new HashMap<String, List<String>>();
+            exp.put("group", Arrays.asList("a", "b", "c"));
+            assertEquals(exp, f.getGroups("group(a b) group(c)"));
+        }
     }
     
     private Attributes attr(final String name, final String value) {

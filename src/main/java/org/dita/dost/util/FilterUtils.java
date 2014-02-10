@@ -11,12 +11,15 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
@@ -121,16 +124,16 @@ public final class FilterUtils {
         for (final String attr: PROFILE_ATTRIBUTES) {
             final String value = atts.getValue(attr);
             if (value != null) {
-                if (value.contains("(")) {
-                    for (final String[] propList: generateAttrDomains(attr, value)) {
-                        final String v = getLabelValue(propList[propList.length - 1], value);
-                        if (extCheckExclude(propList, v)) {
+                final Map<String, List<String>> groups = getGroups(value);
+                for (Map.Entry<String, List<String>> group: groups.entrySet()) {
+                    if (group.getKey() != null) {
+                        if (extCheckExclude(new String[] { attr, group.getKey() }, group.getValue())) {
                             return true;
                         }
-                    }
-                } else {
-                    if (extCheckExclude(new String[] { attr }, value)) {
-                        return true;
+                    } else {
+                        if (extCheckExclude(new String[] { attr }, group.getValue())) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -146,7 +149,7 @@ public final class FilterUtils {
                     propListIndex--;
                     propValue = getLabelValue(propName, atts.getValue(propList[propListIndex]));
                 }
-                if (extCheckExclude(propList, propValue)) {
+                if (propValue != null && extCheckExclude(propList, Arrays.asList(propValue.split("\\s+")))) {
                     return true;
                 }
             }
@@ -154,15 +157,38 @@ public final class FilterUtils {
         return false;
     }
 
-    private String[][] generateAttrDomains(String attr, String value) {
-        if (value == null || !value.contains("(")) {
-            return new String[][] {{ attr }};
+    private Pattern groupPattern = Pattern.compile("(\\w+)\\((.+?)\\)");
+    
+    public Map<String, List<String>> getGroups(final String value) {
+        final Map<String, List<String>> res = new HashMap<String, List<String>>();
+        
+        final StringBuilder buf = new StringBuilder();
+        int previousEnd = 0;
+        final Matcher m = groupPattern.matcher(value);
+        if (m != null) {
+            while(m.find()) {
+                buf.append(value.subSequence(previousEnd, m.start()));
+                final String v = m.group(2); 
+                if (!v.trim().isEmpty()) {
+                    final String k = m.group(1);
+                    if (res.containsKey(k)) {
+                        final List<String> l = new ArrayList<String>(res.get(k));
+                        l.addAll(Arrays.asList(v.trim().split("\\s+")));
+                        res.put(k, l);
+                    } else {
+                        res.put(k, Arrays.asList(v.trim().split("\\s+")));   
+                    }
+                }
+                previousEnd = m.end();
+            }
+            buf.append(value.substring(previousEnd));
+            if (!buf.toString().trim().isEmpty()) {
+                res.put(null, Arrays.asList(buf.toString().trim().split("\\s+")));
+            }
+        } else {
+            res.put(null, Arrays.asList(value.trim().split("\\s+")));
         }
-        final List<String[]> gs = new ArrayList<String[]>();
-        for (final String g: value.trim().split("\\)")) {
-            gs.add(new String[] { attr, g.substring(0, g.indexOf("(")).trim() });
-        }
-        return gs.toArray(new String[gs.size()][]);
+        return res;
     }
 
     /**
@@ -196,17 +222,16 @@ public final class FilterUtils {
      * @param attValue
      * @return {@code true} if should be excluded, otherwise {@code false}
      */
-    private boolean extCheckExclude(final String[] propList, final String attValue) {
-        if (attValue == null || attValue.trim().length() == 0 || propList.length == 0 || attValue.contains("(")) {
+    private boolean extCheckExclude(final String[] propList, final List<String> attValue) {
+        if (attValue == null || attValue.isEmpty() || propList.length == 0 || attValue.contains("(")) {
             return false;
         }
-
         for (int propListIndex = propList.length - 1; propListIndex >= 0; propListIndex--) {
             boolean hasNullAction = false;
             boolean hasExcludeAction = false;
             final String attName = propList[propListIndex];
             checkRuleMapping(attName, attValue);
-            for (final String attSubValue: attValue.split("\\s+")) {
+            for (final String attSubValue: attValue) {
                 final FilterKey filterKey = new FilterKey(attName, attSubValue);
                 final Action filterAction = filterMap.get(filterKey);
                 // no action will be considered as 'not exclude'
@@ -266,41 +291,6 @@ public final class FilterUtils {
         return false;
     }
 
-    /**
-     * Check attribute to see if it should be excluded. If every value token
-     * evaluates to exclude, return {@code true}, otherwise return {@code false}.
-     *  
-     * @param attName attribute name
-     * @param attValue attribute value
-     * @return {@code true} if should be excluded, otherwise {@code false}
-     */
-    private boolean checkExclude(final String attName, final String attValue) {
-        if (attValue == null || attValue.trim().length() == 0) {
-            return false;
-        }
-        checkRuleMapping(attName, attValue);
-        for (final String attSubValue: attValue.split("\\s+")) {
-            final FilterKey filterKey = new FilterKey(attName, attSubValue);
-            final Action filterAction = filterMap.get(filterKey);
-            if (filterAction == null) {
-                final Action defaultAction = filterMap.get(new FilterKey(attName, null));
-                if (defaultAction != null) {
-                    if (Action.EXCLUDE != defaultAction) {
-                        return false;
-                    }
-                } else {
-                    if (!checkExcludeOfGlobalDefaultAction()) {
-                        return false;
-                    }
-                }
-            } else if (Action.EXCLUDE != filterAction) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private boolean checkExcludeOfGlobalDefaultAction() {
         final Action defaultAction = filterMap.get(DEFAULT);
         if (defaultAction == null) {
@@ -315,11 +305,11 @@ public final class FilterUtils {
      * @param attName attribute name
      * @param attValue attribute value
      */
-    private void checkRuleMapping(final String attName, final String attValue) {
-        if (attValue == null || attValue.trim().length() == 0) {
+    private void checkRuleMapping(final String attName, final List<String> attValue) {
+        if (attValue == null || attValue.isEmpty()) {
             return;
         }
-        for (final String attSubValue: attValue.split("\\s+")) {
+        for (final String attSubValue: attValue) {
             final FilterKey filterKey = new FilterKey(attName, attSubValue);
             final Action filterAction = filterMap.get(filterKey);
             if (filterAction == null) {
