@@ -39,6 +39,8 @@
     <!-- 
 	<xsl:include href="../../cfg/fo/attrs/links-attr.xsl"/>
     -->
+  
+  <xsl:key name="link" match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]" use="concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*)"/>
 	
 	<xsl:param name="chapterLayout" select="''"/>
     <xsl:key name="key_anchor" match="*[@id][not(contains(@class,' map/topicref '))]" use="@id"/>
