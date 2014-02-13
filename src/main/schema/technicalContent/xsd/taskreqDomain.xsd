@@ -182,7 +182,7 @@
   <!-- ELEMENT DECLARATIONS -->
   <!-- ============================================================= -->
   <!-- LONG NAME: Preliminary Requirements -->
-  <xs:complexType name="prelreqs.content">
+  <xs:group name="prelreqs.content">
      <xs:sequence>
       <xs:group minOccurs="0" ref="reqconds"/>
       <xs:group minOccurs="0" ref="reqpers"/>
@@ -191,7 +191,7 @@
       <xs:group minOccurs="0" ref="spares"/>
       <xs:group minOccurs="0" ref="safety"/>
     </xs:sequence>
-  </xs:complexType>
+  </xs:group>
   
   <xs:attributeGroup name="prelreqs.attributes">
     <xs:attributeGroup ref="univ-atts"/>
@@ -223,9 +223,11 @@
   </xs:attributeGroup>
   
   <!-- LONG NAME: Closing Requirements -->
-  <xs:complexType name="closereqs.content">
-    <xs:group ref="reqconds"/>
-  </xs:complexType>
+  <xs:group name="closereqs.content">
+    <xs:sequence>
+      <xs:group ref="reqconds"/>
+    </xs:sequence>
+  </xs:group>
   
   <xs:attributeGroup name="closereqs.attributes">
     <xs:attributeGroup ref="univ-atts"/>
