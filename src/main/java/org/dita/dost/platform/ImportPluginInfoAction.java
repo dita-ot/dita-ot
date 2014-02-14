@@ -5,6 +5,7 @@
 package org.dita.dost.platform;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.util.List;
@@ -39,7 +40,7 @@ final class ImportPluginInfoAction extends ImportAction {
             if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
                 location.append("${dita.dir}");
             } else if (f.getLocation().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
-                location.append("${dita.dir}").append(File.separator)
+                location.append("${dita.dir}").append(UNIX_SEPARATOR)
                 .append(FileUtils.getRelativeUnixPath(
                         new File(f.getDitaDir(), "plugin.xml").getAbsolutePath(),
                         f.getLocation().getAbsolutePath()));
