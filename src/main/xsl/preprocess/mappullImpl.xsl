@@ -260,9 +260,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="attrib"/>
     <xsl:value-of select="@*[local-name() = $attrib]"/>
     <xsl:text> </xsl:text>
-    <xsl:apply-templates select="parent::*" mode="mappull:merge-inherit-attribute">
-      <xsl:with-param name="attrib" select="$attrib"/>
-    </xsl:apply-templates>
+    <xsl:if test="ancestor-or-self::*[@cascade][1]/@cascade = 'merge'">
+      <xsl:apply-templates select="parent::*" mode="mappull:merge-inherit-attribute">
+        <xsl:with-param name="attrib" select="$attrib"/>
+      </xsl:apply-templates>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' map/relcell ')]" mode="mappull:merge-inherit-attribute">
@@ -319,6 +321,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
             </xsl:apply-templates>
           </xsl:otherwise>
         </xsl:choose>
+      </xsl:when>
+      <xsl:when test="@cascade">
+        <xsl:apply-templates select="parent::*" mode="mappull:inherit-from-self-then-ancestor">
+          <xsl:with-param name="attrib" select="$attrib"/>
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="parent::*" mode="mappull:inherit-attribute">
