@@ -45,7 +45,7 @@ public final class URLUtils {
         if (file == null) {
             throw new MalformedURLException("The url is null");
         }
-        return new URL(correct(file.toURL().toString(), true));
+        return new URL(correct(file.toURI().toString(), true));
     }
 
     /**
@@ -284,11 +284,7 @@ public final class URLUtils {
             return fileName;
         }else{
             final File file = new File(fileName);
-            try {
-                return file.toURI().toURL().toString();
-            } catch (final MalformedURLException e) {
-                return "";
-            }
+            return file.toURI().toString();
         }
 
     }

@@ -98,7 +98,7 @@ public final class DitaValReader extends AbstractXMLReader {
             //Set the system ID
             if(setSystemid) {
                 //is.setSystemId(URLUtil.correct(file).toString());
-                is.setSystemId(input.toURI().toURL().toString());
+                is.setSystemId(input.toURI().toString());
             }
             reader.parse(is);
 
