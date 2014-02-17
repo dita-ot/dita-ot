@@ -65,7 +65,7 @@ public final class CatalogUtils {
 
             final Catalog catalog = catalogResolver.getCatalog();
             try {
-                catalog.parseCatalog(catalogFilePath.toURI().toURL());
+                catalog.parseCatalog(catalogFilePath.toURI().toASCIIString());
             } catch (final Exception e) {
                 logger.logError(e.getMessage(), e) ;
             }
