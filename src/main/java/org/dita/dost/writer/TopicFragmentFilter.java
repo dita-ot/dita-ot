@@ -7,6 +7,7 @@ import static org.dita.dost.util.XMLUtils.*;
 import java.net.URI;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.LinkedList;
 
 import org.dita.dost.util.DitaClass;
 import org.xml.sax.Attributes;
@@ -19,7 +20,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 public final class TopicFragmentFilter extends XMLFilterImpl {
 
-    final Deque<DitaClass> classes = new ArrayDeque<DitaClass>();
+    final Deque<DitaClass> classes = new LinkedList<DitaClass>();
     final Deque<String> topics = new ArrayDeque<String>();
     
     @Override
