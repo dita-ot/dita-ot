@@ -19,6 +19,7 @@
                   keyref,
                   conrefpush,
                   conref,
+                  topic-fragment,
                   move-meta-entries,
                   coderef,
                   mapref,
@@ -260,6 +261,13 @@
     <condition property="preprocess.conref.skip">
       <length file="${dita.temp.dir}/${conreffile}" length="0"/>
     </condition>
+  </target>
+  
+  <target name="topic-fragment"
+          description="Resolve same topic fragment identifiers">
+    <pipeline message="Resolve topic fragment." taskname="topic-fragment">
+      <module class="org.dita.dost.module.TopicFragmentModule"/>
+    </pipeline>
   </target>
   
   <!-- coderef -->
