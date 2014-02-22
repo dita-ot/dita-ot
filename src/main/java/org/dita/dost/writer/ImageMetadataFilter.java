@@ -5,6 +5,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -155,7 +156,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         final String fileDir = tempDir.toURI().relativize(currentFile.getParentFile().toURI()).toASCIIString();
         final StringBuilder fileName = new StringBuilder(fileDir).append("./");
         if (OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION) {
-            fileName.append(uplevels);
+            fileName.append(separatorsToUnix(uplevels));
         }
         fileName.append(atts.getValue(ATTRIBUTE_NAME_HREF));
         final URI imgInputUri = outputDir.toURI().resolve(fileName.toString());
