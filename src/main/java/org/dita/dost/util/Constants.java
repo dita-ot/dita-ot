@@ -664,6 +664,8 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_CONKEYREF	="conkeyref";
     /**keys attribute.*/
     public static final String ATTRIBUTE_NAME_KEYS = "keys";
+    /**keys attribute.*/
+    public static final String ATTRIBUTE_NAME_KEYSCOPE = "keyscope";
     /**xtrf attribute.*/
     public static final String ATTRIBUTE_NAME_XTRF = "xtrf";
     /**xtrc attribute.*/

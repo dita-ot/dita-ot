@@ -79,6 +79,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 		validateId(atts);
 		modified = validateHref(atts, modified);
 		validateKeys(atts);
+		validateKeyscope(atts);
 		validateAttributeValues(qName, atts);
 		validateAttributeGeneralization(atts);
 		getContentHandler().startElement(uri, localName, qName, modified != null ? modified : atts);
@@ -216,6 +217,20 @@ public final class ValidationFilter extends AbstractXMLFilter {
             for (final String key : keys.split(" ")) {
                 if (!isValidKeyName(key)) {
                     logger.error(messageUtils.getMessage("DOTJ055E", key).toString());
+                }
+            }
+        }
+    }
+    
+    /**
+     * Validate keyscope attribute
+     */
+    private void validateKeyscope(final Attributes atts) {
+        final String keys = atts.getValue(ATTRIBUTE_NAME_KEYSCOPE);
+        if (keys != null) {
+            for (final String key : keys.split(" ")) {
+                if (!isValidKeyName(key)) {
+                    logger.error(messageUtils.getMessage("DOTJ059E", key).toString());
                 }
             }
         }
