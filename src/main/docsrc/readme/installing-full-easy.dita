@@ -17,7 +17,7 @@
         <steps>
             <step>
                 <cmd>Download the full-easy package from <xref
-                        keyref="download.dita-ot.current-release">SourceForge</xref>.</cmd>
+                        keyref="download.dita-ot.current-release" scope="external" format="html">SourceForge</xref>.</cmd>
                 <choicetable frame="topbot" relcolwidth="1.50* 4.0*">
                     <chhead>
                         <choptionhd>Operating system</choptionhd>
