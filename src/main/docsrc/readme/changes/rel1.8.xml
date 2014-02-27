@@ -174,6 +174,15 @@
           <li>#1584 Add basic table support to troff #1073 (maintenance 3)</li>
           <li>#1585 Properties table cell misalligned if no value column #1373 (maintenance 3)</li>
           <li>#1603 XSD schema for Machinery Task does not allow attributes in prelreqs element (maintenance 3)</li>
+          <li>#1597 mappull generates DOTX021E and DTX025E for resource only topicrefs to png files (maintenance 4)</li>
+          <li>#1604 Failed to read job file: XML document structures must start and end within the same entity. (maintenance 4)</li>
+          <li>#1622 Update some XSD fixes that were found by developers from PTC. Also (maintenance 4)</li>
+          <li>#1626 DIITA-OT1.8.M2\plugins\org.dita.pdf2\lib\fo.jar does not include the xep directory (maintenance 4)</li>
+          <li>#1639 xhtml output replaces backslash in @href with escaped character (DOT 1.8M2) (maintenance 4)</li>
+          <li>#1640 ODT publishing doesn't work (DITA OT 1.8M2) (maintenance 4)</li>
+          <li>#1641 Legacy PDF doesn't work (DITA OT 1.8M2) (maintenance 4)</li>
+          <li>#1645 Conversion of File to URL is not properly done in several places (maintenance 4)</li>
+          <li>#1647 Illegal file separator used in created URI (DITA OT 1.8M2) (maintenance 4)</li>
         </ul>
       </section>
     </refbody>
