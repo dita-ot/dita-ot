@@ -12,8 +12,8 @@
   <property name="fo.lib.dir" location="demo/fo/lib"/>	
   
   <property name="fo.jar" location="${lib.dir}/fo.jar" />
-  <property name="resolver.jar" location="${lib.dir}/resolver.jar" />
-  <property name="icu4j.jar" location="${lib.dir}/icu4j.jar" />
+  <property name="resolver.jar" location="${basedir}/../../lib/resolver.jar" />
+  <property name="icu4j.jar" location="${basedir}/../../lib/icu4j.jar" />
   <property name="xep.jar" location="${lib.dir}/xep/lib/xep.jar" />
 
   <path id="build.class.path">
