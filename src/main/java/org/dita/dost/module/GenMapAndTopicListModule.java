@@ -1148,7 +1148,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final Properties prop = new Properties();
         for (final Map.Entry<File, Set<File>> entry: m.entrySet()) {
             final File key = entry.getKey();
-            final String value = StringUtils.assembleString(entry.getValue(), COMMA);
+            final String value = StringUtils.join(entry.getValue(), COMMA);
             prop.setProperty(key.getPath(), value);
         }
         final File outputFile = new File(job.tempDir, filename);
@@ -1300,7 +1300,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        prop.setProperty(org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST, StringUtils.assembleString(newSet, COMMA));
+        prop.setProperty(org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
     }
     
 }

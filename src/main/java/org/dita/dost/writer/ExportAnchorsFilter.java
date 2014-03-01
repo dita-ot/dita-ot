@@ -129,7 +129,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
                 if (pluginId == null) {
                     pluginId = "org.sample.help.doc";
                 }
-                final Set<String> set = StringUtils.restoreSet(pluginId);
+                final Set<String> set = StringUtils.restoreSet(pluginId, COMMA);
                 pluginMap.put("pluginId", set);
             }
         } else if (MAP_TOPICMETA.matches(classValue) || TOPIC_PROLOG.matches(classValue)) {

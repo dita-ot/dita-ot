@@ -27,14 +27,14 @@ public class TestStringUtils {
     public void testAssembleString() {
         String result = null;
         final Collection<Object> input = new ArrayList<Object>();
-        result = StringUtils.assembleString((Collection<Object>) null, ";");
+        result = StringUtils.join((Collection<Object>) null, ";");
         assertEquals("", result);
-        result = StringUtils.assembleString(Collections.emptyList(), ";");
+        result = StringUtils.join(Collections.emptyList(), ";");
         assertEquals("", result);
         input.add("first");
         input.add("second");
         input.add("third");
-        result = StringUtils.assembleString(input, ";");
+        result = StringUtils.join(input, ";");
         assertEquals("first;second;third", result);
     }
 
@@ -54,24 +54,6 @@ public class TestStringUtils {
         final String expected = "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
         result = StringUtils.escapeXML(input,0,input.length);
         assertEquals(expected, result);
-    }
-
-    @Test
-    public void testGetEntity() {
-        String result = null;
-        result = StringUtils.getEntity("abc");
-        assertEquals("&abc;", result);
-        result = StringUtils.getEntity("%xyz");
-        assertEquals("%xyz;", result);
-    }
-
-    @Test
-    public void testCheckEntity() {
-        assertFalse(StringUtils.checkEntity("lt"));
-        assertFalse(StringUtils.checkEntity("gt"));
-        assertFalse(StringUtils.checkEntity("quot"));
-        assertFalse(StringUtils.checkEntity("amp"));
-        assertTrue(StringUtils.checkEntity("abc"));
     }
 
     @Test
@@ -103,16 +85,6 @@ public class TestStringUtils {
                           StringUtils.getExtProps("  a(props   foo  )   "));
         assertArrayEquals(new String[0][0],
                           StringUtils.getExtProps("(topic task)"));
-    }
-
-    @Test
-    public void testRestoreMap() {
-        final Map<String, String> expected = new HashMap<String, String>();
-        expected.put("abc", "def");
-        expected.put("ghi", "jkl");
-        expected.put("mno", "pqr");
-        final Map<String, String> result = StringUtils.restoreMap("abc=def,ghi=jkl,mno=pqr");
-        assertEquals(expected, result);
     }
 
     @Test
@@ -159,13 +131,6 @@ public class TestStringUtils {
             StringUtils.getLocale(null);
             fail();
         } catch (final NullPointerException e) {}
-    }
-
-    @Test
-    public void testGetFileName() {
-        assertEquals("foo.bar", StringUtils.getFileName("foo.bar.baz", "."));
-        assertEquals("foo", StringUtils.getFileName("foo.bar", "."));
-        assertEquals("foo", StringUtils.getFileName("foo", "."));
     }
 
     @Test

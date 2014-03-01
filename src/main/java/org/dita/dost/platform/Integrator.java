@@ -199,7 +199,7 @@ public final class Integrator {
                 }
             }
         }
-        configuration.put(CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, CONF_LIST_SEPARATOR));
+        configuration.put(CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.join(imgExts, CONF_LIST_SEPARATOR));
         // extensions
         configuration.put(CONF_SUPPORTED_TOPIC_EXTENSIONS, readExtensions(FEAT_TOPIC_EXTENSIONS));
         configuration.put(CONF_SUPPORTED_MAP_EXTENSIONS, readExtensions(FEAT_MAP_EXTENSIONS));
@@ -221,7 +221,7 @@ public final class Integrator {
         if (printTranstypeValue != null) {
             printTranstypes.addAll(Arrays.asList(printTranstypeValue.split(PARAM_VALUE_SEPARATOR)));
         }
-        configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.assembleString(printTranstypes, CONF_LIST_SEPARATOR));
+        configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.join(printTranstypes, CONF_LIST_SEPARATOR));
 
         for (final Entry<String, Features> e: pluginTable.entrySet()) {
             final Features f = e.getValue();
@@ -277,7 +277,7 @@ public final class Integrator {
                 }
             }
         }
-        return StringUtils.assembleString(exts, CONF_LIST_SEPARATOR);
+        return StringUtils.join(exts, CONF_LIST_SEPARATOR);
     }
 
     /**
@@ -547,7 +547,7 @@ public final class Integrator {
         if (buf.isEmpty()) {
             return null;
         } else {
-            return StringUtils.assembleString(buf, ",");
+            return StringUtils.join(buf, ",");
         }
     }
 

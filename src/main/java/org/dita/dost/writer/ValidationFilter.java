@@ -200,7 +200,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     final String[] keylist = attrValue.trim().split("\\s+");
                     for (final String s : keylist) {
                         if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
-                            logger.warn(messageUtils.getMessage("DOTJ049W", attrName, qName, attrValue, StringUtils.assembleString(valueSet, COMMA)).toString());
+                            logger.warn(messageUtils.getMessage("DOTJ049W", attrName, qName, attrValue, StringUtils.join(valueSet, COMMA)).toString());
                         }
                     }
                 }

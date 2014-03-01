@@ -1155,7 +1155,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         prop.setProperty(fileKey, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.substring(0, org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
         writeListToFile(new File(job.tempDir, prop.getProperty(fileKey)), newSet);
 
-        prop.setProperty(org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST, StringUtils.assembleString(newSet, COMMA));
+        prop.setProperty(org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
     }
 
 //    /**

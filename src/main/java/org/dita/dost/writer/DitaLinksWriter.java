@@ -206,7 +206,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
                     logger.error(e.getMessage(), e);
                 }
             }
-            final String t = StringUtils.assembleString(topicIdStack, SLASH);
+            final String t = StringUtils.join(topicIdStack, SLASH);
             if (topicSet.contains(t)) {
                 curMatchTopic = t;
             } else if (topicSet.contains(topicIdStack.peekFirst())) {

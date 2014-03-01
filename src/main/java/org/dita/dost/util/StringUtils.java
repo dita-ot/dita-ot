@@ -12,7 +12,6 @@ import static org.dita.dost.util.Constants.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -32,9 +31,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public final class StringUtils {
 
-    private static final String NOT_RESOLVE_ENTITY_LIST = "|lt|gt|quot|amp|";
-    private static final String NOT_RESOLVE_ENTITY_CHAR = "|#38|";
-
     /**
      * Private default constructor to make class uninstantiable.
      */
@@ -51,7 +47,7 @@ public final class StringUtils {
      * @return java.lang.String
      */
     @SuppressWarnings("rawtypes")
-    public static String assembleString(final Collection coll, final String delim) {
+    public static String join(final Collection coll, final String delim) {
         final StringBuilder buff = new StringBuilder(256);
         Iterator iter = null;
 
@@ -79,7 +75,7 @@ public final class StringUtils {
      * @return concatenated map
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static String assembleString(final Map value, final String delim) {
+    public static String join(final Map value, final String delim) {
         if (value == null || value.isEmpty()) {
             return "";
         }
@@ -142,32 +138,6 @@ public final class StringUtils {
         }
 
         return escaped.toString();
-    }
-
-    /**
-     * Get entity.
-     * 
-     * @param name entity name
-     * @return entity
-     */
-    public static String getEntity(final String name) {
-
-        return (name.startsWith("%")) ? (name + ";") : ("&" + name + ";");
-    }
-
-    /**
-     * Check entity.
-     * 
-     * @param name entity name
-     * @return ture if this entity needs to be resolved
-     */
-    public static boolean checkEntity(final String name) {
-        // check whether this entity need resolve
-        return !(NOT_RESOLVE_ENTITY_LIST.indexOf(STICK + name.trim()
-                + STICK) != -1 ||
-                NOT_RESOLVE_ENTITY_CHAR.indexOf(STICK + name.trim()
-                        + STICK) != -1);
-
     }
 
     /**
@@ -240,9 +210,9 @@ public final class StringUtils {
      * @param domains input domain
      * @return list of {@code props} attribute specializations
      */
-    public static String[][] getExtProps (final String domains){
+    public static String[][] getExtProps(final String domains){
         final List<String[]> propsBuffer = new ArrayList<String[]>();
-        int propsStart = domains.indexOf("a(props");
+        int propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS);
         int propsEnd = domains.indexOf(")",propsStart);
         while (propsStart != -1 && propsEnd != -1){
             final String propPath = domains.substring(propsStart+2,propsEnd).trim();
@@ -252,39 +222,10 @@ public final class StringUtils {
                 propList.add(propPathTokenizer.nextToken());
             }
             propsBuffer.add(propList.toArray(new String[propList.size()]));
-            propsStart = domains.indexOf("a(props", propsEnd);
+            propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS, propsEnd);
             propsEnd = domains.indexOf(")",propsStart);
         }
         return propsBuffer.toArray(new String[propsBuffer.size()][]);
-    }
-
-
-
-    /**
-     * Restore map.
-     * @param s input string
-     * @return map created from string
-     */
-    public static Map<String, String> restoreMap(final String s) {
-        final Map<String,String> copytoMap = new HashMap<String,String>();
-        final StringTokenizer st = new StringTokenizer(s, COMMA);
-
-        while (st.hasMoreTokens()) {
-            final String entry = st.nextToken();
-            final int index = entry.indexOf('=');
-            copytoMap.put(entry.substring(0, index), entry.substring(index+1));
-        }
-
-        return copytoMap;
-    }
-
-    /**
-     * Break down a string separated by commas into a string set.
-     * @param s input string
-     * @return string set
-     */
-    public static Set<String> restoreSet(final String s) {
-        return restoreSet(s, COMMA);
     }
 
     /**
@@ -461,21 +402,6 @@ public final class StringUtils {
         }
 
         return aLocale;
-    }
-
-    /**
-     * Get file's main name.
-     * @param input input filename
-     * @param marker delimiter
-     * @return file's main name
-     */
-    public static String getFileName(final String input, final String marker){
-        final int index = input.lastIndexOf(marker);
-        if(index != -1){
-            return input.substring(0, index);
-        }else{
-            return input;
-        }
     }
     
     /** Whitespace normalization state. */

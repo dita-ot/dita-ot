@@ -65,7 +65,7 @@ final class InsertDependsAction implements IAction {
             }
         }
         if (!result.isEmpty()){
-            return StringUtils.assembleString(result, ",");
+            return StringUtils.join(result, ",");
         } else {
             return "";
         }

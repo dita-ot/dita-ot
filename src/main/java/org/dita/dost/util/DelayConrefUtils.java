@@ -239,7 +239,7 @@ public final class DelayConrefUtils {
         final Properties prop = new Properties();
         for (Map.Entry<String, Set<String>> entry : m.entrySet()) {
             final String key = entry.getKey();
-            final String value = StringUtils.assembleString(entry.getValue(),
+            final String value = StringUtils.join(entry.getValue(),
                     COMMA);
             prop.setProperty(key, value);
         }
