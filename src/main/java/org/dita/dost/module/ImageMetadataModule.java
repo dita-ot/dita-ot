@@ -38,16 +38,11 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
-        }
-
         final ImageMetadataFilter writer = new ImageMetadataFilter(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)), job);
         writer.setLogger(logger);
         for (final FileInfo f: job.getFileInfo()) {
             if (!f.isResourceOnly && (ATTR_FORMAT_VALUE_DITA.equals(f.format) || f.isChunked || f.isChunkedDitaMap)) {
-                writer.write(new File(tempDir, f.file.getPath()).getAbsoluteFile());
+                writer.write(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
             }
         }
 

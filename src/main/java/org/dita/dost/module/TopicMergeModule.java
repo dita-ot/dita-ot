@@ -59,7 +59,6 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         final File ditaInput = new File(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
         final File style = input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE) != null ? new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE)) : null;
         final File out = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT));
-        final File tempdir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
         final MergeMapParser mapParser = new MergeMapParser();
         mapParser.setLogger(logger);
         mapParser.setJob(job);
@@ -81,7 +80,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
             midBuffer.write(XML_HEAD.getBytes(UTF8));
             midBuffer.write("<dita-merge xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\">".getBytes(UTF8));
             mapParser.setOutputStream(midBuffer);
-            mapParser.read(ditaInput, tempdir);
+            mapParser.read(ditaInput, job.tempDir);
             midBuffer.write("</dita-merge>".getBytes(UTF8));
         } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException(e);

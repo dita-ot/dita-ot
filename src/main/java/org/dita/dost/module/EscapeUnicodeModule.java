@@ -42,9 +42,6 @@ final class EscapeUnicodeModule extends AbstractPipelineModuleImpl {
         final String inputFile = input.getAttribute(ANT_INVOKER_EXT_PARAM_INPUT);
         final String outputFile = input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT);
 
-        //Transliterator transliterator = Transliterator.getInstance("Any-Hex/C");
-        //initTransliterator(transliterator);
-
         final File file = new File(outputFile);
         if (!file.exists()) {
             try {

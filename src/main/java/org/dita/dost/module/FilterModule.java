@@ -8,7 +8,6 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.tools.ant.util.FileUtils;
@@ -30,20 +29,13 @@ final class FilterModule extends AbstractPipelineModuleImpl {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
-        }
-
-        final Collection<FileInfo> files = job.getFileInfo();
-        
         final ProfilingFilter writer = new ProfilingFilter();
         writer.setLogger(logger);
         final FilterUtils filterUtils = parseFilterFile(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
         writer.setFilterUtils(filterUtils);
-        for (final FileInfo f: files) {
+        for (final FileInfo f: job.getFileInfo()) {
             if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                final File file = new File(tempDir, f.file.getPath());
+                final File file = new File(job.tempDir, f.file.getPath());
                 logger.info("Processing " + file.getAbsolutePath());
                 try {
                     writer.write(file.getAbsoluteFile());
