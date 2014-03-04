@@ -57,4 +57,20 @@
   </sub>
 </xsl:template>
 
+  <xsl:template match="*[contains(@class,' hi-d/line-through ')]" name="topic.hi-d.line-through">
+    <span style="text-decoration:line-through">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="setidaname"/>
+      <xsl:apply-templates/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class,' hi-d/overline ')]" name="topic.hi-d.overline">
+    <span style="text-decoration:overline">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="setidaname"/>
+      <xsl:apply-templates/>
+    </span>
+  </xsl:template>  
+
 </xsl:stylesheet>
