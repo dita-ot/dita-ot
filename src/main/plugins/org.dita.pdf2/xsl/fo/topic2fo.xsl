@@ -87,6 +87,10 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="ui-domain.xsl"/>
     <xsl:import href="ut-domain.xsl"/>
     <xsl:import href="abbrev-domain.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/markup-domain-attr.xsl"/>
+    <xsl:import href="markup-domain.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/xml-domain-attr.xsl"/>
+    <xsl:import href="xml-domain.xsl"/>
 
     <xsl:import href="../../cfg/fo/attrs/static-content-attr.xsl"/>
     <xsl:import href="static-content.xsl"/>
