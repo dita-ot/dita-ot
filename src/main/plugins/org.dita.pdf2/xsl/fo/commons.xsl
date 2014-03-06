@@ -1462,6 +1462,13 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="descendant::opentopic-index:index.entry[not(parent::opentopic-index:index.entry)]"/>
     </xsl:template>
 
+  <xsl:template match="*[contains(@class, ' topic/div ')]">
+    <fo:block xsl:use-attribute-sets="div">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
     <xsl:template match="*[contains(@class, ' topic/p ')]">
         <fo:block xsl:use-attribute-sets="p">
             <xsl:call-template name="commonattributes"/>

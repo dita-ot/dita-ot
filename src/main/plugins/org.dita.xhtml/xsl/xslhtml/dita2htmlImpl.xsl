@@ -486,6 +486,14 @@
 
 <!-- =========== BASIC BODY ELEMENTS =========== -->
 
+<xsl:template match="*[contains(@class, ' topic/div ')]">
+  <div>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates/>
+  </div>
+</xsl:template>
+
 <!-- paragraphs -->
 <xsl:template match="*[contains(@class, ' topic/p ')]" name="topic.p">
  <!-- To ensure XHTML validity, need to determine whether the DITA kids are block elements.
