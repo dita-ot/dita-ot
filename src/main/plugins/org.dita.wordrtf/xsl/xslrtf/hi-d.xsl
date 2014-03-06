@@ -33,4 +33,13 @@
 {\sub <xsl:apply-templates/>}
 </xsl:template>
 
+<xsl:template match="*[contains(@class,' hi-d/line-through ')]">
+  {\strike <xsl:apply-templates/>}
+</xsl:template>  
+
+<xsl:template match="*[contains(@class,' hi-d/overline ')]">
+  <!-- RTF does not support overline -->
+  <xsl:apply-templates/>
+</xsl:template>    
+
 </xsl:stylesheet>

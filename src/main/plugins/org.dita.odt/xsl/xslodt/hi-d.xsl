@@ -455,6 +455,20 @@
                               </xsl:otherwise>
                          </xsl:choose>
                     </xsl:if>
+                    <!-- line-through -->
+                    <xsl:if test="contains($style_name, 'line-through')">
+                      <xsl:attribute name="style:text-line-through-style">solid</xsl:attribute>
+                      <xsl:attribute name="style:text-line-through-type">single</xsl:attribute>
+                      <xsl:attribute name="style:text-line-through-width">auto</xsl:attribute>
+                      <xsl:attribute name="style:text-line-through-color">font-color</xsl:attribute>
+                    </xsl:if>
+                    <!-- overline -->
+                    <xsl:if test="contains($style_name, 'overline')">
+                      <xsl:attribute name="style:text-overline-style">solid</xsl:attribute>
+                      <xsl:attribute name="style:text-overline-type">single</xsl:attribute>
+                      <xsl:attribute name="style:text-overline-width">auto</xsl:attribute>
+                      <xsl:attribute name="style:text-overline-color">font-color</xsl:attribute>
+                    </xsl:if>
                     <!-- codeblock/screen -->
                     <xsl:if test="contains($style_name, 'code')">
                          <xsl:attribute name="fo:background-color">#d9d9d9</xsl:attribute>
@@ -589,6 +603,12 @@
           <xsl:value-of select="'code'"/>
      </xsl:if>
      
+  <xsl:if test="ancestor::*[contains(@class, ' hi-d/line-through ')]">
+    <xsl:text>line-through</xsl:text>
+  </xsl:if>
+  <xsl:if test="ancestor::*[contains(@class, ' hi-d/overline ')]">
+    <xsl:text>overline</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
