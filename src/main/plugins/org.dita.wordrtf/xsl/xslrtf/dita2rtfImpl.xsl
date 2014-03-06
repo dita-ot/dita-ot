@@ -17,6 +17,8 @@
 <xsl:import href="pr-d.xsl"/>
 <xsl:import href="ui-d.xsl"/>
 <xsl:import href="sw-d.xsl"/>
+<xsl:import href="markup-d.xsl"/>
+<xsl:import href="xml-d.xsl"/>
 <xsl:import href="dita2rtf-task.xsl"/>
 <xsl:output method="text"/>
 

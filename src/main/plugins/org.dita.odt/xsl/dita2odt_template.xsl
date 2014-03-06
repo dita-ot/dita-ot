@@ -50,6 +50,8 @@
   <xsl:import href="xslodt/pr-d.xsl"/>
   <xsl:import href="xslodt/sw-d.xsl"/>
   <xsl:import href="xslodt/ui-d.xsl"/>
+  <xsl:import href="xslodt/markup-d.xsl"/>
+  <xsl:import href="xslodt/xml-d.xsl"/>
   <!--
   <xsl:import href="xslodt/common/vars.xsl"/>
   -->
