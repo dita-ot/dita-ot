@@ -724,20 +724,10 @@
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/>
   <xsl:choose>
-   <xsl:when test="@href"> <!-- Insert citation as link, use @href as-is -->
+   <xsl:when test="@href">
     <br/><div style="text-align:right"><a>
      <xsl:attribute name="href">
-      <xsl:choose>
-       <xsl:when test="not(@format) or @format = 'dita'">
-        <xsl:call-template name="replace-extension">
-         <xsl:with-param name="filename" select="@href"/>
-         <xsl:with-param name="extension" select="$OUTEXT"/>
-        </xsl:call-template>
-       </xsl:when>
-       <xsl:otherwise>
-        <xsl:value-of select="@href"/>
-       </xsl:otherwise>
-      </xsl:choose>
+       <xsl:call-template name="href"/>
      </xsl:attribute>
      <xsl:choose>
       <xsl:when test="@type = 'external'">
