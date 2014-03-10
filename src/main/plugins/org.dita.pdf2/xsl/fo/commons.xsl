@@ -1627,6 +1627,7 @@ See the accompanying license.txt file for applicable licenses.
                     <fo:basic-link>
                         <xsl:call-template name="buildBasicLinkDestination">
                             <xsl:with-param name="scope" select="@scope"/>
+                            <xsl:with-param name="format" select="@format"/>
                             <xsl:with-param name="href" select="@href"/>
                         </xsl:call-template>
 
