@@ -62,8 +62,17 @@
           <li>#1614 ant build should not bail out when fop directory has no lib folder (milestone 1)</li>
           <li>#1616 Remove legacy PDF from default distributions (milestone 1)</li>          
           <li>#1509 Remove deprecated code (in progress)</li>
+          <li>#1649 Support DITA 1.3 link syntax (milestone 2)</li>
+          <li>#1644 Add more HTML entities to file entities.properties in dost.jar (milestone 2)</li>
+          <li>#1643 Integrator task constructs property constructs with platform-dependent path separators (milestone 2)</li>
+          <li>#1636 Support DITA 1.3 cascade attribute (milestone 2)</li>
+          <li>#1635 Implement DITA 1.3 profiling (milestone 2)</li>
+          <li>#1631 Process keyrefs before conref (milestone 2)</li>
           <li>#1512 Alternative preprocessing plug-in (in progress)</li>
           <li>#1544 Use URI and File instead of String (in progress)</li>
+          <li>#1654 Add DITA 1.3 div element (in progress)</li>
+          <li>#1652 Add DITA 1.3 markup and xml domain support (in progress)</li>
+          <li>#1651 Add new DITA 1.3 highlighting elements (in progress)</li>
         </ul>
       </section>
       <section>
@@ -78,6 +87,10 @@
           <li>#1462 Support for &lt;table> rowheader in PDF output (milestone 1)</li>
           <li>#1486 PDF transform does not apply @rowsep correctly (milestone 1)</li>
           <li>#1607 Keyref not processed for pushed conrefs (milestone 1)</li>
+          <li>#1620 ODT plugin fails due to missing getMax() (milestone 2)</li>
+          <li>#1619 Add validation for attribute generalization (milestone 2)</li>
+          <li>#1103 DITA-OT doesn't rewite lq/@href (milestone 2)</li>
+          <li>#1600 Indirect reference to keys erases one file, causes failures (in progress)</li>
         </ul>
       </section>
     </refbody>

@@ -24,7 +24,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- DITA-OT: Latest stable version -->
     <topicmeta>
       <keywords>
-        <keyword>1.8.2</keyword>
+        <keyword>1.8.4</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -40,7 +40,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- DITA-OT: Latest test version -->
     <topicmeta>
       <keywords>
-        <keyword>2.0.M1</keyword>
+        <keyword>2.0.M2</keyword>
       </keywords>
     </topicmeta>
   </keydef>
