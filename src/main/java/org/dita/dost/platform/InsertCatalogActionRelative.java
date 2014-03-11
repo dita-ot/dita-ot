@@ -29,8 +29,9 @@ import org.xml.sax.helpers.AttributesImpl;
  * To do: Handle xml:base.
  * 
  * @author Deborah Pickett
- *
+ * @deprecated use {@link ImportCatalogActionRelative} instead
  */
+@Deprecated
 final class InsertCatalogActionRelative extends InsertAction {
 
     @Override

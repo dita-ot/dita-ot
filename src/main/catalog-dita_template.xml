@@ -16,5 +16,6 @@
    <dita:extension id="dita.specialization.catalog"
                    behavior="org.dita.dost.platform.InsertAction"/>
    <dita:extension id="dita.specialization.catalog.relative"
-                   behavior="org.dita.dost.platform.InsertCatalogActionRelative"/>
+                   behavior="org.dita.dost.platform.ImportCatalogActionRelative"/>
+  
 </catalog>
