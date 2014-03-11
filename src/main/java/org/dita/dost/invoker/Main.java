@@ -505,7 +505,18 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         }
 
-        if (installFile != null || uninstallId != null) {
+        if (justPrintUsage || justPrintVersion || justPrintDiagnostics) {
+            if (justPrintVersion) {
+                printVersion(msgOutputLevel);
+            }
+            if (justPrintUsage) {
+                printUsage();
+            }
+            if (justPrintDiagnostics) {
+                Diagnostics.doReport(System.out, msgOutputLevel);
+            }
+            return;
+        } else if (installFile != null || uninstallId != null) {
             buildFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
             targets.clear();
             if (installFile != null) {
@@ -540,20 +551,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             if (!definedProps.containsKey("base.temp.dir") && !definedProps.containsKey("dita.temp.dir")) {
                 definedProps.put("base.temp.dir", new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
             }
-        }
-
-        if (msgOutputLevel >= Project.MSG_VERBOSE || justPrintVersion) {
-            printVersion(msgOutputLevel);
-        }
-
-        if (justPrintUsage || justPrintVersion || justPrintDiagnostics) {
-            if (justPrintUsage) {
-                printUsage();
-            }
-            if (justPrintDiagnostics) {
-                Diagnostics.doReport(System.out, msgOutputLevel);
-            }
-            return;
         }
 
         // if buildFile was not specified on the command line,
