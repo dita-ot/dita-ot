@@ -247,7 +247,7 @@
          dest="${basedir}/target/"
          skipexisting="true"/>
     <unzip src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip"
-           dest="${basedir}/src/main/tools"/>
+           dest="${basedir}/target/tools"/>
   </target>
 
   <target name="package-binary-minimum">
@@ -319,7 +319,7 @@
         <include name="saxon.jar"/>
         <include name="saxon-dom.jar"/>
       </fileset>
-      <fileset dir="${basedir}/src/main/tools/apache-ant-${tool.ant.version}/lib">
+      <fileset dir="${basedir}/target/tools/apache-ant-${tool.ant.version}/lib">
         <include name="ant.jar"/>
         <include name="ant-launcher.jar"/>
         <include name="ant-apache-resolver.jar"/>
@@ -376,22 +376,9 @@
         <patternset refid="pattern.package.full"/>
       </fileset>
     </copy>
-    <!--copy todir="${temp.dist.dir}/tools/ant">
-      <zipfileset src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip">
-        <exclude name="apache-ant-${tool.ant.version}/etc/**"/>
-        <exclude name="apache-ant-${tool.ant.version}/manual/**"/>
-        <exclude name="apache-ant-${tool.ant.version}/fetch.xml"/>
-        <exclude name="apache-ant-${tool.ant.version}/get-m2.xml"/>
-        <exclude name="apache-ant-${tool.ant.version}/lib/*.pom"/>
-        <include name="apache-ant-${tool.ant.version}/*"/>
-        <include name="apache-ant-${tool.ant.version}/bin/**"/>
-        <include name="apache-ant-${tool.ant.version}/lib/**"/>
-      </zipfileset>
-      <mapper type="glob" from="apache-ant-${tool.ant.version}${file.separator}*" to="*"/>
-    </copy-->
     <mkdir dir="${temp.dist.dir}/tools/ant"/>
     <copy todir="${temp.dist.dir}/tools/ant">
-      <fileset dir="${basedir}/src/main/tools/apache-ant-${tool.ant.version}">
+      <fileset dir="${basedir}/target/tools/apache-ant-${tool.ant.version}">
        <exclude name="etc/**"/>
        <exclude name="manual/**"/>
        <exclude name="fetch.xml"/>
