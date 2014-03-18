@@ -83,12 +83,7 @@ public final class DelayConrefUtils {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             //factory.setFeature("http://xml.org/sax/features/validation", false);
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            try {
-                Class.forName(RESOLVER_CLASS);
-                builder.setEntityResolver(CatalogUtils.getCatalogResolver());
-            }catch (final ClassNotFoundException e){
-                builder.setEntityResolver(null);
-            }
+            builder.setEntityResolver(CatalogUtils.getCatalogResolver());
             final Document root = builder.parse(new InputSource(new FileInputStream(absolutePathToFile)));
 
             //get root element
@@ -140,12 +135,7 @@ public final class DelayConrefUtils {
                 final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 //factory.setFeature("http://xml.org/sax/features/validation", false);
                 final DocumentBuilder builder = factory.newDocumentBuilder();
-                try {
-                    Class.forName(RESOLVER_CLASS);
-                    builder.setEntityResolver(CatalogUtils.getCatalogResolver());
-                }catch (final ClassNotFoundException e){
-                    builder.setEntityResolver(null);
-                }
+                builder.setEntityResolver(CatalogUtils.getCatalogResolver());
                 root = builder.parse(new InputSource(new FileInputStream(exportFile)));
             }
             //get file node which contains the export node
