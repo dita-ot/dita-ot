@@ -80,14 +80,13 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         }
         curMatchTopic = topicSet.contains(SHARP) ? SHARP : null;
         topicIdStack = new ArrayDeque<String>();
-        final File inputFile = filename;
         final File outputFile = new File(filename.getPath() + FILE_EXTENSION_TEMP);
         FileOutputStream fileOutput = null;
         try {
             fileOutput = new FileOutputStream(outputFile);
             output = new OutputStreamWriter(fileOutput, UTF8);
             reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
-            reader.parse(inputFile.toURI().toString());
+            reader.parse(filename.toURI().toString());
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -107,9 +106,9 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             }
         }
         try {
-            FileUtils.moveFile(outputFile, inputFile);
+            FileUtils.moveFile(outputFile, filename);
         } catch (final Exception e) {
-            logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
+            logger.error("Failed to replace " + filename + ": " + e.getMessage());
         }
     }
 

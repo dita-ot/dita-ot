@@ -157,8 +157,7 @@ public final class IndexTermReader extends AbstractXMLReader {
     public void endDocument() throws SAXException {
         final int size = indexTermList.size();
         updateIndexTermTargetName();
-        for(int i=0; i<size; i++){
-            final IndexTerm indexterm = indexTermList.get(i);
+        for (final IndexTerm indexterm : indexTermList) {
             //IndexTermCollection.getInstantce().addTerm(indexterm);
             result.addTerm(indexterm);
         }
@@ -467,8 +466,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         if(defaultTitle == null){
             defaultTitle = targetFile;
         }
-        for(int i=0; i<size; i++){
-            final IndexTerm indexterm = indexTermList.get(i);
+        for (final IndexTerm indexterm : indexTermList) {
             updateIndexTermTargetName(indexterm);
         }
     }

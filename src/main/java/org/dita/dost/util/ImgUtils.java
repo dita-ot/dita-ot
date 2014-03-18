@@ -147,8 +147,7 @@ public final class ImgUtils {
             file = new FileInputStream(imgInput);
             file.read(buff);
             //String ret = encoder.encode(buff);
-            final String ret = encoder.encodeToString(buff);
-            return ret;
+            return encoder.encodeToString(buff);
         } catch (final FileNotFoundException e) {
             logger.error(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
             logger.error(e.getMessage(), e) ;

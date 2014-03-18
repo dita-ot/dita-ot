@@ -347,7 +347,7 @@ public final class DitaMetaWriter extends AbstractXMLWriter {
                 child = item; // prevent insert action still want to operate child after it is removed.
             } else {
                 item = parent.getOwnerDocument().importNode(item,true);
-                ((Element) parent).insertBefore(item, child);
+                parent.insertBefore(item, child);
             }
         }
 

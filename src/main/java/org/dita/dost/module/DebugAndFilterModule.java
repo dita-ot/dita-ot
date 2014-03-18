@@ -527,7 +527,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             if(target.equals(PI_WORKDIR_TARGET)) {
                 if (workdir != null) {
                     try {
-                        if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) == -1) {
+                        if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
                             d = workdir.getCanonicalPath();
                         } else {
                             d = UNIX_SEPARATOR + workdir.getCanonicalPath();

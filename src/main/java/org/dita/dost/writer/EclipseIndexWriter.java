@@ -196,8 +196,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         // target
         // Otherwise, the term won't be displayed in the index tab.
         if (targets != null && !targets.isEmpty()) {
-            for (int i = 0; i < targetNum; i++) {
-                final IndexTermTarget target = targets.get(i);
+            for (final IndexTermTarget target : targets) {
                 final String targetUri = target.getTargetURI();
                 final String targetName = target.getTargetName();
                 if (targetUri == null) {
@@ -275,8 +274,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         // target
         // Otherwise, the term won't be displayed in the index tab.
         if (targets != null && !targets.isEmpty()) {
-            for (int i = 0; i < targetNum; i++) {
-                final IndexTermTarget target = targets.get(i);
+            for (final IndexTermTarget target : targets) {
                 final String targetUri = target.getTargetURI();
                 final String targetName = target.getTargetName();
                 if (targetUri == null) {
@@ -306,8 +304,8 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     private List<IndexTerm> cloneIndextermList (final List<IndexTerm> termList){
         final List<IndexTerm> termListClone = new ArrayList<IndexTerm>(termList.size());
         if (termList != null && !termList.isEmpty()){
-            for (int i = 0; i < termList.size(); i++) {
-                termListClone.add(termList.get(i));
+            for (IndexTerm aTermList : termList) {
+                termListClone.add(aTermList);
             }
         }
         return termListClone;

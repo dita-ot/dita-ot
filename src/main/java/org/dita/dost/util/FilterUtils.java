@@ -157,7 +157,7 @@ public final class FilterUtils {
         return false;
     }
 
-    private Pattern groupPattern = Pattern.compile("(\\w+)\\((.+?)\\)");
+    private final Pattern groupPattern = Pattern.compile("(\\w+)\\((.+?)\\)");
     
     public Map<String, List<String>> getGroups(final String value) {
         final Map<String, List<String>> res = new HashMap<String, List<String>>();

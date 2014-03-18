@@ -332,7 +332,7 @@ public final class FileUtils {
             final String mapToken = mapTokenizer.nextToken();
             final String topicToken = topicTokenizer.nextToken();
             boolean equals = false;
-            if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) != -1){
+            if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)){
                 //if OS is Windows, we need to ignore case when comparing path names.
                 equals = mapToken.equalsIgnoreCase(topicToken);
             }else{
@@ -700,7 +700,7 @@ public final class FileUtils {
      */
     public static boolean fileExists (String filename){  //Eric
         // FIXME don't modify argument, use a separate variable for results2
-        filename = filename.indexOf(SHARP) != -1
+        filename = filename.contains(SHARP)
                 ? filename.substring(0, filename.indexOf(SHARP))
                         : filename;
 

@@ -289,7 +289,7 @@ public final class CommandLineInvoker {
      * @return Ant executable file name
      */
     private String getCommandRunner() {
-        return (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) != -1)
+        return (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS))
                 ? "ant.bat"
                         : "ant";
     }

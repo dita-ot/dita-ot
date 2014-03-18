@@ -848,7 +848,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * @param atts all attributes
      * @param attrName attributes to process
      */
-    private void parseLinkAttribute(final Attributes atts, final String attrName, final URI baseDir) throws SAXException, URISyntaxException {
+    private void parseLinkAttribute(final Attributes atts, final String attrName, final URI baseDir) {
         URI attValue = toURI(atts.getValue(attrName));
         if (attValue == null) {
             return;
@@ -856,15 +856,14 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         if (isExternal(attValue, getInherited(ATTRIBUTE_NAME_SCOPE))) {
             return;
         }
-        
-        final URI linkUri = attValue;
+
         // Ignore absolute paths for now
 //        if (new File(attrValue).isAbsolute() && // FIXME: cannot test for absolute here as the value is not a system path yet
 //                !ATTRIBUTE_NAME_DATA.equals(attrName)) {
 //            attrValue = FileUtils.getRelativePath(inputFile.getAbsolutePath(), attrValue);
 //        // for object tag bug:3052156
 //        } else
-        final File file = FileUtils.resolve(baseDir.toString(), linkUri.getPath());
+        final File file = FileUtils.resolve(baseDir.toString(), attValue.getPath());
 
         final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
         final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
@@ -919,8 +918,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     private void handleHrefAttr(final Attributes atts, final URI baseDir) throws URISyntaxException, DITAOTException {
         final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         if (href != null) {
-            final URI linkUri = href;
-            final File file = FileUtils.resolve(baseDir.toString(), linkUri.getPath());
+            final File file = FileUtils.resolve(baseDir.toString(), href.getPath());
             if (PR_D_CODEREF.matches(atts)) {
                 fileInfo.hasCoderef(true);
                 if (isExternal(href, getInherited(ATTRIBUTE_NAME_SCOPE))) {
@@ -959,7 +957,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     private boolean isExternal(final URI href, final String scope) {
         return ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)
                 || ATTR_SCOPE_VALUE_PEER.equals(scope)
-                || href.toString().indexOf(COLON_DOUBLE_SLASH) != -1
+                || href.toString().contains(COLON_DOUBLE_SLASH)
                 || href.toString().startsWith(SHARP);
     }
     
@@ -968,8 +966,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         if (copyTo != null && !isExternal(copyTo, getInherited(ATTRIBUTE_NAME_SCOPE))) {
             final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
             if (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat)) {
-                final URI linkUri = copyTo;
-                final File file = FileUtils.resolve(baseDir.toString(), linkUri.getPath());
+                final File file = FileUtils.resolve(baseDir.toString(), copyTo.getPath());
                 final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
                 final File value = FileUtils.resolve(toFile(currentDir), toFile(href));
     
@@ -982,7 +979,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
                     copytoMap.put(file, value);
                 }
     
-                final String pathWithoutID = FileUtils.resolve(currentDir.toString(), toFile(linkUri.getPath()).getPath()).getPath();
+                final String pathWithoutID = FileUtils.resolve(currentDir.toString(), toFile(copyTo.getPath()).getPath()).getPath();
                 final Builder b = getOrCreateBuilder(pathWithoutID);
                 if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
                     b.isSkipChunk(true);
@@ -1054,9 +1051,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     private List<String> getKeysList(final String key, final Map<String, String> keysRefMap) {
         final List<String> list = new ArrayList<String>();
         // Iterate the map to look for multi-level keys
-        final Iterator<Entry<String, String>> iter = keysRefMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, String> entry = iter.next();
+        for (Entry<String, String> entry : keysRefMap.entrySet()) {
             // Multi-level key found
             if (entry.getValue().equals(key)) {
                 // add key into the list
@@ -1081,9 +1076,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         KeyDef value = null;
         // tempMap storing values to avoid ConcurrentModificationException
         final Map<String, KeyDef> tempMap = new HashMap<String, KeyDef>();
-        final Iterator<Entry<String, KeyDef>> iter = keysDefMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, KeyDef> entry = iter.next();
+        for (Entry<String, KeyDef> entry : keysDefMap.entrySet()) {
             key = entry.getKey();
             value = entry.getValue();
             // there is multi-level keys exist.

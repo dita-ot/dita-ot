@@ -1349,7 +1349,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         while (spaces.length() <= maxlen) {
             spaces += spaces;
         }
-        final StringBuffer msg = new StringBuffer();
+        final StringBuilder msg = new StringBuilder();
         msg.append(heading + lSep + lSep);
         final int size = names.size();
         for (int i = 0; i < size; i++) {

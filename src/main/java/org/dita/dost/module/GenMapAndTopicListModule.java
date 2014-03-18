@@ -280,7 +280,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @throws IOException 
      * @throws SAXException 
      */
-    private void initFilters() throws SAXException, IOException {
+    private void initFilters() {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
 //        listFilter.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
@@ -309,7 +309,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @throws SAXException parsing exception
      * @throws IOException if getting canonical file path fails
      */
-    private void initXMLReader(final File ditaDir, final boolean validate, final File rootFile) throws SAXException, IOException {
+    private void initXMLReader(final File ditaDir, final boolean validate, final File rootFile) throws SAXException {
         reader = StringUtils.getXMLReader();
         // to check whether the current parsing file's href value is out of inputmap.dir
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);

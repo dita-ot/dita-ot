@@ -1429,8 +1429,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         try {
             builder = factory.newDocumentBuilder();
             final Document doc = builder.parse(absolutePathToFile);
-            final Element root = doc.getDocumentElement();
-            return root;
+            return doc.getDocumentElement();
         } catch (final ParserConfigurationException e) {
             e.printStackTrace();
         } catch (final SAXException e) {

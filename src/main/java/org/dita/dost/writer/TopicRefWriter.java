@@ -333,7 +333,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
      * @return boolean
      */
     private boolean notLocalURL(final String valueOfURL) {
-        return valueOfURL.indexOf(NOT_LOCAL_URL) != -1;
+        return valueOfURL.contains(NOT_LOCAL_URL);
     }
 
     /**
@@ -344,10 +344,9 @@ public final class TopicRefWriter extends AbstractXMLWriter {
      * @return boolean
      */
     private boolean notTopicFormat(final Attributes attrs, final String valueOfHref) {
-        final String hrefValue = valueOfHref;
         final String formatValue = attrs.getValue(ATTRIBUTE_NAME_FORMAT);
         final String extOfHref = getExtension(valueOfHref);
-        if (notLocalURL(hrefValue)) {
+        if (notLocalURL(valueOfHref)) {
             return true;
         } else {
             if (formatValue == null && extOfHref != null && !extOfHref.equalsIgnoreCase("DITA")

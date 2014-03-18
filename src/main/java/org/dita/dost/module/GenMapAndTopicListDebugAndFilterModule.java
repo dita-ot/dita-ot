@@ -323,7 +323,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      * @throws SAXException parsing exception
      * @throws IOException if getting canonical file path fails
      */
-    private void initXMLReader(final File ditaDir, final boolean validate, final URI rootFile) throws SAXException, IOException {
+    private void initXMLReader(final File ditaDir, final boolean validate, final URI rootFile) throws SAXException {
         reader = StringUtils.getXMLReader();
         // to check whether the current parsing file's href value is out of inputmap.dir
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);

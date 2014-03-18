@@ -187,7 +187,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      * @param atts all attributes
      * @param attrName attributes to process
      */
-    private void parseAttribute(final Attributes atts) throws SAXException {
+    private void parseAttribute(final Attributes atts) {
         String attrValue = atts.getValue(ATTRIBUTE_NAME_HREF);
         if (attrValue == null) {
             return;

@@ -176,11 +176,10 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 
     private void genTargets(final IndexTerm indexTerm, final TopicrefElement obj) {
 
-        final TopicrefElement topicref = obj;
         final IndexTermTarget target = new IndexTermTarget();
         String targetURI = null;
 
-        final String href = topicref.getHref();
+        final String href = obj.getHref();
 
         final StringBuilder buffer = new StringBuilder();
         if (!href.contains(COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)){
@@ -194,8 +193,8 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             targetURI = href;
         }
 
-        if (topicref.getNavTitle() != null){
-            target.setTargetName(topicref.getNavTitle());
+        if (obj.getNavTitle() != null){
+            target.setTargetName(obj.getNavTitle());
         }else {
             target.setTargetName(href);
         }

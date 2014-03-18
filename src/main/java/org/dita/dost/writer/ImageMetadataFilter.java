@@ -157,8 +157,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         }
         final URI fileName = fileDir.resolve(href);
         final URI imgInputUri = outputDir.toURI().resolve(fileName);
-        final File imgInput = new File(imgInputUri);
-        return imgInput;
+        return new File(imgInputUri);
     }
     
 }

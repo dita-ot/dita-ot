@@ -273,8 +273,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
         if (subTerms != null && subTermNum > 0) {
             Collections.sort(subTerms);
-            for (int i = 0; i < subTermNum; i++) {
-                final IndexTerm subTerm = subTerms.get(i);
+            for (final IndexTerm subTerm : subTerms) {
                 subTerm.sortSubTerms();
             }
         }

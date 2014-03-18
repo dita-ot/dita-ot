@@ -208,7 +208,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @return job configuration
      */
     public static Job getJob(final File tempDir, final Project project) {
-        Job job = (Job) project.getReference(ANT_REFERENCE_JOB);
+        Job job = project.getReference(ANT_REFERENCE_JOB);
         if (job != null && job.isStale(tempDir)) {
             project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
             job = null;
@@ -335,13 +335,13 @@ public final class ExtensibleAntInvoker extends Task {
         	this.out = out;
         }
         
-        public void setIncludesfile(final File includesfile) throws IOException {
+        public void setIncludesfile(final File includesfile) {
               final IncludesFile i = new IncludesFile();
               i.setName(includesfile);
               includes.add(i);
         }
         
-        public void setExcludesfile(final File excludesfile) throws IOException {
+        public void setExcludesfile(final File excludesfile) {
             final IncludesFile i = new IncludesFile();
             i.setName(excludesfile);
             excludes.add(i);

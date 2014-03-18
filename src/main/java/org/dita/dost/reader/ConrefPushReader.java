@@ -299,13 +299,12 @@ public final class ConrefPushReader extends AbstractXMLReader {
                     //if there is no '#' in target string, report error
                     logger.error(MessageUtils.getInstance().getMessage("DOTJ041E", target.toString()).toString());
                 } else {
-                    final String targetLoc = fragment;
                     String id = "";
                     //has element id
-                    if (targetLoc.contains(SLASH)) {
-                        id = targetLoc.substring(targetLoc.lastIndexOf(SLASH) + 1);
+                    if (fragment.contains(SLASH)) {
+                        id = fragment.substring(fragment.lastIndexOf(SLASH) + 1);
                     } else {
-                        id = targetLoc;
+                        id = fragment;
                     }
                     //add id attribute
                     pushcontentWriter.writeAttribute(ATTRIBUTE_NAME_ID,  id);

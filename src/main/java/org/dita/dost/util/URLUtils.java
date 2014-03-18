@@ -344,7 +344,7 @@ public final class URLUtils {
      */
     public static String clean(final String path, final boolean ascii) {
         int len = path.length(), ch;
-        final StringBuffer buffer = new StringBuffer(len*3);
+        final StringBuilder buffer = new StringBuilder(len*3);
         // Change C:/something to /C:/something
         if (len >= 2 && path.charAt(1) == ':') {
             ch = Character.toUpperCase(path.charAt(0));
@@ -577,8 +577,8 @@ public final class URLUtils {
         if (basePath.getPath().equals(refPath.getPath()) && refPath.getFragment() != null) {
             rel = toURI("");
         } else {
-            final StringBuffer upPathBuffer = new StringBuffer(128);
-            final StringBuffer downPathBuffer = new StringBuffer(128);
+            final StringBuilder upPathBuffer = new StringBuilder(128);
+            final StringBuilder downPathBuffer = new StringBuilder(128);
             final StringTokenizer mapTokenizer = new StringTokenizer(
                     FileUtils.normalize(basePath.getPath(), UNIX_SEPARATOR),
                     UNIX_SEPARATOR);
@@ -591,7 +591,7 @@ public final class URLUtils {
                 final String mapToken = mapTokenizer.nextToken();
                 final String topicToken = topicTokenizer.nextToken();
                 boolean equals = false;
-                if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) != -1){
+                if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)){
                     //if OS is Windows, we need to ignore case when comparing path names.
                     equals = mapToken.equalsIgnoreCase(topicToken);
                 }else{
@@ -647,7 +647,7 @@ public final class URLUtils {
      */
     public static URI getRelativePath(final URI relativePath) {
         final StringTokenizer tokenizer = new StringTokenizer(relativePath.toString(), URI_SEPARATOR);
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
         if (tokenizer.countTokens() == 1){
             return null;
         }else{

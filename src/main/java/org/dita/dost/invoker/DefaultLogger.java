@@ -364,8 +364,7 @@ public class DefaultLogger implements BuildLogger {
     protected String getTimestamp() {
         final Date date = new Date(System.currentTimeMillis());
         final DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-        final String finishTime = formatter.format(date);
-        return finishTime;
+        return formatter.format(date);
     }
 
     /**

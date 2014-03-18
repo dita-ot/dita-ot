@@ -78,7 +78,7 @@ public final class FilePathToURI {
      */
     public static String escapeSpecialAsciiAndNonAscii(final String path) {
         int len = path.length(), ch;
-        final StringBuffer buffer = new StringBuffer(len*3);
+        final StringBuilder buffer = new StringBuilder(len*3);
         // Change C:/something to /C:/something
         if (len >= 2 && path.charAt(1) == ':') {
             ch = Character.toUpperCase(path.charAt(0));

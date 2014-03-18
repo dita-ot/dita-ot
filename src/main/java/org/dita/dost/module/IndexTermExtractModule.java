@@ -80,8 +80,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
-    private void parseAndValidateInput(final AbstractPipelineInput input)
-            throws DITAOTException {
+    private void parseAndValidateInput(final AbstractPipelineInput input) {
         final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
         String output = input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT);
         if (!new File(output).isAbsolute()) {
@@ -161,7 +160,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                     xmlReader.parse(new InputSource(inputStream));
                     inputStream.close();
                 } catch (final Exception e) {
-                    final StringBuffer buff = new StringBuffer();
+                    final StringBuilder buff = new StringBuilder();
                     String msg = null;
                     msg = MessageUtils.getInstance().getMessage("DOTJ013E", target).toString();
                     logger.error(buff.append(msg).append(e.getMessage()).toString());

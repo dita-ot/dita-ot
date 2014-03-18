@@ -294,7 +294,7 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @param res attributes to write to
      * @throws IOException if writing to output failed
      */
-    private void processAttributes(final String qName, final Attributes atts, final AttributesImpl res) throws IOException {
+    private void processAttributes(final String qName, final Attributes atts, final AttributesImpl res) {
         // copy the element's attributes
         final int attsLen = atts.getLength();
         for (int i = 0; i < attsLen; i++) {
@@ -345,8 +345,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         final URI tempDirUri = tempDir.toURI();
         final URI filePath = tempDirUri.resolve(toURI(inputFile));
         final URI keyValue = tempDirUri.resolve(href);
-        final URI updatedHref = URLUtils.getRelativePath(filePath, keyValue);
-        return updatedHref;
+        return URLUtils.getRelativePath(filePath, keyValue);
     }
     
     @Override
