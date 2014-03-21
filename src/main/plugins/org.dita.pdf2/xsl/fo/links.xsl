@@ -27,7 +27,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+This file is part of the DITA Open Toolkit project. 
 See the accompanying license.txt file for applicable licenses.
 -->
 
@@ -269,10 +269,10 @@ See the accompanying license.txt file for applicable licenses.
 			</xsl:call-template>
 
 			<xsl:choose>
-				<xsl:when test="not(@scope = 'external' or @format = 'html') and exists($referenceTitle)">
+				<xsl:when test="not(@scope = 'external' or not(empty(@format) or  @format = 'dita')) and exists($referenceTitle)">
 					<xsl:copy-of select="$referenceTitle"/>
 				</xsl:when>
-				<xsl:when test="not(@scope = 'external' or @format = 'html')">
+				<xsl:when test="not(@scope = 'external' or not(empty(@format) or  @format = 'dita'))">
 					<xsl:call-template name="insertPageNumberCitation">
 						<xsl:with-param name="isTitleEmpty" select="'yes'"/>
 						<xsl:with-param name="destination" select="$destination"/>
@@ -299,7 +299,7 @@ See the accompanying license.txt file for applicable licenses.
 				</xsl:if>
 		-->
 
-    	<xsl:if test="not(@scope = 'external' or @format = 'html') and exists($referenceTitle) and not($element[contains(@class, ' topic/fn ')])">
+    	<xsl:if test="not(@scope = 'external' or not(empty(@format) or  @format = 'dita')) and exists($referenceTitle) and not($element[contains(@class, ' topic/fn ')])">
             <!-- SourceForge bug 1880097: should not include page number when xref includes author specified text -->
             <xsl:if test="not(processing-instruction()[name()='ditaot'][.='usertext'])">
                 <xsl:call-template name="insertPageNumberCitation">
@@ -473,7 +473,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:param name="href" select="@href"/>
         <xsl:choose>
             <xsl:when test="(contains($href, '://') and not(starts-with($href, 'file://')))
-            or starts-with($href, '/') or $scope = 'external' or $format = 'html'">
+            or starts-with($href, '/') or $scope = 'external' or not(empty($format) or  $format = 'dita')">
                 <xsl:attribute name="external-destination">
                     <xsl:value-of select="concat('url(', $href, ')')"/>
                 </xsl:attribute>
