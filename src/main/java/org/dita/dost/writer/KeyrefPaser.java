@@ -425,7 +425,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             if (topicFile.exists()) {   
                                 valid = true;
                                 final String topicId = getFirstTopicId(topicFile);
-                                target_output = normalizeHrefValue(URLUtils.getRelativePath(tempDir.toURI().resolve(inputFile.getPath()), tempDir.toURI().resolve(target)), elementId, topicId);
+                                target_output = normalizeHrefValue(URLUtils.getRelativePath(tempDir.toURI().resolve(toURI(inputFile)), tempDir.toURI().resolve(target)), elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
                                     final URI f = toURI(inputFile).resolve(target_output);
