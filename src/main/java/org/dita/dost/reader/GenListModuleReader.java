@@ -871,7 +871,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     private void parseAttribute(final Attributes atts, final String attrName) throws SAXException {
         String attrValue = atts.getValue(attrName);
-        String filename = null;
         final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
@@ -903,18 +902,20 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 || attrValue.contains(COLON_DOUBLE_SLASH) || attrValue.startsWith(SHARP)) {
             return;
         }
-        if (attrValue.startsWith("file:/") && !attrValue.contains("file://")) {
-            attrValue = attrValue.substring("file:/".length());
-            // Unix like OS
-            if (UNIX_SEPARATOR.equals(File.separator)) {
-                attrValue = UNIX_SEPARATOR + attrValue;
-            }
-        } else if (attrValue.startsWith("file:") && !attrValue.startsWith("file:/")) {
-            attrValue = attrValue.substring("file:".length());
-        }
-        final File target = new File(attrValue);
-        if (target.isAbsolute() && !ATTRIBUTE_NAME_DATA.equals(attrName)) {
-            attrValue = FileUtils.getRelativeUnixPath(rootFilePath.getAbsolutePath(), attrValue);
+//        if (attrValue.startsWith("file:/") && !attrValue.contains("file://")) {
+//            attrValue = attrValue.substring("file:/".length());
+//            // Unix like OS
+//            if (UNIX_SEPARATOR.equals(File.separator)) {
+//                attrValue = UNIX_SEPARATOR + attrValue;
+//            }
+//        } else if (attrValue.startsWith("file:") && !attrValue.startsWith("file:/")) {
+//            attrValue = attrValue.substring("file:".length());
+//        }
+
+        final URI target = toURI(attrValue);
+        String filename = null;
+        if (isAbsolute(target) && !ATTRIBUTE_NAME_DATA.equals(attrName)) {
+            filename = FileUtils.getRelativeUnixPath(rootFilePath.getAbsoluteFile().toURI().getPath(), target.getPath());
             // for object tag bug:3052156
         } else if (ATTRIBUTE_NAME_DATA.equals(attrName)) {
             if (!StringUtils.isEmptyString(codebase)) {

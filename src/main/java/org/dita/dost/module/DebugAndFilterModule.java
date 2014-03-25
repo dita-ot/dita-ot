@@ -198,7 +198,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             }
 
             // reload the property for processing of copy-to
-            performCopytoTask(job.tempDir, job);
+            performCopytoTask();
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
@@ -449,14 +449,14 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     /**
      * Execute copy-to task, generate copy-to targets base on sources
      */
-    private void performCopytoTask(final File tempDir, final Job job) {
+    private void performCopytoTask() {
         final Map<File, File> copytoMap = job.getCopytoMap();
         
         for (final Map.Entry<File, File> entry: copytoMap.entrySet()) {
             final File copytoTarget = entry.getKey();
             final File copytoSource = entry.getValue();
-            final File srcFile = new File(tempDir, copytoSource.getPath());
-            final File targetFile = new File(tempDir, copytoTarget.getPath());
+            final File srcFile = new File(job.tempDir, copytoSource.getPath());
+            final File targetFile = new File(job.tempDir, copytoTarget.getPath());
 
             if (targetFile.exists()) {
                 /*logger
@@ -465,7 +465,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                                 .append("\"] which points to an existed file was ignored.").toString());*/
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
             }else{
-                final File inputMapInTemp = new File(tempDir, job.getInputMap()).getAbsoluteFile();
+                final File inputMapInTemp = new File(job.tempDir, job.getInputMap()).getAbsoluteFile();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
             }
         }
