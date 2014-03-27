@@ -1195,7 +1195,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         if (scopeValue == null) {
             scopeValue = ATTR_SCOPE_VALUE_LOCAL;
         }
-        return !(scopeValue != null && scopeValue.equals(ATTR_SCOPE_VALUE_EXTERNAL));
+        return !scopeValue.equals(ATTR_SCOPE_VALUE_EXTERNAL);
 
     }
 

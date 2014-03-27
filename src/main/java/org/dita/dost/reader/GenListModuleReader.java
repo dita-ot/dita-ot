@@ -10,37 +10,27 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.StringUtils.*;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-import java.util.Map.Entry;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
@@ -53,10 +43,9 @@ import org.xml.sax.XMLReader;
  * 
  * <p>
  * <strong>Not thread-safe</strong>. Instances can be reused by calling
- * {@link #reset()} between calls to {@link #parse(File)}.
+ * {@link #reset()} between calls to parse.
  * </p>
  */
-@SuppressWarnings("RedundantIfStatement")
 public final class GenListModuleReader extends AbstractXMLFilter {
     
     /** Output utilities */
@@ -112,7 +101,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Absolute system path to file being processed */
     private File currentFile = null;
     private File rootFilePath = null;
-    private boolean setSystemid = true;
     /** Stack for @processing-role value */
     private final Stack<String> processRoleStack;
     /** Depth inside a @processing-role parent */
@@ -229,11 +217,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     public Map<File, Set<File>> getRelationshipGrap() {
         return schemeRelationGraph;
-    }
-
-    @Deprecated
-    public String getPrimaryDitamap() {
-        return primaryDitamap;
     }
 
     public void setPrimaryDitamap(final String primaryDitamap) {
@@ -375,7 +358,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /**
      * Set processing input directory absolute path.
      * 
-     * @param inputFile absolute path to base directory
+     * @param inputDir absolute path to base directory
      */
     public void setInputDir(final File inputDir) {
         this.rootDir = inputDir;
@@ -605,7 +588,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (domains == null) {
                 logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
             } else {
-                props = StringUtils.getExtProps(domains);
+                props = getExtProps(domains);
             }
         }
 
@@ -772,7 +755,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             // get branch's id
             final String id = atts.getValue(ATTRIBUTE_NAME_ID);
             // this branch is not referenced
-            if (level == 0 && StringUtils.isEmptyString(id)) {
+            if (level == 0 && isEmptyString(id)) {
                 // There is occassion that the whole ditamap should be parsed
                 final boolean found = searchBrachesMap(id);
                 if (found) {
@@ -792,7 +775,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 level++;
                 return true;
                 // This branch has an id but is a new one
-            } else if (!StringUtils.isEmptyString(id)) {
+            } else if (!isEmptyString(id)) {
                 // search branches map.
                 final boolean found = searchBrachesMap(id);
                 // branch is referenced
@@ -902,15 +885,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 || attrValue.contains(COLON_DOUBLE_SLASH) || attrValue.startsWith(SHARP)) {
             return;
         }
-//        if (attrValue.startsWith("file:/") && !attrValue.contains("file://")) {
-//            attrValue = attrValue.substring("file:/".length());
-//            // Unix like OS
-//            if (UNIX_SEPARATOR.equals(File.separator)) {
-//                attrValue = UNIX_SEPARATOR + attrValue;
-//            }
-//        } else if (attrValue.startsWith("file:") && !attrValue.startsWith("file:/")) {
-//            attrValue = attrValue.substring("file:".length());
-//        }
 
         final URI target = toURI(attrValue);
         String filename = null;
@@ -918,7 +892,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             filename = FileUtils.getRelativeUnixPath(rootFilePath.getAbsoluteFile().toURI().getPath(), target.getPath());
             // for object tag bug:3052156
         } else if (ATTRIBUTE_NAME_DATA.equals(attrName)) {
-            if (!StringUtils.isEmptyString(codebase)) {
+            if (!isEmptyString(codebase)) {
                 filename = FileUtils.resolve(codebase, attrValue).getPath();
             } else {
                 filename = FileUtils.resolve(currentDir, attrValue).getPath();
@@ -947,9 +921,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         // Collect non-conref and non-copyto targets
-        if (filename != null
-                && FileUtils.isValidTarget(filename.toLowerCase())
-                && (StringUtils.isEmptyString(atts.getValue(ATTRIBUTE_NAME_COPY_TO))
+        if (FileUtils.isValidTarget(filename.toLowerCase())
+                && (isEmptyString(atts.getValue(ATTRIBUTE_NAME_COPY_TO))
                         || !FileUtils.isDITATopicFile(atts.getValue(ATTRIBUTE_NAME_COPY_TO).toLowerCase()) || (atts
                         .getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
                         "to-content"))) && !ATTRIBUTE_NAME_CONREF.equals(attrName)
@@ -991,7 +964,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (href != null) {
                 final File value = FileUtils.resolve(currentDir, toFile(href).getPath());
     
-                if (href == null || href.toString().isEmpty()) {
+                if (href.toString().isEmpty()) {
                     logger.warn("[WARN]: Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
                 } else if (copytoMap.get(new File(filename)) != null) {
                     if (!value.equals(copytoMap.get(new File(filename)))) {
@@ -1019,29 +992,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
         }
     }
-//
-//    /**
-//     * Convert URI references to file paths.
-//     * 
-//     * @param filename file reference
-//     * @return file path
-//     */
-//    private String toFile(final String filename) {
-//        if (filename == null) {
-//            return null;
-//        }
-//        String f = filename;
-//        try {
-//            f = URLDecoder.decode(filename, UTF8);
-//        } catch (final UnsupportedEncodingException e) {
-//            throw new RuntimeException(e);
-//        }
-//        if (processingMode == Mode.LAX) {
-//            f = f.replace(WINDOWS_SEPARATOR, File.separator);
-//        }
-//        f = f.replace(URI_SEPARATOR, File.separator);
-//        return f;
-//    }
 
     /**
      * Check if path walks up in parent directories

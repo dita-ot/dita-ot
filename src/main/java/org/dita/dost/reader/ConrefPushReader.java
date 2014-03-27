@@ -12,8 +12,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Hashtable;
@@ -38,7 +36,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 

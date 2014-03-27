@@ -156,9 +156,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 		foreignLevel = 0;
 		level = 0;
 		props = null;
-		if (!exclude) {
-        	getContentHandler().startDocument();
-        }
-	}
+        getContentHandler().startDocument();
+    }
 	
 }

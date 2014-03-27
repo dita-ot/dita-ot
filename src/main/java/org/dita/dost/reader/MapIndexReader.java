@@ -99,8 +99,7 @@ public final class MapIndexReader extends AbstractXMLReader {
             return false;
         }
         final List<DitaClass> tail = ancestorList.subList(ancestorSize - matchSize, ancestorSize);
-        final int length = matchSize;
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < matchSize; i++) {
             if (!matchList.get(i).matches(tail.get(i))) {
                 return false;
             }

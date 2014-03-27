@@ -5,7 +5,6 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.URLUtils.toURI;
 
@@ -17,13 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

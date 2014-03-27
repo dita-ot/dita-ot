@@ -201,18 +201,21 @@ public final class ConvertLang extends Task {
     private void convertHtmlCharset() {
         final File outputDir = new File(outputdir);
         final File[] files = outputDir.listFiles();
-        for (final File file : files) {
-            //Recursive method
-            convertCharset(file);
+        if (files != null) {
+            for (final File file : files) {
+                //Recursive method
+                convertCharset(file);
+            }
         }
-
     }
     //Recursive method
     private void convertCharset(final File inputFile){
         if(inputFile.isDirectory()){
             final File[] files = inputFile.listFiles();
-            for (final File file : files) {
-                convertCharset(file);
+            if (files != null) {
+                for (final File file : files) {
+                    convertCharset(file);
+                }
             }
         }else if(FileUtils.isHTMLFile(inputFile.getName())||
                 FileUtils.isHHCFile(inputFile.getName())||
@@ -295,19 +298,22 @@ public final class ConvertLang extends Task {
     private void updateAllEntitiesAndLangs() {
         final File outputDir = new File(outputdir);
         final File[] files = outputDir.listFiles();
-        for (final File file : files) {
-            //Recursive method
-            updateEntityAndLang(file);
+        if (files != null) {
+            for (final File file : files) {
+                //Recursive method
+                updateEntityAndLang(file);
+            }
         }
-
     }
     //Recursive method
     private void updateEntityAndLang(final File inputFile) {
         //directory case
         if(inputFile.isDirectory()){
             final File[] files = inputFile.listFiles();
-            for (final File file : files) {
-                updateEntityAndLang(file);
+            if (files != null) {
+                for (final File file : files) {
+                    updateEntityAndLang(file);
+                }
             }
         }
         //html/hhc/hhk file case

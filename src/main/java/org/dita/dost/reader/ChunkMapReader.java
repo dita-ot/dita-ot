@@ -150,11 +150,7 @@ public final class ChunkMapReader implements AbstractReader {
             // get the document node
             final Element root = doc.getDocumentElement();
             final String rootChunkValue = root.getAttribute(ATTRIBUTE_NAME_CHUNK);
-            if (rootChunkValue != null && rootChunkValue.contains(CHUNK_BY_TOPIC)) {
-                chunkByTopic = true;
-            } else {
-                chunkByTopic = false;
-            }
+            chunkByTopic = rootChunkValue != null && rootChunkValue.contains(CHUNK_BY_TOPIC);
             // chunk value = "to-content"
             // When @chunk="to-content" is specified on "map" element,
             // chunk module will change its @class attribute to "topicref"

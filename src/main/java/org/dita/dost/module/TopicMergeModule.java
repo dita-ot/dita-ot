@@ -64,13 +64,8 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         mapParser.setJob(job);
         mapParser.setOutput(out.getAbsoluteFile());
 
-        if (ditaInput == null || !ditaInput.exists()){
+        if (!ditaInput.exists()){
             logger.error(MessageUtils.getInstance().getMessage("DOTJ025E").toString());
-            return null;
-        }
-
-        if ( out == null ){
-            logger.error(MessageUtils.getInstance().getMessage("DOTJ026E").toString());
             return null;
         }
 
