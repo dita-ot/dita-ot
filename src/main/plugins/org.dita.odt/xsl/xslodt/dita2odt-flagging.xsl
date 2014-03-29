@@ -4,15 +4,17 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
   version="2.0"
   xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
   xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
   xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
   xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" 
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   xmlns:styleUtils="org.dita.dost.util.StyleUtils" 
   xmlns:imgUtils="org.dita.dost.util.ImgUtils"
-  exclude-result-prefixes="ditamsg styleUtils imgUtils">
+  exclude-result-prefixes="xs dita-ot ditamsg styleUtils imgUtils">
   
   <!-- =========== TEMPLATES FOR ODT FLAGGING =========== -->
   <xsl:template name="create_flagging_styles">
@@ -60,12 +62,12 @@
         <xsl:element name="style:text-properties">
           <xsl:if test="@backcolor and not(@backcolor = '')">
             <xsl:attribute name="fo:background-color">
-              <xsl:value-of select="styleUtils:getColor(@backcolor)"/>
+              <xsl:value-of select="dita-ot:getColor(@backcolor)"/>
             </xsl:attribute>
           </xsl:if>
           <xsl:if test="@color and not(@color = '')">
             <xsl:attribute name="fo:color">
-              <xsl:value-of select="styleUtils:getColor(@color)"/>
+              <xsl:value-of select="dita-ot:getColor(@color)"/>
             </xsl:attribute>
           </xsl:if>
         </xsl:element>
@@ -79,12 +81,12 @@
          <xsl:element name="style:table-properties">
             <xsl:if test="@backcolor and not(@backcolor = '')">
               <xsl:attribute name="fo:background-color">
-                <xsl:value-of select="styleUtils:getColor(@backcolor)"/>
+                <xsl:value-of select="dita-ot:getColor(@backcolor)"/>
               </xsl:attribute>
             </xsl:if>
             <xsl:if test="@color and not(@color = '')">
               <xsl:attribute name="fo:color">
-                <xsl:value-of select="styleUtils:getColor(@color)"/>
+                <xsl:value-of select="dita-ot:getColor(@color)"/>
               </xsl:attribute>
             </xsl:if>
          </xsl:element>
@@ -115,12 +117,12 @@
       <xsl:element name="style:text-properties">
         <xsl:if test="@background-conflict-color and not(@background-conflict-color = '')">
           <xsl:attribute name="fo:background-color">
-            <xsl:value-of select="styleUtils:getColor(@background-conflict-color)"/>
+            <xsl:value-of select="dita-ot:getColor(@background-conflict-color)"/>
           </xsl:attribute>
         </xsl:if>
         <xsl:if test="@foreground-conflict-color and not(@foreground-conflict-color = '')">
           <xsl:attribute name="fo:color">
-            <xsl:value-of select="styleUtils:getColor(@foreground-conflict-color)"/>
+            <xsl:value-of select="dita-ot:getColor(@foreground-conflict-color)"/>
           </xsl:attribute>
         </xsl:if>
       </xsl:element>
@@ -134,12 +136,12 @@
       <xsl:element name="style:table-properties">
         <xsl:if test="@background-conflict-color and not(@background-conflict-color = '')">
           <xsl:attribute name="fo:background-color">
-            <xsl:value-of select="styleUtils:getColor(@background-conflict-color)"/>
+            <xsl:value-of select="dita-ot:getColor(@background-conflict-color)"/>
           </xsl:attribute>
         </xsl:if>
         <xsl:if test="@foreground-conflict-color and not(@foreground-conflict-color = '')">
           <xsl:attribute name="fo:color">
-            <xsl:value-of select="styleUtils:getColor(@foreground-conflict-color)"/>
+            <xsl:value-of select="dita-ot:getColor(@foreground-conflict-color)"/>
           </xsl:attribute>
         </xsl:if>
       </xsl:element>
@@ -221,12 +223,12 @@
             <xsl:element name="style:text-properties">
               <xsl:if test="$prop/@backcolor and not($prop/@backcolor = '')">
                 <xsl:attribute name="fo:background-color">
-                  <xsl:value-of select="styleUtils:getColor($prop/@backcolor)"/>
+                  <xsl:value-of select="dita-ot:getColor($prop/@backcolor)"/>
                 </xsl:attribute>
               </xsl:if>
               <xsl:if test="$prop/@color and not($prop/@color = '')">
                 <xsl:attribute name="fo:color">
-                  <xsl:value-of select="styleUtils:getColor($prop/@color)"/>
+                  <xsl:value-of select="dita-ot:getColor($prop/@color)"/>
                 </xsl:attribute>
               </xsl:if>
             </xsl:element>
@@ -240,12 +242,12 @@
             <xsl:element name="style:table-properties">
               <xsl:if test="$prop/@backcolor and not($prop/@backcolor = '')">
                 <xsl:attribute name="fo:background-color">
-                  <xsl:value-of select="styleUtils:getColor($prop/@backcolor)"/>
+                  <xsl:value-of select="dita-ot:getColor($prop/@backcolor)"/>
                 </xsl:attribute>
               </xsl:if>
               <xsl:if test="$prop/@color and not($prop/@color = '')">
                 <xsl:attribute name="fo:color">
-                  <xsl:value-of select="styleUtils:getColor($prop/@color)"/>
+                  <xsl:value-of select="dita-ot:getColor($prop/@color)"/>
                 </xsl:attribute>
               </xsl:if>
             </xsl:element>
@@ -1077,6 +1079,154 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  
+  <xsl:function name="dita-ot:getColor" as="xs:string">
+    <xsl:param name="color"/>
+    <xsl:choose>
+      <xsl:when test="$color = 'aliceblue'">#f0f8ff</xsl:when>
+      <xsl:when test="$color = 'antiquewhite'">#faebd7</xsl:when>
+      <xsl:when test="$color = 'aqua'">#00ffff</xsl:when>
+      <xsl:when test="$color = 'aquamarine'">#7fffd4</xsl:when>
+      <xsl:when test="$color = 'azure'">#f0ffff</xsl:when>
+      <xsl:when test="$color = 'beige'">#f5f5dc</xsl:when>
+      <xsl:when test="$color = 'bisque'">#ffe4c4</xsl:when>
+      <xsl:when test="$color = 'black'">#000000</xsl:when>
+      <xsl:when test="$color = 'blanchedalmond'">#ffebcd</xsl:when>
+      <xsl:when test="$color = 'blue'">#0000ff</xsl:when>
+      <xsl:when test="$color = 'blueviolet'">#8a2be2</xsl:when>
+      <xsl:when test="$color = 'brown'">#a52a2a</xsl:when>
+      <xsl:when test="$color = 'burlywood'">#deb887</xsl:when>
+      <xsl:when test="$color = 'cadetblue'">#5f9ea0</xsl:when>
+      <xsl:when test="$color = 'chartreuse'">#7fff00</xsl:when>
+      <xsl:when test="$color = 'chocolate'">#d2691e</xsl:when>
+      <xsl:when test="$color = 'coral'">#ff7f50</xsl:when>
+      <xsl:when test="$color = 'cornflowerblue'">#6495ed</xsl:when>
+      <xsl:when test="$color = 'cornsilk'">#fff8dc</xsl:when>
+      <xsl:when test="$color = 'crimson'">#dc143c</xsl:when>
+      <xsl:when test="$color = 'cyan'">#00ffff</xsl:when>
+      <xsl:when test="$color = 'darkblue'">#00008b</xsl:when>
+      <xsl:when test="$color = 'darkcyan'">#008b8b</xsl:when>
+      <xsl:when test="$color = 'darkgoldenrod'">#b8860b</xsl:when>
+      <xsl:when test="$color = 'darkgray'">#a9a9a9</xsl:when>
+      <xsl:when test="$color = 'darkgreen'">#006400</xsl:when>
+      <xsl:when test="$color = 'darkkhaki'">#bdb76b</xsl:when>
+      <xsl:when test="$color = 'darkmagenta'">#8b008b</xsl:when>
+      <xsl:when test="$color = 'darkolivegreen'">#556b2f</xsl:when>
+      <xsl:when test="$color = 'darkorange'">#ff8c00</xsl:when>
+      <xsl:when test="$color = 'darkorchid'">#9932cc</xsl:when>
+      <xsl:when test="$color = 'darkred'">#8b0000</xsl:when>
+      <xsl:when test="$color = 'darksalmon'">#e9967a</xsl:when>
+      <xsl:when test="$color = 'darkseagreen'">#8fbc8f</xsl:when>
+      <xsl:when test="$color = 'darkslateblue'">#483d8b</xsl:when>
+      <xsl:when test="$color = 'darkslategray'">#2f4f4f</xsl:when>
+      <xsl:when test="$color = 'darkturquoise'">#00ced1</xsl:when>
+      <xsl:when test="$color = 'darkviolet'">#9400d3</xsl:when>
+      <xsl:when test="$color = 'deeppink'">#ff1493</xsl:when>
+      <xsl:when test="$color = 'deepskyblue'">#00bfff</xsl:when>
+      <xsl:when test="$color = 'dimgray'">#696969</xsl:when>
+      <xsl:when test="$color = 'dodgerblue'">#1e90ff</xsl:when>
+      <xsl:when test="$color = 'firebrick'">#b22222</xsl:when>
+      <xsl:when test="$color = 'floralwhite'">#fffaf0</xsl:when>
+      <xsl:when test="$color = 'forestgreen'">#228b22</xsl:when>
+      <xsl:when test="$color = 'fuchsia'">#ff00ff</xsl:when>
+      <xsl:when test="$color = 'gainsboro'">#dcdcdc</xsl:when>
+      <xsl:when test="$color = 'ghostwhite'">#f8f8ff</xsl:when>
+      <xsl:when test="$color = 'gold'">#ffd700</xsl:when>
+      <xsl:when test="$color = 'goldenrod'">#daa520</xsl:when>
+      <xsl:when test="$color = 'gray'">#808080</xsl:when>
+      <xsl:when test="$color = 'green'">#008000</xsl:when>
+      <xsl:when test="$color = 'greenyellow'">#adff2f</xsl:when>
+      <xsl:when test="$color = 'honeydew'">#f0fff0</xsl:when>
+      <xsl:when test="$color = 'hotpink'">#ff69b4</xsl:when>
+      <xsl:when test="$color = 'indianred'">#cd5c5c</xsl:when>
+      <xsl:when test="$color = 'indigo'">#4b0082</xsl:when>
+      <xsl:when test="$color = 'ivory'">#fffff0</xsl:when>
+      <xsl:when test="$color = 'khaki'">#f0e68c</xsl:when>
+      <xsl:when test="$color = 'lavender'">#e6e6fa</xsl:when>
+      <xsl:when test="$color = 'lavenderblush'">#fff0f5</xsl:when>
+      <xsl:when test="$color = 'lawngreen'">#7cfc00</xsl:when>
+      <xsl:when test="$color = 'lemonchiffon'">#fffacd</xsl:when>
+      <xsl:when test="$color = 'lightblue'">#add8e6</xsl:when>
+      <xsl:when test="$color = 'lightcoral'">#f08080</xsl:when>
+      <xsl:when test="$color = 'lightcyan'">#e0ffff</xsl:when>
+      <xsl:when test="$color = 'lightgoldenrodyellow'">#fafad2</xsl:when>
+      <xsl:when test="$color = 'lightgrey'">#d3d3d3</xsl:when>
+      <xsl:when test="$color = 'lightgreen'">#90ee90</xsl:when>
+      <xsl:when test="$color = 'lightpink'">#ffb6c1</xsl:when>
+      <xsl:when test="$color = 'lightsalmon'">#ffa07a</xsl:when>
+      <xsl:when test="$color = 'lightseagreen'">#20b2aa</xsl:when>
+      <xsl:when test="$color = 'lightskyblue'">#87cefa</xsl:when>
+      <xsl:when test="$color = 'lightslategray'">#778899</xsl:when>
+      <xsl:when test="$color = 'lightsteelblue'">#b0c4de</xsl:when>
+      <xsl:when test="$color = 'lightyellow'">#ffffe0</xsl:when>
+      <xsl:when test="$color = 'lime'">#00ff00</xsl:when>
+      <xsl:when test="$color = 'limegreen'">#32cd32</xsl:when>
+      <xsl:when test="$color = 'linen'">#faf0e6</xsl:when>
+      <xsl:when test="$color = 'magenta'">#ff00ff</xsl:when>
+      <xsl:when test="$color = 'maroon'">#800000</xsl:when>
+      <xsl:when test="$color = 'mediumaquamarine'">#66cdaa</xsl:when>
+      <xsl:when test="$color = 'mediumblue'">#0000cd</xsl:when>
+      <xsl:when test="$color = 'mediumorchid'">#ba55d3</xsl:when>
+      <xsl:when test="$color = 'mediumpurple'">#9370d8</xsl:when>
+      <xsl:when test="$color = 'mediumseagreen'">#3cb371</xsl:when>
+      <xsl:when test="$color = 'mediumslateblue'">#7b68ee</xsl:when>
+      <xsl:when test="$color = 'mediumspringgreen'">#00fa9a</xsl:when>
+      <xsl:when test="$color = 'mediumturquoise'">#48d1cc</xsl:when>
+      <xsl:when test="$color = 'mediumvioletred'">#c71585</xsl:when>
+      <xsl:when test="$color = 'midnightblue'">#191970</xsl:when>
+      <xsl:when test="$color = 'mintcream'">#f5fffa</xsl:when>
+      <xsl:when test="$color = 'mistyrose'">#ffe4e1</xsl:when>
+      <xsl:when test="$color = 'moccasin'">#ffe4b5</xsl:when>
+      <xsl:when test="$color = 'navajowhite'">#ffdead</xsl:when>
+      <xsl:when test="$color = 'navy'">#000080</xsl:when>
+      <xsl:when test="$color = 'oldlace'">#fdf5e6</xsl:when>
+      <xsl:when test="$color = 'olive'">#808000</xsl:when>
+      <xsl:when test="$color = 'olivedrab'">#6b8e23</xsl:when>
+      <xsl:when test="$color = 'orange'">#ffa500</xsl:when>
+      <xsl:when test="$color = 'orangered'">#ff4500</xsl:when>
+      <xsl:when test="$color = 'orchid'">#da70d6</xsl:when>
+      <xsl:when test="$color = 'palegoldenrod'">#eee8aa</xsl:when>
+      <xsl:when test="$color = 'palegreen'">#98fb98</xsl:when>
+      <xsl:when test="$color = 'paleturquoise'">#afeeee</xsl:when>
+      <xsl:when test="$color = 'palevioletred'">#d87093</xsl:when>
+      <xsl:when test="$color = 'papayawhip'">#ffefd5</xsl:when>
+      <xsl:when test="$color = 'peachpuff'">#ffdab9</xsl:when>
+      <xsl:when test="$color = 'peru'">#cd853f</xsl:when>
+      <xsl:when test="$color = 'pink'">#ffc0cb</xsl:when>
+      <xsl:when test="$color = 'plum'">#dda0dd</xsl:when>
+      <xsl:when test="$color = 'powderblue'">#b0e0e6</xsl:when>
+      <xsl:when test="$color = 'purple'">#800080</xsl:when>
+      <xsl:when test="$color = 'red'">#ff0000</xsl:when>
+      <xsl:when test="$color = 'rosybrown'">#bc8f8f</xsl:when>
+      <xsl:when test="$color = 'royalblue'">#4169e1</xsl:when>
+      <xsl:when test="$color = 'saddlebrown'">#8b4513</xsl:when>
+      <xsl:when test="$color = 'salmon'">#fa8072</xsl:when>
+      <xsl:when test="$color = 'sandybrown'">#f4a460</xsl:when>
+      <xsl:when test="$color = 'seagreen'">#2e8b57</xsl:when>
+      <xsl:when test="$color = 'seashell'">#fff5ee</xsl:when>
+      <xsl:when test="$color = 'sienna'">#a0522d</xsl:when>
+      <xsl:when test="$color = 'silver'">#c0c0c0</xsl:when>
+      <xsl:when test="$color = 'skyblue'">#87ceeb</xsl:when>
+      <xsl:when test="$color = 'slateblue'">#6a5acd</xsl:when>
+      <xsl:when test="$color = 'slategray'">#708090</xsl:when>
+      <xsl:when test="$color = 'snow'">#fffafa</xsl:when>
+      <xsl:when test="$color = 'springgreen'">#00ff7f</xsl:when>
+      <xsl:when test="$color = 'steelblue'">#4682b4</xsl:when>
+      <xsl:when test="$color = 'tan'">#d2b48c</xsl:when>
+      <xsl:when test="$color = 'teal'">#008080</xsl:when>
+      <xsl:when test="$color = 'thistle'">#d8bfd8</xsl:when>
+      <xsl:when test="$color = 'tomato'">#ff6347</xsl:when>
+      <xsl:when test="$color = 'turquoise'">#40e0d0</xsl:when>
+      <xsl:when test="$color = 'violet'">#ee82ee</xsl:when>
+      <xsl:when test="$color = 'wheat'">#f5deb3</xsl:when>
+      <xsl:when test="$color = 'white'">#ffffff</xsl:when>
+      <xsl:when test="$color = 'whitesmoke'">#f5f5f5</xsl:when>
+      <xsl:when test="$color = 'yellow'">#ffff00</xsl:when>
+      <xsl:when test="$color = 'yellowgreen'">#9acd32</xsl:when>
+      <xsl:when test="starts-with($color, '#')"><xsl:value-of select="$color"/></xsl:when>
+      <xsl:otherwise><xsl:text></xsl:text></xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
   
   
 </xsl:stylesheet>
