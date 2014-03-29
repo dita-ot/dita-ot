@@ -30,9 +30,8 @@
   xmlns:opentopic="http://www.idiominc.com/opentopic"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   version="2.0" 
-  xmlns:random="org.dita.dost.util.RandomUtils"
   xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-  exclude-result-prefixes="random related-links dita-ot opentopic">
+  exclude-result-prefixes="related-links dita-ot opentopic">
   
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
