@@ -397,11 +397,7 @@
           <xsl:element name="text:line-break"/>
           <xsl:element name="text:span">
                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-               <xsl:call-template name="get-ascii">
-                    <xsl:with-param name="txt">
-                         <xsl:value-of select="@spectitle"/>
-                    </xsl:with-param>
-               </xsl:call-template>
+               <xsl:value-of select="@spectitle"/>
           </xsl:element>
           <xsl:element name="text:line-break"/>
      </xsl:if>

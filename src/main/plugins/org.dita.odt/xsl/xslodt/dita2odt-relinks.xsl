@@ -354,36 +354,20 @@
             <xsl:apply-templates/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="@href"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="@href"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="contains(@class,' topic/link ')">
         <xsl:choose>
           <xsl:when test="*[contains(@class,' topic/linktext ')]">
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
           </xsl:when>
           <xsl:when test="text()">
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="text()"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="text()"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="@href"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="@href"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>

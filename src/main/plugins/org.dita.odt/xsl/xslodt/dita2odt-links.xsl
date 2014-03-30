@@ -595,11 +595,7 @@
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/linktext ')]" mode="processLink">
-    	<xsl:call-template name="get-ascii">
-    		<xsl:with-param name="txt">
-    			<xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
-    		</xsl:with-param>
-    	</xsl:call-template>
+      <xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/linklist ')]" mode="processLink">

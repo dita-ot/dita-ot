@@ -27,35 +27,20 @@
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
   version="2.0"
-  xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  xmlns:stringUtils="org.dita.dost.util.StringUtils" 
-  xmlns:styleUtils="org.dita.dost.util.StyleUtils" 
-  exclude-result-prefixes="stringUtils styleUtils ditamsg">
+  xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg" 
+  exclude-result-prefixes="ditamsg">
   
   <!-- =========== I18N RELATED TEMPLATES, ODT REUSES RESOURCE FILES OF XHTML===============-->
+    <!-- Deprecated: generate text directly instead -->
     <xsl:template name="get-ascii">
       <xsl:param name="txt"></xsl:param>
-      <xsl:variable name="ancestorlang">
-        <xsl:call-template name="getLowerCaseLang"/>
-      </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'zh-cn')) or (string-length($ancestorlang)=2 and contains($ancestorlang,'zh')) )">
-          <xsl:value-of select="stringUtils:getAscii(string($txt))"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$txt"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="$txt"/>
     </xsl:template>
+  <!-- Deprecated: use getString instead -->
   <xsl:template name="getStringODT">
-    <xsl:param name="stringName"></xsl:param>
-    <xsl:variable name="translatedStr">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="$stringName"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:call-template name="get-ascii">
-      <xsl:with-param name="txt" select="$translatedStr"/>
+    <xsl:param name="stringName"/>
+    <xsl:call-template name="getString">
+      <xsl:with-param name="stringName" select="$stringName"/>
     </xsl:call-template>
   </xsl:template>
   
@@ -1446,36 +1431,20 @@
             <xsl:apply-templates/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="@href"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="@href"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="contains(@class,' topic/link ')">
         <xsl:choose>
           <xsl:when test="*[contains(@class,' topic/linktext ')]">
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
           </xsl:when>
           <xsl:when test="text()">
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="text()"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="text()"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="@href"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="@href"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
