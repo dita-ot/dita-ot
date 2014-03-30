@@ -170,41 +170,6 @@ public final class StringUtils {
     }
 
     /**
-     * Get ASCII code of a string.
-     * @param inStr input string
-     * @return asscii code
-     */
-    public static String getAscii(final String inStr){
-        final byte [] input = inStr.getBytes();
-        /*byte [] output;
-		ByteArrayInputStream byteIS = new ByteArrayInputStream(input);
-		InputStreamReader reader = new InputStreamReader(byteIS,"UTF-8");
-		char [] cbuf = new char[INT_128];
-		int count = reader.read(cbuf);*/
-        final StringBuilder ret = new StringBuilder(1024);
-        String strByte = null;
-        for (final byte element : input) {
-            ret.append("\\\'");
-            strByte = Integer.toHexString(element);
-            ret.append(strByte.substring(strByte.length()-2));
-            //System.out.println(Integer.toHexString(input[i]));
-            //System.out.println(strByte);
-        }
-        /*while(count > 0){
-			output = (new String(cbuf, 0, count)).getBytes();
-			for(int j = 0; j < output.length; j++){
-				ret.append("\\\'");
-				strByte = Integer.toHexString(output[j]);
-				ret.append(strByte.substring(strByte.length()-2));
-			}
-			count = reader.read(cbuf);
-		}*/
-
-        return ret.toString();
-
-    }
-
-    /**
      * Parse {@code props} attribute specializations
      * 
      * @param domains input domain

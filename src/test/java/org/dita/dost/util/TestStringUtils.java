@@ -64,18 +64,6 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testGetAscii() {
-        assertEquals("\\'66\\'6f\\'6f", StringUtils.getAscii("foo"));
-        final byte[] nonAscii = "\u00e4\u00f6\u00e5".getBytes(Charset.defaultCharset());
-        final StringBuilder buf = new StringBuilder();
-        for (final byte b: nonAscii) {
-            final String s = Integer.toHexString(b);
-            buf.append('\\').append('\'').append(s.substring(s.length() - 2));
-        }
-        assertEquals(buf.toString(), StringUtils.getAscii("\u00e4\u00f6\u00e5"));
-    }
-
-    @Test
     public void testGetExtProps() {
         assertArrayEquals(new String[][] {{"props", "foo"}, {"props", "bar"}},
                           StringUtils.getExtProps("a(props foo) a(props bar)"));
