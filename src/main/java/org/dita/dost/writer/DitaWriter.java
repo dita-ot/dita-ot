@@ -489,48 +489,50 @@ public final class DitaWriter extends AbstractXMLFilter {
                             final KeyDef value = keys.get(key);
                             final String href = value.href;
                             
-                            final String updatedHref = updateHref(href);
+                            if (href != null) {
+                                final String updatedHref = updateHref(href);
 
-                            //get element/topic id
-                            final String id = attValue.substring(keyIndex+1);
+                                //get element/topic id
+                                final String id = attValue.substring(keyIndex + 1);
 
-                            boolean idExported = false;
-                            boolean keyrefExported = false;
-                            List<Boolean> list = null;
-                            if(transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                                list = delayConrefUtils.checkExport(href, id, key, tempDir);
-                                idExported = list.get(0).booleanValue();
-                                keyrefExported = list.get(1).booleanValue();
-                            }
-                            //both id and key are exported and transtype is eclipsehelp
-                            if(idExported && keyrefExported
-                                    && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                                //remain the conkeyref attribute.
-                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONKEYREF, attValue);
-                            }else {
-                                //normal process
-                                target = updatedHref;
-                                //only replace extension name of topic files.
-                                target = replaceExtName(target);
-                                String tail ;
-                                if(sharpIndex == -1 ){
-                                    if(target.indexOf(SHARP) == -1) {
-                                        //change to topic id
-                                        tail = attValue.substring(keyIndex).replaceAll(SLASH, SHARP);
-                                    } else {
-                                        //change to element id
-                                        tail = attValue.substring(keyIndex);
-                                    }
-                                }else {
-                                    //change to topic id
-                                    tail = attValue.substring(keyIndex);
-                                    //replace the topic id defined in the key's href
-                                    if(target.indexOf(SHARP) != -1){
-                                        target = target.substring(0,target.indexOf(SHARP));
-                                    }
+                                boolean idExported = false;
+                                boolean keyrefExported = false;
+                                List<Boolean> list = null;
+                                if (transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
+                                    list = delayConrefUtils.checkExport(href, id, key, tempDir);
+                                    idExported = list.get(0).booleanValue();
+                                    keyrefExported = list.get(1).booleanValue();
                                 }
-                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, target + tail);
-                                conkeyrefValid = true;
+                                //both id and key are exported and transtype is eclipsehelp
+                                if (idExported && keyrefExported
+                                        && transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
+                                    //remain the conkeyref attribute.
+                                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONKEYREF, attValue);
+                                } else {
+                                    //normal process
+                                    target = updatedHref;
+                                    //only replace extension name of topic files.
+                                    target = replaceExtName(target);
+                                    String tail;
+                                    if (sharpIndex == -1) {
+                                        if (target.indexOf(SHARP) == -1) {
+                                            //change to topic id
+                                            tail = attValue.substring(keyIndex).replaceAll(SLASH, SHARP);
+                                        } else {
+                                            //change to element id
+                                            tail = attValue.substring(keyIndex);
+                                        }
+                                    } else {
+                                        //change to topic id
+                                        tail = attValue.substring(keyIndex);
+                                        //replace the topic id defined in the key's href
+                                        if (target.indexOf(SHARP) != -1) {
+                                            target = target.substring(0, target.indexOf(SHARP));
+                                        }
+                                    }
+                                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, target + tail);
+                                    conkeyrefValid = true;
+                                }
                             }
                         }else{
                             logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", attValue).toString());
@@ -542,22 +544,24 @@ public final class DitaWriter extends AbstractXMLFilter {
                             final KeyDef value = keys.get(attValue);
                             final String href = value.href;
 
-                            final String updatedHref = updateHref(href);
+                            if (href != null) {
+                                final String updatedHref = updateHref(href);
 
-                            final String id = null;
+                                final String id = null;
 
-                            final List<Boolean> list = delayConrefUtils.checkExport(href, id, attValue, tempDir);
-                            final boolean keyrefExported = list.get(1).booleanValue();
-                            //key is exported and transtype is eclipsehelp
-                            if(keyrefExported && transtype.equals(INDEX_TYPE_ECLIPSEHELP)){
-                                //remain the conkeyref attribute.
-                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONKEYREF, attValue);
-                            }else{
-                                //e.g conref = c.xml
-                                String target = updatedHref;
-                                target = replaceExtName(target);
-                                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, target);
-                                conkeyrefValid = true;
+                                final List<Boolean> list = delayConrefUtils.checkExport(href, id, attValue, tempDir);
+                                final boolean keyrefExported = list.get(1).booleanValue();
+                                //key is exported and transtype is eclipsehelp
+                                if (keyrefExported && transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
+                                    //remain the conkeyref attribute.
+                                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONKEYREF, attValue);
+                                } else {
+                                    //e.g conref = c.xml
+                                    String target = updatedHref;
+                                    target = replaceExtName(target);
+                                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, target);
+                                    conkeyrefValid = true;
+                                }
                             }
                         }else{
                             logger.logError(MessageUtils.getInstance().getMessage("DOTJ046E", attValue).toString());
