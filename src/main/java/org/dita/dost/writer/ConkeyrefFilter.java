@@ -76,13 +76,18 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
                         break conkeyref;
                     }
                 }
-                URI target = getRelativePath(keys.get(key).href);
-                if (id != null) {
-                    target = setFragment(target, id);
-                }
                 resAtts = new AttributesImpl(atts);
-                XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target.toString());
                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_CONKEYREF);
+                final KeyDef k = keys.get(key);
+                if (k.href != null && (k.scope == null || k.scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
+                    URI target = getRelativePath(k.href);
+                    if (id != null) {
+                        target = setFragment(target, id);
+                    }
+                    XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target.toString());
+                } else {
+                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ060W", key, conkeyref).toString());
+                }
             } else {
                 logger.error(MessageUtils.getInstance().getMessage("DOTJ046E", conkeyref).toString());
             }

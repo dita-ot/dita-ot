@@ -317,6 +317,11 @@
     <reason>Invalid key scope name "%1".</reason>
     <response></response>
   </message>
+  
+  <message id="DOTJ060W" type="WARN">
+    <reason>Key "%1" was used in conkeyref but is not bound to a DITA topic or map.</reason>
+    <response>Cannot resolve conkeyref value "%2" as a valid conref reference.</response>
+  </message>
     
   <!-- End of Java Messages -->
     
