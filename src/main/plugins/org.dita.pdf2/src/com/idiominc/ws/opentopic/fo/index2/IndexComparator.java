@@ -57,8 +57,6 @@ class IndexComparator implements Comparator<IndexEntry> {
         String result;
         if (theEntry1.getSortString() != null) {
             result = theEntry1.getSortString();
-        } else if (theEntry1.getSoValue() != null) {
-            result = theEntry1.getSoValue();
         } else {
             result = theEntry1.getValue();
         }

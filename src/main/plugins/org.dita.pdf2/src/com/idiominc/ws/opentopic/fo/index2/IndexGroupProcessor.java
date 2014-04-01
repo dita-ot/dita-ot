@@ -166,13 +166,9 @@ public final class IndexGroupProcessor {
 
 
     private static String getValue(final IndexEntry theEntry) {
-        //The so-value has higher priority
-        final String soValue = theEntry.getSoValue();
         final String sortValue = theEntry.getSortString();
         if (sortValue != null && sortValue.length() > 0) {
             return sortValue;
-        } else if (soValue != null && soValue.length() > 0) {
-            return soValue;
         } else {
             return theEntry.getValue();
         }
