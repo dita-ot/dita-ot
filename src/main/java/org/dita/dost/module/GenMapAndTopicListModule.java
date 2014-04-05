@@ -290,7 +290,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         listFilter.setJob(job);
         
         exportAnchorsFilter = new ExportAnchorsFilter();
-        exportAnchorsFilter.setInputFile(rootFile.getAbsoluteFile());
+        exportAnchorsFilter.setInputFile(rootFile.getAbsoluteFile().toURI());
         
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
@@ -438,7 +438,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             exportAnchorsFilter.setCurrentDir(file.getParentFile());
-            exportAnchorsFilter.setCurrentFile(fileToParse);
+            exportAnchorsFilter.setCurrentFile(fileToParse.toURI());
             exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
             pipe.add(exportAnchorsFilter);
         }

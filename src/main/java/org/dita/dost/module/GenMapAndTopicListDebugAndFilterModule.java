@@ -309,7 +309,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         keydefFilter.setJob(job);
         
         exportAnchorsFilter = new ExportAnchorsFilter();
-        exportAnchorsFilter.setInputFile(new File(rootFile).getAbsoluteFile());
+        exportAnchorsFilter.setInputFile(rootFile);
     }
     
     /**
@@ -559,7 +559,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         }
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             exportAnchorsFilter.setCurrentDir(toFile(currentFile.resolve(".")));
-            exportAnchorsFilter.setCurrentFile(new File(fileToParse));
+            exportAnchorsFilter.setCurrentFile(fileToParse);
             exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
             pipe.add(exportAnchorsFilter);
         }
