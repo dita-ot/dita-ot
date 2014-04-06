@@ -338,7 +338,6 @@
     <echo level="info">* basedir = ${basedir}</echo>
     <echo level="info">* dita.dir = ${dita.dir}</echo>
     <!--echo level="info">* input = ${args.input}</echo-->
-    <!--echo level="info">* inputdir = ${dita.input.dirname}</echo-->
     <echo level="info">* transtype = ${transtype}</echo>
     <echo level="info">* tempdir = ${dita.temp.dir}</echo>
     <echo level="info">* outputdir = ${output.dir}</echo>

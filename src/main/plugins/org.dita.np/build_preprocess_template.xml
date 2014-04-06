@@ -48,16 +48,9 @@
     <!-- start file name without extension, e.g. main -->
     <uri-basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".*"/>
     <uri-basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix=".*"/>    
-
-    <!-- absolute input directory, e.g. /Users/me/work -->
-    <condition property="dita.input.dirname" value="${args.input.dir.uri}">
-      <isset property="args.input.dir.uri"/>
-    </condition>
-    <uri-dirname property="dita.input.dirname" file="${args.input.uri}" />
     
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input.uri}</echo>
-    <echo level="info">* inputdir = ${dita.input.dirname}</echo>
     <echo level="info">*****************************************************************</echo>
   </target>
  

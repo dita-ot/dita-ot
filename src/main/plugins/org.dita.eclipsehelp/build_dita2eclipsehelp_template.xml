@@ -453,7 +453,6 @@
 	
 	<target name="copy-plugin-files">
 	  	<!-- Look for files that override behavior in Eclipse plugins -->
-	  	<!-- <echo>* dita.input.dirname = ${user.input.dir}</echo> -->
 	  	<copy todir="${output.dir}">
 	  	      <fileset dir="${user.input.dir}">
 	  	      	<include name="disabled_book.css"/>

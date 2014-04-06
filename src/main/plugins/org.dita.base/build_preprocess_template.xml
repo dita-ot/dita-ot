@@ -77,16 +77,11 @@
     </dita-ot-fail>
     
     <basename property="dita.input.filename" file="${args.input}" />
-    <condition property="dita.input.dirname" value="${args.input.dir}">
-      <isset property="args.input.dir"/>
-    </condition>
-    <dirname property="dita.input.dirname" file="${args.input}" />
     <basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".ditamap" />
     <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix=".dita" />
     
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input}</echo>
-    <echo level="info">* inputdir = ${dita.input.dirname}</echo>
     <echo level="info">*****************************************************************</echo>
   </target>
   

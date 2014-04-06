@@ -36,7 +36,6 @@ default.locale
 dita.dir
 dita.eclipsehelp.index.class
 dita.input
-dita.input.dirname
 dita.input.filename
 dita.input.valfile
 dita.input.valfile.url
