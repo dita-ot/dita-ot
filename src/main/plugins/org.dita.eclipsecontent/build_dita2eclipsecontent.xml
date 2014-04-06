@@ -17,10 +17,8 @@
 
   <target name="dita.map.eclipsecontent.init"
     description="Init properties for EclipseContent">
-    <basename property="dita.map.toc.root" file="${dita.input.filename}"
-      suffix=".ditamap" />
     <condition property="args.eclipsecontent.toc"
-      value="${dita.map.toc.root}">
+      value="${dita.map.filename.root}">
       <not>
         <isset property="args.eclipsecontent.toc" />
       </not>

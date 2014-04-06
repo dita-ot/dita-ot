@@ -41,10 +41,7 @@
 
     <target name="dita.map.eclipse.plugin.init"
             description="Init properties for EclipseHelp">
-        <basename property="dita.map.toc.root"
-                  file="${dita.input.filename}"
-                  suffix=".ditamap" />
-        <condition property="args.eclipsehelp.toc" value="${dita.map.toc.root}">
+        <condition property="args.eclipsehelp.toc" value="${dita.map.filename.root}">
             <not>
                 <isset property="args.eclipsehelp.toc" />
             </not>
