@@ -23,13 +23,19 @@
     <!-- the xsl:key to get all maprefs in the document in order to get reltable -->
     <xsl:key name="reltable" match="//*[contains(@class, ' map/topicref ')]" use="@format"/>
     
-    <xsl:template match="*|@*|comment()|text()|processing-instruction()">
-        <xsl:copy>
-            <xsl:apply-templates select="*|@*|comment()|text()|processing-instruction()" />
-        </xsl:copy>
-    </xsl:template>
+  <xsl:template match="@* | node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()" />
+    </xsl:copy>
+  </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' map/topicref ')]" priority="10">
+  <xsl:template match="*[contains(@class, ' map/topicref ')][@format = 'ditamap'][@scope = ('peer', 'external')]" priority="15">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()" />
+    </xsl:copy>
+  </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' map/topicref ')][@format = 'ditamap']" priority="10">
         <xsl:param name="refclass" select="@class"/> <!-- get the current element's @class value -->
         <xsl:param name="relative-path">#none#</xsl:param>  <!-- need this to resolve multiple mapref -->
         <xsl:param name="parent-linking">#none#</xsl:param>
@@ -48,40 +54,8 @@
         <xsl:param name="parent-search">#none#</xsl:param>
         <xsl:param name="parent-rev">#none#</xsl:param>
         
-        <xsl:variable name="filename">
-            <xsl:choose>
-                <!-- resolve the file name, if the @href contains :// then don't do anything -->
-                <xsl:when test="contains(@href,'://')">
-                    <xsl:value-of select="@href"/>
-                </xsl:when>
-                
-                <xsl:when test="starts-with(@href,'#')">
-                    <xsl:value-of select="$file-being-processed"/>
-                </xsl:when>   
-                
-                <!-- if @href contains # get the part before # -->
-                
-                <xsl:when test="contains(@href,'#')">
-                    <xsl:value-of select="substring-before(@href,'#')"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="@href"/>
-                </xsl:otherwise>
-            </xsl:choose>   
-        </xsl:variable>
-        <xsl:variable name="element-id">
-            <xsl:choose>
-                <xsl:when test="contains(@href,'#')">
-                    <xsl:value-of select="substring-after(@href,'#')"/>
-                </xsl:when>
-                <xsl:otherwise>#none#</xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="WORKDIR">
-            <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
-        </xsl:variable>
         <xsl:choose>
-            <xsl:when test="@format='ditamap' and contains($mapref-id-path,concat(' ',generate-id(.),' '))">
+            <xsl:when test="contains($mapref-id-path,concat(' ',generate-id(.),' '))">
                 <!-- it is mapref but it didn't pass the loop dependency check -->
                 <xsl:call-template name="output-message">
                     <xsl:with-param name="msgnum">053</xsl:with-param>
@@ -89,14 +63,36 @@
                     <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-            <!-- When scope = peer or scope = external on a mapref, 
-                we should not retrieve or try to access the map -->
-            <xsl:when test="@format='ditamap' and (@scope = 'peer' or @scope = 'external')">
-                <xsl:copy>
-                    <xsl:apply-templates select="*|@*|comment()|text()|processing-instruction()" />
-                </xsl:copy>
-            </xsl:when>
-            <xsl:when test="@format='ditamap'">  <!-- it is mapref and pass the loop dependency check -->
+            <xsl:otherwise>
+              <xsl:variable name="filename">
+                <xsl:choose>
+                  <!-- resolve the file name, if the @href contains :// then don't do anything -->
+                  <xsl:when test="contains(@href,'://')">
+                    <xsl:value-of select="@href"/>
+                  </xsl:when>
+                  <xsl:when test="starts-with(@href,'#')">
+                    <xsl:value-of select="$file-being-processed"/>
+                  </xsl:when>   
+                  <!-- if @href contains # get the part before # -->
+                  <xsl:when test="contains(@href,'#')">
+                    <xsl:value-of select="substring-before(@href,'#')"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="@href"/>
+                  </xsl:otherwise>
+                </xsl:choose>   
+              </xsl:variable>
+              <xsl:variable name="element-id">
+                <xsl:choose>
+                  <xsl:when test="contains(@href,'#')">
+                    <xsl:value-of select="substring-after(@href,'#')"/>
+                  </xsl:when>
+                  <xsl:otherwise>#none#</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <xsl:variable name="WORKDIR">
+                <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
+              </xsl:variable>
                 <!-- update mapref id path -->
                 <xsl:variable name="updated-id-path" select="concat($mapref-id-path,' ',generate-id(.),' ')"/> 
                 <!-- get the file handle by getting workdir and use document() to get the file -->
@@ -126,7 +122,6 @@
                 </xsl:call-template>
               </xsl:variable>
                 <xsl:variable name="file" select="document($fileurl,/)"/>
-                
                 <xsl:choose>
                     <!-- verify the validity of $file -->
                     <xsl:when test="not($file) or not($file/*/*)">
@@ -137,7 +132,6 @@
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
-                        
                         <xsl:choose>
                             <!-- see whether it is reference to a file or a reference to specific element -->
                             <xsl:when test="not(contains(@href,'://') or $element-id='#none#' or
@@ -341,7 +335,6 @@
                                         <xsl:otherwise>#none#</xsl:otherwise>
                                       </xsl:choose>
                                     </xsl:with-param>
-                                    
                                     <!-- added additional attributes -->
                                     <xsl:with-param name="parent-linking">
                                         <xsl:choose>
@@ -468,427 +461,445 @@
                   <xsl:with-param name="msgsev">W</xsl:with-param>
                 </xsl:call-template>
               </xsl:if>    
-            </xsl:when>
-            <xsl:otherwise> <!-- not mapref -->  
-                <xsl:copy>                    
-                    <xsl:choose>
-                        <xsl:when test="not(@href) or @href=''"/>
-                        <xsl:when test="$relative-path='#none#' or contains(@href,'://')">
-                            <xsl:attribute name="href">
-                            <xsl:value-of select="@href"/>
-                            </xsl:attribute>
-                        </xsl:when>                        
-                        <xsl:otherwise>
-                            <xsl:attribute name="href">
-                            <xsl:value-of select="concat($relative-path, @href)"/>
-                            </xsl:attribute>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:choose>
-                        <xsl:when test="contains($refclass, ' mapgroup-d/mapref ')">
-                            <xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
-                        </xsl:when>
-                        <!-- if the element is not at the top level of reference target, @class equals to $refclass -->
-                        <xsl:when test="not(contains(@class,substring($refclass, 3)))"> 
-                            <xsl:attribute name="class"><xsl:value-of select="$refclass"/></xsl:attribute>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- linking and following attributes processed in the same way -->
-                    <xsl:choose>
-                        <!-- refer to a map file -->
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <!-- first use local attribute -->
-                                <xsl:when test="@linking and not(@linking='')">
-                                    <xsl:attribute name="linking"><xsl:value-of select="@linking"/></xsl:attribute>
-                                </xsl:when>
-                                <!-- second use attribute in referencing file-->
-                                <xsl:when test="not($parent-linking='#none#')">
-                                    <xsl:attribute name="linking"><xsl:value-of select="$parent-linking"/></xsl:attribute>
-                                </xsl:when>
-                                <!-- third use attribute set on map tag -->
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@linking">
-                                    <xsl:attribute name="linking"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@linking"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <!-- refer to an element in map file -->
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <!-- second use attribute in referencing file to
-                            override local one-->
-                            <xsl:choose>
-                                <xsl:when test="not($parent-linking='#none#')">
-                                    <xsl:attribute name="linking"><xsl:value-of select="$parent-linking"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@linking and not(@linking='')">
-                                    <xsl:attribute name="linking"><xsl:value-of select="@linking"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <!-- for sub element -->
-                        <xsl:otherwise>
-                            <xsl:if test="@linking and not(@linking='')">
-                                <xsl:attribute name="linking"><xsl:value-of select="@linking"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- toc -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@toc and not(@toc='')">
-                                    <xsl:attribute name="toc"><xsl:value-of select="@toc"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-toc='#none#')">
-                                    <xsl:attribute name="toc"><xsl:value-of select="$parent-toc"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@toc">
-                                    <xsl:attribute name="toc"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@toc"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-toc='#none#')">
-                                    <xsl:attribute name="toc"><xsl:value-of select="$parent-toc"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@toc and not(@toc='')">
-                                    <xsl:attribute name="toc"><xsl:value-of select="@toc"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@toc and not(@toc='')">
-                                <xsl:attribute name="toc"><xsl:value-of select="@toc"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- print -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@print and not(@print='')">
-                                    <xsl:attribute name="print"><xsl:value-of select="@print"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-print='#none#')">
-                                    <xsl:attribute name="print"><xsl:value-of select="$parent-print"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@print">
-                                    <xsl:attribute name="print"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@print"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-print='#none#')">
-                                    <xsl:attribute name="print"><xsl:value-of select="$parent-print"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@print and not(@print='')">
-                                    <xsl:attribute name="print"><xsl:value-of select="@print"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@print and not(@print='')">
-                                <xsl:attribute name="print"><xsl:value-of select="@print"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- audience -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@audience and not(@audience='')">
-                                    <xsl:attribute name="audience"><xsl:value-of select="@audience"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-audience='#none#')">
-                                    <xsl:attribute name="audience"><xsl:value-of select="$parent-audience"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@audience">
-                                    <xsl:attribute name="audience"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@audience"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-audience='#none#')">
-                                    <xsl:attribute name="audience"><xsl:value-of select="$parent-audience"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@audience and not(@audience='')">
-                                    <xsl:attribute name="audience"><xsl:value-of select="@audience"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@audience and not(@audience='')">
-                                <xsl:attribute name="audience"><xsl:value-of select="@audience"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- product -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@product and not(@product='')">
-                                    <xsl:attribute name="product"><xsl:value-of select="@product"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-product='#none#')">
-                                    <xsl:attribute name="product"><xsl:value-of select="$parent-product"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@product">
-                                    <xsl:attribute name="product"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@product"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-product='#none#')">
-                                    <xsl:attribute name="product"><xsl:value-of select="$parent-product"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@product and not(@product='')">
-                                    <xsl:attribute name="product"><xsl:value-of select="@product"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@product and not(@product='')">
-                                <xsl:attribute name="product"><xsl:value-of select="@product"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- platform -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@platform and not(@platform='')">
-                                    <xsl:attribute name="platform"><xsl:value-of select="@platform"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-platform='#none#')">
-                                    <xsl:attribute name="platform"><xsl:value-of select="$parent-platform"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@platform">
-                                    <xsl:attribute name="platform"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@platform"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-platform='#none#')">
-                                    <xsl:attribute name="platform"><xsl:value-of select="$parent-platform"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@platform and not(@platform='')">
-                                    <xsl:attribute name="platform"><xsl:value-of select="@platform"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@platform and not(@platform='')">
-                                <xsl:attribute name="platform"><xsl:value-of select="@platform"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- otherprops -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@otherprops and not(@otherprops='')">
-                                    <xsl:attribute name="otherprops"><xsl:value-of select="@otherprops"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-otherprops='#none#')">
-                                    <xsl:attribute name="otherprops"><xsl:value-of select="$parent-otherprops"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@otherprops">
-                                    <xsl:attribute name="otherprops"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@otherprops"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-otherprops='#none#')">
-                                    <xsl:attribute name="otherprops"><xsl:value-of select="$parent-otherprops"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@otherprops and not(@otherprops='')">
-                                    <xsl:attribute name="otherprops"><xsl:value-of select="@otherprops"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@otherprops and not(@otherprops='')">
-                                <xsl:attribute name="otherprops"><xsl:value-of select="@otherprops"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- props -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@props and not(@props='')">
-                                    <xsl:attribute name="props"><xsl:value-of select="@props"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-props='#none#')">
-                                    <xsl:attribute name="props"><xsl:value-of select="$parent-props"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@props">
-                                    <xsl:attribute name="props"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@props"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-props='#none#')">
-                                    <xsl:attribute name="props"><xsl:value-of select="$parent-props"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@props and not(@props='')">
-                                    <xsl:attribute name="props"><xsl:value-of select="@props"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@props and not(@props='')">
-                                <xsl:attribute name="props"><xsl:value-of select="@props"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- processing-role -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@processing-role and not(@processing-role='')">
-                                    <xsl:attribute name="processing-role"><xsl:value-of select="@processing-role"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-processing-role='#none#')">
-                                    <xsl:attribute name="processing-role"><xsl:value-of select="$parent-processing-role"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@processing-role">
-                                    <xsl:attribute name="processing-role"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@processing-role"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-processing-role='#none#')">
-                                    <xsl:attribute name="processing-role"><xsl:value-of select="$parent-processing-role"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@processing-role and not(@processing-role='')">
-                                    <xsl:attribute name="processing-role"><xsl:value-of select="@processing-role"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@processing-role and not(@processing-role='')">
-                                <xsl:attribute name="processing-role"><xsl:value-of select="@processing-role"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- importance -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@importance and not(@importance='')">
-                                    <xsl:attribute name="importance"><xsl:value-of select="@importance"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-importance='#none#')">
-                                    <xsl:attribute name="importance"><xsl:value-of select="$parent-importance"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@importance">
-                                    <xsl:attribute name="importance"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@importance"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-importance='#none#')">
-                                    <xsl:attribute name="importance"><xsl:value-of select="$parent-importance"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@importance and not(@importance='')">
-                                    <xsl:attribute name="importance"><xsl:value-of select="@importance"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@importance and not(@importance='')">
-                                <xsl:attribute name="importance"><xsl:value-of select="@importance"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- search -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@search and not(@search='')">
-                                    <xsl:attribute name="search"><xsl:value-of select="@search"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-search='#none#')">
-                                    <xsl:attribute name="search"><xsl:value-of select="$parent-search"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@search">
-                                    <xsl:attribute name="search"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@search"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-search='#none#')">
-                                    <xsl:attribute name="search"><xsl:value-of select="$parent-search"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@search and not(@search='')">
-                                    <xsl:attribute name="search"><xsl:value-of select="@search"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@search and not(@search='')">
-                                <xsl:attribute name="search"><xsl:value-of select="@search"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <!-- rev -->
-                    <xsl:choose>
-                        <xsl:when test="$referTypeFlag = 'file'">
-                            <xsl:choose>
-                                <xsl:when test="@rev and not(@rev='')">
-                                    <xsl:attribute name="rev"><xsl:value-of select="@rev"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="not($parent-rev='#none#')">
-                                    <xsl:attribute name="rev"><xsl:value-of select="$parent-rev"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@rev">
-                                    <xsl:attribute name="rev"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@rev"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="$referTypeFlag = 'element'">
-                            <xsl:choose>
-                                <xsl:when test="not($parent-rev='#none#')">
-                                    <xsl:attribute name="rev"><xsl:value-of select="$parent-rev"/></xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@rev and not(@rev='')">
-                                    <xsl:attribute name="rev"><xsl:value-of select="@rev"/></xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="@rev and not(@rev='')">
-                                <xsl:attribute name="rev"><xsl:value-of select="@rev"/></xsl:attribute>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    
-                    <xsl:apply-templates select="*|@*[not(contains($special-atts,concat(' ',local-name(),' ')))]|comment()|text()|processing-instruction()" >
-                        <xsl:with-param name="relative-path" select="$relative-path"/> <!-- pass the relative-path to sub elements -->
-                        <xsl:with-param name="mapref-id-path" select="$mapref-id-path"/> <!-- pass the mapref-id-path to sub elements -->
-                    </xsl:apply-templates>
-                </xsl:copy>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+          
+  <xsl:template match="*[contains(@class, ' map/topicref ')]" priority="5">
+    <xsl:param name="refclass" select="@class"/> <!-- get the current element's @class value -->
+    <xsl:param name="relative-path">#none#</xsl:param>  <!-- need this to resolve multiple mapref -->
+    <xsl:param name="parent-linking">#none#</xsl:param>
+    <xsl:param name="parent-toc">#none#</xsl:param>
+    <xsl:param name="parent-print">#none#</xsl:param>
+    <xsl:param name="parent-audience">#none#</xsl:param>
+    <xsl:param name="parent-product">#none#</xsl:param>
+    <xsl:param name="parent-platform">#none#</xsl:param>
+    <xsl:param name="parent-otherprops">#none#</xsl:param>
+    <xsl:param name="parent-props">#none#</xsl:param>
+    <xsl:param name="parent-processing-role">#none#</xsl:param>
+    <xsl:param name="mapref-id-path"/>    <!-- record each target's id of mapref to prevent loop reference -->
+    <!-- params to tell refer type:whole map file or just a branch -->
+    <xsl:param name="referTypeFlag">#none#</xsl:param>
+    <xsl:param name="parent-importance">#none#</xsl:param>
+    <xsl:param name="parent-search">#none#</xsl:param>
+    <xsl:param name="parent-rev">#none#</xsl:param>
+    
+      <xsl:copy>
+          <xsl:choose>
+              <xsl:when test="not(@href) or @href=''"/>
+              <xsl:when test="$relative-path='#none#' or contains(@href,'://')">
+                  <xsl:attribute name="href">
+                  <xsl:value-of select="@href"/>
+                  </xsl:attribute>
+              </xsl:when>                        
+              <xsl:otherwise>
+                  <xsl:attribute name="href">
+                  <xsl:value-of select="concat($relative-path, @href)"/>
+                  </xsl:attribute>
+              </xsl:otherwise>
+          </xsl:choose>
+          <xsl:choose>
+              <xsl:when test="contains($refclass, ' mapgroup-d/mapref ')">
+                  <xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+              </xsl:when>
+              <!-- if the element is not at the top level of reference target, @class equals to $refclass -->
+              <xsl:when test="not(contains(@class,substring($refclass, 3)))"> 
+                  <xsl:attribute name="class"><xsl:value-of select="$refclass"/></xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:attribute name="class"><xsl:value-of select="@class"/></xsl:attribute>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- linking and following attributes processed in the same way -->
+          <xsl:choose>
+              <!-- refer to a map file -->
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <!-- first use local attribute -->
+                      <xsl:when test="@linking and not(@linking='')">
+                          <xsl:attribute name="linking"><xsl:value-of select="@linking"/></xsl:attribute>
+                      </xsl:when>
+                      <!-- second use attribute in referencing file-->
+                      <xsl:when test="not($parent-linking='#none#')">
+                          <xsl:attribute name="linking"><xsl:value-of select="$parent-linking"/></xsl:attribute>
+                      </xsl:when>
+                      <!-- third use attribute set on map tag -->
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@linking">
+                          <xsl:attribute name="linking"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@linking"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <!-- refer to an element in map file -->
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <!-- second use attribute in referencing file to
+                  override local one-->
+                  <xsl:choose>
+                      <xsl:when test="not($parent-linking='#none#')">
+                          <xsl:attribute name="linking"><xsl:value-of select="$parent-linking"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@linking and not(@linking='')">
+                          <xsl:attribute name="linking"><xsl:value-of select="@linking"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <!-- for sub element -->
+              <xsl:otherwise>
+                  <xsl:if test="@linking and not(@linking='')">
+                      <xsl:attribute name="linking"><xsl:value-of select="@linking"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- toc -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@toc and not(@toc='')">
+                          <xsl:attribute name="toc"><xsl:value-of select="@toc"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-toc='#none#')">
+                          <xsl:attribute name="toc"><xsl:value-of select="$parent-toc"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@toc">
+                          <xsl:attribute name="toc"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@toc"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-toc='#none#')">
+                          <xsl:attribute name="toc"><xsl:value-of select="$parent-toc"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@toc and not(@toc='')">
+                          <xsl:attribute name="toc"><xsl:value-of select="@toc"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@toc and not(@toc='')">
+                      <xsl:attribute name="toc"><xsl:value-of select="@toc"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- print -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@print and not(@print='')">
+                          <xsl:attribute name="print"><xsl:value-of select="@print"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-print='#none#')">
+                          <xsl:attribute name="print"><xsl:value-of select="$parent-print"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@print">
+                          <xsl:attribute name="print"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@print"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-print='#none#')">
+                          <xsl:attribute name="print"><xsl:value-of select="$parent-print"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@print and not(@print='')">
+                          <xsl:attribute name="print"><xsl:value-of select="@print"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@print and not(@print='')">
+                      <xsl:attribute name="print"><xsl:value-of select="@print"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- audience -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@audience and not(@audience='')">
+                          <xsl:attribute name="audience"><xsl:value-of select="@audience"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-audience='#none#')">
+                          <xsl:attribute name="audience"><xsl:value-of select="$parent-audience"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@audience">
+                          <xsl:attribute name="audience"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@audience"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-audience='#none#')">
+                          <xsl:attribute name="audience"><xsl:value-of select="$parent-audience"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@audience and not(@audience='')">
+                          <xsl:attribute name="audience"><xsl:value-of select="@audience"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@audience and not(@audience='')">
+                      <xsl:attribute name="audience"><xsl:value-of select="@audience"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- product -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@product and not(@product='')">
+                          <xsl:attribute name="product"><xsl:value-of select="@product"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-product='#none#')">
+                          <xsl:attribute name="product"><xsl:value-of select="$parent-product"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@product">
+                          <xsl:attribute name="product"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@product"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-product='#none#')">
+                          <xsl:attribute name="product"><xsl:value-of select="$parent-product"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@product and not(@product='')">
+                          <xsl:attribute name="product"><xsl:value-of select="@product"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@product and not(@product='')">
+                      <xsl:attribute name="product"><xsl:value-of select="@product"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- platform -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@platform and not(@platform='')">
+                          <xsl:attribute name="platform"><xsl:value-of select="@platform"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-platform='#none#')">
+                          <xsl:attribute name="platform"><xsl:value-of select="$parent-platform"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@platform">
+                          <xsl:attribute name="platform"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@platform"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-platform='#none#')">
+                          <xsl:attribute name="platform"><xsl:value-of select="$parent-platform"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@platform and not(@platform='')">
+                          <xsl:attribute name="platform"><xsl:value-of select="@platform"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@platform and not(@platform='')">
+                      <xsl:attribute name="platform"><xsl:value-of select="@platform"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- otherprops -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@otherprops and not(@otherprops='')">
+                          <xsl:attribute name="otherprops"><xsl:value-of select="@otherprops"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-otherprops='#none#')">
+                          <xsl:attribute name="otherprops"><xsl:value-of select="$parent-otherprops"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@otherprops">
+                          <xsl:attribute name="otherprops"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@otherprops"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-otherprops='#none#')">
+                          <xsl:attribute name="otherprops"><xsl:value-of select="$parent-otherprops"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@otherprops and not(@otherprops='')">
+                          <xsl:attribute name="otherprops"><xsl:value-of select="@otherprops"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@otherprops and not(@otherprops='')">
+                      <xsl:attribute name="otherprops"><xsl:value-of select="@otherprops"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- props -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@props and not(@props='')">
+                          <xsl:attribute name="props"><xsl:value-of select="@props"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-props='#none#')">
+                          <xsl:attribute name="props"><xsl:value-of select="$parent-props"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@props">
+                          <xsl:attribute name="props"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@props"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-props='#none#')">
+                          <xsl:attribute name="props"><xsl:value-of select="$parent-props"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@props and not(@props='')">
+                          <xsl:attribute name="props"><xsl:value-of select="@props"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@props and not(@props='')">
+                      <xsl:attribute name="props"><xsl:value-of select="@props"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- processing-role -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@processing-role and not(@processing-role='')">
+                          <xsl:attribute name="processing-role"><xsl:value-of select="@processing-role"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-processing-role='#none#')">
+                          <xsl:attribute name="processing-role"><xsl:value-of select="$parent-processing-role"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@processing-role">
+                          <xsl:attribute name="processing-role"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@processing-role"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-processing-role='#none#')">
+                          <xsl:attribute name="processing-role"><xsl:value-of select="$parent-processing-role"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@processing-role and not(@processing-role='')">
+                          <xsl:attribute name="processing-role"><xsl:value-of select="@processing-role"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@processing-role and not(@processing-role='')">
+                      <xsl:attribute name="processing-role"><xsl:value-of select="@processing-role"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- importance -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@importance and not(@importance='')">
+                          <xsl:attribute name="importance"><xsl:value-of select="@importance"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-importance='#none#')">
+                          <xsl:attribute name="importance"><xsl:value-of select="$parent-importance"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@importance">
+                          <xsl:attribute name="importance"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@importance"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-importance='#none#')">
+                          <xsl:attribute name="importance"><xsl:value-of select="$parent-importance"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@importance and not(@importance='')">
+                          <xsl:attribute name="importance"><xsl:value-of select="@importance"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@importance and not(@importance='')">
+                      <xsl:attribute name="importance"><xsl:value-of select="@importance"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- search -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@search and not(@search='')">
+                          <xsl:attribute name="search"><xsl:value-of select="@search"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-search='#none#')">
+                          <xsl:attribute name="search"><xsl:value-of select="$parent-search"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@search">
+                          <xsl:attribute name="search"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@search"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-search='#none#')">
+                          <xsl:attribute name="search"><xsl:value-of select="$parent-search"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@search and not(@search='')">
+                          <xsl:attribute name="search"><xsl:value-of select="@search"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@search and not(@search='')">
+                      <xsl:attribute name="search"><xsl:value-of select="@search"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <!-- rev -->
+          <xsl:choose>
+              <xsl:when test="$referTypeFlag = 'file'">
+                  <xsl:choose>
+                      <xsl:when test="@rev and not(@rev='')">
+                          <xsl:attribute name="rev"><xsl:value-of select="@rev"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="not($parent-rev='#none#')">
+                          <xsl:attribute name="rev"><xsl:value-of select="$parent-rev"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@rev">
+                          <xsl:attribute name="rev"><xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@rev"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:when test="$referTypeFlag = 'element'">
+                  <xsl:choose>
+                      <xsl:when test="not($parent-rev='#none#')">
+                          <xsl:attribute name="rev"><xsl:value-of select="$parent-rev"/></xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="@rev and not(@rev='')">
+                          <xsl:attribute name="rev"><xsl:value-of select="@rev"/></xsl:attribute>
+                      </xsl:when>
+                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:if test="@rev and not(@rev='')">
+                      <xsl:attribute name="rev"><xsl:value-of select="@rev"/></xsl:attribute>
+                  </xsl:if>
+              </xsl:otherwise>
+          </xsl:choose>
+          <xsl:apply-templates select="@*[not(contains($special-atts,concat(' ',local-name(),' ')))] | node()" >
+              <xsl:with-param name="relative-path" select="$relative-path"/> <!-- pass the relative-path to sub elements -->
+              <xsl:with-param name="mapref-id-path" select="$mapref-id-path"/> <!-- pass the mapref-id-path to sub elements -->
+          </xsl:apply-templates>
+      </xsl:copy>
     </xsl:template>
         
         <xsl:template match="*[contains(@class,' map/map ')]">
             <xsl:copy>
-                <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()"/>
+                <xsl:apply-templates select="@* | node()"/>
                 <xsl:call-template name="gen-reltable"/>
             </xsl:copy>
         </xsl:template>
@@ -897,7 +908,7 @@
             <xsl:param name="relative-path">#none#</xsl:param>
             <xsl:param name="mapref-id-path"/>
             <xsl:apply-templates select="key('reltable','ditamap')" mode="mapref">
-                <xsl:with-param name="relative-path" select="$relative-path"></xsl:with-param>
+                <xsl:with-param name="relative-path" select="$relative-path"/>
                 <xsl:with-param name="mapref-id-path" select="$mapref-id-path"/>
             </xsl:apply-templates>
         </xsl:template>
@@ -937,12 +948,12 @@
                                 <xsl:when test="not($relative-path='#none#' or $relative-path='')">
                                     <xsl:value-of select="$relative-path"/>
                                     <xsl:call-template name="find-relative-path">
-                                        <xsl:with-param name="remainingpath" select="@href"></xsl:with-param>
+                                        <xsl:with-param name="remainingpath" select="@href"/>
                                     </xsl:call-template>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:call-template name="find-relative-path">
-                                        <xsl:with-param name="remainingpath" select="@href"></xsl:with-param>
+                                        <xsl:with-param name="remainingpath" select="@href"/>
                                     </xsl:call-template>
                                 </xsl:otherwise>
                             </xsl:choose>          
@@ -956,7 +967,7 @@
             <xsl:param name="relative-path">#none#</xsl:param>
             <xsl:param name="mapref-id-path"/>
             <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
-                <xsl:with-param name="relative-path" select="$relative-path"></xsl:with-param>
+                <xsl:with-param name="relative-path" select="$relative-path"/>
             </xsl:apply-templates>
             <!--xsl:copy-of select="*[contains(@class,' map/reltable ')]"/-->
             <xsl:call-template name="gen-reltable">
@@ -965,10 +976,10 @@
             </xsl:call-template>
         </xsl:template>
         
-        <xsl:template match="*|@*|comment()|text()" mode="reltable-copy">
+        <xsl:template match="@* | node()" mode="reltable-copy">
             <xsl:param name="relative-path">#none#</xsl:param>
             <xsl:copy>
-                <xsl:apply-templates select="*|@*|comment()|text()" mode="reltable-copy">
+                <xsl:apply-templates select="@* | node()" mode="reltable-copy">
                     <xsl:with-param name="relative-path" select="$relative-path"/>
                 </xsl:apply-templates>
             </xsl:copy>
