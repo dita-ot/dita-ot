@@ -29,6 +29,7 @@
                   move-links,
                   topicpull,
                   flag-module,
+                  clean-map,
                   {depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
@@ -500,6 +501,30 @@
               </not>
           </or>
       </condition>
+  </target>
+  
+  <!-- Clean maps from processing time  -->
+  <target name="clean-map" 
+          depends="clean-map-check"
+          unless="preprocess.clean-map-check.skip"
+          description="Clean ditamap">
+    <condition property="dita.preprocess.reloadstylesheet.clean-map" value="${dita.preprocess.reloadstylesheet}">
+      <not><isset property="dita.preprocess.reloadstylesheet.clean-map"/></not>
+    </condition>
+    <pipeline message="Resolve mapref in ditamap" taskname="mapref">
+      <xslt basedir="${dita.temp.dir}"
+            reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
+            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
+        <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
+  </target>
+  
+  <target name="clean-map-check">
+    <condition property="preprocess.clean-map-check.skip">
+      <isset property="noMap"/>
+    </condition>
   </target>
   
   <!-- copy-files
