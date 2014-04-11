@@ -9,8 +9,10 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -30,7 +32,7 @@ public final class MergeUtils {
     private final Hashtable<String, String> idMap;
     private int index;
     /** Set of visited topic files. */
-    private final Set<String> visitSet;
+    private final Set<URI> visitSet;
 
     /**
      * Default Constructor
@@ -38,7 +40,7 @@ public final class MergeUtils {
     public MergeUtils() {
         super();
         idMap = new Hashtable<String, String>();
-        visitSet = Collections.synchronizedSet(new HashSet<String>(256));
+        visitSet = Collections.synchronizedSet(new HashSet<URI>(256));
         index = 0;
     }
 
@@ -107,9 +109,9 @@ public final class MergeUtils {
      * @param path topic path, may contain a fragment
      * @return true if has been visited
      */
-    public boolean isVisited(final String path){
-        final String localPath = FileUtils.stripFragment(path);
-        return visitSet.contains(FileUtils.normalize(FileUtils.separatorsToUnix(localPath.trim()), UNIX_SEPARATOR));
+    public boolean isVisited(final URI path){
+        final URI localPath = stripFragment(path).normalize();
+        return visitSet.contains(localPath);
     }
 
     /**
@@ -117,9 +119,9 @@ public final class MergeUtils {
      * 
      * @param path topic path, may contain a fragment
      */
-    public void visit(final String path){
-        final String localPath = FileUtils.stripFragment(path);
-        visitSet.add(FileUtils.normalize(FileUtils.separatorsToUnix(localPath.trim()), UNIX_SEPARATOR));
+    public void visit(final URI path){
+        final URI localPath = stripFragment(path).normalize();
+        visitSet.add(localPath);
     }
 
     /**

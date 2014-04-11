@@ -10,11 +10,13 @@ package org.dita.dost.reader;
 
 import static javax.xml.transform.OutputKeys.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLDecoder;
 import java.util.Stack;
 
@@ -199,21 +201,16 @@ public final class MergeMapParser extends XMLFilterImpl {
                         attValue = copyToValue;
                     }
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, ohref);
-                    if (util.isVisited(attValue)){
+                    if (util.isVisited(toURI(attValue))) {
                         attValue = SHARP + util.getIdValue(attValue);
                     } else {
                         //parse the topic
-                        String p = null;
-                        try {
-                            p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8)).getPath();
-                        } catch (final UnsupportedEncodingException e) {
-                        	throw new RuntimeException(e);
-                        }
+                        final URI p = stripFragment(toURI(attValue)).normalize();
                         util.visit(p);
                         if (p != null) {
-                            final File f = new File(dirPath, p);
+                            final File f = new File(dirPath, toFile(p).getPath());
                             if (f.exists()) {
-                                topicParser.parse(p,dirPath);
+                                topicParser.parse(toFile(p).getPath(), dirPath);
                                 final String fileId = topicParser.getFirstTopicId();
                                 util.addId(attValue, fileId);
                                 if (FileUtils.getFragment(attValue) != null) {
@@ -252,8 +249,8 @@ public final class MergeMapParser extends XMLFilterImpl {
                         element = FileUtils.getRelativeUnixPath(new File(dirPath,"a.ditamap").getAbsolutePath(),
                                                                    new File(tempdir, element).getAbsolutePath());
                     }
-                    if (!util.isVisited(element)) {
-                        util.visit(element);
+                    if (!util.isVisited(toURI(element))) {
+                        util.visit(toURI(element));
                         if (!f.isResourceOnly && (f.isChunked || !f.isSkipChunk)){
                             //ensure the file exists
                             final File file = new File(dirPath, element);

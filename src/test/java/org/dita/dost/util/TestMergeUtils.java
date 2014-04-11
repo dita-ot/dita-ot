@@ -14,6 +14,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import static org.dita.dost.util.URLUtils.*;
+
 import java.io.File;
 
 import org.junit.After;
@@ -78,16 +80,15 @@ public class TestMergeUtils {
     @Test
     public void testIsVisited() {
         //set visitSet
-        mergeUtils.visit("dir/dir1/a.xml#topicid");
-        mergeUtils.visit("dir/a.xml");
-        assertTrue(mergeUtils.isVisited("dir/a.xml"));
-        assertTrue(mergeUtils.isVisited("dir/a.xml#topicid"));
-        assertFalse(mergeUtils.isVisited("a.xml"));
-        assertTrue(mergeUtils.isVisited("dir/dir1/a.xml"));
-        assertTrue(mergeUtils.isVisited("dir/dir1/a.xml#topicid"));
+        mergeUtils.visit(toURI("dir/dir1/a.xml#topicid"));
+        mergeUtils.visit(toURI("dir/a b.xml"));
+        assertTrue(mergeUtils.isVisited(toURI("dir/a%20b.xml")));
+        assertTrue(mergeUtils.isVisited(toURI("dir/a%20b.xml#topicid")));
+        assertFalse(mergeUtils.isVisited(toURI("a%20b.xml")));
+        assertTrue(mergeUtils.isVisited(toURI("dir/dir1/a.xml")));
+        assertTrue(mergeUtils.isVisited(toURI("dir/dir1/a.xml#topicid")));
         //if topic id in the path are not the same
-        assertTrue(mergeUtils.isVisited("dir/dir1/a.xml#another"));
-        assertFalse(mergeUtils.isVisited("a.xml"));
+        assertTrue(mergeUtils.isVisited(toURI("dir/dir1/a.xml#another")));
     }
 
     @Test@Ignore
