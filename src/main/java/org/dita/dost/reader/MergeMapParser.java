@@ -199,16 +199,16 @@ public final class MergeMapParser extends XMLFilterImpl {
                         attValue = copyToValue;
                     }
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, ohref);
-                    if (util.isVisited(attValue)){
+                    //parse the topic
+                    String p = null;
+                    try {
+                        p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8)).getPath();
+                    } catch (final UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if (util.isVisited(p)){
                         attValue = SHARP + util.getIdValue(attValue);
                     } else {
-                        //parse the topic
-                        String p = null;
-                        try {
-                            p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8)).getPath();
-                        } catch (final UnsupportedEncodingException e) {
-                        	throw new RuntimeException(e);
-                        }
                         util.visit(p);
                         if (p != null) {
                             final File f = new File(dirPath, p);
