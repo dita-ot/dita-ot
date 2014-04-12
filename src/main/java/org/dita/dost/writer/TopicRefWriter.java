@@ -42,9 +42,6 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public final class TopicRefWriter extends AbstractXMLWriter {
 
-    // To check the URL of href in topicref attribute
-    private static final String NOT_LOCAL_URL = COLON_DOUBLE_SLASH;
-
     private Map<String, String> changeTable = null;
     private Map<String, String> conflictTable = null;
     private OutputStreamWriter output;
@@ -159,19 +156,14 @@ public final class TopicRefWriter extends AbstractXMLWriter {
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
         try {
-            final AttributesImpl res = new AttributesImpl();
-            final int attsLen = atts.getLength();
-            for (int i = 0; i < attsLen; i++) {
-                final String attQName = atts.getQName(i);
-                String attValue;
-                if (ATTRIBUTE_NAME_HREF.equals(attQName)) {
-                    attValue = updateHref(attQName, atts);
-                } else {
-                    attValue = atts.getValue(i);
-                }
-                addOrSetAttribute(res, attQName, attValue);
+            Attributes as = atts;
+            final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
+            if (href != null) {
+                final AttributesImpl res = new AttributesImpl(atts);
+                addOrSetAttribute(res, ATTRIBUTE_NAME_HREF, updateHref(as));
+                as = res;
             }
-            writeStartElement(qName, res);
+            writeStartElement(qName, as);
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -183,21 +175,18 @@ public final class TopicRefWriter extends AbstractXMLWriter {
      * @param atts
      * @return true/false
      */
-    private boolean checkDITAHREF(final Attributes atts) {
-
+    private boolean isLocalDita(final Attributes atts) {
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-
         if (classValue == null
-                || (!TOPIC_XREF.matches(classValue) && !TOPIC_LINK.matches(classValue) && !MAP_TOPICREF
-                        .matches(classValue))) {
+                || (!TOPIC_XREF.matches(classValue) && !TOPIC_LINK.matches(classValue) && !MAP_TOPICREF.matches(classValue))) {
             return false;
         }
 
+        String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (scopeValue == null) {
             scopeValue = ATTR_SCOPE_VALUE_LOCAL;
         }
+        String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         if (formatValue == null) {
             formatValue = ATTR_FORMAT_VALUE_DITA;
         }
@@ -206,25 +195,11 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
     }
 
-    private String updateHref(final String attQName, final Attributes atts) {
-        String attValue = null;
-
-        if (attQName == null) {
+    private String updateHref(final Attributes atts) {
+        String attValue = atts.getValue(ATTRIBUTE_NAME_HREF);
+        if (attValue == null) {
             return null;
         }
-
-        attValue = atts.getValue(attQName);
-
-        if (attValue != null) {
-            /*
-             * replace all the backslash with slash in all href and conref
-             * attribute
-             */
-            attValue = separatorsToUnix(attValue);
-        } else {
-            return null;
-        }
-
         if (fixpath != null && attValue.startsWith(fixpath)) {
             attValue = attValue.substring(fixpath.length());
         }
@@ -233,7 +208,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             return attValue;
         }
 
-        if (checkDITAHREF(atts)) {
+        if (isLocalDita(atts)) {
             // replace the href value if it's referenced topic is extracted.
             final File rootPathName = currentFilePathName;
             String changeTargetkey = resolve(currentFilePath, attValue).getPath();
@@ -251,52 +226,45 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             final String elementID = getElementID(attValue);
             final String pathtoElem = getFragment(attValue, "");
 
-            if (StringUtils.isEmptyString(changeTarget)) {
+            if (changeTarget == null || changeTarget.isEmpty()) {
                 String absolutePath = resolveTopic(currentFilePath, attValue);
                 absolutePath = setElementID(absolutePath, null);
                 changeTarget = changeTable.get(absolutePath);
             }
 
-            if (!notTopicFormat(atts, attValue)) {
-                if (changeTarget == null) {
-                    return attValue;// no change
-                } else {
-                    final String conTarget = conflictTable.get(stripFragment(changeTarget));
-                    if (!StringUtils.isEmptyString(conTarget)) {
-                        if (elementID == null) {
-                            final String idpath = getElementID(changeTarget);
-                            return setFragment(getRelativeUnixPath(rootPathName, conTarget), idpath);
-                        } else {
-                            if (getFragment(conTarget) != null) {
-                                // conTarget points to topic
-                                if (!pathtoElem.contains(SLASH)) {
-                                    // if pathtoElem does no have '/' slash. it
-                                    // means elementID is topic id
-                                    return getRelativeUnixPath(rootPathName, conTarget);
-                                } else {
-                                    return setElementID(getRelativeUnixPath(rootPathName, conTarget), elementID);
-                                }
-
-                            } else {
-                                return setFragment(getRelativeUnixPath(rootPathName, conTarget), pathtoElem);
-                            }
-                        }
+            if (changeTarget == null) {
+                return attValue;// no change
+            } else {
+                final String conTarget = conflictTable.get(stripFragment(changeTarget));
+                if (conTarget != null && !conTarget.isEmpty()) {
+                    final String p = getRelativeUnixPath(rootPathName, conTarget);
+                    if (elementID == null) {
+                        return setFragment(p, getElementID(changeTarget));
                     } else {
-                        if (elementID == null) {
-                            return getRelativeUnixPath(rootPathName, changeTarget);
-                        } else {
-                            if (getFragment(changeTarget) != null) {
-                                // changeTarget points to topic
-                                if (!pathtoElem.contains(SLASH)) {
-                                    // if pathtoElem does no have '/' slash. it
-                                    // means elementID is topic id
-                                    return getRelativeUnixPath(rootPathName, changeTarget);
-                                } else {
-                                    return setElementID(getRelativeUnixPath(rootPathName, changeTarget), elementID);
-                                }
+                        if (getFragment(conTarget) != null) {
+                            if (!pathtoElem.contains(SLASH)) {
+                                return p;
                             } else {
-                                return setFragment(getRelativeUnixPath(rootPathName, changeTarget), pathtoElem);
+                                return setElementID(p, elementID);
                             }
+
+                        } else {
+                            return setFragment(p, pathtoElem);
+                        }
+                    }
+                } else {
+                    final String p = getRelativeUnixPath(rootPathName, changeTarget);
+                    if (elementID == null) {
+                        return p;
+                    } else {
+                        if (getFragment(changeTarget) != null) {
+                            if (!pathtoElem.contains(SLASH)) {
+                                return p;
+                            } else {
+                                return setElementID(p, elementID);
+                            }
+                        } else {
+                            return setFragment(p, pathtoElem);
                         }
                     }
                 }
@@ -324,38 +292,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             }
         }
         return elementID;
-    }
-
-    /**
-     * Check whether it is a local URL
-     * 
-     * @param valueOfURL
-     * @return boolean
-     */
-    private boolean notLocalURL(final String valueOfURL) {
-        return valueOfURL.contains(NOT_LOCAL_URL);
-    }
-
-    /**
-     * Check whether it is a Topic format
-     * 
-     * @param attrs attributes to check
-     * @param valueOfHref href attribute value
-     * @return boolean
-     */
-    private boolean notTopicFormat(final Attributes attrs, final String valueOfHref) {
-        final String formatValue = attrs.getValue(ATTRIBUTE_NAME_FORMAT);
-        final String extOfHref = getExtension(valueOfHref);
-        if (notLocalURL(valueOfHref)) {
-            return true;
-        } else {
-            if (formatValue == null && extOfHref != null && !extOfHref.equalsIgnoreCase("DITA")
-                    && !extOfHref.equalsIgnoreCase("XML")) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public void write(final File tempDir, final File topicfile, final Map relativePath2fix) throws DITAOTException {
