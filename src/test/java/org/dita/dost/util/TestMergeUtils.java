@@ -45,20 +45,20 @@ public class TestMergeUtils {
 
     @Test
     public void testFindId() {
-        mergeUtils.addId("dir\\\\#topicid");
-        mergeUtils.addId("dir\\\\dir1\\\\a.xml#topicid");
-        assertTrue(mergeUtils.findId("dir/#topicid"));
-        assertTrue(mergeUtils.findId("dir/dir1/a.xml#topicid"));
-        assertFalse(mergeUtils.findId("topicid"));
-        assertFalse(mergeUtils.findId("dir/a.xml#topicid"));
+        mergeUtils.addId(toURI("dir\\\\#topicid"));
+        mergeUtils.addId(toURI("dir\\\\dir1\\\\a.xml#topicid"));
+        assertTrue(mergeUtils.findId(toURI("dir/#topicid")));
+        assertTrue(mergeUtils.findId(toURI("dir/dir1/a.xml#topicid")));
+        assertFalse(mergeUtils.findId(toURI("topicid")));
+        assertFalse(mergeUtils.findId(toURI("dir/a.xml#topicid")));
     }
 
 
     @Test
     public void testAddIdString() {
         assertEquals(null, mergeUtils.addId(null));
-        assertEquals("unique_1", mergeUtils.addId("a.xml#topicid"));
-        assertEquals("unique_2", mergeUtils.addId("a.xml#topicid2"));
+        assertEquals("unique_1", mergeUtils.addId(toURI("a.xml#topicid")));
+        assertEquals("unique_2", mergeUtils.addId(toURI("a.xml#topicid2")));
         assertNull(mergeUtils.addId(null));
     }
 
@@ -69,12 +69,12 @@ public class TestMergeUtils {
 
     @Test
     public void testGetIdValue() {
-        mergeUtils.addId("a.xml#topicid");
-        mergeUtils.addId("a.xml#topicid2");
+        mergeUtils.addId(toURI("a.xml#topicid"));
+        mergeUtils.addId(toURI("a.xml#topicid2"));
         assertEquals(null, mergeUtils.getIdValue(null));
-        assertEquals("unique_1", mergeUtils.getIdValue("a.xml#topicid"));
-        assertEquals("unique_2", mergeUtils.getIdValue("a.xml#topicid2"));
-        assertEquals(null, mergeUtils.getIdValue(" "));
+        assertEquals("unique_1", mergeUtils.getIdValue(toURI("a.xml#topicid")));
+        assertEquals("unique_2", mergeUtils.getIdValue(toURI("a.xml#topicid2")));
+        assertEquals(null, mergeUtils.getIdValue(toURI(" ")));
     }
 
     @Test
@@ -100,8 +100,8 @@ public class TestMergeUtils {
     @Test
     public void testGetFirstTopicId() {
         //assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
-        assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", srcDir.getAbsoluteFile(), false));
-        assertEquals("task", MergeUtils.getFirstTopicId("stub.xml", srcDir.getAbsoluteFile(), true));
+        assertEquals("task", MergeUtils.getFirstTopicId(toURI("stub.xml"), srcDir.getAbsoluteFile(), false));
+        assertEquals("task", MergeUtils.getFirstTopicId(toURI("stub.xml"), srcDir.getAbsoluteFile(), true));
     }
 
 }

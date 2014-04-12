@@ -73,7 +73,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     /**
      * Set merge output file
      * 
-     * @param outputFile merge output file
+     * @param output merge output file
      */
     public void setOutput(File output) {
         this.output = output;
@@ -111,7 +111,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         String idValue = atts.getValue(ATTRIBUTE_NAME_ID);
         if (idValue != null) {
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OID, idValue);
-            final String value = setFragment(filePath, idValue);
+            final URI value = setFragment(toURI(filePath), idValue);
             if (util.findId(value)) {
                 idValue = util.getIdValue(value);
             } else {
@@ -124,25 +124,24 @@ public final class MergeTopicParser extends XMLFilterImpl {
     /**
      * Rewrite local DITA href value.
      * 
-     * @param attValue href attribute value
+     * @param href href attribute value
      * @return rewritten href value
      */
     private URI handleLocalDita(final URI href, final AttributesImpl atts) {
         final String attValue = href.toString();
         final int sharpIndex = attValue.indexOf(SHARP);
-        String pathFromMap;
+        URI pathFromMap;
         String retAttValue = attValue;
         if (sharpIndex != -1) { // href value refer to an id in a topic
             if (sharpIndex == 0) {
-                pathFromMap = separatorsToUnix(filePath);
+                pathFromMap = toURI(filePath);
             } else {
-                pathFromMap = separatorsToUnix(resolveTopic(new File(filePath).getParentFile(),
-                        attValue.substring(0, sharpIndex)));
+                pathFromMap = toURI(resolveTopic(new File(filePath).getParentFile(),
+                                                 attValue.substring(0, sharpIndex)));
             }
-            pathFromMap = URLUtils.decode(pathFromMap);
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF,
                     URLUtils.clean(pathFromMap + attValue.substring(sharpIndex), false));
-            final String topicId = pathFromMap + getElementID(SHARP + getFragment(attValue));
+            final URI topicId = toURI(pathFromMap + getElementID(SHARP + getFragment(attValue)));
             final int index = attValue.indexOf(SLASH, sharpIndex);
             final String elementId = index != -1 ? attValue.substring(index) : "";
             if (util.findId(topicId)) {// topicId found
@@ -151,14 +150,13 @@ public final class MergeTopicParser extends XMLFilterImpl {
                 retAttValue = SHARP + util.addId(topicId) + elementId;
             }
         } else { // href value refer to a topic
-            pathFromMap = resolveTopic(new File(filePath).getParent(), attValue);
-            pathFromMap = URLUtils.decode(pathFromMap);
-            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, URLUtils.clean(pathFromMap, false));
+            pathFromMap = toURI(resolveTopic(new File(filePath).getParent(), attValue));
+            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, pathFromMap.toString());
             if (util.findId(pathFromMap)) {
                 retAttValue = SHARP + util.getIdValue(pathFromMap);
             } else {
                 final String fileId = MergeUtils.getFirstTopicId(pathFromMap, dirPath, false);
-                final String key = setFragment(pathFromMap, fileId);
+                final URI key = setFragment(pathFromMap, fileId);
                 if (util.findId(key)) {
                     util.addId(pathFromMap, util.getIdValue(key));
                     retAttValue = SHARP + util.getIdValue(key);
