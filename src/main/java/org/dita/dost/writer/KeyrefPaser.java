@@ -162,7 +162,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private Element elem;
 
     /** Set of link targets which are not resource-only */
-    private Set<String> normalProcessingRoleTargets;
+    private Set<File> normalProcessingRoleTargets;
     
     /**
      * Constructor.
@@ -207,7 +207,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /**
      * Get set of link targets which have normal processing role. Paths are relative to current file.
      */
-    public Set<String> getNormalProcessingRoleTargets() {
+    public Set<File> getNormalProcessingRoleTargets() {
         return Collections.unmodifiableSet(normalProcessingRoleTargets);
     }
     
@@ -226,13 +226,13 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     @Override
     public void startDocument() throws SAXException {
-        normalProcessingRoleTargets = new HashSet<String>();
+        normalProcessingRoleTargets = new HashSet<File>();
         getContentHandler().startDocument();
     }
     
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (keyrefLeval != 0 && new String(ch,start,length).trim().length() == 0) {
+        if (keyrefLeval != 0 && (length == 0 || new String(ch,start,length).trim().length() == 0)) {
             if (!hasChecked) {
                 empty = true;
             }
@@ -429,7 +429,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
                                     final URI f = toURI(inputFile).resolve(target_output);
-                                    normalProcessingRoleTargets.add(URLUtils.toFile(f).getPath());
+                                    normalProcessingRoleTargets.add(URLUtils.toFile(f));
                                 }
                             } else {
                                 // referenced file does not exist, emits a message.

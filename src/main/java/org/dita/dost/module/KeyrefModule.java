@@ -59,6 +59,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         });
         if (!fis.isEmpty()) {
+            // TODO: If map merge is done before key processing, this needs to be rewritten to just read the single map and take submap wrappers into consideration.
             // maps of keyname and target
             final Map<String, URI> keymap = new HashMap<String, URI>();
             // store the key name defined in a map(keyed by ditamap file)
@@ -88,7 +89,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
             final Map<String, Element> keyDefinition = reader.getKeyDefinition();
             
-            final Set<String> normalProcessingRole = new HashSet<String>();
+            final Set<File> normalProcessingRole = new HashSet<File>();
             for (final FileInfo f: fis) {
                 final File file = f.file;
                 logger.info("Processing " + new File(job.tempDir, file.getPath()).getAbsolutePath());
@@ -113,11 +114,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 XMLUtils.transform(new File(job.tempDir, file.getPath()), filters);
                 
                 // validate resource-only list
-                for (final String t: parser.getNormalProcessingRoleTargets()) {
-                    normalProcessingRole.add(t);
-                }
+                normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
             }
-            for (final String file: normalProcessingRole) {
+            for (final File file: normalProcessingRole) {
                 final FileInfo f = job.getFileInfo(file);
                 if (f != null) {
                     f.isResourceOnly = false;

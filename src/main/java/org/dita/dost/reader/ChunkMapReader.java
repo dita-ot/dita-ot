@@ -64,6 +64,7 @@ public final class ChunkMapReader implements AbstractReader {
 
     /** Input file's parent directory */
     private File filePath = null;
+    // ChunkTopicParser assumes keys and values are chimera paths, i.e. systems paths with fragments.
     private LinkedHashMap<String, String> changeTable = null;
 
     private Map<String, String> conflictTable = null;
@@ -101,7 +102,7 @@ public final class ChunkMapReader implements AbstractReader {
     /**
      * read input file.
      * 
-     * @param filename filename
+     * @param inputFile filename
      */
     @Override
     public void read(final File inputFile) {

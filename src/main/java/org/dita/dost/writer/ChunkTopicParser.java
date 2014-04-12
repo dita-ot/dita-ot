@@ -594,6 +594,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         final String hrefValue = element.getAttribute(ATTRIBUTE_NAME_HREF);
         final String copytoValue = element.getAttribute(ATTRIBUTE_NAME_COPY_TO);
         final String scopeValue = element.getAttribute(ATTRIBUTE_NAME_SCOPE);
+        // Chimera path, has fragment
         String parseFilePath = null;
         Writer tempOutput = null;
         final String chunkValue = element.getAttribute(ATTRIBUTE_NAME_CHUNK);
