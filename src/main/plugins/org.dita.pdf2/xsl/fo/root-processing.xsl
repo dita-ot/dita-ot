@@ -53,9 +53,9 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:choose>
     </xsl:variable>
     
-    <xsl:variable name="mapType">
+    <xsl:variable name="mapType" as="xs:string">
         <xsl:choose>
-            <xsl:when test="/*[contains(@class, ' map/map ') and contains(@class, ' bookmap/bookmap ')]">
+            <xsl:when test="/*[contains(@class, ' bookmap/bookmap ')]">
                 <xsl:value-of select="'bookmap'"/>
             </xsl:when>
             <xsl:otherwise>
@@ -201,29 +201,24 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="/" name="rootTemplate">
         <xsl:call-template name="validateTopicRefs"/>
-
         <fo:root xsl:use-attribute-sets="__fo__root">
             <xsl:call-template name="createMetadata"/>
             <xsl:call-template name="createLayoutMasters"/>
-
             <xsl:call-template name="createBookmarks"/>
-
             <xsl:call-template name="createFrontMatter"/>
-
             <xsl:if test="not($retain-bookmap-order)">
                 <xsl:call-template name="createToc"/>
             </xsl:if>
-
-<!--            <xsl:call-template name="createPreface"/>-->
-
             <xsl:apply-templates/>
-
             <xsl:if test="not($retain-bookmap-order)">
                 <xsl:call-template name="createIndex"/>
             </xsl:if>
-
         </fo:root>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' map/map ')]">
+    <xsl:apply-templates/>
+  </xsl:template>
   
   <xsl:template match="document-node()[*[contains(@class, ' topic/topic ')]]">
     <fo:root xsl:use-attribute-sets="__fo__root">

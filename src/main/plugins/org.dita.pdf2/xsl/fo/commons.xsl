@@ -109,16 +109,11 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="." mode="topicEpilog"/>
     </xsl:template>
 
+    <!-- Hook that allows common end-of-topic processing (after nested topics). -->
     <xsl:template match="*" mode="topicEpilog">
-      <!-- Hook that allows common end-of-topic processing (after nested topics).
-           See SourceForge RFE 2928584: Add general model for end-of-topic processing in PDF -->
+      
     </xsl:template>
 
-    <!-- RDA: From RFE 2882109, combining this rule with existing rules for
-              concept, task, reference later in this file to reduce duplicated
-              code. Continue calling the named process* templates in order to
-              ensure backwards compatibility; ideally though, a single template would
-              be called for all types, deferring the override decision to match rules. -->
     <xsl:template match="*[contains(@class, ' topic/topic ')]">
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>
@@ -789,23 +784,6 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-    <!-- The following three template matches are based on class attributes
-         that do not exist. They have been commented out starting with
-         the DITA-OT 1.5 release, with SourceForge tracker #2882085. -->
-    <!--<xsl:template match="*[contains(@class, ' topic/dita ')]">
-        <xsl:apply-templates/>
-    </xsl:template>
-    <xsl:template match="*[contains(@class, ' topic/topichead ')]">
-        <fo:block xsl:use-attribute-sets="topichead" id="{@id}">
-            <xsl:apply-templates/>
-        </fo:block>
-    </xsl:template>
-    <xsl:template match="*[contains(@class, ' topic/topicgroup ')]">
-        <fo:block xsl:use-attribute-sets="topicgroup" id="{@id}">
-            <xsl:apply-templates/>
-        </fo:block>
-    </xsl:template>-->
-
     <xsl:template match="*[contains(@class, ' topic/tm ')]">
         <fo:inline xsl:use-attribute-sets="tm">
             <xsl:apply-templates/>
@@ -1064,59 +1042,6 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates select="." mode="commonTopicProcessing"/>
         </fo:block>
   </xsl:template>
-
-    <!-- RFE 2882109: Combine this common code with topic/topic rule. -->
-    <!--<xsl:template match="*[contains(@class, ' concept/concept ')]">
-        <xsl:variable name="topicType">
-            <xsl:call-template name="determineTopicType"/>
-        </xsl:variable>
-
-        <xsl:choose>
-            <xsl:when test="$topicType = 'topicChapter'">
-                <xsl:call-template name="processTopicChapter"/>
-            </xsl:when>
-            <xsl:when test="$topicType = 'topicAppendix'">
-                <xsl:call-template name="processTopicAppendix"/>
-            </xsl:when>
-            <xsl:when test="$topicType = 'topicPart'">
-                <xsl:call-template name="processTopicPart"/>
-            </xsl:when>
-            <xsl:when test="$topicType = 'topicPreface'">
-                <xsl:call-template name="processTopicPreface"/>
-            </xsl:when>
-            <xsl:when test="$topicType = 'topicSimple'">
-                <xsl:variable name="page-sequence-reference">
-                    <xsl:choose>
-                        <xsl:when test="$mapType = 'bookmap'">
-                            <xsl:value-of select="'body-sequence'"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="'ditamap-body-sequence'"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
-                        <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
-                            <xsl:call-template name="insertBodyStaticContents"/>
-                            <fo:flow flow-name="xsl-region-body">
-                                <xsl:call-template name="processConcept"/>
-                            </fo:flow>
-                        </fo:page-sequence>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:call-template name="processConcept"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-      <xsl:otherwise>
-                <xsl:call-template name="processUnknowTopic">
-                    <xsl:with-param name="topicType" select="$topicType"/>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-
-    </xsl:template>-->
 
     <xsl:template match="*[contains(@class, ' concept/conbody ')]" priority="1">
       <xsl:variable name="level" as="xs:integer">
@@ -2145,8 +2070,6 @@ See the accompanying license.txt file for applicable licenses.
     <!-- BS: Template owerwrited to define new topic types (List's),
     to create special processing for any of list you should use <template name="processUnknowTopic"/>
     example below.-->
-    <!-- RDA: Modified with RFE 2882109. Can now modify results or add new types by matching an element
-              with mode="determineTopicType", without overriding the entire determineTopicType template. -->
     <xsl:template name="determineTopicType">
       <xsl:variable name="foundTopicType">
         <xsl:variable name="topic" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]"/>

@@ -97,21 +97,17 @@ See the accompanying license.txt file for applicable licenses.
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </fo:block>
-
                             <fo:block xsl:use-attribute-sets="__frontmatter__owner">
                                 <xsl:apply-templates select="$map/*[contains(@class, ' map/topicmeta ')]"/>
                             </fo:block>
-
                         </fo:block>
-
-                        <!--<xsl:call-template name="createPreface"/>-->
-
                     </fo:flow>
                 </fo:page-sequence>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
+    <!-- DITA 1.1 or later cover page -->
     <xsl:template name="createFrontMatter_1.0">
         <fo:page-sequence master-reference="front-matter" xsl:use-attribute-sets="__force__page__count">
             <xsl:call-template name="insertFrontMatterStaticContents"/>
@@ -134,18 +130,12 @@ See the accompanying license.txt file for applicable licenses.
                             </xsl:otherwise>
                         </xsl:choose>
                     </fo:block>
-
                     <!-- set the subtitle -->
                     <xsl:apply-templates select="$map//*[contains(@class,' bookmap/booktitlealt ')]"/>
-
                     <fo:block xsl:use-attribute-sets="__frontmatter__owner">
                         <xsl:apply-templates select="$map//*[contains(@class,' bookmap/bookmeta ')]"/>
                     </fo:block>
-
                 </fo:block>
-
-                <!--<xsl:call-template name="createPreface"/>-->
-
             </fo:flow>
         </fo:page-sequence>
         <xsl:if test="not($retain-bookmap-order)">
@@ -214,10 +204,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
-
         <xsl:if test="$topicType = 'topicNotices'">
             <xsl:call-template name="processTopicNotices"/>
         </xsl:if>
-    </xsl:template>
+  </xsl:template>
     
 </xsl:stylesheet>

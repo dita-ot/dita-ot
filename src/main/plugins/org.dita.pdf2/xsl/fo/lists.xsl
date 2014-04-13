@@ -75,13 +75,11 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                 </fo:block>
             </fo:list-item-label>
-
             <fo:list-item-body xsl:use-attribute-sets="ul.li__body">
                 <fo:block xsl:use-attribute-sets="ul.li__content">
                     <xsl:apply-templates/>
                 </fo:block>
             </fo:list-item-body>
-
         </fo:list-item>
     </xsl:template>
 
@@ -109,13 +107,11 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                 </fo:block>
             </fo:list-item-label>
-
             <fo:list-item-body xsl:use-attribute-sets="ol.li__body">
                 <fo:block xsl:use-attribute-sets="ol.li__content">
                     <xsl:apply-templates/>
                 </fo:block>
             </fo:list-item-body>
-
         </fo:list-item>
     </xsl:template>
 
@@ -144,13 +140,11 @@ See the accompanying license.txt file for applicable licenses.
                     </fo:inline>
                 </fo:block>
             </fo:list-item-label>
-
             <fo:list-item-body xsl:use-attribute-sets="sl.sli__body">
                 <fo:block xsl:use-attribute-sets="sl.sli__content">
                     <xsl:apply-templates/>
                 </fo:block>
             </fo:list-item-body>
-
         </fo:list-item>
     </xsl:template>
 
