@@ -45,7 +45,27 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:key name="id" match="*[@id]" use="@id"/>
     <xsl:key name="map-id" match="opentopic:map//*[@id]" use="@id"/>
     <xsl:key name="class" match="*[@class]" use="tokenize(@class, ' ')"/>
+
     <xsl:key name="topicById" match="*[contains(@class, ' topic/topic ')]" use="@id"/>
+    <xsl:key name="fnById" match="*[contains(@class, ' topic/fn ')]" use="@id"/>
+
+    <!--
+    A key with all elements that need to be numbered.
+
+    To get the number of an element using this key, you can use the << node
+    comparison operator in XPath 2 to get all elements in the key that appear
+    before the current element in the tree. For example, to get the number of
+    topic/fig elements before the current element, you would do something like:
+
+      <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()])"/>
+
+    This is much faster than using the preceding:: axis and somewhat faster than
+    using the <xsl:number> element.
+    -->
+    <xsl:key name="enumerableByClass"
+        match="*[contains(@class, ' topic/fig ')][*[contains(@class, ' topic/title ')]]   |
+               *[contains(@class, ' topic/table ')][*[contains(@class, ' topic/title ')]] |
+               *[contains(@class,' topic/fn ') and not(@callout)]" use="tokenize(@class, ' ')"/>
 
     <xsl:variable name="msgprefix" select="'PDFX'"/>
 
@@ -773,7 +793,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:with-param name="theVariableID" select="'Figure'"/>
                 <xsl:with-param name="theParameters">
                     <number>
-                        <xsl:number level="any" count="*[contains(@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ')]]" from="/"/>
+                        <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()])"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>
@@ -1950,7 +1970,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:value-of select="@callout"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:number level="any" count="*[contains(@class,' topic/fn ') and not(@callout)]"/>
+                            <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </fo:inline>
@@ -1972,7 +1992,7 @@ See the accompanying license.txt file for applicable licenses.
                                             <xsl:value-of select="@callout"/>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <xsl:number level="any" count="*[contains(@class,' topic/fn ') and not(@callout)]"/>
+                                            <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
                                         </xsl:otherwise>
                                     </xsl:choose>
                                 </fo:inline>
