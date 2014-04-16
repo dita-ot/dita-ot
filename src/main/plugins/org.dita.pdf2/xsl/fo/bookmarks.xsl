@@ -94,7 +94,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:choose>
                 <xsl:when test="$map//*[contains(@class,' bookmap/toc ')][@href]"/>
                 <xsl:when test="$map//*[contains(@class,' bookmap/toc ')]
-                            	| /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                              | /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                     <fo:bookmark internal-destination="{$id.toc}">
                         <fo:bookmark-title>
                             <xsl:call-template name="insertVariable">
@@ -119,7 +119,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:choose>
                     <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
                     <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')]
-                          	      | /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                                  | /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                         <fo:bookmark internal-destination="{$id.index}">
                             <fo:bookmark-title>
                                 <xsl:call-template name="insertVariable">

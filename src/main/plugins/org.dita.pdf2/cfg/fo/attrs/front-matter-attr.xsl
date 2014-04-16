@@ -88,8 +88,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute name="break-before">even-page</xsl:attribute>
   </xsl:attribute-set>
 
-	<xsl:attribute-set name="bookmap.summary">
-		<xsl:attribute name="font-size">9pt</xsl:attribute>
-	</xsl:attribute-set>
+  <xsl:attribute-set name="bookmap.summary">
+    <xsl:attribute name="font-size">9pt</xsl:attribute>
+  </xsl:attribute-set>
 
 </xsl:stylesheet>

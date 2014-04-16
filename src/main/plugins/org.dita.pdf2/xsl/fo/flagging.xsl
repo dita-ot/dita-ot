@@ -52,13 +52,13 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:value-of select="@id" />
          </xsl:attribute>
 
-         <!--        	 	
-       	 	change-bar-color 
-			change-bar-offset
-			change-bar-placement= start | end | left | right | inside | outside | alternate 
-			change-bar-style = none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
-			change-bar-width
-			-->
+         <!--             
+            change-bar-color 
+      change-bar-offset
+      change-bar-placement= start | end | left | right | inside | outside | alternate 
+      change-bar-style = none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
+      change-bar-width
+      -->
 
          <xsl:call-template name="parseChangeBarStyle">
             <xsl:with-param name="value">
@@ -108,12 +108,12 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:variable name="val" select="substring-after($value,':')"/>
 
             <!-- 
-       	 	change-bar-color 
-			change-bar-offset
-			change-bar-placement= start | end | left | right | inside | outside | alternate 
-			change-bar-style = none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
-			change-bar-width
-			-->
+            change-bar-color 
+      change-bar-offset
+      change-bar-placement= start | end | left | right | inside | outside | alternate 
+      change-bar-style = none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
+      change-bar-width
+      -->
 
             <xsl:choose>
                <xsl:when test="$attr='color'">

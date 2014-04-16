@@ -372,19 +372,19 @@ See the accompanying license.txt file for applicable licenses.
     <!-- The search by text button title in online-help output -->
     <variable id="Search text button title">Search</variable>
 
-	<variable id="Online Help Search Method Field">Search method</variable>
-	<variable id="Online Help Search Method Or">or</variable>
-	<variable id="Online Help Search Method And">and</variable>
-	<variable id="Search Highlight Switch">Highlight text in search results</variable>
-	<variable id="Search index next button title">Show Next</variable>
-	<variable id="Search Whole Words Switch">Find whole words only</variable>
-	<variable id="Search Case Sensitive Switch">Match case</variable>
-	<variable id="Search Stopped Message">The search was stopped after 50 hits.</variable>
-	<!--This one is a java script expression. So if the order of message should be another don't forget to add '+'
-	and quotes to the string expressions.-->
-	<variable id="Search Excluded Stop Words Message">"The following words were excluded from the search: "+<param ref-name="stop-words-list"/></variable>
-	<variable id="Search Search in Progress Message">Search in progress...</variable>
-	<variable id="Search Search Give No Results Message">No matches were found.</variable>
+  <variable id="Online Help Search Method Field">Search method</variable>
+  <variable id="Online Help Search Method Or">or</variable>
+  <variable id="Online Help Search Method And">and</variable>
+  <variable id="Search Highlight Switch">Highlight text in search results</variable>
+  <variable id="Search index next button title">Show Next</variable>
+  <variable id="Search Whole Words Switch">Find whole words only</variable>
+  <variable id="Search Case Sensitive Switch">Match case</variable>
+  <variable id="Search Stopped Message">The search was stopped after 50 hits.</variable>
+  <!--This one is a java script expression. So if the order of message should be another don't forget to add '+'
+  and quotes to the string expressions.-->
+  <variable id="Search Excluded Stop Words Message">"The following words were excluded from the search: "+<param ref-name="stop-words-list"/></variable>
+  <variable id="Search Search in Progress Message">Search in progress...</variable>
+  <variable id="Search Search Give No Results Message">No matches were found.</variable>
 
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">Optional:</variable>

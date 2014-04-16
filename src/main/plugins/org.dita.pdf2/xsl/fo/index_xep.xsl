@@ -55,7 +55,7 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:template match="opentopic-index:index.entry" mode="index-postprocess">
     <xsl:variable name="value" select="@value"/>
     <xsl:choose>
-			<xsl:when test="opentopic-index:index.entry">
+      <xsl:when test="opentopic-index:index.entry">
         <fo:table rx:table-omit-initial-header="true" width="100%">
           <fo:table-header>
             <fo:table-row>
@@ -161,10 +161,10 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:choose>
   </xsl:template>
 
-	<xsl:template match="*" mode="make-index-ref">
-		<xsl:param name="idxs" select="()"/>
-		<xsl:param name="inner-text" select="()"/>
-		<xsl:param name="no-page"/>
+  <xsl:template match="*" mode="make-index-ref">
+    <xsl:param name="idxs" select="()"/>
+    <xsl:param name="inner-text" select="()"/>
+    <xsl:param name="no-page"/>
     <fo:block id="{generate-id(.)}" xsl:use-attribute-sets="index.term">
       <xsl:if test="empty(preceding-sibling::opentopic-index:index.entry)">
         <xsl:attribute name="keep-with-previous">always</xsl:attribute>
@@ -196,6 +196,6 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="opentopic-index:see-also-childs" mode="index-postprocess"/>
       </xsl:if>
     </fo:block>
-	</xsl:template>
+  </xsl:template>
 
 </xsl:stylesheet>

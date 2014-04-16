@@ -138,9 +138,9 @@
    <!-- For these elements, the flagging style can be applied directly to the fo element 
         already being created by the default DITA-OT processing -->
    <xsl:template match="*[contains(@class, ' topic/image ') or contains(@class,' topic/table ') or 
-						   contains(@class, ' topic/ol ') or 
-						   contains(@class, ' topic/ul ') or contains(@class, ' topic/sl ')]" 
-						   priority="50">
+               contains(@class, ' topic/ol ') or 
+               contains(@class, ' topic/ul ') or contains(@class, ' topic/sl ')]" 
+               priority="50">
 
       <xsl:variable name="id">
          <xsl:value-of select="generate-id(.)"/>
@@ -319,8 +319,8 @@
       already being created by the default DITA-OT processing, but now the startflag and endflag images 
       are placed inside the element rather than before and after it -->
    <xsl:template match="*[contains(@class,' topic/entry ') or contains(@class, ' topic/stentry ') or
-						   contains(@class, ' topic/dd ') or contains(@class, ' topic/dt ') or 
-						   contains(@class, ' topic/ddhd ') or contains(@class, ' topic/dthd ')]"
+               contains(@class, ' topic/dd ') or contains(@class, ' topic/dt ') or 
+               contains(@class, ' topic/ddhd ') or contains(@class, ' topic/dthd ')]"
            priority="30">
 
       <xsl:variable name="id">
@@ -373,9 +373,9 @@
       already being created by the default DITA-OT processing, 
       but startflag and endflag images are not supported (where would they go?) -->
    <xsl:template match="*[contains(@class,' topic/tgroup ') or contains(@class, ' topic/thead ') or
-						   contains(@class,' topic/tfoot ') or contains(@class,' topic/tbody ') or contains(@class,' topic/row ') or contains(@class, ' topic/strow ') or
-						   contains(@class, ' topic/dlentry ') or contains(@class, ' topic/dlhead ') or 
-						   contains(@class, ' topic/sthead ')]"
+               contains(@class,' topic/tfoot ') or contains(@class,' topic/tbody ') or contains(@class,' topic/row ') or contains(@class, ' topic/strow ') or
+               contains(@class, ' topic/dlentry ') or contains(@class, ' topic/dlhead ') or 
+               contains(@class, ' topic/sthead ')]"
            priority="20">
 
       <xsl:variable name="id">
@@ -411,7 +411,7 @@
       </xsl:apply-templates>
       
    </xsl:template>
-   					   
+                
    <!-- For all other elements, we try to apply the flagging style directly to the fo element 
       already being created by the default DITA-OT processing, and place the startflag and endflag images 
       inside the element -->

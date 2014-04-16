@@ -372,19 +372,19 @@ See the accompanying license.txt file for applicable licenses.
     <!-- The search by text button title in online-help output -->
     <variable id="Search text button title">検索</variable>
 
-	<variable id="Online Help Search Method Field">検索方法</variable>
-	<variable id="Online Help Search Method Or">または</variable>
-	<variable id="Online Help Search Method And">および</variable>
-	<variable id="Search Highlight Switch">検索結果でテキストを強調表示する</variable>
-	<variable id="Search index next button title">次を表示</variable>
-	<variable id="Search Whole Words Switch">単語単位で探す</variable>
-	<variable id="Search Case Sensitive Switch">大文字と小文字を区別する</variable>
-	<variable id="Search Stopped Message">50 件ヒットしたので、検索は停止しました。</variable>
-	<!--This one is a java script expression. So if the order of message should be another don't forget to add '+'
-	and quotes to the string expressions.-->
-	<variable id="Search Excluded Stop Words Message">&quot;次の単語は検索から除外されました: &quot;+<param ref-name="stop-words-list"/></variable>
-	<variable id="Search Search in Progress Message">検索中...</variable>
-	<variable id="Search Search Give No Results Message">一致は見つかりませんでした。</variable>
+  <variable id="Online Help Search Method Field">検索方法</variable>
+  <variable id="Online Help Search Method Or">または</variable>
+  <variable id="Online Help Search Method And">および</variable>
+  <variable id="Search Highlight Switch">検索結果でテキストを強調表示する</variable>
+  <variable id="Search index next button title">次を表示</variable>
+  <variable id="Search Whole Words Switch">単語単位で探す</variable>
+  <variable id="Search Case Sensitive Switch">大文字と小文字を区別する</variable>
+  <variable id="Search Stopped Message">50 件ヒットしたので、検索は停止しました。</variable>
+  <!--This one is a java script expression. So if the order of message should be another don't forget to add '+'
+  and quotes to the string expressions.-->
+  <variable id="Search Excluded Stop Words Message">&quot;次の単語は検索から除外されました: &quot;+<param ref-name="stop-words-list"/></variable>
+  <variable id="Search Search in Progress Message">検索中...</variable>
+  <variable id="Search Search Give No Results Message">一致は見つかりませんでした。</variable>
 
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">オプション:</variable>

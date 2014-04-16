@@ -32,18 +32,18 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:opentopic-vars="http://www.idiominc.com/opentopic/vars"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	exclude-result-prefixes="opentopic-vars xs">
+  xmlns:opentopic-vars="http://www.idiominc.com/opentopic/vars"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  exclude-result-prefixes="opentopic-vars xs">
 
   <xsl:param name="variableFiles.url" as="xs:string?"/>
   <xsl:variable name="variableFiles" select="document($variableFiles.url)"/>
 
-	<xsl:template name="insertVariable">
-		<xsl:param name="theVariableID" as="xs:string"/>
-		<xsl:param name="theParameters" as="document-node()*"/>
-	  
-	  <xsl:variable name="currentLocale" as="xs:string">
+  <xsl:template name="insertVariable">
+    <xsl:param name="theVariableID" as="xs:string"/>
+    <xsl:param name="theParameters" as="document-node()*"/>
+    
+    <xsl:variable name="currentLocale" as="xs:string">
       <xsl:choose>
         <xsl:when test="ancestor-or-self::*/@xml:lang">
           <xsl:variable name="tempLang" select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
@@ -64,7 +64,7 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:value-of select="$currentLocale"/>
         </xsl:otherwise>
       </xsl:choose>
-    </xsl:variable>	  
+    </xsl:variable>    
     <xsl:call-template name="findVariable">
       <xsl:with-param name="theVariableID" select="$theVariableID"/>
       <xsl:with-param name="theParameters" select="$theParameters"/>
@@ -72,7 +72,7 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:with-param name="languageFiles" select="$variableFiles//var[@xml:lang = $currentLanguage]"/>
       <xsl:with-param name="currentLocale" select="$currentLocale"/>
     </xsl:call-template>
-	</xsl:template>
+  </xsl:template>
 
   <xsl:template name="findVariable">
     <xsl:param name="theVariableID" as="xs:string"/>
@@ -135,32 +135,32 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:choose>
   </xsl:template>
 
-	<xsl:template name="__processVariableBody">
-		<xsl:param name="theParameters"/>
-		<!--
-			Inserting variable with given id
-		-->
-		<xsl:for-each select="node()">
-			<xsl:choose>
-			  <xsl:when test="self::opentopic-vars:param">
-					<!--Processing parametrized variable-->
-					<xsl:variable name="param-name" select="@ref-name"/>
-					<!--Copying parameter child as is-->
-					<xsl:copy-of select="$theParameters/*[name() = $param-name]/node()"/>
-				</xsl:when>
-			  <xsl:when test="self::opentopic-vars:variable">
+  <xsl:template name="__processVariableBody">
+    <xsl:param name="theParameters"/>
+    <!--
+      Inserting variable with given id
+    -->
+    <xsl:for-each select="node()">
+      <xsl:choose>
+        <xsl:when test="self::opentopic-vars:param">
+          <!--Processing parametrized variable-->
+          <xsl:variable name="param-name" select="@ref-name"/>
+          <!--Copying parameter child as is-->
+          <xsl:copy-of select="$theParameters/*[name() = $param-name]/node()"/>
+        </xsl:when>
+        <xsl:when test="self::opentopic-vars:variable">
           <xsl:call-template name="insertVariable">
             <xsl:with-param name="theVariableID" select="@id"/>
             <xsl:with-param name="theParameters" select="$theParameters"/>
           </xsl:call-template>
         </xsl:when>
-				<xsl:otherwise>
-					<!--Using default template-->
-					<xsl:apply-templates select="." mode="default"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:for-each>
-	</xsl:template>
+        <xsl:otherwise>
+          <!--Using default template-->
+          <xsl:apply-templates select="." mode="default"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
   
   <xsl:template match="@* | node()" mode="default">
     <xsl:copy>

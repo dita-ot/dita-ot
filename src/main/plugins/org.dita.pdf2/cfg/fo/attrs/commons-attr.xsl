@@ -108,7 +108,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic.title" use-attribute-sets="common.title">
-		<xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
+    <xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
         <xsl:attribute name="space-before">0pt</xsl:attribute>
         <xsl:attribute name="space-after">16.8pt</xsl:attribute>
         <xsl:attribute name="font-size">18pt</xsl:attribute>

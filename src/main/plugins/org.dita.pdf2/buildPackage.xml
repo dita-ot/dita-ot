@@ -9,7 +9,7 @@
   <property name="package.file" value="fo.zip"/>
   
   <property name="classpath.dir" location="${basedir}/../../dev/lib"/>
-  <property name="fo.lib.dir" location="demo/fo/lib"/>	
+  <property name="fo.lib.dir" location="demo/fo/lib"/>  
   
   <property name="fo.jar" location="${lib.dir}/fo.jar" />
 
@@ -33,11 +33,11 @@
     <delete dir="${bin.dir}"/>
     <delete file="${fo.jar}"/>
   </target>
-	
+  
   <target name="init-java" depends="clean-java">
     <mkdir dir="${bin.dir}"/>
   </target>
-	
+  
   <target name="compile" depends="init-java, xep-compile">
     <javac srcdir="${src.dir}" destdir="${bin.dir}"
       debug="on" excludes="com/idiominc/ws/opentopic/fo/xep/**"
