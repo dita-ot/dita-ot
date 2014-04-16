@@ -112,36 +112,40 @@ See the accompanying license.txt file for applicable licenses.
         <fo:page-sequence master-reference="front-matter" xsl:use-attribute-sets="__force__page__count">
             <xsl:call-template name="insertFrontMatterStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
-                <fo:block xsl:use-attribute-sets="__frontmatter">
-                    <!-- set the title -->
-                    <fo:block xsl:use-attribute-sets="__frontmatter__title">
-                        <xsl:choose>
-                            <xsl:when test="$map/*[contains(@class,' topic/title ')][1]">
-                                <xsl:apply-templates select="$map/*[contains(@class,' topic/title ')][1]"/>
-                            </xsl:when>
-                            <xsl:when test="$map//*[contains(@class,' bookmap/mainbooktitle ')][1]">
-                                <xsl:apply-templates select="$map//*[contains(@class,' bookmap/mainbooktitle ')][1]"/>
-                            </xsl:when>
-                            <xsl:when test="//*[contains(@class, ' map/map ')]/@title">
-                                <xsl:value-of select="//*[contains(@class, ' map/map ')]/@title"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="/descendant::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </fo:block>
-                    <!-- set the subtitle -->
-                    <xsl:apply-templates select="$map//*[contains(@class,' bookmap/booktitlealt ')]"/>
-                    <fo:block xsl:use-attribute-sets="__frontmatter__owner">
-                        <xsl:apply-templates select="$map//*[contains(@class,' bookmap/bookmeta ')]"/>
-                    </fo:block>
-                </fo:block>
+              <fo:block-container xsl:use-attribute-sets="__frontmatter">
+                <xsl:call-template name="createFrontCoverContents"/>
+              </fo:block-container>
             </fo:flow>
         </fo:page-sequence>
         <xsl:if test="not($retain-bookmap-order)">
           <xsl:call-template name="createNotices"/>
         </xsl:if>
     </xsl:template>
+  
+  <xsl:template name="createFrontCoverContents">
+    <!-- set the title -->
+    <fo:block xsl:use-attribute-sets="__frontmatter__title">
+      <xsl:choose>
+        <xsl:when test="$map/*[contains(@class,' topic/title ')][1]">
+          <xsl:apply-templates select="$map/*[contains(@class,' topic/title ')][1]"/>
+        </xsl:when>
+        <xsl:when test="$map//*[contains(@class,' bookmap/mainbooktitle ')][1]">
+          <xsl:apply-templates select="$map//*[contains(@class,' bookmap/mainbooktitle ')][1]"/>
+        </xsl:when>
+        <xsl:when test="//*[contains(@class, ' map/map ')]/@title">
+          <xsl:value-of select="//*[contains(@class, ' map/map ')]/@title"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="/descendant::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </fo:block>
+    <!-- set the subtitle -->
+    <xsl:apply-templates select="$map//*[contains(@class,' bookmap/booktitlealt ')]"/>
+    <fo:block xsl:use-attribute-sets="__frontmatter__owner">
+      <xsl:apply-templates select="$map//*[contains(@class,' bookmap/bookmeta ')]"/>
+    </fo:block>
+  </xsl:template>
   
     <xsl:template name="createBackCover">
       <xsl:if test="$generate-back-cover">
@@ -162,7 +166,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' bookmap/bookmeta ')]" priority="1">
         <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
             <fo:block >
-				<xsl:apply-templates/>
+        <xsl:apply-templates/>
             </fo:block>
         </fo:block-container>
     </xsl:template>
@@ -182,41 +186,41 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-	<xsl:template match="*[contains(@class, ' xnal-d/namedetails ')]">
-		<fo:block>
-			<xsl:apply-templates/>
-		</fo:block>
-	</xsl:template>
+  <xsl:template match="*[contains(@class, ' xnal-d/namedetails ')]">
+    <fo:block>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
 
-	<xsl:template match="*[contains(@class, ' xnal-d/addressdetails ')]">
-		<fo:block>
-			<xsl:apply-templates/>
-		</fo:block>
-	</xsl:template>
+  <xsl:template match="*[contains(@class, ' xnal-d/addressdetails ')]">
+    <fo:block>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
 
-	<xsl:template match="*[contains(@class, ' xnal-d/contactnumbers ')]">
-		<fo:block>
-			<xsl:apply-templates/>
-		</fo:block>
-	</xsl:template>
+  <xsl:template match="*[contains(@class, ' xnal-d/contactnumbers ')]">
+    <fo:block>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
 
-	<xsl:template match="*[contains(@class, ' bookmap/bookowner ')]">
-		<fo:block xsl:use-attribute-sets="author">
-			<xsl:apply-templates/>
-		</fo:block>
-	</xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/bookowner ')]">
+    <fo:block xsl:use-attribute-sets="author">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
 
-	<xsl:template match="*[contains(@class, ' bookmap/summary ')]">
-		<fo:block xsl:use-attribute-sets="bookmap.summary">
-			<xsl:apply-templates/>
-		</fo:block>
-	</xsl:template>
-	
-	<xsl:template name="createNotices">
-	   <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
-	</xsl:template>
-	
-	<xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-notices">
+  <xsl:template match="*[contains(@class, ' bookmap/summary ')]">
+    <fo:block xsl:use-attribute-sets="bookmap.summary">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  
+  <xsl:template name="createNotices">
+     <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-notices">
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
