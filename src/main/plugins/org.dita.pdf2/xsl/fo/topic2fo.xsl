@@ -104,8 +104,6 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:import href="flagging.xsl"/>
 
-<!--    <xsl:strip-space elements="*"/>-->
-
     <!-- Parameters in the following group are always passed in from Ant. -->
     <xsl:param name="locale"/>
     <xsl:param name="customizationDir.url"/>

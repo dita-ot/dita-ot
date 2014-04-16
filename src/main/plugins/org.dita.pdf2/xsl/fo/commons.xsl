@@ -409,9 +409,6 @@ See the accompanying license.txt file for applicable licenses.
                           <xsl:apply-templates select="." mode="createMiniToc"/>
                       </xsl:otherwise>
                     </xsl:choose>
-
-<!--                    <xsl:apply-templates select="*[not(contains(@class, ' topic/topic '))]"/>-->
-
                     <xsl:for-each select="*[contains(@class,' topic/topic ')]">
                         <xsl:variable name="topicType">
                             <xsl:call-template name="determineTopicType"/>
@@ -1782,7 +1779,6 @@ See the accompanying license.txt file for applicable licenses.
 
         <xsl:choose>
             <xsl:when test="not(@placement = 'inline')">
-<!--                <fo:float xsl:use-attribute-sets="image__float">-->
                     <fo:block xsl:use-attribute-sets="image__block">
                         <xsl:call-template name="commonattributes"/>
                         <xsl:apply-templates select="." mode="placeImage">
@@ -1792,7 +1788,6 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:with-param name="width" select="@width"/>
                         </xsl:apply-templates>
                     </fo:block>
-<!--                </fo:float>-->
             </xsl:when>
             <xsl:otherwise>
                 <fo:inline xsl:use-attribute-sets="image__inline">
@@ -1940,25 +1935,6 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/fn ')]">
-
-        <!--
-                <fo:block xsl:use-attribute-sets="fn">
-                    <xsl:if test="@id">
-                        <fo:inline xsl:use-attribute-sets="fn__id">
-                            <xsl:text>[Footnote: </xsl:text>
-                            <xsl:value-of select="@id"/>
-                            <xsl:text>]</xsl:text>
-                        </fo:inline>
-                    </xsl:if>
-                    <xsl:if test="@callout">
-                        <fo:inline xsl:use-attribute-sets="fn__callout">
-                            <xsl:value-of select="@callout"/>
-                        </fo:inline>
-                    </xsl:if>
-                    <xsl:apply-templates/>
-                </fo:block>
-        -->
-
         <fo:inline>
             <xsl:call-template name="commonattributes"/>
         </fo:inline>
@@ -2002,7 +1978,6 @@ See the accompanying license.txt file for applicable licenses.
                         </fo:list-item-label>
                         <fo:list-item-body start-indent="body-start()">
                             <fo:block>
-<!--                                <xsl:value-of select="."/>-->
                                 <xsl:apply-templates/>
                             </fo:block>
                         </fo:list-item-body>

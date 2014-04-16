@@ -165,7 +165,6 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
         </xsl:when>
         <xsl:otherwise>
-        <!--<xsl:when test="$figurelink.style='NUMTITLE'">-->
           <xsl:call-template name="insertVariable">
             <xsl:with-param name="theVariableID" select="'Figure'"/>
             <xsl:with-param name="theParameters">
@@ -204,7 +203,6 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
         </xsl:when>
         <xsl:otherwise>
-          <!--<xsl:when test="$tablelink.style='NUMTITLE'">-->
           <xsl:call-template name="insertVariable">
             <xsl:with-param name="theVariableID" select="'Table'"/>
             <xsl:with-param name="theParameters">
@@ -419,7 +417,6 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:variable>
 
         <fo:block xsl:use-attribute-sets="link">
-            <!--<xsl:text>&#x2022; </xsl:text>-->
             <fo:inline xsl:use-attribute-sets="link__content">
                 <fo:basic-link>
                     <xsl:call-template name="buildBasicLinkDestination">
@@ -449,21 +446,11 @@ See the accompanying license.txt file for applicable licenses.
 					<xsl:with-param name="element" select="$element"/>
 				</xsl:call-template>
             </xsl:if>
-<!--
-            Disable because of the CQ#8102 bug
-            <xsl:if test="*[contains(@class, ' topic/desc ')]">
-                <xsl:call-template name="insertLinkDesc"/>
-            </xsl:if>
--->
-            <!-- Previously: skip if linkSope = external. New processing: pass
-                 linkscope to the template, let the template decide. -->
-            <!--<xsl:if test="not($linkScope = 'external')">-->
                 <xsl:call-template name="insertLinkShortDesc">
 					<xsl:with-param name="destination" select="$destination"/>
 					<xsl:with-param name="element" select="$element"/>
 					<xsl:with-param name="linkScope" select="$linkScope"/>
 				</xsl:call-template>
-            <!--</xsl:if>-->
         </fo:block>
     </xsl:template>
 
@@ -496,11 +483,6 @@ See the accompanying license.txt file for applicable licenses.
             		<xsl:with-param name="href" select="$href"/>
             	</xsl:call-template>
             </xsl:otherwise>
-            <!--xsl:otherwise>
-                <xsl:attribute name="internal-destination">
-                    <xsl:value-of select="opentopic-func:getDestinationId($href)"/>
-                </xsl:attribute>
-            </xsl:otherwise-->
         </xsl:choose>
     </xsl:template>
 
@@ -596,12 +578,6 @@ See the accompanying license.txt file for applicable licenses.
         <!--Related links-->
 
     <xsl:template match="*" mode="buildRelationships">
-<!--
-		<xsl:param name="context" select="."/>
-		<xsl:for-each select=".">
-
-		</xsl:for-each>
--->
 			<xsl:variable name="parentCollectionType">
 				<xsl:call-template name="getCollectionType">
 					<xsl:with-param name="nodeType" select="'parent'"/>

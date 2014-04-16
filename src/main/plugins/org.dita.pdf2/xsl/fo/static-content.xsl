@@ -85,8 +85,6 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:if>
         <xsl:call-template name="insertPrefaceFirstHeader"/>
         <xsl:call-template name="insertPrefaceFirstFooter"/>
-<!--        <xsl:call-template name="insertPrefaceLastHeader"/>-->
-<!--        <xsl:call-template name="insertPrefaceLastFooter"/>-->
     </xsl:template>
 
     <xsl:template name="insertFrontMatterStaticContents">
@@ -99,8 +97,6 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="$mirror-page-margins">
           <xsl:call-template name="insertFrontMatterEvenHeader"/>
         </xsl:if>
-<!--        <xsl:call-template name="insertPrefaceLastHeader"/>-->
-<!--        <xsl:call-template name="insertPrefaceLastFooter"/>-->
     </xsl:template>
   
     <xsl:template name="insertBackCoverStaticContents">
