@@ -102,6 +102,17 @@ See the accompanying license.txt file for applicable licenses.
 <!--        <xsl:call-template name="insertPrefaceLastHeader"/>-->
 <!--        <xsl:call-template name="insertPrefaceLastFooter"/>-->
     </xsl:template>
+  
+    <xsl:template name="insertBackCoverStaticContents">
+      <xsl:call-template name="insertBackCoverOddFooter"/>
+      <xsl:if test="$mirror-page-margins">
+        <xsl:call-template name="insertBackCoverEvenFooter"/>
+      </xsl:if>
+      <xsl:call-template name="insertBackCoverOddHeader"/>
+      <xsl:if test="$mirror-page-margins">
+        <xsl:call-template name="insertBackCoverEvenHeader"/>
+      </xsl:if>
+    </xsl:template>
 
     <xsl:template name="insertGlossaryStaticContents">
         <xsl:call-template name="insertGlossaryOddFooter"/>
@@ -740,6 +751,100 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
+    </xsl:template>
+  
+    <xsl:template name="insertBackCoverOddHeader">
+      <fo:static-content flow-name="odd-back-cover-header">
+        <fo:block xsl:use-attribute-sets="__body__odd__header">
+          <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Preface odd header'"/>
+            <xsl:with-param name="theParameters">
+              <prodname>
+                <xsl:value-of select="$productName"/>
+              </prodname>
+              <heading>
+                <fo:inline xsl:use-attribute-sets="__body__odd__header__heading">
+                  <fo:retrieve-marker retrieve-class-name="current-header"/>
+                </fo:inline>
+              </heading>
+              <pagenum>
+                <fo:inline xsl:use-attribute-sets="__body__odd__header__pagenum">
+                  <fo:page-number/>
+                </fo:inline>
+              </pagenum>
+            </xsl:with-param>
+          </xsl:call-template>
+        </fo:block>
+      </fo:static-content>
+    </xsl:template>
+    
+    <xsl:template name="insertBackCoverEvenHeader">
+      <fo:static-content flow-name="even-back-cover-header">
+        <fo:block xsl:use-attribute-sets="__body__even__header">
+          <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Preface even header'"/>
+            <xsl:with-param name="theParameters">
+              <prodname>
+                <xsl:value-of select="$productName"/>
+              </prodname>
+              <heading>
+                <fo:inline xsl:use-attribute-sets="__body__even__header__heading">
+                  <fo:retrieve-marker retrieve-class-name="current-header"/>
+                </fo:inline>
+              </heading>
+              <pagenum>
+                <fo:inline xsl:use-attribute-sets="__body__even__header__pagenum">
+                  <fo:page-number/>
+                </fo:inline>
+              </pagenum>
+            </xsl:with-param>
+          </xsl:call-template>
+        </fo:block>
+      </fo:static-content>
+    </xsl:template>
+    
+    <xsl:template name="insertBackCoverOddFooter">
+      <fo:static-content flow-name="odd-back-cover-footer">
+        <fo:block xsl:use-attribute-sets="__body__odd__footer">
+          <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Preface odd footer'"/>
+            <xsl:with-param name="theParameters">
+              <heading>
+                <fo:inline xsl:use-attribute-sets="__body__odd__footer__heading">
+                  <fo:retrieve-marker retrieve-class-name="current-header"/>
+                </fo:inline>
+              </heading>
+              <pagenum>
+                <fo:inline xsl:use-attribute-sets="__body__odd__footer__pagenum">
+                  <fo:page-number/>
+                </fo:inline>
+              </pagenum>
+            </xsl:with-param>
+          </xsl:call-template>
+        </fo:block>
+      </fo:static-content>
+    </xsl:template>
+    
+    <xsl:template name="insertBackCoverEvenFooter">
+      <fo:static-content flow-name="even-back-cover-footer">
+        <fo:block xsl:use-attribute-sets="__body__even__footer">
+          <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Preface even footer'"/>
+            <xsl:with-param name="theParameters">
+              <heading>
+                <fo:inline xsl:use-attribute-sets="__body__even__footer__heading">
+                  <fo:retrieve-marker retrieve-class-name="current-header"/>
+                </fo:inline>
+              </heading>
+              <pagenum>
+                <fo:inline xsl:use-attribute-sets="__body__even__footer__pagenum">
+                  <fo:page-number/>
+                </fo:inline>
+              </pagenum>
+            </xsl:with-param>
+          </xsl:call-template>
+        </fo:block>
+      </fo:static-content>
     </xsl:template>
 
     <xsl:template name="insertGlossaryOddHeader">

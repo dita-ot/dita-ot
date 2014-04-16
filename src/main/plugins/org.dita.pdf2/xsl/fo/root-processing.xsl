@@ -213,6 +213,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:if test="not($retain-bookmap-order)">
                 <xsl:call-template name="createIndex"/>
             </xsl:if>
+          <xsl:call-template name="createBackCover"/>
         </fo:root>
     </xsl:template>
   

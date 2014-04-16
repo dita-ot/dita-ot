@@ -142,6 +142,22 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:call-template name="createNotices"/>
         </xsl:if>
     </xsl:template>
+  
+    <xsl:template name="createBackCover">
+      <xsl:if test="$generate-back-cover">
+        <fo:page-sequence master-reference="back-cover" xsl:use-attribute-sets="back-cover">
+          <xsl:call-template name="insertBackCoverStaticContents"/>
+          <fo:flow flow-name="xsl-region-body">
+            <fo:block-container xsl:use-attribute-sets="__back-cover">
+              <xsl:call-template name="createBackCoverContents"/>
+            </fo:block-container>
+          </fo:flow>
+        </fo:page-sequence>
+      </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="createBackCoverContents">
+    </xsl:template>
 
     <xsl:template match="*[contains(@class, ' bookmap/bookmeta ')]" priority="1">
         <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
