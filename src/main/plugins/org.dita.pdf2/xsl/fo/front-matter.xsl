@@ -76,39 +76,6 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template name="createFrontMatter">
-        <xsl:choose>
-            <xsl:when test="$ditaVersion &gt;= 1.1">
-                <xsl:call-template name="createFrontMatter_1.0"/>
-            </xsl:when>
-            <!-- DITA 1.0 -->
-            <xsl:otherwise>
-                <fo:page-sequence master-reference="front-matter" xsl:use-attribute-sets="__force__page__count">
-                    <xsl:call-template name="insertFrontMatterStaticContents"/>
-                    <fo:flow flow-name="xsl-region-body">
-                        <fo:block xsl:use-attribute-sets="__frontmatter">
-                            <!-- set the title -->
-                            <fo:block xsl:use-attribute-sets="__frontmatter__title">
-                                <xsl:choose>
-                                    <xsl:when test="//*[contains(@class, ' map/map ')]/@title">
-                                        <xsl:value-of select="//*[contains(@class, ' map/map ')]/@title"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="/descendant::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </fo:block>
-                            <fo:block xsl:use-attribute-sets="__frontmatter__owner">
-                                <xsl:apply-templates select="$map/*[contains(@class, ' map/topicmeta ')]"/>
-                            </fo:block>
-                        </fo:block>
-                    </fo:flow>
-                </fo:page-sequence>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <!-- DITA 1.1 or later cover page -->
-    <xsl:template name="createFrontMatter_1.0">
         <fo:page-sequence master-reference="front-matter" xsl:use-attribute-sets="__force__page__count">
             <xsl:call-template name="insertFrontMatterStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
