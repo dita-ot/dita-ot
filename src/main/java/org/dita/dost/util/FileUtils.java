@@ -694,6 +694,33 @@ public final class FileUtils {
     }
 
     /**
+     * Get the base name, minus the full path and extension, from a full filename.
+     *
+     * @param path the filename to query, null returns null
+     * @return the name of the file without the path, or an empty string if none exists
+     */
+    public static String getBaseName(final String path) {
+        if (path == null) {
+            return null;
+        }
+        final int pi = path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR).lastIndexOf(UNIX_SEPARATOR);
+        String file;
+        if (pi == path.length() - 1) {
+            return "";
+        } else if (pi != -1) {
+            file = path.substring(pi + 1);
+        } else {
+            file = path;
+        }
+        final int i = file.lastIndexOf(DOT);
+        if (i != -1) {
+            return file.substring(0, i);
+        } else {
+            return file;
+        }
+    }
+
+    /**
      * Check whether a file exists on the local file systmem.
      * @param filename platform path, may contain a hash fragment
      * @return boolean  true if the file exists, false otherwise

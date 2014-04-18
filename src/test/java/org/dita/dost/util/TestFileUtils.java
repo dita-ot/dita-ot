@@ -9,6 +9,7 @@
 package org.dita.dost.util;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -322,6 +323,16 @@ public class TestFileUtils {
         assertEquals("xml", FileUtils.getExtension("file.name.xml"));
         assertEquals("xml", FileUtils.getExtension("file.name.xml#topicid"));
         assertNull(FileUtils.getExtension("file"));
+    }
+
+    @Test
+    public void testGetBaseName() {
+        assertNull(FileUtils.getBaseName(null));
+        assertEquals("c", FileUtils.getBaseName("a/b/c.txt"));
+        assertEquals("a", FileUtils.getBaseName("a.txt"));
+        assertEquals("a", FileUtils.getBaseName("a"));
+        assertEquals("c", FileUtils.getBaseName("a/b/c"));
+        assertEquals("", FileUtils.getBaseName("a/b/c/"));
     }
 
     @Test
