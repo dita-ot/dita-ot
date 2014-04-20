@@ -1026,8 +1026,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private void toOutFile(final File filename) throws SAXException {
         // the filename is a relative path from the dita input file
         final String[] prop = { FileUtils.resolve(rootDir.getAbsolutePath(), filename.getPath()).getPath(), FileUtils.normalize(currentFile.getAbsolutePath()).getPath() };
-        if ((job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER)
-                || (job.getGeneratecopyouter() == Job.Generate.GENERATEOUTTER)) {
+        if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
             if (isOutFile(filename)) {
                 if (job.getOutterControl() == Job.OutterControl.FAIL) {
                     final MessageBean msgBean = MessageUtils.getInstance().getMessage("DOTJ035F", prop);

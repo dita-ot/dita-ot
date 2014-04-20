@@ -127,9 +127,7 @@
               output files for content that is not located in or beneath the directory containing
               the DITA map file. The following values are supported:<ul>
                 <li><option>1</option> (default) – Do not generate output for content that is
-                  located outside the DITA map directory..</li>
-                <li><option>2</option> – Generate output for the content that is located outside the
-                  DITA map directory.</li>
+                  located outside the DITA map directory.</li>
                 <li><option>3</option> – Shift the output directory so that it contains all output
                   for the publication.</li>
               </ul><p>See <xref href="generate-copy-outer.dita"/> for more information.</p></pd>

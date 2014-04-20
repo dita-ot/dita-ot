@@ -783,8 +783,6 @@ public final class Job {
     public enum Generate {
         /** Not generate outer files. */
         NOT_GENERATEOUTTER(1),
-        /** Generate outer files. */
-        GENERATEOUTTER(2),
         /** Old solution. */
         OLDSOLUTION(3);
 

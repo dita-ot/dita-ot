@@ -540,7 +540,7 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
     description="Copy image files">
     <condition property="copy-image.todir" value="${output.dir}/${uplevels}" else="${output.dir}">
-      <equals arg1="${generate.copy.outer}" arg2="3"/>      
+      <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
     <copy todir="${copy-image.todir}">
       <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />

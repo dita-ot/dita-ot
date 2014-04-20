@@ -28,27 +28,8 @@ images</pre>The DITA map is in the <filepath>maps</filepath>
 --- commonltr.css
 --- commonrtl.css</pre>The <filepath>index.html</filepath> file contains the navigation structure, but all the links are broken, since no
         HTML5 files were built for the topics.</p>
-   <p>How do you fix this? By specifying a value of <option>2</option> or <option>3</option> for the
+   <p>How do you fix this? By specifying a value of <option>3</option> for the
      <parmname>generate.outer.copy</parmname> parameter. </p>
-  </section>
-  <section>
-   <title>Setting the <parmname>generate.outer.copy</parmname> parameter to
-    <option>2</option></title>
-   <p>Let's assume that you run the HTML5 transformation again and specify the following parameters:<ul>
-          <li>The <parmname>generate.outer.copy</parmname> parameter is set to <option>2</option>.</li>
-          <li>The <parmname>output.dir</parmname> parameter is set to <filepath>C:\A-test</filepath>.</li>
-        </ul></p>
-   <p>This is what your output looks like:<pre>C:\A-test
---- index.html
---- commonltr.css
---- commonrtl.css
-...
-C:\images
-...
-C:\topics</pre></p>
-   <p>The links in the output all work properly. However, depending on how many other directories
-    are located at the same level of your build system as the output directory, it might not be easy
-    gather all the output together if you need to copy it elsewhere.</p>
   </section>
   <section>
    <title>Setting the <parmname>generate.outer.copy</parmname> parameter to

@@ -113,8 +113,7 @@
           depends="xhtml.init,
                    xhtml.image-metadata,
                    dita.topics.html.common,
-                   dita.inner.topics.html.common,
-                   dita.outer.topics.html.common"/>  
+                   dita.inner.topics.html.common"/>  
 
   <target name="xhtml.image-metadata" depends="xhtml.image-metadata-check"
           unless="xhtml.image-metadata.skip"
@@ -216,57 +215,4 @@
     </xslt>
   </target>
   
-  <!--requirement 2-->
-  <!--if the outditafileslist is empty ,do not execute the outer transformation-->
-  <target name="checkouterTransform">
-  	<condition property="outer.transform">
-  		<and>
-  			<equals arg1="${generate.copy.outer}" arg2="2"></equals>
-  			<and>
-  				<isset property="outditafileslist"/>
-  				<not>
-  					<equals arg1="" arg2="${outditafileslist}"/>
-  				</not>
-  			</and>
-  		</and>
-	</condition>	
-  </target>	
-  	
-  <target name="dita.outer.topics.html.common" unless="noTopic" if="outer.transform" depends="checkouterTransform">
-    <xslt basedir="${dita.temp.dir}"
-      destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
-      reloadstylesheet="${dita.xhtml.reloadstylesheet}"
-      classpathref="dost.class.path"
-      extension="${out.ext}" style="${args.xsl}"
-      filenameparameter="FILENAME"
-      filedirparameter="FILEDIR">
-    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="TRANSTYPE" expression="${transtype}" />
-      <param name="FILTERFILE" expression="${dita.input.valfile.url}"
-        if="dita.input.valfile" />
-      <param name="CSS" expression="${args.css.file}"
-        if="args.css.file" />
-      <param name="CSSPATH" expression="${user.csspath}"
-        if="user.csspath" />
-      <param name="HDF" expression="${args.hdf}" if="args.hdf" />
-      <param name="HDR" expression="${args.hdr}" if="args.hdr" />
-      <param name="FTR" expression="${args.ftr}" if="args.ftr" />
-      <param name="DRAFT" expression="${args.draft}" if="args.draft" />
-      <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
-      <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
-      <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if="args.xhtml.classattr"/>
-      <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if="args.hide.parent.link"/>
-      <param name="include.rellinks" expression="${include.rellinks}"/>
-      <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if="args.breadcrumbs"/>
-      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
-      <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
-      <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-      <param name="BASEDIR" expression="${basedir}"/>
-      <param name="OUTPUTDIR" expression="${output.dir}"/>
-      <param name="DBG" expression="${args.debug}" if="args.debug"/>
-      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-  </target>
 </project>

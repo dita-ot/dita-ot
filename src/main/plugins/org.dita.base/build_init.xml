@@ -288,10 +288,7 @@
   	</condition>
   	
     <condition property="inner.transform">
-	   <or>
-	 	 <equals arg1="${generate.copy.outer}" arg2="1"></equals>
-	     <equals arg1="${generate.copy.outer}" arg2="2"></equals>
-	   </or>
+	 	   <equals arg1="${generate.copy.outer}" arg2="1"/>
   	</condition>
   	
   	<condition property="old.transform">
