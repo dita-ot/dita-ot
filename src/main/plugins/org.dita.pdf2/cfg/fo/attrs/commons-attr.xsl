@@ -388,7 +388,6 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="white-space-collapse">false</xsl:attribute>
         <xsl:attribute name="linefeed-treatment">preserve</xsl:attribute>
         <xsl:attribute name="wrap-option">wrap</xsl:attribute>
-        <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
         <xsl:attribute name="font-family">monospace</xsl:attribute>
         <xsl:attribute name="line-height">106%</xsl:attribute>
     </xsl:attribute-set>
@@ -397,24 +396,31 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__border__top">
-        <xsl:attribute name="border-top-color">black</xsl:attribute>
-        <xsl:attribute name="border-top-width">thin</xsl:attribute>
+    <xsl:attribute-set name="__border__right" use-attribute-sets="common.border__right">
+      <xsl:attribute name="padding-right">6pt</xsl:attribute>
+      <xsl:attribute name="end-indent">6pt + from-parent(end-indent)</xsl:attribute>
+    </xsl:attribute-set>
+  
+    <xsl:attribute-set name="__border__left" use-attribute-sets="common.border__left">
+      <xsl:attribute name="padding-left">6pt</xsl:attribute>
+      <xsl:attribute name="start-indent">6pt + from-parent(start-indent)</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__border__bot">
-        <xsl:attribute name="border-bottom-color">black</xsl:attribute>
-        <xsl:attribute name="border-bottom-width">thin</xsl:attribute>
+    <xsl:attribute-set name="__border__top" use-attribute-sets="common.border__top">
+      <xsl:attribute name="padding-top">6pt</xsl:attribute>
+    </xsl:attribute-set>
+  
+    <xsl:attribute-set name="__border__bot" use-attribute-sets="common.border__bottom">
+      <xsl:attribute name="padding-bottom">6pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__border__sides">
-        <xsl:attribute name="border-left-color">black</xsl:attribute>
-        <xsl:attribute name="border-left-width">thin</xsl:attribute>
-        <xsl:attribute name="border-right-color">black</xsl:attribute>
-        <xsl:attribute name="border-right-width">thin</xsl:attribute>
+    <xsl:attribute-set name="__border__topbot" use-attribute-sets="__border__top __border__bot">
     </xsl:attribute-set>
-
-    <xsl:attribute-set name="__border__all" use-attribute-sets="common.border">
+  
+    <xsl:attribute-set name="__border__sides" use-attribute-sets="__border__right __border__left">
+    </xsl:attribute-set>
+  
+    <xsl:attribute-set name="__border__all" use-attribute-sets="__border__right __border__left __border__top __border__bot">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lines" use-attribute-sets="base-font">

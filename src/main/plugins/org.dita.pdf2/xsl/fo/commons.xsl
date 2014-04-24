@@ -1639,16 +1639,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' topic/pre ')]">
         <xsl:call-template name="setSpecTitle"/>
-        <xsl:variable name="attrSets">
-            <xsl:call-template name="setFrame"/>
-        </xsl:variable>
         <fo:block xsl:use-attribute-sets="pre">
             <xsl:call-template name="commonattributes"/>
-            <!--TODO: $attrSets contains space-separated names!! Check if this actually works. -->
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="$attrSets"/>
-                <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
-            </xsl:call-template>
+            <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
             <xsl:apply-templates/>
         </fo:block>
@@ -1673,25 +1666,34 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Process the frame attribute -->
     <!-- frame styles (setframe) must be called within a block that defines the content being framed -->
-    <xsl:template name="setFrame">
-        <xsl:if test="contains(@frame,'top')"> __border__top </xsl:if>
-        <xsl:if test="contains(@frame,'bot')"> __border__bot </xsl:if>
-        <xsl:if test="contains(@frame,'sides')"> __border__sides </xsl:if>
-        <xsl:if test="contains(@frame,'all')"> __border__all </xsl:if>
+    <xsl:template name="setFrame" as="attribute()*">
+      <xsl:variable name="container" as="element()*">
+        <xsl:choose>
+         <xsl:when test="@frame = 'top'">
+           <element xsl:use-attribute-sets="__border__top"/>
+         </xsl:when>
+         <xsl:when test="@frame = 'bot'">
+           <element xsl:use-attribute-sets="__border__bot"/>
+         </xsl:when>
+          <xsl:when test="@frame = 'topbot'">
+            <element xsl:use-attribute-sets="__border__topbot"/>
+          </xsl:when>
+         <xsl:when test="@frame = 'sides'">
+           <element xsl:use-attribute-sets="__border__sides"/>
+         </xsl:when>
+         <xsl:when test="@frame = 'all'">
+           <element xsl:use-attribute-sets="__border__all"/>
+         </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:sequence select="$container/@*"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/lines ')]">
         <xsl:call-template name="setSpecTitle"/>
-        <xsl:variable name="attrSets">
-            <xsl:call-template name="setFrame"/>
-        </xsl:variable>
         <fo:block xsl:use-attribute-sets="lines">
             <xsl:call-template name="commonattributes"/>
-            <!--TODO: $attrSets contains space-separated names!! Check if this actually works. -->
-            <xsl:call-template name="processAttrSetReflection">
-                <xsl:with-param name="attrSet" select="$attrSets"/>
-                <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
-            </xsl:call-template>
+            <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
             <xsl:apply-templates/>
         </fo:block>
