@@ -68,6 +68,9 @@
           <li>#1636 Support DITA 1.3 cascade attribute (milestone 2)</li>
           <li>#1635 Implement DITA 1.3 profiling (milestone 2)</li>
           <li>#1631 Process keyrefs before conref (milestone 2)</li>
+          <li>#1673 Remove support for generate.copy.outer=2 (milestone 3)</li>
+          <li>#1671 Add support for generating back cover on PDF (milestone 3)</li>
+          <li>#1667 Remove FrameMaker index syntax support (milestone 3)</li>
           <li>#1512 Alternative preprocessing plug-in (in progress)</li>
           <li>#1544 Use URI and File instead of String (in progress)</li>
           <li>#1654 Add DITA 1.3 div element (in progress)</li>
@@ -90,6 +93,12 @@
           <li>#1620 ODT plugin fails due to missing getMax() (milestone 2)</li>
           <li>#1619 Add validation for attribute generalization (milestone 2)</li>
           <li>#1103 DITA-OT doesn't rewite lq/@href (milestone 2)</li>
+          <li>#1668 Fix table cell @id and @headers attributes #1596 (milestone 3)</li>
+          <li>#1634 XML Catalog which has a DOCTYPE declaration is not properly parsed by Integrator task (milestone 3)</li>
+          <li>#1596 xref to table cell of DITA simple table does not result in correct target in &lt;a> element (XHTML output) (milestone 3)</li>
+          <li>#1539 TopicMerge generates multiple topic entries in the merged middle file. (milestone 3)</li>
+          <li>#1231 &lt;screen> and &lt;codebock> do not support all frame attributes (milestone 3)</li>
+          <li>#1086 metadata in ancestor map not inherited by topics in childmap (milestone 3)</li>
           <li>#1600 Indirect reference to keys erases one file, causes failures (in progress)</li>
         </ul>
       </section>
