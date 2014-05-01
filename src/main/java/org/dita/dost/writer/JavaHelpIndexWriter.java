@@ -32,7 +32,6 @@ import org.dita.dost.util.XMLSerializer;
  * 
  * @author Wu, Zhi Qiang
  */
-@SuppressWarnings("ForLoopReplaceableByForEach")
 public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
 
     @Override
@@ -47,7 +46,6 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
             serializer.writeStartDocument();
             serializer.writeStartElement("index");
             serializer.writeAttribute("version", "1.0");
-            final int termNum = termList.size();
             for (final IndexTerm term : termList) {
                 outputIndexTerm(term, serializer);
             }
