@@ -29,7 +29,7 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
         try {
             XMLUtils.transform(filename, asList((XMLFilter) this));
         } catch (final Exception e) {
-            logger.error(e.getMessage(), e) ;
+            throw new DITAOTException(e);
         }
     }
 
