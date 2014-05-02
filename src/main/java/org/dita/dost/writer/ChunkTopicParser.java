@@ -22,6 +22,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -645,7 +646,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         startFromFirstTopic = false;
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_BRANCH;
                     } else if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_DOCUMENT)) {
-                        firstTopicID = this.getFirstTopicId(FileUtils.resolve(filePath, parseFilePath).getPath());
+                        firstTopicID = getFirstTopicId(FileUtils.resolve(filePath, parseFilePath).getPath());
 
                         topicDoc = getTopicDoc(FileUtils.resolve(filePath, parseFilePath).getPath());
 
@@ -665,7 +666,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_TOPIC;
                     }
                 } else {
-                    firstTopicID = this.getFirstTopicId(FileUtils.resolve(filePath, parseFilePath).getPath());
+                    firstTopicID = getFirstTopicId(FileUtils.resolve(filePath, parseFilePath).getPath());
 
                     topicDoc = getTopicDoc(FileUtils.resolve(filePath, parseFilePath).getPath());
 
@@ -883,7 +884,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                 } else {
                                     // Find the first topic id in target file if
                                     // any.
-                                    final String firstTopic = this.getFirstTopicId(FileUtils.resolve(filePath,
+                                    final String firstTopic = getFirstTopicId(FileUtils.resolve(filePath,
                                             hrefValue).getPath());
                                     if (!StringUtils.isEmptyString(firstTopic)) {
                                         outputFileName = FileUtils.resolve(filePath,
@@ -922,7 +923,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         if (getFragment(path) != null) {
                             newpath = setFragment(outputFileName.getPath(), getFragment(path));
                         } else {
-                            final String firstTopicID = this.getFirstTopicId(path);
+                            final String firstTopicID = getFirstTopicId(path);
                             if (!StringUtils.isEmptyString(firstTopicID)) {
                                 newpath = setFragment(outputFileName.getPath(), firstTopicID);
                             } else {
@@ -970,18 +971,17 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         // TODO recursive point
                         reader.parse(currentParsingFile.toURI().toString());
                         if (currentParsingFileTopicIDChangeTable.size() > 0) {
-                            String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
-                            href = FileUtils.separatorsToUnix(href);
-                            final String pathtoElem = getFragment(href) != null ? getFragment(href) : "";
-
-                            final String old_elementid = pathtoElem.contains(SLASH) ? pathtoElem.substring(0,
-                                    pathtoElem.indexOf(SLASH)) : pathtoElem;
-
-                            if (old_elementid.length() > 0) {
+                            final URI href = toURI(element.getAttribute(ATTRIBUTE_NAME_HREF));
+                            final String pathtoElem = href.getFragment() != null
+                                                      ? href.getFragment()
+                                                      : "";
+                            final String old_elementid = pathtoElem.contains(SLASH)
+                                                         ? pathtoElem.substring(0, pathtoElem.indexOf(SLASH))
+                                                         : pathtoElem;
+                            if (!old_elementid.isEmpty()) {
                                 final String new_elementid = currentParsingFileTopicIDChangeTable.get(old_elementid);
-                                if (new_elementid != null && new_elementid.length() > 0) {
-                                    href = setFragment(href, new_elementid);
-                                    element.setAttribute(ATTRIBUTE_NAME_HREF, href);
+                                if (new_elementid != null && !new_elementid.isEmpty()) {
+                                    element.setAttribute(ATTRIBUTE_NAME_HREF, setFragment(href, new_elementid).toString());
                                 }
 
                             }
@@ -1188,8 +1188,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
     /** Check whether current href needs to be updated */
     private boolean checkHREF(final Attributes atts) {
-        final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
-        if (hrefValue == null || hrefValue.contains(COLON_DOUBLE_SLASH)) {
+        final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+        if (hrefValue == null || hrefValue.toString().contains(COLON_DOUBLE_SLASH)) {
             return false;
         }
         String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
