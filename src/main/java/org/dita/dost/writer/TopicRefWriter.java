@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Map;
 
 import org.dita.dost.exception.DITAOTException;
@@ -44,7 +45,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
     private Map<String, String> changeTable = null;
     private Map<String, String> conflictTable = null;
-    private OutputStreamWriter output;
+    private Writer output;
     private File currentFilePath = null;
     private File currentFilePathName = null;
     /** XMLReader instance for parsing dita file */
@@ -139,6 +140,10 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
     public void setChangeTable(final Map<String, String> changeTable) {
         this.changeTable = changeTable;
+    }
+
+    public void setFixpath(final String fixpath) {
+        this.fixpath = fixpath;
     }
 
     @Override
@@ -275,7 +280,7 @@ public final class TopicRefWriter extends AbstractXMLWriter {
 
     /**
      * Retrieve the element ID from the path. If there is no element ID, return topic ID.
-     * 
+     *
      * @param relativePath
      * @return String
      */
@@ -292,14 +297,6 @@ public final class TopicRefWriter extends AbstractXMLWriter {
             }
         }
         return elementID;
-    }
-
-    public void write(final File tempDir, final File topicfile, final Map relativePath2fix) throws DITAOTException {
-        if (relativePath2fix.containsKey(topicfile)) {
-            fixpath = (String) relativePath2fix.get(topicfile);
-        }
-        write(new File(tempDir, topicfile.getPath()).getAbsoluteFile());
-        fixpath = null;
     }
 
     @Override

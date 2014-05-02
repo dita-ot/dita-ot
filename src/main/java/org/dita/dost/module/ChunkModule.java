@@ -130,7 +130,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         try {
             for (final FileInfo f : job.getFileInfo()) {
                 if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                    topicRefWriter.write(job.tempDir.getAbsoluteFile(), f.file, relativePath2fix);
+                    topicRefWriter.setFixpath(relativePath2fix.get(f.file));
+                    topicRefWriter.write(new File(job.tempDir.getAbsoluteFile(), f.file.getPath()).getAbsoluteFile());
                 }
             }
         } catch (final DITAOTException ex) {
