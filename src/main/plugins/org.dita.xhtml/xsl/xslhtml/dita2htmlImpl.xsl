@@ -73,7 +73,7 @@
 <xsl:param name="BREADCRUMBS" select="'no'"/> <!-- "no" and "yes" are valid values; non-'yes' is ignored -->
 
 <!-- the year for the copyright -->
-<xsl:param name="YEAR" select="'2005'"/>
+<xsl:param name="YEAR" select="format-date(current-date(), '[Y]')"/>
 
 <!-- default "output extension" processing parameter ('.html')-->
 <xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->

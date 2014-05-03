@@ -45,7 +45,7 @@
   <xsl:apply-templates select="/processing-instruction('path2project-uri')[1]" mode="get-path2project"/>
 </xsl:param>
 <xsl:param name="genDefMeta" select="'no'"/>
-<xsl:param name="YEAR" select="'2005'"/>
+<xsl:param name="YEAR" select="format-date(current-date(), '[Y]')"/>
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
 </xsl:text></xsl:variable>
