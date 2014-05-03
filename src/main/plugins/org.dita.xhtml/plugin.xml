@@ -10,6 +10,7 @@
   <extension-point id="dita.conductor.xhtml.param" name="XHTML XSLT parameters"/>
   <extension-point id="dita.conductor.xhtml.toc.param" name="HTML/XSLT XSLT parameter"/>
   <extension-point id="dita.xsl.htmltoc" name="HTML/XHTML TOC XSLT import"/>
+  <extension-point id="dita.xsl.html.cover" name="HTML/XHTML Cover XSLT import"/>
   <!-- extensions -->
   <feature extension="dita.conductor.transtype.check" value="xhtml"/>
   <feature extension="dita.conductor.transtype.check" value="html5"/>
@@ -19,4 +20,5 @@
   <template file="build_dita2xhtml_template.xml"/>
   <template file="xsl/dita2html-base_template.xsl"/>
   <template file="xsl/map2htmltoc_template.xsl"/>
+  <template file="xsl/map2html-coverImpl_template.xsl"/>
 </plugin>

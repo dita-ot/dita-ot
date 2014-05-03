@@ -16,9 +16,6 @@
   <xsl:param name="WORKDIR">
     <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
   </xsl:param>
-  <xsl:param name="PATH2PROJ">
-    <xsl:apply-templates select="/processing-instruction('path2project-uri')[1]" mode="get-path2project"/>
-  </xsl:param>
   
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="toc">
     <xsl:param name="pathFromMaplist"/>

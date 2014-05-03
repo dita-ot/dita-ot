@@ -33,7 +33,7 @@
             depends="dita.map.xhtml.init, dita.map.xhtml.toc , dita.out.map.xhtml.toc" />
 
     <target name="dita.map.xhtml.init" unless="noMap">
-      <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/map2${html-version}toc.xsl">
+      <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/map2${html-version}-cover.xsl">
         <not>
           <isset property="args.xhtml.toc.xsl" />
         </not>
