@@ -8,136 +8,81 @@
                 exclude-result-prefixes="xs dita-ot">
 
   <xsl:import href="plugin:org.dita.xhtml:xsl/map2htmtoc/map2htmlImpl.xsl"/>
-  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
-  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
-  <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
 
-  <xsl:param name="CSS"/>
-  <xsl:param name="CSSPATH"/>
-  <xsl:param name="PATH2PROJ">
-    <xsl:apply-templates select="/processing-instruction('path2project-uri')[1]" mode="get-path2project"/>
-  </xsl:param>
-  <xsl:param name="genDefMeta" select="'no'"/>
-  <xsl:param name="YEAR" select="format-date(current-date(), '[Y]')"/>
-
-  <xsl:template match="/">
-    <xsl:variable name="title" as="node()*">
-      <xsl:call-template name="generateMapTitle"/>
-    </xsl:variable>
-    <html>
-      <head>
-        <xsl:call-template name="generateCharset"/>
-        <xsl:call-template name="generateDefaultCopyright"/>
-        <xsl:call-template name="generateDefaultMeta"/>
-        <xsl:call-template name="copyright"/>
-        <xsl:call-template name="generateCssLinks"/>
-        <xsl:if test="exists($title)">
-          <title>
-            <xsl:copy-of select="$title"/>
-          </title>
-        </xsl:if>
-        <xsl:call-template name="gen-user-head"/>
-        <xsl:call-template name="gen-user-scripts"/>
-        <xsl:call-template name="gen-user-styles"/>
-      </head>
-      <body>
-        <xsl:call-template name="commonattributes"/>
-        <xsl:if test="exists($title)">
-          <h1 class="title topictitle1">
-            <xsl:copy-of select="$title"/>
-          </h1>
-        </xsl:if>
-        <xsl:apply-templates select="*" mode="toc"/>
-      </body>
-    </html>
+  <xsl:template match="*[contains(@class, ' map/map ')]">
+    <xsl:apply-templates select="." mode="root_element"/>
   </xsl:template>
 
-  <xsl:template name="generateMapTitle">
-    <xsl:if test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')] or /*[contains(@class,' map/map ')]/@title">
-      <xsl:call-template name="gen-user-panel-title-pfx"/>
+  <xsl:template match="*[contains(@class, ' map/map ')]" mode="chapterBody">
+    <body>
+      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:if test="@outputclass">
+        <xsl:attribute name="class" select="@outputclass"/>
+      </xsl:if>
+      <xsl:apply-templates select="." mode="addAttributesToBody"/>
+      <xsl:call-template name="setidaname"/>
+      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+      <xsl:call-template name="generateBreadcrumbs"/>
+      <xsl:call-template name="gen-user-header"/>
+      <xsl:call-template name="processHDR"/>
+      <xsl:if test="$INDEXSHOW = 'yes'">
+        <xsl:apply-templates select="/*/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')]"/>
+      </xsl:if>
+      <xsl:call-template name="gen-user-sidetoc"/>
       <xsl:choose>
+        <xsl:when test="*[contains(@class, ' topic/title ')]">
+          <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="@title"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="." mode="toc"/>
+      <xsl:call-template name="gen-endnotes"/>
+      <xsl:call-template name="gen-user-footer"/>
+      <xsl:call-template name="processFTR"/>
+      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+    </body>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' map/map ')]/*[contains(@class, ' topic/title ')]">
+    <h1 class="title topictitle1">
+      <xsl:call-template name="gen-user-panel-title-pfx"/>
+      <xsl:apply-templates/>
+    </h1>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' map/map ')]/@title">
+    <h1 class="title topictitle1">
+      <xsl:call-template name="gen-user-panel-title-pfx"/>
+      <xsl:value-of select="."/>
+    </h1>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class,' bookmap/bookmap ')]/*[contains(@class,' bookmap/booktitle ')]">
+    <h1 class="title topictitle1">
+      <xsl:call-template name="gen-user-panel-title-pfx"/>
+      <xsl:apply-templates select="*[contains(@class, ' bookmap/mainbooktitle ')]/node()"/>
+    </h1>
+  </xsl:template>
+
+  <xsl:template name="generateChapterTitle">
+    <title>
+      <xsl:choose>
+        <xsl:when test="/*[contains(@class,' bookmap/bookmap ')]/*[contains(@class,' bookmap/booktitle ')]/*[contains(@class, ' bookmap/mainbooktitle ')]">
+          <xsl:call-template name="gen-user-panel-title-pfx"/>
+          <xsl:value-of select="/*[contains(@class,' bookmap/bookmap ')]/*[contains(@class,' bookmap/booktitle ')]/*[contains(@class, ' bookmap/mainbooktitle ')]"/>
+        </xsl:when>
         <xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
-          <xsl:value-of select="normalize-space(/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')])"/>
+          <xsl:call-template name="gen-user-panel-title-pfx"/>
+          <xsl:value-of select="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]"/>
         </xsl:when>
         <xsl:when test="/*[contains(@class,' map/map ')]/@title">
+          <xsl:call-template name="gen-user-panel-title-pfx"/>
           <xsl:value-of select="/*[contains(@class,' map/map ')]/@title"/>
         </xsl:when>
       </xsl:choose>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="gen-user-panel-title-pfx">
-    <xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>
-  </xsl:template>
-  <xsl:template match="/|node()|@*" mode="gen-user-panel-title-pfx">
-    <!-- to customize: copy this to your override transform, add the content you want. -->
-    <!-- It will be placed immediately after TITLE tag, in the title -->
-  </xsl:template>
-
-  <xsl:function name="dita-ot:is-external" as="xs:boolean">
-    <xsl:param name="urltext" as="xs:string"/>
-    <xsl:sequence select="starts-with($urltext, 'http://') or
-                          starts-with($urltext, 'https://') or
-                          starts-with($urltext, '//')"/>
-  </xsl:function>
-
-  <!-- To be overridden by user shell. -->
-
-  <xsl:template name="gen-user-head">
-    <xsl:apply-templates select="." mode="gen-user-head"/>
-  </xsl:template>
-  <xsl:template match="/|node()|@*" mode="gen-user-head">
-    <!-- to customize: copy this to your override transform, add the content you want. -->
-    <!-- it will be placed in the HEAD section of the XHTML. -->
-  </xsl:template>
-
-  <xsl:template name="gen-user-header">
-    <xsl:apply-templates select="." mode="gen-user-header"/>
-  </xsl:template>
-  <xsl:template match="/|node()|@*" mode="gen-user-header">
-    <!-- to customize: copy this to your override transform, add the content you want. -->
-    <!-- it will be placed in the running heading section of the XHTML. -->
-  </xsl:template>
-
-  <xsl:template name="gen-user-footer">
-    <xsl:apply-templates select="." mode="gen-user-footer"/>
-  </xsl:template>
-  <xsl:template match="/|node()|@*" mode="gen-user-footer">
-    <!-- to customize: copy this to your override transform, add the content you want. -->
-    <!-- it will be placed in the running footing section of the XHTML. -->
-  </xsl:template>
-
-  <xsl:template name="gen-user-sidetoc">
-    <xsl:apply-templates select="." mode="gen-user-sidetoc"/>
-  </xsl:template>
-  <xsl:template match="/|node()|@*" mode="gen-user-sidetoc">
-    <!-- to customize: copy this to your override transform, add the content you want. -->
-    <!-- Uncomment the line below to have a "freebie" table of contents on the top-right -->
-  </xsl:template>
-
-  <xsl:template name="gen-user-scripts">
-    <xsl:apply-templates select="." mode="gen-user-scripts"/>
-  </xsl:template>
-  <xsl:template match="/|node()|@*" mode="gen-user-scripts">
-    <!-- to customize: copy this to your override transform, add the content you want. -->
-    <!-- It will be placed before the ending HEAD tag -->
-    <!-- see (or enable) the named template "script-sample" for an example -->
-  </xsl:template>
-
-  <xsl:template name="gen-user-styles">
-    <xsl:apply-templates select="." mode="gen-user-styles"/>
-  </xsl:template>
-  <xsl:template match="/|node()|@*" mode="gen-user-styles">
-    <!-- to customize: copy this to your override transform, add the content you want. -->
-    <!-- It will be placed before the ending HEAD tag -->
-  </xsl:template>
-
-  <xsl:template name="gen-user-external-link">
-    <xsl:apply-templates select="." mode="gen-user-external-link"/>
-  </xsl:template>
-  <xsl:template match="/|node()|@*" mode="gen-user-external-link">
-    <!-- to customize: copy this to your override transform, add the content you want. -->
-    <!-- It will be placed after an external LINK or XREF -->
+    </title>
   </xsl:template>
 
   <dita:extension id="dita.xsl.html.cover" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
