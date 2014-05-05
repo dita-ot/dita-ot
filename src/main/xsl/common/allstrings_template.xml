@@ -4,5 +4,5 @@
   applicable licenses.-->
 <allstrings>
   <stringfile>strings.xml</stringfile>
-  <dita:extension id="dita.xsl.strings" behavior="org.dita.dost.platform.ImportStringsAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+  <!--dita:extension id="dita.xsl.strings" behavior="org.dita.dost.platform.ImportStringsAction" xmlns:dita="http://dita-ot.sourceforge.net"/-->
 </allstrings>

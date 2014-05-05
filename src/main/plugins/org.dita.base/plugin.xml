@@ -85,6 +85,7 @@
   <template file="build_preprocess_template.xml"/>
   <template file="../../resource/messages_template.xml"/>
   <template file="../../xsl/common/allstrings_template.xml"/>
+  <template file="../../xsl/common/strings_template.xml"/>
   <template file="../../xsl/preprocess/maplink_template.xsl"/>
   <template file="../../xsl/preprocess/mapref_template.xsl"/>
   <template file="../../xsl/preprocess/mappull_template.xsl"/>
