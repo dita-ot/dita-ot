@@ -6,22 +6,26 @@ package org.dita.dost.pdf2;
 
 import static javax.xml.XMLConstants.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+import javax.xml.parsers.*;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.FileSet;
+import org.dita.dost.util.URLUtils;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * Generate list of variable files.
@@ -43,33 +47,42 @@ public final class VariableFileTask extends Task {
                 files.add(new File(ds.getBasedir(), f));
             }
         }
-        
+        if (files.isEmpty()) {
+            log("No variable files found", Project.MSG_DEBUG);
+            return;
+        }
+
+
+        final File strings = getBaseVariableFile().getAbsoluteFile();
+
         OutputStream out = null;
-        XMLStreamWriter s = null;
         try {
-        	out = new FileOutputStream(file);
-            s = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
-            s.writeStartDocument();
-            s.writeStartElement("langlist");
+            final Document d = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(strings);
+            final Element root = d.getDocumentElement();
+
+            final NodeList nl = root.getElementsByTagName("lang");
+            for (int i = 0; i < nl.getLength(); i++) {
+                final Element lang = (Element) nl.item(i);
+                final Attr filename = lang.getAttributeNode("filename");
+                final URI f = URLUtils.toURI(filename.getValue());
+                if (!f.isAbsolute()) {
+                    filename.setValue(strings.toURI().resolve(f).toString());
+                }
+            }
+
             for (final File f: files) {
-                s.writeStartElement("var");
+                final Element lang = d.createElement("lang");
                 final String n = f.getName();
                 final int i = n.indexOf('.');
-                s.writeAttribute("xml", XML_NS_URI, "lang", n.substring(0, i).replace('_', '-'));
-                s.writeAttribute("filename", f.toURI().toString());
-                s.writeEndElement();
+                lang.setAttributeNS(XML_NS_URI, "xml:lang", n.substring(0, i).replace('_', '-'));
+                lang.setAttribute("filename", f.toURI().toString());
+                root.appendChild(lang);
             }
-            s.writeEndDocument();
+
+            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(d), new StreamResult(file));
         } catch (final Exception e) {
             throw new BuildException("Failed to write output file: " + e.getMessage(), e);
         } finally {
-            if (s != null) {
-                try {
-                    s.close();
-                } catch (final XMLStreamException e) {
-                    getProject().log("Failed to close output writer", Project.MSG_ERR);
-				}
-            }
             if (out != null) {
                 try {
                     out.close();
@@ -79,7 +92,15 @@ public final class VariableFileTask extends Task {
             }
         }
     }
-    
+
+    private File getBaseVariableFile() {
+        final String f = getProject().getProperty("dita.plugin.org.dita.base.dir");
+        if (f != null) {
+            return new File(f, "xsl" + File.separator + "common" + File.separator + "strings.xml");
+        }
+        return null;
+    }
+
     public void addFileset(FileSet fileset) {
         filesets.add(fileset);
     }

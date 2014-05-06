@@ -66,6 +66,8 @@
   
   <xsl:template name="getVariable">
     <xsl:param name="id" as="xs:string"/>
+    <xsl:param name="params" as="element()*"/>
+        
     <xsl:variable name="ancestorlang" as="xs:string*">
       <xsl:variable name="l" as="xs:string*">
         <xsl:call-template name="getLowerCaseLang"/>
@@ -83,6 +85,7 @@
     </xsl:variable>
     <xsl:call-template name="findString">
       <xsl:with-param name="id" select="$id"/>
+      <xsl:with-param name="params" select="$params"/>
       <xsl:with-param name="ancestorlang" select="$ancestorlang"/>
       <xsl:with-param name="defaultlang" select="$defaultlang"/>
     </xsl:call-template>
@@ -90,21 +93,24 @@
   
   <xsl:template name="findString">
     <xsl:param name="id" as="xs:string"/>
+    <xsl:param name="params" as="element()*"/>
     <xsl:param name="ancestorlang" as="xs:string*"/>
     <xsl:param name="defaultlang" as="xs:string*"/>
-    
+        
     <xsl:variable name="l" select="($ancestorlang, $defaultlang)[1]" as="xs:string?"/>
     <xsl:choose>
       <xsl:when test="exists($l)">
         <xsl:variable name="stringfile" select="$stringFiles[@xml:lang = $l]/@filename" as="xs:string*"/>
-        <xsl:variable name="str"  as="element()*">
+        <xsl:variable name="str" as="element()*">
           <xsl:for-each select="$stringfile">
-            <xsl:sequence select="document(., $stringFiles[1])/strings/str[@name = $id]"/>
+            <xsl:sequence select="document(., $stringFiles[1])/*/*[@name = $id or @id = $id]"/><!-- strings/str/@name opentopic-vars:vars/opentopic-vars:variable/@id -->
           </xsl:for-each>
         </xsl:variable>
         <xsl:choose>
           <xsl:when test="exists($str)">
-            <xsl:value-of select="$str[last()]"/>
+            <xsl:apply-templates select="$str[last()]" mode="processVariableBody">
+              <xsl:with-param name="params" select="$params"/>
+            </xsl:apply-templates>
             <xsl:if test="empty($ancestorlang)">
               <xsl:call-template name="output-message">
                 <xsl:with-param name="msgnum">001</xsl:with-param>
@@ -116,6 +122,7 @@
           <xsl:otherwise>
             <xsl:call-template name="findString">
               <xsl:with-param name="id" select="$id"/>
+              <xsl:with-param name="params" select="$params"/>
               <xsl:with-param name="ancestorlang" select="$ancestorlang[position() gt 1]"/>
               <xsl:with-param name="defaultlang" select="if (exists($ancestorlang)) then $defaultlang else $defaultlang[position() gt 1]"/>
             </xsl:call-template>
@@ -131,6 +138,12 @@
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>    
+  </xsl:template>
+  
+  <xsl:template match="str" mode="processVariableBody">
+    <xsl:param name="params" as="element()*"/>
+    
+    <xsl:value-of select="."/>
   </xsl:template>
     
   <xsl:template name="length-to-pixels">

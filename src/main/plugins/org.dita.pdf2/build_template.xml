@@ -197,10 +197,10 @@ with those set forth herein.
       <fileset dir="${customization.dir}/common/vars" erroronmissingdir="false">
         <include name="*.xml"/>
       </fileset>
-      <fileset dir="${cfg.common.dir}/vars">
-        <include name="*.xml"/>
-      </fileset>
     </gen-variable>
+    <condition property="variable.file.exists">
+      <available file="${variable.file}" />
+    </condition>
 
     <condition property="document.locale" value="${default.locale}">
       <not><isset property="document.locale"/></not>
@@ -352,7 +352,7 @@ with those set forth herein.
     <makeurl property="work.dir.url" file="${dita.temp.dir}" validate="no"/>
     <makeurl property="customization.dir.url" file="${customization.dir}"/>
     <makeurl property="user.input.dir.url" file="${user.input.dir}"/>    
-    <makeurl property="variable.file.url" file="${variable.file}"/>
+    <makeurl property="variable.file.url" file="${variable.file}" validate="no"/>
 
     <xslt style="${temp.transformation.file}"
           in="${dita.temp.dir}/stage1a.xml"
@@ -373,7 +373,7 @@ with those set forth herein.
       <param name="bookmap-order" expression="${args.bookmap-order}"/>
       <param name="figurelink.style" expression="${args.figurelink.style}"/>
       <param name="tablelink.style" expression="${args.tablelink.style}"/>
-      <param name="variableFiles.url" expression="${variable.file.url}"/>
+      <param name="variableFiles.url" expression="${variable.file.url}" if="variable.file.exists"/>
       <dita:extension id="dita.conductor.pdf2.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
