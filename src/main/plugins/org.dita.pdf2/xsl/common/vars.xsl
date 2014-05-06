@@ -39,9 +39,20 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:param name="variableFiles.url" as="xs:string?"/>
   <xsl:variable name="variableFiles" select="document($variableFiles.url)"/>
 
+  <!-- Deprecated. Use getVariable template instead. -->
   <xsl:template name="insertVariable">
     <xsl:param name="theVariableID" as="xs:string"/>
     <xsl:param name="theParameters" as="document-node()*"/>
+    
+    <xsl:call-template name="getVariable">
+      <xsl:with-param name="id" select="$theVariableID"/>
+      <xsl:with-param name="params" select="$theParameters"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="getVariable">
+    <xsl:param name="id" as="xs:string"/>
+    <xsl:param name="params" as="document-node()*"/>
     
     <xsl:variable name="currentLocale" as="xs:string">
       <xsl:choose>
@@ -66,8 +77,8 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:choose>
     </xsl:variable>    
     <xsl:call-template name="findVariable">
-      <xsl:with-param name="theVariableID" select="$theVariableID"/>
-      <xsl:with-param name="theParameters" select="$theParameters"/>
+      <xsl:with-param name="id" select="$id"/>
+      <xsl:with-param name="params" select="$params"/>
       <xsl:with-param name="localeFiles" select="$variableFiles//var[lang($currentLocale)]"/>
       <xsl:with-param name="languageFiles" select="$variableFiles//var[@xml:lang = $currentLanguage]"/>
       <xsl:with-param name="currentLocale" select="$currentLocale"/>
@@ -75,27 +86,27 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
 
   <xsl:template name="findVariable">
-    <xsl:param name="theVariableID" as="xs:string"/>
-    <xsl:param name="theParameters" as="document-node()*"/>
+    <xsl:param name="id" as="xs:string"/>
+    <xsl:param name="params" as="document-node()*"/>
     <xsl:param name="localeFiles" as="element()*"/>
     <xsl:param name="languageFiles" as="element()*"/>
     <xsl:param name="currentLocale" as="xs:string"/>
     
     <xsl:choose>
       <xsl:when test="$localeFiles">
-        <xsl:variable name="var" select="document($localeFiles[1]/@filename)/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]"/>
+        <xsl:variable name="var" select="document($localeFiles[1]/@filename)/opentopic-vars:vars/opentopic-vars:variable[@id = $id]"/>
         <xsl:choose>
           <xsl:when test="$var">
             <xsl:for-each select="$var[1]">
               <xsl:call-template name="__processVariableBody">
-                <xsl:with-param name="theParameters" select="$theParameters"/>
+                <xsl:with-param name="params" select="$params"/>
               </xsl:call-template>
             </xsl:for-each>
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="findVariable">
-              <xsl:with-param name="theVariableID" select="$theVariableID"/>
-              <xsl:with-param name="theParameters" select="$theParameters"/>
+              <xsl:with-param name="id" select="$id"/>
+              <xsl:with-param name="params" select="$params"/>
               <xsl:with-param name="localeFiles" select="$localeFiles[position() > 1]"/>
               <xsl:with-param name="languageFiles" select="$languageFiles"/>
               <xsl:with-param name="currentLocale" select="$currentLocale"/>
@@ -104,19 +115,19 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
       </xsl:when>
       <xsl:when test="$languageFiles">
-        <xsl:variable name="var" select="document($languageFiles[1]/@filename)/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]"/>
+        <xsl:variable name="var" select="document($languageFiles[1]/@filename)/opentopic-vars:vars/opentopic-vars:variable[@id = $id]"/>
         <xsl:choose>
           <xsl:when test="$var">
             <xsl:for-each select="$var[1]">
               <xsl:call-template name="__processVariableBody">
-                <xsl:with-param name="theParameters" select="$theParameters"/>
+                <xsl:with-param name="params" select="$params"/>
               </xsl:call-template>
             </xsl:for-each>
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="findVariable">
-              <xsl:with-param name="theVariableID" select="$theVariableID"/>
-              <xsl:with-param name="theParameters" select="$theParameters"/>
+              <xsl:with-param name="id" select="$id"/>
+              <xsl:with-param name="params" select="$params"/>
               <!--xsl:with-param name="localeFiles" select="$localeFiles[position() > 1]"/-->
               <xsl:with-param name="languageFiles" select="$languageFiles[position() > 1]"/>
               <xsl:with-param name="currentLocale" select="$currentLocale"/>
@@ -129,14 +140,14 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:with-param name="msgcat">DOTX</xsl:with-param>
           <xsl:with-param name="msgnum">067</xsl:with-param>
           <xsl:with-param name="msgsev">E</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=<xsl:value-of select="$theVariableID"/>;%2=<xsl:value-of select="$currentLocale"/></xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/>;%2=<xsl:value-of select="$currentLocale"/></xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
   <xsl:template name="__processVariableBody">
-    <xsl:param name="theParameters"/>
+    <xsl:param name="params"/>
     <!--
       Inserting variable with given id
     -->
@@ -146,12 +157,12 @@ See the accompanying license.txt file for applicable licenses.
           <!--Processing parametrized variable-->
           <xsl:variable name="param-name" select="@ref-name"/>
           <!--Copying parameter child as is-->
-          <xsl:copy-of select="$theParameters/*[name() = $param-name]/node()"/>
+          <xsl:copy-of select="$params/*[name() = $param-name]/node()"/>
         </xsl:when>
         <xsl:when test="self::opentopic-vars:variable">
-          <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="@id"/>
-            <xsl:with-param name="theParameters" select="$theParameters"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="params" select="$params"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
