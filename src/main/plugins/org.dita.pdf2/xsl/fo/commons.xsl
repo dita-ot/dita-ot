@@ -434,7 +434,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="processTopicNotices">
         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
             <xsl:call-template name="startPageNumbering"/>
-            <xsl:call-template name="insertBodyStaticContents"/>
+            <xsl:call-template name="insertPrefaceStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
                     <xsl:call-template name="commonattributes"/>
