@@ -46,13 +46,19 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:otherwise>NO</xsl:otherwise>
         </xsl:choose>
     </xsl:param>
-
-    <xsl:template match="*" mode="processTask">
-        <fo:block xsl:use-attribute-sets="task">
-            <xsl:apply-templates select="." mode="commonTopicProcessing"/>
-        </fo:block>
-    </xsl:template>
-
+  
+  <xsl:template match="*[contains(@class, ' task/task ')]" mode="processTopic"
+                name="processTask">
+    <fo:block xsl:use-attribute-sets="task">
+      <xsl:apply-templates select="." mode="commonTopicProcessing"/>
+    </fo:block>
+  </xsl:template>
+  
+  <!-- Deprecated, retained for backwards compatibility -->
+  <xsl:template match="*" mode="processTask">
+    <xsl:call-template name="processTask"/>
+  </xsl:template>
+  
     <xsl:template match="*[contains(@class, ' task/taskbody ')]">
         <fo:block xsl:use-attribute-sets="taskbody">
             <xsl:call-template name="commonattributes"/>

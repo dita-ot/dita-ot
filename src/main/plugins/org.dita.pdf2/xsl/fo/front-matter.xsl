@@ -85,7 +85,7 @@ See the accompanying license.txt file for applicable licenses.
             </fo:flow>
         </fo:page-sequence>
         <xsl:if test="not($retain-bookmap-order)">
-          <xsl:call-template name="createNotices"/>
+          <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
         </xsl:if>
     </xsl:template>
   
@@ -182,11 +182,7 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
-  
-  <xsl:template name="createNotices">
-     <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
-  </xsl:template>
-  
+    
   <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-notices">
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>

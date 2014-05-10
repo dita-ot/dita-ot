@@ -9,6 +9,18 @@ See the accompanying license.txt file for applicable licenses.
   exclude-result-prefixes="xs"
   version="2.0">
 
+  <xsl:template match="*[contains(@class, ' reference/reference ')]" mode="processTopic"
+                name="processReference">
+    <fo:block xsl:use-attribute-sets="reference">
+      <xsl:apply-templates select="." mode="commonTopicProcessing"/>
+    </fo:block>
+  </xsl:template>
+  
+  <!-- Deprecated, retained for backwards compatibility -->
+  <xsl:template match="*" mode="processReference">
+    <xsl:call-template name="processReference"/>
+  </xsl:template>
+
   <xsl:template match="*[contains(@class, ' reference/refbody ')]" priority="1">
     <xsl:variable name="level" as="xs:integer">
       <xsl:apply-templates select="." mode="get-topic-level"/>
