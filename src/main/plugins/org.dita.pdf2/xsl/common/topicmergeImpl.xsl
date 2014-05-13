@@ -52,9 +52,10 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
   <xsl:template match="dita-merge">
-        <xsl:element name="{name(*[contains(@class,' map/map ')])}">
-            <xsl:copy-of select="*[contains(@class,' map/map ')]/@*"/>
-            <xsl:apply-templates select="*[contains(@class,' map/map ')]" mode="build-tree"/>
+        <xsl:variable name="map" select="(*[contains(@class,' map/map ')])[1]"/>
+        <xsl:element name="{name($map)}">
+          <xsl:copy-of select="$map/@*"/>
+          <xsl:apply-templates select="$map" mode="build-tree"/>
         </xsl:element>
     </xsl:template>
 

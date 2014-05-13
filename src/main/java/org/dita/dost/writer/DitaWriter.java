@@ -528,6 +528,8 @@ public final class DitaWriter extends AbstractXMLFilter {
         {
             final NormalizeFilter normalizeFilter = new NormalizeFilter();
             normalizeFilter.setLogger(logger);
+            normalizeFilter.setCurrentFile(inFile);
+            normalizeFilter.setJob(job);
             pipe.add(normalizeFilter);
         }
         {

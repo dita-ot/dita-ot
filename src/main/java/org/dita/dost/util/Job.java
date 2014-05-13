@@ -528,7 +528,18 @@ public final class Job {
     public FileInfo getFileInfo(final File file) {
         return files.get(file);
     }
-    
+
+    /**
+     * Get file info object
+     *
+     * @param file file URI
+     * @return file info object
+     */
+    public FileInfo getFileInfo(final URI file) {
+        return files.get(toFile(file));
+    }
+
+
     /**
      * Get or create FileInfo for given path.
      * @param file system path

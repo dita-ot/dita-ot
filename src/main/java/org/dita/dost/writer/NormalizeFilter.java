@@ -6,7 +6,10 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.configuration;
+import static org.dita.dost.util.URLUtils.*;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Deque;
 
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -59,6 +63,9 @@ public final class NormalizeFilter extends AbstractXMLFilter {
     private Map<String, Integer> colSpanMap;
     /** DITA class stack */
     private final Deque<String> classStack = new LinkedList<String>();
+    /** Current file, relative to temporary directory */
+    private File currentFile;
+    private Job job;
 
     public NormalizeFilter() {
         super();
@@ -186,6 +193,20 @@ public final class NormalizeFilter extends AbstractXMLFilter {
                         : ATTRIBUTE_CASCADE_VALUE_MERGE); 
             }
         }
+        // Ensure map references are marked correctly
+        if (MAP_TOPICREF.matches(cls)) {
+            final String format = res.getValue(ATTRIBUTE_NAME_FORMAT);
+            final String scope = res.getValue(ATTRIBUTE_NAME_SCOPE);
+            final URI href = toURI(res.getValue(ATTRIBUTE_NAME_HREF));
+            if (format == null && (scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL)) && href != null) {
+                // fix format
+                final URI target = toURI(currentFile).resolve(href);
+                final Job.FileInfo fi = job.getFileInfo(target);
+                if (fi != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, fi.format);
+                }
+            }
+        }
         getContentHandler().startElement(uri, localName, qName, res);
     }
 
@@ -273,4 +294,11 @@ public final class NormalizeFilter extends AbstractXMLFilter {
         }
     }
 
+    public void setCurrentFile(final File currentFile) {
+        this.currentFile = currentFile;
+    }
+
+    public void setJob(final Job job) {
+        this.job = job;
+    }
 }
