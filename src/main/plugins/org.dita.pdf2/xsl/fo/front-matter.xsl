@@ -84,9 +84,6 @@ See the accompanying license.txt file for applicable licenses.
               </fo:block-container>
             </fo:flow>
         </fo:page-sequence>
-        <xsl:if test="not($retain-bookmap-order)">
-          <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
-        </xsl:if>
     </xsl:template>
   
   <xsl:template name="createFrontCoverContents">
@@ -181,15 +178,6 @@ See the accompanying license.txt file for applicable licenses.
     <fo:block xsl:use-attribute-sets="bookmap.summary">
       <xsl:apply-templates/>
     </fo:block>
-  </xsl:template>
-    
-  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-notices">
-        <xsl:variable name="topicType">
-            <xsl:call-template name="determineTopicType"/>
-        </xsl:variable>
-        <xsl:if test="$topicType = 'topicNotices'">
-            <xsl:call-template name="processTopicNotices"/>
-        </xsl:if>
   </xsl:template>
     
 </xsl:stylesheet>

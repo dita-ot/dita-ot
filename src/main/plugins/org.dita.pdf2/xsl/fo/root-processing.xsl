@@ -207,6 +207,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="createBookmarks"/>
             <xsl:call-template name="createFrontMatter"/>
             <xsl:if test="not($retain-bookmap-order)">
+                <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
                 <xsl:call-template name="createToc"/>
             </xsl:if>
             <xsl:apply-templates/>
@@ -216,6 +217,15 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:call-template name="createBackCover"/>
         </fo:root>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-notices">
+    <xsl:variable name="topicType">
+      <xsl:call-template name="determineTopicType"/>
+    </xsl:variable>
+    <xsl:if test="$topicType = 'topicNotices'">
+      <xsl:call-template name="processTopicNotices"/>
+    </xsl:if>
+  </xsl:template>
   
   <xsl:template match="*[contains(@class, ' map/map ')]">
     <xsl:apply-templates/>
