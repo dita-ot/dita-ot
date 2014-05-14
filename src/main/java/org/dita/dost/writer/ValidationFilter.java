@@ -7,7 +7,9 @@ package org.dita.dost.writer;
 import static javax.xml.XMLConstants.*;
 import static org.dita.dost.util.Configuration.processingMode;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Deque;
@@ -17,10 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -36,6 +35,9 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	private Map<String, Map<String, Set<String>>> validateMap = null;
 	private Locator locator;
 	private final Deque<String[][]> domains = new LinkedList<String[][]>();
+    /** Current file, relative to temporary directory */
+    private URI currentFile;
+    private Job job;
 	
 	/**
 	 * Create new profiling filter.
@@ -53,6 +55,14 @@ public final class ValidationFilter extends AbstractXMLFilter {
      */
     public void setValidateMap(final Map<String, Map<String, Set<String>>> validateMap) {
         this.validateMap = validateMap;
+    }
+
+    public void setCurrentFile(final URI currentFile) {
+        this.currentFile = currentFile;
+    }
+
+    public void setJob(final Job job) {
+        this.job = job;
     }
 	
 	// Locator methods
@@ -78,6 +88,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 		modified = validateLang(atts, modified);
 		validateId(atts);
 		modified = validateHref(atts, modified);
+        modified = processFormatDitamap(atts, modified);
 		validateKeys(atts);
 		validateKeyscope(atts);
 		validateAttributeValues(qName, atts);
@@ -300,5 +311,45 @@ public final class ValidationFilter extends AbstractXMLFilter {
         }
     }
 
+    /**
+     * Validate topicref format attribute.
+     *
+     * @param atts original attributes
+     * @param modified modified attributes
+     * @return modified attributes, {@code null} if there have been no changes
+     */
+    private AttributesImpl processFormatDitamap(final Attributes atts, final AttributesImpl modified) {
+        if (job == null) {
+            return modified;
+        }
+        AttributesImpl res = modified;
+        final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        if (MAP_TOPICREF.matches(cls)) {
+            final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+            final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+            final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+            if (format == null && (scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL)) && href != null) {
+                final URI target = currentFile.resolve(href);
+                final Job.FileInfo fi = job.getFileInfo(target);
+                if (fi != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+                    switch (processingMode) {
+                        case STRICT:
+                            throw new RuntimeException(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                        case SKIP:
+                            logger.error(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                            break;
+                        case LAX:
+                            logger.error(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                            if (res == null) {
+                                res = new AttributesImpl(atts);
+                            }
+                            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, fi.format);
+                            break;
+                    }
+                }
+            }
+        }
+        return res;
+    }
     
 }

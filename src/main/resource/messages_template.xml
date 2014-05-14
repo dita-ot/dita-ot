@@ -322,6 +322,11 @@
     <reason>Key "%1" was used in conkeyref but is not bound to a DITA topic or map.</reason>
     <response>Cannot resolve conkeyref value "%2" as a valid conref reference.</response>
   </message>
+
+  <message id="DOTJ061E" type="ERROR">
+    <reason>Topic reference target is a DITA map but format attribute has not been set.</reason>
+    <response>Set format attribute value to "ditamap".</response>
+  </message>
     
   <!-- End of Java Messages -->
     

@@ -269,7 +269,6 @@ public final class DitaWriter extends AbstractXMLFilter {
      * Sets the grammar pool on the parser. Note that this is a Xerces-specific
      * feature.
      * @param reader
-     * @param grammarPool
      */
     public void setGrammarPool(final XMLReader reader) {
         try {
@@ -485,6 +484,8 @@ public final class DitaWriter extends AbstractXMLFilter {
             final Source source = new SAXSource(xmlSource, is);
             final Result result = new StreamResult(out);
             serializer.transform(source, result);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage(), e) ;
@@ -523,13 +524,14 @@ public final class DitaWriter extends AbstractXMLFilter {
             final ValidationFilter validationFilter = new ValidationFilter();
             validationFilter.setLogger(logger);
             validationFilter.setValidateMap(validateMap);
+            validationFilter.setCurrentFile(toURI(inFile));
+            validationFilter.setJob(job);
             pipe.add(validationFilter);
         }
         {
             final NormalizeFilter normalizeFilter = new NormalizeFilter();
             normalizeFilter.setLogger(logger);
-            normalizeFilter.setCurrentFile(inFile);
-            normalizeFilter.setJob(job);
+
             pipe.add(normalizeFilter);
         }
         {
