@@ -108,8 +108,7 @@ See the accompanying license.txt file for applicable licenses.
           </xsl:call-template>
         </xsl:if>
         <xsl:if test="@href and @id">
-            <xsl:variable name="searchId" select="@id"/>
-            <xsl:if test="not(//*[contains(@class, ' topic/topic ')][@id = $searchId]) and not($searchId = '')">
+            <xsl:if test="string-length(@id) > 0 and empty(key('topicById', @id))">
               <xsl:call-template name="output-message">
                 <xsl:with-param name="msgnum">005</xsl:with-param>
                 <xsl:with-param name="msgsev">F</xsl:with-param>
