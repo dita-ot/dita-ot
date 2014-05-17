@@ -55,7 +55,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -142,7 +141,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             job.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)));
             fileWriter.setJob(job);
 
-            final Map<String, Set<String>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
+            final Map<File, Set<File>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
 
             for (final FileInfo f: job.getFileInfo()) {
                 if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)
@@ -156,14 +155,14 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     }
                     logger.info("Processing " + currentFile.getAbsolutePath());
     
-                    final Set<String> schemaSet = dic.get(filename.getPath());
+                    final Set<File> schemaSet = dic.get(filename);
                     filterReader.reset();
                     if (schemaSet != null) {
                         subjectSchemeReader.reset();
                         final FilterUtils fu = new FilterUtils(printTranstype.contains(transtype));
                         fu.setLogger(logger);
-                        for (final String schema: schemaSet) {
-                            subjectSchemeReader.loadSubjectScheme(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema) + SUBJECT_SCHEME_EXTENSION);
+                        for (final File schema: schemaSet) {
+                            subjectSchemeReader.loadSubjectScheme(new File(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
                         }
                         if (ditavalFile != null){
                             filterReader.filterReset();
@@ -203,11 +202,11 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * 
      * @param filename XML properties file path, relative to temporary directory
      */
-    private Map<String, Set<String>> readMapFromXML(final String filename) {
+    private Map<File, Set<File>> readMapFromXML(final String filename) {
         final File inputFile = new File(job.tempDir, filename);
-        final Map<String, Set<String>> graph = new HashMap<String, Set<String>>();
+        final Map<File, Set<File>> graph = new HashMap<File, Set<File>>();
         if (!inputFile.exists()) {
-            return graph;
+            return Collections.EMPTY_MAP;
         }
         final Properties prop = new Properties();
         FileInputStream in = null;
@@ -230,7 +229,11 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         for (final Map.Entry<Object, Object> entry: prop.entrySet()) {
             final String key = (String) entry.getKey();
             final String value = (String) entry.getValue();
-            graph.put(key, StringUtils.restoreSet(value, COMMA));
+            final Set<File> r = new HashSet<File>();
+            for (final String v: StringUtils.restoreSet(value, COMMA)) {
+                r.add(new File(v));
+            }
+            graph.put(new File(key), r);
         }
 
         return Collections.unmodifiableMap(graph);
@@ -243,12 +246,12 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      */
     private void outputSubjectScheme() throws DITAOTException {
 
-        final Map<String, Set<String>> graph = readMapFromXML(FILE_NAME_SUBJECT_RELATION);
+        final Map<File, Set<File>> graph = readMapFromXML(FILE_NAME_SUBJECT_RELATION);
 
-        final Queue<String> queue = new LinkedList<String>();
-        final Set<String> visitedSet = new HashSet<String>();
+        final Queue<File> queue = new LinkedList<File>();
+        final Set<File> visitedSet = new HashSet<File>();
         
-        for (final Map.Entry<String, Set<String>> entry: graph.entrySet()) {
+        for (final Map.Entry<File, Set<File>> entry: graph.entrySet()) {
             queue.offer(entry.getKey());
         }
 
@@ -258,37 +261,37 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             builder.setEntityResolver(CatalogUtils.getCatalogResolver());
 
             while (!queue.isEmpty()) {
-                final String parent = queue.poll();
-                final Set<String> children = graph.get(parent);
+                final File parent = queue.poll();
+                final Set<File> children = graph.get(parent);
 
                 if (children != null) {
                     queue.addAll(children);
                 }
-                if ("ROOT".equals(parent) || visitedSet.contains(parent)) {
+                if ((new File("ROOT")).equals(parent) || visitedSet.contains(parent)) {
                     continue;
                 }
                 visitedSet.add(parent);
-                String tmprel = FileUtils.getRelativeUnixPath(inputMap.getAbsolutePath(), parent);
-                tmprel = FileUtils.resolve(job.tempDir.getAbsolutePath(), tmprel) + SUBJECT_SCHEME_EXTENSION;
-                Document parentRoot = null;
-                if (!FileUtils.fileExists(tmprel)) {
-                    parentRoot = builder.parse(new InputSource(new FileInputStream(parent)));
+                File tmprel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), parent);
+                tmprel = new File(FileUtils.resolve(job.tempDir.getAbsoluteFile(), tmprel) + SUBJECT_SCHEME_EXTENSION);
+                Document parentRoot;
+                if (!tmprel.exists()) {
+                    parentRoot = builder.parse(parent);
                 } else {
-                    parentRoot = builder.parse(new InputSource(new FileInputStream(tmprel)));
+                    parentRoot = builder.parse(tmprel);
                 }
                 if (children != null) {
-                    for (final String childpath: children) {
-                        final Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
+                    for (final File childpath: children) {
+                        final Document childRoot = builder.parse(childpath);
                         mergeScheme(parentRoot, childRoot);
-                        String rel = FileUtils.getRelativeUnixPath(inputMap.getAbsolutePath(), childpath);
-                        rel = FileUtils.resolve(job.tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
+                        File rel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), childpath);
+                        rel = new File(FileUtils.resolve(job.tempDir.getAbsoluteFile(), rel) + SUBJECT_SCHEME_EXTENSION);
                         generateScheme(rel, childRoot);
                     }
                 }
 
                 //Output parent scheme
-                String rel = FileUtils.getRelativeUnixPath(inputMap.getAbsolutePath(), parent);
-                rel = FileUtils.resolve(job.tempDir.getAbsolutePath(), rel) + SUBJECT_SCHEME_EXTENSION;
+                File rel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), parent);
+                rel = new File(FileUtils.resolve(job.tempDir.getAbsoluteFile(), rel) + SUBJECT_SCHEME_EXTENSION);
                 generateScheme(rel, parentRoot);
             }
         } catch (final Exception e) {
@@ -408,15 +411,14 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * 
      * @throws DITAOTException if generation fails
      */
-    private void generateScheme(final String filename, final Document root) throws DITAOTException {
+    private void generateScheme(final File filename, final Document root) throws DITAOTException {
+        final File p = filename.getParentFile();
+        if (!p.exists() && !p.mkdirs()) {
+            throw new DITAOTException("Failed to make directory " + p.getAbsolutePath());
+        }
         FileOutputStream out = null;
         try {
-            final File f = new File(filename);
-            final File p = f.getParentFile();
-            if (!p.exists() && !p.mkdirs()) {
-                throw new IOException("Failed to make directory " + p.getAbsolutePath());
-            }
-            out = new FileOutputStream(new File(filename));
+            out = new FileOutputStream(filename);
             final StreamResult res = new StreamResult(out);
             final DOMSource ds = new DOMSource(root);
             final TransformerFactory tff = TransformerFactory.newInstance();

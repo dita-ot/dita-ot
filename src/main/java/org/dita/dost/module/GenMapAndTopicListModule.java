@@ -630,12 +630,13 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         outDitaFilesSet.addAll(listFilter.getOutFilesSet());
 
         // Generate topic-scheme dictionary
-        if (listFilter.getSchemeSet() != null && !listFilter.getSchemeSet().isEmpty()) {
+        final Set<File> schemeSet = listFilter.getSchemeSet();
+        if (schemeSet != null && !schemeSet.isEmpty()) {
             Set<File> children = schemeDictionary.get(currentFile);
             if (children == null) {
                 children = new HashSet<File>();
             }
-            children.addAll(listFilter.getSchemeSet());
+            children.addAll(schemeSet);
             schemeDictionary.put(currentFile, children);
             final Set<File> hrfSet = listFilter.getHrefTargets();
             for (final File filename: hrfSet) {
@@ -643,7 +644,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
                 if (children == null) {
                     children = new HashSet<File>();
                 }
-                children.addAll(listFilter.getSchemeSet());
+                children.addAll(schemeSet);
                 schemeDictionary.put(filename, children);
             }
         }

@@ -109,7 +109,7 @@ public class TestDitaWriter {
         filterReader.read(new File(baseDir, ditavalFile).getAbsoluteFile());
         
         final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
-        subjectSchemeReader.loadSubjectScheme(new File(inputDir, "subject_scheme.ditamap").getPath());
+        subjectSchemeReader.loadSubjectScheme(new File(inputDir, "subject_scheme.ditamap"));
         writer.setValidateMap(subjectSchemeReader.getValidValuesMap());
         writer.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
 
