@@ -245,15 +245,10 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if generation files
      */
     private void outputSubjectScheme() throws DITAOTException {
-
         final Map<File, Set<File>> graph = readMapFromXML(FILE_NAME_SUBJECT_RELATION);
 
-        final Queue<File> queue = new LinkedList<File>();
+        final Queue<File> queue = new LinkedList<File>(graph.keySet());
         final Set<File> visitedSet = new HashSet<File>();
-        
-        for (final Map.Entry<File, Set<File>> entry: graph.entrySet()) {
-            queue.offer(entry.getKey());
-        }
 
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -267,31 +262,32 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 if (children != null) {
                     queue.addAll(children);
                 }
-                if ((new File("ROOT")).equals(parent) || visitedSet.contains(parent)) {
+                if (new File("ROOT").equals(parent) || visitedSet.contains(parent)) {
                     continue;
                 }
                 visitedSet.add(parent);
-                File tmprel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), parent);
-                tmprel = new File(FileUtils.resolve(job.tempDir.getAbsoluteFile(), tmprel) + SUBJECT_SCHEME_EXTENSION);
+                //File tmprel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), parent);
+                File tmprel = new File(FileUtils.resolve(job.tempDir.getAbsoluteFile(), parent) + SUBJECT_SCHEME_EXTENSION);
                 Document parentRoot;
                 if (!tmprel.exists()) {
-                    parentRoot = builder.parse(parent);
+                    final File src = new File(inputMap.getParentFile(), parent.getPath());
+                    parentRoot = builder.parse(src);
                 } else {
                     parentRoot = builder.parse(tmprel);
                 }
                 if (children != null) {
                     for (final File childpath: children) {
-                        final Document childRoot = builder.parse(childpath);
+                        final Document childRoot = builder.parse(new File(inputMap.getParentFile(), childpath.getPath()));
                         mergeScheme(parentRoot, childRoot);
-                        File rel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), childpath);
-                        rel = new File(FileUtils.resolve(job.tempDir.getAbsoluteFile(), rel) + SUBJECT_SCHEME_EXTENSION);
+                        //File rel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), childpath);
+                        File rel = new File(job.tempDir.getAbsoluteFile(), childpath.getPath() + SUBJECT_SCHEME_EXTENSION);
                         generateScheme(rel, childRoot);
                     }
                 }
 
                 //Output parent scheme
-                File rel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), parent);
-                rel = new File(FileUtils.resolve(job.tempDir.getAbsoluteFile(), rel) + SUBJECT_SCHEME_EXTENSION);
+                //File rel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), parent);
+                File rel = new File(job.tempDir.getAbsoluteFile(), parent.getPath() + SUBJECT_SCHEME_EXTENSION);
                 generateScheme(rel, parentRoot);
             }
         } catch (final Exception e) {

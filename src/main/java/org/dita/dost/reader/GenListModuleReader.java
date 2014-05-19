@@ -28,6 +28,7 @@ import java.util.Stack;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
@@ -112,8 +113,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Set<File> crossSet;
     /** Subject scheme relative file paths. */
     private final Set<File> schemeRefSet;
-    /** Relationship graph between subject schema. Keys are absolute paths of subject scheme maps and values
-     * are absolute paths of subject scheme maps. A key {@code File("ROOT")} contains all subject scheme maps. */
+    /** Relationship graph between subject schema. Keys are subject scheme map paths and values
+     * are subject scheme map paths, both relative to base directory. A key {@code File("ROOT")} contains all subject scheme maps. */
     private final Map<File, Set<File>> schemeRelationGraph;
     /** Map to store referenced branches. */
     private final Map<String, List<String>> vaildBranches;
@@ -212,9 +213,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * Get relationship graph between subject schema. Keys are absolute subject scheme map paths and values
-     * are absolute subject scheme map paths. A key {@code "ROOT"} contains all subject scheme maps.
-     * 
+     * Get relationship graph between subject schema. Keys are subject scheme map paths and values
+     * are subject scheme map paths, both relative to base directory. A key {@code "ROOT"} contains all subject scheme maps.
+     *
      * @return relationship graph
      */
     public Map<File, Set<File>> getRelationshipGrap() {
@@ -527,15 +528,17 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             // Make it easy to do the BFS later.
             final File key = new File("ROOT");
             final Set<File> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<File>();
-            children.add(currentFile.getAbsoluteFile());
+            final File child = getRelativePath(rootFilePath.getAbsoluteFile(), currentFile.getAbsoluteFile());
+            children.add(child);
             schemeRelationGraph.put(key, children);
 
             schemeRefSet.add(getRelativePath(rootFilePath.getAbsoluteFile(), currentFile.getAbsoluteFile()));
         } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
             if (href != null) {
-                final File key = currentFile.getAbsoluteFile();
+                final File key = getRelativePath(rootFilePath.getAbsoluteFile(), currentFile.getAbsoluteFile());
                 final Set<File> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<File>();
-                children.add(resolve(rootDir.getAbsoluteFile(), toFile(href).getPath()));
+                final File child = getRelativePath(rootFilePath.getAbsoluteFile(), resolve(rootDir.getAbsoluteFile(), toFile(href).getPath()));
+                children.add(child);
                 schemeRelationGraph.put(key, children);
             }
         }
