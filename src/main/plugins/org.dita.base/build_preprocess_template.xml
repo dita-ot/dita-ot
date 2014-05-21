@@ -6,7 +6,7 @@
 
   <!-- Set to "true" if you get out-of-memory errors during preprocess
        while processing very large (thousands of files) document sets. -->
-  <condition property="dita.preprocess.reloadstylesheet" value="false">
+  <condition property="dita.preprocess.reloadstylesheet" value="${conserve-memory}">
     <not><isset property="dita.preprocess.reloadstylesheet"/></not>
   </condition>
 

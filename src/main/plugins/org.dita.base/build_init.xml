@@ -294,6 +294,10 @@
   	<condition property="old.transform">
     	<equals arg1="${generate.copy.outer}" arg2="3"></equals>
     </condition>
+    
+    <condition property="conserve-memory" value="false">
+      <not><isset property="conserve-memory"/></not>
+    </condition>
   </target>
   
   <target name="log-arg">
