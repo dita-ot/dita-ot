@@ -59,7 +59,7 @@
     <xsl:param name="parent-rev">#none#</xsl:param>
 
     <xsl:choose>
-      <xsl:when test="contains($mapref-id-path,concat(' ',generate-id(.),' '))">
+      <xsl:when test="generate-id(.) = $mapref-id-path">
         <!-- it is mapref but it didn't pass the loop dependency check -->
         <xsl:call-template name="output-message">
           <xsl:with-param name="msgnum">053</xsl:with-param>
