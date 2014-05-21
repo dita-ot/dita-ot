@@ -341,6 +341,7 @@
         style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl">
         <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
         <param name="TRANSTYPE" expression="${transtype}" />
+        <param name="conserve-memory" expression="${conserve-memory}" if="conserve-memory"/>
         <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
