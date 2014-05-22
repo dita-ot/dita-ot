@@ -30,11 +30,12 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
 <xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:mappull="http://dita-ot.sourceforge.net/ns/200704/mappull"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:saxon="http://saxon.sf.net/"
-                exclude-result-prefixes="dita-ot mappull ditamsg saxon">
+                exclude-result-prefixes="xs dita-ot mappull ditamsg saxon">
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-utilities.xsl"/>
   <xsl:import href="../common/dita-textonly.xsl"/>
@@ -108,6 +109,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:if test="(:not(@type) and :)$type!='#none#'">
             <xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
           </xsl:if>
+          <!-- FIXME: importance is not inheretable per http://docs.oasis-open.org/dita/v1.2/os/spec/archSpec/cascading-in-a-ditamap.html -->
           <!--xsl:if test="not(@importance)"-->
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">importance</xsl:with-param></xsl:apply-templates>
           <!--/xsl:if-->
@@ -237,6 +239,10 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:value-of select="."/>
   </xsl:template>
 
+  <xsl:variable name="single-value-attrib"
+                select="('linking', 'toc', 'print', 'search', 'format', 'scope', 'type', 'xml:lang', 'dir', 'translate', 'processing-role')"
+                as="xs:string*"/>
+
   <!-- Some elements should not pass an attribute to children, but they SHOULD set the
        attribute locally. If it is specified locally, use it. Otherwise, go to parent. This
        template should ONLY be called from the actual element that is trying to set attributes.
@@ -246,7 +252,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="attrib"/>
     <xsl:variable name="attrib-here" select="@*[local-name()=$attrib]"/>
     <xsl:choose>
-      <xsl:when test="ancestor-or-self::*[@cascade][1]/@cascade = 'nomerge'">
+      <xsl:when test="$attrib = $single-value-attrib or ancestor-or-self::*[@cascade][1]/@cascade = 'nomerge'">
         <xsl:choose>
           <!-- Any time the attribute is specified on this element, use it -->
           <xsl:when test="$attrib-here!=''"><xsl:value-of select="$attrib-here"/></xsl:when>
