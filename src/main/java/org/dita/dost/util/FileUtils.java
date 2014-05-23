@@ -721,22 +721,6 @@ public final class FileUtils {
     }
 
     /**
-     * Check whether a file exists on the local file systmem.
-     * @param filename platform path, may contain a hash fragment
-     * @return boolean  true if the file exists, false otherwise
-     */
-    public static boolean fileExists (String filename){  //Eric
-        // FIXME don't modify argument, use a separate variable for results2
-        filename = filename.contains(SHARP)
-                ? filename.substring(0, filename.indexOf(SHARP))
-                        : filename;
-
-
-        return new File(filename).exists();
-
-    }
-
-    /**
      * Get filename from a path.
      * 
      * @param aURLString Windows, UNIX, or URI path, may contain hash fragment

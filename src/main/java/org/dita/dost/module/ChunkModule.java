@@ -243,7 +243,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 final String targetPath = conflictTable.get(entry.getKey());
                 if (targetPath != null) {
                     final File target = new File(targetPath);
-                    if (!fileExists(target.getAbsolutePath())) {
+                    if (!target.getAbsoluteFile().exists()) {
                         // newly chunked file
                         final File from = new File(entry.getValue());
                         String relativePath = getRelativePath(xmlDitalist.getAbsolutePath(), from.getAbsolutePath(), File.separator);

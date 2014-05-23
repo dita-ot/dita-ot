@@ -72,9 +72,9 @@ public final class DelayConrefUtils {
      * @param id topic id
      * @return true if id find and false otherwise
      */
-    public boolean findTopicId(final String absolutePathToFile, final String id) {
+    public boolean findTopicId(final File absolutePathToFile, final String id) {
 
-        if(!FileUtils.fileExists(absolutePathToFile)){
+        if(!absolutePathToFile.exists()){
             return false;
         }
         try {

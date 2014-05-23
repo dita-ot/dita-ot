@@ -335,12 +335,6 @@ public class TestFileUtils {
         assertEquals("", FileUtils.getBaseName("a/b/c/"));
     }
 
-    @Test
-    public void testFileExists() {
-        assertTrue(FileUtils.fileExists(new File(srcDir, "ibmrnr.txt").getPath()));
-        assertTrue(FileUtils.fileExists(new File(srcDir, "ibmrnr.txt#topicid").getPath()));
-        assertFalse(FileUtils.fileExists(new File(srcDir, "ibmrnr").getPath()));
-    }
     
     @Test
     public void testDeriveFilename() {

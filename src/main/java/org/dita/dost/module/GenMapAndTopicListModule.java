@@ -1070,9 +1070,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
         
         // Output relation-graph
-        writeMapToXML(listFilter.getRelationshipGrap(), FILE_NAME_SUBJECT_RELATION);
+        writeMapToXML(listFilter.getRelationshipGrap(), new File(FILE_NAME_SUBJECT_RELATION));
         // Output topic-scheme dictionary
-        writeMapToXML(schemeDictionary, FILE_NAME_SUBJECT_DICTIONARY);
+        writeMapToXML(schemeDictionary, new File(FILE_NAME_SUBJECT_DICTIONARY));
 
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // Output plugin id
@@ -1140,9 +1140,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * separated lists.</p>
      * 
      * @param m map to serialize
-     * @param filename output filename
+     * @param filename output filename, relative to temporary directory
      */
-    private void writeMapToXML(final Map<File, Set<File>> m, final String filename) {
+    private void writeMapToXML(final Map<File, Set<File>> m, final File filename) {
         if (m == null) {
             return;
         }
@@ -1152,7 +1152,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             final String value = StringUtils.join(entry.getValue(), COMMA);
             prop.setProperty(key.getPath(), value);
         }
-        final File outputFile = new File(job.tempDir, filename);
+        final File outputFile = new File(job.tempDir, filename.getPath());
         OutputStream os = null;
         try {
             os = new FileOutputStream(outputFile);

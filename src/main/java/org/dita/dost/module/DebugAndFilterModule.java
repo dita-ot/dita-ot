@@ -141,7 +141,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             job.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)));
             fileWriter.setJob(job);
 
-            final Map<File, Set<File>> dic = readMapFromXML(FILE_NAME_SUBJECT_DICTIONARY);
+            final Map<File, Set<File>> dic = readMapFromXML(new File(FILE_NAME_SUBJECT_DICTIONARY));
 
             for (final FileInfo f: job.getFileInfo()) {
                 if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)
@@ -202,8 +202,8 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * 
      * @param filename XML properties file path, relative to temporary directory
      */
-    private Map<File, Set<File>> readMapFromXML(final String filename) {
-        final File inputFile = new File(job.tempDir, filename);
+    private Map<File, Set<File>> readMapFromXML(final File filename) {
+        final File inputFile = new File(job.tempDir, filename.getPath());
         final Map<File, Set<File>> graph = new HashMap<File, Set<File>>();
         if (!inputFile.exists()) {
             return Collections.EMPTY_MAP;
@@ -245,7 +245,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if generation files
      */
     private void outputSubjectScheme() throws DITAOTException {
-        final Map<File, Set<File>> graph = readMapFromXML(FILE_NAME_SUBJECT_RELATION);
+        final Map<File, Set<File>> graph = readMapFromXML(new File(FILE_NAME_SUBJECT_RELATION));
 
         final Queue<File> queue = new LinkedList<File>(graph.keySet());
         final Set<File> visitedSet = new HashSet<File>();
