@@ -178,6 +178,7 @@
         <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
         <param name="outputdir" location="${output.dir}"/>
         <param name="transtype" value="${transtype}"/>
+        <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
       </module>
     </pipeline>

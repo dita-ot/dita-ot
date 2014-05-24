@@ -74,6 +74,8 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     
     /** Absolute input map path. */
     private File inputMap = null;
+    /** use grammar pool cache */
+    private boolean gramcache = true;
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -93,6 +95,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 }
 
             }
+            gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
             
             /* Absolute input directory path. */
             File inputDir = new File(job.getInputDir());
@@ -121,7 +124,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             try{
                 final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
                 boolean setSystemid = true;
-                fileWriter.initXMLReader(ditaDir.getAbsoluteFile(),xmlValidate, setSystemid);
+                fileWriter.initXMLReader(ditaDir.getAbsoluteFile(),xmlValidate, setSystemid, gramcache);
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);
             }

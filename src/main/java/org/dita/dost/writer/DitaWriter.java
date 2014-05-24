@@ -30,6 +30,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.Locator;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -239,9 +240,10 @@ public final class DitaWriter extends AbstractXMLFilter {
      * Initialize XML reader used for pipeline parsing.
      * @param ditaDir ditaDir
      * @param validate whether validate
+     * @param gramcache use grammar pool cache
      * @throws SAXException SAXException
      */
-    public void initXMLReader(final File ditaDir, final boolean validate, final boolean arg_setSystemid) throws SAXException {
+    public void initXMLReader(final File ditaDir, final boolean validate, final boolean arg_setSystemid, final boolean gramcache) throws SAXException {
         CatalogUtils.setDitaDir(ditaDir);
         try {
             reader = StringUtils.getXMLReader();
@@ -261,28 +263,21 @@ public final class DitaWriter extends AbstractXMLFilter {
         } catch (final Exception e) {
             throw new SAXException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
-        setGrammarPool(reader);
-        setSystemid = arg_setSystemid;
-    }
-    
-    /**
-     * Sets the grammar pool on the parser. Note that this is a Xerces-specific
-     * feature.
-     * @param reader
-     */
-    public void setGrammarPool(final XMLReader reader) {
-        try {
-            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", GrammarPoolManager.getGrammarPool());
-            logger.info("Using Xerces grammar pool for DTD and schema caching.");
-        } catch (final NoClassDefFoundError e) {
-            logger.debug("Xerces not available, not using grammar caching");
-        } catch (final SAXNotRecognizedException e) {
-            e.printStackTrace();
-            logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-        } catch (final SAXNotSupportedException e) {
-            e.printStackTrace();
-            logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+        if (gramcache) {
+            GrammarPoolManager.setGramCache(gramcache);
+            final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
+            try {
+                reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
+                logger.info("Using Xerces grammar pool for DTD and schema caching.");
+            } catch (final NoClassDefFoundError e) {
+                logger.debug("Xerces not available, not using grammar caching");
+            } catch (final SAXNotRecognizedException e) {
+                logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+            } catch (final SAXNotSupportedException e) {
+                logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+            }
         }
+        setSystemid = arg_setSystemid;
     }
 
     /**

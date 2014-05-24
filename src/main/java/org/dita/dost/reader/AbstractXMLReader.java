@@ -34,26 +34,6 @@ import org.xml.sax.ext.LexicalHandler;
 public abstract class AbstractXMLReader implements AbstractReader,
 ContentHandler, LexicalHandler, EntityResolver {
 
-    /**
-     * Sets the grammar pool on the parser. Note that this is a Xerces-specific
-     * feature.
-     * @param reader
-     */
-    public void setGrammarPool(final XMLReader reader) {
-        try {
-            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", GrammarPoolManager.getGrammarPool());
-            logger.info("Using Xerces grammar pool for DTD and schema caching.");
-        } catch (final NoClassDefFoundError e) {
-            logger.debug("Xerces not available, not using grammar caching");
-        } catch (final SAXNotRecognizedException e) {
-            e.printStackTrace();
-            logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-        } catch (final SAXNotSupportedException e) {
-            e.printStackTrace();
-            logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-        }
-    }
-
     protected DITAOTLogger logger;
 
     @Override
