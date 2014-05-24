@@ -93,7 +93,7 @@ public class TestDitaWriter {
 
         writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
-        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
+        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true, true);
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
