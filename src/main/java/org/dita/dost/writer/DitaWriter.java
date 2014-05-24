@@ -264,7 +264,6 @@ public final class DitaWriter extends AbstractXMLFilter {
             throw new SAXException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
         if (gramcache) {
-            GrammarPoolManager.setGramCache(gramcache);
             final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
             try {
                 reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);

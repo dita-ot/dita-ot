@@ -20,7 +20,6 @@ import org.apache.xerces.xni.grammars.XMLGrammarDescription;
  */
 public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
 
-    private boolean gramCache = true;
     private static final Grammar[] INITIAL_GRAMMAR_SET = new Grammar[0];
 
 
@@ -29,16 +28,11 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
         super();
     }
 
-    /** Constructs a grammar pool with a default number of buckets. */
-    public XMLGrammarPoolImplUtils(final boolean gramCache) {
-        super();
-        this.gramCache = gramCache;
-    }
-
     /** Constructs a grammar pool with a specified number of buckets. */
     public XMLGrammarPoolImplUtils(final int initialCapacity) {
         super(initialCapacity);
     }
+
     /**
      * @see org.apache.xerces.xni.grammars.XMLGrammarPool#retrieveInitialGrammarSet(String)
      */
@@ -81,20 +75,14 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
     @Override
     public boolean equals(final XMLGrammarDescription desc1,
             final XMLGrammarDescription desc2) {
-        //grammar pool caching enabled.
-        if (gramCache) {
-            if (desc1 instanceof XSDDescription
-                    && desc2 instanceof XSDDescription) {
+        if (desc1 instanceof XSDDescription
+                && desc2 instanceof XSDDescription) {
 //                return desc1.getLiteralSystemId().equals(
 //                        desc2.getLiteralSystemId());
-            	// always return false for XSD grammar to disable XSD grammar caching
-            	return false;
-            } else {
-                return desc1.equals(desc2);
-            }
-        }else{
-            //disabled
+            // always return false for XSD grammar to disable XSD grammar caching
             return false;
+        } else {
+            return desc1.equals(desc2);
         }
     }
 

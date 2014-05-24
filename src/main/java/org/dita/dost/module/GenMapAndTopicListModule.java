@@ -319,9 +319,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             final String msg = MessageUtils.getInstance().getMessage("DOTJ037W").toString();
             logger.warn(msg);
         }
-        // set grammar pool flag
         if (gramcache) {
-            GrammarPoolManager.setGramCache(gramcache);
             final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
             try {
                 reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
