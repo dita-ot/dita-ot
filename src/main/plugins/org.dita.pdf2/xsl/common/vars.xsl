@@ -47,6 +47,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:call-template>
   </xsl:template>
 
+  <!-- Support legacy variable namespace -->
   <xsl:template match="opentopic-vars:variable" mode="processVariableBody">
     <xsl:param name="params"/>
     
@@ -65,17 +66,10 @@ See the accompanying license.txt file for applicable licenses.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <!--Using default template-->
-          <xsl:apply-templates select="." mode="default"/>
+          <xsl:copy-of select="."/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
   </xsl:template>
   
-  <xsl:template match="@* | node()" mode="default">
-    <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="default"/>
-    </xsl:copy>
-  </xsl:template>
-
 </xsl:stylesheet>

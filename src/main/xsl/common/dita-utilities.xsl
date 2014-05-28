@@ -140,10 +140,32 @@
     </xsl:choose>    
   </xsl:template>
   
+  <!-- Support legacy variable syntax -->
   <xsl:template match="str" mode="processVariableBody">
-    <xsl:param name="params" as="element()*"/>
+    <xsl:param name="params"/>
+    <xsl:copy-of select="node()"/>
+  </xsl:template>
+
+  <xsl:template match="variable" mode="processVariableBody">
+    <xsl:param name="params"/>
     
-    <xsl:value-of select="."/>
+    <xsl:for-each select="node()">
+      <xsl:choose>
+        <xsl:when test="self::param">
+          <xsl:variable name="param-name" select="@ref-name"/>
+          <xsl:copy-of select="$params[name() = $param-name]/node()"/>
+        </xsl:when>
+        <xsl:when test="self::variableref">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="@refid"/>
+            <xsl:with-param name="params" select="$params"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:copy-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
   </xsl:template>
     
   <xsl:template name="length-to-pixels">
