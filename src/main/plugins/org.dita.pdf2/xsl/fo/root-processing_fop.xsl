@@ -16,16 +16,7 @@
       <xsl:call-template name="createLayoutMasters"/>
       <xsl:call-template name="createMetadata"/>
       <xsl:call-template name="createBookmarks"/>
-      <xsl:call-template name="createFrontMatter"/>
-      <xsl:if test="not($retain-bookmap-order)">
-        <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
-        <xsl:call-template name="createToc"/>
-      </xsl:if>
-      <xsl:apply-templates/>      
-      <xsl:if test="not($retain-bookmap-order)">
-        <xsl:call-template name="createIndex"/>
-      </xsl:if>
-      <xsl:call-template name="createBackCover"/>
+      <xsl:apply-templates select="*" mode="generatePageSequences"/>
     </fo:root>
   </xsl:template>
   

@@ -40,7 +40,7 @@
   
   <!--   LOT   -->
   
-  <xsl:template match="ot-placeholder:tablelist">
+  <xsl:template match="ot-placeholder:tablelist" name="createTableList">
     <xsl:if test="//*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
       <!--exists tables with titles-->
       <fo:page-sequence master-reference="toc-sequence" format="1" xsl:use-attribute-sets="__force__page__count">
@@ -115,7 +115,7 @@
 
   <!--   LOF   -->
   
-  <xsl:template match="ot-placeholder:figurelist">
+  <xsl:template match="ot-placeholder:figurelist" name="createFigureList">
       <xsl:if test="//*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
         <!--exists figures with titles-->
         <fo:page-sequence master-reference="toc-sequence" format="1" xsl:use-attribute-sets="__force__page__count">
