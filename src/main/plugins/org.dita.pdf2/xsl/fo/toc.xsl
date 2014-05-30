@@ -36,8 +36,9 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+    xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    exclude-result-prefixes="xs opentopic opentopic-func ot-placeholder"
+    exclude-result-prefixes="xs opentopic opentopic-func ot-placeholder opentopic-index"
     version="2.0">
   
     <xsl:variable name="map" select="//opentopic:map"/>
@@ -65,7 +66,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]"/>
             <xsl:choose>
               <!-- In a future version, suppressing Notices in the TOC should not be hard-coded. -->
-              <xsl:when test="$mapTopicref/self::*[contains(@class, ' bookmap/notices ')]"/>
+              <xsl:when test="$retain-bookmap-order and $mapTopicref/self::*[contains(@class, ' bookmap/notices ')]"/>
               <xsl:when test="$mapTopicref[@toc = 'yes' or not(@toc)] or
                               (not($mapTopicref) and $include = 'true')">
                     <fo:block xsl:use-attribute-sets="__toc__indent">
@@ -278,6 +279,27 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:template match="ot-placeholder:toc[$retain-bookmap-order]">
     <xsl:call-template name="createToc"/>
+  </xsl:template>
+    
+  <xsl:template match="ot-placeholder:indexlist" mode="toc">
+    <fo:block>foobar index</fo:block>
+    <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (exists($index-entries//opentopic-index:index.entry))">
+      <fo:block xsl:use-attribute-sets="__toc__indent__booklist">
+        <fo:block xsl:use-attribute-sets="__toc__topic__content__booklist">
+          <fo:basic-link internal-destination="{$id.index}" xsl:use-attribute-sets="__toc__link">
+            <fo:inline xsl:use-attribute-sets="__toc__title">
+              <xsl:call-template name="insertVariable">
+                <xsl:with-param name="theVariableID" select="'Index'"/>
+              </xsl:call-template>
+            </fo:inline>
+            <fo:inline xsl:use-attribute-sets="__toc__page-number">
+              <fo:leader xsl:use-attribute-sets="__toc__leader"/>
+              <fo:page-number-citation ref-id="{$id.index}"/>
+            </fo:inline>
+          </fo:basic-link>
+        </fo:block>
+      </fo:block>
+    </xsl:if>
   </xsl:template>
     
     <xsl:template match="ot-placeholder:glossarylist" mode="toc">

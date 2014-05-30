@@ -104,26 +104,6 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:import href="flagging.xsl"/>
 
-    <!-- Parameters in the following group are always passed in from Ant. -->
-    <xsl:param name="locale"/>
-    <xsl:param name="customizationDir.url"/>
-    <xsl:param name="artworkPrefix"/>
-    <xsl:param name="publishRequiredCleanup"/>
-    <xsl:param name="DRAFT"/>
-    <xsl:param name="output.dir.url"/>
-    <xsl:param name="work.dir.url"/>
-    <xsl:param name="input.dir.url"/>
-    <xsl:param name="pdfFormatter" select="'fop'"/>
-
-    <!-- Parameters in the following group are passed in from Ant only to
-         change defaults for related XSLT parameters. -->
-    <xsl:param name="antArgsBookmarkStyle"/>
-    <xsl:param name="antArgsChapterLayout"/>
-    <xsl:param name="include.rellinks"/>
-    <xsl:param name="antArgsGenerateTaskLabels"/>
-
-    <!-- Remaining parameters are not passed in with the default Ant code. -->
-    <xsl:param name="tocMaximumLevel" select="4"/>
 
     <xsl:output method="xml" encoding="utf-8" indent="no"/>
 

@@ -355,6 +355,18 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:choose>
     </xsl:for-each>
   </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/glossarylist ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:choose>
+        <xsl:when test="self::ot-placeholder:glossarylist">
+          <xsl:call-template name="createGlossary"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="processTopicSimple"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
   <xsl:template match="*[contains(@class, ' bookmap/notices ')]" mode="generatePageSequences">
     <xsl:for-each select="key('topic-id', @id)">
       <xsl:call-template name="processTopicNotices"/>

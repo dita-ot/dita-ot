@@ -332,7 +332,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/related-links ')]">
-        <xsl:if test="normalize-space($includeRelatedLinkRoles)">
+        <xsl:if test="exists($includeRelatedLinkRoles)">
             <xsl:variable name="topicType">
                 <xsl:for-each select="parent::*">
                     <xsl:call-template name="determineTopicType"/>
@@ -388,8 +388,8 @@ See the accompanying license.txt file for applicable licenses.
           </xsl:for-each>
       </xsl:param>
       <xsl:choose>
-        <xsl:when test="(@role and not(contains($includeRelatedLinkRoles, concat(' ', @role, ' ')))) or
-                        (not(@role) and not(contains($includeRelatedLinkRoles, ' #default ')))"/>
+        <xsl:when test="(@role and not($includeRelatedLinkRoles = @role)) or
+                        (not(@role) and not($includeRelatedLinkRoles = '#default'))"/>
         <xsl:when test="@role='child' and $chapterLayout='MINITOC' and
                         ($topicType='topicChapter' or $topicType='topicAppendix' or $topicType='topicPart')">
           <!-- When a minitoc already links to children, do not add them here -->
