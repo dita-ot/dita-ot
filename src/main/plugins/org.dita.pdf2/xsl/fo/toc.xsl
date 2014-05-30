@@ -282,7 +282,6 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
     
   <xsl:template match="ot-placeholder:indexlist" mode="toc">
-    <fo:block>foobar index</fo:block>
     <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (exists($index-entries//opentopic-index:index.entry))">
       <fo:block xsl:use-attribute-sets="__toc__indent__booklist">
         <fo:block xsl:use-attribute-sets="__toc__topic__content__booklist">
