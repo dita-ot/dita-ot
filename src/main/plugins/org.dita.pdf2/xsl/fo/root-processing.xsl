@@ -212,11 +212,21 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:variable name="map-based-page-sequence-generation" select="true()"/>
   
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="generatePageSequences">
+    <fo:page-sequence master-reference="ditamap-body-sequence" xsl:use-attribute-sets="__force__page__count">
+      <xsl:call-template name="startPageNumbering"/>
+      <xsl:call-template name="insertBodyStaticContents"/>
+      <fo:flow flow-name="xsl-region-body">
+        <xsl:apply-templates select="." mode="processTopic"/>
+      </fo:flow>
+    </fo:page-sequence>
+  </xsl:template>
+  
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="generatePageSequences">
+    <xsl:call-template name="createFrontMatter"/>
+    <xsl:call-template name="createToc"/>
     <xsl:choose>
       <xsl:when test="$map-based-page-sequence-generation">
-        <xsl:call-template name="createFrontMatter"/>
-        <xsl:call-template name="createToc"/>
         <fo:page-sequence master-reference="ditamap-body-sequence" xsl:use-attribute-sets="__force__page__count">
           <xsl:call-template name="startPageNumbering"/>
           <xsl:call-template name="insertBodyStaticContents"/>
@@ -228,28 +238,24 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:for-each>
           </fo:flow>
         </fo:page-sequence>
-        <xsl:call-template name="createBackCover"/>
       </xsl:when>
       <!-- legacy topic based page-sequence generation -->
       <xsl:otherwise>
-        <xsl:call-template name="createFrontMatter"/>
-        <xsl:call-template name="createToc"/>
         <xsl:apply-templates/>
-        <xsl:call-template name="createBackCover"/>
+        
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:call-template name="createBackCover"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' bookmap/bookmap ')]" mode="generatePageSequences" priority="10">
+    <xsl:call-template name="createFrontMatter"/>
     <xsl:choose>
       <xsl:when test="$map-based-page-sequence-generation">
-        <xsl:call-template name="createFrontMatter"/>
         <xsl:apply-templates select="opentopic:map/*[contains(@class, ' map/topicref ')]" mode="generatePageSequences"/>
-        <xsl:call-template name="createBackCover"/>
       </xsl:when>
       <!-- legacy topic based page-sequence generation -->
       <xsl:otherwise>
-        <xsl:call-template name="createFrontMatter"/>
         <xsl:if test="not($retain-bookmap-order)">
           <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
           <xsl:call-template name="createToc"/>
@@ -258,9 +264,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="not($retain-bookmap-order)">
           <xsl:call-template name="createIndex"/>
         </xsl:if>
-        <xsl:call-template name="createBackCover"/>
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:call-template name="createBackCover"/>
   </xsl:template>
   
   <xsl:template match="*" mode="generatePageSequences" priority="-1">
@@ -366,15 +372,6 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:template match="*[contains(@class, ' map/map ')]">
     <xsl:apply-templates/>
-  </xsl:template>
-  
-  <xsl:template match="document-node()[*[contains(@class, ' topic/topic ')]]">
-    <fo:root xsl:use-attribute-sets="__fo__root">
-      <xsl:call-template name="createMetadata"/>
-      <xsl:call-template name="createLayoutMasters"/>      
-      <xsl:call-template name="createBookmarks"/>
-      <xsl:apply-templates/>
-    </fo:root>
   </xsl:template>
 
 </xsl:stylesheet>

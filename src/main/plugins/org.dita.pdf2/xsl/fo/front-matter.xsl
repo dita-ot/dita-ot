@@ -76,6 +76,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="map" select="//opentopic:map"/>
 
     <xsl:template name="createFrontMatter">
+      <xsl:if test="$generate-front-cover">
         <fo:page-sequence master-reference="front-matter" xsl:use-attribute-sets="__force__page__count">
             <xsl:call-template name="insertFrontMatterStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
@@ -84,6 +85,7 @@ See the accompanying license.txt file for applicable licenses.
               </fo:block-container>
             </fo:flow>
         </fo:page-sequence>
+      </xsl:if>
     </xsl:template>
   
   <xsl:template name="createFrontCoverContents">

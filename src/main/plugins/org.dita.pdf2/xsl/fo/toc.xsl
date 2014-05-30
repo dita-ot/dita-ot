@@ -233,6 +233,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="createToc">
+      <xsl:if test="$generate-toc">
         <xsl:variable name="toc">
             <xsl:choose>
                 <xsl:when test="$map//*[contains(@class,' bookmap/toc ')][@href]"/>
@@ -260,6 +261,7 @@ See the accompanying license.txt file for applicable licenses.
                 </fo:flow>
             </fo:page-sequence>
         </xsl:if>
+      </xsl:if>
     </xsl:template>
 
     <xsl:template name="processTocList">
