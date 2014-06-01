@@ -1773,6 +1773,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
 
         <xsl:choose>
+            <xsl:when test="empty(@href)"/>
             <xsl:when test="not(@placement = 'inline')">
                     <fo:block xsl:use-attribute-sets="image__block">
                         <xsl:call-template name="commonattributes"/>
