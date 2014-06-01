@@ -183,6 +183,12 @@
           <li>#1641 Legacy PDF doesn't work (DITA OT 1.8M2) (maintenance 4)</li>
           <li>#1645 Conversion of File to URL is not properly done in several places (maintenance 4)</li>
           <li>#1647 Illegal file separator used in created URI (DITA OT 1.8M2) (maintenance 4)</li>
+          <li>#1103 DITA-OT doesn't rewite lq/@href (maintenance 5)</li>
+          <li>#1189 PDF generation does not work with glossentry (maintenance 5)</li>
+          <li>#1653 2 invalid URI mappings in "DITA-OT/plugins/org.dita.pdf2/cfg/catalog.xml" (DOT 1.8.4) (maintenance 5)</li>
+          <li>#1663 Treat non-DITA links as external  (maintenance 5)</li>
+          <li>#1665 NullPointerException with incorrect conkeyref (maintenance 5)</li>
+          <li>#1675 Image without an @href attribute generates error in XSLT stylesheet for PDF transformation (DOT 1.8) (maintenance 5)</li>
         </ul>
       </section>
     </refbody>
