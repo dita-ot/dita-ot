@@ -350,7 +350,7 @@ with those set forth herein.
     <makeurl property="artworkPrefixUrl" file="${artworkPrefix}"/>
     <makeurl property="dita.map.output.dir.url" file="${pdf2.temp.dir}" validate="no"/>
     <makeurl property="work.dir.url" file="${dita.temp.dir}" validate="no"/>
-    <makeurl property="customization.dir.url" file="${customization.dir}"/>
+    <makeurl property="customization.dir.url" file="${customization.dir}" validate="no"/>
     <makeurl property="user.input.dir.url" file="${user.input.dir}"/>    
     <makeurl property="variable.file.url" file="${variable.file}" validate="no"/>
 
@@ -358,7 +358,7 @@ with those set forth herein.
           in="${dita.temp.dir}/stage1a.xml"
           out="${dita.temp.dir}/stage2.fo">
       <param name="locale" expression="${document.locale}"/>
-      <param name="customizationDir.url" expression="${customization.dir.url}"/>
+      <param name="customizationDir.url" expression="${customization.dir.url}" if="customization.dir"/>
       <param name="input.dir.url" expression="${user.input.dir.url}"/>
       <param name="DRAFT" expression="${args.draft}"/>
       <param name="output.dir.url" expression="${dita.map.output.dir.url}"/>
