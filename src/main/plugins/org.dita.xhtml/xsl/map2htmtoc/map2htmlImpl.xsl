@@ -22,11 +22,13 @@
     <xsl:if test="descendant::*[contains(@class, ' map/topicref ')]
                                [not(@toc = 'no')]
                                [not(@processing-role = 'resource-only')]">
-      <ul>
-        <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
-          <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
-        </xsl:apply-templates>
-      </ul>
+      <nav>
+        <ul>
+          <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
+            <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+          </xsl:apply-templates>
+        </ul>
+      </nav>
     </xsl:if>
   </xsl:template>
 

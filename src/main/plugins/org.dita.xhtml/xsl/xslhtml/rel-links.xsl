@@ -212,7 +212,7 @@
 
   <!--main template for setting up all links after the body - applied to the related-links container-->
   <xsl:template match="*[contains(@class, ' topic/related-links ')]" name="topic.related-links">
-    <div>
+    <nav>
       <xsl:call-template name="commonattributes"/>
       <xsl:if test="$include.roles = ('child', 'descendant')">
         <xsl:call-template name="ul-child-links"/>
@@ -239,7 +239,7 @@
 
       <!--linklists - last but not least, create all the linklists and their links, with no sorting or re-ordering-->
       <xsl:apply-templates select="*[contains(@class, ' topic/linklist ')]"/>
-    </div>
+    </nav>
   </xsl:template>
 
 
