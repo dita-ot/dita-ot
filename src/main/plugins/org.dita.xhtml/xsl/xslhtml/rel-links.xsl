@@ -27,7 +27,7 @@
 
   <xsl:param name="NOPARENTLINK" select="'no'"/><!-- "no" and "yes" are valid values; non-'no' is ignored -->
   <xsl:param name="include.rellinks" select="'#default parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
-  <xsl:variable name="include.roles" select="concat(' ', normalize-space($include.rellinks), ' ')" as="xs:string"/>
+  <xsl:variable name="include.roles" select="tokenize(normalize-space($include.rellinks), '\s+')" as="xs:string*"/>
 
   <xsl:function name="related-links:link" as="xs:string">
     <xsl:param name="link" as="element()"/>
@@ -143,42 +143,36 @@
     <xsl:for-each select="descendant-or-self::*[contains(@class, ' topic/related-links ') or contains(@class, ' topic/linkpool ')][*[@role = 'ancestor']]">
       <xsl:value-of select="$newline"/>
       <div class="breadcrumb">
-        <xsl:if test="contains($include.roles, ' previous ')">
-          <xsl:choose>
-            <!--output previous link first, if it exists-->
-            <xsl:when test="*[@href][@role = 'previous']">
-              <xsl:apply-templates select="*[@href][@role = 'previous'][1]" mode="breadcrumb"/>
-            </xsl:when>
-            <xsl:otherwise/>
-          </xsl:choose>
+        <xsl:if test="$include.roles = 'previous'">
+          <!--output previous link first, if it exists-->
+          <xsl:if test="*[@href][@role = 'previous']">
+            <xsl:apply-templates select="*[@href][@role = 'previous'][1]" mode="breadcrumb"/>
+          </xsl:if>
         </xsl:if>
         <!--if both previous and next links exist, output a separator bar-->
-        <xsl:if test="contains($include.roles, ' next ') and contains($include.roles, ' next ')">
+        <xsl:if test="$include.roles = 'previous' and $include.roles = 'next'">
           <xsl:if test="*[@href][@role = 'next'] and *[@href][@role = 'previous']">
             <xsl:text> | </xsl:text>
           </xsl:if>
         </xsl:if>
-        <xsl:if test="contains($include.roles, ' next ')">
-          <xsl:choose>
-            <!--output next link, if it exists-->
-            <xsl:when test="*[@href][@role = 'next']">
-              <xsl:apply-templates select="*[@href][@role = 'next'][1]" mode="breadcrumb"/>
-            </xsl:when>
-            <xsl:otherwise/>
-          </xsl:choose>
+        <xsl:if test="$include.roles = 'next'">
+          <!--output next link, if it exists-->
+          <xsl:if test="*[@href][@role = 'next']">
+            <xsl:apply-templates select="*[@href][@role = 'next'][1]" mode="breadcrumb"/>
+          </xsl:if>
         </xsl:if>
-        <xsl:if test="contains($include.roles, ' next ') and contains($include.roles, ' next ') and contains($include.roles, ' ancestor ')">
+        <xsl:if test="$include.roles = 'previous' and $include.roles = 'next' and $include.roles = 'ancestor'">
           <!--if we have either next or previous, plus ancestors, separate the next/prev from the ancestors with a vertical bar-->
           <xsl:if test="(*[@href][@role = 'next'] or *[@href][@role = 'previous']) and *[@href][@role = 'ancestor']">
             <xsl:text> | </xsl:text>
           </xsl:if>
         </xsl:if>
-        <xsl:if test="contains($include.roles, ' ancestor ')">
+        <xsl:if test="$include.roles = 'ancestor'">
           <!--if ancestors exist, output them, and include a greater-than symbol after each one, including a trailing one-->
-          <xsl:if test="*[@href][@role = 'ancestor']">
-            <xsl:for-each select="*[@href][@role = 'ancestor']">
-              <xsl:apply-templates select="."/> &gt; </xsl:for-each>
-          </xsl:if>
+          <xsl:for-each select="*[@href][@role = 'ancestor']">
+            <xsl:apply-templates select="."/>
+            <xsl:text> &gt; </xsl:text>
+          </xsl:for-each>
         </xsl:if>
       </div>
       <xsl:value-of select="$newline"/>
@@ -220,14 +214,14 @@
   <xsl:template match="*[contains(@class, ' topic/related-links ')]" name="topic.related-links">
     <div>
       <xsl:call-template name="commonattributes"/>
-      <xsl:if test="contains($include.roles, ' child ') or contains($include.roles, ' descendant ')">
+      <xsl:if test="$include.roles = ('child', 'descendant')">
         <xsl:call-template name="ul-child-links"/>
         <!--handle child/descendants outside of linklists in collection-type=unordered or choice-->
 
         <xsl:call-template name="ol-child-links"/>
         <!--handle child/descendants outside of linklists in collection-type=ordered/sequence-->
       </xsl:if>
-      <xsl:if test="contains($include.roles, ' next ') or contains($include.roles, ' previous ') or contains($include.roles, ' parent ')">
+      <xsl:if test="$include.roles = ('next', 'previous', 'parent')">
         <xsl:call-template name="next-prev-parent-links"/>
         <!--handle next and previous links-->
       </xsl:if>
@@ -302,7 +296,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
       <div class="familylinks">
         <xsl:value-of select="$newline"/>
 
-        <xsl:if test="$NOPARENTLINK = 'no' and contains($include.roles, ' parent ')">
+        <xsl:if test="$NOPARENTLINK = 'no' and $include.roles = 'parent'">
           <xsl:choose>
             <xsl:when test="*[@href][@role = 'parent']">
               <xsl:for-each select="*[@href][@role = 'parent']">
@@ -323,7 +317,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
           </xsl:choose>
         </xsl:if>
 
-        <xsl:if test="contains($include.roles, ' previous ')">
+        <xsl:if test="$include.roles = 'previous'">
           <xsl:for-each select="*[@href][@role = 'previous']">
             <div class="previouslink">
               <xsl:apply-templates select="."/>
@@ -331,7 +325,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
             <xsl:value-of select="$newline"/>
           </xsl:for-each>
         </xsl:if>
-        <xsl:if test="contains($include.roles, ' next ')">
+        <xsl:if test="$include.roles = 'next'">
           <xsl:for-each select="*[@href][@role = 'next']">
             <div class="nextlink">
               <xsl:apply-templates select="."/>
@@ -611,7 +605,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <xsl:template match="*[contains(@class, ' topic/link ')]" name="topic.link">
     <xsl:if test="(@role and contains($include.roles, concat(' ', @role, ' '))) or
-                  (empty(@role) and contains($include.roles, ' #default '))">
+                  (empty(@role) and $include.roles = '#default')">
       <xsl:choose>
         <!-- Linklist links put out <br/> in "processlinklist" -->
         <xsl:when test="ancestor::*[contains(@class, ' topic/linklist ')]">
