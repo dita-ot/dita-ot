@@ -66,6 +66,13 @@
                                  normalize-space(string-join($link/*, ' ')))"/>
   </xsl:function>
 
+  <xsl:function name="related-links:omit-from-unordered-links" as="xs:boolean">
+    <xsl:param name="node"/>
+    <xsl:sequence select="$node/@role = ('child', 'descendant', 'next', 'previous', 'parent') or
+                          $node[@importance = 'required' and (empty(@role) or @role = ('sibling', 'friend', 'cousin'))] or
+                          $node/ancestor::*[contains(@class, ' topic/linklist ')]"/>
+  </xsl:function>
+  
   <!-- ========== Hooks for common user customizations ============== -->
   <!-- The following two templates are available for anybody who needs
      to put out an token at the start or end of a link, such as an
@@ -205,11 +212,6 @@
 
   </xsl:template>
 
-  <!-- Omit prereq links from unordered related-links (handled by mode="prereqs" template). -->
-  <xsl:key name="omit-from-unordered-links"
-           match="*[@importance = 'required' and (empty(@role) or @role = ('sibling', 'friend', 'cousin'))]"
-           use="1"/>
-
   <!--main template for setting up all links after the body - applied to the related-links container-->
   <xsl:template match="*[contains(@class, ' topic/related-links ')]" name="topic.related-links">
     <nav>
@@ -231,10 +233,9 @@
              creating group titles and formatting links is located in XSL files specific to each type. -->
       <xsl:apply-templates select="." mode="related-links:group-unordered-links">
         <xsl:with-param name="nodes"
-          select="descendant::*[contains(@class, ' topic/link ')]
-       [count(. | key('omit-from-unordered-links', 1)) != count(key('omit-from-unordered-links', 1))]
-       [generate-id(.) = generate-id(key('hideduplicates', related-links:hideduplicates(.))[1])]"
-        />
+                        select="descendant::*[contains(@class, ' topic/link ')]
+                                             [not(related-links:omit-from-unordered-links(.))]
+                                             [generate-id(.) = generate-id(key('hideduplicates', related-links:hideduplicates(.))[1])]"/>
       </xsl:apply-templates>
 
       <!--linklists - last but not least, create all the linklists and their links, with no sorting or re-ordering-->
@@ -246,18 +247,17 @@
   <!--children links - handle all child or descendant links except those in linklists or ordered collection-types.
 Each child is indented, the linktext is bold, and the shortdesc appears in normal text directly below the link, to create a summary-like appearance.-->
   <xsl:template name="ul-child-links">
-    <xsl:if
-      test="descendant::*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')][not(parent::*/@collection-type = 'sequence')][not(ancestor::*[contains(@class, ' topic/linklist ')])]">
+    <xsl:variable name="children"
+                  select="descendant::*[contains(@class, ' topic/link ')]
+                                       [@role = ('child', 'descendant')]
+                                       [not(parent::*/@collection-type = 'sequence')]
+                                       [not(ancestor::*[contains(@class, ' topic/linklist ')])]"/>
+    <xsl:if test="$children">
       <xsl:value-of select="$newline"/>
       <ul class="ullinks">
         <xsl:value-of select="$newline"/>
         <!--once you've tested that at least one child/descendant exists, apply templates to only the unique ones-->
-        <xsl:apply-templates select="descendant::*[generate-id(.) = generate-id(key('link', related-links:link(.))[1])]
-                                                  [contains(@class, ' topic/link ')]
-                                                  [@role = ('child', 'descendant')]
-                                                  [not(parent::*/@collection-type = 'sequence')]
-                                                  [not(ancestor::*[contains(@class, ' topic/linklist ')])]"
-        />
+        <xsl:apply-templates select="$children[generate-id(.) = generate-id(key('link', related-links:link(.))[1])]"/>
       </ul>
       <xsl:value-of select="$newline"/>
     </xsl:if>
@@ -267,25 +267,21 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
   Children are displayed in a numbered list, with the target title as the cmd and the shortdesc as info, like a task.
   -->
   <xsl:template name="ol-child-links">
-    <xsl:if test="descendant::*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')][parent::*/@collection-type = 'sequence'][not(ancestor::*[contains(@class, ' topic/linklist ')])]">
+    <xsl:variable name="children"
+                  select="descendant::*[contains(@class, ' topic/link ')]
+                                       [@role = ('child', 'descendant')]
+                                       [parent::*/@collection-type = 'sequence']
+                                       [not(ancestor::*[contains(@class, ' topic/linklist ')])]"/>
+    <xsl:if test="$children">
       <xsl:value-of select="$newline"/>
       <ol class="olchildlinks">
         <xsl:value-of select="$newline"/>
         <!--once you've tested that at least one child/descendant exists, apply templates to only the unique ones-->
-        <xsl:apply-templates select="descendant::*[generate-id(.) = generate-id(key('link', related-links:link(.))[1])]
-                                                  [contains(@class, ' topic/link ')]
-                                                  [@role = ('child', 'descendant')]
-                                                  [parent::*/@collection-type = 'sequence']
-                                                  [not(ancestor-or-self::*[contains(@class, ' topic/linklist ')])]"
-        />
+        <xsl:apply-templates select="$children[generate-id(.) = generate-id(key('link', related-links:link(.))[1])]"/>
       </ol>
       <xsl:value-of select="$newline"/>
     </xsl:if>
   </xsl:template>
-
-  <!-- Omit child and descendant links from unordered related-links (handled by ul-child-links and ol-child-links). -->
-  <xsl:key name="omit-from-unordered-links" match="*[@role = 'child']" use="1"/>
-  <xsl:key name="omit-from-unordered-links" match="*[@role = 'descendant']" use="1"/>
 
   <!--create the next and previous links, with accompanying parent link if any; create group for each unique parent, as well as for any next and previous links that aren't in the same group as a parent-->
   <xsl:template name="next-prev-parent-links">
@@ -338,11 +334,6 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     </xsl:for-each>
   </xsl:template>
 
-  <!-- Omit child and descendant links from unordered related-links (handled by next-prev-parent-links). -->
-  <xsl:key name="omit-from-unordered-links" match="*[@role = 'next']" use="1"/>
-  <xsl:key name="omit-from-unordered-links" match="*[@role = 'previous']" use="1"/>
-  <xsl:key name="omit-from-unordered-links" match="*[@role = 'parent']" use="1"/>
-
   <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result.">
     <xsl:param name="links"/>
@@ -383,7 +374,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:choose>
       <xsl:when test="not(normalize-space(@href)) or empty(@href)"/>
       <!-- For non-DITA formats - use the href as is -->
-      <xsl:when test="(empty(@format) and (@type = 'external' or @scope = 'external')) or (@format and not(@format = 'dita'))">
+      <xsl:when test="(empty(@format) and @scope = 'external') or (@format and not(@format = 'dita'))">
         <xsl:value-of select="@href"/>
       </xsl:when>
       <!-- For DITA - process the internal href -->
@@ -604,7 +595,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/link ')]" name="topic.link">
-    <xsl:if test="(@role and contains($include.roles, concat(' ', @role, ' '))) or
+    <xsl:if test="(@role and $include.roles = @role) or
                   (empty(@role) and $include.roles = '#default')">
       <xsl:choose>
         <!-- Linklist links put out <br/> in "processlinklist" -->
@@ -712,9 +703,6 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     </xsl:choose>
     <xsl:value-of select="$newline"/>
   </xsl:template>
-
-  <!-- Omit any descendants of linklist from unordered related links (handled by topic.linklist template). -->
-  <xsl:key name="omit-from-unordered-links" match="*[ancestor::*[contains(@class, ' topic/linklist ')]]" use="1"/>
 
   <xsl:template name="processlinklist">
     <xsl:apply-templates select="." mode="processlinklist"/>
