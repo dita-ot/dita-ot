@@ -356,7 +356,7 @@
         <fo:block xsl:use-attribute-sets="table.title">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'Table'"/>
+                <xsl:with-param name="theVariableID" select="'Table.title'"/>
                 <xsl:with-param name="theParameters">
                     <number>
                         <xsl:number level="any" count="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" from="/"/>

@@ -764,7 +764,7 @@ See the accompanying license.txt file for applicable licenses.
         <fo:block xsl:use-attribute-sets="fig.title">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'Figure'"/>
+                <xsl:with-param name="theVariableID" select="'Figure.title'"/>
                 <xsl:with-param name="theParameters">
                     <number>
                         <xsl:number level="any" count="*[contains(@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ')]]" from="/"/>

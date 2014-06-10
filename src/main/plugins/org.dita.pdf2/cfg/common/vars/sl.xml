@@ -44,9 +44,9 @@ See the accompanying license.txt file for applicable licenses.
   
   <variable id="Notice">Objava</variable>
 
-  <variable id="Figure">Slika <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Figure.title">Slika <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Figure Number">Slika <param ref-name="number"/></variable>
-  <variable id="Table">Tabela <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Table.title">Tabela <param ref-name="number"/>: <param ref-name="title"/></variable>
   <variable id="Table Number">Tabela <param ref-name="number"/></variable>
   <variable id="Related Links">Sorodne povezave</variable>
   <variable id="Cross-Reference">Križni sklic na:</variable>

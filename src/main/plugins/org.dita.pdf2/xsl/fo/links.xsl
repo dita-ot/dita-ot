@@ -166,7 +166,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Figure'"/>
+            <xsl:with-param name="theVariableID" select="'Figure.title'"/>
             <xsl:with-param name="theParameters">
                 <number>
                     <xsl:value-of select="count(preceding::*[contains(@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ')]]) + 1"/>
@@ -204,7 +204,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Table'"/>
+            <xsl:with-param name="theVariableID" select="'Table.title'"/>
             <xsl:with-param name="theParameters">
                 <number>
                     <xsl:value-of select="count(preceding::*[contains(@class, ' topic/table ')][child::*[contains(@class, ' topic/title ')]]) + 1"/>

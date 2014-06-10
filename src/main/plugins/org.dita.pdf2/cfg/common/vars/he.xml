@@ -44,9 +44,9 @@
   
   <variable id="Notice"><!--TODO:Notice--></variable>
 
-  <variable id="Figure">איור <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Figure.title">איור <param ref-name="number"/>. <param ref-name="title"/></variable>
   <variable id="Figure Number">איור <param ref-name="number"/></variable>
-  <variable id="Table">טבלה <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Table.title">טבלה <param ref-name="number"/>. <param ref-name="title"/></variable>
   <variable id="Table Number">טבלה <param ref-name="number"/></variable>
   <variable id="Related Links"><!--TODO:Related Links--></variable>
   <variable id="Cross-Reference"><!--TODO:Cross-Reference to:--></variable>
