@@ -156,7 +156,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="theVariableID" select="'Figure Number'"/>
             <xsl:with-param name="theParameters">
                 <number>
-                    <xsl:value-of select="count(preceding::*[contains(@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ')]]) + 1"/>
+                    <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()]) + 1"/>
                 </number>
             </xsl:with-param>
           </xsl:call-template>
@@ -169,7 +169,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="theVariableID" select="'Figure.title'"/>
             <xsl:with-param name="theParameters">
                 <number>
-                    <xsl:value-of select="count(preceding::*[contains(@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ')]]) + 1"/>
+                    <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()]) + 1"/>
                 </number>
                 <title>
                     <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
@@ -194,7 +194,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="theVariableID" select="'Table Number'"/>
             <xsl:with-param name="theParameters">
                 <number>
-                    <xsl:value-of select="count(preceding::*[contains(@class, ' topic/table ')][child::*[contains(@class, ' topic/title ')]]) + 1"/>
+                    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()]) + 1"/>
                 </number>
             </xsl:with-param>
           </xsl:call-template>
@@ -207,7 +207,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="theVariableID" select="'Table.title'"/>
             <xsl:with-param name="theParameters">
                 <number>
-                    <xsl:value-of select="count(preceding::*[contains(@class, ' topic/table ')][child::*[contains(@class, ' topic/title ')]]) + 1"/>
+                    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()]) + 1"/>
                 </number>
                 <title>
                     <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
@@ -312,7 +312,9 @@ See the accompanying license.txt file for applicable licenses.
     <!-- xref to footnote makes a callout. -->
     <xsl:template match="*[contains(@class,' topic/xref ')][@type='fn']" priority="2">
         <xsl:variable name="href-fragment" select="substring-after(@href, '#')"/>
-        <xsl:variable name="footnote-target" select="//*[contains(@class, ' topic/fn ')][@id = substring-after($href-fragment, '/')][ancestor::*[contains(@class, ' topic/topic ')][1]/@id = substring-before($href-fragment, '/')]"/>
+        <xsl:variable name="elemId" select="substring-after($href-fragment, '/')"/>
+        <xsl:variable name="topicId" select="substring-before($href-fragment, '/')"/>
+        <xsl:variable name="footnote-target" select="key('fnById', $elemId)[ancestor::*[contains(@class, ' topic/topic ')][1]/@id = $topicId]"/>
         <xsl:apply-templates select="$footnote-target" mode="footnote-callout"/>
     </xsl:template>
 
@@ -324,7 +326,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:value-of select="@callout"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:number level="any" count="*[contains(@class,' topic/fn ') and not(@callout)]"/>
+                        <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
                     </xsl:otherwise>
                 </xsl:choose>
 

@@ -359,7 +359,7 @@
                 <xsl:with-param name="theVariableID" select="'Table.title'"/>
                 <xsl:with-param name="theParameters">
                     <number>
-                        <xsl:number level="any" count="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" from="/"/>
+                        <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>
