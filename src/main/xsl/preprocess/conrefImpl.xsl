@@ -217,7 +217,7 @@
       </xsl:choose>
     </xsl:variable>
 
-    <!-- conref = "a.dita/b" is illeagal -->
+    <!-- conref = "a.dita/b" is illegal -->
     <xsl:variable name="elemid" as="xs:string?">
       <xsl:choose>
         <xsl:when test="contains(@conref, '#') and contains(substring-after(@conref, '#'), '/')">
