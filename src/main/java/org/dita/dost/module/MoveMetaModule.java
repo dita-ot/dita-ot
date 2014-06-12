@@ -59,7 +59,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         //        fis.add(f);
         //    }
         //}
-        fis.add(job.getFileInfo(new File(job.getInputMap())));
+        fis.add(job.getFileInfo(toURI(job.getInputMap())));
         if (!fis.isEmpty()) {
             final MapMetaReader metaReader = new MapMetaReader();
             metaReader.setLogger(logger);

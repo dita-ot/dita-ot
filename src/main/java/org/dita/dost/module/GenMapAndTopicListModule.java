@@ -985,7 +985,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         // output problem
         job.setProperty("tempdirToinputmapdir.relative.value", escapeRegExp(prefix));
         job.setProperty("uplevels", getUpdateLevels());
-        for (final File file: addFilePrefix(outDitaFilesSet)) {
+        for (final URI file: addFilePrefix(outDitaFilesSet)) {
             job.getOrCreateFileInfo(file).isOutDita = true;
         }
 //        // XXX: This loop is probably redundant
@@ -994,62 +994,62 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 //                f.isActive = false;
 //            }
 //        }
-        for (final File file: addFilePrefix(fullTopicSet)) {
+        for (final URI file: addFilePrefix(fullTopicSet)) {
             final FileInfo ff = job.getOrCreateFileInfo(file);
             ff.format = ATTR_FORMAT_VALUE_DITA;
         }
-        for (final File file: addFilePrefix(fullMapSet)) {
+        for (final URI file: addFilePrefix(fullMapSet)) {
             final FileInfo ff = job.getOrCreateFileInfo(file);
             ff.format = ATTR_FORMAT_VALUE_DITAMAP;
         }        
-        for (final File file: addFilePrefix(hrefTopicSet)) {
+        for (final URI file: addFilePrefix(hrefTopicSet)) {
             job.getOrCreateFileInfo(file).hasLink = true;
         }
-        for (final File file: addFilePrefix(conrefSet)) {
+        for (final URI file: addFilePrefix(conrefSet)) {
             job.getOrCreateFileInfo(file).hasConref = true;
         }
-        for (final File file: addFilePrefix(imageSet)) {
+        for (final URI file: addFilePrefix(imageSet)) {
             job.getOrCreateFileInfo(file).format = "image";
         }
-        for (final File file: addFilePrefix(flagImageSet)) {
+        for (final URI file: addFilePrefix(flagImageSet)) {
             final FileInfo f = job.getOrCreateFileInfo(file);
             f.isFlagImage = true;
             f.format = "image";
         }
-        for (final File file: addFilePrefix(htmlSet)) {
+        for (final URI file: addFilePrefix(htmlSet)) {
             job.getOrCreateFileInfo(file).format = "html";
         }
-        for (final File file: addFilePrefix(hrefTargetSet)) {
+        for (final URI file: addFilePrefix(hrefTargetSet)) {
             job.getOrCreateFileInfo(file).isTarget = true;
         }
-        for (final File file: addFilePrefix(hrefWithIDSet)) {
+        for (final URI file: addFilePrefix(hrefWithIDSet)) {
             job.getOrCreateFileInfo(file).isNonConrefTarget = true;
         }
-        for (final File file: addFilePrefix(chunkTopicSet)) {
+        for (final URI file: addFilePrefix(chunkTopicSet)) {
             job.getOrCreateFileInfo(file).isSkipChunk = true;
         }
-        for (final File file: addFilePrefix(schemeSet)) {
+        for (final URI file: addFilePrefix(schemeSet)) {
             job.getOrCreateFileInfo(file).isSubjectScheme = true;
         }
-        for (final File file: addFilePrefix(conrefTargetSet)) {
+        for (final URI file: addFilePrefix(conrefTargetSet)) {
             job.getOrCreateFileInfo(file).isConrefTarget = true;
         }
-        for (final File file: addFilePrefix(copytoSourceSet)) {
+        for (final URI file: addFilePrefix(copytoSourceSet)) {
             job.getOrCreateFileInfo(file).isCopyToSource = true;
         }
-        for (final File file: addFilePrefix(subsidiarySet)) {
+        for (final URI file: addFilePrefix(subsidiarySet)) {
             job.getOrCreateFileInfo(file).isSubtarget = true;
         }
-        for (final File file: addFilePrefix(conrefpushSet)) {
+        for (final URI file: addFilePrefix(conrefpushSet)) {
             job.getOrCreateFileInfo(file).isConrefPush = true;
         }
-        for (final File file: addFilePrefix(keyrefSet)) {
+        for (final URI file: addFilePrefix(keyrefSet)) {
             job.getOrCreateFileInfo(file).hasKeyref = true;
         }
-        for (final File file: addFilePrefix(coderefSet)) {
+        for (final URI file: addFilePrefix(coderefSet)) {
             job.getOrCreateFileInfo(file).hasCoderef = true;
         }
-        for (final File file: addFilePrefix(resourceOnlySet)) {
+        for (final URI file: addFilePrefix(resourceOnlySet)) {
             job.getOrCreateFileInfo(file).isResourceOnly = true;
         }
         
@@ -1174,13 +1174,13 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @param set file paths
      * @return file paths with prefix
      */
-    private Set<File> addFilePrefix(final Set<File> set) {
-        final Set<File> newSet = new HashSet<File>(set.size());
+    private Set<URI> addFilePrefix(final Set<File> set) {
+        final Set<URI> newSet = new HashSet<URI>(set.size());
         for (final File file: set) {
             if (file.isAbsolute()) {
-                newSet.add(FileUtils.normalize(file));
+                newSet.add(toURI(file).normalize());
             } else {
-                newSet.add(FileUtils.normalize(prefix + file));
+                newSet.add(toURI(prefix + file).normalize());
             }
         }
         return newSet;

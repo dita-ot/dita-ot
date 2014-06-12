@@ -573,7 +573,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             final Map<File, File> copytotarget2sourcemaplist = job.getCopytoMap();
             copytotarget2source.putAll(copytotarget2sourcemaplist);
             for (final String file : copytoSource) {
-                job.getOrCreateFileInfo(toFile(file)).isCopyToSource = true;
+                job.getOrCreateFileInfo(toURI(file)).isCopyToSource = true;
             }
             job.setCopytoMap(copytotarget2source);
             job.write();

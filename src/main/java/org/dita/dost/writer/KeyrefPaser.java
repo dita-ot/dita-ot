@@ -162,7 +162,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private Element elem;
 
     /** Set of link targets which are not resource-only */
-    private Set<File> normalProcessingRoleTargets;
+    private Set<URI> normalProcessingRoleTargets;
     
     /**
      * Constructor.
@@ -207,7 +207,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /**
      * Get set of link targets which have normal processing role. Paths are relative to current file.
      */
-    public Set<File> getNormalProcessingRoleTargets() {
+    public Set<URI> getNormalProcessingRoleTargets() {
         return Collections.unmodifiableSet(normalProcessingRoleTargets);
     }
     
@@ -226,7 +226,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     @Override
     public void startDocument() throws SAXException {
-        normalProcessingRoleTargets = new HashSet<File>();
+        normalProcessingRoleTargets = new HashSet<URI>();
         getContentHandler().startDocument();
     }
     
@@ -429,7 +429,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
                                     final URI f = toURI(inputFile).resolve(target_output);
-                                    normalProcessingRoleTargets.add(URLUtils.toFile(f));
+                                    normalProcessingRoleTargets.add(f);
                                 }
                             } else {
                                 // referenced file does not exist, emits a message.

@@ -498,18 +498,6 @@ public final class Job {
         return ret;
     }
 
-    
-    /**
-     * Get file info object
-     * 
-     * @param file file system path
-     * @return file info object
-     */
-    @Deprecated
-    public FileInfo getFileInfo(final File file) {
-        return files.get(toURI(file));
-    }
-
     /**
      * Get file info object
      *
@@ -519,22 +507,6 @@ public final class Job {
     public FileInfo getFileInfo(final URI file) {
         return files.get(file);
     }
-
-
-    /**
-     * Get or create FileInfo for given path.
-     * @param file system path
-     */
-    @Deprecated
-    public FileInfo getOrCreateFileInfo(final String file) {
-        final File f = FileUtils.normalize(file);
-        FileInfo i = files.get(toURI(f));
-        if (i == null) {
-            i = new FileInfo(f);
-            files.put(i.uri, i);
-        }
-        return i;
-    }
     
     /**
      * Get or create FileInfo for given path.
@@ -543,21 +515,6 @@ public final class Job {
     public FileInfo getOrCreateFileInfo(final URI file) {
         final URI f = file.normalize();
         FileInfo i = files.get(f); 
-        if (i == null) {
-            i = new FileInfo(f);
-            files.put(i.uri, i);
-        }
-        return i;
-    }
-    
-    /**
-     * Get or create FileInfo for given path.
-     * @param file system path
-     */
-    @Deprecated
-    public FileInfo getOrCreateFileInfo(final File file) {
-        final File f = FileUtils.normalize(file);
-        FileInfo i = files.get(toURI(f));
         if (i == null) {
             i = new FileInfo(f);
             files.put(i.uri, i);

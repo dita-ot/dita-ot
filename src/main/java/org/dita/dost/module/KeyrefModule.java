@@ -89,7 +89,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
             final Map<String, Element> keyDefinition = reader.getKeyDefinition();
             
-            final Set<File> normalProcessingRole = new HashSet<File>();
+            final Set<URI> normalProcessingRole = new HashSet<URI>();
             for (final FileInfo f: fis) {
                 final File file = f.file;
                 logger.info("Processing " + new File(job.tempDir, file.getPath()).getAbsolutePath());
@@ -116,7 +116,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 // validate resource-only list
                 normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
             }
-            for (final File file: normalProcessingRole) {
+            for (final URI file: normalProcessingRole) {
                 final FileInfo f = job.getFileInfo(file);
                 if (f != null) {
                     f.isResourceOnly = false;

@@ -922,27 +922,27 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         // output problem
         job.setProperty("tempdirToinputmapdir.relative.value", formatRelativeValue(prefix));
         job.setProperty("uplevels", getUpdateLevels());
-        for (final File file: addFilePrefix(outDitaFilesSet)) {
+        for (final URI file: addFilePrefix(outDitaFilesSet)) {
             job.getOrCreateFileInfo(file).isOutDita = true;
         }
-        for (final File file: addFilePrefix(imageSet)) {
+        for (final URI file: addFilePrefix(imageSet)) {
             job.getOrCreateFileInfo(file).format = "image";
         }
-        for (final File file: addFilePrefix(flagImageSet)) {
+        for (final URI file: addFilePrefix(flagImageSet)) {
             final FileInfo f = job.getOrCreateFileInfo(file);
             f.isFlagImage = true;
             f.format = "image";
         }
-        for (final File file: addFilePrefix(htmlSet)) {
+        for (final URI file: addFilePrefix(htmlSet)) {
             job.getOrCreateFileInfo(file).format = "html";
         }
-        for (final File file: addFilePrefix(hrefWithIDSet)) {
+        for (final URI file: addFilePrefix(hrefWithIDSet)) {
             job.getOrCreateFileInfo(file).isNonConrefTarget = true;
         }
-        for (final File file: addFilePrefix(copytoSourceSet)) {
+        for (final URI file: addFilePrefix(copytoSourceSet)) {
             job.getOrCreateFileInfo(file).isCopyToSource = true;
         }
-        for (final File file: addFilePrefix(resourceOnlySet)) {
+        for (final URI file: addFilePrefix(resourceOnlySet)) {
             job.getOrCreateFileInfo(file).isResourceOnly = true;
         }
 
@@ -1051,13 +1051,13 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      * @param set file paths
      * @return file paths with prefix
      */
-    private Set<File> addFilePrefix(final Set<File> set) {
-        final Set<File> newSet = new HashSet<File>(set.size());
+    private Set<URI> addFilePrefix(final Set<File> set) {
+        final Set<URI> newSet = new HashSet<URI>(set.size());
         for (final File file: set) {
             if (file.isAbsolute()) {
-                newSet.add(FileUtils.normalize(file));
+                newSet.add(toURI(file).normalize());
             } else {
-                newSet.add(FileUtils.normalize(new File(prefix + file)));
+                newSet.add(toURI(new File(prefix + file)).normalize());
             }
         }
         return newSet;
