@@ -9,6 +9,7 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
@@ -285,26 +286,26 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         // remove redundant topic information
         for (final String file: oldTopicList) {
             if (!all.contains(file)) {
-                job.remove(job.getOrCreateFileInfo(file));
+                job.remove(job.getOrCreateFileInfo(toURI(file)));
             }
         }
         
         for (final String file : topicList) {
-            final FileInfo ff = job.getOrCreateFileInfo(file);
+            final FileInfo ff = job.getOrCreateFileInfo(toURI(file));
             ff.format = ATTR_FORMAT_VALUE_DITA;
         }
         for (final String file : ditamapList) {
-            final FileInfo ff = job.getOrCreateFileInfo(file);
+            final FileInfo ff = job.getOrCreateFileInfo(toURI(file));
             ff.format = ATTR_FORMAT_VALUE_DITAMAP;
         }
 
         for (final String file : chunkedDitamapSet) {
-            final FileInfo f = job.getOrCreateFileInfo(file);
+            final FileInfo f = job.getOrCreateFileInfo(toURI(file));
             f.format = ATTR_FORMAT_VALUE_DITAMAP;
             f.isResourceOnly = false;
         }
         for (final String file : chunkedTopicSet) {
-            final FileInfo f = job.getOrCreateFileInfo(file);
+            final FileInfo f = job.getOrCreateFileInfo(toURI(file));
             f.format = ATTR_FORMAT_VALUE_DITA;
             f.isResourceOnly = false;
         }

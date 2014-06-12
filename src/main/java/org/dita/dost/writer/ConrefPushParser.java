@@ -174,7 +174,7 @@ public final class ConrefPushParser extends AbstractXMLFilter {
      */
     private void updateList(final File filename) {
         try {
-            final String reletivePath = filename.getAbsolutePath().substring(FileUtils.normalize(tempDir.toString()).getPath().length() + 1);
+            final File reletivePath = new File(filename.getAbsolutePath().substring(FileUtils.normalize(tempDir.toString()).getPath().length() + 1));
             final FileInfo f = job.getOrCreateFileInfo(reletivePath);
             if (hasConref) {
                 f.hasConref = true;

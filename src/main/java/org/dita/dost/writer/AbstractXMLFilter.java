@@ -26,11 +26,7 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
 
     @Override
     public void write(final File filename) throws DITAOTException {
-        try {
-            XMLUtils.transform(filename, asList((XMLFilter) this));
-        } catch (final Exception e) {
-            throw new DITAOTException(e);
-        }
+        XMLUtils.transform(filename, asList((XMLFilter) this));
     }
 
     @Override

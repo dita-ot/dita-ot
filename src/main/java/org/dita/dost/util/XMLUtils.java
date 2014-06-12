@@ -152,6 +152,8 @@ public final class XMLUtils {
         transform(inputFile, outputFile, filters);
         try {
             FileUtils.moveFile(outputFile, inputFile);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
         }
@@ -174,7 +176,7 @@ public final class XMLUtils {
         try {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer();
             XMLReader reader = StringUtils.getXMLReader();
-            for (final XMLFilter filter: filters) {
+            for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
                 // when reusing filter with multiple Transformers.
                 filter.setContentHandler(null);
@@ -186,6 +188,8 @@ public final class XMLUtils {
             final Source source = new SAXSource(reader, new InputSource(in));
             final Result result = new StreamResult(out);
             transformer.transform(source, result);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessage(), e);
         } finally {
