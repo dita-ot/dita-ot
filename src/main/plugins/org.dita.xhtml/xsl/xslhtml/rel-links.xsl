@@ -9,7 +9,8 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-                exclude-result-prefixes="xs related-links ditamsg">
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+                exclude-result-prefixes="xs related-links ditamsg dita-ot">
 
   <xsl:key name="link"
            match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]"
@@ -379,9 +380,8 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
       </xsl:when>
       <!-- For DITA - process the internal href -->
       <xsl:when test="starts-with(@href, '#')">
-        <xsl:call-template name="parsehref">
-          <xsl:with-param name="href" select="@href"/>
-        </xsl:call-template>
+        <xsl:text>#</xsl:text>
+        <xsl:value-of select="dita-ot:generate-id(dita-ot:get-topic-id(@href), dita-ot:get-element-id(@href))"/>
       </xsl:when>
       <!-- It's to a DITA file - process the file name (adding the html extension)
     and process the rest of the href -->
@@ -393,9 +393,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
         </xsl:call-template>
         <xsl:if test="contains(@href, '#')">
           <xsl:text>#</xsl:text>
-          <xsl:call-template name="parsehref">
-            <xsl:with-param name="href" select="substring-after(@href, '#')"/>
-          </xsl:call-template>
+          <xsl:value-of select="dita-ot:generate-id(dita-ot:get-topic-id(@href), dita-ot:get-element-id(@href))"/>
         </xsl:if>
       </xsl:when>
       <xsl:otherwise>
@@ -406,11 +404,14 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
   </xsl:template>
 
   <!-- "/" is not legal in IDs - need to swap it with two underscores -->
+  <!-- Deprecated, use dita-ot:generate-id function instead -->
   <xsl:template name="parsehref">
     <xsl:param name="href"/>
     <xsl:choose>
       <xsl:when test="contains($href, '/')">
-        <xsl:value-of select="substring-before($href, '/')"/>__<xsl:value-of select="substring-after($href, '/')"/>
+        <xsl:value-of select="substring-before($href, '/')"/>
+        <xsl:value-of select="$HTML_ID_SEPARATOR"/>
+        <xsl:value-of select="substring-after($href, '/')"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$href"/>

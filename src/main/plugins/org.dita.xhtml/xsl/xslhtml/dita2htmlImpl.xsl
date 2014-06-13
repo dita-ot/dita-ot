@@ -3076,12 +3076,18 @@
 
 <!-- ================= COMMON ATTRIBUTE PROCESSORS ====================== -->
 
+  <xsl:function name="dita-ot:generate-id" as="xs:string">
+    <xsl:param name="topic" as="xs:string?"/>
+    <xsl:param name="element" as="xs:string?"/>
+    
+    <xsl:value-of select="string-join(($topic, $element), $HTML_ID_SEPARATOR)"/>
+  </xsl:function>
+
 <xsl:function name="dita-ot:get-prefixed-id" as="xs:string">
   <xsl:param name="element" as="element()"/>
   <xsl:param name="id" as="xs:string"/>
 
-  <xsl:sequence
-    select="string-join(($element/ancestor::*[contains(@class, ' topic/body ')][1]/parent::*/@id, $id), $HTML_ID_SEPARATOR)"/>
+  <xsl:sequence select="dita-ot:generate-id($element/ancestor::*[contains(@class, ' topic/body ')][1]/parent::*/@id, $id)"/>
 </xsl:function>
 
 <xsl:function name="dita-ot:generate-html-id" as="xs:string">

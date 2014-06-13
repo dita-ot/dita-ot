@@ -7,7 +7,8 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  exclude-result-prefixes="ditamsg conref xs">
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  exclude-result-prefixes="ditamsg conref xs dita-ot">
 
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-utilities.xsl"/>
@@ -134,8 +135,8 @@
 
     <xsl:variable name="conrefend" as="xs:string?">
       <xsl:choose>
-        <xsl:when test="contains(@conrefend, '#') and contains(substring-after(@conrefend, '#'), '/')">
-          <xsl:value-of select="substring-after(substring-after(@conrefend, '#'), '/')"/>
+        <xsl:when test="dita-ot:has-element-id(@conrefend)">
+          <xsl:value-of select="dita-ot:get-element-id(@conrefend)"/>
         </xsl:when>
         <xsl:when test="contains(@conrefend, '#')">
           <xsl:value-of select="substring-after(@conrefend, '#')"/>
@@ -206,25 +207,8 @@
     <!-- replace the extension name -->
     <xsl:variable name="FILENAME" select="concat(substring-before($filename, '.'), '.dita')"/>
 
-    <xsl:variable name="topicid" as="xs:string?">
-      <xsl:choose>
-        <xsl:when test="contains(@conref, '#') and contains(substring-after(@conref, '#'), '/')">
-          <xsl:value-of select="substring-before(substring-after(@conref, '#'), '/')"/>
-        </xsl:when>
-        <xsl:when test="contains(@conref, '#')">
-          <xsl:value-of select="substring-after(@conref, '#')"/>
-        </xsl:when>
-      </xsl:choose>
-    </xsl:variable>
-
-    <!-- conref = "a.dita/b" is illeagal -->
-    <xsl:variable name="elemid" as="xs:string?">
-      <xsl:choose>
-        <xsl:when test="contains(@conref, '#') and contains(substring-after(@conref, '#'), '/')">
-          <xsl:value-of select="substring-after(substring-after(@conref, '#'), '/')"/>
-        </xsl:when>
-      </xsl:choose>
-    </xsl:variable>
+    <xsl:variable name="topicid" select="dita-ot:get-topic-id(@conref)" as="xs:string?"/>
+    <xsl:variable name="elemid" select="dita-ot:get-element-id(@conref)" as="xs:string?"/>
 
     <xsl:choose>
       <!-- exportanchors defined in topicmeta-->
@@ -294,7 +278,7 @@
             <xsl:apply-templates select="." mode="ditamsg:conrefLoop"/>
           </xsl:when>
           <!--targetting an element inside a topic-->
-          <xsl:when test="contains(substring-after(@conref, '#'), '/')">
+          <xsl:when test="dita-ot:has-element-id(@conref)">
             <xsl:choose>
               <xsl:when test="$topicpos = 'samefile'">
                 <xsl:variable name="target" select="key('id', $elemid)[local-name() = $element][ancestor::*[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
@@ -996,8 +980,8 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="href-topicid" select="substring-before(substring-after(., '#'), '/')"/>
-    <xsl:variable name="href-elemid" select="substring-after(., '/')"/>
+    <xsl:variable name="href-topicid" select="dita-ot:get-topic-id(.)" as="xs:string?"/>
+    <xsl:variable name="href-elemid" select="dita-ot:get-element-id(.)" as="xs:string?"/>
     <xsl:variable name="conref-gen-id" as="xs:string">
       <xsl:choose>
         <xsl:when test="empty($elemid) or $elemid = $href-elemid">
