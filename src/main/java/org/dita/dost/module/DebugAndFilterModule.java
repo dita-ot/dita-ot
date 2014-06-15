@@ -12,6 +12,7 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.Configuration.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -479,7 +480,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         }
         final DitaWriter dw = new DitaWriter();
         dw.setJob(job);
-        final String path2project = dw.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
+        final File path2project = dw.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
         final File workdir = target.getParentFile();
         XMLFilter filter = new CopyToFilter(workdir, path2project);
         
@@ -505,9 +506,9 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private static final class CopyToFilter extends XMLFilterImpl {
         
         private final File workdir;
-        private final String path2project;  
+        private final File path2project;
         
-        CopyToFilter(final File workdir, final String path2project) {
+        CopyToFilter(final File workdir, final File path2project) {
             super();
             this.workdir = workdir;
             this.path2project = path2project;
@@ -534,11 +535,11 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 }
             } else if (target.equals(PI_PATH2PROJ_TARGET)) {
                 if (path2project != null) {
-                    d = path2project;
+                    d = path2project.getPath();
                 }
             } else if (target.equals(PI_PATH2PROJ_TARGET_URI)) {
                 if (path2project != null) {
-                    d = URLUtils.correct(FileUtils.separatorsToUnix(path2project), true);
+                    d = toURI(path2project).toString();
                 }
             }            
             getContentHandler().processingInstruction(target, d);

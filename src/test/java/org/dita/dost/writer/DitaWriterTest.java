@@ -216,7 +216,7 @@ public class DitaWriterTest {
     @Test
     public void testGetPathtoProject() throws IOException {
         final DitaWriter dw = configureDitaWriter(Job.Generate.NOT_GENERATEOUTTER, new File(srcDir, "main.ditamap"));
-        assertEquals(".." + File.separator, 
+        assertEquals(new File(".."),
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
                                     new File(srcDir, "main.ditamap").getAbsoluteFile()));
@@ -229,11 +229,11 @@ public class DitaWriterTest {
     @Test
     public void testGetPathtoProjectSibling() throws IOException {
         final DitaWriter dw = configureDitaWriter(Job.Generate.NOT_GENERATEOUTTER, new File(srcDir, "maps" + File.separator + "main.ditamap"));
-        assertEquals(".." + File.separator + "org.dita.dost.writer.DitaWriterTest" + File.separator, 
+        assertEquals(new File(".." + File.separator + "org.dita.dost.writer.DitaWriterTest"),
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
                                     new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
-        assertEquals("org.dita.dost.writer.DitaWriterTest" + File.separator, 
+        assertEquals(new File("org.dita.dost.writer.DitaWriterTest"),
                 dw.getPathtoProject(new File("topic.dita"),
                                     new File(srcDir, "topic.dita").getAbsoluteFile(),
                                     new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
@@ -242,7 +242,7 @@ public class DitaWriterTest {
     @Test
     public void testGetPathtoProjectUplevels() throws IOException {
         final DitaWriter dw = configureDitaWriter(Job.Generate.OLDSOLUTION, new File(srcDir, "main.ditamap"));
-        assertEquals(".." + File.separator, 
+        assertEquals(new File(".."),
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
                                     new File(srcDir, "main.ditamap").getAbsoluteFile()));
@@ -255,7 +255,7 @@ public class DitaWriterTest {
     @Test
     public void testGetPathtoProjectSiblingUplevels() throws IOException {
         final DitaWriter dw = configureDitaWriter(Job.Generate.OLDSOLUTION, new File(srcDir, "maps" + File.separator + "main.ditamap"));
-        assertEquals(".." + File.separator, 
+        assertEquals(new File(".."),
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
                                     new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));

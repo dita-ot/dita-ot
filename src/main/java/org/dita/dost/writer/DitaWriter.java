@@ -10,6 +10,7 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,12 +42,10 @@ import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.DelayConrefUtils;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -98,79 +97,20 @@ public final class DitaWriter extends AbstractXMLFilter {
     private final boolean genDebugInfo;
     
     private boolean setSystemid = true;
-
-    /**
-     * replace all the backslash with slash in
-     * all href and conref attribute
-     */
-    private URI replaceCONREF(final Attributes atts){
-        URI attValue = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
-        final String fragment = attValue.getFragment();
-        if(fragment != null){
-            final URI path = stripFragment(attValue);
-            if(path.toString().length() != 0){
-                final File target = toFile(path);
-                if(target.isAbsolute()){
-                    final URI relativePath = getRelativePath(job.getInputFile().toURI(), path);
-                    attValue = setFragment(relativePath, fragment);
-                }
-            }
-        }else{
-            final File target = toFile(attValue);
-            if(target.isAbsolute()){
-                attValue = getRelativePath(job.getInputFile().toURI(), attValue);
-            }
-        }
-
-        return attValue;
-    }
-    
-    /**
-     * Normalize and validate href attribute.
-     * 
-     * @param attName attribute name
-     * @param atts attributes
-     * @return attribute value
-     */
-    private URI replaceHREF(final String attName, final Attributes atts){
-        if (attName == null){
-            return null;
-        }
-
-        URI attValue = toURI(atts.getValue(attName));
-        if(attValue != null){
-            final String fragment = attValue.getFragment();
-            if(fragment != null){
-                URI path = stripFragment(attValue);
-                if(path.toString().length() != 0){
-                    final File target = toFile(path);
-                    if(target.isAbsolute()){
-                        final URI relativePath = getRelativePath(job.getInputFile().toURI(), path);
-                        attValue = setFragment(relativePath, fragment);
-                    }
-                }
-            }else{
-                final File target = toFile(attValue);
-                if(target.isAbsolute()){
-                    attValue = getRelativePath(job.getInputFile().toURI(), attValue);
-                }
-            }
-        } else {
-            return null;
-        }
-
-        return attValue;
-    }
+    /** Absolute path to current destination file. */
     private File outputFile;
 
     private int foreignLevel; // foreign/unknown nesting level
-    private String path2Project;
+    /** Relative path to base directory, may be {@code null}. */
+    private File path2Project;
 
+    /** Absolute path to temporary directory. */
     private File tempDir;
+    /** Absolute path to current source file. */
     private File currentFile;
 
     private Map<String, KeyDef> keys;
-
+    /** Relative path to current source file. */
     private File inputFile = null;
 
     private Map<String, Map<String, Set<String>>> validateMap = null;
@@ -187,7 +127,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     /**
      * Default constructor of DitaWriter class.
      * 
-     * {@link #initXMLReader(File, boolean, boolean)} must be called after
+     * {@link #initXMLReader(File, boolean, boolean, boolean)} must be called after
      * construction to initialize XML parser.
      */
     public DitaWriter() {
@@ -235,7 +175,19 @@ public final class DitaWriter extends AbstractXMLFilter {
     		keys.put(k.keys, k);
     	}
     }
-    
+
+    /**
+     * Set temporary directory
+     *
+     * @param tempDir absolute path to temporary directory
+     */
+    public void setTempDir(final File tempDir) {
+        if (!tempDir.isAbsolute()) {
+            throw new IllegalArgumentException("Temporary directory '" + tempDir.toString() + "' must be an absolute path");
+        }
+        this.tempDir = tempDir;
+    }
+
     /**
      * Initialize XML reader used for pipeline parsing.
      * @param ditaDir ditaDir
@@ -277,6 +229,69 @@ public final class DitaWriter extends AbstractXMLFilter {
             }
         }
         setSystemid = arg_setSystemid;
+    }
+
+    /**
+     * replace all the backslash with slash in
+     * all href and conref attribute
+     */
+    private URI replaceCONREF(final Attributes atts) {
+        URI attValue = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
+        final String fragment = attValue.getFragment();
+        if (fragment != null)  {
+            final URI path = stripFragment(attValue);
+            if (path.toString().length() != 0) {
+                final File target = toFile(path);
+                if (target.isAbsolute()) {
+                    final URI relativePath = getRelativePath(job.getInputFile().toURI(), path);
+                    attValue = setFragment(relativePath, fragment);
+                }
+            }
+        } else {
+            final File target = toFile(attValue);
+            if (target.isAbsolute()) {
+                attValue = getRelativePath(job.getInputFile().toURI(), attValue);
+            }
+        }
+
+        return attValue;
+    }
+
+    /**
+     * Normalize and validate href attribute.
+     *
+     * @param attName attribute name
+     * @param atts attributes
+     * @return attribute value
+     */
+    private URI replaceHREF(final String attName, final Attributes atts){
+        if (attName == null) {
+            return null;
+        }
+
+        URI attValue = toURI(atts.getValue(attName));
+        if (attValue != null) {
+            final String fragment = attValue.getFragment();
+            if (fragment != null) {
+                URI path = stripFragment(attValue);
+                if (path.toString().length() != 0) {
+                    final File target = toFile(path);
+                    if (target.isAbsolute()) {
+                        final URI relativePath = getRelativePath(job.getInputFile().toURI(), path);
+                        attValue = setFragment(relativePath, fragment);
+                    }
+                }
+            } else {
+                final File target = toFile(attValue);
+                if (target.isAbsolute()) {
+                    attValue = getRelativePath(job.getInputFile().toURI(), attValue);
+                }
+            }
+        } else {
+            return null;
+        }
+
+        return attValue;
     }
 
     /**
@@ -338,7 +353,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         final URI tempDirUri = tempDir.toURI();
         final URI filePath = tempDirUri.resolve(toURI(inputFile));
         final URI keyValue = tempDirUri.resolve(href);
-        return URLUtils.getRelativePath(filePath, keyValue);
+        return getRelativePath(filePath, keyValue);
     }
     
     @Override
@@ -350,7 +365,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         }
     }
 
-
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
@@ -359,41 +373,26 @@ public final class DitaWriter extends AbstractXMLFilter {
         }
         getContentHandler().endElement(uri, localName, qName);
     }
-
-    
-
-    /**
-     * Set temporary directory
-     * 
-     * @param tempDir absolute path to temporary directory
-     */
-    public void setTempDir(final File tempDir) {
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory '" + tempDir.toString() + "' must be an absolute path");
-        }
-        this.tempDir = tempDir;
-    }
     
     @Override
     public void startDocument() throws SAXException {
         path2Project = getPathtoProject(inputFile, currentFile, job.getInputFile().getAbsoluteFile());            
         try {
             getContentHandler().startDocument();
-            if(!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS))
-            {
+            if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
                 getContentHandler().processingInstruction(PI_WORKDIR_TARGET, outputFile.getParentFile().getCanonicalPath());
-            }else{
+            } else {
                 getContentHandler().processingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + outputFile.getParentFile().getCanonicalPath());
             }
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
             getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, outputFile.getParentFile().toURI().toASCIIString());
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
-            if(path2Project != null){
-                getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project);
-                getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, URLUtils.toURI(path2Project).toString());
-            }else{
+            if (path2Project != null) {
+                getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project.getPath() + File.separator);
+                getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, toURI(path2Project).toString() + URI_SEPARATOR);
+            } else {
                 getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, "");
-                getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, "." + UNIX_SEPARATOR);
+                getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, "." + URI_SEPARATOR);
             }
             getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
         } catch (final Exception e) {
@@ -406,16 +405,16 @@ public final class DitaWriter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
-        if (foreignLevel > 0){
+        if (foreignLevel > 0) {
             foreignLevel ++;
-        }else if( foreignLevel == 0){
+        } else if( foreignLevel == 0) {
             final String attrValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-            if(attrValue == null && !ELEMENT_NAME_DITA.equals(localName)){
+            if (attrValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
                 logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
             }
             if (attrValue != null &&
                     (TOPIC_FOREIGN.matches(attrValue) ||
-                            TOPIC_UNKNOWN.matches(attrValue))){
+                            TOPIC_UNKNOWN.matches(attrValue))) {
                 foreignLevel = 1;
             }
         }
@@ -456,11 +455,10 @@ public final class DitaWriter extends AbstractXMLFilter {
             
             out = new FileOutputStream(outputFile);
 
-            // start to parse the file and direct to output in the temp
-            // directory
+            // start to parse the file and direct to output in the temp directory
             reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.getAbsolutePath(), logger));
             final InputSource is = new InputSource(currentFile.toURI().toString());
-            if(setSystemid) {
+            if (setSystemid) {
                 is.setSystemId(currentFile.toURI().toString());
             }
             
@@ -551,27 +549,18 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @param inputMap absolute path to start file
      * @return path to base directory, {@code null} if not available
      */
-    public String getPathtoProject (final File filename, final File traceFilename, final File inputMap) {
-    	String path2Project = null;
-    	if(job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION){
-            if(isOutFile(traceFilename, inputMap)){
-                
-                path2Project = getRelativePathFromOut(traceFilename.getAbsoluteFile());
-            }else{
-                 path2Project = FileUtils.getRelativeUnixPath(traceFilename.getAbsolutePath(),inputMap.getAbsolutePath());
-                path2Project = new File(path2Project).getParent();
-                if(path2Project != null && path2Project.length()>0){
-                    path2Project = path2Project+File.separator;
-                }
+    public File getPathtoProject(final File filename, final File traceFilename, final File inputMap) {
+    	File path2Project;
+    	if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
+            if (isOutFile(traceFilename, inputMap)) {
+                path2Project = toFile(getRelativePathFromOut(traceFilename.getAbsoluteFile()));
+            } else {
+                path2Project = new File(getRelativeUnixPath(traceFilename.getAbsolutePath(), inputMap.getAbsolutePath())).getParentFile();
             }
         } else {
-            final File p = FileUtils.getRelativePath(filename);
-            path2Project = p != null ? p.getPath() : null;
-            if (path2Project != null && !path2Project.endsWith(File.separator)) {
-                path2Project = path2Project + File.separator;
-            }
+            path2Project = getRelativePath(filename);
         }
-    	 return path2Project;
+    	return path2Project;
     }
     /**
      * Just for the overflowing files.
@@ -579,11 +568,11 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @return relative path to out
      */
     public String getRelativePathFromOut(final File overflowingFile) {
-        final File relativePath = FileUtils.getRelativePath(job.getInputFile(), overflowingFile);
+        final File relativePath = getRelativePath(job.getInputFile(), overflowingFile);
         final File outputDir = job.getOutputDir().getAbsoluteFile();
         final File outputPathName = new File(outputDir, "index.html");
-        final File finalOutFilePathName = FileUtils.resolve(outputDir, relativePath.getPath());
-        final File finalRelativePathName = FileUtils.getRelativePath(finalOutFilePathName, outputPathName);
+        final File finalOutFilePathName = resolve(outputDir, relativePath.getPath());
+        final File finalRelativePathName = getRelativePath(finalOutFilePathName, outputPathName);
         File parentDir = finalRelativePathName.getParentFile();
         if (parentDir == null || parentDir.getPath().isEmpty()) {
             parentDir = new File(".");
@@ -599,7 +588,7 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @return {@code true} if outside start directory, otherwise {@code false}
      */
     private boolean isOutFile(final File filePathName, final File inputMap){
-        final File relativePath = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
+        final File relativePath = getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
         return !(relativePath == null || relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
     }
 

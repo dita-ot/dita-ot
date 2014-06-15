@@ -1476,7 +1476,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
             logger.error("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
         }
-        final String path2project = listFilter.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
+        final File path2project = listFilter.getPathtoProject(copytoTargetFilename, target, inputMapInTemp);
         final File workdir = target.getParentFile();
         try {
             final Transformer serializer = TransformerFactory.newInstance().newTransformer();
@@ -1502,9 +1502,9 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
     private static final class CopyToFilter extends XMLFilterImpl {
 
         private final File workdir;
-        private final String path2project;  
+        private final File path2project;
 
-        CopyToFilter(final XMLReader parent, final File workdir, final String path2project) {
+        CopyToFilter(final XMLReader parent, final File workdir, final File path2project) {
             super(parent);
             this.workdir = workdir;
             this.path2project = path2project;
@@ -1532,11 +1532,11 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
                 }
             } else if (target.equals(PI_PATH2PROJ_TARGET)) {
                 if (path2project != null) {
-                    d = path2project;
+                    d = path2project.getPath();
                 }
             } else if (target.equals(PI_PATH2PROJ_TARGET_URI)) {
                 if (path2project != null) {
-                    d = URLUtils.correct(path2project, true);
+                    d = toURI(path2project).toString();
                 }
             }            
             getContentHandler().processingInstruction(target, d);

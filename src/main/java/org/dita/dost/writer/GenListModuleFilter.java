@@ -94,7 +94,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     private int level;
     /** Topicref stack */
     private final Stack<String> topicrefStack;
-    private String path2Project;
+    private File path2Project;
     /** Absolute system path to input file parent directory */
     private URI inputDir;
     private URI inputFile;
@@ -268,7 +268,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     /**
      * Set processing input directory absolute path.
      * 
-     * @param inputFile absolute path to base directory
+     * @param inputDir absolute path to base directory
      */
     public void setInputDir(final URI inputDir) {
         this.inputDir = inputDir;
@@ -334,9 +334,6 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * <p>The following processing instructions are added before the root element:</p>
      * <dl>
-     *   <!--dt>{@link #PI_WORKDIR_TARGET}<dt>
-     *   <dd>Absolute system path of the file parent directory. On Windows, a {@code /}
-     *     is added to beginning of the path.</dd-->
      *   <dt>{@link #PI_WORKDIR_TARGET_URI}<dt>
      *   <dd>Absolute URI of the file parent directory.</dd>
      *   <dt>{@link #PI_PATH2PROJ_TARGET}<dt>
@@ -353,15 +350,15 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, workDir.toString());
         getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
         if (path2Project != null) {
-            getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project);
-            getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, toURI(path2Project).toString());
+            getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project.getPath() + File.separator);
+            getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, toURI(path2Project).toString() + URI_SEPARATOR);
         } else {
             getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, "");
-            getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, "." + UNIX_SEPARATOR);
+            getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET_URI, "." + URI_SEPARATOR);
         }
         getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
     }
-    
+
     /**
      * Push inherited attributes to the stack.
      */
@@ -871,14 +868,9 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * @param inputMap absolute path to start file
      * @return path to base directory, {@code null} if not available
      */
-    public String getPathtoProject(final File filename, final File traceFilename, final String inputMap) {
-        String path2Project = null;
-            final File p = FileUtils.getRelativePath(filename);
-            path2Project = p != null ? p.getPath() : null;
-            if (path2Project != null && !path2Project.endsWith(File.separator)) {
-                path2Project = path2Project + File.separator;
-            }
-         return path2Project;
+    public File getPathtoProject(final File filename, final File traceFilename, final String inputMap) {
+        final File p = FileUtils.getRelativePath(filename);
+        return p != null ? p : null;
     }
     
     /**

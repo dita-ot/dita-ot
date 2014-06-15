@@ -135,6 +135,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     topicRefWriter.write(new File(job.tempDir.getAbsoluteFile(), f.file.getPath()).getAbsoluteFile());
                 }
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final DITAOTException ex) {
             logger.error(ex.getMessage(), ex);
         }
