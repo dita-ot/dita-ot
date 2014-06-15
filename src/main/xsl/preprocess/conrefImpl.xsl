@@ -82,7 +82,7 @@
   <!-- DITA 1.1 added the key -dita-use-conref-target, which can be used on required attributes
      to be sure they do not override the same attribute on a target element. -->
   <xsl:template match="@*[. = '-dita-use-conref-target']" mode="get-source-attribute" priority="11"/>
-  <!-- The value -dita-ues-conref-target replaces the need for the following templates, which
+  <!-- The value -dita-use-conref-target replaces the need for the following templates, which
      ensured that known required attributes did not override the conref target. They are left
      here for completeness. -->
   <xsl:template match="*[contains(@class, ' topic/image ')]/@href" mode="get-source-attribute" priority="10"/>
