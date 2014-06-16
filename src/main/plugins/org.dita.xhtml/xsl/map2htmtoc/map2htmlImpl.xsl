@@ -24,6 +24,7 @@
                                [not(@processing-role = 'resource-only')]">
       <nav>
         <ul>
+          <xsl:call-template name="commonattributes"/>
           <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
             <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
           </xsl:apply-templates>
@@ -43,6 +44,7 @@
     <xsl:choose>
       <xsl:when test="normalize-space($title)">
         <li>
+          <xsl:call-template name="commonattributes"/>
           <xsl:choose>
             <!-- If there is a reference to a DITA or HTML file, and it is not external: -->
             <xsl:when test="normalize-space(@href)">
