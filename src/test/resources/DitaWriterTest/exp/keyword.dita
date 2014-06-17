@@ -35,9 +35,9 @@
       </foreign>
       <table>
         <tgroup cols="3">
-          <colspec colname="col1"/>
-          <colspec colname="col2"/>
-          <colspec colname="col3"/>
+          <colspec colname="col1" colwidth="1*"/>
+          <colspec colname="col2" colwidth="1*"/>
+          <colspec colname="col3" colwidth="1*"/>
           <tbody>
             <row id="row">
               <entry colname="col1" namest="col1" nameend="col2"/>

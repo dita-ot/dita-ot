@@ -678,6 +678,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_PRINT = "print";
     /**cascade attribute.*/
     public static final String ATTRIBUTE_NAME_CASCADE = "cascade";
+    public static final String ATTRIBUTE_NAME_COLS = "cols";
 
     public static final String ATTRIBUTE_CASCADE_VALUE_MERGE = "merge";
     public static final String ATTRIBUTE_CASCADE_VALUE_NOMERGE = "nomerge";

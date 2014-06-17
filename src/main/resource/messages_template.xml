@@ -328,6 +328,16 @@
     <response>Set format attribute value to "ditamap".</response>
   </message>
     
+  <message id="DOTJ062E" type="ERROR">
+    <reason>Invalid %1 attribute value "%2".</reason>
+    <response></response>
+  </message>
+
+  <message id="DOTJ063E" type="ERROR">
+    <reason>The cols attibute is "%1" but number of colspec elements was %2.</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  
