@@ -3656,35 +3656,44 @@
       <caption>
         <span class="tablecap">
          <xsl:choose>     <!-- Hungarian: "1. Table " -->
-          <xsl:when test="( (string-length($ancestorlang) = 5 and contains($ancestorlang, 'hu-hu')) or (string-length($ancestorlang) = 2 and contains($ancestorlang, 'hu')) )">
-           <xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
-           <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Table'"/>
-           </xsl:call-template><xsl:text> </xsl:text>
+          <xsl:when test="$ancestorlang = ('hu', 'hu-hu')">
+            <xsl:value-of select="$tbl-count-actual"/>
+            <xsl:text>. </xsl:text>
+            <xsl:call-template name="getString">
+              <xsl:with-param name="stringName" select="'Table'"/>
+             </xsl:call-template>
+            <xsl:text> </xsl:text>
           </xsl:when>
           <xsl:otherwise>
-           <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Table'"/>
-           </xsl:call-template><xsl:text> </xsl:text><xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
+            <xsl:call-template name="getString">
+              <xsl:with-param name="stringName" select="'Table'"/>
+             </xsl:call-template>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$tbl-count-actual"/>
+            <xsl:text>. </xsl:text>
           </xsl:otherwise>
          </xsl:choose>
-         <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="tabletitle"/>         
-        </span>
-       <xsl:if test="*[contains(@class, ' topic/desc ')]"> 
-        <xsl:text>. </xsl:text>
-        <span class="tabledesc">
-          <xsl:for-each select="*[contains(@class, ' topic/desc ')]"><xsl:call-template name="commonattributes"/></xsl:for-each>
-          <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]" mode="tabledesc"/>
-        </span>
-       </xsl:if>
+         <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="tabletitle"/>
+         <xsl:if test="*[contains(@class, ' topic/desc ')]">
+           <xsl:text>. </xsl:text>
+         </xsl:if>
+       </span>
+       <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
+          <span class="tabledesc">
+            <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="tabledesc"/>
+          </span>
+        </xsl:for-each>
       </caption>
     </xsl:when>
     <!-- desc -->
     <xsl:when test="*[contains(@class, ' topic/desc ')]">
-      <span class="tabledesc">
-        <xsl:for-each select="*[contains(@class, ' topic/desc ')]"><xsl:call-template name="commonattributes"/></xsl:for-each>
-        <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]" mode="tabledesc"/>
-      </span>
+      <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
+        <span class="tabledesc">
+          <xsl:call-template name="commonattributes"/>
+          <xsl:apply-templates select="." mode="tabledesc"/>
+        </span>
+      </xsl:for-each>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
@@ -3719,34 +3728,43 @@
     <xsl:when test="*[contains(@class, ' topic/title ')]">
       <span class="figcap">
        <xsl:choose>      <!-- Hungarian: "1. Figure " -->
-        <xsl:when test="( (string-length($ancestorlang) = 5 and contains($ancestorlang, 'hu-hu')) or (string-length($ancestorlang) = 2 and contains($ancestorlang, 'hu')) )">
-         <xsl:value-of select="$fig-count-actual"/><xsl:text>. </xsl:text>
+        <xsl:when test="$ancestorlang = ('hu', 'hu-hu')">
+         <xsl:value-of select="$fig-count-actual"/>
+         <xsl:text>. </xsl:text>
          <xsl:call-template name="getString">
           <xsl:with-param name="stringName" select="'Figure'"/>
-         </xsl:call-template><xsl:text> </xsl:text>
+         </xsl:call-template>
+         <xsl:text> </xsl:text>
         </xsl:when>
         <xsl:otherwise>
          <xsl:call-template name="getString">
           <xsl:with-param name="stringName" select="'Figure'"/>
-         </xsl:call-template><xsl:text> </xsl:text><xsl:value-of select="$fig-count-actual"/><xsl:text>. </xsl:text>
+         </xsl:call-template>
+         <xsl:text> </xsl:text>
+         <xsl:value-of select="$fig-count-actual"/>
+         <xsl:text>. </xsl:text>
         </xsl:otherwise>
        </xsl:choose>
        <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="figtitle"/>
+       <xsl:if test="*[contains(@class, ' topic/desc ')]">
+         <xsl:text>. </xsl:text>
+       </xsl:if>
       </span>
-      <xsl:if test="*[contains(@class, ' topic/desc ')]">
-       <xsl:text>. </xsl:text>
+      <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
        <span class="figdesc">
-         <xsl:for-each select="*[contains(@class, ' topic/desc ')]"><xsl:call-template name="commonattributes"/></xsl:for-each>
-         <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]" mode="figdesc"/>
+         <xsl:call-template name="commonattributes"/>
+         <xsl:apply-templates select="." mode="figdesc"/>
        </span>
-      </xsl:if>
+      </xsl:for-each>
     </xsl:when>
     <!-- desc -->
     <xsl:when test="*[contains(@class, ' topic/desc ')]">
-      <span class="figdesc">
-        <xsl:for-each select="*[contains(@class, ' topic/desc ')]"><xsl:call-template name="commonattributes"/></xsl:for-each>
-        <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]" mode="figdesc"/>
-      </span>
+      <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
+       <span class="figdesc">
+         <xsl:call-template name="commonattributes"/>
+         <xsl:apply-templates select="." mode="figdesc"/>
+       </span>
+      </xsl:for-each>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
