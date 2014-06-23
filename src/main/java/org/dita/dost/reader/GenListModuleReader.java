@@ -28,15 +28,11 @@ import java.util.Stack;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
 
 /**
  * This class extends AbstractReader, used to parse relevant dita topics and
@@ -51,7 +47,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     
     /** Output utilities */
     private Job job;
-    /** Basedir of the current parsing file */
+    /** Relative basedir of the current parsing file */
     private File currentDir = null;
     /** Flag for conref in parsing file */
     private boolean hasConRef = false;
@@ -117,7 +113,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * are subject scheme map paths, both relative to base directory. A key {@code File("ROOT")} contains all subject scheme maps. */
     private final Map<File, Set<File>> schemeRelationGraph;
     /** Map to store referenced branches. */
-    private final Map<String, List<String>> vaildBranches;
+    private final Map<URI, List<String>> vaildBranches;
     /** Int to mark referenced nested elements. */
     private int level;
     /** Topicref stack */
@@ -145,7 +141,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         resourceOnlySet = new HashSet<File>(32);
         crossSet = new HashSet<File>(32);
         schemeRelationGraph = new LinkedHashMap<File, Set<File>>();
-        vaildBranches = new HashMap<String, List<String>>(32);
+        vaildBranches = new HashMap<URI, List<String>>(32);
         level = 0;
         topicrefStack = new Stack<String>();
         props = null;
@@ -606,15 +602,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                         break topicref;
                     }
                     // normalize href value.
-                    final File target = toFile(hrefValue);
-                    // caculate relative path for href value.
-                    String fileName = null;
+                    URI target = hrefValue;
                     if (target.isAbsolute()) {
-                        fileName = getRelativeUnixPath(rootFilePath.getAbsolutePath(), toFile(hrefValue).getPath());
+                        target = getRelativePath(rootFilePath.getAbsoluteFile().toURI(), target);
                     }
-                    fileName = resolve(currentDir, toFile(hrefValue).getPath()).getPath();
-                    // change '\' to '/' for comparsion.
-                    fileName = separatorsToUnix(fileName);
+                    // caculate relative path for href value.
+                    final URI fileName = toURI(resolve(currentDir, toFile(target)));
 
                     final boolean canParse = parseBranch(atts, hrefValue, fileName);
                     if (!canParse) {
@@ -632,16 +625,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                         break topicref;
                     }
                     // normalize href value.
-                    final File target = new File(conrefValue);
-                    // caculate relative path for href value.
-                    String fileName = null;
+                    URI target = conrefValue;
                     if (target.isAbsolute()) {
-                        fileName = getRelativeUnixPath(rootFilePath.getAbsolutePath(), toFile(conrefValue).getPath());
+                        target = getRelativePath(rootFilePath.getAbsoluteFile().toURI(), target);
                     }
-                    fileName = resolve(currentDir, toFile(conrefValue).getPath()).getPath();
-
-                    // change '\' to '/' for comparsion.
-                    fileName = separatorsToUnix(fileName);
+                    // caculate relative path for href value.
+                    final URI fileName = toURI(resolve(currentDir, toFile(target)));
 
                     final boolean canParse = parseBranch(atts, conrefValue, fileName);
                     if (!canParse) {
@@ -719,7 +708,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * @param fileName normalized file name(remove '#')
      * @return boolean
      */
-    private boolean parseBranch(final Attributes atts, final URI hrefValue, final String fileName) {
+    private boolean parseBranch(final Attributes atts, final URI hrefValue, final URI fileName) {
         // current file is primary ditamap file.
         // parse every branch.
         final String currentFileRelative = getRelativeUnixPath(rootFilePath.getAbsolutePath(),
@@ -781,8 +770,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     private boolean searchBrachesMap(final String id) {
         // caculate relative path for current file.
-        final String currentFileRelative = getRelativeUnixPath(rootFilePath.getAbsolutePath(),
-                currentFile.getAbsolutePath());
+        final URI currentFileRelative = toURI(getRelativePath(rootFilePath.getAbsoluteFile(),
+                currentFile.getAbsoluteFile()));
         // seach the map with id & current file name.
         if (vaildBranches.containsKey(currentFileRelative)) {
             final List<String> branchIdList = vaildBranches.get(currentFileRelative);
@@ -805,7 +794,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * @param hrefValue
      * @param fileName
      */
-    private void addReferredBranches(final URI hrefValue, final String fileName) {
+    private void addReferredBranches(final URI hrefValue, final URI fileName) {
         final String branchId = hrefValue.getFragment();
         // href value has branch id.
         if (branchId != null) {
