@@ -6,6 +6,7 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.net.URI;
@@ -41,7 +42,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * 
  * <p>
  * <strong>Not thread-safe</strong>. Instances can be reused by calling
- * {@link #reset()} between calls to {@link #parse(File, File)}.
+ * {@link #reset()} between calls to parse.
  * </p>
  */
 public final class GenListModuleFilter extends AbstractXMLFilter {
@@ -89,7 +90,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     /** Topics with processing role of "normal" */
     private final Set<File> normalProcessingSet;
     /** Map to store referenced branches. */
-    private final Map<String, List<String>> validBranches;
+    private final Map<URI, List<String>> validBranches;
     /** Int to mark referenced nested elements. */
     private int level;
     /** Topicref stack */
@@ -119,7 +120,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         inheritedAttsStack = new ArrayDeque<AttributesImpl>();
         resourceOnlySet = new HashSet<File>(32);
         normalProcessingSet = new HashSet<File>(32);
-        validBranches = new HashMap<String, List<String>>(32);
+        validBranches = new HashMap<URI, List<String>>(32);
         counterMap = new HashMap<String, Integer>();
         level = 0;
         topicrefStack = new Stack<String>();
@@ -467,13 +468,12 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
                     return;
                 }
                 // normalize href value.
-                final File target = toFile(hrefValue);
-                // caculate relative path for href value.
-                String fileName = null;
+                URI target = hrefValue;
                 if (target.isAbsolute()) {
-                    fileName = FileUtils.getRelativeUnixPath(inputFile.toString(), hrefValue.toString());
+                    target = getRelativePath(inputFile, hrefValue);
                 }
-                fileName = FileUtils.separatorsToUnix(FileUtils.resolve(currentDir.toString(), hrefValue.toString()).getPath());
+                // caculate relative path for href value.
+                final URI fileName = toURI(resolve(toFile(currentDir), toFile(hrefValue)));
 
                 final boolean canParse = parseBranch(atts, hrefValue, fileName);
                 if (canParse) {
@@ -555,7 +555,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * @param fileName normalized file name(remove '#')
      * @return boolean
      */
-    private boolean parseBranch(final Attributes atts, final URI hrefValue, final String fileName) {
+    private boolean parseBranch(final Attributes atts, final URI hrefValue, final URI fileName) {
         // current file is primary ditamap file.
         // parse every branch.
         if (currentDir == null && isStartDocument) {
@@ -636,11 +636,10 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * @param hrefValue
      * @param fileName
      */
-    private void addReferredBranches(final URI hrefValue, final String fileName) {
-        String branchId = null;
+    private void addReferredBranches(final URI hrefValue, final URI fileName) {
+        final String branchId = hrefValue.getFragment();
         // href value has branch id.
-        if (hrefValue.getFragment() != null) {
-            branchId = hrefValue.getFragment();
+        if (branchId != null) {
             // The map contains the file name
             if (validBranches.containsKey(fileName)) {
                 final List<String> branchIdList = validBranches.get(fileName);

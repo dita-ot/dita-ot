@@ -113,7 +113,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * are subject scheme map paths, both relative to base directory. A key {@code File("ROOT")} contains all subject scheme maps. */
     private final Map<File, Set<File>> schemeRelationGraph;
     /** Map to store referenced branches. */
-    private final Map<URI, List<String>> vaildBranches;
+    private final Map<URI, List<String>> validBranches;
     /** Int to mark referenced nested elements. */
     private int level;
     /** Topicref stack */
@@ -141,7 +141,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         resourceOnlySet = new HashSet<File>(32);
         crossSet = new HashSet<File>(32);
         schemeRelationGraph = new LinkedHashMap<File, Set<File>>();
-        vaildBranches = new HashMap<URI, List<String>>(32);
+        validBranches = new HashMap<URI, List<String>>(32);
         level = 0;
         topicrefStack = new Stack<String>();
         props = null;
@@ -582,65 +582,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
         }
 
-        // onlyTopicInMap is on.
-        topicref: if (job.getOnlyTopicInMap() && this.canResolved()) {
-            // topicref(only defined in ditamap file.)
-            if (MAP_TOPICREF.matches(classValue)) {
-
-                // get href attribute value.
-                final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-
-                // get conref attribute value.
-                final URI conrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
-
-                // has href attribute and refer to ditamap file.
-                if (hrefValue != null && !hrefValue.toString().isEmpty()) {
-                    // exclude external resources
-                    final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                    if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
-                            || hrefValue.toString().contains(COLON_DOUBLE_SLASH) || hrefValue.toString().startsWith(SHARP)) {
-                        break topicref;
-                    }
-                    // normalize href value.
-                    URI target = hrefValue;
-                    if (target.isAbsolute()) {
-                        target = getRelativePath(rootFilePath.getAbsoluteFile().toURI(), target);
-                    }
-                    // caculate relative path for href value.
-                    final URI fileName = toURI(resolve(currentDir, toFile(target)));
-
-                    final boolean canParse = parseBranch(atts, hrefValue, fileName);
-                    if (!canParse) {
-                        break topicref;
-                    } else {
-                        topicrefStack.push(localName);
-                    }
-
-                } else if (conrefValue != null && !conrefValue.toString().isEmpty()) {
-
-                    // exclude external resources
-                    final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                    if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
-                            || conrefValue.toString().contains(COLON_DOUBLE_SLASH) || conrefValue.toString().startsWith(SHARP)) {
-                        break topicref;
-                    }
-                    // normalize href value.
-                    URI target = conrefValue;
-                    if (target.isAbsolute()) {
-                        target = getRelativePath(rootFilePath.getAbsoluteFile().toURI(), target);
-                    }
-                    // caculate relative path for href value.
-                    final URI fileName = toURI(resolve(currentDir, toFile(target)));
-
-                    final boolean canParse = parseBranch(atts, conrefValue, fileName);
-                    if (!canParse) {
-                        break topicref;
-                    } else {
-                        topicrefStack.push(localName);
-                    }
-                }
-            }
-        }
+        handleTopicRef(localName, atts);
 
         parseAttribute(atts, ATTRIBUTE_NAME_CONREF);
         parseAttribute(atts, ATTRIBUTE_NAME_HREF);
@@ -651,6 +593,40 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         parseAttribute(atts, ATTRIBUTE_NAME_KEYREF);
 
         getContentHandler().startElement(uri, localName, qName, atts);
+    }
+
+    private void handleTopicRef(String localName, Attributes atts) {
+        final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        // onlyTopicInMap is on.
+        if (job.getOnlyTopicInMap() && canResolved()) {
+            // topicref(only defined in ditamap file.)
+            if (MAP_TOPICREF.matches(classValue)) {
+                URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+                if (hrefValue == null || hrefValue.toString().isEmpty()) {
+                    hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
+                }
+                if (hrefValue != null && !hrefValue.toString().isEmpty()) {
+                    // exclude external resources
+                    final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+                    if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
+                            || hrefValue.toString().contains(COLON_DOUBLE_SLASH) || hrefValue.toString().startsWith(SHARP)) {
+                        return;
+                    }
+                    // normalize href value.
+                    URI target = hrefValue;
+                    if (target.isAbsolute()) {
+                        target = getRelativePath(rootFilePath.getAbsoluteFile().toURI(), target);
+                    }
+                    // caculate relative path for href value.
+                    final URI fileName = toURI(resolve(currentDir, toFile(target)));
+
+                    final boolean canParse = parseBranch(atts, hrefValue, fileName);
+                    if (canParse) {
+                        topicrefStack.push(localName);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -773,8 +749,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         final URI currentFileRelative = toURI(getRelativePath(rootFilePath.getAbsoluteFile(),
                 currentFile.getAbsoluteFile()));
         // seach the map with id & current file name.
-        if (vaildBranches.containsKey(currentFileRelative)) {
-            final List<String> branchIdList = vaildBranches.get(currentFileRelative);
+        if (validBranches.containsKey(currentFileRelative)) {
+            final List<String> branchIdList = validBranches.get(currentFileRelative);
             // the branch is referenced.
             if (branchIdList.contains(id)) {
 
@@ -799,17 +775,17 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         // href value has branch id.
         if (branchId != null) {
             // The map contains the file name
-            if (vaildBranches.containsKey(fileName)) {
-                final List<String> branchIdList = vaildBranches.get(fileName);
+            if (validBranches.containsKey(fileName)) {
+                final List<String> branchIdList = validBranches.get(fileName);
                 branchIdList.add(branchId);
             } else {
                 final List<String> branchIdList = new ArrayList<String>();
                 branchIdList.add(branchId);
-                vaildBranches.put(fileName, branchIdList);
+                validBranches.put(fileName, branchIdList);
             }
             // href value has no branch id
         } else {
-            vaildBranches.put(fileName, new ArrayList<String>());
+            validBranches.put(fileName, new ArrayList<String>());
         }
     }
     
