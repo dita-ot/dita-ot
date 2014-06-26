@@ -1780,22 +1780,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/image ')]">
-        <!-- build any pre break indicated by style -->
-        <xsl:choose>
-            <xsl:when test="parent::fig">
-                <!-- NOP if there is already a break implied by a parent property -->
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:if test="not(@placement='inline')">
-                    <!-- generate an FO break here -->
-                    <fo:block>&#160;</fo:block>
-                </xsl:if>
-            </xsl:otherwise>
-        </xsl:choose>
-
         <xsl:choose>
             <xsl:when test="empty(@href)"/>
-            <xsl:when test="not(@placement = 'inline')">
+            <xsl:when test="@placement = 'break'">
                     <fo:block xsl:use-attribute-sets="image__block">
                         <xsl:call-template name="commonattributes"/>
                         <xsl:apply-templates select="." mode="placeImage">
@@ -1816,19 +1803,6 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:with-param name="width" select="@width"/>
                     </xsl:apply-templates>
                 </fo:inline>
-            </xsl:otherwise>
-        </xsl:choose>
-
-        <!-- build any post break indicated by style -->
-        <xsl:choose>
-            <xsl:when test="parent::fig">
-                <!-- NOP if there is already a break implied by a parent property -->
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:if test="not(@placement='inline')">
-                    <!-- generate an FO break here -->
-                    <fo:block>&#160;</fo:block>
-                </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
