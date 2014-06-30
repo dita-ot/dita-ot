@@ -919,10 +919,6 @@ public final class Constants {
     public static final String GEN_CONF_PROPERTIES = "plugin.properties";
     /** Configuration value separator. */
     public static final String CONF_LIST_SEPARATOR = ";";
-    /** Property name for supported DITA topic extensions. */
-    public static final String CONF_SUPPORTED_TOPIC_EXTENSIONS = "supported_topic_extensions";
-    /** Property name for supported DITA map extensions. */
-    public static final String CONF_SUPPORTED_MAP_EXTENSIONS = "supported_map_extensions";
     /** Property name for supported image extensions. */
     public static final String CONF_SUPPORTED_IMAGE_EXTENSIONS = "supported_image_extensions";
     /** Property name for supported HTML extensions. */

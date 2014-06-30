@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -45,6 +46,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     private URI topicHref;
     /** For topic/dita files whether a </file> tag should be added */
     private boolean shouldAppendEndTag = false;
+    private DitaClass rootClass;
     
 	/**
 	 * Create new export antchors filter.
@@ -98,10 +100,21 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     
 	// SAX methods
 
+    @Override
+    public void startDocument() throws SAXException {
+        rootClass = null;
+
+        getContentHandler().startDocument();
+    }
+
 	@Override
 	public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
 			throws SAXException {
 	    final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        if (rootClass == null) {
+            rootClass = new DitaClass(classValue);
+        }
+        final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         // when meets topic tag
         if (TOPIC_TOPIC.matches(classValue)) {
             topicId = atts.getValue(ATTRIBUTE_NAME_ID);
@@ -134,13 +147,13 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         } else if (DELAY_D_EXPORTANCHORS.matches(classValue)) {
             hasExport = true;
             // If current file is a ditamap file
-            if (FileUtils.isDITAMapFile(currentFile.getPath())) {
+            if (rootClass != null && rootClass.matches(MAP_MAP)) {
                 // if dita file's extension name is ".xml"
                 currentExportAnchor = new ExportAnchor(topicHref);
                 // if <exportanchors> is defined in topicmeta(topicref), there is only one topic id
                 currentExportAnchor.topicids.add(topicId);
             // If current file is topic file
-            } else if (FileUtils.isDITATopicFile(currentFile.getPath())) {
+            } else if (rootClass == null || rootClass.matches(TOPIC_TOPIC)) {
                 URI filename = getRelativePath(rootFilePath, currentFile);
                 currentExportAnchor = new ExportAnchor(filename);
                 // if <exportanchors> is defined in metadata(topic), there can be many topic ids
@@ -157,12 +170,12 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
             final String id = atts.getValue(ATTRIBUTE_NAME_ID);
             // If current file is a ditamap file
             // The id can only be element id within a topic
-            if (FileUtils.isDITAMapFile(currentFile.getPath())) {
+            if (rootClass != null && rootClass.matches(MAP_MAP)) {
                 // id shouldn't be same as topic id in the case of duplicate insert
                 if (!topicId.equals(id)) {
                     currentExportAnchor.ids.add(id);
                 }
-            } else if (FileUtils.isDITATopicFile(currentFile.getPath())) {
+            } else if (rootClass == null || rootClass.matches(TOPIC_TOPIC)) {
                 // id shouldn't be same as topic id in the case of duplicate insert
                 if (!topicId.equals(id)) {
                     // topic id found
@@ -222,7 +235,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
                 topicId = attrValue.substring(position + 1);
             } else {
                 // get the first topicId(vaild href file)
-                if (FileUtils.isDITAFile(topicHref.getPath())) {
+                if (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA) || attrFormat.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
                     topicId = topicHref + QUESTION;
                 }
             }   
@@ -238,7 +251,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         // <exportanchors> over should write </file> tag
         if (topicMetaSet.contains(qName) && hasExport) {
             // If current file is a ditamap file
-            if (FileUtils.isDITAMapFile(currentFile.getPath())) {
+            if (rootClass != null && rootClass.matches(MAP_MAP)) {
                 exportAnchors.add(currentExportAnchor);
                 currentExportAnchor = null;
                 // If current file is topic file
@@ -255,7 +268,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      */
     @Override
     public void endDocument() throws SAXException {
-        if (FileUtils.isDITATopicFile(currentFile.getPath()) && shouldAppendEndTag) {
+        if ((rootClass == null || rootClass.matches(TOPIC_TOPIC)) && shouldAppendEndTag) {
             exportAnchors.add(currentExportAnchor);
             currentExportAnchor = null;
             // should reset

@@ -43,39 +43,6 @@ public final class FileUtils {
     private static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 
     /**
-     * Supported DITA topic extensions. File extensions contain a leading dot.
-     */
-    private final static List<String> supportedTopicExtensions;
-    static {
-        final List<String> ste = new ArrayList<String>();
-        final String extensions = Configuration.configuration.get(CONF_SUPPORTED_TOPIC_EXTENSIONS);
-        if (extensions != null && extensions.length()>0) {
-            Collections.addAll(ste, extensions.split(CONF_LIST_SEPARATOR));
-        } else {
-            logger.error("Failed to read supported DITA topic extensions from configuration, using defaults.");
-            ste.add(FILE_EXTENSION_DITA);
-            ste.add(FILE_EXTENSION_XML);
-        }
-        supportedTopicExtensions = Collections.unmodifiableList(ste);
-    }
-    
-    /**
-     * Supported DITA map extensions. File extensions contain a leading dot.
-     */
-    private final static List<String> supportedMapExtensions;
-    static {
-        final List<String> sme = new ArrayList<String>();
-        final String extensions = Configuration.configuration.get(CONF_SUPPORTED_MAP_EXTENSIONS);
-        if (extensions != null && extensions.length()>0) {
-            Collections.addAll(sme, extensions.split(CONF_LIST_SEPARATOR));
-        } else {
-            logger.error("Failed to read supported DITA map extensions from configuration, using defaults.");
-            sme.add(FILE_EXTENSION_DITAMAP);
-        }
-        supportedMapExtensions = Collections.unmodifiableList(sme);
-    }
-
-    /**
      * Supported image extensions. File extensions contain a leading dot.
      */
     private final static List<String> supportedImageExtensions;
@@ -133,20 +100,6 @@ public final class FileUtils {
     }
 
     /**
-     * Supported extensions. File extensions contain a leading dot.
-     */
-    private final static List<String> supportedExtensions;
-    static {
-        final List<String> se = new ArrayList<String>();
-        se.addAll(supportedTopicExtensions);
-        se.addAll(supportedMapExtensions);
-        se.addAll(supportedImageExtensions);
-        se.addAll(supportedHTMLExtensions);
-        se.addAll(supportedResourceExtensions);
-        supportedExtensions = Collections.unmodifiableList(se);
-    }
-
-    /**
      * Return if the file is a html file by extension.
      * @param lcasefn file name
      * @return true if is html file and false otherwise
@@ -200,71 +153,12 @@ public final class FileUtils {
     }
 
     /**
-     * Return if the file is a dita file by extension.
-     * @param lcasefn file name
-     * @return true if is DITA file and false otherwise
-     */
-    @Deprecated
-    public static boolean isDITAFile(String lcasefn) {
-        if(lcasefn == null) {
-            return false;
-        }
-        lcasefn = stripFragment(lcasefn);
-
-        return isDITATopicFile(lcasefn) || isDITAMapFile(lcasefn);
-    }
-
-    /**
-     * Return if the file is a dita topic file by extension.
-     * @param lcasefn file name
-     * @return true if is dita file and false otherwise
-     */
-    @Deprecated
-    public static boolean isDITATopicFile(final String lcasefn) {
-        for (final String ext: supportedTopicExtensions) {
-            if (lcasefn.endsWith(ext)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Return if the file is a dita map file by extension.
-     * @param lcasefn file name
-     * @return true if is ditamap file and false otherwise
-     */
-    @Deprecated
-    public static boolean isDITAMapFile(final String lcasefn) {
-        for (final String ext: supportedMapExtensions) {
-            if (lcasefn.endsWith(ext)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Return if the file is a supported image file by extension.
      * @param lcasefn filename
      * @return true if is supported image and false otherwise
      */
     public static boolean isSupportedImageFile(final String lcasefn) {
         for (final String ext: supportedImageExtensions) {
-            if (lcasefn.endsWith(ext)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Return if the file is a valid target file by extension.
-     * @param lcasefn filename
-     * @return true is the target is valid and false otherwise
-     */
-    public static boolean isValidTarget(final String lcasefn) {
-        for (final String ext: supportedExtensions) {
             if (lcasefn.endsWith(ext)) {
                 return true;
             }
@@ -312,7 +206,7 @@ public final class FileUtils {
      * 
      * @param basePath base path
      * @param refPath reference path
-     * @param ref path separator
+     * @param sep path separator
      * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
      */
     public static String getRelativePath(final String basePath, final String refPath, final String sep) {

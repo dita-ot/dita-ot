@@ -51,33 +51,6 @@ public class TestFileUtils {
     }
 
     @Test
-    public void testIsDITAFile() {
-        assertTrue(FileUtils.isDITAFile("file.xml"));
-        assertTrue(FileUtils.isDITAFile("file.xml#topicid"));
-        assertTrue(FileUtils.isDITAFile("file.dita"));
-        assertTrue(FileUtils.isDITAFile("file.dita#topicid"));
-        assertFalse(FileUtils.isDITAFile("file.xm"));
-        assertFalse(FileUtils.isDITAFile("file.dit#xml"));
-    }
-
-    @Test
-    public void testIsDITATopicFile() {
-        assertTrue(FileUtils.isDITATopicFile("file.xml"));
-        assertTrue(FileUtils.isDITATopicFile("file.dita"));
-        assertFalse(FileUtils.isDITATopicFile("file"));
-        assertFalse(FileUtils.isDITATopicFile("file.XML"));
-        assertFalse(FileUtils.isDITATopicFile("file.DITA"));
-    }
-
-    @Test
-    public void testIsDITAMapFile() {
-        assertTrue(FileUtils.isDITAMapFile("file.ditamap"));
-        assertFalse(FileUtils.isDITAMapFile("file.Ditamap"));
-        assertFalse(FileUtils.isDITAMapFile("file.DITAMAP"));
-        assertFalse(FileUtils.isDITAMapFile("file"));
-    }
-
-    @Test
     public void testIsSupportedImageFile() {
         assertTrue(FileUtils.isSupportedImageFile("image.jpg"));
         assertTrue(FileUtils.isSupportedImageFile("image.gif"));
@@ -90,24 +63,6 @@ public class TestFileUtils {
         assertFalse(FileUtils.isSupportedImageFile("image.abc"));
         assertFalse(FileUtils.isSupportedImageFile("image"));
 
-    }
-
-    @Test
-    public void testIsValidTarget() {
-        assertTrue(FileUtils.isValidTarget("file.ditamap"));
-        assertTrue(FileUtils.isValidTarget("file.xml"));
-        assertTrue(FileUtils.isValidTarget("file.dita"));
-        assertTrue(FileUtils.isValidTarget("file.jpg"));
-        assertTrue(FileUtils.isValidTarget("file.gif"));
-        assertTrue(FileUtils.isValidTarget("file.eps"));
-        assertTrue(FileUtils.isValidTarget("file.html"));
-        assertTrue(FileUtils.isValidTarget("file.jpeg"));
-        assertTrue(FileUtils.isValidTarget("file.png"));
-        assertTrue(FileUtils.isValidTarget("file.svg"));
-        assertTrue(FileUtils.isValidTarget("file.tiff"));
-        assertTrue(FileUtils.isValidTarget("file.tif"));
-        assertFalse(FileUtils.isValidTarget("file.abc"));
-        assertFalse(FileUtils.isValidTarget("file"));
     }
 
     @Test

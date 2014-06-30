@@ -441,7 +441,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
             isRootElement = false;
             final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
             if (classValue != null) {
-                rootClass = new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS));
+                rootClass = new DitaClass(classValue);
             }
             if (TOPIC_TOPIC.matches(rootClass)) {
                 fileInfo.format(ATTR_FORMAT_VALUE_DITA);
@@ -672,22 +672,17 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
 
         final File file = FileUtils.resolve(baseDir.toString(), attValue.getPath());
 
-        final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-
         // Collect non-conref and non-copyto targets
         if (file != null
-                && FileUtils.isValidTarget(file.getPath().toLowerCase())
                 && (atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
-                        || !FileUtils.isDITATopicFile(atts.getValue(ATTRIBUTE_NAME_COPY_TO).toLowerCase())
                         || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null
                             && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content")))
                 && !ATTRIBUTE_NAME_CONREF.equals(attrName)
                 && !ATTRIBUTE_NAME_COPY_TO.equals(attrName)
                 && (canResolved() || FileUtils.isSupportedImageFile(file.getPath().toLowerCase()))) {
-            String format = attrFormat;
+            String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
             if (format == null) {
-                if (TOPIC_IMAGE.matches(attrClass)) {
+                if (TOPIC_IMAGE.matches(atts.getValue(ATTRIBUTE_NAME_CLASS))) {
                     format = "image";
                 } else {
                     format = ATTR_FORMAT_VALUE_DITA;

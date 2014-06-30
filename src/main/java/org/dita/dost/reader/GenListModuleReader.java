@@ -28,6 +28,7 @@ import java.util.Stack;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
@@ -120,6 +121,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Stack<String> topicrefStack;
     /** Store the primary ditamap file name. */
     private String primaryDitamap = "";
+    private boolean isRootElement = true;
+    private DitaClass rootClass = null;
 
     /**
      * Constructor.
@@ -206,6 +209,30 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         final Set<File> res = new HashSet<File>(resourceOnlySet);
         res.removeAll(crossSet);
         return res;
+    }
+
+    /**
+     * Is the processed file a DITA topic.
+     *
+     * @return {@code true} if DITA topic, otherwise {@code false}
+     */
+    public boolean isDitaTopic() {
+        if (isRootElement) {
+            throw new IllegalStateException();
+        }
+        return rootClass == null || TOPIC_TOPIC.matches(rootClass);
+    }
+
+    /**
+     * Is the processed file a DITA map.
+     *
+     * @return {@code true} if DITA map, otherwise {@code false}
+     */
+    public boolean isDitaMap() {
+        if (isRootElement) {
+            throw new IllegalStateException();
+        }
+        return rootClass != null && MAP_MAP.matches(rootClass);
     }
 
     /**
@@ -440,29 +467,16 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         topicrefStack.clear();
         processRoleLevel = 0;
         processRoleStack.clear();
+        isRootElement = true;
+        rootClass = null;
         // Don't clean resourceOnlySet por crossSet
-    }
-
-    /**
-     * Check if the current file is a ditamap with
-     * "@processing-role=resource-only".
-     */
-    @Override
-    public void startDocument() throws SAXException {
-        final File href = getRelativePath(rootFilePath.getAbsoluteFile(), currentFile.getAbsoluteFile());
-        if (isDITAMapFile(currentFile.getName()) && resourceOnlySet.contains(href)
-                && !crossSet.contains(href)) {
-            processRoleLevel++;
-            processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
-        }
-        
-        getContentHandler().startDocument();
     }
 
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
-        String domains = null;
+        handleRootElement(localName, atts);
+
         final String processingRole = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
         final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
@@ -558,7 +572,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         if (classValue != null && TOPIC_TOPIC.matches(classValue)) {
-            domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
+            final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains == null) {
                 logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
             } else {
@@ -593,6 +607,22 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         parseAttribute(atts, ATTRIBUTE_NAME_KEYREF);
 
         getContentHandler().startElement(uri, localName, qName, atts);
+    }
+
+    private void handleRootElement(final String localName, final Attributes atts) {
+        if (isRootElement) {
+            isRootElement = false;
+            final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+            if (classValue != null) {
+                rootClass = new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS));
+            }
+
+            final File href = getRelativePath(rootFilePath.getAbsoluteFile(), currentFile.getAbsoluteFile());
+            if (isDitaMap() && resourceOnlySet.contains(href) && !crossSet.contains(href)) {
+                processRoleLevel++;
+                processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+            }
+        }
     }
 
     private void handleTopicRef(String localName, Attributes atts) {
@@ -864,18 +894,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         // Collect non-conref and non-copyto targets
-        if (isValidTarget(filename.toLowerCase())
-                && (isEmptyString(atts.getValue(ATTRIBUTE_NAME_COPY_TO))
-                        || !isDITATopicFile(atts.getValue(ATTRIBUTE_NAME_COPY_TO).toLowerCase()) || (atts
-                        .getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
-                        "to-content"))) && !ATTRIBUTE_NAME_CONREF.equals(attrName)
-                && !ATTRIBUTE_NAME_COPY_TO.equals(attrName)
+        if ((ATTRIBUTE_NAME_HREF.equals(attrName) || ATTRIBUTE_NAME_DATA.equals(attrName))
+                && (atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
+                    || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content")))
                 && (canResolved() || isSupportedImageFile(filename.toLowerCase()))) {
             nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
-            // nonConrefCopytoTargets.add(filename);
         }
         // outside ditamap files couldn't cause warning messages, it is stopped here
-        if (attrFormat != null && !ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat)) {
+        if (attrFormat != null && !ATTR_FORMAT_VALUE_DITA.equals(attrFormat)) {
             // The format of the href is not dita topic
             // The logic after this "if" clause is not related to files other than dita topic.
             // Therefore, we need to return here to filter out those files in other format.
@@ -885,7 +911,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         /*
          * Collect only href target topic files for index extracting.
          */
-        if (ATTRIBUTE_NAME_HREF.equals(attrName) && isDITATopicFile(filename) && canResolved()) {
+        if (ATTRIBUTE_NAME_HREF.equals(attrName) && isFormatDita(attrFormat) && canResolved()) {
             hrefTargets.add(new File(filename));
             toOutFile(new File(filename));
             if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
@@ -896,13 +922,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         // Collect only conref target topic files
-        if (ATTRIBUTE_NAME_CONREF.equals(attrName) && isDITAFile(filename)) {
+        if (ATTRIBUTE_NAME_CONREF.equals(attrName)) {
             conrefTargets.add(new File(filename));
             toOutFile(new File(filename));
         }
 
         // Collect copy-to (target,source) into hash map
-        if (ATTRIBUTE_NAME_COPY_TO.equals(attrName) && isDITATopicFile(filename)) {
+        if (ATTRIBUTE_NAME_COPY_TO.equals(attrName) && isFormatDita(attrFormat)) {
             final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
             if (href != null) {
                 final File value = resolve(currentDir, toFile(href).getPath());
@@ -936,6 +962,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
     }
 
+    private boolean isFormatDita(final String attrFormat) {
+        return attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA);
+    }
+
     /**
      * Check if path walks up in parent directories
      * 
@@ -952,8 +982,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * @return {@code} true if file is map, otherwise {@code false}
      */
     private boolean isMapFile() {
-        final String current = normalize(currentFile.getAbsolutePath()).getPath();
-        return isDITAMapFile(current);
+        return isDitaMap();
     }
 
     private boolean canResolved() {

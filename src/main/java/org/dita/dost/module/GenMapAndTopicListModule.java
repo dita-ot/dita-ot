@@ -51,13 +51,7 @@ import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.reader.KeydefFilter;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.DelayConrefUtils;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.ExportAnchorsFilter.ExportAnchor;
@@ -409,10 +403,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     }
 
     private void processWaitList() throws DITAOTException {
-        if (FileUtils.isDITAMapFile(inputFile.getPath())) {
-            listFilter.setPrimaryDitamap(inputFile.getPath());
-        }
-
+        listFilter.setPrimaryDitamap(inputFile.getPath());
         while (!waitList.isEmpty()) {
         	currentFile = waitList.remove(0); 
             processFile(currentFile);
@@ -480,11 +471,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         if (!fileToParse.exists()) {
             logger.error(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
             return;
-        }
-        if (!FileUtils.isValidTarget(file.getPath().toLowerCase())) {
-            final Properties prop = new Properties();
-            prop.put("%1", fileToParse);
-            logger.warn(MessageUtils.getInstance().getMessage("DOTJ053W", params).toString());
         }
         
         try {
@@ -657,7 +643,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         ditaSet.add(currentFile);
 
-        if (FileUtils.isDITATopicFile(currentFile.getPath())) {
+        if (listFilter.isDitaTopic()) {
             hrefTargetSet.add(currentFile);
         }
 
@@ -677,14 +663,14 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             coderefSet.add(currentFile);
         }
 
-        if (FileUtils.isDITATopicFile(lcasefn)) {
+        if (listFilter.isDitaTopic()) {
             fullTopicSet.add(currentFile);
             if (listFilter.hasHref()) {
                 hrefTopicSet.add(currentFile);
             }
         }
 
-        if (FileUtils.isDITAMapFile(lcasefn)) {
+        if (listFilter.isDitaMap()) {
             fullMapSet.add(currentFile);
             if (listFilter.hasHref()) {
                 hrefMapSet.add(currentFile);
@@ -709,11 +695,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         if (subsidiarySet.contains(toFile(file.filename))) {
             return;
         }
-
-        if (FileUtils.isDITAFile(lcasefn)
-                && (file.format == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(file.format) || ATTR_FORMAT_VALUE_DITAMAP
-                .equalsIgnoreCase(file.format))) {
-
+        if (file.format == null || ATTR_FORMAT_VALUE_DITA.equals(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
             addToWaitList(new File(file.filename));
         } else if (!FileUtils.isSupportedImageFile(lcasefn)) {
             // FIXME: Treating all non-image extensions as HTML/resource files is not correct if HTML/resource files
