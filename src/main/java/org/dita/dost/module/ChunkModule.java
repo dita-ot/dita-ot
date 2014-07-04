@@ -31,10 +31,8 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ChunkMapReader;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.TopicRefWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -45,6 +43,8 @@ import org.xml.sax.SAXException;
  * 
  */
 final public class ChunkModule extends AbstractPipelineModuleImpl {
+
+    public static final DitaClass ECLIPSEMAP_PLUGIN = new DitaClass("- map/map eclipsemap/plugin ");
 
     /**
      * using to save relative path when do rename action for newly chunked file
@@ -119,7 +119,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
         }
         final Element root = doc.getDocumentElement();
-        return root.getAttribute(ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ");
+        return ECLIPSEMAP_PLUGIN.matches(root);
     }
 
     // update the href in ditamap and topic files
