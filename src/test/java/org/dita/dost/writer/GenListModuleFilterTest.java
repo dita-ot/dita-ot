@@ -167,7 +167,6 @@ public class GenListModuleFilterTest {
             assertEquals(actFileInfo.file + ": ", expFileInfo.isSkipChunk, actFileInfo.isSkipChunk);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isSubtarget, actFileInfo.isSubtarget);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isFlagImage, actFileInfo.isFlagImage);
-            assertEquals(actFileInfo.file + ": ", expFileInfo.isChunkedDitaMap, actFileInfo.isChunkedDitaMap);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isOutDita, actFileInfo.isOutDita);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isCopyToSource, actFileInfo.isCopyToSource);
         }

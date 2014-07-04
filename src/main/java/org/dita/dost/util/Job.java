@@ -109,7 +109,6 @@ public final class Job {
             attrToFieldMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getField("isSubjectScheme"));
             attrToFieldMap.put(ATTRIBUTE_COPYTO_SOURCE_LIST, FileInfo.class.getField("isCopyToSource"));
             attrToFieldMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getField("isOutDita"));
-            attrToFieldMap.put(ATTRIBUTE_CHUNKED_DITAMAP_LIST, FileInfo.class.getField("isChunkedDitaMap"));
             attrToFieldMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
             attrToFieldMap.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getField("isSubtarget"));
             attrToFieldMap.put(ATTRIBUTE_CHUNK_TOPIC_LIST, FileInfo.class.getField("isSkipChunk"));
@@ -572,8 +571,6 @@ public final class Job {
         public boolean isSubtarget;
         /** File is a flagging image. */
         public boolean isFlagImage;
-        /** File is a chunked map. */
-        public boolean isChunkedDitaMap;
         /** Source file is outside base directory. */
         public boolean isOutDita;
         /** File is used only as a source of a copy-to. */
@@ -615,7 +612,6 @@ public final class Job {
             private boolean isSkipChunk;
             private boolean isSubtarget;
             private boolean isFlagImage;
-            private boolean isChunkedDitaMap;
             private boolean isOutDita;
             private boolean isCopyToSource;
         
@@ -638,7 +634,6 @@ public final class Job {
                 isSkipChunk = orig.isSkipChunk;
                 isSubtarget = orig.isSubtarget;
                 isFlagImage = orig.isFlagImage;
-                isChunkedDitaMap = orig.isChunkedDitaMap;
                 isOutDita = orig.isOutDita;
                 isCopyToSource = orig.isCopyToSource;
             }
@@ -664,7 +659,6 @@ public final class Job {
                 if (orig.isSkipChunk) isSkipChunk = orig.isSkipChunk;
                 if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
                 if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
-                if (orig.isChunkedDitaMap) isChunkedDitaMap = orig.isChunkedDitaMap;
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
                 if (orig.isCopyToSource) isCopyToSource = orig.isCopyToSource;
                 return this;
@@ -687,7 +681,6 @@ public final class Job {
             public Builder isSkipChunk(final boolean isSkipChunk) { this.isSkipChunk = isSkipChunk; return this; }
             public Builder isSubtarget(final boolean isSubtarget) { this.isSubtarget = isSubtarget; return this; }
             public Builder isFlagImage(final boolean isFlagImage) { this.isFlagImage = isFlagImage; return this; }
-            public Builder isChunkedDitaMap(final boolean isChunkedDitaMap) { this.isChunkedDitaMap = isChunkedDitaMap; return this; }
             public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
             public Builder isCopyToSource(final boolean isCopyToSource) { this.isCopyToSource = isCopyToSource; return this; }
             
@@ -711,7 +704,6 @@ public final class Job {
                 fi.isSkipChunk = isSkipChunk;
                 fi.isSubtarget = isSubtarget;
                 fi.isFlagImage = isFlagImage;
-                fi.isChunkedDitaMap = isChunkedDitaMap;
                 fi.isOutDita = isOutDita;
                 fi.isCopyToSource = isCopyToSource;
                 return fi;
