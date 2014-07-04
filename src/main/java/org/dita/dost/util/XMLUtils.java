@@ -25,7 +25,6 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.MessageUtils;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 import org.w3c.dom.Attr;
@@ -146,16 +145,38 @@ public final class XMLUtils {
      * Transform file with XML filters.
      * 
      * @param inputFile file to transform and replace
-     * @param filters XML filters to transform file with
+     * @param filters XML filters to transform file with, may be an empty list
      */
     public static void transform(final File inputFile, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
+        transform(inputFile, outputFile, filters);
+        try {
+            FileUtils.moveFile(outputFile, inputFile);
+        } catch (final RuntimeException e) {
+            throw e;
+        } catch (final Exception e) {
+            throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Transform file with XML filters.
+     * 
+     * @param inputFile input file
+     * @param outputFile output file
+     * @param filters XML filters to transform file with, may be an empty list
+     */
+    public static void transform(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
+        if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
+            throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
+        }
+        
         InputStream in = null;
         OutputStream out = null;
         try {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer();
             XMLReader reader = StringUtils.getXMLReader();
-            for (final XMLFilter filter: filters) {
+            for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
                 // when reusing filter with multiple Transformers.
                 filter.setContentHandler(null);
@@ -167,6 +188,8 @@ public final class XMLUtils {
             final Source source = new SAXSource(reader, new InputSource(in));
             final Result result = new StreamResult(out);
             transformer.transform(source, result);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessage(), e);
         } finally {
@@ -184,17 +207,6 @@ public final class XMLUtils {
                     // ignore
                 }
             }
-        }
-        // replace original file
-        try {
-            if (!inputFile.delete()) {
-                throw new DITAOTException("Failed to delete " + outputFile);
-            }
-            if (!outputFile.renameTo(inputFile)) {
-                throw new DITAOTException("Failed to move " + inputFile);
-            }
-        } catch (final Exception e) {
-            throw new DITAOTException("Failed to replace " + inputFile + ": " + e.getMessage());
         }
     }
     
@@ -263,6 +275,16 @@ public final class XMLUtils {
          */
         public AttributesBuilder add(final String uri, final String localName, final String value) {
             return add(uri, localName, localName, "CDATA", value);
+        }
+        
+        /**
+         * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
+         * 
+         * @param attr DOM attribute node
+         * @return this builder
+         */
+        public AttributesBuilder add(final Attr attr) {
+            return add(attr.getNodeName(), attr.getNodeValue());
         }
         
         /**

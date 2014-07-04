@@ -35,13 +35,20 @@
       </foreign>
       <table>
         <tgroup cols="3">
-          <colspec colname="col1"/>
-          <colspec colname="col2"/>
-          <colspec colname="col3"/>
+          <colspec colname="col1" colwidth="1*"/>
+          <colspec colname="col2" colwidth="1*"/>
+          <colspec colname="col3" colwidth="1*"/>
           <tbody>
             <row id="row">
               <entry colname="col1" namest="col1" nameend="col2"/>
               <entry colname="col3"/>
+            </row>
+            <row conkeyref="keyword/row">
+              <entry colname="col1"/>
+            </row>
+            <!-- FIXME: should be keyword.dita#keyword/other -->
+            <row conref="keyword.dita#other">
+              <entry colname="col1"/>
             </row>
           </tbody>
         </tgroup>

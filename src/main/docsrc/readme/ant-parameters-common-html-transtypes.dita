@@ -5,8 +5,8 @@
   <titlealts>
     <navtitle>All HTML-based transformations</navtitle>
   </titlealts>
-  <shortdesc>Certain parameters apply to all the HTML-based transformation types: Eclipse content,
-    Eclipse help, HTML Help, JavaHelp, TocJS, and XHTML. </shortdesc>
+  <shortdesc>Certain parameters apply to all the HTML-based transformation types: Eclipse help, HTML
+    Help, JavaHelp, TocJS, HTML5, and XHTML. </shortdesc>
   <prolog>
     <metadata>
       <keywords>

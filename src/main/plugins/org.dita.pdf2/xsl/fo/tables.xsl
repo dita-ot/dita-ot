@@ -356,10 +356,10 @@
         <fo:block xsl:use-attribute-sets="table.title">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'Table'"/>
+                <xsl:with-param name="theVariableID" select="'Table.title'"/>
                 <xsl:with-param name="theParameters">
                     <number>
-                        <xsl:number level="any" count="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" from="/"/>
+                        <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>
@@ -408,6 +408,8 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+  
+    <xsl:template match="*[contains(@class, ' topic/tgroup ')][empty(*[contains(@class, ' topic/tbody ')]//*[contains(@class, ' topic/row ')])]" priority="10"/>
 
     <xsl:template match="*[contains(@class, ' topic/colspec ')]">
         <fo:table-column>
@@ -505,13 +507,14 @@
         <xsl:variable name="entryNumber">
             <xsl:call-template name="countEntryNumber"/>
         </xsl:variable>
+        <xsl:variable name="colspec" select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = number($entryNumber)]"/>
         <xsl:variable name="char">
             <xsl:choose>
                 <xsl:when test="@char">
                     <xsl:value-of select="@char"/>
                 </xsl:when>
-                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = number($entryNumber)]/@char">
-                    <xsl:value-of select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = $entryNumber]/@char"/>
+                <xsl:when test="$colspec/@char">
+                    <xsl:value-of select="$colspec/@char"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
@@ -520,8 +523,8 @@
                 <xsl:when test="@charoff">
                     <xsl:value-of select="@charoff"/>
                 </xsl:when>
-                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = number($entryNumber)]/@charoff">
-                    <xsl:value-of select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = $entryNumber]/@charoff"/>
+                <xsl:when test="$colspec/@charoff">
+                    <xsl:value-of select="$colspec/@charoff"/>
                 </xsl:when>
                 <xsl:otherwise>50</xsl:otherwise>
             </xsl:choose>
@@ -564,63 +567,6 @@
                         </fo:list-item-body>
                     </fo:list-item>
                 </fo:list-block>
-<!--
-                <fo:block text-align="right">
-                    <xsl:copy-of select="text-before"/>
-                    <fo:leader leader-pattern="use-content"
-                        leader-length="{concat(string(100 - $charoff),'%')}"
-                        leader-pattern-width="use-font-metrics">
-                        <xsl:copy-of select="$text-after"/>
-                    </fo:leader>
-                </fo:block>
--->
-<!--
-                <fo:table>
-                    <fo:table-column column-number="1" >
-                        <xsl:attribute name="column-width">proportional-column-width(
-                        <xsl:value-of select="$charoff"/>
-                        )</xsl:attribute>
-                    </fo:table-column>
-                    <fo:table-column column-number="2" >
-                    </fo:table-column>
-                    <fo:table-column column-number="3" >
-                        <xsl:attribute name="column-width">proportional-column-width(
-                        <xsl:value-of select="100 - number($charoff)"/>
-                        )</xsl:attribute>
-                    </fo:table-column>
-                    <fo:table-body>
-                        <fo:table-row>
-                            <fo:table-cell text-align="right">
-                                <fo:block>
-                                    <xsl:copy-of select="$text-before"/>
-                                </fo:block>
-                            </fo:table-cell>
-                            <fo:table-cell text-align="center">
-                                <fo:block>
-                                    <xsl:choose>
-                                        <xsl:when test="($text-before='') and ($text-after='')"/>
-                                        <xsl:otherwise>
-                                            <xsl:copy-of select="$char"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </fo:block>
-                            </fo:table-cell>
-                            <fo:table-cell text-align="left">
-                                <fo:block>
-                                    <xsl:choose>
-                                        <xsl:when test="($text-before='') and ($text-after='')">
-                                            <xsl:copy-of select="text()"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:copy-of select="$text-after"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </fo:block>
-                            </fo:table-cell>
-                        </fo:table-row>
-                    </fo:table-body>
-                </fo:table>
--->
             </xsl:when>
         </xsl:choose>
     </xsl:template>
@@ -637,20 +583,6 @@
                 <xsl:value-of select="@colnum"/>
             </xsl:when>
             <xsl:otherwise>
-<!--  TODO Count of the entry Position              -->
-<!--
-                <xsl:variable name="cols" select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/@cols"/>
-                <xsl:variable name="colsInCurentRow" select="count(preceding-sibling::*[contains(@class, ' topic/entry ')])+count(following-sibling::*[contains(@class, ' topic/entry ')])+1"/>
-                <xsl:variable name="precedingHorizontalSpan">
-                    <xsl:value-of select="number(preceding-sibling::*[contains(@class, ' topic/entry ')]/@nameend) - number(preceding-sibling::*[contains(@class, ' topic/entry ')]/@namest)"/>
-                </xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="$colsInCurentRow = $cols">
-                        <xsl:value-of select="count(preceding-sibling::*[contains(@class, ' topic/entry ')])+1"/>
-                    </xsl:when>
-                    <xsl:when test=""/>
-                </xsl:choose>
--->
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1074,8 +1006,6 @@
         </xsl:variable>
         <fo:table xsl:use-attribute-sets="simpletable">
             <xsl:call-template name="commonattributes"/>
-            <!-- <xsl:call-template name="univAttrs"/>
-            -->
             <xsl:call-template name="globalAtts"/>
             <xsl:call-template name="displayAtts">
                 <xsl:with-param name="element" select="."/>
@@ -1106,6 +1036,8 @@
 
         </fo:table>
     </xsl:template>
+  
+    <xsl:template match="*[contains(@class, ' topic/simpletable ')][empty(*)]" priority="10"/>
 
     <xsl:template name="createSimpleTableColumns">
         <xsl:param name="theColumnWidthes" select="'1*'"/>

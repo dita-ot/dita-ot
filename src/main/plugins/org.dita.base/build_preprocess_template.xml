@@ -1,18 +1,36 @@
 <?xml version="1.0"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="ditaot-preprocess">
 
   <!-- Set to "true" if you get out-of-memory errors during preprocess
        while processing very large (thousands of files) document sets. -->
-  <condition property="dita.preprocess.reloadstylesheet" value="false">
+  <condition property="dita.preprocess.reloadstylesheet" value="${conserve-memory}">
     <not><isset property="dita.preprocess.reloadstylesheet"/></not>
   </condition>
 
   <target name="preprocess"
-    dita:depends="{depend.preprocess.pre},preprocess.init,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,flag-module,{depend.preprocess.post}"
+    dita:depends="{depend.preprocess.pre},
+                  preprocess.init,
+                  gen-list,
+                  debug-filter,
+                  copy-files,
+                  keyref,
+                  conrefpush,
+                  conref,
+                  topic-fragment,
+                  coderef,
+                  mapref,
+                  move-meta-entries,
+                  mappull,
+                  chunk,
+                  maplink,
+                  move-links,
+                  topicpull,
+                  flag-module,
+                  clean-map,
+                  {depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
   
@@ -60,16 +78,11 @@
     </dita-ot-fail>
     
     <basename property="dita.input.filename" file="${args.input}" />
-    <condition property="dita.input.dirname" value="${args.input.dir}">
-      <isset property="args.input.dir"/>
-    </condition>
-    <dirname property="dita.input.dirname" file="${args.input}" />
     <basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".ditamap" />
     <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix=".dita" />
     
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input}</echo>
-    <echo level="info">* inputdir = ${dita.input.dirname}</echo>
     <echo level="info">*****************************************************************</echo>
   </target>
   
@@ -125,9 +138,6 @@
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
     <job-helper file="subtargets.list" property="subtargetslist"/>
-    <job-helper file="conrefpush.list" property="conrefpushlist"/>
-    <job-helper file="keyref.list" property="keyreflist"/>
-    <job-helper file="coderef.list" property="codereflist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <property name="outditafilesfile" value="outditafiles.list"/>
     <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
@@ -144,9 +154,6 @@
     <property name="conreftargetsfile" value="conreftargets.list"/>
     <property name="copytosourcefile" value="copytosource.list"/>
     <property name="subtargetsfile" value="subtargets.list"/>
-    <property name="conrefpushfile" value="conrefpush.list"/>
-    <property name="keyreffile" value="keyref.list"/>
-    <property name="codereffile" value="coderef.list"/>
     <property name="resourceonlyfile" value="resourceonly.list"/>
   </target>
 
@@ -171,6 +178,7 @@
         <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
         <param name="outputdir" location="${output.dir}"/>
         <param name="transtype" value="${transtype}"/>
+        <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
       </module>
     </pipeline>
@@ -181,43 +189,23 @@
     <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
-    <job-helper file="conrefpush.list" property="conrefpushlist"/>
-    <job-helper file="keyref.list" property="keyreflist"/>
     <job-helper file="canditopics.list" property="canditopicslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-property dir="${dita.temp.dir}"/>
     <dirname property="_dita.map.output.dir" file="${output.dir}/${user.input.file}" />
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
-    <condition property="noConref">
-      <length file="${dita.temp.dir}/${conreffile}" length="0"/>
-    </condition>
     <condition property="noMap">
       <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
     </condition>
     <condition property="noImagelist">
       <length file="${dita.temp.dir}/${imagefile}" length="0"/>
     </condition>
-    <condition property="noHtmllist">
-      <length file="${dita.temp.dir}/${htmlfile}" length="0"/>
-    </condition>
-    <condition property="noSublist">
-      <length file="${dita.temp.dir}/${subtargetsfile}" length="0"/>
-    </condition>
-    <condition property="noConrefPush">
-      <length file="${dita.temp.dir}/${conrefpushfile}" length="0"/>
-    </condition>
-    <condition property="noKeyref">
-      <length file="${dita.temp.dir}/${keyreffile}" length="0"/>
-    </condition>
-    <condition property="noCoderef">
-      <length file="${dita.temp.dir}/${codereffile}" length="0"/>
-    </condition>
   </target>
   
   <!-- conref push
       Push information to the specified target -->
   <target name="conrefpush"
-    dita:depends="{depend.preprocess.conrefpush.pre},conrefpush-check"
+    dita:depends="{depend.preprocess.conrefpush.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.conrefpush.skip"
     description="Resolve conref push">
@@ -225,18 +213,13 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.ConrefPushModule"/>
     </pipeline>
-  </target>
-  
-  <target name="conrefpush-check">
-    <condition property="preprocess.conrefpush.skip">
-      <isset property="noConrefPush"/>
-    </condition>
+    <job-helper file="conref.list" property="conreflist"/>
   </target>
   
   <!-- move-meta-entries
       Push information from <topicmeta> in the map into the corresponding topics. -->
   <target name="move-meta-entries" 
-    dita:depends="{depend.preprocess.move-meta-entries.pre},move-meta-entries-check"
+    dita:depends="{depend.preprocess.move-meta-entries.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-meta-entries.skip"
     description="Move metadata entries">
@@ -245,12 +228,6 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.MoveMetaModule"/>
     </pipeline>
-  </target>
-
-  <target name="move-meta-entries-check">
-    <condition property="preprocess.move-meta-entries.skip">
-      <isset property="noMap"/>
-    </condition>
   </target>
   
   <!-- conref
@@ -264,32 +241,35 @@
       <not><isset property="dita.preprocess.reloadstylesheet.conref"/></not>
     </condition>
     <makeurl property="exportfile.url" file="${dita.temp.dir}/export.xml" validate="false"/>
-    <xslt basedir="${dita.temp.dir}" taskname="conref"
-      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}/${conreffile}"
-      classpathref="dost.class.path"
-      reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
-      <mapper type="glob" from="*" to="*.cnrf" />
-      <param name="EXPORTFILE" expression="${exportfile.url}"/>
-      <param name="TRANSTYPE" expression="${transtype}"/>
-      <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-    <move todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.cnrf" />
-      <mapper type="glob" from="*.cnrf" to="*" />
-    </move>
+    <pipeline message="Resolve conref in input files" taskname="conref">
+      <xslt basedir="${dita.temp.dir}"
+        reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
+        <includesfile name="${dita.temp.dir}/${conreffile}"/>
+        <param name="EXPORTFILE" expression="${exportfile.url}"/>
+        <param name="TRANSTYPE" expression="${transtype}"/>
+        <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
   </target>
   
   <target name="conref-check">
     <condition property="preprocess.conref.skip">
-      <isset property="noConref"/>
+      <length file="${dita.temp.dir}/${conreffile}" length="0"/>
     </condition>
+  </target>
+  
+  <target name="topic-fragment"
+          description="Resolve same topic fragment identifiers">
+    <pipeline message="Resolve topic fragment." taskname="topic-fragment">
+      <module class="org.dita.dost.module.TopicFragmentModule"/>
+    </pipeline>
   </target>
   
   <!-- coderef -->
   <target name="coderef"
-    dita:depends="{depend.preprocess.coderef.pre},coderef-check"
+    dita:depends="{depend.preprocess.coderef.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.coderef.skip"
     description="Resolve coderef in input files">
@@ -298,13 +278,7 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.CoderefModule"/>
     </pipeline>
-      
-  </target>
-  
-  <target name="coderef-check">
-    <condition property="preprocess.coderef.skip">
-      <isset property="noCoderef"/>
-    </condition>
+    
   </target>
   
   <!-- mapref
@@ -319,22 +293,16 @@
       <not><isset property="dita.preprocess.reloadstylesheet.mapref"/></not>
     </condition>
     <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
-    <xslt taskname="mapref"
-    	basedir="${dita.temp.dir}"
-    	destdir="${dita.temp.dir}"
-        includesfile="${dita.temp.dir}/${fullditamapfile}"
-    	extension=".ditamap.ref"
-        classpathref="dost.class.path"
-        reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
-      <param name="TRANSTYPE" expression="${transtype}" />
-      <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-    <move overwrite="true" todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.ditamap.ref" />
-      <mapper type="glob" from="*.ditamap.ref" to="*.ditamap" />
-    </move>
+    <pipeline message="Resolve mapref in ditamap" taskname="mapref">
+      <xslt basedir="${dita.temp.dir}"
+          reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
+        <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
+        <param name="TRANSTYPE" expression="${transtype}" />
+        <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
   </target>
 
   <target name="mapref-check">
@@ -346,7 +314,7 @@
   <!-- keyref
        Resolve keyref using key definition in ditamap-->
   <target name="keyref"
-    dita:depends="{depend.preprocess.keyref.pre},keyref-check"
+    dita:depends="{depend.preprocess.keyref.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
@@ -357,12 +325,6 @@
     </pipeline>
   </target>
   
-  <target name="keyref-check">
-    <condition property="preprocess.keyref.skip">
-      <isset property="noKeyref"/>
-    </condition>
-  </target>
-    
   <!-- mappull
       Pull metadata (such as navtitle) into the map from the referenced topics. -->
   <target name="mappull"
@@ -374,22 +336,17 @@
     <condition property="dita.preprocess.reloadstylesheet.mappull" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.mappull"/></not>
     </condition>
-    <xslt taskname="mappull"
-  	    basedir="${dita.temp.dir}"
-    	destdir="${dita.temp.dir}"
-        includesfile="${dita.temp.dir}/${fullditamapfile}"
-    	extension=".ditamap.pull"
-        classpathref="dost.class.path"
-        reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
-      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl">
-      <param name="TRANSTYPE" expression="${transtype}" />
-      <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-    <move overwrite="true" todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.ditamap.pull" />
-      <mapper type="glob" from="*.ditamap.pull" to="*.ditamap" />
-    </move>
+    <pipeline message="Pull the navtitle and topicmeta from topics to ditamap" taskname="mappull">
+      <xslt basedir="${dita.temp.dir}"
+          reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl">
+        <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
+        <param name="TRANSTYPE" expression="${transtype}" />
+        <param name="conserve-memory" expression="${conserve-memory}" if="conserve-memory"/>
+        <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
   </target>
   
   <target name="mappull-check">
@@ -420,9 +377,9 @@
     <job-helper file="copytosource.list" property="copytosourcelist"/>
     <job-helper file="copytotarget2sourcemap.list" property="copytotarget2sourcemaplist"/>
     <job-property dir="${dita.temp.dir}"/>
-  	<condition property="noTopic">
-  	    <length file="${dita.temp.dir}/${fullditatopicfile}" length="0"/>
-  	</condition>
+    <condition property="noTopic">
+        <length file="${dita.temp.dir}/${fullditatopicfile}" length="0"/>
+    </condition>
   </target>
 
   <target name="chunk-check">
@@ -466,7 +423,7 @@
       Push links from maplinks.unordered file into
       <related-links> sections of the corresponding topics. -->
   <target name="move-links"
-    dita:depends="{depend.preprocess.move-links.pre},move-links-check"
+    dita:depends="{depend.preprocess.move-links.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.move-links.skip"
     description="Move the related link information to topics">
@@ -476,12 +433,6 @@
         <param name="maplinks" location="${maplink.workdir}/maplinks.unordered"/>
       </module>
     </pipeline>
-  </target>
-
-  <target name="move-links-check">
-    <condition property="preprocess.move-links.skip">
-      <isset property="noMap"/>
-    </condition>
   </target>
   
   <!-- topicpull
@@ -494,22 +445,18 @@
     <condition property="dita.preprocess.reloadstylesheet.topicpull" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.topicpull"/></not>
     </condition>
-    <xslt taskname="topicpull" basedir="${dita.temp.dir}"
-      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}/${fullditatopicfile}"
-      classpathref="dost.class.path"
-      reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
-      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
-      <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
-      <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
-      <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
-      <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <mapper type="glob" from="*" to="*.pull" />
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-    <move todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.pull" />
-      <mapper type="glob" from="*.pull" to="*" />
-    </move>
+    <pipeline message="Pull metadata for link and xref element" taskname="topicpull">
+      <xslt basedir="${dita.temp.dir}"
+        reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
+        <includesfile name="${dita.temp.dir}/${fullditatopicfile}"/>
+        <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
+        <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
+        <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
+        <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
   </target>
 
   <target name="topicpull-check">
@@ -527,32 +474,24 @@
     <condition property="dita.preprocess.reloadstylesheet.flag-module" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.flag-module"></isset></not>
     </condition>
-    <xslt taskname="preprocess_flag" 
-        basedir="${dita.temp.dir}" 
-        destdir="${dita.temp.dir}" 
-        includesfile="${dita.temp.dir}/${fullditatopicfile}" 
-        classpathref="dost.class.path" 
-        reloadstylesheet="${dita.preprocess.reloadstylesheet.flag-module}" 
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/flag.xsl"
-        filenameparameter="FILENAME" 
-        filedirparameter="FILEDIR">
-      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"></excludesfile>
-
-      <param name="TRANSTYPE" expression="${transtype}"></param>
-      <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"></param>
-      <param name="DRAFT" expression="${args.draft}" if="args.draft"></param>
-      <param name="BASEDIR" expression="${basedir}"></param>
-      <param name="OUTPUTDIR" expression="${output.dir}"></param>
-      <param name="DBG" expression="${args.debug}" if="args.debug"></param>
-      <dita:extension id="dita.preprocess.flag-module.param" behavior="org.dita.dost.platform.InsertAction"/>
-
-      <mapper type="glob" from="*" to="*.flag"></mapper>
-      <xmlcatalog refid="dita.catalog"></xmlcatalog>
-    </xslt>
-    <move todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.flag"></fileset>
-      <mapper type="glob" from="*.flag" to="*"></mapper>
-    </move>
+    <pipeline message="Add flagging information to topics" taskname="preprocess_flag">
+      <xslt basedir="${dita.temp.dir}" 
+          reloadstylesheet="${dita.preprocess.reloadstylesheet.flag-module}" 
+          style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/flag.xsl"
+          filenameparameter="FILENAME" 
+          filedirparameter="FILEDIR">
+        <includesfile name="${dita.temp.dir}/${fullditatopicfile}"/>
+        <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+        <param name="TRANSTYPE" expression="${transtype}"/>
+        <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"/>
+        <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
+        <param name="BASEDIR" expression="${basedir}"/>
+        <param name="OUTPUTDIR" expression="${output.dir}"/>
+        <param name="DBG" expression="${args.debug}" if="args.debug"/>
+        <dita:extension id="dita.preprocess.flag-module.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
   </target>
 
   <target name="flag-module-check">
@@ -566,40 +505,48 @@
       </condition>
   </target>
   
+  <!-- Clean maps from processing time  -->
+  <target name="clean-map" 
+          depends="clean-map-check"
+          unless="preprocess.clean-map-check.skip"
+          description="Clean ditamap">
+    <condition property="dita.preprocess.reloadstylesheet.clean-map" value="${dita.preprocess.reloadstylesheet}">
+      <not><isset property="dita.preprocess.reloadstylesheet.clean-map"/></not>
+    </condition>
+    <pipeline message="Resolve mapref in ditamap" taskname="mapref">
+      <xslt basedir="${dita.temp.dir}"
+            reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
+            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
+        <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </pipeline>
+  </target>
+  
+  <target name="clean-map-check">
+    <condition property="preprocess.clean-map-check.skip">
+      <isset property="noMap"/>
+    </condition>
+  </target>
+  
   <!-- copy-files
       Copy files to the output directory. -->
   <target name="copy-files"
     dita:depends="{depend.preprocess.copy-files.pre},copy-image,copy-html,copy-flag,copy-subsidiary"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-files.skip" />
-
-	
-  <target name="copy-image-uplevels"
-		if="image.copy.uplevels"
-	    dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
-	    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-	    unless="preprocess.copy-image.skip"
-	    description="Copy image files">
-	    <copy todir="${output.dir}/${uplevels}">
-	      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />
-	    </copy>
-  </target>
-	
-  <target name="copy-image-noraml"
-	 	if="image.copy.normal"
-		dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
-		dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-		unless="preprocess.copy-image.skip"
-		description="Copy image files">
-		<copy todir="${output.dir}">
-		   <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />
-		</copy>
-  </target>
-		 
+     
   <target name="copy-image"
-    dita:depends="{depend.preprocess.copy-image.pre},copy-image-uplevels,copy-image-noraml"
+    unless="preprocess.copy-image.skip"
+    dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
-    description="Copy image files">   
+    description="Copy image files">
+    <condition property="copy-image.todir" value="${output.dir}/${uplevels}" else="${output.dir}">
+      <equals arg1="${generate.copy.outer}" arg2="1"/>      
+    </condition>
+    <copy todir="${copy-image.todir}">
+      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />
+    </copy>
   </target>
   
   <target name="copy-image-check">
@@ -609,16 +556,6 @@
         <isset property="noImagelist"/>
       </or>
     </condition>
-  	<condition property="image.copy.uplevels">
-  	  <not>
-  	  	 <equals arg1="${generate.copy.outer}" arg2="3"></equals>
-  	  </not>
-  	 </condition>
-  	 <condition property="image.copy.normal">
-  	 	<and>
-  	     <equals arg1="${generate.copy.outer}" arg2="3"></equals>
-  	   </and>
-  	</condition> 	
   </target>
 
   <target name="copy-html"
@@ -635,7 +572,7 @@
     <condition property="preprocess.copy-html.skip">
       <or>
         <isset property="preprocess.copy-files.skip"/>
-        <isset property="noHtmllist"/>
+        <length file="${dita.temp.dir}/${htmlfile}" length="0"/>
       </or>
     </condition>
   </target>
@@ -645,7 +582,7 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-flag.skip"
     description="Copy flag files">
-    <dita-ot-copy todir="${output.dir}" includes="${flagimagelist}" relativepaths="${relflagimagelist}" />
+    <dita-ot-copy todir="${output.dir}" includesfile="${dita.temp.dir}/${flagimagefile}" relativepaths="${relflagimagelist}" />
   </target>
   
   <target name="copy-flag-check">
@@ -672,7 +609,7 @@
     <condition property="preprocess.copy-subsidiary.skip">
       <or>
         <isset property="preprocess.copy-files.skip"/>
-        <isset property="noSublist"/>
+        <length file="${dita.temp.dir}/${subtargetsfile}" length="0"/>
       </or>
     </condition>
   </target>

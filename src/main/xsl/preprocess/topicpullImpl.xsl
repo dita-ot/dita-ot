@@ -48,17 +48,14 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:topicpull="http://dita-ot.sourceforge.net/ns/200704/topicpull"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                exclude-result-prefixes="dita-ot topicpull ditamsg">
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                exclude-result-prefixes="dita-ot topicpull ditamsg xs">
   <xsl:import href="../common/dita-utilities.xsl"/>
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-textonly.xsl"/>
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
-  <!-- Deprecated -->
-  <xsl:param name="FILEREF">file://</xsl:param>
-  <!-- The directory where the topic resides, starting with root -->
-  <xsl:param name="WORKDIR" select="'./'"/>
   <xsl:param name="DBG" select="'no'"/>
 
   <!-- Set the format for generated text for links to tables and figures.   -->
@@ -318,7 +315,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:variable name="file">
       <xsl:call-template name="replace-blank">
         <xsl:with-param name="file-origin">
-          <xsl:value-of select="translate($file-origin,'\','/')"/>
+          <xsl:value-of select="$file-origin"/>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
@@ -440,7 +437,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:variable name="file">
       <xsl:call-template name="replace-blank">
         <xsl:with-param name="file-origin">
-          <xsl:value-of select="translate($file-origin,'\','/')"/>
+          <xsl:value-of select="$file-origin"/>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
@@ -530,9 +527,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!-- Get the file name for a reference that goes out of the file -->
   <xsl:template match="*" mode="topicpull:get-stuff_file">
-    <!--xsl:param name="WORKDIR">
-      <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
-    </xsl:param-->
     <xsl:param name="WORKDIR">
 	    <xsl:choose>
 	        <xsl:when test="contains(@class, ' topic/link ')">
@@ -597,12 +591,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!-- Pick out the topic ID from an href value -->
   <xsl:template match="*" mode="topicpull:get-stuff_topicid">
+    <xsl:variable name="topic-id" select="dita-ot:get-topic-id(@href)" as="xs:string?"/>
     <xsl:choose>
-      <xsl:when test="contains(@href,'#') and contains(substring-after(@href,'#'),'/')">
-        <xsl:value-of select="substring-before(substring-after(@href,'#'),'/')"/>
-      </xsl:when>
-      <xsl:when test="contains(@href,'#')">
-        <xsl:value-of select="substring-after(@href,'#')"/>
+      <xsl:when test="exists($topic-id)">
+        <xsl:value-of select="$topic-id"/>
       </xsl:when>
       <xsl:otherwise>#none#</xsl:otherwise>
     </xsl:choose>
@@ -610,9 +602,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!-- Pick out the element ID from an href value -->
   <xsl:template match="*" mode="topicpull:get-stuff_elemid">
+    <xsl:variable name="element-id" select="dita-ot:get-element-id(@href)" as="xs:string?"/>
     <xsl:choose>
-      <xsl:when test="contains(@href,'#') and contains(substring-after(@href,'#'),'/')">
-        <xsl:value-of select="substring-after(substring-after(@href,'#'),'/')"/>
+      <xsl:when test="exists($element-id)">
+        <xsl:value-of select="$element-id"/>
       </xsl:when>
       <xsl:otherwise>#none#</xsl:otherwise>
     </xsl:choose>
@@ -851,7 +844,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <!--if type doesn't exist, assume target is a topic of some kind-->
       <xsl:when test="$type='#none#'"><xsl:text> topic/topic </xsl:text></xsl:when>
       <!--if there is an element id, construct a partial classvalue and just use that-->
-      <xsl:when test="contains(@href,'#') and contains(substring-after(@href,'#'),'/')">
+      <xsl:when test="dita-ot:has-element-id(@href)">
         <xsl:text>/</xsl:text><xsl:value-of select="$type"/><xsl:text> </xsl:text>
       </xsl:when>
       <!-- otherwise there's a type but no element id, so construct a root element classvalue, eg task/task or concept/concept-->
@@ -975,7 +968,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
     <xsl:choose>
-      <xsl:when test="contains(@href,'#') and contains(substring-after(@href,'#'),'/')">
+      <xsl:when test="dita-ot:has-element-id(@href)">
         <!-- Points to an element within a topic -->
         <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic">
           <xsl:with-param name="file" select="$file"/>

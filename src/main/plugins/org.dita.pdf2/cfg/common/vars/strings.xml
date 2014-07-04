@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses. -->
+<langlist>
+  <lang filename="de.xml" xml:lang="de"/>
+  <lang filename="en.xml" xml:lang="en"/>
+  <lang filename="es.xml" xml:lang="es"/>
+  <lang filename="fi.xml" xml:lang="fi"/>
+  <lang filename="fr.xml" xml:lang="fr"/>
+  <lang filename="he.xml" xml:lang="he"/>
+  <lang filename="it.xml" xml:lang="it"/>
+  <lang filename="ja.xml" xml:lang="ja"/>
+  <lang filename="nl.xml" xml:lang="nl"/>
+  <lang filename="ro.xml" xml:lang="ro"/>
+  <lang filename="ru.xml" xml:lang="ru"/>
+  <lang filename="sl.xml" xml:lang="sl"/>
+  <lang filename="sv.xml" xml:lang="sv"/>
+  <lang filename="zh_CN.xml" xml:lang="zh-CN"/>
+</langlist>

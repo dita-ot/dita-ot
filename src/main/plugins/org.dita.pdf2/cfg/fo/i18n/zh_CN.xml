@@ -55,17 +55,17 @@ See the accompanying license.txt file for applicable licenses.
     <alphabet char-set="Simplified Chinese">
        <character-set>
           <character-range>
-	     <start include="yes">&#x4e00;</start>
-	     <end include="yes">&#x9fff;</end>
-	  </character-range>
+       <start include="yes">&#x4e00;</start>
+       <end include="yes">&#x9fff;</end>
+    </character-range>
           <character-range>
-	     <start include="yes">&#x3400;</start>
-	     <end include="yes">&#x4dff;</end>
-	  </character-range>
+       <start include="yes">&#x3400;</start>
+       <end include="yes">&#x4dff;</end>
+    </character-range>
           <character-range>
-	     <start include="yes">&#x0100;</start>
-	     <end include="yes">&#xff00;</end>
-	  </character-range>
+       <start include="yes">&#x0100;</start>
+       <end include="yes">&#xff00;</end>
+    </character-range>
        </character-set>
     </alphabet>    
 

@@ -33,7 +33,6 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.OutputUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.junit.After;
 import org.junit.Before;
@@ -53,20 +52,23 @@ public class TestDitaWriter {
     private final File baseDir = new File(resourceDir, "DITA-OT1.5");
     private final File inputDir = new File("DITAVAL");
     private final File inputMap = new File(baseDir, "DITAVAL" + File.separator + "DITAVAL_testdata1.ditamap");
-    private final File outDir = new File(tempDir, "out");
+    private File outDir;
     private final File ditavalFile = new File(inputDir, "DITAVAL_1.ditaval");
 
     private DocumentBuilder builder;
 
     private PipelineHashIO pipelineInput;
+    private Job job = null;
 
     @Before
     public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(getClass());
-
+        outDir = new File(tempDir, "out");
+        job = new Job(tempDir);
+        
         final PipelineFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
-        facade.setJob(new Job(tempDir));
+        facade.setJob(job);
         pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute("inputmap", inputMap.getAbsolutePath());
         pipelineInput.setAttribute("basedir", baseDir.getAbsolutePath());
@@ -91,7 +93,7 @@ public class TestDitaWriter {
 
         writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
-        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
+        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true, true);
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
@@ -107,7 +109,7 @@ public class TestDitaWriter {
         filterReader.read(new File(baseDir, ditavalFile).getAbsoluteFile());
         
         final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
-        subjectSchemeReader.loadSubjectScheme(new File(inputDir, "subject_scheme.ditamap").getPath());
+        subjectSchemeReader.loadSubjectScheme(new File(inputDir, "subject_scheme.ditamap"));
         writer.setValidateMap(subjectSchemeReader.getValidValuesMap());
         writer.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
 
@@ -130,12 +132,12 @@ public class TestDitaWriter {
         filterUtils.setLogger(new TestUtils.TestLogger());
         filterUtils.setFilterMap(map);
         writer.setFilterUtils(filterUtils);
-        final OutputUtils outputUtils = new OutputUtils();
-        outputUtils.setInputMapPathName(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
-        writer.setOutputUtils(outputUtils);
+        final Job job = this.job;
+        job.setInputFile(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
+        writer.setJob(job);
         writer.setTempDir(tempDir.getAbsoluteFile());
         writer.setKeyDefinitions(Collections.EMPTY_LIST);
-        writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), "keyword.dita");
+        writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), new File("keyword.dita"));
 
         compareKeyword(new File(baseDir, new File(inputDir, "keyword.dita").getPath()),
                 new String[] {"prodname1", "prodname2", "prodname3"},

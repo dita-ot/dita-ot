@@ -35,6 +35,7 @@ import org.dita.dost.util.XMLSerializer;
  * these will be sorted based on locale as long as the xml:lang attribute is used.)
  *
  */
+@SuppressWarnings("ForLoopReplaceableByForEach")
 public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
 
     @Override
@@ -84,7 +85,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
                 try {
                     out.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -124,8 +125,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
         }
         if (subTerms != null && subTermNum > 0) {
             serializer.writeStartElement("ul");
-            for (int i = 0; i < subTermNum; i++) {
-                final IndexTerm subTerm = subTerms.get(i);
+            for (final IndexTerm subTerm : subTerms) {
                 outputIndexTerm(subTerm, serializer);
             }
             serializer.writeEndElement(); // ul
@@ -142,10 +142,9 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
         final List<IndexTerm> subTerms = term.getSubTerms();
         List<IndexTermTarget> subTargets = null;
         if (subTerms != null && ! subTerms.isEmpty()){
-            for (int i = 0; i < subTerms.size(); i++){
-                final IndexTerm subTerm = subTerms.get(i);
+            for (final IndexTerm subTerm : subTerms) {
                 subTargets = subTerm.getTargetList();
-                if (subTargets != null && !subTargets.isEmpty()){
+                if (subTargets != null && !subTargets.isEmpty()) {
                     findTargets(subTerm);
                 }
                 term.addTargets(subTerm.getTargetList());
@@ -160,9 +159,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
      */
     @Override
     public String getIndexFileName(final String outputFileRoot) {
-        final StringBuffer indexFilename = new StringBuffer(outputFileRoot);
-        indexFilename.append(".hhk");
-        return indexFilename.toString();
+        return outputFileRoot + ".hhk";
     }
 
 }

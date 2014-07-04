@@ -98,17 +98,17 @@ public class SubjectSchemeReader {
      * load schema file.
      * @param scheme scheme file
      */
-    public void loadSubjectScheme(final String scheme) {
+    public void loadSubjectScheme(final File scheme) {
 
-        if (!FileUtils.fileExists(scheme)) {
+        if (!scheme.exists()) {
             return;
         }
-        logger.logDebug("Load subject scheme " + scheme);
+        logger.debug("Load subject scheme " + scheme);
 
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
-            final Document doc = builder.parse(new InputSource(new FileInputStream(new File(scheme))));
+            final Document doc = builder.parse(scheme);
             final Element schemeRoot = doc.getDocumentElement();
             if (schemeRoot == null) {
                 return;
@@ -177,7 +177,7 @@ public class SubjectSchemeReader {
                 }
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
     

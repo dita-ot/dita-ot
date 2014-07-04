@@ -8,13 +8,11 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.invoker.ExtensibleAntInvoker.getJob;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
-import java.util.Set;
-
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -51,7 +49,7 @@ public final class CheckLang extends Task {
     @Override
     public void execute(){
         logger = new DITAOTAntLogger(getProject());
-        logger.logInfo(message);
+        logger.info(message);
 
         new Properties();
         //ensure tempdir is absolute
@@ -67,12 +65,7 @@ public final class CheckLang extends Task {
             inputmap = new File(tempdir, inputmap).getAbsolutePath();
         }
 
-        Job job = null;
-        try{
-            job = new Job(tempdir);
-        }catch(final IOException e){
-            logger.logError(e.getMessage(), e) ;
-        }
+        final Job job = getJob(tempdir, getProject());
 
         final LangParser parser = new LangParser();
 
@@ -88,7 +81,7 @@ public final class CheckLang extends Task {
             }else{
                 //parse topic files
                 for (final FileInfo f: job.getFileInfo()){
-                    if (f.isActive && ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
+                    if (ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
                         final File topicFile = new File(tempdir, f.file.getPath());
                         if(topicFile.exists()){
                             saxParser.parse(topicFile, parser);

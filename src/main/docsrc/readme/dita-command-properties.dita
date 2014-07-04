@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference
+  PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="dita-command-properties" xml:lang="en">
+  <title><cmdname>dita</cmdname> command arguments and options</title>
+  <shortdesc>The <cmdname>dita</cmdname> command takes mandatory arguments to process DITA, manage plug-in, or print information about the command. Options can be used modify the command behaviour or
+    provide additional configuration.</shortdesc>
+  <prolog>
+    <metadata>
+      <keywords>
+        <indexterm>dita command<indexterm>syntax</indexterm></indexterm>
+      </keywords>
+    </metadata>
+  </prolog>
+  <refbody>
+    <section>
+      <title>Usage</title>
+      <syntaxdiagram>
+        <fragment>
+          <groupseq>
+            <kwd>dita</kwd>
+            <kwd>-f</kwd>
+            <var>name</var>
+            <kwd>-i</kwd>
+            <var>file</var>
+            <groupcomp importance="optional">
+              <var>options</var>
+            </groupcomp>
+          </groupseq>
+        </fragment>
+        <fragment>
+          <groupseq>
+            <kwd>dita</kwd>
+            <kwd>-install</kwd>
+            <groupchoice>
+              <var>file</var>
+              <var>url</var>
+            </groupchoice>
+          </groupseq>
+        </fragment>
+        <fragment>
+          <groupseq>
+            <kwd>dita</kwd>
+            <kwd>-uninstall</kwd>
+            <var>id</var>
+          </groupseq>
+        </fragment>
+        <fragment>
+          <groupseq>
+            <kwd>dita</kwd>
+            <kwd>-help</kwd>
+          </groupseq>
+        </fragment>
+        <fragment>
+          <groupseq>
+            <kwd>dita</kwd>
+            <kwd>-version</kwd>
+          </groupseq>
+        </fragment>
+      </syntaxdiagram>
+    </section>
+    <section>
+      <title>Arguments</title>
+      <parml>
+        <plentry>
+          <pt><parmname>-f</parmname>, <parmname>-format</parmname>
+            <varname>name</varname></pt>
+          <pd conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/transtype.desc"/>
+        </plentry>
+        <plentry>
+          <pt><parmname>-i</parmname>, <parmname>-input</parmname>
+            <varname>file</varname></pt>
+          <pd conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/args.input.desc"/>
+        </plentry>
+        <plentry>
+          <pt><parmname>-install</parmname>
+            <varname>file</varname></pt>
+          <pt><parmname>-install</parmname>
+            <varname>url</varname></pt>
+          <pd>Install plug-in from a local ZIP file or from a URL.</pd>
+        </plentry>
+        <plentry>
+          <pt><parmname>-uninstall</parmname>
+            <varname>id</varname></pt>
+          <pd>Uninstall plug-in with the ID.</pd>
+        </plentry>
+        <plentry>
+          <pt><parmname>-h</parmname>, <parmname>-help</parmname></pt>
+          <pd>Print command usage help.</pd>
+        </plentry>
+        <plentry>
+          <pt><parmname>-version</parmname></pt>
+          <pd>Print version information and exit.</pd>
+        </plentry>
+      </parml>
+    </section>
+    <section>
+      <title>Options</title>
+      <parml>
+        <plentry>
+          <pt><parmname>-o</parmname>, <parmname>-output</parmname>
+            <varname>dir</varname></pt>
+          <pd id="output.dir.desc">Specifies the name and location of the output directory. By default, the output is written to <filepath>out</filepath> subdirectory of the current directory.</pd>
+        </plentry>
+        <plentry>
+          <pt><parmname>-filter</parmname>
+            <varname>file</varname></pt>
+          <pd conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/args.filter.desc"/>
+        </plentry>
+        <plentry>
+          <pt><parmname>-temp</parmname>
+            <varname>dir</varname></pt>
+          <pd conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/dita.temp.dir.desc"/>
+        </plentry>
+        <plentry>
+          <pt><parmname>-v</parmname>, <parmname>-verbose</parmname></pt>
+          <pd>Verbose logging.</pd>
+        </plentry>
+        <plentry>
+          <pt><parmname>-d</parmname>, <parmname>-debug</parmname></pt>
+          <pd>Debug logging.</pd>
+        </plentry>
+        <plentry>
+          <pt><parmname>-l</parmname>, <parmname>-logfile</parmname>
+            <varname>file</varname></pt>
+          <pd>Output logging messages into a file.</pd>
+        </plentry>
+        <plentry>
+          <pt><parmname>-D</parmname><varname>property</varname>=<varname>value</varname></pt>
+          <pd>Specify a value for a property. Supported properties are the same as Ant parameters and are transformation type specific.</pd>
+        </plentry>
+        <plentry>
+          <pt><parmname>-propertyfile</parmname>
+            <varname>file</varname></pt>
+          <pd>Load all properties from a file. Properties specified with <parmname>-D</parmname> option take precedence.</pd>
+        </plentry>
+      </parml>
+    </section>
+  </refbody>
+</reference>

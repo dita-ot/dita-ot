@@ -29,10 +29,9 @@ Caret -2?><p>A pre-process is done before the main transformation. The input of 
             PDF transform, and is often called "PDF2".</dd>
     </dlentry>
     <dlentry>
-      <dt>XHTML</dt>
-      <dd>XHTML output is supported together with a variety of XHTML-based navigation types.
-        Navigation is not required. The XHTML output contains class values based on the DITA
-        elements so CSS files may be used to customize the output style.</dd>
+      <dt>HTML5 and XHTML</dt>
+      <dd>HTML5 and XHTML output is supported together with a variety of HTML-based navigation types. Navigation is not required. The HTML5 and XHTML output contains class values based on the DITA
+            elements so CSS files may be used to customize the output style.</dd>
     </dlentry>
     <dlentry>
       <dt>Eclipse Help</dt>
@@ -41,14 +40,11 @@ Caret -2?><p>A pre-process is done before the main transformation. The input of 
     </dlentry>
     <dlentry>
       <dt>TocJS</dt>
-      <dd>The TocJS transformation type includes XHTML output along with JavaScript based frames
-        for navigation, including TOC sections that expand and collapse.</dd>
+      <dd>The TocJS transformation type includes HTML5 output along with JavaScript based frames for navigation, including TOC sections that expand and collapse.</dd>
     </dlentry>
     <dlentry platform="windows">
       <dt>HTML Help</dt>
-      <dd>Microsoft Compiled HTML Help output produces a compiled help
-        (<filepath>.chm</filepath>) file with the XHTML topics, table of contents, and
-        index.</dd>
+      <dd>Microsoft Compiled HTML Help output produces a compiled help (<filepath>.chm</filepath>) file with the HTML topics, table of contents, and index.</dd>
     </dlentry>
     <dlentry>
       <dt>Java Help</dt>

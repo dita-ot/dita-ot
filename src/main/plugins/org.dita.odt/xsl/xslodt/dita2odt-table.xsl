@@ -147,9 +147,7 @@
             <xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:call-template name="get-ascii">
-          <xsl:with-param name="txt"><xsl:value-of select="."/></xsl:with-param>
-        </xsl:call-template>
+        <xsl:value-of select="."/>
     </xsl:element>
   </xsl:element>
 </xsl:template>
@@ -657,11 +655,7 @@
       <xsl:text>. </xsl:text>
     </xsl:otherwise>
   </xsl:choose>
-  <xsl:call-template name="get-ascii">
-    <xsl:with-param name="txt">
-      <xsl:value-of select="."/>
-    </xsl:with-param>
-  </xsl:call-template>
+  <xsl:value-of select="."/>
  </xsl:element>
 </xsl:template>
 

@@ -8,7 +8,6 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Configuration.processingMode;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
@@ -20,8 +19,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.StringTokenizer;
-
-import org.dita.dost.util.Configuration.Mode;
 
 /**
  * Corrects the URLs.
@@ -48,7 +45,7 @@ public final class URLUtils {
         if (file == null) {
             throw new MalformedURLException("The url is null");
         }
-        return new URL(correct(file.toURL().toString(), true));
+        return new URL(correct(file.toURI().toString(), true));
     }
 
     /**
@@ -100,7 +97,7 @@ public final class URLUtils {
             // Optimization, nothing to uncorrect here
             return s;
         }
-        final StringBuffer sbuf = new StringBuffer();
+        final StringBuilder sbuf = new StringBuilder();
         final int l = s.length();
         int ch = -1;
         int b = 0, sumb = 0;
@@ -223,7 +220,7 @@ public final class URLUtils {
         final String initialUrl = url;
 
         // If there is a % that means the URL was already corrected.
-        if (!forceCorrection && url.indexOf("%") != -1) {
+        if (!forceCorrection && url.contains("%")) {
             return initialUrl;
         }
 
@@ -287,11 +284,7 @@ public final class URLUtils {
             return fileName;
         }else{
             final File file = new File(fileName);
-            try {
-                return file.toURI().toURL().toString();
-            } catch (final MalformedURLException e) {
-                return "";
-            }
+            return file.toURI().toString();
         }
 
     }
@@ -324,8 +317,8 @@ public final class URLUtils {
                 };
         final int len = escChs.length;
         char ch;
-        for (int i = 0; i < len; i++) {
-            ch = escChs[i];
+        for (char escCh : escChs) {
+            ch = escCh;
             gNeedEscaping[ch] = true;
             gAfterEscaping1[ch] = gHexChs[ch >> 4];
             gAfterEscaping2[ch] = gHexChs[ch & 0xf];
@@ -351,7 +344,7 @@ public final class URLUtils {
      */
     public static String clean(final String path, final boolean ascii) {
         int len = path.length(), ch;
-        final StringBuffer buffer = new StringBuffer(len*3);
+        final StringBuilder buffer = new StringBuilder(len*3);
         // Change C:/something to /C:/something
         if (len >= 2 && path.charAt(1) == ':') {
             ch = Character.toUpperCase(path.charAt(0));
@@ -546,6 +539,21 @@ public final class URLUtils {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
+    
+    /**
+     * Create new URI with a given path.
+     * 
+     * @param path URI to set path on
+     * @param fragment new paht, {@code null} for no path
+     * @return new URI instance with given path
+     */
+    public static URI setPath(final URI orig, final String path) {
+        try {
+            return new URI(orig.getScheme(), orig.getUserInfo(), orig.getHost(), orig.getPort(), path, orig.getQuery(), orig.getFragment());
+        } catch (final URISyntaxException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
 
     /**
      * Resolves absolute URI against another absolute URI.
@@ -569,13 +577,13 @@ public final class URLUtils {
         if (basePath.getPath().equals(refPath.getPath()) && refPath.getFragment() != null) {
             rel = toURI("");
         } else {
-            final StringBuffer upPathBuffer = new StringBuffer(128);
-            final StringBuffer downPathBuffer = new StringBuffer(128);
+            final StringBuilder upPathBuffer = new StringBuilder(128);
+            final StringBuilder downPathBuffer = new StringBuilder(128);
             final StringTokenizer mapTokenizer = new StringTokenizer(
-                    FileUtils.normalize(FileUtils.separatorsToUnix(basePath.getPath()), UNIX_SEPARATOR),
+                    FileUtils.normalize(basePath.getPath(), UNIX_SEPARATOR),
                     UNIX_SEPARATOR);
             final StringTokenizer topicTokenizer = new StringTokenizer(
-                    FileUtils.normalize(FileUtils.separatorsToUnix(refPath.getPath()), UNIX_SEPARATOR),
+                    FileUtils.normalize(refPath.getPath(), UNIX_SEPARATOR),
                     UNIX_SEPARATOR);
     
             while (mapTokenizer.countTokens() > 1
@@ -583,7 +591,7 @@ public final class URLUtils {
                 final String mapToken = mapTokenizer.nextToken();
                 final String topicToken = topicTokenizer.nextToken();
                 boolean equals = false;
-                if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) != -1){
+                if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)){
                     //if OS is Windows, we need to ignore case when comparing path names.
                     equals = mapToken.equalsIgnoreCase(topicToken);
                 }else{
@@ -617,10 +625,39 @@ public final class URLUtils {
                     downPathBuffer.append(URI_SEPARATOR);
                 }
             }
-            rel = toURI(upPathBuffer.append(downPathBuffer).toString());
+            upPathBuffer.append(downPathBuffer);
+            
+            try {
+                rel = new URI(null, null, upPathBuffer.toString(), null, null);
+            } catch (final URISyntaxException e) {
+                throw new IllegalArgumentException(e);
+            }
         }
         
         return setFragment(rel, refPath.getFragment());
+    }
+ 
+    /**
+     * Get relative path to base path.
+     * 
+     * <p>For {@code foo/bar/baz.txt} return {@code ../../}</p>
+     * 
+     * @param relativePath relative URI
+     * @return relative URI to base path, {@code null} if reference path was a single file
+     */
+    public static URI getRelativePath(final URI relativePath) {
+        final StringTokenizer tokenizer = new StringTokenizer(relativePath.toString(), URI_SEPARATOR);
+        final StringBuilder buffer = new StringBuilder();
+        if (tokenizer.countTokens() == 1){
+            return null;
+        }else{
+            while(tokenizer.countTokens() > 1){
+                tokenizer.nextToken();
+                buffer.append("..");
+                buffer.append(URI_SEPARATOR);
+            }
+            return toURI(buffer.toString());
+        }
     }
     
 }

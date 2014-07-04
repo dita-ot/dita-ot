@@ -23,7 +23,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import org.dita.dost.TestUtils;
-import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.dita.dost.util.ImgUtils;
 
 import org.junit.Test;
@@ -41,7 +40,6 @@ public class TestImgUtils {
         tempDir = TestUtils.createTempDir(TestImgUtils.class);
         final Job job = new Job(tempDir);
         job.write();
-        DitaURIResolverFactory.setPath(tempDir.getAbsolutePath());
     }
     
     @Test

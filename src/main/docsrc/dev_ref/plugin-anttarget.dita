@@ -18,7 +18,7 @@ provide Ant targets for the use of other plug-ins.</shortdesc>
 is               deprecated. Use <codeph>dita.conductor.target.relative</codeph> instead.</note> 
          </dd>
 </dlentry></dl>       </section>
-<example><title>Example</title><?Pub Caret -2?><p>To extend And processing,
+<example><title>Example</title><?Pub Caret -2?><p>To extend Ant processing,
 first place your extensions in an Ant project file within your plug-in,
 such           as <filepath>myAntStuff.xml</filepath>. Next, create
 a small wrapper file <filepath>myAntStuffWrapper.xml</filepath> in

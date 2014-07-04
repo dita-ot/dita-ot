@@ -3,8 +3,11 @@
  "concept.dtd">
 <concept id="ditaotarch" xml:lang="en-us">
 <title>Architecture of the DITA Open Toolkit</title>
+  <titlealts>
+    <navtitle>Architecture of the DITA-OT</navtitle>
+  </titlealts>
 <shortdesc>The DITA Open Toolkit (DITA-OT) is an open-source implementation of the OASIS
-    specification for the Darwin Information Typing Architecture (DITA). The toolkit uses ANT, XSLT,
+    specification for the Darwin Information Typing Architecture (DITA). The toolkit uses Ant, XSLT,
     and Java to transform DITA content (maps and topics) into different deliverable
     formats.</shortdesc>
 </concept>

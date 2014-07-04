@@ -9,23 +9,31 @@
     <property name="html-version" value="html5"/>
   </target>
   <target name="dita2html5"
-          depends="dita2html5.init, build-init, preprocess, 
-                   copy-css, xhtml.topics, dita.map.xhtml"/>
+          depends="dita2html5.init,
+                   build-init,
+                   preprocess, 
+                   xhtml.topics,
+                   dita.map.xhtml,
+                   copy-css"/>
 
   <target name="dita2xhtml.init">
     <property name="html-version" value="xhtml"/>
   </target>
 	
     <target name="dita2xhtml"
-      depends="dita2xhtml.init, build-init, preprocess, 
-                     copy-css , xhtml.topics, dita.map.xhtml">
+            depends="dita2xhtml.init,
+                     build-init,
+                     preprocess, 
+                     xhtml.topics,
+                     dita.map.xhtml,
+                     copy-css">
     </target>
 
     <target name="dita.map.xhtml"
             depends="dita.map.xhtml.init, dita.map.xhtml.toc , dita.out.map.xhtml.toc" />
 
     <target name="dita.map.xhtml.init" unless="noMap">
-      <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/map2${html-version}toc.xsl">
+      <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/map2${html-version}-cover.xsl">
         <not>
           <isset property="args.xhtml.toc.xsl" />
         </not>

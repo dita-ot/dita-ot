@@ -2,12 +2,18 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="loghandling" xml:lang="en-us">
 <title>Log files</title>
-  <shortdesc>When you run the DITA-OT, key information is logged on the screen. This information
-    also is written to a log file. If you encounter a problem, you can analyze this information to
+  <shortdesc>When you run the DITA-OT, key information is logged on the screen. This information can also be written to a log file. If you encounter a problem, you can analyze this information to
     determine the source of the problem and then take action to resolve it.</shortdesc>
 <conbody>
-    <p>The logging behavior varies depending on whether you use the DITA-OT command-line tool or Ant
+    <p>The logging behavior varies depending on whether you use the <cmdname>dita</cmdname> command, DITA-OT command-line tool, or Ant
       to invoke a toolkit build.<dl>
+        <dlentry>
+          <dt><cmdname>dita</cmdname> command</dt>
+          <dd>By default, only warning and error messages are written to the screen. If you use the
+          <parmname>-v</parmname> option, logging will be more verbose and informative messages
+          are also written out. The <parmname>-l</parmname> option can be used to write the log messages
+          into a file.</dd>
+        </dlentry>
         <dlentry>
           <dt>Ant</dt>
           <dd>By default, status information is written to the screen. If you issue the
@@ -15,7 +21,7 @@
             written to a log file with the name and location that you specified. (You also can use
             other Ant loggers; see the Ant documentation for more information.)</dd>
         </dlentry>
-        <dlentry>
+        <dlentry importance="deprecated">
           <dt>Command-line tool</dt>
           <dd>Status information is written to the screen and the log file. The log file name
             contains the input file name and transformation type; by default, it is located in the

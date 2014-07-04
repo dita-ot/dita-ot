@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+<!--  
   This file is part of the DITA Open Toolkit project.
   See the accompanying license.txt file for applicable licenses.
 -->
@@ -28,7 +28,7 @@
   <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
   <variable id="Unordered List bullet">•</variable>
   <variable id="Table of Contents">Innehållsförteckning</variable>
-  <variable id="Index">Index</variable>
+  
   <variable id="Index Continued String"><!--TODO:continued--></variable>
   <variable id="Index See String">, Se </variable>
   <variable id="Index See Also String">Se Även </variable>
@@ -41,19 +41,13 @@
   <variable id="Notices title"><!--TODO:Notice--></variable>
   <variable id="Mini Toc"><!--TODO:Topics: --></variable>
   <variable id="#note-separator">: </variable>
-  <variable id="Note">Notera</variable>
+  
   <variable id="Notice"><!--TODO:Notice--></variable>
-  <variable id="Tip">Tips</variable>
-  <variable id="Important">Viktigt</variable>
-  <variable id="Fastpath">Genväg</variable>
-  <variable id="Remember">Glöm inte</variable>
-  <variable id="Attention">Varning</variable>
-  <variable id="Caution">Observera</variable>
-  <variable id="Danger">Varning - livsfara</variable>
-  <variable id="Warning">Varning</variable>
-  <variable id="Restriction">Begränsning</variable>
-  <variable id="Figure">Figur <param ref-name="number"/>. <param ref-name="title"/></variable>
-  <variable id="Table">Tabell <param ref-name="number"/>. <param ref-name="title"/></variable>
+
+  <variable id="Figure.title">Figur <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Figure Number">Figur <param ref-name="number"/></variable>
+  <variable id="Table.title">Tabell <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Table Number">Tabell <param ref-name="number"/></variable>
   <variable id="Related Links"><!--TODO:Related Links--></variable>
   <variable id="Cross-Reference"><!--TODO:Cross-Reference to:--></variable>
   <variable id="Content-Reference"><!--TODO:Content-Reference to:--></variable>
@@ -80,14 +74,11 @@
   <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
   <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
   <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="Parent topic">Överordnat ämne</variable>
-  <variable id="Next topic">Nästa avsnitt</variable>
-  <variable id="Previous topic">Föregående avsnitt</variable>
+
   <variable id="Child topics"><!--TODO:Child Topics--></variable>
-  <variable id="Related concepts">Närliggande begrepp</variable>
-  <variable id="Related tasks">Närliggande uppgifter</variable>
+
   <variable id="Related references">Närliggande referens</variable>
-  <variable id="Related information">Närliggande information</variable>
+  
   <variable id="Index multiple entries separator">, </variable>
   <variable id="Optional Step"><!--TODO:Optional:--></variable>
   <variable id="Task Prereq">Innan du börjar</variable>
@@ -104,9 +95,8 @@
   <variable id="Glossary">Gloslista</variable>
   <variable id="List of Tables">Tabellförteckning</variable>
   <variable id="List of Figures">Figurförteckning</variable>
-  <variable id="Option">Alternativ</variable>
-  <variable id="Description">Beskrivning</variable>
-  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+
+  <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">”</variable>
   <variable id="#quote-end">”</variable>
 </vars>

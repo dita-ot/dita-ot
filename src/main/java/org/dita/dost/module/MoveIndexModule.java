@@ -9,20 +9,19 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
-import java.io.IOException;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapIndexReader;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.DitaIndexWriter;
 
 /**
@@ -43,47 +42,40 @@ final class MoveIndexModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        if (logger == null) {
-            throw new IllegalStateException("Logger not set");
-        }
-        
-        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
-        }
-
-        final MapIndexReader indexReader = new MapIndexReader();
-        indexReader.setLogger(logger);
-        indexReader.setMatch(new StringBuffer(MAP_TOPICREF.localName)
-                .append(SLASH).append(MAP_TOPICMETA.localName)
-                .append(SLASH).append(TOPIC_KEYWORDS.localName).toString());
-
-        for(final FileInfo f: job.getFileInfo()){
-            if (f.isActive && "ditamap".equals(f.format)) {
-                //FIXME: this reader needs parent directory for further process
-                indexReader.read(new File(tempDir, f.file.getPath()).getAbsoluteFile());
+        final Collection<FileInfo> fis = job.getFileInfo(new Filter() {
+            @Override
+            public boolean accept(FileInfo f) {
+                return ATTR_FORMAT_VALUE_DITAMAP.equals(f.format);
             }
-        }
-
-        final Map<String, String> mapSet = indexReader.getMapping();
+        });
+        if (!fis.isEmpty()) {
+            final MapIndexReader indexReader = new MapIndexReader();
+            indexReader.setLogger(logger);
+            indexReader.setMatch(Arrays.asList(MAP_TOPICREF, MAP_TOPICMETA, TOPIC_KEYWORDS));
+    
+            for(final FileInfo f: fis){
+                //FIXME: this reader needs parent directory for further process
+                indexReader.read(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
+            }
+    
+            final Map<URI, String> mapSet = indexReader.getMapping();
+            
+            if (!mapSet.isEmpty()) {
+                final DitaIndexWriter indexInserter = new DitaIndexWriter();
+                indexInserter.setLogger(logger);
+                for (final Map.Entry<URI, String> entry: mapSet.entrySet()) {
+                    final String targetFileName = entry.getKey().getPath();
+                    if (targetFileName.endsWith(FILE_EXTENSION_DITA) || targetFileName.endsWith(FILE_EXTENSION_XML)){
+                        indexInserter.setIndexEntries(entry.getValue());
+                        if (toFile(entry.getKey()).exists()) {
+                            logger.info("Processing " + targetFileName);
+                            indexInserter.write(new File(entry.getKey()));
+                        } else {
+                            logger.error("File " + entry.getKey() + " does not exist");
+                        }
         
-        final DitaIndexWriter indexInserter = new DitaIndexWriter();
-        indexInserter.setLogger(logger);
-        for (final Map.Entry<String, String> entry: mapSet.entrySet()) {
-            String targetFileName = entry.getKey();
-            targetFileName = stripFragment(targetFileName);
-            if (targetFileName.endsWith(FILE_EXTENSION_DITA) || targetFileName.endsWith(FILE_EXTENSION_XML)){
-//                final ContentImpl content = new ContentImpl();
-//                content.setValue(entry.getValue());
-//                indexInserter.setContent(content);
-                indexInserter.setIndexEntries(entry.getValue());
-                if (FileUtils.fileExists(entry.getKey())) {
-                    logger.logInfo("Processing " + targetFileName);
-                    indexInserter.write(new File(entry.getKey()));
-                } else {
-                    logger.logError("File " + entry.getKey() + " does not exist");
+                    }
                 }
-
             }
         }
         return null;

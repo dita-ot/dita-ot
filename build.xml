@@ -3,7 +3,7 @@
      See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole binary package for DITA Open Toolkit -->
-<project name="build_DITA-OT_package" default="dist" basedir=".">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="build_DITA-OT_package" default="dist" basedir=".">
   <description>Build binary packages for DITA Open Toolkit</description>
 
   <property file="${basedir}/src/main/lib/configuration.properties"/>
@@ -46,7 +46,7 @@
   <property name="win32.zip.suffix" value=".zip"/>
   <property name="linux.zip.suffix" value=".tar.gz"/>
 
-  <property name="tool.ant.version" value="1.8.4"/>
+  <property name="tool.ant.version" value="1.9.2"/>
 
   <target name="init-package" depends="clean-package">
     <mkdir dir="${package.output.dir}"/>
@@ -56,9 +56,11 @@
     <delete dir="${package.output.dir}"/>
   </target>
 
-  <target name="init-java" depends="clean-java">
+  <target name="init-java" depends="clean-java, init-ivy">
     <mkdir dir="${lib.dir}"/>
     <mkdir dir="${bin.dir}"/>
+    <ivy:retrieve pattern="${lib.dir}/[artifact](-[classifier]).[ext]" conf="compile"/>    
+    <ivy:cachepath pathid="compile.path" conf="compile"/>
   </target>
 
   <target name="clean-java">
@@ -66,23 +68,16 @@
     <delete dir="${bin.dir}"/>
   </target>
 
-  <target name="build-java" depends="compile"/>
   <target name="compile" depends="init-java" description="Compile Java">
     <javac srcdir="${java.dir}" destdir="${bin.dir}"
            debug="on"
-           source="1.6" target="1.6">
+           source="1.7" target="1.7"
+           classpathref="compile.path">
       <exclude name="org/dita/dost/invoker/JavaInvoker.java"/>
       <exclude name="org/dita/dost/invoker/CommandLineInvoker"/>
-      <classpath>
-        <pathelement location="${lib.dir}/xercesImpl.jar"/>
-        <pathelement location="${lib.dir}/xml-apis.xml"/>
-        <pathelement location="${lib.dir}/resolver.jar"/>
-        <pathelement location="${lib.dir}/commons-codec-1.4.jar"/>
-      </classpath>
     </javac>
   </target>
 
-  <target name="package-java" depends="jar"/>
   <target name="jar" depends="compile" description="Build Java libraries">
     <copy todir="${bin.dir}/resource/">
       <fileset dir="${resource.dir}" includes="messages.*"/>
@@ -100,19 +95,10 @@
     <exclude name=".*"/>
     <exclude name="local.properties"/>
     <exclude name="build.log"/>
-    <exclude name="build.number"/>
-    <exclude name="relnotes.txt"/>
-    <exclude name="EvaluateOT.html"/>
     <exclude name="lib/commons-logging-1.1.1.jar"/>
     <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
     <exclude name="plugins/org.dita.pdf2/bin/**"/>
     <exclude name="plugins/org.dita.pdf2/lib/xep/**"/>
-    <exclude name="buildSourceForge.xml"/>
-    <exclude name="docsrc/sourceforge/**"/>
-    <exclude name="docsrc/userguide-orig/**"/>
-    <exclude name="docsrc/ot-userguide/**"/>
-    <exclude name="docsrc/archive/**"/>
-    <exclude name="docsrc/langref-dita1.1/**"/>
   </patternset>
 
   <patternset id="pattern.package.minimum">
@@ -122,7 +108,7 @@
     <exclude name="plugins/org.dita.pdf2/fop/lib/"/>
     <exclude name="plugins/org.dita.pdf2/lib/icu4j.jar"/>
     <exclude name="plugins/org.dita.pdf2/src/**"/>
-    <exclude name="lib/saxon/*"/>
+    <exclude name="lib/saxon*"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
     <exclude name="startcmd.*"/>
@@ -139,7 +125,7 @@
     <include name="xsl/**"/>
     <include name="lib/dost.jar"/>
     <include name="lib/APACHE-LICENSE-2_0.html"/>
-    <include name="lib/resolver.jar"/>
+    <include name="lib/xml-resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
     <include name="lib/**"/>
   </patternset>
@@ -151,7 +137,7 @@
     <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
     <exclude name="lib/log4j.properties"/>
-    <exclude name="lib/saxon/*"/>
+    <exclude name="lib/saxon*"/>
     <exclude name="startcmd.*"/>
     <include name="build_demo.xml"/>
     <exclude name="catalog-dita.txt"/>
@@ -205,7 +191,7 @@
   </patternset>
   <patternset id="pattern.package.ext-plugins.full">
     <include name="h2d/**"/>
-    <include name="legacypdf/**"/>
+    <!--include name="legacypdf/**"/-->
   </patternset>
 
   <patternset id="pattern.package.standard">
@@ -214,7 +200,7 @@
     <exclude name="plugins/org.dita.pdf2/fop/conf/"/>
     <exclude name="plugins/org.dita.pdf2/fop/lib/"/>
     <exclude name="plugins/org.dita.pdf2/lib/icu4j.jar"/>
-    <exclude name="lib/saxon/*"/>
+    <exclude name="lib/saxon*"/>
     <exclude name="lib/icu4j.jar"/>
     <exclude name="lib/log4j.properties"/>
     <exclude name="startcmd.*"/>
@@ -240,7 +226,7 @@
   </patternset>
   <patternset id="pattern.package.ext-plugins.standard">
     <include name="h2d/**"/>
-    <include name="legacypdf/**"/>
+    <!--include name="legacypdf/**"/-->
   </patternset>
     
   <patternset id="pattern.package.doc">
@@ -261,7 +247,7 @@
          dest="${basedir}/target/"
          skipexisting="true"/>
     <unzip src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip"
-           dest="${basedir}/src/main/tools"/>
+           dest="${basedir}/target/tools"/>
   </target>
 
   <target name="package-binary-minimum">
@@ -329,27 +315,27 @@
       </fileset>
     </copy>
     <copy todir="${temp.dist.dir}/lib">
-      <fileset dir="${lib.dir}/saxon">
-        <include name="saxon9.jar"/>
-        <include name="saxon9-dom.jar"/>
+      <fileset dir="${lib.dir}">
+        <include name="saxon.jar"/>
+        <include name="saxon-dom.jar"/>
       </fileset>
-      <fileset dir="${basedir}/src/main/tools/apache-ant-${tool.ant.version}/lib">
+      <fileset dir="${basedir}/target/tools/apache-ant-${tool.ant.version}/lib">
         <include name="ant.jar"/>
         <include name="ant-launcher.jar"/>
         <include name="ant-apache-resolver.jar"/>
       </fileset>
     </copy>
     <!--copy todir="${temp.dist.dir}">
-      <zipfileset src="${basedir}/target/apache-ant-1.8.4-bin.zip">
-        <!- -exclude name="apache-ant-1.8.4/etc/**"/>
-        <exclude name="apache-ant-1.8.4/manual/**"/>
-        <include name="apache-ant-1.8.4/*"/>
-        <exclude name="apache-ant-1.8.4/bin/**"/- ->
-        <include name="apache-ant-1.8.4/lib/ant.jar"/>
-        <include name="apache-ant-1.8.4/lib/ant-launcher.jar"/>
-        <include name="apache-ant-1.8.4/lib/ant-apache-resolver.jar"/>
+      <zipfileset src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip">
+        <!- -exclude name="apache-ant-${tool.ant.version}/etc/**"/>
+        <exclude name="apache-ant-${tool.ant.version}/manual/**"/>
+        <include name="apache-ant-${tool.ant.version}/*"/>
+        <exclude name="apache-ant-${tool.ant.version}/bin/**"/- ->
+        <include name="apache-ant-${tool.ant.version}/lib/ant.jar"/>
+        <include name="apache-ant-${tool.ant.version}/lib/ant-launcher.jar"/>
+        <include name="apache-ant-${tool.ant.version}/lib/ant-apache-resolver.jar"/>
       </zipfileset>
-      <mapper type="glob" from="apache-ant-1.8.4/*" to="*"/>
+      <mapper type="glob" from="apache-ant-${tool.ant.version}/*" to="*"/>
     </copy-->
     <copy todir="${temp.dist.dir}/plugins">
       <fileset dir="${src.dir}/ext-plugins">
@@ -390,22 +376,9 @@
         <patternset refid="pattern.package.full"/>
       </fileset>
     </copy>
-    <!--copy todir="${temp.dist.dir}/tools/ant">
-      <zipfileset src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip">
-        <exclude name="apache-ant-${tool.ant.version}/etc/**"/>
-        <exclude name="apache-ant-${tool.ant.version}/manual/**"/>
-        <exclude name="apache-ant-${tool.ant.version}/fetch.xml"/>
-        <exclude name="apache-ant-${tool.ant.version}/get-m2.xml"/>
-        <exclude name="apache-ant-${tool.ant.version}/lib/*.pom"/>
-        <include name="apache-ant-${tool.ant.version}/*"/>
-        <include name="apache-ant-${tool.ant.version}/bin/**"/>
-        <include name="apache-ant-${tool.ant.version}/lib/**"/>
-      </zipfileset>
-      <mapper type="glob" from="apache-ant-${tool.ant.version}${file.separator}*" to="*"/>
-    </copy-->
     <mkdir dir="${temp.dist.dir}/tools/ant"/>
     <copy todir="${temp.dist.dir}/tools/ant">
-      <fileset dir="${basedir}/src/main/tools/apache-ant-${tool.ant.version}">
+      <fileset dir="${basedir}/target/tools/apache-ant-${tool.ant.version}">
        <exclude name="etc/**"/>
        <exclude name="manual/**"/>
        <exclude name="fetch.xml"/>
@@ -462,28 +435,11 @@
       </antcall>
     </sequential>
   </target>
-
-  <target name="build-package-binary-with-buildnum" depends="jar, jar.plug-ins, update-doc">
-    <buildnumber/>
-    <tstamp>
-      <format property="build.time" pattern="yyyyMMddhhmm"/>
-    </tstamp>
-    <sequential>
-      <antcall target="package-binary-full">
-        <param name="param.out.file" value="${package.name.root}${otversion}b${build.number}_full_easy_install_bin.${build.time}"/>
-      </antcall>
-      <antcall target="package-binary-standard">
-        <param name="param.out.file" value="${package.name.root}${otversion}b${build.number}_standard_bin.${build.time}"/>
-      </antcall>
-      <antcall target="package-binary-minimum">
-        <param name="param.out.file" value="${package.name.root}${otversion}b${build.number}_minimal_bin.${build.time}"/>
-      </antcall>
-    </sequential>
-  </target>
 	
   <target name="jar.plug-ins" description="Build plug-in Java libraries">
-    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="package-java" inheritAll="false">
+    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="jar" inheritAll="false">
   	  <property name="basedir" value="${src.dir}/plugins/org.dita.pdf2"/>
+      <reference refid="compile.path" torefid="base.compile.path"/>
   	</ant>
   </target>
 
@@ -572,7 +528,12 @@
   <property name="test.log.dir" location="${test.src.dir}/log"/>
   <property name="test.suite.dir" location="${test.src.dir}/testsuite"/>
 
-  <target name="test-compile" depends="compile">
+  <target name="test-init">
+    <ivy:retrieve pattern="${test.lib.dir}/[artifact](-[classifier]).[ext]" conf="test"/>
+    <ivy:cachepath pathid="test.path" conf="test"/>    
+  </target>
+
+  <target name="test-compile" depends="test-init, compile">
     <delete failonerror="false">
       <fileset dir="${test.bin.dir}" erroronmissingdir="false"/>
     </delete>
@@ -584,11 +545,9 @@
         <pathelement location="${test.java.dir}"/>
       </src>
       <classpath>
-        <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
-        <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
-        <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
+        <path refid="test.path"/>
         <pathelement location="${bin.dir}"/>
-        <pathelement location="${lib.dir}/resolver.jar"/>
+        <path refid="compile.path"/>
       </classpath>
     </javac>
   </target>
@@ -602,16 +561,10 @@
       <classpath>
         <pathelement location="${test.bin.dir}"/>
         <pathelement location="${test.src.dir}/resources"/>
-        <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
-        <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
-        <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
+        <path refid="test.path"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>
-        <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
-        <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
-        <pathelement location="${lib.dir}/xercesImpl.jar"/>
-        <pathelement location="${lib.dir}/xml-apis.jar"/>
-        <pathelement location="${lib.dir}/resolver.jar"/>
+        <path refid="compile.path"/>
       </classpath>
       <formatter type="plain"/>
       <batchtest fork="yes" todir="${test.log.dir}">
@@ -639,10 +592,10 @@
         <pathelement location="${test.suite.dir}/src/main/java"/>
       </src>
       <classpath>
-        <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
-        <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
-        <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
         <pathelement location="${test.bin.dir}"/>
+        <path refid="test.path"/>
+        <pathelement location="${bin.dir}"/>
+        <path refid="compile.path"/>
       </classpath>
     </javac>
   </target>
@@ -660,16 +613,10 @@
         <pathelement location="${integration-test.bin.dir}"/>
         <pathelement location="${test.bin.dir}"/>
         <pathelement location="${test.src.dir}/resources"/>
-        <pathelement location="${test.lib.dir}/junit-4.8.2.jar"/>
-        <pathelement location="${test.lib.dir}/htmlparser-1.3.1.jar"/>
-        <pathelement location="${test.lib.dir}/xmlunit-1.3.jar"/>
+        <path refid="test.path"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>
-        <pathelement location="${lib.dir}/saxon/saxon9.jar"/>
-        <pathelement location="${lib.dir}/saxon/saxon9-dom.jar"/>
-        <!--pathelement location="${lib.dir}/xercesImpl.jar"/>
-        <pathelement location="${lib.dir}/xml-apis.jar"/-->
-        <pathelement location="${lib.dir}/resolver.jar"/>
+        <path refid="compile.path"/>
       </classpath>
       <sysproperty key="dita.dir" value="${src.dir}"/>
       <sysproperty key="basedir" value="${test.suite.dir}"/>
@@ -701,5 +648,34 @@
       <property name="args.gen.task.lbl" value="YES"/>
     </ant>
   </target>  
+
+  <!-- Ivy -->
+    
+  <target name="check-ivy">
+    <available property="ivy.available" classname="org.apache.ivy.ant.IvyResolve"/>
+  </target>
+  
+  <target name="download-ivy" unless="ivy.available">
+    <property name="ivy.install.version" value="2.3.0" />
+    <condition property="ivy.home" value="${env.IVY_HOME}">
+      <isset property="env.IVY_HOME" />
+    </condition>
+    <property name="ivy.home" value="${user.home}/.ant" />
+    <property name="ivy.jar.dir" value="${ivy.home}/lib" />
+    <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+    <mkdir dir="${ivy.jar.dir}"/>
+    <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" 
+         dest="${ivy.jar.file}"
+         usetimestamp="true"/>
+  </target>
+  
+  <target name="init-ivy" depends="check-ivy, download-ivy" unless="ivy.available">
+    <path id="ivy.lib.path">
+      <fileset dir="${ivy.jar.dir}" includes="*.jar"/>      
+    </path>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml"
+             uri="antlib:org.apache.ivy.ant"
+             classpathref="ivy.lib.path"/>
+  </target>
 
 </project>

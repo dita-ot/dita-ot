@@ -12,6 +12,8 @@
   <xsl:import href="troff/step1-sw-d.xsl"/>
   <xsl:import href="troff/step1-ui-d.xsl"/>
   <xsl:import href="troff/step1-ut-d.xsl"/>
+  <xsl:import href="troff/step1-markup-d.xsl"/>
+  <xsl:import href="troff/step1-xml-d.xsl"/>
 
   <xsl:param name="DEFAULTLANG" select="'en-us'"/>
     

@@ -11,7 +11,7 @@ and creates lists of topics, images, document properties, or other
 content. These lists are used by later steps in the pipeline. For
 example, one list includes all topics that make use of the conref
 attribute; only those files are processed         during the conref
-stage of the build. This step is implemented in Ant and Java.</shortdesc>
+stage of the build. This step is implemented in Java.</shortdesc>
 <refbody>
 <section><p>The result of this list is a set of several list files
 in the temporary directory, including <filepath>dita.list</filepath> and <filepath>dita.xml.properties</filepath>.</p><table>

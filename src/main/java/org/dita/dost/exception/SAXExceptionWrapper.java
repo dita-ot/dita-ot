@@ -98,15 +98,8 @@ public final class SAXExceptionWrapper extends SAXParseException {
      */
     @Override
     public String getMessage(){
-        final StringBuffer buff = new StringBuffer();
-        buff.append(sourceFile);
-        buff.append(" Line ");
-        buff.append(saxParseException.getLineNumber());
-        buff.append(":");
-        buff.append(saxParseException.getMessage());
-        buff.append(LINE_SEPARATOR);
 
-        return buff.toString();
+        return sourceFile + " Line " + saxParseException.getLineNumber() + ":" + saxParseException.getMessage() + LINE_SEPARATOR;
     }
 
 }

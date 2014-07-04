@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -80,37 +80,35 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         }
         curMatchTopic = topicSet.contains(SHARP) ? SHARP : null;
         topicIdStack = new ArrayDeque<String>();
-        final File inputFile = filename;
         final File outputFile = new File(filename.getPath() + FILE_EXTENSION_TEMP);
         FileOutputStream fileOutput = null;
         try {
             fileOutput = new FileOutputStream(outputFile);
             output = new OutputStreamWriter(fileOutput, UTF8);
             reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
-            reader.parse(inputFile.toURI().toString());
+            reader.parse(filename.toURI().toString());
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         } finally {
             try {
                 if (fileOutput != null) {
                     fileOutput.close();
                 }
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
             try {
                 if (output != null) {
                     output.close();
                 }
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
         }
-        if (!inputFile.delete()) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
-        }
-        if (!outputFile.renameTo(inputFile)) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", inputFile.getPath(), outputFile.getPath()).toString());
+        try {
+            FileUtils.moveFile(outputFile, filename);
+        } catch (final Exception e) {
+            logger.error("Failed to replace " + filename + ": " + e.getMessage());
         }
     }
 
@@ -121,7 +119,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         try {
             writeCharacters(ch, start, length);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -130,7 +128,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         try {
             output.flush();
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -158,7 +156,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             }
             writeEndElement(qName);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -167,7 +165,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         try {
             writeCharacters(ch, start, length);
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -176,7 +174,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         try {
             writeProcessingInstruction(target, data);
         } catch (final IOException e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -204,10 +202,10 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
                     writeEndElement(TOPIC_RELATED_LINKS.localName);
                     curMatchTopic = null;
                 } catch (final Exception e) {
-                    logger.logError(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
             }
-            final String t = StringUtils.assembleString(topicIdStack, SLASH);
+            final String t = StringUtils.join(topicIdStack, SLASH);
             if (topicSet.contains(t)) {
                 curMatchTopic = t;
             } else if (topicSet.contains(topicIdStack.peekFirst())) {
@@ -224,7 +222,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
                 curMatchTopic = null;
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -236,9 +234,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             final String attValue = StringUtils.escapeXML(atts.getValue(i));
-            output.write(new StringBuffer().append(STRING_BLANK)
-                    .append(attQName).append(EQUAL).append(QUOTATION)
-                    .append(attValue).append(QUOTATION).toString());
+            output.write(STRING_BLANK + attQName + EQUAL + QUOTATION + attValue + QUOTATION);
         }
         output.write(GREATER_THAN);
     }

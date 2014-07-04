@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -90,8 +88,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
             //Clone the list of indexterms so we can look for see references
             termCloneList = cloneIndextermList(termList);
             final int termNum = termList.size();
-            for (int i = 0; i < termNum; i++) {
-                final IndexTerm term = termList.get(i);
+            for (final IndexTerm term : termList) {
                 outputIndexTerm(term, serializer, indexsee);
             }
             serializer.writeEndElement(); // index
@@ -103,14 +100,14 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                 try {
                 	serializer.close();
                 } catch (final XMLStreamException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
 				}
             }
             if (out != null) {
                 try {
                 	out.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
 				}
             }
         }
@@ -129,8 +126,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         final int subTermNum = subTerms.size();
         outputIndexTermStartElement(term, serializer, indexsee);
         if (subTerms != null && subTermNum > 0) {
-            for (int i = 0; i < subTermNum; i++) {
-                final IndexTerm subTerm = subTerms.get(i);
+            for (final IndexTerm subTerm : subTerms) {
                 outputIndexTerm(subTerm, serializer, indexsee);
             }
         }
@@ -169,8 +165,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     public String getIndexFileName(final String outputFileRoot) {
         final File indexDir = new File(outputFileRoot).getParentFile();
         setFilePath(indexDir.getAbsolutePath());
-        final StringBuffer indexFilename = new StringBuffer(new File(indexDir, "index.xml").getAbsolutePath());
-        return indexFilename.toString();
+        return new File(indexDir, "index.xml").getAbsolutePath();
     }
 
     /*
@@ -201,8 +196,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         // target
         // Otherwise, the term won't be displayed in the index tab.
         if (targets != null && !targets.isEmpty()) {
-            for (int i = 0; i < targetNum; i++) {
-                final IndexTermTarget target = targets.get(i);
+            for (final IndexTermTarget target : targets) {
                 final String targetUri = target.getTargetURI();
                 final String targetName = target.getTargetName();
                 if (targetUri == null) {
@@ -257,7 +251,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                 }
             }//end for
             if (!foundIndexTerm && foundIndexsee && indexSeeRefTerm != null && !indexSeeRefTerm.equals("***")){
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ050W", indexSeeRefTerm.trim()).toString());
+                logger.warn(MessageUtils.getInstance().getMessage("DOTJ050W", indexSeeRefTerm.trim()).toString());
             }
         }
 
@@ -280,8 +274,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         // target
         // Otherwise, the term won't be displayed in the index tab.
         if (targets != null && !targets.isEmpty()) {
-            for (int i = 0; i < targetNum; i++) {
-                final IndexTermTarget target = targets.get(i);
+            for (final IndexTermTarget target : targets) {
                 final String targetUri = target.getTargetURI();
                 final String targetName = target.getTargetName();
                 if (targetUri == null) {
@@ -311,8 +304,8 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     private List<IndexTerm> cloneIndextermList (final List<IndexTerm> termList){
         final List<IndexTerm> termListClone = new ArrayList<IndexTerm>(termList.size());
         if (termList != null && !termList.isEmpty()){
-            for (int i = 0; i < termList.size(); i++) {
-                termListClone.add(termList.get(i));
+            for (IndexTerm aTermList : termList) {
+                termListClone.add(aTermList);
             }
         }
         return termListClone;

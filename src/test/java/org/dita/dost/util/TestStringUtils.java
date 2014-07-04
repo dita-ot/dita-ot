@@ -27,14 +27,14 @@ public class TestStringUtils {
     public void testAssembleString() {
         String result = null;
         final Collection<Object> input = new ArrayList<Object>();
-        result = StringUtils.assembleString((Collection<Object>) null, ";");
+        result = StringUtils.join((Collection<Object>) null, ";");
         assertEquals("", result);
-        result = StringUtils.assembleString(Collections.emptyList(), ";");
+        result = StringUtils.join(Collections.emptyList(), ";");
         assertEquals("", result);
         input.add("first");
         input.add("second");
         input.add("third");
-        result = StringUtils.assembleString(input, ";");
+        result = StringUtils.join(input, ";");
         assertEquals("first;second;third", result);
     }
 
@@ -57,24 +57,6 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testGetEntity() {
-        String result = null;
-        result = StringUtils.getEntity("abc");
-        assertEquals("&abc;", result);
-        result = StringUtils.getEntity("%xyz");
-        assertEquals("%xyz;", result);
-    }
-
-    @Test
-    public void testCheckEntity() {
-        assertFalse(StringUtils.checkEntity("lt"));
-        assertFalse(StringUtils.checkEntity("gt"));
-        assertFalse(StringUtils.checkEntity("quot"));
-        assertFalse(StringUtils.checkEntity("amp"));
-        assertTrue(StringUtils.checkEntity("abc"));
-    }
-
-    @Test
     public void testReplaceAll() {
         String result = null;
         result = StringUtils.replaceAll("abababa", "aba", "c");
@@ -82,37 +64,15 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testGetAscii() {
-        assertEquals("\\'66\\'6f\\'6f", StringUtils.getAscii("foo"));
-        final byte[] nonAscii = "\u00e4\u00f6\u00e5".getBytes(Charset.defaultCharset());
-        final StringBuilder buf = new StringBuilder();
-        for (final byte b: nonAscii) {
-            final String s = Integer.toHexString(b);
-            buf.append('\\').append('\'').append(s.substring(s.length() - 2));
-        }
-        assertEquals(buf.toString(), StringUtils.getAscii("\u00e4\u00f6\u00e5"));
-    }
-
-    @Test
     public void testGetExtProps() {
-        assertArrayEquals(new String[][] {new String[] {"props", "foo"}, new String[] {"props", "bar"}},
+        assertArrayEquals(new String[][] {{"props", "foo"}, {"props", "bar"}},
                           StringUtils.getExtProps("a(props foo) a(props bar)"));
-        assertArrayEquals(new String[][] {new String[] {"props", "bar"}, new String[] {"props", "qux"}},
+        assertArrayEquals(new String[][] {{"props", "bar"}, {"props", "qux"}},
                           StringUtils.getExtProps("(topic foo) a(props bar) (topic baz) a(props qux)"));
-        assertArrayEquals(new String[][] {new String[] {"props", "foo"}},
+        assertArrayEquals(new String[][] {{"props", "foo"}},
                           StringUtils.getExtProps("  a(props   foo  )   "));
         assertArrayEquals(new String[0][0],
                           StringUtils.getExtProps("(topic task)"));
-    }
-
-    @Test
-    public void testRestoreMap() {
-        final Map<String, String> expected = new HashMap<String, String>();
-        expected.put("abc", "def");
-        expected.put("ghi", "jkl");
-        expected.put("mno", "pqr");
-        final Map<String, String> result = StringUtils.restoreMap("abc=def,ghi=jkl,mno=pqr");
-        assertEquals(expected, result);
     }
 
     @Test
@@ -162,24 +122,17 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testGetFileName() {
-        assertEquals("foo.bar", StringUtils.getFileName("foo.bar.baz", "."));
-        assertEquals("foo", StringUtils.getFileName("foo.bar", "."));
-        assertEquals("foo", StringUtils.getFileName("foo", "."));
+    public void testNormalizeAndCollapseWhitespace() {
+        assertEquals("foo bar baz", runNormalizeAndCollapseWhitespace("foo bar baz"));
+        assertEquals(" foo bar baz ", runNormalizeAndCollapseWhitespace(" foo bar baz "));
+        assertEquals(" foo bar baz ", runNormalizeAndCollapseWhitespace("  foo  bar  baz  "));
+        assertEquals(" foo bar baz ", runNormalizeAndCollapseWhitespace("\nfoo\nbar\nbaz\n"));
     }
-
-    @Test
-    public void testGetMaxFive() {
-        assertEquals(Integer.valueOf(5), StringUtils.getMax("1", "2", "3", "4", "5"));
-        assertEquals(Integer.valueOf(5), StringUtils.getMax("5", "4", "3", "2", "1"));
-        assertEquals(Integer.valueOf(5), StringUtils.getMax("5", "5", "5", "5", "5"));
+    
+    private String runNormalizeAndCollapseWhitespace(final String text) {
+        final StringBuilder sb = new StringBuilder(text);
+        StringUtils.normalizeAndCollapseWhitespace(sb);
+        return sb.toString();
     }
-
-    @Test
-    public void testGetMaxSix() {
-        assertEquals(Integer.valueOf(6), StringUtils.getMax("1", "2", "3", "4", "5", "6"));
-        assertEquals(Integer.valueOf(6), StringUtils.getMax("6", "5", "4", "3", "2", "1"));
-        assertEquals(Integer.valueOf(6), StringUtils.getMax("6", "6", "6", "6", "6", "6"));
-    }
-
+    
 }

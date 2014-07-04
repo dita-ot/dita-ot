@@ -9,6 +9,18 @@ See the accompanying license.txt file for applicable licenses.
   exclude-result-prefixes="xs"
   version="2.0">
 
+  <xsl:template match="*[contains(@class, ' reference/reference ')]" mode="processTopic"
+                name="processReference">
+    <fo:block xsl:use-attribute-sets="reference">
+      <xsl:apply-templates select="." mode="commonTopicProcessing"/>
+    </fo:block>
+  </xsl:template>
+  
+  <!-- Deprecated, retained for backwards compatibility -->
+  <xsl:template match="*" mode="processReference">
+    <xsl:call-template name="processReference"/>
+  </xsl:template>
+
   <xsl:template match="*[contains(@class, ' reference/refbody ')]" priority="1">
     <xsl:variable name="level" as="xs:integer">
       <xsl:apply-templates select="." mode="get-topic-level"/>
@@ -399,59 +411,5 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:choose>
     </fo:table-cell>
   </xsl:template>
-
-  <!-- RFE 2882109: Combine this common code with topic/topic rule. -->
-  <!--
-  <xsl:template match="*[contains(@class, ' reference/reference ')]">
-    <xsl:variable name="topicType">
-      <xsl:call-template name="determineTopicType"/>
-    </xsl:variable>
-
-    <xsl:choose>
-      <xsl:when test="$topicType = 'topicChapter'">
-        <xsl:call-template name="processTopicChapter"/>
-      </xsl:when>
-      <xsl:when test="$topicType = 'topicAppendix'">
-        <xsl:call-template name="processTopicAppendix"/>
-      </xsl:when>
-      <xsl:when test="$topicType = 'topicPart'">
-        <xsl:call-template name="processTopicPart"/>
-      </xsl:when>
-      <xsl:when test="$topicType = 'topicPreface'">
-        <xsl:call-template name="processTopicPreface"/>
-      </xsl:when>
-      <xsl:when test="$topicType = 'topicSimple'">
-        <xsl:variable name="page-sequence-reference">
-          <xsl:choose>
-            <xsl:when test="$mapType = 'bookmap'">
-              <xsl:value-of select="'body-sequence'"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="'ditamap-body-sequence'"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <xsl:choose>
-          <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
-            <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
-              <xsl:call-template name="insertBodyStaticContents"/>
-              <fo:flow flow-name="xsl-region-body">
-                <xsl:call-template name="processReference"/>
-              </fo:flow>
-            </fo:page-sequence>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="processReference"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="processUnknowTopic">
-          <xsl:with-param name="topicType" select="$topicType"/>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  -->
 
 </xsl:stylesheet>

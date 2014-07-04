@@ -307,28 +307,28 @@ public class TestUtils {
             this.failOnError = failOnError;
         }
         
-        public void logInfo(final String msg) {
+        public void info(final String msg) {
             //System.out.println(msg);
         }
 
-        public void logWarn(final String msg) {
+        public void warn(final String msg) {
             //System.err.println(msg);
         }
 
-        public void logError(final String msg) {
+        public void error(final String msg) {
             if (failOnError) {
                 throw new AssertionError("Error message was thrown: " + msg);
             }
         }
 
-        public void logError(final String msg, final Throwable t) {
+        public void error(final String msg, final Throwable t) {
             if (failOnError) {
                 t.printStackTrace();
                 throw new AssertionError("Error message was thrown: " + msg);
             }
         }
 
-        public void logDebug(final String msg) {
+        public void debug(final String msg) {
             //System.out.println(msg);
         }
 
@@ -341,19 +341,19 @@ public class TestUtils {
 
         private List<Message> buf = new ArrayList<Message>();
         
-        public void logInfo(final String msg) {
+        public void info(final String msg) {
             buf.add(new Message(Message.Level.INFO, msg, null));
         }
 
-        public void logWarn(final String msg) {
+        public void warn(final String msg) {
             buf.add(new Message(Message.Level.WARN, msg, null));
         }
 
-        public void logError(final String msg) {
+        public void error(final String msg) {
             buf.add(new Message(Message.Level.ERROR, msg, null));
         }
         
-        public void logError(final String msg, final Throwable t) {
+        public void error(final String msg, final Throwable t) {
             buf.add(new Message(Message.Level.ERROR, msg, t));
         }
 
@@ -361,7 +361,7 @@ public class TestUtils {
             buf.add(new Message(Message.Level.FATAL, msg, null));
         }
 
-        public void logDebug(final String msg) {
+        public void debug(final String msg) {
             buf.add(new Message(Message.Level.DEBUG, msg, null));
         }
 

@@ -18,6 +18,12 @@
     </xsl:element>
   </xsl:template>
   
+  <xsl:template match="nav" mode="add-xhtml-ns" priority="20">
+    <xsl:element name="div" namespace="http://www.w3.org/1999/xhtml">
+      <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>
+    </xsl:element>
+  </xsl:template>
+  
   <xsl:template match="@* | node()" mode="add-xhtml-ns">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>

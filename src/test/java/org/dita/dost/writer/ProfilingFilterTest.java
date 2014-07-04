@@ -42,29 +42,26 @@ public class ProfilingFilterTest {
 	
 	@Test
 	public void testNoFilter() throws Exception {
-		test(new FilterUtils(), "topic.dita", "topic.dita", null);
+		test(new FilterUtils(), "topic.dita", "topic.dita");
 		
 		final FilterUtils filterUtils = new FilterUtils();
 		final DitaValReader filterReader = new DitaValReader();
 		filterReader.read(new File(getClass().getClassLoader().getResource("ProfilingFilterTest/src/topic1.ditaval").toURI()).getAbsoluteFile());
         filterUtils.setFilterMap(filterReader.getFilterMap());
 		filterUtils.setLogger(new TestUtils.TestLogger());
-        test(filterUtils, "topic.dita", "topic1.dita", null);
+        test(filterUtils, "topic.dita", "topic1.dita");
 
-        test(new FilterUtils(false), "map.ditamap", "map_xhtml.ditamap", "xhtml");
-        test(new FilterUtils(true), "map.ditamap", "map_pdf.ditamap", "pdf");
+        test(new FilterUtils(false), "map.ditamap", "map_xhtml.ditamap");
+        test(new FilterUtils(true), "map.ditamap", "map_pdf.ditamap");
 	}
 	
-	private void test(final FilterUtils filterUtils, final String srcFile, final String expFile, final String transtype) throws Exception {
+	private void test(final FilterUtils filterUtils, final String srcFile, final String expFile) throws Exception {
 		final Transformer t = TransformerFactory.newInstance().newTransformer();
 		final InputStream src = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/src/" + srcFile);
 		final ProfilingFilter f = new ProfilingFilter();
 		f.setParent(StringUtils.getXMLReader());
 		filterUtils.setLogger(new TestUtils.TestLogger());
 		f.setFilterUtils(filterUtils);
-		if (transtype != null) {
-			f.setTranstype(transtype);
-		}
 		f.setLogger(new TestUtils.TestLogger());
 		final SAXSource s = new SAXSource(f, new InputSource(src));
 		final DOMResult d = new DOMResult();

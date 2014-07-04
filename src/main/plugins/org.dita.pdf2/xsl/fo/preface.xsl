@@ -52,74 +52,20 @@ See the accompanying license.txt file for applicable licenses.
                              </xsl:for-each>
                          </fo:marker>
                      </xsl:if>
-
                      <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
-
                      <xsl:call-template name="insertChapterFirstpageStaticContent">
                          <xsl:with-param name="type" select="'preface'"/>
                      </xsl:call-template>
-
                      <fo:block xsl:use-attribute-sets="topic.title">
                          <xsl:call-template name="pullPrologIndexTerms"/>
                          <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                              <xsl:apply-templates select="." mode="getTitle"/>
                          </xsl:for-each>
                      </fo:block>
-
-                     <!--<xsl:call-template name="createMiniToc"/>-->
-
                      <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
                  </fo:block>
              </fo:flow>
          </fo:page-sequence>
-
-
-<!--        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">-->
-<!--            <xsl:call-template name="insertBodyStaticContents"/>-->
-<!--            <fo:flow flow-name="xsl-region-body">-->
-<!--
-                <fo:block xsl:use-attribute-sets="topic" page-break-before="always">
-                    <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
-                        <fo:marker marker-class-name="current-topic-number">
-                            <xsl:number format="1"/>
-                        </fo:marker>
-                        <fo:marker marker-class-name="current-header">
-                            <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                                <xsl:call-template name="getTitle"/>
-                            </xsl:for-each>
-                        </fo:marker>
-                    </xsl:if>
-                    <fo:inline id="{@id}"/>
-                    <fo:inline>
-                        <xsl:attribute name="id"">
-                            <xsl:call-template name="generate-toc-id"/>
-                        </xsl:attribute>
-                    </fo:inline>
-                    <fo:block>
-                        <xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
-                        <xsl:attribute name="margin-bottom">16.8pt</xsl:attribute>
-                    </fo:block>
-                    <fo:block xsl:use-attribute-sets="body__toplevel">
-                        <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))]"/>
-                    </fo:block>
-                </fo:block>
--->
-<!--            </fo:flow>-->
-<!--        </fo:page-sequence>-->
     </xsl:template>
-
-<!--
-    <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-preface">
-        <xsl:param name="include" select="'true'"/>
-        <xsl:variable name="topicType">
-            <xsl:call-template name="determineTopicType"/>
-        </xsl:variable>
-
-        <xsl:if test="$topicType = 'topicPreface'">
-            <xsl:call-template name="processTopicPreface"/>
-        </xsl:if>
-    </xsl:template>
--->
-
 
 </xsl:stylesheet>

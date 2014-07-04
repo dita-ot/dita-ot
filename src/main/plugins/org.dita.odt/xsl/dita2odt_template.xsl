@@ -23,7 +23,7 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
-  xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefixes="random"
+  xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
   version="2.0">
   
   
@@ -50,6 +50,8 @@
   <xsl:import href="xslodt/pr-d.xsl"/>
   <xsl:import href="xslodt/sw-d.xsl"/>
   <xsl:import href="xslodt/ui-d.xsl"/>
+  <xsl:import href="xslodt/markup-d.xsl"/>
+  <xsl:import href="xslodt/xml-d.xsl"/>
   <!--
   <xsl:import href="xslodt/common/vars.xsl"/>
   -->
@@ -82,7 +84,7 @@
 <xsl:param name="BREADCRUMBS" select="'no'"/> <!-- "no" and "yes" are valid values; non-'yes' is ignored -->
 
 <!-- the year for the copyright -->
-<xsl:param name="YEAR" select="'2010'"/>
+<xsl:param name="YEAR" select="format-date(current-date(), '[Y]')"/>
 
 <!-- the file name (file name and extension only - no path) of the document being transformed.
   Needed to help with debugging.
@@ -123,7 +125,6 @@
 <xsl:variable name="tempfiledir">
   <xsl:choose>
     <xsl:when test="contains($TEMPDIR, ':\') or contains($TEMPDIR, ':/')">
-      <!--xsl:value-of select="concat($FILEREF,'/')"/-->
       <xsl:value-of select="'file:/'"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
     </xsl:when>
     <xsl:when test="starts-with($TEMPDIR, '/')">
@@ -133,7 +134,6 @@
       <xsl:value-of select="'file://'"/><xsl:value-of select="concat($BASEDIR, '/')"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
     </xsl:when>
     <xsl:otherwise>
-      <!--xsl:value-of select="concat($FILEREF,'/')"/-->
       <xsl:value-of select="'file:/'"/><xsl:value-of select="concat($BASEDIR, '/')"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
     </xsl:otherwise>
   </xsl:choose>

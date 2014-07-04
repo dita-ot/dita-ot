@@ -39,7 +39,7 @@ import org.dita.dost.util.Configuration;
 public final class CommandLineInvoker {
 
     /**logger.*/
-    private static DITAOTLogger logger = new DITAOTJavaLogger();
+    private static final DITAOTLogger logger = new DITAOTJavaLogger();
     /** Map to store input parameters.*/
     private static final Map<String, String> paramMap;
     static {
@@ -289,7 +289,7 @@ public final class CommandLineInvoker {
      * @return Ant executable file name
      */
     private String getCommandRunner() {
-        return (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) != -1)
+        return (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS))
                 ? "ant.bat"
                         : "ant";
     }
@@ -316,7 +316,7 @@ public final class CommandLineInvoker {
                 try {
                     outReader.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -332,7 +332,7 @@ public final class CommandLineInvoker {
                 try {
                     errReader.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -417,7 +417,7 @@ public final class CommandLineInvoker {
                 invoker.startAnt();
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 

@@ -86,7 +86,7 @@
   </target>
 
   <target name="escapeUnicode">
-    <pipeline message="Escape Unicode">
+    <pipeline message="Escape Unicode" tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.EscapeUnicodeModule">
         <param name="input" value="${input}"/>
         <param name="output" value="${output}"/>

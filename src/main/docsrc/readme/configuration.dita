@@ -8,7 +8,7 @@
     <metadata>
       <keywords>
         <indexterm>configuration
-            properties<indexterm>default.language</indexterm><indexterm>generate-debug-attributes</indexterm><indexterm>processing-mode</indexterm><indexterm>org.dita.pdf2.index.frame-markup</indexterm><indexterm>org.dita.pdf2.i18n.enabled</indexterm><indexterm>org.dita.pdf2.use-out-temp</indexterm></indexterm>
+            properties<indexterm>default.language</indexterm><indexterm>generate-debug-attributes</indexterm><indexterm>processing-mode</indexterm><indexterm>org.dita.pdf2.i18n.enabled</indexterm><indexterm>org.dita.pdf2.use-out-temp</indexterm></indexterm>
         <indexterm>files<indexterm>lib/configuration.properties file</indexterm><indexterm>topic.fo
             file</indexterm></indexterm>
         <indexterm>topic.fo<indexterm>location of</indexterm></indexterm>
@@ -60,20 +60,6 @@
                 <li><option>skip</option> — When an error is encountered, the DITA continues
                   processing but does not attempt error recovery.</li>
               </ul></entry>
-          </row>
-          <row>
-            <entry><parmname>org.dita.pdf2.index.frame-markup</parmname></entry>
-            <entry>(PDF transformation only) Specifies how the DITA-OT handles legacy FrameMaker
-              syntax for &lt;indexterm> elements. The following values are allowed: <ul>
-                <li><option>true</option>— Enables special processing of legacy FrameMaker syntax
-                  for &lt;indexterm> elements. Standard DITA &lt;indexterm> elements are processed
-                  also.</li>
-                <li><option>false</option> (default) — Disables special processing of legacy
-                  FrameMaker syntax for &lt;indexterm> elements.</li>
-              </ul><note>Setting the <parmname>org.dita.pdf2.index.frame-markup</parmname> parameter
-                to <option>yes</option> only affects how index entries are generated in PDF output.
-                For example, an <codeph>&lt;indexterm>files:topic&lt;/index></codeph> element will
-                generate an index entry of  "files:topic" in a CHM file.</note></entry>
           </row>
           <row>
             <entry><parmname>org.dita.pdf2.i18n.enabled</parmname></entry>

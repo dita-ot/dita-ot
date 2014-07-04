@@ -30,7 +30,6 @@ import org.xml.sax.InputSource;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.junit.Test;
 
 public class TestKeyrefReader {
@@ -41,7 +40,6 @@ public class TestKeyrefReader {
     @Test
     public void testKeyrefReader() throws Exception {
         final String path = System.getProperty("user.dir");
-        DitaURIResolverFactory.setPath(path);
         final File filename = new File(srcDir, "keyrefreader.xml");
 
         final Set <String> set = new HashSet<String> ();
@@ -50,6 +48,8 @@ public class TestKeyrefReader {
         set.add("blatintro");
         set.add("keyword");
         set.add("escape");
+        set.add("top");
+        set.add("nested");
         final KeyrefReader keyrefreader = new KeyrefReader();
         keyrefreader.setKeys(set);
         keyrefreader.read(toURI(filename.getAbsolutePath()));
@@ -61,6 +61,8 @@ public class TestKeyrefReader {
         exp.put("blatintro", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
         exp.put("keyword", "<topicref keys='keyword' class='- map/topicref '><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>keyword value</keyword></keywords></topicmeta></topicref>");
         exp.put("escape", "<topicref keys='escape' class='- map/topicref ' navtitle='&amp;&lt;&gt;&quot;&apos;'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>&amp;&lt;&gt;&quot;&apos;</keyword></keywords></topicmeta></topicref>");
+        exp.put("top", "<topicref keys='top' class='- map/topicref ' navtitle='top'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>top keyword</keyword></keywords></topicmeta><topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref></topicref>");
+        exp.put("nested", "<topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref>");
         
         TestUtils.resetXMLUnit();
         XMLUnit.setIgnoreWhitespace(true);

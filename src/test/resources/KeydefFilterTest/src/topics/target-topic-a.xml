@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/topic.dtd">
+<topic
+  id="topic-1">
+  <title>Target Topic A</title>
+  <body>
+    <p>This is topic A.</p>
+  </body>
+</topic>

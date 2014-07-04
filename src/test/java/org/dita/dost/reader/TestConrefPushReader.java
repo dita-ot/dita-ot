@@ -16,12 +16,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.AfterClass;
-
+import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.ConrefPushReader;
-
+import org.dita.dost.reader.ConrefPushReader.MoveKey;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.w3c.dom.DocumentFragment;
+import org.xml.sax.SAXException;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -38,7 +41,7 @@ public class TestConrefPushReader {
     }
 
     @Test
-    public void testRead(){
+    public void testRead() throws SAXException, IOException{
         /*
          * the part of content of conrefpush_stup.xml is
          *  <steps>
@@ -52,17 +55,23 @@ public class TestConrefPushReader {
         final File filename = new File(srcDir, "conrefpush_stub.xml");
         final ConrefPushReader pushReader = new ConrefPushReader();
         pushReader.read(filename.getAbsoluteFile());
-        final Map<String, Hashtable<String,String>> pushSet = pushReader.getPushMap();
-        final Iterator<Map.Entry<String, Hashtable<String,String>>> it= pushSet.entrySet().iterator();
+        final Map<File, Hashtable<MoveKey, DocumentFragment>> pushSet = pushReader.getPushMap();
+        final Iterator<Map.Entry<File, Hashtable<MoveKey, DocumentFragment>>> it= pushSet.entrySet().iterator();
         if (it.hasNext()){
             // pushSet has only one entry, so there is no need to iterate it.
-            final Hashtable<String, String> table = it.next().getValue();
-            assertTrue(table.containsKey("#X/A|pushbefore"));
-            assertEquals(table.get("#X/A|pushbefore"), "<step class=\"- topic/li task/step \"><cmd class=\"- topic/ph task/cmd \">before</cmd></step>");
-            assertTrue(table.containsKey("#X/B|pushafter"));
-            assertEquals(table.get("#X/B|pushafter"), "<step class=\"- topic/li task/step \"><cmd class=\"- topic/ph task/cmd \">after</cmd></step>");
-            assertTrue(table.containsKey("#X/C|pushreplace"));
-            assertEquals( "<step class=\"- topic/li task/step \" id=\"C\"><cmd class=\"- topic/ph task/cmd \">replace</cmd></step>",table.get("#X/C|pushreplace"));
+            final Hashtable<MoveKey, DocumentFragment> table = it.next().getValue();
+            assertTrue(table.containsKey(new MoveKey("#X/A", "pushbefore")));
+            XMLUnit.compareXML(
+                    table.get(new MoveKey("#X/A", "pushbefore")).getOwnerDocument(),
+                    XMLUnit.buildControlDocument("<step class=\"- topic/li task/step \"><cmd class=\"- topic/ph task/cmd \">before</cmd></step>"));
+            assertTrue(table.containsKey(new MoveKey("#X/B", "pushafter")));
+            XMLUnit.compareXML(
+                    table.get(new MoveKey("#X/B", "pushafter")).getOwnerDocument(),
+                    XMLUnit.buildControlDocument("<step class=\"- topic/li task/step \"><cmd class=\"- topic/ph task/cmd \">after</cmd></step>"));
+            assertTrue(table.containsKey(new MoveKey("#X/C", "pushreplace")));
+            XMLUnit.compareXML(
+                    table.get(new MoveKey("#X/C", "pushreplace")).getOwnerDocument(),
+                    XMLUnit.buildControlDocument("<step class=\"- topic/li task/step \" id=\"C\"><cmd class=\"- topic/ph task/cmd \">replace</cmd></step>"));
         }
     }
 

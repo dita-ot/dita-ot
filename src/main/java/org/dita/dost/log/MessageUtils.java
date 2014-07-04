@@ -38,11 +38,11 @@ public final class MessageUtils {
     private static final String ELEMENT_RESPONSE = "response";
     private static final String ATTRIBUTE_ID = "id";
     private static final String ATTRIBUTE_TYPE = "type";
-    private static String defaultResource = "resource/messages.xml";
+    private static final String defaultResource = "resource/messages.xml";
 
     // Variables
 
-    private final Hashtable<String, MessageBean> hashTable = new Hashtable<String, MessageBean>();;
+    private final Hashtable<String, MessageBean> hashTable = new Hashtable<String, MessageBean>();
     private static MessageUtils utils;
 
     // Constructors

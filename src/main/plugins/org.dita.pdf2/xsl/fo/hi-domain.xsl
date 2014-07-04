@@ -77,4 +77,18 @@ See the accompanying license.txt file for applicable licenses.
       </fo:inline>
     </xsl:template>
 
+  <xsl:template match="*[contains(@class,' hi-d/line-through ')]">
+    <fo:inline xsl:use-attribute-sets="line-through">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' hi-d/overline ')]">
+    <fo:inline xsl:use-attribute-sets="overline">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+
 </xsl:stylesheet>

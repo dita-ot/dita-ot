@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--   
 Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
@@ -29,7 +29,6 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
 See the accompanying license.txt file for applicable licenses.
 -->
-
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
 
     <!-- 
@@ -61,10 +60,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Body first header"/>
 
     <!-- The header that appears on odd-numbered pages. -->
-    <variable id="Body odd header"><param ref-name="prodname"/>&#160;|&#160;<param ref-name="heading"/>&#160;|&#160;<param ref-name="pagenum"/></variable>
+    <variable id="Body odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on even-numbered pages. -->
-    <variable id="Body even header"><param ref-name="pagenum"/>&#160;|&#160;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Body even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
 
     <!-- The footer that appears on Preface odd-numbered pages. -->
     <variable id="Preface odd footer"/>
@@ -76,10 +75,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Preface first footer"/>
 
     <!-- The header that appears on Preface odd-numbered pages. -->
-    <variable id="Preface odd header"><param ref-name="prodname"/>&#160;|&#160;序言&#160;|&#160;<param ref-name="pagenum"/></variable>
+    <variable id="Preface odd header"><param ref-name="prodname"/> | 序言 | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on Preface even-numbered pages. -->
-    <variable id="Preface even header"><param ref-name="pagenum"/>&#160;|&#160;序言&#160;|&#160;<param ref-name="prodname"/></variable>
+    <variable id="Preface even header"><param ref-name="pagenum"/> | 序言 | <param ref-name="prodname"/></variable>
 
     <!-- The header that appears on Preface first page. -->
     <variable id="Preface first header"/>
@@ -95,11 +94,11 @@ See the accompanying license.txt file for applicable licenses.
     <!-- The header that appears on the odd-numbered table of contents
          pages. --> 
     <!-- 目录 -->
-    <variable id="Toc odd header"><param ref-name="prodname"/>&#160;|&#160;<param ref-name="heading"/>&#160;|&#160;<param ref-name="pagenum"/></variable>
+    <variable id="Toc odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the odd-numbered table of contents
          pages. --> 
-    <variable id="Toc even header"><param ref-name="pagenum"/>&#160;|&#160;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Toc even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
 
     <!-- The footer that appears on the odd-numbered index pages. -->
     <variable id="Index odd footer"/>
@@ -108,38 +107,36 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Index even footer"/>
 
     <!-- The header that appears on the odd-numbered index pages. -->
-    <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Index odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the even-numbered index pages. -->
-    <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Index even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
 
     <!-- The formatting used to display ordered lists (e.g., "1., 2." or 
          "1), 2)" -->
     <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
 
     <!-- The unordered list bullet   -->
-    <variable id="Unordered List bullet">&#8226;</variable>
+    <variable id="Unordered List bullet">•</variable>
 
     <!-- The heading string to put at the top of the Table of Contents -->
     <variable id="Table of Contents">内容</variable>
 
-    <!-- The heading string to put at the top of the Index -->
-    <variable id="Index">索引</variable>
     <variable id="Index Continued String">继续</variable>
     <variable id="Index See String">，见</variable>
     <variable id="Index See Also String">参见</variable>
 
     <!-- The string used to label a chapter within the table of contents. -->
-    <variable id="Table of Contents Chapter">章节&#160;<param ref-name="number"/>:&#160;</variable>
+    <variable id="Table of Contents Chapter">章节 <param ref-name="number"/>: </variable>
 
     <!-- The string used to label an appendix within the table of contents. -->
-    <variable id="Table of Contents Appendix">附录&#160;<param ref-name="number"/>:&#160;</variable>
+    <variable id="Table of Contents Appendix">附录 <param ref-name="number"/>: </variable>
 
     <!-- The string used to label an part within the table of contents. -->
-    <variable id="Table of Contents Part">第部分&#160;<param ref-name="number"/>:&#160;</variable>
+    <variable id="Table of Contents Part">第部分 <param ref-name="number"/>: </variable>
 
     <!-- The string used to label an preface within the table of contents. -->
-    <variable id="Table of Contents Preface">序言&#160;</variable>
+    <variable id="Table of Contents Preface">序言 </variable>
     <variable id="Preface title">序言</variable>
 
     <!-- The heading to put at the top of a chapter when creating a
@@ -147,50 +144,19 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Mini Toc">Topics: </variable>
 
     <variable id="#note-separator">: </variable>
-    <!-- Text to use for 'Note' label generated from <note> element. -->
-    <variable id="Note">注</variable>
+
     <!-- Text to use for 'Notice' label generated from <note> element. -->
     <variable id="Notice"><!--TODO:Notice--></variable>
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'tip'. -->
-    <variable id="Tip">提示</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element
-         with 'type' attribute set to 'tip'. -->
-    <variable id="Important">重要</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'fastpath'. -->
-    <variable id="Fastpath">捷径</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'remember'. -->
-    <variable id="Remember">切记</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'attention'. -->
-    <variable id="Attention">注意</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'caution'. -->
-    <variable id="Caution">警告</variable>
-    <!-- Text to use for 'Note' label generated from <note> element with 'type' attribute set to 'warning'. -->
-    <variable id="Warning">警告</variable>
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'danger'. -->
-    <variable id="Danger">危险</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element
-         with 'type' attribute set to 'restriction'. -->
-    <variable id="Restriction">限制</variable>
 
     <!-- Text to use for figure titles. Renders as part of <fig>/<title>
           elements. -->
-    <variable id="Figure">图 <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Figure.title">图 <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Figure Number">图 <param ref-name="number"/></variable>
 
     <!-- Text to use for table titles. Renders as part of <table>/<title> 
          elements. -->
-    <variable id="Table">表 <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Table.title">表 <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Table Number">表 <param ref-name="number"/></variable>
 
     <!-- Text to use for related links label.
          Renders as part of <related-links> element. -->
@@ -339,14 +305,13 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Task Postreq">下一步做什么</variable>
     <variable id="Glossary odd footer"/>
     <variable id="Glossary even footer"/>
-    <variable id="Glossary odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
-    <variable id="Glossary even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+    <variable id="Glossary even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
     <variable id="Glossary">术语表</variable>
     <variable id="List of Tables">表格清单</variable>
     <variable id="List of Figures">插图清单</variable>
-  <variable id="Option">选项</variable>
-  <variable id="Description">描述</variable>
-  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+
+  <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>
   <variable id="#quote-end">”</variable>
 </vars>

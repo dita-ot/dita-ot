@@ -8,8 +8,9 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.invoker.ExtensibleAntInvoker.getJob;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 import org.apache.tools.ant.BuildException;
@@ -25,13 +26,9 @@ public final class JobPropertyTask extends Task {
 
     @Override
     public void execute() throws BuildException {
-        try {
-            final Job job = new Job(dir);
-            for (final Map.Entry<String, String> e: job.getProperties().entrySet()) {
-                getProject().setProperty(e.getKey(), e.getValue());
-            }
-        } catch (final IOException e) {
-            throw new BuildException("Failed to read job configuration: " + e.getMessage(), e);
+        final Job job = getJob(dir, getProject());
+        for (final Map.Entry<String, String> e: job.getProperties().entrySet()) {
+            getProject().setProperty(e.getKey(), e.getValue());
         }
     }
 

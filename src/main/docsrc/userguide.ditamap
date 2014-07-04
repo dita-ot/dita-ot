@@ -11,7 +11,7 @@
   <topicref href="dev_ref/developer-reference.dita">
     <mapref href="dev_ref/dev_ref.ditamap" format="ditamap"/>
   </topicref>
-  <mapref href="admin/project-management.ditamap" format="ditamap"/>
+  <!--mapref href="admin/project-management.ditamap" format="ditamap"/-->
   <mapref href="dita-resources.ditamap" format="ditamap"/>
   <mapref href="subjectscheme.ditamap" type="subjectScheme" processing-role="resource-only"/>
   <mapref href="reltable.ditamap" processing-role="resource-only"/>

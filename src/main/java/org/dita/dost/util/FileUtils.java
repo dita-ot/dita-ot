@@ -40,44 +40,7 @@ public final class FileUtils {
     private FileUtils(){
     }
 
-    private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
-
-    /**
-     * Supported DITA topic extensions. File extensions contain a leading dot.
-     */
-    private final static List<String> supportedTopicExtensions;
-    static {
-        final List<String> ste = new ArrayList<String>();
-        final String extensions = Configuration.configuration.get(CONF_SUPPORTED_TOPIC_EXTENSIONS);
-        if (extensions != null && extensions.length()>0) {
-            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                ste.add(ext);
-            }
-        } else {
-            logger.logError("Failed to read supported DITA topic extensions from configuration, using defaults.");
-            ste.add(FILE_EXTENSION_DITA);
-            ste.add(FILE_EXTENSION_XML);
-        }
-        supportedTopicExtensions = Collections.unmodifiableList(ste);
-    }
-    
-    /**
-     * Supported DITA map extensions. File extensions contain a leading dot.
-     */
-    private final static List<String> supportedMapExtensions;
-    static {
-        final List<String> sme = new ArrayList<String>();
-        final String extensions = Configuration.configuration.get(CONF_SUPPORTED_MAP_EXTENSIONS);
-        if (extensions != null && extensions.length()>0) {
-            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                sme.add(ext);
-            }
-        } else {
-            logger.logError("Failed to read supported DITA map extensions from configuration, using defaults.");
-            sme.add(FILE_EXTENSION_DITAMAP);
-        }
-        supportedMapExtensions = Collections.unmodifiableList(sme);
-    }
+    private static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
 
     /**
      * Supported image extensions. File extensions contain a leading dot.
@@ -87,11 +50,9 @@ public final class FileUtils {
         final List<String> sie = new ArrayList<String>();
         final String imageExtensions = Configuration.configuration.get(CONF_SUPPORTED_IMAGE_EXTENSIONS);
         if (imageExtensions != null && imageExtensions.length()>0) {
-            for (final String ext: imageExtensions.split(CONF_LIST_SEPARATOR)) {
-                sie.add(ext);
-            }
+            Collections.addAll(sie, imageExtensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.logError("Failed to read supported image extensions from configuration, using defaults.");
+            logger.error("Failed to read supported image extensions from configuration, using defaults.");
             sie.add(FILE_EXTENSION_JPG);
             sie.add(FILE_EXTENSION_GIF);
             sie.add(FILE_EXTENSION_EPS);
@@ -112,11 +73,9 @@ public final class FileUtils {
         final List<String> she = new ArrayList<String>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_HTML_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
-            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                she.add(ext);
-            }
+            Collections.addAll(she, extensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.logError("Failed to read supported HTML extensions from configuration, using defaults.");
+            logger.error("Failed to read supported HTML extensions from configuration, using defaults.");
             she.add(FILE_EXTENSION_HTML);
             she.add(FILE_EXTENSION_HTM);
         }
@@ -131,29 +90,13 @@ public final class FileUtils {
         final List<String> sre = new ArrayList<String>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_RESOURCE_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
-            for (final String ext: extensions.split(CONF_LIST_SEPARATOR)) {
-                sre.add(ext);
-            }
+            Collections.addAll(sre, extensions.split(CONF_LIST_SEPARATOR));
         } else {
-            logger.logError("Failed to read supported resource file extensions from configuration, using defaults.");
+            logger.error("Failed to read supported resource file extensions from configuration, using defaults.");
             sre.add(FILE_EXTENSION_SWF);
             sre.add(FILE_EXTENSION_PDF);
         }
         supportedResourceExtensions = Collections.unmodifiableList(sre);
-    }
-
-    /**
-     * Supported extensions. File extensions contain a leading dot.
-     */
-    private final static List<String> supportedExtensions;
-    static {
-        final List<String> se = new ArrayList<String>();
-        se.addAll(supportedTopicExtensions);
-        se.addAll(supportedMapExtensions);
-        se.addAll(supportedImageExtensions);
-        se.addAll(supportedHTMLExtensions);
-        se.addAll(supportedResourceExtensions);
-        supportedExtensions = Collections.unmodifiableList(se);
     }
 
     /**
@@ -210,71 +153,12 @@ public final class FileUtils {
     }
 
     /**
-     * Return if the file is a dita file by extension.
-     * @param lcasefn file name
-     * @return true if is DITA file and false otherwise
-     */
-    @Deprecated
-    public static boolean isDITAFile(String lcasefn) {
-        if(lcasefn == null) {
-            return false;
-        }
-        lcasefn = stripFragment(lcasefn);
-
-        return isDITATopicFile(lcasefn) || isDITAMapFile(lcasefn);
-    }
-
-    /**
-     * Return if the file is a dita topic file by extension.
-     * @param lcasefn file name
-     * @return true if is dita file and false otherwise
-     */
-    @Deprecated
-    public static boolean isDITATopicFile(final String lcasefn) {
-        for (final String ext: supportedTopicExtensions) {
-            if (lcasefn.endsWith(ext)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Return if the file is a dita map file by extension.
-     * @param lcasefn file name
-     * @return true if is ditamap file and false otherwise
-     */
-    @Deprecated
-    public static boolean isDITAMapFile(final String lcasefn) {
-        for (final String ext: supportedMapExtensions) {
-            if (lcasefn.endsWith(ext)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Return if the file is a supported image file by extension.
      * @param lcasefn filename
      * @return true if is supported image and false otherwise
      */
     public static boolean isSupportedImageFile(final String lcasefn) {
         for (final String ext: supportedImageExtensions) {
-            if (lcasefn.endsWith(ext)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Return if the file is a valid target file by extension.
-     * @param lcasefn filename
-     * @return true is the target is valid and false otherwise
-     */
-    public static boolean isValidTarget(final String lcasefn) {
-        for (final String ext: supportedExtensions) {
             if (lcasefn.endsWith(ext)) {
                 return true;
             }
@@ -322,12 +206,12 @@ public final class FileUtils {
      * 
      * @param basePath base path
      * @param refPath reference path
-     * @param ref path separator
+     * @param sep path separator
      * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
      */
     public static String getRelativePath(final String basePath, final String refPath, final String sep) {
-        final StringBuffer upPathBuffer = new StringBuffer(128);
-        final StringBuffer downPathBuffer = new StringBuffer(128);
+        final StringBuilder upPathBuffer = new StringBuilder(128);
+        final StringBuilder downPathBuffer = new StringBuilder(128);
         final StringTokenizer mapTokenizer = new StringTokenizer(
                 normalize(FileUtils.separatorsToUnix(basePath),
                         UNIX_SEPARATOR),
@@ -342,7 +226,7 @@ public final class FileUtils {
             final String mapToken = mapTokenizer.nextToken();
             final String topicToken = topicTokenizer.nextToken();
             boolean equals = false;
-            if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) != -1){
+            if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)){
                 //if OS is Windows, we need to ignore case when comparing path names.
                 equals = mapToken.equalsIgnoreCase(topicToken);
             }else{
@@ -392,18 +276,6 @@ public final class FileUtils {
     public static String getRelativeUnixPath(final String relativePath) {
         return getRelativePathForPath(relativePath, UNIX_SEPARATOR);
     }
-
-    /**
-     * Get relative path to base path.
-     * 
-     * <p>For {@code foo/bar/baz.txt} return {@code ../../}</p>
-     * 
-     * @param relativePath relative URI
-     * @return relative URI to base path, {@code null} if reference path was a single file
-     */
-    public static URI getRelativePath(final URI relativePath) {
-        return URLUtils.toURI(getRelativePathForPath(relativePath.toString(), URI_SEPARATOR));
-    }
     
     /**
      * Get relative path to base path.
@@ -429,7 +301,7 @@ public final class FileUtils {
      */
     private static String getRelativePathForPath(final String relativePath, final String sep) {
         final StringTokenizer tokenizer = new StringTokenizer(separatorsToUnix(relativePath), UNIX_SEPARATOR);
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
         if (tokenizer.countTokens() == 1){
             return null;
         }else{
@@ -447,13 +319,13 @@ public final class FileUtils {
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
      * from the file path, with no change to substring behind "#".
      * 
-     * @param rootPath root path
+     * @param rootPath root directory path
      * @param relativePath relative path
      * @return resolved topic file
      */
     @Deprecated
     public static String resolveTopic(final File rootPath, final String relativePath) {
-        return resolveTopic(rootPath.getPath(), relativePath);
+        return setFragment(resolve(rootPath, stripFragment(relativePath)).getPath(), getFragment(relativePath));
     }
 
     /**
@@ -461,106 +333,32 @@ public final class FileUtils {
      * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
      * from the file path, with no change to substring behind "#".
      * 
-     * @param rootPath root path
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
-    public static URI resolveTopic(final URI rootPath, final URI relativePath) {
-        return URLUtils.toURI(resolveTopic(rootPath.getPath(), relativePath.getPath()));
-    }
-    
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", ".."
-     * from the file path, with no change to substring behind "#".
-     * 
-     * @param rootPath root path
+     * @param rootPath root directory path
      * @param relativePath relative path
      * @return resolved topic file
      */
     @Deprecated
     public static String resolveTopic(final String rootPath, final String relativePath) {
-        String begin = relativePath;
-        String end = "";
-
-        if (relativePath.indexOf(SHARP) != -1) {
-            begin = relativePath.substring(0, relativePath.indexOf('#'));
-            end = relativePath.substring(relativePath.indexOf('#'));
-        }
-
-        return normalizeDirectory(rootPath, begin) + end;
-    }
-
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
-     * from the file path.
-     * 
-     * @param rootPath root path
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
-    @Deprecated
-    public static File resolveFile(final File rootPath, final String relativePath) {
-        return resolveFile(rootPath != null ? rootPath.getPath() : null, relativePath);
+        return setFragment(resolve(rootPath, stripFragment(relativePath)).getPath(), getFragment(relativePath));
     }
     
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
-     * from the file path.
-     * 
-     * @param rootPath root path
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
     @Deprecated
-    public static URI resolveFile(final File rootPath, final URI relativePath) {
-        return URLUtils.toURI(resolveFile(rootPath != null ? rootPath.getPath() : null, relativePath.getPath()));
-    }
-    
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
-     * from the file path.
-     * 
-     * @param rootPath root path
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
-    public static URI resolveFile(final URI rootPath, final URI relativePath) {
-        return URLUtils.toURI(resolveFile(rootPath != null ? rootPath.getPath() : null, relativePath.getPath()));
-    }
-    
-    /**
-     * Normalize topic path base on current directory and href value, by
-     * replacing "\\" and "\" with {@link File#separator}, and removing ".", "..", and "#"
-     * from the file path.
-     * 
-     * @param rootPath root path
-     * @param relativePath relative path
-     * @return resolved topic file
-     */
-    @Deprecated
-    public static File resolveFile(final String rootPath, final String relativePath) {
-        final String begin = stripFragment(relativePath);
-        return normalizeDirectory(rootPath, begin);
+    public static URI resolve(final File rootPath, final URI relativePath) {
+        return URLUtils.toURI(resolve(rootPath != null ? rootPath.getPath() : null, relativePath.getPath()));
     }
 
     /**
-     * Normalize the input file path, by replacing all the '\\', '/' with
+     * Resolve file path against a base directory path. Normalize the input file path, by replacing all the '\\', '/' with
      * File.seperator, and removing '..' from the directory.
      * 
      * <p>Note: the substring behind "#" will be removed.</p>
-     * 
-     * TODO: Return File
-     * 
-     * @param basedir base dir
+     *  
+     * @param basedir base dir, may be {@code null}
      * @param filepath file path
      * @return normalized path
      */
     @Deprecated
-    public static File normalizeDirectory(final String basedir, final String filepath) {
+    public static File resolve(final String basedir, final String filepath) {
         final File pathname = FileUtils.normalize(stripFragment(filepath));
         if (basedir == null || basedir.length() == 0) {
             return pathname;
@@ -570,20 +368,18 @@ public final class FileUtils {
     }
     
     @Deprecated
-    public static File normalizeDirectory(final File basedir, final String filepath) {
-        return normalizeDirectory(basedir != null ? basedir.getPath() : null, filepath);
+    public static File resolve(final File basedir, final String filepath) {
+        return resolve(basedir != null ? basedir.getPath() : null, filepath);
     }
 
-    public static File normalizeDirectory(final File basedir, final File filepath) {
-        return normalizeDirectory(basedir != null ? basedir.getPath() : null, filepath.getPath());
+    public static File resolve(final File basedir, final File filepath) {
+        return resolve(basedir != null ? basedir.getPath() : null, filepath.getPath());
     }
     
     /**
      * Remove redundant names ".." and "." from the given path.
      * Use platform directory separator.
-     * 
-     * TODO: Return File
-     * 
+     *
      * @param path input path
      * @return processed path
      */
@@ -600,16 +396,6 @@ public final class FileUtils {
      */
     public static File normalize(final File path) {
         return new File(normalize(path.getPath(), File.separator));
-    }
-
-    /**
-     * Remove redundant names ".." and "." from the given path.
-     * 
-     * @param path input path
-     * @return processed path
-     */
-    public static URI normalize(final URI path) {
-        return URLUtils.toURI(normalize(path.getPath(), URI_SEPARATOR));
     }
     
     /**
@@ -651,7 +437,7 @@ public final class FileUtils {
         }
 
         // restore the directory.
-        final StringBuffer buff = new StringBuffer(p.length());
+        final StringBuilder buff = new StringBuilder(p.length());
         if (p.startsWith(separator + separator)) {
             buff.append(separator).append(separator);
         } else if (p.startsWith(separator)) {
@@ -716,20 +502,20 @@ public final class FileUtils {
             fos = new FileOutputStream(target);
             copy(fis, fos);
         } catch (final IOException ex) {
-            logger.logError(ex.getMessage(), ex) ;
+            logger.error(ex.getMessage(), ex) ;
         } finally {
             if (fis != null) {
                 try {
                     fis.close();
                 } catch (final Exception e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
             if (fos != null) {
                 try {
                     fos.close();
                 } catch (final Exception e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -802,22 +588,30 @@ public final class FileUtils {
     }
 
     /**
-     * Check whether a file exists on the local file systmem.
-     * @param filename platform path, may contain a hash fragment
-     * @return boolean  true if the file exists, false otherwise
+     * Get the base name, minus the full path and extension, from a full filename.
+     *
+     * @param path the filename to query, null returns null
+     * @return the name of the file without the path, or an empty string if none exists
      */
-    public static boolean fileExists (String filename){  //Eric
-        // FIXME don't modify argument, use a separate variable for results2
-        filename = filename.indexOf(SHARP) != -1
-                ? filename.substring(0, filename.indexOf(SHARP))
-                        : filename;
-
-
-                if (new File(filename).exists()){
-                    return true;
-                }
-
-                return false;
+    public static String getBaseName(final String path) {
+        if (path == null) {
+            return null;
+        }
+        final int pi = path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR).lastIndexOf(UNIX_SEPARATOR);
+        String file;
+        if (pi == path.length() - 1) {
+            return "";
+        } else if (pi != -1) {
+            file = path.substring(pi + 1);
+        } else {
+            file = path;
+        }
+        final int i = file.lastIndexOf(DOT);
+        if (i != -1) {
+            return file.substring(0, i);
+        } else {
+            return file;
+        }
     }
 
     /**
@@ -861,10 +655,7 @@ public final class FileUtils {
      */
     public static boolean isWindows() {
         final String osName = System.getProperty("os.name");
-        if (osName.startsWith("Win")) {
-            return true;
-        }
-        return false;
+        return osName.startsWith("Win");
 
     }
 
@@ -1009,6 +800,22 @@ public final class FileUtils {
             return false;
         } else {
             return c.getPath().startsWith(d.getPath());
+        }
+    }
+
+    /**
+     * Move file.
+     * 
+     * @param srcFile source file
+     * @param destFile destination
+     * @throws IOException if moving failed
+     */
+    public static void moveFile(File srcFile, File destFile) throws IOException {
+        if (destFile.exists() && !destFile.delete()) {
+            throw new IOException("Failed to remove " + destFile.getAbsolutePath());
+        }
+        if (!srcFile.renameTo(destFile)) {
+            throw new IOException("Failed to move " + srcFile.getAbsolutePath() + " tp " + destFile.getAbsolutePath());
         }
     }
     

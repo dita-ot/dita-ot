@@ -9,24 +9,21 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
-import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
 
 import org.w3c.dom.Element;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.DitaMapMetaWriter;
 import org.dita.dost.writer.DitaMetaWriter;
@@ -40,14 +37,11 @@ import org.dita.dost.writer.DitaMetaWriter;
  */
 final class MoveMetaModule extends AbstractPipelineModuleImpl {
 
-//    private final ContentImpl content;
-
     /**
      * Default constructor of MoveMetaModule class.
      */
     public MoveMetaModule() {
         super();
-//        content = new ContentImpl();
     }
 
     /**
@@ -59,74 +53,58 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        if (logger == null) {
-            throw new IllegalStateException("Logger not set");
-        }
-        
-        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
-        }
-
-        final MapMetaReader metaReader = new MapMetaReader();
-        metaReader.setLogger(logger);
-        for (final FileInfo f: job.getFileInfo()) {
-            if (f.isActive && "ditamap".equals(f.format)) {
-                final File mapFile = new File(tempDir, f.file.getPath());
-                logger.logInfo("Reading " + mapFile);
+        final Collection<FileInfo> fis = new ArrayList<FileInfo>(); 
+        //for (final FileInfo f: job.getFileInfo()) {
+        //    if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
+        //        fis.add(f);
+        //    }
+        //}
+        fis.add(job.getFileInfo(toURI(job.getInputMap())));
+        if (!fis.isEmpty()) {
+            final MapMetaReader metaReader = new MapMetaReader();
+            metaReader.setLogger(logger);
+            for (final FileInfo f: fis) {
+                final File mapFile = new File(job.tempDir, f.file.getPath());
+                logger.info("Processing " + mapFile);
                 //FIXME: this reader gets the parent path of input file
                 metaReader.read(mapFile);
-                final File newMap = new File(mapFile+".temp");
-                if (newMap.exists()) {
-                    if (!mapFile.delete()) {
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", mapFile.getPath(), newMap.getAbsolutePath()+".chunk").toString());
-                    }
-                    if (!newMap.renameTo(mapFile)) {
-                        logger.logError(MessageUtils.getInstance().getMessage("DOTJ009E", mapFile.getPath(), newMap.getAbsolutePath()+".chunk").toString());
-                    }
-                }
             }
-        }
-
-        final Map<String, Hashtable<String, Element>> mapSet = metaReader.getMapping();
+            final Map<URI, Hashtable<String, Element>> mapSet = metaReader.getMapping();
+            
+            if (!mapSet.isEmpty()) {
+                //process map first
+                final DitaMapMetaWriter mapInserter = new DitaMapMetaWriter();
+                mapInserter.setLogger(logger);
+                for (final Entry<URI, Hashtable<String, Element>> entry: mapSet.entrySet()) {
+                    final URI targetFileName = entry.getKey();
+                    if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITAMAP )) {
+                        mapInserter.setMetaTable(entry.getValue());
+                        if (toFile(targetFileName).exists()) {
+                            logger.info("Processing " + targetFileName);
+                            mapInserter.write(targetFileName);
+                        } else {
+                            logger.error("File " + targetFileName + " does not exist");
+                        }
         
-        //process map first
-        final DitaMapMetaWriter mapInserter = new DitaMapMetaWriter();
-        mapInserter.setLogger(logger);
-        for (final Entry<String, Hashtable<String, Element>> entry: mapSet.entrySet()) {
-            String targetFileName = entry.getKey();
-            targetFileName = stripFragment(targetFileName);
-            if (targetFileName.endsWith(FILE_EXTENSION_DITAMAP )) {
-//                content.setValue(entry.getValue());
-//                mapInserter.setContent(content);
-                mapInserter.setMetaTable(entry.getValue());
-                if (FileUtils.fileExists(entry.getKey())) {
-                    logger.logInfo("Processing " + entry.getKey());
-                    mapInserter.write(new File(entry.getKey()));
-                } else {
-                    logger.logError("File " + entry.getKey() + " does not exist");
+                    }
                 }
-
-            }
-        }
-
-        //process topic
-        final DitaMetaWriter topicInserter = new DitaMetaWriter();
-        topicInserter.setLogger(logger);
-        for (final Map.Entry<String, Hashtable<String, Element>> entry: mapSet.entrySet()) {
-            String targetFileName = entry.getKey();
-            targetFileName = stripFragment(targetFileName);
-            if (targetFileName.endsWith(FILE_EXTENSION_DITA) || targetFileName.endsWith(FILE_EXTENSION_XML)) {
-//                content.setValue(entry.getValue());
-//                topicInserter.setContent(content);
-                topicInserter.setMetaTable(entry.getValue());
-                if (FileUtils.fileExists(entry.getKey())) {
-                    logger.logInfo("Processing " + entry.getKey());
-                    topicInserter.write(new File(entry.getKey()));
-                } else {
-                    logger.logError("File " + entry.getKey() + " does not exist");
+        
+                //process topic
+                final DitaMetaWriter topicInserter = new DitaMetaWriter();
+                topicInserter.setLogger(logger);
+                for (final Map.Entry<URI, Hashtable<String, Element>> entry: mapSet.entrySet()) {
+                    final URI targetFileName = entry.getKey();
+                    if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITA) || targetFileName.getPath().endsWith(FILE_EXTENSION_XML)) {
+                        topicInserter.setMetaTable(entry.getValue());
+                        if (toFile(targetFileName).exists()) {
+                            logger.info("Processing " + targetFileName);
+                            topicInserter.write(targetFileName);
+                        } else {
+                            logger.error("File " + targetFileName + " does not exist");
+                        }
+        
+                    }
                 }
-
             }
         }
         return null;

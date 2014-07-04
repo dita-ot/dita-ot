@@ -5,6 +5,9 @@
 <?Pub Inc?>
 <reference id="extending-the-ot" xml:lang="en-us">
 <title>Extending the DITA Open Toolkit</title>
+<titlealts>
+  <navtitle>Extending the DITA-OT</navtitle>
+</titlealts>
 <shortdesc>There are several methods that can be used to extend the
 toolkit; not all of them are recommended or supported. The best way
 to create most extensions is with a plug-in; extended documentation

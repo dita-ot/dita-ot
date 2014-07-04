@@ -40,7 +40,7 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 exclude-result-prefixes="opentopic-i18n">
 
-  <xsl:import href="../../../../xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
     <xsl:param name="debug-enabled" select="'false'"/>
   <xsl:variable name="msgprefix" select="'PDFX'"/>
@@ -48,41 +48,41 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="font-mappings" select="document('cfg:fo/font-mappings.xml')/font-mappings"/>
   <xsl:variable name="default-font" select="$font-mappings/font-table/aliases/alias[. = 'Normal']/@name"/>
 
-	<xsl:template match="fo:bookmark | fo:bookmark-label | fo:bookmark-title" priority="+10">
-		<xsl:copy>
-			<xsl:copy-of select="@*"/>
-			<xsl:apply-templates/>
-		</xsl:copy>
-	</xsl:template>
+  <xsl:template match="fo:bookmark | fo:bookmark-label | fo:bookmark-title" priority="+10">
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
 
-	<xsl:template match="fo:bookmark//opentopic-i18n:text-fragment" priority="+10">
-		<xsl:value-of select="."/>
-	</xsl:template>
+  <xsl:template match="fo:bookmark//opentopic-i18n:text-fragment" priority="+10">
+    <xsl:value-of select="."/>
+  </xsl:template>
 
     <xsl:template match="*[@font-family][not(@font-family='inherit')]" priority="+1">
         <xsl:variable name="currFontFam" select="@font-family"/>
         <xsl:variable name="realFontName">
-			<xsl:choose>
-				<xsl:when test="$font-mappings/font-table/logical-font[@name=$currFontFam]">
-					<xsl:value-of select="$currFontFam"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<!--Try search this name within font aliases-->
-					<xsl:variable name="aliasValue" select="$font-mappings/font-table/aliases/alias[@name=$currFontFam]/."/>
-					<xsl:if test="not($aliasValue)">
-					  <xsl:call-template name="output-message">
-					    <xsl:with-param name="msgnum">008</xsl:with-param>
-					    <xsl:with-param name="msgsev">W</xsl:with-param>
-					    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$currFontFam"/></xsl:with-param>
-					  </xsl:call-template>
-					</xsl:if>
-					<xsl:value-of select="$aliasValue"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
+      <xsl:choose>
+        <xsl:when test="$font-mappings/font-table/logical-font[@name=$currFontFam]">
+          <xsl:value-of select="$currFontFam"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <!--Try search this name within font aliases-->
+          <xsl:variable name="aliasValue" select="$font-mappings/font-table/aliases/alias[@name=$currFontFam]/."/>
+          <xsl:if test="not($aliasValue)">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">008</xsl:with-param>
+              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$currFontFam"/></xsl:with-param>
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:value-of select="$aliasValue"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
         <xsl:variable name="phys-font" select="$font-mappings/font-table/logical-font[@name=normalize-space($realFontName)]/physical-font[@char-set='default']"/>
         <xsl:variable name="physical-font-family">
-			<xsl:variable
+      <xsl:variable
                 name="font"
                 select="$phys-font/font-face"/>
             <xsl:choose>
@@ -125,26 +125,26 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="charSet" select="@char-set"/>
 
         <xsl:variable name="realFontName">
-			<xsl:choose>
-				<xsl:when test="$font-mappings/font-table/logical-font[@name=$fontFace]">
-					<xsl:value-of select="$fontFace"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<!--Try search this name within font aliases-->
-					<xsl:variable name="aliasValue" select="$font-mappings/font-table/aliases/alias[@name=$fontFace]/."/>
-					<xsl:if test="not($aliasValue)">
-					  <xsl:call-template name="output-message">
-					    <xsl:with-param name="msgnum">008</xsl:with-param>
-					    <xsl:with-param name="msgsev">W</xsl:with-param>
-					    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$fontFace"/></xsl:with-param>
-					  </xsl:call-template>
-					</xsl:if>
-					<xsl:value-of select="$aliasValue"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
+      <xsl:choose>
+        <xsl:when test="$font-mappings/font-table/logical-font[@name=$fontFace]">
+          <xsl:value-of select="$fontFace"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <!--Try search this name within font aliases-->
+          <xsl:variable name="aliasValue" select="$font-mappings/font-table/aliases/alias[@name=$fontFace]/."/>
+          <xsl:if test="not($aliasValue)">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">008</xsl:with-param>
+              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$fontFace"/></xsl:with-param>
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:value-of select="$aliasValue"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
-   	  <xsl:variable name="logical-font" select="$font-mappings/font-table/logical-font[@name = normalize-space($realFontName)]"/>
+       <xsl:variable name="logical-font" select="$font-mappings/font-table/logical-font[@name = normalize-space($realFontName)]"/>
       <xsl:variable name="phys-font.charset">
         <xsl:choose>
           <xsl:when test="$logical-font/physical-font[@char-set = $charSet]">
@@ -160,7 +160,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="override-size" select="$phys-font/override-size"/>
 
         <xsl:variable name="physical-font-family">
-			<xsl:variable
+      <xsl:variable
                 name="font"
                 select="$phys-font/font-face"/>
             <xsl:choose>

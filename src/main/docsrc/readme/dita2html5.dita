@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="dita2html5" xml:lang="en">
+  <title>DITA to HTML5</title>
+  <shortdesc>The <option>html5</option> transformation generates HTML5 output and a table of
+    contents (TOC) file.</shortdesc>
+  <conbody>
+    <p>The HTML5 output is always associated with the default DITA-OT CSS file
+        (<filepath>commonltr.css</filepath> or <filepath>commonrtl.css</filepath> for right-to-left
+      languages). You can use toolkit parameters to add a custom style sheets to override the
+      default styles.</p>
+    <p>To run the HTML5 transformation, set the <parmname>transtype</parmname> parameter to
+        <option>html5</option>.</p>
+  </conbody>
+</concept>

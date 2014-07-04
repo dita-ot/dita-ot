@@ -4,6 +4,7 @@
  */
 package org.dita.dost.platform;
 
+import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
@@ -11,7 +12,9 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils.AttributesBuilder;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * Integration action to output plugin information to catalog file.
@@ -28,8 +31,7 @@ final class ImportPluginCatalogAction extends ImportAction {
     }
 
     @Override
-    public String getResult() {
-        final StringBuffer buf = new StringBuffer();
+    public void getResult(final ContentHandler buf) throws SAXException {
         // plugin properties
         for (final Entry<String, Features> e: featureTable.entrySet()) {
             final Features f = e.getValue();
@@ -50,13 +52,12 @@ final class ImportPluginCatalogAction extends ImportAction {
             if (location.length() > 0 && !location.substring(location.length() - 1).equals(UNIX_SEPARATOR)) {
                 location.append(UNIX_SEPARATOR);
             }
-            buf.append("<rewriteURI uriStartString='")
-               .append(StringUtils.escapeXML(name))
-               .append("' rewritePrefix='")
-               .append(StringUtils.escapeXML(location.toString()))
-               .append("'/>");
+            buf.startElement(NULL_NS_URI, "rewriteURI", "rewriteURI", new AttributesBuilder()
+                .add("uriStartString", name)
+                .add("rewritePrefix", location.toString())
+                .build());
+            buf.endElement(NULL_NS_URI, "rewriteURI", "rewriteURI");
         }
-        return buf.toString();
     }
 
 }

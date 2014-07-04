@@ -164,8 +164,7 @@ public final class IndexTermCollection {
         /*
          * Sort all the terms recursively
          */
-        for (int i = 0; i < termListSize; i++) {
-            final IndexTerm term = termList.get(i);
+        for (final IndexTerm term : termList) {
             term.sortSubTerms();
         }
 
@@ -196,8 +195,8 @@ public final class IndexTermCollection {
                     ((AbstractExtendDitaWriter) abstractWriter).setPipelineHashIO(this.getPipelineHashIO());
 
                 }catch (final ClassCastException e){
-                    javaLogger.logInfo(e.getMessage());
-                    javaLogger.logInfo(e.toString());
+                    javaLogger.info(e.getMessage());
+                    javaLogger.info(e.toString());
                     e.printStackTrace();
 
                 }

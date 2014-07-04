@@ -10,8 +10,8 @@
                    use-init.envhhcdir,
                    use-init.hhcdir,
                    preprocess,
-                   copy-css,
-                   xhtml.topics">
+                   xhtml.topics,
+                   copy-css">
     <antcall target="dita.map.htmlhelp"/>
     <antcall target="dita.htmlhelp.convertlang"/>
     <antcall target="compile.HTML.Help"/>
@@ -22,7 +22,7 @@
   </target>
 
   <target name="use-init.envhhcdir" if="env.HHCDIR">
-    <available file="${env.HHCDIR}${file.separator}hhc.exe"
+    <available file="${env.HHCDIR}/hhc.exe"
                property="HTMLHelpCompiler"
                value="${env.HHCDIR}${file.separator}hhc.exe"/>
   </target>
@@ -33,7 +33,7 @@
                else="C:\Program Files\HTML Help Workshop">
       <available file="C:\Program Files (x86)\HTML Help Workshop" type="dir"/>
     </condition>
-    <available file="${hhc.dir}${file.separator}hhc.exe"
+    <available file="${hhc.dir}/hhc.exe"
                property="HTMLHelpCompiler"
                value="${hhc.dir}${file.separator}hhc.exe"/>
   </target>
@@ -59,11 +59,11 @@
           description="Build HTMLHelp HHP file">
     <xslt basedir="${dita.temp.dir}"
           destdir="${output.dir}"
-          includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
+          includesfile="${dita.temp.dir}/${user.input.file.listfile}"
           extension=".hhp"
           classpathref="dost.class.path"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
-      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+      <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
       <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
@@ -75,10 +75,10 @@
           description="Build HTMLHelp HHP file">
     <xslt basedir="${dita.temp.dir}"
           destdir="${output.dir}"
-          includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
+          includesfile="${dita.temp.dir}/${user.input.file.listfile}"
           classpathref="dost.class.path"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
-      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+      <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
       <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
@@ -91,11 +91,11 @@
           description="Build HTMLHelp HHC file">
     <xslt basedir="${dita.temp.dir}"
           destdir="${output.dir}"
-          includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
+          includesfile="${dita.temp.dir}/${user.input.file.listfile}"
           extension=".hhc"
           classpathref="dost.class.path"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
-      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+      <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
@@ -105,10 +105,10 @@
           description="Build HTMLHelp HHC file">
     <xslt basedir="${dita.temp.dir}"
           destdir="${output.dir}"
-          includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
+          includesfile="${dita.temp.dir}/${user.input.file.listfile}"
           classpathref="dost.class.path"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
-      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+      <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <mapper type="glob" from="${user.input.file}" to="${dita.map.filename.root}.hhc"/>
       <xmlcatalog refid="dita.catalog"/>
@@ -119,7 +119,7 @@
           description="Build HTMLHelp HHK file">
     <pipeline message="Extract index term." tempdir="${dita.temp.dir}" inputmap="${user.input.file}">
       <module class="org.dita.dost.module.IndexTermExtractModule">
-        <param name="output" location="${output.dir}${file.separator}${user.input.file}"/>
+        <param name="output" location="${output.dir}/${user.input.file}"/>
         <param name="targetext" value="${out.ext}"/>
         <param name="indextype" value="htmlhelp"/>
         <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
@@ -131,7 +131,7 @@
           description="Build HTMLHelp HHK file">
     <pipeline message="Extract index term." tempdir="${dita.temp.dir}" inputmap="${user.input.file}">
       <module class="org.dita.dost.module.IndexTermExtractModule">
-        <param name="output" location="${output.dir}${file.separator}${dita.map.filename.root}.hhk"/>
+        <param name="output" location="${output.dir}/${dita.map.filename.root}.hhk"/>
         <param name="targetext" value="${out.ext}"/>
         <param name="indextype" value="htmlhelp"/>
         <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>

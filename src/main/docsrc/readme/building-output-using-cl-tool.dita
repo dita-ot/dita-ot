@@ -19,10 +19,8 @@
             </step>
         </steps>
         <example>
-            <p>The following command generates XHTML output for the
-                    <filepath>sequence.ditamap</filepath> file and specifies the output is written
-                to the <filepath>test</filepath>
-                directory<codeblock>java -jar lib/dost.jar /i:samples/sequence.ditamap /outdir:test /transtype:xhtml</codeblock></p>
+            <p>The following command generates HTML5 output for the <filepath>sequence.ditamap</filepath> file and specifies the output is written to the <filepath>test</filepath>
+        directory<codeblock>java -jar lib/dost.jar /i:samples/sequence.ditamap /outdir:test /transtype:html5</codeblock></p>
         </example>
     </taskbody>
 </task>

@@ -5,9 +5,9 @@
 package org.dita.dost.writer;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,8 +56,8 @@ import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.XMLUtils;
 
 public class DitaWriterTest {
@@ -72,21 +73,23 @@ public class DitaWriterTest {
         final DitaWriter writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
         writer.setTempDir(tempDir.getAbsoluteFile());
-        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true);
-        writer.setTranstype("xhtml");
+        writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true, true);
         final FilterUtils fu = new FilterUtils();
         fu.setLogger(new TestUtils.TestLogger());
         writer.setFilterUtils(fu);
         writer.setDelayConrefUtils(new DelayConrefUtils());
-        final OutputUtils outputUtils = new OutputUtils();
-        outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
-        writer.setOutputUtils(outputUtils);
-        writer.setKeyDefinitions(Arrays.asList(new KeyDef("keydef", "keyword.dita", ATTR_SCOPE_VALUE_LOCAL, "main.ditamap")));
+        final Job outputUtils = new Job(tempDir);
+        outputUtils.setInputFile(new File(srcDir, "main.ditamap"));
+        writer.setJob(outputUtils);
+        writer.setKeyDefinitions(Arrays.asList(
+                new KeyDef("keydef", toURI("keyword.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap")),
+                new KeyDef("keyword", toURI("keyword.dita#keyword"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))
+                ));
         
         FileUtils.copyFile(new File(srcDir, FILE_NAME_EXPORT_XML), new File(tempDir, FILE_NAME_EXPORT_XML));
 
         for (final String f: new String[] {"main.ditamap", "keyword.dita"}) {
-            writer.write(srcDir.getAbsoluteFile(), f);
+            writer.write(srcDir.getAbsoluteFile(), new File(f));
         }
         
         TestUtils.resetXMLUnit();
@@ -163,19 +166,19 @@ public class DitaWriterTest {
                 XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_LOCAL);
                 XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FORMAT, ATTR_FORMAT_VALUE_DITA);
                 XMLUtils.addOrSetAttribute(atts, attrName, value);
-                return (String) method.invoke(writer, attrName, atts);    
+                return ((URI) method.invoke(writer, attrName, atts)).toString();    
             }
         };
         // same directory path
-        assertEquals("foo +%25bar.dita", w.invoke("foo +%25bar.dita"));
+        assertEquals("foo%20+%25bar.dita", w.invoke("foo +%25bar.dita"));
         assertEquals("foo.dita#bar", w.invoke("foo.dita#bar"));
         // absolute same directory path
-        assertEquals("foo.dita", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath()));
-        assertEquals("foo.dita#bar", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath() + "#bar"));
+        assertEquals("foo.dita", w.invoke(new File(srcDir, "foo.dita").getAbsoluteFile().toURI().toString()));
+        assertEquals("foo.dita#bar", w.invoke(new File(srcDir, "foo.dita").getAbsoluteFile().toURI().toString() + "#bar"));
         final File sub = new File(srcDir, "sub" + File.separator + "foo +%bar.dita").getAbsoluteFile();
         // absolute sub directory path
-        assertEquals("sub/foo +%bar.dita", w.invoke(sub.getAbsolutePath()));
-        assertEquals("sub/foo +%bar.dita#bar", w.invoke(sub.getAbsolutePath() + "#bar"));
+        assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.getAbsoluteFile().toURI().toString()));
+        assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.getAbsoluteFile().toURI().toString() + "#bar"));
         // absolute sub directory URI
         assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.toURI().toASCIIString()));
         assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.toURI().toASCIIString() + "#bar"));
@@ -190,30 +193,30 @@ public class DitaWriterTest {
             public String invoke(final String value) throws Exception {
                 final AttributesImpl atts = new AttributesImpl();
                 XMLUtils.addOrSetAttribute(atts, attrName, value);
-                return (String) method.invoke(writer, atts);    
+                return ((URI) method.invoke(writer, atts)).toString();    
             }
         };
         // same directory path
-        assertEquals("foo +%25bar.dita", w.invoke("foo +%25bar.dita"));
+        assertEquals("foo%20+%25bar.dita", w.invoke("foo +%25bar.dita"));
         assertEquals("foo.dita#bar", w.invoke("foo.dita#bar"));
         // absolute same directory path
-        assertEquals("foo.dita", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath()));
-        assertEquals("foo.dita#bar", w.invoke(new File(srcDir, "foo.dita").getAbsolutePath() + "#bar"));
+        assertEquals("foo.dita", w.invoke(new File(srcDir, "foo.dita").getAbsoluteFile().toURI().toString()));
+        assertEquals("foo.dita#bar", w.invoke(new File(srcDir, "foo.dita").getAbsoluteFile().toURI().toString() + "#bar"));
         final File sub = new File(srcDir, "sub" + File.separator + "foo +%bar.dita").getAbsoluteFile();
         // absolute sub directory path
-        assertEquals("sub/foo +%bar.dita", w.invoke(sub.getAbsolutePath()));
-        assertEquals("sub/foo +%bar.dita#bar", w.invoke(sub.getAbsolutePath() + "#bar"));
+        assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.toURI().toString()));
+        assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.toURI().toString() + "#bar"));
         // absolute sub directory URI
-        assertEquals(srcDir.toURI().toASCIIString() + "sub/foo%20+%25bar.dita", w.invoke(sub.toURI().toASCIIString()));
-        assertEquals(srcDir.toURI().toASCIIString() + "sub/foo%20+%25bar.dita#bar", w.invoke(sub.toURI().toASCIIString() + "#bar"));
+        assertEquals("sub/foo%20+%25bar.dita", w.invoke(sub.getAbsoluteFile().toURI().toString()));
+        assertEquals("sub/foo%20+%25bar.dita#bar", w.invoke(sub.getAbsoluteFile().toURI().toString() + "#bar"));
         // unsupported extension
         assertEquals("foo.bar", w.invoke("foo.bar"));
     }
     
     @Test
-    public void testGetPathtoProject() {
-        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.NOT_GENERATEOUTTER, new File(srcDir, "main.ditamap"));
-        assertEquals(".." + File.separator, 
+    public void testGetPathtoProject() throws IOException {
+        final DitaWriter dw = configureDitaWriter(Job.Generate.NOT_GENERATEOUTTER, new File(srcDir, "main.ditamap"));
+        assertEquals(new File(".."),
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
                                     new File(srcDir, "main.ditamap").getAbsoluteFile()));
@@ -224,22 +227,22 @@ public class DitaWriterTest {
     }
     
     @Test
-    public void testGetPathtoProjectSibling() {
-        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.NOT_GENERATEOUTTER, new File(srcDir, "maps" + File.separator + "main.ditamap"));
-        assertEquals(".." + File.separator + "org.dita.dost.writer.DitaWriterTest" + File.separator, 
+    public void testGetPathtoProjectSibling() throws IOException {
+        final DitaWriter dw = configureDitaWriter(Job.Generate.NOT_GENERATEOUTTER, new File(srcDir, "maps" + File.separator + "main.ditamap"));
+        assertEquals(new File(".." + File.separator + "org.dita.dost.writer.DitaWriterTest"),
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
                                     new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
-        assertEquals("org.dita.dost.writer.DitaWriterTest" + File.separator, 
+        assertEquals(new File("org.dita.dost.writer.DitaWriterTest"),
                 dw.getPathtoProject(new File("topic.dita"),
                                     new File(srcDir, "topic.dita").getAbsoluteFile(),
                                     new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
     }
     
     @Test
-    public void testGetPathtoProjectUplevels() {
-        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.OLDSOLUTION, new File(srcDir, "main.ditamap"));
-        assertEquals(".." + File.separator, 
+    public void testGetPathtoProjectUplevels() throws IOException {
+        final DitaWriter dw = configureDitaWriter(Job.Generate.OLDSOLUTION, new File(srcDir, "main.ditamap"));
+        assertEquals(new File(".."),
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
                                     new File(srcDir, "main.ditamap").getAbsoluteFile()));
@@ -250,9 +253,9 @@ public class DitaWriterTest {
     }
     
     @Test
-    public void testGetPathtoProjectSiblingUplevels() {
-        final DitaWriter dw = configureDitaWriter(OutputUtils.Generate.OLDSOLUTION, new File(srcDir, "maps" + File.separator + "main.ditamap"));
-        assertEquals(".." + File.separator, 
+    public void testGetPathtoProjectSiblingUplevels() throws IOException {
+        final DitaWriter dw = configureDitaWriter(Job.Generate.OLDSOLUTION, new File(srcDir, "maps" + File.separator + "main.ditamap"));
+        assertEquals(new File(".."),
                 dw.getPathtoProject(new File("topics" + File.separator + "topic.dita"),
                                     new File(srcDir, "topics" + File.separator + "topic.dita").getAbsoluteFile(),
                                     new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
@@ -262,16 +265,53 @@ public class DitaWriterTest {
                                     new File(srcDir, "maps" + File.separator + "main.ditamap").getAbsoluteFile()));
     }
 
-    private DitaWriter configureDitaWriter(final OutputUtils.Generate outerCopy, final File map) {
-        final OutputUtils outputUtils = new OutputUtils();
-        outputUtils.setGeneratecopyouter(Integer.toString(outerCopy.type));
-        outputUtils.setOutterControl(OutputUtils.OutterControl.FAIL.toString());
-        outputUtils.setOnlyTopicInMap(Boolean.toString(true));
-        outputUtils.setInputMapPathName(map);
-        outputUtils.setOutputDir(tempDir);
+    private DitaWriter configureDitaWriter(final Job.Generate outerCopy, final File map) throws IOException {
+        final Job job = new Job(tempDir);
+        job.setGeneratecopyouter(Integer.toString(outerCopy.type));
+        job.setOutterControl(Job.OutterControl.FAIL.toString());
+        job.setOnlyTopicInMap(Boolean.toString(true));
+        job.setInputFile(map);
+        job.setOutputDir(tempDir);
         final DitaWriter dw = new DitaWriter();
-        dw.setOutputUtils(outputUtils);
+        dw.setJob(job);
         return dw;
+    }
+    
+    @Test
+    public void testGetRelativePathFromOut() throws IOException {
+        {
+            final DitaWriter w = new DitaWriter();
+            final Job job = new Job(tempDir);
+            job.setInputFile(new File(srcDir, "main.ditamap"));
+            job.setOutputDir(new File(expDir, "out"));
+            w.setJob(job);
+            assertEquals("." + File.separator, w.getRelativePathFromOut(new File(srcDir, "a.dita").getAbsoluteFile()));
+            assertEquals(".." + File.separator, w.getRelativePathFromOut(new File(srcDir, "topics"  + File.separator + "a.dita").getAbsoluteFile()));
+            assertEquals(".." + File.separator + ".." + File.separator, w.getRelativePathFromOut(new File(srcDir, "topics"  + File.separator + "sub"  + File.separator + "a.dita").getAbsoluteFile()));
+        }
+        {
+            final DitaWriter w = new DitaWriter();
+            final Job job = new Job(tempDir);
+            job.setInputFile(new File(srcDir, "maps" + File.separator + "main.ditamap"));
+            job.setOutputDir(new File(expDir, "out"));
+            w.setJob(job);
+            assertEquals("." + File.separator, w.getRelativePathFromOut(new File(srcDir, "maps" + File.separator + "a.dita").getAbsoluteFile()));
+            assertEquals(".." + File.separator, w.getRelativePathFromOut(new File(srcDir, "maps" + File.separator + "sub" + File.separator + "a.dita").getAbsoluteFile()));
+            assertEquals("out" + File.separator, w.getRelativePathFromOut(new File(srcDir, "a.dita").getAbsoluteFile()));
+            assertEquals(".." + File.separator + "out" + File.separator, w.getRelativePathFromOut(new File(srcDir, "topics" + File.separator + "a.dita").getAbsoluteFile()));
+            assertEquals(".." + File.separator + "../out" + File.separator, w.getRelativePathFromOut(new File(srcDir, "topics" + File.separator + "sub" + File.separator + "a.dita").getAbsoluteFile()));
+        }
+        {
+            final DitaWriter w = new DitaWriter();
+            final Job job = new Job(tempDir);
+            job.setInputFile(new File(srcDir, "maps" + File.separator + "sub" + File.separator + "main.ditamap"));
+            job.setOutputDir(new File(expDir, "out" + File.separator + "sub"));
+            w.setJob(job);
+            assertEquals("." + File.separator, w.getRelativePathFromOut(new File(srcDir, "maps" + File.separator + "sub" + File.separator + "a.dita").getAbsoluteFile()));
+            assertEquals("out" + File.separator + "sub" + File.separator, w.getRelativePathFromOut(new File(srcDir, "a.dita").getAbsoluteFile()));
+            assertEquals(".." + File.separator + "out" + File.separator + "sub" + File.separator, w.getRelativePathFromOut(new File(srcDir, "topics" + File.separator + "a.dita").getAbsoluteFile()));
+            assertEquals(".." + File.separator + ".." + File.separator + "out" + File.separator + "sub" + File.separator, w.getRelativePathFromOut(new File(srcDir, "topics" + File.separator + "sub" + File.separator + "a.dita").getAbsoluteFile()));
+        }
     }
     
     @AfterClass
@@ -363,9 +403,9 @@ public class DitaWriterTest {
         public Invoker(final String m, final String attrName, final Class<?>... args) throws Exception {
             writer = new DitaWriter();
             writer.setLogger(new TestUtils.TestLogger(false));
-            final OutputUtils outputUtils = new OutputUtils();
-            outputUtils.setInputMapPathName(new File(srcDir, "main.ditamap"));
-            writer.setOutputUtils(outputUtils);        
+            final Job job = new Job(tempDir);
+            job.setInputFile(new File(srcDir, "main.ditamap"));
+            writer.setJob(job);        
             method = DitaWriter.class.getDeclaredMethod(m, args);
             method.setAccessible(true);
             this.attrName = attrName;

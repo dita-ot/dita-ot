@@ -56,7 +56,7 @@ public final class ImgUtils {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getWidth();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
             return -1;
         }
     }
@@ -79,7 +79,7 @@ public final class ImgUtils {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getHeight();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
             return -1;
         }
     }
@@ -100,7 +100,7 @@ public final class ImgUtils {
         FileInputStream binInput = null;
         try{
             String binStr = null;
-            final StringBuffer ret = new StringBuffer(16*1024);
+            final StringBuilder ret = new StringBuilder(16*1024);
             binInput = new FileInputStream(imgInput);
             int bin = binInput.read();
             while (bin != -1){
@@ -113,15 +113,15 @@ public final class ImgUtils {
             }
             return ret.toString();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logError(e.getMessage(), e) ;
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
+            logger.error(e.getMessage(), e) ;
             return null;
         }finally{
             if (binInput != null) {
                 try{
                     binInput.close();
                 }catch(final IOException ioe){
-                    logger.logError(ioe.getMessage(), ioe) ;
+                    logger.error(ioe.getMessage(), ioe) ;
                 }
             }
         }
@@ -147,22 +147,21 @@ public final class ImgUtils {
             file = new FileInputStream(imgInput);
             file.read(buff);
             //String ret = encoder.encode(buff);
-            final String ret = encoder.encodeToString(buff);
-            return ret;
+            return encoder.encodeToString(buff);
         } catch (final FileNotFoundException e) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logError(e.getMessage(), e) ;
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
+            logger.error(e.getMessage(), e) ;
             return null;
         } catch (final IOException e) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logError(e.getMessage(), e) ;
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
+            logger.error(e.getMessage(), e) ;
             return null;
         }finally{
             if (file != null) {
                 try{
                     file.close();
                 }catch(final IOException ioe){
-                    logger.logError(ioe.getMessage(), ioe) ;
+                    logger.error(ioe.getMessage(), ioe) ;
                 }
             }
         }

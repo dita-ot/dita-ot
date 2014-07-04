@@ -11,7 +11,7 @@
     <property name="troff.step2.xsl" location="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl"/>
   </target>
   <target name="dita2troff"
-    depends="dita2troff.init, build-init, preprocess, dita.topic.troff, dita.inner.topic.troff, dita.outer.topic.troff">
+    depends="dita2troff.init, build-init, preprocess, dita.topic.troff, dita.inner.topic.troff">
   </target>
 
   <target name="dita.topic.troff" unless="noTopic" if="old.transform"
@@ -75,47 +75,6 @@
         to="\2${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
-  </target>
-  
-  <target name="dita.outer.topic.troff" unless="noTopic" if="outer.transform"  depends="troff.checkouterTransform"
-    description="Build troff output from outer dita topics">
-    <!-- step 1 -->
-    <xslt basedir="${dita.temp.dir}"
-      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
-      extension=".dita"
-      classpathref="dost.class.path"
-      style="${troff.step1.xsl}">
-    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <mapper type="glob" from="*" to="*.tr1" />
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-    <move todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.tr1" />
-      <mapper type="glob" from="*.tr1" to="*" />
-    </move>
-    <!-- step 2 -->
-    <xslt basedir="${output.dir}" destdir="${output.dir}${file.separator}${uplevels}"
-      includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}" extension="${out.ext}"
-      classpathref="dost.class.path"
-      style="${troff.step2.xsl}">
-    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-  </target>
-
-  <target name="troff.checkouterTransform">
-    <condition property="outer.transform">
-      <and>
-        <equals arg1="${generate.copy.outer}" arg2="2"/>
-        <and>
-          <isset property="outditafileslist"/>
-          <not>
-            <equals arg1="" arg2="${outditafileslist}"/>
-          </not>
-        </and>
-      </and>
-    </condition>  
   </target>
 
 </project>

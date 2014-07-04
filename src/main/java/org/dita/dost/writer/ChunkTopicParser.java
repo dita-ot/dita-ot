@@ -22,24 +22,33 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
-import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TopicIdParser;
 import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -66,7 +75,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     private static final String ATTR_CHUNK_VALUE_SELECT_DOCUMENT = "select-document";
     /** Keys and values are chimera paths, i.e. systems paths with fragments */
     private LinkedHashMap<String, String> changeTable = null;
-    private Hashtable<String, String> conflictTable = null;
+    private Map<String, String> conflictTable = null;
 
     private Element elem = null;
 
@@ -156,7 +165,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             try {
                 output.write(StringUtils.escapeXML(ch, start, length));
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
         }
     }
@@ -197,7 +206,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     try {
                         output.close();
                     } catch (final IOException e) {
-                        logger.logError(e.getMessage(), e);
+                        logger.error(e.getMessage(), e);
                     }
                     output = fileWriterStack.pop();
                     outputFile = outputFileNameStack.pop();
@@ -205,7 +214,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     stub = stubStack.pop();
                 }
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
         }
 
@@ -222,19 +231,19 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             try {
                 output.write(ch, start, length);
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
         }
     }
 
     @Override
     public void processingInstruction(final String target, final String data) throws SAXException {
-        if (include || PI_WORKDIR_TARGET.equalsIgnoreCase(target) || PI_WORKDIR_TARGET_URI.equals(target)
-                || PI_PATH2PROJ_TARGET.equalsIgnoreCase(target)) {
+        if (include || PI_WORKDIR_TARGET.equals(target) || PI_WORKDIR_TARGET_URI.equals(target)
+                || PI_PATH2PROJ_TARGET.equals(target)) {
             try {
                 writeProcessingInstruction(output, target, data);
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
         }
     }
@@ -284,7 +293,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 topicSpecSet.add(qName);
                 final String id = atts.getValue(ATTRIBUTE_NAME_ID);
                 // search node by id.
-                final Element element = DITAAttrUtils.getInstance().searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID,
+                final Element element = searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID,
                         TOPIC_TOPIC.matcher);
 
                 // only by topic
@@ -294,17 +303,17 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     outputFileNameStack.push(outputFile);
 
                     // need generate new file based on new topic id
-                    File newFileName = FileUtils.resolveFile(filePath, idValue + FILE_EXTENSION_DITA);
+                    File newFileName = FileUtils.resolve(filePath, idValue + FILE_EXTENSION_DITA);
                     if (StringUtils.isEmptyString(idValue) || newFileName.exists()) {
                         final File t = newFileName;
-                        newFileName = FileUtils.resolveFile(filePath, generateFilename());
+                        newFileName = FileUtils.resolve(filePath, generateFilename());
                         conflictTable.put(newFileName.getPath(), t.getPath());
                     }
                     outputFile = newFileName;
                     output = new OutputStreamWriter(new FileOutputStream(newFileName), UTF8);
                     // write xml header and workdir PI to the new generated file
                     writeStartDocument(output);
-                    if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) == -1) {
+                    if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
                         writeProcessingInstruction(output, PI_WORKDIR_TARGET, filePath.getAbsolutePath());
                     } else {
                         writeProcessingInstruction(output, PI_WORKDIR_TARGET, UNIX_SEPARATOR + filePath);
@@ -411,7 +420,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                 changeTable.put(setFragment(currentParsingFile.getPath(), idValue), setFragment(outputFile.getPath(), attrValue));
                             }
 
-                            tmpVal = changeTable.get(currentParsingFile);
+                            tmpVal = changeTable.get(currentParsingFile.getPath());
                             if (tmpVal != null && tmpVal.equalsIgnoreCase(setFragment(outputFile.getPath(), idValue))) {
                                 changeTable.put(currentParsingFile.getPath(), setFragment(outputFile.getPath(), attrValue));
                             }
@@ -426,8 +435,8 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         if (checkHREF(resAtts)) {
                             // if current @href value needs to be updated
                             String relative = FileUtils.getRelativeUnixPath(outputFile, currentParsingFile.getPath());
-                            if (conflictTable.containsKey(outputFile)) {
-                                final String realoutputfile = conflictTable.get(outputFile);
+                            if (conflictTable.containsKey(outputFile.getPath())) {
+                                final String realoutputfile = conflictTable.get(outputFile.getPath());
                                 relative = FileUtils.getRelativeUnixPath(realoutputfile, currentParsingFile.getPath());
                             }
                             if (attrValue.startsWith(SHARP)) {
@@ -438,7 +447,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                                 // be update again
                                 // to the new location.
                                 value = relative + attrValue;
-                            } else if (relative.indexOf(SLASH) != -1) {
+                            } else if (relative.contains(SLASH)) {
                                 // if new file is not under the same directory
                                 // with current file
                                 // add path information to the @href value
@@ -467,7 +476,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             }
 
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -560,23 +569,23 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
     private void updateList() {
         try {
             // XXX: This may have to use new
-            // File(FileUtils.resolveFile(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
+            // File(FileUtils.resolve(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
             final Map<File, File> copytotarget2sourcemaplist = job.getCopytoMap();
             copytotarget2source.putAll(copytotarget2sourcemaplist);
             for (final String file : copytoSource) {
-                job.getOrCreateFileInfo(file).isCopyToSource = true;
+                job.getOrCreateFileInfo(toURI(file)).isCopyToSource = true;
             }
             job.setCopytoMap(copytotarget2source);
             job.write();
-        } catch (final Exception e) {
+        } catch (final IOException e) {
             /* logger.logWarn(e.toString()); */
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         } finally {
             if (output != null) {
                 try {
                     output.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
             }
         }
@@ -586,6 +595,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         final String hrefValue = element.getAttribute(ATTRIBUTE_NAME_HREF);
         final String copytoValue = element.getAttribute(ATTRIBUTE_NAME_COPY_TO);
         final String scopeValue = element.getAttribute(ATTRIBUTE_NAME_SCOPE);
+        // Chimera path, has fragment
         String parseFilePath = null;
         Writer tempOutput = null;
         final String chunkValue = element.getAttribute(ATTRIBUTE_NAME_CHUNK);
@@ -617,10 +627,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             }
         }
         try {
-            if (!StringUtils.isEmptyString(parseFilePath) && !ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(scopeValue)
-                    && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue)) {
+            if (!StringUtils.isEmptyString(parseFilePath) && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)
+                    && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                 // if the path to target file make sense
-                currentParsingFile = FileUtils.resolveFile(filePath, parseFilePath);
+                currentParsingFile = FileUtils.resolve(filePath, parseFilePath);
                 File outputFileName = null;
                 /*
                  * FIXME: we have code flaws here, references in ditamap need to
@@ -631,17 +641,17 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 if (getFragment(parseFilePath) != null) {
                     id = getFragment(parseFilePath);
                     if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
-                        outputFileName = FileUtils.resolveFile(filePath, id + FILE_EXTENSION_DITA);
+                        outputFileName = FileUtils.resolve(filePath, id + FILE_EXTENSION_DITA);
                         targetTopicId = id;
                         startFromFirstTopic = false;
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_BRANCH;
                     } else if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_DOCUMENT)) {
-                        firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath).getPath());
+                        firstTopicID = getFirstTopicId(FileUtils.resolve(filePath, parseFilePath).getPath());
 
-                        topicDoc = DITAAttrUtils.getInstance().getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath).getPath());
+                        topicDoc = getTopicDoc(FileUtils.resolve(filePath, parseFilePath).getPath());
 
                         if (!StringUtils.isEmptyString(firstTopicID)) {
-                            outputFileName = FileUtils.resolveFile(filePath, firstTopicID + FILE_EXTENSION_DITA);
+                            outputFileName = FileUtils.resolve(filePath, firstTopicID + FILE_EXTENSION_DITA);
                             targetTopicId = firstTopicID;
                         } else {
                             outputFileName = new File(currentParsingFile.getPath() + FILE_EXTENSION_CHUNK);
@@ -650,18 +660,18 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         }
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
                     } else {
-                        outputFileName = FileUtils.resolveFile(filePath, id + FILE_EXTENSION_DITA);
+                        outputFileName = FileUtils.resolve(filePath, id + FILE_EXTENSION_DITA);
                         targetTopicId = id;
                         startFromFirstTopic = false;
                         selectMethod = ATTR_CHUNK_VALUE_SELECT_TOPIC;
                     }
                 } else {
-                    firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath).getPath());
+                    firstTopicID = getFirstTopicId(FileUtils.resolve(filePath, parseFilePath).getPath());
 
-                    topicDoc = DITAAttrUtils.getInstance().getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath).getPath());
+                    topicDoc = getTopicDoc(FileUtils.resolve(filePath, parseFilePath).getPath());
 
                     if (!StringUtils.isEmptyString(firstTopicID)) {
-                        outputFileName = FileUtils.resolveFile(filePath, firstTopicID + FILE_EXTENSION_DITA);
+                        outputFileName = FileUtils.resolve(filePath, firstTopicID + FILE_EXTENSION_DITA);
                         targetTopicId = firstTopicID;
                     } else {
                         outputFileName = new File(currentParsingFile.getPath() + FILE_EXTENSION_CHUNK);
@@ -672,12 +682,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 }
                 if (copytoValue.length() != 0) {
                     // use @copy-to value as the new file name
-                    outputFileName = FileUtils.resolveFile(filePath, copytoValue);
+                    outputFileName = FileUtils.resolve(filePath, copytoValue);
                 }
 
                 if (outputFileName.exists()) {
                     final File t = outputFileName;
-                    outputFileName = FileUtils.resolveFile(filePath, generateFilename());
+                    outputFileName = FileUtils.resolve(filePath, generateFilename());
                     conflictTable.put(outputFileName.getPath(), t.getPath());
                     dotchunk = false;
                 }
@@ -748,23 +758,23 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         } finally {
             try {
                 if (output != null) {
                     output.close();
                     if (dotchunk && !currentParsingFile.delete()) {
-                        logger.logError(MessageUtils.getInstance()
+                        logger.error(MessageUtils.getInstance()
                                 .getMessage("DOTJ009E", currentParsingFile.getPath(), outputFile.getPath()).toString());
                     }
                     if (dotchunk && !outputFile.renameTo(currentParsingFile)) {
-                        logger.logError(MessageUtils.getInstance()
+                        logger.error(MessageUtils.getInstance()
                                 .getMessage("DOTJ009E", currentParsingFile.getPath(), outputFile.getPath()).toString());
                     }
                 }
                 output = tempOutput;
             } catch (final Exception ex) {
-                logger.logError(ex.getMessage(), ex);
+                logger.error(ex.getMessage(), ex);
             }
 
         }
@@ -836,9 +846,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
             if (!StringUtils.isEmptyString(classValue)) {
                 if ((!MAPGROUP_D_TOPICGROUP.matches(classValue)) && (!StringUtils.isEmptyString(parseFilePath))
-                        && (!ATTR_SCOPE_VALUE_EXTERNAL.equalsIgnoreCase(scopeValue))) {
+                        && (!ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue))) {
                     // now the path to target file make sense
-                    if (chunkValue.indexOf(ATTR_CHUNK_VALUE_TO_CONTENT) != -1) {
+                    if (chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)) {
                         // if current element contains "to-content" in chunk
                         // attribute
                         // we need to create new buffer and flush the buffer to
@@ -858,44 +868,44 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             // content.
                             // No need to parse any file, just generate a stub
                             // output.
-                            outputFileName = FileUtils.resolveFile(filePath, parseFilePath);
+                            outputFileName = FileUtils.resolve(filePath, parseFilePath);
                             needWriteDitaTag = false;
                         } else if (copytoValue.length() != 0) {
                             // use @copy-to value as the new file name
-                            outputFileName = FileUtils.resolveFile(filePath, copytoValue);
+                            outputFileName = FileUtils.resolve(filePath, copytoValue);
                         } else if (hrefValue.length() != 0) {
                             // try to use href value as the new file name
                             if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_TOPIC)
                                     || chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
                                 if (getFragment(hrefValue) != null) {
                                     // if we have an ID here, use it.
-                                    outputFileName = FileUtils.resolveFile(filePath,
+                                    outputFileName = FileUtils.resolve(filePath,
                                             getFragment(hrefValue) + FILE_EXTENSION_DITA);
                                 } else {
                                     // Find the first topic id in target file if
                                     // any.
-                                    final String firstTopic = this.getFirstTopicId(FileUtils.resolveFile(filePath,
+                                    final String firstTopic = getFirstTopicId(FileUtils.resolve(filePath,
                                             hrefValue).getPath());
                                     if (!StringUtils.isEmptyString(firstTopic)) {
-                                        outputFileName = FileUtils.resolveFile(filePath,
+                                        outputFileName = FileUtils.resolve(filePath,
                                                 firstTopic + FILE_EXTENSION_DITA);
                                     } else {
-                                        outputFileName = FileUtils.resolveFile(filePath, hrefValue);
+                                        outputFileName = FileUtils.resolve(filePath, hrefValue);
                                     }
                                 }
                             } else {
                                 // otherwise, use the href value instead
-                                outputFileName = FileUtils.resolveFile(filePath, hrefValue);
+                                outputFileName = FileUtils.resolve(filePath, hrefValue);
                             }
                         } else {
                             // use randomly generated file name
-                            outputFileName = FileUtils.resolveFile(filePath, generateFilename());
+                            outputFileName = FileUtils.resolve(filePath, generateFilename());
                         }
 
                         // Check if there is any conflict
                         if (outputFileName.exists() && !MAP_MAP.matches(classValue)) {
                             final File t = outputFileName;
-                            outputFileName = FileUtils.resolveFile(filePath, generateFilename());
+                            outputFileName = FileUtils.resolve(filePath, generateFilename());
                             conflictTable.put(outputFileName.getPath(), t.getPath());
                         }
                         // add newly generated file to changTable
@@ -913,7 +923,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         if (getFragment(path) != null) {
                             newpath = setFragment(outputFileName.getPath(), getFragment(path));
                         } else {
-                            final String firstTopicID = this.getFirstTopicId(path);
+                            final String firstTopicID = getFirstTopicId(path);
                             if (!StringUtils.isEmptyString(firstTopicID)) {
                                 newpath = setFragment(outputFileName.getPath(), firstTopicID);
                             } else {
@@ -933,7 +943,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         targetTopicId = getFragment(parseFilePath);
                     }
 
-                    if (chunkValue.indexOf("select") != -1) {
+                    if (chunkValue.contains("select")) {
                         final int endIndex = chunkValue.indexOf(STRING_BLANK, chunkValue.indexOf("select"));
                         if (endIndex == -1) {
                             // if there is no space after select-XXXX in chunk
@@ -954,25 +964,24 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         }
                     }
                     final File tempPath = currentParsingFile;
-                    currentParsingFile = FileUtils.resolveFile(filePath, parseFilePath);
+                    currentParsingFile = FileUtils.resolve(filePath, parseFilePath);
 
-                    if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue)) {
+                    if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                         currentParsingFileTopicIDChangeTable = new HashMap<String, String>();
                         // TODO recursive point
                         reader.parse(currentParsingFile.toURI().toString());
                         if (currentParsingFileTopicIDChangeTable.size() > 0) {
-                            String href = element.getAttribute(ATTRIBUTE_NAME_HREF);
-                            href = FileUtils.separatorsToUnix(href);
-                            final String pathtoElem = getFragment(href) != null ? getFragment(href) : "";
-
-                            final String old_elementid = pathtoElem.contains(SLASH) ? pathtoElem.substring(0,
-                                    pathtoElem.indexOf(SLASH)) : pathtoElem;
-
-                            if (old_elementid.length() > 0) {
+                            final URI href = toURI(element.getAttribute(ATTRIBUTE_NAME_HREF));
+                            final String pathtoElem = href.getFragment() != null
+                                                      ? href.getFragment()
+                                                      : "";
+                            final String old_elementid = pathtoElem.contains(SLASH)
+                                                         ? pathtoElem.substring(0, pathtoElem.indexOf(SLASH))
+                                                         : pathtoElem;
+                            if (!old_elementid.isEmpty()) {
                                 final String new_elementid = currentParsingFileTopicIDChangeTable.get(old_elementid);
-                                if (new_elementid != null && new_elementid.length() > 0) {
-                                    href = setFragment(href, new_elementid);
-                                    element.setAttribute(ATTRIBUTE_NAME_HREF, href);
+                                if (new_elementid != null && !new_elementid.isEmpty()) {
+                                    element.setAttribute(ATTRIBUTE_NAME_HREF, setFragment(href, new_elementid).toString());
                                 }
 
                             }
@@ -986,32 +995,29 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 // use @copy-to value(dita spec v1.2)
                 if (outputFileName == null) {
                     if (!StringUtils.isEmptyString(copytoValue)) {
-                        outputFileName = FileUtils.resolveFile(filePath, copytoValue);
+                        outputFileName = FileUtils.resolve(filePath, copytoValue);
                         // use id value
                     } else if (!StringUtils.isEmptyString(id)) {
-                        outputFileName = FileUtils.resolveFile(filePath, id + FILE_EXTENSION_DITA);
+                        outputFileName = FileUtils.resolve(filePath, id + FILE_EXTENSION_DITA);
                     } else {
                         // use randomly generated file name
-                        outputFileName = FileUtils.resolveFile(filePath, generateFilename());
+                        outputFileName = FileUtils.resolve(filePath, generateFilename());
                         // Check if there is any conflict
                         if (outputFileName.exists() && !MAP_MAP.matches(classValue)) {
                             final File t = outputFileName;
-                            outputFileName = FileUtils.resolveFile(filePath, generateFilename());
+                            outputFileName = FileUtils.resolve(filePath, generateFilename());
                             conflictTable.put(outputFileName.getPath(), t.getPath());
                         }
                     }
 
                     // if topicref has child node or topicref has @navtitle
                     if (element.hasChildNodes() || !StringUtils.isEmptyString(navtitle)) {
-
-                        final DITAAttrUtils utils = DITAAttrUtils.getInstance();
-
                         String navtitleValue = null;
                         String shortDescValue = null;
                         // get navtitle value.
-                        navtitleValue = utils.getChildElementValueOfTopicmeta(element, TOPIC_NAVTITLE.matcher);
+                        navtitleValue = getChildElementValueOfTopicmeta(element, TOPIC_NAVTITLE.matcher);
                         // get shortdesc value
-                        shortDescValue = utils.getChildElementValueOfTopicmeta(element, MAP_SHORTDESC.matcher);
+                        shortDescValue = getChildElementValueOfTopicmeta(element, MAP_SHORTDESC.matcher);
                         // no navtitle tag exists.
                         if (navtitleValue == null) {
                             // use @navtitle
@@ -1028,7 +1034,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             element.setAttribute(ATTRIBUTE_NAME_HREF, toURI(FileUtils.getRelativePath(new File(filePath,
                                     FILE_NAME_STUB_DITAMAP), outputFileName)).toString());
                             // manually create a new topic chunk
-                            final StringBuffer buffer = new StringBuffer();
+                            final StringBuilder buffer = new StringBuilder();
                             buffer.append("<topic id=\"topic\" class=\"- topic/topic \">")
                                     .append("<title class=\"- topic/title \">").append(navtitleValue)
                                     .append("</title>");
@@ -1068,7 +1074,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     for (int i = 0; i < children.getLength(); i++) {
                         final Node current = children.item(i);
                         if (current.getNodeType() == Node.ELEMENT_NODE
-                                && ((Element) current).getAttribute(ATTRIBUTE_NAME_CLASS).indexOf(MAP_TOPICREF.matcher) != -1) {
+                                && ((Element) current).getAttribute(ATTRIBUTE_NAME_CLASS).contains(MAP_TOPICREF.matcher)) {
                             processChunk((Element) current, outputFileName);
                         }
                     }
@@ -1078,14 +1084,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     // Skip empty parents and @processing-role='resource-only'
                     // entries.
                     if (parentResult.length() > 0 && !StringUtils.isEmptyString(parseFilePath)
-                            && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue)) {
+                            && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                         int insertpoint = parentResult.lastIndexOf("</");
                         final int end = parentResult.indexOf(">", insertpoint);
 
                         if (insertpoint == -1 || end == -1) {
-                            logger.logError(MessageUtils.getInstance().getMessage("DOTJ033E", hrefValue).toString());
+                            logger.error(MessageUtils.getInstance().getMessage("DOTJ033E", hrefValue).toString());
                         } else {
-                            if (ELEMENT_NAME_DITA.equalsIgnoreCase(parentResult.substring(insertpoint, end).trim())) {
+                            if (ELEMENT_NAME_DITA.equals(parentResult.substring(insertpoint, end).trim())) {
                                 insertpoint = parentResult.lastIndexOf("</", insertpoint);
                             }
                             parentResult.insert(insertpoint, ((StringWriter) output).getBuffer());
@@ -1098,7 +1104,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
                 }
 
-                if (chunkValue.indexOf(ATTR_CHUNK_VALUE_TO_CONTENT) != -1) {
+                if (chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)) {
                     // flush the buffer to file after processing is finished
                     // and restore back original output
 
@@ -1106,12 +1112,12 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     OutputStreamWriter ditaFileOutput = null;
                     try {
                         ditaFileOutput = new OutputStreamWriter(fileOutput, UTF8);
-                        if (outputFileName.equals(changeTable.get(outputFileName))) {
+                        if (outputFileName.getPath().equals(changeTable.get(outputFileName.getPath()))) {
                             // if the output file is newly generated file
                             // write the xml header and workdir PI into new file
                             writeStartDocument(ditaFileOutput);
                             final File workDir = outputFileName.getParentFile().getAbsoluteFile();
-                            if (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) == -1) {
+                            if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
                                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, workDir.getAbsolutePath());
                             } else {
                                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET,
@@ -1120,9 +1126,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                             writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toURI()
                                     .toString());
 
-                            if ((conflictTable.get(outputFileName) != null)) {
+                            if ((conflictTable.get(outputFileName.getPath()) != null)) {
                                 final String relativePath = FileUtils.getRelativeUnixPath(filePath + UNIX_SEPARATOR
-                                        + FILE_NAME_STUB_DITAMAP, conflictTable.get(outputFileName));
+                                        + FILE_NAME_STUB_DITAMAP, conflictTable.get(outputFileName.getPath()));
                                 String path2project = FileUtils.getRelativeUnixPath(relativePath);
                                 if (null == path2project) {
                                     path2project = "";
@@ -1154,7 +1160,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                 }
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
 
     }
@@ -1169,7 +1175,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      * @param separate separate
      * @param chunkByTopic chunkByTopic
      */
-    public void setup(final LinkedHashMap<String, String> changeTable, final Hashtable<String, String> conflictTable,
+    public void setup(final LinkedHashMap<String, String> changeTable, final Map<String, String> conflictTable,
             final Set<String> refFileSet, final Element elem, final boolean separate, final boolean chunkByTopic,
             final ChunkFilenameGenerator chunkFilenameGenerator) {
         // Initialize ChunkTopicParser
@@ -1182,19 +1188,16 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
     /** Check whether current href needs to be updated */
     private boolean checkHREF(final Attributes atts) {
-        final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
-        if (hrefValue == null || hrefValue.indexOf(COLON_DOUBLE_SLASH) != -1) {
+        final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+        if (hrefValue == null || hrefValue.toString().contains(COLON_DOUBLE_SLASH)) {
             return false;
         }
         String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (scopeValue == null) {
             scopeValue = ATTR_SCOPE_VALUE_LOCAL;
         }
-        if (scopeValue != null && scopeValue.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
-            return false;
-        }
+        return !scopeValue.equals(ATTR_SCOPE_VALUE_EXTERNAL);
 
-        return true;
     }
 
     /**
@@ -1218,7 +1221,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             reader.setContentHandler(parser);
             reader.parse(new File(absolutePathToFile).toURI().toString());
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return firstTopicId.toString();
 
@@ -1236,8 +1239,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         final Element topicmeta = elem.getOwnerDocument().createElement(MAP_TOPICMETA.localName);
         topicmeta.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICMETA.toString());
         newChild.appendChild(topicmeta);
-
-        final DITAAttrUtils utils = DITAAttrUtils.getInstance();
 
         // iterate the node.
         if (element != null) {
@@ -1290,14 +1291,14 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             // append navtitle node
             if (navtitle != null) {
                 // Get text value
-                final String text = utils.getText(navtitle);
+                final String text = getText(navtitle);
                 final Text titleText = elem.getOwnerDocument().createTextNode(text);
                 navtitleNode.appendChild(titleText);
                 topicmeta.appendChild(navtitleNode);
 
             } else {
                 // Get text value
-                final String text = utils.getText(title);
+                final String text = getText(title);
                 final Text titleText = elem.getOwnerDocument().createTextNode(text);
                 navtitleNode.appendChild(titleText);
                 topicmeta.appendChild(navtitleNode);
@@ -1311,7 +1312,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             final Element linkTextNode = elem.getOwnerDocument().createElement(TOPIC_LINKTEXT.localName);
             linkTextNode.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_LINKTEXT.toString());
             // Get text value
-            final String text = utils.getText(title);
+            final String text = getText(title);
             final Text textNode = elem.getOwnerDocument().createTextNode(text);
             linkTextNode.appendChild(textNode);
             topicmeta.appendChild(linkTextNode);
@@ -1324,7 +1325,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
             final Element shortDescNode = elem.getOwnerDocument().createElement(TOPIC_SHORTDESC.localName);
             shortDescNode.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_SHORTDESC.toString());
             // Get text value
-            final String shortDescText = utils.getText(shortDesc);
+            final String shortDescText = getText(shortDesc);
             final Text shortDescTextNode = elem.getOwnerDocument().createTextNode(shortDescText);
             shortDescNode.appendChild(shortDescTextNode);
             topicmeta.appendChild(shortDescNode);
@@ -1332,4 +1333,162 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         }
     }
 
+    private static final List<String> excludeList;
+    static {
+        final List<String> el = new ArrayList<String>();
+        el.add(TOPIC_INDEXTERM.toString());
+        el.add(TOPIC_DRAFT_COMMENT.toString());
+        el.add(TOPIC_REQUIRED_CLEANUP.toString());
+        el.add(TOPIC_DATA.toString());
+        el.add(TOPIC_DATA_ABOUT.toString());
+        el.add(TOPIC_UNKNOWN.toString());
+        el.add(TOPIC_FOREIGN.toString());
+        excludeList = Collections.unmodifiableList(el);
+    }
+
+    /**
+     * Search for the special kind of node by specialized value.
+     * @param root place may have the node.
+     * @param searchKey keyword for search.
+     * @param attrName attribute name for search.
+     * @param classValue class value for search.
+     * @return element.
+     */
+    private Element searchForNode(final Element root, final String searchKey, final String attrName,
+            final String classValue) {
+        if (root == null || StringUtils.isEmptyString(searchKey)) {
+            return null;
+        }
+        final Queue<Element> queue = new LinkedList<Element>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            final Element pe = queue.poll();
+            final NodeList pchildrenList = pe.getChildNodes();
+            for (int i = 0; i < pchildrenList.getLength(); i++) {
+                final Node node = pchildrenList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    queue.offer((Element)node);
+                }
+            }
+            //whick kind of node to search
+            final String clazzValue = pe.getAttribute(ATTRIBUTE_NAME_CLASS);
+            if (StringUtils.isEmptyString(clazzValue)
+                    || !clazzValue.contains(classValue)) {
+                continue;
+            }
+            final String value = pe.getAttribute(attrName);
+            if (StringUtils.isEmptyString(value)) {
+                continue;
+            }
+            if (searchKey.equals(value)){
+                return pe;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Get text value of a node.
+     * @param root root node
+     * @return text value.
+     */
+    private String getText(final Node root){
+        final StringBuilder result = new StringBuilder(1024);
+        if(root == null){
+            return "";
+        }else{
+            if(root.hasChildNodes()){
+                final NodeList list = root.getChildNodes();
+                for(int i = 0; i < list.getLength(); i++){
+                    final Node childNode = list.item(i);
+                    if(childNode.getNodeType() == Node.ELEMENT_NODE){
+                        final Element e = (Element)childNode;
+                        final String value = e.getAttribute(ATTRIBUTE_NAME_CLASS);
+                        if(!excludeList.contains(value)){
+                            final String s = getText(e);
+                            result.append(s);
+                        }
+                    }else if(childNode.getNodeType() == Node.TEXT_NODE){
+                        result.append(childNode.getNodeValue());
+                    }
+                }
+            }else if(root.getNodeType() == Node.TEXT_NODE){
+                result.append(root.getNodeValue());
+            }
+        }
+        return result.toString();
+    }
+
+    /**
+     * get the document node of a topic file.
+     * @param absolutePathToFile topic file
+     * @return element.
+     */
+    private Element getTopicDoc(final String absolutePathToFile){
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try {
+            builder = factory.newDocumentBuilder();
+            final Document doc = builder.parse(absolutePathToFile);
+            return doc.getDocumentElement();
+        } catch (final ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (final SAXException e) {
+            e.printStackTrace();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * get topicmeta's child(e.g navtitle, shortdesc) tag's value(text-only).
+     * @param element input element
+     * @return text value
+     */
+    private String getChildElementValueOfTopicmeta(final Element element, final String classValue) {
+        //navtitle
+        String returnValue = null;
+        //has child nodes
+        if(element.hasChildNodes()){
+            //Get topicmeta element node
+            final Element topicMeta = getElementNode(element, MAP_TOPICMETA.matcher);
+            //no topicmeta node
+            if(topicMeta == null){
+                return returnValue;
+            }
+            //Get element node
+            final Element elem = getElementNode(topicMeta, classValue);
+            //no navtitle node
+            if(elem == null){
+                return returnValue;
+            }
+            //get text value
+            returnValue = this.getText(elem);
+        }
+        return returnValue;
+    }
+
+    /**
+     * Get specific element node from child nodes.
+     * @param element parent node
+     * @param classValue @class
+     * @return element node.
+     */
+    private Element getElementNode(final Element element, final String classValue) {
+        final NodeList list = element.getChildNodes();
+        for(int i = 0; i < list.getLength(); i++){
+            final Node node = list.item(i);
+            if(node.getNodeType() == Node.ELEMENT_NODE){
+                final Element child = (Element) node;
+                //node found
+                if(child.getAttribute(ATTRIBUTE_NAME_CLASS).contains(classValue)){
+                    return child;
+                    //break;
+                }
+            }
+        }
+        return null;
+    }
+    
 }

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * Interface.
@@ -34,6 +36,11 @@ public interface IAction {
      * @return result
      */
     String getResult();
+    /**
+     * Return the result.
+     * @param output output to write results to
+     */
+    void getResult(ContentHandler output) throws SAXException;
     /**
      * Set the feature table.
      * @param h hastable

@@ -34,13 +34,13 @@
         <xsl:apply-templates select="job/files/file[@flag-image = 'true']"/>
       </xsl:when>
       <xsl:when test="$property = 'fullditamaplist'">
-        <xsl:apply-templates select="job/files/file[@format = 'ditamap' and @active = 'true']"/>
+        <xsl:apply-templates select="job/files/file[@format = 'ditamap']"/>
       </xsl:when>
       <xsl:when test="$property = 'fullditamapandtopiclist'">
-        <xsl:apply-templates select="job/files/file[(@format = 'ditamap' or @format = 'dita') and @active = 'true']"/>
+        <xsl:apply-templates select="job/files/file[(@format = 'ditamap' or @format = 'dita')]"/>
       </xsl:when>
       <xsl:when test="$property = 'fullditatopiclist'">
-        <xsl:apply-templates select="job/files/file[@format = 'dita' and @active = 'true']"/>
+        <xsl:apply-templates select="job/files/file[@format = 'dita']"/>
       </xsl:when>
       <xsl:when test="$property = 'hrefditatopiclist'">
         <xsl:apply-templates select="job/files/file[@has-link = 'true']"/>

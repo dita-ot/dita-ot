@@ -46,9 +46,7 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
             serializer.writeStartDocument();
             serializer.writeStartElement("index");
             serializer.writeAttribute("version", "1.0");
-            final int termNum = termList.size();
-            for (int i = 0; i < termNum; i++) {
-                final IndexTerm term = termList.get(i);
+            for (final IndexTerm term : termList) {
                 outputIndexTerm(term, serializer);
             }
             serializer.writeEndElement(); // index
@@ -60,7 +58,7 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
                 try {
                     out.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -92,12 +90,7 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
             for (int i = 0; i < targetNum; i++) {
                 final IndexTermTarget target = targets.get(i);
                 String targetURL = target.getTargetURI();
-                // Remove file extension from targetName, and replace all the
-                // file seperator with '_'.
-                targetURL = targetURL.substring(0, targetURL.lastIndexOf("."));
-                targetURL = targetURL.replace('\\', '_');
-                targetURL = targetURL.replace('/', '_');
-                targetURL = targetURL.replace('.', '_');
+                targetURL = targetURL.substring(0, targetURL.lastIndexOf(".")).replace('\\', '_').replace('/', '_').replace('.', '_');
 
                 serializer.writeStartElement("indexitem");
                 serializer.writeAttribute("text", term.getTermFullName());
@@ -114,9 +107,7 @@ public final class JavaHelpIndexWriter extends AbstractExtendDitaWriter {
      */
     @Override
     public String getIndexFileName(final String outputFileRoot) {
-        final StringBuffer indexFilename = new StringBuffer(outputFileRoot);
-        indexFilename.append("_index.xml");
-        return indexFilename.toString();
+        return outputFileRoot + "_index.xml";
     }
 
 }

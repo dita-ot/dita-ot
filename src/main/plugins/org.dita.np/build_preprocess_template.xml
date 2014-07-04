@@ -48,16 +48,9 @@
     <!-- start file name without extension, e.g. main -->
     <uri-basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".*"/>
     <uri-basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix=".*"/>    
-
-    <!-- absolute input directory, e.g. /Users/me/work -->
-    <condition property="dita.input.dirname" value="${args.input.dir.uri}">
-      <isset property="args.input.dir.uri"/>
-    </condition>
-    <uri-dirname property="dita.input.dirname" file="${args.input.uri}" />
     
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input.uri}</echo>
-    <echo level="info">* inputdir = ${dita.input.dirname}</echo>
     <echo level="info">*****************************************************************</echo>
   </target>
  
@@ -132,29 +125,11 @@
     <property name="subtargetsfile" value="subtargets.list"/>
     <job-property dir="${dita.temp.dir}"/>
     <dirname property="dita.map.output.dir" file="${output.dir}/${user.input.file}" />
-    <condition property="noConref">
-      <length file="${dita.temp.dir}/${conreffile}" length="0"/>
-    </condition>
     <condition property="noMap">
       <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
     </condition>
     <condition property="noImagelist">
       <length file="${dita.temp.dir}/${imagefile}" length="0"/>
-    </condition>
-    <condition property="noHtmllist">
-      <length file="${dita.temp.dir}/${htmlfile}" length="0"/>
-    </condition>
-    <condition property="noSublist">
-      <length file="${dita.temp.dir}/${subtargetsfile}" length="0"/>
-    </condition>
-    <condition property="noConrefPush">
-      <length file="${dita.temp.dir}/${conrefpushfile}" length="0"/>
-    </condition>
-    <condition property="noKeyref">
-      <length file="${dita.temp.dir}/${keyreffile}" length="0"/>
-    </condition>
-    <condition property="noCoderef">
-      <length file="${dita.temp.dir}/${codereffile}" length="0"/>
     </condition>
   </target>
  
@@ -222,7 +197,7 @@
   
   <target name="np.conref-check">
     <condition property="preprocess.conref.skip">
-      <isset property="noConref"/>
+      <length file="${dita.temp.dir}/${conreffile}" length="0"/>      
     </condition>
   </target>
   

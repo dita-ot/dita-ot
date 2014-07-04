@@ -64,6 +64,7 @@
   <topicref href="a.xml">
     <topicmeta>
       <author>map author</author>
+      <source>map source</source>
       <publisher>map publisher</publisher>
       <copyright>
         <copyryear year="2010"/>
@@ -90,6 +91,8 @@
           <vrm version="1.0"/>
         </vrmlist>
       </prodinfo>
+      <othermeta content="map othermeta" name="othermeta"/>
+      <othermeta content="map othermeta" name="othermeta"/>
     </topicmeta>
   </topicref>
   <topicref href="b.xml">
@@ -155,6 +158,8 @@
       </prodinfo>
       <othermeta content="topicref othermeta" name="othermeta"/>
       <othermeta content="topicref othermeta" name="othermeta"/>
+      <othermeta content="map othermeta" name="othermeta"/>
+      <othermeta content="map othermeta" name="othermeta"/>
       <resourceid id="foo"/>
       <data>topicref data</data>
       <data>topicref datafoo</data>
@@ -176,6 +181,7 @@
   <topicref href="c.xml">
     <topicmeta>
       <author>map author</author>
+      <source>map source</source>
       <publisher>map publisher</publisher>
       <copyright>
         <copyryear year="2010"/>
@@ -202,6 +208,8 @@
           <vrm version="1.0"/>
         </vrmlist>
       </prodinfo>
+      <othermeta content="map othermeta" name="othermeta"/>
+      <othermeta content="map othermeta" name="othermeta"/>
     </topicmeta>
   </topicref>
   <topicref href="d.xml">
@@ -267,6 +275,8 @@
       </prodinfo>
       <othermeta content="topicref othermeta" name="othermeta"/>
       <othermeta content="topicref othermeta" name="othermeta"/>
+      <othermeta content="map othermeta" name="othermeta"/>
+      <othermeta content="map othermeta" name="othermeta"/>
       <resourceid id="foo"/>
       <data>topicref data</data>
       <data>topicref datafoo</data>

@@ -59,19 +59,13 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         final File ditaInput = new File(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
         final File style = input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE) != null ? new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE)) : null;
         final File out = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT));
-        final File tempdir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
         final MergeMapParser mapParser = new MergeMapParser();
         mapParser.setLogger(logger);
         mapParser.setJob(job);
         mapParser.setOutput(out.getAbsoluteFile());
 
-        if (ditaInput == null || !ditaInput.exists()){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ025E").toString());
-            return null;
-        }
-
-        if ( out == null ){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ026E").toString());
+        if (!ditaInput.exists()){
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ025E").toString());
             return null;
         }
 
@@ -81,7 +75,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
             midBuffer.write(XML_HEAD.getBytes(UTF8));
             midBuffer.write("<dita-merge xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\">".getBytes(UTF8));
             mapParser.setOutputStream(midBuffer);
-            mapParser.read(ditaInput, tempdir);
+            mapParser.read(ditaInput, job.tempDir);
             midBuffer.write("</dita-merge>".getBytes(UTF8));
         } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException(e);
@@ -92,7 +86,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
                 try {
                     midBuffer.close();
                 } catch (final IOException e) {
-                    logger.logError("Failed to close output buffer: " + e.getMessage(), e);
+                    logger.error("Failed to close output buffer: " + e.getMessage(), e);
                 }
             }
         }
@@ -121,7 +115,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
                     output.close();
                 }
             }catch (final Exception e){
-                logger.logError("Failed to close output buffer: " + e.getMessage(), e);
+                logger.error("Failed to close output buffer: " + e.getMessage(), e);
             }
         }
 

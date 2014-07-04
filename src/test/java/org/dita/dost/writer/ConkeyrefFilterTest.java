@@ -2,6 +2,7 @@ package org.dita.dost.writer;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -22,7 +23,7 @@ public class ConkeyrefFilterTest {
     @Test
     public void testKey() throws SAXException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", "library.dita", ATTR_SCOPE_VALUE_LOCAL, "main.ditamap")));
+        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", toURI("library.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -38,7 +39,7 @@ public class ConkeyrefFilterTest {
     @Test
     public void testKeyAndElement() throws SAXException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", "library.dita", ATTR_SCOPE_VALUE_LOCAL, "main.ditamap")));
+        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", toURI("library.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -54,7 +55,7 @@ public class ConkeyrefFilterTest {
     @Test
     public void testElementInTarget() throws SAXException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", "library.dita#baz", ATTR_SCOPE_VALUE_LOCAL, "main.ditamap")));
+        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", toURI("library.dita#baz"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -71,7 +72,7 @@ public class ConkeyrefFilterTest {
     public void testRelativePaths() throws SAXException {
         final ConkeyrefFilter f = getConkeyrefFilter();
         f.setCurrentFile(new File("product/sub folder/this.dita"));
-        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", "common/library.dita", ATTR_SCOPE_VALUE_LOCAL, "main.ditamap")));
+        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", toURI("common/library.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {

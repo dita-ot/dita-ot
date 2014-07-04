@@ -11,6 +11,7 @@
   <feature extension="dita.conductor.transtype.check" value="htmlhelp"/>
   <require plugin="org.dita.xhtml"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
   <template file="xsl/map2hhc_template.xsl"/>
   <template file="xsl/map2hhp_template.xsl"/>
 </plugin>

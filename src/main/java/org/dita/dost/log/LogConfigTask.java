@@ -9,7 +9,6 @@
 package org.dita.dost.log;
 
 import java.io.File;
-import java.util.Properties;
 import java.util.Vector;
 
 import org.apache.tools.ant.BuildListener;

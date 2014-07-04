@@ -3,6 +3,8 @@
     <!-- this is the second author -->
     
     <topicref class="- map/topicref " href="blatview.dita" keys="blatview blatfeference blatintro" locktitle="yes" navtitle="blatview"></topicref>
+  
+    <topicref class="- map/topicref " href="blatviewduplicate.dita" keys="blatview" locktitle="yes" navtitle="blatview duplicate"></topicref>
     
     <!-- skipped key -->
     <topicref class="- map/topicref " href="blatexample.dita" keys="blatexample" locktitle="yes" navtitle="blatexample"></topicref>
@@ -28,5 +30,20 @@
       
     <!-- Check keyRef_blatexample.dita  -->
     <!-- It will change its link to blatexample.dita , not blatview.dita -->
-    
+
+  <topicref class="- map/topicref " keys="top" navtitle="top">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">top keyword</keyword>
+      </keywords>
+    </topicmeta>
+    <topicref class="- map/topicref " keys="nested" navtitle="nested">
+      <topicmeta class="- map/topicmeta ">
+        <keywords class="- topic/keywords ">
+          <keyword class="- topic/keyword ">nested keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </topicref>
+  </topicref>
+
 </map>

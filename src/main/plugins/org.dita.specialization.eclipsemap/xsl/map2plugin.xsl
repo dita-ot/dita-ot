@@ -11,8 +11,8 @@
 <xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
-  <xsl:import href="../../../xsl/common/dita-utilities.xsl"/>
-  <xsl:import href="../../../xsl/common/output-message.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
   <xsl:param name="PLUGINFILE" select="'plugin.xml'"/>

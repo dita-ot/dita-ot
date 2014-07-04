@@ -37,27 +37,25 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        if (logger == null) {
-            throw new IllegalStateException("Logger not set");
-        }
-        
         final File maplinksFile = new File(input.getAttribute(ANT_INVOKER_PARAM_MAPLINKS));
+        if (!maplinksFile.exists()) {
+            return null;
+        }
         
         final MapLinksReader indexReader = new MapLinksReader();
         indexReader.setLogger(logger);
-        indexReader.setMatch(new StringBuffer(ELEMENT_NAME_MAPLINKS)
-                .append(SLASH).append(TOPIC_LINKPOOL.localName)
-                .append(SLASH).append(TOPIC_LINKLIST.localName)
-                .toString());
+        indexReader.setMatch(ELEMENT_NAME_MAPLINKS + SLASH + TOPIC_LINKPOOL.localName + SLASH + TOPIC_LINKLIST.localName);
         indexReader.read(maplinksFile.getAbsoluteFile());
-        final Map<String, Map<String, String>> mapSet = indexReader.getMapping();
+        final Map<File, Map<String, String>> mapSet = indexReader.getMapping();
         
-        final DitaLinksWriter indexInserter = new DitaLinksWriter();
-        indexInserter.setLogger(logger);
-        for (final Map.Entry<String, Map<String, String>> entry: mapSet.entrySet()) {
-            logger.logInfo("Processing " + entry.getKey());
-            indexInserter.setLinks(entry.getValue());
-            indexInserter.write(new File(entry.getKey()));
+        if (!mapSet.isEmpty()) {
+            final DitaLinksWriter indexInserter = new DitaLinksWriter();
+            indexInserter.setLogger(logger);
+            for (final Map.Entry<File, Map<String, String>> entry: mapSet.entrySet()) {
+                logger.info("Processing " + entry.getKey());
+                indexInserter.setLinks(entry.getValue());
+                indexInserter.write(entry.getKey());
+            }
         }
         return null;
     }

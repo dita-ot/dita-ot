@@ -22,9 +22,9 @@ import javax.xml.transform.sax.SAXSource;
 
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
-import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -132,9 +132,9 @@ public class GenListModuleFilterTest {
         listFilter.setLogger(new TestUtils.TestLogger());
         listFilter.setInputFile(srcFile.toURI());
         listFilter.setInputDir(srcDir.toURI());
-        final OutputUtils outputUtils = new OutputUtils();
-        outputUtils.setInputMapPathName(srcFile);
-        listFilter.setOutputUtils(outputUtils);
+        final Job job = new Job(tempDir);
+        job.setInputFile(srcFile);
+        listFilter.setJob(job);
 //        listFilter.setTranstype("xhtml");
         listFilter.setCurrentDir(new URI(""));
         listFilter.setCurrentFile(srcFile.toURI());
@@ -170,7 +170,6 @@ public class GenListModuleFilterTest {
             assertEquals(actFileInfo.file + ": ", expFileInfo.isChunkedDitaMap, actFileInfo.isChunkedDitaMap);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isOutDita, actFileInfo.isOutDita);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isCopyToSource, actFileInfo.isCopyToSource);
-            assertEquals(actFileInfo.file + ": ", expFileInfo.isActive, actFileInfo.isActive);
         }
         
         final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();

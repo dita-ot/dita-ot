@@ -24,7 +24,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- DITA-OT: Latest stable version -->
     <topicmeta>
       <keywords>
-        <keyword>1.8.2</keyword>
+        <keyword>1.8.4</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -40,7 +40,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- DITA-OT: Latest test version -->
     <topicmeta>
       <keywords>
-        <keyword>2.0.M1</keyword>
+        <keyword>2.0.M3</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -57,7 +57,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Ant: Bundled version-->
     <topicmeta>
       <keywords>
-        <keyword>1.8.4</keyword>
+        <keyword>1.9.2</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -73,7 +73,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Codec: Bundled version -->
     <topicmeta>
       <keywords>
-        <keyword>1.4</keyword>
+        <keyword>1.8</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -81,7 +81,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- ICU for Java: Bundled version -->
     <topicmeta>
       <keywords>
-        <keyword>49.1</keyword>
+        <keyword>52.1</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -89,7 +89,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Java-->
     <topicmeta>
       <keywords>
-        <keyword>6</keyword>
+        <keyword>7</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -113,7 +113,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- FOP: Bundled version -->
     <topicmeta>
       <keywords>
-        <keyword>1.0</keyword>
+        <keyword>1.1</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -129,7 +129,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Saxon: Bundled version -->
     <topicmeta>
       <keywords>
-        <keyword>9.1</keyword>
+        <keyword>9.1.0.8</keyword>
       </keywords>
     </topicmeta>
   </keydef>
@@ -174,6 +174,12 @@ See the accompanying license.txt file for applicable licenses.
   <keydef keys="license-CPL" href="http://www.opensource.org/licenses/cpl1.0.php" scope="external" format="html">
     <topicmeta>
       <linktext>Common Public License</linktext>
+    </topicmeta>
+  </keydef>
+  
+  <keydef keys="rfc5147" href="http://tools.ietf.org/html/rfc5147" scope="external" format="html">
+    <topicmeta>
+      <linktext>RFC 5147</linktext>
     </topicmeta>
   </keydef>
 </map>

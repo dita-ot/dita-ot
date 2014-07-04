@@ -8,8 +8,6 @@
  */
 package org.dita.dost.index;
 
-import static org.dita.dost.util.Constants.*;
-
 /**
  * This class represent the target of an index term.
  * 
@@ -105,7 +103,6 @@ public final class IndexTermTarget {
      */
     @Override
     public String toString() {
-        return new StringBuffer("{Target name: ").append(targetName).append(
-                ", Target URL: ").append(targetURI).append("}").toString();
+        return "{Target name: " + targetName + ", Target URL: " + targetURI + "}";
     }
 }

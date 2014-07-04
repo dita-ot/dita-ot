@@ -25,6 +25,6 @@
   <part navtitle="Developer Reference" href="dev_ref/developer-reference.dita">
     <chapter navtitle="Developer Reference" href="dev_ref/dev_ref.ditamap" format="ditamap"/>
   </part>
-  <appendix navtitle="Project Management" href="admin/project-management.ditamap" format="ditamap"/>
+  <!--appendix navtitle="Project Management" href="admin/project-management.ditamap" format="ditamap"/-->
   <appendix href="dita-resources.ditamap" format="ditamap"/>
 </bookmap>

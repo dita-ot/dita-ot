@@ -1416,19 +1416,10 @@
           <xsl:choose>
             <xsl:when
               test="@reftitle">
-              <xsl:call-template name="get-ascii">
-                <xsl:with-param name="txt">
-                  <xsl:value-of select="@reftitle"/>
-                </xsl:with-param>
-              </xsl:call-template>
+              <xsl:value-of select="@reftitle"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:call-template
-                name="get-ascii">
-                <xsl:with-param name="txt">
-                  <xsl:value-of select="@href"/>
-                </xsl:with-param>
-              </xsl:call-template>
+              <xsl:value-of select="@href"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:element>
@@ -1438,12 +1429,7 @@
       <xsl:element name="text:line-break"/>
       <!-- Insert citation text -->
       <xsl:element name="text:span">
-        <xsl:call-template
-          name="get-ascii">
-          <xsl:with-param name="txt">
-            <xsl:value-of select="@reftitle"/>
-          </xsl:with-param>
-        </xsl:call-template>
+        <xsl:value-of select="@reftitle"/>
       </xsl:element>
     </xsl:when>
     <xsl:otherwise><!--nop - do nothing--></xsl:otherwise>
@@ -1997,11 +1983,7 @@
         <xsl:choose>
           <xsl:when test="@othertype and
           not(@othertype='')">
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="@othertype"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="@othertype"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text>[other]</xsl:text>
@@ -2202,11 +2184,7 @@
         <xsl:choose>
           <xsl:when test="@othertype and
           not(@othertype='')">
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="@othertype"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="@othertype"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text>[other]</xsl:text>
@@ -2308,9 +2286,7 @@
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:call-template name="get-ascii">
-        <xsl:with-param name="txt" select="$txt"/>
-      </xsl:call-template>
+        <xsl:value-of select="$txt"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -2447,11 +2423,7 @@
       <xsl:if test="starts-with(.,' ') and not(normalize-space(.)='')">
         <xsl:text> </xsl:text>
       </xsl:if>
-      <xsl:call-template name="get-ascii">
-        <xsl:with-param name="txt">
-          <xsl:value-of select="normalize-space(.)"/>
-        </xsl:with-param>
-      </xsl:call-template>
+      <xsl:value-of select="normalize-space(.)"/>
       <xsl:if test="substring(.,string-length(.))=' ' and not(normalize-space(.)='')">
         <xsl:text> </xsl:text>
       </xsl:if>

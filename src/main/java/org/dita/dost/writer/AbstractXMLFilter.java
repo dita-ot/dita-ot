@@ -20,17 +20,13 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * @since 1.5.4
  * @author Jarno Elovirta
  */
-abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter {
+public abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter {
 
     protected DITAOTLogger logger;
 
     @Override
     public void write(final File filename) throws DITAOTException {
-        try {
-            XMLUtils.transform(filename, asList((XMLFilter) this));
-        } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
-        }
+        XMLUtils.transform(filename, asList((XMLFilter) this));
     }
 
     @Override

@@ -85,7 +85,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
         final char[] chars = temp.toCharArray();
         char flag = '\n';
         //used for store the new String
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         for(final char c : chars){
             //when a whitespace is met
             if(c==' '){
@@ -97,7 +97,6 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                     flag = c;
                 }else{
                     //abundant space, ignore it
-                    continue;
                 }
                 //the consecutive whitespace is interrupted
             }else{
@@ -138,7 +137,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                     return;
                 }else{
                     indexTerm.setTermName("***");
-                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ014W").toString());
+                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ014W").toString());
                 }
             }
 
@@ -177,13 +176,12 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 
     private void genTargets(final IndexTerm indexTerm, final TopicrefElement obj) {
 
-        final TopicrefElement topicref = obj;
         final IndexTermTarget target = new IndexTermTarget();
         String targetURI = null;
 
-        final String href = topicref.getHref();
+        final String href = obj.getHref();
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
         if (!href.contains(COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)){
             if (mapPath != null && mapPath.length() != 0) {
                 buffer.append(mapPath);
@@ -195,8 +193,8 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             targetURI = href;
         }
 
-        if (topicref.getNavTitle() != null){
-            target.setTargetName(topicref.getNavTitle());
+        if (obj.getNavTitle() != null){
+            target.setTargetName(obj.getNavTitle());
         }else {
             target.setTargetName(href);
         }
@@ -351,7 +349,8 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             //			return ((TopicrefElement) elementStack.peek()).needExtractTerm();
             // for dita files the indexterm has been moved to its <prolog>
             // therefore we don't need to collect these terms again.
-            if (indexMoved && FileUtils.isDITAFile(((TopicrefElement) elementStack.peek()).getHref())){
+            final TopicrefElement elem = (TopicrefElement) elementStack.peek();
+            if (indexMoved && (elem.getFormat() == null || elem.getFormat().equals(ATTR_FORMAT_VALUE_DITA) || elem.getFormat().equals(ATTR_FORMAT_VALUE_DITAMAP))) {
                 return false;
             }
         }

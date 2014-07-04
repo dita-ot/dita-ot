@@ -191,16 +191,6 @@
 
 <!-- No flagging attrs allowed to process in phrases - output a message when in debug mode. -->
 <xsl:template name="flagcheck">
-  <!--
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
-  <xsl:variable name="props">
-    <xsl:if test="contains($domains, 'a(props')">
-      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
-    </xsl:if>
-  </xsl:variable>
-  -->
 </xsl:template>
 
   <xsl:template name="ext-flagcheck">

@@ -62,4 +62,59 @@
     </antcall>
   </target>
 
+  <target name="install" description="Install plug-in" depends="install.init, install.local, install.download">
+    <pathconvert property="temp.plugin.file">
+      <first>
+        <fileset dir="${dita.temp.dir}">
+          <include name="**/plugin.xml"/>
+        </fileset>
+      </first>
+    </pathconvert>
+    <dirname property="temp.plugin.dir" file="${temp.plugin.file}"/>
+    <xmlproperty file="${temp.plugin.file}" collapseAttributes="true"/>
+    <available property="plugin.exists" file="${dita.dir}/plugins/${plugin.id}"/>
+    <antcall target="install.move"/>
+    <delete dir="${dita.temp.dir}"/>
+    <fail if="plugin.exists">Plug-in ${dita.dir}/plugins/${plugin.id} already exists.</fail>
+  </target>
+  <target name="install.move" unless="plugin.exists">
+    <move todir="${dita.dir}/plugins/${plugin.id}">
+      <fileset dir="${temp.plugin.dir}"/>
+    </move>
+    <antcall target="integrate">
+      <param name="strict" value="true"/>
+    </antcall>
+  </target>
+  <target name="install.init">
+    <fail unless="plugin.file"/>
+    <available file="${plugin.file}" property="install.file.exists"/>
+    <tstamp>
+      <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
+    </tstamp>
+    <property name="dita.temp.dir" location="${dita.dir}/temp/temp${current.date}" />
+    <mkdir dir="${dita.temp.dir}"/>
+  </target>
+  <target name="install.local" if="install.file.exists">
+    <unzip src="${plugin.file}" dest="${dita.temp.dir}"/>
+  </target>
+  <target name="install.download" unless="install.file.exists">
+    <basename property="install.downlaod.file" file="${plugin.file}"/>
+    <get src="${plugin.file}" dest="${dita.temp.dir}/${install.downlaod.file}" ignoreerrors="false" verbose="on"/>
+    <unzip src="${dita.temp.dir}/${install.downlaod.file}" dest="${dita.temp.dir}"/>
+    <delete file="${dita.temp.dir}/${install.downlaod.file}"/>
+  </target>
+  
+  <target name="uninstall" description="Uninstall plug-in">
+    <fail unless="plugin.id"/>
+    <available property="plugin.exists" file="${dita.dir}/plugins/${plugin.id}"/>
+    <fail unless="plugin.exists">Plug-in ${dita.dir}/plugins/${plugin.id} doesn't exist.</fail>
+    <antcall target="uninstall.delete"/>
+  </target>
+  <target name="uninstall.delete" if="plugin.exists">
+    <delete dir="${dita.dir}/plugins/${plugin.id}"/>
+    <antcall target="integrate">
+      <param name="strict" value="true"/>
+    </antcall>
+  </target>
+  
 </project>

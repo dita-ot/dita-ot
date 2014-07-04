@@ -32,8 +32,7 @@ select="$tbl-count-actual"/><xsl:text>. </xsl:text><xsl:call-template
 name="getString"><xsl:with-param name="stringName" select="'Table'"/></xsl:call-template><xsl:text>
 </xsl:text></xsl:when><xsl:otherwise><xsl:call-template name="getStringRTF"><xsl:with-param
 name="stringName" select="'Table'"/></xsl:call-template><xsl:text> </xsl:text><xsl:value-of
-select="$tbl-count-actual"/><xsl:text>. </xsl:text></xsl:otherwise></xsl:choose><xsl:call-template
-  name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="."/></xsl:with-param></xsl:call-template>\par \plain\s0 \qj\f2\fs24
+select="$tbl-count-actual"/><xsl:text>. </xsl:text></xsl:otherwise></xsl:choose><xsl:value-of select="."/>\par \plain\s0 \qj\f2\fs24
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/desc ')]">
@@ -546,7 +545,7 @@ select="$tbl-count-actual"/><xsl:text>. </xsl:text></xsl:otherwise></xsl:choose>
   </xsl:variable>
   <xsl:variable name="tbl-count-actual" select="count(preceding::*[contains(@class,' topic/table ')
     or contains(@class,' topic/simpletable ')]/*[contains(@class,' topic/title ')])+1"/>
-  <xsl:call-template name="gen-id"/>\pard \plain\s9 \qc\f4\fs24\b <xsl:choose><!-- Hungarian: "1.Table " --><xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'hu-hu')) or (string-length($ancestorlang)=2 and contains($ancestorlang,'hu')) )"><xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Table'"/></xsl:call-template><xsl:text> </xsl:text></xsl:when><xsl:otherwise><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Table'"/></xsl:call-template><xsl:text> </xsl:text><xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text></xsl:otherwise></xsl:choose><xsl:call-template name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="."/></xsl:with-param></xsl:call-template>\par \plain\s0 \qj\f2\fs24
+  <xsl:call-template name="gen-id"/>\pard \plain\s9 \qc\f4\fs24\b <xsl:choose><!-- Hungarian: "1.Table " --><xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'hu-hu')) or (string-length($ancestorlang)=2 and contains($ancestorlang,'hu')) )"><xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Table'"/></xsl:call-template><xsl:text> </xsl:text></xsl:when><xsl:otherwise><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Table'"/></xsl:call-template><xsl:text> </xsl:text><xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text></xsl:otherwise></xsl:choose><xsl:value-of select="."/>\par \plain\s0 \qj\f2\fs24
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/sthead ')]">

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!-- Common utilities that can be used by DITA transforms -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+                exclude-result-prefixes="xs dita-ot">
+  
   <xsl:param name="DEFAULTLANG">en-us</xsl:param>
-  <!-- Function to convert a string to lower case -->
+  <xsl:param name="variableFiles.url" select="'plugin:org.dita.base:xsl/common/strings.xml'"/>
   
   <xsl:variable name="pixels-per-inch" select="number(96)"/>
   
@@ -50,128 +54,118 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- Function to get translated text for a common string.
-     * Each language is stored in a unique file. The association between a language and
-     its translations is stored in $stringFileList.
-     * Default file associations are in strings.xml.
-     * Once the file for a language is found, look for the translation in that file.
-     * If the correct file or translation are not found, use the default language.
-
-     If adding translations for a specialization, create a new version of strings.xml,
-     to indicate which languages are supported, and the name of each language file.
-     When calling this template, pass in the new association file as $stringFileList.
-
-     To reset the default language, import this template, and then set the DEFAULTLANG
-     parameter in the importing topic. Or, just pass it in on the command line.
-      -->
+  <xsl:variable name="stringFiles" select="document($variableFiles.url)/langlist/lang"/>
+  
+  <!-- Deprecated. Use getVariable template instead. -->
   <xsl:template name="getString">
     <xsl:param name="stringName"/>
-    <xsl:param name="stringFileList" select="document('allstrings.xml')/allstrings/stringfile"/>
-    <xsl:param name="stringFile">#none#</xsl:param>
-    <xsl:param name="ancestorlang">
-      <!-- Get the current language -->
-      <xsl:call-template name="getLowerCaseLang"/>
-    </xsl:param>
+    <xsl:call-template name="getVariable">
+      <xsl:with-param name="id" select="string($stringName)"/>
+    </xsl:call-template>
+  </xsl:template>
+  
+  <xsl:template name="getVariable">
+    <xsl:param name="id" as="xs:string"/>
+    <xsl:param name="params" as="element()*"/>
+        
+    <xsl:variable name="ancestorlang" as="xs:string*">
+      <xsl:variable name="l" as="xs:string*">
+        <xsl:call-template name="getLowerCaseLang"/>
+      </xsl:variable>
+      <xsl:value-of select="$l"/>
+      <xsl:if test="contains($l, '-')">
+        <xsl:value-of select="substring-before($l, '-')"/>
+      </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="defaultlang" as="xs:string*">
+      <xsl:value-of select="$DEFAULTLANG"/>
+      <xsl:if test="contains($DEFAULTLANG, '-')">
+        <xsl:value-of select="substring-before($DEFAULTLANG, '-')"/>
+      </xsl:if>
+    </xsl:variable>
+    <xsl:call-template name="findString">
+      <xsl:with-param name="id" select="$id"/>
+      <xsl:with-param name="params" select="$params"/>
+      <xsl:with-param name="ancestorlang" select="$ancestorlang"/>
+      <xsl:with-param name="defaultlang" select="$defaultlang"/>
+    </xsl:call-template>
+  </xsl:template>
+  
+  <xsl:template name="findString">
+    <xsl:param name="id" as="xs:string"/>
+    <xsl:param name="params" as="element()*"/>
+    <xsl:param name="ancestorlang" as="xs:string*"/>
+    <xsl:param name="defaultlang" as="xs:string*"/>
+        
+    <xsl:variable name="l" select="($ancestorlang, $defaultlang)[1]" as="xs:string?"/>
     <xsl:choose>
-      <xsl:when test="$stringFile != '#none#'">
-        <!-- Use the old getString template interface -->
-        <!-- Get the translated string -->
-        <xsl:variable name="str"
-          select="$stringFile/strings/str[@name=$stringName][lang($ancestorlang)]"/>
+      <xsl:when test="exists($l)">
+        <xsl:variable name="stringfile" select="$stringFiles[@xml:lang = $l]/@filename" as="xs:string*"/>
+        <xsl:variable name="str" as="element()*">
+          <xsl:for-each select="$stringfile">
+            <xsl:sequence select="document(., $stringFiles[1])/*/*[@name = $id or @id = $id]"/><!-- strings/str/@name opentopic-vars:vars/opentopic-vars:variable/@id -->
+          </xsl:for-each>
+        </xsl:variable>
         <xsl:choose>
-          <!-- If the string was found, use it. Cannot test $str, because value could be empty. -->
-          <xsl:when test="$stringFile/strings/str[@name=$stringName][lang($ancestorlang)]">
-            <xsl:value-of select="$str"/>
+          <xsl:when test="exists($str)">
+            <xsl:apply-templates select="$str[last()]" mode="processVariableBody">
+              <xsl:with-param name="params" select="$params"/>
+            </xsl:apply-templates>
+            <xsl:if test="empty($ancestorlang)">
+              <xsl:call-template name="output-message">
+                <xsl:with-param name="msgnum">001</xsl:with-param>
+                <xsl:with-param name="msgsev">W</xsl:with-param>
+                <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/>;%2=<xsl:call-template name="getLowerCaseLang"/>;%3=<xsl:value-of select="$DEFAULTLANG"/></xsl:with-param>
+              </xsl:call-template>
+            </xsl:if>
           </xsl:when>
-          <!-- If the current language is not the default language, try the default -->
-          <xsl:when test="$ancestorlang!=$DEFAULTLANG">
-            <!-- Determine which file holds the defaults; then get the default translation. -->
-            <xsl:variable name="str-default"
-              select="$stringFile/strings/str[@name=$stringName][lang($DEFAULTLANG)]"/>
-            <xsl:choose>
-              <!-- If a default was found, use it, but warn that fallback was needed.-->
-              <xsl:when test="string-length($str-default)>0">
-                <xsl:value-of select="$str-default"/>
-                <xsl:call-template name="output-message">
-                  <xsl:with-param name="msgnum">001</xsl:with-param>
-                  <xsl:with-param name="msgsev">W</xsl:with-param>
-                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/>;%2=<xsl:value-of select="$ancestorlang"/>;%3=<xsl:value-of select="$DEFAULTLANG"/></xsl:with-param>
-                </xsl:call-template>
-              </xsl:when>
-              <!-- Translation was not even found in the default language. -->
-              <xsl:otherwise>
-                <xsl:value-of select="$stringName"/>
-                <xsl:call-template name="output-message">
-                  <xsl:with-param name="msgnum">052</xsl:with-param>
-                  <xsl:with-param name="msgsev">W</xsl:with-param>
-                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/></xsl:with-param>
-                </xsl:call-template>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-          <!-- The current language is the default; no translation found at all. -->
           <xsl:otherwise>
-            <xsl:value-of select="$stringName"/>
-            <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">052</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
-              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/></xsl:with-param>
+            <xsl:call-template name="findString">
+              <xsl:with-param name="id" select="$id"/>
+              <xsl:with-param name="params" select="$params"/>
+              <xsl:with-param name="ancestorlang" select="$ancestorlang[position() gt 1]"/>
+              <xsl:with-param name="defaultlang" select="if (exists($ancestorlang)) then $defaultlang else $defaultlang[position() gt 1]"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <!-- Use the new getString template interface -->
-        <!-- Determine which file holds translations for the current language -->
-        <xsl:variable name="stringfile"
-            select="document($stringFileList)/*/lang[@xml:lang=$ancestorlang]/@filename"/>
-        <!-- Get the translated string -->
-        <xsl:variable name="str" select="document($stringfile)/strings/str[@name=$stringName]"/>
-        <xsl:choose>
-          <!-- If the string was found, use it. -->
-          <xsl:when test="count($str) &gt; 0">
-            <xsl:value-of select="$str[last()]"/>
-          </xsl:when>
-          <!-- If the current language is not the default language, try the default -->
-          <xsl:when test="$ancestorlang!=$DEFAULTLANG">
-            <!-- Determine which file holds the defaults; then get the default translation. -->
-            <xsl:variable name="backupstringfile"
-                select="document($stringFileList)/*/lang[@xml:lang=$DEFAULTLANG]/@filename"/>
-            <xsl:variable name="str-default"
-              select="document($backupstringfile)/strings/str[@name=$stringName]"/>
-            <xsl:choose>
-              <!-- If a default was found, use it, but warn that fallback was needed.-->
-              <xsl:when test="count($str-default) &gt; 0">
-                <xsl:value-of select="$str-default[last()]"/>
-                <xsl:call-template name="output-message">
-                  <xsl:with-param name="msgnum">001</xsl:with-param>
-                  <xsl:with-param name="msgsev">W</xsl:with-param>
-                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/>;%2=<xsl:value-of select="$ancestorlang"/>;%3=<xsl:value-of select="$DEFAULTLANG"/></xsl:with-param>
-                </xsl:call-template>
-              </xsl:when>
-              <!-- Translation was not even found in the default language. -->
-              <xsl:otherwise>
-                <xsl:value-of select="$stringName"/>
-                <xsl:call-template name="output-message">
-                  <xsl:with-param name="msgnum">052</xsl:with-param>
-                  <xsl:with-param name="msgsev">W</xsl:with-param>
-                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/></xsl:with-param>
-                </xsl:call-template>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-          <!-- The current language is the default; no translation found at all. -->
-          <xsl:otherwise>
-            <xsl:value-of select="$stringName"/>
-            <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">052</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
-              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/></xsl:with-param>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="$id"/>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgnum">052</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/></xsl:with-param>
+        </xsl:call-template>
       </xsl:otherwise>
-    </xsl:choose>
+    </xsl:choose>    
+  </xsl:template>
+  
+  <!-- Support legacy variable syntax -->
+  <xsl:template match="str" mode="processVariableBody">
+    <xsl:param name="params"/>
+    <xsl:copy-of select="node()"/>
+  </xsl:template>
+
+  <xsl:template match="variable" mode="processVariableBody">
+    <xsl:param name="params"/>
+    
+    <xsl:for-each select="node()">
+      <xsl:choose>
+        <xsl:when test="self::param">
+          <xsl:variable name="param-name" select="@ref-name"/>
+          <xsl:copy-of select="$params[name() = $param-name]/node()"/>
+        </xsl:when>
+        <xsl:when test="self::variableref">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="@refid"/>
+            <xsl:with-param name="params" select="$params"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:copy-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
   </xsl:template>
     
   <xsl:template name="length-to-pixels">
@@ -370,6 +364,40 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+  <xsl:function name="dita-ot:get-topic-id" as="xs:string?">
+    <xsl:param name="href"/>
+    <xsl:variable name="fragment" select="substring-after($href, '#')" as="xs:string"/>
+    <xsl:if test="string-length($fragment) gt 0">
+      <xsl:choose>
+        <xsl:when test="contains($fragment, '/')">
+          <xsl:value-of select="substring-before($fragment, '/')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$fragment"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:has-topic-id" as="xs:boolean">
+    <xsl:param name="href"/>
+    <xsl:sequence select="contains($href, '#')"/>
+  </xsl:function>
+
+  <xsl:function name="dita-ot:get-element-id" as="xs:string?">
+    <xsl:param name="href"/>
+    <xsl:variable name="fragment" select="substring-after($href, '#')" as="xs:string"/>
+    <xsl:if test="contains($fragment, '/')">
+      <xsl:value-of select="substring-after($fragment, '/')"/>
+    </xsl:if>
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:has-element-id" as="xs:boolean">
+    <xsl:param name="href"/>
+    <xsl:sequence select="contains(substring-after($href, '#'), '/')"/>
+  </xsl:function>
+  
 
 </xsl:stylesheet>
 

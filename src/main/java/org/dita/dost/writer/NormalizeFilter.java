@@ -4,7 +4,9 @@
  */
 package org.dita.dost.writer;
 
+import static javax.xml.XMLConstants.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Configuration.configuration;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public final class NormalizeFilter extends AbstractXMLFilter {
 
     private static final String ATTRIBUTE_NAME_COLNAME = "colname";
     private static final String ATTRIBUTE_NAME_COLNUM = "colnum";
+    private static final String ATTRIBUTE_NAME_COLWIDTH = "colwidth";
     private static final String COLUMN_NAME_COL = "col";
 
     private List<String> colSpec;
@@ -58,6 +61,8 @@ public final class NormalizeFilter extends AbstractXMLFilter {
     private Map<String, Integer> colSpanMap;
     /** DITA class stack */
     private final Deque<String> classStack = new LinkedList<String>();
+    /** Number of cols in tgroup */
+    private int cols;
 
     public NormalizeFilter() {
         super();
@@ -106,23 +111,29 @@ public final class NormalizeFilter extends AbstractXMLFilter {
             colSpec = new ArrayList<String>(16);
             // new table initialize the col list
             rowNumber = 0;
+            try {
+                cols = Integer.parseInt(atts.getValue(ATTRIBUTE_NAME_COLS).trim());
+            } catch (final NumberFormatException e) {
+                cols = -1;
+            }
         } else if (TOPIC_ROW.matches(cls)) {
             columnNumber = 1; // initialize the column number
             columnNumberEnd = 0;
             // store the row number
             rowNumber++;
         } else if (TOPIC_COLSPEC.matches(cls)) {
-            columnNumber = columnNumberEnd + 1;
-            if (atts.getValue(ATTRIBUTE_NAME_COLNAME) != null) {
-                colSpec.add(atts.getValue(ATTRIBUTE_NAME_COLNAME));
-            } else {
-                colSpec.add(COLUMN_NAME_COL + columnNumber);
+            processColspec(res);
+        } else if (TOPIC_THEAD.matches(cls) || TOPIC_TBODY.matches(cls)) {
+            if (columnNumberEnd < cols && cols != -1) {
+                final int length = cols - totalColumns;
+                for (int i = 0; i < length; i++) {
+                    final AttributesImpl colspecAtts = new AttributesImpl();
+                    XMLUtils.addOrSetAttribute(colspecAtts, ATTRIBUTE_NAME_CLASS, TOPIC_COLSPEC.toString());
+                    processColspec(colspecAtts);
+                    getContentHandler().startElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName, colspecAtts);
+                    getContentHandler().endElement(NULL_NS_URI, TOPIC_COLSPEC.localName, TOPIC_COLSPEC.localName);
+                }
             }
-            columnNumberEnd = columnNumber;
-            // change the col name of colspec
-            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
-            // total columns count
-            totalColumns = columnNumberEnd;
         } else if (TOPIC_ENTRY.matches(cls)) {
             columnNumber = getStartNumber(atts, columnNumberEnd);
             if (columnNumber > columnNumberEnd) {
@@ -177,9 +188,36 @@ public final class NormalizeFilter extends AbstractXMLFilter {
                 }
             }
             columnNumberEnd = getEndNumber(atts, columnNumber);
+        } else if (MAP_MAP.matches(cls)) {
+            if (res.getIndex(ATTRIBUTE_NAME_CASCADE) == -1) {
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CASCADE,
+                        configuration.containsKey("default.cascade")
+                        ? configuration.get("default.cascade")
+                        : ATTRIBUTE_CASCADE_VALUE_MERGE); 
+            }
         }
+
         getContentHandler().startElement(uri, localName, qName, res);
     }
+
+    private void processColspec(final AttributesImpl res) {
+        columnNumber = columnNumberEnd + 1;
+        if (res.getValue(ATTRIBUTE_NAME_COLNAME) != null) {
+            colSpec.add(res.getValue(ATTRIBUTE_NAME_COLNAME));
+        } else {
+            colSpec.add(COLUMN_NAME_COL + columnNumber);
+        }
+        columnNumberEnd = columnNumber;
+        // change the col name of colspec
+        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
+        // total columns count
+        totalColumns = columnNumberEnd;
+        final String colWidth = res.getValue(ATTRIBUTE_NAME_COLWIDTH);
+        if (colWidth == null || colWidth.isEmpty()) {
+            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLWIDTH, "1*");
+        }
+    }
+
 
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {

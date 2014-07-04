@@ -1,4 +1,4 @@
-<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xml:lang="en-US" ditaarch:DITAArchVersion="1.2" title="Title &amp;&lt;&quot;&apos;">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xml:lang="en-US" ditaarch:DITAArchVersion="1.2" title="Title &amp;&lt;&quot;&apos;" cascade="nomerge">
   <topicref href="keyword.dita">
     <topicmeta>
       <exportanchors>
@@ -11,4 +11,5 @@
   <topicref href="key%20word.dita" scope="peer" navtitle="peer"/>
   
   <keydef keys="keydef" href="keyword.dita" processing-role="resource-only"/>
+  <keydef keys="keyword" href="keyword.dita#keyword" processing-role="resource-only"/>
 </map>

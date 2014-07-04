@@ -142,7 +142,7 @@ public final class DitaClass {
      * @return {@code true} if given class matches this class, otherwise {@code false}
      */
     public boolean matches(final DitaClass cls) {
-        return cls != null && cls.toString().indexOf(matcher) != -1;
+        return cls != null && cls.toString().contains(matcher);
     }
 
     /**
@@ -152,7 +152,7 @@ public final class DitaClass {
      * @return {@code true} if given class matches this class, otherwise {@code false}
      */
     public boolean matches(final String classString) {
-        return classString != null && classString.indexOf(matcher) != -1;
+        return classString != null && classString.contains(matcher);
     }
 
     /**

@@ -9,6 +9,7 @@
 package org.dita.dost.util;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -50,33 +51,6 @@ public class TestFileUtils {
     }
 
     @Test
-    public void testIsDITAFile() {
-        assertTrue(FileUtils.isDITAFile("file.xml"));
-        assertTrue(FileUtils.isDITAFile("file.xml#topicid"));
-        assertTrue(FileUtils.isDITAFile("file.dita"));
-        assertTrue(FileUtils.isDITAFile("file.dita#topicid"));
-        assertFalse(FileUtils.isDITAFile("file.xm"));
-        assertFalse(FileUtils.isDITAFile("file.dit#xml"));
-    }
-
-    @Test
-    public void testIsDITATopicFile() {
-        assertTrue(FileUtils.isDITATopicFile("file.xml"));
-        assertTrue(FileUtils.isDITATopicFile("file.dita"));
-        assertFalse(FileUtils.isDITATopicFile("file"));
-        assertFalse(FileUtils.isDITATopicFile("file.XML"));
-        assertFalse(FileUtils.isDITATopicFile("file.DITA"));
-    }
-
-    @Test
-    public void testIsDITAMapFile() {
-        assertTrue(FileUtils.isDITAMapFile("file.ditamap"));
-        assertFalse(FileUtils.isDITAMapFile("file.Ditamap"));
-        assertFalse(FileUtils.isDITAMapFile("file.DITAMAP"));
-        assertFalse(FileUtils.isDITAMapFile("file"));
-    }
-
-    @Test
     public void testIsSupportedImageFile() {
         assertTrue(FileUtils.isSupportedImageFile("image.jpg"));
         assertTrue(FileUtils.isSupportedImageFile("image.gif"));
@@ -89,24 +63,6 @@ public class TestFileUtils {
         assertFalse(FileUtils.isSupportedImageFile("image.abc"));
         assertFalse(FileUtils.isSupportedImageFile("image"));
 
-    }
-
-    @Test
-    public void testIsValidTarget() {
-        assertTrue(FileUtils.isValidTarget("file.ditamap"));
-        assertTrue(FileUtils.isValidTarget("file.xml"));
-        assertTrue(FileUtils.isValidTarget("file.dita"));
-        assertTrue(FileUtils.isValidTarget("file.jpg"));
-        assertTrue(FileUtils.isValidTarget("file.gif"));
-        assertTrue(FileUtils.isValidTarget("file.eps"));
-        assertTrue(FileUtils.isValidTarget("file.html"));
-        assertTrue(FileUtils.isValidTarget("file.jpeg"));
-        assertTrue(FileUtils.isValidTarget("file.png"));
-        assertTrue(FileUtils.isValidTarget("file.svg"));
-        assertTrue(FileUtils.isValidTarget("file.tiff"));
-        assertTrue(FileUtils.isValidTarget("file.tif"));
-        assertFalse(FileUtils.isValidTarget("file.abc"));
-        assertFalse(FileUtils.isValidTarget("file"));
     }
 
     @Test
@@ -145,6 +101,19 @@ public class TestFileUtils {
             assertEquals(new File("a.dita"), FileUtils.getRelativePath(new File("/map.ditamap"), new File("/a.dita")));
             assertEquals(new File("a.dita"), FileUtils.getRelativePath(new File("/map1/map2/map.ditamap"), new File("/map1/map2/a.dita")));
             assertEquals(new File("../topic/a.dita"), FileUtils.getRelativePath(new File("/map1/map.ditamap"), new File("/topic/a.dita")));
+        }
+    }
+    
+    @Test
+    public void testGetRelativePathFile() {
+        if (File.separator.equals(SEPARATOR_WINDOWS)) {
+            assertEquals(new File(".."), FileUtils.getRelativePath(new File("map\\map.ditamap")));
+            assertEquals(null, FileUtils.getRelativePath(new File("map.ditamap")));
+            assertEquals(new File("..\\..\\"), FileUtils.getRelativePath(new File("map1\\map2\\map.ditamap")));
+        } else {
+            assertEquals(new File(".."), FileUtils.getRelativePath(new File("map/map.ditamap")));
+            assertEquals(null, FileUtils.getRelativePath(new File("map.ditamap")));
+            assertEquals(new File("../../"), FileUtils.getRelativePath(new File("map1/map2/map.ditamap")));
         }
     }    
 
@@ -185,34 +154,36 @@ public class TestFileUtils {
     @Test
     public void testResolveFile() {
         if (File.separator.equals(SEPARATOR_WINDOWS)) {
-            assertEquals(new File("c:\\dir\\file.xml"), FileUtils.resolveFile("c:\\dir","file.xml"));
-            assertEquals(new File("c:\\dir\\file.xml"), FileUtils.resolveFile("c:\\dir","file.xml#topicid"));
-            assertEquals(new File("c:\\file.xml"), FileUtils.resolveFile("c:\\dir","..\\file.xml"));
-            assertEquals(new File("file.xml"), FileUtils.resolveFile("","file.xml"));
-            assertEquals(new File("file.xml"), FileUtils.resolveFile((String) null,"file.xml"));
+            assertEquals(new File("c:\\dir\\file.xml"), FileUtils.resolve("c:\\dir","file.xml"));
+            assertEquals(new File("c:\\dir\\file.xml"), FileUtils.resolve("c:\\dir","file.xml#topicid"));
+            assertEquals(new File("c:\\file.xml"), FileUtils.resolve("c:\\dir","..\\file.xml"));
+            assertEquals(new File("file.xml"), FileUtils.resolve("","file.xml"));
+            assertEquals(new File("file.xml"), FileUtils.resolve((String) null,"file.xml"));
         } else {
-            assertEquals(new File("/dir/file.xml"), FileUtils.resolveFile("/dir","file.xml"));
-            assertEquals(new File("/dir/file.xml"), FileUtils.resolveFile("/dir","file.xml#topicid"));
-            assertEquals(new File("/file.xml"), FileUtils.resolveFile("/dir","../file.xml"));
-            assertEquals(new File("file.xml"), FileUtils.resolveFile("","file.xml"));
-            assertEquals(new File("file.xml"), FileUtils.resolveFile((String) null,"file.xml"));
+            assertEquals(new File("/dir/file.xml"), FileUtils.resolve("/dir","file.xml"));
+            assertEquals(new File("/dir/file.xml"), FileUtils.resolve("/dir","file.xml#topicid"));
+            assertEquals(new File("/file.xml"), FileUtils.resolve("/dir","../file.xml"));
+            assertEquals(new File("file.xml"), FileUtils.resolve("","file.xml"));
+            assertEquals(new File("file.xml"), FileUtils.resolve((String) null,"file.xml"));
         }
     }
 
     @Test
     public void testNormalizeDirectory() {
         if (File.separator.equals(SEPARATOR_WINDOWS)) {
-            assertEquals(new File("c:\\dir1\\dir2\\file.xml"),FileUtils.normalizeDirectory("c:\\dir1", "dir2\\file.xml"));
-            assertEquals(new File("c:\\dir1\\file.xml"),FileUtils.normalizeDirectory("c:\\dir1\\dir2", "..\\file.xml"));
-            assertEquals(new File("\\file.xml"),FileUtils.normalizeDirectory("", "\\file.xml#topicid"));
-            assertEquals(new File("c:\\file.xml"),FileUtils.normalizeDirectory("", "c:\\file.xml"));
-            assertEquals(new File("c:\\file.xml"),FileUtils.normalizeDirectory((String) null, "c:\\file.xml#topicid"));
+            assertEquals(new File("c:\\dir1\\dir2\\file.xml"),FileUtils.resolve("c:\\dir1", "dir2\\file.xml"));
+            assertEquals(new File("c:\\dir1\\file.xml"),FileUtils.resolve("c:\\dir1\\dir2", "..\\file.xml"));
+            assertEquals(new File("\\file.xml"),FileUtils.resolve("", "\\file.xml#topicid"));
+            assertEquals(new File("c:\\file.xml"),FileUtils.resolve("", "c:\\file.xml"));
+            assertEquals(new File("c:\\file.xml"),FileUtils.resolve((String) null, "c:\\file.xml#topicid"));
         } else {
-            assertEquals(new File("/dir1/dir2/file.xml"),FileUtils.normalizeDirectory("/dir1", "dir2/file.xml"));
-            assertEquals(new File("/dir1/file.xml"),FileUtils.normalizeDirectory("/dir1/dir2", "../file.xml"));
-            assertEquals(new File("/file.xml"),FileUtils.normalizeDirectory("", "/file.xml#topicid"));
-            assertEquals(new File("/file.xml"),FileUtils.normalizeDirectory("", "/file.xml"));
-            assertEquals(new File("/file.xml"),FileUtils.normalizeDirectory((String) null, "/file.xml#topicid"));
+            assertEquals(new File("/dir1/dir2/file.xml"),FileUtils.resolve("/dir1", "dir2/file.xml"));
+            assertEquals(new File("/dir1/file.xml"),FileUtils.resolve("/dir1/dir2", "../file.xml"));
+            assertEquals(new File("/file.xml"),FileUtils.resolve("", "/file.xml#topicid"));
+            assertEquals(new File("/file.xml"),FileUtils.resolve("", "/file.xml"));
+            assertEquals(new File("/file.xml"),FileUtils.resolve((String) null, "/file.xml#topicid"));
+            assertEquals(new File("file.xml"), FileUtils.resolve("","file.xml"));
+            assertEquals(new File("file.xml"), FileUtils.resolve((String) null,"file.xml"));
         }
     }
 
@@ -310,11 +281,15 @@ public class TestFileUtils {
     }
 
     @Test
-    public void testFileExists() {
-        assertTrue(FileUtils.fileExists(new File(srcDir, "ibmrnr.txt").getPath()));
-        assertTrue(FileUtils.fileExists(new File(srcDir, "ibmrnr.txt#topicid").getPath()));
-        assertFalse(FileUtils.fileExists(new File(srcDir, "ibmrnr").getPath()));
+    public void testGetBaseName() {
+        assertNull(FileUtils.getBaseName(null));
+        assertEquals("c", FileUtils.getBaseName("a/b/c.txt"));
+        assertEquals("a", FileUtils.getBaseName("a.txt"));
+        assertEquals("a", FileUtils.getBaseName("a"));
+        assertEquals("c", FileUtils.getBaseName("a/b/c"));
+        assertEquals("", FileUtils.getBaseName("a/b/c/"));
     }
+
     
     @Test
     public void testDeriveFilename() {

@@ -15,13 +15,12 @@
    <topicref href="ant-parameters-html-help-transformation.dita" navtitle="HTML Help transformation"
     platform="windows"/>
    <topicref href="ant-parameters-javahelp-transformation.dita" navtitle="JavaHelp transformation"/>
-   <topicref href="ant-parameters-legacypdf-transformation.dita"
-    navtitle="Legacy PDF transformation"/>
    <topicref href="ant-parameters-odt-transformation.dita" navtitle="ODT transformation"/>
    <topicref href="ant-parameters-other.dita" navtitle="Other"/>
    <topicref href="ant-parameters-pdf2-transformation.dita" navtitle="PDF2 transformation"/>
    <topicref href="ant-parameters-xhtml-transformation.dita" navtitle="XHTML transformation"/>
   </topicref>
+  <topicref href="dita-command-properties.dita" navtitle="Dita command options and parameters" product="client"/>
   <topicref href="dita-ot_java_properties.dita" navtitle="Command-line tool parameters">
    <topicref href="tool-parameters-all-transformation.dita" navtitle="All transformations"/>
    <topicref href="tool-parameters-common-html-transformation.dita"

@@ -273,7 +273,7 @@ public class XMLSerializer {
             throw new IllegalStateException("Current state does not allow Character writing");
         }
         processStartElement();
-        transformer.characters(ch, 0, ch.length);
+        transformer.characters(ch, start, length);
     }
 
     /**
@@ -319,7 +319,7 @@ public class XMLSerializer {
     }
 
     private void addNamespace(final String uri, final String prefix, final QName current) {
-        if (uri.equals(NULL_NS_URI) && !prefix.equals(DEFAULT_NS_PREFIX)) {
+        if (uri != null && uri.equals(NULL_NS_URI) && !prefix.equals(DEFAULT_NS_PREFIX)) {
             throw new IllegalArgumentException("Undeclaring prefix " + prefix + " not allowed");
         }
         if (uri != null) {

@@ -68,7 +68,7 @@ public class MapMetaReaderTest {
         XMLUnit.setIgnoreComments(true);
 
         assertXMLEqual(db.parse(new File(expDir, "test.ditamap")),
-                db.parse(new File(tempDir, "test.ditamap.temp")));
+                db.parse(new File(tempDir, "test.ditamap")));
     }
 
     @AfterClass

@@ -11,8 +11,6 @@
   <extension-point id="dita.conductor.plugin" name="Ant conductor plug-in information"/>
   <extension-point id="dita.catalog.plugin-info" name="Plug-in XML catalog information"/>
   <extension-point id="dita.image.extensions" name="Image file extension"/>
-  <extension-point id="dita.topic.extensions" name="DITA topic file extension"/>
-  <extension-point id="dita.map.extensions" name="DITA map file extension"/>
   <extension-point id="dita.html.extensions" name="HTML file extension"/>
   <extension-point id="dita.resource.extensions" name="Resource file extension"/>
   <extension-point id="dita.conductor.transtype.check" name="Transtype check"/>
@@ -71,9 +69,6 @@
   <feature extension="dita.image.extensions" value=".tif"/>
   <feature extension="dita.image.extensions" value=".tiff"/>
   <feature extension="dita.image.extensions" value=".bmp"/>
-  <feature extension="dita.topic.extensions" value=".dita"/>
-  <feature extension="dita.topic.extensions" value=".xml"/>
-  <feature extension="dita.map.extensions" value=".ditamap"/>
   <feature extension="dita.html.extensions" value=".html"/>
   <feature extension="dita.html.extensions" value=".htm"/>
   <feature extension="dita.resource.extensions" value=".pdf"/>
@@ -85,6 +80,7 @@
   <template file="build_preprocess_template.xml"/>
   <template file="../../resource/messages_template.xml"/>
   <template file="../../xsl/common/allstrings_template.xml"/>
+  <template file="../../xsl/common/strings_template.xml"/>
   <template file="../../xsl/preprocess/maplink_template.xsl"/>
   <template file="../../xsl/preprocess/mapref_template.xsl"/>
   <template file="../../xsl/preprocess/mappull_template.xsl"/>

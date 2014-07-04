@@ -18,29 +18,7 @@ import org.dita.dost.util.XMLGrammarPoolImplUtils;
  */
 public final class GrammarPoolManager {
 
-    //flag whether use grammar caching.
-    private static boolean gramCache;
-
-    public static XMLGrammarPool initializeGrammarPool() {
-        XMLGrammarPool pool = null;
-        try {
-            pool = new XMLGrammarPoolImplUtils(gramCache);
-            //set grammar caching flag
-
-        }
-        catch (final Exception e) {
-            System.out.println("Failed to create Xerces grammar pool for caching DTDs and schemas");
-        }
-        grammarPool.set(pool);
-        return pool;
-    }
-
-    private static ThreadLocal<XMLGrammarPool> grammarPool = new ThreadLocal<XMLGrammarPool>() {
-
-
-    };
-
-
+    private static final ThreadLocal<XMLGrammarPool> grammarPool = new ThreadLocal<XMLGrammarPool>();
 
     /**
      * Get grammar pool
@@ -50,13 +28,14 @@ public final class GrammarPoolManager {
     public static XMLGrammarPool getGrammarPool() {
         XMLGrammarPool pool = grammarPool.get();
         if (pool == null) {
-            pool = initializeGrammarPool();
+            try {
+                pool = new XMLGrammarPoolImplUtils();
+                grammarPool.set(pool);
+            } catch (final Exception e) {
+                System.out.println("Failed to create Xerces grammar pool for caching DTDs and schemas");
+            }
         }
         return pool;
-    }
-
-    public static void setGramCache(final boolean gramCache) {
-        GrammarPoolManager.gramCache = gramCache;
     }
 
 }

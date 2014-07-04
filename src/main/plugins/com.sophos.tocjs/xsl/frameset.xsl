@@ -21,7 +21,11 @@
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
-  <xsl:output encoding="UTF-8"/>
+  <xsl:output method="html"
+              encoding="UTF-8"
+              indent="no"
+              doctype-system="about:legacy-compat"
+              omit-xml-declaration="yes"/>  
 
   <xsl:param name="CSSPATH"/>
   <xsl:param name="OUTEXT" select="'.html'"/>

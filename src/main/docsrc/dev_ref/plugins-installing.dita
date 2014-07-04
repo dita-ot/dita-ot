@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="plugins-installing" xml:lang="en">
-  <title>Installing plug-ins</title>
+  <title>Manually installing plug-ins</title>
   <shortdesc>Plug-ins are generally distributed as zip files. There are two steps to installing a
     plug-in: unzipping and integrating.</shortdesc>
   <taskbody>

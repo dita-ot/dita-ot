@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
+<messages>
+  <message id="DOTX048I" type="INFO">
+    <reason>In order to include peer or external topic '%1' in your help file, you may need to recompile the CHM file after making the file available.</reason>
+    <response></response>
+  </message>
+</messages>
