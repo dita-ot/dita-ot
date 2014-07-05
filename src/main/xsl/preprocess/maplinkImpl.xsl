@@ -62,7 +62,7 @@
   
   <!-- Match a topicref. Create all of the hierarchy links associated with the topicref. -->
   <xsl:template 
-    match="*[@href and not(@href='')][not(@linking='none' or @linking='targetonly' or @scope='external' or @scope='peer' or @type='external')][not(@format) or @format='dita' or @format='DITA']">
+    match="*[@href and not(@href='')][not(@linking='none' or @linking='targetonly' or @scope='external' or @scope='peer' or @type='external')][not(@format) or @format='dita']">
     <!-- Href that points from this map to the topic this href references. -->
     <xsl:param name="pathFromMaplist"/>
     <xsl:variable name="use-href">
@@ -636,7 +636,7 @@
             The target of the HREF is a local DITA file
             The user has not specified locktitle to override the title -->
           <xsl:if 
-            test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and (not(@scope) or @scope='local') and (not(@format) or @format='dita' or @format='DITA') and (not(@locktitle) or @locktitle='no'))">
+            test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and (not(@scope) or @scope='local') and (not(@format) or @format='dita') and (not(@locktitle) or @locktitle='no'))">
             <linktext class="- topic/linktext ">
               <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']"/>
               <xsl:copy-of

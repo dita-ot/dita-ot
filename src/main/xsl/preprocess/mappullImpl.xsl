@@ -483,7 +483,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:when test="$type='#none#'">
         <xsl:choose>
           <xsl:when test="@href=''"/>
-          <xsl:when test="$scope='external' or $scope='peer' or $type='external' or not($format='#none#' or $format='dita' or $format='DITA')">
+          <xsl:when test="$scope='external' or $scope='peer' or not($format='#none#' or $format='dita')">
             <!-- do nothing - type is unavailable-->
           </xsl:when>
 
@@ -524,7 +524,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         </xsl:choose>
       </xsl:when>
       <!-- Type is set locally for a dita topic; warn if it is not correct. -->
-      <xsl:when test="$scope!='external' and $scope!='peer' and ($format='#none#' or $format='dita' or $format='DITA')">
+      <xsl:when test="$scope!='external' and $scope!='peer' and ($format='#none#' or $format='dita')">
         <xsl:variable name="target" select="$doc//*[@id=$topicid]"/>
         <xsl:if test="$topicid!='#none#' and not($target[contains(@class, ' topic/topic ')])">
           <!-- topicid does not point to a valid topic -->
@@ -570,7 +570,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <!--if it's external and not dita, use the href as fallback-->
       <xsl:when
-        test="($scope='external' and not($format='dita' or $format='DITA')) or $type='external'">
+        test="$scope='external' and not($format='dita')">
         <xsl:choose>
           <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
             <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
@@ -619,7 +619,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <!-- skip resource-only image files -->
       <xsl:when test="not($format = 'dita' or $format = '#none#') and 
         ancestor-or-self::*[@processing-role][1][@processing-role = 'resource-only']"/>
-      <xsl:when test="not($format='#none#' or $format='dita' or $format='DITA')">
+      <xsl:when test="not($format='#none#' or $format='dita')">
         <xsl:apply-templates select="." mode="mappull:get-navtitle-for-non-dita"/>
       </xsl:when>
       <xsl:when test="@href=''"/>
@@ -861,7 +861,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <xsl:variable name="linktext">
           <xsl:choose>
             <!--if it's external and not dita, use the href as fallback-->
-            <xsl:when test="($scope='external' and not($format='dita' or $format='DITA')) or $type='external'">
+            <xsl:when test="$scope='external' and not($format='dita')">
               <xsl:apply-templates select="." mode="mappull:get-linktext_external-and-non-dita"/>
             </xsl:when>
             <!--if it's external and dita, leave empty as fallback, so that the final output process can handle file extension-->
@@ -874,7 +874,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <!-- skip resource-only image files -->
             <xsl:when test="not($format = 'dita' or $format = '#none#') and 
               ancestor-or-self::*[@processing-role][1][@processing-role = 'resource-only']"/>
-            <xsl:when test="not($format='#none#' or $format='dita' or $format='DITA')">
+            <xsl:when test="not($format='#none#' or $format='dita')">
               <xsl:apply-templates select="." mode="mappull:get-linktext-for-non-dita"/>
             </xsl:when>
             <xsl:when test="@href=''">#none#</xsl:when>
@@ -977,7 +977,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
       </xsl:when>
       <xsl:when
-        test="$scope='external' or $scope='peer' or $type='external' or not($format='#none#' or $format='dita' or $format='DITA')">
+        test="$scope='external' or $scope='peer' or not($format='#none#' or $format='dita')">
         <!-- do nothing - shortdesc is unavailable-->
       </xsl:when>
       <!--try retrieving from a particular topic in another file-->
@@ -1139,7 +1139,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         </xsl:copy>
       </xsl:when>
       <xsl:when
-        test="@format and not(@format='dita' or @format='DITA')">
+        test="@format and not(@format='dita')">
         <xsl:copy>
           <xsl:apply-templates select="@*|text()|*|comment()|processing-instruction()"
             mode="copy-shortdesc" />

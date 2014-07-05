@@ -122,7 +122,7 @@
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="@format='dita' or @format='DITA'">
+    <xsl:when test="@format='dita'">
       <xsl:call-template name="output-toc-entry">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>

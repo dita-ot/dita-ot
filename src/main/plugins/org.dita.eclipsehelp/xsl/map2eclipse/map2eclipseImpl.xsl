@@ -108,7 +108,7 @@
 <!-- Format @href for the title attribute on the map element -->
 <xsl:template match="*" mode="format-href">
   <xsl:choose>
-    <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
+    <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
     <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
     <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
       <xsl:value-of select="$work.dir"/>
@@ -200,7 +200,7 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:choose>
-                <xsl:when test="@type='external' or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
+                <xsl:when test="@type='external' or not(not(@format) or @format='dita')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                 <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
                 <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
                   <xsl:call-template name="replace-extension">
@@ -231,7 +231,7 @@
         <xsl:if test="@href and not(@href='')">
                   <xsl:attribute name="href">
                     <xsl:choose>
-                      <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
+                      <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                       <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
                       <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
                         <xsl:value-of select="$work.dir"/>
