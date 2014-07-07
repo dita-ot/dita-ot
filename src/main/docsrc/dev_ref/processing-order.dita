@@ -33,6 +33,6 @@ follows:<codeblock>&lt;note id="note" product="SomeOtherProduct">This is an impo
 conref before that conref is ever evaluated, which will result in a broken reference. Evaluating
 conref first would resolve the reference, apply product="MyProd", and not filter out the
 target of the conref. While some use cases can be found where this is the desired behavior, benefits
-such as those described above resulted in the current processing order used by the DITA-OT..</p></section>
+such as those described above resulted in the current processing order used by the DITA-OT.</p></section>
 </conbody>
 </concept>
