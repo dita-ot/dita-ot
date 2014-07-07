@@ -26,7 +26,7 @@ kept back from translation, preventing accidental translation and increased cost
 </ul></p>
 <p>If the order of these two steps is reversed, so that conref is evaluated first, it is possible
 that results will differ. For example, in the code sample above, the @product attribute will
-override the product setting on the referencing note. Assume that the &lt;note> elements in
+override the product setting on the referenced note. Assume that the &lt;note> elements in
 documentA is defined as
 follows:<codeblock>&lt;note id="note" product="SomeOtherProduct">This is an important note!&lt;/note></codeblock></p>
 <p>A process that filters out product="SomeOtherProduct" will remove the target of the original
