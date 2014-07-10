@@ -29,7 +29,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -70,7 +70,7 @@ public final class DitaValReader extends AbstractXMLReader {
         relFlagImageList= new ArrayList<File>(256);
 
         try {
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;

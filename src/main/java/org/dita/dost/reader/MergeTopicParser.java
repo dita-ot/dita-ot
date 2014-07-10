@@ -21,7 +21,6 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.MergeUtils;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
@@ -58,7 +57,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     public MergeTopicParser(final MergeUtils util) {
         this.util = util;
         try {
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
         } catch (final Exception e) {

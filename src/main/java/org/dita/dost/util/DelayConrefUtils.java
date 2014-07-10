@@ -24,8 +24,6 @@ import java.util.Queue;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -79,9 +77,7 @@ public final class DelayConrefUtils {
         }
         try {
             //load the file
-            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            //factory.setFeature("http://xml.org/sax/features/validation", false);
-            final DocumentBuilder builder = factory.newDocumentBuilder();
+            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setEntityResolver(CatalogUtils.getCatalogResolver());
             final Document root = builder.parse(new InputSource(new FileInputStream(absolutePathToFile)));
 
@@ -131,9 +127,7 @@ public final class DelayConrefUtils {
         try {
             //load export.xml only once
             if(root==null){
-                final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                //factory.setFeature("http://xml.org/sax/features/validation", false);
-                final DocumentBuilder builder = factory.newDocumentBuilder();
+                final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
                 builder.setEntityResolver(CatalogUtils.getCatalogResolver());
                 root = builder.parse(new InputSource(new FileInputStream(exportFile)));
             }
@@ -234,13 +228,7 @@ public final class DelayConrefUtils {
         }
         //File outputFile = new File(tempDir, filename);
 
-        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = null;
-        try {
-            db = dbf.newDocumentBuilder();
-        } catch (final ParserConfigurationException pce) {
-            assert (false);
-        }
+        final DocumentBuilder db = XMLUtils.getDocumentBuilder();
         final Document doc = db.newDocument();
         final Element properties = (Element) doc.appendChild(doc
                 .createElement("properties"));

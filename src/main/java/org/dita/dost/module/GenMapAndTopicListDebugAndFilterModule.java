@@ -54,17 +54,9 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.reader.KeydefFilter;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.DelayConrefUtils;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.Job;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.URLUtils;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.DitaWriter;
 import org.dita.dost.writer.ExportAnchorsFilter;
@@ -318,7 +310,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      * @throws IOException if getting canonical file path fails
      */
     private void initXMLReader(final File ditaDir, final boolean validate, final URI rootFile) throws SAXException {
-        reader = StringUtils.getXMLReader();
+        reader = XMLUtils.getXMLReader();
         // to check whether the current parsing file's href value is out of inputmap.dir
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
         if (validate) {
@@ -1262,8 +1254,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
 //        }
 //
 //        try {
-//            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//            final DocumentBuilder builder = factory.newDocumentBuilder();
+//            final DocumentBuilder builder = StringUtils.getDocumentBuilder();
 //            builder.setEntityResolver(CatalogUtils.getCatalogResolver());
 //
 //            while (!queue.isEmpty()) {
@@ -1480,7 +1471,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         final File workdir = target.getParentFile();
         try {
             final Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            final XMLFilter filter = new CopyToFilter(StringUtils.getXMLReader(), workdir, path2project);
+            final XMLFilter filter = new CopyToFilter(XMLUtils.getXMLReader(), workdir, path2project);
             serializer.transform(
                     new SAXSource(filter, new InputSource(src.toURI().toString())),
                     new StreamResult(target));

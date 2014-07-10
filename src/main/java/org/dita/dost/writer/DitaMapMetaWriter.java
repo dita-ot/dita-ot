@@ -31,14 +31,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -140,7 +138,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         startMap = false;
 
         try {
-            reader = StringUtils.getXMLReader();
+            reader = getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -210,15 +208,14 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     }
 
     private void processDOM() {
-        try{
-            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder builder = factory.newDocumentBuilder();
+        try {
+            final DocumentBuilder builder = getDocumentBuilder();
             Document doc;
 
-            if (strOutput.getBuffer().length() > 0){
+            if (strOutput.getBuffer().length() > 0) {
                 builder.setErrorHandler(new DITAOTXMLErrorHandler(strOutput.toString(), logger));
                 doc = builder.parse(new InputSource(new StringReader(strOutput.toString())));
-            }else {
+            } else {
                 doc = builder.newDocument();
                 doc.appendChild(doc.createElement(MAP_MAP.localName));
             }
@@ -229,7 +226,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
                 moveMeta(entry, root);
             }
             outputMeta(root);
-        } catch (final Exception e){
+        } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
         hasWritten = true;
@@ -538,7 +535,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         output.write(LESS_THAN + qName);
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
-            final String attValue = StringUtils.escapeXML(atts.getValue(i));
+            final String attValue = escapeXML(atts.getValue(i));
             output.write(STRING_BLANK + attQName + EQUAL + QUOTATION + attValue + QUOTATION);
         }
         output.write(GREATER_THAN);
@@ -549,7 +546,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
     }
     
     private void writeCharacters(final char[] ch, final int start, final int length) throws IOException {
-        output.write(StringUtils.escapeXML(ch, start, length));
+        output.write(escapeXML(ch, start, length));
     }
 
     private void writeProcessingInstruction(final String target, final String data) throws IOException {

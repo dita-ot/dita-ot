@@ -18,8 +18,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -28,7 +26,7 @@ import javax.xml.transform.dom.DOMResult;
 
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
@@ -135,7 +133,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
     public ConrefPushReader() {
         pushtable = new Hashtable<File, Hashtable<MoveKey,DocumentFragment>>();
         try{
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             reader.setFeature(FEATURE_NAMESPACE, true);
             reader.setContentHandler(this);
@@ -143,12 +141,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
 
-        DocumentBuilder documentBuilder;
-        try {
-            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-        }
+        final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
         pushDocument = documentBuilder.newDocument();
     }
 

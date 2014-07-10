@@ -6,11 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.Templates;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -21,7 +17,8 @@ import org.apache.tools.ant.util.FileUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -64,7 +61,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         }
         XMLReader parser;
 		try {
-			parser = StringUtils.getXMLReader();
+			parser = XMLUtils.getXMLReader();
 		} catch (final SAXException e) {
 			throw new RuntimeException("Failed to create XML reader: " + e.getMessage(), e);
 		}
@@ -76,6 +73,9 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 logger.info("Loading stylesheet " + style.getAbsolutePath());
 	            try {
 	                t = templates.newTransformer();
+                    if (Configuration.DEBUG) {
+                        t.setURIResolver(new XMLUtils.DebugURIResolver(xmlcatalog));
+                    }
 	            } catch (final TransformerConfigurationException e) {
 	                throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
 	            }

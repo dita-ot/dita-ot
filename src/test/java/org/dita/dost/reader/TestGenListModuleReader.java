@@ -13,30 +13,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.dita.dost.util.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.reader.GenListModuleReader.Reference;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.StringUtils;
 
 /**
  * @author william
@@ -133,7 +125,7 @@ public class TestGenListModuleReader {
     }
     
     private static void initXMLReader(final File ditaDir, final boolean validate, final File rootFile) throws SAXException, IOException {
-        parser = StringUtils.getXMLReader();
+        parser = XMLUtils.getXMLReader();
         // to check whether the current parsing file's href value is out of inputmap.dir
 //        reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
         if (validate == true) {

@@ -161,7 +161,7 @@ public final class Job {
         if (jobFile.exists()) {
         	InputStream in = null;
             try {
-                final XMLReader parser = StringUtils.getXMLReader();
+                final XMLReader parser = XMLUtils.getXMLReader();
                 parser.setContentHandler(new JobHandler(prop, files));
                 in = new FileInputStream(jobFile);
                 parser.parse(new InputSource(in));

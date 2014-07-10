@@ -82,7 +82,7 @@ public class KeyDef {
     public static Collection<KeyDef> readKeydef(final File keydefFile) throws DITAOTException {
         final Collection<KeyDef> res = new ArrayList<KeyDef>();
         try {
-            final XMLReader parser = StringUtils.getXMLReader();
+            final XMLReader parser = XMLUtils.getXMLReader();
             parser.setContentHandler(new DefaultHandler() {
                 @Override
                 public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {

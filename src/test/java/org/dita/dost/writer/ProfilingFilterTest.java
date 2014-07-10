@@ -1,35 +1,26 @@
 package org.dita.dost.writer;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamSource;
 
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.XMLFilterImpl;
 
 public class ProfilingFilterTest {
 
@@ -59,7 +50,7 @@ public class ProfilingFilterTest {
 		final Transformer t = TransformerFactory.newInstance().newTransformer();
 		final InputStream src = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/src/" + srcFile);
 		final ProfilingFilter f = new ProfilingFilter();
-		f.setParent(StringUtils.getXMLReader());
+		f.setParent(XMLUtils.getXMLReader());
 		filterUtils.setLogger(new TestUtils.TestLogger());
 		f.setFilterUtils(filterUtils);
 		f.setLogger(new TestUtils.TestLogger());

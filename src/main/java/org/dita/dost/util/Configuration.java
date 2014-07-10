@@ -30,7 +30,9 @@ import org.dita.dost.platform.Integrator;
  */
 public final class Configuration {
 
-    private static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    public static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    /** Debug mode to aid in development, not intended for end users. */
+    public static final boolean DEBUG = false;
 
     /**
      * Immutable configuration properties.

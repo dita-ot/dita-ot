@@ -15,9 +15,7 @@ import static org.dita.dost.util.URLUtils.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.util.Stack;
 
 import javax.xml.transform.TransformerFactory;
@@ -35,7 +33,6 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.MergeUtils;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 
 import org.xml.sax.Attributes;
@@ -77,7 +74,7 @@ public final class MergeMapParser extends XMLFilterImpl {
         topicParser = new MergeTopicParser(util);
         topicBuffer = new ByteArrayOutputStream();
         try{
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             

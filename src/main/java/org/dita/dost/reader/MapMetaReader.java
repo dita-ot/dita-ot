@@ -25,15 +25,13 @@ import java.util.Set;
 
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractDomFilter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Cascade map metadata to child topic references.
@@ -122,11 +120,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     public MapMetaReader() {
         super();
         globalMeta = new Hashtable<String, Element>(16);
-        try {
-            resultDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-        } catch (final ParserConfigurationException e) {
-            throw new RuntimeException("Failed to create result document: " + e.getMessage(), e);
-        }
+        resultDoc = XMLUtils.getDocumentBuilder().newDocument();
         resultTable.clear();
     }
     /**

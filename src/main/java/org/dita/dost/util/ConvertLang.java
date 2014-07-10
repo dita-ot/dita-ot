@@ -28,7 +28,6 @@ import java.util.Properties;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -142,8 +141,7 @@ public final class ConvertLang extends Task {
         InputStream in = null;
         try {
             in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/util/codepages.xml");
-            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder builder = factory.newDocumentBuilder();
+            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             final Document doc = builder.parse(in);
             final Element root = doc.getDocumentElement();
             final NodeList childNodes = root.getChildNodes();

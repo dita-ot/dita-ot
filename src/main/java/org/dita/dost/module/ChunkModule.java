@@ -24,8 +24,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -103,13 +101,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     }
     
     private boolean isEclipseMap(final File mapFile) throws DITAOTException {
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-        try {
-            builder = factory.newDocumentBuilder();
-        } catch (final ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        }
+        final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
         Document doc;
         try {
             doc = builder.parse(mapFile);

@@ -8,7 +8,6 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
@@ -140,7 +139,7 @@ public final class MergeUtils {
         final StringBuffer firstTopicId = new StringBuffer();
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
         try {
-            final XMLReader reader = StringUtils.getXMLReader();
+            final XMLReader reader = XMLUtils.getXMLReader();
             reader.setContentHandler(parser);
             if (useCatalog) {
                 reader.setEntityResolver(CatalogUtils.getCatalogResolver());

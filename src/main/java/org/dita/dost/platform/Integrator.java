@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.SAXException;
 
 import org.xml.sax.ErrorHandler;
@@ -480,7 +481,7 @@ public final class Integrator {
         featureTable = new Hashtable<String, List<String>>(16);
         extensionPoints = new HashSet<String>();
         try {
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }

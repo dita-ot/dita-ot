@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -73,7 +72,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         hasWritten = false;
 
         try {
-            reader = StringUtils.getXMLReader();
+            reader = getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -348,7 +347,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         output.write(LESS_THAN + qName);
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
-            final String attValue = StringUtils.escapeXML(atts.getValue(i));
+            final String attValue = escapeXML(atts.getValue(i));
             output.write(STRING_BLANK + attQName + EQUAL + QUOTATION + attValue + QUOTATION);
         }
         output.write(GREATER_THAN);
@@ -359,7 +358,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     }
     
     private void writeCharacters(final char[] ch, final int start, final int length) throws IOException {
-        output.write(StringUtils.escapeXML(ch, start, length));
+        output.write(escapeXML(ch, start, length));
     }
 
     private void writeProcessingInstruction(final String target, final String data) throws IOException {

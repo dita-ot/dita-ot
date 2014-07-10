@@ -198,7 +198,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     public void initXMLReader(final File ditaDir, final boolean validate, final boolean arg_setSystemid, final boolean gramcache) throws SAXException {
         CatalogUtils.setDitaDir(ditaDir);
         try {
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             if(validate){
                 reader.setFeature(FEATURE_VALIDATION, true);
                 try {

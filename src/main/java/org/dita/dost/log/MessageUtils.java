@@ -15,9 +15,9 @@ import java.io.InputStream;
 import java.util.Hashtable;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -104,9 +104,7 @@ public final class MessageUtils {
     	synchronized (hashTable) {
     		hashTable.clear();
 	        try {
-	            final DocumentBuilderFactory factory = DocumentBuilderFactory
-	                    .newInstance();
-	            final DocumentBuilder builder = factory.newDocumentBuilder();
+	            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
 	            final Document doc = builder.parse(in);
 	
 	            final Element messages = doc.getDocumentElement();

@@ -8,7 +8,6 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,16 +15,14 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 /**
  * Subject scheme reader.
@@ -106,8 +103,7 @@ public class SubjectSchemeReader {
         logger.debug("Load subject scheme " + scheme);
 
         try {
-            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder builder = factory.newDocumentBuilder();
+            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             final Document doc = builder.parse(scheme);
             final Element schemeRoot = doc.getDocumentElement();
             if (schemeRoot == null) {

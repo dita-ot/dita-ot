@@ -36,8 +36,6 @@ import java.util.Set;
 import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
@@ -146,7 +144,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         copytoSource = new HashSet<String>();
         copytotarget2source = new HashMap<File, File>();
         try {
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -159,11 +157,13 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         this.job = job;
     }
 
+    // Filter methods
+
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
         if (include) {
             try {
-                output.write(StringUtils.escapeXML(ch, start, length));
+                output.write(XMLUtils.escapeXML(ch, start, length));
             } catch (final Exception e) {
                 logger.error(e.getMessage(), e);
             }
@@ -350,14 +350,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                         } else {
                             stub.getParentNode().insertBefore(newChild, stub);
                         }
-                        // <element>
-                        // <newchild/>
-                        // <stub/>
-                        // <stub/>
-                        // ...
-                        // </element>
-                        // <siblingstub/>
-                        // ...
                         stubStack.push(stub);
                         stub = (Element) stub.cloneNode(false);
                         newChild.appendChild(stub);
@@ -370,9 +362,6 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
                     include = false;
                     skipLevel = 1;
                     skip = true;
-                    // Fix: no need to close the tag, just skip the nested
-                    // topic.
-                    // output.write("</"+qName+">");
                 } else if (include) {
                     // if select method is "select-document" or "select-branch"
                     // and current topic is the nested topic in target topic.
@@ -512,7 +501,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
         output.write(name);
         output.write(EQUAL);
         output.write(QUOTATION);
-        output.write(StringUtils.escapeXML(value));
+        output.write(XMLUtils.escapeXML(value));
         output.write(QUOTATION);
     }
 
@@ -1217,7 +1206,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
 
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
         try {
-            final XMLReader reader = StringUtils.getXMLReader();
+            final XMLReader reader = XMLUtils.getXMLReader();
             reader.setContentHandler(parser);
             reader.parse(new File(absolutePathToFile).toURI().toString());
         } catch (final Exception e) {
@@ -1425,14 +1414,10 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      * @return element.
      */
     private Element getTopicDoc(final String absolutePathToFile){
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
+        final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
         try {
-            builder = factory.newDocumentBuilder();
             final Document doc = builder.parse(absolutePathToFile);
             return doc.getDocumentElement();
-        } catch (final ParserConfigurationException e) {
-            e.printStackTrace();
         } catch (final SAXException e) {
             e.printStackTrace();
         } catch (final IOException e) {

@@ -118,4 +118,23 @@ public class XMLUtilsTest {
         assertEquals(3, aaa.getLength());
     }
 
+
+    @Test
+    public void testEscapeXMLString() {
+        String result = null;
+        final String input = "<this is test of char update for xml href=\" see link: http://www.ibm.com/download.php?abc=123&def=456\">'test' </test>";
+        final String expected = "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
+        result = XMLUtils.escapeXML(input);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testEscapeXMLCharArrayIntInt() {
+        String result = null;
+        final char[] input = "<this is test of char update for xml href=\" see link: http://www.ibm.com/download.php?abc=123&def=456\">'test' </test>".toCharArray();
+        final String expected = "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
+        result = XMLUtils.escapeXML(input, 0, input.length);
+        assertEquals(expected, result);
+    }
+
 }

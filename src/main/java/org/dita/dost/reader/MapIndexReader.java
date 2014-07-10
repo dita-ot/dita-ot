@@ -22,6 +22,7 @@ import java.util.Map;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -69,7 +70,7 @@ public final class MapIndexReader extends AbstractXMLReader {
         topicPath = null;
 
         try {
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
         } catch (final Exception e) {
@@ -83,7 +84,7 @@ public final class MapIndexReader extends AbstractXMLReader {
             throws SAXException {
 
         if (match && validHref) {
-            indexEntries.append(StringUtils.escapeXML(new String(ch, start, length)));
+            indexEntries.append(XMLUtils.escapeXML(new String(ch, start, length)));
         }
     }
 
@@ -243,7 +244,7 @@ public final class MapIndexReader extends AbstractXMLReader {
                     indexEntries.append(atts.getQName(i));
                     indexEntries.append(EQUAL);
                     indexEntries.append(QUOTATION);
-                    indexEntries.append(StringUtils.escapeXML(atts.getValue(i)));
+                    indexEntries.append(XMLUtils.escapeXML(atts.getValue(i)));
                     indexEntries.append(QUOTATION);
                 }
 

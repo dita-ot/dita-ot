@@ -24,6 +24,7 @@ import java.util.Set;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -102,7 +103,7 @@ public final class MapLinksReader extends AbstractXMLReader {
         inputFile = null;
 
         try {
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature("http://xml.org/sax/features/namespaces", false);
@@ -117,7 +118,7 @@ public final class MapLinksReader extends AbstractXMLReader {
             throws SAXException {
 
         if (match && validHref) {
-            indexEntries.append(StringUtils.escapeXML(new String(ch, start, length)));
+            indexEntries.append(XMLUtils.escapeXML(new String(ch, start, length)));
         }
     }
 
@@ -309,7 +310,7 @@ public final class MapLinksReader extends AbstractXMLReader {
                     indexEntries.append(atts.getQName(i));
                     indexEntries.append(EQUAL);
                     indexEntries.append(QUOTATION);
-                    indexEntries.append(StringUtils.escapeXML(atts.getValue(i)));
+                    indexEntries.append(XMLUtils.escapeXML(atts.getValue(i)));
                     indexEntries.append(QUOTATION);
                 }
 
@@ -328,7 +329,7 @@ public final class MapLinksReader extends AbstractXMLReader {
                          .append(target);
             if (data != null) {
                 indexEntries.append(STRING_BLANK)
-                            .append(StringUtils.escapeXML(data));
+                            .append(XMLUtils.escapeXML(data));
             }
             indexEntries.append(QUESTION)
                          .append(GREATER_THAN);

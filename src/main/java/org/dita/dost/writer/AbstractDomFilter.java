@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -14,6 +13,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.reader.AbstractReader;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
 /**
@@ -27,7 +27,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
     public void read(final File filename) {
         Document doc = null;
         try {
-            final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
             doc = builder.parse(filename);
         } catch (final Exception e) {

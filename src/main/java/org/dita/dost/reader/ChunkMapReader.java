@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Transformer;
@@ -36,6 +34,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ChunkTopicParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -108,10 +107,10 @@ public final class ChunkMapReader implements AbstractReader {
     public void read(final File inputFile) {
         this.inputFile = inputFile;
         filePath = inputFile.getParentFile();
-        
-        Document doc = null;
+
+        final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
+        Document doc;
         try {
-            final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             doc = builder.parse(inputFile);
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
@@ -277,13 +276,7 @@ public final class ChunkMapReader implements AbstractReader {
     }
 
     private Document buildOutputDocument(final Element root) {
-        Document doc = null;
-        try {
-            doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-        } catch (final ParserConfigurationException e) {
-            throw new RuntimeException("Failed to create empty document: " + e.getMessage(), e);
-        }
-        
+        final Document doc = XMLUtils.getDocumentBuilder().newDocument();
         if (workdir != null) {
             doc.appendChild(doc.importNode(workdir, true));
         }

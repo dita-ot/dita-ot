@@ -11,27 +11,15 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
+import org.dita.dost.util.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.TestUtils;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.reader.GenListModuleReader.Reference;
-import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.StringUtils;
 
 public class KeydefFilterTest {
 
@@ -57,7 +45,7 @@ public class KeydefFilterTest {
         
         reader.setContentHandler(new DefaultHandler());
         
-        parser = StringUtils.getXMLReader();
+        parser = XMLUtils.getXMLReader();
         CatalogUtils.setDitaDir(ditaDir);
         parser.setEntityResolver(CatalogUtils.getCatalogResolver());
         parser.setContentHandler(reader);
