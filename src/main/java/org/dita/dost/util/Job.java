@@ -119,6 +119,7 @@ public final class Job {
     
     private final Map<String, Object> prop;
     public final File tempDir;
+    private final File jobFile;
     private final ConcurrentMap<URI, FileInfo> files = new ConcurrentHashMap<URI, FileInfo>();
     private long lastModified;
     
@@ -134,6 +135,7 @@ public final class Job {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
         this.tempDir = tempDir;
+        jobFile = new File(tempDir, JOB_FILE);
         prop = new HashMap<String, Object>();
         read();
     }
@@ -144,7 +146,6 @@ public final class Job {
      * @return {@code true} if configuration file has been update after this object has been created or serialized
      */
     public boolean isStale(final File tempDir) {
-        final File jobFile = new File(tempDir, JOB_FILE);
         return jobFile.lastModified() > lastModified;
     }
     
@@ -156,7 +157,6 @@ public final class Job {
      * @throws IllegalStateException if configuration files are missing
      */
     private void read() throws IOException {
-        final File jobFile = new File(tempDir, JOB_FILE);
         lastModified = jobFile.lastModified();
         if (jobFile.exists()) {
         	InputStream in = null;
@@ -271,11 +271,10 @@ public final class Job {
      * @throws IOException if writing configuration files failed
      */
     public void write() throws IOException {
-        final File f = new File(tempDir, JOB_FILE);
     	OutputStream outStream = null;
         XMLStreamWriter out = null;
         try {
-        	outStream = new FileOutputStream(f);
+        	outStream = new FileOutputStream(jobFile);
             out = XMLOutputFactory.newInstance().createXMLStreamWriter(outStream, "UTF-8");
             out.writeStartDocument();
             out.writeStartElement(ELEMENT_JOB);
@@ -357,7 +356,7 @@ public final class Job {
                 }
             }
         }
-        lastModified = f.lastModified();
+        lastModified = jobFile.lastModified();
     }
     
     /**
