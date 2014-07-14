@@ -63,6 +63,7 @@ final class MoveIndexModule extends AbstractPipelineModuleImpl {
             if (!mapSet.isEmpty()) {
                 final DitaIndexWriter indexInserter = new DitaIndexWriter();
                 indexInserter.setLogger(logger);
+                indexInserter.setJob(job);
                 for (final Map.Entry<URI, String> entry: mapSet.entrySet()) {
                     final String targetFileName = entry.getKey().getPath();
                     if (targetFileName.endsWith(FILE_EXTENSION_DITA) || targetFileName.endsWith(FILE_EXTENSION_XML)){

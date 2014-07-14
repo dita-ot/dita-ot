@@ -42,6 +42,7 @@ public class ImageMetadataFilterTest {
         job.setProperty("uplevels", "");
         final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job);
         filter.setLogger(new TestUtils.TestLogger());
+        filter.setJob(job);
         filter.write(f.getAbsoluteFile());
 
         TestUtils.resetXMLUnit();
@@ -60,6 +61,7 @@ public class ImageMetadataFilterTest {
         job.setProperty("uplevels", ".." + File.separator);
         final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job);
         filter.setLogger(new TestUtils.TestLogger());
+        filter.setJob(job);
         filter.write(f.getAbsoluteFile());
 
         TestUtils.resetXMLUnit();

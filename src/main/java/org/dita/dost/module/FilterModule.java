@@ -31,6 +31,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
         }
         final ProfilingFilter writer = new ProfilingFilter();
         writer.setLogger(logger);
+        writer.setJob(job);
         final FilterUtils filterUtils = parseFilterFile(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
         writer.setFilterUtils(filterUtils);
         for (final FileInfo f: job.getFileInfo()) {

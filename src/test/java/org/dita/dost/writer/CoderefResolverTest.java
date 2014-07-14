@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.custommonkey.xmlunit.XMLUnit;
+import org.dita.dost.util.Job;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,6 +44,7 @@ public class CoderefResolverTest {
 
         final CoderefResolver filter = new CoderefResolver();
         filter.setLogger(new TestUtils.TestLogger());
+        filter.setJob(new Job(tempDir));
         filter.write(f.getAbsoluteFile());
 
         TestUtils.resetXMLUnit();

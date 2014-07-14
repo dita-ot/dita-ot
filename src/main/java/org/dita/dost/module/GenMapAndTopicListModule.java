@@ -421,6 +421,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         if (filterUtils != null) {
             final ProfilingFilter profilingFilter = new ProfilingFilter();
             profilingFilter.setLogger(logger);
+            profilingFilter.setJob(job);
             profilingFilter.setFilterUtils(filterUtils);
             pipe.add(profilingFilter);
         }

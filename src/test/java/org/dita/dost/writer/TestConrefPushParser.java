@@ -19,6 +19,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.dita.dost.util.Job;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -100,6 +101,8 @@ public class TestConrefPushParser {
          * </ol>
          */
         final ConrefPushParser parser = new ConrefPushParser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir));
         final ConrefPushReader reader = new ConrefPushReader();
 
         reader.read(inputFile.getAbsoluteFile());

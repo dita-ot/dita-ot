@@ -118,6 +118,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     private void updateRefOfDita(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
         final TopicRefWriter topicRefWriter = new TopicRefWriter();
         topicRefWriter.setLogger(logger);
+        topicRefWriter.setJob(job);
         topicRefWriter.setChangeTable(changeTable);
         topicRefWriter.setup(conflictTable);
         try {

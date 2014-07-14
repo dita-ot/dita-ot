@@ -117,7 +117,6 @@ public final class ConrefPushParser extends AbstractXMLFilter {
     private boolean hasKeyref = false;
     /**tempDir.*/
     private File tempDir;
-    private Job job;
     
     /**
      * Constructor.
@@ -127,11 +126,7 @@ public final class ConrefPushParser extends AbstractXMLFilter {
         levelForPushAfterStack = new Stack<Integer>();
         contentForPushAfterStack = new Stack<DocumentFragment>();
     }
-    
-    public void setJob(final Job job) {
-        this.job = job;
-    }
-    
+
     public void setMoveTable(final Hashtable<MoveKey, DocumentFragment> movetable) {
         this.movetable = movetable;
     }

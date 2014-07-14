@@ -98,6 +98,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 
                 final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
                 conkeyrefFilter.setLogger(logger);
+                conkeyrefFilter.setJob(job);
                 conkeyrefFilter.setKeyDefinitions(keydefs);
                 conkeyrefFilter.setTempDir(job.tempDir);
                 conkeyrefFilter.setCurrentFile(file);
@@ -105,6 +106,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 
                 final KeyrefPaser parser = new KeyrefPaser();
                 parser.setLogger(logger);
+                parser.setJob(job);
                 parser.setKeyDefinition(keyDefinition);
                 parser.setTempDir(job.tempDir);
                 parser.setCurrentFile(file);

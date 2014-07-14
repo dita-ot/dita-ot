@@ -40,6 +40,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
         }
         final ImageMetadataFilter writer = new ImageMetadataFilter(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)), job);
         writer.setLogger(logger);
+        writer.setJob(job);
         for (final FileInfo f: job.getFileInfo()) {
             if (!f.isResourceOnly && ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
                 writer.write(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());

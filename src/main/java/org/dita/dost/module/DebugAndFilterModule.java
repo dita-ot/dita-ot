@@ -120,6 +120,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             
             final DitaWriter fileWriter = new DitaWriter();
             fileWriter.setLogger(logger);
+            fileWriter.setJob(job);
             try{
                 final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
                 boolean setSystemid = true;

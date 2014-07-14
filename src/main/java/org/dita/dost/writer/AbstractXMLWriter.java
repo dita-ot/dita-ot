@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.Job;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
@@ -32,6 +33,7 @@ abstract class AbstractXMLWriter implements AbstractWriter,
 ContentHandler, LexicalHandler, EntityResolver {
 
     protected DITAOTLogger logger;
+    protected Job job;
 
 
     @Override
@@ -125,6 +127,11 @@ ContentHandler, LexicalHandler, EntityResolver {
     @Override
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        this.job = job;
     }
     
 }

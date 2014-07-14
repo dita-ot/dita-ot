@@ -27,6 +27,7 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.custommonkey.xmlunit.XMLUnit;
+import org.dita.dost.util.Job;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -72,6 +73,7 @@ public class KeyrefPaserTest {
     public void testTopicWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File("a.xml"));
         parser.setTempDir(tempDir);
@@ -86,6 +88,7 @@ public class KeyrefPaserTest {
     public void testMapWrite() throws Exception {
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File("b.ditamap"));
         parser.setTempDir(tempDir);

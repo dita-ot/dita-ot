@@ -75,6 +75,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 //process map first
                 final DitaMapMetaWriter mapInserter = new DitaMapMetaWriter();
                 mapInserter.setLogger(logger);
+                mapInserter.setJob(job);
                 for (final Entry<URI, Hashtable<String, Element>> entry: mapSet.entrySet()) {
                     final URI targetFileName = entry.getKey();
                     if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITAMAP )) {
@@ -92,6 +93,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 //process topic
                 final DitaMetaWriter topicInserter = new DitaMetaWriter();
                 topicInserter.setLogger(logger);
+                topicInserter.setJob(job);
                 for (final Map.Entry<URI, Hashtable<String, Element>> entry: mapSet.entrySet()) {
                     final URI targetFileName = entry.getKey();
                     if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITA) || targetFileName.getPath().endsWith(FILE_EXTENSION_XML)) {

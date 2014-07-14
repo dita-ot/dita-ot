@@ -526,18 +526,21 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         if (genDebugInfo) {
             final DebugFilter debugFilter = new DebugFilter();
             debugFilter.setLogger(logger);
+            debugFilter.setJob(job);
             debugFilter.setInputFile(fileToParse);
             pipe.add(debugFilter);
         }
         if (filterUtils != null) {
             final ProfilingFilter profilingFilter = new ProfilingFilter();
             profilingFilter.setLogger(logger);
+            profilingFilter.setJob(job);
             profilingFilter.setFilterUtils(filterUtils);
             pipe.add(profilingFilter);
         }
         {
             final ValidationFilter validationFilter = new ValidationFilter();
             validationFilter.setLogger(logger);
+            validationFilter.setJob(job);
             // SS not supported
             //validationFilter.setValidateMap(validateMap);
             pipe.add(validationFilter);
@@ -545,6 +548,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
         {
             final NormalizeFilter normalizeFilter = new NormalizeFilter();
             normalizeFilter.setLogger(logger);
+            normalizeFilter.setJob(job);
             pipe.add(normalizeFilter);
         }
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {

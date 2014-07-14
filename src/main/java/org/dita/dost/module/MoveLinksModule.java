@@ -51,6 +51,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         if (!mapSet.isEmpty()) {
             final DitaLinksWriter indexInserter = new DitaLinksWriter();
             indexInserter.setLogger(logger);
+            indexInserter.setJob(job);
             for (final Map.Entry<File, Map<String, String>> entry: mapSet.entrySet()) {
                 logger.info("Processing " + entry.getKey());
                 indexInserter.setLinks(entry.getValue());
