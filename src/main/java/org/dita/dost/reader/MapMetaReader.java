@@ -15,13 +15,8 @@ import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.net.URI;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
@@ -34,14 +29,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Cascade map metadata to child topic references.
+ * Cascade map metadata to child topic references and collect metadata for topics.
  */
 public final class MapMetaReader extends AbstractDomFilter {
 
     /**
      * Cascaded metadata. Contents <topic absolute URI, <class matcher, cascading metadata elements>>.
      */
-    private final Hashtable<URI, Hashtable<String, Element>> resultTable = new Hashtable<URI, Hashtable<String, Element>>(16);
+    private final Map<URI, Map<String, Element>> resultTable = new HashMap<URI, Map<String, Element>>(16);
 
     public static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<String>(asList(
             TOPIC_CRITDATES.matcher,
@@ -106,7 +101,7 @@ public final class MapMetaReader extends AbstractDomFilter {
             DELAY_D_EXPORTANCHORS.matcher
             ));
 
-    private final Hashtable<String, Element> globalMeta;
+    private final Map<String, Element> globalMeta;
     /** Current document. */
     private Document doc = null;
     /** Result metadata document. */
@@ -119,7 +114,7 @@ public final class MapMetaReader extends AbstractDomFilter {
      */
     public MapMetaReader() {
         super();
-        globalMeta = new Hashtable<String, Element>(16);
+        globalMeta = new HashMap<String, Element>(16);
         resultDoc = XMLUtils.getDocumentBuilder().newDocument();
         resultTable.clear();
     }
@@ -158,7 +153,7 @@ public final class MapMetaReader extends AbstractDomFilter {
         }
         // Indexterm elements with either start or end attribute should not been
         // move to referenced dita file's prolog section.
-        for (final Hashtable<String, Element> resultTableEntry: resultTable.values()) {
+        for (final Map<String, Element> resultTableEntry: resultTable.values()) {
             for (final Map.Entry<String, Element> mapEntry: resultTableEntry.entrySet()) {
                 final String key = mapEntry.getKey();
                 if (TOPIC_KEYWORDS.matcher.equals(key)) {
@@ -194,12 +189,12 @@ public final class MapMetaReader extends AbstractDomFilter {
         }
     }
 
-    private void handleTopicref(final Element topicref, final Hashtable<String, Element> inheritance) {
+    private void handleTopicref(final Element topicref, final Map<String, Element> inheritance) {
         final Attr hrefAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_HREF);
         final Attr copytoAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
         final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
         final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
-        Hashtable<String, Element> current = mergeMeta(null, inheritance, cascadeSet);
+        Map<String, Element> current = mergeMeta(null, inheritance, cascadeSet);
         Element metaNode = null;
 
         final NodeList children = topicref.getChildNodes();
@@ -235,12 +230,12 @@ public final class MapMetaReader extends AbstractDomFilter {
                 if (resultTable.containsKey(topicPath)) {
                     //if the result table already contains some result
                     //metadata for current topic path.
-                    final Hashtable<String, Element> previous = resultTable.get(topicPath);
+                    final Map<String, Element> previous = resultTable.get(topicPath);
                     resultTable.put(topicPath, mergeMeta(previous, current, metaSet));
                 } else {
                     resultTable.put(topicPath, cloneElementMap(current));
                 }
-                final Hashtable<String, Element> metas = resultTable.get(topicPath);
+                final Map<String, Element> metas = resultTable.get(topicPath);
                 if (!metas.isEmpty()) {
                     if (metaNode != null) {
                         topicref.removeChild(metaNode);
@@ -278,8 +273,8 @@ public final class MapMetaReader extends AbstractDomFilter {
      * @param current metadata map to clone
      * @return a clone of the original map
      */
-    private Hashtable<String, Element> cloneElementMap(final Hashtable<String, Element> current) {
-        final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(16);
+    private Map<String, Element> cloneElementMap(final Map<String, Element> current) {
+        final Map<String, Element> topicMetaTable = new HashMap<String, Element>(16);
         for (final Entry<String, Element> topicMetaItem: current.entrySet()) {
             topicMetaTable.put(topicMetaItem.getKey(), (Element) resultDoc.importNode(topicMetaItem.getValue(), true));
         }
@@ -287,13 +282,13 @@ public final class MapMetaReader extends AbstractDomFilter {
     }
 
 
-    private Hashtable<String, Element> handleMeta(final Element meta, final Hashtable<String, Element> inheritance) {
-        final Hashtable<String, Element> topicMetaTable = new Hashtable<String, Element>(16);
+    private Map<String, Element> handleMeta(final Element meta, final Map<String, Element> inheritance) {
+        final Map<String, Element> topicMetaTable = new HashMap<String, Element>(16);
         getMeta(meta, topicMetaTable);
         return mergeMeta(topicMetaTable, inheritance, cascadeSet);
     }
 
-    private void getMeta(final Element meta, final Hashtable<String, Element> topicMetaTable) {
+    private void getMeta(final Element meta, final Map<String, Element> topicMetaTable) {
         final NodeList children = meta.getChildNodes();
         for(int i = 0; i < children.getLength(); i++) {
             final Node node = children.item(i);
@@ -319,15 +314,15 @@ public final class MapMetaReader extends AbstractDomFilter {
         }
     }
 
-    private Hashtable<String, Element> mergeMeta(Hashtable<String, Element> topicMetaTable,
-            final Hashtable<String, Element> inheritance, final Set<String> enableSet) {
+    private Map<String, Element> mergeMeta(Map<String, Element> topicMetaTable,
+            final Map<String, Element> inheritance, final Set<String> enableSet) {
         // When inherited metadata need to be merged into current metadata
         // enableSet should be cascadeSet so that only metadata that can
         // be inherited are merged.
         // Otherwise enableSet should be metaSet in order to merge all
         // metadata.
         if (topicMetaTable == null) {
-            topicMetaTable = new Hashtable<String, Element>(16);
+            topicMetaTable = new HashMap<String, Element>(16);
         }
         for (String key : enableSet) {
             if (inheritance.containsKey(key)) {
@@ -393,7 +388,7 @@ public final class MapMetaReader extends AbstractDomFilter {
      * 
      * @return map of metadata by topic path
      */
-    public Map<URI, Hashtable<String, Element>> getMapping() {
+    public Map<URI, Map<String, Element>> getMapping() {
     	return Collections.unmodifiableMap(resultTable);
     } 
 

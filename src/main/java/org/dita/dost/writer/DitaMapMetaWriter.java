@@ -24,7 +24,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +56,7 @@ import org.xml.sax.helpers.AttributesImpl;
 public final class DitaMapMetaWriter extends AbstractXMLWriter {
     private String firstMatchTopic;
     private String lastMatchTopic;
-    private Hashtable<String, Element> metaTable;
+    private Map<String, Element> metaTable;
     /** topic path that topicIdList need to match */
     private List<String> matchList;
     private Writer output;
@@ -366,7 +365,7 @@ public final class DitaMapMetaWriter extends AbstractXMLWriter {
         }
     }
     
-    public void setMetaTable(final Hashtable<String, Element> metaTable) {
+    public void setMetaTable(final Map<String, Element> metaTable) {
         this.metaTable = metaTable;
     }
     
