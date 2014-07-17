@@ -151,7 +151,7 @@ with those set forth herein.
 
   <target name="map2pdf2" unless="noMap">
     <dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
-    <pipeline message="topicmerge"
+    <pipeline message="topicmerge" taskname="topic-merge"
               inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
               tempdir="${dita.temp.dir.fullpath}">
       <module class="org.dita.dost.module.TopicMergeModule">
