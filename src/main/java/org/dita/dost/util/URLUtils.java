@@ -567,10 +567,10 @@ public final class URLUtils {
             throw new IllegalArgumentException();
         }
         if (!basePath.getScheme().equals("file")) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Only file URI scheme supported");
         }
         if (refPath.getScheme() != null && !refPath.getScheme().equals(basePath.getScheme())) {
-            throw new IllegalArgumentException();
+            return refPath;
         }
         
         URI rel = null;

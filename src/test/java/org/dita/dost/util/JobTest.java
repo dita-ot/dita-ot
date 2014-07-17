@@ -4,18 +4,14 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -54,6 +50,17 @@ public final class JobTest {
         exp.put(new File("foo"), new File("bar"));
         exp.put(new File("baz"), new File("qux"));
         assertEquals(exp, job.getCopytoMap());
+    }
+
+    @Test
+    public void testGetFileInfo() throws URISyntaxException {
+        final URI relative = new URI("foo/bar.dita");
+        final URI absolute = tempDir.toURI().resolve(relative);
+        final Job.FileInfo fi = new Job.FileInfo.Builder().uri(relative).build();
+        job.add(fi);
+        assertEquals(fi, job.getFileInfo(relative));
+        assertEquals(fi, job.getFileInfo(absolute));
+        assertNull(job.getFileInfo((URI) null));
     }
 
     @Test

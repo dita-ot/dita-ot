@@ -500,15 +500,25 @@ public final class Job {
      * Get file info object
      *
      * @param file file URI
-     * @return file info object
+     * @return file info object, {@code null} if not found
      */
     public FileInfo getFileInfo(final URI file) {
-        return files.get(file);
+        if (file == null) {
+            return null;
+        } else if (files.containsKey(file)) {
+            return files.get(file);
+        } else if (file.isAbsolute()) {
+            final URI relative = getRelativePath(jobFile.toURI(), file);
+            return files.get(relative);
+        } else {
+            return null;
+        }
     }
     
     /**
      * Get or create FileInfo for given path.
      * @param file system path
+     * @return created or existing file info object
      */
     public FileInfo getOrCreateFileInfo(final URI file) {
         final URI f = file.normalize();
