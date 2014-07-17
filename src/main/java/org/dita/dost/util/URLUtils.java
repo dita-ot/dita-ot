@@ -455,7 +455,7 @@ public final class URLUtils {
 
     /**
      * Covert file reference to URI. The difference between this method and
-     * {@link java.uri.URI(java.io.File)} constructor is that this
+     * {@link java.net.URI(java.io.File)} constructor is that this
      * method doesn't make the URI absolute.
      * 
      * @param file system path to convert to a URI, may be {@code null}
@@ -543,8 +543,8 @@ public final class URLUtils {
     /**
      * Create new URI with a given path.
      * 
-     * @param path URI to set path on
-     * @param fragment new paht, {@code null} for no path
+     * @param orig URI to set path on
+     * @param path new paht, {@code null} for no path
      * @return new URI instance with given path
      */
     public static URI setPath(final URI orig, final String path) {
@@ -558,70 +558,63 @@ public final class URLUtils {
     /**
      * Resolves absolute URI against another absolute URI.
      * 
-     * @param basePath absolute base file URI
-     * @param refPath absolute reference file URI
-     * @return relative URI
+     * @param base absolute base file URI
+     * @param ref absolute reference file URI
+     * @return relative URI if possible, otherwise original reference file URI argument
      */
-    public static URI getRelativePath(final URI basePath, final URI refPath) {
-        if (!basePath.isAbsolute() && basePath.getPath() != null) {
-            throw new IllegalArgumentException();
-        }
-        if (!basePath.getScheme().equals("file")) {
-            throw new IllegalArgumentException("Only file URI scheme supported");
-        }
-        if (refPath.getScheme() != null && !refPath.getScheme().equals(basePath.getScheme())) {
-            return refPath;
+    public static URI getRelativePath(final URI base, final URI ref) {
+        final String baseScheme = base.getScheme();
+        final String refScheme = ref.getScheme();
+        final String baseAuth = base.getAuthority();
+        final String refAuth = ref.getAuthority();
+        if (!(((baseScheme == null && refScheme == null) || (baseScheme != null && refScheme != null && baseScheme.equals(refScheme))) &&
+                ((baseAuth == null && refAuth == null) || (baseAuth != null && refAuth != null && baseAuth.equals(refAuth))))) {
+            return ref;
         }
         
-        URI rel = null;
-        if (basePath.getPath().equals(refPath.getPath()) && refPath.getFragment() != null) {
+        URI rel;
+        if (base.getPath().equals(ref.getPath()) && ref.getFragment() != null) {
             rel = toURI("");
         } else {
             final StringBuilder upPathBuffer = new StringBuilder(128);
             final StringBuilder downPathBuffer = new StringBuilder(128);
-            final StringTokenizer mapTokenizer = new StringTokenizer(
-                    FileUtils.normalize(basePath.getPath(), UNIX_SEPARATOR),
-                    UNIX_SEPARATOR);
-            final StringTokenizer topicTokenizer = new StringTokenizer(
-                    FileUtils.normalize(refPath.getPath(), UNIX_SEPARATOR),
-                    UNIX_SEPARATOR);
+            String basePath = base.normalize().getPath();
+            if (basePath.endsWith("/")) {
+                basePath = basePath + "dummy";
+            }
+            String refPath = ref.normalize().getPath();
+            final StringTokenizer baseTokenizer = new StringTokenizer(basePath, URI_SEPARATOR);
+            final StringTokenizer refTokenizer = new StringTokenizer(refPath, URI_SEPARATOR);
     
-            while (mapTokenizer.countTokens() > 1
-                    && topicTokenizer.countTokens() > 1) {
-                final String mapToken = mapTokenizer.nextToken();
-                final String topicToken = topicTokenizer.nextToken();
-                boolean equals = false;
-                if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)){
-                    //if OS is Windows, we need to ignore case when comparing path names.
-                    equals = mapToken.equalsIgnoreCase(topicToken);
-                }else{
-                    equals = mapToken.equals(topicToken);
-                }
-    
+            while (baseTokenizer.countTokens() > 1 && refTokenizer.countTokens() > 1) {
+                final String baseToken = baseTokenizer.nextToken();
+                final String refToken = refTokenizer.nextToken();
+                //if OS is Windows, we need to ignore case when comparing path names.
+                final boolean equals = OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)
+                                       ? baseToken.equalsIgnoreCase(refToken)
+                                       : baseToken.equals(refToken);
                 if (!equals) {
-                    if(mapToken.endsWith(COLON) ||
-                            topicToken.endsWith(COLON)){
+                    if (baseToken.endsWith(COLON) || refToken.endsWith(COLON)) {
                         //the two files are in different disks under Windows
-                        return refPath;
+                        return ref;
                     }
                     upPathBuffer.append("..");
                     upPathBuffer.append(URI_SEPARATOR);
-                    downPathBuffer.append(topicToken);
+                    downPathBuffer.append(refToken);
                     downPathBuffer.append(URI_SEPARATOR);
                     break;
                 }
             }
     
-            while (mapTokenizer.countTokens() > 1) {
-                mapTokenizer.nextToken();
-    
+            while (baseTokenizer.countTokens() > 1) {
+                baseTokenizer.nextToken();
                 upPathBuffer.append("..");
                 upPathBuffer.append(URI_SEPARATOR);
             }
     
-            while (topicTokenizer.hasMoreTokens()) {
-                downPathBuffer.append(topicTokenizer.nextToken());
-                if (topicTokenizer.hasMoreTokens()) {
+            while (refTokenizer.hasMoreTokens()) {
+                downPathBuffer.append(refTokenizer.nextToken());
+                if (refTokenizer.hasMoreTokens()) {
                     downPathBuffer.append(URI_SEPARATOR);
                 }
             }
@@ -634,7 +627,7 @@ public final class URLUtils {
             }
         }
         
-        return setFragment(rel, refPath.getFragment());
+        return setFragment(rel, ref.getFragment());
     }
  
     /**

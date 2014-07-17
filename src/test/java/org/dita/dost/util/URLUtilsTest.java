@@ -121,22 +121,20 @@ public class URLUtilsTest {
     @Test
     public void testGetRelativePathFromMap() throws URISyntaxException {
         assertEquals(new URI("../a.dita"), URLUtils.getRelativePath(new URI("file:/map/map.ditamap"), new URI("file:/a.dita")));
+        assertEquals(new URI("../a.dita"), URLUtils.getRelativePath(new URI("file:/map/"), new URI("file:/a.dita")));
         assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map.ditamap"), new URI("file:/a.dita")));
         assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map2/map.ditamap"), new URI("file:/map1/map2/a.dita")));
+        assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map2/"), new URI("file:/map1/map2/a.dita")));
         assertEquals(new URI("map2/a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map.ditamap"), new URI("file:/map1/map2/a.dita")));
+        assertEquals(new URI("map2/a.dita"), URLUtils.getRelativePath(new URI("file:/map1/"), new URI("file:/map1/map2/a.dita")));
         assertEquals(new URI("../topic/a.dita"), URLUtils.getRelativePath(new URI("file:/map1/map.ditamap"), new URI("file:/topic/a.dita")));
         assertEquals(new URI("a.dita#bar"), URLUtils.getRelativePath(new URI("file:/map.ditamap#foo"), new URI("file:/a.dita#bar")));
         assertEquals(new URI("a.dita"), URLUtils.getRelativePath(new URI("file:/a.dita"), new URI("file:/a.dita")));
         assertEquals(new URI("#bar"), URLUtils.getRelativePath(new URI("file:/a.dita#foo"), new URI("file:/a.dita#bar")));
         assertEquals(new URI("#bar"), URLUtils.getRelativePath(new URI("file:/a.dita"), new URI("#bar")));
-        try {
-            URLUtils.getRelativePath(new URI("/map.ditamap"), new URI("file://a.dita"));
-            fail();
-        } catch (final IllegalArgumentException e) {}
-        try {
-            URLUtils.getRelativePath(new URI("http://localhost/map.ditamap"), new URI("file://a.dita"));
-            fail();
-        } catch (final IllegalArgumentException e) {}
+        assertEquals(new URI("file://a.dita"), URLUtils.getRelativePath(new URI("/map.ditamap"), new URI("file://a.dita")));
+        assertEquals(new URI("https://localhost/map.ditamap") ,URLUtils.getRelativePath(new URI("http://localhost/map.ditamap"), new URI("https://localhost/map.ditamap")));
+        assertEquals(new URI("http:///map.ditamap"), URLUtils.getRelativePath(new URI("http://localhost/map.ditamap"), new URI("http:///map.ditamap")));
     }
 
     @Test
