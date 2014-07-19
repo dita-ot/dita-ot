@@ -82,7 +82,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                         mapInserter.setMetaTable(entry.getValue());
                         if (toFile(targetFileName).exists()) {
                             logger.info("Processing " + targetFileName);
-                            mapInserter.write(targetFileName);
+                            mapInserter.read(toFile(targetFileName));
                         } else {
                             logger.error("File " + targetFileName + " does not exist");
                         }
@@ -100,7 +100,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                         topicInserter.setMetaTable(entry.getValue());
                         if (toFile(targetFileName).exists()) {
                             logger.info("Processing " + targetFileName);
-                            topicInserter.write(targetFileName);
+                            topicInserter.read(toFile(targetFileName));
                         } else {
                             logger.error("File " + targetFileName + " does not exist");
                         }

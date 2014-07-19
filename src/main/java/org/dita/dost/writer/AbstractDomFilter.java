@@ -13,6 +13,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.reader.AbstractReader;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
@@ -22,6 +23,7 @@ import org.w3c.dom.Document;
 public abstract class AbstractDomFilter implements AbstractReader {
 
     protected DITAOTLogger logger;
+    protected Job job;
 
     @Override
     public void read(final File filename) {
@@ -60,6 +62,10 @@ public abstract class AbstractDomFilter implements AbstractReader {
     @Override
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+    }
+
+    public void setJob(final Job job) {
+        this.job = job;
     }
 
     /**
