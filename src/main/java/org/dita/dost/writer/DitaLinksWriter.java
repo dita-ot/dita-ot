@@ -11,10 +11,7 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -24,11 +21,11 @@ import java.util.Set;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
+import org.w3c.dom.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
-
 
 /**
  * Read DITA topic file and insert map links information into it.
@@ -38,7 +35,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     private String curMatchTopic;
     private boolean firstTopic;
 
-    private Map<String, String> indexEntries;
+    private Map<String, Element> indexEntries;
     private Set<String> topicSet;
     private OutputStreamWriter output;
     private final XMLReader reader;
@@ -68,7 +65,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
      * @param indexEntries map of related links. Keys are topic IDs and
      * {@link SHARP} is used to denote root element; values are XML strings
      */
-    public void setLinks(final Map<String, String> indexEntries) {
+    public void setLinks(final Map<String, Element> indexEntries) {
         this.indexEntries = indexEntries;
         topicSet = indexEntries.keySet();
     }
@@ -133,34 +130,6 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
     }
 
     @Override
-    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-        if (topicSpecList.contains(localName)) {
-            // Remove the last topic id.
-            if (!topicIdStack.isEmpty()) {
-                topicIdStack.removeFirst();
-            }
-            if (firstTopic) {
-                firstTopic = false;
-            }
-        }
-        try {
-            // Using the same type of logic that's used in DITAIndexWriter.
-            if (curMatchTopic != null && topicSpecList.contains(localName)) {
-                // if <prolog> don't exist
-                final AttributesImpl atts = new AttributesImpl();
-                addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString());
-                writeStartElement(TOPIC_RELATED_LINKS.localName, atts);
-                output.write(indexEntries.get(curMatchTopic));
-                writeEndElement(TOPIC_RELATED_LINKS.localName);
-                curMatchTopic = null;
-            }
-            writeEndElement(qName);
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    @Override
     public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
         try {
             writeCharacters(ch, start, length);
@@ -198,7 +167,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
                     final AttributesImpl relAtts = new AttributesImpl();
                     addOrSetAttribute(relAtts, ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString());
                     writeStartElement(TOPIC_RELATED_LINKS.localName, relAtts);
-                    output.write(indexEntries.get(curMatchTopic));
+                    outputMeta(indexEntries.get(curMatchTopic));
                     writeEndElement(TOPIC_RELATED_LINKS.localName);
                     curMatchTopic = null;
                 } catch (final Exception e) {
@@ -218,7 +187,7 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         try {
             writeStartElement(qName, atts);
             if (TOPIC_RELATED_LINKS.matches(atts) && curMatchTopic != null) {
-                output.write(indexEntries.get(curMatchTopic));
+                outputMeta(indexEntries.get(curMatchTopic));
                 curMatchTopic = null;
             }
         } catch (final Exception e) {
@@ -226,8 +195,89 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         }
     }
 
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+        if (topicSpecList.contains(localName)) {
+            // Remove the last topic id.
+            if (!topicIdStack.isEmpty()) {
+                topicIdStack.removeFirst();
+            }
+            if (firstTopic) {
+                firstTopic = false;
+            }
+        }
+        try {
+            // Using the same type of logic that's used in DITAIndexWriter.
+            if (curMatchTopic != null && topicSpecList.contains(localName)) {
+                // if <TOPIC_RELATED_LINKS> doesn't exist
+                final AttributesImpl atts = new AttributesImpl();
+                addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString());
+                writeStartElement(TOPIC_RELATED_LINKS.localName, atts);
+                outputMeta(indexEntries.get(curMatchTopic));
+                writeEndElement(TOPIC_RELATED_LINKS.localName);
+                curMatchTopic = null;
+            }
+            writeEndElement(qName);
+        } catch (final Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    // DOM to SAX conversion methods
+
+    private void outputMeta(final Node root) throws IOException {
+        final NodeList children = root.getChildNodes();
+        Node child = null;
+        for (int i = 0; i < children.getLength(); i++){
+            child = children.item(i);
+            switch (child.getNodeType()) {
+                case Node.TEXT_NODE:
+                    output((Text) child); break;
+                case Node.PROCESSING_INSTRUCTION_NODE:
+                    output((ProcessingInstruction) child); break;
+                case Node.ELEMENT_NODE:
+                    output((Element) child); break;
+            }
+        }
+    }
+
+    private void output(final ProcessingInstruction instruction) throws IOException{
+        String data = instruction.getData();
+        if (data != null && data.isEmpty()) {
+            data = null;
+        }
+        writeProcessingInstruction(instruction.getTarget(), data);
+    }
+
+    private void output(final Text text) throws IOException{
+        final char[] cs = text.getData().toCharArray();
+        writeCharacters(cs, 0, cs.length);
+    }
+
+    private void output(final Element elem) throws IOException{
+        final AttributesImpl atts = new AttributesImpl();
+        final NamedNodeMap attrMap = elem.getAttributes();
+        for (int i = 0; i<attrMap.getLength(); i++){
+            addOrSetAttribute(atts, attrMap.item(i));
+        }
+        writeStartElement(elem.getNodeName(), atts);
+        final NodeList children = elem.getChildNodes();
+        for (int j = 0; j<children.getLength(); j++){
+            final Node child = children.item(j);
+            switch (child.getNodeType()){
+                case Node.TEXT_NODE:
+                    output((Text) child); break;
+                case Node.PROCESSING_INSTRUCTION_NODE:
+                    output((ProcessingInstruction) child); break;
+                case Node.ELEMENT_NODE:
+                    output((Element) child); break;
+            }
+        }
+        writeEndElement(elem.getNodeName());
+    }
+
     // SAX serializer methods
-    
+
     private void writeStartElement(final String qName, final Attributes atts) throws IOException {
         final int attsLen = atts.getLength();
         output.write(LESS_THAN + qName);

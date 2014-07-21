@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.custommonkey.xmlunit.XMLUnit;
+import org.dita.dost.util.XMLUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -56,13 +57,16 @@ public class MapLinksReaderTest {
         XMLUnit.setIgnoreDiffBetweenTextAndCDATA(true);
         XMLUnit.setIgnoreComments(true);
 
-        final Map<File, Map<String, String>> mapSet = reader.getMapping();
+        final Map<File, Map<String, Element>> mapSet = reader.getMapping();
         
-        for (final Map.Entry<File, Map<String, String>> e: mapSet.entrySet()) {
-            for (final Map.Entry<String, String> ee: e.getValue().entrySet()) {
+        for (final Map.Entry<File, Map<String, Element>> e: mapSet.entrySet()) {
+            for (final Map.Entry<String, Element> ee: e.getValue().entrySet()) {
                 assertEquals(SHARP, ee.getKey());
+                final Document doc = XMLUtils.getDocumentBuilder().newDocument();
+                final Node n = doc.importNode(ee.getValue(), true);
+                doc.appendChild(n);
                 assertXMLEqual(expMap.get(e.getKey()),
-                               db.parse(new InputSource(new StringReader(ee.getValue()))));
+                               doc);
             }
         }
     }
@@ -73,12 +77,14 @@ public class MapLinksReaderTest {
         final NodeList maplinks = expDoc.getElementsByTagName(ELEMENT_NAME_MAPLINKS);
         for (int i = 0; i < maplinks.getLength(); i++) {
             final Element m = (Element) maplinks.item(i);
-            final Document d = expDoc.getImplementation().createDocument(null, m.getLocalName(), null);
+            final Document d = XMLUtils.getDocumentBuilder().newDocument();
+            final Element root = d.createElement("stub");
+            d.appendChild(root);
             final NodeList cs = m.getChildNodes();
             for (int j = 0; j < cs.getLength(); j++) {
                 final Node c = cs.item(j);
                 if (c.getNodeType() == Node.ELEMENT_NODE) {
-                    d.appendChild(d.importNode(c, true));
+                    root.appendChild(d.importNode(c, true));
                 }
             }
             expMap.put(new File(srcDir, m.getAttribute(ATTRIBUTE_NAME_HREF)), d);

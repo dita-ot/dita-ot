@@ -18,6 +18,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapLinksReader;
 import org.dita.dost.writer.DitaLinksWriter;
+import org.w3c.dom.Element;
 
 /**
  * MoveLinksModule implements move links step in preprocess. It reads the map links
@@ -46,13 +47,13 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         indexReader.setLogger(logger);
         indexReader.setMatch(ELEMENT_NAME_MAPLINKS + SLASH + TOPIC_LINKPOOL.localName + SLASH + TOPIC_LINKLIST.localName);
         indexReader.read(maplinksFile.getAbsoluteFile());
-        final Map<File, Map<String, String>> mapSet = indexReader.getMapping();
+        final Map<File, Map<String, Element>> mapSet = indexReader.getMapping();
         
         if (!mapSet.isEmpty()) {
             final DitaLinksWriter indexInserter = new DitaLinksWriter();
             indexInserter.setLogger(logger);
             indexInserter.setJob(job);
-            for (final Map.Entry<File, Map<String, String>> entry: mapSet.entrySet()) {
+            for (final Map.Entry<File, Map<String, Element>> entry: mapSet.entrySet()) {
                 logger.info("Processing " + entry.getKey());
                 indexInserter.setLinks(entry.getValue());
                 indexInserter.write(entry.getKey());

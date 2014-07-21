@@ -601,8 +601,8 @@
   </target>
   
   <target name="integration-test" depends="compile, test-compile, integration-test-compile" description="Run integration tests">
-    <condition property="only-test.name" value="${only-test}" else="">
-      <isset property="only-test"/>
+    <condition property="only-test.name" value="${test}" else="">
+      <isset property="test"/>
     </condition>
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
