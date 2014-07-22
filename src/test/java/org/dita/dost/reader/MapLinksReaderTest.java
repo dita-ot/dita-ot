@@ -38,11 +38,6 @@ public class MapLinksReaderTest {
     public static void setUp() throws Exception {
         reader = new MapLinksReader();
         reader.setLogger(new TestUtils.TestLogger());
-        reader.setMatch(new StringBuffer(ELEMENT_NAME_MAPLINKS)
-                .append(SLASH).append(TOPIC_LINKPOOL.localName)
-                .append(SLASH).append(TOPIC_LINKLIST.localName)
-                .toString());
-
         reader.read(new File(srcDir, "maplinks.unordered").getAbsoluteFile());
     }
 

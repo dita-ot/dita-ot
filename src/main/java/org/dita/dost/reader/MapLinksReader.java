@@ -12,17 +12,8 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.escapeXML;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.util.FileUtils;
@@ -42,7 +33,7 @@ import javax.xml.parsers.DocumentBuilder;
  * MapLinksReader reads and parse the index information. It is also used to parse
  * map link information in "maplinks.unordered" file.
  * 
- * NOTE: Result of this reader is a map organized as Map<String, Map<String, String> >.
+ * NOTE: Result of this reader is a map organized as Map<String, Map<String, String>>.
  * Logically it is organized as:
  * 
  * 		topic-file-path --+-- topic-id-1 --+-- index-entry-1-1
@@ -63,7 +54,6 @@ public final class MapLinksReader extends AbstractXMLReader {
 
     private final List<String> ancestorList;
     private File filePath = null;
-    private String firstMatchElement;
     private StringBuffer indexEntries;
     private File inputFile;
     private final Set<String> lastMatchElement;
@@ -85,10 +75,13 @@ public final class MapLinksReader extends AbstractXMLReader {
         super();
         map = new HashMap<File, Map<String, String>>();
         ancestorList = new ArrayList<String>(16);
-        matchList = new ArrayList<String>(16);
+        matchList = Collections.unmodifiableList(Arrays.asList(
+                ELEMENT_NAME_MAPLINKS,
+                TOPIC_LINKLIST.localName + STRING_BLANK + TOPIC_LINKPOOL.localName + STRING_BLANK));
         indexEntries = new StringBuffer(1024);
-        firstMatchElement = null;
-        lastMatchElement = new HashSet<String>();
+        lastMatchElement = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
+                TOPIC_LINKLIST.localName,
+                TOPIC_LINKPOOL.localName)));
         level = 0;
         match = false;
         validHref = true;
@@ -103,37 +96,6 @@ public final class MapLinksReader extends AbstractXMLReader {
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
-
-    }
-
-    /**
-     * Set the match pattern in the reader. The match pattern is used to see whether
-     * current element can be include in the result of parsing.
-     *
-     * @param matchPattern the match pattern
-     */
-    public void setMatch(final String matchPattern) {
-        int index = 0;
-        firstMatchElement = (matchPattern.contains(SLASH)) ? matchPattern.substring(0, matchPattern.indexOf(SLASH)) : matchPattern;
-
-        while (index != -1) {
-            final int start = matchPattern.indexOf(SLASH, index);
-            final int end = matchPattern.indexOf(SLASH,start + 1);
-            if(start != -1 && end != -1){
-                lastMatchElement.add(matchPattern.substring(start+1, end));
-                index = end;
-            } else if(start != -1 && end == -1){
-                lastMatchElement.add(matchPattern.substring(start + 1));
-                index = -1;
-            }
-        }
-        matchList.add(firstMatchElement);
-        final Iterator<String> it = lastMatchElement.iterator();
-        final StringBuilder sb = new StringBuilder();
-        while(it.hasNext()){
-            sb.append(it.next()).append(STRING_BLANK);
-        }
-        matchList.add(sb.toString());
     }
 
     /**
@@ -215,7 +177,7 @@ public final class MapLinksReader extends AbstractXMLReader {
             ancestorList.remove(ancestorList.size() - 1);
         }
 
-        if (qName.equals(firstMatchElement) && verifyIndexEntries(indexEntries) && topicPath != null) {
+        if (qName.equals(ELEMENT_NAME_MAPLINKS) && verifyIndexEntries(indexEntries) && topicPath != null) {
             // if the href is not valid, topicPath will be null. We don't need to set the condition
             // to check validHref at here.
             final File t = new File(FileUtils.stripFragment(topicPath));
@@ -257,7 +219,7 @@ public final class MapLinksReader extends AbstractXMLReader {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
-        if (qName.equals(firstMatchElement)) {
+        if (qName.equals(ELEMENT_NAME_MAPLINKS)) {
             if (verifyIndexEntries(indexEntries) && topicPath != null) {
                 final File t = new File(FileUtils.stripFragment(topicPath));
                 final String frag = FileUtils.getFragment(topicPath, SHARP);
