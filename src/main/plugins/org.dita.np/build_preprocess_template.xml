@@ -18,7 +18,6 @@
                   np.mappull,
                   chunk,
                   maplink,
-                  move-links,
                   np.topicpull,
                   np.flag-module,
                   copy-files,

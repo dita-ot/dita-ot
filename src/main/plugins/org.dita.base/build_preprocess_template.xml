@@ -26,7 +26,6 @@
                   mappull,
                   chunk,
                   maplink,
-                  move-links,
                   topicpull,
                   flag-module,
                   clean-map,
@@ -389,50 +388,29 @@
   </target>
   
   <!-- maplink
-    Produce maplinks.unordered file, containing all related links
-    implied by the map (family and reltables). -->
+    Collect all links from maps and push them into topics. -->
   <target name="maplink"
     dita:depends="{depend.preprocess.maplink.pre},maplink-check"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.maplink.skip"
     description="Find and generate related link information">
-    <dirname property="maplink.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <condition property="dita.preprocess.reloadstylesheet.maplink" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.maplink"/></not>
     </condition>
-    <xslt taskname="maplink"
-      in="${dita.temp.dir}/${user.input.file}"
-      out="${maplink.workdir}/maplinks.unordered"
-      classpathref="dost.class.path"
-      reloadstylesheet="${dita.preprocess.reloadstylesheet.maplink}"
-      style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl">
-      <param name="INPUTMAP" expression="${user.input.file}" />
-      <param name="include.rellinks" expression="${include.rellinks}" if="include.rellinks"/>
-      <dita:extension id="dita.preprocess.maplink.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
+    <pipeline message="Move related links" taskname="maplink"
+              inputmap="${user.input.file}" tempdir="${dita.temp.dir}">
+      <module class="org.dita.dost.module.MoveLinksModule">
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl"/>
+        <param name="include.rellinks" expression="${include.rellinks}" if="include.rellinks"/>
+        <!--dita:extension id="dita.preprocess.maplink.param" behavior="org.dita.dost.platform.InsertAction"/-->
+      </module>
+    </pipeline>
   </target>
 
   <target name="maplink-check">
     <condition property="preprocess.maplink.skip">
       <isset property="noMap"/>
     </condition>
-  </target>
-  
-  <!-- move-links
-      Push links from maplinks.unordered file into
-      <related-links> sections of the corresponding topics. -->
-  <target name="move-links"
-    dita:depends="{depend.preprocess.move-links.pre}"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.move-links.skip"
-    description="Move the related link information to topics">
-    <pipeline message="Move links." taskname="move-links"
-      inputmap="${user.input.file}" tempdir="${dita.temp.dir}">
-      <module class="org.dita.dost.module.MoveLinksModule">
-        <param name="maplinks" location="${maplink.workdir}/maplinks.unordered"/>
-      </module>
-    </pipeline>
   </target>
   
   <!-- topicpull

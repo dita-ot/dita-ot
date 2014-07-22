@@ -43,10 +43,10 @@ parameter is defined:<codeblock>&lt;dummy>
 </dlentry><dlentry>
 <dt><codeph>dita.preprocess.mappull.param</codeph></dt>
 <dd>Pass parameters to mappull XSLT</dd>
-</dlentry><dlentry>
+</dlentry><!--dlentry>
 <dt><codeph>dita.preprocess.maplink.param</codeph></dt>
 <dd>Pass parameters to maplink XSLT</dd>
-</dlentry><dlentry>
+</dlentry--><dlentry>
 <dt><codeph>dita.preprocess.topicpull.param</codeph></dt>
 <dd>Pass parameters to topicpull XSLT</dd>
 </dlentry>

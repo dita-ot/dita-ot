@@ -38,7 +38,6 @@
   <extension-point id="depend.preprocess.mappull.pre" name="Map pull pre-target"/>
   <extension-point id="depend.preprocess.chunk.pre" name="Chunking pre-target"/>
   <extension-point id="depend.preprocess.maplink.pre" name="Map link pre-target"/>
-  <extension-point id="depend.preprocess.move-links.pre" name="Move links pre-target"/>
   <extension-point id="depend.preprocess.topicpull.pre" name="Topic pull pre-target"/>
   <extension-point id="depend.preprocess.flag-module.pre" name="Flag module pre-target"/>
   <extension-point id="depend.preprocess.copy-files.pre" name="Copy files pre-target"/>
@@ -50,7 +49,7 @@
   <extension-point id="dita.preprocess.conref.param" name="Content reference XSLT parameters"/>
   <extension-point id="dita.preprocess.mapref.param" name="Map reference XSLT parameters"/>
   <extension-point id="dita.preprocess.mappull.param" name="Map pull  XSLT parameters"/>
-  <extension-point id="dita.preprocess.maplink.param" name="Map link XSLT parameters"/>
+  <!--extension-point id="dita.preprocess.maplink.param" name="Map link XSLT parameters"/-->
   <extension-point id="dita.preprocess.topicpull.param" name="Topic pull XSLT parameters"/>
   <extension-point id="dita.preprocess.flag-module.param" name="Flag module XSLT parameters"/>
   <extension-point id="dita.xsl.conref" name="Content reference XSLT import"/>

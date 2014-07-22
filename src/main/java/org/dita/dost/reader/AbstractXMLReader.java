@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.Job;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
@@ -35,6 +36,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
 ContentHandler, LexicalHandler, EntityResolver {
 
     protected DITAOTLogger logger;
+    protected Job job;
 
     @Override
     public void read(final File filename) {
@@ -44,6 +46,10 @@ ContentHandler, LexicalHandler, EntityResolver {
     @Override
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+    }
+
+    public final void setJob(final Job job) {
+        this.job = job;
     }
 
     @Override

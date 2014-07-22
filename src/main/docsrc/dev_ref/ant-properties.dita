@@ -134,7 +134,6 @@ preprocess.keyref.skip
 preprocess.maplink.skip
 preprocess.mappull.skip
 preprocess.mapref.skip
-preprocess.move-links.skip
 preprocess.move-meta-entries.skip
 preprocess.topicpull.skip
 prompt.ditamap.directory

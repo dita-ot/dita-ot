@@ -214,7 +214,6 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
         <dlentry><dt><codeph>depend.preprocess.mappull.pre</codeph></dt><dd>Map pull pre-target</dd></dlentry>
         <dlentry><dt><codeph>depend.preprocess.chunk.pre</codeph></dt><dd>Chunking pre-target</dd></dlentry>
         <dlentry><dt><codeph>depend.preprocess.maplink.pre</codeph></dt><dd>Map link pre-target</dd></dlentry>
-        <dlentry><dt><codeph>depend.preprocess.move-links.pre</codeph></dt><dd>Move links pre-target</dd></dlentry>
         <dlentry><dt><codeph>depend.preprocess.topicpull.pre</codeph></dt><dd>Topic pull pre-target</dd></dlentry>
         <dlentry><dt><codeph>depend.preprocess.copy-files.pre</codeph></dt><dd>Copy files pre-target</dd></dlentry>
         <dlentry><dt><codeph>depend.preprocess.copy-image.pre</codeph></dt><dd>Copy images pre-target</dd></dlentry>
@@ -378,10 +377,10 @@ token ::= ( [0..9] | [a..zA..Z] | ’_’ | ’-’ )+</codeblock>
           <dt><codeph>dita.preprocess.mappull.param</codeph></dt>
           <dd>Pass parameters to mappull XSLT</dd>
         </dlentry>
-        <dlentry>
+        <!--dlentry>
           <dt><codeph>dita.preprocess.maplink.param</codeph></dt>
           <dd>Pass parameters to maplink XSLT</dd>
-        </dlentry>
+        </dlentry-->
         <dlentry>
           <dt><codeph>dita.preprocess.topicpull.param</codeph></dt>
           <dd>Pass parameters to topicpull XSLT</dd>

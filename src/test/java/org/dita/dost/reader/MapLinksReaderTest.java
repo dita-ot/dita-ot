@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.custommonkey.xmlunit.XMLUnit;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,6 +28,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import org.dita.dost.TestUtils;
+import org.xml.sax.XMLReader;
 
 public class MapLinksReaderTest {
     
@@ -36,9 +38,16 @@ public class MapLinksReaderTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
+        final Job job = new Job(srcDir);
+        job.setProperty(INPUT_DITAMAP, "foo.ditamap");
+
         reader = new MapLinksReader();
         reader.setLogger(new TestUtils.TestLogger());
-        reader.read(new File(srcDir, "maplinks.unordered").getAbsoluteFile());
+        reader.setJob(job);
+
+        final XMLReader parser = XMLUtils.getXMLReader();
+        parser.setContentHandler(reader);
+        parser.parse(new InputSource(new File(srcDir, "maplinks.unordered").getAbsoluteFile().toURI().toString()));
     }
 
     @Test
