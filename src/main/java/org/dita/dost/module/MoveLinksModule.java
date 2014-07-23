@@ -8,36 +8,32 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.*;
-
-import java.io.*;
-import java.util.Map;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.reader.MapLinksReader;
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.writer.DitaLinksWriter;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLFilter;
-import org.xml.sax.XMLReader;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 /**
  * MoveLinksModule implements move links step in preprocess. It reads the map links
- * information from the temp file "maplinks.unordered" and move these information
- * to different corresponding dita topic file.
- * 
- * @author Zhang, Yuan Peng
+ * information from the input map and inserts the links into topics.
  */
 final class MoveLinksModule extends AbstractPipelineModuleImpl {
 
@@ -53,21 +49,20 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         final File inputFile = new File(job.tempDir, input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
         final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
 
-        final MapLinksReader linkReader = new MapLinksReader();
-        linkReader.setLogger(logger);
-        linkReader.setJob(job);
-
+        Document doc;
         InputStream in = null;
         try {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(styleFile));
+            transformer.setURIResolver(CatalogUtils.getCatalogResolver());
             if (input.getAttribute("include.rellinks") != null) {
                 transformer.setParameter("include.rellinks", input.getAttribute("include.rellinks"));
             }
             in = new BufferedInputStream(new FileInputStream(inputFile));
             final Source source = new StreamSource(in);
             source.setSystemId(inputFile.toURI().toString());
-            final Result result = new SAXResult(linkReader);
+            final DOMResult result = new DOMResult();
             transformer.transform(source, result);
+            doc = (Document) result.getNode();
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
@@ -82,8 +77,8 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        final Map<File, Map<String, Element>> mapSet = linkReader.getMapping();
-        
+        final Map<File, Map<String, Element>> mapSet = getMapping(doc);
+
         if (!mapSet.isEmpty()) {
             final DitaLinksWriter linkInserter = new DitaLinksWriter();
             linkInserter.setLogger(logger);
@@ -91,10 +86,43 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             for (final Map.Entry<File, Map<String, Element>> entry: mapSet.entrySet()) {
                 logger.info("Processing " + entry.getKey());
                 linkInserter.setLinks(entry.getValue());
-                linkInserter.write(entry.getKey());
+                linkInserter.write(new File(job.tempDir, entry.getKey().getPath()));
             }
         }
         return null;
+    }
+
+    private Map<File, Map<String, Element>> getMapping(Document doc) {
+        final Map<File, Map<String, Element>> map = new HashMap<File, Map<String, Element>>();
+        final NodeList maplinks = doc.getDocumentElement().getChildNodes();
+        for (int i = 0; i < maplinks.getLength(); i++) {
+            final Node n = maplinks.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                final Element maplink = (Element) n;
+                final URI href = toURI(maplink.getAttribute(ATTRIBUTE_NAME_HREF));
+                final File path = toFile(stripFragment(href));
+                String fragment = href.getFragment();
+                if (fragment == null) {
+                    fragment = SHARP;
+                }
+                Map<String, Element> m = map.get(path);
+                if (m == null) {
+                    m = new HashMap<String, Element>();
+                    map.put(path, m);
+                }
+                Element stub = m.get(fragment);
+                if (stub == null) {
+                    stub = doc.createElement("stub");
+                    m.put(fragment, stub);
+                }
+                Node c = maplink.getFirstChild();
+                while (c != null) {
+                    stub.appendChild(maplink.removeChild(c));
+                    c = c.getNextSibling();
+                }
+            }
+        }
+        return map;
     }
 
 }
