@@ -8,40 +8,43 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.*;
-
-import java.io.*;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Map;
-import java.util.Set;
-
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.util.FileUtils;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.XMLFilterImpl;
+
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXResult;
+import java.io.File;
+import java.util.*;
+
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
+import static org.dita.dost.util.XMLUtils.AttributesBuilder;
 
 /**
  * Read DITA topic file and insert map links information into it.
  */
-public final class DitaLinksWriter extends AbstractXMLWriter {
+public final class DitaLinksWriter extends AbstractXMLFilter {
     
     private String curMatchTopic;
     private boolean firstTopic;
 
     private Map<String, Element> indexEntries;
-    private Set<String> topicSet;
-    private OutputStreamWriter output;
-    private final XMLReader reader;
     /** Stack of topic IDs. */
     private Deque<String> topicIdStack;
     private final ArrayList<String> topicSpecList;
+    final Transformer saxToDomTransformer;
+    private static final Attributes relatedLinksAtts = new AttributesBuilder()
+            .add(ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString())
+            .build();
 
     /**
      * Default constructor of DitaLinksWriter class.
@@ -50,12 +53,9 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
         super();
         topicSpecList = new ArrayList<String>();
         try {
-            reader = getXMLReader();
-            reader.setContentHandler(this);
-            reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
+            saxToDomTransformer = TransformerFactory.newInstance().newTransformer();
+        } catch (final TransformerConfigurationException e) {
+            throw new RuntimeException("Failed to configure DOM to SAX transformer: " + e.getMessage(), e);
         }
     }
     
@@ -63,94 +63,29 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
      * Set relates links
      * 
      * @param indexEntries map of related links. Keys are topic IDs and
-     * {@link SHARP} is used to denote root element; values are XML strings
+     * {@link org.dita.dost.util.Constants#SHARP #} is used to denote root element
      */
     public void setLinks(final Map<String, Element> indexEntries) {
         this.indexEntries = indexEntries;
-        topicSet = indexEntries.keySet();
     }
 
     @Override
-    public void write(final File filename) {
+    public void write(final File filename) throws DITAOTException {
         if (filename == null || !filename.exists()) {
             return;
         }
-        curMatchTopic = topicSet.contains(SHARP) ? SHARP : null;
+        curMatchTopic = indexEntries.containsKey(SHARP) ? SHARP : null;
         topicIdStack = new ArrayDeque<String>();
-        final File outputFile = new File(filename.getPath() + FILE_EXTENSION_TEMP);
-        FileOutputStream fileOutput = null;
-        try {
-            fileOutput = new FileOutputStream(outputFile);
-            output = new OutputStreamWriter(fileOutput, UTF8);
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
-            reader.parse(filename.toURI().toString());
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                if (fileOutput != null) {
-                    fileOutput.close();
-                }
-            } catch (final Exception e) {
-                logger.error(e.getMessage(), e);
-            }
-            try {
-                if (output != null) {
-                    output.close();
-                }
-            } catch (final Exception e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
-        try {
-            FileUtils.moveFile(outputFile, filename);
-        } catch (final Exception e) {
-            logger.error("Failed to replace " + filename + ": " + e.getMessage());
-        }
+        super.write(filename);
     }
 
     // SAX methods
 
     @Override
-    public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        try {
-            writeCharacters(ch, start, length);
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public void endDocument() throws SAXException {
-        try {
-            output.flush();
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
-        try {
-            writeCharacters(ch, start, length);
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public void processingInstruction(final String target, final String data) throws SAXException {
-        try {
-            writeProcessingInstruction(target, data);
-        } catch (final IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    @Override
     public void startDocument() throws SAXException {
         topicIdStack.clear();
         firstTopic = true;
+        getContentHandler().startDocument();
     }
 
     @Override
@@ -164,34 +99,28 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
             topicIdStack.addFirst(atts.getValue(ATTRIBUTE_NAME_ID));
             if (curMatchTopic != null && !firstTopic) {
                 try {
-                    final AttributesImpl relAtts = new AttributesImpl();
-                    addOrSetAttribute(relAtts, ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString());
-                    writeStartElement(TOPIC_RELATED_LINKS.localName, relAtts);
-                    outputMeta(indexEntries.get(curMatchTopic));
-                    writeEndElement(TOPIC_RELATED_LINKS.localName);
+                    getContentHandler().startElement(NULL_NS_URI, TOPIC_RELATED_LINKS.localName, TOPIC_RELATED_LINKS.localName, relatedLinksAtts);
+                    domToSax(indexEntries.get(curMatchTopic));
+                    getContentHandler().endElement(NULL_NS_URI, TOPIC_RELATED_LINKS.localName, TOPIC_RELATED_LINKS.localName);
                     curMatchTopic = null;
                 } catch (final Exception e) {
                     logger.error(e.getMessage(), e);
                 }
             }
             final String t = StringUtils.join(topicIdStack, SLASH);
-            if (topicSet.contains(t)) {
+            if (indexEntries.containsKey(t)) {
                 curMatchTopic = t;
-            } else if (topicSet.contains(topicIdStack.peekFirst())) {
+            } else if (indexEntries.containsKey(topicIdStack.peekFirst())) {
                 curMatchTopic = topicIdStack.peekFirst();
             }
             if (firstTopic) {
                 firstTopic = false;
             }
         }
-        try {
-            writeStartElement(qName, atts);
-            if (TOPIC_RELATED_LINKS.matches(atts) && curMatchTopic != null) {
-                outputMeta(indexEntries.get(curMatchTopic));
-                curMatchTopic = null;
-            }
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
+        getContentHandler().startElement(uri, localName, qName, atts);
+        if (TOPIC_RELATED_LINKS.matches(atts) && curMatchTopic != null) {
+            domToSax(indexEntries.get(curMatchTopic));
+            curMatchTopic = null;
         }
     }
 
@@ -206,100 +135,48 @@ public final class DitaLinksWriter extends AbstractXMLWriter {
                 firstTopic = false;
             }
         }
-        try {
-            // Using the same type of logic that's used in DITAIndexWriter.
-            if (curMatchTopic != null && topicSpecList.contains(localName)) {
-                // if <TOPIC_RELATED_LINKS> doesn't exist
-                final AttributesImpl atts = new AttributesImpl();
-                addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString());
-                writeStartElement(TOPIC_RELATED_LINKS.localName, atts);
-                outputMeta(indexEntries.get(curMatchTopic));
-                writeEndElement(TOPIC_RELATED_LINKS.localName);
-                curMatchTopic = null;
-            }
-            writeEndElement(qName);
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
+        if (curMatchTopic != null && topicSpecList.contains(localName)) {
+            // if <TOPIC_RELATED_LINKS> doesn't exist
+            getContentHandler().startElement(NULL_NS_URI, TOPIC_RELATED_LINKS.localName, TOPIC_RELATED_LINKS.localName, relatedLinksAtts);
+            domToSax(indexEntries.get(curMatchTopic));
+            getContentHandler().endElement(NULL_NS_URI, TOPIC_RELATED_LINKS.localName, TOPIC_RELATED_LINKS.localName);
+            curMatchTopic = null;
         }
+        getContentHandler().endElement(uri, localName, qName);
     }
 
     // DOM to SAX conversion methods
 
-    private void outputMeta(final Node root) throws IOException {
-        final NodeList children = root.getChildNodes();
-        Node child = null;
-        for (int i = 0; i < children.getLength(); i++){
-            child = children.item(i);
-            switch (child.getNodeType()) {
-                case Node.TEXT_NODE:
-                    output((Text) child); break;
-                case Node.PROCESSING_INSTRUCTION_NODE:
-                    output((ProcessingInstruction) child); break;
-                case Node.ELEMENT_NODE:
-                    output((Element) child); break;
+    private void domToSax(final Node root) throws SAXException {
+        try {
+            final Result result = new SAXResult(new FilterHandler(getContentHandler()));
+            final NodeList children = root.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                final Source source = new DOMSource(children.item(i));
+                saxToDomTransformer.transform(source, result);
             }
+        } catch (TransformerException e) {
+            throw new SAXException("Failed to serialize DOM node to SAX: " + e.getMessage(), e);
         }
     }
 
-    private void output(final ProcessingInstruction instruction) throws IOException{
-        String data = instruction.getData();
-        if (data != null && data.isEmpty()) {
-            data = null;
+    private static class FilterHandler extends XMLFilterImpl {
+
+        public FilterHandler(final ContentHandler handler) {
+            super();
+            setContentHandler(handler);
         }
-        writeProcessingInstruction(instruction.getTarget(), data);
-    }
 
-    private void output(final Text text) throws IOException{
-        final char[] cs = text.getData().toCharArray();
-        writeCharacters(cs, 0, cs.length);
-    }
-
-    private void output(final Element elem) throws IOException{
-        final AttributesImpl atts = new AttributesImpl();
-        final NamedNodeMap attrMap = elem.getAttributes();
-        for (int i = 0; i<attrMap.getLength(); i++){
-            addOrSetAttribute(atts, attrMap.item(i));
+        @Override
+        public void startDocument() throws SAXException {
+            // ignore
         }
-        writeStartElement(elem.getNodeName(), atts);
-        final NodeList children = elem.getChildNodes();
-        for (int j = 0; j<children.getLength(); j++){
-            final Node child = children.item(j);
-            switch (child.getNodeType()){
-                case Node.TEXT_NODE:
-                    output((Text) child); break;
-                case Node.PROCESSING_INSTRUCTION_NODE:
-                    output((ProcessingInstruction) child); break;
-                case Node.ELEMENT_NODE:
-                    output((Element) child); break;
-            }
+
+        @Override
+        public void endDocument() throws SAXException {
+            // ignore
         }
-        writeEndElement(elem.getNodeName());
+
     }
 
-    // SAX serializer methods
-
-    private void writeStartElement(final String qName, final Attributes atts) throws IOException {
-        final int attsLen = atts.getLength();
-        output.write(LESS_THAN + qName);
-        for (int i = 0; i < attsLen; i++) {
-            final String attQName = atts.getQName(i);
-            final String attValue = escapeXML(atts.getValue(i));
-            output.write(STRING_BLANK + attQName + EQUAL + QUOTATION + attValue + QUOTATION);
-        }
-        output.write(GREATER_THAN);
-    }
-    
-    private void writeEndElement(final String qName) throws IOException {
-        output.write(LESS_THAN + SLASH + qName + GREATER_THAN);
-    }
-    
-    private void writeCharacters(final char[] ch, final int start, final int length) throws IOException {
-        output.write(escapeXML(ch, start, length));
-    }
-
-    private void writeProcessingInstruction(final String target, final String data) throws IOException {
-        final String pi = data != null ? target + STRING_BLANK + data : target;
-        output.write(LESS_THAN + QUESTION + pi + QUESTION + GREATER_THAN);
-    }
-    
 }

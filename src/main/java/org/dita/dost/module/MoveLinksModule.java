@@ -66,7 +66,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
-            throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessage(), e);
+            throw new DITAOTException("Failed to read links from " + inputFile + ": " + e.getMessage(), e);
         } finally {
             if (in != null) {
                 try {
@@ -86,7 +86,11 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             for (final Map.Entry<File, Map<String, Element>> entry: mapSet.entrySet()) {
                 logger.info("Processing " + entry.getKey());
                 linkInserter.setLinks(entry.getValue());
-                linkInserter.write(new File(job.tempDir, entry.getKey().getPath()));
+                try {
+                    linkInserter.write(new File(job.tempDir, entry.getKey().getPath()));
+                } catch (final DITAOTException e) {
+                    logger.error("Failed to insert links: " + e.getMessage(), e);
+                }
             }
         }
         return null;
