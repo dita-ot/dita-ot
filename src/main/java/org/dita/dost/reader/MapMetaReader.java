@@ -132,7 +132,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     }
     
     @Override
-    public void process(final Document doc) {
+    public Document process(final Document doc) {
         this.doc = doc;
         final NodeList list = doc.getDocumentElement().getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
@@ -161,6 +161,7 @@ public final class MapMetaReader extends AbstractDomFilter {
                 }
             }
         }
+        return doc;
     }
 
     /**

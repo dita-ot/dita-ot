@@ -22,7 +22,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Transformer;
@@ -30,11 +29,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
+import org.dita.dost.writer.AbstractDomFilter;
 import org.dita.dost.writer.ChunkTopicParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,7 +45,7 @@ import org.w3c.dom.ProcessingInstruction;
  * ChunkMapReader class, read ditamap file for chunking.
  * 
  */
-public final class ChunkMapReader implements AbstractReader {
+public final class ChunkMapReader extends AbstractDomFilter {
 
     public static final String FILE_NAME_STUB_DITAMAP = "stub.ditamap";
     public static final String FILE_EXTENSION_CHUNK = ".chunk";
@@ -56,8 +55,6 @@ public final class ChunkMapReader implements AbstractReader {
     public static final String CHUNK_BY_TOPIC = "by-topic";
     public static final String CHUNK_TO_CONTENT = "to-content";
     public static final String CHUNK_TO_NAVIGATION = "to-navigation";
-
-    private DITAOTLogger logger;
 
     private boolean chunkByTopic = false;
 
@@ -108,26 +105,11 @@ public final class ChunkMapReader implements AbstractReader {
         this.inputFile = inputFile;
         filePath = inputFile.getParentFile();
 
-        final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
-        Document doc;
-        try {
-            doc = builder.parse(inputFile);
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
-            return;
-        }
-        
-        doc = process(doc);
-        
-        try {
-            outputMapFile(inputFile, doc);
-        } catch (final Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-
+        super.read(inputFile);
     }
 
-    private Document process(final Document doc) {
+    @Override
+    public Document process(final Document doc) {
         try {   
             // workdir and path2proj processing instructions.
             final NodeList docNodes = doc.getChildNodes();
@@ -249,11 +231,6 @@ public final class ChunkMapReader implements AbstractReader {
             logger.error(e.getMessage(), e);
             return null;
         }
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
     }
 
     private void outputMapFile(final File file, final Document doc) {  

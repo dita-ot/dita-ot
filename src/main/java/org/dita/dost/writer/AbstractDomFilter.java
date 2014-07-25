@@ -37,13 +37,13 @@ public abstract class AbstractDomFilter implements AbstractReader {
             return;
         }
 
-        process(doc);
+        final Document resDoc = process(doc);
 
         FileOutputStream file = null;
         try {
             file = new FileOutputStream(filename);
             final StreamResult res = new StreamResult(file);
-            final DOMSource ds = new DOMSource(doc);
+            final DOMSource ds = new DOMSource(resDoc);
             final Transformer tf = TransformerFactory.newInstance().newTransformer();
             tf.transform(ds, res);
         } catch (final Exception e) {
@@ -72,7 +72,8 @@ public abstract class AbstractDomFilter implements AbstractReader {
      * Modify document.
      * 
      * @param doc document to modify
+     * @return modified document, may be argument document
      */
-    public abstract void process(final Document doc);
+    public abstract Document process(final Document doc);
 
 }

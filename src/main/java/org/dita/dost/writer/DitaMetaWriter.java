@@ -60,7 +60,7 @@ public final class DitaMetaWriter extends AbstractDitaMetaWriter {
             TOPIC_OTHERMETA
     ));
 
-    public void process(final Document doc) {
+    public Document process(final Document doc) {
         Element root = doc.getDocumentElement();
         if (root.getTagName().equals(ELEMENT_NAME_DITA)) {
             root = getFirstChildElement(root, TOPIC_TOPIC);
@@ -77,6 +77,7 @@ public final class DitaMetaWriter extends AbstractDitaMetaWriter {
                 processMetadata(metadata, metadataOrder);
             }
         }
+        return doc;
     }
 
 }

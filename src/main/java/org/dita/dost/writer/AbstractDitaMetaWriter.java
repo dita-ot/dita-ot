@@ -37,7 +37,7 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
         this.metaTable = metaTable;
     }
 
-    public abstract void process(final Document doc);
+    public abstract Document process(final Document doc);
 
     protected void processMetadata(final Element metadataContainer, final List<DitaClass> order) {
         for (int i = 0; i < order.size(); i++) {
