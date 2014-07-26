@@ -74,7 +74,6 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         try {
             reader = getXMLReader();
             reader.setContentHandler(this);
-            reader.setProperty(LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);

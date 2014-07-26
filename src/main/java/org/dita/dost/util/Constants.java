@@ -844,10 +844,6 @@ public final class Constants {
     public static final String SAX_DRIVER_SUN_HACK_CLASS = "com.sun.org.apache.xerces.internal.parsers.SAXParser";
     /**SAX_DRIVER_CRIMSON_CLASS.*/
     public static final String SAX_DRIVER_CRIMSON_CLASS = "org.apache.crimson.parser.XMLReaderImpl";
-    /**RESOLVER_CLASS.*/
-    public static final String RESOLVER_CLASS = "org.apache.xml.resolver.tools.CatalogResolver";
-    /**LEXICAL_HANDLER_PROPERTY.*/
-    public static final String LEXICAL_HANDLER_PROPERTY = "http://xml.org/sax/properties/lexical-handler";
     /**FEATURE_NAMESPACE_PREFIX.*/
     public static final String FEATURE_NAMESPACE_PREFIX = "http://xml.org/sax/features/namespace-prefixes";
     /**FEATURE_NAMESPACE.*/

@@ -29,15 +29,15 @@ public final class TopicRefWriter extends AbstractXMLFilter {
 
     private Map<String, String> changeTable = null;
     private Map<String, String> conflictTable = null;
+    private File currentFileDir = null;
     private File currentFilePath = null;
-    private File currentFilePathName = null;
     /** Using for rectify relative path of xml */
     private String fixpath = null;
 
     @Override
     public void write(final File outputFilename) throws DITAOTException {
-        currentFilePathName = outputFilename.getAbsoluteFile();
-        currentFilePath = outputFilename.getParentFile();
+        currentFilePath = outputFilename.getAbsoluteFile();
+        currentFileDir = outputFilename.getParentFile();
         super.write(outputFilename);
     }
 
@@ -78,24 +78,36 @@ public final class TopicRefWriter extends AbstractXMLFilter {
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
         Attributes as = atts;
-        final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
-        if (href != null) {
-            final AttributesImpl res = new AttributesImpl(atts);
-            addOrSetAttribute(res, ATTRIBUTE_NAME_HREF, updateHref(as));
-            as = res;
+
+        if (TOPIC_OBJECT.matches(atts)) {
+            final String data = atts.getValue(ATTRIBUTE_NAME_DATA);
+            if (data != null) {
+                final AttributesImpl res = new AttributesImpl(atts);
+                addOrSetAttribute(res, ATTRIBUTE_NAME_DATA, updateData(data));
+                as = res;
+            }
+        } else {
+            final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
+            if (href != null) {
+                final AttributesImpl res = new AttributesImpl(atts);
+                addOrSetAttribute(res, ATTRIBUTE_NAME_HREF, updateHref(as));
+                as = res;
+            }
         }
+
         getContentHandler().startElement(uri, localName, qName, as);
     }
 
     /**
      * Check whether the attributes contains references
      * 
-     * @param atts
-     * @return true/false
+     * @param atts element attributes
+     * @return {@code true} if local DITA reference, otherwise {@code false}
      */
     private boolean isLocalDita(final Attributes atts) {
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
         if (classValue == null
+                // FIXME doesn't handle e.g. data, data-about, author, or source elements correctly
                 || (!TOPIC_XREF.matches(classValue) && !TOPIC_LINK.matches(classValue) && !MAP_TOPICREF.matches(classValue))) {
             return false;
         }
@@ -113,26 +125,34 @@ public final class TopicRefWriter extends AbstractXMLFilter {
 
     }
 
+    private String updateData(final String origValue) {
+        String hrefValue = origValue;
+        if (fixpath != null && hrefValue.startsWith(fixpath)) {
+            hrefValue = hrefValue.substring(fixpath.length());
+        }
+        return hrefValue;
+    }
+
     private String updateHref(final Attributes atts) {
-        String attValue = atts.getValue(ATTRIBUTE_NAME_HREF);
-        if (attValue == null) {
+        String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
+        if (hrefValue == null) {
             return null;
         }
-        if (fixpath != null && attValue.startsWith(fixpath)) {
-            attValue = attValue.substring(fixpath.length());
+        if (fixpath != null && hrefValue.startsWith(fixpath)) {
+            hrefValue = hrefValue.substring(fixpath.length());
         }
 
         if (changeTable == null || changeTable.isEmpty()) {
-            return attValue;
+            return hrefValue;
         }
 
         if (isLocalDita(atts)) {
             // replace the href value if it's referenced topic is extracted.
-            final File rootPathName = currentFilePathName;
-            String changeTargetkey = resolve(currentFilePath, attValue).getPath();
+            final File rootPathName = currentFilePath;
+            String changeTargetkey = resolve(currentFileDir, hrefValue).getPath();
             String changeTarget = changeTable.get(changeTargetkey);
 
-            final String topicID = getTopicID(attValue);
+            final String topicID = getTopicID(hrefValue);
             if (topicID != null) {
                 changeTargetkey = setFragment(changeTargetkey, topicID);
                 final String changeTarget_with_elemt = changeTable.get(changeTargetkey);
@@ -141,17 +161,17 @@ public final class TopicRefWriter extends AbstractXMLFilter {
                 }
             }
 
-            final String elementID = getElementID(attValue);
-            final String pathtoElem = getFragment(attValue, "");
+            final String elementID = getElementID(hrefValue);
+            final String pathtoElem = getFragment(hrefValue, "");
 
             if (changeTarget == null || changeTarget.isEmpty()) {
-                String absolutePath = resolveTopic(currentFilePath, attValue);
+                String absolutePath = resolveTopic(currentFileDir, hrefValue);
                 absolutePath = setElementID(absolutePath, null);
                 changeTarget = changeTable.get(absolutePath);
             }
 
             if (changeTarget == null) {
-                return attValue;// no change
+                return hrefValue;// no change
             } else {
                 final String conTarget = conflictTable.get(stripFragment(changeTarget));
                 if (conTarget != null && !conTarget.isEmpty()) {
@@ -188,7 +208,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
                 }
             }
         }
-        return attValue;
+        return hrefValue;
     }
 
     /**

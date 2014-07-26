@@ -53,7 +53,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.ext.LexicalHandler;
 
 
 
@@ -621,80 +620,5 @@ public final class DitaWriter extends AbstractXMLFilter {
         this.locator = locator;
         getContentHandler().setDocumentLocator(locator);
     }
-    
-    // LexicalHandler methods
-    
-    @Override
-    public void setProperty(final String name, final Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
-        if (getParent().getClass().getName().equals(SAX_DRIVER_DEFAULT_CLASS) && name.equals(LEXICAL_HANDLER_PROPERTY)) {
-            getParent().setProperty(name, new XercesFixLexicalHandler((LexicalHandler) value));
-        } else {
-            getParent().setProperty(name, value);
-        }
-    }
-    
-    /**
-     * LexicalHandler implementation to work around Xerces bug. When source document root contains
-     * 
-     * <pre>&lt;!--AAA-->
-&lt;!--BBBbbbBBB-->
-&lt;!--CCCCCC--></pre>
-     *
-     * the output will be
-     * 
-     * <pre>&lt;!--CCC-->
-&lt;!--CCCCCCBBB-->
-&lt;!--CCCCCC--></pre>
-     *
-     * This implementation makes a copy of the comment data array and passes the copy forward.
-     * 
-     * @since 1.6
-     */
-    private static final class XercesFixLexicalHandler implements LexicalHandler {
 
-        private final LexicalHandler lexicalHandler;
-        
-        XercesFixLexicalHandler(final LexicalHandler lexicalHandler) {
-            this.lexicalHandler = lexicalHandler;
-        }
-        
-        @Override
-        public void comment(final char[] arg0, final int arg1, final int arg2) throws SAXException {
-            final char[] buf = new char[arg2];
-            System.arraycopy(arg0, arg1, buf, 0, arg2);
-            lexicalHandler.comment(buf, 0, arg2);
-        }
-    
-        @Override
-        public void endCDATA() throws SAXException {
-            lexicalHandler.endCDATA();
-        }
-    
-        @Override
-        public void endDTD() throws SAXException {
-            lexicalHandler.endDTD();
-        }
-    
-        @Override
-        public void endEntity(final String arg0) throws SAXException {
-            lexicalHandler.endEntity(arg0);
-        }
-    
-        @Override
-        public void startCDATA() throws SAXException {
-            lexicalHandler.startCDATA();
-        }
-    
-        @Override
-        public void startDTD(final String arg0, final String arg1, final String arg2) throws SAXException {
-            lexicalHandler.startDTD(arg0, arg1, arg2);
-        }
-    
-        @Override
-        public void startEntity(final String arg0) throws SAXException {
-            lexicalHandler.startEntity(arg0);
-        }
-    
-    }
-    
 }

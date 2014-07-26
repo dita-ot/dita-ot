@@ -20,7 +20,6 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.ext.LexicalHandler;
 
 /**
  * AbstractXMLWriter class.
@@ -30,7 +29,7 @@ import org.xml.sax.ext.LexicalHandler;
  */
 
 abstract class AbstractXMLWriter implements AbstractWriter,
-ContentHandler, LexicalHandler, EntityResolver {
+ContentHandler, EntityResolver {
 
     protected DITAOTLogger logger;
     protected Job job;
@@ -84,35 +83,6 @@ ContentHandler, LexicalHandler, EntityResolver {
     @Override
     public void startPrefixMapping(final String prefix, final String uri)
             throws SAXException {
-    }
-
-    @Override
-    public void comment(final char[] ch, final int start, final int length) throws SAXException {
-    }
-
-    @Override
-    public void endCDATA() throws SAXException {
-    }
-
-    @Override
-    public void endDTD() throws SAXException {
-    }
-
-    @Override
-    public void endEntity(final String name) throws SAXException {
-    }
-
-    @Override
-    public void startCDATA() throws SAXException {
-    }
-
-    @Override
-    public void startDTD(final String name, final String publicId, final String systemId)
-            throws SAXException {
-    }
-
-    @Override
-    public void startEntity(final String name) throws SAXException {
     }
 
     @Override
