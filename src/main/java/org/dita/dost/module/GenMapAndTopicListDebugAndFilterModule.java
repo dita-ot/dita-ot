@@ -747,7 +747,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
 //        for (int i = uplevels; i > 0; i--) {
 //            final File file = baseInputDir;
 //            baseInputDir = baseInputDir.getParentFile();
-//            prefix = new StringBuffer(file.getName()).append(File.separator).append(prefix).toString();
+//            prefix = new StringBuilder(file.getName()).append(File.separator).append(prefix).toString();
 //        }
 //    }
 
@@ -758,7 +758,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      */
     private String getUpdateLevels() {
 //        int current = uplevels;
-//        final StringBuffer buff = new StringBuffer();
+//        final StringBuilder buff = new StringBuilder();
 //        while (current > 0) {
 //            buff.append(".." + File.separator);
 //            current--;

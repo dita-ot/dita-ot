@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
  */
 public final class TopicIdParser implements ContentHandler {
     private boolean isFirstId = true;
-    private StringBuffer firstId = null;
+    private StringBuilder firstId = null;
 
     /**
      * Default Constructor.
@@ -35,7 +35,7 @@ public final class TopicIdParser implements ContentHandler {
      * Constructor.
      * @param result to store the topic id
      */
-    public TopicIdParser(final StringBuffer result) {
+    public TopicIdParser(final StringBuilder result) {
         firstId = result;
     }
 

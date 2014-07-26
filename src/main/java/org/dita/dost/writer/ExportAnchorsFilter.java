@@ -161,12 +161,12 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
                 shouldAppendEndTag = true;
             }
         } else if (DELAY_D_ANCHORKEY.matches(classValue)) {
-            // create keyref element in the StringBuffer
+            // create keyref element in the StringBuilder
             // TODO in topic file is no keys
             final String keyref = atts.getValue(ATTRIBUTE_NAME_KEYREF);
             currentExportAnchor.keys.add(keyref);
         } else if (DELAY_D_ANCHORID.matches(classValue)) {
-            // create keyref element in the StringBuffer
+            // create keyref element in the StringBuilder
             final String id = atts.getValue(ATTRIBUTE_NAME_ID);
             // If current file is a ditamap file
             // The id can only be element id within a topic

@@ -177,7 +177,7 @@ public final class IndexTermCollection {
      * @throws DITAOTException exception
      */
     public void outputTerms() throws DITAOTException {
-        StringBuffer buff = new StringBuffer(outputFileRoot);
+        StringBuilder buff = new StringBuilder(outputFileRoot);
         AbstractWriter abstractWriter = null;
         IDitaTranstypeIndexWriter indexWriter = null;
 
@@ -202,7 +202,7 @@ public final class IndexTermCollection {
                 }
 
 
-                buff = new StringBuffer(indexWriter.getIndexFileName(outputFileRoot));
+                buff = new StringBuilder(indexWriter.getIndexFileName(outputFileRoot));
 
 
             } catch (final ClassNotFoundException e) {
@@ -237,7 +237,7 @@ public final class IndexTermCollection {
                 ((EclipseIndexWriter) abstractWriter).setFilePath(indexDir
                         .getAbsolutePath());
                 // buff.insert(filepath, "\\index.xml");
-                buff = new StringBuffer(new File(indexDir, "index.xml")
+                buff = new StringBuilder(new File(indexDir, "index.xml")
                 .getAbsolutePath());
             }
         }

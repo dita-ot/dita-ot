@@ -552,7 +552,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
             if (copytoMap.containsKey(key)) {
                 /*
-                 * StringBuffer buff = new StringBuffer();
+                 * StringBuilder buff = new StringBuilder();
                  * buff.append("Copy-to task [href=\""); buff.append(value);
                  * buff.append("\" copy-to=\""); buff.append(key);
                  * buff.append("\"] which points to another copy-to target");

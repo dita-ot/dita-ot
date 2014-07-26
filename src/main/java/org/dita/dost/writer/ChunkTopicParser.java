@@ -1181,7 +1181,7 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      *         an empty string is returned.
      */
     private String getFirstTopicId(final String absolutePathToFile) {
-        final StringBuffer firstTopicId = new StringBuffer();
+        final StringBuilder firstTopicId = new StringBuilder();
 
         if (absolutePathToFile == null || !isAbsolutePath(absolutePathToFile)) {
             return firstTopicId.toString();

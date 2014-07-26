@@ -236,14 +236,14 @@ public final class URLUtils {
         }
 
         // Buffer where eventual query string will be processed.
-        StringBuffer queryBuffer = null;
+        StringBuilder queryBuffer = null;
         if (!forceCorrection) {
             final int queryIndex = url.indexOf('?');
             if (queryIndex != -1) {
                 // We have a query
                 final String query = url.substring(queryIndex + 1);
                 url = url.substring(0, queryIndex);
-                queryBuffer = new StringBuffer(query.length());
+                queryBuffer = new StringBuilder(query.length());
                 // Tokenize by &
                 final StringTokenizer st = new StringTokenizer(query, "&");
                 while (st.hasMoreElements()) {

@@ -136,7 +136,7 @@ public final class MergeUtils {
             return null;
         }
         final DITAOTLogger logger = new DITAOTJavaLogger();
-        final StringBuffer firstTopicId = new StringBuffer();
+        final StringBuilder firstTopicId = new StringBuilder();
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
         try {
             final XMLReader reader = XMLUtils.getXMLReader();
