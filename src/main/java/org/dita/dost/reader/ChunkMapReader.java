@@ -29,6 +29,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.util.Job;
@@ -52,7 +53,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     public static final String CHUNK_TO_CONTENT = "to-content";
     public static final String CHUNK_TO_NAVIGATION = "to-navigation";
 
-    private boolean chunkByTopic = false; // By default, processor should chunk by document.
+    private String defaultChunkByToken;
 
     /** Input file's parent directory */
     private File filePath = null;
@@ -106,7 +107,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
         final Element root = doc.getDocumentElement();
         final String rootChunkValue = root.getAttribute(ATTRIBUTE_NAME_CHUNK);
-        chunkByTopic = rootChunkValue != null && rootChunkValue.contains(CHUNK_BY_TOPIC);
+        defaultChunkByToken = getChunkByToken(rootChunkValue, CHUNK_BY_DOCUMENT);
         // chunk value = "to-content"
         // When @chunk="to-content" is specified on "map" element,
         // chunk module will change its @class attribute to "topicref"
@@ -134,6 +135,18 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
 
         return buildOutputDocument(root);
+    }
+
+    private String getChunkByToken(final String chunkValue, final String defaultToken) {
+        if (chunkValue == null || chunkValue.isEmpty()) {
+            return defaultToken;
+        }
+        for (final String token: chunkValue.split("\\s+")) {
+            if (token.startsWith("by-")) {
+                return token;
+            }
+        }
+        return defaultToken;
     }
 
     /**
@@ -170,6 +183,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
             o.writeEndDocument();
             o.close();
             newFileWriter.flush();
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -220,6 +235,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
             output = new FileOutputStream(file);
             final Transformer t = TransformerFactory.newInstance().newTransformer();
             t.transform(new DOMSource(doc), new StreamResult(output));
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -261,7 +278,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
         String xtrfValue = null;
         String processValue = null;
         final String tempRole = processingRole;
-        boolean prevChunkByTopic = false;
 
         final Attr hrefAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_HREF);
         final Attr chunkAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_CHUNK);
@@ -298,40 +314,24 @@ public final class ChunkMapReader extends AbstractDomFilter {
             return;
         }
 
-        // set chunkByTopic if there is "by-topic" or "by-document" in chunkValue
-        if (chunkValue != null && (chunkValue.contains(CHUNK_BY_TOPIC) || chunkValue.contains(CHUNK_BY_DOCUMENT))) {
-            // a temp value to store the flag
-            prevChunkByTopic = chunkByTopic;
-            chunkByTopic = chunkValue.contains(CHUNK_BY_TOPIC);
-        }
+        final String chunkByToken = getChunkByToken(chunkValue, defaultChunkByToken);
 
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)
                 || (hrefValue != null && !resolve(filePath, hrefValue).exists())
                 || (MAPGROUP_D_TOPICHEAD.matches(classValue) && chunkValue == null)
                 || (MAP_TOPICREF.matches(classValue) && chunkValue == null && hrefValue == null)) {
-            // ||
-            // (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processValue)))
-            // {
             // Skip external links or non-existing href files.
             // Skip topic head entries.
-            // Skip @processing-role=resource-only entries.
-            if (chunkValue != null && (chunkValue.contains(CHUNK_BY_TOPIC) || chunkValue.contains(CHUNK_BY_DOCUMENT))) {
-                chunkByTopic = prevChunkByTopic;
-            }
             processChildTopicref(topicref);
         // chunk "to-content"
         } else if (chunkValue != null && chunkValue.contains(CHUNK_TO_CONTENT)
                 && (hrefAttr != null || copytoAttr != null || topicref.hasChildNodes())) {
             // if this is the start point of the content chunk
             // TODO very important start point(to-content).
-            processChunk(topicref, false, chunkByTopic);
+            processChunk(topicref, false);
         } else if (chunkValue != null && chunkValue.contains(CHUNK_TO_NAVIGATION)
                 && INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // if this is the start point of the navigation chunk
-            if (chunkValue != null && (chunkValue.contains(CHUNK_BY_TOPIC) || chunkValue.contains(CHUNK_BY_DOCUMENT))) {
-                // restore the chunkByTopic value
-                chunkByTopic = prevChunkByTopic;
-            }
             processChildTopicref(topicref);
             // create new map file
             // create new map's root element
@@ -349,12 +349,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
             changeTable.put(navmap.getPath(), navmap.getPath());
             outputMapFile(navmap, buildOutputDocument(root));
         // chunk "by-topic"
-        } else if (chunkByTopic) {
+        } else if (chunkByToken.equals(CHUNK_BY_TOPIC)) {
             // TODO very important start point(by-topic).
-            processChunk(topicref, true, chunkByTopic);
-            if (chunkValue != null && (chunkValue.contains(CHUNK_BY_TOPIC) || chunkValue.contains(CHUNK_BY_DOCUMENT))) {
-                chunkByTopic = prevChunkByTopic;
-            }
+            processChunk(topicref, true);
             processChildTopicref(topicref);
         } else {
             String currentPath = null;
@@ -373,23 +370,14 @@ public final class ChunkMapReader extends AbstractDomFilter {
             }
 
             // Here, we have a "by-document" chunk, simply send it to the output.
-            if ((chunkValue != null || !chunkByTopic)
+            if ((chunkValue != null || chunkByToken.equals(CHUNK_BY_DOCUMENT))
                     && currentPath != null
                     && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                 changeTable.put(currentPath, currentPath);
             }
-
-            if (chunkValue != null && (chunkValue.contains(CHUNK_BY_TOPIC) || chunkValue.contains(CHUNK_BY_DOCUMENT))) {
-                chunkByTopic = prevChunkByTopic;
-            }
-
             processChildTopicref(topicref);
         }
 
-        // restore chunkByTopic if there is "by-topic" or "by-document" in chunkValue
-        if (chunkValue != null && (chunkValue.contains(CHUNK_BY_TOPIC) || chunkValue.contains(CHUNK_BY_DOCUMENT))) {
-            chunkByTopic = prevChunkByTopic;
-        }
         processingRole = tempRole;
     }
 
@@ -415,14 +403,14 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
     }
 
-    private void processChunk(final Element topicref, final boolean separate, final boolean chunkByTopic) {
+    private void processChunk(final Element topicref, final boolean separate) {
         try {
             final ChunkTopicParser chunkParser = new ChunkTopicParser();
             chunkParser.setLogger(logger);
             chunkParser.setJob(job);
-            chunkParser.setup(changeTable, conflictTable, refFileSet, topicref, separate, chunkByTopic, chunkFilenameGenerator);
+            chunkParser.setup(changeTable, conflictTable, refFileSet, topicref, separate, chunkFilenameGenerator);
             chunkParser.write(filePath);
-        } catch (final Exception e) {
+        } catch (final DITAOTException e) {
             logger.error("Failed to process chunk: " + e.getMessage(), e);
         }
     }

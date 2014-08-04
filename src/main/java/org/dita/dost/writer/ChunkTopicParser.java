@@ -176,10 +176,9 @@ public final class ChunkTopicParser extends AbstractXMLWriter {
      * @param refFileSet refFileSet
      * @param elem chunking topicref
      * @param separate separate
-     * @param chunkByTopic chunkByTopic
      */
     public void setup(final LinkedHashMap<String, String> changeTable, final Map<String, String> conflictTable,
-                      final Set<String> refFileSet, final Element elem, final boolean separate, final boolean chunkByTopic,
+                      final Set<String> refFileSet, final Element elem, final boolean separate,
                       final ChunkFilenameGenerator chunkFilenameGenerator) {
         this.changeTable = changeTable;
         this.rootTopicref = elem;

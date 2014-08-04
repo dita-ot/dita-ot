@@ -91,15 +91,20 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
 
         final Map<String, String> changeTable = mapReader.getChangeTable();
         if (!changeTable.isEmpty()) {
-            // update dita.list to include new generated files
             updateList(changeTable, mapReader.getConflicTable());
-            // update references in dita files
             updateRefOfDita(changeTable, mapReader.getConflicTable());
         }
 
         return null;
     }
-    
+
+    /**
+     * Check whether ditamap is an Eclipse specialization.
+     *
+     * @param mapFile ditamap file to test
+     * @return {@code true} if Eclipse specialization, otherwise {@code false}
+     * @throws DITAOTException if reading ditamap fails
+     */
     private boolean isEclipseMap(final File mapFile) throws DITAOTException {
         final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
         Document doc;
@@ -114,7 +119,9 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         return ECLIPSEMAP_PLUGIN.matches(root);
     }
 
-    // update the href in ditamap and topic files
+    /**
+     * Update href attributes in ditamap and topic files.
+     */
     private void updateRefOfDita(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
         final TopicRefWriter topicRefWriter = new TopicRefWriter();
         topicRefWriter.setLogger(logger);
@@ -136,6 +143,9 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
 
     }
 
+    /**
+     * Update Job configuration to include new generated files
+     */
     private void updateList(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
         final File xmlDitalist = new File(job.tempDir, "dummy.xml");
 
