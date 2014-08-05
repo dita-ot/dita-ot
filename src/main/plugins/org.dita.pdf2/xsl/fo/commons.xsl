@@ -186,7 +186,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="topicType"/>
     <xsl:variable name="page-sequence-reference" select="if ($mapType = 'bookmap') then 'body-sequence' else 'ditamap-body-sequence'"/>
     <xsl:choose>
-      <xsl:when test="empty(ancestor::*[contains(@class,' topic/topic ')])">
+      <xsl:when test="empty(ancestor::*[contains(@class,' topic/topic ')]) and empty(ancestor::ot-placeholder:glossarylist)">
         <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
           <xsl:call-template name="startPageNumbering"/>
           <xsl:call-template name="insertBodyStaticContents"/>
