@@ -47,6 +47,13 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:key name="id" match="*[@id]" use="@id"/>
     <xsl:key name="map-id" match="opentopic:map//*[@id]" use="@id"/>
+    <xsl:key name="topic-id"
+                 match="*[@id][contains(@class, ' topic/topic ')] |
+                        ot-placeholder:*[@id]"
+                 use="@id"/>
+
+    <xsl:key name="fnById" match="*[contains(@class, ' topic/fn ')]" use="@id"/>
+    <xsl:key name="class" match="*[@class]" use="tokenize(@class, ' ')"/>
 
     <xsl:variable name="msgprefix" select="'PDFX'"/>
 
