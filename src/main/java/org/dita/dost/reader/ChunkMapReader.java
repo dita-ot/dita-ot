@@ -64,7 +64,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     private final Set<String> refFileSet = new HashSet<String>(128);
 
-    private String transtype = null;
+    private boolean supportToNavigation;
 
     private ProcessingInstruction workdir = null;
     private ProcessingInstruction workdirUrl = null;
@@ -323,15 +323,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
             // Skip external links or non-existing href files.
             // Skip topic head entries.
             processChildTopicref(topicref);
-        // chunk "to-content"
         } else if (chunkValue != null && chunkValue.contains(CHUNK_TO_CONTENT)
                 && (hrefAttr != null || copytoAttr != null || topicref.hasChildNodes())) {
-            // if this is the start point of the content chunk
-            // TODO very important start point(to-content).
             processChunk(topicref, false);
         } else if (chunkValue != null && chunkValue.contains(CHUNK_TO_NAVIGATION)
-                && INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            // if this is the start point of the navigation chunk
+                && supportToNavigation) {
             processChildTopicref(topicref);
             // create new map file
             // create new map's root element
@@ -339,7 +335,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
             // create navref element
             final Element navref = topicref.getOwnerDocument().createElement(MAP_NAVREF.localName);
             final String newMapFile = chunkFilenameGenerator.generateFilename("MAPCHUNK", FILE_EXTENSION_DITAMAP);
-            navref.setAttribute(MAPGROUP_D_MAPREF.localName, newMapFile);
+            navref.setAttribute(ATTRIBUTE_NAME_MAPREF, newMapFile);
             navref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_NAVREF.toString());
             // replace topicref with navref
             topicref.getParentNode().replaceChild(navref, topicref);
@@ -348,7 +344,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
             final File navmap = resolve(filePath, newMapFile);
             changeTable.put(navmap.getPath(), navmap.getPath());
             outputMapFile(navmap, buildOutputDocument(root));
-        // chunk "by-topic"
         } else if (chunkByToken.equals(CHUNK_BY_TOPIC)) {
             // TODO very important start point(by-topic).
             processChunk(topicref, true);
@@ -369,7 +364,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 }
             }
 
-            // Here, we have a "by-document" chunk, simply send it to the output.
             if ((chunkValue != null || chunkByToken.equals(CHUNK_BY_DOCUMENT))
                     && currentPath != null
                     && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
@@ -381,7 +375,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         processingRole = tempRole;
     }
 
-    private void processChildTopicref(final Node node) {
+    private void processChildTopicref(final Element node) {
         final NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node current = children.item(i);
@@ -391,11 +385,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 if (MAP_TOPICREF.matches(classValue)) {
                     final String hrefValue = currentElem.getAttribute(ATTRIBUTE_NAME_HREF);
                     final String xtrfValue = currentElem.getAttribute(ATTRIBUTE_NAME_XTRF);
-                    if (hrefValue.length() == 0) {
+                    if (hrefValue.length() == 0 || MAPGROUP_D_TOPICHEAD.matches(classValue)) {
                         processTopicref(currentElem);
-                    } else if ((!ATTR_XTRF_VALUE_GENERATED.equals(xtrfValue)
-                                && !resolve(filePath, hrefValue).getPath().equals(changeTable.get(resolve(filePath, hrefValue).getPath())))
-                            || MAPGROUP_D_TOPICHEAD.matches(classValue)) {
+                    } else if (!ATTR_XTRF_VALUE_GENERATED.equals(xtrfValue)
+                            && !resolve(filePath, hrefValue).getPath().equals(changeTable.get(resolve(filePath, hrefValue).getPath()))) {
                         processTopicref(currentElem);
                     }
                 }
@@ -460,12 +453,12 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     /**
-     * Set up environment.
+     * Support chunk token to-navigation.
      * 
-     * @param transtype transtype
+     * @param supportToNavigation flag to enable to-navigation support
      */
-    public void setup(final String transtype) {
-        this.transtype = transtype;
+    public void supportToNavigation(final boolean supportToNavigation) {
+        this.supportToNavigation = supportToNavigation;
     }
 
 }

@@ -600,6 +600,8 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_CONREF = "conref";
     /**href attribute.*/
     public static final String ATTRIBUTE_NAME_HREF = "href";
+    /**mapref attribute.*/
+    public static final String ATTRIBUTE_NAME_MAPREF = "mapref";
     /**navtitle attribute.*/
     public static final String ATTRIBUTE_NAME_NAVTITLE = "navtitle";
     /**format attribute.*/

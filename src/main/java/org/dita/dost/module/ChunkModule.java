@@ -59,7 +59,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * Entry point of chunk module. Starting from map files, it parses and
      * processes chunk attribute, writes out the "chunked" results and finally
-     * update references pointing to "chunked" topics in other dita topics.
+     * updates reference pointing to "chunked" topics in other topics.
      * 
      * @param input Input parameters and resources.
      * @return null
@@ -72,7 +72,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(logger);
         mapReader.setJob(job);
-        mapReader.setup(transtype);
+        mapReader.supportToNavigation(INDEX_TYPE_ECLIPSEHELP.equals(transtype));
 
         try {
             final File mapFile = new File(job.tempDir, job.getProperty(INPUT_DITAMAP)).getAbsoluteFile();

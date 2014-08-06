@@ -41,23 +41,25 @@ public abstract class AbstractDomFilter implements AbstractReader {
 
         final Document resDoc = process(doc);
 
-        FileOutputStream file = null;
-        try {
-            file = new FileOutputStream(filename);
-            final StreamResult res = new StreamResult(file);
-            final DOMSource ds = new DOMSource(resDoc);
-            final Transformer tf = TransformerFactory.newInstance().newTransformer();
-            tf.transform(ds, res);
-        } catch (final RuntimeException e) {
-            throw e;
-        } catch (final Exception e) {
-            logger.error("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
-        } finally {
-            if (file != null) {
-                try {
-                    file.close();
-                } catch (final IOException e) {
-                    // NOOP
+        if (resDoc != null) {
+            FileOutputStream file = null;
+            try {
+                file = new FileOutputStream(filename);
+                final StreamResult res = new StreamResult(file);
+                final DOMSource ds = new DOMSource(resDoc);
+                final Transformer tf = TransformerFactory.newInstance().newTransformer();
+                tf.transform(ds, res);
+            } catch (final RuntimeException e) {
+                throw e;
+            } catch (final Exception e) {
+                logger.error("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
+            } finally {
+                if (file != null) {
+                    try {
+                        file.close();
+                    } catch (final IOException e) {
+                        // NOOP
+                    }
                 }
             }
         }
@@ -76,7 +78,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
      * Modify document.
      * 
      * @param doc document to modify
-     * @return modified document, may be argument document
+     * @return modified document, may be argument document; if {@code null}, document is not serialized
      */
     public abstract Document process(final Document doc);
 
