@@ -151,8 +151,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * Process map when "to-content" is specified on map element.
-      */
-    private void chunkMap(Element root) {
+     */
+    private void chunkMap(final Element root) {
         // create the reference to the new file on root element.
         String newFilename = replaceExtension(inputFile.getName(), FILE_EXTENSION_DITA);
         File newFile = new File(inputFile.getParentFile().getAbsolutePath(), newFilename);
@@ -170,7 +170,22 @@ public final class ChunkMapReader extends AbstractDomFilter {
         root.setAttribute(ATTRIBUTE_NAME_CLASS, originClassValue + MAP_TOPICREF.matcher);
         root.setAttribute(ATTRIBUTE_NAME_HREF, newFilename);
 
-        // create the new topic stump
+        createTopicStump(newFile);
+
+        // process chunk
+        processTopicref(root);
+
+        // restore original root element
+        if (originClassValue != null) {
+            root.setAttribute(ATTRIBUTE_NAME_CLASS, originClassValue);
+        }
+        root.removeAttribute(ATTRIBUTE_NAME_HREF);
+    }
+
+    /**
+     * Create the new topic stump.
+     */
+    private void createTopicStump(final File newFile) {
         OutputStream newFileWriter = null;
         try {
             newFileWriter = new FileOutputStream(newFile);
@@ -196,15 +211,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 logger.error(e.getMessage(), e);
             }
         }
-
-        // process chunk
-        processTopicref(root);
-
-        // restore original root element
-        if (originClassValue != null) {
-            root.setAttribute(ATTRIBUTE_NAME_CLASS, originClassValue);
-        }
-        root.removeAttribute(ATTRIBUTE_NAME_HREF);
     }
 
     /**
@@ -268,47 +274,13 @@ public final class ChunkMapReader extends AbstractDomFilter {
         return doc;
     } 
 
-    // process chunk
     private void processTopicref(final Element topicref) {
-        String hrefValue = null;
-        String chunkValue = null;
-        String copytoValue = null;
-        String scopeValue = null;
-        String classValue = null;
-        String xtrfValue = null;
-        String processValue = null;
-        final String tempRole = processingRole;
+        final String hrefValue = getValue(topicref,ATTRIBUTE_NAME_HREF);
+        final String chunkValue = getValue(topicref, ATTRIBUTE_NAME_CHUNK);
+        final String copytoValue = getValue(topicref, ATTRIBUTE_NAME_COPY_TO);
+        final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
+        final String xtrfValue = getValue(topicref, ATTRIBUTE_NAME_XTRF);
 
-        final Attr hrefAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_HREF);
-        final Attr chunkAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_CHUNK);
-        final Attr copytoAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
-        final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
-        final Attr classAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_CLASS);
-        final Attr xtrfAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_XTRF);
-        final Attr processAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_PROCESSING_ROLE);
-
-        if (hrefAttr != null) {
-            hrefValue = hrefAttr.getNodeValue();
-        }
-        if (chunkAttr != null) {
-            chunkValue = chunkAttr.getNodeValue();
-        }
-        if (copytoAttr != null) {
-            copytoValue = copytoAttr.getNodeValue();
-        }
-        if (scopeAttr != null) {
-            scopeValue = scopeAttr.getNodeValue();
-        }
-        if (classAttr != null) {
-            classValue = classAttr.getNodeValue();
-        }
-        if (xtrfAttr != null) {
-            xtrfValue = xtrfAttr.getNodeValue();
-        }
-        if (processAttr != null) {
-            processValue = processAttr.getNodeValue();
-            processingRole = processValue;
-        }
         // This file is chunked(by-topic)
         if (xtrfValue != null && xtrfValue.contains(ATTR_XTRF_VALUE_GENERATED)) {
             return;
@@ -318,13 +290,12 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)
                 || (hrefValue != null && !resolve(filePath, hrefValue).exists())
-                || (MAPGROUP_D_TOPICHEAD.matches(classValue) && chunkValue == null)
-                || (MAP_TOPICREF.matches(classValue) && chunkValue == null && hrefValue == null)) {
+                || (chunkValue == null && hrefValue == null)) {
             // Skip external links or non-existing href files.
             // Skip topic head entries.
             processChildTopicref(topicref);
         } else if (chunkValue != null && chunkValue.contains(CHUNK_TO_CONTENT)
-                && (hrefAttr != null || copytoAttr != null || topicref.hasChildNodes())) {
+                && (hrefValue != null || copytoValue != null || topicref.hasChildNodes())) {
             processChunk(topicref, false);
         } else if (chunkValue != null && chunkValue.contains(CHUNK_TO_NAVIGATION)
                 && supportToNavigation) {
@@ -371,8 +342,31 @@ public final class ChunkMapReader extends AbstractDomFilter {
             }
             processChildTopicref(topicref);
         }
+    }
 
-        processingRole = tempRole;
+    private String getValue(final Element elem, final String attrName) {
+        final Attr attr = elem.getAttributeNode(attrName);
+        if (attr != null) {
+            return attr.getValue();
+        }
+        return null;
+    }
+
+    private String getCascadeValue(final Element elem, final String attrName) {
+        Element current = elem;
+        while (current != null) {
+            final Attr attr = current.getAttributeNode(attrName);
+            if (attr != null) {
+                return attr.getValue();
+            }
+            final Node parent = current.getParentNode();
+            if (parent != null && parent.getNodeType() == Node.ELEMENT_NODE) {
+                current = (Element) parent;
+            } else {
+                break;
+            }
+        }
+        return null;
     }
 
     private void processChildTopicref(final Element node) {
@@ -385,7 +379,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 if (MAP_TOPICREF.matches(classValue)) {
                     final String hrefValue = currentElem.getAttribute(ATTRIBUTE_NAME_HREF);
                     final String xtrfValue = currentElem.getAttribute(ATTRIBUTE_NAME_XTRF);
-                    if (hrefValue.length() == 0 || MAPGROUP_D_TOPICHEAD.matches(classValue)) {
+                    if (hrefValue.length() == 0) {
                         processTopicref(currentElem);
                     } else if (!ATTR_XTRF_VALUE_GENERATED.equals(xtrfValue)
                             && !resolve(filePath, hrefValue).getPath().equals(changeTable.get(resolve(filePath, hrefValue).getPath()))) {
