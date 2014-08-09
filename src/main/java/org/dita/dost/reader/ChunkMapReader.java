@@ -11,16 +11,14 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.URLUtils.*;
+import static java.util.Arrays.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.net.URI;
+import java.util.*;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
@@ -39,7 +37,7 @@ import org.dita.dost.writer.ChunkTopicParser;
 import org.w3c.dom.*;
 
 /**
- * ChunkMapReader class, read ditamap file for chunking.
+ * ChunkMapReader class, read and filter ditamap file for chunking.
  * 
  */
 public final class ChunkMapReader extends AbstractDomFilter {
@@ -71,7 +69,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
     private ProcessingInstruction path2proj = null;
     private ProcessingInstruction path2projUrl = null;
 
-    private String processingRole = ATTR_PROCESSING_ROLE_VALUE_NORMAL;
     private final ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
     private Job job;
 
@@ -106,14 +103,14 @@ public final class ChunkMapReader extends AbstractDomFilter {
         readProcessingInstructions(doc);
 
         final Element root = doc.getDocumentElement();
-        final String rootChunkValue = root.getAttribute(ATTRIBUTE_NAME_CHUNK);
-        defaultChunkByToken = getChunkByToken(rootChunkValue, CHUNK_BY_DOCUMENT);
+        final Collection<String> rootChunkValue = split(root.getAttribute(ATTRIBUTE_NAME_CHUNK));
+        defaultChunkByToken = getChunkByToken(rootChunkValue, "by-", CHUNK_BY_DOCUMENT);
         // chunk value = "to-content"
         // When @chunk="to-content" is specified on "map" element,
         // chunk module will change its @class attribute to "topicref"
         // and process it as if it were a normal topicref wich
         // @chunk="to-content"
-        if (rootChunkValue != null && rootChunkValue.contains(CHUNK_TO_CONTENT)) {
+        if (rootChunkValue.contains(CHUNK_TO_CONTENT)) {
             chunkMap(root);
         } else {
             // if to-content is not specified on map element
@@ -137,12 +134,12 @@ public final class ChunkMapReader extends AbstractDomFilter {
         return buildOutputDocument(root);
     }
 
-    private String getChunkByToken(final String chunkValue, final String defaultToken) {
-        if (chunkValue == null || chunkValue.isEmpty()) {
+    public static String getChunkByToken(final Collection<String> chunkValue, final String category, final String defaultToken) {
+        if (chunkValue.isEmpty()) {
             return defaultToken;
         }
-        for (final String token: chunkValue.split("\\s+")) {
-            if (token.startsWith("by-")) {
+        for (final String token: chunkValue) {
+            if (token.startsWith(category)) {
                 return token;
             }
         }
@@ -274,30 +271,39 @@ public final class ChunkMapReader extends AbstractDomFilter {
         return doc;
     } 
 
+    public static Collection<String> split(final String value) {
+        if (value == null) {
+            return Collections.EMPTY_LIST;
+        }
+        final String[] tokens = value.trim().split("\\s+");
+        return asList(tokens);
+    }
+
     private void processTopicref(final Element topicref) {
-        final String hrefValue = getValue(topicref,ATTRIBUTE_NAME_HREF);
-        final String chunkValue = getValue(topicref, ATTRIBUTE_NAME_CHUNK);
-        final String copytoValue = getValue(topicref, ATTRIBUTE_NAME_COPY_TO);
+        final URI hrefValue = toURI(getValue(topicref,ATTRIBUTE_NAME_HREF));
+        final Collection<String> chunkValue = split(getValue(topicref, ATTRIBUTE_NAME_CHUNK));
+        final URI copytoValue = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
         final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
         final String xtrfValue = getValue(topicref, ATTRIBUTE_NAME_XTRF);
+        final String processingRole = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
 
         // This file is chunked(by-topic)
         if (xtrfValue != null && xtrfValue.contains(ATTR_XTRF_VALUE_GENERATED)) {
             return;
         }
 
-        final String chunkByToken = getChunkByToken(chunkValue, defaultChunkByToken);
+        final String chunkByToken = getChunkByToken(chunkValue, "by-", defaultChunkByToken);
 
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)
-                || (hrefValue != null && !resolve(filePath, hrefValue).exists())
-                || (chunkValue == null && hrefValue == null)) {
+                || (hrefValue != null && !resolve(filePath, hrefValue.toString()).exists())
+                || (chunkValue.isEmpty() && hrefValue == null)) {
             // Skip external links or non-existing href files.
             // Skip topic head entries.
             processChildTopicref(topicref);
-        } else if (chunkValue != null && chunkValue.contains(CHUNK_TO_CONTENT)
+        } else if (chunkValue.contains(CHUNK_TO_CONTENT)
                 && (hrefValue != null || copytoValue != null || topicref.hasChildNodes())) {
             processChunk(topicref, false);
-        } else if (chunkValue != null && chunkValue.contains(CHUNK_TO_NAVIGATION)
+        } else if (chunkValue.contains(CHUNK_TO_NAVIGATION)
                 && supportToNavigation) {
             processChildTopicref(topicref);
             // create new map file
@@ -335,7 +341,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 }
             }
 
-            if ((chunkValue != null || chunkByToken.equals(CHUNK_BY_DOCUMENT))
+            if ((!chunkValue.isEmpty() || chunkByToken.equals(CHUNK_BY_DOCUMENT))
                     && currentPath != null
                     && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                 changeTable.put(currentPath, currentPath);
@@ -344,15 +350,15 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
     }
 
-    private String getValue(final Element elem, final String attrName) {
+    public static String getValue(final Element elem, final String attrName) {
         final Attr attr = elem.getAttributeNode(attrName);
-        if (attr != null) {
+        if (attr != null && !attr.getValue().isEmpty()) {
             return attr.getValue();
         }
         return null;
     }
 
-    private String getCascadeValue(final Element elem, final String attrName) {
+    public static String getCascadeValue(final Element elem, final String attrName) {
         Element current = elem;
         while (current != null) {
             final Attr attr = current.getAttributeNode(attrName);

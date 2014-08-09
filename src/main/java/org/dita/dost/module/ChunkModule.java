@@ -38,7 +38,9 @@ import org.xml.sax.SAXException;
 
 /**
  * The chunking module class.
- * 
+ *
+ * Starting from map files, it parses and processes chunk attribute, writes out the chunked
+ * results and finally updates reference pointing to chunked topics in other topics.
  */
 final public class ChunkModule extends AbstractPipelineModuleImpl {
 
@@ -57,9 +59,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     }
 
     /**
-     * Entry point of chunk module. Starting from map files, it parses and
-     * processes chunk attribute, writes out the "chunked" results and finally
-     * updates reference pointing to "chunked" topics in other topics.
+     * Entry point of chunk module.
      * 
      * @param input Input parameters and resources.
      * @return null
@@ -85,6 +85,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             } else {
                 mapReader.read(mapFile);
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
         }
