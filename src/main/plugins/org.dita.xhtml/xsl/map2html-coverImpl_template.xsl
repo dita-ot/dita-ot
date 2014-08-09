@@ -59,7 +59,7 @@
     </h1>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class,' bookmap/bookmap ')]/*[contains(@class,' bookmap/booktitle ')]">
+  <xsl:template match="*[contains(@class,' bookmap/bookmap ')]/*[contains(@class,' bookmap/booktitle ')]" priority="10">
     <h1 class="title topictitle1">
       <xsl:call-template name="gen-user-panel-title-pfx"/>
       <xsl:apply-templates select="*[contains(@class, ' bookmap/mainbooktitle ')]/node()"/>
