@@ -911,7 +911,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
         <xsl:apply-templates select="*[not(contains(@class, ' topic/desc '))]|comment()|processing-instruction()"/>
       </xsl:when>
-      <xsl:when test="contains(@class,' topic/xref ') and (normalize-space(text())!='' or *[not(contains(@class, ' topic/desc '))])">
+      <xsl:when test="contains(@class,' topic/xref ') and (normalize-space(.) != '' or *[not(contains(@class, ' topic/desc '))])">
         <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
         <xsl:apply-templates select="text()|*[not(contains(@class, ' topic/desc '))]|comment()|processing-instruction()"/>
       </xsl:when>
