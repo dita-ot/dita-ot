@@ -2365,12 +2365,12 @@
     <!-- If there is a defined column name, check the colspans to determine position -->
     <xsl:when test="@colname">
       <!-- count the number of colspans before the one this entry references, plus one -->
-      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = current()/@colname]/preceding-sibling::*)+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = current()/@colname]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
 
     <!-- If the starting column is defined, check colspans to determine position -->
     <xsl:when test="@namest">
-      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = current()/@namest]/preceding-sibling::*)+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = current()/@namest]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
 
     <!-- Need a test for spanspec -->
@@ -2378,13 +2378,13 @@
       <xsl:variable name="startspan">  <!-- starting column for this span -->
         <xsl:value-of select="../../../*[contains(@class, ' topic/spanspec ')][@spanname = current()/@spanname]/@namest"/>
       </xsl:variable>
-      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = $startspan]/preceding-sibling::*)+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = $startspan]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
 
     <!-- Otherwise, just use the count of cells in this row -->
     <xsl:otherwise>
       <xsl:variable name="prev-sib">
-        <xsl:value-of select="count(preceding-sibling::*)"/>
+        <xsl:value-of select="count(preceding-sibling::*[contains(@class, ' topic/entry ')])"/>
       </xsl:variable>
       <xsl:value-of select="$prev-sib+1"/>
     </xsl:otherwise>
@@ -2398,13 +2398,13 @@
   <xsl:param name="startposition" select="0"/>
   <xsl:choose>
     <xsl:when test="@nameend">
-      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = current()/@nameend]/preceding-sibling::*)+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = current()/@nameend]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
     <xsl:when test="@spanname">
       <xsl:variable name="endspan">  <!-- starting column for this span -->
         <xsl:value-of select="../../../*[contains(@class, ' topic/spanspec ')][@spanname = current()/@spanname]/@nameend"/>
       </xsl:variable>
-      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = $endspan]/preceding-sibling::*)+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = $endspan]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="$startposition"/>
@@ -2463,8 +2463,8 @@
     <!-- When the current column-1 cell ends before the tbody cell we are matching -->
     <xsl:when test="number($endCurrentRow) &lt; number($startMatchRow)">
       <!-- Call this template again with the next entry in column one -->
-      <xsl:if test="parent::*/parent::*/*[number($endCurrentRow)+1]">
-        <xsl:apply-templates select="parent::*/parent::*/*[number($endCurrentRow)+1]/*[1]" mode="check-first-column">
+      <xsl:if test="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]">
+        <xsl:apply-templates select="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]/*[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
           <xsl:with-param name="startMatchRow" select="$startMatchRow"/>
           <xsl:with-param name="endMatchRow" select="$endMatchRow"/>
           <xsl:with-param name="startCurrentRow" select="number($endCurrentRow)+1"/>
@@ -2478,8 +2478,8 @@
       <xsl:value-of select="generate-id(.)"/><xsl:text> </xsl:text>
       <!-- If we are not at the end of the tbody cell, and more rows exist, continue testing column 1 -->
       <xsl:if test="number($endCurrentRow) &lt; number($endMatchRow) and
-                    parent::*/parent::*/*[number($endCurrentRow)+1]">
-        <xsl:apply-templates select="parent::*/parent::*/*[number($endCurrentRow)+1]/*[1]" mode="check-first-column">
+                    parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]">
+        <xsl:apply-templates select="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]/*[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
           <xsl:with-param name="startMatchRow" select="$startMatchRow"/>
           <xsl:with-param name="endMatchRow" select="$endMatchRow"/>
           <xsl:with-param name="startCurrentRow" select="number($endCurrentRow)+1"/>
@@ -2504,7 +2504,9 @@
   <!-- Find the IDs of headers that are aligned above this cell. This is done by applying
        templates on all headers, using mode=findmatch; matching IDs are returned. -->
   <xsl:variable name="hdrattr">
-    <xsl:apply-templates select="../../../*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*" mode="findmatch">
+    <xsl:apply-templates select="../../../*[contains(@class, ' topic/thead ')]/
+                                          *[contains(@class, ' topic/row ')]/
+                                          *[contains(@class, ' topic/entry ')]" mode="findmatch">
       <xsl:with-param name="startmatch" select="$entrystartpos"/>
       <xsl:with-param name="endmatch" select="$entryendpos"/>
     </xsl:apply-templates>
@@ -2516,7 +2518,7 @@
                   not(parent::*/parent::*[contains(@class, ' topic/thead ')]) and
                   ../../../../@rowheader = 'firstcol'">
       <!-- Find the start row for this entry -->
-      <xsl:variable name="startrow" select="number(count(parent::*/preceding-sibling::*)+1)"/>
+      <xsl:variable name="startrow" select="number(count(parent::*/preceding-sibling::*[contains(@class, ' topic/row ')])+1)"/>
       <!-- Find the end row for this entry -->
       <xsl:variable name="endrow">
         <xsl:if test="@morerows"><xsl:value-of select="number($startrow) + number(@morerows)"/></xsl:if>
@@ -2634,7 +2636,7 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:choose>
       <!-- If there are any rows or headers before this, the width values have already been set. -->
-      <xsl:when test="preceding-sibling::*">
+      <xsl:when test="preceding-sibling::*[contains(@class, ' topic/strow ')]">
         <xsl:apply-templates/>
       </xsl:when>
       <!-- Otherwise, this is the first row. Pass the percentage to all entries in this row. -->
