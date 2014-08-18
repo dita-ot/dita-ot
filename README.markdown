@@ -1,7 +1,7 @@
 DITA Open Toolkit [![Build Status](https://secure.travis-ci.org/dita-ot/dita-ot.png?branch=develop)](http://travis-ci.org/dita-ot/dita-ot)
 =================
 
-The DITA Open Toolkit, or DITA-OT for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.sf.net](http://dita-ot.sourceforge.net/) for documentation, information about releases, and download packages.
+The DITA Open Toolkit, or DITA-OT for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.github.io](http://dita-ot.github.io/) for documentation, information about releases, and download packages.
 
 Prerequisites
 -------------
@@ -12,7 +12,7 @@ To build and use DITA-OT, you’ll need:
 * Apache Ant 1.9.2 or newer
 * Apache Ivy 2.3.0 or newer
 
-   If Ant throws an error like `unknown protocol: plugin` or `unknown protocol: cfg`, your Ant installation may be outdated. Try installing [a newer version of Ant](http://ant.apache.org/).
+If Ant throws an error like `unknown protocol: plugin` or `unknown protocol: cfg`, your Ant installation may be outdated. Try installing [a newer version of Ant](http://ant.apache.org/).
 
 Building
 --------
@@ -49,7 +49,7 @@ Usage
 
         ant [options]
         
-   See the [documentation](http://dita-ot.sourceforge.net/latest/) for arguments and options.
+   See the [documentation](http://dita-ot.github.io/1.8/) for arguments and options.
 
 Distribution
 ------------
@@ -87,4 +87,4 @@ Distribution
 License
 -------
 
-The DITA Open Toolkit is licensed for use, at the user's election, under the [Common Public License](http://www.opensource.org/licenses/cpl1.0.php) 1.0 (CPL) or [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+The DITA Open Toolkit is licensed for use, at the user's election, under the [Common Public License 1.0](http://www.opensource.org/licenses/cpl1.0.php) (CPL) or [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
