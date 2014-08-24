@@ -28,12 +28,14 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractDomFilter;
 import org.dita.dost.writer.ChunkTopicParser;
+import org.dita.dost.writer.SeparateChunkTopicParser;
 import org.w3c.dom.*;
 
 /**
@@ -59,8 +61,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
     private final LinkedHashMap<String, String> changeTable = new LinkedHashMap<String, String>(128);
 
     private final Map<String, String> conflictTable = new HashMap<String, String>(128);
-
-    private final Set<String> refFileSet = new HashSet<String>(128);
 
     private boolean supportToNavigation;
 
@@ -302,6 +302,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
             processChildTopicref(topicref);
         } else if (chunkValue.contains(CHUNK_TO_CONTENT)
                 && (hrefValue != null || copytoValue != null || topicref.hasChildNodes())) {
+            if (chunkValue.contains(CHUNK_BY_TOPIC)) {
+                logger.warn(MessageUtils.getInstance().getMessage("DOTJ064W").setLocation(topicref).toString());
+            }
             processChunk(topicref, false);
         } else if (chunkValue.contains(CHUNK_TO_NAVIGATION)
                 && supportToNavigation) {
@@ -335,9 +338,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
             if (currentPath != null) {
                 if (changeTable.containsKey(currentPath)) {
                     changeTable.remove(currentPath);
-                }
-                if (!refFileSet.contains(currentPath)) {
-                    refFileSet.add(currentPath);
                 }
             }
 
@@ -398,11 +398,19 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     private void processChunk(final Element topicref, final boolean separate) {
         try {
-            final ChunkTopicParser chunkParser = new ChunkTopicParser();
-            chunkParser.setLogger(logger);
-            chunkParser.setJob(job);
-            chunkParser.setup(changeTable, conflictTable, refFileSet, topicref, separate, chunkFilenameGenerator);
-            chunkParser.write(filePath);
+            if (separate) {
+                final SeparateChunkTopicParser chunkParser = new SeparateChunkTopicParser();
+                chunkParser.setLogger(logger);
+                chunkParser.setJob(job);
+                chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
+                chunkParser.write(filePath);
+            } else {
+                final ChunkTopicParser chunkParser = new ChunkTopicParser();
+                chunkParser.setLogger(logger);
+                chunkParser.setJob(job);
+                chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
+                chunkParser.write(filePath);
+            }
         } catch (final DITAOTException e) {
             logger.error("Failed to process chunk: " + e.getMessage(), e);
         }
