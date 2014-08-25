@@ -252,12 +252,12 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 currentParsingFile = tempPath;
             }
 
-            // use @copy-to value(dita spec v1.2)
             if (outputFileName == null) {
                 if (copytoValue != null) {
+                    // use @copy-to value(dita spec v1.2)
                     outputFileName = resolve(filePath, copytoValue);
-                    // use id value
                 } else if (id != null) {
+                    // use id value
                     outputFileName = resolve(filePath, id + FILE_EXTENSION_DITA);
                 } else {
                     // use randomly generated file name
@@ -327,17 +327,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 if (parentResult.length() > 0
                         && parseFilePath != null
                         && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
-                    int insertpoint = parentResult.lastIndexOf("</");
-                    final int end = parentResult.indexOf(">", insertpoint);
-
-                    if (insertpoint == -1 || end == -1) {
-                        logger.error(MessageUtils.getInstance().getMessage("DOTJ033E", hrefValue).toString());
-                    } else {
-                        if (ELEMENT_NAME_DITA.equals(parentResult.substring(insertpoint, end).trim())) {
-                            insertpoint = parentResult.lastIndexOf("</", insertpoint - 1);
-                        }
-                        parentResult.insert(insertpoint, tmpContent);
-                    }
+                    insertAfter(hrefValue, parentResult, tmpContent);
                 // replace contents
                 } else {
                     parentResult.append(tmpContent);
@@ -357,6 +347,27 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Append XML content into root element
+     *
+     * @param hrefValue href of the topicref
+     * @param parentResult XML content to insert into
+     * @param tmpContent XML content to insert
+     */
+    private void insertAfter(String hrefValue, StringBuffer parentResult, CharSequence tmpContent) {
+        int insertpoint = parentResult.lastIndexOf("</");
+        final int end = parentResult.indexOf(">", insertpoint);
+
+        if (insertpoint == -1 || end == -1) {
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ033E", hrefValue).toString());
+        } else {
+            if (ELEMENT_NAME_DITA.equals(parentResult.substring(insertpoint, end).trim())) {
+                insertpoint = parentResult.lastIndexOf("</", insertpoint - 1);
+            }
+            parentResult.insert(insertpoint, tmpContent);
         }
     }
 

@@ -364,13 +364,13 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                         attrValue = chunkFilenameGenerator.generateID();
                         topicID.add(attrValue);
 
-                        String tmpVal = changeTable.get(setFragment(currentParsingFile.getPath(), idValue));
-                        if (tmpVal != null && tmpVal.equalsIgnoreCase(setFragment(outputFile.getPath(), idValue))) {
+                        final String tmpValId = changeTable.get(setFragment(currentParsingFile.getPath(), idValue));
+                        if (tmpValId != null && tmpValId.equals(setFragment(outputFile.getPath(), idValue))) {
                             changeTable.put(setFragment(currentParsingFile.getPath(), idValue), setFragment(outputFile.getPath(), attrValue));
                         }
 
-                        tmpVal = changeTable.get(currentParsingFile.getPath());
-                        if (tmpVal != null && tmpVal.equalsIgnoreCase(setFragment(outputFile.getPath(), idValue))) {
+                        final String tmpVal = changeTable.get(currentParsingFile.getPath());
+                        if (tmpVal != null && tmpVal.equals(setFragment(outputFile.getPath(), idValue))) {
                             changeTable.put(currentParsingFile.getPath(), setFragment(outputFile.getPath(), attrValue));
                         }
                         currentParsingFileTopicIDChangeTable.put(oldAttrValue, attrValue);
