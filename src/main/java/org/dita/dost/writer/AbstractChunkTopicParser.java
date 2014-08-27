@@ -200,7 +200,8 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         if (include
                 || PI_WORKDIR_TARGET.equals(target)
                 || PI_WORKDIR_TARGET_URI.equals(target)
-                || PI_PATH2PROJ_TARGET.equals(target)) {
+                || PI_PATH2PROJ_TARGET.equals(target)
+                || PI_PATH2PROJ_TARGET_URI.equals(target)) {
             try {
                 writeProcessingInstruction(output, target, data);
             } catch (final IOException e) {

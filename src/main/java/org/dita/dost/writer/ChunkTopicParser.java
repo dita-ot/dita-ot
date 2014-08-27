@@ -395,6 +395,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                         path2project = "";
                     }
                     writeProcessingInstruction(ditaFileOutput, PI_PATH2PROJ_TARGET, path2project);
+                    writeProcessingInstruction(ditaFileOutput, PI_PATH2PROJ_TARGET_URI, path2project.isEmpty() ? "./" : toURI(path2project).toString());
                 }
             }
             if (needWriteDitaTag) {
