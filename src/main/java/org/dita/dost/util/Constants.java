@@ -874,6 +874,7 @@ public final class Constants {
     public static final String ATTRIBUTE_PREFIX_DITAARCHVERSION = "ditaarch";
     /**ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = "xmlns:ditaarch";
+    public static final String DITA_NAMESPACE = "http://dita.oasis-open.org/architecture/2005/";
 
     /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE.*/
     public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE = " subjectScheme/";

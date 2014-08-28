@@ -593,7 +593,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      * @param root root node
      * @return text value
      */
-    protected String getText(final Node root) {
+    public static String getText(final Node root) {
         if (root == null) {
             return "";
         } else {
@@ -627,7 +627,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      * @param classValue DITA class to search for
      * @return element node, {@code null} if not found
      */
-    protected Element getElementNode(final Element element, final DitaClass classValue) {
+    public static Element getElementNode(final Element element, final DitaClass classValue) {
         final NodeList list = element.getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
             final Node node = list.item(i);

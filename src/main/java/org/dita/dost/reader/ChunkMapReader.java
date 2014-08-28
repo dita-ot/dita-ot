@@ -9,14 +9,16 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.getRelativePath;
+import static org.dita.dost.util.FileUtils.resolve;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.writer.AbstractChunkTopicParser.getElementNode;
+import static org.dita.dost.writer.AbstractChunkTopicParser.getText;
 import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.util.FileUtils.*;
-import static org.dita.dost.util.URLUtils.*;
 import static java.util.Arrays.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.util.*;
 
@@ -31,12 +33,12 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.writer.AbstractDomFilter;
 import org.dita.dost.writer.ChunkTopicParser;
 import org.dita.dost.writer.SeparateChunkTopicParser;
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 /**
  * ChunkMapReader class, read and filter ditamap file for chunking.
@@ -148,6 +150,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * Process map when "to-content" is specified on map element.
+     *
+     * TODO: Instead of reclassing map element to be a topicref, add a topicref
+     * into the map root and move all map content into that topicref.
      */
     private void chunkMap(final Element root) {
         // create the reference to the new file on root element.
@@ -280,8 +285,13 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private void processTopicref(final Element topicref) {
-        final URI hrefValue = toURI(getValue(topicref,ATTRIBUTE_NAME_HREF));
         final Collection<String> chunkValue = split(getValue(topicref, ATTRIBUTE_NAME_CHUNK));
+
+        if (topicref.getAttributeNode(ATTRIBUTE_NAME_HREF) == null && chunkValue.contains(CHUNK_TO_CONTENT)) {
+            generateStumpTopic(topicref);
+        }
+
+        final URI hrefValue = toURI(getValue(topicref,ATTRIBUTE_NAME_HREF));
         final URI copytoValue = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
         final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
         final String xtrfValue = getValue(topicref, ATTRIBUTE_NAME_XTRF);
@@ -348,6 +358,107 @@ public final class ChunkMapReader extends AbstractDomFilter {
             }
             processChildTopicref(topicref);
         }
+    }
+
+    /**
+     * Generate file name.
+     *
+     * @return generated file name
+     */
+    protected String generateFilename() {
+        return chunkFilenameGenerator.generateFilename("XChunk", FILE_EXTENSION_DITA);
+    }
+
+    /**
+     * Generate stump topic for to-content content.
+     * @param topicref topicref without href to generate stump topic for
+     */
+    private void generateStumpTopic(final Element topicref) {
+        final URI copytoValue = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
+        final String idValue = getValue(topicref, ATTRIBUTE_NAME_ID);
+
+        File outputFileName;
+        if (copytoValue != null) {
+            outputFileName = resolve(filePath, copytoValue.toString());
+        } else if (idValue != null) {
+            outputFileName = resolve(filePath, idValue + FILE_EXTENSION_DITA);
+        } else {
+            do {
+                outputFileName = resolve(filePath, generateFilename());
+            } while (outputFileName.exists());
+        }
+
+        final String id = getBaseName(outputFileName.getName());
+        String navtitleValue = getChildElementValueOfTopicmeta(topicref, TOPIC_NAVTITLE);
+        if (navtitleValue == null) {
+            navtitleValue = getValue(topicref, ATTRIBUTE_NAME_NAVTITLE);
+        }
+        if (navtitleValue == null) {
+            navtitleValue = id;
+        }
+        final String shortDescValue = getChildElementValueOfTopicmeta(topicref, MAP_SHORTDESC);
+
+        OutputStream output = null;
+        try {
+            output = new FileOutputStream(outputFileName);
+            final XMLSerializer serializer = XMLSerializer.newInstance(output);
+            serializer.writeStartDocument();
+            serializer.writeStartElement(TOPIC_TOPIC.localName);
+            serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.2");
+            serializer.writeAttribute(ATTRIBUTE_NAME_ID, id);
+            serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString());
+            serializer.writeAttribute(ATTRIBUTE_NAME_DOMAINS, "");
+            serializer.writeStartElement(TOPIC_TITLE.localName);
+            serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TITLE.toString());
+            serializer.writeCharacters(navtitleValue);
+            serializer.writeEndElement(); // title
+            if (shortDescValue != null) {
+                serializer.writeStartElement(TOPIC_SHORTDESC.localName);
+                serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_SHORTDESC.toString());
+                serializer.writeCharacters(shortDescValue);
+                serializer.writeEndElement(); // shortdesc
+            }
+            serializer.writeEndElement(); // topic
+            serializer.writeEndDocument();
+            serializer.close();
+        } catch (final IOException e) {
+            logger.error("Failed to write generated chunk: " + e.getMessage(), e);
+        } catch (final SAXException e) {
+            logger.error("Failed to write generated chunk: " + e.getMessage(), e);
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException e) {
+                    logger.error("Failed to close output stream: " + e.getMessage(), e);
+                }
+            }
+        }
+
+        // update current element's @href value
+        final URI relativePath = toURI(getRelativePath(new File(filePath, FILE_NAME_STUB_DITAMAP), outputFileName));
+        topicref.setAttribute(ATTRIBUTE_NAME_HREF, relativePath.toString());
+
+        final URI relativeToBase = URLUtils.getRelativePath(job.tempDir.toURI().resolve("dummy"), outputFileName.toURI());
+        job.add(new Job.FileInfo.Builder().uri(relativeToBase).format(ATTR_FORMAT_VALUE_DITA).build());
+    }
+
+    /**
+     * get topicmeta's child(e.g navtitle, shortdesc) tag's value(text-only).
+     * @param element input element
+     * @return text value
+     */
+    private String getChildElementValueOfTopicmeta(final Element element, final DitaClass classValue) {
+        if (element.hasChildNodes()) {
+            final Element topicMeta = getElementNode(element, MAP_TOPICMETA);
+            if (topicMeta != null) {
+                final Element elem = getElementNode(topicMeta, classValue);
+                if (elem != null) {
+                    return getText(elem);
+                }
+            }
+        }
+        return null;
     }
 
     public static String getValue(final Element elem, final String attrName) {

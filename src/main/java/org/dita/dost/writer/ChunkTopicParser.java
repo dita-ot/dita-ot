@@ -10,11 +10,9 @@ package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.DitaClass;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -252,59 +250,6 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 currentParsingFile = tempPath;
             }
 
-            if (outputFileName == null) {
-                if (copytoValue != null) {
-                    // use @copy-to value(dita spec v1.2)
-                    outputFileName = resolve(filePath, copytoValue);
-                } else if (id != null) {
-                    // use id value
-                    outputFileName = resolve(filePath, id + FILE_EXTENSION_DITA);
-                } else {
-                    // use randomly generated file name
-                    outputFileName = resolve(filePath, generateFilename());
-                    // Check if there is any conflict
-                    if (outputFileName.exists() && !MAP_MAP.matches(classValue)) {
-                        final File t = outputFileName;
-                        outputFileName = resolve(filePath, generateFilename());
-                        conflictTable.put(outputFileName.getPath(), t.getPath());
-                    }
-                }
-
-                // if topicref has child node or topicref has @navtitle
-                if (topicref.hasChildNodes() || navtitle != null) {
-                    String navtitleValue = getChildElementValueOfTopicmeta(topicref, TOPIC_NAVTITLE);
-                    if (navtitleValue == null) {
-                        navtitleValue = navtitle;
-                    }
-                    String shortDescValue = getChildElementValueOfTopicmeta(topicref, MAP_SHORTDESC);
-
-                    // add newly generated file to changTable
-                    // the new entry in changeTable has same key and value
-                    // in order to indicate it is a newly generated file
-                    changeTable.put(outputFileName.getPath(), outputFileName.getPath());
-                    // update current element's @href value
-                    // create a title-only topic when there is a title
-                    if (navtitleValue != null) {
-                        topicref.setAttribute(ATTRIBUTE_NAME_HREF, toURI(getRelativePath(new File(filePath,
-                                FILE_NAME_STUB_DITAMAP), outputFileName)).toString());
-                        final String buffer = generateStumpTopic(navtitleValue, shortDescValue);
-
-                        final StringReader rder = new StringReader(buffer);
-                        final InputSource source = new InputSource(rder);
-
-                        // for recursive
-                        final File tempPath = currentParsingFile;
-                        currentParsingFile = outputFileName;
-                        // insert not append the nested topic
-                        parseFilePath = outputFileName.getPath();
-                        // create chunk
-                        reader.parse(source);
-                        // restore the currentParsingFile
-                        currentParsingFile = tempPath;
-                    }
-                }
-            }
-
             if (topicref.hasChildNodes()) {
                 // if current element has child nodes and chunk results for
                 // this element has value
@@ -411,42 +356,10 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             }
             ditaFileOutput.flush();
         } finally {
-            ditaFileOutput.close();
-        }
-    }
-
-    private String generateStumpTopic(final String navtitleValue, final String shortDescValue) {
-        // manually create a new topic chunk
-        final StringBuilder buffer = new StringBuilder();
-        buffer.append("<topic id=\"topic\" class=\"- topic/topic \">")
-                .append("<title class=\"- topic/title \">").append(escapeXML(navtitleValue))
-                .append("</title>");
-        if (shortDescValue != null) {
-            buffer.append("<shortdesc class=\"- topic/shortdesc \">").append(escapeXML(shortDescValue))
-                    .append("</shortdesc>");
-        }
-        buffer.append("</topic>");
-        return buffer.toString();
-    }
-
-    // DOM utility methods
-
-    /**
-     * get topicmeta's child(e.g navtitle, shortdesc) tag's value(text-only).
-     * @param element input element
-     * @return text value
-     */
-    private String getChildElementValueOfTopicmeta(final Element element, final DitaClass classValue) {
-        if (element.hasChildNodes()) {
-            final Element topicMeta = getElementNode(element, MAP_TOPICMETA);
-            if (topicMeta != null) {
-                final Element elem = getElementNode(topicMeta, classValue);
-                if (elem != null) {
-                    return getText(elem);
-                }
+            if (ditaFileOutput != null) {
+                ditaFileOutput.close();
             }
         }
-        return null;
     }
 
 }
