@@ -27,7 +27,7 @@
       <ul>
         <li>The <codeph>id</codeph> attribute defines the extension point ID which provides the
           argument data.</li>
-        <li>The <codeph>behaviour</codeph> attribute defines which processing action is used.</li>
+        <li>The <codeph>behavior</codeph> attribute defines which processing action is used.</li>
       </ul>
       <p>Supported values for <codeph>behavior</codeph> attribute:</p>
       <dl>
@@ -121,7 +121,7 @@
                    dita2xhtml"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction">
     &lt;dita:extension id="com.example.new-extensions.content"
-                    behaviour="org.dita.dost.platform.InsertAction"/>
+                    behavior="org.dita.dost.platform.InsertAction"/>
   &lt;target>
 &lt;/project></codeblock></example>
   </refbody>
