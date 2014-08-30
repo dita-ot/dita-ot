@@ -51,15 +51,15 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:attribute-set>
 
   <xsl:attribute-set name="common.border__right">
-    <xsl:attribute name="border-right-style">solid</xsl:attribute>
-    <xsl:attribute name="border-right-width">1pt</xsl:attribute>
-    <xsl:attribute name="border-right-color">black</xsl:attribute>
+    <xsl:attribute name="border-end-style">solid</xsl:attribute>
+    <xsl:attribute name="border-end-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-end-color">black</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="common.border__left">
-    <xsl:attribute name="border-left-style">solid</xsl:attribute>
-    <xsl:attribute name="border-left-width">1pt</xsl:attribute>
-    <xsl:attribute name="border-left-color">black</xsl:attribute>
+    <xsl:attribute name="border-start-style">solid</xsl:attribute>
+    <xsl:attribute name="border-start-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-start-color">black</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="common.border" use-attribute-sets="common.border__top common.border__right common.border__bottom common.border__left"/>
