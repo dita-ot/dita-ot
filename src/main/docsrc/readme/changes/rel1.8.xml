@@ -189,6 +189,7 @@
           <li>#1663 Treat non-DITA links as external  (maintenance 5)</li>
           <li>#1665 NullPointerException with incorrect conkeyref (maintenance 5)</li>
           <li>#1675 Image without an @href attribute generates error in XSLT stylesheet for PDF transformation (DOT 1.8) (maintenance 5)</li>
+          <li>#1730 Table border gone in Arabic PDF (maintenance 5)</li>
         </ul>
       </section>
     </refbody>
