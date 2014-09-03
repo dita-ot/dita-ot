@@ -42,6 +42,7 @@ See the accompanying license.txt file for applicable licenses.
              <xsl:call-template name="insertPrefaceStaticContents"/>
              <fo:flow flow-name="xsl-region-body">
                  <fo:block xsl:use-attribute-sets="topic">
+                     <xsl:call-template name="commonattributes"/>
                      <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                          <fo:marker marker-class-name="current-topic-number">
                              <xsl:number format="1"/>
