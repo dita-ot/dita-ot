@@ -84,8 +84,6 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
         final String classValue = getValue(topicref, ATTRIBUTE_NAME_CLASS);
         final String processRoleValue = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
-        final String id = getValue(topicref, ATTRIBUTE_NAME_ID);
-        final String navtitle = getValue(topicref, ATTRIBUTE_NAME_NAVTITLE);
 
         File outputFileName = outputFile;
         Writer tempWriter = null;

@@ -285,6 +285,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private void processTopicref(final Element topicref) {
+        final String xtrfValue = getValue(topicref, ATTRIBUTE_NAME_XTRF);
+        if (xtrfValue != null && xtrfValue.contains(ATTR_XTRF_VALUE_GENERATED)) {
+            return;
+        }
+
         final Collection<String> chunkValue = split(getValue(topicref, ATTRIBUTE_NAME_CHUNK));
 
         if (topicref.getAttributeNode(ATTRIBUTE_NAME_HREF) == null && chunkValue.contains(CHUNK_TO_CONTENT)) {
@@ -294,21 +299,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
         final URI hrefValue = toURI(getValue(topicref,ATTRIBUTE_NAME_HREF));
         final URI copytoValue = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
         final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
-        final String xtrfValue = getValue(topicref, ATTRIBUTE_NAME_XTRF);
-        final String processingRole = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
-
-        // This file is chunked(by-topic)
-        if (xtrfValue != null && xtrfValue.contains(ATTR_XTRF_VALUE_GENERATED)) {
-            return;
-        }
-
         final String chunkByToken = getChunkByToken(chunkValue, "by-", defaultChunkByToken);
 
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)
                 || (hrefValue != null && !resolve(filePath, hrefValue.toString()).exists())
                 || (chunkValue.isEmpty() && hrefValue == null)) {
-            // Skip external links or non-existing href files.
-            // Skip topic head entries.
             processChildTopicref(topicref);
         } else if (chunkValue.contains(CHUNK_TO_CONTENT)
                 && (hrefValue != null || copytoValue != null || topicref.hasChildNodes())) {
@@ -319,26 +314,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
         } else if (chunkValue.contains(CHUNK_TO_NAVIGATION)
                 && supportToNavigation) {
             processChildTopicref(topicref);
-            // create new map file
-            // create new map's root element
-            final Element root = (Element) topicref.getOwnerDocument().getDocumentElement().cloneNode(false);
-            // create navref element
-            final Element navref = topicref.getOwnerDocument().createElement(MAP_NAVREF.localName);
-            final String newMapFile = chunkFilenameGenerator.generateFilename("MAPCHUNK", FILE_EXTENSION_DITAMAP);
-            navref.setAttribute(ATTRIBUTE_NAME_MAPREF, newMapFile);
-            navref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_NAVREF.toString());
-            // replace topicref with navref
-            topicref.getParentNode().replaceChild(navref, topicref);
-            root.appendChild(topicref);
-            // generate new file
-            final File navmap = resolve(filePath, newMapFile);
-            changeTable.put(navmap.getPath(), navmap.getPath());
-            outputMapFile(navmap, buildOutputDocument(root));
+            processNavitation(topicref);
         } else if (chunkByToken.equals(CHUNK_BY_TOPIC)) {
-            // TODO very important start point(by-topic).
             processChunk(topicref, true);
             processChildTopicref(topicref);
-        } else {
+        } else { // chunkByToken.equals(CHUNK_BY_DOCUMENT)
             String currentPath = null;
             if (copytoValue != null) {
                 currentPath = resolve(filePath, copytoValue).getPath();
@@ -349,15 +329,34 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 if (changeTable.containsKey(currentPath)) {
                     changeTable.remove(currentPath);
                 }
-            }
-
-            if ((!chunkValue.isEmpty() || chunkByToken.equals(CHUNK_BY_DOCUMENT))
-                    && currentPath != null
-                    && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
-                changeTable.put(currentPath, currentPath);
+                final String processingRole = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
+                if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
+                    changeTable.put(currentPath, currentPath);
+                }
             }
             processChildTopicref(topicref);
         }
+    }
+
+    /**
+     * Create new map and refer to it with navref.
+     * @param topicref
+     */
+    private void processNavitation(final Element topicref) {
+        // create new map's root element
+        final Element root = (Element) topicref.getOwnerDocument().getDocumentElement().cloneNode(false);
+        // create navref element
+        final Element navref = topicref.getOwnerDocument().createElement(MAP_NAVREF.localName);
+        final String newMapFile = chunkFilenameGenerator.generateFilename("MAPCHUNK", FILE_EXTENSION_DITAMAP);
+        navref.setAttribute(ATTRIBUTE_NAME_MAPREF, newMapFile);
+        navref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_NAVREF.toString());
+        // replace topicref with navref
+        topicref.getParentNode().replaceChild(navref, topicref);
+        root.appendChild(topicref);
+        // generate new file
+        final File navmap = resolve(filePath, newMapFile);
+        changeTable.put(navmap.getPath(), navmap.getPath());
+        outputMapFile(navmap, buildOutputDocument(root));
     }
 
     /**
