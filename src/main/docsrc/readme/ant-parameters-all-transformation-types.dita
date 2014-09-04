@@ -134,10 +134,8 @@
           </plentry>
           <plentry id="onlytopic.in.map">
             <pt><parmname>onlytopic.in.map</parmname></pt>
-            <pd id="onlytopic.in.map.desc">Specifies whether files that are
-              linked to, or referenced with a @conref attribute, generate output. If set to
-              <option>yes</option>, only files that are referenced directly from the map will
-              generate output.</pd>
+            <pd id="onlytopic.in.map.desc">Specifies whether files that are linked to, or referenced with a @conref attribute, generate output. If set to <option>true</option>, only files that are
+              referenced directly from the map will generate output; the default value is <option>false</option>.</pd>
           </plentry>
           <plentry id="outer.control">
             <pt><parmname>outer.control</parmname></pt>
