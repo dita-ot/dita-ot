@@ -391,7 +391,11 @@ public final class XMLUtils {
          * @return this builder
          */
         public AttributesBuilder add(final Attr attr) {
-            return add(attr.getNodeName(), attr.getNodeValue());
+            return add(attr.getNamespaceURI() != null ? attr.getNamespaceURI() : "",
+                       attr.getLocalName() != null ? attr.getLocalName() : attr.getNodeName(),
+                       attr.getNodeName(),
+                       attr.isId() ? "ID" : "CDATA",
+                       attr.getNodeValue());
         }
         
         /**

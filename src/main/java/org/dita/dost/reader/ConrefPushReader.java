@@ -111,8 +111,11 @@ public final class ConrefPushReader extends AbstractXMLReader {
         pushType = null;
         try{
             reader.parse(filename.toURI().toString());
+        } catch (final RuntimeException e) {
+            throw e;
         }catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
+            e.printStackTrace();
         }
     }
     
@@ -134,7 +137,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         pushtable = new Hashtable<File, Hashtable<MoveKey,DocumentFragment>>();
         try{
             reader = XMLUtils.getXMLReader();
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, false);
             reader.setFeature(FEATURE_NAMESPACE, true);
             reader.setContentHandler(this);
         }catch (final Exception e) {
@@ -275,7 +278,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
                         // adjust href for pushbefore and replace
                         value = replaceURL(value);
                     }
-                    pushcontentWriter.writeAttribute(name,  value);
+                    final int offset = atts.getQName(index).indexOf(":");
+                    final String prefix = offset != -1 ? atts.getQName(index).substring(0, offset) : "";
+                    pushcontentWriter.writeAttribute(prefix, atts.getURI(index), atts.getLocalName(index), value);
                 }
     
             }
@@ -297,7 +302,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                         id = fragment;
                     }
                     //add id attribute
-                    pushcontentWriter.writeAttribute(ATTRIBUTE_NAME_ID,  id);
+                    pushcontentWriter.writeAttribute(ATTRIBUTE_NAME_ID, id);
                 }
             }
         } catch (final XMLStreamException e) {
