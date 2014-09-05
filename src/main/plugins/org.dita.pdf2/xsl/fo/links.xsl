@@ -276,7 +276,9 @@ See the accompanying license.txt file for applicable licenses.
     <!-- xref to footnote makes a callout. -->
     <xsl:template match="*[contains(@class,' topic/xref ')][@type='fn']" priority="2">
         <xsl:variable name="href-fragment" select="substring-after(@href, '#')"/>
-        <xsl:variable name="footnote-target" select="//*[contains(@class, ' topic/fn ')][@id = substring-after($href-fragment, '/')][ancestor::*[contains(@class, ' topic/topic ')][1]/@id = substring-before($href-fragment, '/')]"/>
+        <xsl:variable name="elemId" select="substring-after($href-fragment, '/')"/>
+        <xsl:variable name="topicId" select="substring-before($href-fragment, '/')"/>
+        <xsl:variable name="footnote-target" select="key('fnById', $elemId)[ancestor::*[contains(@class, ' topic/topic ')][1]/@id = $topicId]"/>
         <xsl:apply-templates select="$footnote-target" mode="footnote-callout"/>
     </xsl:template>
 
