@@ -42,15 +42,50 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
+  <xsl:variable name="codeblock.wrap" select="false()"/>
+
     <xsl:template match="*[contains(@class,' pr-d/codeblock ')]">
         <xsl:call-template name="generateAttrLabel"/>
         <fo:block xsl:use-attribute-sets="codeblock">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
-            <xsl:apply-templates/>
+          <xsl:choose>
+            <xsl:when test="$codeblock.wrap">
+              <xsl:apply-templates mode="codeblock.wrap"/>    
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates/>
+            </xsl:otherwise>
+          </xsl:choose>
         </fo:block>
     </xsl:template>
+ 
+  <xsl:template match="@* | node()" mode="codeblock.wrap">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()" mode="codeblock.wrap"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="text()" mode="codeblock.wrap"
+                name="codeblock.text" priority="10">
+    <xsl:param name="text" select="."/>
+    <xsl:variable name="head" select="substring($text, 1, 1)"/>
+    <xsl:variable name="tail" select="substring($text, 2)"/>
+    <xsl:choose>
+      <xsl:when test="$head = (' ', '&#xA0;')">
+        <xsl:text>&#xA0;&#xAD;</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$head"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="$tail">
+      <xsl:call-template name="codeblock.text">
+        <xsl:with-param name="text" select="$tail"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/option ')]">
         <fo:inline xsl:use-attribute-sets="option">
