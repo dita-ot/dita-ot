@@ -12,7 +12,7 @@ IMPORTANT: The Project does not represent or warrant that the information in thi
 
 The Program includes the following software components, which were obtained under the following terms and conditions: 
 
-Ant, Batik, Commons IO, Commons Logging, Commons Serializer, Commons XMLGraphics, Commons Resolver, FOP, Xalan, Xerces, XML-APIs
+Ant, Batik, Commons IO, Commons Logging, Commons Serializer, Commons XMLGraphics, Commons Resolver, FOP, Xerces, XML-APIs
 
 Apache License
 Version 2.0, January 2004
