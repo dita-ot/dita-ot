@@ -50,17 +50,20 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
-          <xsl:choose>
-            <xsl:when test="$codeblock.wrap">
-              <xsl:apply-templates mode="codeblock.wrap"/>    
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:apply-templates/>
-            </xsl:otherwise>
-          </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="$codeblock.wrap">
+                <xsl:variable name="content" as="node()*">
+                  <xsl:apply-templates/>
+                </xsl:variable>
+                <xsl:apply-templates select="$content" mode="codeblock.wrap"/>    
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates/>
+              </xsl:otherwise>
+            </xsl:choose>
         </fo:block>
     </xsl:template>
- 
+
   <xsl:template match="@* | node()" mode="codeblock.wrap">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()" mode="codeblock.wrap"/>
