@@ -71,6 +71,7 @@ with those set forth herein.
     </condition>
   </target>
 
+  <target name="dita2pdf" depends="dita2pdf2"/>
   <target name="dita2pdf2" depends="dita2pdf2.init, build-init, preprocess, map2pdf2, topic2pdf2"/>
 
   <target name="transform.topic2pdf.init">

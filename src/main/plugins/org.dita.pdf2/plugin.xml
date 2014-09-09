@@ -11,7 +11,9 @@
   <extension-point id="dita.conductor.pdf2.formatter.check" name="Formatter check"/>
   <!-- extensions -->
   <feature extension="dita.conductor.lib.import" file="lib/fo.jar"/>
-  <feature extension="dita.conductor.transtype.check" value="pdf2" type="pdf"/>
+  <feature extension="dita.conductor.transtype.check" value="pdf"/>
+  <feature extension="dita.conductor.transtype.check" value="pdf2"/>
+  <feature extension="dita.transtype.print" value="pdf"/>
   <feature extension="dita.transtype.print" value="pdf2"/>
   <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
   <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
