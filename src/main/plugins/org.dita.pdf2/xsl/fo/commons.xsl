@@ -1867,6 +1867,15 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:value-of select="concat(@scale,'%')"/>
                 </xsl:attribute>
             </xsl:if>
+          <xsl:if test="@scalefit = 'yes' and not($width) and not($height) and not(@scale)">            
+            <xsl:attribute name="width">100%</xsl:attribute>
+            <xsl:attribute name="height">100%</xsl:attribute>
+            <xsl:attribute name="content-width">scale-to-fit</xsl:attribute>
+            <xsl:attribute name="content-height">scale-to-fit</xsl:attribute>
+            <xsl:attribute name="scaling">uniform</xsl:attribute>
+          </xsl:if>
+          <xsl:apply-templates select="node() except (*[contains(@class, ' topic/alt ') or
+                                                        contains(@class, ' topic/longdescref ')])"/>
         </fo:external-graphic>
     </xsl:template>
 
