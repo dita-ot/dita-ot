@@ -169,6 +169,9 @@
               select="if (string-length($FILTERFILEURL) > 0)
                       then document($FILTERFILEURL, /)
                       else ()"/>
+  
+  <xsl:variable name="passthrough-attrs" as="element()*"
+                select="$FILTERDOC/val/prop[@action = 'passthrough']"/>
 
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
@@ -3163,6 +3166,13 @@
   <xsl:apply-templates select="." mode="set-output-class">
     <xsl:with-param name="default" select="$default-output-class"/>
   </xsl:apply-templates>
+  <xsl:if test="exists($passthrough-attrs)">
+    <xsl:for-each select="@*">
+      <xsl:if test="$passthrough-attrs[@att = name(current()) and (empty(@val) or (some $v in tokenize(current(), '\s+') satisfies $v = @val))]">
+        <xsl:attribute name="data-{name()}" select="."/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:if>
 </xsl:template>
 
 <!-- Set the class attribute on the resulting output element. The default for a class of elements

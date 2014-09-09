@@ -24,6 +24,8 @@
     </xsl:element>
   </xsl:template>
   
+  <xsl:template match="@*[starts-with(name(), 'data-')]" mode="add-xhtml-ns" priority="10"/>
+  
   <xsl:template match="@* | node()" mode="add-xhtml-ns">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>
