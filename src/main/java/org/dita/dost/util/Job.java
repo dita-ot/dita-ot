@@ -636,9 +636,18 @@ public final class Job {
                 ff.isActive = true;
             }
         } else if (key.equals(HTML_LIST)) {
+        	
             for (final String f: value) {
-            	getOrAdd(f).format = "html";
+            	
+            	FileInfo info = getOrAdd(f);
+            	
+            	if("dita".equals(info.format)){
+            		continue;
+            	}
+            	
+            	info.format = "html";
             }
+            
         } else if (key.equals(IMAGE_LIST)) {
             for (final String f: value) {
             	getOrAdd(f).format = "image";
