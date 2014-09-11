@@ -983,7 +983,7 @@ public final class GenMapAndTopicListModule implements AbstractPipelineModule {
             XMLStreamWriter export = null;
             try {
             	exportStream = new FileOutputStream(new File(tempDir, FILE_NAME_EXPORT_XML));
-            	export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream);
+            	export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
             	export.writeStartDocument();
             	export.writeStartElement("stub");
             	for (final ExportAnchor e: reader.getExportAnchors()) {
