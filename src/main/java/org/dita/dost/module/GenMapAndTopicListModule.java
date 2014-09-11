@@ -1063,7 +1063,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             XMLStreamWriter export = null;
             try {
             	exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML));
-            	export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream);
+            	export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
             	export.writeStartDocument();
             	export.writeStartElement("stub");
             	for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {

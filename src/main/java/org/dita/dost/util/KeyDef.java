@@ -114,7 +114,7 @@ public class KeyDef {
         XMLStreamWriter keydef = null;
         try {
             out = new FileOutputStream(keydefFile);
-            keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
+            keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out, "UTF-8");
             keydef.writeStartDocument();
             keydef.writeStartElement(ELEMENT_STUB);
             for (final KeyDef k: keydefs) {

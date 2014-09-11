@@ -81,7 +81,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                 targetExt = this.getPipelineHashIO().getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
             }
 
-            serializer = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
+            serializer = XMLOutputFactory.newInstance().createXMLStreamWriter(out, "UTF-8");
 
             serializer.writeStartDocument();
             serializer.writeStartElement("index");
