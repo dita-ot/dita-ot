@@ -39,15 +39,15 @@ See the accompanying license.txt file for applicable licenses.
   <!-- common attribute sets -->
 
   <xsl:attribute-set name="common.border__top">
-    <xsl:attribute name="border-top-style">solid</xsl:attribute>
-    <xsl:attribute name="border-top-width">1pt</xsl:attribute>
-    <xsl:attribute name="border-top-color">black</xsl:attribute>
+    <xsl:attribute name="border-before-style">solid</xsl:attribute>
+    <xsl:attribute name="border-before-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-before-color">black</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="common.border__bottom">
-    <xsl:attribute name="border-bottom-style">solid</xsl:attribute>
-    <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>
-    <xsl:attribute name="border-bottom-color">black</xsl:attribute>
+    <xsl:attribute name="border-after-style">solid</xsl:attribute>
+    <xsl:attribute name="border-after-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-after-color">black</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="common.border__right">
@@ -107,8 +107,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="source">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="topic.title" use-attribute-sets="common.title">
-    <xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
+    <xsl:attribute-set name="topic.title" use-attribute-sets="common.title common.border__bottom">
+    <xsl:attribute name="border-after-width">3pt</xsl:attribute>
         <xsl:attribute name="space-before">0pt</xsl:attribute>
         <xsl:attribute name="space-after">16.8pt</xsl:attribute>
         <xsl:attribute name="font-size">18pt</xsl:attribute>
