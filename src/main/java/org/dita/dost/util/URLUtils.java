@@ -534,7 +534,11 @@ public final class URLUtils {
      */
     public static URI setFragment(final URI path, final String fragment) {
         try {
-            return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), path.getQuery(), fragment);
+            if (path.getPath() != null) {
+                return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), path.getQuery(), fragment);
+            } else {
+                return new URI(path.getScheme(), path.getSchemeSpecificPart(), fragment);
+            }
         } catch (final URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
         }

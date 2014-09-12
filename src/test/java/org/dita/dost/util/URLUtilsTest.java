@@ -154,6 +154,12 @@ public class URLUtilsTest {
         assertEquals(new URI("foo"), URLUtils.setFragment(new URI("foo#"), null));
         assertEquals(new URI("foo"), URLUtils.setFragment(new URI("foo"), null));
         assertEquals(new URI(""), URLUtils.setFragment(new URI("#bar"), null));
+        assertEquals(new URI("file:/foo/bar#baz"), URLUtils.setFragment(new URI("file:/foo/bar"), "baz"));
+        assertEquals(new URI("file:/foo/bar"), URLUtils.setFragment(new URI("file:/foo/bar"), null));
+        assertEquals(new URI("file://localhost/foo/bar#baz"), URLUtils.setFragment(new URI("file://localhost/foo/bar"), "baz"));
+        assertEquals(new URI("file://localhost/foo/bar"), URLUtils.setFragment(new URI("file://localhost/foo/bar"), null));
+        assertEquals(new URI("urn:foo:bar#baz"), URLUtils.setFragment(new URI("urn:foo:bar"), "baz"));
+        assertEquals(new URI("urn:foo:bar"), URLUtils.setFragment(new URI("urn:foo:bar"), null));
     }
     
     @Test
