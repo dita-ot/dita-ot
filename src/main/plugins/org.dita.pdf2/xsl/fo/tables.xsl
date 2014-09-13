@@ -383,7 +383,7 @@
                 <xsl:with-param name="theVariableID" select="'Table'"/>
                 <xsl:with-param name="theParameters">
                     <number>
-                        <xsl:number level="any" count="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" from="/"/>
+                        <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>
@@ -515,13 +515,15 @@
         <xsl:variable name="entryNumber">
             <xsl:call-template name="countEntryNumber"/>
         </xsl:variable>
+        <xsl:variable name="colspec"
+            select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = number($entryNumber)]"/>
         <xsl:variable name="char">
             <xsl:choose>
                 <xsl:when test="@char">
                     <xsl:value-of select="@char"/>
                 </xsl:when>
-                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = number($entryNumber)]/@char">
-                    <xsl:value-of select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = $entryNumber]/@char"/>
+                <xsl:when test="$colspec/@char">
+                    <xsl:value-of select="$colspec/@char"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
@@ -530,8 +532,8 @@
                 <xsl:when test="@charoff">
                     <xsl:value-of select="@charoff"/>
                 </xsl:when>
-                <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = number($entryNumber)]/@charoff">
-                    <xsl:value-of select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = $entryNumber]/@charoff"/>
+                <xsl:when test="$colspec/@charoff">
+                    <xsl:value-of select="$colspec/@charoff"/>
                 </xsl:when>
                 <xsl:otherwise>50</xsl:otherwise>
             </xsl:choose>
