@@ -366,6 +366,7 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.ChunkModule">
         <param name="transtype" value="${transtype}"/>
+        <param name="root-chunk-override" value="${root-chunk-override}" if="root-chunk-override"/>
       </module>
     </pipeline>
     

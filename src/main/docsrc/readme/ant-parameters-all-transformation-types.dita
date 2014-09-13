@@ -163,6 +163,10 @@
               default, the output is written to
               <filepath><varname>DITA-dir</varname>\out</filepath>.</pd>
           </plentry>
+          <plentry id="root-chunk-override">
+            <pt><parmname>root-chunk-override</parmname></pt>
+            <pd id="root-chunk-override.desc">Override for map chunk attribute value.</pd>
+          </plentry>
           <plentry id="transtype">
             <pt><parmname>transtype</parmname></pt>
             <pd id="transtype.desc">Specifies the output format. You can create plug-ins to add

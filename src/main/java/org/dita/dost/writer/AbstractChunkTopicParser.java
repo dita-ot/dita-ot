@@ -55,7 +55,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     protected Element topicDoc = null;
 
     private final boolean separate;
-    /** Input file's parent directory */
+    /** Input file's parent absolute directory path. */
     protected File filePath = null;
 
     protected File currentParsingFile = null;

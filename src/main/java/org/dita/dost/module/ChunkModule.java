@@ -45,6 +45,7 @@ import org.xml.sax.SAXException;
 final public class ChunkModule extends AbstractPipelineModuleImpl {
 
     public static final DitaClass ECLIPSEMAP_PLUGIN = new DitaClass("- map/map eclipsemap/plugin ");
+    public static final String ROOT_CHUNK_OVERRIDE = "root-chunk-override";
 
     /**
      * using to save relative path when do rename action for newly chunked file
@@ -73,6 +74,9 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         mapReader.setLogger(logger);
         mapReader.setJob(job);
         mapReader.supportToNavigation(INDEX_TYPE_ECLIPSEHELP.equals(transtype));
+        if (input.getAttribute(ROOT_CHUNK_OVERRIDE) != null) {
+            mapReader.setRootChunkOverride(input.getAttribute(ROOT_CHUNK_OVERRIDE));
+        }
 
         try {
             final File mapFile = new File(job.tempDir, job.getProperty(INPUT_DITAMAP)).getAbsoluteFile();
@@ -92,12 +96,27 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
 
         final Map<String, String> changeTable = mapReader.getChangeTable();
-        if (!changeTable.isEmpty()) {
+        if (hasChanges(changeTable)) {
             updateList(changeTable, mapReader.getConflicTable());
             updateRefOfDita(changeTable, mapReader.getConflicTable());
         }
 
         return null;
+    }
+
+    /**
+     * Test whether there are changes that require topic rewriting.
+     */
+    private boolean hasChanges(final Map<String, String> changeTable) {
+        if (changeTable.isEmpty()) {
+            return false;
+        }
+        for (Map.Entry<String, String> e: changeTable.entrySet()) {
+            if (!e.getKey().equals(e.getValue())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
