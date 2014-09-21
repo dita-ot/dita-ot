@@ -661,6 +661,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="__fo__root" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">serif</xsl:attribute>
+        <!-- TODO: https://issues.apache.org/jira/browse/FOP-2409 -->
         <xsl:attribute name="xml:lang" select="translate($locale, '_', '-')"/>
         <xsl:attribute name="writing-mode" select="$writing-mode"/>
     </xsl:attribute-set>
@@ -668,7 +669,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__force__page__count">
         <xsl:attribute name="force-page-count">
             <xsl:choose>
-                <xsl:when test="name(/*) = 'bookmap'">
+                <xsl:when test="/*[contains(@class, ' bookmap/bookmap ')]">
                     <xsl:value-of select="'even'"/>
                 </xsl:when>
                 <xsl:otherwise>

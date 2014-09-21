@@ -237,6 +237,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:for-each>
           </fo:flow>
         </fo:page-sequence>
+        <xsl:call-template name="createIndex"/>
       </xsl:when>
       <!-- legacy topic based page-sequence generation -->
       <xsl:otherwise>

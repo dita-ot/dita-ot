@@ -243,6 +243,7 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:when>
                 <xsl:when test="/*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                     <xsl:apply-templates select="/" mode="toc"/>
+                    <xsl:call-template name="toc.index"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
@@ -281,7 +282,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:call-template name="createToc"/>
   </xsl:template>
     
-  <xsl:template match="ot-placeholder:indexlist" mode="toc">
+  <xsl:template match="ot-placeholder:indexlist" mode="toc" name="toc.index">
     <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (exists($index-entries//opentopic-index:index.entry))">
       <fo:block xsl:use-attribute-sets="__toc__indent__booklist">
         <fo:block xsl:use-attribute-sets="__toc__topic__content__booklist">
