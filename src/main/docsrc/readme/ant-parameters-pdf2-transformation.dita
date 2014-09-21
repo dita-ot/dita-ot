@@ -29,6 +29,16 @@
               order is retained in bookmap. The allowed values are <option>retain</option> and
                 <option>discard</option>; the default value is <option>discard</option>.</pd>
           </plentry>
+          <plentry id="args.bookmark.style">
+            <pt><parmname>args.bookmark.style</parmname></pt>
+            <pd id="args.bookmark.style.desc">Specifies whether PDF bookmarks are by default expanded or collapsed. The allowed values are
+              <option>COLLAPSED</option> and <option>EXPANDED</option>, the default value is <option>COLLAPSE</option>.</pd>
+          </plentry>
+          <plentry id="args.chapter.layout">
+            <pt><parmname>args.chapter.layout</parmname></pt>
+            <pd id="args.chapter.layout.desc">Specifies whether chapter level TOCs are generated. The allowed values are
+              <option>MINITOC</option> and <option>BASIC</option>; the default value is <option>MINITOC</option>.</pd>
+          </plentry>
           <plentry conref="conref-dita-ot-parameters.dita#conref-dita-ot-parameters/args.fo.userconfig">
             <pt/>
             <pd/>
@@ -63,7 +73,7 @@
                 <li><option>ah</option> – Antenna House Formatter</li>
                 <li><option>fop</option> (default) – Apache FOP</li>
                 <li><option>xep</option> – RenderX XEP Engine</li>
-              </ul>The full-easy-install package comes with Apache FOP; other XSL processors must be
+              </ul>The client and full-easy-install packages come with Apache FOP; other XSL processors must be
               separately installed. </pd>
           </plentry>
           <plentry id="publish.required.cleanup" importance="deprecated">

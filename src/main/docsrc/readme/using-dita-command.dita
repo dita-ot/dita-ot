@@ -16,9 +16,9 @@
           </ul>
         </info>
         <tutorialinfo>
-          <p>If you add <filepath><varname>installation-directory</varname>\bin</filepath> directory
+          <note type="tip">If you add <filepath><varname>installation-directory</varname>\bin</filepath> directory
             to <varname>PATH</varname> system variable, you can invoke the <cmdname>dita</cmdname>
-            command without the absolute path.</p>
+            command without the absolute path.</note>
         </tutorialinfo>
         <stepresult id="running-ditaot-results">If you do not specify an output directory, by default, the DITA-OT writes the output to <filepath>out</filepath> subdirectory of current
           directory.</stepresult>
