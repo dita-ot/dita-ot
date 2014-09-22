@@ -98,10 +98,11 @@
     <unzip src="${plugin.file}" dest="${dita.temp.dir}"/>
   </target>
   <target name="install.download" unless="install.file.exists">
-    <basename property="install.downlaod.file" file="${plugin.file}"/>
-    <get src="${plugin.file}" dest="${dita.temp.dir}/${install.downlaod.file}" ignoreerrors="false" verbose="on"/>
-    <unzip src="${dita.temp.dir}/${install.downlaod.file}" dest="${dita.temp.dir}"/>
-    <delete file="${dita.temp.dir}/${install.downlaod.file}"/>
+    <tempfile property="install.download.file.abs" destdir="${dita.temp.dir}" suffix=".zip"/>
+    <basename property="install.download.file" file="${install.download.file.abs}"/>
+    <get src="${plugin.file}" dest="${dita.temp.dir}/${install.download.file}" ignoreerrors="false" verbose="on"/>
+    <unzip src="${dita.temp.dir}/${install.download.file}" dest="${dita.temp.dir}"/>
+    <delete file="${dita.temp.dir}/${install.download.file}"/>
   </target>
   
   <target name="uninstall" description="Uninstall plug-in">
