@@ -117,8 +117,7 @@
           <plentry id="dita.input.valfile" importance="deprecated">
             <pt><parmname>dita.input.valfile</parmname></pt>
             <pd id="dita.input.valfile.desc">Specifies a filter file to be
-              used to include, exclude, or flag content. Filter files must have a .ditaval or
-              .DITAVAL extension.<note type="notice">Deprecated in favor of the
+              used to include, exclude, or flag content.<note type="notice">Deprecated in favor of the
                   <parmname>args.filter</parmname> parameter.</note></pd>
           </plentry>
           <plentry id="generate.copy.outer">

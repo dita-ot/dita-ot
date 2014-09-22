@@ -4,9 +4,9 @@
   <title>DITA Open Toolkit <keyword keyref="release"/></title>
   <mapref href="keyrefs.ditamap" processing-role="resource-only"/>
   <topicref href="DITA-OTProjectHome.xml"/>
-  <mapref href="quickstart.ditamap"/>
-    <topicref href="readme/DITA-readme.xml">
-  <mapref href="readme.ditamap"/>
+  <mapref href="client-quickstart.ditamap"/>
+  <topicref href="readme/DITA-readme.xml">
+    <mapref href="readme.ditamap"/>
   </topicref>
   <topicref href="dev_ref/developer-reference.dita">
     <mapref href="dev_ref/dev_ref.ditamap" format="ditamap"/>

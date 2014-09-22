@@ -70,7 +70,8 @@
         <plentry>
           <pt><parmname>-i</parmname>, <parmname>-input</parmname>
             <varname>file</varname></pt>
-          <pd conref="ant-parameters-all-transformation-types.dita#ant-parameters-all-transformation-types/args.input.desc"/>
+          <pd id="args.input.desc">Specifies the master file for your documentation project. Typically this is a DITA map, however it also can be a DITA topic if you want to transform a single DITA
+            file. The path can be absolute, relative to <parmname>args.input.dir</parmname>, or relative to current directory if <parmname>args.input.dir</parmname> is not defined. </pd>
         </plentry>
         <plentry>
           <pt><parmname>-install</parmname>
@@ -100,7 +101,8 @@
         <plentry>
           <pt><parmname>-o</parmname>, <parmname>-output</parmname>
             <varname>dir</varname></pt>
-          <pd id="output.dir.desc">Specifies the name and location of the output directory. By default, the output is written to <filepath>out</filepath> subdirectory of the current directory.</pd>
+          <pd id="output.dir.desc">Specifies the path of output directory; the path can be absolute or relative to current directory. By default, the output is written to <filepath>out</filepath>
+            subdirectory of the current directory.</pd>
         </plentry>
         <plentry>
           <pt><parmname>-filter</parmname>
@@ -127,7 +129,7 @@
         </plentry>
         <plentry>
           <pt><parmname>-D</parmname><varname>property</varname>=<varname>value</varname></pt>
-          <pd>Specify a value for a property. Supported properties are the same as Ant parameters and are transformation type specific.</pd>
+          <pd>Specify a value for a parameter. Supported parameters are the same as Ant parameters and are transformation type specific.</pd>
         </plentry>
         <plentry>
           <pt><parmname>-propertyfile</parmname>
@@ -137,4 +139,7 @@
       </parml>
     </section>
   </refbody>
+  <related-links>
+    <link href="dita-ot_ant_properties.dita"/>
+  </related-links>
 </reference>

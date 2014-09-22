@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="using-command-line-tool" xml:lang="en">
+  <title>Building output using the <cmdname>dita</cmdname> command</title>
+  <shortdesc>You can invoke DITA-OT and build output using the <cmdname>dita</cmdname> command. </shortdesc>
+  <taskbody>
+    <steps>
+      <step>
+        <cmd>DITA-OT client is a command-line tool, there is no graphic user interface. Open a terminal window by typing the following in search bar:</cmd>
+        <info>
+          <ul>
+            <li>On OS X and Linux type <userinput>Terminal</userinput>.</li>
+            <li>On Windows type <userinput>Command Prompt</userinput></li>
+          </ul>
+        </info>
+      </step>
+      <step>
+        <cmd>From the terminal window, issue the following command:</cmd>
+        <info>
+          <codeblock><varname>install-dir</varname>/bin/dita -f <varname>transformation-type</varname> -i <varname>input-file</varname> -o <varname>output-dir</varname></codeblock>
+          <p>where:</p>
+          <ul id="basic-variables">
+            <li><varname>install-dir</varname> is the DITA-OT installation directory path.</li>
+            <li><varname>transformation-type</varname> is the transformation type.</li>
+            <li><varname>input-file</varname> is the DITA map or DITA file path that you want to process.</li>
+            <li><varname>output-dir</varname> is the output directory path for generated output.</li>
+          </ul>
+        </info>
+        <stepresult id="running-ditaot-results">If processing is successful, nothing is printed on the terminal window.</stepresult>
+      </step>
+    </steps>
+    <example>
+      <p>The following command generates HTML5 output for the <filepath>sequence.ditamap</filepath> file and specifies the output is written to the <filepath>test</filepath> directory</p>
+      <codeblock>dita -f html5 -i samples/sequence.ditamap -o test </codeblock>
+    </example>
+  </taskbody>
+</task>

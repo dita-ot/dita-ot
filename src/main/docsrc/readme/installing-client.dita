@@ -40,8 +40,7 @@
           DITA-OT.</cmd>
       </step>
       <step importance="optional">
-        <cmd>Add <filepath>bin</filepath> directory to <varname>PATH</varname> system
-          variable.</cmd>
+        <cmd>Add absolute path for <filepath>bin</filepath> directory to <varname>PATH</varname> system variable.</cmd>
         <stepresult>This defines the necessary environment variable to run the <cmdname>dita</cmdname> command from the command-line.</stepresult>
       </step>
     </steps>
