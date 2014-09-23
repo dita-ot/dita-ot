@@ -538,6 +538,9 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             } else if (target.equals(PI_PATH2PROJ_TARGET_URI)) {
                 if (path2project != null) {
                     d = toURI(path2project).toString();
+                    if (!d.endsWith(URI_SEPARATOR)) {
+                        d = d + URI_SEPARATOR;
+                    }
                 }
             }            
             getContentHandler().processingInstruction(target, d);
