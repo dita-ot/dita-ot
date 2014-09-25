@@ -110,7 +110,6 @@
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <exclude name="lib/saxon*"/>
     <exclude name="lib/icu4j.jar"/>
-    <exclude name="lib/log4j.properties"/>
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
     <include name="plugins/com.sophos.tocjs/**"/>
@@ -126,7 +125,6 @@
     <include name="lib/dost.jar"/>
     <include name="lib/APACHE-LICENSE-2_0.html"/>
     <include name="lib/xml-resolver.jar"/>
-    <include name="lib/CatalogManager.properties"/>
     <include name="lib/**"/>
   </patternset>
   <patternset id="pattern.package.ext-plugins.minimum">
@@ -136,7 +134,6 @@
   <patternset id="pattern.package.client">
     <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
-    <exclude name="lib/log4j.properties"/>
     <exclude name="lib/saxon*"/>
     <exclude name="startcmd.*"/>
     <include name="build_demo.xml"/>
@@ -170,7 +167,6 @@
   <patternset id="pattern.package.full">
     <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
-    <exclude name="lib/log4j.properties"/>
     <include name="*.*"/>
     <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
@@ -202,7 +198,6 @@
     <exclude name="plugins/org.dita.pdf2/lib/icu4j.jar"/>
     <exclude name="lib/saxon*"/>
     <exclude name="lib/icu4j.jar"/>
-    <exclude name="lib/log4j.properties"/>
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
     <exclude name="src/**"/>
@@ -450,7 +445,7 @@
     <delete dir="${work.dir}"/>
   </target>
 
-  <target name="update-doc">
+  <target name="update-doc" unless="doc.skip">
     <ant antfile="${src.dir}/integrator.xml" target="integrate">
       <property name="basedir" value="${src.dir}"/>
     </ant>
