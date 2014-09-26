@@ -44,7 +44,7 @@
     <jar destfile="${basedir}/lib/dost-configuration.jar">
       <fileset dir="${basedir}/lib">
         <include name="configuration.properties"/>
-        <include name="CatalogManager.properties"/>
+        <!--include name="CatalogManager.properties"/-->
         <include name="org.dita.dost.platform/plugin.properties"/>
       </fileset>
     </jar>
