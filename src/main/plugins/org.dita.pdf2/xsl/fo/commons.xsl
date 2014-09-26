@@ -82,7 +82,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="opentopic:map"/>
 
     <!-- get the max chars for shortdesc-->
-    <xsl:variable name="maxCharsInShortDesc">
+    <xsl:variable name="maxCharsInShortDesc" as="xs:integer">
         <xsl:call-template name="getMaxCharsForShortdescKeep"/>
     </xsl:variable>
 
@@ -95,7 +95,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-    <xsl:template name="startPageNumbering">
+    <xsl:template name="startPageNumbering" as="attribute()*">
         <!--BS: uncomment if you need reset page numbering at first chapter-->
 <!--
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
@@ -1168,26 +1168,34 @@ See the accompanying license.txt file for applicable licenses.
     <!-- For SF Bug 2879171: modify so that shortdesc is inline when inside
          abstract with only other text or inline markup. -->
     <xsl:template match="*[contains(@class,' topic/shortdesc ')]">
-        <xsl:variable name="format-as-block">
+        <xsl:variable name="format-as-block" as="xs:boolean">
             <xsl:choose>
-                <xsl:when test="not(parent::*[contains(@class,' topic/abstract ')])">yes</xsl:when>
+                <xsl:when test="not(parent::*[contains(@class,' topic/abstract ')])">
+                  <xsl:sequence select="true()"/>
+                </xsl:when>
                 <xsl:when test="preceding-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
                                          contains(@class,' topic/fig ') or contains(@class,' topic/lines ') or
                                          contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
                                          contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
                                          contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
-                                         contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">yes</xsl:when>
+                                         contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">
+                  <xsl:sequence select="true()"/>
+                </xsl:when>
                 <xsl:when test="following-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
                                          contains(@class,' topic/fig ') or contains(@class,' topic/lines ') or
                                          contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
                                          contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
                                          contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
-                                         contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">yes</xsl:when>
-                <xsl:otherwise>no</xsl:otherwise>
+                                         contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">
+                  <xsl:sequence select="true()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:sequence select="false()"/>
+                </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:choose>
-            <xsl:when test="$format-as-block='yes'">
+            <xsl:when test="$format-as-block">
                 <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
             </xsl:when>
             <xsl:otherwise>
@@ -1204,7 +1212,7 @@ See the accompanying license.txt file for applicable licenses.
         <fo:block xsl:use-attribute-sets="topic__shortdesc">
             <xsl:call-template name="commonattributes"/>
             <!-- If the shortdesc is sufficiently short, add keep-with-next. -->
-            <xsl:if test="string-length(.) &lt;= $maxCharsInShortDesc">
+            <xsl:if test="string-length(.) lt $maxCharsInShortDesc">
                 <!-- Low-strength keep to avoid conflict with keeps on titles. -->
                 <xsl:attribute name="keep-with-next.within-page">5</xsl:attribute>
             </xsl:if>
@@ -1232,7 +1240,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:variable>
         <xsl:choose>
             <!--  Disable chapter summary processing when mini TOC is created -->
-            <xsl:when test="(topicType = 'topicChapter') or (topicType = 'topicAppendix')"/>
+            <xsl:when test="$topicType = ('topicChapter', 'topicAppendix')"/>
             <!--   Normal processing         -->
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
@@ -1240,7 +1248,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="getMaxCharsForShortdescKeep">
+    <xsl:template name="getMaxCharsForShortdescKeep" as="xs:integer">
     <!-- These values specify the length of a short description that will
         render with keep-with-next set, which should be (approximately) the
         character count in three lines of rendered shortdesc text. If you customize the
@@ -1248,20 +1256,20 @@ See the accompanying license.txt file for applicable licenses.
         to change these values. -->
         <xsl:choose>
             <xsl:when test="$locale = 'en_US' or $locale = 'fr_FR'">
-                <xsl:value-of select="360"/>
+              <xsl:sequence select="360"/>
             </xsl:when>
             <xsl:when test="$locale = 'ja_JP'">
-                <xsl:value-of select="141"/>
+              <xsl:sequence select="141"/>
             </xsl:when>
             <xsl:when test="$locale = 'zh_CN'">
-                <xsl:value-of select="141"/>
+              <xsl:sequence select="141"/>
             </xsl:when>
             <!-- Other languages require a template override to generate
             keep-with-next
             on shortdesc. Data was not available at the time this code released.
             -->
             <xsl:otherwise>
-                <xsl:value-of select="0"/>
+              <xsl:sequence select="0"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1298,10 +1306,10 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/section ')][@spectitle != ''
-                         and not(*[contains(@class, ' topic/title ')])]"
-    mode="dita2xslfo:section-heading"
-    priority="10">
+  <xsl:template match="*[contains(@class,' topic/section ')]
+                        [@spectitle != '' and not(*[contains(@class, ' topic/title ')])]"
+                mode="dita2xslfo:section-heading"
+                priority="10">
     <fo:block xsl:use-attribute-sets="section.title">
       <xsl:call-template name="commonattributes"/>
       <xsl:variable name="spectitleValue" as="xs:string" select="string(@spectitle)"/>
@@ -1310,11 +1318,9 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:with-param name="theVariableID" select="$spectitleValue"/>
         </xsl:call-template>
       </xsl:variable>
-      <xsl:sequence
-        select="if (not(normalize-space($resolvedVariable)))
-        then $spectitleValue
-        else $resolvedVariable"
-      />
+      <xsl:sequence select="if (not(normalize-space($resolvedVariable)))
+                            then $spectitleValue
+                            else $resolvedVariable" />
     </fo:block>
 
   </xsl:template>
@@ -1520,7 +1526,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/note ')]" mode="setNoteImagePath">
-      <xsl:variable name="noteType">
+      <xsl:variable name="noteType" as="xs:string">
           <xsl:choose>
               <xsl:when test="@type">
                   <xsl:value-of select="@type"/>
