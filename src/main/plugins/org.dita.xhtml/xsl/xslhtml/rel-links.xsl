@@ -26,8 +26,8 @@
                    [empty(@role) or @role = ('cousin', 'external', 'friend', 'other', 'sample', 'sibling')]"
            use="related-links:hideduplicates(.)"/>
 
-  <xsl:param name="NOPARENTLINK" select="'no'"/><!-- "no" and "yes" are valid values; non-'no' is ignored -->
-  <xsl:param name="include.rellinks" select="'#default parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
+  <xsl:param name="NOPARENTLINK" select="'no'" as="xs:string"/><!-- "no" and "yes" are valid values; non-'no' is ignored -->
+  <xsl:param name="include.rellinks" select="'#default parent child sibling friend next previous cousin ancestor descendant sample external other'" as="xs:string"/>
   <xsl:variable name="include.roles" select="tokenize(normalize-space($include.rellinks), '\s+')" as="xs:string*"/>
 
   <xsl:function name="related-links:link" as="xs:string">
@@ -68,7 +68,7 @@
   </xsl:function>
 
   <xsl:function name="related-links:omit-from-unordered-links" as="xs:boolean">
-    <xsl:param name="node"/>
+    <xsl:param name="node" as="element()"/>
     <xsl:sequence select="$node/@role = ('child', 'descendant', 'next', 'previous', 'parent') or
                           $node[@importance = 'required' and (empty(@role) or @role = ('sibling', 'friend', 'cousin'))] or
                           $node/ancestor::*[contains(@class, ' topic/linklist ')]"/>
@@ -337,8 +337,8 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result.">
-    <xsl:param name="links"/>
-    <xsl:if test="normalize-space($links)">
+    <xsl:param name="links" as="node()*"/>
+    <xsl:if test="exists($links)">
       <div class="relinfo">
         <strong>
           <xsl:call-template name="getString">
@@ -354,14 +354,19 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
   </xsl:template>
 
   <!-- Links with @type="topic" belong in no-name group. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type = 'topic']" mode="related-links:get-group-priority" name="related-links:group-priority.topic" priority="2">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type = 'topic']" mode="related-links:get-group-priority"
+                name="related-links:group-priority.topic" priority="2"
+                as="xs:integer">
     <xsl:call-template name="related-links:group-priority."/>
   </xsl:template>
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type = 'topic']" mode="related-links:get-group" name="related-links:group.topic" priority="2">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type = 'topic']" mode="related-links:get-group"
+                name="related-links:group.topic" priority="2"
+                as="xs:string">
     <xsl:call-template name="related-links:group."/>
   </xsl:template>
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type = 'topic']" mode="related-links:result-group" name="related-links:group-result.topic" priority="2">
-    <xsl:param name="links"/>
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type = 'topic']" mode="related-links:result-group"
+                name="related-links:group-result.topic" priority="2">
+    <xsl:param name="links" as="node()*"/>
     <xsl:call-template name="related-links:group-result.">
       <xsl:with-param name="links" select="$links"/>
     </xsl:call-template>
@@ -405,13 +410,13 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <!-- "/" is not legal in IDs - need to swap it with two underscores -->
   <!-- Deprecated, use dita-ot:generate-id function instead -->
-  <xsl:template name="parsehref">
-    <xsl:param name="href"/>
+  <xsl:template name="parsehref" as="xs:string">
+    <xsl:param name="href" as="xs:string"/>
     <xsl:choose>
       <xsl:when test="contains($href, '/')">
-        <xsl:value-of select="substring-before($href, '/')"/>
-        <xsl:value-of select="$HTML_ID_SEPARATOR"/>
-        <xsl:value-of select="substring-after($href, '/')"/>
+        <xsl:value-of select="concat(substring-before($href, '/'),
+                                     $HTML_ID_SEPARATOR,
+                                     substring-after($href, '/'))"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$href"/>
@@ -554,7 +559,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <!--ordered child processing-->
   <xsl:template match="*[@collection-type = 'sequence']/*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')]" priority="3" name="topic.link_orderedchild">
-    <xsl:variable name="el-name">
+    <xsl:variable name="el-name" as="xs:string">
       <xsl:choose>
         <xsl:when test="contains(../@class, ' topic/linklist ')">div</xsl:when>
         <xsl:otherwise>li</xsl:otherwise>
@@ -709,7 +714,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:apply-templates select="." mode="processlinklist"/>
   </xsl:template>
   <xsl:template match="*" mode="processlinklist">
-    <xsl:param name="default-list-type" select="'linklist'"/>
+    <xsl:param name="default-list-type" select="'linklist'" as="xs:string"/>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="$default-list-type"/>
     </xsl:call-template>
@@ -827,8 +832,8 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
   </xsl:template>
 
   <xsl:template match="*" mode="ditamsg:link-may-be-duplicate">
-    <xsl:param name="href" select="@href"/>
-    <xsl:param name="outfile">
+    <xsl:param name="href" select="@href" as="xs:string"/>
+    <xsl:param name="outfile" as="xs:string">
       <xsl:call-template name="replace-extension">
         <xsl:with-param name="filename" select="$FILENAME"/>
         <xsl:with-param name="extension" select="$OUTEXT"/>
