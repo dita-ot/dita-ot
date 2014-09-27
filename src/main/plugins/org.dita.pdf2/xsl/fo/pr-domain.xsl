@@ -33,7 +33,9 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="2.0">
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    version="2.0"
+    exclude-result-prefixes="xs">
 
     <xsl:template match="*[contains(@class,' pr-d/codeph ')]">
         <fo:inline xsl:use-attribute-sets="codeph">
@@ -43,6 +45,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
   <xsl:variable name="codeblock.wrap" select="false()"/>
+  <xsl:template match="node()" mode="codeblock.generate-line-number" as="xs:boolean">
+    <xsl:sequence select="false()"/>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class,' pr-d/codeblock ')]">
         <xsl:call-template name="generateAttrLabel"/>
@@ -50,12 +55,30 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
+            <xsl:variable name="codeblock.line-number" as="xs:boolean">
+              <xsl:apply-templates select="." mode="codeblock.generate-line-number"/>
+            </xsl:variable>
             <xsl:choose>
-              <xsl:when test="$codeblock.wrap">
+              <xsl:when test="$codeblock.wrap or $codeblock.line-number">
                 <xsl:variable name="content" as="node()*">
                   <xsl:apply-templates/>
                 </xsl:variable>
-                <xsl:apply-templates select="$content" mode="codeblock.wrap"/>    
+                <xsl:choose>
+                  <xsl:when test="$codeblock.line-number">
+                    <xsl:variable name="buf" as="document-node()">
+                      <xsl:document>
+                        <xsl:processing-instruction name="line-number"/>
+                        <xsl:apply-templates select="$content" mode="codeblock.line-number"/>
+                      </xsl:document>
+                    </xsl:variable>
+                    <xsl:apply-templates select="$buf" mode="codeblock">
+                      <xsl:with-param name="line-count" select="count($buf/descendant::processing-instruction('line-number'))" tunnel="yes"/>
+                    </xsl:apply-templates>    
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:apply-templates select="$content" mode="codeblock"/>
+                  </xsl:otherwise>
+                </xsl:choose>                
               </xsl:when>
               <xsl:otherwise>
                 <xsl:apply-templates/>
@@ -64,19 +87,53 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-  <xsl:template match="@* | node()" mode="codeblock.wrap">
+  <xsl:template match="node() | @*" mode="codeblock.line-number">
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="codeblock.wrap"/>
+      <xsl:apply-templates select="node() | @*" mode="codeblock.line-number"/>
     </xsl:copy>
   </xsl:template>
+  
+  <xsl:template match="text()" mode="codeblock.line-number"
+                name="codeblock.line-number" priority="10">
+    <xsl:param name="text" select="." as="xs:string"/>
+    <xsl:variable name="head" select="substring($text, 1, 1)"/>
+    <xsl:variable name="tail" select="substring($text, 2)"/>
+    <xsl:value-of select="$head"/>
+    <xsl:if test="$head = '&#xA;'">
+      <xsl:processing-instruction name="line-number"/>
+    </xsl:if>
+    <xsl:if test="$tail">
+      <xsl:call-template name="codeblock.line-number">
+        <xsl:with-param name="text" select="$tail"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
 
-  <xsl:template match="text()" mode="codeblock.wrap"
+  <xsl:template match="@* | node()" mode="codeblock">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()" mode="codeblock"/>
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="processing-instruction('line-number')"
+                mode="codeblock" priority="10">
+    <xsl:param name="line-count" as="xs:integer" tunnel="yes"/>
+    <xsl:variable name="line-number" select="count(preceding::processing-instruction('line-number')) + 1" as="xs:integer"/>
+    <fo:inline xsl:use-attribute-sets="codeblock.line-number">
+      <xsl:for-each select="string-length(string($line-number)) to string-length(string($line-count)) - 1">
+        <xsl:text>&#xA0;</xsl:text>
+      </xsl:for-each>
+      <xsl:value-of select="$line-number"/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match="text()" mode="codeblock"
                 name="codeblock.text" priority="10">
     <xsl:param name="text" select="."/>
     <xsl:variable name="head" select="substring($text, 1, 1)"/>
     <xsl:variable name="tail" select="substring($text, 2)"/>
     <xsl:choose>
-      <xsl:when test="$head = (' ', '&#xA0;')">
+      <xsl:when test="$codeblock.wrap and $head = (' ', '&#xA0;')">
         <xsl:text>&#xA0;&#xAD;</xsl:text>
       </xsl:when>
       <xsl:otherwise>
