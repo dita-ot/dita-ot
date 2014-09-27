@@ -574,6 +574,9 @@
     <xsl:when test="@type = 'warning'">
       <xsl:apply-templates select="." mode="process.note.warning"/>
     </xsl:when>
+    <xsl:when test="@type = 'trouble'">
+      <xsl:apply-templates select="." mode="process.note.trouble"/>
+    </xsl:when>
     <xsl:when test="@type = 'other'">
       <xsl:apply-templates select="." mode="process.note.other"/>
     </xsl:when>
@@ -648,6 +651,10 @@
 </xsl:template>
 
 <xsl:template match="*" mode="process.note.attention">
+  <xsl:apply-templates select="." mode="process.note.common-processing"/>
+</xsl:template>
+  
+<xsl:template match="*" mode="process.note.trouble">
   <xsl:apply-templates select="." mode="process.note.common-processing"/>
 </xsl:template>
 

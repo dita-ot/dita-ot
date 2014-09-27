@@ -1977,6 +1977,26 @@
         <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
       </xsl:element>
     </xsl:when>
+    <xsl:when test="@type='trouble'">
+      <xsl:element name="text:span">
+        <xsl:attribute name="text:style-name">bold</xsl:attribute>
+        <xsl:call-template name="getStringODT">
+          <xsl:with-param name="stringName" select="'Trouble'"/>
+        </xsl:call-template>
+        <xsl:call-template name="getStringODT">
+          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text>
+        
+      </xsl:element>
+      <xsl:element name="text:span">
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+        <xsl:apply-templates/>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+      </xsl:element>
+    </xsl:when>
     <xsl:when test="@type='other'">
       <xsl:element name="text:span">
         <xsl:attribute name="text:style-name">bold</xsl:attribute>
@@ -2178,7 +2198,23 @@
           <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
         </xsl:element>
     </xsl:when>
-
+    <xsl:when test="@type='trouble'">
+      <xsl:attribute name="text:style-name">bold</xsl:attribute>
+      <xsl:call-template name="getStringODT">
+        <xsl:with-param name="stringName" select="'Trouble'"/>
+      </xsl:call-template>
+      <xsl:call-template name="getStringODT">
+        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      </xsl:call-template>
+      <xsl:text> </xsl:text>
+      <xsl:element name="text:span">
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+        <xsl:apply-templates/>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+      </xsl:element>
+    </xsl:when>
     <xsl:when test="@type='other'">
         <xsl:attribute name="text:style-name">bold</xsl:attribute>
         <xsl:choose>

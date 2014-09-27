@@ -439,6 +439,10 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 \par \plain\s0\f4\fs24\b <xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Danger'"/></xsl:call-template><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text>\pard \plain\s0\f4\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:apply-templates/>
 \par \plain\s0\f2\fs24
     </xsl:when>
+    <xsl:when test="@type='trouble'">
+\par \plain\s0\f4\fs24\b <xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Trouble'"/></xsl:call-template><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text>\pard \plain\s0\f4\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:apply-templates/>
+\par \plain\s0\f2\fs24
+    </xsl:when>
     <xsl:when test="@type='other'">
 \par \plain\s0\f4\fs24\b <xsl:choose><xsl:when test="@othertype and
   not(@othertype='')"><xsl:value-of select="@othertype"/></xsl:when><xsl:otherwise><xsl:text>[other]</xsl:text></xsl:otherwise></xsl:choose><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text>\pard \plain\s0\f4\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:apply-templates/>

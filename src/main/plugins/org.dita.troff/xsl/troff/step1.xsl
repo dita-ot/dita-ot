@@ -214,6 +214,9 @@
             <xsl:when test="@type='tip'">
                 <xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Tip'"/></xsl:call-template>
             </xsl:when>
+            <xsl:when test="@type='trouble'">
+              <xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Trouble'"/></xsl:call-template>
+            </xsl:when>
             <xsl:when test="@type='other' and @othertype">
                 <xsl:value-of select="@othertype"/>
             </xsl:when>
