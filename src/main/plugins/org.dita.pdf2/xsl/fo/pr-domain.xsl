@@ -71,8 +71,9 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:apply-templates select="$content" mode="codeblock.line-number"/>
                       </xsl:document>
                     </xsl:variable>
+                    <xsl:variable name="line-count" select="count($buf/descendant::processing-instruction('line-number'))"/>
                     <xsl:apply-templates select="$buf" mode="codeblock">
-                      <xsl:with-param name="line-count" select="count($buf/descendant::processing-instruction('line-number'))" tunnel="yes"/>
+                      <xsl:with-param name="line-count" select="$line-count" tunnel="yes"/>
                     </xsl:apply-templates>    
                   </xsl:when>
                   <xsl:otherwise>

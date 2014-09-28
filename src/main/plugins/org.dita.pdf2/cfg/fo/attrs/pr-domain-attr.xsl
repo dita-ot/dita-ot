@@ -58,10 +58,11 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
   
     <xsl:attribute-set name="codeblock.line-number">
-      <xsl:attribute name="font-weight">bold</xsl:attribute>
+      <xsl:attribute name="font-size">75%</xsl:attribute>
+      <xsl:attribute name="font-weight">normal</xsl:attribute>
       <xsl:attribute name="font-style">normal</xsl:attribute>
-      <xsl:attribute name="padding-end">1em</xsl:attribute>
       <xsl:attribute name="color">gray</xsl:attribute>
+      <xsl:attribute name="padding-end">1em</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="option">
