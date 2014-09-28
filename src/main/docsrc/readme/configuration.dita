@@ -34,7 +34,7 @@
             <entry>Specifies the language that is used if the input file does not have the @xml:lang
               attribute set on the root element. By default, this is set to<option> en</option>. The
               allowed values are those that are defined in IETF BCP 47, <xref
-                href="https://tools.ietf.org/html/bcp47" scope="external">Tags for the
+                href="https://tools.ietf.org/html/bcp47" format="html" scope="external">Tags for the
                 Identification of Languages</xref>.</entry>
           </row>
           <row>

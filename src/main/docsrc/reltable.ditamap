@@ -444,7 +444,7 @@ navtitle="JavaHelp transformation"/>
 <topicref href="http://opensource.org/licenses/cpl1.0.php"
 navtitle="Common Public License, version 1.0" type="html" scope="external"/>
 <topicref href="http://www.apache.org/licenses/LICENSE-2.0" navtitle="Apache License, version 2.0"
-scope="external"/>
+format="html" scope="external"/>
 </relcell>
 </relrow>
 <relrow>
