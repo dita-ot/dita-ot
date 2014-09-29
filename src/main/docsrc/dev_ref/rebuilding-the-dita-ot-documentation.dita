@@ -8,7 +8,7 @@
     <taskbody>
         <steps>
             <step>
-                <cmd>Change to the <filepath>doc</filepath> directory.</cmd>
+                <cmd>Change to the <filepath>docsrc</filepath> directory.</cmd>
             </step>
             <step>
                 <cmd>Run the following command:</cmd>
