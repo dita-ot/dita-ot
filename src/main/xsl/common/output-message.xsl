@@ -30,13 +30,7 @@
     <xsl:param name="msgnum" select="'000'"/>
     <xsl:param name="msgsev" select="'I'"/>
     <xsl:param name="msgparams" select="''"/>
-    
-    <xsl:message>
-      <xsl:text>{</xsl:text>
-      <xsl:value-of select="($msg, $msgcat, $msgnum, $msgsev, $msgparams)" separator=", "/>
-      <xsl:text>}</xsl:text>
-    </xsl:message>
-    
+        
     <xsl:variable name="msgid">
       <xsl:value-of select="$msgcat"/>
       <xsl:value-of select="$msgnum"/>
