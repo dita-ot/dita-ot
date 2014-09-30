@@ -824,7 +824,7 @@
                         </xsl:when>
                         <xsl:when test="../parent::node()[contains(@class, ' topic/tbody ')]">
                             <xsl:variable name="entryNum" select="count(preceding-sibling::*[contains(@class, ' topic/entry ')]) + 1"/>
-                            <xsl:variable name="prevEntryRowsep" as="xs:string">
+                            <xsl:variable name="prevEntryRowsep" as="xs:string?">
                                 <xsl:for-each select="../preceding-sibling::*[contains(@class, ' topic/row ')][1]/*[contains(@class, ' topic/entry ')][$entryNum]">
                                     <xsl:call-template name="getTableRowsep"/>
                                 </xsl:for-each>

@@ -1036,6 +1036,7 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:template name="brokenLinks">
     <xsl:param name="href"/>
+    <!-- FIXME: There is no message PDFX063W -->
     <xsl:call-template name="output-message">
       <xsl:with-param name="msgnum">063</xsl:with-param>
       <xsl:with-param name="msgsev">W</xsl:with-param>
