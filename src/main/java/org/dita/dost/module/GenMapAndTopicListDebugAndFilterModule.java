@@ -970,17 +970,17 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
                 for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
                     export.writeStartElement("file");
                     export.writeAttribute("name", e.file.toString());
-                    for (final String t: e.topicids) {
+                    for (final String t: sort(e.topicids)) {
                         export.writeStartElement("topicid");
                         export.writeAttribute("name", t);
                         export.writeEndElement();
                     }
-                    for (final String i: e.ids) {
+                    for (final String i: sort(e.ids)) {
                         export.writeStartElement("id");
                         export.writeAttribute("name", i);
                         export.writeEndElement();
                     }
-                    for (final String k: e.keys) {
+                    for (final String k: sort(e.keys)) {
                         export.writeStartElement("keyref");
                         export.writeAttribute("name", k);
                         export.writeEndElement();
@@ -1010,6 +1010,12 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
                 }
             }
         }
+    }
+
+    private List<String> sort(final Set<String> set) {
+        final List<String> sorted = new ArrayList<String>(set);
+        Collections.sort(sorted);
+        return sorted;
     }
 
     /**
