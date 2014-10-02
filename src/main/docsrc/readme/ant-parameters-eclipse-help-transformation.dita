@@ -31,22 +31,16 @@
             <entry id="args.eclipsehelp.toc.desc">Specifies the name of the TOC file.</entry>
           </row>
           <row id="args.eclipse.country">
-            <entry><parmname>args.eclipse.country</parmname></entry>
-            <entry id="args.eclipse.country.desc">Specifies the region for the language that is
-              specified by the <parmname>args.eclipse.language</parmname> parameter. For example,
-                <option>us</option>, <option>ca</option>, and <option>gb</option> would clarify a
-              value of <option>en</option> set for the <parmname>args.eclipse.language</parmname>
-              parameter. The content will be moved into the appropriate directory structure for an
-              Eclipse fragment.<draft-comment author="Kristen James Eberlein" time="11 August 2012"
-                >What does "The content will be moved into the appropriate directory structure for
-                an Eclipse fragment" mean?</draft-comment></entry>
+            <entry><parmname>args.eclipsehelp.country</parmname></entry>
+            <entry id="args.eclipse.country.desc">Specifies the region for the language that is specified by the <parmname>args.eclipsehelp.language</parmname> parameter. For example,
+                <option>us</option>, <option>ca</option>, and <option>gb</option> would clarify a value of <option>en</option> set for the <parmname>args.eclipsehelp.language</parmname> parameter. The
+              content will be moved into the appropriate directory structure for an Eclipse fragment.<draft-comment author="Kristen James Eberlein" time="11 August 2012">What does "The content will be
+                moved into the appropriate directory structure for an Eclipse fragment" mean?</draft-comment></entry>
           </row>
           <row id="args.eclipse.language">
-            <entry><parmname>args.eclipse.language</parmname></entry>
-            <entry id="args.eclipse.language.desc">Specifies the base language for translated
-              content, such as <option>en</option> for English. This parameter is a prerequisite for
-              the <parmname>args.eclipse.country</parmname> parameter. The content will be moved
-              into the appropriate directory structure for an Eclipse fragment.</entry>
+            <entry><parmname>args.eclipsehelp.language</parmname></entry>
+            <entry id="args.eclipse.language.desc">Specifies the base language for translated content, such as <option>en</option> for English. This parameter is a prerequisite for the
+                <parmname>args.eclipsehelp.country</parmname> parameter. The content will be moved into the appropriate directory structure for an Eclipse fragment.</entry>
           </row>
           <row id="args.eclipse.provider">
             <entry><parmname>args.eclipse.provider</parmname></entry>
