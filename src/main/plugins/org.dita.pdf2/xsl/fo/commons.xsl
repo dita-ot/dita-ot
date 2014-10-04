@@ -80,6 +80,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="id.lof" select="'ID_LOF_00-0F-EA-40-0D-4D'"/>
     <xsl:variable name="id.glossary" select="'ID_GLOSSARY_00-0F-EA-40-0D-4D'"/>
 
+    <xsl:variable name="root" select="/"/>
+
     <!--  In order to not process any data under opentopic:map  -->
     <xsl:template match="opentopic:map"/>
 
@@ -130,7 +132,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
                                        not(contains(@class, ' topic/prolog ')) and
                                        not(contains(@class, ' topic/topic '))]"/>
-        <xsl:apply-templates select="." mode="buildRelationships"/>
+        <!--xsl:apply-templates select="." mode="buildRelationships"/-->
         <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
         <xsl:apply-templates select="." mode="topicEpilog"/>
     </xsl:template>
@@ -245,7 +247,7 @@ See the accompanying license.txt file for applicable licenses.
                       <xsl:when test="$chapterLayout='BASIC'">
                           <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
                                                              contains(@class, ' topic/prolog '))]"/>
-                          <xsl:apply-templates select="." mode="buildRelationships"/>
+                          <!--xsl:apply-templates select="." mode="buildRelationships"/-->
                       </xsl:when>
                       <xsl:otherwise>
                           <xsl:apply-templates select="." mode="createMiniToc"/>
@@ -301,7 +303,7 @@ See the accompanying license.txt file for applicable licenses.
                       <xsl:when test="$appendixLayout='BASIC'">
                           <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
                                                              contains(@class, ' topic/prolog '))]"/>
-                          <xsl:apply-templates select="." mode="buildRelationships"/>
+                          <!--xsl:apply-templates select="." mode="buildRelationships"/-->
                       </xsl:when>
                       <xsl:otherwise>
                           <xsl:apply-templates select="." mode="createMiniToc"/>
@@ -354,7 +356,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="$appendicesLayout='BASIC'">
               <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
                                                  contains(@class, ' topic/prolog '))]"/>
-              <xsl:apply-templates select="." mode="buildRelationships"/>
+              <!--xsl:apply-templates select="." mode="buildRelationships"/-->
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="." mode="createMiniToc"/>
@@ -422,7 +424,7 @@ See the accompanying license.txt file for applicable licenses.
                       <xsl:when test="$partLayout='BASIC'">
                           <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
                                                              contains(@class, ' topic/prolog '))]"/>
-                          <xsl:apply-templates select="." mode="buildRelationships"/>
+                          <!--xsl:apply-templates select="." mode="buildRelationships"/-->
                       </xsl:when>
                       <xsl:otherwise>
                           <xsl:apply-templates select="." mode="createMiniToc"/>
@@ -488,7 +490,7 @@ See the accompanying license.txt file for applicable licenses.
                       <xsl:when test="$noticesLayout='BASIC'">
                           <xsl:apply-templates select="*[not(contains(@class, ' topic/topic ') or contains(@class, ' topic/title ') or
                                                              contains(@class, ' topic/prolog '))]"/>
-                          <xsl:apply-templates select="." mode="buildRelationships"/>
+                          <!--xsl:apply-templates select="." mode="buildRelationships"/-->
                       </xsl:when>
                       <xsl:otherwise>
                           <xsl:apply-templates select="." mode="createMiniToc"/>

@@ -43,7 +43,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
     <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-
+    <xsl:import href="plugin:org.dita.base:xsl/common/related-links.xsl"/>
+  
     <xsl:import href="../common/attr-set-reflection.xsl"/>
     <xsl:import href="../common/vars.xsl"/>
 

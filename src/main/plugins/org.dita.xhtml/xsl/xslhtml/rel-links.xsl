@@ -21,10 +21,6 @@
            use="concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id,
                        ' ',
                        @href)"/>
-  <xsl:key name="hideduplicates"
-           match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]
-                   [empty(@role) or @role = ('cousin', 'external', 'friend', 'other', 'sample', 'sibling')]"
-           use="related-links:hideduplicates(.)"/>
 
   <xsl:param name="NOPARENTLINK" select="'no'" as="xs:string"/><!-- "no" and "yes" are valid values; non-'no' is ignored -->
   <xsl:param name="include.rellinks" select="'#default parent child sibling friend next previous cousin ancestor descendant sample external other'" as="xs:string"/>
@@ -50,28 +46,6 @@
                                  $link/@rev,
                                  $link/@class,
                                  normalize-space(string-join($link/*, ' ')))"/>
-  </xsl:function>
-
-  <xsl:function name="related-links:hideduplicates" as="xs:string">
-    <xsl:param name="link" as="element()"/>
-    <xsl:value-of select="concat($link/ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id,
-                                 ' ',
-                                 $link/@href,
-                                 $link/@scope,
-                                 $link/@audience,
-                                 $link/@platform,
-                                 $link/@product,
-                                 $link/@otherprops,
-                                 $link/@rev,
-                                 $link/@type,
-                                 normalize-space(string-join($link/*, ' ')))"/>
-  </xsl:function>
-
-  <xsl:function name="related-links:omit-from-unordered-links" as="xs:boolean">
-    <xsl:param name="node" as="element()"/>
-    <xsl:sequence select="$node/@role = ('child', 'descendant', 'next', 'previous', 'parent') or
-                          $node[@importance = 'required' and (empty(@role) or @role = ('sibling', 'friend', 'cousin'))] or
-                          $node/ancestor::*[contains(@class, ' topic/linklist ')]"/>
   </xsl:function>
   
   <!-- ========== Hooks for common user customizations ============== -->
@@ -692,9 +666,6 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:value-of select="$newline"/>
   </xsl:template>
 
-  <xsl:template name="processlinklist">
-    <xsl:apply-templates select="." mode="processlinklist"/>
-  </xsl:template>
   <xsl:template match="*" mode="processlinklist">
     <xsl:param name="default-list-type" select="'linklist'" as="xs:string"/>
     <xsl:call-template name="commonattributes">
