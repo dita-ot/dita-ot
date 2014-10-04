@@ -18,16 +18,16 @@
     <!-- Without a group, links are emitted as-is.  (Can be overridden.) -->
     <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result.">
         <xsl:param name="links" as="node()*"/>
-        <xsl:copy-of select="$links"/>
+        <xsl:sequence select="$links"/>
     </xsl:template>
 
     <!-- Ungrouped links have the default-mode template applied to them. (Can be overridden.) -->
     <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:link" name="related-links:link.">
-        <xsl:apply-templates select="."/>
+      <xsl:sequence select="."/>
     </xsl:template>
 
     <!-- Main entry point. -->
-    <xsl:template match="*[contains(@class, ' topic/related-links ')]" mode="related-links:group-unordered-links">
+    <xsl:template match="*[contains(@class, ' topic/related-links ')]" mode="related-links:group-unordered-links" as="element(linklist)*">
         <!-- Node set.  The set of nodes to group. -->
         <xsl:param name="nodes" as="element()*"/>
         <!-- Sent back to all callback templates as a parameter.-->

@@ -296,17 +296,17 @@
   
   <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group"
-                name="related-links:result.reference">
+                name="related-links:result.reference" as="element(linklist)">
     <xsl:param name="links"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
-      <div class="relinfo relref">
-        <strong>
+      <linklist class="- topic/linklist " outputclass="relinfo relref">
+        <title class="- topic/title ">
           <xsl:call-template name="getString">
             <xsl:with-param name="stringName" select="'Related reference'"/>
           </xsl:call-template>
-        </strong><br/><xsl:value-of select="$newline"/>
+        </title>
         <xsl:copy-of select="$links"/>
-      </div><xsl:value-of select="$newline"/>
+      </linklist>
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
