@@ -54,7 +54,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:variable name="stringFiles" select="document($variableFiles.url)/langlist/lang"/>
+  <xsl:variable name="stringFiles" select="document($variableFiles.url)/langlist/lang" as="element(lang)*"/>
   
   <!-- Deprecated. Use getVariable template instead. -->
   <xsl:template name="getString">

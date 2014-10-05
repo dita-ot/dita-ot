@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit.
+     See the accompanying license.txt file for applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<strings xml:lang="it-it">
+  <str name="Related Links">Collegamenti correlati</str>
+  <str name="List item">Voce di elenco.</str>
+  <str name="Foot note">Piè di pagina.</str>
+  <str name="Page"> pagina </str>
+  <str name="Unordered List bullet">&#8226;</str>
+</strings>

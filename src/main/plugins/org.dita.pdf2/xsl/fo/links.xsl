@@ -274,7 +274,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:when>
         <xsl:when test="not(@scope = 'external' or not(empty(@format) or  @format = 'dita'))">
           <xsl:call-template name="insertPageNumberCitation">
-            <xsl:with-param name="isTitleEmpty" select="'yes'"/>
+            <xsl:with-param name="isTitleEmpty" select="true()"/>
             <xsl:with-param name="destination" select="$destination"/>
             <xsl:with-param name="element" select="$element"/>
           </xsl:call-template>
@@ -448,7 +448,7 @@ See the accompanying license.txt file for applicable licenses.
                   </xsl:when>
                   <xsl:when test="not($linkScope = 'external')">
                     <xsl:call-template name="insertPageNumberCitation">
-                      <xsl:with-param name="isTitleEmpty" select="'yes'"/>
+                      <xsl:with-param name="isTitleEmpty" select="true()"/>
                       <xsl:with-param name="destination" select="$destination"/>
                       <xsl:with-param name="element" select="$element"/>
                     </xsl:call-template>
@@ -506,9 +506,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="insertPageNumberCitation">
-        <xsl:param name="isTitleEmpty"/>
-        <xsl:param name="destination"/>
-        <xsl:param name="element"/>
+        <xsl:param name="isTitleEmpty" as="xs:boolean" select="false()"/>
+        <xsl:param name="destination" as="xs:string"/>
+        <xsl:param name="element" as="element()?"/>
 
         <xsl:choose>
             <xsl:when test="not($element) or ($destination = '')"/>
@@ -605,21 +605,21 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
   
   <!-- Links with @type="topic" belong in no-name group. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type = 'topic']" mode="related-links:get-group-priority"
-                name="related-links:group-priority.topic" priority="2"
+  <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:get-group-priority"
+                name="related-links:group-priority.topic" priority="-10"
                 as="xs:integer">
     <xsl:call-template name="related-links:group-priority."/>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type = 'topic']" mode="related-links:get-group"
-                name="related-links:group.topic" priority="2"
+  <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:get-group"
+                name="related-links:group.topic" priority="-10"
                 as="xs:string">
     <xsl:call-template name="related-links:group."/>
   </xsl:template>
   
   <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <linklist>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result."
-                as="element(linklist)">
+                as="element(linklist)" priority="-10">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="exists($links)">
       <linklist class="- topic/linklist " outputclass="relinfo">
