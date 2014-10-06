@@ -12,9 +12,6 @@
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 exclude-result-prefixes="xs related-links ditamsg dita-ot">
 
-  <xsl:key name="link"
-           match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]"
-           use="related-links:link(.)"/>
   <xsl:key name="linkdup"
            match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]
                    [not(@role = ('child', 'parent', 'previous', 'next', 'ancestor', 'descendant'))]"
@@ -25,28 +22,6 @@
   <xsl:param name="NOPARENTLINK" select="'no'" as="xs:string"/><!-- "no" and "yes" are valid values; non-'no' is ignored -->
   <xsl:param name="include.rellinks" select="'#default parent child sibling friend next previous cousin ancestor descendant sample external other'" as="xs:string"/>
   <xsl:variable name="include.roles" select="tokenize(normalize-space($include.rellinks), '\s+')" as="xs:string*"/>
-
-  <xsl:function name="related-links:link" as="xs:string">
-    <xsl:param name="link" as="element()"/>
-    <xsl:value-of select="concat($link/ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id,
-                                 ' ',
-                                 $link/@href,
-                                 $link/@type,
-                                 $link/@role,
-                                 $link/@platform,
-                                 $link/@audience,
-                                 $link/@importance,
-                                 $link/@outputclass,
-                                 $link/@keyref,
-                                 $link/@scope,
-                                 $link/@format,
-                                 $link/@otherrole,
-                                 $link/@product,
-                                 $link/@otherprops,
-                                 $link/@rev,
-                                 $link/@class,
-                                 normalize-space(string-join($link/*, ' ')))"/>
-  </xsl:function>
   
   <!-- ========== Hooks for common user customizations ============== -->
   <!-- The following two templates are available for anybody who needs

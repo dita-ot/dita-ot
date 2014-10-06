@@ -4,6 +4,9 @@
     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
     exclude-result-prefixes="related-links xs">
 
+  <xsl:key name="link"
+           match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]"
+           use="related-links:link(.)"/>
   <xsl:key name="hideduplicates"
            match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]
                    [empty(@role) or @role = ('cousin', 'external', 'friend', 'other', 'sample', 'sibling')]"
@@ -28,6 +31,28 @@
                                  $link/@otherprops,
                                  $link/@rev,
                                  $link/@type,
+                                 normalize-space(string-join($link/*, ' ')))"/>
+  </xsl:function>
+  
+  <xsl:function name="related-links:link" as="xs:string">
+    <xsl:param name="link" as="element()"/>
+    <xsl:value-of select="concat($link/ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id,
+                                 ' ',
+                                 $link/@href,
+                                 $link/@type,
+                                 $link/@role,
+                                 $link/@platform,
+                                 $link/@audience,
+                                 $link/@importance,
+                                 $link/@outputclass,
+                                 $link/@keyref,
+                                 $link/@scope,
+                                 $link/@format,
+                                 $link/@otherrole,
+                                 $link/@product,
+                                 $link/@otherprops,
+                                 $link/@rev,
+                                 $link/@class,
                                  normalize-space(string-join($link/*, ' ')))"/>
   </xsl:function>
 
