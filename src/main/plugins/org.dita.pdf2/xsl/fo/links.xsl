@@ -368,6 +368,8 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:if>
 
             -->
+        <fo:block xsl:use-attribute-sets="related-links">
+          <fo:block xsl:use-attribute-sets="related-links__content">
           <xsl:if test="$includeRelatedLinkRoles = ('child', 'descendant')">
             <xsl:call-template name="ul-child-links"/>
             <xsl:call-template name="ol-child-links"/>
@@ -386,7 +388,9 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:apply-templates select="$unordered-links"/>
           <!--linklists - last but not least, create all the linklists and their links, with no sorting or re-ordering-->
           <xsl:apply-templates select="*[contains(@class, ' topic/linklist ')]"/>
-        </xsl:if>
+          </fo:block>
+        </fo:block>
+      </xsl:if>
     </xsl:template>
   
   <xsl:template name="ul-child-links">
@@ -396,11 +400,11 @@ See the accompanying license.txt file for applicable licenses.
                                        [not(parent::*/@collection-type = 'sequence')]
                                        [not(ancestor::*[contains(@class, ' topic/linklist ')])]"/>
     <xsl:if test="$children">
-      <fo:list-block xsl:use-attribute-sets="ul">
+      <fo:list-block xsl:use-attribute-sets="related-links.ul">
         <xsl:for-each select="$children[generate-id(.) = generate-id(key('link', related-links:link(.))[1])]">
-          <fo:list-item xsl:use-attribute-sets="ul.li">
-            <fo:list-item-label xsl:use-attribute-sets="ul.li__label">
-              <fo:block xsl:use-attribute-sets="ul.li__label__content">
+          <fo:list-item xsl:use-attribute-sets="related-links.ul.li">
+            <fo:list-item-label xsl:use-attribute-sets="related-links.ul.li__label">
+              <fo:block xsl:use-attribute-sets="related-links.ul.li__label__content">
                 <fo:inline>
                   <xsl:call-template name="commonattributes"/>
                 </fo:inline>
@@ -409,8 +413,8 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
               </fo:block>
             </fo:list-item-label>
-            <fo:list-item-body xsl:use-attribute-sets="ul.li__body">
-              <fo:block xsl:use-attribute-sets="ul.li__content">
+            <fo:list-item-body xsl:use-attribute-sets="related-links.ul.li__body">
+              <fo:block xsl:use-attribute-sets="related-links.ul.li__content">
                 <xsl:apply-templates select="."/>
               </fo:block>
             </fo:list-item-body>
@@ -427,11 +431,11 @@ See the accompanying license.txt file for applicable licenses.
                                        [parent::*/@collection-type = 'sequence']
                                        [not(ancestor::*[contains(@class, ' topic/linklist ')])]"/>
     <xsl:if test="$children">
-      <fo:list-block xsl:use-attribute-sets="ol">
+      <fo:list-block xsl:use-attribute-sets="related-links.ol">
         <xsl:for-each select="($children[generate-id(.) = generate-id(key('link', related-links:link(.))[1])])">
-          <fo:list-item xsl:use-attribute-sets="ul.li">
-            <fo:list-item-label xsl:use-attribute-sets="ul.li__label">
-              <fo:block xsl:use-attribute-sets="ul.li__label__content">
+          <fo:list-item xsl:use-attribute-sets="related-links.ol.li">
+            <fo:list-item-label xsl:use-attribute-sets="related-links.ol.li__label">
+              <fo:block xsl:use-attribute-sets="related-links.ol.li__label__content">
                 <fo:inline>
                   <xsl:call-template name="commonattributes"/>
                 </fo:inline>
@@ -445,8 +449,8 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
               </fo:block>
             </fo:list-item-label>
-            <fo:list-item-body xsl:use-attribute-sets="ul.li__body">
-              <fo:block xsl:use-attribute-sets="ul.li__content">
+            <fo:list-item-body xsl:use-attribute-sets="related-links.ol.li__body">
+              <fo:block xsl:use-attribute-sets="related-links.ol.li__content">
                 <xsl:apply-templates select="."/>
               </fo:block>
             </fo:list-item-body>
