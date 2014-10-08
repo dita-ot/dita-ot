@@ -53,6 +53,7 @@
                                  $link/@otherprops,
                                  $link/@rev,
                                  $link/@class,
+                                 $link/../@collection-type,
                                  normalize-space(string-join($link/*, ' ')))"/>
   </xsl:function>
 
