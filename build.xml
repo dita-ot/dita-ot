@@ -135,7 +135,7 @@
     <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
     <exclude name="lib/saxon*"/>
-    <exclude name="startcmd.*"/>
+    <include name="startcmd.*"/>
     <include name="build_demo.xml"/>
     <exclude name="catalog-dita.txt"/>
     <include name="*.*"/>
@@ -320,6 +320,13 @@
         <include name="ant-apache-resolver.jar"/>
       </fileset>
     </copy>
+    <copy todir="${temp.dist.dir}/bin">
+      <fileset dir="${basedir}/target/tools/apache-ant-${tool.ant.version}/bin">
+        <include name="ant"/>
+        <include name="ant.bat"/>
+      </fileset>
+    </copy>
+    
     <!--copy todir="${temp.dist.dir}">
       <zipfileset src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip">
         <!- -exclude name="apache-ant-${tool.ant.version}/etc/**"/>
