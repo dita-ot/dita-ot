@@ -28,12 +28,8 @@ is        adding new functionality to the codebase. In most cases,
 bug fixes do not        add new functionality although it&apos;s not
 impossible. </p>
 <p>or </p>
-<p>Any contribution containing third-party code maintained by another
-open        source project, individual, group, or organization. In
-addition to        reviewing the contribution, if the license is not
-the Common Public        License (CPL) or Apache License 2.0, the
-PM will need to review and approve the third-party        license
-for compatibility with the CPL or Apache License 2.0. </p>
+<p>Any contribution containing third-party code maintained by another open source project, individual, group, or organization. In addition to reviewing the contribution, if the license is not the
+      Apache License 2.0, the PM will need to review and approve the third-party license for compatibility with the Apache License 2.0. </p>
 <p>       <b>How to send PM this form?</b>     </p>
 <p>Please fill in this form and sign your name and get your employer's
 authorized signature, such as your manager's.       then send a scanned

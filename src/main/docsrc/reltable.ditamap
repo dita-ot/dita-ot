@@ -441,8 +441,6 @@ navtitle="JavaHelp transformation"/>
 <topicref href="readme/overview-of-dita-ot.dita" navtitle="Overview of the DITA Open Toolkit"/>
 </relcell>
 <relcell>
-<topicref href="http://opensource.org/licenses/cpl1.0.php"
-navtitle="Common Public License, version 1.0" format="html" scope="external"/>
 <topicref href="http://www.apache.org/licenses/LICENSE-2.0" navtitle="Apache License, version 2.0"
 format="html" scope="external"/>
 </relcell>
