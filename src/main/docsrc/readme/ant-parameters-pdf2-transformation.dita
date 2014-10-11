@@ -73,7 +73,7 @@
                 <li><option>ah</option> – Antenna House Formatter</li>
                 <li><option>fop</option> (default) – Apache FOP</li>
                 <li><option>xep</option> – RenderX XEP Engine</li>
-              </ul>The client and full-easy-install packages come with Apache FOP; other XSL processors must be
+              </ul>The client <!--and full-easy-install -->package comes with Apache FOP; other XSL processors must be
               separately installed. </pd>
           </plentry>
           <plentry id="publish.required.cleanup" importance="deprecated">
