@@ -159,6 +159,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private File ditaDir;
     /** Input file name. */
     private File inputFile;
+    /** Profiling is enabled. */
+    private boolean profilingEnabled;
     /** Absolute path for filter file. */
     private File ditavalFile;
     /** Number of directory levels base direcory is adjusted. */
@@ -266,18 +268,19 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     
     /**
      * Initialize reusable filters.
-     * @throws IOException 
-     * @throws SAXException 
      */
     private void initFilters() {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
 //        listFilter.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
-        filterUtils = parseFilterFile();
         listFilter.setInputFile(rootFile.getAbsoluteFile());
         listFilter.setInputDir(rootFile.getAbsoluteFile().getParentFile());//baseInputDir
         listFilter.setJob(job);
         
+        if (profilingEnabled) {
+            filterUtils = parseFilterFile();
+        }
+
         exportAnchorsFilter = new ExportAnchorsFilter();
         exportAnchorsFilter.setInputFile(rootFile.getAbsoluteFile().toURI());
         
@@ -387,9 +390,15 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         } else {
             ditaDir = ditaDir.getCanonicalFile();
         }
-        if (ditavalFile != null && !ditavalFile.isAbsolute()) {
-            // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
-            ditavalFile = new File(basedir, ditavalFile.getPath()).getAbsoluteFile();
+        profilingEnabled = true;
+        if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {
+            profilingEnabled = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED));
+        }
+        if (profilingEnabled) {
+            if (ditavalFile != null && !ditavalFile.isAbsolute()) {
+                // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
+                ditavalFile = new File(basedir, ditavalFile.getPath()).getAbsoluteFile();
+            }
         }
 
         rootFile = inFile.getCanonicalFile();

@@ -75,6 +75,8 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private File inputMap = null;
     /** use grammar pool cache */
     private boolean gramcache = true;
+    /** Profiling is enabled. */
+    private boolean profilingEnabled;
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -86,13 +88,18 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             /* Absolute DITA-OT base path. */
             File ditaDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
             final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+            profilingEnabled = true;
+            if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {
+                profilingEnabled = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED));
+            }
             File ditavalFile = null;
-            if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null ) {
-                ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
-                if (!ditavalFile.isAbsolute()) {
-                    ditavalFile = new File(baseDir, ditavalFile.getPath()).getAbsoluteFile();
+            if (profilingEnabled) {
+                if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
+                    ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
+                    if (!ditavalFile.isAbsolute()) {
+                        ditavalFile = new File(baseDir, ditavalFile.getPath()).getAbsoluteFile();
+                    }
                 }
-
             }
             gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
             
@@ -105,18 +112,22 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
             // Output subject schemas
             outputSubjectScheme();
-            final DitaValReader filterReader = new DitaValReader();
-            filterReader.setLogger(logger);
-            filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
-
-            FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype));
-            filterUtils.setLogger(logger);
-            if (ditavalFile != null){
-                filterReader.read(ditavalFile.getAbsoluteFile());
-                filterUtils.setFilterMap(filterReader.getFilterMap());
+            DitaValReader filterReader = null;
+            FilterUtils filterUtils = null;
+            SubjectSchemeReader subjectSchemeReader = null;
+            if (profilingEnabled) {
+                filterReader = new DitaValReader();
+                filterReader.setLogger(logger);
+                filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
+                filterUtils = new FilterUtils(printTranstype.contains(transtype));
+                filterUtils.setLogger(logger);
+                if (ditavalFile != null) {
+                    filterReader.read(ditavalFile.getAbsoluteFile());
+                    filterUtils.setFilterMap(filterReader.getFilterMap());
+                }
+                subjectSchemeReader = new SubjectSchemeReader();
+                subjectSchemeReader.setLogger(logger);
             }
-            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
-            subjectSchemeReader.setLogger(logger);
             
             final DitaWriter fileWriter = new DitaWriter();
             fileWriter.setLogger(logger);
@@ -157,33 +168,35 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                         continue;
                     }
                     logger.info("Processing " + currentFile.getAbsolutePath());
-    
-                    final Set<File> schemaSet = dic.get(filename);
-                    filterReader.reset();
-                    if (schemaSet != null) {
-                        subjectSchemeReader.reset();
-                        final FilterUtils fu = new FilterUtils(printTranstype.contains(transtype));
-                        fu.setLogger(logger);
-                        for (final File schema: schemaSet) {
-                            subjectSchemeReader.loadSubjectScheme(new File(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
-                        }
-                        if (ditavalFile != null){
-                            filterReader.filterReset();
-                            filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
-                            filterReader.read(ditavalFile.getAbsoluteFile());
-                            final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
-                            fm.putAll(filterReader.getFilterMap());
-                            fm.putAll(filterUtils.getFilterMap());
-                            fu.setFilterMap(Collections.unmodifiableMap(fm));
+
+                    if (profilingEnabled) {
+                        filterReader.reset();
+                        final Set<File> schemaSet = dic.get(filename);
+                        if (schemaSet != null) {
+                            subjectSchemeReader.reset();
+                            final FilterUtils fu = new FilterUtils(printTranstype.contains(transtype));
+                            fu.setLogger(logger);
+                            for (final File schema : schemaSet) {
+                                subjectSchemeReader.loadSubjectScheme(new File(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
+                            }
+                            if (ditavalFile != null) {
+                                filterReader.filterReset();
+                                filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
+                                filterReader.read(ditavalFile.getAbsoluteFile());
+                                final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+                                fm.putAll(filterReader.getFilterMap());
+                                fm.putAll(filterUtils.getFilterMap());
+                                fu.setFilterMap(Collections.unmodifiableMap(fm));
+                            } else {
+                                fu.setFilterMap(Collections.EMPTY_MAP);
+                            }
+                            fileWriter.setFilterUtils(fu);
+
+                            fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
+                            fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
                         } else {
-                            fu.setFilterMap(Collections.EMPTY_MAP);
+                            fileWriter.setFilterUtils(filterUtils);
                         }
-                        fileWriter.setFilterUtils(fu);
-    
-                        fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
-                        fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
-                    } else {
-                        fileWriter.setFilterUtils(filterUtils);
                     }
     
                     fileWriter.write(inputDir, filename);

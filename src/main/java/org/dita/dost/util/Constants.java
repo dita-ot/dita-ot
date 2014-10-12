@@ -749,6 +749,8 @@ public final class Constants {
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";
     /**Constants for common params used in ant invoker(maplinks).*/
     public static final String ANT_INVOKER_PARAM_MAPLINKS = "maplinks";
+    /** Argument name for enabling profiling. */
+    public static final String ANT_INVOKER_PARAM_PROFILING_ENABLED = "profiling.enable";
 
     /**Constants for extensive params used in ant invoker(targetext).*/
     public static final String ANT_INVOKER_EXT_PARAM_TARGETEXT = "targetext";

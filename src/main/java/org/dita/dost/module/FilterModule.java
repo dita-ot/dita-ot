@@ -4,6 +4,7 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
@@ -24,11 +25,15 @@ import org.dita.dost.writer.ProfilingFilter;
  */
 final class FilterModule extends AbstractPipelineModuleImpl {
 
+    String transtype;
+
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
+        transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+
         final ProfilingFilter writer = new ProfilingFilter();
         writer.setLogger(logger);
         writer.setJob(job);
@@ -63,11 +68,12 @@ final class FilterModule extends AbstractPipelineModuleImpl {
     /**
      * Parse filter file. From GenMapAndTopicListModule.
      * 
+     * @param ditavalFile filte file absolute path, may be {@code null}
      * @return configured filter utility
      */
     private FilterUtils parseFilterFile(final String ditavalFile) {
         
-        final FilterUtils filterUtils = new FilterUtils();
+        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype));
         filterUtils.setLogger(logger);
         
         if (ditavalFile != null) {

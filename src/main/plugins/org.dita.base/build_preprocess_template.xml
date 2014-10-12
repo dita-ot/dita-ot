@@ -22,6 +22,7 @@
                   keyref,
                   conrefpush,
                   conref,
+                  profile,
                   topic-fragment,
                   coderef,
                   mapref,
@@ -122,6 +123,7 @@
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
+        <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
       </module>
     </pipeline>
     <!-- generate list files -->
@@ -182,6 +184,7 @@
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
+        <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
       </module>
     </pipeline>
     <job-helper file="user.input.file.list" property="user.input.file"/>
@@ -201,6 +204,44 @@
     </condition>
     <condition property="noImagelist">
       <length file="${dita.temp.dir}/${imagefile}" length="0"/>
+    </condition>
+  </target>
+
+  <!-- profile -->
+  <target name="profile" depends="profile-check"
+          unless="preprocess.profile.skip"
+          description="Profile input files">
+    <pipeline message="Profile filtering." taskname="profile"
+              inputmap="${args.input}"
+              tempdir="${dita.temp.dir}">
+      <module class="org.dita.dost.module.FilterModule">
+        <!--param name="ditadir" location="${dita.dir}"/-->
+        <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
+        <!--param name="inputdir" location="${args.input.dir}" if="args.input.dir"/-->
+        <!--param name="outputdir" location="${output.dir}"/-->
+        <!--param name="setsystemid" value="${args.xml.systemid.set}"/-->
+        <param name="transtype" value="${transtype}"/>
+      </module>
+    </pipeline>
+    <!-- update list files -->
+    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="fullditamap.list" property="fullditamaplist"/>
+    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>
+    <job-helper file="copytosource.list" property="copytosourcelist"/>
+    <job-helper file="copytotarget2sourcemap.list" property="copytotarget2sourcemaplist"/>
+    <job-property dir="${dita.temp.dir}"/>
+    <condition property="noTopic">
+      <length file="${dita.temp.dir}/${fullditatopicfile}" length="0"/>
+    </condition>
+  </target>
+
+  <target name="profile-check">
+    <condition property="preprocess.profile.skip">
+      <!--not>
+        <isset property="dita.input.valfile"/>
+      </not-->
+      <istrue value="${filter-on-parse}"/>
     </condition>
   </target>
   

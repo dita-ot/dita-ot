@@ -196,6 +196,16 @@
         <not><isset property="dita.input.valfile"/></not>
       </and>
     </condition>
+    <condition property="filter-stage" value="early">
+      <not>
+        <isset property="filter-stage"/>
+      </not>
+    </condition>
+    <condition property="filter-on-parse" value="true">
+      <and>
+        <equals arg1="${filter-stage}" arg2="early"/>
+      </and>
+    </condition>
 
     <!-- append a '.' to out.ext if args.outext not contains '.' -->
     <condition property="out.ext" value=".${args.outext}">
