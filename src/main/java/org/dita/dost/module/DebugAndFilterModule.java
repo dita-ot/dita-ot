@@ -170,33 +170,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     logger.info("Processing " + currentFile.getAbsolutePath());
 
                     if (profilingEnabled) {
-                        filterReader.reset();
-                        final Set<File> schemaSet = dic.get(filename);
-                        if (schemaSet != null) {
-                            subjectSchemeReader.reset();
-                            final FilterUtils fu = new FilterUtils(printTranstype.contains(transtype));
-                            fu.setLogger(logger);
-                            for (final File schema : schemaSet) {
-                                subjectSchemeReader.loadSubjectScheme(new File(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
-                            }
-                            if (ditavalFile != null) {
-                                filterReader.filterReset();
-                                filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
-                                filterReader.read(ditavalFile.getAbsoluteFile());
-                                final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
-                                fm.putAll(filterReader.getFilterMap());
-                                fm.putAll(filterUtils.getFilterMap());
-                                fu.setFilterMap(Collections.unmodifiableMap(fm));
-                            } else {
-                                fu.setFilterMap(Collections.EMPTY_MAP);
-                            }
-                            fileWriter.setFilterUtils(fu);
-
-                            fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
-                            fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
-                        } else {
-                            fileWriter.setFilterUtils(filterUtils);
-                        }
+                        configureSubjectScheme(transtype, ditavalFile, filterReader, filterUtils, subjectSchemeReader, fileWriter, dic.get(filename));
                     }
     
                     fileWriter.write(inputDir, filename);
@@ -211,6 +185,40 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         }
 
         return null;
+    }
+
+    private void configureSubjectScheme(String transtype, File ditavalFile, DitaValReader filterReader, FilterUtils baseFilterUtils, SubjectSchemeReader subjectSchemeReader, DitaWriter fileWriter, final Set<File> schemaSet) {
+        if (schemaSet != null) {
+            // load subject schemes
+            subjectSchemeReader.reset();
+            for (final File schema: schemaSet) {
+                subjectSchemeReader.loadSubjectScheme(new File(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
+            }
+            // create new subject schema enabled filter util
+            final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype));
+            filterUtils.setLogger(logger);
+            // set filters
+            if (ditavalFile != null) {
+                //filterReader.reset();
+                filterReader.filterReset();
+                filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
+                filterReader.read(ditavalFile.getAbsoluteFile());
+                final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+                fm.putAll(filterReader.getFilterMap());
+                fm.putAll(baseFilterUtils.getFilterMap());
+                filterUtils.setFilterMap(Collections.unmodifiableMap(fm));
+            } else {
+                filterUtils.setFilterMap(Collections.EMPTY_MAP);
+            }
+            // configure writer
+            fileWriter.setFilterUtils(filterUtils);
+            fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
+            fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
+        } else {
+            fileWriter.setFilterUtils(baseFilterUtils);
+            fileWriter.setValidateMap(Collections.EMPTY_MAP);
+            fileWriter.setDefaultValueMap(Collections.EMPTY_MAP);
+        }
     }
 
     /**
