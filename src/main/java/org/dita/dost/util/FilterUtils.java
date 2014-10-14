@@ -8,8 +8,10 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +26,8 @@ import java.util.regex.Pattern;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
+import org.dita.dost.reader.DitaValReader;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
 /**
@@ -32,6 +36,9 @@ import org.xml.sax.Attributes;
  * @author Wu, Zhi Qiang
  */
 public final class FilterUtils {
+
+    /** Subject scheme file extension */
+    public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
 
     public enum Action {
         INCLUDE, EXCLUDE, PASSTHROUGH, FLAG
@@ -49,6 +56,7 @@ public final class FilterUtils {
     public static final FilterKey DEFAULT = new FilterKey(DEFAULT_ACTION, null);
 
     private DITAOTLogger logger;
+    private boolean isPrintType;
     /** Immutable default filter map. */
     private final Map<FilterKey, Action> defaultFilterMap;
     private Map<FilterKey, Action> filterMap = null;
@@ -66,6 +74,7 @@ public final class FilterUtils {
      * @param isPrintType transformation output is print-oriented
      */
     public FilterUtils(final boolean isPrintType) {
+        this.isPrintType = isPrintType;
         final Map<FilterKey, Action> dfm = new HashMap<FilterKey, Action>();
         dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_YES), Action.INCLUDE);
         if (isPrintType) {
@@ -82,6 +91,38 @@ public final class FilterUtils {
     
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+    }
+
+    /**
+     * Return a copy of this filter utils amended with subject scheme information.
+     *
+     * @param ditavalFile filter file absolute path
+     * @param filterReader filter reader
+     * @param subjectSchemeMap subject scheme mapping
+     * @return a new filter utils instance, or {@code this} if subject scheme mapping is empty
+     */
+    public FilterUtils getSubjectSchemeFilterUtils(final File ditavalFile, final DitaValReader filterReader, final Map<String, Map<String, Set<Element>>> subjectSchemeMap) {
+        if (!subjectSchemeMap.isEmpty()) {
+            // create new subject schema enabled filter util
+            final FilterUtils filterUtils = new FilterUtils(isPrintType);
+            filterUtils.setLogger(logger);
+            // set filters
+            if (ditavalFile != null) {
+                filterReader.filterReset();
+                filterReader.setSubjectScheme(subjectSchemeMap);
+                filterReader.read(ditavalFile.getAbsoluteFile());
+                final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
+                fm.putAll(filterReader.getFilterMap());
+                fm.putAll(getFilterMap());
+                filterUtils.setFilterMap(Collections.unmodifiableMap(fm));
+            } else {
+                filterUtils.setFilterMap(Collections.EMPTY_MAP);
+            }
+            // configure writer
+            return filterUtils;
+        } else {
+            return this;
+        }
     }
 
     /**

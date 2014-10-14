@@ -46,11 +46,8 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.reader.DitaValReader;
-import org.dita.dost.reader.GenListModuleReader;
+import org.dita.dost.reader.*;
 import org.dita.dost.reader.GenListModuleReader.Reference;
-import org.dita.dost.reader.GrammarPoolManager;
-import org.dita.dost.reader.KeydefFilter;
 import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.ExportAnchorsFilter;
@@ -1057,11 +1054,15 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
         }
-        
-        // Output relation-graph
-        writeMapToXML(listFilter.getRelationshipGrap(), new File(FILE_NAME_SUBJECT_RELATION));
-        // Output topic-scheme dictionary
-        writeMapToXML(schemeDictionary, new File(FILE_NAME_SUBJECT_DICTIONARY));
+
+        try {
+            // Output relation-graph
+            SubjectSchemeReader.writeMapToXML(listFilter.getRelationshipGrap(), new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            // Output topic-scheme dictionary
+            SubjectSchemeReader.writeMapToXML(schemeDictionary, new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+        } catch (final IOException e) {
+            throw new DITAOTException(e);
+        }
 
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // Output plugin id
@@ -1126,44 +1127,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final List<String> sorted = new ArrayList<String>(set);
         Collections.sort(sorted);
         return sorted;
-    }
-
-    /**
-     * Write map of sets to a file.
-     * 
-     * <p>The serialization format is XML properties format where values are comma
-     * separated lists.</p>
-     * 
-     * @param m map to serialize
-     * @param filename output filename, relative to temporary directory
-     */
-    private void writeMapToXML(final Map<File, Set<File>> m, final File filename) {
-        if (m == null) {
-            return;
-        }
-        final Properties prop = new Properties();
-        for (final Map.Entry<File, Set<File>> entry: m.entrySet()) {
-            final File key = entry.getKey();
-            final String value = StringUtils.join(entry.getValue(), COMMA);
-            prop.setProperty(key.getPath(), value);
-        }
-        final File outputFile = new File(job.tempDir, filename.getPath());
-        OutputStream os = null;
-        try {
-            os = new FileOutputStream(outputFile);
-            prop.storeToXML(os, null);
-            os.close();
-        } catch (final IOException e) {
-            logger.error(e.getMessage(), e) ;
-        } finally {
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (final Exception e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-            }
-        }
     }
 
     /**

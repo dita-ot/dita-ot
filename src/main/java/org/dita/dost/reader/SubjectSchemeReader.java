@@ -7,12 +7,8 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -92,11 +88,89 @@ public class SubjectSchemeReader {
     }
     
     /**
-     * load schema file.
-     * @param scheme scheme file
+     * Read a map from XML properties file. Values are split by {@link org.dita.dost.util.Constants#COMMA COMMA} into a set.
+     *
+     * @param inputFile XML properties file absolute path
+     */
+    public static Map<File, Set<File>> readMapFromXML(final File inputFile) throws IOException {
+        final Map<File, Set<File>> graph = new HashMap<File, Set<File>>();
+        if (!inputFile.exists()) {
+            return Collections.EMPTY_MAP;
+        }
+        final Properties prop = new Properties();
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream(inputFile);
+            prop.loadFromXML(in);
+            in.close();
+        } catch (final IOException e) {
+            throw new IOException("Failed to read subject scheme graph: " + e.getMessage(), e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (final IOException e) {
+                    // NOOP
+                }
+            }
+        }
+
+        for (final Map.Entry<Object, Object> entry: prop.entrySet()) {
+            final String key = (String) entry.getKey();
+            final String value = (String) entry.getValue();
+            final Set<File> r = new HashSet<File>();
+            for (final String v: StringUtils.restoreSet(value, COMMA)) {
+                r.add(new File(v));
+            }
+            graph.put(new File(key), r);
+        }
+
+        return Collections.unmodifiableMap(graph);
+    }
+
+    /**
+     * Write map of sets to a file.
+     *
+     * <p>The serialization format is XML properties format where values are comma
+     * separated lists.</p>
+     *
+     * @param m map to serialize
+     * @param outputFile output filename, relative to temporary directory
+     */
+    public static void writeMapToXML(final Map<File, Set<File>> m, final File outputFile) throws IOException {
+        if (m == null) {
+            return;
+        }
+        final Properties prop = new Properties();
+        for (final Map.Entry<File, Set<File>> entry: m.entrySet()) {
+            final File key = entry.getKey();
+            final String value = StringUtils.join(entry.getValue(), COMMA);
+            prop.setProperty(key.getPath(), value);
+        }
+        OutputStream os = null;
+        try {
+            os = new FileOutputStream(outputFile);
+            prop.storeToXML(os, null);
+            os.close();
+        } catch (final IOException e) {
+            throw new IOException("Failed to write subject scheme graph: " + e.getMessage(), e);
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (final Exception e) {
+                    // NOOP
+                }
+            }
+        }
+    }
+
+    /**
+     * Load schema file.
+     *
+     * @param scheme absolute path for subject scheme
      */
     public void loadSubjectScheme(final File scheme) {
-
         if (!scheme.exists()) {
             return;
         }

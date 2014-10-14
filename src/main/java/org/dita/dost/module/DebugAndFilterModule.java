@@ -13,18 +13,15 @@ import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.FilterUtils.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
 
@@ -41,8 +38,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.DelayConrefUtils;
-import org.dita.dost.util.FilterUtils.Action;
-import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
@@ -67,10 +62,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * @author Zhang, Yuan Peng
  */
 final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
-    
-    /** Subject scheme file extension */
-    private static final String SUBJECT_SCHEME_EXTENSION = ".subm";
-    
+
     /** Absolute input map path. */
     private File inputMap = null;
     /** use grammar pool cache */
@@ -111,10 +103,13 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             inputMap = new File(inputDir, job.getInputMap()).getAbsoluteFile();
 
             // Output subject schemas
-            outputSubjectScheme();
+            final Map<File, Set<File>> subjectSchemeRelations = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            outputSubjectScheme(subjectSchemeRelations);
+            final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+            subjectSchemeReader.setLogger(logger);
+
             DitaValReader filterReader = null;
             FilterUtils filterUtils = null;
-            SubjectSchemeReader subjectSchemeReader = null;
             if (profilingEnabled) {
                 filterReader = new DitaValReader();
                 filterReader.setLogger(logger);
@@ -125,8 +120,6 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     filterReader.read(ditavalFile.getAbsoluteFile());
                     filterUtils.setFilterMap(filterReader.getFilterMap());
                 }
-                subjectSchemeReader = new SubjectSchemeReader();
-                subjectSchemeReader.setLogger(logger);
             }
             
             final DitaWriter fileWriter = new DitaWriter();
@@ -155,7 +148,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             job.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)));
             fileWriter.setJob(job);
 
-            final Map<File, Set<File>> dic = readMapFromXML(new File(FILE_NAME_SUBJECT_DICTIONARY));
+            final Map<File, Set<File>> dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
 
             for (final FileInfo f: job.getFileInfo()) {
                 if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)
@@ -169,8 +162,21 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     }
                     logger.info("Processing " + currentFile.getAbsolutePath());
 
+                    subjectSchemeReader.reset();
+                    final Set<File> schemaSet = dic.get(filename);
+                    if (schemaSet != null && !schemaSet.isEmpty()) {
+                        logger.debug("Loading subject schemes");
+
+                        for (final File schema : schemaSet) {
+                            subjectSchemeReader.loadSubjectScheme(new File(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
+                        }
+                    }
+
+                    fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
+                    fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
+
                     if (profilingEnabled) {
-                        configureSubjectScheme(transtype, ditavalFile, filterReader, filterUtils, subjectSchemeReader, fileWriter, dic.get(filename));
+                        fileWriter.setFilterUtils(filterUtils.getSubjectSchemeFilterUtils(ditavalFile, filterReader, subjectSchemeReader.getSubjectSchemeMap()));
                     }
     
                     fileWriter.write(inputDir, filename);
@@ -187,90 +193,14 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
-    private void configureSubjectScheme(String transtype, File ditavalFile, DitaValReader filterReader, FilterUtils baseFilterUtils, SubjectSchemeReader subjectSchemeReader, DitaWriter fileWriter, final Set<File> schemaSet) {
-        if (schemaSet != null) {
-            // load subject schemes
-            subjectSchemeReader.reset();
-            for (final File schema: schemaSet) {
-                subjectSchemeReader.loadSubjectScheme(new File(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
-            }
-            // create new subject schema enabled filter util
-            final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype));
-            filterUtils.setLogger(logger);
-            // set filters
-            if (ditavalFile != null) {
-                //filterReader.reset();
-                filterReader.filterReset();
-                filterReader.setSubjectScheme(subjectSchemeReader.getSubjectSchemeMap());
-                filterReader.read(ditavalFile.getAbsoluteFile());
-                final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
-                fm.putAll(filterReader.getFilterMap());
-                fm.putAll(baseFilterUtils.getFilterMap());
-                filterUtils.setFilterMap(Collections.unmodifiableMap(fm));
-            } else {
-                filterUtils.setFilterMap(Collections.EMPTY_MAP);
-            }
-            // configure writer
-            fileWriter.setFilterUtils(filterUtils);
-            fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
-            fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
-        } else {
-            fileWriter.setFilterUtils(baseFilterUtils);
-            fileWriter.setValidateMap(Collections.EMPTY_MAP);
-            fileWriter.setDefaultValueMap(Collections.EMPTY_MAP);
-        }
-    }
 
-    /**
-     * Read a map from XML properties file. Values are split by {@link org.dita.dost.util.Constants#COMMA COMMA} into a set.
-     * 
-     * @param filename XML properties file path, relative to temporary directory
-     */
-    private Map<File, Set<File>> readMapFromXML(final File filename) {
-        final File inputFile = new File(job.tempDir, filename.getPath());
-        final Map<File, Set<File>> graph = new HashMap<File, Set<File>>();
-        if (!inputFile.exists()) {
-            return Collections.EMPTY_MAP;
-        }
-        final Properties prop = new Properties();
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(inputFile);
-            prop.loadFromXML(in);
-            in.close();
-        } catch (final IOException e) {
-            logger.error(e.getMessage(), e) ;
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-            }
-        }
-
-        for (final Map.Entry<Object, Object> entry: prop.entrySet()) {
-            final String key = (String) entry.getKey();
-            final String value = (String) entry.getValue();
-            final Set<File> r = new HashSet<File>();
-            for (final String v: StringUtils.restoreSet(value, COMMA)) {
-                r.add(new File(v));
-            }
-            graph.put(new File(key), r);
-        }
-
-        return Collections.unmodifiableMap(graph);
-    }
 
     /**
      * Output subject schema file.
      * 
      * @throws DITAOTException if generation files
      */
-    private void outputSubjectScheme() throws DITAOTException {
-        final Map<File, Set<File>> graph = readMapFromXML(new File(FILE_NAME_SUBJECT_RELATION));
-
+    private void outputSubjectScheme(final Map<File, Set<File>> graph) throws DITAOTException {
         final Queue<File> queue = new LinkedList<File>(graph.keySet());
         final Set<File> visitedSet = new HashSet<File>();
 
@@ -290,7 +220,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 }
                 visitedSet.add(parent);
                 //File tmprel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), parent);
-                File tmprel = new File(FileUtils.resolve(job.tempDir.getAbsoluteFile(), parent) + SUBJECT_SCHEME_EXTENSION);
+                File tmprel = new File(FileUtils.resolve(job.tempDir, parent) + SUBJECT_SCHEME_EXTENSION);
                 Document parentRoot;
                 if (!tmprel.exists()) {
                     final File src = new File(inputMap.getParentFile(), parent.getPath());
@@ -303,7 +233,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                         final Document childRoot = builder.parse(new File(inputMap.getParentFile(), childpath.getPath()));
                         mergeScheme(parentRoot, childRoot);
                         //File rel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), childpath);
-                        File rel = new File(job.tempDir.getAbsoluteFile(), childpath.getPath() + SUBJECT_SCHEME_EXTENSION);
+                        File rel = new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION);
                         generateScheme(rel, childRoot);
                     }
                 }

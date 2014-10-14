@@ -330,7 +330,7 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @return attribute value or default
      */
     private String getAttributeValue(final String elemQName, final String attQName, final String value) {
-        if (StringUtils.isEmptyString(value) && defaultValueMap != null) {
+        if (StringUtils.isEmptyString(value) && defaultValueMap != null && !defaultValueMap.isEmpty()) {
             final Map<String, String> defaultMap = defaultValueMap.get(attQName);
             if (defaultMap != null) {
                 final String defaultValue = defaultMap.get(elemQName);
@@ -606,7 +606,7 @@ public final class DitaWriter extends AbstractXMLFilter {
     }
     /**
      * Set default value map.
-     * @param defaultMap default value map
+     * @param defaultMap default value map, may be {@code null}
      */
     public void setDefaultValueMap(final Map<String, Map<String, String>> defaultMap) {
         defaultValueMap  = defaultMap;

@@ -78,6 +78,10 @@ public final class DitaValReader extends AbstractXMLReader {
 
     }
 
+    /**
+     * Set the map of subject scheme definitions. The contents of the map is in pseudo-code
+     * {@code Map<AttName, Map<ElemName, Set<Element>>>}. For default element mapping, the value is {@code *}.
+     */
     public void setSubjectScheme(final Map<String, Map<String, Set<Element>>> bindingMap) {
         this.bindingMap = bindingMap;
     }
