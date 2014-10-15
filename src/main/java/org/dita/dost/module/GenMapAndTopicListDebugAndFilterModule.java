@@ -139,7 +139,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private final boolean genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
     //private boolean setSystemid = true;
-    private FilterUtils filterUtils = new FilterUtils();
+    private FilterUtils filterUtils;
     /** XMLReader instance for parsing dita file */
     private XMLReader reader;
 
@@ -267,21 +267,22 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      * Initialize reusable filters.
      */
     private void initFilters() {
-        filterUtils = new FilterUtils(printTranstype.contains(transtype));
-        filterUtils.setLogger(logger);
+        Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
             ditaValReader.initXMLReader(true/*setSystemid*/);
             ditaValReader.read(ditavalFile.getAbsoluteFile());
             // Store filter map for later use
-            filterUtils.setFilterMap(ditaValReader.getFilterMap());
+            filterMap = ditaValReader.getFilterMap();
             // Store flagging image used for image copying
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
         } else {
-            filterUtils.setFilterMap(Collections.EMPTY_MAP);
+            filterMap = Collections.EMPTY_MAP;
         }
+        filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
+        filterUtils.setLogger(logger);
         
         listFilter = new GenListModuleFilter();
         listFilter.setLogger(logger);

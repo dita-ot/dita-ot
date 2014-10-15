@@ -128,9 +128,8 @@ public class TestDitaWriter {
         assertEquals(Action.FLAG, map.get(new FilterKey("product", "key2")));
         assertEquals(Action.INCLUDE, map.get(new FilterKey("product", "key3")));
 
-        final FilterUtils filterUtils = new FilterUtils();
+        final FilterUtils filterUtils = new FilterUtils(map);
         filterUtils.setLogger(new TestUtils.TestLogger());
-        filterUtils.setFilterMap(map);
         writer.setFilterUtils(filterUtils);
         final Job job = this.job;
         job.setInputFile(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));

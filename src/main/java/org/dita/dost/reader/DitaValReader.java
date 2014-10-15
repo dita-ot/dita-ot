@@ -16,17 +16,12 @@ import static org.dita.dost.util.FileUtils.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.XMLUtils;
@@ -109,6 +104,13 @@ public final class DitaValReader extends AbstractXMLReader {
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
+
+        if (bindingMap != null && !bindingMap.isEmpty()) {
+            final Map<FilterKey, Action> buf = new HashMap<FilterKey, Action>(filterMap);
+            for (final Map.Entry<FilterKey, Action> e: buf.entrySet()) {
+                refineAction(e.getValue(), e.getKey());
+            }
+        }
     }
 
     @Override
@@ -124,20 +126,6 @@ public final class DitaValReader extends AbstractXMLReader {
                 final String attValue = atts.getValue(ATTRIBUTE_NAME_VAL);
                 final FilterKey key = attName != null ? new FilterKey(attName, attValue) : DEFAULT;
                 insertAction(action, key);
-                // Subject scheme
-                if (attName != null && attValue != null && bindingMap != null && !bindingMap.isEmpty()) {
-                    final Map<String, Set<Element>> schemeMap = bindingMap.get(attName);
-                    if (schemeMap != null && !schemeMap.isEmpty()) {
-                        for (final Set<Element> submap: schemeMap.values()) {                    
-                            for (final Element e: submap) {
-                                final Element subRoot = searchForKey(e, attValue);
-                                if (subRoot != null) {
-                                    insertAction(subRoot, attName, action);
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }
 
@@ -163,6 +151,25 @@ public final class DitaValReader extends AbstractXMLReader {
         }
     }
     
+    /**
+     * Refine action key with information from subject schemes.
+     */
+    private void refineAction(final Action action, final FilterKey key) {
+        if (key.attribute != null && key.value != null && bindingMap != null && !bindingMap.isEmpty()) {
+            final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
+            if (schemeMap != null && !schemeMap.isEmpty()) {
+                for (final Set<Element> submap: schemeMap.values()) {
+                    for (final Element e: submap) {
+                        final Element subRoot = searchForKey(e, key.value);
+                        if (subRoot != null) {
+                            insertAction(subRoot, key.attribute, action);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Insert subject scheme based action into filetermap if key not present in the map
      * 

@@ -18,12 +18,7 @@ import static org.dita.dost.util.FilterUtils.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Transformer;
@@ -114,12 +109,15 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 filterReader = new DitaValReader();
                 filterReader.setLogger(logger);
                 filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
-                filterUtils = new FilterUtils(printTranstype.contains(transtype));
-                filterUtils.setLogger(logger);
+                Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
                 if (ditavalFile != null) {
                     filterReader.read(ditavalFile.getAbsoluteFile());
-                    filterUtils.setFilterMap(filterReader.getFilterMap());
+                    filterMap = filterReader.getFilterMap();
+                } else {
+                    filterMap = Collections.EMPTY_MAP;
                 }
+                filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
+                filterUtils.setLogger(logger);
             }
             
             final DitaWriter fileWriter = new DitaWriter();
@@ -176,7 +174,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
 
                     if (profilingEnabled) {
-                        fileWriter.setFilterUtils(filterUtils.getSubjectSchemeFilterUtils(ditavalFile, filterReader, subjectSchemeReader.getSubjectSchemeMap()));
+                        fileWriter.setFilterUtils(filterUtils.refine(subjectSchemeReader.getSubjectSchemeMap()));
                     }
     
                     fileWriter.write(inputDir, filename);

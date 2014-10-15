@@ -4,6 +4,7 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Collections;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -33,17 +34,16 @@ public class ProfilingFilterTest {
 	
 	@Test
 	public void testNoFilter() throws Exception {
-		test(new FilterUtils(), "topic.dita", "topic.dita");
-		
-		final FilterUtils filterUtils = new FilterUtils();
+		test(new FilterUtils(Collections.EMPTY_MAP), "topic.dita", "topic.dita");
+
 		final DitaValReader filterReader = new DitaValReader();
 		filterReader.read(new File(getClass().getClassLoader().getResource("ProfilingFilterTest/src/topic1.ditaval").toURI()).getAbsoluteFile());
-        filterUtils.setFilterMap(filterReader.getFilterMap());
+        final FilterUtils filterUtils = new FilterUtils(filterReader.getFilterMap());
 		filterUtils.setLogger(new TestUtils.TestLogger());
         test(filterUtils, "topic.dita", "topic1.dita");
 
-        test(new FilterUtils(false), "map.ditamap", "map_xhtml.ditamap");
-        test(new FilterUtils(true), "map.ditamap", "map_pdf.ditamap");
+        test(new FilterUtils(false, Collections.EMPTY_MAP), "map.ditamap", "map_xhtml.ditamap");
+        test(new FilterUtils(true, Collections.EMPTY_MAP), "map.ditamap", "map_pdf.ditamap");
 	}
 	
 	private void test(final FilterUtils filterUtils, final String srcFile, final String expFile) throws Exception {

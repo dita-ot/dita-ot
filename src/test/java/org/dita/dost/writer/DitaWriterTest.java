@@ -20,12 +20,7 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -74,7 +69,7 @@ public class DitaWriterTest {
         writer.setLogger(new TestUtils.TestLogger());
         writer.setTempDir(tempDir.getAbsoluteFile());
         writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true, true);
-        final FilterUtils fu = new FilterUtils();
+        final FilterUtils fu = new FilterUtils(Collections.EMPTY_MAP);
         fu.setLogger(new TestUtils.TestLogger());
         writer.setFilterUtils(fu);
         writer.setDelayConrefUtils(new DelayConrefUtils());

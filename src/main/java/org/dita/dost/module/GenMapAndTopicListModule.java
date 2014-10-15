@@ -845,8 +845,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @return configured filter utility
      */
     private FilterUtils parseFilterFile() {
-        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype));
-        filterUtils.setLogger(logger);
+        Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
@@ -854,13 +853,15 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
             ditaValReader.read(ditavalFile.getAbsoluteFile());
             // Store filter map for later use
-            filterUtils.setFilterMap(ditaValReader.getFilterMap());
+            filterMap = ditaValReader.getFilterMap();
             // Store flagging image used for image copying
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
         } else {
-            filterUtils.setFilterMap(Collections.EMPTY_MAP);
+            filterMap = Collections.EMPTY_MAP;
         }
+        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
+        filterUtils.setLogger(logger);
         return filterUtils;
     }
 
