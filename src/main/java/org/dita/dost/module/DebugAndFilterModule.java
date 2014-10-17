@@ -59,11 +59,17 @@ import org.xml.sax.helpers.XMLFilterImpl;
 final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
     /** Absolute input map path. */
-    private File inputMap = null;
+    private File inputMap;
     /** use grammar pool cache */
     private boolean gramcache = true;
     /** Profiling is enabled. */
     private boolean profilingEnabled;
+    private String transtype;
+    /** Absolute DITA-OT base path. */
+    private File ditaDir;
+    private File ditavalFile;
+    /** Absolute input directory path. */
+    private File inputDir;
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -71,42 +77,18 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             throw new IllegalStateException("Logger not set");
         }
         try {
-            final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
-            /* Absolute DITA-OT base path. */
-            File ditaDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
-            final String transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-            profilingEnabled = true;
-            if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {
-                profilingEnabled = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED));
-            }
-            File ditavalFile = null;
-            if (profilingEnabled) {
-                if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
-                    ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
-                    if (!ditavalFile.isAbsolute()) {
-                        ditavalFile = new File(baseDir, ditavalFile.getPath()).getAbsoluteFile();
-                    }
-                }
-            }
-            gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
-            
-            /* Absolute input directory path. */
-            File inputDir = new File(job.getInputDir());
-            if (!inputDir.isAbsolute()) {
-                inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
-            }
-            inputMap = new File(inputDir, job.getInputMap()).getAbsoluteFile();
+            readArguments(input);
 
             // Output subject schemas
             final Map<File, Set<File>> subjectSchemeRelations = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
             outputSubjectScheme(subjectSchemeRelations);
             final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
             subjectSchemeReader.setLogger(logger);
+            final Map<File, Set<File>> dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
 
-            DitaValReader filterReader = null;
             FilterUtils filterUtils = null;
             if (profilingEnabled) {
-                filterReader = new DitaValReader();
+                final DitaValReader filterReader = new DitaValReader();
                 filterReader.setLogger(logger);
                 filterReader.initXMLReader("yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID)));
                 Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
@@ -126,7 +108,7 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             try{
                 final boolean xmlValidate = Boolean.valueOf(input.getAttribute("validate"));
                 boolean setSystemid = true;
-                fileWriter.initXMLReader(ditaDir.getAbsoluteFile(),xmlValidate, setSystemid, gramcache);
+                fileWriter.initXMLReader(ditaDir.getAbsoluteFile(), xmlValidate, setSystemid, gramcache);
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);
             }
@@ -146,8 +128,6 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             job.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)));
             fileWriter.setJob(job);
 
-            final Map<File, Set<File>> dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
-
             for (final FileInfo f: job.getFileInfo()) {
                 if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)
                         || f.isConrefTarget || f.isCopyToSource) {
@@ -160,18 +140,19 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     }
                     logger.info("Processing " + currentFile.getAbsolutePath());
 
-                    subjectSchemeReader.reset();
                     final Set<File> schemaSet = dic.get(filename);
                     if (schemaSet != null && !schemaSet.isEmpty()) {
                         logger.debug("Loading subject schemes");
-
+                        subjectSchemeReader.reset();
                         for (final File schema : schemaSet) {
                             subjectSchemeReader.loadSubjectScheme(new File(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
                         }
+                        fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
+                        fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
+                    } else {
+                        fileWriter.setValidateMap(Collections.EMPTY_MAP);
+                        fileWriter.setDefaultValueMap(Collections.EMPTY_MAP);
                     }
-
-                    fileWriter.setValidateMap(subjectSchemeReader.getValidValuesMap());
-                    fileWriter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
 
                     if (profilingEnabled) {
                         fileWriter.setFilterUtils(filterUtils.refine(subjectSchemeReader.getSubjectSchemeMap()));
@@ -181,7 +162,6 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 }
             }
 
-            // reload the property for processing of copy-to
             performCopytoTask();
         } catch (final Exception e) {
             e.printStackTrace();
@@ -191,6 +171,30 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
+    private void readArguments(AbstractPipelineInput input) {
+        final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+        ditaDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
+        transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+        profilingEnabled = true;
+        if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {
+            profilingEnabled = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED));
+        }
+        if (profilingEnabled) {
+            if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
+                ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
+                if (!ditavalFile.isAbsolute()) {
+                    ditavalFile = new File(baseDir, ditavalFile.getPath()).getAbsoluteFile();
+                }
+            }
+        }
+        gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
+
+        inputDir = new File(job.getInputDir());
+        if (!inputDir.isAbsolute()) {
+            inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
+        }
+        inputMap = new File(inputDir, job.getInputMap()).getAbsoluteFile();
+    }
 
 
     /**
@@ -399,12 +403,8 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             final File targetFile = new File(job.tempDir, copytoTarget.getPath());
 
             if (targetFile.exists()) {
-                /*logger
-                        .logWarn(new StringBuilder("Copy-to task [copy-to=\"")
-                                .append(copytoTarget)
-                                .append("\"] which points to an existed file was ignored.").toString());*/
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
-            }else{
+            } else {
                 final File inputMapInTemp = new File(job.tempDir, job.getInputMap()).getAbsoluteFile();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
             }

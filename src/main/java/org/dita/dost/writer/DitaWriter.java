@@ -231,32 +231,6 @@ public final class DitaWriter extends AbstractXMLFilter {
     }
 
     /**
-     * replace all the backslash with slash in
-     * all href and conref attribute
-     */
-    private URI replaceCONREF(final Attributes atts) {
-        URI attValue = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
-        final String fragment = attValue.getFragment();
-        if (fragment != null)  {
-            final URI path = stripFragment(attValue);
-            if (path.toString().length() != 0) {
-                final File target = toFile(path);
-                if (target.isAbsolute()) {
-                    final URI relativePath = getRelativePath(job.getInputFile().toURI(), path);
-                    attValue = setFragment(relativePath, fragment);
-                }
-            }
-        } else {
-            final File target = toFile(attValue);
-            if (target.isAbsolute()) {
-                attValue = getRelativePath(job.getInputFile().toURI(), attValue);
-            }
-        }
-
-        return attValue;
-    }
-
-    /**
      * Normalize and validate href attribute.
      *
      * @param attName attribute name
@@ -308,7 +282,7 @@ public final class DitaWriter extends AbstractXMLFilter {
             final String attQName = atts.getQName(i);
             String attValue = getAttributeValue(qName, attQName, atts.getValue(i));
             if (ATTRIBUTE_NAME_CONREF.equals(attQName)) {
-                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, replaceCONREF(atts).toString());
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, replaceHREF(ATTRIBUTE_NAME_CONREF, atts).toString());
             } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
                         atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)){
@@ -340,19 +314,6 @@ public final class DitaWriter extends AbstractXMLFilter {
             }
         }
         return value;
-    }
-
-    /**
-     * Update href URI.
-     * 
-     * @param href href URI
-     * @return updated href URI
-     */
-    private URI updateHref(final URI href) {
-        final URI tempDirUri = tempDir.toURI();
-        final URI filePath = tempDirUri.resolve(toURI(inputFile));
-        final URI keyValue = tempDirUri.resolve(href);
-        return getRelativePath(filePath, keyValue);
     }
     
     @Override
@@ -522,7 +483,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         {
             final NormalizeFilter normalizeFilter = new NormalizeFilter();
             normalizeFilter.setLogger(logger);
-
             pipe.add(normalizeFilter);
         }
         {
@@ -589,13 +549,6 @@ public final class DitaWriter extends AbstractXMLFilter {
     private boolean isOutFile(final File filePathName, final File inputMap){
         final File relativePath = getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
         return !(relativePath == null || relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
-    }
-
-    /**
-     * @return the validateMap
-     */
-    public Map<String, Map<String, Set<String>>> getValidateMap() {
-        return validateMap;
     }
 
     /**
