@@ -183,12 +183,12 @@ public class DitaWriterTest {
     
     @Test
     public void testReplaceConref() throws Exception {
-        final Invoker w = new Invoker("replaceCONREF", ATTRIBUTE_NAME_CONREF, Attributes.class) {
+        final Invoker w = new Invoker("replaceHREF", ATTRIBUTE_NAME_CONREF, String.class, Attributes.class) {
             @Override
             public String invoke(final String value) throws Exception {
                 final AttributesImpl atts = new AttributesImpl();
                 XMLUtils.addOrSetAttribute(atts, attrName, value);
-                return ((URI) method.invoke(writer, atts)).toString();    
+                return ((URI) method.invoke(writer, ATTRIBUTE_NAME_CONREF, atts)).toString();
             }
         };
         // same directory path

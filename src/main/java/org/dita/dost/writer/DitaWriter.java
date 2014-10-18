@@ -198,7 +198,7 @@ public final class DitaWriter extends AbstractXMLFilter {
         CatalogUtils.setDitaDir(ditaDir);
         try {
             reader = XMLUtils.getXMLReader();
-            if(validate){
+            if (validate) {
                 reader.setFeature(FEATURE_VALIDATION, true);
                 try {
                     reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
@@ -235,13 +235,9 @@ public final class DitaWriter extends AbstractXMLFilter {
      *
      * @param attName attribute name
      * @param atts attributes
-     * @return attribute value
+     * @return attribute value, may be {@code null}
      */
     private URI replaceHREF(final String attName, final Attributes atts){
-        if (attName == null) {
-            return null;
-        }
-
         URI attValue = toURI(atts.getValue(attName));
         if (attValue != null) {
             final String fragment = attValue.getFragment();
@@ -263,7 +259,6 @@ public final class DitaWriter extends AbstractXMLFilter {
         } else {
             return null;
         }
-
         return attValue;
     }
 
@@ -405,8 +400,8 @@ public final class DitaWriter extends AbstractXMLFilter {
 
         OutputStream out = null;
         try {
-            currentFile = new File(baseDir, inputFile.getPath());
-            outputFile = new File(tempDir, inputFile.getPath());
+            currentFile = new File(baseDir, inFile.getPath());
+            outputFile = new File(tempDir, inFile.getPath());
 
             final File outputDir = outputFile.getParentFile();
             if (!outputDir.exists()) {
