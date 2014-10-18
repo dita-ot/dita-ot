@@ -933,7 +933,12 @@ public final class Constants {
 
     /** Project reference name for job configuration object. */
     public static final String ANT_REFERENCE_JOB = "job";
-    
+
+    public static final String PI_PATH2PROJ_TARGET = "path2project";
+    public static final String PI_PATH2PROJ_TARGET_URI = "path2project-uri";
+    public static final String PI_WORKDIR_TARGET = "workdir";
+    public static final String PI_WORKDIR_TARGET_URI = "workdir-uri";
+
     /**
      * Instances should NOT be constructed in standard programming.
      */

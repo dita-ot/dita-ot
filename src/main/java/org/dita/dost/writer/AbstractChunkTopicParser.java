@@ -27,7 +27,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.*;
-import static org.dita.dost.writer.DitaWriter.*;
 
 /**
  * ChunkTopicParser class, writing chunking content into relative topic files

@@ -15,7 +15,6 @@ import static org.dita.dost.util.StringUtils.join;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getElementNode;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getText;
-import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.util.FileUtils.*;
 import static java.util.Arrays.*;
 

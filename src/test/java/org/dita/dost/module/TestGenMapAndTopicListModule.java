@@ -41,8 +41,6 @@ import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.writer.DitaWriter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -9,7 +9,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.writer.GenListModuleFilter.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -58,7 +57,6 @@ import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.writer.DebugFilter;
-import org.dita.dost.writer.DitaWriter;
 import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.ExportAnchorsFilter.ExportAnchor;
 import org.dita.dost.writer.GenListModuleFilter;
