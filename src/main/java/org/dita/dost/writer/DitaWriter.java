@@ -100,17 +100,11 @@ public final class DitaWriter extends AbstractXMLFilter {
     private File outputFile;
 
     private int foreignLevel; // foreign/unknown nesting level
-    /** Relative path to base directory, may be {@code null}. */
-    private File path2Project;
 
-    /** Absolute path to temporary directory. */
-    private File tempDir;
     /** Absolute path to current source file. */
     private File currentFile;
 
     private Map<String, KeyDef> keys;
-    /** Relative path to current source file. */
-    private File inputFile = null;
 
     private Map<String, Map<String, Set<String>>> validateMap = null;
     private Map<String, Map<String, String>> defaultValueMap = null;
@@ -134,10 +128,8 @@ public final class DitaWriter extends AbstractXMLFilter {
         
         genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
         
-        path2Project = null;
         currentFile = null;
         foreignLevel = 0;
-        tempDir = null;
 
         validateMap = null;
     }
@@ -173,18 +165,6 @@ public final class DitaWriter extends AbstractXMLFilter {
     	for (final KeyDef k: keydefs) {
     		keys.put(k.keys, k);
     	}
-    }
-
-    /**
-     * Set temporary directory
-     *
-     * @param tempDir absolute path to temporary directory
-     */
-    public void setTempDir(final File tempDir) {
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory '" + tempDir.toString() + "' must be an absolute path");
-        }
-        this.tempDir = tempDir;
     }
 
     /**
@@ -331,7 +311,9 @@ public final class DitaWriter extends AbstractXMLFilter {
     
     @Override
     public void startDocument() throws SAXException {
-        path2Project = getPathtoProject(inputFile, currentFile, job.getInputFile().getAbsoluteFile());            
+        final File path2Project = getPathtoProject(getRelativePath(new File(job.getInputDir(), "dummy"), currentFile),
+                                                   currentFile,
+                                                   job.getInputFile());
         try {
             getContentHandler().startDocument();
             if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
@@ -396,18 +378,17 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @param inFile relative file path
      */
     public void write(final File baseDir, final File inFile) {
-        inputFile = inFile;
+        currentFile = new File(baseDir, inFile.getPath());
+        outputFile = new File(job.tempDir, inFile.getPath());
+
+        final File outputDir = outputFile.getParentFile();
+        if (!outputDir.exists() && !outputDir.mkdirs()) {
+            logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
+            return;
+        }
 
         OutputStream out = null;
         try {
-            currentFile = new File(baseDir, inFile.getPath());
-            outputFile = new File(tempDir, inFile.getPath());
-
-            final File outputDir = outputFile.getParentFile();
-            if (!outputDir.exists()) {
-                outputDir.mkdirs();
-            }
-            
             out = new FileOutputStream(outputFile);
 
             // start to parse the file and direct to output in the temp directory
@@ -434,9 +415,8 @@ public final class DitaWriter extends AbstractXMLFilter {
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
-            e.printStackTrace();
             logger.error(e.getMessage(), e) ;
-        }finally {
+        } finally {
             if (out != null) {
                 try {
                     out.close();
@@ -504,17 +484,15 @@ public final class DitaWriter extends AbstractXMLFilter {
      * @return path to base directory, {@code null} if not available
      */
     public File getPathtoProject(final File filename, final File traceFilename, final File inputMap) {
-    	File path2Project;
     	if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
             if (isOutFile(traceFilename, inputMap)) {
-                path2Project = toFile(getRelativePathFromOut(traceFilename.getAbsoluteFile()));
+                return toFile(getRelativePathFromOut(traceFilename.getAbsoluteFile()));
             } else {
-                path2Project = new File(getRelativeUnixPath(traceFilename.getAbsolutePath(), inputMap.getAbsolutePath())).getParentFile();
+                return new File(getRelativeUnixPath(traceFilename.getAbsolutePath(), inputMap.getAbsolutePath())).getParentFile();
             }
         } else {
-            path2Project = getRelativePath(filename);
+            return getRelativePath(filename);
         }
-    	return path2Project;
     }
     /**
      * Just for the overflowing files.

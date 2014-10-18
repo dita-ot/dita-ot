@@ -112,7 +112,6 @@ final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             } catch (final SAXException e) {
                 throw new DITAOTException(e.getMessage(), e);
             }
-            fileWriter.setTempDir(job.tempDir);
             if (filterUtils != null) {
             	fileWriter.setFilterUtils(filterUtils);
             }

@@ -67,7 +67,7 @@ public class DitaWriterTest {
         tempDir = TestUtils.createTempDir(DitaWriterTest.class);
         final DitaWriter writer = new DitaWriter();
         writer.setLogger(new TestUtils.TestLogger());
-        writer.setTempDir(tempDir.getAbsoluteFile());
+        writer.setJob(new Job(tempDir));
         writer.initXMLReader(new File("src" + File.separator + "main").getAbsoluteFile(), false, true, true);
         final FilterUtils fu = new FilterUtils(Collections.EMPTY_MAP);
         fu.setLogger(new TestUtils.TestLogger());

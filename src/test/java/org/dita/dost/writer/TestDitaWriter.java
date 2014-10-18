@@ -134,7 +134,6 @@ public class TestDitaWriter {
         final Job job = this.job;
         job.setInputFile(new File(baseDir, inputDir.getPath() + File.separator + "keyword.dita"));
         writer.setJob(job);
-        writer.setTempDir(tempDir.getAbsoluteFile());
         writer.setKeyDefinitions(Collections.EMPTY_LIST);
         writer.write(new File(baseDir, inputDir.getPath()).getAbsoluteFile(), new File("keyword.dita"));
 
