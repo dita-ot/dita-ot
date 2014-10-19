@@ -339,12 +339,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
         }
         inputMap = new File(inputDir, job.getInputMap()).getAbsoluteFile();
-
-        job.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
-        job.setOutterControl(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
-        job.setOnlyTopicInMap(input.getAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
-        job.setInputFile(inputMap);
-        job.setOutputDir(new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR)));
     }
 
 

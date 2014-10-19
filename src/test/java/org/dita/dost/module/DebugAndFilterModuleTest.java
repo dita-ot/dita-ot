@@ -62,6 +62,9 @@ public class DebugAndFilterModuleTest {
         tmpDir = new File(tempDir, "temp");
         TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
         final Job props = new Job(tmpDir);
+        props.setInputFile(inputMap.getAbsoluteFile());
+        props.setGeneratecopyouter("1");
+        props.setOutputDir(outDir);
         props.setProperty("user.input.dir", inputDir.getAbsolutePath());
         props.write();
 
