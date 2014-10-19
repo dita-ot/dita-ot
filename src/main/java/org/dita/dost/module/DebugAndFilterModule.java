@@ -73,6 +73,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private boolean profilingEnabled;
     private boolean validate;
     private String transtype;
+    private boolean forceUnique;
     /** Absolute DITA-OT base path. */
     private File ditaDir;
     private File ditavalFile;
@@ -93,6 +94,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private Map<File, Set<File>> dic;
     private SubjectSchemeReader subjectSchemeReader;
     private FilterUtils baseFilterUtils;
+    private ForceUniqueFilter forceUniqueFilter;
     private DitaWriterFilter ditaWriterFilter;
 
     @Override
@@ -112,6 +114,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             }
 
             performCopytoTask();
+
+            job.write();
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
@@ -257,6 +261,11 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * Initialize reusable filters.
      */
     private void initFilters() {
+        forceUniqueFilter = new ForceUniqueFilter();
+        forceUniqueFilter.setLogger(logger);
+        forceUniqueFilter.setJob(job);
+        forceUniqueFilter.setEntityResolver(reader.getEntityResolver());
+
         ditaWriterFilter = new DitaWriterFilter();
         ditaWriterFilter.setLogger(logger);
         ditaWriterFilter.setJob(job);
@@ -305,6 +314,10 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
             pipe.add(conkeyrefFilter);
         }
+        if (forceUnique) {
+            forceUniqueFilter.setCurrentFile(currentFile);
+            pipe.add(forceUniqueFilter);
+        }
         {
             ditaWriterFilter.setDefaultValueMap(defaultValueMap);
             ditaWriterFilter.setCurrentFile(currentFile);
@@ -333,6 +346,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
         validate = Boolean.valueOf(input.getAttribute("validate"));
         setSystemId = "yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
+        forceUnique = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE));
 
         inputDir = new File(job.getInputDir());
         if (!inputDir.isAbsolute()) {
@@ -541,7 +555,11 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * Execute copy-to task, generate copy-to targets base on sources
      */
     private void performCopytoTask() {
-        final Map<File, File> copytoMap = job.getCopytoMap();
+        final Map<File, File> copytoMap = new HashMap<File, File>();
+        copytoMap.putAll(job.getCopytoMap());
+        if (forceUniqueFilter != null) {
+            copytoMap.putAll(forceUniqueFilter.copyToMap);
+        }
         
         for (final Map.Entry<File, File> entry: copytoMap.entrySet()) {
             final File copytoTarget = entry.getKey();
@@ -554,6 +572,11 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             } else {
                 final File inputMapInTemp = new File(job.tempDir, job.getInputMap()).getAbsoluteFile();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
+                // add new file info into job
+                final FileInfo src = job.getFileInfo(toURI(copytoSource));
+                final FileInfo.Builder b = src != null ? new FileInfo.Builder(src) : new FileInfo.Builder();
+                final FileInfo dst = b.uri(toURI(copytoTarget)).isCopyToSource(false).build();
+                job.add(dst);
             }
         }
     }
@@ -576,7 +599,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         final File workdir = target.getParentFile();
         XMLFilter filter = new CopyToFilter(workdir, path2project);
         
-        logger.info("Processing " + target.getAbsolutePath());
+        logger.info("Processing " + src.getAbsolutePath() + " to " + target.getAbsolutePath());
         try {
             XMLUtils.transform(src, target, Arrays.asList(filter));
         } catch (final DITAOTException e) {

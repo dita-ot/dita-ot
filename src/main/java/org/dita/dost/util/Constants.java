@@ -785,6 +785,7 @@ public final class Constants {
     /**Constants for extensive params used in ant invoker(gramcache).*/
     public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE="gramcache";
     public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID="setsystemid";
+    public static final String ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE = "force-unique";
     /**Constants for line separator.*/
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 

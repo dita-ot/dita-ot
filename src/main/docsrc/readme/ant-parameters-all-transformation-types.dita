@@ -126,6 +126,11 @@
                 <option>late</option>; the default value is <option>early</option>.<note>Changing the filtering stage may produce different results for the same initial data set and filtering
                 conditions.</note></pd>
           </plentry>
+          <plentry id="force-unique">
+            <pt><parmname>force-unique</parmname></pt>
+            <pd id="force-unique.desc">Generate <codeph>copy-to</codeph> attributes to duplicate <codeph>topicref</codeph> elements. The allowed values are <option>true</option> and
+                <option>false</option>; the default value is <option>false</option>.<draft-comment author="jelovirt">This needs a better and longer description.</draft-comment></pd>
+          </plentry>
           <plentry id="generate.copy.outer">
             <pt><parmname>generate.copy.outer</parmname></pt>
             <pd id="generate.copy.outer.desc">Specifies whether to generate

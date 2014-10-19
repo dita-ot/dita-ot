@@ -181,6 +181,7 @@
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
         <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
+        <param name="force-unique" value="${force-unique}" if="force-unique"/>
       </module>
     </pipeline>
     <job-helper file="user.input.file.list" property="user.input.file"/>
