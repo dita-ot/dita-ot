@@ -93,6 +93,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private Map<File, Set<File>> dic;
     private SubjectSchemeReader subjectSchemeReader;
     private FilterUtils baseFilterUtils;
+    private DitaWriterFilter ditaWriterFilter;
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -208,6 +209,22 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             baseFilterUtils.setLogger(logger);
         }
 
+        initXmlReader();
+
+        delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
+
+        final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(job.tempDir, KEYDEF_LIST_FILE));
+        keys = new HashMap<String, KeyDef>();
+        for (final KeyDef k: keydefs) {
+            keys.put(k.keys, k);
+        }
+
+        initFilters();
+    }
+    /**
+     * Init xml reader used for pipeline parsing.
+     */
+     private void initXmlReader() throws SAXException {
         CatalogUtils.setDitaDir(ditaDir);
         reader = XMLUtils.getXMLReader();
         if (validate) {
@@ -234,14 +251,16 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
             }
         }
+    }
 
-        delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
-
-        final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(job.tempDir, KEYDEF_LIST_FILE));
-        keys = new HashMap<String, KeyDef>();
-        for (final KeyDef k: keydefs) {
-            keys.put(k.keys, k);
-        }
+    /**
+     * Initialize reusable filters.
+     */
+    private void initFilters() {
+        ditaWriterFilter = new DitaWriterFilter();
+        ditaWriterFilter.setLogger(logger);
+        ditaWriterFilter.setJob(job);
+        ditaWriterFilter.setEntityResolver(reader.getEntityResolver());
     }
 
     /**
@@ -287,13 +306,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             pipe.add(conkeyrefFilter);
         }
         {
-            final DitaWriterFilter ditaWriterFilter = new DitaWriterFilter();
-            ditaWriterFilter.setLogger(logger);
-            ditaWriterFilter.setJob(job);
             ditaWriterFilter.setDefaultValueMap(defaultValueMap);
             ditaWriterFilter.setCurrentFile(currentFile);
             ditaWriterFilter.setOutputFile(outputFile);
-            ditaWriterFilter.setEntityResolver(reader.getEntityResolver());
             pipe.add(ditaWriterFilter);
         }
         return pipe;

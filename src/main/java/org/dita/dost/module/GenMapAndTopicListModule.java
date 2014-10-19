@@ -242,7 +242,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             parseInputParameters(input);
 
             initFilters();
-            initXMLReader(ditaDir, xmlValidate, rootFile);
+            initXMLReader(ditaDir, xmlValidate);
             
             addToWaitList(inputFile);
             processWaitList();
@@ -294,11 +294,10 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * 
      * @param ditaDir absolute path to DITA-OT directory
      * @param validate whether validate input file
-     * @param rootFile absolute path to input file
      * @throws SAXException parsing exception
      * @throws IOException if getting canonical file path fails
      */
-    private void initXMLReader(final File ditaDir, final boolean validate, final File rootFile) throws SAXException {
+    private void initXMLReader(final File ditaDir, final boolean validate) throws SAXException {
         reader = XMLUtils.getXMLReader();
         // to check whether the current parsing file's href value is out of inputmap.dir
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
