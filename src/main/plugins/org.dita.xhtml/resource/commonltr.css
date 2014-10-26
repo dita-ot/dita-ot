@@ -348,14 +348,12 @@ div.imagejustify {
 }
 .row-nocellborder {
   border-left: none;
-  border-right: none;
   border-top: none;
   border-right: hidden;
   border-bottom: solid 1px;
 }
 .cell-norowborder {
   border-top: none;
-  border-bottom: none;
   border-left: none;
   border-bottom: hidden;
   border-right: solid 1px;

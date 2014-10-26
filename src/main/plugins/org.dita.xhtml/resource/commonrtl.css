@@ -350,7 +350,6 @@ div.imagejustify {
   border-bottom: solid 1px;
 }
 .row-nocellborder {
-  border-left: none;
   border-right: none;
   border-top: none;
   border-left: hidden;
@@ -358,7 +357,6 @@ div.imagejustify {
 }
 .cell-norowborder {
   border-top: none;
-  border-bottom: none;
   border-right: none;
   border-bottom: hidden;
   border-left: solid 1px;
