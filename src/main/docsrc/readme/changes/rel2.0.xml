@@ -45,7 +45,7 @@
     </refbody>
   </reference>
   <reference id="rel2.0.issues">
-    <title>Issues</title>
+    <title>Resolved Issues</title>
     <shortdesc>The following items are included in DITA Open Toolkit Release 2.0. Issue numbers
       correspond to the tracking number in the <ph><xref keyref="dita-ot-issues" scope="external"
           >GitHub issues tracker</xref></ph>.</shortdesc>
@@ -306,6 +306,14 @@
             <xref href="https://github.com/dita-ot/dita-ot/issues/1600" format="html" scope="external">#1600</xref>
              Indirect reference to keys erases one file, causes failures (in progress)</li>
         </ul>
+      </section>
+    </refbody>
+  </reference>
+  <reference id="limitations">
+    <title>Limitations</title>
+    <refbody>
+      <section>
+        <draft-comment author="infotexture">Add info on any significant open issues, caveats or known limitations in DITA markup support.</draft-comment>
       </section>
     </refbody>
   </reference>
