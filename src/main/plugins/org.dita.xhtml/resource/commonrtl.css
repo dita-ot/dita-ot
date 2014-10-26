@@ -112,7 +112,7 @@ dt.prereq {
 }
 /* Set heading sizes, getting smaller for deeper nesting */
 .topictitle1 {
-  margin-top: 0pc;
+  margin-top: 0;
   margin-bottom: .1em;
   font-size: 1.34em;
 }
@@ -142,7 +142,7 @@ dt.prereq {
 }
 .sectiontitle {
   margin-top: 1em;
-  margin-bottom: 0em;
+  margin-bottom: 0;
   color: black;
   font-size: 1.17em;
   font-weight: bold;
@@ -294,7 +294,7 @@ ul.simple {
   margin-top: 1em;
 }
 *[compact="yes"] > li {
-  margin-top: 0em;
+  margin-top: 0;
 }
 *[compact="no"] > li {
   margin-top: .53em;
