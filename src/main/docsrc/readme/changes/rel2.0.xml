@@ -54,8 +54,16 @@
         <title>Feature Requests</title>
         <ul>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1192" format="html" scope="external">#1192</xref>
-             Empty &lt;ul>&lt;/ul> kills FOP (milestone 1)</li>
+            <p>The filtering logic has been extended to catch cases which could case PDF rendering to fail when
+              "exclude" actions in ditaval filtering result in empty elements.
+            <ul>
+              <li>
+                <xref href="https://github.com/dita-ot/dita-ot/issues/1192" format="html" scope="external">#1192</xref>
+                Empty &lt;ul>&lt;/ul> kills FOP (milestone 1)</li>
+              <li>
+                <xref href="https://github.com/dita-ot/dita-ot/issues/1610" format="html" scope="external">#1610</xref>
+                Filtered content leads to total fail of PDF rendering duplicate (milestone 1)</li>
+            </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1267" format="html" scope="external">#1267</xref>
              PDF support for figurelink/tablelink.style (milestone 1)</li>
@@ -98,9 +106,6 @@
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1608" format="html" scope="external">#1608</xref>
              img should be used instead of embed in XHTML output for all image types (milestone 1)</li>
-          <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1610" format="html" scope="external">#1610</xref>
-             Filtered content leads to total fail of PDF rendering duplicate (milestone 1)</li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1612" format="html" scope="external">#1612</xref>
              Update Ant to 1.9.2 (milestone 1)</li>
