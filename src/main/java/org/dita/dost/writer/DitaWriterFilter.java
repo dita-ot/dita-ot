@@ -147,22 +147,19 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
      * @throws java.io.IOException if writing to output failed
      */
     private void processAttributes(final String qName, final Attributes atts, final AttributesImpl res) {
-        // copy the element's attributes
         final int attsLen = atts.getLength();
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
             String attValue = getAttributeValue(qName, attQName, atts.getValue(i));
             if (ATTRIBUTE_NAME_CONREF.equals(attQName)) {
-                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, replaceHREF(ATTRIBUTE_NAME_CONREF, atts).toString());
+                attValue = replaceHREF(ATTRIBUTE_NAME_CONREF, atts).toString();
             } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
                         atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)){
                     attValue = replaceHREF(attQName, atts).toString();
                 }
-                XMLUtils.addOrSetAttribute(res, attQName, attValue);
-            } else {
-                XMLUtils.addOrSetAttribute(res, atts.getURI(i), atts.getLocalName(i), attQName, atts.getType(i), attValue);
             }
+            XMLUtils.addOrSetAttribute(res, atts.getURI(i), atts.getLocalName(i), attQName, atts.getType(i), attValue);
         }
     }
 
@@ -188,7 +185,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     }
 
     /**
-     * Normalize and validate href attribute.
+     * Relativize absolute references if possible.
      *
      * @param attName attribute name
      * @param atts attributes
@@ -199,19 +196,14 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         if (attValue != null) {
             final String fragment = attValue.getFragment();
             if (fragment != null) {
-                final URI path = stripFragment(attValue);
-                if (path.toString().length() != 0) {
-                    final File target = toFile(path);
-                    if (target.isAbsolute()) {
-                        final URI relativePath = getRelativePath(job.getInputFile().toURI(), path);
-                        attValue = setFragment(relativePath, fragment);
-                    }
-                }
-            } else {
-                final File target = toFile(attValue);
-                if (target.isAbsolute()) {
-                    attValue = getRelativePath(job.getInputFile().toURI(), attValue);
-                }
+                attValue = stripFragment(attValue);
+            }
+            if (attValue.toString().length() != 0) {
+                final URI current = currentFile.toURI().resolve(attValue);
+                attValue = getRelativePath(currentFile.toURI(), current);
+            }
+            if (fragment != null) {
+                attValue = setFragment(attValue, fragment);
             }
         } else {
             return null;

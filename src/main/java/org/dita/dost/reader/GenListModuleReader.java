@@ -70,7 +70,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Set<File> chunkTopicSet;
     /** Set of subject schema files */
     private final Set<File> schemeSet;
-    /** Set of subsidiary files */
+    /** Set of coderef or object target files */
     private final Set<File> subsidiarySet;
     /** Set of sources of those copy-to that were ignored */
     private final Set<File> ignoredCopytoSourceSet;
@@ -842,7 +842,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (ATTRIBUTE_NAME_CONREF.equals(attrName) || ATTRIBUTE_NAME_CONKEYREF.equals(attrName)) {
             hasConRef = true;
         } else if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
-            if (attrClass != null && PR_D_CODEREF.matches(attrClass)) {
+            if (PR_D_CODEREF.matches(attrClass)) {
                 // if current element is <coderef> or its specialization
                 // set hasCodeRef to true
                 hasCodeRef = true;
@@ -888,7 +888,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
         }
         // files referred by coderef won't effect the uplevels, code has already returned.
-        if (("DITA-foreign".equals(attrType) && ATTRIBUTE_NAME_DATA.equals(attrName)) || attrClass != null && PR_D_CODEREF.matches(attrClass)) {
+        if (("DITA-foreign".equals(attrType) && ATTRIBUTE_NAME_DATA.equals(attrName)) || PR_D_CODEREF.matches(attrClass)) {
             subsidiarySet.add(new File(filename));
             return;
         }
