@@ -265,6 +265,9 @@ ul.simple {
 .uicontrol {
   font-weight: bold;
 }
+.wintitle {
+  font-weight: bold;
+}
 .parmname {
   font-weight: bold;
 }
