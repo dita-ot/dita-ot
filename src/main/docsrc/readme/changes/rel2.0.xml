@@ -65,8 +65,18 @@
                 Filtered content leads to total fail of PDF rendering duplicate (milestone 1)</li>
             </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1267" format="html" scope="external">#1267</xref>
-             PDF support for figurelink/tablelink.style (milestone 1)</li>
+            <p>The format of figure and table references in PDF output can now be defined using the same parameters that
+              govern HTML output.</p>
+            <p>The <parmname>args.figurelink.style</parmname> and <parmname>args.tablelink.style</parmname> Ant
+              parameters are now also considered when generating PDF output. The <option>NUMBER</option> and
+                <option>TITLE</option> options previously available for HTML-based output formats can now also be
+              applied to PDF output. By default PDF uses the new value <option>NUMTITLE</option> to include both the
+              number and title of the referenced figure or table as in previous toolkit versions. The
+                <option>NUMTITLE</option> value is not supported for other transform types. <ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1267" format="html" scope="external"
+                    >#1267</xref> PDF support for figurelink/tablelink.style (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1347" format="html" scope="external">#1347</xref>
              Issue with "xsl/dita2xhtml.xsl"? (milestone 1)</li>
