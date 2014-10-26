@@ -33,6 +33,17 @@
       </section>
     </refbody>
   </reference>
+  <reference id="requirements">
+    <title>Requirements</title>
+    <refbody>
+      <section>
+        <draft-comment author="infotexture">Add info on new minimum Java version or any other requirements that have
+          changed since previous release.</draft-comment>
+        <p>DITA Open Toolkit Release 2.0 requires the Java Runtime Environment (JRE) or Java Development Kit (JDK),
+          version 7 or later.</p>
+      </section>
+    </refbody>
+  </reference>
   <reference id="rel2.0.issues">
     <title>Issues</title>
     <shortdesc>The following items are included in DITA Open Toolkit Release 2.0. Issue numbers
