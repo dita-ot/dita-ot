@@ -588,13 +588,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
          * extended from <title> was found, this kind of element's class
          * attribute must contains 'topic/title'.
          */
-
-        if (classValue != null) {
-            if ((MAP_MAP.matches(classValue)) || (TOPIC_TITLE.matches(classValue))) {
-                isValidInput = true;
-            } else if (TOPIC_OBJECT.matches(classValue)) {
-                parseAttribute(atts, ATTRIBUTE_NAME_DATA);
-            }
+        if ((MAP_MAP.matches(classValue)) || (TOPIC_TITLE.matches(classValue))) {
+            isValidInput = true;
         }
 
         handleTopicRef(localName, atts);
@@ -602,8 +597,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         parseConrefAttr(atts);
         parseAttribute(atts, ATTRIBUTE_NAME_HREF);
         parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
-        // FIXME: img is a DITAVAL attribute, why process it here?
-        parseAttribute(atts, ATTRIBUTE_NAME_IMG);
+        parseAttribute(atts, ATTRIBUTE_NAME_DATA);
         parseConactionAttr(atts);
         parseConkeyrefAttr(atts);
         parseKeyrefAttr(atts);
@@ -867,7 +861,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         } else {
             filename = resolve(currentDir, attrValue).getPath();
         }
-
         filename = toFile(filename).getPath();
         // XXX: At this point, filename should be a system path
 
@@ -893,49 +886,41 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 && (canResolved() || isSupportedImageFile(filename.toLowerCase()))) {
             nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
         }
-        // outside ditamap files couldn't cause warning messages, it is stopped here
-        if (attrFormat != null && !ATTR_FORMAT_VALUE_DITA.equals(attrFormat)) {
-            // The format of the href is not dita topic
-            // The logic after this "if" clause is not related to files other than dita topic.
-            // Therefore, we need to return here to filter out those files in other format.
-            return;
-        }
 
-        // Collect only href target topic files for index extracting.
-        if (ATTRIBUTE_NAME_HREF.equals(attrName) && isFormatDita(attrFormat) && canResolved()) {
-            hrefTargets.add(new File(filename));
-            toOutFile(new File(filename));
-            if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
-                chunkTopicSet.add(new File(filename));
-            } else {
-                hrefTopicSet.add(new File(filename));
-            }
-        }
-
-        // Collect copy-to (target,source) into hash map
-        if (ATTRIBUTE_NAME_COPY_TO.equals(attrName) && isFormatDita(attrFormat)) {
-            final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-            if (href != null) {
-                final File value = resolve(currentDir, toFile(href).getPath());
-    
-                if (href.toString().isEmpty()) {
-                    logger.warn("Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
-                } else if (copytoMap.get(new File(filename)) != null) {
-                    if (!value.equals(copytoMap.get(new File(filename)))) {
-                        logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.toString(), filename).toString());
-                    }
-                    ignoredCopytoSourceSet.add(toFile(href));
-                } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
-                        "to-content"))) {
-                    copytoMap.put(new File(filename), value);
+        if (isFormatDita(attrFormat)) {
+            if (ATTRIBUTE_NAME_HREF.equals(attrName) && canResolved()) {
+                hrefTargets.add(new File(filename));
+                toOutFile(new File(filename));
+                if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
+                    chunkTopicSet.add(new File(filename));
+                } else {
+                    hrefTopicSet.add(new File(filename));
                 }
             }
-            
-            final File pathWithoutID = resolve(currentDir, toFile(attrValue).getPath());
-            if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
-                chunkTopicSet.add(pathWithoutID);
-            } else {
-                hrefTopicSet.add(pathWithoutID);
+            if (ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
+                final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+                if (href != null) {
+                    final File value = resolve(currentDir, toFile(href).getPath());
+
+                    if (href.toString().isEmpty()) {
+                        logger.warn("Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
+                    } else if (copytoMap.get(new File(filename)) != null) {
+                        if (!value.equals(copytoMap.get(new File(filename)))) {
+                            logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.toString(), filename).toString());
+                        }
+                        ignoredCopytoSourceSet.add(toFile(href));
+                    } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
+                            "to-content"))) {
+                        copytoMap.put(new File(filename), value);
+                    }
+                }
+
+                final File pathWithoutID = resolve(currentDir, toFile(attrValue).getPath());
+                if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
+                    chunkTopicSet.add(pathWithoutID);
+                } else {
+                    hrefTopicSet.add(pathWithoutID);
+                }
             }
         }
     }
