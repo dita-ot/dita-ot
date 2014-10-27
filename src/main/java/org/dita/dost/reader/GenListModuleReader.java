@@ -9,6 +9,7 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.resolve;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.StringUtils.*;
@@ -598,13 +599,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         handleTopicRef(localName, atts);
 
-        parseAttribute(atts, ATTRIBUTE_NAME_CONREF);
+        parseConrefAttr(atts);
         parseAttribute(atts, ATTRIBUTE_NAME_HREF);
         parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
+        // FIXME: img is a DITAVAL attribute, why process it here?
         parseAttribute(atts, ATTRIBUTE_NAME_IMG);
-        parseAttribute(atts, ATTRIBUTE_NAME_CONACTION);
-        parseAttribute(atts, ATTRIBUTE_NAME_CONKEYREF);
-        parseAttribute(atts, ATTRIBUTE_NAME_KEYREF);
+        parseConactionAttr(atts);
+        parseConkeyrefAttr(atts);
+        parseKeyrefAttr(atts);
 
         getContentHandler().startElement(uri, localName, qName, atts);
     }
@@ -783,11 +785,11 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             final List<String> branchIdList = validBranches.get(currentFileRelative);
             // the branch is referenced.
             if (branchIdList.contains(id)) {
-
                 return true;
-            } else // the whole map is referenced
-// the branch is not referred
+            } else {// the whole map is referenced
+                // the branch is not referred
                 return branchIdList.size() == 0;
+            }
         } else {
             // current file is not refered
             return false;
@@ -827,21 +829,16 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     private void parseAttribute(final Attributes atts, final String attrName) throws SAXException {
         String attrValue = atts.getValue(attrName);
+        if (attrValue == null) {
+            return;
+        }
         final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         final String attrType = atts.getValue(ATTRIBUTE_NAME_TYPE);
-
         final String codebase = atts.getValue(ATTRIBUTE_NAME_CODEBASE);
 
-        if (attrValue == null) {
-            return;
-        }
-
-        // @conkeyref will be resolved to @conref in Debug&Fileter step
-        if (ATTRIBUTE_NAME_CONREF.equals(attrName) || ATTRIBUTE_NAME_CONKEYREF.equals(attrName)) {
-            hasConRef = true;
-        } else if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
+        if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
             if (PR_D_CODEREF.matches(attrClass)) {
                 // if current element is <coderef> or its specialization
                 // set hasCodeRef to true
@@ -849,8 +846,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             } else {
                 hasHref = true;
             }
-        } else if (ATTRIBUTE_NAME_KEYREF.equals(attrName)) {
-            hasKeyRef = true;
         }
 
         // external resource is filtered here.
@@ -860,10 +855,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         final URI target = toURI(attrValue);
-        String filename = null;
+        String filename;
         if (isAbsolute(target) && !ATTRIBUTE_NAME_DATA.equals(attrName)) {
             filename = getRelativeUnixPath(rootFilePath.getAbsoluteFile().toURI().getPath(), target.getPath());
-            // for object tag bug:3052156
         } else if (ATTRIBUTE_NAME_DATA.equals(attrName)) {
             if (!isEmptyString(codebase)) {
                 filename = resolve(codebase, attrValue).getPath();
@@ -871,7 +865,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 filename = resolve(currentDir, attrValue).getPath();
             }
         } else {
-            // noraml process.
             filename = resolve(currentDir, attrValue).getPath();
         }
 
@@ -908,9 +901,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             return;
         }
 
-        /*
-         * Collect only href target topic files for index extracting.
-         */
+        // Collect only href target topic files for index extracting.
         if (ATTRIBUTE_NAME_HREF.equals(attrName) && isFormatDita(attrFormat) && canResolved()) {
             hrefTargets.add(new File(filename));
             toOutFile(new File(filename));
@@ -919,12 +910,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             } else {
                 hrefTopicSet.add(new File(filename));
             }
-        }
-
-        // Collect only conref target topic files
-        if (ATTRIBUTE_NAME_CONREF.equals(attrName)) {
-            conrefTargets.add(new File(filename));
-            toOutFile(new File(filename));
         }
 
         // Collect copy-to (target,source) into hash map
@@ -952,11 +937,50 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             } else {
                 hrefTopicSet.add(pathWithoutID);
             }
-
         }
-        // Collect the conaction source topic file
-        if (ATTRIBUTE_NAME_CONACTION.equals(attrName)) {
-            if (attrValue.equals("mark") || attrValue.equals("pushreplace")) {
+    }
+
+    private void parseConrefAttr(final Attributes atts) throws SAXException {
+        String attrValue = atts.getValue(ATTRIBUTE_NAME_CONREF);
+        if (attrValue != null) {
+            hasConRef = true;
+
+            String filename;
+            final URI target = toURI(attrValue);
+            if (isAbsolute(target)) {
+                filename = getRelativeUnixPath(rootFilePath.getAbsoluteFile().toURI().getPath(), target.getPath());
+            } else if (attrValue.startsWith(SHARP)) {
+                filename = getRelativeUnixPath(rootFilePath.getAbsoluteFile().toURI().getPath(), currentFile.getPath());
+            } else {
+                filename = resolve(currentDir, attrValue).getPath();
+            }
+            filename = toFile(filename).getPath();
+            // XXX: At this point, filename should be a system path
+
+            // Collect only conref target topic files
+            conrefTargets.add(new File(filename));
+            toOutFile(new File(filename));
+        }
+    }
+
+    private void parseConkeyrefAttr(final Attributes atts) {
+        final String conkeyref = atts.getValue(ATTRIBUTE_NAME_CONKEYREF);
+        if (conkeyref != null) {
+            hasConRef = true;
+        }
+    }
+
+    private void parseKeyrefAttr(final Attributes atts) {
+        final String keyref = atts.getValue(ATTRIBUTE_NAME_KEYREF);
+        if (keyref != null) {
+            hasKeyRef = true;
+        }
+    }
+
+    private void parseConactionAttr(final Attributes atts) {
+        final String conaction = atts.getValue(ATTRIBUTE_NAME_CONACTION);
+        if (conaction != null) {
+            if (conaction.equals("mark") || conaction.equals("pushreplace")) {
                 hasconaction = true;
             }
         }
