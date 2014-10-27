@@ -874,7 +874,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
         }
         // files referred by coderef won't effect the uplevels, code has already returned.
-        if (("DITA-foreign".equals(attrType) && ATTRIBUTE_NAME_DATA.equals(attrName)) || PR_D_CODEREF.matches(attrClass)) {
+        if (PR_D_CODEREF.matches(attrClass)) {
             subsidiarySet.add(new File(filename));
             return;
         }

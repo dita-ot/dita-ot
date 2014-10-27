@@ -4156,9 +4156,7 @@
 
   <!-- Add for "Support foreign content vocabularies such as 
     MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
-  <xsl:template match="*[contains(@class, ' topic/foreign ') or contains(@class, ' topic/unknown ')]" >
-    <xsl:apply-templates select="*[contains(@class, ' topic/object ')][@type = 'DITA-foreign']"/>
-  </xsl:template>
+  <xsl:template match="*[contains(@class, ' topic/foreign ') or contains(@class, ' topic/unknown ')]"/>
 
   <!-- Add for index-base element. This template is used to prevent
     any processing applied on index-base element -->
