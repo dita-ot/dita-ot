@@ -21,8 +21,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import java.io.*;
 import java.util.*;
 
-import static org.dita.dost.reader.ChunkMapReader.ATTR_XTRF_VALUE_GENERATED;
-import static org.dita.dost.reader.ChunkMapReader.FILE_NAME_STUB_DITAMAP;
+import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -37,12 +36,6 @@ import static org.dita.dost.util.XMLUtils.*;
  * </p>
  */
 public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
-
-    protected static final String ATTR_CHUNK_VALUE_SELECT_BRANCH = "select-branch";
-    protected static final String ATTR_CHUNK_VALUE_TO_CONTENT = "to-content";
-    protected static final String ATTR_CHUNK_VALUE_SELECT_TOPIC = "select-topic";
-    protected static final String ATTR_CHUNK_VALUE_SELECT_DOCUMENT = "select-document";
-    protected static final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
 
     /** Keys and values are absolute chimera paths, i.e. systems paths with fragments */
     protected LinkedHashMap<String, String> changeTable = null;
@@ -63,7 +56,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     protected String targetTopicId = null;
 
-    protected String selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
+    protected String selectMethod = CHUNK_SELECT_DOCUMENT;
     // flag whether output the nested nodes
     protected boolean include = false;
     private boolean skip = false;
@@ -165,7 +158,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                     logger.error(e.getMessage(), e);
                 }
             }
-            if (includelevel == 0 && !ATTR_CHUNK_VALUE_SELECT_DOCUMENT.equals(selectMethod)) {
+            if (includelevel == 0 && !CHUNK_SELECT_DOCUMENT.equals(selectMethod)) {
                 include = false;
             }
             if (separate && topicSpecSet.contains(qName) && !outputStack.isEmpty()) {
@@ -212,7 +205,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     @Override
     public void startDocument() throws SAXException {
         // difference between to-content & select-topic
-        if (ATTR_CHUNK_VALUE_SELECT_DOCUMENT.equals(selectMethod)) {
+        if (CHUNK_SELECT_DOCUMENT.equals(selectMethod)) {
             // currentParsingFile can never equal outputFile except when
             // chunk="to-content" is set at map level
             if ((currentParsingFile).equals(outputFile)) {
@@ -251,7 +244,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                 final Element topic = searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID, TOPIC_TOPIC);
 
                 // only by-topic
-                if (separate && include && !ATTR_CHUNK_VALUE_SELECT_TOPIC.equals(selectMethod)) {
+                if (separate && include && !CHUNK_SELECT_TOPIC.equals(selectMethod)) {
                     // chunk="by-topic" and next topic element found
                     outputStack.push(output);
                     outputFileNameStack.push(outputFile);
@@ -296,7 +289,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                     }
                 }
                 if (include) {
-                    if (ATTR_CHUNK_VALUE_SELECT_TOPIC.equals(selectMethod)) {
+                    if (CHUNK_SELECT_TOPIC.equals(selectMethod)) {
                         // if select method is "select-topic" and current topic is the nested topic in target topic, skip it.
                         include = false;
                         skipLevel = 1;
@@ -404,7 +397,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
             resAtts.setValue(i, attrValue);
         }
         if (TOPIC_TOPIC.matches(classValue) && resAtts.getValue("xmlns:ditaarch") == null) {
-            addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, ditaarchNSValue);
+            addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, DITA_NAMESPACE);
         }
         return resAtts;
     }

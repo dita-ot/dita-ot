@@ -69,7 +69,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         final String processRoleValue = getCascadeValue(rootTopicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
         boolean dotchunk = false;
 
-        if (copytoValue != null && !chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)) {
+        if (copytoValue != null && !chunkValue.contains(CHUNK_TO_CONTENT)) {
             if (hrefValue != null && getFragment(hrefValue) != null) {
                 parseFilePath = setFragment(copytoValue, getFragment(hrefValue));
             } else {
@@ -83,7 +83,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         // updated.
         // Because @copy-to should be included in fulltopiclist, and the source
         // of coyy-to should be excluded in fulltopiclist.
-        if (copytoValue != null && chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)) {
+        if (copytoValue != null && chunkValue.contains(CHUNK_TO_CONTENT)) {
             copyto.add(copytoValue);
             if (hrefValue != null && getFragment(hrefValue) != null) {
                 copytoSource.add(stripFragment(hrefValue));
@@ -107,12 +107,12 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 String firstTopicID = null;
                 if (getFragment(parseFilePath) != null) {
                     id = getFragment(parseFilePath);
-                    if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
+                    if (chunkValue.contains(CHUNK_SELECT_BRANCH)) {
                         outputFileName = resolve(filePath, id + FILE_EXTENSION_DITA);
                         targetTopicId = id;
                         startFromFirstTopic = false;
-                        selectMethod = ATTR_CHUNK_VALUE_SELECT_BRANCH;
-                    } else if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_DOCUMENT)) {
+                        selectMethod = CHUNK_SELECT_BRANCH;
+                    } else if (chunkValue.contains(CHUNK_SELECT_DOCUMENT)) {
                         firstTopicID = getFirstTopicId(resolve(filePath, parseFilePath).getPath());
 
                         topicDoc = getTopicDoc(resolve(filePath, parseFilePath).getPath());
@@ -125,12 +125,12 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                             dotchunk = true;
                             targetTopicId = null;
                         }
-                        selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
+                        selectMethod = CHUNK_SELECT_DOCUMENT;
                     } else {
                         outputFileName = resolve(filePath, id + FILE_EXTENSION_DITA);
                         targetTopicId = id;
                         startFromFirstTopic = false;
-                        selectMethod = ATTR_CHUNK_VALUE_SELECT_TOPIC;
+                        selectMethod = CHUNK_SELECT_TOPIC;
                     }
                 } else {
                     firstTopicID = getFirstTopicId(resolve(filePath, parseFilePath).getPath());
@@ -145,7 +145,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                         dotchunk = true;
                         targetTopicId = null;
                     }
-                    selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
+                    selectMethod = CHUNK_SELECT_DOCUMENT;
                 }
                 if (copytoValue != null) {
                     // use @copy-to value as the new file name

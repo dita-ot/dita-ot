@@ -13,6 +13,7 @@ import static org.dita.dost.util.FileUtils.resolve;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.StringUtils.*;
+import static org.dita.dost.reader.ChunkMapReader.*;
 
 import java.io.File;
 import java.net.URI;
@@ -557,7 +558,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (chunkToNavLevel > 0) {
             chunkToNavLevel++;
         } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null
-                && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-navigation")) {
+                && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_NAVIGATION)) {
             chunkToNavLevel++;
         }
 
@@ -882,7 +883,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         // Collect non-conref and non-copyto targets
         if ((ATTRIBUTE_NAME_HREF.equals(attrName) || ATTRIBUTE_NAME_DATA.equals(attrName))
                 && (atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
-                    || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content")))
+                    || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)))
                 && (canResolved() || isSupportedImageFile(filename.toLowerCase()))) {
             nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
         }
@@ -910,7 +911,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                         }
                         ignoredCopytoSourceSet.add(toFile(href));
                     } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
-                            "to-content"))) {
+                            CHUNK_TO_CONTENT))) {
                         copytoMap.put(new File(filename), value);
                     }
                 }

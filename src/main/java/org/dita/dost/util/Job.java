@@ -445,8 +445,8 @@ public final class Job {
      * 
      * @return input file path relative to input directory
      */
-    public String getInputMap() {
-        return getProperty(INPUT_DITAMAP);
+    public File getInputMap() {
+       return new File(getProperty(INPUT_DITAMAP));
     }
 
     /**
@@ -454,8 +454,8 @@ public final class Job {
      * 
      * @return absolute input directory path 
      */
-    public String getInputDir() {
-        return getProperty(INPUT_DIR);
+    public File getInputDir() {
+        return new File(getProperty(INPUT_DIR));
     }
 
     /**

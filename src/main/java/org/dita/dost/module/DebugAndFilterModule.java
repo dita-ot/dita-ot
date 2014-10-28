@@ -348,11 +348,11 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         setSystemId = "yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
         forceUnique = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE));
 
-        inputDir = new File(job.getInputDir());
+        inputDir = job.getInputDir();
         if (!inputDir.isAbsolute()) {
             inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
         }
-        inputMap = new File(inputDir, job.getInputMap()).getAbsoluteFile();
+        inputMap = new File(inputDir, job.getInputMap().getPath()).getAbsoluteFile();
     }
 
 
@@ -570,7 +570,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             if (targetFile.exists()) {
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
             } else {
-                final File inputMapInTemp = new File(job.tempDir, job.getInputMap()).getAbsoluteFile();
+                final File inputMapInTemp = new File(job.tempDir, job.getInputMap().getPath()).getAbsoluteFile();
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
                 // add new file info into job
                 final FileInfo src = job.getFileInfo(toURI(copytoSource));

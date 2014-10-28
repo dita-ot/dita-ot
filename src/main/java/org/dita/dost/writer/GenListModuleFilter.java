@@ -7,6 +7,7 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.reader.ChunkMapReader.*;
 
 import java.io.File;
 import java.net.URI;
@@ -407,7 +408,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         if (chunkToNavLevel > 0) {
             chunkToNavLevel++;
         } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null
-                && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-navigation")) {
+                && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_NAVIGATION)) {
             chunkToNavLevel++;
         }
 
@@ -676,7 +677,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         if (file != null
                 && (atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
                         || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null
-                            && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content")))
+                            && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)))
                 && !ATTRIBUTE_NAME_CONREF.equals(attrName)
                 && !ATTRIBUTE_NAME_COPY_TO.equals(attrName)
                 && (canResolved() || FileUtils.isSupportedImageFile(file.getPath().toLowerCase()))) {
@@ -752,7 +753,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
                         logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.getPath(), file.getPath()).toString());
                     }
                     ignoredCopytoSourceSet.add(toFile(href));
-                } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains("to-content"))) {
+                } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT))) {
                     copytoMap.put(file, value);
                 }
     

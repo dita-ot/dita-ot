@@ -1457,7 +1457,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             if (targetFile.exists()) {
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
             }else{
-                final String inputMapInTemp = new File(job.tempDir, job.getInputMap()).getAbsolutePath();
+                final String inputMapInTemp = new File(job.tempDir, job.getInputMap().getPath()).getAbsolutePath();
                 logger.info("copy-to: " + copytoSource + " -> " + copytoTarget);
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
             }
@@ -1493,10 +1493,10 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      * XML filter to rewrite processing instructions to reflect copy-to location. The following processing-instructions are 
      * 
      * <ul>
-     * <!--li>{@link DitaWriter#PI_WORKDIR_TARGET PI_WORKDIR_TARGET}</li-->
-     * <li>{@link DitaWriter#PI_WORKDIR_TARGET_URI PI_WORKDIR_TARGET_URI}</li>
-     * <li>{@link DitaWriter#PI_PATH2PROJ_TARGET PI_PATH2PROJ_TARGET}</li>
-     * <li>{@link DitaWriter#PI_PATH2PROJ_TARGET_URI PI_PATH2PROJ_TARGET_URI}</li>
+     * <!--li>{@link Constants#PI_WORKDIR_TARGET PI_WORKDIR_TARGET}</li-->
+     * <li>{@link Constants#PI_WORKDIR_TARGET_URI PI_WORKDIR_TARGET_URI}</li>
+     * <li>{@linkConstants#PI_PATH2PROJ_TARGET PI_PATH2PROJ_TARGET}</li>
+     * <li>{@link Constants#PI_PATH2PROJ_TARGET_URI PI_PATH2PROJ_TARGET_URI}</li>
      * </ul>
      */
     private static final class CopyToFilter extends XMLFilterImpl {

@@ -89,14 +89,14 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         Set<String> tempTopicID = null;
 
         targetTopicId = null;
-        selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
+        selectMethod = CHUNK_SELECT_DOCUMENT;
         include = false;
 
         boolean needWriteDitaTag = true;
 
         try {
             String parseFilePath;
-            if (copytoValue != null && !chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)) {
+            if (copytoValue != null && !chunkValue.contains(CHUNK_TO_CONTENT)) {
                 if (getFragment(hrefValue) != null) {
                     parseFilePath = setFragment(copytoValue, getFragment(hrefValue));
                 } else {
@@ -110,7 +110,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             // be updated.
             // Because @copy-to should be included in fulltopiclist, and the
             // source of coyy-to should be excluded in fulltopiclist.
-            if (copytoValue != null && chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)
+            if (copytoValue != null && chunkValue.contains(CHUNK_TO_CONTENT)
                     && hrefValue != null) {
                 copyto.add(copytoValue);
                 if (getFragment(hrefValue) != null) {
@@ -124,7 +124,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
 
             if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)) {
                 // now the path to target file make sense
-                if (chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)) {
+                if (chunkValue.contains(CHUNK_TO_CONTENT)) {
                     // if current element contains "to-content" in chunk
                     // attribute
                     // we need to create new buffer and flush the buffer to
@@ -148,8 +148,8 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                         outputFileName = resolve(filePath, copytoValue);
                     } else if (hrefValue != null) {
                         // try to use href value as the new file name
-                        if (chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_TOPIC)
-                                || chunkValue.contains(ATTR_CHUNK_VALUE_SELECT_BRANCH)) {
+                        if (chunkValue.contains(CHUNK_SELECT_TOPIC)
+                                || chunkValue.contains(CHUNK_SELECT_BRANCH)) {
                             if (getFragment(hrefValue) != null) {
                                 // if we have an ID here, use it.
                                 outputFileName = resolve(filePath, getFragment(hrefValue) + FILE_EXTENSION_DITA);
@@ -216,7 +216,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     // if the current topic href referred to a entire
                     // topic file,it will be handled in "document" level.
                     if (targetTopicId == null) {
-                        selectMethod = ATTR_CHUNK_VALUE_SELECT_DOCUMENT;
+                        selectMethod = CHUNK_SELECT_DOCUMENT;
                     }
                 }
                 final File tempPath = currentParsingFile;
@@ -278,7 +278,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 output = tempOutput;
             }
 
-            if (chunkValue.contains(ATTR_CHUNK_VALUE_TO_CONTENT)) {
+            if (chunkValue.contains(CHUNK_TO_CONTENT)) {
                 final String tmpContent = ((StringWriter) output).toString();
                 writeToContentChunk(tmpContent, outputFileName, needWriteDitaTag);
                 // restore back original output
@@ -343,7 +343,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             }
             if (needWriteDitaTag) {
                 final AttributesImpl atts = new AttributesImpl();
-                addOrSetAttribute(atts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, ditaarchNSValue);
+                addOrSetAttribute(atts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, DITA_NAMESPACE);
                 addOrSetAttribute(atts, ATTRIBUTE_PREFIX_DITAARCHVERSION + COLON + ATTRIBUTE_NAME_DITAARCHVERSION, "1.2");
                 writeStartElement(ditaFileOutput, ELEMENT_NAME_DITA, atts);
             }

@@ -65,12 +65,12 @@ public final class JobTest {
 
     @Test
     public void testGetInputMap() {
-        assertEquals("foo", job.getInputMap());
+        assertEquals(new File("foo"), job.getInputMap());
     }
 
     @Test
     public void testGetValue() {
-        assertEquals("/foo/bar", job.getInputDir());
+        assertEquals(new File("/foo/bar"), job.getInputDir());
     }
 
     @AfterClass
