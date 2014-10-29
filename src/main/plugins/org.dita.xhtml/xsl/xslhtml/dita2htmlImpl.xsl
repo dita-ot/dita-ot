@@ -1429,7 +1429,7 @@
 
       <xsl:choose>
         <xsl:when test="not(normalize-space($updatedTarget) = $OUTEXT)">
-          <a href="{$updatedTarget}" title="{$hovertext}">
+          <a href="{$updatedTarget}" title="{normalize-space($hovertext)}">
             <xsl:apply-templates select="." mode="output-term">
               <xsl:with-param name="displaytext" select="normalize-space($displaytext)"/>
             </xsl:apply-templates>
