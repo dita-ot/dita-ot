@@ -103,10 +103,7 @@
 
   <patternset id="pattern.package.minimum">
     <patternset refid="pattern.global.excludes"/>
-    <exclude name="plugins/org.dita.pdf2/fop/build/"/>
-    <exclude name="plugins/org.dita.pdf2/fop/conf/"/>
-    <exclude name="plugins/org.dita.pdf2/fop/lib/"/>
-    <exclude name="plugins/org.dita.pdf2/lib/icu4j.jar"/>
+    <exclude name="plugins/org.dita.pdf2/fop/**"/>
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <exclude name="lib/saxon*"/>
     <exclude name="lib/icu4j.jar"/>
@@ -128,7 +125,8 @@
     <include name="lib/**"/>
   </patternset>
   <patternset id="pattern.package.ext-plugins.minimum">
-    <include name="h2d/**"/>
+    <exclude name="**/*"/>
+    <!--include name="h2d/**"/-->
   </patternset>
 
   <patternset id="pattern.package.client">
@@ -186,7 +184,8 @@
     <include name="lib/**"/>
   </patternset>
   <patternset id="pattern.package.ext-plugins.full">
-    <include name="h2d/**"/>
+    <exclude name="**/*"/>
+    <!- -include name="h2d/**"/- ->
     <!- -include name="legacypdf/**"/- ->
   </patternset-->
 
@@ -196,7 +195,7 @@
     <exclude name="plugins/org.dita.pdf2/fop/conf/"/>
     <exclude name="plugins/org.dita.pdf2/fop/lib/"/>
     <exclude name="plugins/org.dita.pdf2/lib/icu4j.jar"/>
-    <exclude name="lib/saxon*"/>
+    <!--exclude name="lib/saxon*"/-->
     <exclude name="lib/icu4j.jar"/>
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
@@ -220,7 +219,8 @@
     <include name="lib/**"/>
   </patternset>
   <patternset id="pattern.package.ext-plugins.standard">
-    <include name="h2d/**"/>
+    <exclude name="**/*"/>
+    <!--include name="h2d/**"/-->
     <!--include name="legacypdf/**"/-->
   </patternset>
     
