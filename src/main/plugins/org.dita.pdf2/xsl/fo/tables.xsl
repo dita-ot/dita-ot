@@ -154,7 +154,7 @@
     </xsl:template>
     <!-- SourceForge bug tracker item 2872988:
          Count the max number of cells in any row of a simpletable -->
-    <xsl:template match="*[contains(@class, ' topic/sthead ')] | *[contains(@class, ' topic/strow ')]" mode="count-max-simpletable-cells">
+    <xsl:template match="*[contains(@class, ' topic/sthead ')] | *[contains(@class, ' topic/strow ')]" mode="count-max-simpletable-cells" as="xs:integer">
       <xsl:param name="maxcount" select="0" as="xs:integer"/>
       <xsl:variable name="newmaxcount" as="xs:integer">
         <xsl:variable name="row-cell-count" select="count(*[contains(@class, ' topic/stentry ')])"/>
@@ -177,12 +177,12 @@
 
     <!-- SourceForge bug tracker item 2872988:
          Count the number of values in @relcolwidth (to add values if one is missing) -->
-    <xsl:template match="*" mode="count-colwidths">
+    <xsl:template match="*" mode="count-colwidths" as="xs:integer">
       <xsl:param name="relcolwidth" select="@relcolwidth"/>
-      <xsl:param name="count" select="0"/>
+      <xsl:param name="count" select="0" as="xs:integer"/>
       <xsl:choose>
         <xsl:when test="not(contains($relcolwidth,' '))">
-          <xsl:value-of select="$count + 1"/>
+          <xsl:sequence select="$count + 1"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates select="." mode="count-colwidths">
@@ -198,10 +198,10 @@
          add 1* for each missing cell, otherwise the FO processor may crash. -->
     <xsl:template match="*" mode="fix-relcolwidth">
       <xsl:param name="update-relcolwidth" select="@relcolwidth"/>
-      <xsl:param name="number-cells">
+      <xsl:param name="number-cells" as="xs:integer">
         <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
       </xsl:param>
-      <xsl:param name="number-relwidths">
+      <xsl:param name="number-relwidths" as="xs:integer">
         <xsl:apply-templates select="." mode="count-colwidths"/>
       </xsl:param>
       <xsl:choose>
@@ -1121,7 +1121,7 @@
          default headings for the table. By default, the existing sthead
          element is used when specified. -->
     <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="dita2xslfo:simpletable-heading">
-        <xsl:param name="number-cells">
+        <xsl:param name="number-cells" as="xs:integer">
             <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
         </xsl:param>
         <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]">

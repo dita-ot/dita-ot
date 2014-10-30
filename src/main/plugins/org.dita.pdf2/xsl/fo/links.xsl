@@ -460,7 +460,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:if>
   </xsl:template>
 
-    <xsl:template name="getLinkScope">
+    <xsl:template name="getLinkScope" as="xs:string">
         <xsl:choose>
             <xsl:when test="ancestor-or-self::*[@scope][1]/@scope">
               <xsl:value-of select="ancestor-or-self::*[@scope][1]/@scope"/>
@@ -472,7 +472,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/link ')]">
-      <xsl:param name="topicType">
+      <xsl:param name="topicType" as="xs:string?">
           <xsl:for-each select="ancestor::*[contains(@class,' topic/topic ')][1]">
               <xsl:call-template name="determineTopicType"/>
           </xsl:for-each>
@@ -481,7 +481,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:when test="(@role and not($includeRelatedLinkRoles = @role)) or
                         (not(@role) and not($includeRelatedLinkRoles = '#default'))"/>
         <xsl:when test="@role='child' and $chapterLayout='MINITOC' and
-                        ($topicType='topicChapter' or $topicType='topicAppendix' or $topicType='topicPart')">
+                        $topicType = ('topicChapter', 'topicAppendix', 'topicPart')">
           <!-- When a minitoc already links to children, do not add them here -->
         </xsl:when>
         <xsl:otherwise>
@@ -502,7 +502,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="element" select="$element"/>
         </xsl:apply-templates>
     </xsl:variable>
-    <xsl:variable name="linkScope">
+    <xsl:variable name="linkScope" as="xs:string">
         <xsl:call-template name="getLinkScope"/>
     </xsl:variable>
 

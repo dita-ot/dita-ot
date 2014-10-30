@@ -80,7 +80,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="id.lof" select="'ID_LOF_00-0F-EA-40-0D-4D'"/>
     <xsl:variable name="id.glossary" select="'ID_GLOSSARY_00-0F-EA-40-0D-4D'"/>
 
-    <xsl:variable name="root" select="/"/>
+    <xsl:variable name="root" select="/" as="document-node()"/>
 
     <!--  In order to not process any data under opentopic:map  -->
     <xsl:template match="opentopic:map"/>
@@ -143,7 +143,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/topic ')]">
-        <xsl:variable name="topicType">
+        <xsl:variable name="topicType" as="xs:string">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
 
@@ -364,7 +364,7 @@ See the accompanying license.txt file for applicable licenses.
           </xsl:choose>
                     
           <xsl:for-each select="*[contains(@class,' topic/topic ')]">
-            <xsl:variable name="topicType">
+            <xsl:variable name="topicType" as="xs:string">
               <xsl:call-template name="determineTopicType"/>
             </xsl:variable>
             <xsl:if test="$topicType = 'topicSimple'">
@@ -376,7 +376,7 @@ See the accompanying license.txt file for applicable licenses.
       </fo:flow>
     </fo:page-sequence>
     <xsl:for-each select="*[contains(@class,' topic/topic ')]">
-      <xsl:variable name="topicType">
+      <xsl:variable name="topicType" as="xs:string">
         <xsl:call-template name="determineTopicType"/>
       </xsl:variable>
       <xsl:if test="not($topicType = 'topicSimple')">
@@ -431,7 +431,7 @@ See the accompanying license.txt file for applicable licenses.
                       </xsl:otherwise>
                     </xsl:choose>
                     <xsl:for-each select="*[contains(@class,' topic/topic ')]">
-                        <xsl:variable name="topicType">
+                        <xsl:variable name="topicType" as="xs:string">
                             <xsl:call-template name="determineTopicType"/>
                         </xsl:variable>
                         <xsl:if test="$topicType = 'topicSimple'">
@@ -443,7 +443,7 @@ See the accompanying license.txt file for applicable licenses.
             </fo:flow>
         </fo:page-sequence>
         <xsl:for-each select="*[contains(@class,' topic/topic ')]">
-            <xsl:variable name="topicType">
+            <xsl:variable name="topicType" as="xs:string">
                 <xsl:call-template name="determineTopicType"/>
             </xsl:variable>
             <xsl:if test="not($topicType = 'topicSimple')">
@@ -506,7 +506,7 @@ See the accompanying license.txt file for applicable licenses.
 
 
     <xsl:template name="insertChapterFirstpageStaticContent">
-        <xsl:param name="type"/>
+        <xsl:param name="type" as="xs:string"/>
         <fo:block>
             <xsl:attribute name="id">
                 <xsl:call-template name="generate-toc-id"/>
@@ -682,7 +682,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- h[n] -->
     <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
-        <xsl:variable name="topicType">
+        <xsl:variable name="topicType" as="xs:string">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
         <xsl:choose>
@@ -756,12 +756,12 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
 
     <xsl:template match="*" mode="createTopicAttrsName">
-      <xsl:param name="theCounter"/>
-      <xsl:param name="theName" select="''"/>
+      <xsl:param name="theCounter" as="xs:integer"/>
+      <xsl:param name="theName" select="''" as="xs:string"/>
         <xsl:choose>
-            <xsl:when test="number($theCounter) > 0">
+            <xsl:when test="$theCounter > 0">
                 <xsl:apply-templates select="." mode="createTopicAttrsName">
-                    <xsl:with-param name="theCounter" select="number($theCounter) - 1"/>
+                    <xsl:with-param name="theCounter" select="$theCounter - 1"/>
                     <xsl:with-param name="theName" select="concat($theName, 'topic.')"/>
                 </xsl:apply-templates>
             </xsl:when>
@@ -1239,7 +1239,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class,' topic/shortdesc ')]" priority="1">
-        <xsl:variable name="topicType">
+        <xsl:variable name="topicType" as="xs:string">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
         <xsl:choose>
@@ -1835,8 +1835,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*" mode="placeImage">
         <xsl:param name="imageAlign"/>
         <xsl:param name="href"/>
-        <xsl:param name="height"/>
-        <xsl:param name="width"/>
+        <xsl:param name="height" as="xs:double?"/>
+        <xsl:param name="width" as="xs:double?"/>
 <!--Using align attribute set according to image @align attribute-->
         <xsl:call-template name="processAttrSetReflection">
                 <xsl:with-param name="attrSet" select="concat('__align__', $imageAlign)"/>
@@ -2065,14 +2065,14 @@ See the accompanying license.txt file for applicable licenses.
     to create special processing for any of list you should use <template name="processUnknowTopic"/>
     example below.-->
     <xsl:template name="determineTopicType">
-      <xsl:variable name="foundTopicType">
+      <xsl:variable name="foundTopicType" as="xs:string?">
         <xsl:variable name="topic" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]"/>
         <xsl:variable name="id" select="$topic/@id"/>
         <xsl:variable name="mapTopics" select="key('map-id', $id)"/>
         <xsl:apply-templates select="$mapTopics[1]" mode="determineTopicType"/>
       </xsl:variable>
       <xsl:choose>
-        <xsl:when test="$foundTopicType!=''">
+        <xsl:when test="exists($foundTopicType) and $foundTopicType != ''">
           <xsl:value-of select="$foundTopicType"/>
         </xsl:when>
         <xsl:otherwise>topicSimple</xsl:otherwise>
@@ -2130,11 +2130,11 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' topic/data ')]" mode="insert-text"/>
     <xsl:template match="*[contains(@class, ' topic/data-about ')]"/>
 
-    <xsl:function name="opentopic-func:determineTopicType">
-      <xsl:variable name="topicType">
+    <xsl:function name="opentopic-func:determineTopicType" as="xs:string">
+      <xsl:variable name="topicType" as="xs:string">
         <xsl:call-template name="determineTopicType"/>
       </xsl:variable>
-      <xsl:value-of select="string($topicType)"/>
+      <xsl:sequence select="$topicType"/>
     </xsl:function>
 
 </xsl:stylesheet>
