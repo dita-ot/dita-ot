@@ -78,8 +78,15 @@
                     >#1267</xref> PDF support for figurelink/tablelink.style (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1347" format="html" scope="external">#1347</xref>
-             Issue with "xsl/dita2xhtml.xsl"? (milestone 1)</li>
+            <p>The XSLT processing has been updated to use the XHTML output method for XHTML 1.0 and assign the mandatory
+              xhtml namespace to the the generated HTML root element:
+                <tt>&lt;html&#xA0;xmlns="http://www.w3.org/1999/xhtml"&gt;</tt>. This ensures the XSL processor formats
+              elements in the output with XHTML syntax (self-closing elements include an additional space for browser
+              compatibility). <ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1347" format="html" scope="external">#1347</xref>
+                  Issue with "xsl/dita2xhtml.xsl"? (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1506" format="html" scope="external">#1506</xref>
              New command line tool (milestone 1)</li>
