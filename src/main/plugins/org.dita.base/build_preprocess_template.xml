@@ -361,6 +361,7 @@
     <pipeline message="Resolve keyref." taskname="keyref"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.KeyrefModule">
+        <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
   </target>

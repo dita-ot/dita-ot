@@ -110,7 +110,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
         
     private Map<String, Element> definitionMap;
-    private File tempDir;
     /** File name with relative path to the temporary directory of input file. */
     private File inputFile;
 
@@ -180,15 +179,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     public void setKeyDefinition(final Map<String, Element> definitionMap) {
         this.definitionMap = definitionMap;
     }
-    
-    /**
-     * Set temp dir.
-     * @param tempDir temp dir
-     */
-    public void setTempDir(final File tempDir) {
-        this.tempDir = tempDir;
-    }
-    
+
     /**
      * Set current file.
      */
@@ -219,7 +210,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     @Override
     public void write(final File filename) throws DITAOTException {
-        super.write(new File(tempDir, inputFile.getPath()).getAbsoluteFile());
+        super.write(new File(job.tempDir, inputFile.getPath()).getAbsoluteFile());
     }
         
     // XML filter methods ------------------------------------------------------
@@ -417,15 +408,15 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         final String formatValue = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
                         if (TOPIC_IMAGE.matches(currentElement.type)) {
                             valid = true;
-                            target_output = normalizeHrefValue(URLUtils.getRelativePath(tempDir.toURI().resolve(inputFile.getPath()), tempDir.toURI().resolve(target)), elementId);
+                            target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(inputFile.getPath()), job.tempDir.toURI().resolve(target)), elementId);
                             XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                         } else if (("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)) &&
                                 ("".equals(formatValue) || ATTR_FORMAT_VALUE_DITA.equals(formatValue)  || ATTR_FORMAT_VALUE_DITAMAP.equals(formatValue))) {
-                            final File topicFile = toFile(tempDir.toURI().resolve(stripFragment(target)));
+                            final File topicFile = toFile(job.tempDir.toURI().resolve(stripFragment(target)));
                             if (topicFile.exists()) {   
                                 valid = true;
                                 final String topicId = getFirstTopicId(topicFile);
-                                target_output = normalizeHrefValue(URLUtils.getRelativePath(tempDir.toURI().resolve(toURI(inputFile)), tempDir.toURI().resolve(target)), elementId, topicId);
+                                target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
                                     final URI f = toURI(inputFile).resolve(target_output);

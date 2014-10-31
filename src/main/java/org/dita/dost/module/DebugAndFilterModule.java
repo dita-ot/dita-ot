@@ -86,9 +86,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private Map<String, Map<String, String>> defaultValueMap;
     /** XMLReader instance for parsing dita file */
     private XMLReader reader;
-    private Map<String, KeyDef> keys;
-    /** Delayed conref utils. */
-    private DelayConrefUtils delayConrefUtils;
+//    private Map<String, KeyDef> keys;
+//    /** Delayed conref utils. */
+//    private DelayConrefUtils delayConrefUtils;
     /** Absolute path to current source file. */
     private File currentFile;
     private Map<File, Set<File>> dic;
@@ -215,13 +215,13 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
         initXmlReader();
 
-        delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
-
-        final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(job.tempDir, KEYDEF_LIST_FILE));
-        keys = new HashMap<String, KeyDef>();
-        for (final KeyDef k: keydefs) {
-            keys.put(k.keys, k);
-        }
+//        delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
+//
+//        final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(job.tempDir, KEYDEF_LIST_FILE));
+//        keys = new HashMap<String, KeyDef>();
+//        for (final KeyDef k: keydefs) {
+//            keys.put(k.keys, k);
+//        }
 
         initFilters();
     }
@@ -280,50 +280,52 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      */
     private List<XMLFilter> getProcessingPipe(final File fileToParse, final File inFile) {
         final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
+
         if (genDebugInfo) {
             final DebugFilter debugFilter = new DebugFilter();
             debugFilter.setLogger(logger);
             debugFilter.setInputFile(fileToParse);
             pipe.add(debugFilter);
         }
+
         if (filterUtils != null) {
             final ProfilingFilter profilingFilter = new ProfilingFilter();
             profilingFilter.setLogger(logger);
             profilingFilter.setFilterUtils(filterUtils);
             pipe.add(profilingFilter);
         }
-        {
-            final ValidationFilter validationFilter = new ValidationFilter();
-            validationFilter.setLogger(logger);
-            validationFilter.setValidateMap(validateMap);
-            validationFilter.setCurrentFile(toURI(inFile));
-            validationFilter.setJob(job);
-            pipe.add(validationFilter);
-        }
-        {
-            final NormalizeFilter normalizeFilter = new NormalizeFilter();
-            normalizeFilter.setLogger(logger);
-            pipe.add(normalizeFilter);
-        }
-        {
-            final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
-            conkeyrefFilter.setLogger(logger);
-            conkeyrefFilter.setKeyDefinitions(keys.values());
-            conkeyrefFilter.setTempDir(job.tempDir);
-            conkeyrefFilter.setCurrentFile(inFile);
-            conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
-            pipe.add(conkeyrefFilter);
-        }
+
+        final ValidationFilter validationFilter = new ValidationFilter();
+        validationFilter.setLogger(logger);
+        validationFilter.setValidateMap(validateMap);
+        validationFilter.setCurrentFile(toURI(inFile));
+        validationFilter.setJob(job);
+        pipe.add(validationFilter);
+
+
+        final NormalizeFilter normalizeFilter = new NormalizeFilter();
+        normalizeFilter.setLogger(logger);
+        pipe.add(normalizeFilter);
+
+//        final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
+//        conkeyrefFilter.setLogger(logger);
+//        conkeyrefFilter.setJob(job);
+//        conkeyrefFilter.setKeyDefinitions(keys.values());
+//        conkeyrefFilter.setTempDir(job.tempDir);
+//        conkeyrefFilter.setCurrentFile(inFile);
+//        conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
+//        pipe.add(conkeyrefFilter);
+
         if (forceUnique) {
             forceUniqueFilter.setCurrentFile(currentFile);
             pipe.add(forceUniqueFilter);
         }
-        {
-            ditaWriterFilter.setDefaultValueMap(defaultValueMap);
-            ditaWriterFilter.setCurrentFile(currentFile);
-            ditaWriterFilter.setOutputFile(outputFile);
-            pipe.add(ditaWriterFilter);
-        }
+
+        ditaWriterFilter.setDefaultValueMap(defaultValueMap);
+        ditaWriterFilter.setCurrentFile(currentFile);
+        ditaWriterFilter.setOutputFile(outputFile);
+        pipe.add(ditaWriterFilter);
+
         return pipe;
     }
 

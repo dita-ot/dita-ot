@@ -29,7 +29,6 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public final class ConkeyrefFilter extends AbstractXMLFilter {
 
-    private File tempDir;
     private File inputFile;
     private Map<String, KeyDef> keys;
     /** Delayed conref utils, may be {@code null} */
@@ -40,10 +39,6 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
         for (final KeyDef k : keydefs) {
             keys.put(k.keys, k);
         }
-    }
-
-    public void setTempDir(final File tempDir) {
-        this.tempDir = tempDir;
     }
 
     public void setCurrentFile(final File inputFile) {
@@ -68,7 +63,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
             if (keyDef != null) {
                 final String id = keyIndex != -1 ? conkeyref.substring(keyIndex + 1) : null;
                 if (delayConrefUtils != null) {
-                    final List<Boolean> list = delayConrefUtils.checkExport(stripFragment(keyDef.href).toString(), id, key, tempDir);
+                    final List<Boolean> list = delayConrefUtils.checkExport(stripFragment(keyDef.href).toString(), id, key, job.tempDir);
                     final boolean idExported = list.get(0);
                     final boolean keyrefExported = list.get(1);
                     //both id and key are exported and transtype is eclipsehelp
@@ -102,8 +97,8 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
      * @return updated href URI
      */
     private URI getRelativePath(final URI href) {
-        final URI filePath = new File(tempDir, inputFile.getPath()).toURI();
-        final URI keyValue = tempDir.toURI().resolve(stripFragment(href));
+        final URI filePath = new File(job.tempDir, inputFile.getPath()).toURI();
+        final URI keyValue = job.tempDir.toURI().resolve(stripFragment(href));
         return URLUtils.getRelativePath(filePath, keyValue);
     }
 
