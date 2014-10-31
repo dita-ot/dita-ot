@@ -935,27 +935,36 @@
 <!-- SF Patch 2185423: condensed code so that dt processing is not repeated for keyref or when $dtcount!=1
      Code could be reduced further by compressing the flagging templates. -->
 <xsl:template match="*[contains(@class, ' topic/dt ')]" mode="output-dt">
-  <!-- insert a blank line before only the first DT in a DLENTRY; count which DT this is -->
-  <xsl:variable name="dtcount"><xsl:number count="*[contains(@class, ' topic/dt ')]"/></xsl:variable>
+  <xsl:variable name="is-first-dt" select="empty(preceding-sibling::*[contains(@class, ' topic/dt ')])"/>
   <xsl:variable name="dt-class">
     <xsl:choose>
       <!-- handle non-compact list items -->
-      <xsl:when test="$dtcount = 1 and ../../@compact = 'no'">dltermexpand</xsl:when>
+      <xsl:when test="$is-first-dt and ../../@compact = 'no'">dltermexpand</xsl:when>
       <xsl:otherwise>dlterm</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <dt class="{$dt-class}">
+  <dt>
     <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
     <xsl:apply-templates select="../@xml:lang"/> 
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="$dt-class"/>
     </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
     <!-- handle ID on a DLENTRY -->
-    <xsl:if test="$dtcount = 1 and parent::*/@id">
-      <xsl:call-template name="parent-id"/>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="$is-first-dt and exists(../@id) and exists(@id)">
+        <xsl:call-template name="setidaname"/>
+        <a id="{dita-ot:get-prefixed-id(.., ../@id)}"/> 
+      </xsl:when>
+      <xsl:when test="$is-first-dt and exists(../@id) and empty(@id)">
+        <xsl:for-each select="..">
+          <xsl:call-template name="setidaname"/>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="setidaname"/>        
+      </xsl:otherwise>
+    </xsl:choose>
     <!-- Use flags from parent dlentry, if present -->
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:apply-templates/>
@@ -1000,11 +1009,9 @@
 
 <!-- DL description -->
 <xsl:template match="*[contains(@class, ' topic/dd ')]" name="topic.dd">
-  <!-- insert a blank line before all but the first DD in a DLENTRY; count which DD this is -->
-  <!-- SF Patch 2185423: condensed code so that dd processing is not repeated when $ddcount!=1 -->
-  <xsl:variable name="ddcount"><xsl:number count="*[contains(@class, ' topic/dd ')]"/></xsl:variable>
+  <xsl:variable name="is-first-dd" select="empty(preceding-sibling::*[contains(@class, ' topic/dd ')])"/>
   <dd>
-    <xsl:if test="$ddcount!=1">  <!-- para space before 2 thru N -->
+    <xsl:if test="not($is-first-dd)">  <!-- para space before 2 thru N -->
       <xsl:attribute name="class">ddexpand</xsl:attribute>
     </xsl:if>
     <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
@@ -3088,13 +3095,6 @@
 <!-- Legacy named template for generating HTML4 anchors -->
 <xsl:template name="setanametag">
   <xsl:param name="idvalue"/>
-</xsl:template>
-
-<xsl:template name="parent-id"><!-- if the parent's element has an ID, copy it through as an anchor -->
-  <a>
-    <xsl:attribute name="name" select="dita-ot:generate-html-id(parent::*)"/>
-    <xsl:value-of select="$afill"/><xsl:comment><xsl:text> </xsl:text></xsl:comment> <!-- fix for home page reader -->
-  </a>
 </xsl:template>
 
 <!-- Create & insert an ID for the generated table of contents -->
