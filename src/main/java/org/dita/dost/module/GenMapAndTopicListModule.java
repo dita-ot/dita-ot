@@ -32,7 +32,6 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -154,13 +153,13 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     /** Absolute ditadir for processing */
     private File ditaDir;
-    /** Input file name. */
+    /** Relative input file path */
     private File inputFile;
     /** Profiling is enabled. */
     private boolean profilingEnabled;
     /** Absolute path for filter file. */
     private File ditavalFile;
-    /** Number of directory levels base direcory is adjusted. */
+    /** Number of directory levels base directory is adjusted. */
     private int uplevels = 0;
     /** Prefix path. Either an empty string or a path which ends in {@link java.io.File#separator File.separator}. */
     private String prefix = "";
@@ -246,9 +245,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             
             addToWaitList(inputFile);
             processWaitList();
-            // Depreciated function
-            // The base directory does not change according to the referenceing
-            // topic files in the new resolution
+
             updateBaseDirectory();
             refactoringResult();
             outputResult();
@@ -270,8 +267,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
 //        listFilter.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
-        listFilter.setInputFile(rootFile.getAbsoluteFile());
-        listFilter.setInputDir(rootFile.getAbsoluteFile().getParentFile());//baseInputDir
+        listFilter.setInputFile(rootFile);
+        listFilter.setInputDir(rootFile.getParentFile());//baseInputDir
+        listFilter.setPrimaryDitamap(inputFile.getPath());
         listFilter.setJob(job);
         
         if (profilingEnabled) {
@@ -279,11 +277,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
 
         exportAnchorsFilter = new ExportAnchorsFilter();
-        exportAnchorsFilter.setInputFile(rootFile.getAbsoluteFile().toURI());
+        exportAnchorsFilter.setInputFile(rootFile.toURI());
         
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
-        keydefFilter.setInputFile(rootFile.getAbsoluteFile().toURI());
+        keydefFilter.setInputFile(rootFile.toURI());
         keydefFilter.setJob(job);
         
         nullHandler = new DefaultHandler();
@@ -408,7 +406,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     }
 
     private void processWaitList() throws DITAOTException {
-        listFilter.setPrimaryDitamap(inputFile.getPath());
         while (!waitList.isEmpty()) {
         	currentFile = waitList.remove(0); 
             processFile(currentFile);
@@ -461,7 +458,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         File file;
         if (currentFile.isAbsolute()) {
             fileToParse = currentFile;
-            file = new File(FileUtils.getRelativeUnixPath(rootFile.getAbsolutePath(), currentFile.getPath()));
+            file = new File(FileUtils.getRelativeUnixPath(rootFile, currentFile.getPath()));
         } else {
             fileToParse = new File(baseInputDir, currentFile.getPath());
             file = currentFile;
@@ -552,18 +549,10 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         // Update uplevels for copy-to targets, and store copy-to map.
         // Note: same key(target) copy-to will be ignored.
-        for (final File key: cpMap.keySet()) {
-            final File value = cpMap.get(key);
-
+        for (final Map.Entry<File, File> e: cpMap.entrySet()) {
+            final File key = e.getKey();
+            final File value = e.getValue();
             if (copytoMap.containsKey(key)) {
-                /*
-                 * StringBuilder buff = new StringBuilder();
-                 * buff.append("Copy-to task [href=\""); buff.append(value);
-                 * buff.append("\" copy-to=\""); buff.append(key);
-                 * buff.append("\"] which points to another copy-to target");
-                 * buff.append(" was ignored.");
-                 * logger.logWarn(buff.toString());
-                 */
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", value.getPath(), key.getPath()).toString());
                 ignoredCopytoSourceSet.add(value);
             } else {
@@ -574,38 +563,20 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         schemeSet.addAll(listFilter.getSchemeRefSet());
 
         // collect key definitions
-        for (final String key: kdMap.keySet()) {
+        for (final Map.Entry<String, KeyDef> e: kdMap.entrySet()) {
             // key and value.keys will differ when keydef is a redirect to another keydef
-            final KeyDef value = kdMap.get(key);
+            final String key = e.getKey();
+            final KeyDef value = e.getValue();
             if (keysDefMap.containsKey(key)) {
-                // if there already exists duplicated key definition in
-                // different map files.
-                // Should only emit this if in a debug mode; comment out for now
-                /*
-                 * Properties prop = new Properties(); prop.put("%1", key);
-                 * prop.put("%2", value); prop.put("%3", currentFile); logger
-                 * .logInfo(MessageUtils.getInstance().getMessage("DOTJ048I",
-                 * prop).toString());
-                 */
+                // ignore
             } else {
-                updateUplevels(new File(key));
-                // add the ditamap where it is defined.
-                /*
-                 * try { keydef.write("<keydef ");
-                 * keydef.write("keys=\""+key+"\" ");
-                 * keydef.write("href=\""+value+"\" ");
-                 * keydef.write("source=\""+currentFile+"\"/>");
-                 * keydef.write("\n"); keydef.flush(); } catch (IOException e) {
-                 * 
-                 * logger.logError(e.getMessage(), e) ; }
-                 */
+//                updateUplevels(new File(key));
                 keysDefMap.put(key, new KeyDef(key, value.href, value.scope, toURI(currentFile)));
             }
             // if the current file is also a schema file
             if (schemeSet.contains(currentFile)) {
             	schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, toURI(currentFile)));
             }
-
         }
 
         hrefTargetSet.addAll(listFilter.getHrefTargets());
@@ -769,9 +740,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /**
      * Get up-levels relative path.
      * 
-     * @return path to up-level, e.g. {@code ../../}
+     * @return path to up-level, e.g. {@code ../../}, may be empty string
      */
-    private String getUpdateLevels() {
+    private String getLevelsPath() {
+        if (uplevels == 0) {
+            return "";
+        }
         final StringBuilder buff = new StringBuilder();
         for (int current = uplevels; current > 0; current--) {
             buff.append("..").append(File.separator);
@@ -785,7 +759,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @param value input
      * @return input with regular expression special characters escaped
      */
-    private String escapeRegExp(final String value) {
+    private static String escapeRegExp(final String value) {
         final StringBuilder buff = new StringBuilder();
         if (value == null || value.length() == 0) {
             return "";
@@ -973,7 +947,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         // add out.dita.files,tempdirToinputmapdir.relative.value to solve the
         // output problem
         job.setProperty("tempdirToinputmapdir.relative.value", escapeRegExp(prefix));
-        job.setProperty("uplevels", getUpdateLevels());
+        job.setProperty("uplevels", getLevelsPath());
         for (final URI file: addFilePrefix(outDitaFilesSet)) {
             job.getOrCreateFileInfo(file).isOutDita = true;
         }
@@ -1064,6 +1038,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException(e);
         }
 
+        writeExportAnchors();
+
+        KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), schemekeydefMap.values());
+    }
+
+    private void writeExportAnchors() throws DITAOTException {
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // Output plugin id
             final File pluginIdFile = new File(job.tempDir, FILE_NAME_PLUGIN_XML);
@@ -1119,8 +1099,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             	}
             }
         }
-
-        KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), schemekeydefMap.values());
     }
 
     private List<String> sort(final Set<String> set) {
