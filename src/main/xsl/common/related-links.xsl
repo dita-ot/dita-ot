@@ -4,6 +4,59 @@
     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
     exclude-result-prefixes="related-links xs">
 
+  <xsl:key name="link"
+           match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]"
+           use="related-links:link(.)"/>
+  <xsl:key name="hideduplicates"
+           match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]
+                   [empty(@role) or @role = ('cousin', 'external', 'friend', 'other', 'sample', 'sibling')]"
+           use="related-links:hideduplicates(.)"/>
+
+  <xsl:function name="related-links:omit-from-unordered-links" as="xs:boolean">
+    <xsl:param name="node" as="element()"/>
+    <xsl:sequence select="$node/@role = ('child', 'descendant', 'next', 'previous', 'parent') or
+                          $node[@importance = 'required' and (empty(@role) or @role = ('sibling', 'friend', 'cousin'))] or
+                          $node/ancestor::*[contains(@class, ' topic/linklist ')]"/>
+  </xsl:function>
+  
+  <xsl:function name="related-links:hideduplicates" as="xs:string">
+    <xsl:param name="link" as="element()"/>
+    <xsl:value-of select="concat($link/ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id,
+                                 ' ',
+                                 $link/@href,
+                                 $link/@scope,
+                                 $link/@audience,
+                                 $link/@platform,
+                                 $link/@product,
+                                 $link/@otherprops,
+                                 $link/@rev,
+                                 $link/@type,
+                                 normalize-space(string-join($link/*, ' ')))"/>
+  </xsl:function>
+  
+  <xsl:function name="related-links:link" as="xs:string">
+    <xsl:param name="link" as="element()"/>
+    <xsl:value-of select="concat($link/ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id,
+                                 ' ',
+                                 $link/@href,
+                                 $link/@type,
+                                 $link/@role,
+                                 $link/@platform,
+                                 $link/@audience,
+                                 $link/@importance,
+                                 $link/@outputclass,
+                                 $link/@keyref,
+                                 $link/@scope,
+                                 $link/@format,
+                                 $link/@otherrole,
+                                 $link/@product,
+                                 $link/@otherprops,
+                                 $link/@rev,
+                                 $link/@class,
+                                 $link/../@collection-type,
+                                 normalize-space(string-join($link/*, ' ')))"/>
+  </xsl:function>
+
     <!-- Ungrouped links have a priority of zero.  (Can be overridden.) -->
     <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:get-group-priority"
         name="related-links:group-priority." as="xs:integer">
@@ -16,18 +69,25 @@
     </xsl:template>
 
     <!-- Without a group, links are emitted as-is.  (Can be overridden.) -->
-    <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result.">
+    <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group"
+                  name="related-links:group-result." as="element(linklist)">
         <xsl:param name="links" as="node()*"/>
-        <xsl:copy-of select="$links"/>
+        <xsl:if test="normalize-space(string-join($links, ''))">
+          <linklist class="- topic/linklist " outputclass="relinfo relref">
+            <xsl:sequence select="$links"/>
+          </linklist>
+        </xsl:if>
     </xsl:template>
 
     <!-- Ungrouped links have the default-mode template applied to them. (Can be overridden.) -->
-    <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:link" name="related-links:link.">
-        <xsl:apply-templates select="."/>
+    <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:link" name="related-links:link."
+                  as="element(link)">
+      <xsl:sequence select="."/>
     </xsl:template>
 
     <!-- Main entry point. -->
-    <xsl:template match="*[contains(@class, ' topic/related-links ')]" mode="related-links:group-unordered-links">
+    <xsl:template match="*[contains(@class, ' topic/related-links ')]" mode="related-links:group-unordered-links"
+                  as="element(linklist)*">
         <!-- Node set.  The set of nodes to group. -->
         <xsl:param name="nodes" as="element()*"/>
         <!-- Sent back to all callback templates as a parameter.-->
@@ -35,7 +95,7 @@
         <xsl:param name="tunnel"/>
 
         <!-- Query all links for their group and priority. -->
-        <xsl:variable name="group-priorities">
+        <xsl:variable name="group-priorities" as="xs:string">
             <xsl:call-template name="related-links:get-priorities">
                 <xsl:with-param name="nodes" select="$nodes"/>
                 <xsl:with-param name="tunnel" select="$tunnel"/>
@@ -62,7 +122,7 @@
     <!-- Produces a string like "2 task task ;3 concept concept ;1 reference reference ;0  topic ;",
          where the numbers are priorities of each group, and the space-delimited words
          are the groups and link types (link/@type) which belong to that group. -->
-    <xsl:template name="related-links:get-priorities">
+    <xsl:template name="related-links:get-priorities" as="xs:string">
         <xsl:param name="nodes" as="element()*"/>
         <xsl:param name="tunnel"/>
         <xsl:param name="partial-result" select="''" as="xs:string"/>
@@ -71,7 +131,7 @@
             <xsl:when test="exists($nodes)">
                 <!-- Process each node one at a time. -->
                 <xsl:variable name="node" select="$nodes[1]" as="element()"/>
-                <xsl:variable name="node-group">
+                <xsl:variable name="node-group" as="xs:string">
                     <xsl:apply-templates select="$node" mode="related-links:get-group">
                         <xsl:with-param name="tunnel" select="$tunnel"/>
                     </xsl:apply-templates>
@@ -222,7 +282,7 @@
     </xsl:template>
 
     <!-- Process each group in turn. -->
-    <xsl:template name="related-links:walk-groups">
+  <xsl:template name="related-links:walk-groups" as="element(linklist)*">
         <xsl:param name="nodes" as="element()*"/>
         <xsl:param name="tunnel"/>
         <!-- semicolon separate list -->
@@ -245,14 +305,14 @@
     </xsl:template>
 
     <!-- Process each group. -->
-    <xsl:template name="related-links:do-group">
+    <xsl:template name="related-links:do-group" as="element(linklist)">
         <xsl:param name="nodes" as="element()*"/>
         <xsl:param name="tunnel"/>
         <!-- space separated list -->
         <xsl:param name="group" as="xs:string"/>
 
         <!-- Process the links belonging to that group.  -->
-        <xsl:variable name="group-nodes" select="$nodes[contains(concat(' ', $group), concat(' ', @type, ' '))]"/>
+        <xsl:variable name="group-nodes" select="$nodes[contains(concat(' ', $group), concat(' ', @type, ' '))]" as="element()*"/>
         <!-- Let the group wrap all its links in additional elements. -->
         <xsl:apply-templates select="$group-nodes[1]" mode="related-links:result-group">
             <xsl:with-param name="links" as="node()*">
@@ -277,7 +337,6 @@
             </xsl:with-param>
             <xsl:with-param name="tunnel" select="$tunnel"/>
         </xsl:apply-templates>
-
     </xsl:template>
 
 </xsl:stylesheet>

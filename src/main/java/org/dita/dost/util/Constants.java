@@ -749,6 +749,8 @@ public final class Constants {
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";
     /**Constants for common params used in ant invoker(maplinks).*/
     public static final String ANT_INVOKER_PARAM_MAPLINKS = "maplinks";
+    /** Argument name for enabling profiling. */
+    public static final String ANT_INVOKER_PARAM_PROFILING_ENABLED = "profiling.enable";
 
     /**Constants for extensive params used in ant invoker(targetext).*/
     public static final String ANT_INVOKER_EXT_PARAM_TARGETEXT = "targetext";
@@ -783,6 +785,7 @@ public final class Constants {
     /**Constants for extensive params used in ant invoker(gramcache).*/
     public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE="gramcache";
     public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID="setsystemid";
+    public static final String ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE = "force-unique";
     /**Constants for line separator.*/
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
@@ -931,7 +934,12 @@ public final class Constants {
 
     /** Project reference name for job configuration object. */
     public static final String ANT_REFERENCE_JOB = "job";
-    
+
+    public static final String PI_PATH2PROJ_TARGET = "path2project";
+    public static final String PI_PATH2PROJ_TARGET_URI = "path2project-uri";
+    public static final String PI_WORKDIR_TARGET = "workdir";
+    public static final String PI_WORKDIR_TARGET_URI = "workdir-uri";
+
     /**
      * Instances should NOT be constructed in standard programming.
      */

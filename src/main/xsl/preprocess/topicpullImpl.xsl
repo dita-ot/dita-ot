@@ -2013,11 +2013,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:call-template>
   </xsl:template>
   
-  <!-- re-specialize the unknown and foreign elements -->
-  <xsl:template match="*[contains(@class,' topic/object ')][@data and not(@data='')][@type='DITA-foreign']" priority="10">
-    <xsl:apply-templates select="document(@data,/)/*/*" mode="specialize-foreign-unknown"/> 
-  </xsl:template>
-  
   <xsl:template match="*|@*|text()|comment()|processing-instruction()" mode="specialize-foreign-unknown">
     <xsl:copy>
       <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()" mode="specialize-foreign-unknown"/>

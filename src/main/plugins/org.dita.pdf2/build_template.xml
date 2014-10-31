@@ -66,7 +66,7 @@ with those set forth herein.
       <istrue value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
     
-    <condition property="args.rellinks" value="none">
+    <condition property="args.rellinks" value="nofamily">
       <not><isset property="args.rellinks"/></not>
     </condition>
   </target>

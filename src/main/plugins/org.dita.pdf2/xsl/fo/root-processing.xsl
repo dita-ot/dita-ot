@@ -43,7 +43,7 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func dita-ot xs ot-placeholder"
     version="2.0">
     
-    <xsl:param name="bookmap-order" select="'discard'"/>
+    <xsl:param name="bookmap-order" select="'discard'" as="xs:string"/>
   
     <xsl:variable name="retain-bookmap-order" select="*[contains(@class,' bookmap/bookmap ')] and $bookmap-order eq 'retain'"/>
     <xsl:variable name="writing-mode">

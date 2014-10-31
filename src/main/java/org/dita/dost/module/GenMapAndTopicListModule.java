@@ -46,11 +46,8 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.reader.DitaValReader;
-import org.dita.dost.reader.GenListModuleReader;
+import org.dita.dost.reader.*;
 import org.dita.dost.reader.GenListModuleReader.Reference;
-import org.dita.dost.reader.GrammarPoolManager;
-import org.dita.dost.reader.KeydefFilter;
 import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.ExportAnchorsFilter;
@@ -159,6 +156,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private File ditaDir;
     /** Input file name. */
     private File inputFile;
+    /** Profiling is enabled. */
+    private boolean profilingEnabled;
     /** Absolute path for filter file. */
     private File ditavalFile;
     /** Number of directory levels base direcory is adjusted. */
@@ -243,7 +242,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             parseInputParameters(input);
 
             initFilters();
-            initXMLReader(ditaDir, xmlValidate, rootFile);
+            initXMLReader(ditaDir, xmlValidate);
             
             addToWaitList(inputFile);
             processWaitList();
@@ -266,18 +265,19 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     
     /**
      * Initialize reusable filters.
-     * @throws IOException 
-     * @throws SAXException 
      */
     private void initFilters() {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
 //        listFilter.initXMLReader(ditaDir, xmlValidate, rootFile, setSystemid);
-        filterUtils = parseFilterFile();
         listFilter.setInputFile(rootFile.getAbsoluteFile());
         listFilter.setInputDir(rootFile.getAbsoluteFile().getParentFile());//baseInputDir
         listFilter.setJob(job);
         
+        if (profilingEnabled) {
+            filterUtils = parseFilterFile();
+        }
+
         exportAnchorsFilter = new ExportAnchorsFilter();
         exportAnchorsFilter.setInputFile(rootFile.getAbsoluteFile().toURI());
         
@@ -294,11 +294,10 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * 
      * @param ditaDir absolute path to DITA-OT directory
      * @param validate whether validate input file
-     * @param rootFile absolute path to input file
      * @throws SAXException parsing exception
      * @throws IOException if getting canonical file path fails
      */
-    private void initXMLReader(final File ditaDir, final boolean validate, final File rootFile) throws SAXException {
+    private void initXMLReader(final File ditaDir, final boolean validate) throws SAXException {
         reader = XMLUtils.getXMLReader();
         // to check whether the current parsing file's href value is out of inputmap.dir
         reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
@@ -387,9 +386,15 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         } else {
             ditaDir = ditaDir.getCanonicalFile();
         }
-        if (ditavalFile != null && !ditavalFile.isAbsolute()) {
-            // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
-            ditavalFile = new File(basedir, ditavalFile.getPath()).getAbsoluteFile();
+        profilingEnabled = true;
+        if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {
+            profilingEnabled = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED));
+        }
+        if (profilingEnabled) {
+            if (ditavalFile != null && !ditavalFile.isAbsolute()) {
+                // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
+                ditavalFile = new File(basedir, ditavalFile.getPath()).getAbsoluteFile();
+            }
         }
 
         rootFile = inFile.getCanonicalFile();
@@ -839,8 +844,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @return configured filter utility
      */
     private FilterUtils parseFilterFile() {
-        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype));
-        filterUtils.setLogger(logger);
+        Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
@@ -848,13 +852,15 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
             ditaValReader.read(ditavalFile.getAbsoluteFile());
             // Store filter map for later use
-            filterUtils.setFilterMap(ditaValReader.getFilterMap());
+            filterMap = ditaValReader.getFilterMap();
             // Store flagging image used for image copying
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
         } else {
-            filterUtils.setFilterMap(Collections.EMPTY_MAP);
+            filterMap = Collections.EMPTY_MAP;
         }
+        final FilterUtils filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
+        filterUtils.setLogger(logger);
         return filterUtils;
     }
 
@@ -1048,11 +1054,15 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         } catch (final IOException e) {
             throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
         }
-        
-        // Output relation-graph
-        writeMapToXML(listFilter.getRelationshipGrap(), new File(FILE_NAME_SUBJECT_RELATION));
-        // Output topic-scheme dictionary
-        writeMapToXML(schemeDictionary, new File(FILE_NAME_SUBJECT_DICTIONARY));
+
+        try {
+            // Output relation-graph
+            SubjectSchemeReader.writeMapToXML(listFilter.getRelationshipGrap(), new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            // Output topic-scheme dictionary
+            SubjectSchemeReader.writeMapToXML(schemeDictionary, new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+        } catch (final IOException e) {
+            throw new DITAOTException(e);
+        }
 
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // Output plugin id
@@ -1069,17 +1079,17 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             	for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
             		export.writeStartElement("file");
             		export.writeAttribute("name", e.file.toString());
-            		for (final String t: e.topicids) {
+            		for (final String t: sort(e.topicids)) {
             			export.writeStartElement("topicid");
                 		export.writeAttribute("name", t);
                 		export.writeEndElement();
             		}
-            		for (final String i: e.ids) {
+            		for (final String i: sort(e.ids)) {
             			export.writeStartElement("id");
                 		export.writeAttribute("name", i);
                 		export.writeEndElement();
             		}
-            		for (final String k: e.keys) {
+            		for (final String k: sort(e.keys)) {
             			export.writeStartElement("keyref");
                 		export.writeAttribute("name", k);
                 		export.writeEndElement();
@@ -1112,43 +1122,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), schemekeydefMap.values());
     }
-    
-    /**
-     * Write map of sets to a file.
-     * 
-     * <p>The serialization format is XML properties format where values are comma
-     * separated lists.</p>
-     * 
-     * @param m map to serialize
-     * @param filename output filename, relative to temporary directory
-     */
-    private void writeMapToXML(final Map<File, Set<File>> m, final File filename) {
-        if (m == null) {
-            return;
-        }
-        final Properties prop = new Properties();
-        for (final Map.Entry<File, Set<File>> entry: m.entrySet()) {
-            final File key = entry.getKey();
-            final String value = StringUtils.join(entry.getValue(), COMMA);
-            prop.setProperty(key.getPath(), value);
-        }
-        final File outputFile = new File(job.tempDir, filename.getPath());
-        OutputStream os = null;
-        try {
-            os = new FileOutputStream(outputFile);
-            prop.storeToXML(os, null);
-            os.close();
-        } catch (final IOException e) {
-            logger.error(e.getMessage(), e) ;
-        } finally {
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (final Exception e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-            }
-        }
+
+    private List<String> sort(final Set<String> set) {
+        final List<String> sorted = new ArrayList<String>(set);
+        Collections.sort(sorted);
+        return sorted;
     }
 
     /**

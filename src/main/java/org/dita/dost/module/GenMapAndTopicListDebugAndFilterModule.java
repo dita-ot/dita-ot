@@ -9,7 +9,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.writer.GenListModuleFilter.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -58,7 +57,6 @@ import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.writer.DebugFilter;
-import org.dita.dost.writer.DitaWriter;
 import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.ExportAnchorsFilter.ExportAnchor;
 import org.dita.dost.writer.GenListModuleFilter;
@@ -139,7 +137,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private final boolean genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
     //private boolean setSystemid = true;
-    private FilterUtils filterUtils = new FilterUtils();
+    private FilterUtils filterUtils;
     /** XMLReader instance for parsing dita file */
     private XMLReader reader;
 
@@ -267,21 +265,22 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      * Initialize reusable filters.
      */
     private void initFilters() {
-        filterUtils = new FilterUtils(printTranstype.contains(transtype));
-        filterUtils.setLogger(logger);
+        Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
         if (ditavalFile != null) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
             ditaValReader.initXMLReader(true/*setSystemid*/);
             ditaValReader.read(ditavalFile.getAbsoluteFile());
             // Store filter map for later use
-            filterUtils.setFilterMap(ditaValReader.getFilterMap());
+            filterMap = ditaValReader.getFilterMap();
             // Store flagging image used for image copying
             flagImageSet.addAll(ditaValReader.getImageList());
             relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
         } else {
-            filterUtils.setFilterMap(Collections.EMPTY_MAP);
+            filterMap = Collections.EMPTY_MAP;
         }
+        filterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
+        filterUtils.setLogger(logger);
         
         listFilter = new GenListModuleFilter();
         listFilter.setLogger(logger);
@@ -970,17 +969,17 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
                 for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
                     export.writeStartElement("file");
                     export.writeAttribute("name", e.file.toString());
-                    for (final String t: e.topicids) {
+                    for (final String t: sort(e.topicids)) {
                         export.writeStartElement("topicid");
                         export.writeAttribute("name", t);
                         export.writeEndElement();
                     }
-                    for (final String i: e.ids) {
+                    for (final String i: sort(e.ids)) {
                         export.writeStartElement("id");
                         export.writeAttribute("name", i);
                         export.writeEndElement();
                     }
-                    for (final String k: e.keys) {
+                    for (final String k: sort(e.keys)) {
                         export.writeStartElement("keyref");
                         export.writeAttribute("name", k);
                         export.writeEndElement();
@@ -1010,6 +1009,12 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
                 }
             }
         }
+    }
+
+    private List<String> sort(final Set<String> set) {
+        final List<String> sorted = new ArrayList<String>(set);
+        Collections.sort(sorted);
+        return sorted;
     }
 
     /**
@@ -1452,7 +1457,7 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
             if (targetFile.exists()) {
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
             }else{
-                final String inputMapInTemp = new File(job.tempDir, job.getInputMap()).getAbsolutePath();
+                final String inputMapInTemp = new File(job.tempDir, job.getInputMap().getPath()).getAbsolutePath();
                 logger.info("copy-to: " + copytoSource + " -> " + copytoTarget);
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
             }
@@ -1488,10 +1493,10 @@ public final class GenMapAndTopicListDebugAndFilterModule extends AbstractPipeli
      * XML filter to rewrite processing instructions to reflect copy-to location. The following processing-instructions are 
      * 
      * <ul>
-     * <!--li>{@link DitaWriter#PI_WORKDIR_TARGET PI_WORKDIR_TARGET}</li-->
-     * <li>{@link DitaWriter#PI_WORKDIR_TARGET_URI PI_WORKDIR_TARGET_URI}</li>
-     * <li>{@link DitaWriter#PI_PATH2PROJ_TARGET PI_PATH2PROJ_TARGET}</li>
-     * <li>{@link DitaWriter#PI_PATH2PROJ_TARGET_URI PI_PATH2PROJ_TARGET_URI}</li>
+     * <!--li>{@link Constants#PI_WORKDIR_TARGET PI_WORKDIR_TARGET}</li-->
+     * <li>{@link Constants#PI_WORKDIR_TARGET_URI PI_WORKDIR_TARGET_URI}</li>
+     * <li>{@linkConstants#PI_PATH2PROJ_TARGET PI_PATH2PROJ_TARGET}</li>
+     * <li>{@link Constants#PI_PATH2PROJ_TARGET_URI PI_PATH2PROJ_TARGET_URI}</li>
      * </ul>
      */
     private static final class CopyToFilter extends XMLFilterImpl {

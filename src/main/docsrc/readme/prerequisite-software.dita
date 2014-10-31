@@ -12,7 +12,7 @@
           <dlentry>
             <dt>JRE or JDK, version <keyword keyref="tool.java.version"/> or later</dt>
             <dd>Provides the basic environment for the DITA-OT. You can download the Oracle JRE or
-              JDK from <xref keyref="download.oracle-jdk"/>. If you opt to use the full-easy-install
+              JDK from <xref keyref="download.oracle-jdk"/>. If you opt to use the <!--full-easy-install--> client
               package, this is the <i>only</i> prerequisite software that you need to install.</dd>
           </dlentry>
           <dlentry id="antbuild">

@@ -15,7 +15,6 @@ import static org.dita.dost.util.StringUtils.join;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getElementNode;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getText;
-import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.util.FileUtils.*;
 import static java.util.Arrays.*;
 
@@ -51,6 +50,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
     public static final String FILE_EXTENSION_CHUNK = ".chunk";
     public static final String ATTR_XTRF_VALUE_GENERATED = "generated_by_chunk";
 
+    public static final String CHUNK_SELECT_BRANCH = "select-branch";
+    public static final String CHUNK_SELECT_TOPIC = "select-topic";
+    public static final String CHUNK_SELECT_DOCUMENT = "select-document";
     public static final String CHUNK_BY_DOCUMENT = "by-document";
     public static final String CHUNK_BY_TOPIC = "by-topic";
     public static final String CHUNK_TO_CONTENT = "to-content";

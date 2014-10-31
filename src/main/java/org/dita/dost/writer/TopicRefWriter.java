@@ -9,7 +9,6 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.writer.DitaWriter.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 

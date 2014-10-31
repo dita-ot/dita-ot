@@ -20,17 +20,17 @@
     
     <!-- Wrapper for concept group: "Related concepts" in a <div>. -->
     <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group"
-                  name="related-links:result.concept">
+                  name="related-links:result.concept" as="element(linklist)">
         <xsl:param name="links" as="node()*"/>
         <xsl:if test="normalize-space(string-join($links, ''))">
-          <div class="relinfo relconcepts">
-              <strong>
+          <linklist class="- topic/linklist " outputclass="relinfo relconcepts">
+            <title class="- topic/title ">
                   <xsl:call-template name="getString">
                       <xsl:with-param name="stringName" select="'Related concepts'"/>
                   </xsl:call-template>
-              </strong><br/><xsl:value-of select="$newline"/>
+              </title>
               <xsl:copy-of select="$links"/>
-          </div><xsl:value-of select="$newline"/>
+          </linklist>
         </xsl:if>
     </xsl:template>
     

@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
 
 import java.io.File;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.dita.dost.util.DelayConrefUtils;
 import org.w3c.dom.Element;
 import org.xml.sax.XMLFilter;
 import org.dita.dost.exception.DITAOTException;
@@ -34,11 +36,16 @@ import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ConkeyrefFilter;
 import org.dita.dost.writer.KeyrefPaser;
+
 /**
  * Keyref Module.
  *
  */
 final class KeyrefModule extends AbstractPipelineModuleImpl {
+
+    /** Delayed conref utils. */
+    private DelayConrefUtils delayConrefUtils;
+    private String transtype;
 
     /**
      * Entry point of KeyrefModule.
@@ -88,6 +95,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 reader.read(job.tempDir.toURI().resolve(mapFile));
             }
             final Map<String, Element> keyDefinition = reader.getKeyDefinition();
+            transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+            delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
             
             final Set<URI> normalProcessingRole = new HashSet<URI>();
             for (final FileInfo f: fis) {
@@ -100,15 +109,14 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 conkeyrefFilter.setLogger(logger);
                 conkeyrefFilter.setJob(job);
                 conkeyrefFilter.setKeyDefinitions(keydefs);
-                conkeyrefFilter.setTempDir(job.tempDir);
                 conkeyrefFilter.setCurrentFile(file);
+                conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
                 filters.add(conkeyrefFilter);
                 
                 final KeyrefPaser parser = new KeyrefPaser();
                 parser.setLogger(logger);
                 parser.setJob(job);
                 parser.setKeyDefinition(keyDefinition);
-                parser.setTempDir(job.tempDir);
                 parser.setCurrentFile(file);
                 parser.setKeyMap(keymap);
                 filters.add(parser);

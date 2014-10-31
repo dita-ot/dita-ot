@@ -76,7 +76,6 @@ public class KeyrefPaserTest {
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File("a.xml"));
-        parser.setTempDir(tempDir);
         parser.setKeyMap(keymap);
         parser.write(new File("a.xml"));
 
@@ -91,7 +90,6 @@ public class KeyrefPaserTest {
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File("b.ditamap"));
-        parser.setTempDir(tempDir);
         parser.setKeyMap(keymap);
         parser.write(new File("b.ditamap"));
 

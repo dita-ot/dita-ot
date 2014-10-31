@@ -87,4 +87,4 @@ Distribution
 License
 -------
 
-The DITA Open Toolkit is licensed for use, at the user's election, under the [Common Public License 1.0](http://www.opensource.org/licenses/cpl1.0.php) (CPL) or [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+The DITA Open Toolkit is licensed for use under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).

@@ -445,8 +445,8 @@ public final class Job {
      * 
      * @return input file path relative to input directory
      */
-    public String getInputMap() {
-        return getProperty(INPUT_DITAMAP);
+    public File getInputMap() {
+       return new File(getProperty(INPUT_DITAMAP));
     }
 
     /**
@@ -454,8 +454,8 @@ public final class Job {
      * 
      * @return absolute input directory path 
      */
-    public String getInputDir() {
-        return getProperty(INPUT_DIR);
+    public File getInputDir() {
+        return new File(getProperty(INPUT_DIR));
     }
 
     /**
@@ -673,8 +673,8 @@ public final class Job {
                 return this;
             }
             
-            public Builder uri(final URI uri) { this.uri = uri; return this; }
-            public Builder file(final File file) { this.file = file; return this; }
+            public Builder uri(final URI uri) { this.uri = uri; this.file = null; return this; }
+            public Builder file(final File file) { this.file = file; this.uri = null; return this; }
             public Builder format(final String format) { this.format = format; return this; }
             public Builder hasConref(final boolean hasConref) { this.hasConref = hasConref; return this; }
             public Builder isChunked(final boolean isChunked) { this.isChunked = isChunked; return this; }

@@ -169,14 +169,7 @@ See the accompanying license.txt file for applicable licenses.
     <topicmeta>
       <linktext>Apache License 2.0</linktext>
     </topicmeta>
-  </keydef>
-
-  <keydef keys="license-CPL" href="http://www.opensource.org/licenses/cpl1.0.php" scope="external" format="html">
-    <topicmeta>
-      <linktext>Common Public License</linktext>
-    </topicmeta>
-  </keydef>
-  
+  </keydef>  
   <keydef keys="rfc5147" href="http://tools.ietf.org/html/rfc5147" scope="external" format="html">
     <topicmeta>
       <linktext>RFC 5147</linktext>

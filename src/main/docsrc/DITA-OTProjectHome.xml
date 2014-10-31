@@ -7,13 +7,9 @@
   <body>
     <section>
       <title>What is the DITA Open Toolkit?</title>
-      <p>The DITA Open Toolkit, or DITA-OT for short, is a set of Java-based, open source tools that
-        provide processing for DITA maps and topic content. You can download the OT and install it
-        for free on your computer to get started with topic-based writing and publishing. The
-        DITA-OT is licensed under the <xref format="html"
-          href="http://www.opensource.org/licenses/cpl1.0.php" scope="external">CPL 1.0</xref> and
-          <xref format="html" href="http://www.apache.org/licenses/LICENSE-2.0" scope="external"
-          >Apache 2.0</xref> open source licenses.</p>
+      <p>The DITA Open Toolkit, or DITA-OT for short, is a set of Java-based, open source tools that provide processing for DITA maps and topic content. You can download the OT and install it for free
+        on your computer to get started with topic-based writing and publishing. The DITA-OT is licensed under the <xref format="html" href="http://www.apache.org/licenses/LICENSE-2.0"
+          scope="external">Apache 2.0</xref> open source license.</p>
       <note>While the DITA Standard itself is owned and developed by OASIS, the DITA Open Toolkit is
         an independent, open source implementation of the standard.</note>
       <p>Key output formats for the toolkit include:</p>

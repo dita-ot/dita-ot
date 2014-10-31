@@ -72,13 +72,5 @@
 <str name="OpenQuote">"</str>
 <str name="CloseQuote">"</str>
 <str name="ColonSymbol">:</str>
-    
-<!-- For odt transform -->
-<str name="On the page">ページ </str>
-<str name="Related Links">関連リンク</str>
-<str name="List item">リスト項目</str>
-<str name="Foot note">脚注</str>
-<str name="Page">ページ </str>
-<str name="Unordered List bullet">•</str>
 
 </strings>

@@ -785,17 +785,17 @@
   
   <!-- Task wrapper for HTML: "Related tasks" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group"
-                name="related-links:result.task">
+                name="related-links:result.task" as="element(linklist)">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
-      <div class="relinfo reltasks">
-        <strong>
+      <linklist class="- topic/linklist " outputclass="relinfo reltasks">
+        <title class="- topic/title ">
           <xsl:call-template name="getString">
             <xsl:with-param name="stringName" select="'Related tasks'"/>
           </xsl:call-template>
-        </strong><br/><xsl:value-of select="$newline"/>
+        </title>
         <xsl:copy-of select="$links"/>
-      </div><xsl:value-of select="$newline"/>
+      </linklist>
     </xsl:if>
   </xsl:template>
   

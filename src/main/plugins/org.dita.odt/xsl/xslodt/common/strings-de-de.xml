@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project
+     See the accompanying license.txt file for applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<strings xml:lang="de-de">
+  <str name="Related Links">Verwandte Links</str>
+  <str name="List item">Listenelement.</str>
+  <str name="Foot note">Fußnote.</str>
+  <str name="Page"> Seite </str>
+  <str name="Unordered List bullet">&#8226;</str>
+</strings>

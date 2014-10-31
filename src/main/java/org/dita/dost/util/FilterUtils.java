@@ -8,22 +8,21 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.File;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
+import org.dita.dost.reader.DitaValReader;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 
 /**
@@ -32,6 +31,9 @@ import org.xml.sax.Attributes;
  * @author Wu, Zhi Qiang
  */
 public final class FilterUtils {
+
+    /** Subject scheme file extension */
+    public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
 
     public enum Action {
         INCLUDE, EXCLUDE, PASSTHROUGH, FLAG
@@ -49,23 +51,19 @@ public final class FilterUtils {
     public static final FilterKey DEFAULT = new FilterKey(DEFAULT_ACTION, null);
 
     private DITAOTLogger logger;
-    /** Immutable default filter map. */
-    private final Map<FilterKey, Action> defaultFilterMap;
-    private Map<FilterKey, Action> filterMap = null;
+    private final Map<FilterKey, Action> filterMap;
     private final Set<FilterKey> notMappingRules = new HashSet<FilterKey>();
-    
-    @Deprecated
-    public FilterUtils() {
-        defaultFilterMap = Collections.emptyMap();
-        filterMap = defaultFilterMap;
+
+    public FilterUtils(final Map<FilterKey, Action> filterMap) {
+        this.filterMap = new HashMap<FilterKey, Action>(filterMap);
     }
-    
+
     /**
      * Construct filter utility.
      * 
      * @param isPrintType transformation output is print-oriented
      */
-    public FilterUtils(final boolean isPrintType) {
+    public FilterUtils(final boolean isPrintType, final Map<FilterKey, Action> filterMap) {
         final Map<FilterKey, Action> dfm = new HashMap<FilterKey, Action>();
         dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_YES), Action.INCLUDE);
         if (isPrintType) {
@@ -76,41 +74,17 @@ public final class FilterUtils {
             dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_NO), Action.INCLUDE);            
         }
         dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, null), Action.INCLUDE);
-        defaultFilterMap = Collections.unmodifiableMap(dfm);
-        filterMap = defaultFilterMap;
+        dfm.putAll(filterMap);
+        this.filterMap = dfm;
     }
-    
+
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
     /**
-     * Set the filter map.
-     * 
-     * @param filtermap The filterMap to set.
-     */
-    public void setFilterMap(final Map<FilterKey, Action> filtermap) {
-        if (!filtermap.isEmpty()) {
-            final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>(defaultFilterMap);
-            fm.putAll(filtermap);
-            filterMap = Collections.unmodifiableMap(fm);
-        } else {
-            filterMap = defaultFilterMap;
-        }
-    }
-
-    /**
-     * Getter for filter map.
-     * 
-     * @return filter map
-     */
-    public Map<FilterKey, Action> getFilterMap() {
-        return filterMap;
-    }
-
-    /**
      * Check if the given Attributes need to be excluded.
-     * 
+     *
      * @param atts attributes
      * @param extProps {@code props} attribute specializations
      * @return true if any one of attributes 'audience', 'platform', 'product',
@@ -138,13 +112,13 @@ public final class FilterUtils {
                 }
             }
         }
-        
+
         if (extProps != null && extProps.length != 0) {
             for (final String[] propList: extProps) {
                 int propListIndex = propList.length - 1;
                 final String propName = propList[propListIndex];
                 String propValue = atts.getValue(propName);
-    
+
                 while (propValue == null && propListIndex > 0) {
                     propListIndex--;
                     propValue = getLabelValue(propName, atts.getValue(propList[propListIndex]));
@@ -390,6 +364,117 @@ public final class FilterUtils {
                 return false;
             }
             return true;
+        }
+    }
+
+    // Subject scheme support
+
+    /**
+     * Refine filter with subject scheme.
+     *
+     * @param bindingMap subject scheme bindings
+     * @return new filter with subject scheme information
+     */
+    public FilterUtils refine(final Map<String, Map<String, Set<Element>>> bindingMap) {
+        if (bindingMap != null && !bindingMap.isEmpty()) {
+            final Map<FilterKey, Action> buf = new HashMap<FilterKey, Action>(filterMap);
+            for (final Map.Entry<FilterKey, Action> e: filterMap.entrySet()) {
+                refineAction(e.getValue(), e.getKey(), bindingMap, buf);
+            }
+            final FilterUtils filterUtils = new FilterUtils(buf);
+            filterUtils.setLogger(logger);
+            return filterUtils;
+        } else {
+            return this;
+        }
+    }
+    /**
+     * Refine action key with information from subject schemes.
+     */
+    private void refineAction(final Action action, final FilterKey key, final Map<String, Map<String, Set<Element>>> bindingMap,
+                              final Map<FilterKey, Action> destFilterMap) {
+        if (key.attribute != null && key.value != null) {
+            final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
+            if (schemeMap != null && !schemeMap.isEmpty()) {
+                for (final Set<Element> submap: schemeMap.values()) {
+                    for (final Element e: submap) {
+                        final Element subRoot = searchForKey(e, key.value);
+                        if (subRoot != null) {
+                            insertAction(subRoot, key.attribute, action, destFilterMap);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Search subject scheme elements for a given key
+     * @param root subject scheme element tree to search through
+     * @param keyValue key to locate
+     * @return element that matches the key, otherwise {@code null}
+     */
+    private Element searchForKey(final Element root, final String keyValue) {
+        if (root == null || keyValue == null) {
+            return null;
+        }
+        final LinkedList<Element> queue = new LinkedList<Element>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            final Element node = queue.removeFirst();
+            final NodeList children = node.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    queue.add((Element)children.item(i));
+                }
+            }
+            if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
+                final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
+                if (keyValue.equals(key)) {
+                    return node;
+                }
+            }
+        }
+        return null;
+    }
+    /**
+     * Insert subject scheme based action into filetermap if key not present in the map
+     *
+     * @param subTree subject scheme definition element
+     * @param attName attribute name
+     * @param action action to insert
+     */
+    private void insertAction(final Element subTree, final String attName, final Action action, final Map<FilterKey, Action> destFilterMap) {
+        if (subTree == null || action == null) {
+            return;
+        }
+
+        final LinkedList<Element> queue = new LinkedList<Element>();
+
+        // Skip the sub-tree root because it has been added already.
+        NodeList children = subTree.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                queue.offer((Element)children.item(i));
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            final Element node = queue.poll();
+            children = node.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    queue.offer((Element)children.item(i));
+                }
+            }
+            if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
+                final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
+                if (key != null && !key.trim().isEmpty()) {
+                    final FilterKey k = new FilterKey(attName, key);
+                    if (!destFilterMap.containsKey(k)) {
+                        destFilterMap.put(k, action);
+                    }
+                }
+            }
         }
     }
 
