@@ -309,6 +309,31 @@
     </xsl:when>
   </xsl:choose>
 </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' task/cmd ')]" name="topic.task.cmd">
+    <xsl:choose>
+      <xsl:when test="@keyref">
+        <xsl:apply-templates select="." mode="turning-to-link">
+          <xsl:with-param name="keys" select="@keyref"/>
+          <xsl:with-param name="type" select="'ph'"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <span>
+          <xsl:call-template name="commonattributes"/>
+          <xsl:call-template name="setidaname"/> 
+          <xsl:apply-templates/>  
+        </span>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="add-br-for-empty-cmd"/>
+  </xsl:template>
+  
+  <xsl:template name="add-br-for-empty-cmd">
+    <xsl:if test="string-length(normalize-space(.)) = 0">
+      <br/>
+    </xsl:if>
+  </xsl:template>
 
 <!-- nested steps - 1 level of nesting only -->
 <xsl:template match="*[contains(@class,' task/substeps ')]" name="topic.task.substeps">
