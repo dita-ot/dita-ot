@@ -544,7 +544,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         // Category non-copyto result and update uplevels accordingly
         for (final Reference file: listFilter.getNonCopytoResult()) {
             categorizeResultFile(file);
-            updateUplevels(new File(file.filename));
+            updateUplevels(toFile(file.filename));
         }
 
         // Update uplevels for copy-to targets, and store copy-to map.
@@ -666,23 +666,23 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @param file file system path with optional format
      */
     private void categorizeResultFile(final Reference file) {
-        final String lcasefn = file.filename.toLowerCase();
+        final String lcasefn = file.filename.toString().toLowerCase();
 
         // avoid files referred by coderef being added into wait list
         if (subsidiarySet.contains(toFile(file.filename))) {
             return;
         }
         if (file.format == null || ATTR_FORMAT_VALUE_DITA.equals(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
-            addToWaitList(new File(file.filename));
+            addToWaitList(toFile(file.filename));
         } else if (!FileUtils.isSupportedImageFile(lcasefn)) {
             // FIXME: Treating all non-image extensions as HTML/resource files is not correct if HTML/resource files
             //        are defined by the file extension. Correct behaviour would be to remove this else block.
-            htmlSet.add(new File(file.filename));
+            htmlSet.add(toFile(file.filename));
         }
         if (FileUtils.isSupportedImageFile(lcasefn)) {
-        	imageSet.add(new File(file.filename));        	      	
+        	imageSet.add(toFile(file.filename));
 			try {
-				final File image = new File (baseInputDir, file.filename).getCanonicalFile(); 
+				final File image = new File(baseInputDir, toFile(file.filename).getPath()).getCanonicalFile();
 				if (!image.exists()){
 					logger.warn(MessageUtils.getInstance().getMessage("DOTX008W", image.getAbsolutePath()).toString());
 	            }
@@ -692,7 +692,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
 
         if (FileUtils.isHTMLFile(lcasefn) || FileUtils.isResourceFile(lcasefn)) {
-            htmlSet.add(new File(file.filename));
+            htmlSet.add(toFile(file.filename));
         }
     }
 

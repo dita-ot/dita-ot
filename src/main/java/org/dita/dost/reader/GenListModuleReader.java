@@ -298,18 +298,18 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         nonCopytoSet.addAll(nonConrefCopytoTargets);
         for (final File f : conrefTargets) {
-            nonCopytoSet.add(new Reference(f.getPath()));
+            nonCopytoSet.add(new Reference(toURI(f)));
         }
         for (final File f : copytoMap.values()) {
-            nonCopytoSet.add(new Reference(f.getPath()));
+            nonCopytoSet.add(new Reference(toURI(f)));
         }
         for (final File f : ignoredCopytoSourceSet) {
-            nonCopytoSet.add(new Reference(f.getPath()));
+            nonCopytoSet.add(new Reference(toURI(f)));
         }
         for (final File filename : subsidiarySet) {
             // only activated on /generateout:3 & is out file.
             if (isOutFile(filename) && job.getGeneratecopyouter() == Job.Generate.OLDSOLUTION) {
-                nonCopytoSet.add(new Reference(filename.getPath()));
+                nonCopytoSet.add(new Reference(toURI(filename)));
             }
         }
         // nonCopytoSet.addAll(subsidiarySet);
@@ -360,7 +360,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     public Set<File> getNonConrefCopytoTargets() {
         final Set<File> res = new HashSet<File>(nonConrefCopytoTargets.size());
         for (final Reference r : nonConrefCopytoTargets) {
-            res.add(new File(r.filename));
+            res.add(toFile(r.filename));
         }
         return res;
     }
@@ -885,7 +885,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 && (atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
                     || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)))
                 && (canResolved() || isSupportedImageFile(filename.toLowerCase()))) {
-            nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
+            nonConrefCopytoTargets.add(new Reference(toURI(filename), attrFormat));
         }
 
         if (isFormatDita(attrFormat)) {
@@ -1026,15 +1026,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * File reference with path and optional format.
      */
     public static class Reference {
-        public final String filename;
+        public final URI filename;
         public final String format;
 
-        public Reference(final String filename, final String format) {
+        public Reference(final URI filename, final String format) {
             this.filename = filename;
             this.format = format;
         }
 
-        public Reference(final String filename) {
+        public Reference(final URI filename) {
             this(filename, null);
         }
 

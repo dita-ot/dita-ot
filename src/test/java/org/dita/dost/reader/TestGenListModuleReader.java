@@ -16,6 +16,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
 import java.util.Set;
 
@@ -107,9 +108,9 @@ public class TestGenListModuleReader {
         assertTrue(nonConref.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
         assertTrue(nonConref.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
 
-        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
-        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
-        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
+        assertTrue(nonCopyTo.contains(new Reference(new URI("../topics/xreffin-topic-1.xml"))));
+        assertTrue(nonCopyTo.contains(new Reference(new URI("../topics/target-topic-c.xml"))));
+        assertTrue(nonCopyTo.contains(new Reference(new URI("../topics/target-topic-a.xml"))));
 
         assertTrue(outDita.contains(new File(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
         assertTrue(outDita.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
