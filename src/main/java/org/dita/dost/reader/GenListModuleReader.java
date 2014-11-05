@@ -50,7 +50,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     
     /** Output utilities */
     private Job job;
-    /** Relative basedir of the current parsing file */
+    /** Absolute basedir of the current parsing file */
     private File currentDir = null;
     /** Flag for conref in parsing file */
     private boolean hasConRef = false;
@@ -130,7 +130,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * Constructor.
      */
     public GenListModuleReader() {
-        nonConrefCopytoTargets = new HashSet<Reference>(64);
+        nonConrefCopytoTargets = new LinkedHashSet<Reference>(64);
         hrefTargets = new HashSet<File>(32);
         hrefTopicSet = new HashSet<File>(32);
         chunkTopicSet = new HashSet<File>(32);
@@ -294,7 +294,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      *         {@link org.dita.dost.util.Constants#STICK STICK}
      */
     public Set<Reference> getNonCopytoResult() {
-        final Set<Reference> nonCopytoSet = new HashSet<Reference>(128);
+        final Set<Reference> nonCopytoSet = new LinkedHashSet<Reference>(128);
 
         nonCopytoSet.addAll(nonConrefCopytoTargets);
         for (final File f : conrefTargets) {
@@ -475,6 +475,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     @Override
+    public void startDocument() throws SAXException {
+        if (currentDir == null) {
+            throw new IllegalStateException();
+        }
+        getContentHandler().startDocument();
+    }
+
+    @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
         handleRootElement(localName, atts);
@@ -520,16 +528,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             // Make it easy to do the BFS later.
             final File key = new File("ROOT");
             final Set<File> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<File>();
-            final File child = getRelativePath(rootFilePath.getAbsoluteFile(), currentFile.getAbsoluteFile());
-            children.add(child);
+            children.add(currentFile);
             schemeRelationGraph.put(key, children);
 
-            schemeRefSet.add(getRelativePath(rootFilePath.getAbsoluteFile(), currentFile.getAbsoluteFile()));
+            schemeRefSet.add(currentFile);
         } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
             if (href != null) {
-                final File key = getRelativePath(rootFilePath.getAbsoluteFile(), currentFile.getAbsoluteFile());
+                final File key = currentFile;
                 final Set<File> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<File>();
-                final File child = getRelativePath(rootFilePath.getAbsoluteFile(), resolve(rootDir.getAbsoluteFile(), toFile(href).getPath()));
+                final File child = resolve(currentFile.getParentFile(), toFile(href).getPath());
                 children.add(child);
                 schemeRelationGraph.put(key, children);
             }
@@ -614,7 +621,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 rootClass = new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS));
             }
 
-            final File href = getRelativePath(rootFilePath.getAbsoluteFile(), currentFile.getAbsoluteFile());
+            final File href = currentFile;
             if (isDitaMap() && resourceOnlySet.contains(href) && !crossSet.contains(href)) {
                 processRoleLevel++;
                 processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
@@ -640,12 +647,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                         return;
                     }
                     // normalize href value.
-                    URI target = hrefValue;
-                    if (target.isAbsolute()) {
-                        target = getRelativePath(rootFilePath.getAbsoluteFile().toURI(), target);
+                    URI fileName = hrefValue;
+                    if (!fileName.isAbsolute()) {
+                        fileName = toURI(resolve(currentDir, toFile(fileName)));
                     }
-                    // caculate relative path for href value.
-                    final URI fileName = toURI(resolve(currentDir, toFile(target)));
 
                     final boolean canParse = parseBranch(atts, hrefValue, fileName);
                     if (canParse) {
@@ -714,9 +719,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private boolean parseBranch(final Attributes atts, final URI hrefValue, final URI fileName) {
         // current file is primary ditamap file.
         // parse every branch.
-        final String currentFileRelative = getRelativeUnixPath(rootFilePath.getAbsolutePath(),
-                currentFile.getAbsolutePath());
-        if (currentDir == null && currentFileRelative.equals(primaryDitamap)) {
+        if (currentDir == null && currentFile.equals(primaryDitamap)) {
             // add branches into map
             addReferredBranches(hrefValue, fileName);
             return true;
@@ -773,11 +776,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     private boolean searchBrachesMap(final String id) {
         // caculate relative path for current file.
-        final URI currentFileRelative = toURI(getRelativePath(rootFilePath.getAbsoluteFile(),
-                currentFile.getAbsoluteFile()));
+        final URI currentFileAbsolute = toURI(currentFile);
         // seach the map with id & current file name.
-        if (validBranches.containsKey(currentFileRelative)) {
-            final List<String> branchIdList = validBranches.get(currentFileRelative);
+        if (validBranches.containsKey(currentFileAbsolute)) {
+            final List<String> branchIdList = validBranches.get(currentFileAbsolute);
             // the branch is referenced.
             if (branchIdList.contains(id)) {
                 return true;
@@ -850,24 +852,23 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         final URI target = toURI(attrValue);
-        String filename;
+        File filename;
         if (isAbsolute(target) && !ATTRIBUTE_NAME_DATA.equals(attrName)) {
-            filename = getRelativeUnixPath(rootFilePath.getAbsoluteFile().toURI().getPath(), target.getPath());
+            filename = toFile(target.getPath());
         } else if (ATTRIBUTE_NAME_DATA.equals(attrName)) {
             if (!isEmptyString(codebase)) {
-                filename = resolve(codebase, attrValue).getPath();
+                filename = toFile(resolve(codebase, attrValue).getPath());
             } else {
-                filename = resolve(currentDir, attrValue).getPath();
+                filename = toFile(resolve(currentDir, attrValue).getPath());
             }
         } else {
-            filename = resolve(currentDir, attrValue).getPath();
+            filename = toFile(resolve(currentDir, attrValue).getPath());
         }
-        filename = toFile(filename).getPath();
-        // XXX: At this point, filename should be a system path
+        assert filename.isAbsolute();
 
         if (MAP_TOPICREF.matches(attrClass)) {
             if (ATTR_TYPE_VALUE_SUBJECT_SCHEME.equalsIgnoreCase(attrType)) {
-                schemeSet.add(new File(filename));
+                schemeSet.add(filename);
             }
         } else if (TOPIC_IMAGE.matches(attrClass)) {
             if (attrFormat == null) {
@@ -876,7 +877,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
         // files referred by coderef won't effect the uplevels, code has already returned.
         if (PR_D_CODEREF.matches(attrClass)) {
-            subsidiarySet.add(new File(filename));
+            subsidiarySet.add(filename);
             return;
         }
 
@@ -884,35 +885,36 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if ((ATTRIBUTE_NAME_HREF.equals(attrName) || ATTRIBUTE_NAME_DATA.equals(attrName))
                 && (atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
                     || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)))
-                && (canResolved() || isSupportedImageFile(filename.toLowerCase()))) {
+                && (canResolved() || isSupportedImageFile(filename.getName().toLowerCase()))) {
             nonConrefCopytoTargets.add(new Reference(toURI(filename), attrFormat));
         }
 
         if (isFormatDita(attrFormat)) {
             if (ATTRIBUTE_NAME_HREF.equals(attrName) && canResolved()) {
-                hrefTargets.add(new File(filename));
-                toOutFile(new File(filename));
+                hrefTargets.add(filename);
+                toOutFile(filename);
                 if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
-                    chunkTopicSet.add(new File(filename));
+                    chunkTopicSet.add(filename);
                 } else {
-                    hrefTopicSet.add(new File(filename));
+                    hrefTopicSet.add(filename);
                 }
             }
             if (ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
                 final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
                 if (href != null) {
-                    final File value = resolve(currentDir, toFile(href).getPath());
-
                     if (href.toString().isEmpty()) {
                         logger.warn("Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
-                    } else if (copytoMap.get(new File(filename)) != null) {
-                        if (!value.equals(copytoMap.get(new File(filename)))) {
-                            logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.toString(), filename).toString());
+                    } else {
+                        final File value = resolve(currentDir, toFile(href).getPath());
+                        if (copytoMap.get(filename) != null) {
+                            if (!value.equals(copytoMap.get(filename))) {
+                                logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.toString(), filename.toString()).toString());
+                            }
+                            ignoredCopytoSourceSet.add(value);
+                        } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
+                                CHUNK_TO_CONTENT))) {
+                            copytoMap.put(filename, value);
                         }
-                        ignoredCopytoSourceSet.add(toFile(href));
-                    } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
-                            CHUNK_TO_CONTENT))) {
-                        copytoMap.put(new File(filename), value);
                     }
                 }
 
@@ -931,21 +933,19 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (attrValue != null) {
             hasConRef = true;
 
-            String filename;
+            File filename;
             final URI target = toURI(attrValue);
             if (isAbsolute(target)) {
-                filename = getRelativeUnixPath(rootFilePath.getAbsoluteFile().toURI().getPath(), target.getPath());
+                filename = toFile(target.getPath());
             } else if (attrValue.startsWith(SHARP)) {
-                filename = getRelativeUnixPath(rootFilePath.getAbsoluteFile().toURI().getPath(), currentFile.getPath());
+                filename = toFile(currentFile.getPath());
             } else {
-                filename = resolve(currentDir, attrValue).getPath();
+                filename = toFile(resolve(currentDir, attrValue).getPath());
             }
-            filename = toFile(filename).getPath();
-            // XXX: At this point, filename should be a system path
 
             // Collect only conref target topic files
-            conrefTargets.add(new File(filename));
-            toOutFile(new File(filename));
+            conrefTargets.add(filename);
+            toOutFile(filename);
         }
     }
 
@@ -983,7 +983,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * @return {@code true} if path walks up, otherwise {@code false}
      */
     private boolean isOutFile(final File toCheckPath) {
-        return toCheckPath.getPath().startsWith("..");
+        return !toCheckPath.getPath().startsWith(rootDir.getPath());
     }
 
     /**
@@ -1006,6 +1006,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     private void toOutFile(final File filename) throws SAXException {
+        assert filename.isAbsolute();
         // the filename is a relative path from the dita input file
         final String[] prop = { resolve(rootDir.getAbsolutePath(), filename.getPath()).getPath(), normalize(currentFile.getAbsolutePath()).getPath() };
         if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
@@ -1030,6 +1031,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         public final String format;
 
         public Reference(final URI filename, final String format) {
+            assert (filename.isAbsolute() || (toFile(filename.getPath())).isAbsolute());
             this.filename = filename;
             this.format = format;
         }
