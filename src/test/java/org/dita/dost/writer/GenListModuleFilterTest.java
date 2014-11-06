@@ -146,7 +146,7 @@ public class GenListModuleFilterTest {
         TransformerFactory.newInstance().newTransformer().transform(source, result);
         
         
-        final Set<File> resourceOnly = listFilter.getResourceOnlySet();
+        final Set<URI> resourceOnly = listFilter.getResourceOnlySet();
         final List<FileInfo> actFileInfos = listFilter.getFileInfo();        
         assertEquals(expFileInfos.size(), actFileInfos.size());
         for (final FileInfo actFileInfo: actFileInfos) {
@@ -156,7 +156,7 @@ public class GenListModuleFilterTest {
             assertEquals(actFileInfo.file + ": ", expFileInfo.hasConref, actFileInfo.hasConref);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isChunked, actFileInfo.isChunked);
             assertEquals(actFileInfo.file + ": ", expFileInfo.hasLink, actFileInfo.hasLink);
-            assertEquals(actFileInfo.file + ": ", expFileInfo.isResourceOnly, resourceOnly.contains(actFileInfo.file));
+            assertEquals(actFileInfo.file + ": ", expFileInfo.isResourceOnly, resourceOnly.contains(actFileInfo.uri));
             assertEquals(actFileInfo.file + ": ", expFileInfo.isTarget, actFileInfo.isTarget);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isConrefTarget, actFileInfo.isConrefTarget);
             assertEquals(actFileInfo.file + ": ", expFileInfo.isNonConrefTarget, actFileInfo.isNonConrefTarget);

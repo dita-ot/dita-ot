@@ -28,7 +28,7 @@ import org.xml.sax.SAXException;
 public final class ExportAnchorsFilter extends AbstractXMLFilter {
 
     /** Basedir of the current parsing file */
-    private File currentDir = null;
+    private URI currentDir = null;
     /** Topicmeta set for merge multiple exportanchors into one. Each topicmeta/prolog can define many exportanchors */
     private final Set<String> topicMetaSet = new HashSet<String>(16);
     /** Flag to show whether a file has <exportanchors> tag */
@@ -78,7 +78,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      * 
      * @param dir dir
      */
-    public void setCurrentDir(final File dir) {
+    public void setCurrentDir(final URI dir) {
         currentDir = dir;
     }
 
@@ -209,7 +209,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
             if (target.isAbsolute()) {
                 topicHref = attrValue;
             } else {
-                topicHref = currentDir.toURI().resolve(attrValue);
+                topicHref = currentDir.resolve(attrValue);
             }
 
             // attrValue has topicId

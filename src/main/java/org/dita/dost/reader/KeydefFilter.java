@@ -153,8 +153,8 @@ public final class KeydefFilter extends AbstractXMLFilter {
                                 tail = target.getFragment();
                                 target = stripFragment(target);
                             }
-                            if (!(target.isAbsolute() || toFile(target).isAbsolute())) {
-                                target = toURI(resolve(toFile(currentDir), target.getPath()).getAbsolutePath());
+                            if (!target.isAbsolute()) {
+                                target = currentDir.resolve(target);
                             }
                             keysDefMap.put(key, new KeyDef(key, setFragment(target, tail), ATTR_SCOPE_VALUE_LOCAL, null));
                         }

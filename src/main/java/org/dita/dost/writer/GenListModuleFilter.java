@@ -66,9 +66,9 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     /** Set of all the non-conref and non-copyto targets refered in current parsing file */
     private final Set<Reference> nonConrefCopytoTargets;
     /** Set of sources of those copy-to that were ignored */
-    private final Set<File> ignoredCopytoSourceSet;
+    private final Set<URI> ignoredCopytoSourceSet;
     /** Map of copy-to target to souce */
-    private final Map<File, File> copytoMap;
+    private final Map<URI, URI> copytoMap;
     /** chunk nesting level */
     private int chunkLevel = 0;
     /** mark topics in reltables */
@@ -79,7 +79,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     private int topicGroupLevel = 0;
     /** Flag used to mark if current file is still valid after filtering */
     /** Set of outer dita files */
-    private final Set<File> outDitaFilesSet;
+    private final Set<URI> outDitaFilesSet;
     /** Absolute system path to file being processed */
     private URI currentFile = null;
     /** System path to file being processed, relative to base directory. */
@@ -87,9 +87,9 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     /** Stack of inherited attributes. */
     private final Deque<AttributesImpl> inheritedAttsStack;
     /** Topics with processing role of "resource-only" */
-    private final Set<File> resourceOnlySet;
+    private final Set<URI> resourceOnlySet;
     /** Topics with processing role of "normal" */
-    private final Set<File> normalProcessingSet;
+    private final Set<URI> normalProcessingSet;
     /** Map to store referenced branches. */
     private final Map<URI, List<String>> validBranches;
     /** Int to mark referenced nested elements. */
@@ -115,12 +115,12 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      */
     public GenListModuleFilter() {
         nonConrefCopytoTargets = new HashSet<Reference>(64);
-        copytoMap = new HashMap<File, File>(16);
-        ignoredCopytoSourceSet = new HashSet<File>(16);
-        outDitaFilesSet = new HashSet<File>(64);
+        copytoMap = new HashMap<URI, URI>(16);
+        ignoredCopytoSourceSet = new HashSet<URI>(16);
+        outDitaFilesSet = new HashSet<URI>(64);
         inheritedAttsStack = new ArrayDeque<AttributesImpl>();
-        resourceOnlySet = new HashSet<File>(32);
-        normalProcessingSet = new HashSet<File>(32);
+        resourceOnlySet = new HashSet<URI>(32);
+        normalProcessingSet = new HashSet<URI>(32);
         validBranches = new HashMap<URI, List<String>>(32);
         counterMap = new HashMap<String, Integer>();
         level = 0;
@@ -179,7 +179,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return out file set
      */
-    public Set<File> getOutFilesSet() {
+    public Set<URI> getOutFilesSet() {
         return outDitaFilesSet;
     }
 
@@ -188,8 +188,8 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return the resource-only set
      */
-    public Set<File> getResourceOnlySet() {
-        final Set<File> res = new HashSet<File>(resourceOnlySet);
+    public Set<URI> getResourceOnlySet() {
+        final Set<URI> res = new HashSet<URI>(resourceOnlySet);
         res.removeAll(normalProcessingSet);
         return res;
     }
@@ -209,10 +209,10 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
                 nonCopytoSet.add(new Reference(f.file.getPath(), f.format));
             }
         }
-        for (final File f : copytoMap.values()) {
+        for (final URI f : copytoMap.values()) {
             nonCopytoSet.add(new Reference(f.getPath(), fileInfoMap.get(f.getPath()).build().format));
         }
-        for (final File f : ignoredCopytoSourceSet) {
+        for (final URI f : ignoredCopytoSourceSet) {
             nonCopytoSet.add(new Reference(f.getPath(), fileInfoMap.get(f.getPath()).build().format));
         }
         return nonCopytoSet;
@@ -223,7 +223,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return Returns the outditafileslist.
      */
-    public Set<File> getOutDitaFilesSet() {
+    public Set<URI> getOutDitaFilesSet() {
         return outDitaFilesSet;
     }
 
@@ -232,10 +232,10 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return Returns the nonConrefCopytoTargets.
      */
-    public Set<File> getNonConrefCopytoTargets() {
-        final Set<File> res = new HashSet<File>(nonConrefCopytoTargets.size());
+    public Set<URI> getNonConrefCopytoTargets() {
+        final Set<URI> res = new HashSet<URI>(nonConrefCopytoTargets.size());
         for (final Reference r : nonConrefCopytoTargets) {
-            res.add(new File(r.filename));
+            res.add(toURI(r.filename));
         }
         return res;
     }
@@ -245,7 +245,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return Returns the ignoredCopytoSourceSet.
      */
-    public Set<File> getIgnoredCopytoSourceSet() {
+    public Set<URI> getIgnoredCopytoSourceSet() {
         return ignoredCopytoSourceSet;
     }
 
@@ -254,7 +254,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * 
      * @return copy-to map
      */
-    public Map<File, File> getCopytoMap() {
+    public Map<URI, URI> getCopytoMap() {
         return copytoMap;
     }
 
@@ -324,7 +324,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
     @Override
     public void startDocument() throws SAXException {
         currentFileRelative = inputDir.relativize(currentFile);
-        path2Project = getPathtoProject(toFile(currentFileRelative), toFile(currentFile.toString()), job.getInputFile().getAbsolutePath());
+        path2Project = getPathtoProject(currentFileRelative, toFile(currentFile.toString()), job.getInputFile().getAbsolutePath());
         fileInfo = getOrCreateBuilder(currentFileRelative);
         
         super.startDocument();
@@ -489,7 +489,7 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         final String scope = inheritedAttsStack.peekFirst().getValue(ATTRIBUTE_NAME_SCOPE);
         if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
             final String processingRole = getInherited(ATTRIBUTE_NAME_PROCESSING_ROLE);
-            final File target = FileUtils.resolve(currentDir.toString(), href);
+            final URI target = currentDir.resolve(href);
             if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
                 resourceOnlySet.add(target);
             } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processingRole)) {
@@ -744,15 +744,15 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
         if (copyTo != null && !isExternal(copyTo, getInherited(ATTRIBUTE_NAME_SCOPE))) {
             final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
             if (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat)) {
-                final File file = FileUtils.resolve(baseDir.toString(), copyTo.getPath());
+                final URI file = baseDir.resolve(copyTo);
                 final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-                final File value = FileUtils.resolve(toFile(currentDir), toFile(href));
+                final URI value = currentDir.resolve(href);
     
                 if (copytoMap.containsKey(file)) {
                     if (!value.equals(copytoMap.get(file))) {
                         logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.getPath(), file.getPath()).toString());
                     }
-                    ignoredCopytoSourceSet.add(toFile(href));
+                    ignoredCopytoSourceSet.add(href);
                 } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT))) {
                     copytoMap.put(file, value);
                 }
@@ -863,8 +863,8 @@ public final class GenListModuleFilter extends AbstractXMLFilter {
      * @param inputMap absolute path to start file
      * @return path to base directory, {@code null} if not available
      */
-    public File getPathtoProject(final File filename, final File traceFilename, final String inputMap) {
-        final File p = FileUtils.getRelativePath(filename);
+    public File getPathtoProject(final URI filename, final File traceFilename, final String inputMap) {
+        final File p = FileUtils.getRelativePath(toFile(filename));
         return p != null ? p : null;
     }
     

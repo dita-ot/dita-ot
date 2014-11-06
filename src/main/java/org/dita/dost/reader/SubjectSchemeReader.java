@@ -8,6 +8,7 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.*;
+import java.net.URI;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -137,13 +138,13 @@ public class SubjectSchemeReader {
      * @param m map to serialize
      * @param outputFile output filename, relative to temporary directory
      */
-    public static void writeMapToXML(final Map<File, Set<File>> m, final File outputFile) throws IOException {
+    public static void writeMapToXML(final Map<URI, Set<URI>> m, final File outputFile) throws IOException {
         if (m == null) {
             return;
         }
         final Properties prop = new Properties();
-        for (final Map.Entry<File, Set<File>> entry: m.entrySet()) {
-            final File key = entry.getKey();
+        for (final Map.Entry<URI, Set<URI>> entry: m.entrySet()) {
+            final URI key = entry.getKey();
             final String value = StringUtils.join(entry.getValue(), COMMA);
             prop.setProperty(key.getPath(), value);
         }

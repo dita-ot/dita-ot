@@ -416,14 +416,14 @@ public final class Job {
      *
      * @return copy-to map, empty map if no mapping is defined
      */
-    public Map<File, File> getCopytoMap() {
+    public Map<URI, URI> getCopytoMap() {
         final Map<String, String> value = (Map<String, String>) prop.get(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
         if (value == null) {
             return Collections.emptyMap();
         } else {
-            final Map<File, File> res = new HashMap<File, File>();
+            final Map<URI, URI> res = new HashMap<URI, URI>();
             for (final Map.Entry<String, String> e: value.entrySet()) {
-                res.put(new File(e.getKey()), new File(e.getValue()));
+                res.put(toURI(e.getKey()), toURI(e.getValue()));
             }
             return Collections.unmodifiableMap(res);
         }
@@ -432,9 +432,9 @@ public final class Job {
     /**
      * Set copy-to map.
      */
-    public void setCopytoMap(final Map<File, File> value) {
+    public void setCopytoMap(final Map<URI, URI> value) {
         final Map<String, String> res = new HashMap<String, String>();
-        for (final Map.Entry<File, File> e: value.entrySet()) {
+        for (final Map.Entry<URI, URI> e: value.entrySet()) {
             res.put(e.getKey().toString(), e.getValue().toString());
         }
         prop.put(COPYTO_TARGET_TO_SOURCE_MAP_LIST, res);
@@ -442,7 +442,7 @@ public final class Job {
 
     /**
      * Get input file
-     * 
+     *
      * @return input file path relative to input directory
      */
     public File getInputMap() {
@@ -517,10 +517,11 @@ public final class Job {
     
     /**
      * Get or create FileInfo for given path.
-     * @param file system path
+     * @param file relative URI to temporary directory
      * @return created or existing file info object
      */
     public FileInfo getOrCreateFileInfo(final URI file) {
+        assert file.getFragment() == null;
         final URI f = file.normalize();
         FileInfo i = files.get(f); 
         if (i == null) {
@@ -596,6 +597,31 @@ public final class Job {
             this.file = file;
         }
         
+        @Override
+        public String toString() {
+            return "FileInfo{" +
+                    "uri=" + uri +
+                    ", file=" + file +
+                    ", format='" + format + '\'' +
+                    ", hasConref=" + hasConref +
+                    ", isChunked=" + isChunked +
+                    ", hasLink=" + hasLink +
+                    ", isResourceOnly=" + isResourceOnly +
+                    ", isTarget=" + isTarget +
+                    ", isConrefTarget=" + isConrefTarget +
+                    ", isNonConrefTarget=" + isNonConrefTarget +
+                    ", isConrefPush=" + isConrefPush +
+                    ", hasKeyref=" + hasKeyref +
+                    ", hasCoderef=" + hasCoderef +
+                    ", isSubjectScheme=" + isSubjectScheme +
+                    ", isSkipChunk=" + isSkipChunk +
+                    ", isSubtarget=" + isSubtarget +
+                    ", isFlagImage=" + isFlagImage +
+                    ", isOutDita=" + isOutDita +
+                    ", isCopyToSource=" + isCopyToSource +
+                    '}';
+        }
+
         public static interface Filter {
             
             public boolean accept(FileInfo f);

@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -533,7 +534,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      */
     private void performCopytoTask() {
         final Map<File, File> copytoMap = new HashMap<File, File>();
-        copytoMap.putAll(job.getCopytoMap());
+        for (final Map.Entry<URI, URI> e: job.getCopytoMap().entrySet()) {
+            copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
+        }
         if (forceUniqueFilter != null) {
             copytoMap.putAll(forceUniqueFilter.copyToMap);
         }

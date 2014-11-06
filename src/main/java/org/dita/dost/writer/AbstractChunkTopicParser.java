@@ -19,6 +19,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.*;
+import java.net.URI;
 import java.util.*;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
@@ -87,7 +88,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     protected final Set<String> copytoSource = new HashSet<String>();
 
-    protected final Map<File, File> copytotarget2source = new HashMap<File, File>();
+    protected final Map<URI, URI> copytotarget2source = new HashMap<URI, URI>();
 
     protected Map<String, String> currentParsingFileTopicIDChangeTable;
 
@@ -406,7 +407,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         try {
             // XXX: This may have to use new
             // File(resolve(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
-            final Map<File, File> copytotarget2sourcemaplist = job.getCopytoMap();
+            final Map<URI, URI> copytotarget2sourcemaplist = job.getCopytoMap();
             copytotarget2source.putAll(copytotarget2sourcemaplist);
             for (final String file : copytoSource) {
                 job.getOrCreateFileInfo(toURI(file)).isCopyToSource = true;
