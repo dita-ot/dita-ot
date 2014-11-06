@@ -454,11 +454,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         assert currentFile.isAbsolute();
         logger.info("Processing " + currentFile.getAbsolutePath());
         final String[] params = { currentFile.getAbsolutePath() };
-
-        if (!currentFile.exists()) {
-            logger.error(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
-            return;
-        }
         
         try {
             XMLReader xmlSource = reader;
@@ -481,30 +476,29 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         } catch (final RuntimeException e) {
             throw e;
         } catch (final SAXParseException sax) {
-            // To check whether the inner third level is DITAOTBuildException
-            // :FATALERROR
             final Exception inner = sax.getException();
+            if (inner != null) {
+                System.err.println("Inner: " + inner.getClass().toString());
+            }
             if (inner != null && inner instanceof DITAOTException) {
-                // second level
-                //logger.info(inner.getMessage());
                 throw (DITAOTException) inner;
             }
             if (currentFile.equals(rootFile)) {
-                // stop the build if exception thrown when parsing input file.
-                final String msg = MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage();
-                throw new DITAOTException(msg, sax);
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage(), sax);
             } else {
-                final String msg = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage();
-                logger.error(msg, sax);
+                logger.error(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
+            }
+        } catch (final FileNotFoundException e) {
+            if (currentFile.equals(rootFile)) {
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTX008E", params).toString(), e);
+            } else {
+                logger.error(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
             }
         } catch (final Exception e) {
             if (currentFile.equals(rootFile)) {
-                // stop the build if exception thrown when parsing input file.
-                final String msg = MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage();
-                throw new DITAOTException(msg,  e);
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(),  e);
             } else {
-                final String msg = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + e.getMessage();
-                logger.error(msg, e);
+                logger.error(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
             }
         }
 
