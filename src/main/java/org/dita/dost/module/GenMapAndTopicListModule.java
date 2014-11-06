@@ -478,30 +478,34 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             } else if (!currentFile.equals(rootFile)) {
                 logger.warn(MessageUtils.getInstance().getMessage("DOTJ021W", params).toString());
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final SAXParseException sax) {
             // To check whether the inner third level is DITAOTBuildException
             // :FATALERROR
             final Exception inner = sax.getException();
             if (inner != null && inner instanceof DITAOTException) {
                 // second level
-                logger.info(inner.getMessage());
+                //logger.info(inner.getMessage());
                 throw (DITAOTException) inner;
             }
             if (currentFile.equals(rootFile)) {
                 // stop the build if exception thrown when parsing input file.
                 final String msg = MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage();
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params), sax, msg);
+                throw new DITAOTException(msg, sax);
+            } else {
+                final String msg = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage();
+                logger.error(msg, sax);
             }
-            final String buff = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + LINE_SEPARATOR + sax.getMessage();
-            logger.error(buff, sax);
         } catch (final Exception e) {
             if (currentFile.equals(rootFile)) {
                 // stop the build if exception thrown when parsing input file.
                 final String msg = MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage();
-                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params), e, msg);
+                throw new DITAOTException(msg,  e);
+            } else {
+                final String msg = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + e.getMessage();
+                logger.error(msg, e);
             }
-            final String buff = MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + LINE_SEPARATOR + e.getMessage();
-            logger.error(buff, e);
         }
 
         if (!listFilter.isValidInput() && currentFile.equals(rootFile)) {
