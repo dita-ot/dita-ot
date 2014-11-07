@@ -101,8 +101,14 @@
                   New command line tool (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1507" format="html" scope="external">#1507</xref>
-             Convert XSLT to version 2.0 (milestone 1)</li>
+            <draft-comment author="infotexture">TODO: Add to Release Highlights / Migration sections</draft-comment>
+            <p>The XSLT stylesheets for preprocessing and transformation types have been converted to version 2.0 and EXSLT
+              extensions like node-set have been removed. If you have customized versions of these stylesheets in your own
+              plugins, you may need to adjust them for compatibility with XSLT 2.0.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1507" format="html" scope="external">#1507</xref>
+                  Convert XSLT to version 2.0 (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1511" format="html" scope="external">#1511</xref>
              Use Ivy for dependency management (milestone 1)</li>
