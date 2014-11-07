@@ -110,8 +110,14 @@
                   Convert XSLT to version 2.0 (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1511" format="html" scope="external">#1511</xref>
-             Use Ivy for dependency management (milestone 1)</li>
+            <p>Apache Ivy is now used to resolve project dependencies. A new <filepath>ivy.xml</filepath> file lists the
+              resources necessary to build the project. Ivy uses this list to resolve and download the necessary resources
+              from an artifact repository, so the corresponding libraries were removed from the Git repository. (They are
+              still included in the <filepath>/lib/</filepath> folder of the appropriate client distribution packages.)<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1511" format="html" scope="external">#1511</xref>
+                  Use Ivy for dependency management (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1522" format="html" scope="external">#1522</xref>
              Add HTML5 transtype (milestone 1)</li>
