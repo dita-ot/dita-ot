@@ -158,9 +158,8 @@
                   generated or copied outside of the directory, but log a warning</li>
                 <li><option>quiet</option> – Quietly finish with only those files; do not generate
                   warnings or errors.</li>
-              </ul>The <parmname>gen-list-without-flagging</parmname> Ant task generates a harmless
-              warning for content that is located outside the map directory; you can suppress these
-              warnings by setting the property to <option>quiet</option>. <note type="warning"
+              </ul>
+              <note type="warning"
                 platform="windows">Microsoft HTML Help Compiler cannot produce HTML Help for
                 documentation projects that use outer content. The content files must reside in or
                 below the directory containing the master DITA map file, and the map file cannot
