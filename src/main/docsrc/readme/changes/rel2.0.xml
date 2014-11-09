@@ -207,8 +207,13 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   img should be used instead of embed in XHTML output for all image types (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1612" format="html" scope="external">#1612</xref>
-             Update Ant to 1.9.2 (milestone 1)</li>
+            <p>The bundled distribution of Apache Ant has been updated from version 1.8.4 to 1.9.2. For details on the
+              changes in recent Ant versions, see <xref href="https://ant.apache.org/antnews.html" format="html"
+                scope="external">Ant Project News</xref>.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1612" format="html" scope="external">#1612</xref>
+                  Update Ant to 1.9.2 (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1614" format="html" scope="external">#1614</xref>
              ant build should not bail out when fop directory has no lib folder (milestone 1)</li>
