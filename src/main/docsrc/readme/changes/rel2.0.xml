@@ -268,9 +268,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Add more HTML entities to file entities.properties in dost.jar (milestone 2)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1643" format="html" scope="external">#1643</xref>
-             Integrator task constructs property constructs with platform-dependent path separators (milestone
-            2)</li>
+            <p>The @location attributes in integration-generated Ant properties now use the forward slash character (/) as
+              directory separator to ensure that generated pathnames are compatible with both UNIX and Windows.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1643" format="html" scope="external">#1643</xref>
+                  Integrator task constructs property constructs with platform-dependent path separators (milestone 2)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1631" format="html" scope="external">#1631</xref>
              Process keyrefs before conref (milestone 2)</li>
