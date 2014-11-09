@@ -282,8 +282,14 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Process keyrefs before conref (milestone 2)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1673" format="html" scope="external">#1673</xref>
-             Remove support for generate.copy.outer=2 (milestone 3)</li>
+            <p>Removed support for the rarely used <parmname>generate.copy.outer</parmname>=<option>2</option> option that
+              generated output for content located outside the DITA map directory. If output must be generated for content
+              that is not located in or beneath the directory containing the DITA map file, option <option>3</option>
+              should be used instead to shift the output directory so that it contains all output for the publication. <ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1673" format="html" scope="external">#1673</xref>
+                  Remove support for generate.copy.outer=2 (milestone 3)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1671" format="html" scope="external">#1671</xref>
              Add support for generating back cover on PDF (milestone 3)</li>
