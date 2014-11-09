@@ -131,9 +131,14 @@
                   Add HTML5 transtype (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1523" format="html" scope="external">#1523</xref>
-             Reduce HTML/XHTML code duplication (milestone 1)</li>
-          <li>
+            <p>The Ant scripts and stylesheets in the HTML and XHTML transformation types have been refactored to reduce
+              code duplication. <ph id="custom-files">If you have customized versions of these files in your own plugins,
+                you may need to adjust them for compatibility with DITA-OT <keyword keyref="release"/></ph>.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1523" format="html" scope="external">#1523</xref>
+                  Reduce HTML/XHTML code duplication (milestone 1)</li>
+              </ul></p></li>
+        <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1524" format="html" scope="external">#1524</xref>
              Use DITAVAL for print filtering (milestone 1)</li>
           <li>
