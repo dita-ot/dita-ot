@@ -153,8 +153,16 @@
                   Use DITAVAL for print filtering (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1548" format="html" scope="external">#1548</xref>
-             Support RFC 5147 in coderef (milestone 1)</li>
+            <p>The <codeph>coderef</codeph> element now supports fragment identifiers as specified in <xref
+                keyref="rfc5147"/> along with the custom line-range fragment function previously added in DITA-OT 1.8.</p>
+            <p>You can use fragment identifiers to refer to specific parts of a file by line position or range, for example
+              to include a range of lines from an external file in a <codeph>codeblock</codeph>.</p>
+            <p><codeblock>&lt;coderef href="Parser.scala#line=4,10" format="scala"/></codeblock>
+              <ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1548" format="html" scope="external">#1548</xref>
+                  Support RFC 5147 in coderef (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1561" format="html" scope="external">#1561</xref>
              Combine chunkedtopic lists into fullditatopic list (milestone 1)</li>
