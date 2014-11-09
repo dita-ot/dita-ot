@@ -138,9 +138,20 @@
                   <xref href="https://github.com/dita-ot/dita-ot/issues/1523" format="html" scope="external">#1523</xref>
                   Reduce HTML/XHTML code duplication (milestone 1)</li>
               </ul></p></li>
-        <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1524" format="html" scope="external">#1524</xref>
-             Use DITAVAL for print filtering (milestone 1)</li>
+          <li>
+            <p>The custom print filtering code has been replaced with a generated DITAVAL filter file that is applied to
+              all print-oriented transformation types. The <codeph>dita.transtype.print</codeph> plug-in extension point
+              introduced in DITA-OT 1.5.4 is used to declare a transtype as a print type. When output is generated via
+              plugins that include this property, the following DITAVAL filter is applied:<codeblock>&lt;val>
+  &lt;prop att="print" val="yes" action="include"/>
+  &lt;prop att="print" val="printonly" action="include"/>
+  &lt;prop att="print" val="no" action="exclude"/>
+  &lt;prop att="print" action="include"/>
+&lt;/val></codeblock><ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1524" format="html" scope="external">#1524</xref>
+                  Use DITAVAL for print filtering (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1548" format="html" scope="external">#1548</xref>
              Support RFC 5147 in coderef (milestone 1)</li>
