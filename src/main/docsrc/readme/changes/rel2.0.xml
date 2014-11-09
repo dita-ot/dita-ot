@@ -229,8 +229,13 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Remove legacy PDF from default distributions (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1509" format="html" scope="external">#1509</xref>
-             Remove deprecated code (in progress)</li>
+            <p>The deprecated <filepath>integrator.properties</filepath> file has been removed. The integration-related
+              properties <option>plugindirs</option> and <option>plugin.ignores</option> are now specified along with other
+              configuration properties in the <filepath>lib/configuration.properties</filepath> file.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1509" format="html" scope="external">#1509</xref>
+                  Remove deprecated code (in progress)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1649" format="html" scope="external">#1649</xref>
              Support DITA 1.3 link syntax (milestone 2)</li>
