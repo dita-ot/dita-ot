@@ -199,8 +199,13 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Add plug-in installation operation to integration (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1608" format="html" scope="external">#1608</xref>
-             img should be used instead of embed in XHTML output for all image types (milestone 1)</li>
+            <p>HTML output now wraps scalable vector graphics (SVG) images in an <codeph>img</codeph> element like all
+              other image types, rather than in an <codeph>embed</codeph> element. This ensures that SVG images in
+              cross-references are correctly rendered as hyperlinks in HTML-based output formats.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1608" format="html" scope="external">#1608</xref>
+                  img should be used instead of embed in XHTML output for all image types (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1612" format="html" scope="external">#1612</xref>
              Update Ant to 1.9.2 (milestone 1)</li>
