@@ -51,6 +51,29 @@
           >GitHub issues tracker</xref></ph>.</shortdesc>
     <refbody>
       <section>
+        <title>Initial Preview Support for DITA 1.3</title>
+        <ul>
+          <li>
+            <xref href="https://github.com/dita-ot/dita-ot/issues/1649" format="html" scope="external">#1649</xref>
+            Support DITA 1.3 link syntax (milestone 2)</li>
+          <li>
+            <xref href="https://github.com/dita-ot/dita-ot/issues/1636" format="html" scope="external">#1636</xref>
+            Support DITA 1.3 cascade attribute (milestone 2)</li>
+          <li>
+            <xref href="https://github.com/dita-ot/dita-ot/issues/1635" format="html" scope="external">#1635</xref>
+            Implement DITA 1.3 profiling (milestone 2)</li>
+          <li>
+            <xref href="https://github.com/dita-ot/dita-ot/issues/1651" format="html" scope="external">#1651</xref>
+            Add new DITA 1.3 highlighting elements (milestone 4)</li>
+          <li>
+            <xref href="https://github.com/dita-ot/dita-ot/issues/1652" format="html" scope="external">#1652</xref>
+            Add DITA 1.3 markup and xml domain support (milestone 4)</li>
+          <li>
+            <xref href="https://github.com/dita-ot/dita-ot/issues/1654" format="html" scope="external">#1654</xref>
+            Add DITA 1.3 div element (milestone 4)</li>
+        </ul>
+      </section>
+      <section>
         <title>Feature Requests</title>
         <ul>
           <li>
@@ -237,21 +260,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Remove deprecated code (in progress)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1649" format="html" scope="external">#1649</xref>
-             Support DITA 1.3 link syntax (milestone 2)</li>
-          <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1644" format="html" scope="external">#1644</xref>
              Add more HTML entities to file entities.properties in dost.jar (milestone 2)</li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1643" format="html" scope="external">#1643</xref>
              Integrator task constructs property constructs with platform-dependent path separators (milestone
             2)</li>
-          <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1636" format="html" scope="external">#1636</xref>
-             Support DITA 1.3 cascade attribute (milestone 2)</li>
-          <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1635" format="html" scope="external">#1635</xref>
-             Implement DITA 1.3 profiling (milestone 2)</li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1631" format="html" scope="external">#1631</xref>
              Process keyrefs before conref (milestone 2)</li>
@@ -277,15 +291,6 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1508" format="html" scope="external">#1508</xref>
              Move DTDs and XML Schemas to plug-ins (milestone 4)</li>
-          <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1651" format="html" scope="external">#1651</xref>
-             Add new DITA 1.3 highlighting elements (milestone 4)</li>
-          <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1652" format="html" scope="external">#1652</xref>
-             Add DITA 1.3 markup and xml domain support (milestone 4)</li>
-          <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1654" format="html" scope="external">#1654</xref>
-             Add DITA 1.3 div element (milestone 4)</li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1672" format="html" scope="external">#1672</xref>
              Performance optimizations for the PDF2 plugin (milestone 4)</li>
