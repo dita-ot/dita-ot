@@ -223,8 +223,11 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   ant build should not bail out when fop directory has no lib folder (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1616" format="html" scope="external">#1616</xref>
-             Remove legacy PDF from default distributions (milestone 1)</li>
+            <p>The deprecated legacy PDF transformation is no longer included in the default distribution packages.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1616" format="html" scope="external">#1616</xref>
+                  Remove legacy PDF from default distributions (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1509" format="html" scope="external">#1509</xref>
              Remove deprecated code (in progress)</li>
