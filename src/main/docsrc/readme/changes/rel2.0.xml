@@ -260,8 +260,13 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Remove deprecated code (in progress)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1644" format="html" scope="external">#1644</xref>
-             Add more HTML entities to file entities.properties in dost.jar (milestone 2)</li>
+            <p>Additional HTML entities have been added to the <filepath>entities.properties</filepath> file that is used
+              in the HTMLHelp transformation to provide support for Greek charaters and other commonly used special
+              characters in Windows help files (CHM).<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1644" format="html" scope="external">#1644</xref>
+                  Add more HTML entities to file entities.properties in dost.jar (milestone 2)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1643" format="html" scope="external">#1643</xref>
              Integrator task constructs property constructs with platform-dependent path separators (milestone
