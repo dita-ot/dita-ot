@@ -185,8 +185,19 @@
                   Change output for rendering a single topic to PDF (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1602" format="html" scope="external">#1602</xref>
-             Add plug-in installation operation to integration (milestone 1)</li>
+            <p>Plugins can now be installed and removed via the new <cmdname>dita</cmdname> command line tool.</p>
+            <p><codeblock>$ dita -install &lt;plugin-zip-path>
+$ dita -uninstall &lt;plugin-id></codeblock></p>
+            <p>Plugins provided as ZIP or JAR files are extracted to the <filepath>plugins</filepath> folder on
+              installation. A new plugin folder is created based on the plugin ID in the <filepath>plugin.xml</filepath>
+              file. If the <filepath>plugin.xml</filepath> is located in a subfolder inside the archive, that subfolder is
+              treated as the plugin folder. After the plugin is extracted, the integration process is run. The uninstall
+              operation removes the subfolder with the specified ID from the <filepath>plugins</filepath> folder and runs
+              the integration process to update the list of registered plugins. <ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1602" format="html" scope="external">#1602</xref>
+                  Add plug-in installation operation to integration (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1608" format="html" scope="external">#1608</xref>
              img should be used instead of embed in XHTML output for all image types (milestone 1)</li>
