@@ -215,8 +215,13 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Update Ant to 1.9.2 (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1614" format="html" scope="external">#1614</xref>
-             ant build should not bail out when fop directory has no lib folder (milestone 1)</li>
+            <p>PDF builds no longer require Apache FOP to be present in the <filepath>fop/lib</filepath> folder of the PDF
+              plugin. Previous versions of DITA-OT expected to find Apache FOP in the default location and issued an error
+              if the path was not present (even if FOP was available in an alternate location).<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1614" format="html" scope="external">#1614</xref>
+                  ant build should not bail out when fop directory has no lib folder (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1616" format="html" scope="external">#1616</xref>
              Remove legacy PDF from default distributions (milestone 1)</li>
