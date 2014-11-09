@@ -178,8 +178,12 @@
                 Index capability with FOP (milestone 1)</li>
             </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1601" format="html" scope="external">#1601</xref>
-             Change output for rendering a single topic to PDF (milestone 1)</li>
+            <p>Single-topic PDFs now include only the topic content, rather than generating a cover page and table of
+              contents as in previous versions of DITA-OT.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1601" format="html" scope="external">#1601</xref>
+                  Change output for rendering a single topic to PDF (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1602" format="html" scope="external">#1602</xref>
              Add plug-in installation operation to integration (milestone 1)</li>
