@@ -164,8 +164,13 @@
                   Support RFC 5147 in coderef (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1561" format="html" scope="external">#1561</xref>
-             Combine chunkedtopic lists into fullditatopic list (milestone 1)</li>
+            <p>The list of chunked topics is now included in the full list of DITA topics, rather than generating a
+              separate list for topics that were created as a result of chunking. All chunk-generated content is now
+              treated as if it was part of the original input set. <ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1561" format="html" scope="external">#1561</xref>
+                  Combine chunkedtopic lists into fullditatopic list (milestone 1)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1569" format="html" scope="external">#1569</xref>
              Index capability with FOP (milestone 1)</li>
