@@ -291,8 +291,16 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Remove support for generate.copy.outer=2 (milestone 3)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1671" format="html" scope="external">#1671</xref>
-             Add support for generating back cover on PDF (milestone 3)</li>
+            <p>New templates and variables have been added to make it easier to include a back cover in PDF output. A new
+                <codeph>generate-back-cover</codeph> option is now provided in the <filepath>basic-settings.xsl</filepath>
+              file in the <filepath>cfg/fo/attrs/</filepath> folder of the PDF plugin. This option is disabled by default.
+              An empty XSL template named <codeph>createBackCoverContents</codeph> has been added to
+                <filepath>xsl/fo/front-matter.xsl</filepath>. Custom PDF plugins can enable back cover generation and
+              adjust the template to include images or text on the last page of PDF files.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1671" format="html" scope="external">#1671</xref>
+                  Add support for generating back cover on PDF (milestone 3)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1667" format="html" scope="external">#1667</xref>
              Remove FrameMaker index syntax support (milestone 3)</li>
