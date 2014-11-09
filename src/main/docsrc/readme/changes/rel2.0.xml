@@ -275,8 +275,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Integrator task constructs property constructs with platform-dependent path separators (milestone 2)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1631" format="html" scope="external">#1631</xref>
-             Process keyrefs before conref (milestone 2)</li>
+            <p>The order of preprocessing stages has been optimized to move keyref processing before conref processing.
+              This provides significant performance gains for source that uses multiple keyrefs in conreffed blocks.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1631" format="html" scope="external">#1631</xref>
+                  Process keyrefs before conref (milestone 2)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1673" format="html" scope="external">#1673</xref>
              Remove support for generate.copy.outer=2 (milestone 3)</li>
