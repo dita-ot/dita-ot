@@ -172,8 +172,11 @@
                   Combine chunkedtopic lists into fullditatopic list (milestone 1)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1569" format="html" scope="external">#1569</xref>
-             Index capability with FOP (milestone 1)</li>
+            <p>An Index is now created when generating PDF output via Apache Formatting Objects Processor (FOP).<ul>
+              <li>
+                <xref href="https://github.com/dita-ot/dita-ot/issues/1569" format="html" scope="external">#1569</xref>
+                Index capability with FOP (milestone 1)</li>
+            </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1601" format="html" scope="external">#1601</xref>
              Change output for rendering a single topic to PDF (milestone 1)</li>
