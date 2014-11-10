@@ -7,9 +7,10 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 version="2.0"
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:mappull="http://dita-ot.sourceforge.net/ns/200704/mappull"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                exclude-result-prefixes="xs mappull ditamsg">
+                exclude-result-prefixes="xs dita-ot mappull ditamsg">
 
   <xsl:import href="../common/dita-utilities.xsl"/>
   <xsl:import href="../common/output-message.xsl"/>
@@ -350,7 +351,7 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:attribute name="href">
-            <xsl:value-of select="concat($relative-path, @href)"/>
+            <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, @href))"/>
           </xsl:attribute>
         </xsl:otherwise>
       </xsl:choose>
