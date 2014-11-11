@@ -332,7 +332,7 @@
       <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]" mode="grab-group-title"/>
     </xsl:variable>
     
-    <xsl:if test="$linklist and not($group-title = '#none#') and not($group-title = '')">
+    <xsl:if test="$linklist and exists($group-title) and not($group-title = '')">
       <xsl:if test="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
         <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]">
           <xsl:with-param name="role">friend</xsl:with-param>
@@ -349,7 +349,7 @@
         </xsl:apply-templates>
       </xsl:if>  
     </xsl:if>
-    <xsl:if test="not($linklist) and ($group-title = '#none#' or $group-title = '')">
+    <xsl:if test="not($linklist) and (empty($group-title) or $group-title = '')">
       <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
         <xsl:with-param name="role">friend</xsl:with-param>
       </xsl:apply-templates>
@@ -371,7 +371,7 @@
     <xsl:variable name="group-title">
       <xsl:apply-templates mode="grab-group-title" select="."/>
     </xsl:variable>
-    <xsl:if test="$linklist and not($group-title = '#none#') and not($group-title = '')">
+    <xsl:if test="$linklist and exists($group-title) and not($group-title = '')">
       <linklist class="- topic/linklist ">
         <xsl:copy-of select="@xtrf | @xtrc"/>
         <xsl:if test="/*[@id]">
@@ -385,7 +385,7 @@
         </xsl:apply-templates>
       </linklist>
     </xsl:if>
-    <xsl:if test="not($linklist) and ($group-title = '#none#' or $group-title = '')">
+    <xsl:if test="not($linklist) and (empty($group-title) or $group-title = '')">
       <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position() = $position]//*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]" mode="link">
         <xsl:with-param name="role">friend</xsl:with-param>
       </xsl:apply-templates>
@@ -409,7 +409,7 @@
     </xsl:choose>
   </xsl:template>  
   
-  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="grab-group-title">
+  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="grab-group-title" as="xs:string?">
     <xsl:variable name="file-origin">
       <xsl:call-template name="get-file-uri">
         <xsl:with-param name="href" select="@href"/>
@@ -436,9 +436,6 @@
       <xsl:when test="document($file,/)//*[contains(@class, ' topic/title ')]">
         <xsl:value-of select="document($file,/)//*[contains(@class, ' topic/title ')][1]"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="'#none#'"/>
-      </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
   
@@ -457,7 +454,7 @@
       <xsl:if test="/*[@id]">
         <xsl:attribute name="mapkeyref" select="/*/@id"/>
       </xsl:if>
-      <xsl:if test="not($group-title = '#none#') and not($group-title = '')">
+      <xsl:if test="exists($group-title) and not($group-title = '')">
         <title class="- topic/title ">
           <xsl:value-of select="$group-title"/>
         </title>
@@ -483,7 +480,7 @@
       <xsl:if test="/*[@id]">
         <xsl:attribute name="mapkeyref" select="/*/@id"/>
       </xsl:if>
-      <xsl:if test="not($group-title = '#none#') and not($group-title = '')">
+      <xsl:if test="exists($group-title) and not($group-title = '')">
         <title class="- topic/title ">
           <xsl:value-of select="$group-title"/>
         </title>
@@ -497,8 +494,8 @@
   
   <xsl:template mode="link" 
               match="*[@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))][not(@processing-role = 'resource-only')]">
-    <xsl:param name="role" as="xs:string">#none#</xsl:param>
-    <xsl:param name="otherrole" as="xs:string">#none#</xsl:param>
+    <xsl:param name="role" as="xs:string?" select="()"/>
+    <xsl:param name="otherrole" as="xs:string?" select="()"/>
     <xsl:param name="pathBackToMapDirectory" as="xs:string" tunnel="yes"/>
     <!-- child found tag -->
     <xsl:param name="found" select="true()" as="xs:boolean"/>
@@ -554,10 +551,10 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:attribute>
-        <xsl:if test="not($role = '#none#')">
+        <xsl:if test="exists($role)">
           <xsl:attribute name="role" select="$role"/>
         </xsl:if>
-        <xsl:if test="not($otherrole = '#none#')">
+        <xsl:if test="exists($otherrole)">
           <xsl:attribute name="otherrole" select="$otherrole"/>
         </xsl:if>
         <!--figure out the linktext and desc-->
