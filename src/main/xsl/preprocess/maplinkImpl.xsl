@@ -36,7 +36,25 @@
 
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix" select="'DOTX'"/>
+    
+  <xsl:template match="/">
+    <xsl:variable name="map" as="document-node()">
+      <xsl:document>
+        <xsl:apply-templates select="node()" mode="strip"/>
+      </xsl:document>
+    </xsl:variable>
+    <xsl:apply-templates select="$map/node()"/>
+  </xsl:template>
   
+  <xsl:template match="node() | @*" mode="strip">
+    <xsl:copy>
+      <xsl:apply-templates select="node() | @*" mode="strip"/>
+    </xsl:copy>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' ditaot-d/submap ')]" mode="strip">
+    <xsl:apply-templates select="node()" mode="strip"/>
+  </xsl:template>
+
   <!-- Start by creating the collection element for the map being processed. -->
   <xsl:template match="/*[contains(@class, ' map/map ')]">    
     <mapcollection>
