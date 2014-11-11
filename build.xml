@@ -46,7 +46,7 @@
   <property name="win32.zip.suffix" value=".zip"/>
   <property name="linux.zip.suffix" value=".tar.gz"/>
 
-  <property name="tool.ant.version" value="1.9.2"/>
+  <property name="tool.ant.version" value="1.9.4"/>
 
   <target name="init-package" depends="clean-package">
     <mkdir dir="${package.output.dir}"/>
