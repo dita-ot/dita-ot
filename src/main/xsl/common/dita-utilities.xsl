@@ -423,7 +423,7 @@
           <xsl:with-param name="res" select="$res"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:when test="$src[1] = '..' and exists($res) and $res[position() eq last()] ne '..'">
+      <xsl:when test="$src[1] = '..' and exists($res) and not($res[position() eq last()] = ('..', ''))">
         <xsl:call-template name="dita-ot:normalize-uri">
           <xsl:with-param name="src" select="$src[position() ne 1]"/>
           <xsl:with-param name="res" select="$res[position() ne last()]"/>
