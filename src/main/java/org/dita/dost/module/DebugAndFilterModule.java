@@ -691,7 +691,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      */
     private static boolean isOutFile(final File filePathName, final File inputMap){
         final File relativePath = getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
-        return !(relativePath == null || relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
+        return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
     }
 
 }

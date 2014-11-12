@@ -91,7 +91,7 @@ public final class FilterUtils {
      *         'otherprops', 'props', or 'print' was excluded.
      */
     public boolean needExclude(final Attributes atts, final String[][] extProps) {
-        if (filterMap == null || filterMap.isEmpty()) {
+        if (filterMap.isEmpty()) {
             return false;
         }
 
@@ -139,28 +139,24 @@ public final class FilterUtils {
         final StringBuilder buf = new StringBuilder();
         int previousEnd = 0;
         final Matcher m = groupPattern.matcher(value);
-        if (m != null) {
-            while(m.find()) {
-                buf.append(value.subSequence(previousEnd, m.start()));
-                final String v = m.group(2); 
-                if (!v.trim().isEmpty()) {
-                    final String k = m.group(1);
-                    if (res.containsKey(k)) {
-                        final List<String> l = new ArrayList<String>(res.get(k));
-                        l.addAll(Arrays.asList(v.trim().split("\\s+")));
-                        res.put(k, l);
-                    } else {
-                        res.put(k, Arrays.asList(v.trim().split("\\s+")));   
-                    }
+        while(m.find()) {
+            buf.append(value.subSequence(previousEnd, m.start()));
+            final String v = m.group(2);
+            if (!v.trim().isEmpty()) {
+                final String k = m.group(1);
+                if (res.containsKey(k)) {
+                    final List<String> l = new ArrayList<String>(res.get(k));
+                    l.addAll(Arrays.asList(v.trim().split("\\s+")));
+                    res.put(k, l);
+                } else {
+                    res.put(k, Arrays.asList(v.trim().split("\\s+")));
                 }
-                previousEnd = m.end();
             }
-            buf.append(value.substring(previousEnd));
-            if (!buf.toString().trim().isEmpty()) {
-                res.put(null, Arrays.asList(buf.toString().trim().split("\\s+")));
-            }
-        } else {
-            res.put(null, Arrays.asList(value.trim().split("\\s+")));
+            previousEnd = m.end();
+        }
+        buf.append(value.substring(previousEnd));
+        if (!buf.toString().trim().isEmpty()) {
+            res.put(null, Arrays.asList(buf.toString().trim().split("\\s+")));
         }
         return res;
     }
@@ -330,7 +326,7 @@ public final class FilterUtils {
         public int hashCode() {
             final int prime = 31;
             int result = 1;
-            result = prime * result + ((attribute == null) ? 0 : attribute.hashCode());
+            result = prime * result + (attribute.hashCode());
             result = prime * result + ((value == null) ? 0 : value.hashCode());
             return result;
         }
@@ -349,11 +345,7 @@ public final class FilterUtils {
                 return false;
             }
             final FilterKey other = (FilterKey) obj;
-            if (attribute == null) {
-                if (other.attribute != null) {
-                    return false;
-                }
-            } else if (!attribute.equals(other.attribute)) {
+            if (!attribute.equals(other.attribute)) {
                 return false;
             }
             if (value == null) {
@@ -393,7 +385,7 @@ public final class FilterUtils {
      */
     private void refineAction(final Action action, final FilterKey key, final Map<String, Map<String, Set<Element>>> bindingMap,
                               final Map<FilterKey, Action> destFilterMap) {
-        if (key.attribute != null && key.value != null) {
+        if (key.value != null) {
             final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
             if (schemeMap != null && !schemeMap.isEmpty()) {
                 for (final Set<Element> submap: schemeMap.values()) {

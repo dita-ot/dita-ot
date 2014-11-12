@@ -120,7 +120,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Topicref stack */
     private final Stack<String> topicrefStack;
     /** Store the primary ditamap file name. */
-    private String primaryDitamap = "";
+    private URI primaryDitamap;
     private boolean isRootElement = true;
     private DitaClass rootClass = null;
 
@@ -245,7 +245,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         return schemeRelationGraph;
     }
 
-    public void setPrimaryDitamap(final String primaryDitamap) {
+    public void setPrimaryDitamap(final URI primaryDitamap) {
+        assert primaryDitamap.isAbsolute();
         this.primaryDitamap = primaryDitamap;
     }
 
@@ -406,6 +407,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * @param currentFile absolute path to current file
      */
     public void setCurrentFile(final URI currentFile) {
+        assert currentFile.isAbsolute();
         this.currentFile = currentFile;
     }
     

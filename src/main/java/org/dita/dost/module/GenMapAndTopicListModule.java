@@ -174,7 +174,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private FilterUtils filterUtils;
     
     /** Absolute path to input file. */
-    private File rootFile;
+    private URI rootFile;
     /** File currently being processed */
     private URI currentFile;
     /** Subject scheme key map. Key is key value, value is key definition. */
@@ -243,7 +243,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             initFilters();
             initXMLReader(ditaDir, xmlValidate);
             
-            addToWaitList(rootFile.toURI());
+            addToWaitList(rootFile);
             processWaitList();
 
             updateBaseDirectory();
@@ -266,9 +266,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private void initFilters() {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
-        listFilter.setInputFile(rootFile.toURI());
-        listFilter.setInputDir(rootFile.getParentFile().toURI());//baseInputDir
-        listFilter.setPrimaryDitamap(rootFile.getPath());
+        listFilter.setInputFile(rootFile);
+        listFilter.setInputDir(rootFile.resolve("."));//baseInputDir
+        listFilter.setPrimaryDitamap(rootFile);
         listFilter.setJob(job);
         
         if (profilingEnabled) {
@@ -276,11 +276,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
 
         exportAnchorsFilter = new ExportAnchorsFilter();
-        exportAnchorsFilter.setInputFile(rootFile.toURI());
+        exportAnchorsFilter.setInputFile(rootFile);
         
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
-        keydefFilter.setInputFile(rootFile.toURI());
+        keydefFilter.setInputFile(rootFile);
         keydefFilter.setJob(job);
         
         nullHandler = new DefaultHandler();
@@ -394,7 +394,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        rootFile = inFile.getCanonicalFile().getAbsoluteFile();
+        rootFile = inFile.getAbsoluteFile().toURI();
         // create the keydef file for scheme files
     	schemekeydefMap = new HashMap<String, KeyDef>();
 
@@ -680,7 +680,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final URI f = file.toString().contains(STICK)
                        ? toURI(file.toString().substring(0, file.toString().indexOf(STICK)))
                        : file;
-        final URI relative = getRelativePath(rootFile.toURI(), f).normalize();
+        final URI relative = getRelativePath(rootFile, f).normalize();
         final int lastIndex = relative.getPath().lastIndexOf(".." + File.separator);
         if (lastIndex != -1) {
             final int newUplevels = lastIndex / 3 + 1;
@@ -895,7 +895,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
         
         // assume empty Job
-        final File relativeRootFile = getRelativePath(new File(baseInputDir, "dummy"), rootFile);
+        final File relativeRootFile = getRelativePath(new File(baseInputDir, "dummy"), new File(rootFile));
         
         job.setProperty(INPUT_DIR, baseInputDir.getAbsolutePath());
         job.setProperty(INPUT_DITAMAP, relativeRootFile.toString());
@@ -1155,9 +1155,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final Collection<KeyDef> updated = new ArrayList<KeyDef>(keydefs.size());
         for (final KeyDef file: keydefs.values()) {
             final String keys = file.keys;
-            if (file.href != null && ATTR_SCOPE_VALUE_LOCAL.equals(file.scope)) {
-                assert (file.href == null || file.href.isAbsolute() || toFile(file.href).isAbsolute());
-            }
             final URI href = (file.href != null && ATTR_SCOPE_VALUE_LOCAL.equals(file.scope))
                              ? b.relativize(file.href)
                              : file.href;

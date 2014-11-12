@@ -154,7 +154,7 @@ public final class DitaValReader extends AbstractXMLReader {
      * Refine action key with information from subject schemes.
      */
     private void refineAction(final Action action, final FilterKey key) {
-        if (key.attribute != null && key.value != null && bindingMap != null && !bindingMap.isEmpty()) {
+        if (key.value != null && bindingMap != null && !bindingMap.isEmpty()) {
             final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
             if (schemeMap != null && !schemeMap.isEmpty()) {
                 for (final Set<Element> submap: schemeMap.values()) {
