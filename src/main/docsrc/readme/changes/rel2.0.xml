@@ -86,7 +86,6 @@
           <li>#1735 Support marking wrapped lines in codeblock (milestone 4)</li>
           <li>#1739 Map profiling attributes set on DITA elements to equivalent HTML5 "data-" attributes (milestone 4)</li>
           <li>#1742 Add override for map chunk (milestone 4)</li>
-          <li>#1512 Alternative preprocessing plug-in (in progress)</li>
           <li>#1544 Use URI and File instead of String (in progress)</li>
         </ul>
       </section>
