@@ -40,7 +40,7 @@ public class KeydefFilterTest {
         reader = new KeydefFilter();
         reader.setLogger(new TestUtils.TestLogger());
         reader.setInputFile(rootFile.toURI());
-        reader.setCurrentDir(null);
+        reader.setCurrentDir(inputDir.toURI());
         reader.setJob(new Job(tempDir));
         
         reader.setContentHandler(new DefaultHandler());
@@ -56,11 +56,11 @@ public class KeydefFilterTest {
         parser.parse(new File(rootFile.getPath()).toURI().toString());
         
         final Map<String, KeyDef> expKeyDefMap = new HashMap<String, KeyDef>();
-        expKeyDefMap.put("target_topic_1", new KeyDef("target_topic_1", toURI(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"), ATTR_SCOPE_VALUE_LOCAL, null));
-        expKeyDefMap.put("target_topic_2", new KeyDef("target_topic_2", toURI(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"), ATTR_SCOPE_VALUE_LOCAL, null));
-        expKeyDefMap.put("target_topic_3", new KeyDef("target_topic_1", toURI(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"), ATTR_SCOPE_VALUE_LOCAL, null));
-        expKeyDefMap.put("target_topic_4", new KeyDef("target_topic_1", toURI(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"), ATTR_SCOPE_VALUE_LOCAL, null));
-        expKeyDefMap.put("peer", new KeyDef("peer", toURI(".." + File.separator + "topics" + File.separator + "peer.xml"), ATTR_SCOPE_VALUE_PEER, null));
+        expKeyDefMap.put("target_topic_1", new KeyDef("target_topic_1", new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null));
+        expKeyDefMap.put("target_topic_2", new KeyDef("target_topic_2", new File(srcDir, "topics" + File.separator + "target-topic-c.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null));
+        expKeyDefMap.put("target_topic_3", new KeyDef("target_topic_1", new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null));
+        expKeyDefMap.put("target_topic_4", new KeyDef("target_topic_1", new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI(), ATTR_SCOPE_VALUE_LOCAL, null));
+        expKeyDefMap.put("peer", new KeyDef("peer", toURI("../topics/peer.xml"), ATTR_SCOPE_VALUE_PEER, null));
         expKeyDefMap.put("external", new KeyDef("external", toURI("http://www.example.com/external.xml"), ATTR_SCOPE_VALUE_EXTERNAL, null));
         
         assertEquals(expKeyDefMap, reader.getKeysDMap());                

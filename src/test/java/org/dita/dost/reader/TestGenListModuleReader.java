@@ -13,9 +13,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,9 +57,10 @@ public class TestGenListModuleReader {
         reader = new GenListModuleReader();
         reader.setLogger(new TestUtils.TestLogger());
 //        reader.initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalFile(), true);
-        reader.setCurrentFile(rootFile);
-        reader.setInputDir(rootFile.getParentFile());
-        reader.setInputFile(rootFile);
+        reader.setCurrentFile(rootFile.toURI());
+        reader.setCurrentDir(rootFile.getParentFile().toURI());
+        reader.setInputDir(rootFile.getParentFile().toURI());
+        reader.setInputFile(rootFile.toURI());
         reader.setJob(new Job(tempDir));
         
         reader.setContentHandler(new DefaultHandler());
@@ -74,18 +77,18 @@ public class TestGenListModuleReader {
         
         parser.parse(new File(rootFile.getPath()).toURI().toString());
         
-        final Set<File> conref = reader.getConrefTargets();
-        final Set<File> chunk = reader.getChunkTopicSet();
-        final Map<File, File> copytoMap = reader.getCopytoMap();
-        final Set<File> hrefTargets = reader.getHrefTargets();
-        final Set<File> hrefTopic =reader.getHrefTopicSet();
-        final Set<File> copytoSet = reader.getIgnoredCopytoSourceSet();
-        final Set<File> nonConref = reader.getNonConrefCopytoTargets();
+        final Set<URI> conref = reader.getConrefTargets();
+        final Set<URI> chunk = reader.getChunkTopicSet();
+        final Map<URI, URI> copytoMap = reader.getCopytoMap();
+        final Set<URI> hrefTargets = reader.getHrefTargets();
+        final Set<URI> hrefTopic =reader.getHrefTopicSet();
+        final Set<URI> copytoSet = reader.getIgnoredCopytoSourceSet();
+        final Set<URI> nonConref = reader.getNonConrefCopytoTargets();
         final Set<Reference> nonCopyTo = reader.getNonCopytoResult();
-        final Set<File> outDita = reader.getOutDitaFilesSet();
-        final Set<File> outFiles = reader.getOutFilesSet();
-        final Set<File> resourceOnlySet = reader.getResourceOnlySet();
-        final Set<File> subsidiaryTargets = reader.getSubsidiaryTargets();
+        final Set<URI> outDita = reader.getOutDitaFilesSet();
+        final Set<URI> outFiles = reader.getOutFilesSet();
+        final Set<URI> resourceOnlySet = reader.getResourceOnlySet();
+        final Set<URI> subsidiaryTargets = reader.getSubsidiaryTargets();
 
         assertEquals(0, conref.size());
 
@@ -93,31 +96,31 @@ public class TestGenListModuleReader {
 
         assertEquals(0, copytoMap.size());
 
-        assertTrue(hrefTargets.contains(new File(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
-        assertTrue(hrefTargets.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
-        assertTrue(hrefTargets.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
+        assertTrue(hrefTargets.contains(new File(srcDir, "topics" + File.separator + "xreffin-topic-1.xml").toURI()));
+        assertTrue(hrefTargets.contains(new File(srcDir, "topics" + File.separator + "target-topic-c.xml").toURI()));
+        assertTrue(hrefTargets.contains(new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI()));
 
-        assertTrue(hrefTopic.contains(new File(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
-        assertTrue(hrefTopic.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
-        assertTrue(hrefTopic.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
+        assertTrue(hrefTopic.contains(new File(srcDir, "topics" + File.separator + "xreffin-topic-1.xml").toURI()));
+        assertTrue(hrefTopic.contains(new File(srcDir, "topics" + File.separator + "target-topic-c.xml").toURI()));
+        assertTrue(hrefTopic.contains(new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI()));
 
         assertEquals(0, copytoSet.size());
         
-        assertTrue(nonConref.contains(new File(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
-        assertTrue(nonConref.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
-        assertTrue(nonConref.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
+        assertTrue(nonConref.contains(new File(srcDir, "topics" + File.separator + "xreffin-topic-1.xml").toURI()));
+        assertTrue(nonConref.contains(new File(srcDir, "topics" + File.separator + "target-topic-c.xml").toURI()));
+        assertTrue(nonConref.contains(new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI()));
 
-        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
-        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
-        assertTrue(nonCopyTo.contains(new Reference(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
+        assertTrue(nonCopyTo.contains(new Reference(new File(srcDir, "topics" + File.separator + "xreffin-topic-1.xml").toURI())));
+        assertTrue(nonCopyTo.contains(new Reference(new File(srcDir, "topics" + File.separator + "target-topic-c.xml").toURI())));
+        assertTrue(nonCopyTo.contains(new Reference(new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI())));
 
-        assertTrue(outDita.contains(new File(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
-        assertTrue(outDita.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
-        assertTrue(outDita.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
+        assertTrue(outDita.contains(new File(srcDir, "topics" + File.separator + "xreffin-topic-1.xml").toURI()));
+        assertTrue(outDita.contains(new File(srcDir, "topics" + File.separator + "target-topic-c.xml").toURI()));
+        assertTrue(outDita.contains(new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI()));
 
-        assertTrue(outFiles.contains(new File(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml")));
-        assertTrue(outFiles.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-c.xml")));
-        assertTrue(outFiles.contains(new File(".." + File.separator + "topics" + File.separator + "target-topic-a.xml")));
+        assertTrue(outFiles.contains(new File(srcDir, "topics" + File.separator + "xreffin-topic-1.xml").toURI()));
+        assertTrue(outFiles.contains(new File(srcDir, "topics" + File.separator + "target-topic-c.xml").toURI()));
+        assertTrue(outFiles.contains(new File(srcDir, "topics" + File.separator + "target-topic-a.xml").toURI()));
 
         assertEquals(0, resourceOnlySet.size());
 

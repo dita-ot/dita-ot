@@ -87,17 +87,17 @@
   
   <message id="DOTJ012F" type="FATAL">
     <reason>Failed to parse the input file '%1'.</reason>
-    <response>The XML parser reported the following error: </response>
+    <response></response>
   </message>
   
   <message id="DOTJ013E" type="ERROR">
     <reason>Failed to parse the referenced file '%1'.</reason>
-    <response>The XML parser reported the following error: </response>
+    <response></response>
   </message>
   
   <message id="DOTJ014W" type="WARN">
-    <reason>Found an indexterm element with no content. Setting the term to ***.</reason>
-    <response></response>
+    <reason>Found an indexterm element with no content.</reason>
+    <response>Setting the term to ***.</response>
   </message>
   
   <!-- I was not able to produce this message, tried passing in:

@@ -28,7 +28,7 @@ import org.xml.sax.SAXException;
 public final class ExportAnchorsFilter extends AbstractXMLFilter {
 
     /** Basedir of the current parsing file */
-    private File currentDir = null;
+    private URI currentDir = null;
     /** Topicmeta set for merge multiple exportanchors into one. Each topicmeta/prolog can define many exportanchors */
     private final Set<String> topicMetaSet = new HashSet<String>(16);
     /** Flag to show whether a file has <exportanchors> tag */
@@ -78,7 +78,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      * 
      * @param dir dir
      */
-    public void setCurrentDir(final File dir) {
+    public void setCurrentDir(final URI dir) {
         currentDir = dir;
     }
 
@@ -119,12 +119,11 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         if (TOPIC_TOPIC.matches(classValue)) {
             topicId = atts.getValue(ATTRIBUTE_NAME_ID);
             // relpace place holder with first topic id
-            // Get relative file name
-            final String filename = FileUtils.getRelativeUnixPath(rootFilePath.toString(), currentFile.toString());
+            final String filename = currentFile.toString() + QUESTION;
             for (final ExportAnchor e: exportAnchors) {
-                if (e.topicids.contains(filename + QUESTION)) {
+                if (e.topicids.contains(filename)) {
                     e.topicids.add(topicId);
-                    e.topicids.remove(filename + QUESTION);
+                    e.topicids.remove(filename);
                 }
             }
         } else if (MAP_TOPICREF.matches(classValue)) {
@@ -154,8 +153,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
                 currentExportAnchor.topicids.add(topicId);
             // If current file is topic file
             } else if (rootClass == null || rootClass.matches(TOPIC_TOPIC)) {
-                URI filename = getRelativePath(rootFilePath, currentFile);
-                currentExportAnchor = new ExportAnchor(filename);
+                currentExportAnchor = new ExportAnchor(currentFile);
                 // if <exportanchors> is defined in metadata(topic), there can be many topic ids
                 currentExportAnchor.topicids.add(topicId);
                 shouldAppendEndTag = true;
@@ -193,7 +191,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      * @param atts attributes to process
      */
     private void parseAttribute(final Attributes atts) {
-        String attrValue = atts.getValue(ATTRIBUTE_NAME_HREF);
+        final URI attrValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         if (attrValue == null) {
             return;
         }
@@ -201,38 +199,22 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         // external resource is filtered here.
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
-                || attrValue.contains(COLON_DOUBLE_SLASH) || attrValue.startsWith(SHARP)) {
+                || attrValue.toString().contains(COLON_DOUBLE_SLASH) || attrValue.toString().startsWith(SHARP)) {
             return;
         }
         // For only format of the href is dita topic
         String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-        if (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat)) {
-            if (attrValue.startsWith("file:/") && !attrValue.contains("file://")) {
-                attrValue = attrValue.substring("file:/".length());
-                // Unix like OS
-                if (UNIX_SEPARATOR.equals(File.separator)) {
-                    attrValue = UNIX_SEPARATOR + attrValue;
-                }
-            } else if (attrValue.startsWith("file:") && !attrValue.startsWith("file:/")) {
-                attrValue = attrValue.substring("file:".length());
-            }
-            String filename = null;
-            final File target = new File(attrValue);
+        if (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat)) {
+            final File target = toFile(attrValue);
             if (target.isAbsolute()) {
-                attrValue = FileUtils.getRelativeUnixPath(rootFilePath.getPath(), attrValue);
+                topicHref = attrValue;
             } else {
-                filename = FileUtils.resolve(currentDir, attrValue).getPath();
+                topicHref = currentDir.resolve(attrValue);
             }
-    
-            filename = toFile(filename).getPath();
-            // XXX: At this point, filename should be a system path
-        
-            topicHref = toURI(filename);
+
             // attrValue has topicId
-            if (attrValue.lastIndexOf(SHARP) != -1) {
-                // get the topicId position
-                final int position = attrValue.lastIndexOf(SHARP);
-                topicId = attrValue.substring(position + 1);
+            if (attrValue.getFragment() != null) {
+                topicId = attrValue.getFragment();
             } else {
                 // get the first topicId(vaild href file)
                 if (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA) || attrFormat.equals(ATTR_FORMAT_VALUE_DITAMAP)) {

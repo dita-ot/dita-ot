@@ -401,7 +401,42 @@
     <xsl:param name="href"/>
     <xsl:sequence select="contains(substring-after($href, '#'), '/')"/>
   </xsl:function>
+
+  <xsl:function name="dita-ot:normalize-uri" as="xs:string">
+    <xsl:param name="uri" as="xs:string"/>
+    <xsl:call-template name="dita-ot:normalize-uri">
+      <xsl:with-param name="src" select="tokenize($uri, '/')"/>
+    </xsl:call-template>
+  </xsl:function>
   
+  <xsl:template name="dita-ot:normalize-uri" as="xs:string">
+    <xsl:param name="src" as="xs:string*"/>
+    <xsl:param name="res" select="()" as="xs:string*"/>
+    
+    <xsl:choose>
+      <xsl:when test="empty($src)">
+        <xsl:value-of select="$res" separator="/"/>
+      </xsl:when>
+      <xsl:when test="$src[1] = '.'">
+        <xsl:call-template name="dita-ot:normalize-uri">
+          <xsl:with-param name="src" select="$src[position() ne 1]"/>
+          <xsl:with-param name="res" select="$res"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="$src[1] = '..' and exists($res) and not($res[position() eq last()] = ('..', ''))">
+        <xsl:call-template name="dita-ot:normalize-uri">
+          <xsl:with-param name="src" select="$src[position() ne 1]"/>
+          <xsl:with-param name="res" select="$res[position() ne last()]"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="dita-ot:normalize-uri">
+          <xsl:with-param name="src" select="$src[position() ne 1]"/>
+          <xsl:with-param name="res" select="($res, $src[1])"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>
 

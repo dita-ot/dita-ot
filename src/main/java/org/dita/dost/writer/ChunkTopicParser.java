@@ -115,10 +115,10 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 copyto.add(copytoValue);
                 if (getFragment(hrefValue) != null) {
                     copytoSource.add(stripFragment(hrefValue));
-                    copytotarget2source.put(toFile(copytoValue), toFile(stripFragment(hrefValue)));
+                    copytotarget2source.put(toURI(copytoValue), toURI(stripFragment(hrefValue)));
                 } else {
                     copytoSource.add(hrefValue);
-                    copytotarget2source.put(toFile(copytoValue), toFile(hrefValue));
+                    copytotarget2source.put(toURI(copytoValue), toURI(hrefValue));
                 }
             }
 

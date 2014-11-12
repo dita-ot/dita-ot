@@ -179,7 +179,7 @@ public class TestGenMapAndTopicListModule {
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder builder = factory.newDocumentBuilder();
-        final Document document = builder.parse(new File(tempDirParallel+ File.separator + KEYDEF_LIST_FILE));
+        final Document document = builder.parse(new File(tempDirParallel, KEYDEF_LIST_FILE));
         final Element elem = document.getDocumentElement();
         final NodeList nodeList = elem.getElementsByTagName("keydef");
         final Map<String, List<String>> expKeyDef = new HashMap<String, List<String>>();
@@ -269,7 +269,7 @@ public class TestGenMapAndTopicListModule {
         
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder builder = factory.newDocumentBuilder();
-        final Document document = builder.parse(new File(tempDirAbove+ File.separator + KEYDEF_LIST_FILE));
+        final Document document = builder.parse(new File(tempDirAbove, KEYDEF_LIST_FILE));
         final Element elem = document.getDocumentElement();
         final NodeList nodeList = elem.getElementsByTagName("keydef");
         final Map<String, List<String>> expKeyDef = new HashMap<String, List<String>>();
@@ -318,33 +318,33 @@ public class TestGenMapAndTopicListModule {
         return lines;
     }
 
-    @Test
-    public void testUpdateUplevels() throws NoSuchMethodException, SecurityException, SAXException, ParserConfigurationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
-        final Method updateUplevels = GenMapAndTopicListModule.class.getDeclaredMethod("updateUplevels", File.class);
-        updateUplevels.setAccessible(true);
-        final Field uplevels = GenMapAndTopicListModule.class.getDeclaredField("uplevels");
-        uplevels.setAccessible(true);
-        {
-            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-            updateUplevels.invoke(m, new File("foo" + File.separator + "bar" + File.separator + "foo"));
-            assertEquals(0, uplevels.getInt(m));
-        }
-        {
-            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-            updateUplevels.invoke(m, new File(".." + File.separator + "foo" + File.separator + "bar"));
-            assertEquals(1, uplevels.getInt(m));
-        }
-        {
-            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-            updateUplevels.invoke(m, new File(".." + File.separator + ".." + File.separator + "foo"));
-            assertEquals(2, uplevels.getInt(m));
-        }
-        {
-            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
-            updateUplevels.invoke(m, new File(".." + File.separator + "foo" + File.separator + ".." + File.separator + "bar"));
-            assertEquals(1, uplevels.getInt(m));
-        }
-    }
+//    @Test
+//    public void testUpdateUplevels() throws NoSuchMethodException, SecurityException, SAXException, ParserConfigurationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
+//        final Method updateUplevels = GenMapAndTopicListModule.class.getDeclaredMethod("updateUplevels", File.class);
+//        updateUplevels.setAccessible(true);
+//        final Field uplevels = GenMapAndTopicListModule.class.getDeclaredField("uplevels");
+//        uplevels.setAccessible(true);
+//        {
+//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
+//            updateUplevels.invoke(m, new File("foo" + File.separator + "bar" + File.separator + "foo"));
+//            assertEquals(0, uplevels.getInt(m));
+//        }
+//        {
+//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
+//            updateUplevels.invoke(m, new File(".." + File.separator + "foo" + File.separator + "bar"));
+//            assertEquals(1, uplevels.getInt(m));
+//        }
+//        {
+//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
+//            updateUplevels.invoke(m, new File(".." + File.separator + ".." + File.separator + "foo"));
+//            assertEquals(2, uplevels.getInt(m));
+//        }
+//        {
+//            final GenMapAndTopicListModule m = new GenMapAndTopicListModule();
+//            updateUplevels.invoke(m, new File(".." + File.separator + "foo" + File.separator + ".." + File.separator + "bar"));
+//            assertEquals(1, uplevels.getInt(m));
+//        }
+//    }
     
     @AfterClass
     public static void tearDown() throws IOException {

@@ -5,7 +5,7 @@
   <topicref
     href="../topics/xreffin-topic-1.xml"/>
   <topicref
-    href="../topics/target-topic a.xml"
+    href="../topics/target-topic%20a.xml"
     keys="target_topic_1"/>
   <topicref
     href="../topics/target-topic-c.xml"

@@ -45,10 +45,10 @@ public final class JobTest {
     }
 
     @Test
-    public void testGetCopytoMap() {
-        final Map<File, File> exp = new HashMap<File, File>();
-        exp.put(new File("foo"), new File("bar"));
-        exp.put(new File("baz"), new File("qux"));
+    public void testGetCopytoMap() throws URISyntaxException {
+        final Map<URI, URI> exp = new HashMap<URI, URI>();
+        exp.put(new URI("foo"), new URI("bar"));
+        exp.put(new URI("baz"), new URI("qux"));
         assertEquals(exp, job.getCopytoMap());
     }
 

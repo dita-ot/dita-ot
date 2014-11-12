@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -86,9 +87,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private Map<String, Map<String, String>> defaultValueMap;
     /** XMLReader instance for parsing dita file */
     private XMLReader reader;
-//    private Map<String, KeyDef> keys;
-//    /** Delayed conref utils. */
-//    private DelayConrefUtils delayConrefUtils;
     /** Absolute path to current source file. */
     private File currentFile;
     private Map<File, Set<File>> dic;
@@ -215,14 +213,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
         initXmlReader();
 
-//        delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
-//
-//        final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(job.tempDir, KEYDEF_LIST_FILE));
-//        keys = new HashMap<String, KeyDef>();
-//        for (final KeyDef k: keydefs) {
-//            keys.put(k.keys, k);
-//        }
-
         initFilters();
     }
     /**
@@ -307,15 +297,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         normalizeFilter.setLogger(logger);
         pipe.add(normalizeFilter);
 
-//        final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
-//        conkeyrefFilter.setLogger(logger);
-//        conkeyrefFilter.setJob(job);
-//        conkeyrefFilter.setKeyDefinitions(keys.values());
-//        conkeyrefFilter.setTempDir(job.tempDir);
-//        conkeyrefFilter.setCurrentFile(inFile);
-//        conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
-//        pipe.add(conkeyrefFilter);
-
         if (forceUnique) {
             forceUniqueFilter.setCurrentFile(currentFile);
             pipe.add(forceUniqueFilter);
@@ -384,7 +365,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     continue;
                 }
                 visitedSet.add(parent);
-                //File tmprel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), parent);
                 File tmprel = new File(FileUtils.resolve(job.tempDir, parent) + SUBJECT_SCHEME_EXTENSION);
                 Document parentRoot;
                 if (!tmprel.exists()) {
@@ -397,16 +377,12 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     for (final File childpath: children) {
                         final Document childRoot = builder.parse(new File(inputMap.getParentFile(), childpath.getPath()));
                         mergeScheme(parentRoot, childRoot);
-                        //File rel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), childpath);
-                        File rel = new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION);
-                        generateScheme(rel, childRoot);
+                        generateScheme(new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION), childRoot);
                     }
                 }
 
                 //Output parent scheme
-                //File rel = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), parent);
-                File rel = new File(job.tempDir.getAbsoluteFile(), parent.getPath() + SUBJECT_SCHEME_EXTENSION);
-                generateScheme(rel, parentRoot);
+                generateScheme(new File(job.tempDir.getAbsoluteFile(), parent.getPath() + SUBJECT_SCHEME_EXTENSION), parentRoot);
             }
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
@@ -558,7 +534,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      */
     private void performCopytoTask() {
         final Map<File, File> copytoMap = new HashMap<File, File>();
-        copytoMap.putAll(job.getCopytoMap());
+        for (final Map.Entry<URI, URI> e: job.getCopytoMap().entrySet()) {
+            copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
+        }
         if (forceUniqueFilter != null) {
             copytoMap.putAll(forceUniqueFilter.copyToMap);
         }
@@ -713,7 +691,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      */
     private static boolean isOutFile(final File filePathName, final File inputMap){
         final File relativePath = getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
-        return !(relativePath == null || relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
+        return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
     }
 
 }

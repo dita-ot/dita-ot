@@ -656,5 +656,15 @@ public final class URLUtils {
             return toURI(buffer.toString());
         }
     }
+
+    public static boolean exists(final URI file) {
+        if (file.getScheme() == null) {
+            return new File(file.getPath()).exists();
+        } else if ("file".equals(file.getScheme())) {
+            return new File(file).exists();
+        } else  {
+            return false;
+        }
+    }
     
 }

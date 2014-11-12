@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.net.URI;
@@ -22,7 +23,6 @@ import java.util.Map.Entry;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
@@ -153,10 +153,9 @@ public final class KeydefFilter extends AbstractXMLFilter {
                                 tail = target.getFragment();
                                 target = stripFragment(target);
                             }
-                            if (toFile(target).isAbsolute()) {
-                                target = toURI(FileUtils.getRelativeUnixPath(inputFile.toString(), target.getPath()));
+                            if (!target.isAbsolute()) {
+                                target = currentDir.resolve(target);
                             }
-                            target = toURI(FileUtils.resolve(toFile(currentDir), target.getPath()).getPath());
                             keysDefMap.put(key, new KeyDef(key, setFragment(target, tail), ATTR_SCOPE_VALUE_LOCAL, null));
                         }
                     } else if (!StringUtils.isEmptyString(keyRef)) {

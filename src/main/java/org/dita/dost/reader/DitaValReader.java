@@ -45,13 +45,13 @@ public final class DitaValReader extends AbstractXMLReader {
 
     private XMLReader reader;
     /** List of absolute flagging image paths. */
-    private final List<File> imageList;
+    private final List<URI> imageList;
 
     private File ditaVal = null;
 
     private Map<String, Map<String, Set<Element>>> bindingMap;
     /** List of relative flagging image paths. */
-    private final List<File> relFlagImageList;
+    private final List<URI> relFlagImageList;
 
     private boolean setSystemid = true;
 
@@ -61,8 +61,8 @@ public final class DitaValReader extends AbstractXMLReader {
     public DitaValReader() {
         super();
         filterMap = new HashMap<FilterKey, Action>();
-        imageList = new ArrayList<File>(256);
-        relFlagImageList= new ArrayList<File>(256);
+        imageList = new ArrayList<URI>(256);
+        relFlagImageList= new ArrayList<URI>(256);
 
         try {
             reader = XMLUtils.getXMLReader();
@@ -139,13 +139,12 @@ public final class DitaValReader extends AbstractXMLReader {
             flagImage = toURI(atts.getValue(ATTRIBUTE_NAME_IMAGEREF));
         }
         if (flagImage != null) {
-            final File f = toFile(flagImage);
+            final URI f = flagImage;
             if (f.isAbsolute()) {
                 imageList.add(f);
-                relFlagImageList.add(getRelativePath(ditaVal, f));
+                relFlagImageList.add(getRelativePath(ditaVal.toURI(), f));
             } else {
-                final File filterDir = ditaVal.getParentFile();
-                imageList.add(new File(filterDir, f.getPath()));
+                imageList.add(ditaVal.toURI().resolve(f));
                 relFlagImageList.add(f);
             }
         }
@@ -155,7 +154,7 @@ public final class DitaValReader extends AbstractXMLReader {
      * Refine action key with information from subject schemes.
      */
     private void refineAction(final Action action, final FilterKey key) {
-        if (key.attribute != null && key.value != null && bindingMap != null && !bindingMap.isEmpty()) {
+        if (key.value != null && bindingMap != null && !bindingMap.isEmpty()) {
             final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
             if (schemeMap != null && !schemeMap.isEmpty()) {
                 for (final Set<Element> submap: schemeMap.values()) {
@@ -260,7 +259,7 @@ public final class DitaValReader extends AbstractXMLReader {
      * Return the image list.
      * @return image list
      */
-    public List<File> getImageList() {
+    public List<URI> getImageList() {
         return imageList;
     }
 
@@ -287,7 +286,7 @@ public final class DitaValReader extends AbstractXMLReader {
      * get image list relative to the .ditaval file.
      * @return image list
      */
-    public List<File> getRelFlagImageList(){
+    public List<URI> getRelFlagImageList(){
         return relFlagImageList;
     }
 
