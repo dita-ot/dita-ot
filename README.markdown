@@ -8,7 +8,7 @@ Prerequisites
 
 To build and use DITA-OT, you’ll need:
 
-* Java Development Kit 6 or newer
+* Java Development Kit 7 or newer
 * Apache Ant 1.9.2 or newer
 * Apache Ivy 2.3.0 or newer
 
