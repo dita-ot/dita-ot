@@ -397,8 +397,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Add override for map chunk (milestone 4)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1544" format="html" scope="external">#1544</xref>
-             Use URI and File instead of String (in progress)</li>
+            <p>The Java code has been refactored to use URI and File objects instead of Strings to permit automatic
+              validation of values.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1544" format="html" scope="external">#1544</xref>
+                  Use URI and File instead of String (in progress)</li>
+              </ul></p></li>
         </ul>
       </section>
       <section>
