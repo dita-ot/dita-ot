@@ -367,8 +367,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Merge maplink and move-links preprocessing steps (milestone 4)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1719" format="html" scope="external">#1719</xref>
-             Restore glossarylist check introduced in #1659 (milestone 4)</li>
+            <p>Topic references inside <codeph>glossarylist</codeph> elements are now supported in PDF output. They are
+              treated like regular nested topics.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1719" format="html" scope="external">#1719</xref>
+                  Restore glossarylist check introduced in #1659 (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1735" format="html" scope="external">#1735</xref>
              Support marking wrapped lines in codeblock (milestone 4)</li>
