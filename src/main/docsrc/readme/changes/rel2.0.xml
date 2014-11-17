@@ -347,8 +347,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
              Performance optimizations for the PDF2 plugin (milestone 4)</li>
               </ul></p></li>
           <li>
+            <p>The default map processing for HTML now generates a cover page with a table of contents in an HTML5
+                <codeph>nav</codeph> element rather than generating a separate ToC file for use in a frameset.<ul>
+                <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1674" format="html" scope="external">#1674</xref>
              Change HTML default TOC to cover with TOC (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1695" format="html" scope="external">#1695</xref>
              In XHTML output the figure title and figure description should be in the same paragraph (milestone
