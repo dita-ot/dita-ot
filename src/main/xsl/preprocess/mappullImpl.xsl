@@ -50,12 +50,13 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="url-sequence" as="item()*"/>
     <xsl:param name="base-node" as="node()"/>
     <xsl:choose>
-      <xsl:when test="$conserve-memory eq 'true' and function-available('saxon:discard-document')">
+      <xsl:when test="$conserve-memory eq 'true'" use-when="function-available('saxon:discard-document')">
         <xsl:sequence select="saxon:discard-document(document($url-sequence, $base-node))"/>
       </xsl:when>
-      <xsl:otherwise>
+      <!-- use xsl:when instead of xsl:otherwise because of preceding @use-when -->
+      <xsl:when test="true()">
         <xsl:sequence select="document($url-sequence, $base-node)"/>    
-      </xsl:otherwise>
+      </xsl:when>
     </xsl:choose>
   </xsl:function>
 

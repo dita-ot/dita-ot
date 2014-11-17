@@ -18,6 +18,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -52,6 +54,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         Document doc;
         InputStream in = null;
         try {
+            doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
             final Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(styleFile));
             transformer.setURIResolver(CatalogUtils.getCatalogResolver());
             if (input.getAttribute("include.rellinks") != null) {
@@ -60,9 +63,8 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             in = new BufferedInputStream(new FileInputStream(inputFile));
             final Source source = new StreamSource(in);
             source.setSystemId(inputFile.toURI().toString());
-            final DOMResult result = new DOMResult();
+            final DOMResult result = new DOMResult(doc);
             transformer.transform(source, result);
-            doc = (Document) result.getNode();
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
@@ -84,10 +86,11 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             linkInserter.setLogger(logger);
             linkInserter.setJob(job);
             for (final Map.Entry<File, Map<String, Element>> entry: mapSet.entrySet()) {
-                logger.info("Processing " + entry.getKey());
+                final File f = new File(job.tempDir, entry.getKey().getPath());
+                logger.info("Processing " + f);
                 linkInserter.setLinks(entry.getValue());
                 try {
-                    linkInserter.write(new File(job.tempDir, entry.getKey().getPath()));
+                    linkInserter.write(f);
                 } catch (final DITAOTException e) {
                     logger.error("Failed to insert links: " + e.getMessage(), e);
                 }
