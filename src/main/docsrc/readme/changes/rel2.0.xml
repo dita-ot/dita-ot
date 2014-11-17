@@ -382,9 +382,13 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Support marking wrapped lines in codeblock (milestone 4)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1739" format="html" scope="external">#1739</xref>
-             Map profiling attributes set on DITA elements to equivalent HTML5 "data-" attributes (milestone
-            4)</li>
+            <p>Profiling attributes set on DITA content are now mapped to their equivalent HTML5 <codeph>data-</codeph>
+              attributes. This allows you to use Javascript or CSS rules to show/hide parts of the output based on user
+              roles, for example.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1739" format="html" scope="external">#1739</xref>
+                  Map profiling attributes set on DITA elements to equivalent HTML5 "data-" attributes (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1742" format="html" scope="external">#1742</xref>
              Add override for map chunk (milestone 4)</li>
