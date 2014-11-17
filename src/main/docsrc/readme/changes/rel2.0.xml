@@ -374,8 +374,13 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Restore glossarylist check introduced in #1659 (milestone 4)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1735" format="html" scope="external">#1735</xref>
-             Support marking wrapped lines in codeblock (milestone 4)</li>
+            <p>If the lines of program listing are too long to fit into one line, they can now be marked with the &#x25BA;
+              character (<codeph>&amp;#x25BA;</codeph>) to indicate that code continues on the next line. Lines will be
+              automatically wrapped at this character.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1735" format="html" scope="external">#1735</xref>
+                  Support marking wrapped lines in codeblock (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1739" format="html" scope="external">#1739</xref>
              Map profiling attributes set on DITA elements to equivalent HTML5 "data-" attributes (milestone
