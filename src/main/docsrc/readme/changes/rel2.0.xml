@@ -302,8 +302,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Add support for generating back cover on PDF (milestone 3)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1667" format="html" scope="external">#1667</xref>
-             Remove FrameMaker index syntax support (milestone 3)</li>
+            <p>The redundant code that supported legacy FrameMaker syntax for <codeph>indexterm</codeph> elements has been
+              removed. The same functionality is available with a preprocessing step.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1667" format="html" scope="external">#1667</xref>
+                  Remove FrameMaker index syntax support (milestone 3)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1186" format="html" scope="external">#1186</xref>
              PDF2: update processTopicNotices staticcontents (milestone 4)</li>
