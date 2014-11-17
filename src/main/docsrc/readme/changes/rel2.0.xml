@@ -361,8 +361,11 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   4)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1714" format="html" scope="external">#1714</xref>
-             Merge maplink and move-links preprocessing steps (milestone 4)</li>
+            <p>The interdependent maplink and move-links preprocessing steps have been merged into a single step.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1714" format="html" scope="external">#1714</xref>
+                  Merge maplink and move-links preprocessing steps (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1719" format="html" scope="external">#1719</xref>
              Restore glossarylist check introduced in #1659 (milestone 4)</li>
