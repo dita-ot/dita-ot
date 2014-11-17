@@ -317,8 +317,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   PDF2: update processTopicNotices staticcontents (milestone 4)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1188" format="html" scope="external">#1188</xref>
-             Localization should be independent of transtype. (milestone 4)</li>
+            <p>Localization strings for all transformation types can now be configured in one place by specifying the
+                <parmname>variable.file.url</parmname> parameter.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1188" format="html" scope="external">#1188</xref>
+                  Localization should be independent of transtype. (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1310" format="html" scope="external">#1310</xref>
              Improve error message during topicmerge step in case format attribute is incorrect (milestone
