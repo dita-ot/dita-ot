@@ -309,8 +309,13 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Remove FrameMaker index syntax support (milestone 3)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1186" format="html" scope="external">#1186</xref>
-             PDF2: update processTopicNotices staticcontents (milestone 4)</li>
+            <p>When generating PDF output for bookmaps, the <codeph>notices</codeph> element in
+                <codeph>frontmatter</codeph> now uses the preface static contents template to ensure that page numbering is
+              consistent with the numbering scheme used for other frontmatter content.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1186" format="html" scope="external">#1186</xref>
+                  PDF2: update processTopicNotices staticcontents (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1188" format="html" scope="external">#1188</xref>
              Localization should be independent of transtype. (milestone 4)</li>
