@@ -340,8 +340,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
              Move DTDs and XML Schemas to plug-ins (milestone 4)</li>
               </ul></p></li>
           <li>
+            <p>PDF output is now generated faster as a result of performance optimizations in the XSLT stylesheets of the
+              PDF2 plugin.<ul>
+                <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1672" format="html" scope="external">#1672</xref>
              Performance optimizations for the PDF2 plugin (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1674" format="html" scope="external">#1674</xref>
              Change HTML default TOC to cover with TOC (milestone 4)</li>
