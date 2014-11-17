@@ -324,9 +324,14 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Localization should be independent of transtype. (milestone 4)</li>
               </ul></p></li>
           <li>
+            <p>An error message has been added to alert users if the root ditamap contains a <codeph>topicref</codeph>
+              element that refers to a submap without setting the format attribute to <option>ditamap</option>. In
+                <option>lax</option> processing mode, the debug filter will add the missing attribute for links to maps,
+              but it will not fix any existing incorrect format values.<ul>
+                <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1310" format="html" scope="external">#1310</xref>
-             Improve error message during topicmerge step in case format attribute is incorrect (milestone
-            4)</li>
+                  Improve error message during topicmerge step in case format attribute is incorrect (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1508" format="html" scope="external">#1508</xref>
              Move DTDs and XML Schemas to plug-ins (milestone 4)</li>
