@@ -390,8 +390,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Map profiling attributes set on DITA elements to equivalent HTML5 "data-" attributes (milestone 4)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1742" format="html" scope="external">#1742</xref>
-             Add override for map chunk (milestone 4)</li>
+            <p>A new <parmname>root-chunk-override</parmname> parameter has been added to support overrides to the root map
+              chunk value.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1742" format="html" scope="external">#1742</xref>
+                  Add override for map chunk (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1544" format="html" scope="external">#1544</xref>
              Use URI and File instead of String (in progress)</li>
