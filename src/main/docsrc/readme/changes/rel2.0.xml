@@ -333,8 +333,12 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Improve error message during topicmerge step in case format attribute is incorrect (milestone 4)</li>
               </ul></p></li>
           <li>
+            <p>The DTDs and XML Schemas included with the toolkit have been bundled as plugins to facilitate maintenance
+              and customization.<ul>
+                <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1508" format="html" scope="external">#1508</xref>
              Move DTDs and XML Schemas to plug-ins (milestone 4)</li>
+              </ul></p></li>
           <li>
             <xref href="https://github.com/dita-ot/dita-ot/issues/1672" format="html" scope="external">#1672</xref>
              Performance optimizations for the PDF2 plugin (milestone 4)</li>
