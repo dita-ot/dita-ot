@@ -32,7 +32,7 @@ Building
 Usage
 -----
 
-1. Add these files and directories into the `CLASSPATH` environment variable:
+1. Add these files and directories to the `CLASSPATH` environment variable:
    * `src/main/`
    * `src/main/lib/`
    * `src/main/lib/dost.jar`
@@ -58,7 +58,7 @@ Distribution
 
         ant jar jar.plug-ins
      
-2. Add these files and directories into the `CLASSPATH` environment variable:
+2. Add these files and directories to the `CLASSPATH` environment variable:
    * `src/main/`
    * `src/main/lib/`
    * `src/main/lib/dost.jar`
@@ -78,7 +78,7 @@ Distribution
 
         ant dist
    
-   Distribution packages are build into the `target` directory.
+   Distribution packages are built in the `target` directory.
 
    If Ant throws an error like `java.lang.OutOfMemoryError: Java heap space`, you probably need to increase the maximum Java heap size. One way to do this is to set the `ANT_OPTS` environment variable to a value like `-Xmx1024m`.
 
