@@ -17,29 +17,21 @@
     </metadata>
   </prolog>
   <refbody>
-    <table frame="all" colsep="1" rowsep="1">
-      <title>Properties set in the <filepath>lib/configuration.properties</filepath> file</title>
-      <tgroup cols="2">
-        <colspec colnum="1" colwidth="1.5*"/>
-        <colspec colnum="2" colwidth="4.0*"/>
-        <thead>
-          <row>
-            <entry>Property</entry>
-            <entry>Description</entry>
-          </row>
-        </thead>
-        <tbody>
-          <row>
-            <entry><parmname>default.language</parmname></entry>
-            <entry>Specifies the language that is used if the input file does not have the @xml:lang
+    <section>
+      <fig>
+        <title>Properties set in the <filepath>lib/configuration.properties</filepath> file</title>
+        <parml>
+          <plentry id="default.language">
+            <pt><parmname>default.language</parmname></pt>
+            <pd id="default.language.desc">Specifies the language that is used if the input file does not have the @xml:lang
               attribute set on the root element. By default, this is set to<option> en</option>. The
               allowed values are those that are defined in IETF BCP 47, <xref
                 href="https://tools.ietf.org/html/bcp47" format="html" scope="external">Tags for 
-                Identifying Languages</xref>.</entry>
-          </row>
-          <row>
-            <entry><parmname>generate-debug-attributes</parmname></entry>
-            <entry>Specifies whether the @xtrf and @xtrc debugging attributes are generated in the
+                Identifying Languages</xref>.</pd>
+          </plentry>
+          <plentry id="generate-debug-attributes">
+            <pt><parmname>generate-debug-attributes</parmname></pt>
+            <pd id="generate-debug-attributes.desc">Specifies whether the @xtrf and @xtrc debugging attributes are generated in the
               temporary files. The following values are allowed: <ul>
                 <li><option>true</option> (default) — Enables generation of debugging
                   attributes</li>
@@ -47,11 +39,11 @@
               </ul><note>Disabling debugging attributes reduces the size of temporary files and thus
                 reduces memory consumption. However, the log messages no longer have the source
                 information available and thus the ability to debug problems might
-                deteriorate.</note></entry>
-          </row>
-          <row id="processing-mode">
-            <entry><parmname>processing-mode</parmname></entry>
-            <entry>Specifies how the DITA-OT handles errors and error recovery. The following values
+                deteriorate.</note></pd>
+          </plentry>
+          <plentry id="processing-mode">
+            <pt><parmname>processing-mode</parmname></pt>
+            <pd id="processing-mode.desc">Specifies how the DITA-OT handles errors and error recovery. The following values
               are allowed: <ul>
                 <li><option>strict</option> — When an error is encountered, the DITA-OT stops
                   processing.</li>
@@ -59,11 +51,11 @@
                   attempts to recover from it.</li>
                 <li><option>skip</option> — When an error is encountered, the DITA continues
                   processing but does not attempt error recovery.</li>
-              </ul></entry>
-          </row>
-          <row>
-            <entry><parmname>org.dita.pdf2.i18n.enabled</parmname></entry>
-            <entry>(PDF transformation only) Enables I18N font processing. The following values are
+              </ul></pd>
+          </plentry>
+          <plentry id="org.dita.pdf2.i18n.enabled">
+            <pt><parmname>org.dita.pdf2.i18n.enabled</parmname></pt>
+            <pd id="org.dita.pdf2.i18n.enabled.desc">(PDF transformation only) Enables I18N font processing. The following values are
               allowed: <ul>
                 <li><option>true</option> (default) — Enables I18N processing</li>
                 <li><option>false</option> — Disables I18N processing</li>
@@ -104,33 +96,33 @@
     &lt;/physical-font></codeblock></p><p>The
                   I18N processing is on by default (because it's been on before), but for most users
                   it's just an additional level of complexity which should be turned off and support
-                  for multiple languages be handled in XSLT code.</p></draft-comment></entry>
-          </row>
-          <row>
-            <entry><parmname>org.dita.pdf2.use-out-temp</parmname></entry>
-            <entry>(PDF transformation only) Specifies whether the XSL-FO processing writes the
+                  for multiple languages be handled in XSLT code.</p></draft-comment></pd>
+          </plentry>
+          <plentry id="org.dita.pdf2.use-out-temp">
+            <pt><parmname>org.dita.pdf2.use-out-temp</parmname></pt>
+            <pd id="org.dita.pdf2.use-out-temp.desc">(PDF transformation only) Specifies whether the XSL-FO processing writes the
               intermediate files (for example, the <filepath>topic.fo</filepath> file) to the output
               directory. The following values are allowed: <ul>
                 <li><option>true</option> — Write intermediate files to the output directory</li>
                 <li><option>false</option> (default) — Write intermediate files to the temporary
                   directory</li>
-              </ul></entry>
-          </row>
-          <row id="plugindirs">
-            <entry><parmname>plugindirs</parmname></entry>
-            <entry>A semicolon-separated list of directory paths that the DITA-OT searches for
+              </ul></pd>
+          </plentry>
+          <plentry id="plugindirs">
+            <pt><parmname>plugindirs</parmname></pt>
+            <pd id="plugindirs.desc">A semicolon-separated list of directory paths that the DITA-OT searches for
               plug-ins to integrate; any relative paths are resolved against the DITA-OT base
               directory. Any immediate subdirectory that contains a <filepath>plugin.xml</filepath>
-              file is integrated</entry>
-          </row>
-          <row id="plugin.ignores">
-            <entry><parmname>plugin.ignores</parmname></entry>
-            <entry>A semicolon-separated list of directory names to be ignored during plug-in
+              file is integrated</pd>
+          </plentry>
+          <plentry id="plugin.ignores">
+            <pt><parmname>plugin.ignores</parmname></pt>
+            <pd id="plugin.ignores.desc">A semicolon-separated list of directory names to be ignored during plug-in
               integration; any relative paths are resolved against the DITA-OT base
-              directory.</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+              directory.</pd>
+          </plentry>
+       </parml>
+     </fig>
+    </section>
   </refbody>
 </reference>
