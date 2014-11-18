@@ -3,12 +3,21 @@
  "reference.dtd">
 <reference id="rel2.0" xml:lang="en">
   <title>DITA Open Toolkit Release 2.0</title>
-  <!--reference id="releasehighlights">
-    <title>Release highlights</title>
+  <reference id="releasehighlights">
+    <title>Release Highlights</title>
     <refbody>
-      <section/>
+      <section>
+        <p>DITA Open Toolkit Release 2.0 includes the following significant enhancements: <ul>
+            <li>New <cmdname>dita</cmdname> command line tool</li>
+            <li>XSLT stylesheets have been converted to XSLT 2.0</li>
+            <li>Processing order of keys and conrefs has been changed</li>
+            <li>Initial preview support for DITA 1.3</li>
+            <li>Faster PDF output generation</li>
+          </ul> For details, see the sections below.</p>
+      </section>
     </refbody>
-  </reference-->
+  </reference>
+  <!--
   <reference id="general-enhancements-and-changes">
     <title>General Enhancements and Changes</title>
     <refbody>
@@ -33,6 +42,7 @@
       </section>
     </refbody>
   </reference>
+  -->
   <reference id="requirements">
     <title>Requirements</title>
     <refbody>
@@ -112,13 +122,14 @@
               </ul></p></li>
           <li>
             <draft-comment author="infotexture">TODO: Add extended description to Release Highlights</draft-comment>
-            <p>A new <cmdname>dita</cmdname> command line tool wraps Ant processing into a single command. The CLI sets
-              all required environment variables and allows you to run DITA-OT without setting up anything beforehand.
-              Instead of calling <cmdname>java</cmdname> or <cmdname>ant</cmdname>, you can now run
+            <p>A new <cmdname>dita</cmdname> command line tool wraps Ant processing into a single command. The CLI sets all
+              required environment variables and allows you to run DITA-OT without setting up anything beforehand. Instead
+              of calling <cmdname>java</cmdname> or <cmdname>ant</cmdname>, you can now run
               <codeblock><cmdname>dita</cmdname> -f <varname>format</varname> -i <varname>input</varname> <varname>[options]</varname></codeblock>
               The command line tool is a wrapper around the Ant interface; it takes the simplified parameters as input,
               converts them to Ant parameters, and then runs an Ant build. The command-line tool supports a subset of the
-              parameters that are available to the Ant builds. <ul>
+              parameters that are available to the Ant builds (use the <option>-f</option> and <option>-i</option> options
+              to pass output format and input file parameters instead of the <option>-D</option> options). <ul>
                 <li>
                   <xref href="https://github.com/dita-ot/dita-ot/issues/1506" format="html" scope="external">#1506</xref>
                   New command line tool (milestone 1)</li>
@@ -302,50 +313,107 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
                   Add support for generating back cover on PDF (milestone 3)</li>
               </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1667" format="html" scope="external">#1667</xref>
-             Remove FrameMaker index syntax support (milestone 3)</li>
+            <p>The redundant code that supported legacy FrameMaker syntax for <codeph>indexterm</codeph> elements has been
+              removed. The same functionality is available with a preprocessing step.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1667" format="html" scope="external">#1667</xref>
+                  Remove FrameMaker index syntax support (milestone 3)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1186" format="html" scope="external">#1186</xref>
-             PDF2: update processTopicNotices staticcontents (milestone 4)</li>
+            <p>When generating PDF output for bookmaps, the <codeph>notices</codeph> element in
+                <codeph>frontmatter</codeph> now uses the preface static contents template to ensure that page numbering is
+              consistent with the numbering scheme used for other frontmatter content.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1186" format="html" scope="external">#1186</xref>
+                  PDF2: update processTopicNotices staticcontents (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1188" format="html" scope="external">#1188</xref>
-             Localization should be independent of transtype. (milestone 4)</li>
+            <p>Localization strings for all transformation types can now be configured in one place by specifying the
+                <parmname>variable.file.url</parmname> parameter.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1188" format="html" scope="external">#1188</xref>
+                  Localization should be independent of transtype. (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1310" format="html" scope="external">#1310</xref>
-             Improve error message during topicmerge step in case format attribute is incorrect (milestone
-            4)</li>
+            <p>An error message has been added to alert users if the root ditamap contains a <codeph>topicref</codeph>
+              element that refers to a submap without setting the format attribute to <option>ditamap</option>. In
+                <option>lax</option> processing mode, the debug filter will add the missing attribute for links to maps,
+              but it will not fix any existing incorrect format values.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1310" format="html" scope="external">#1310</xref>
+                  Improve error message during topicmerge step in case format attribute is incorrect (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1508" format="html" scope="external">#1508</xref>
-             Move DTDs and XML Schemas to plug-ins (milestone 4)</li>
+            <p>The DTDs and XML Schemas included with the toolkit have been bundled as plugins to facilitate maintenance
+              and customization.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1508" format="html" scope="external">#1508</xref>
+                  Move DTDs and XML Schemas to plug-ins (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1672" format="html" scope="external">#1672</xref>
-             Performance optimizations for the PDF2 plugin (milestone 4)</li>
+            <p>PDF output is now generated faster as a result of performance optimizations in the XSLT stylesheets of the
+              PDF2 plugin.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1672" format="html" scope="external">#1672</xref>
+                  Performance optimizations for the PDF2 plugin (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1674" format="html" scope="external">#1674</xref>
-             Change HTML default TOC to cover with TOC (milestone 4)</li>
+            <p>The default map processing for HTML now generates a cover page with a table of contents in an HTML5
+                <codeph>nav</codeph> element rather than generating a separate ToC file for use in a frameset.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1674" format="html" scope="external">#1674</xref>
+                  Change HTML default TOC to cover with TOC (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1695" format="html" scope="external">#1695</xref>
-             In XHTML output the figure title and figure description should be in the same paragraph (milestone
-            4)</li>
+            <p>Figure descriptions in HTML output now appear in the same paragraph as the figure title.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1695" format="html" scope="external">#1695</xref>
+                  In XHTML output the figure title and figure description should be in the same paragraph (milestone
+                  4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1714" format="html" scope="external">#1714</xref>
-             Merge maplink and move-links preprocessing steps (milestone 4)</li>
+            <p>The interdependent maplink and move-links preprocessing steps have been merged into a single step.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1714" format="html" scope="external">#1714</xref>
+                  Merge maplink and move-links preprocessing steps (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1719" format="html" scope="external">#1719</xref>
-             Restore glossarylist check introduced in #1659 (milestone 4)</li>
+            <p>Topic references inside <codeph>glossarylist</codeph> elements are now supported in PDF output. They are
+              treated like regular nested topics.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1719" format="html" scope="external">#1719</xref>
+                  Restore glossarylist check introduced in #1659 (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1735" format="html" scope="external">#1735</xref>
-             Support marking wrapped lines in codeblock (milestone 4)</li>
+            <p>If the lines of program listing are too long to fit into one line, they can now be marked with the &#x25BA;
+              character (<codeph>&amp;#x25BA;</codeph>) to indicate that code continues on the next line. Lines will be
+              automatically wrapped at this character.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1735" format="html" scope="external">#1735</xref>
+                  Support marking wrapped lines in codeblock (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1739" format="html" scope="external">#1739</xref>
-             Map profiling attributes set on DITA elements to equivalent HTML5 "data-" attributes (milestone
-            4)</li>
+            <p>Profiling attributes set on DITA content are now mapped to their equivalent HTML5 <codeph>data-</codeph>
+              attributes. This allows you to use Javascript or CSS rules to show/hide parts of the output based on user
+              roles, for example.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1739" format="html" scope="external">#1739</xref>
+                  Map profiling attributes set on DITA elements to equivalent HTML5 "data-" attributes (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1742" format="html" scope="external">#1742</xref>
-             Add override for map chunk (milestone 4)</li>
+            <p>A new <parmname>root-chunk-override</parmname> parameter has been added to support overrides to the root map
+              chunk value.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1742" format="html" scope="external">#1742</xref>
+                  Add override for map chunk (milestone 4)</li>
+              </ul></p></li>
           <li>
-            <xref href="https://github.com/dita-ot/dita-ot/issues/1544" format="html" scope="external">#1544</xref>
-             Use URI and File instead of String (in progress)</li>
+            <p>The Java code has been refactored to use URI and File objects instead of Strings to permit automatic
+              validation of values.<ul>
+                <li>
+                  <xref href="https://github.com/dita-ot/dita-ot/issues/1544" format="html" scope="external">#1544</xref>
+                  Use URI and File instead of String (in progress)</li>
+              </ul></p></li>
         </ul>
       </section>
       <section>
@@ -460,6 +528,7 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
       </section>
     </refbody>
   </reference>
+  <!--
   <reference id="limitations">
     <title>Limitations</title>
     <refbody>
@@ -468,4 +537,5 @@ $ dita -uninstall &lt;plugin-id></codeblock></p>
       </section>
     </refbody>
   </reference>
+  -->
 </reference>
