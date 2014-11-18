@@ -122,13 +122,14 @@
               </ul></p></li>
           <li>
             <draft-comment author="infotexture">TODO: Add extended description to Release Highlights</draft-comment>
-            <p>A new <cmdname>dita</cmdname> command line tool wraps Ant processing into a single command. The CLI sets
-              all required environment variables and allows you to run DITA-OT without setting up anything beforehand.
-              Instead of calling <cmdname>java</cmdname> or <cmdname>ant</cmdname>, you can now run
+            <p>A new <cmdname>dita</cmdname> command line tool wraps Ant processing into a single command. The CLI sets all
+              required environment variables and allows you to run DITA-OT without setting up anything beforehand. Instead
+              of calling <cmdname>java</cmdname> or <cmdname>ant</cmdname>, you can now run
               <codeblock><cmdname>dita</cmdname> -f <varname>format</varname> -i <varname>input</varname> <varname>[options]</varname></codeblock>
               The command line tool is a wrapper around the Ant interface; it takes the simplified parameters as input,
               converts them to Ant parameters, and then runs an Ant build. The command-line tool supports a subset of the
-              parameters that are available to the Ant builds. <ul>
+              parameters that are available to the Ant builds (use the <option>-f</option> and <option>-i</option> options
+              to pass output format and input file parameters instead of the <option>-D</option> options). <ul>
                 <li>
                   <xref href="https://github.com/dita-ot/dita-ot/issues/1506" format="html" scope="external">#1506</xref>
                   New command line tool (milestone 1)</li>
