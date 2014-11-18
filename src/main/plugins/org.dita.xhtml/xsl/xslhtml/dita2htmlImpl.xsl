@@ -2484,7 +2484,7 @@
     </xsl:if>
   </xsl:variable>
    <xsl:if test="string-length($rowheader) > 0 or string-length($hdrattr) > 0">
-    <xsl:attribute name="headers" select="$rowheader"/><xsl:value-of select="$hdrattr"/>
+    <xsl:attribute name="headers" select="concat($rowheader, $hdrattr)"/>
   </xsl:if>
 </xsl:template>
 
