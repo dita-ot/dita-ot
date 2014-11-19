@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+<!--  
   This file is part of the DITA Open Toolkit project.
   See the accompanying license.txt file for applicable licenses.
 -->
@@ -28,7 +28,7 @@
   <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
   <variable id="Unordered List bullet">•</variable>
   <variable id="Table of Contents">תוכן העניינים</variable>
-  <variable id="Index">אינדקס</variable>
+  
   <variable id="Index Continued String">המשך</variable>
   <variable id="Index See String">, ראה </variable>
   <variable id="Index See Also String">ראה גם </variable>
@@ -41,19 +41,13 @@
   <variable id="Notices title"><!--TODO:Notice--></variable>
   <variable id="Mini Toc">נושאים: </variable>
   <variable id="#note-separator">: </variable>
-  <variable id="Note">שים לב</variable>
+  
   <variable id="Notice"><!--TODO:Notice--></variable>
-  <variable id="Tip">עצה</variable>
-  <variable id="Important">חשוב</variable>
-  <variable id="Fastpath">נתיב מהיר</variable>
-  <variable id="Remember">נא לזכור</variable>
-  <variable id="Attention">אל</variable>
-  <variable id="Caution">אזהרה</variable>
-  <variable id="Danger">סכנה</variable>
-  <variable id="Warning">אזהרה</variable>
-  <variable id="Restriction">מגבלה</variable>
-  <variable id="Figure">איור <param ref-name="number"/>. <param ref-name="title"/></variable>
-  <variable id="Table">טבלה <param ref-name="number"/>. <param ref-name="title"/></variable>
+
+  <variable id="Figure.title">איור <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Figure Number">איור <param ref-name="number"/></variable>
+  <variable id="Table.title">טבלה <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Table Number">טבלה <param ref-name="number"/></variable>
   <variable id="Related Links"><!--TODO:Related Links--></variable>
   <variable id="Cross-Reference"><!--TODO:Cross-Reference to:--></variable>
   <variable id="Content-Reference"><!--TODO:Content-Reference to:--></variable>
@@ -80,14 +74,11 @@
   <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
   <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
   <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
-  <variable id="Parent topic">נושא אב</variable>
-  <variable id="Next topic">הנושא הבא</variable>
-  <variable id="Previous topic">הנושא הקודם</variable>
+
   <variable id="Child topics"><!--TODO:Child Topics--></variable>
-  <variable id="Related concepts">מושגים קשורים</variable>
-  <variable id="Related tasks">משימות קשורות</variable>
+
   <variable id="Related references">תיעוד קשור</variable>
-  <variable id="Related information">מידע קשור</variable>
+  
   <variable id="Index multiple entries separator">, </variable>
   <variable id="Optional Step"><!--TODO:Optional:--></variable>
   <variable id="Task Prereq">לפני שתתחילו</variable>
@@ -104,9 +95,8 @@
   <variable id="Glossary">מילון מונחים</variable>
   <variable id="List of Tables">רשימת טבלאות</variable>
   <variable id="List of Figures">רשימת איורים</variable>
-  <variable id="Option">אופציה</variable>
-  <variable id="Description">תיאור</variable>
-  <variable id="#menucascade-separator">&#xA0;&#x202B;&#x3E;&#x202C; </variable>
+
+  <variable id="#menucascade-separator"> ‫&gt;‬ </variable>
   <variable id="#quote-start">„</variable>
   <variable id="#quote-end">”</variable>
 </vars>

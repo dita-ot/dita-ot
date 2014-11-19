@@ -5,7 +5,10 @@
 <!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
 <xsl:stylesheet
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	version="1.0" xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefixes="random">
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+	version="2.0"
+	exclude-result-prefixes="xs dita-ot">
 	
 <!-- single-part lists -->
 
@@ -76,10 +79,15 @@
 <xsl:template name="gen-list-table">
 {\*\listtables <xsl:apply-templates select="descendant::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')][1]" mode="gen-list-table"/>}
 </xsl:template>
+
+<xsl:function name="dita-ot:getCounterNum" as="xs:integer">
+  <xsl:param name="current"/>
+  <xsl:sequence select="count($current/preceding::node())"/>
+</xsl:function>
 	
 <xsl:template match="*[contains(@class,' topic/ol ')]" mode="gen-list-table">
-<xsl:variable name="templateid" select="random:getRandomNum()"/>
-<xsl:variable name="listid" select="random:getRandomNum()"/>
+<xsl:variable name="templateid" select="dita-ot:getCounterNum(.)"/>
+<xsl:variable name="listid" select="dita-ot:getCounterNum(.)"/>
 <xsl:variable name="listnum" select="count(preceding::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')][not(ancestor::*[contains(@class,' topic/li ')])]) + 1"/>
 {\list\listtemplateid<xsl:value-of select="$templateid"/>\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace0
 \levelindent0{\leveltext\'02\'00.;}{\levelnumbers\'01;}\fi-420\li420\jclisttab\tx420\lin420 }{\listlevel\levelnfc4\levelnfcn4\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace0\levelindent0{\leveltext\'02\'01);}{\levelnumbers\'01;}\fi-420\li840\jclisttab\tx840\lin840 }{\listlevel\levelnfc2\levelnfcn2\leveljc2\leveljcn2\levelfollow0\levelstartat1\levelspace0\levelindent0{\leveltext\'02\'02.;}{\levelnumbers\'01;}\fi-420\li1260
@@ -100,8 +108,8 @@
 </xsl:template>
 	
 <xsl:template match="*[contains(@class,' topic/ul ')]" mode="gen-list-table">
-<xsl:variable name="templateid" select="random:getRandomNum()"/>
-<xsl:variable name="listid" select="random:getRandomNum()"/>
+<xsl:variable name="templateid" select="dita-ot:getCounterNum(.)"/>
+<xsl:variable name="listid" select="dita-ot:getCounterNum(.)"/>
 <xsl:variable name="listnum" select="count(preceding::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ')][not(ancestor::*[contains(@class,' topic/li ')])]) + 1"/>
 {\list\listtemplateid<xsl:value-of select="$templateid"/>\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0
 \levelstartat1\levelspace0\levelindent0{\leveltext\'01{\uc1\u-3988 ?};}{\levelnumbers;}\f10\fbias0 \fi-420\li420\jclisttab\tx420\lin420 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace0

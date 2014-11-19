@@ -153,6 +153,10 @@ See the accompanying license.txt file for applicable licenses.
     <!--body cell-->
   </xsl:attribute-set>
 
+  <xsl:attribute-set name="tbody.row.entry__firstcol" use-attribute-sets="tbody.row.entry">
+    <xsl:attribute name="font-weight">bold</xsl:attribute>
+  </xsl:attribute-set>
+
   <xsl:attribute-set name="tbody.row.entry__content" use-attribute-sets="common.table.body.entry">
     <!--body cell contents-->
   </xsl:attribute-set>

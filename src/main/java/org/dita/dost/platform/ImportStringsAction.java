@@ -8,10 +8,11 @@
  */
 package org.dita.dost.platform;
 
-import static org.dita.dost.util.Constants.*;
-
+import static javax.xml.XMLConstants.NULL_NS_URI;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils.AttributesBuilder;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * ImportStringsAction class.
@@ -24,18 +25,14 @@ final class ImportStringsAction extends ImportAction {
      * @return result
      */
     @Override
-    public String getResult() {
-        final StringBuilder retBuf = new StringBuilder();
+    public void getResult(final ContentHandler buf) throws SAXException {
         final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
         for (final String value: valueSet) {
-            retBuf.append(LINE_SEPARATOR);
-            retBuf.append("<stringfile>");
-            retBuf.append(StringUtils.escapeXML(
-                    FileUtils.getRelativePath(
-                            templateFilePath, value)));
-            retBuf.append("</stringfile>");
+            buf.startElement(NULL_NS_URI, "stringfile", "stringfile", new AttributesBuilder().build());
+            final char[] location =  FileUtils.getRelativeUnixPath(templateFilePath, value).toCharArray();
+            buf.characters(location, 0, location.length);
+            buf.endElement(NULL_NS_URI, "stringfile", "stringfile");
         }
-        return retBuf.toString();
     }
 
 }

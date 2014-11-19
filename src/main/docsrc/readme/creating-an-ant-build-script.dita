@@ -17,7 +17,7 @@
   &lt;target name="@target-name@">
     &lt;ant antfile="${dita.dir}${file.separator}build.xml">
       &lt;property name="args.input" value="@DITA-input@"/>
-      &lt;property name="transtype" value="xhtml"/>
+      &lt;property name="transtype" value="html5"/>
     &lt;/ant>
   &lt;/target>
 

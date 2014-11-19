@@ -27,7 +27,7 @@
   xmlns:styleUtils="org.dita.dost.util.StyleUtils"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
   exclude-result-prefixes="styleUtils ditamsg"
-  version="1.0">
+  version="2.0">
   
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
@@ -1416,19 +1416,10 @@
           <xsl:choose>
             <xsl:when
               test="@reftitle">
-              <xsl:call-template name="get-ascii">
-                <xsl:with-param name="txt">
-                  <xsl:value-of select="@reftitle"/>
-                </xsl:with-param>
-              </xsl:call-template>
+              <xsl:value-of select="@reftitle"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:call-template
-                name="get-ascii">
-                <xsl:with-param name="txt">
-                  <xsl:value-of select="@href"/>
-                </xsl:with-param>
-              </xsl:call-template>
+              <xsl:value-of select="@href"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:element>
@@ -1438,12 +1429,7 @@
       <xsl:element name="text:line-break"/>
       <!-- Insert citation text -->
       <xsl:element name="text:span">
-        <xsl:call-template
-          name="get-ascii">
-          <xsl:with-param name="txt">
-            <xsl:value-of select="@reftitle"/>
-          </xsl:with-param>
-        </xsl:call-template>
+        <xsl:value-of select="@reftitle"/>
       </xsl:element>
     </xsl:when>
     <xsl:otherwise><!--nop - do nothing--></xsl:otherwise>
@@ -1991,17 +1977,33 @@
         <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
       </xsl:element>
     </xsl:when>
+    <xsl:when test="@type='trouble'">
+      <xsl:element name="text:span">
+        <xsl:attribute name="text:style-name">bold</xsl:attribute>
+        <xsl:call-template name="getStringODT">
+          <xsl:with-param name="stringName" select="'Trouble'"/>
+        </xsl:call-template>
+        <xsl:call-template name="getStringODT">
+          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text>
+        
+      </xsl:element>
+      <xsl:element name="text:span">
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+        <xsl:apply-templates/>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+      </xsl:element>
+    </xsl:when>
     <xsl:when test="@type='other'">
       <xsl:element name="text:span">
         <xsl:attribute name="text:style-name">bold</xsl:attribute>
         <xsl:choose>
           <xsl:when test="@othertype and
           not(@othertype='')">
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="@othertype"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="@othertype"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text>[other]</xsl:text>
@@ -2196,17 +2198,29 @@
           <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
         </xsl:element>
     </xsl:when>
-
+    <xsl:when test="@type='trouble'">
+      <xsl:attribute name="text:style-name">bold</xsl:attribute>
+      <xsl:call-template name="getStringODT">
+        <xsl:with-param name="stringName" select="'Trouble'"/>
+      </xsl:call-template>
+      <xsl:call-template name="getStringODT">
+        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      </xsl:call-template>
+      <xsl:text> </xsl:text>
+      <xsl:element name="text:span">
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+        <xsl:apply-templates/>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+      </xsl:element>
+    </xsl:when>
     <xsl:when test="@type='other'">
         <xsl:attribute name="text:style-name">bold</xsl:attribute>
         <xsl:choose>
           <xsl:when test="@othertype and
           not(@othertype='')">
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="@othertype"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="@othertype"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text>[other]</xsl:text>
@@ -2308,9 +2322,7 @@
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:call-template name="get-ascii">
-        <xsl:with-param name="txt" select="$txt"/>
-      </xsl:call-template>
+        <xsl:value-of select="$txt"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -2447,11 +2459,7 @@
       <xsl:if test="starts-with(.,' ') and not(normalize-space(.)='')">
         <xsl:text> </xsl:text>
       </xsl:if>
-      <xsl:call-template name="get-ascii">
-        <xsl:with-param name="txt">
-          <xsl:value-of select="normalize-space(.)"/>
-        </xsl:with-param>
-      </xsl:call-template>
+      <xsl:value-of select="normalize-space(.)"/>
       <xsl:if test="substring(.,string-length(.))=' ' and not(normalize-space(.)='')">
         <xsl:text> </xsl:text>
       </xsl:if>

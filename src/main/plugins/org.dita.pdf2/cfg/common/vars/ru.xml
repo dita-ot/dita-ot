@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+<!--  
   This file is part of the DITA Open Toolkit project.
   See the accompanying license.txt file for applicable licenses.
 -->
@@ -28,7 +28,7 @@
   <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
   <variable id="Unordered List bullet">•</variable>
   <variable id="Table of Contents">Содержание</variable>
-  <variable id="Index">Предметный указатель</variable>
+  
   <variable id="Index Continued String"><!--TODO:continued--></variable>
   <variable id="Index See String">, См. </variable>
   <variable id="Index See Also String">См. также </variable>
@@ -41,19 +41,13 @@
   <variable id="Notices title"><!--TODO:Notice--></variable>
   <variable id="Mini Toc"><!--TODO:Topics: --></variable>
   <variable id="#note-separator">: </variable>
-  <variable id="Note">Примечание</variable>
+  
   <variable id="Notice"><!--TODO:Notice--></variable>
-  <variable id="Tip">Подсказка</variable>
-  <variable id="Important">Важно</variable>
-  <variable id="Fastpath">Быстрый путь</variable>
-  <variable id="Remember">Напоминание</variable>
-  <variable id="Attention">Внимание</variable>
-  <variable id="Caution">Внимание</variable>
-  <variable id="Danger">ОПАСНО</variable>
-  <variable id="Warning">Внимание</variable>
-  <variable id="Restriction">Ограничение</variable>
-  <variable id="Figure">Рисунок <param ref-name="number"/>. <param ref-name="title"/></variable>
-  <variable id="Table">Таблица <param ref-name="number"/>. <param ref-name="title"/></variable>
+
+  <variable id="Figure.title">Рисунок <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Figure Number">Рисунок <param ref-name="number"/></variable>
+  <variable id="Table.title">Таблица <param ref-name="number"/>. <param ref-name="title"/></variable>
+  <variable id="Table Number">Таблица <param ref-name="number"/></variable>
   <variable id="Related Links"><!--TODO:Related Links--></variable>
   <variable id="Cross-Reference"><!--TODO:Cross-Reference to:--></variable>
   <variable id="Content-Reference"><!--TODO:Content-Reference to:--></variable>
@@ -80,14 +74,11 @@
   <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
   <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
   <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="Parent topic">На уровень выше</variable>
-  <variable id="Next topic">Следующая тема</variable>
-  <variable id="Previous topic">Предыдущая тема</variable>
+
   <variable id="Child topics"><!--TODO:Child Topics--></variable>
-  <variable id="Related concepts">Понятия, связанные с данным</variable>
-  <variable id="Related tasks">Задачи, связанные с данной</variable>
+
   <variable id="Related references">Ссылки, связанные с данной</variable>
-  <variable id="Related information">Информация, связанная с данной</variable>
+  
   <variable id="Index multiple entries separator">, </variable>
   <variable id="Optional Step"><!--TODO:Optional:--></variable>
   <variable id="Task Prereq">Подготовка</variable>
@@ -104,9 +95,8 @@
   <variable id="Glossary">Глоссарий</variable>
   <variable id="List of Tables">Список таблиц</variable>
   <variable id="List of Figures">Список иллюстраций</variable>
-  <variable id="Option">Опция</variable>
-  <variable id="Description">Описание</variable>
-  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+
+  <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">«</variable>
   <variable id="#quote-end">»</variable>
 </vars>

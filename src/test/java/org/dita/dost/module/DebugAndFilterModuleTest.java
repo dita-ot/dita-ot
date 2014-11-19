@@ -4,24 +4,23 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -30,16 +29,15 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTFileLogger;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.resolver.DitaURIResolverFactory;
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
-import org.dita.dost.util.OutputUtils;
+import org.dita.dost.util.Job;
 
 public class DebugAndFilterModuleTest {
 
@@ -49,6 +47,11 @@ public class DebugAndFilterModuleTest {
     private File tmpDir;
     private File inputDir;
 
+    @BeforeClass
+    public static void setUpClass() {
+        CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
+    }
+    
     @Before
     public void setUp() throws IOException, DITAOTException {
         tempDir = TestUtils.createTempDir(getClass());
@@ -58,15 +61,15 @@ public class DebugAndFilterModuleTest {
         final File outDir = new File(tempDir, "out");
         tmpDir = new File(tempDir, "temp");
         TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
-        final File ditaList = new File(tmpDir, "dita.list");
-        final Properties props = readProperties(ditaList);
-        props.put("user.input.dir", inputDir.getAbsolutePath());
-        writeProperties(props, ditaList, false);
-        writeProperties(props, new File(tmpDir, "dita.xml.properties"), true);
+        final Job props = new Job(tmpDir);
+        props.setInputFile(inputMap.getAbsoluteFile());
+        props.setGeneratecopyouter("1");
+        props.setOutputDir(outDir);
+        props.setProperty("user.input.dir", inputDir.getAbsolutePath());
+        props.write();
 
         DITAOTFileLogger.getInstance().setLogDir(tmpDir.getAbsolutePath());
         DITAOTFileLogger.getInstance().setLogFile(DebugAndFilterModuleTest.class.getSimpleName() + ".log");
-        DitaURIResolverFactory.setPath(tmpDir.getAbsolutePath());
 
         final PipelineHashIO pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute("inputmap", inputMap.getPath());
@@ -75,7 +78,6 @@ public class DebugAndFilterModuleTest {
         pipelineInput.setAttribute("outputdir", outDir.getPath());
         pipelineInput.setAttribute("tempDir", tmpDir.getPath());
         pipelineInput.setAttribute("ditadir", ditaDir.getAbsolutePath());
-        pipelineInput.setAttribute("ditaext", ".xml");
         pipelineInput.setAttribute("indextype", "xhtml");
         pipelineInput.setAttribute("encoding", "en-US");
         pipelineInput.setAttribute("targetext", ".html");
@@ -86,9 +88,11 @@ public class DebugAndFilterModuleTest {
         pipelineInput.setAttribute("ditalist", new File(tmpDir, "dita.list").getPath());
         pipelineInput.setAttribute("maplinks", new File(tmpDir, "maplinks.unordered").getPath());
         pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "yes");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "xhtml");
 
         final AbstractFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
+        facade.setJob(new Job(tmpDir));
         facade.execute("DebugAndFilter", pipelineInput);
     }
 
@@ -105,6 +109,7 @@ public class DebugAndFilterModuleTest {
         copyto.put(new File("topics", "copy-to.xml"), new File("topics", "xreffin-topic-1.xml"));
         final TestHandler handler = new TestHandler();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
+        parser.setEntityResolver(CatalogUtils.getCatalogResolver());
         parser.setContentHandler(handler);
         for (final File f: files) {
             InputStream in = null;
@@ -123,36 +128,6 @@ public class DebugAndFilterModuleTest {
     @After
     public void tearDown() throws IOException {
         TestUtils.forceDelete(tempDir);
-    }
-
-    private Properties readProperties(final File ditaList) throws IOException {
-        final Properties props = new Properties();
-        InputStream in = null;
-        try {
-            in = new FileInputStream(ditaList);
-            props.load(in);
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-        }
-        return props;
-    }
-
-    private void writeProperties(final Properties props, final File ditaList, final boolean isXML) throws IOException {
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(ditaList);
-            if (isXML) {
-                props.storeToXML(out, null);
-            } else {
-                props.store(out, null);
-            }
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
     }
 
     private static class TestHandler implements ContentHandler {

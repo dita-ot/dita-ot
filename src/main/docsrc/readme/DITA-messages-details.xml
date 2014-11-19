@@ -96,10 +96,10 @@ with "file:" as a prefix.</stentry></strow>
 which contains content to be added to the &lt;head&gt; section of each XHTML output topic, cannot be located or read. This is
 usually caused by a typo in the parameter value. You should also ensure that the value is not specified
 with "file:" as a prefix.</stentry></strow>
-<strow><stentry conref="DITA-messages.xml#msgs/DOTA010E-extra" conaction="pushreplace">By default, the
+<!--strow><stentry conref="DITA-messages.xml#msgs/DOTA010E-extra" conaction="pushreplace">By default, the
 DITA-OT expects to find Apache FOP in the <filepath>fop/</filepath> directory inside of the PDF plug-in. If you
 are using an alternate renderer, or if you have placed FOP in a different directory, you will
-need to update your configuration accordingly.</stentry></strow>
+need to update your configuration accordingly.</stentry></strow-->
 <strow><stentry conref="DITA-messages.xml#msgs/DOTA066F-extra" conaction="pushreplace">An alternate
 stylesheet was specified to run in place of the default XSL-FO output process, but that
 stylesheet could not be loaded. Please correct the parameter to specify a valid stylesheet.</stentry></strow>

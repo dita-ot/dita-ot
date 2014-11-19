@@ -23,14 +23,15 @@
   xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"
   xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"
   xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
   xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
-  xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg" version="1.0"
-  exclude-result-prefixes="related-links dita2html ditamsg">
+  xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
+  version="2.0"
+  exclude-result-prefixes="xs related-links dita2html ditamsg">
 
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
@@ -357,7 +358,7 @@
   <xsl:template match="*[contains(@class,' task/step ')]" mode="steps">
     <xsl:param name="step_expand"/>
     <xsl:param name="start-value">0</xsl:param>
-    <xsl:variable name="revtest">
+    <xsl:variable name="revtest" as="xs:integer?">
       <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
         <xsl:call-template name="find-active-rev-flag">
           <xsl:with-param name="allrevs" select="@rev"/>
@@ -467,7 +468,7 @@
   <!-- nested step -->
   <xsl:template match="*[contains(@class,' task/substep ')]" name="topic.task.substep">
     <xsl:param name="sub_step_expand"/>
-    <xsl:variable name="revtest">
+    <xsl:variable name="revtest" as="xs:integer?">
       <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
         <!-- revision? -->
         <xsl:call-template name="find-active-rev-flag">
@@ -567,7 +568,7 @@
   
   <!-- choices contain choice items -->
   <xsl:template match="*[contains(@class,' task/choices ')]" name="topic.task.choices">
-    <xsl:variable name="revtest">
+    <xsl:variable name="revtest" as="xs:integer?">
       <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
         <xsl:call-template name="find-active-rev-flag">               
           <xsl:with-param name="allrevs" select="@rev"/>

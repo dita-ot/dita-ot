@@ -4,17 +4,14 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -24,25 +21,15 @@ import org.dita.dost.TestUtils;
 
 public final class JobTest {
 
+    private static final File resourceDir = TestUtils.getResourceDir(JobTest.class);
+    private static final File srcDir = new File(resourceDir, "src");
     private static File tempDir;
     private static Job job;
     
     @BeforeClass
     public static void setUp() throws IOException {
         tempDir = TestUtils.createTempDir(JobTest.class);
-        final Job j = new Job(tempDir);
-        j.setProperty("user.input.dir", "/foo/bar");
-        final Map<String, String> m = new HashMap<String, String>();
-        m.put("foo", "bar");
-        m.put("baz", "qux");
-        j.setMap(COPYTO_TARGET_TO_SOURCE_MAP_LIST, m);
-        j.setSet(SUBJEC_SCHEME_LIST, new HashSet<String>(Arrays.asList("foo","bar")));
-        j.setProperty(INPUT_DITAMAP, "foo");
-        j.setSet(FULL_DITA_TOPIC_LIST, new HashSet<String>(Arrays.asList("foo1", "bar1")));
-        j.setSet(FULL_DITAMAP_LIST, new HashSet<String>(Arrays.asList("foo1", "bar1")));
-        j.setSet(CONREF_TARGET_LIST, new HashSet<String>(Arrays.asList("foo2", "bar2")));
-        j.setSet(COPYTO_SOURCE_LIST, new HashSet<String>(Arrays.asList("foo3", "bar3")));
-        j.write();
+        TestUtils.copy(srcDir, tempDir);
         job = new Job(tempDir);
     }
 
@@ -58,45 +45,32 @@ public final class JobTest {
     }
 
     @Test
-    public void testGetCopytoMap() {
-        final Map<String, String> exp = new HashMap<String, String>();
-        exp.put("foo", "bar");
-        exp.put("baz", "qux");
+    public void testGetCopytoMap() throws URISyntaxException {
+        final Map<URI, URI> exp = new HashMap<URI, URI>();
+        exp.put(new URI("foo"), new URI("bar"));
+        exp.put(new URI("baz"), new URI("qux"));
         assertEquals(exp, job.getCopytoMap());
     }
 
     @Test
-    public void testGetSchemeSet() {
-        final Set<String> exp = new HashSet<String>();
-        exp.add("foo");
-        exp.add("bar");
-        assertEquals(exp, job.getSchemeSet());
+    public void testGetFileInfo() throws URISyntaxException {
+        final URI relative = new URI("foo/bar.dita");
+        final URI absolute = tempDir.toURI().resolve(relative);
+        final Job.FileInfo fi = new Job.FileInfo.Builder().uri(relative).build();
+        job.add(fi);
+        assertEquals(fi, job.getFileInfo(relative));
+        assertEquals(fi, job.getFileInfo(absolute));
+        assertNull(job.getFileInfo((URI) null));
     }
 
     @Test
     public void testGetInputMap() {
-        assertEquals("foo", job.getInputMap());
-    }
-
-    @Test
-    public void testGetCollection() {
-        final Set<String> exp = new HashSet<String>();
-        exp.add("bar3");
-        exp.add("foo3");
-        exp.add("bar2");
-        exp.add("foo2");
-        exp.add("bar1");
-        exp.add("foo1");
-        final Set<String> act = new HashSet<String>();
-        act.addAll(job.getSet(FULL_DITAMAP_TOPIC_LIST));
-        act.addAll(job.getSet(CONREF_TARGET_LIST));
-        act.addAll(job.getSet(COPYTO_SOURCE_LIST));
-        assertEquals(exp, act);
+        assertEquals(new File("foo"), job.getInputMap());
     }
 
     @Test
     public void testGetValue() {
-        assertEquals("/foo/bar", job.getInputDir());
+        assertEquals(new File("/foo/bar"), job.getInputDir());
     }
 
     @AfterClass

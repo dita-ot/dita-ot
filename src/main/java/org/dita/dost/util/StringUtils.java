@@ -10,9 +10,9 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -21,9 +21,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * String relevant utilities.
@@ -31,9 +36,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Wu, Zhi Qiang
  */
 public final class StringUtils {
-
-    private static final String NOT_RESOLVE_ENTITY_LIST = "|lt|gt|quot|amp|";
-    private static final String NOT_RESOLVE_ENTITY_CHAR = "|#38|";
 
     /**
      * Private default constructor to make class uninstantiable.
@@ -51,8 +53,8 @@ public final class StringUtils {
      * @return java.lang.String
      */
     @SuppressWarnings("rawtypes")
-    public static String assembleString(final Collection coll, final String delim) {
-        final StringBuffer buff = new StringBuffer(INT_256);
+    public static String join(final Collection coll, final String delim) {
+        final StringBuilder buff = new StringBuilder(256);
         Iterator iter = null;
 
         if ((coll == null) || coll.isEmpty()) {
@@ -79,98 +81,19 @@ public final class StringUtils {
      * @return concatenated map
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static String assembleString(final Map value, final String delim) {
+    public static String join(final Map value, final String delim) {
         if (value == null || value.isEmpty()) {
             return "";
         }
         final StringBuilder buf = new StringBuilder();
         for (final Iterator<Map.Entry<String, String>> i = value.entrySet().iterator(); i.hasNext();) {
             final Map.Entry<String, String> e = i.next();
-            buf.append(e.getKey().toString()).append(EQUAL).append(e.getValue().toString());
+            buf.append(e.getKey()).append(EQUAL).append(e.getValue());
             if (i.hasNext()) {
                 buf.append(delim);
             }
         }
         return buf.toString();
-    }
-
-    /**
-     * Escape XML characters.
-     * Suggested by hussein_shafie
-     * @param s value needed to be escaped
-     * @return escaped value
-     */
-    public static String escapeXML(final String s){
-        final char[] chars = s.toCharArray();
-        return escapeXML(chars, 0, chars.length);
-    }
-
-    /**
-     * Escape XML characters.
-     * Suggested by hussein_shafie
-     * @param chars char arrays
-     * @param offset start position
-     * @param length arrays lenth
-     * @return escaped value
-     */
-    public static String escapeXML(final char[] chars, final int offset, final int length){
-        final StringBuffer escaped = new StringBuffer();
-
-        final int end = offset + length;
-        for (int i = offset; i < end; ++i) {
-            final char c = chars[i];
-
-            switch (c) {
-            case '\'':
-                escaped.append("&apos;");
-                break;
-            case '\"':
-                escaped.append("&quot;");
-                break;
-            case '<':
-                escaped.append("&lt;");
-                break;
-            case '>':
-                escaped.append("&gt;");
-                break;
-            case '&':
-                escaped.append("&amp;");
-                break;
-            default:
-                escaped.append(c);
-            }
-        }
-
-        return escaped.toString();
-    }
-
-    /**
-     * Get entity.
-     * 
-     * @param name entity name
-     * @return entity
-     */
-    public static String getEntity(final String name) {
-
-        return (name.startsWith("%")) ? (name + ";") : ("&" + name + ";");
-    }
-
-    /**
-     * Check entity.
-     * 
-     * @param name entity name
-     * @return ture if this entity needs to be resolved
-     */
-    public static boolean checkEntity(final String name) {
-        // check whether this entity need resolve
-        if (NOT_RESOLVE_ENTITY_LIST.indexOf(STICK + name.trim()
-                + STICK) != -1 ||
-                NOT_RESOLVE_ENTITY_CHAR.indexOf(STICK + name.trim()
-                        + STICK) != -1 ) {
-            return false;
-        }
-        return true;
-
     }
 
     /**
@@ -187,7 +110,7 @@ public final class StringUtils {
      */
     public static String replaceAll(final String input,
             final String pattern, final String replacement) {
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         int startIndex = 0;
         int newIndex = 0;
 
@@ -203,91 +126,27 @@ public final class StringUtils {
     }
 
     /**
-     * Get ASCII code of a string.
-     * @param inStr input string
-     * @return asscii code
-     */
-    public static String getAscii(final String inStr){
-        final byte [] input = inStr.getBytes();
-        /*byte [] output;
-		ByteArrayInputStream byteIS = new ByteArrayInputStream(input);
-		InputStreamReader reader = new InputStreamReader(byteIS,"UTF-8");
-		char [] cbuf = new char[INT_128];
-		int count = reader.read(cbuf);*/
-        final StringBuffer ret = new StringBuffer(INT_1024);
-        String strByte = null;
-        for (final byte element : input) {
-            ret.append("\\\'");
-            strByte = Integer.toHexString(element);
-            ret.append(strByte.substring(strByte.length()-2));
-            //System.out.println(Integer.toHexString(input[i]));
-            //System.out.println(strByte);
-        }
-        /*while(count > 0){
-			output = (new String(cbuf, 0, count)).getBytes();
-			for(int j = 0; j < output.length; j++){
-				ret.append("\\\'");
-				strByte = Integer.toHexString(output[j]);
-				ret.append(strByte.substring(strByte.length()-2));
-			}
-			count = reader.read(cbuf);
-		}*/
-
-        return ret.toString();
-
-    }
-
-    /**
      * Parse {@code props} attribute specializations
      * 
      * @param domains input domain
      * @return list of {@code props} attribute specializations
      */
-    public static String[][] getExtProps (final String domains){
+    public static String[][] getExtProps(final String domains){
         final List<String[]> propsBuffer = new ArrayList<String[]>();
-        int propsStart = domains.indexOf("a(props");
+        int propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS);
         int propsEnd = domains.indexOf(")",propsStart);
         while (propsStart != -1 && propsEnd != -1){
             final String propPath = domains.substring(propsStart+2,propsEnd).trim();
             final StringTokenizer propPathTokenizer = new StringTokenizer(propPath, STRING_BLANK);
-            final List<String> propList = new ArrayList<String>(INT_128);
+            final List<String> propList = new ArrayList<String>(128);
             while(propPathTokenizer.hasMoreTokens()){
                 propList.add(propPathTokenizer.nextToken());
             }
             propsBuffer.add(propList.toArray(new String[propList.size()]));
-            propsStart = domains.indexOf("a(props", propsEnd);
+            propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS, propsEnd);
             propsEnd = domains.indexOf(")",propsStart);
         }
         return propsBuffer.toArray(new String[propsBuffer.size()][]);
-    }
-
-
-
-    /**
-     * Restore map.
-     * @param s input string
-     * @return map created from string
-     */
-    public static Map<String, String> restoreMap(final String s) {
-        final Map<String,String> copytoMap = new HashMap<String,String>();
-        final StringTokenizer st = new StringTokenizer(s, COMMA);
-
-        while (st.hasMoreTokens()) {
-            final String entry = st.nextToken();
-            final int index = entry.indexOf('=');
-            copytoMap.put(entry.substring(0, index), entry.substring(index+1));
-        }
-
-        return copytoMap;
-    }
-
-    /**
-     * Break down a string separated by commas into a string set.
-     * @param s input string
-     * @return string set
-     */
-    public static Set<String> restoreSet(final String s) {
-        return restoreSet(s, COMMA);
     }
 
     /**
@@ -341,42 +200,6 @@ public final class StringUtils {
                 return target + STRING_BLANK + value;
             }else{
                 return target + value;
-            }
-        }
-    }
-
-    /**
-     * Get preferred SAX parser.
-     * 
-     * Preferred XML readers are in order:
-     * 
-     * <ol>
-     *   <li>{@link org.dita.dost.util.Constants#SAX_DRIVER_DEFAULT_CLASS Xerces}</li>
-     *   <li>{@link org.dita.dost.util.Constants#SAX_DRIVER_SUN_HACK_CLASS Sun's Xerces}</li>
-     *   <li>{@link org.dita.dost.util.Constants#SAX_DRIVER_CRIMSON_CLASS Crimson}</li>
-     * </ol>
-     * 
-     * @return XML parser instance.
-     * @throws SAXException if instantiating XMLReader failed
-     */
-    public static XMLReader getXMLReader() throws SAXException {
-        if (System.getProperty(SAX_DRIVER_PROPERTY) != null) {
-            return XMLReaderFactory.createXMLReader();
-        }
-        try {
-            Class.forName(SAX_DRIVER_DEFAULT_CLASS);
-            return XMLReaderFactory.createXMLReader(SAX_DRIVER_DEFAULT_CLASS);
-        } catch (final ClassNotFoundException e) {
-            try {
-                Class.forName(SAX_DRIVER_SUN_HACK_CLASS);
-                return XMLReaderFactory.createXMLReader(SAX_DRIVER_SUN_HACK_CLASS);
-            } catch (final ClassNotFoundException ex) {
-                try {
-                    Class.forName(SAX_DRIVER_CRIMSON_CLASS);
-                    return XMLReaderFactory.createXMLReader(SAX_DRIVER_CRIMSON_CLASS);
-                } catch (final ClassNotFoundException exc){
-                    return XMLReaderFactory.createXMLReader();
-                }
             }
         }
     }
@@ -465,84 +288,30 @@ public final class StringUtils {
 
         return aLocale;
     }
+    
+    /** Whitespace normalization state. */
+    private enum WhiteSpaceState { WORD, SPACE }
 
     /**
-     * Get file's main name.
-     * @param input input filename
-     * @param marker delimiter
-     * @return file's main name
+     * Normalize and collapse whitespaces from string buffer.
+     * 
+     * @param strBuffer The string buffer.
      */
-    public static String getFileName(final String input, final String marker){
-        final int index = input.lastIndexOf(marker);
-        if(index != -1){
-            return input.substring(0, index);
-        }else{
-            return input;
+    public static void normalizeAndCollapseWhitespace(final StringBuilder strBuffer){
+        WhiteSpaceState currentState = WhiteSpaceState.WORD;
+        for (int i = strBuffer.length() - 1; i >= 0; i--) {
+            final char currentChar = strBuffer.charAt(i);
+            if (Character.isWhitespace(currentChar)) {
+                if (currentState == WhiteSpaceState.SPACE) {
+                    strBuffer.delete(i, i + 1);
+                } else if(currentChar != ' ') {
+                    strBuffer.replace(i, i + 1, " ");
+                }
+                currentState = WhiteSpaceState.SPACE;
+            } else {
+                currentState = WhiteSpaceState.WORD;
+            }
         }
     }
 
-    /**
-     * Get max value.
-     */
-    @Deprecated
-    public static Integer getMax(final String ul_depth, final String ol_depth, final String sl_depth,
-            final String dl_depth, final String table_depth, final String stable_depth){
-
-        final int unDepth = Integer.parseInt(ul_depth);
-        final int olDepth = Integer.parseInt(ol_depth);
-        final int slDepth = Integer.parseInt(sl_depth);
-        final int dlDepth = Integer.parseInt(dl_depth);
-        final int tableDepth = Integer.parseInt(table_depth);
-        final int stableDepth = Integer.parseInt(stable_depth);
-
-        int max = unDepth;
-        if(olDepth > max){
-            max = olDepth;
-        }
-        if(slDepth > max){
-            max = slDepth;
-        }
-        if(dlDepth > max){
-            max = dlDepth;
-        }
-        if(tableDepth > max){
-            max = tableDepth;
-        }
-        if(stableDepth > max){
-            max = stableDepth;
-        }
-
-        return max;
-
-    }
-
-    /**
-     * Get max value.
-     */
-    @Deprecated
-    public static Integer getMax(final String fn_depth, final String list_depth, final String dlist_depth, final String table_depth, final String stable_depth){
-
-        final int fnDepth = Integer.parseInt(fn_depth);
-        final int listDepth = Integer.parseInt(list_depth);
-        final int dlistDepth = Integer.parseInt(dlist_depth);
-        final int tableDepth = Integer.parseInt(table_depth);
-        final int stableDepth = Integer.parseInt(stable_depth);
-
-        int max = fnDepth;
-        if(listDepth > max){
-            max = listDepth;
-        }
-        if(dlistDepth > max){
-            max = dlistDepth;
-        }
-        if(tableDepth > max){
-            max = tableDepth;
-        }
-        if(stableDepth > max){
-            max = stableDepth;
-        }
-
-        return max;
-
-    }
 }

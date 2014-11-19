@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:java="org.dita.dost.util.ImgUtils" exclude-result-prefixes="java">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns:java="org.dita.dost.util.ImgUtils" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" exclude-result-prefixes="java dita-ot">
 
 <xsl:template match="*[contains(@class,' topic/fig ')]">
 <xsl:apply-templates/>
@@ -33,22 +32,8 @@
       <xsl:otherwise/>
     </xsl:choose>
   </xsl:variable>
-  <xsl:variable name="height">
-    <xsl:choose>
-      <xsl:when test="not(contains(@href,'://'))">
-        <xsl:value-of select="java:getHeight($OUTPUTDIR, string(@href))"/>
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="width">
-    <xsl:choose>
-      <xsl:when test="not(contains(@href,'://'))">
-        <xsl:value-of select="java:getWidth($OUTPUTDIR, string(@href))"/>
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-  </xsl:variable>
+  <xsl:variable name="height" select="@dita-ot:image-height"/>
+  <xsl:variable name="width" select="@dita-ot:image-width"/>
 
 <xsl:call-template name="gen-id"/>
 <xsl:choose>
@@ -75,18 +60,12 @@
 
   <xsl:template name="getType">
     <xsl:param name="file"/>
-    <xsl:variable name="f">
-      <xsl:call-template name="convert-to-lower">
-        <xsl:with-param name="inputval" select="$file"/>
-      </xsl:call-template>
-    </xsl:variable>
+    <xsl:variable name="f" select="lower-case($file)"/>
     <xsl:choose>
-      <xsl:when test="substring($f, string-length($f) - 3) = '.jpg' or
-                      substring($f, string-length($f) - 4) = '.jpg'">
+      <xsl:when test="ends-with($f, '.jpg') or ends-with($f, '.jpeg')">
         <xsl:text>jpegblip</xsl:text>
       </xsl:when>
-      <xsl:when test="substring($f, string-length($f) - 3) = '.gif' or
-                      substring($f, string-length($f) - 3) = '.png'">
+      <xsl:when test="ends-with($f, '.gif') or ends-with($f, '.png')">
         <xsl:text>pngblip</xsl:text>
       </xsl:when>
       <xsl:otherwise>

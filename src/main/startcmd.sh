@@ -1,8 +1,8 @@
 #!/bin/sh
-#  This file is part of the DITA Open Toolkit project hosted on 
-#  Sourceforge.net. See the accompanying license.txt file for 
-#  applicable licenses.
+#  This file is part of the DITA Open Toolkit project. 
+#  See the accompanying license.txt file for applicable licenses.
 #  (c) Copyright IBM Corp. 2006 All Rights Reserved.
+echo "NOTE: The startcmd.sh has been deprecated, use the 'dita' command instead."
 
 realpath() {
   case $1 in
@@ -17,24 +17,24 @@ else #elif [ "${DITA_HOME:+1}" != "1" ]; then
   export DITA_DIR="$(dirname "$(realpath "$0")")"
 fi
 
-if [ -f "$DITA_DIR"/tools/ant/bin/ant ] && [ ! -x "$DITA_DIR"/tools/ant/bin/ant ]; then
-  chmod +x "$DITA_DIR"/tools/ant/bin/ant
+if [ -f "$DITA_DIR"/bin/ant ] && [ ! -x "$DITA_DIR"/bin/ant ]; then
+  chmod +x "$DITA_DIR"/bin/ant
 fi
 
 export ANT_OPTS="-Xmx512m $ANT_OPTS"
 export ANT_OPTS="$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl"
-export ANT_HOME="$DITA_DIR"/tools/ant
-export PATH="$DITA_DIR"/tools/ant/bin:"$PATH"
+export ANT_HOME="$DITA_DIR"
+export PATH="$DITA_DIR"/bin:"$PATH"
 
 NEW_CLASSPATH="$DITA_DIR/lib/dost.jar"
 NEW_CLASSPATH="$DITA_DIR/lib:$NEW_CLASSPATH"
-NEW_CLASSPATH="$DITA_DIR/lib/commons-codec-1.4.jar:$NEW_CLASSPATH"
-NEW_CLASSPATH="$DITA_DIR/lib/resolver.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/commons-codec.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/xml-resolver.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/icu4j.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/xercesImpl.jar:$NEW_CLASSPATH"
 NEW_CLASSPATH="$DITA_DIR/lib/xml-apis.jar:$NEW_CLASSPATH"
-NEW_CLASSPATH="$DITA_DIR/lib/saxon/saxon9.jar:$NEW_CLASSPATH"
-NEW_CLASSPATH="$DITA_DIR/lib/saxon/saxon9-dom.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/saxon.jar:$NEW_CLASSPATH"
+NEW_CLASSPATH="$DITA_DIR/lib/saxon-dom.jar:$NEW_CLASSPATH"
 if test -n "$CLASSPATH"; then
   export CLASSPATH="$NEW_CLASSPATH":"$CLASSPATH"
 else

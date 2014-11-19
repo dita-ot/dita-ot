@@ -42,8 +42,11 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="start-indent">6pt + from-parent(start-indent)</xsl:attribute>
         <xsl:attribute name="end-indent">6pt + from-parent(end-indent)</xsl:attribute>
         <xsl:attribute name="padding">6pt</xsl:attribute>
+        <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
+        <xsl:attribute name="wrap-option">wrap</xsl:attribute>
+        <xsl:attribute name="hyphenation-character">&#x25BA;</xsl:attribute>
     </xsl:attribute-set>
-
+  
     <xsl:attribute-set name="codeblock__top">
         <xsl:attribute name="leader-pattern">rule</xsl:attribute>
         <xsl:attribute name="leader-length">100%</xsl:attribute>
@@ -52,6 +55,14 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="codeblock__bottom">
         <xsl:attribute name="leader-pattern">rule</xsl:attribute>
         <xsl:attribute name="leader-length">100%</xsl:attribute>
+    </xsl:attribute-set>
+  
+    <xsl:attribute-set name="codeblock.line-number">
+      <xsl:attribute name="font-size">75%</xsl:attribute>
+      <xsl:attribute name="font-weight">normal</xsl:attribute>
+      <xsl:attribute name="font-style">normal</xsl:attribute>
+      <xsl:attribute name="color">gray</xsl:attribute>
+      <xsl:attribute name="padding-end">1em</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="option">

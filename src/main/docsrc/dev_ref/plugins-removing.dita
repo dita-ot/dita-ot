@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="plugins-removing" xml:lang="en">
-  <title>Removing plug-ins</title>
+  <title>Manually removing plug-ins</title>
   <shortdesc>Plug-ins can be installed by removing the plug-in and running integration
     process.</shortdesc>
   <taskbody>

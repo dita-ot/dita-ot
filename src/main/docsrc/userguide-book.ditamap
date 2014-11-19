@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
 <bookmap xml:lang="en">
-  <title>DITA Open Toolkit, version <keyword keyref="release.version"/></title>
+  <title>DITA Open Toolkit, version <keyword keyref="release"/></title>
   <bookmeta>
     <prodinfo>
       <prodname>DITA Open Toolkit</prodname>
@@ -18,9 +18,13 @@
       <toc/>
     </booklists>
   </frontmatter>
-  <chapter format="ditamap" href="quickstart.ditamap"/>
-  <chapter href="readme.ditamap" format="ditamap"/>
-  <chapter navtitle="Developer Reference" href="dev_ref/dev_ref.ditamap" format="ditamap"/>
-  <appendix navtitle="Project Management" href="admin/project-management.ditamap" format="ditamap"/>
+  <chapter format="ditamap" href="client-quickstart.ditamap"/>
+  <part navtitle="User Guide" href="readme/DITA-readme.xml">
+    <chapter href="readme.ditamap" format="ditamap"/>  
+  </part>
+  <part navtitle="Developer Reference" href="dev_ref/developer-reference.dita">
+    <chapter navtitle="Developer Reference" href="dev_ref/dev_ref.ditamap" format="ditamap"/>
+  </part>
+  <!--appendix navtitle="Project Management" href="admin/project-management.ditamap" format="ditamap"/-->
   <appendix href="dita-resources.ditamap" format="ditamap"/>
 </bookmap>

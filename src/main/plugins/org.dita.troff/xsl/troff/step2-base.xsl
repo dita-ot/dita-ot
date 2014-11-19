@@ -26,7 +26,7 @@
      
      -->
 
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 >
 
@@ -141,7 +141,7 @@
      format. -->
 <xsl:template name="wrap">
   <xsl:param name="string"/>
-  <xsl:param name="curLength">0</xsl:param>
+  <xsl:param name="curLength" select="0"/>
   <xsl:param name="leadin"/>   <!-- Text to use once, before indent -->
   <xsl:param name="addIndent">
     <xsl:choose>
@@ -177,7 +177,7 @@
     <!-- End of the string; nothing left to evaluate, so quit -->
     <xsl:when test="string-length($string)=0"/>
     <!-- At the start of the line; add the word, whatever the length -->
-    <xsl:when test="$curLength='0'">
+    <xsl:when test="$curLength = 0">
       <xsl:value-of select="$addIndent"/>
       <xsl:value-of select="$firstword"/>
       <xsl:call-template name="wrap">

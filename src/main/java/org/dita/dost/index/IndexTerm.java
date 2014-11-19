@@ -50,7 +50,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
     private String termPrefix = null;
 
     /** The list of rtl locale.*/
-    private static ArrayList<String> rtlLocaleList = null;
+    private static final ArrayList<String> rtlLocaleList;
 
     /**
      * The boolean to show whether current term is leaf term
@@ -61,7 +61,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     //initialization for rtlLocaleList
     static{
-        rtlLocaleList = new ArrayList<String>(INT_2);
+        rtlLocaleList = new ArrayList<String>(2);
         rtlLocaleList.add("ar_EG");
         rtlLocaleList.add("he_IL");
     }
@@ -70,8 +70,8 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * Constructor.
      */
     public IndexTerm() {
-        subTerms = new ArrayList<IndexTerm>(INT_1);
-        targetList = new ArrayList<IndexTermTarget>(INT_1);
+        subTerms = new ArrayList<IndexTerm>(1);
+        targetList = new ArrayList<IndexTermTarget>(1);
     }
 
     /**
@@ -255,12 +255,12 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      */
     @Override
     public int hashCode() {
-        int result = INT_17;
+        int result = 17;
 
-        result = INT_37 * result + termName.hashCode();
-        result = INT_37 * result + termKey.hashCode();
-        result = INT_37 * result + targetList.hashCode();
-        result = INT_37 * result + subTerms.hashCode();
+        result = 37 * result + termName.hashCode();
+        result = 37 * result + termKey.hashCode();
+        result = 37 * result + targetList.hashCode();
+        result = 37 * result + subTerms.hashCode();
 
         return result;
     }
@@ -273,8 +273,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
         if (subTerms != null && subTermNum > 0) {
             Collections.sort(subTerms);
-            for (int i = 0; i < subTermNum; i++) {
-                final IndexTerm subTerm = subTerms.get(i);
+            for (final IndexTerm subTerm : subTerms) {
                 subTerm.sortSubTerms();
             }
         }
@@ -344,17 +343,8 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      */
     @Override
     public String toString() {
-        final StringBuffer buffer = new StringBuffer(INT_128);
 
-        buffer.append("{Term name: ").append(termName); //$NON-NLS-1$
-        buffer.append(", Term key: ").append(termKey); //$NON-NLS-1$
-        buffer.append(", Target list: "); //$NON-NLS-1$
-        buffer.append(targetList.toString());
-        buffer.append(", Sub-terms: "); //$NON-NLS-1$
-        buffer.append(subTerms.toString());
-        buffer.append("}"); //$NON-NLS-1$
-
-        return buffer.toString();
+        return "{Term name: " + termName + ", Term key: " + termKey + ", Target list: " + targetList.toString() + ", Sub-terms: " + subTerms.toString() + "}";
     }
 
     /**

@@ -12,6 +12,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.module.ModuleFactory;
+import org.dita.dost.util.Job;
 
 /**
  * PipelineFacade implement AbstractFacade and control the constructing and excuting
@@ -23,6 +24,7 @@ import org.dita.dost.module.ModuleFactory;
 public final class PipelineFacade implements AbstractFacade {
 
     private DITAOTLogger logger;
+    private Job job;
     private final ModuleFactory factory = ModuleFactory.instance();
 
     /**
@@ -50,6 +52,7 @@ public final class PipelineFacade implements AbstractFacade {
         final AbstractPipelineModule module = factory.createModule(pipelineModuleName);
         if (module != null) {
             module.setLogger(logger);
+            module.setJob(job);
             return module.execute(input);
         }
         return null;
@@ -61,9 +64,18 @@ public final class PipelineFacade implements AbstractFacade {
         final AbstractPipelineModule module = factory.createModule(moduleClass);
         if (module != null) {
             module.setLogger(logger);
+            module.setJob(job);
             return module.execute(input);
         }
         return null;
+    }
+
+    @Override
+    public AbstractPipelineOutput execute(final AbstractPipelineModule module,
+            final AbstractPipelineInput input) throws DITAOTException {
+        module.setLogger(logger);
+        module.setJob(job);
+        return module.execute(input);
     }
 
     @Override
@@ -71,4 +83,9 @@ public final class PipelineFacade implements AbstractFacade {
         this.logger = logger;
     }
 
+    @Override
+    public void setJob(final Job job) {
+        this.job = job;
+    }
+    
 }

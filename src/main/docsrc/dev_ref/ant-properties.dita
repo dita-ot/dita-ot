@@ -22,8 +22,6 @@ artworkPrefixUrl
 axf.cmd
 axf.formatter.output-format
 axf.path
-chunkedditamapfile
-chunkedtopicfile
 clean-temp.skip
 clean.temp
 collator
@@ -37,10 +35,7 @@ customization.dir.url
 default.locale
 dita.dir
 dita.eclipsehelp.index.class
-dita.ext
-dita.extname
 dita.input
-dita.input.dirname
 dita.input.filename
 dita.input.valfile
 dita.input.valfile.url
@@ -104,14 +99,9 @@ mappull.workdir
 mapref.workdir
 msg.deprecate
 noCoderef
-noConref
-noConrefPush
-noHtmllist
 noImagelist
-noKeyref
 noMap
 noPlugin
-noSublist
 noTopic
 odt.dir
 odt.output.tempdir
@@ -144,7 +134,6 @@ preprocess.keyref.skip
 preprocess.maplink.skip
 preprocess.mappull.skip
 preprocess.mapref.skip
-preprocess.move-links.skip
 preprocess.move-meta-entries.skip
 preprocess.topicpull.skip
 prompt.ditamap.directory

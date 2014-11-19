@@ -58,5 +58,13 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="baseline-shift">sub</xsl:attribute>
         <xsl:attribute name="font-size">75%</xsl:attribute>
     </xsl:attribute-set>
+  
+    <xsl:attribute-set name="line-through">
+        <xsl:attribute name="text-decoration">line-through</xsl:attribute>
+    </xsl:attribute-set>
+  
+    <xsl:attribute-set name="overline">
+      <xsl:attribute name="text-decoration">overline</xsl:attribute>
+    </xsl:attribute-set> 
 
 </xsl:stylesheet>

@@ -5,6 +5,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,8 +19,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.module.Content;
-import org.dita.dost.util.OutputUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -47,33 +47,30 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private File currentFile = null;
     private int depth = 0;
     private final Map<File, Attributes> cache = new HashMap<File, Attributes>();
+    private final Job job;
 
     // Constructors ------------------------------------------------------------
 
     /**
      * Constructor.
      */
-    public ImageMetadataFilter(final File outputDir, final File tempDir, final String uplevels) {
+    public ImageMetadataFilter(final File outputDir, final Job job) {
         this.outputDir = outputDir;
-        this.tempDir = tempDir;
-        this.uplevels = uplevels;
+        this.job = job;
+        this.tempDir = job.tempDir;
+        this.uplevels = job.getProperty("uplevels");
     }
 
     // AbstractWriter methods --------------------------------------------------
 
     @Override
-    public void setContent(final Content content) {
-        // NOOP
-    }
-
-    @Override
-    public void write(final String filename) throws DITAOTException {
+    public void write(final File filename) throws DITAOTException {
         // ignore in-exists file
-        if (filename == null || !new File(filename).exists()) {
+        if (filename == null || !filename.exists()) {
             return;
         }
-        currentFile = new File(filename);
-        logger.logInfo("Processing " + filename);
+        currentFile = filename;
+        logger.info("Processing " + filename.getAbsolutePath());
         super.write(filename);
     } 
     
@@ -84,14 +81,16 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             final Attributes atts) throws SAXException {
         if (TOPIC_IMAGE.matches(atts)) {
             final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder(atts);
-            final File imgInput = getImageFile(atts);
-            if (imgInput.exists()) {
-                Attributes m = cache.get(imgInput);
-                if (m == null) {
-                    m = readMetadata(imgInput);
-                    cache.put(imgInput, m);
+            if (atts.getValue(ATTRIBUTE_NAME_HREF) != null) {
+                final File imgInput = getImageFile(toURI(atts.getValue(ATTRIBUTE_NAME_HREF)));
+                if (imgInput.exists()) {
+                    Attributes m = cache.get(imgInput);
+                    if (m == null) {
+                        m = readMetadata(imgInput);
+                        cache.put(imgInput, m);
+                    }
+                    a.addAll(m);
                 }
-                a.addAll(m);
             }
             depth = 1;
             super.startPrefixMapping(DITA_OT_PREFIX , DITA_OT_NS);
@@ -118,13 +117,13 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     // Private methods ---------------------------------------------------------
     
     private Attributes readMetadata(final File imgInput) {
-        logger.logInfo("Reading " + imgInput);
+        logger.info("Reading " + imgInput);
         final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder();
         try {
             final ImageInputStream iis = ImageIO.createImageInputStream(imgInput);
             final Iterator<ImageReader> i = ImageIO.getImageReaders(iis);
             if (!i.hasNext()) {
-                logger.logInfo("Image " + imgInput + " format not supported");
+                logger.info("Image " + imgInput + " format not supported");
             } else {
                 final ImageReader r = i.next();
                 r.setInput(iis);
@@ -146,21 +145,19 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
                 }
             }
         } catch (final Exception e) {
-            logger.logError("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);
+            logger.error("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);
         }
         return a.build();
     }
 
-    private File getImageFile(final Attributes atts) {
-        final String fileDir = tempDir.toURI().relativize(currentFile.getParentFile().toURI()).toASCIIString();
-        final StringBuilder fileName = new StringBuilder(fileDir).append("./");
-        if (OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION) {
-            fileName.append(uplevels);
+    private File getImageFile(final URI href) {
+        URI fileDir = tempDir.toURI().relativize(currentFile.getParentFile().toURI());
+        if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
+            fileDir = fileDir.resolve(uplevels.replace(File.separator, URI_SEPARATOR));
         }
-        fileName.append(atts.getValue(ATTRIBUTE_NAME_HREF));
-        final URI imgInputUri = outputDir.toURI().resolve(fileName.toString());
-        final File imgInput = new File(imgInputUri);
-        return imgInput;
+        final URI fileName = fileDir.resolve(href);
+        final URI imgInputUri = outputDir.toURI().resolve(fileName);
+        return new File(imgInputUri);
     }
     
 }

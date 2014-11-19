@@ -8,16 +8,21 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.io.File;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
+import org.dita.dost.reader.DitaValReader;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 
 /**
@@ -27,95 +32,159 @@ import org.xml.sax.Attributes;
  */
 public final class FilterUtils {
 
+    /** Subject scheme file extension */
+    public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
+
     public enum Action {
         INCLUDE, EXCLUDE, PASSTHROUGH, FLAG
     }
 
+    private static final String[] PROFILE_ATTRIBUTES = {
+        ATTRIBUTE_NAME_AUDIENCE,
+        ATTRIBUTE_NAME_PLATFORM,
+        ATTRIBUTE_NAME_PRODUCT,
+        ATTRIBUTE_NAME_OTHERPROPS,
+        ATTRIBUTE_NAME_PROPS,
+        ATTRIBUTE_NAME_PRINT
+    };
+    
     public static final FilterKey DEFAULT = new FilterKey(DEFAULT_ACTION, null);
 
     private DITAOTLogger logger;
-    private Map<FilterKey, Action> filterMap = null;
+    private final Map<FilterKey, Action> filterMap;
     private final Set<FilterKey> notMappingRules = new HashSet<FilterKey>();
+
+    public FilterUtils(final Map<FilterKey, Action> filterMap) {
+        this.filterMap = new HashMap<FilterKey, Action>(filterMap);
+    }
+
+    /**
+     * Construct filter utility.
+     * 
+     * @param isPrintType transformation output is print-oriented
+     */
+    public FilterUtils(final boolean isPrintType, final Map<FilterKey, Action> filterMap) {
+        final Map<FilterKey, Action> dfm = new HashMap<FilterKey, Action>();
+        dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_YES), Action.INCLUDE);
+        if (isPrintType) {
+            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_PRINT_ONLY), Action.INCLUDE);
+            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_NO), Action.EXCLUDE);
+        } else {
+            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_PRINT_ONLY), Action.EXCLUDE);
+            dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_NO), Action.INCLUDE);            
+        }
+        dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, null), Action.INCLUDE);
+        dfm.putAll(filterMap);
+        this.filterMap = dfm;
+    }
 
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
 
     /**
-     * Set the filter map.
-     * 
-     * @param filtermap The filterMap to set.
-     */
-    public void setFilterMap(final Map<FilterKey, Action> filtermap) {
-        filterMap = filtermap;
-    }
-
-    /**
-     * Getter for filter map.
-     * 
-     * @return filter map
-     */
-    public Map<FilterKey, Action> getFilterMap() {
-        return filterMap;
-    }
-
-    /**
      * Check if the given Attributes need to be excluded.
-     * 
+     *
      * @param atts attributes
      * @param extProps {@code props} attribute specializations
      * @return true if any one of attributes 'audience', 'platform', 'product',
-     *         'otherprops' was excluded.
+     *         'otherprops', 'props', or 'print' was excluded.
      */
     public boolean needExclude(final Attributes atts, final String[][] extProps) {
-        if (filterMap == null) {
+        if (filterMap.isEmpty()) {
             return false;
         }
 
-        boolean ret = false;
-        boolean extRet = false;
-
-        if (filterMap == null) {
-            return false;
-        }
-
-        ret = checkExclude(ATTRIBUTE_NAME_AUDIENCE, atts.getValue(ATTRIBUTE_NAME_AUDIENCE))
-                || checkExclude(ATTRIBUTE_NAME_PLATFORM, atts.getValue(ATTRIBUTE_NAME_PLATFORM))
-                || checkExclude(ATTRIBUTE_NAME_PRODUCT, atts.getValue(ATTRIBUTE_NAME_PRODUCT))
-                || checkExclude(ATTRIBUTE_NAME_OTHERPROPS, atts.getValue(ATTRIBUTE_NAME_OTHERPROPS))
-                || checkExclude(ATTRIBUTE_NAME_PROPS, atts.getValue(ATTRIBUTE_NAME_PROPS));
-
-        if (extProps == null) {
-            return ret;
-        }
-
-        for (final String[] propList : extProps) {
-            int propListIndex = propList.length - 1;
-            final String propName = propList[propListIndex];
-            String propValue = atts.getValue(propName);
-
-            while (propValue == null && propListIndex > 0) {
-                propListIndex--;
-                final String attrPropsValue = atts.getValue(propList[propListIndex]);
-                if (attrPropsValue != null) {
-                    int propStart = -1;
-                    if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.indexOf(STRING_BLANK + propName + "(", 0) != -1) {
-                        propStart = attrPropsValue.indexOf(propName + "(");
-                    }
-                    if (propStart != -1) {
-                        propStart = propStart + propName.length() + 1;
-                    }
-                    final int propEnd = attrPropsValue.indexOf(")", propStart);
-                    if (propStart != -1 && propEnd != -1) {
-                        propValue = attrPropsValue.substring(propStart, propEnd).trim();
+        for (final String attr: PROFILE_ATTRIBUTES) {
+            final String value = atts.getValue(attr);
+            if (value != null) {
+                final Map<String, List<String>> groups = getGroups(value);
+                for (Map.Entry<String, List<String>> group: groups.entrySet()) {
+                    if (group.getKey() != null) {
+                        if (extCheckExclude(new String[] { attr, group.getKey() }, group.getValue())) {
+                            return true;
+                        }
+                    } else {
+                        if (extCheckExclude(new String[] { attr }, group.getValue())) {
+                            return true;
+                        }
                     }
                 }
             }
-            extRet = extRet || extCheckExclude(propList, propValue);
         }
-        return ret || extRet;
+
+        if (extProps != null && extProps.length != 0) {
+            for (final String[] propList: extProps) {
+                int propListIndex = propList.length - 1;
+                final String propName = propList[propListIndex];
+                String propValue = atts.getValue(propName);
+
+                while (propValue == null && propListIndex > 0) {
+                    propListIndex--;
+                    propValue = getLabelValue(propName, atts.getValue(propList[propListIndex]));
+                }
+                if (propValue != null && extCheckExclude(propList, Arrays.asList(propValue.split("\\s+")))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
+    private final Pattern groupPattern = Pattern.compile("(\\w+)\\((.+?)\\)");
+    
+    public Map<String, List<String>> getGroups(final String value) {
+        final Map<String, List<String>> res = new HashMap<String, List<String>>();
+        
+        final StringBuilder buf = new StringBuilder();
+        int previousEnd = 0;
+        final Matcher m = groupPattern.matcher(value);
+        while(m.find()) {
+            buf.append(value.subSequence(previousEnd, m.start()));
+            final String v = m.group(2);
+            if (!v.trim().isEmpty()) {
+                final String k = m.group(1);
+                if (res.containsKey(k)) {
+                    final List<String> l = new ArrayList<String>(res.get(k));
+                    l.addAll(Arrays.asList(v.trim().split("\\s+")));
+                    res.put(k, l);
+                } else {
+                    res.put(k, Arrays.asList(v.trim().split("\\s+")));
+                }
+            }
+            previousEnd = m.end();
+        }
+        buf.append(value.substring(previousEnd));
+        if (!buf.toString().trim().isEmpty()) {
+            res.put(null, Arrays.asList(buf.toString().trim().split("\\s+")));
+        }
+        return res;
+    }
+
+    /**
+     * Get labelled props value.
+     * 
+     * @param propName attribute name
+     * @param attrPropsValue attribute value
+     * @return props value, {@code null} if not available
+     */
+    private String getLabelValue(final String propName, final String attrPropsValue) {
+        if (attrPropsValue != null) {
+            int propStart = -1;
+            if (attrPropsValue.startsWith(propName + "(") || attrPropsValue.indexOf(" " + propName + "(", 0) != -1) {
+                propStart = attrPropsValue.indexOf(propName + "(");
+            }
+            if (propStart != -1) {
+                propStart = propStart + propName.length() + 1;
+            }
+            final int propEnd = attrPropsValue.indexOf(")", propStart);
+            if (propStart != -1 && propEnd != -1) {
+                return attrPropsValue.substring(propStart, propEnd).trim();
+            }
+        }
+        return null;
+    }
+    
     /**
      * Check the given extended attribute in propList to see if it was excluded.
      * 
@@ -123,41 +192,29 @@ public final class FilterUtils {
      * @param attValue
      * @return {@code true} if should be excluded, otherwise {@code false}
      */
-    private boolean extCheckExclude(final String[] propList, final String attValue) {
-        // to check if the value is just only "" or " ",ignore it
-        if (attValue == null || attValue.trim().length() == 0 || propList.length == 0 || attValue.indexOf("(") != -1) {
+    private boolean extCheckExclude(final String[] propList, final List<String> attValue) {
+        if (attValue == null || attValue.isEmpty() || propList.length == 0 || attValue.contains("(")) {
             return false;
         }
-
-        int propListIndex = 0;
-        boolean hasNullAction = false;
-        boolean hasExcludeAction = false;
-
-        propListIndex = propList.length - 1;
-        checkRuleMapping(propList[propListIndex], attValue);
-        while (propListIndex >= 0) {
-            hasNullAction = false;
-            hasExcludeAction = false;
-            final StringTokenizer tokenizer = new StringTokenizer(attValue, STRING_BLANK);
-
+        for (int propListIndex = propList.length - 1; propListIndex >= 0; propListIndex--) {
+            boolean hasNullAction = false;
+            boolean hasExcludeAction = false;
             final String attName = propList[propListIndex];
-            while (tokenizer.hasMoreTokens()) {
-                final String attSubValue = tokenizer.nextToken();
+            checkRuleMapping(attName, attValue);
+            for (final String attSubValue: attValue) {
                 final FilterKey filterKey = new FilterKey(attName, attSubValue);
                 final Action filterAction = filterMap.get(filterKey);
                 // no action will be considered as 'not exclude'
                 if (filterAction == null) {
-                    // check Specified DefaultAction mapping this attribute's
-                    // name
-                    final Action attDefaultAction = filterMap.get(new FilterKey(attName, null));
-                    if (attDefaultAction != null) {
-                        // filterAction=attDefaultAction;
-                        if (Action.EXCLUDE != attDefaultAction) {
+                    // check Specified DefaultAction mapping this attribute's name
+                    final Action defaultAction = filterMap.get(new FilterKey(attName, null));
+                    if (defaultAction != null) {
+                        if (Action.EXCLUDE != defaultAction) {
                             return false;
                         } else {
                             hasExcludeAction = true;
-                            if (hasNullAction == true) {
-                                if (checkExcludeOfGlobalDefaultAction() == true) {
+                            if (hasNullAction) {
+                                if (checkExcludeOfGlobalDefaultAction()) {
                                     hasNullAction = false;
                                 } else {
                                     return false;
@@ -165,8 +222,8 @@ public final class FilterUtils {
                             }
                         }
                     } else {
-                        if (hasExcludeAction == true) {
-                            if (checkExcludeOfGlobalDefaultAction() == false) {
+                        if (hasExcludeAction) {
+                            if (!checkExcludeOfGlobalDefaultAction()) {
                                 return false;
                             }
                         } else {
@@ -175,8 +232,8 @@ public final class FilterUtils {
                     }
                 } else if (Action.EXCLUDE == filterAction) {
                     hasExcludeAction = true;
-                    if (hasNullAction == true) {
-                        if (checkExcludeOfGlobalDefaultAction() == true) {
+                    if (hasNullAction) {
+                        if (checkExcludeOfGlobalDefaultAction()) {
                             hasNullAction = false;
                         } else {
                             return false;
@@ -188,10 +245,8 @@ public final class FilterUtils {
             }
 
             if (hasNullAction) {
-                // if there is exclude action but not all value should be
-                // excluded
-                // under the condition of default action also not exist or not
-                // excluded
+                // if there is exclude action but not all value should be excluded
+                // under the condition of default action also not exist or not excluded
                 if (0 == propListIndex) {
                     // the ancient parent on the top level
                     return checkExcludeOfGlobalDefaultAction();
@@ -200,68 +255,10 @@ public final class FilterUtils {
                 // if all of the value should be excluded
                 return true;
             }
-            // If no action for this extended prop has been found, we need to
-            // check the
-            // parent prop action
-
-            propListIndex--;
+            // If no action for this extended prop has been found, we need to check the parent prop action
         }
 
         return false;
-    }
-
-    /**
-     * Check the given attName to see if it was excluded.
-     * 
-     * Note: attName is case sensitive, action is case insensitive
-     * 
-     * @param attName
-     * @param attValue
-     * @return {@code true} if should be excluded, otherwise {@code false}
-     */
-    private boolean checkExclude(final String attName, final String attValue) {
-        StringTokenizer tokenizer;
-
-        // for the special value :"" or " ",just ignore it
-        if (attValue == null || attValue.trim().length() == 0) {
-            return false;
-        }
-        checkRuleMapping(attName, attValue);
-        /*
-         * attValue may has several values, so we need to check them separately
-         * 1. if one of those values was not set to 'exclude', then don't
-         * exclude; 2. only if all of those values were set to 'exclude', it can
-         * be exclude.
-         */
-        tokenizer = new StringTokenizer(attValue, STRING_BLANK);
-        while (tokenizer.hasMoreTokens()) {
-            final String attSubValue = tokenizer.nextToken();
-            final FilterKey filterKey = new FilterKey(attName, attSubValue);
-            Action filterAction = filterMap.get(filterKey);
-
-            // not mapping ,no action will be considered as default action,
-            // if default action does not exists ,considered as "not exclude"
-            if (filterAction == null) {
-                // check Specified DefaultAction mapping this attribute's name
-                final Action attDefaultAction = filterMap.get(new FilterKey(attName, null));
-                if (attDefaultAction != null) {
-                    filterAction = attDefaultAction;
-                    if (Action.EXCLUDE != attDefaultAction) {
-                        return false;
-                    }
-                } else {
-                    if (checkExcludeOfGlobalDefaultAction() == false) {
-                        return false;
-                    }
-                }
-            }
-            // action is case insensitive
-            else if (Action.EXCLUDE != filterAction) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private boolean checkExcludeOfGlobalDefaultAction() {
@@ -269,37 +266,28 @@ public final class FilterUtils {
         if (defaultAction == null) {
             return false;
         } else {
-            if (Action.EXCLUDE != defaultAction) {
-                return false;
-            } else {
-                return true;
-            }
+            return Action.EXCLUDE == defaultAction;
         }
     }
 
-    private void checkRuleMapping(final String attName, final String attValue) {
-        if (attValue == null || attValue.trim().length() == 0) {
+    /**
+     * Check if attribute value has mapping in filter configuration and throw messages.
+     * @param attName attribute name
+     * @param attValue attribute value
+     */
+    private void checkRuleMapping(final String attName, final List<String> attValue) {
+        if (attValue == null || attValue.isEmpty()) {
             return;
         }
-        final StringTokenizer tokenizer = new StringTokenizer(attValue, STRING_BLANK);
-        while (tokenizer.hasMoreTokens()) {
-            final String attSubValue = tokenizer.nextToken();
+        for (final String attSubValue: attValue) {
             final FilterKey filterKey = new FilterKey(attName, attSubValue);
             final Action filterAction = filterMap.get(filterKey);
             if (filterAction == null) {
-                noRuleMapping(filterKey);
+                if (!alreadyShowed(filterKey)) {
+                    logger.info(MessageUtils.getInstance().getMessage("DOTJ031I", filterKey.toString()).toString());
+                }
             }
         }
-    }
-
-    private void noRuleMapping(final FilterKey notMappingKey) {
-        if (!alreadyShowed(notMappingKey)) {
-            showInfoOfNoRuleMapping(notMappingKey);
-        }
-    }
-
-    private void showInfoOfNoRuleMapping(final FilterKey notMappingKey) {
-        logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ031I", notMappingKey.toString()).toString());
     }
 
     private boolean alreadyShowed(final FilterKey notMappingKey) {
@@ -338,7 +326,7 @@ public final class FilterUtils {
         public int hashCode() {
             final int prime = 31;
             int result = 1;
-            result = prime * result + ((attribute == null) ? 0 : attribute.hashCode());
+            result = prime * result + (attribute.hashCode());
             result = prime * result + ((value == null) ? 0 : value.hashCode());
             return result;
         }
@@ -357,11 +345,7 @@ public final class FilterUtils {
                 return false;
             }
             final FilterKey other = (FilterKey) obj;
-            if (attribute == null) {
-                if (other.attribute != null) {
-                    return false;
-                }
-            } else if (!attribute.equals(other.attribute)) {
+            if (!attribute.equals(other.attribute)) {
                 return false;
             }
             if (value == null) {
@@ -372,6 +356,117 @@ public final class FilterUtils {
                 return false;
             }
             return true;
+        }
+    }
+
+    // Subject scheme support
+
+    /**
+     * Refine filter with subject scheme.
+     *
+     * @param bindingMap subject scheme bindings
+     * @return new filter with subject scheme information
+     */
+    public FilterUtils refine(final Map<String, Map<String, Set<Element>>> bindingMap) {
+        if (bindingMap != null && !bindingMap.isEmpty()) {
+            final Map<FilterKey, Action> buf = new HashMap<FilterKey, Action>(filterMap);
+            for (final Map.Entry<FilterKey, Action> e: filterMap.entrySet()) {
+                refineAction(e.getValue(), e.getKey(), bindingMap, buf);
+            }
+            final FilterUtils filterUtils = new FilterUtils(buf);
+            filterUtils.setLogger(logger);
+            return filterUtils;
+        } else {
+            return this;
+        }
+    }
+    /**
+     * Refine action key with information from subject schemes.
+     */
+    private void refineAction(final Action action, final FilterKey key, final Map<String, Map<String, Set<Element>>> bindingMap,
+                              final Map<FilterKey, Action> destFilterMap) {
+        if (key.value != null) {
+            final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
+            if (schemeMap != null && !schemeMap.isEmpty()) {
+                for (final Set<Element> submap: schemeMap.values()) {
+                    for (final Element e: submap) {
+                        final Element subRoot = searchForKey(e, key.value);
+                        if (subRoot != null) {
+                            insertAction(subRoot, key.attribute, action, destFilterMap);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Search subject scheme elements for a given key
+     * @param root subject scheme element tree to search through
+     * @param keyValue key to locate
+     * @return element that matches the key, otherwise {@code null}
+     */
+    private Element searchForKey(final Element root, final String keyValue) {
+        if (root == null || keyValue == null) {
+            return null;
+        }
+        final LinkedList<Element> queue = new LinkedList<Element>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            final Element node = queue.removeFirst();
+            final NodeList children = node.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    queue.add((Element)children.item(i));
+                }
+            }
+            if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
+                final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
+                if (keyValue.equals(key)) {
+                    return node;
+                }
+            }
+        }
+        return null;
+    }
+    /**
+     * Insert subject scheme based action into filetermap if key not present in the map
+     *
+     * @param subTree subject scheme definition element
+     * @param attName attribute name
+     * @param action action to insert
+     */
+    private void insertAction(final Element subTree, final String attName, final Action action, final Map<FilterKey, Action> destFilterMap) {
+        if (subTree == null || action == null) {
+            return;
+        }
+
+        final LinkedList<Element> queue = new LinkedList<Element>();
+
+        // Skip the sub-tree root because it has been added already.
+        NodeList children = subTree.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                queue.offer((Element)children.item(i));
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            final Element node = queue.poll();
+            children = node.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    queue.offer((Element)children.item(i));
+                }
+            }
+            if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
+                final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
+                if (key != null && !key.trim().isEmpty()) {
+                    final FilterKey k = new FilterKey(attName, key);
+                    if (!destFilterMap.containsKey(k)) {
+                        destFilterMap.put(k, action);
+                    }
+                }
+            }
         }
     }
 

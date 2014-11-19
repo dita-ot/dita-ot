@@ -11,14 +11,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 
 import org.xml.sax.SAXException;
-
 import org.xml.sax.InputSource;
-
 import org.dita.dost.TestUtils;
-
+import org.dita.dost.util.Job;
 import org.junit.Test;
 
 public class MergeMapParserTest {
@@ -31,10 +28,11 @@ public class MergeMapParserTest {
     public void testReadStringString() throws SAXException, IOException {
         final MergeMapParser parser = new MergeMapParser();
         parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(srcDir));
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         output.write("<wrapper>".getBytes(UTF8));
         parser.setOutputStream(output);
-        parser.read(new File(srcDir, "test.ditamap").getAbsolutePath(), srcDir.getAbsolutePath());
+        parser.read(new File(srcDir, "test.ditamap").getAbsoluteFile(), srcDir.getAbsoluteFile());
         output.write("</wrapper>".getBytes(UTF8));
         assertXMLEqual(new InputSource(new File(expDir, "merged.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
@@ -44,10 +42,11 @@ public class MergeMapParserTest {
     public void testReadSpace() throws SAXException, IOException {
         final MergeMapParser parser = new MergeMapParser();
         parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(srcDir));
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         output.write("<wrapper>".getBytes(UTF8));
         parser.setOutputStream(output);
-        parser.read(new File(srcDir, "space in map name.ditamap").getAbsolutePath(), srcDir.getAbsolutePath());
+        parser.read(new File(srcDir, "space in map name.ditamap").getAbsoluteFile(), srcDir.getAbsoluteFile());
         output.write("</wrapper>".getBytes(UTF8));
         assertXMLEqual(new InputSource(new File(expDir, "merged.xml").toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));

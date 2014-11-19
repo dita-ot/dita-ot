@@ -29,7 +29,7 @@
 [echo] The filename must have the .ditamap extension. 
 [echo] Note that relative paths that climb (..) are not supported yet. 
 [echo] To build the sample, press return without entering anything. 
-[input] The DITA map filename: [C:\DITA-OT1.6.M5\samples\hierarchy.ditamap]</codeblock></stepresult>
+[input] The DITA map filename: [C:\DITA-OT<keyword keyref="version"/>\samples\hierarchy.ditamap]</codeblock></stepresult>
             </step>
             <step>
                 <cmd/>

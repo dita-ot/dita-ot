@@ -38,11 +38,12 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+    xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-    exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func dita-ot xs"
+    exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func dita-ot xs ot-placeholder"
     version="2.0">
     
-    <xsl:param name="bookmap-order" select="'discard'"/>
+    <xsl:param name="bookmap-order" select="'discard'" as="xs:string"/>
   
     <xsl:variable name="retain-bookmap-order" select="*[contains(@class,' bookmap/bookmap ')] and $bookmap-order eq 'retain'"/>
     <xsl:variable name="writing-mode">
@@ -53,9 +54,9 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:choose>
     </xsl:variable>
     
-    <xsl:variable name="mapType">
+    <xsl:variable name="mapType" as="xs:string">
         <xsl:choose>
-            <xsl:when test="/*[contains(@class, ' map/map ') and contains(@class, ' bookmap/bookmap ')]">
+            <xsl:when test="/*[contains(@class, ' bookmap/bookmap ')]">
                 <xsl:value-of select="'bookmap'"/>
             </xsl:when>
             <xsl:otherwise>
@@ -88,7 +89,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:for-each>
     </xsl:variable>
 
-	<xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]"/>
+  <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]"/>
 
 <!-- Root template, and topicref validation mooved from topic2fo_shell.xsl to add ability for customizaing   -->
 
@@ -108,8 +109,7 @@ See the accompanying license.txt file for applicable licenses.
           </xsl:call-template>
         </xsl:if>
         <xsl:if test="@href and @id">
-            <xsl:variable name="searchId" select="@id"/>
-            <xsl:if test="not(//*[contains(@class, ' topic/topic ')][@id = $searchId]) and not($searchId = '')">
+            <xsl:if test="not(@id = '') and empty(key('topic-id', @id))">
               <xsl:call-template name="output-message">
                 <xsl:with-param name="msgnum">005</xsl:with-param>
                 <xsl:with-param name="msgsev">F</xsl:with-param>
@@ -123,7 +123,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*" mode="topicref-validation"/>
 
   <xsl:template name="createMetadata">
-	<!-- Override in XSL processor specific stylesheets -->
+  <!-- Override in XSL processor specific stylesheets -->
   </xsl:template>
     
   <xsl:template match="/" mode="dita-ot:title-metadata" as="xs:string?">
@@ -201,28 +201,189 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="/" name="rootTemplate">
         <xsl:call-template name="validateTopicRefs"/>
-
         <fo:root xsl:use-attribute-sets="__fo__root">
             <xsl:call-template name="createMetadata"/>
             <xsl:call-template name="createLayoutMasters"/>
-
             <xsl:call-template name="createBookmarks"/>
-
-            <xsl:call-template name="createFrontMatter"/>
-
-            <xsl:if test="not($retain-bookmap-order)">
-                <xsl:call-template name="createToc"/>
-            </xsl:if>
-
-<!--            <xsl:call-template name="createPreface"/>-->
-
-            <xsl:apply-templates/>
-
-            <xsl:if test="not($retain-bookmap-order)">
-                <xsl:call-template name="createIndex"/>
-            </xsl:if>
-
+            <xsl:apply-templates select="*" mode="generatePageSequences"/>
         </fo:root>
     </xsl:template>
+  
+  <xsl:variable name="map-based-page-sequence-generation" select="true()"/>
+  
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="generatePageSequences">
+    <fo:page-sequence master-reference="ditamap-body-sequence" xsl:use-attribute-sets="__force__page__count">
+      <xsl:call-template name="startPageNumbering"/>
+      <xsl:call-template name="insertBodyStaticContents"/>
+      <fo:flow flow-name="xsl-region-body">
+        <xsl:apply-templates select="." mode="processTopic"/>
+      </fo:flow>
+    </fo:page-sequence>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' map/map ')]" mode="generatePageSequences">
+    <xsl:call-template name="createFrontMatter"/>
+    <xsl:call-template name="createToc"/>
+    <xsl:choose>
+      <xsl:when test="$map-based-page-sequence-generation">
+        <fo:page-sequence master-reference="ditamap-body-sequence" xsl:use-attribute-sets="__force__page__count">
+          <xsl:call-template name="startPageNumbering"/>
+          <xsl:call-template name="insertBodyStaticContents"/>
+          <fo:flow flow-name="xsl-region-body">
+            <xsl:for-each select="opentopic:map/*[contains(@class, ' map/topicref ')]">
+              <xsl:for-each select="key('topic-id', @id)">
+                <xsl:apply-templates select="." mode="processTopic"/>
+              </xsl:for-each>
+            </xsl:for-each>
+          </fo:flow>
+        </fo:page-sequence>
+        <xsl:call-template name="createIndex"/>
+      </xsl:when>
+      <!-- legacy topic based page-sequence generation -->
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+        
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="createBackCover"/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' bookmap/bookmap ')]" mode="generatePageSequences" priority="10">
+    <xsl:call-template name="createFrontMatter"/>
+    <xsl:choose>
+      <xsl:when test="$map-based-page-sequence-generation">
+        <xsl:apply-templates select="opentopic:map/*[contains(@class, ' map/topicref ')]" mode="generatePageSequences"/>
+      </xsl:when>
+      <!-- legacy topic based page-sequence generation -->
+      <xsl:otherwise>
+        <xsl:if test="not($retain-bookmap-order)">
+          <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
+          <xsl:call-template name="createToc"/>
+        </xsl:if>
+        <xsl:apply-templates/>
+        <xsl:if test="not($retain-bookmap-order)">
+          <xsl:call-template name="createIndex"/>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="createBackCover"/>
+  </xsl:template>
+  
+  <xsl:template match="*" mode="generatePageSequences" priority="-1">
+    <xsl:apply-templates select="*" mode="generatePageSequences"/>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generatePageSequences" priority="0">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:call-template name="processTopicSimple"/>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/frontmatter ') or
+                         contains(@class, ' bookmap/backmatter ') or
+                         contains(@class, ' bookmap/booklists ')]" mode="generatePageSequences">
+    <xsl:apply-templates select="*" mode="generatePageSequences"/>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/chapter ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:call-template name="processTopicChapter"/>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:call-template name="processTopicAppendix"/>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/preface ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:call-template name="processTopicPreface"/>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/appendices ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:call-template name="processTopicAppendices"/>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:call-template name="processTopicPart"/>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/figurelist ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:choose>
+        <xsl:when test="self::ot-placeholder:figurelist">
+          <xsl:call-template name="createFigureList"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="processTopicSimple"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/tablelist ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:choose>
+        <xsl:when test="self::ot-placeholder:tablelist">
+          <xsl:call-template name="createTableList"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="processTopicSimple"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/indexlist ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:choose>
+        <xsl:when test="self::ot-placeholder:indexlist">
+          <xsl:call-template name="createIndex"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="processIndexList"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/toc ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:choose>
+        <xsl:when test="self::ot-placeholder:toc">
+          <xsl:call-template name="createToc"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="processTocList"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/glossarylist ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:choose>
+        <xsl:when test="self::ot-placeholder:glossarylist">
+          <xsl:call-template name="createGlossary"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="processTopicSimple"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/notices ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:call-template name="processTopicNotices"/>
+    </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-notices">
+    <xsl:variable name="topicType">
+      <xsl:call-template name="determineTopicType"/>
+    </xsl:variable>
+    <xsl:if test="$topicType = 'topicNotices'">
+      <xsl:call-template name="processTopicNotices"/>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' map/map ')]">
+    <xsl:apply-templates/>
+  </xsl:template>
 
 </xsl:stylesheet>

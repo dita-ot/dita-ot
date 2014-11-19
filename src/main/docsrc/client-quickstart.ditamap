@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map xml:lang="en">
+  <title>Getting started</title>
+  <topicref href="quickstartguide/exploring-the-dita-ot-client.dita" collection-type="sequence">
+    <topicref href="readme/installing-client.dita" copy-to="quickstartguide/installing-client.dita"/>
+    <topicref href="quickstartguide/using-dita-command.dita"/>
+  </topicref>
+</map>

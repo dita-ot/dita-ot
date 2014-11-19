@@ -8,84 +8,57 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.io.File;
-import java.io.IOException;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Set;
 
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ConrefPushReader;
-import org.dita.dost.util.Job;
+import org.dita.dost.reader.ConrefPushReader.MoveKey;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.ConrefPushParser;
+import org.w3c.dom.DocumentFragment;
+
 /**
  * Conref push module.
- * 
- *
  */
-final class ConrefPushModule implements AbstractPipelineModule {
+final class ConrefPushModule extends AbstractPipelineModuleImpl {
 
-    private DITAOTLogger logger;
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
-    }
-
-    /**
-     * @param input input
-     * @return output
-     * @throws DITAOTException exception
-     */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
-        if (logger == null) {
-            throw new IllegalStateException("Logger not set");
+        final Collection<FileInfo> fis = job.getFileInfo(new Filter() {
+            @Override
+            public boolean accept(FileInfo f) {
+                return f.isConrefPush;
+            }
+        });
+        if (!fis.isEmpty()) {
+            final ConrefPushReader reader = new ConrefPushReader();
+            reader.setLogger(logger);
+            for(final FileInfo f: fis) {
+                final File file = new File(job.tempDir, f.file.getPath());
+                logger.info("Reading  " + file.getAbsolutePath());
+                //FIXME: this reader calculate parent directory
+                reader.read(file.getAbsoluteFile());
+            }            
+            final Map<File, Hashtable<MoveKey, DocumentFragment>> pushSet = reader.getPushMap();
+            for (final Map.Entry<File, Hashtable<MoveKey, DocumentFragment>> entry: pushSet.entrySet()) {
+                logger.info("Processing " + entry.getKey().getAbsolutePath());
+                final ConrefPushParser parser = new ConrefPushParser();
+                parser.setJob(job);
+                parser.setLogger(logger);
+                parser.setMoveTable(entry.getValue());
+                //pass the tempdir to ConrefPushParser
+                parser.setTempDir(job.tempDir.getAbsoluteFile());
+                //FIXME:This writer creates and renames files, have to
+                parser.write(entry.getKey());
+            }
         }
-        
-        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
-        }
-        
-        Job job = null;
-        try{
-            job = new Job(tempDir);
-        }catch(final IOException e){
-            logger.logError(e.getMessage(), e) ;
-        }
-
-        final Set<String> conrefpushlist = job.getSet(CONREF_PUSH_LIST);
-        final ConrefPushReader reader = new ConrefPushReader();
-        reader.setLogger(logger);
-        for(final String fileName:conrefpushlist){
-            final File file = new File(tempDir,fileName);
-            logger.logInfo("Reading  " + file.getAbsolutePath());
-            //FIXME: this reader calculate parent directory
-            reader.read(file.getAbsolutePath());
-        }
-
-        final Map<String, Hashtable<String, String>> pushSet = reader.getPushMap();
-        
-        for (final Map.Entry<String, Hashtable<String,String>> entry: pushSet.entrySet()) {
-            logger.logInfo("Processing " + new File(tempDir, entry.getKey()).getAbsolutePath());
-            final ConrefPushParser parser = new ConrefPushParser();
-            parser.setLogger(logger);
-            final Content content = new ContentImpl();
-            content.setValue(entry.getValue());
-            parser.setContent(content);
-            //pass the tempdir to ConrefPushParser
-            parser.setTempDir(tempDir.getAbsolutePath());
-            //FIXME:This writer creates and renames files, have to
-            parser.write(entry.getKey());
-        }
-
         return null;
     }
 

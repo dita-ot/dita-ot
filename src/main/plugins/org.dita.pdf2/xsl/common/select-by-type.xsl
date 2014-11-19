@@ -65,17 +65,17 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*" mode="typeMatched">
-	<xsl:element name="{local-name()}">
+  <xsl:element name="{local-name()}">
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates mode="typeMatched"/>
-	</xsl:element>
+  </xsl:element>
     </xsl:template>
 
     <xsl:template match="*">
-	<xsl:element name="{local-name()}">
+  <xsl:element name="{local-name()}">
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates mode="typeMatched"/>
-	</xsl:element>
+  </xsl:element>
     </xsl:template>
 
 </xsl:stylesheet>

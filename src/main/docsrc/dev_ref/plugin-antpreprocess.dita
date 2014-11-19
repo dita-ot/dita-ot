@@ -58,9 +58,6 @@ an Ant target before individual preprocessing steps.</p><dl><dlentry>
 <dt><codeph>depend.preprocess.maplink.pre</codeph></dt>
 <dd>Map link pre-target</dd>
 </dlentry><dlentry>
-<dt><codeph>depend.preprocess.move-links.pre</codeph></dt>
-<dd>Move links pre-target</dd>
-</dlentry><dlentry>
 <dt><codeph>depend.preprocess.topicpull.pre</codeph></dt>
 <dd>Topic pull pre-target</dd>
 </dlentry><dlentry>

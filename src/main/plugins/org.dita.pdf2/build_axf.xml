@@ -12,6 +12,8 @@
   </target>
 
   <target name="transform.fo2pdf.ah.init" if="use.ah.pdf.formatter">
+    <taskdef name="log-processor" classname="org.dita.dost.pdf2.AhfLogProcessorTask"
+             classpathref="project.class.path"/>
     <!-- default output format -->
     <condition property="axf.formatter.output-format" value="@PDF">
       <not><isset property="axf.formatter.output-format"/></not>
@@ -172,7 +174,8 @@
   </target>
 
   <target name="transform.fo2pdf.ah.nooption" unless="has.axf.option">
-    <exec executable="${axf.cmd}" resultproperty="errCode" logerror="true">
+    <echo level="info" taskname="ahf">Processing ${pdf2.temp.dir}/topic.fo to ${outputFile}</echo>
+    <exec executable="${axf.cmd}" resultproperty="errCode" output="${dita.temp.dir}/pdf2.ah.log">
       <arg value="-d"/>
       <arg value="${pdf2.temp.dir}/topic.fo"/>
       <arg value="-o"/>
@@ -184,10 +187,12 @@
       <arg value="-peb"/>
       <arg value="1"/>
     </exec>
+    <log-processor file="${dita.temp.dir}/pdf2.ah.log" taskname="ahf"/>
   </target>
 
   <target name="transform.fo2pdf.ah.hasoption" if="has.axf.option">
-    <exec executable="${axf.cmd}" resultproperty="errCode" logerror="true">
+    <echo level="info" taskname="ahf" >Processing ${pdf2.temp.dir}/topic.fo to ${outputFile}</echo>
+    <exec executable="${axf.cmd}" resultproperty="errCode" output="${dita.temp.dir}/pdf2.ah.log">
       <arg value="-d"/>
       <arg value="${pdf2.temp.dir}/topic.fo"/>
       <arg value="-o"/>
@@ -201,6 +206,7 @@
       <arg value="-i"/>
       <arg value="${env.AXF_OPT}"/>
     </exec>
+    <log-processor file="${dita.temp.dir}/pdf2.ah.log" taskname="ahf"/>
   </target>
 
 </project>

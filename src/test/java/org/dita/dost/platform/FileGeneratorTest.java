@@ -5,6 +5,10 @@
 package org.dita.dost.platform;
 
 import static org.junit.Assert.assertEquals;
+import static java.util.Arrays.*;
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.util.XMLUtils.*;
+import static javax.xml.XMLConstants.NULL_NS_URI;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.DITAOTLogger;
@@ -18,11 +22,13 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 public class FileGeneratorTest {
@@ -31,10 +37,10 @@ public class FileGeneratorTest {
     private File tempDir;
 
     private static File tempFile;
-    private final static Hashtable<String, String> features = new Hashtable<String, String>();
+    private final static Hashtable<String, List<String>> features = new Hashtable<String, List<String>>();
     static {
-        features.put("element", "foo,bar,baz");
-        features.put("attribute", "foo,bar,baz");
+        features.put("element", asList("foo", "bar", "baz"));
+        features.put("attribute", asList("foo", "bar", "baz"));
     }
     private final static Map<String, Features> plugins = new HashMap<String, Features>();
     static {
@@ -58,15 +64,16 @@ public class FileGeneratorTest {
         tempFile = new File(tempDir, "dummy_template.xml");
         FileUtils.copyFile(new File(resourceDir, "src" + File.separator + "dummy_template.xml"),
                 tempFile);
+        TestUtils.resetXMLUnit();
     }
 
     @Test
-    public void testGenerate() throws IOException {
+    public void testGenerate() throws IOException, SAXException {
         final FileGenerator f = new FileGenerator(features, plugins);
         f.generate(tempFile);
 
-        assertEquals(TestUtils.readFileToString(new File(resourceDir, "exp" + File.separator + "dummy.xml")),
-                TestUtils.readFileToString(new File(tempDir, "dummy.xml")));
+        assertXMLEqual(new InputSource(new File(resourceDir, "exp" + File.separator + "dummy.xml").toURI().toString()),
+                new InputSource(new File(tempDir, "dummy.xml").toURI().toString()));
     }
 
     @After
@@ -78,11 +85,8 @@ public class FileGeneratorTest {
         protected List<String> inputs = new ArrayList<String>();
         protected Map<String, String> params = new HashMap<String, String>();
         protected Map<String, Features> features;
-        public void setInput(final String input) {
-            final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
-            while(inputTokenizer.hasMoreElements()){
-                inputs.add(inputTokenizer.nextToken());
-            }
+        public void setInput(final List<String> input) {
+            inputs.addAll(input);
         }
         public void addParam(final String name, final String value) {
             params.put(name, value);
@@ -98,7 +102,7 @@ public class FileGeneratorTest {
 
     public static class ElementAction extends AbstractAction {
         @Override
-        public String getResult() {
+        public void getResult(ContentHandler output) throws SAXException {
             final Map<String, String> paramsExp = new HashMap<String, String>();
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
             paramsExp.put("id", "element");
@@ -107,7 +111,13 @@ public class FileGeneratorTest {
             final List<String> inputExp = Arrays.asList(new String[] {"foo", "bar", "baz"});
             assertEquals(inputExp, inputs);
             assertEquals(FileGeneratorTest.plugins, features);
-            return "<foo bar='baz'>quz</foo>";
+            output.startElement(NULL_NS_URI, "foo", "foo", new AttributesBuilder().add("bar", "baz").build());
+            output.characters(new char[] {'q', 'u', 'z'}, 0, 3);
+            output.endElement(NULL_NS_URI, "foo", "foo");
+        }
+        @Override
+        public String getResult() {
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -116,12 +126,17 @@ public class FileGeneratorTest {
         public String getResult() {
             final Map<String, String> paramsExp = new HashMap<String, String>();
             paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
-            paramsExp.put(FileGenerator.PARAM_LOCALNAME, "foo");
+//            paramsExp.put(FileGenerator.PARAM_LOCALNAME, "foo");
             assertEquals(paramsExp, params);
             final List<String> inputExp = Arrays.asList(new String[] {"attribute"});
             assertEquals(inputExp, inputs);
             assertEquals(FileGeneratorTest.plugins, features);
-            return " foo='bar'";
+            return "bar";
+        }
+
+        @Override
+        public void getResult(ContentHandler output) throws SAXException {
+            throw new UnsupportedOperationException();
         }
     }
 

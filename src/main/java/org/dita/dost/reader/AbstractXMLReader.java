@@ -8,60 +8,44 @@
  */
 package org.dita.dost.reader;
 
+import java.io.File;
 import java.io.IOException;
-import org.apache.xerces.xni.grammars.XMLGrammarPool;
+
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.module.Content;
+import org.dita.dost.util.Job;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.ext.LexicalHandler;
 
 /**
- * This class extends AbstractReader, implement SAX's ContentHandler,
- * LexicalHandler, and EntityResolver.
+ * This class extends AbstractReader, implement SAX's ContentHandler
+ * and EntityResolver.
  * 
  * @version 1.0 2005-06-24
  * 
  * @author Wu, Zhi Qiang
  */
 public abstract class AbstractXMLReader implements AbstractReader,
-ContentHandler, LexicalHandler, EntityResolver {
-
-    /**
-     * Sets the grammar pool on the parser. Note that this is a Xerces-specific
-     * feature.
-     * @param reader
-     * @param grammarPool
-     */
-    public void setGrammarPool(final XMLReader reader, final XMLGrammarPool grammarPool) {
-        try {
-            reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
-            logger.logInfo("Using Xerces grammar pool for DTD and schema caching.");
-        } catch (final Exception e) {
-            logger.logWarn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-        }
-    }
+ContentHandler, EntityResolver {
 
     protected DITAOTLogger logger;
+    protected Job job;
 
     @Override
-    public void read(final String filename) {
+    public void read(final File filename) {
         // NOOP
-    }
-
-    @Override
-    public Content getContent() {
-        return null;
     }
 
     @Override
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+    }
+
+    public final void setJob(final Job job) {
+        this.job = job;
     }
 
     @Override
@@ -122,42 +106,6 @@ ContentHandler, LexicalHandler, EntityResolver {
 
     @Override
     public void skippedEntity(final String name) throws SAXException {
-        // NOOP
-    }
-
-    @Override
-    public void startDTD(final String name, final String publicId, final String systemId)
-            throws SAXException {
-        // NOOP
-    }
-
-    @Override
-    public void endDTD() throws SAXException {
-        // NOOP
-    }
-
-    @Override
-    public void startEntity(final String name) throws SAXException {
-        // NOOP
-    }
-
-    @Override
-    public void endEntity(final String name) throws SAXException {
-        // NOOP
-    }
-
-    @Override
-    public void startCDATA() throws SAXException {
-        // NOOP
-    }
-
-    @Override
-    public void endCDATA() throws SAXException {
-        // NOOP
-    }
-
-    @Override
-    public void comment(final char[] ch, final int start, final int length) throws SAXException {
         // NOOP
     }
 

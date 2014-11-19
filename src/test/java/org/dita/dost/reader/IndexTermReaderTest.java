@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.dita.dost.util.XMLUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,6 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
-import org.dita.dost.util.StringUtils;
 
 /**
  * IndexTermReader unit test.
@@ -49,7 +49,7 @@ public class IndexTermReaderTest {
         final File target = new File(tempDir, "concept.html");
         final IndexTermReader handler = new IndexTermReader(indexTermCollection);
         handler.setTargetFile(target.getAbsolutePath());
-        final XMLReader xmlReader = StringUtils.getXMLReader();
+        final XMLReader xmlReader = XMLUtils.getXMLReader();
         xmlReader.setContentHandler(handler);
         final File source = new File(resourceDir, "concept.dita");
         FileInputStream inputStream = null;

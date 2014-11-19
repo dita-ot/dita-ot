@@ -35,10 +35,8 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
-    xmlns:exsl="http://exslt.org/common"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
-    extension-element-prefixes="exsl"
-    exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo"
+    exclude-result-prefixes="opentopic opentopic-index dita2xslfo"
     version="2.0">
 
     <!-- Determines whether to generate titles for task sections. Values are YES and NO. -->
@@ -48,13 +46,19 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:otherwise>NO</xsl:otherwise>
         </xsl:choose>
     </xsl:param>
-
-    <xsl:template match="*" mode="processTask">
-        <fo:block xsl:use-attribute-sets="task">
-            <xsl:apply-templates select="." mode="commonTopicProcessing"/>
-        </fo:block>
-    </xsl:template>
-
+  
+  <xsl:template match="*[contains(@class, ' task/task ')]" mode="processTopic"
+                name="processTask">
+    <fo:block xsl:use-attribute-sets="task">
+      <xsl:apply-templates select="." mode="commonTopicProcessing"/>
+    </fo:block>
+  </xsl:template>
+  
+  <!-- Deprecated, retained for backwards compatibility -->
+  <xsl:template match="*" mode="processTask">
+    <xsl:call-template name="processTask"/>
+  </xsl:template>
+  
     <xsl:template match="*[contains(@class, ' task/taskbody ')]">
         <fo:block xsl:use-attribute-sets="taskbody">
             <xsl:call-template name="commonattributes"/>

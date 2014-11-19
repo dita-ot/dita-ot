@@ -3,7 +3,6 @@
  "map.dtd">
 <map xml:lang="en-us">
   <title>Developer's Reference</title>
-  <topicref href="developer-reference.dita">
     <topicref href="DITA-OTArchitecture.dita" navtitle="Architecture of the DITA-OT">
       <topicref href="processing-structure.dita"/>
       <topicref href="processing-pipeline-modules.dita"/>
@@ -13,10 +12,10 @@
         <topicref href="preprocess-genlist.dita"/>
         <topicref href="preprocess-debugfilter.dita"/>
         <topicref href="preprocess-copyfiles.dita"/>
+        <topicref href="preprocess-keyref.dita"/>
         <topicref href="preprocess-conrefpush.dita"/>
         <topicref href="preprocess-conref.dita"/>
         <topicref href="preprocess-metadata.dita"/>
-        <topicref href="preprocess-keyref.dita"/>
         <topicref href="preprocess-coderef.dita"/>
         <topicref href="preprocess-mapref.dita"/>
         <topicref href="preprocess-mappull.dita"/>
@@ -28,6 +27,7 @@
       <topicref href="XhtmlWithNavigation.dita">
         <topicref href="XhtmlCommon.dita"/>
         <topicref href="XhtmlDefault.dita"/>
+        <topicref href="html5.dita"/>
         <topicref href="XhtmlEclipse.dita"/>
         <topicref href="XhtmlTocjs.dita"/>
         <topicref href="XhtmlCHM.dita"/>
@@ -79,7 +79,6 @@
     no longer referenced. The topic should be cleaned up or removed. It is also commented 
     out of the TOC below. -->
 <!-- <topicref href="DITA-OTGenListModule.xml" navtitle="Java Module Architecture"/> -->
-</topicref>
 <reltable>
 <relrow>
 <relcell>
@@ -95,5 +94,14 @@ scope="external">
 </topicref>
 </relcell>
 </relrow>
+  <relrow>
+    <relcell>
+      <topicref href="../readme/plugins-installing.dita" linking="targetonly"/>
+      <topicref href="../readme/plugins-removing.dita" linking="targetonly"/>
+    </relcell>
+    <relcell>
+      <topicref href="extending-the-ot.dita" linking="sourceonly"/>
+    </relcell>
+  </relrow>
 </reltable>
 </map>

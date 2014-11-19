@@ -15,17 +15,20 @@
   one is not already provided. Long term, users may wish to create
   a stable frameset using local styles and organization.
   -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
-  <xsl:output encoding="UTF-8"/>
+  <xsl:output method="html"
+              encoding="UTF-8"
+              indent="no"
+              doctype-system="about:legacy-compat"
+              omit-xml-declaration="yes"/>  
 
   <xsl:param name="CSSPATH"/>
   <xsl:param name="OUTEXT" select="'.html'"/>
-  <xsl:param name="DITAEXT" select="'.xml'"/>
 
   <xsl:variable name="firsttopic">
     <xsl:variable name="f" select="/*/*[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href][not(@processing-role='resource-only')]"/>

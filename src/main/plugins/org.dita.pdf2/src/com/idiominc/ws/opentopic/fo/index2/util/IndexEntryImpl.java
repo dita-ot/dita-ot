@@ -44,7 +44,6 @@ class IndexEntryImpl implements IndexEntry {
     private final String value;
     private final String formattedString;
     private final List<Node> contents;
-    private String soString;
     private String sortString;
 
     private final HashMap<String, IndexEntry> childs = new HashMap<String, IndexEntry>();
@@ -62,15 +61,13 @@ class IndexEntryImpl implements IndexEntry {
      * Index entry constructor.
      * 
      * @param theValue string value
-     * @param theSoString FrameMaker SO value 
      * @param theSortString sort-as value
      * @param theFormattedString formatter string value
      * @param contents markup value, may be {@code null}
      */
-    public IndexEntryImpl(final String theValue, final String theSoString, final String theSortString, final String theFormattedString,
+    public IndexEntryImpl(final String theValue, final String theSortString, final String theFormattedString,
                           final List<Node> contents) {
         this.value = theValue;
-        this.soString = theSoString;
         this.sortString = theSortString;
         this.formattedString = theFormattedString;
         this.contents = contents;
@@ -84,11 +81,6 @@ class IndexEntryImpl implements IndexEntry {
 
     public String getValue() {
         return this.value;
-    }
-
-
-    public String getSoValue() {
-        return this.soString;
     }
 
 
@@ -166,9 +158,6 @@ class IndexEntryImpl implements IndexEntry {
         if (theEntry.getSortString() != null) {
             existingEntry.setSortString(theEntry.getSortString());
         }
-        if (theEntry.getSoValue() != null) {
-            existingEntry.setSoValue(theEntry.getSoValue());
-        }
     }
 
     public void addSeeAlsoChild(final IndexEntry theEntry) {
@@ -197,9 +186,6 @@ class IndexEntryImpl implements IndexEntry {
         }
         if (theEntry.getSortString() != null) {
             existingEntry.setSortString(theEntry.getSortString());
-        }
-        if (theEntry.getSoValue() != null) {
-            existingEntry.setSoValue(theEntry.getSoValue());
         }
     }
 
@@ -230,17 +216,10 @@ class IndexEntryImpl implements IndexEntry {
         if (theEntry.getSortString() != null) {
             existingEntry.setSortString(theEntry.getSortString());
         }
-        if (theEntry.getSoValue() != null) {
-            existingEntry.setSoValue(theEntry.getSoValue());
-        }
     }
 
     public void setSortString(final String theSortString) {
         this.sortString = theSortString;
-    }
-
-    public void setSoValue(final String theSoValue) {
-        this.soString = theSoValue;
     }
 
     public void setStartRange(final boolean theStartRange) {
@@ -297,9 +276,6 @@ class IndexEntryImpl implements IndexEntry {
     public String toString() {
         String result = "";
         result+=getValue();
-        if (this.getSoValue() != null && this.getSoValue().length() > 0) {
-            result+="<so>"+getSoValue();
-        }
         if (this.isSuppressesThePageNumber()) {
             result+="<$nopage>";
         }

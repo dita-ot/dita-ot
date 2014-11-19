@@ -145,11 +145,11 @@ public final class IndexGroupProcessor {
                 final String key = key2;
                 if (key.length() > 0) {
                     final IndexEntry entry = (IndexEntry) indexMap.get(key);
-                    logger.logError(MessageUtils.getInstance().getMessage("PDFJ001E", entry.toString()).toString());
+                    logger.error(MessageUtils.getInstance().getMessage("PDFJ001E", entry.toString()).toString());
                 }
             }
             if (IndexPreprocessorTask.failOnError) {
-                logger.logError(MessageUtils.getInstance().getMessage("PDFJ002E").toString());
+                logger.error(MessageUtils.getInstance().getMessage("PDFJ002E").toString());
                 IndexPreprocessorTask.processingFaild=true;
             }
         }
@@ -166,13 +166,9 @@ public final class IndexGroupProcessor {
 
 
     private static String getValue(final IndexEntry theEntry) {
-        //The so-value has higher priority
-        final String soValue = theEntry.getSoValue();
         final String sortValue = theEntry.getSortString();
         if (sortValue != null && sortValue.length() > 0) {
             return sortValue;
-        } else if (soValue != null && soValue.length() > 0) {
-            return soValue;
         } else {
             return theEntry.getValue();
         }

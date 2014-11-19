@@ -23,7 +23,7 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
-  xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" version="1.0">
+  xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" version="2.0">
   
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>

@@ -4,7 +4,7 @@
   applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 
@@ -387,7 +387,7 @@
   <listitem>
     <para>
       <xsl:choose>
-        <xsl:when test="(not(@format) or @format='dita' or @format='DITA') and
+        <xsl:when test="(not(@format) or @format='dita') and
                         (not(@scope)  or @scope='local') and
                         @href and (
                              substring(@href, string-length(@href) - 4) = '.dita' or
@@ -396,7 +396,7 @@
                              contains(@href,'.xml#'))">
           <xsl:apply-templates select="." mode="make-xref-from-link"/>
         </xsl:when>
-        <xsl:when test="((@format and @format!='dita' and @format!='DITA') or
+        <xsl:when test="((@format and @format != 'dita') or
                          (@scope  and @scope!='local') or
                          (@href   and
                                substring(@href, string-length(@href) - 4) != '.dita' and
@@ -806,7 +806,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <xsl:template match="*[contains(@class,' topic/xref ')]">
   <xsl:choose>
-    <xsl:when test="(not(@format) or @format='dita' or @format='DITA') and
+    <xsl:when test="(not(@format) or @format='dita') and
 	                (not(@scope)  or @scope='local') and
 	                @href and (
 	                      substring(@href, string-length(@href) - 4) = '.dita' or
@@ -815,7 +815,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
                           contains(@href,'.xml#'))">
       <xsl:apply-templates select="." mode="make-xref-from-xref"/>
     </xsl:when>
-    <xsl:when test="((@format and @format!='dita' and @format!='DITA') or
+    <xsl:when test="((@format and @format != 'dita') or
 	                 (@scope  and @scope!='local') or
 	                 (@href   and
 	                      substring(@href, string-length(@href) - 4) != '.dita' and
@@ -832,7 +832,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 </xsl:template>
 
 <!--<xsl:template match="*[contains(@class,' topic/xref ') and (
-      (@format and @format!='dita' and @format!='DITA') or
+      (@format and @format != 'dita') or
 	  (@scope  and @scope!='local') or
 	  (@href   and
 	      substring(@href, string-length(@href) - 5) != '.dita' and
@@ -847,7 +847,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 </xsl:template>
 
 <!--<xsl:template match="*[contains(@class,' topic/xref ') and
-      (not(@format) or @format='dita' or @format='DITA') and
+      (not(@format) or @format='dita') and
 	  (not(@scope)  or @scope='local') and
 	  @href and (
 	      substring(@href, string-length(@href) - 5) = '.dita' or

@@ -137,5 +137,61 @@ public class ValidationFilterTest {
             assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level);            
         }
     }
+	
+	   @Test
+	    public void testKeyscope() throws SAXException, URISyntaxException {
+	        final ValidationFilter f = new ValidationFilter();
+	        f.setContentHandler(new DefaultHandler());
+	        final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
+	        f.setLogger(l);
+	        
+	        f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+	                .add(ATTRIBUTE_NAME_KEYSCOPE, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;=")
+	                .build());
+	        f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+	                .add(ATTRIBUTE_NAME_KEYSCOPE, "foo bar baz")
+	                .build());
+	        f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+	                .add(ATTRIBUTE_NAME_KEYSCOPE, " foo ")
+	                .build());
+	        assertEquals(0, l.getMessages().size());
+	        
+	        f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+	                .add(ATTRIBUTE_NAME_KEYSCOPE, "foo/bar")
+	                .build());
+	        f.startElement(NULL_NS_URI, TOPIC_P.localName, TOPIC_P.localName, new AttributesBuilder()
+	                .add(ATTRIBUTE_NAME_KEYSCOPE, "foo\u00E4bar")
+	                .build());
+	        
+	        assertEquals(2, l.getMessages().size());
+	        for (final Message m: l.getMessages()) {
+	            assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level);            
+	        }
+	    }
+
+    @Test
+    public void testAttributeGeneralization() throws SAXException {
+        final ValidationFilter f = new ValidationFilter();
+        f.setContentHandler(new DefaultHandler());
+        final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
+        f.setLogger(l);
+        
+        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
+            .add(XML_NS_URI, ATTRIBUTE_NAME_DOMAINS, "a(props person jobrole)")
+            .build());
+        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
+            .add(XML_NS_URI, "person", "jobrole(programmer)")
+            .add(XML_NS_URI, "jobrole", "admin")
+            .build());
+        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
+            .add(XML_NS_URI, "jobrole", "admin")
+            .build());
+        f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder()
+            .add(XML_NS_URI, "person", "jobrole(programmer)")
+            .build());
+        
+        assertEquals(1, l.getMessages().size());
+        assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
+    }
 
 }

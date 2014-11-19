@@ -80,8 +80,16 @@ See the accompanying license.txt file for applicable licenses.
         <!--<xsl:attribute name=""></xsl:attribute>-->
     </xsl:attribute-set>
 
-	<xsl:attribute-set name="bookmap.summary">
-		<xsl:attribute name="font-size">9pt</xsl:attribute>
-	</xsl:attribute-set>
+  <xsl:attribute-set name="back-cover">
+    <xsl:attribute name="force-page-count">end-on-even</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="__back-cover">
+    <xsl:attribute name="break-before">even-page</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="bookmap.summary">
+    <xsl:attribute name="font-size">9pt</xsl:attribute>
+  </xsl:attribute-set>
 
 </xsl:stylesheet>

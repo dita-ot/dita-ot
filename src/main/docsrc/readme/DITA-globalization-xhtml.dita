@@ -4,11 +4,10 @@
 <?Pub Inc?>
 <reference id="dita-globalization-xhtml" xml:lang="en-us">
 <title>Supported languages: HTML-based transformations</title>
-<shortdesc>The DITA Open Toolkit (DITA-OT) supports over 50 languages and language variants for the
-HTML- and XHTML-based transformations, for example, Eclipse Help, HTML Help, and TocJS.</shortdesc>
+<shortdesc>The DITA Open Toolkit (DITA-OT) supports over 50 languages and language variants for the HTML-based transformations, for example, Eclipse Help, HTML Help, and TocJS.</shortdesc>
 <refbody>
 <table frame="all" rowsep="1" colsep="1">
-<title>Supported languages: HTML- and XHTML-based transformations</title>
+<title>Supported languages: HTML-based transformations</title>
 <tgroup cols="2">
 <colspec colnum="1" colwidth="1.0*"/>
 <colspec colnum="2" colwidth="1.0*"/>

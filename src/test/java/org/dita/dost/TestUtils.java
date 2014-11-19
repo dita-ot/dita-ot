@@ -34,6 +34,7 @@ import org.apache.xml.resolver.tools.CatalogResolver;
 import org.custommonkey.xmlunit.XMLUnit;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.FileUtils;
 
 import org.xml.sax.Attributes;
@@ -149,6 +150,7 @@ public class TestUtils {
             in = new BufferedInputStream(new FileInputStream(file));
             final Transformer t = TransformerFactory.newInstance().newTransformer();
             XMLReader p = XMLReaderFactory.createXMLReader();
+            p.setEntityResolver(CatalogUtils.getCatalogResolver());
             if (normalize) {
                 t.setOutputProperty(OutputKeys.INDENT, "yes");
                 p = new NormalizingXMLFilterImpl(p);
@@ -258,9 +260,10 @@ public class TestUtils {
      * @throws Exception if parsing or serializing failed
      */
     public static void normalize(final File src, final File dst) throws Exception {
+        CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
         final Transformer serializer = TransformerFactory.newInstance().newTransformer();
         final XMLReader parser = XMLReaderFactory.createXMLReader();
-        parser.setEntityResolver(new CatalogResolver());
+        parser.setEntityResolver(CatalogUtils.getCatalogResolver());
         InputStream in = null;
         OutputStream out = null;
         try {
@@ -304,28 +307,28 @@ public class TestUtils {
             this.failOnError = failOnError;
         }
         
-        public void logInfo(final String msg) {
+        public void info(final String msg) {
             //System.out.println(msg);
         }
 
-        public void logWarn(final String msg) {
+        public void warn(final String msg) {
             //System.err.println(msg);
         }
 
-        public void logError(final String msg) {
+        public void error(final String msg) {
             if (failOnError) {
                 throw new AssertionError("Error message was thrown: " + msg);
             }
         }
 
-        public void logError(final String msg, final Throwable t) {
+        public void error(final String msg, final Throwable t) {
             if (failOnError) {
                 t.printStackTrace();
                 throw new AssertionError("Error message was thrown: " + msg);
             }
         }
 
-        public void logDebug(final String msg) {
+        public void debug(final String msg) {
             //System.out.println(msg);
         }
 
@@ -338,19 +341,19 @@ public class TestUtils {
 
         private List<Message> buf = new ArrayList<Message>();
         
-        public void logInfo(final String msg) {
+        public void info(final String msg) {
             buf.add(new Message(Message.Level.INFO, msg, null));
         }
 
-        public void logWarn(final String msg) {
+        public void warn(final String msg) {
             buf.add(new Message(Message.Level.WARN, msg, null));
         }
 
-        public void logError(final String msg) {
+        public void error(final String msg) {
             buf.add(new Message(Message.Level.ERROR, msg, null));
         }
         
-        public void logError(final String msg, final Throwable t) {
+        public void error(final String msg, final Throwable t) {
             buf.add(new Message(Message.Level.ERROR, msg, t));
         }
 
@@ -358,7 +361,7 @@ public class TestUtils {
             buf.add(new Message(Message.Level.FATAL, msg, null));
         }
 
-        public void logDebug(final String msg) {
+        public void debug(final String msg) {
             buf.add(new Message(Message.Level.DEBUG, msg, null));
         }
 

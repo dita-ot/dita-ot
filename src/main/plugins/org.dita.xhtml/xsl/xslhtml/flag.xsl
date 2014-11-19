@@ -14,11 +14,10 @@
               this file are deprecated.
               -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  version="1.0" 
-  xmlns:exsl="http://exslt.org/common" 
+  version="2.0"  
   xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  exclude-result-prefixes="exsl dita2html ditamsg">
+  exclude-result-prefixes="dita2html ditamsg">
 
  <!-- ========== Flagging with flags & revisions ========== -->
 
@@ -443,7 +442,7 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="exsl:node-set($flag-result)/prop">
+      <xsl:when test="$flag-result/prop">
         <xsl:copy-of select="$flag-result"/>
       </xsl:when>
       <xsl:otherwise>
@@ -689,22 +688,26 @@
 
 <!-- Output starting flag only -->
 <xsl:template name="start-revflag">
+  <xsl:param name="flagrules"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
 </xsl:template>
 
 <!-- Output ending flag only -->
 <xsl:template name="end-revflag">
+  <xsl:param name="flagrules"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
 </xsl:template>
 
 <!-- for table entries - if the parent (row) has a rev but the cell does not - output the rev -->
 <xsl:template name="start-revflag-parent">
+  <xsl:param name="flagrules"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
 </xsl:template>
 <xsl:template name="end-revflag-parent">
+  <xsl:param name="flagrules"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
 </xsl:template>
@@ -729,12 +732,14 @@
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="start-mark-rev">
+  <xsl:param name="revvalue"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop/startflag" mode="ditaval-outputflag"/>
 </xsl:template>
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="end-mark-rev">
+  <xsl:param name="revvalue"/>
   <!-- DEPRECATED IN FAVOR OF FALLTHROUGH SUPPORT WITH NEW FLAGGING PREPROCESS. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop/endflag" mode="ditaval-outputflag"/>
 </xsl:template>
@@ -1005,8 +1010,8 @@
       <xsl:when test="normalize-space($FILTERFILE)=''">
         <xsl:value-of select="'false'"/>
       </xsl:when>
-      <xsl:when test="exsl:node-set($flagrules)/*">
-        <xsl:apply-templates select="exsl:node-set($flagrules)/*[1]" mode="conflict-check"/>
+      <xsl:when test="$flagrules/*">
+        <xsl:apply-templates select="$flagrules/*[1]" mode="conflict-check"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="'false'"/>
@@ -1045,7 +1050,7 @@
     <xsl:param name="flagrules">
       <xsl:call-template name="getrules"/>
     </xsl:param>
-    <xsl:apply-templates select="exsl:node-set($flagrules)/prop[1]" mode="start-flagit"/>
+    <xsl:apply-templates select="$flagrules/prop[1]" mode="start-flagit"/>
   </xsl:template>
  
  <xsl:template match="prop" mode="start-flagit">  
@@ -1101,7 +1106,7 @@
   <xsl:param name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:param>
-  <xsl:apply-templates select="exsl:node-set($flagrules)/prop[last()]" mode="end-flagit"/>
+  <xsl:apply-templates select="$flagrules/prop[last()]" mode="end-flagit"/>
  </xsl:template>
  
  <xsl:template match="prop" mode="end-flagit">  

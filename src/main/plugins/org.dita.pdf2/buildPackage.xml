@@ -9,59 +9,53 @@
   <property name="package.file" value="fo.zip"/>
   
   <property name="classpath.dir" location="${basedir}/../../dev/lib"/>
-  <property name="fo.lib.dir" location="demo/fo/lib"/>	
+  <property name="fo.lib.dir" location="demo/fo/lib"/>  
   
   <property name="fo.jar" location="${lib.dir}/fo.jar" />
-  <property name="resolver.jar" location="${lib.dir}/resolver.jar" />
-  <property name="icu4j.jar" location="${lib.dir}/icu4j.jar" />
-  <property name="xep.jar" location="${lib.dir}/xep/lib/xep.jar" />
 
-  <path id="build.class.path">
+  <path id="base.compile.path">
     <pathelement location="${basedir}/../../lib/dost.jar" />
-    <pathelement location="${resolver.jar}" />
-    <pathelement location="${icu4j.jar}" />
-    <pathelement location="${xep.jar}" />
+    <pathelement location="${basedir}/../../lib/xml-resolver.jar" />
+    <pathelement location="${basedir}/../../lib/icu4j.jar" />
   </path>
 
-  <!--We will only build the XEP classes if XEP is in the build.class.path-->
+  <path id="compile.path">
+    <path refid="base.compile.path"/>
+    <pathelement location="${lib.dir}/xep/lib/xep.jar" />
+  </path>
+
+  <!--We will only build the XEP classes if XEP is in the compile.path-->
   <available classname="com.renderx.xep.FOTarget" property="xep-available">
-    <classpath refid="build.class.path"/>
+    <classpath refid="compile.path"/>
   </available>
 
   <target name="clean-java">
     <delete dir="${bin.dir}"/>
     <delete file="${fo.jar}"/>
   </target>
-	
+  
   <target name="init-java" depends="clean-java">
     <mkdir dir="${bin.dir}"/>
   </target>
-
-  <target name="check-icu4j">
-    <available classname="com.ibm.icu.text.Collator" property="icu4j-available">
-      <classpath refid="build.class.path"/>
-    </available>
-    <fail unless="icu4j-available" message="In order to build fo.jar, icu4j.jar must be present in the lib directory."/>
-  </target>
-	
-  <target name="build-java" depends="init-java, check-icu4j, build-xep-java">
+  
+  <target name="compile" depends="init-java, xep-compile">
     <javac srcdir="${src.dir}" destdir="${bin.dir}"
       debug="on" excludes="com/idiominc/ws/opentopic/fo/xep/**"
       source="1.6" target="1.6">
-      <classpath refid="build.class.path"/>
+      <classpath refid="compile.path"/>
     </javac>
   </target>
 
-  <target name="build-xep-java" depends="init-java" if="xep-available">
+  <target name="xep-compile" depends="init-java" if="xep-available">
     <javac srcdir="${src.dir}/com/idiominc/ws/opentopic/fo/xep/"
            destdir="${bin.dir}"
            source="1.6" target="1.6"
       debug="on">
-      <classpath refid="build.class.path"/>
+      <classpath refid="compile.path"/>
     </javac>
   </target>
   
-  <target name="package-java" depends="build-java">    
+  <target name="jar" depends="compile">    
     <jar destfile="${fo.jar}" basedir="${bin.dir}" includes="**" />
   </target>
 
@@ -73,7 +67,7 @@
     <delete file="${package.output.dir}/${package.file}"/>
   </target>
  
-  <target name="package-plugin" depends="package-java,init-package">
+  <target name="package-plugin" depends="jar, init-package">
     <zip destfile="${package.output.dir}/${package.file}">
       <zipfileset dir="${basedir}" prefix="fo">
         <include name="*.xml"/>
@@ -81,7 +75,6 @@
         <include name="cfg/**"/>
         <include name="lib/**"/>
         <exclude name="lib/xep/**"/>
-        <exclude name="lib/icu4j.jar"/>
         <include name="src/**"/>
         <include name="xsl/**"/>
         <include name="Customization/**"/>

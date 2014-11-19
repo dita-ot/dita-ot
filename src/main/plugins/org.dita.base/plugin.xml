@@ -11,8 +11,6 @@
   <extension-point id="dita.conductor.plugin" name="Ant conductor plug-in information"/>
   <extension-point id="dita.catalog.plugin-info" name="Plug-in XML catalog information"/>
   <extension-point id="dita.image.extensions" name="Image file extension"/>
-  <extension-point id="dita.topic.extensions" name="DITA topic file extension"/>
-  <extension-point id="dita.map.extensions" name="DITA map file extension"/>
   <extension-point id="dita.html.extensions" name="HTML file extension"/>
   <extension-point id="dita.resource.extensions" name="Resource file extension"/>
   <extension-point id="dita.conductor.transtype.check" name="Transtype check"/>
@@ -40,7 +38,6 @@
   <extension-point id="depend.preprocess.mappull.pre" name="Map pull pre-target"/>
   <extension-point id="depend.preprocess.chunk.pre" name="Chunking pre-target"/>
   <extension-point id="depend.preprocess.maplink.pre" name="Map link pre-target"/>
-  <extension-point id="depend.preprocess.move-links.pre" name="Move links pre-target"/>
   <extension-point id="depend.preprocess.topicpull.pre" name="Topic pull pre-target"/>
   <extension-point id="depend.preprocess.flag-module.pre" name="Flag module pre-target"/>
   <extension-point id="depend.preprocess.copy-files.pre" name="Copy files pre-target"/>
@@ -48,12 +45,11 @@
   <extension-point id="depend.preprocess.copy-html.pre" name="Copy HTML pre-target"/>
   <extension-point id="depend.preprocess.copy-flag.pre" name="Copy flag pre-target"/>
   <extension-point id="depend.preprocess.copy-subsidiary.pre" name="Copy subsidiary pre-target"/>
-  <extension-point id="depend.preprocess.copy-generated-files.pre" name="Copy generated files pre-target"/>
   <extension-point id="depend.preprocess.post" name="Preprocessing post-target"/>
   <extension-point id="dita.preprocess.conref.param" name="Content reference XSLT parameters"/>
   <extension-point id="dita.preprocess.mapref.param" name="Map reference XSLT parameters"/>
   <extension-point id="dita.preprocess.mappull.param" name="Map pull  XSLT parameters"/>
-  <extension-point id="dita.preprocess.maplink.param" name="Map link XSLT parameters"/>
+  <!--extension-point id="dita.preprocess.maplink.param" name="Map link XSLT parameters"/-->
   <extension-point id="dita.preprocess.topicpull.param" name="Topic pull XSLT parameters"/>
   <extension-point id="dita.preprocess.flag-module.param" name="Flag module XSLT parameters"/>
   <extension-point id="dita.xsl.conref" name="Content reference XSLT import"/>
@@ -72,9 +68,6 @@
   <feature extension="dita.image.extensions" value=".tif"/>
   <feature extension="dita.image.extensions" value=".tiff"/>
   <feature extension="dita.image.extensions" value=".bmp"/>
-  <feature extension="dita.topic.extensions" value=".dita"/>
-  <feature extension="dita.topic.extensions" value=".xml"/>
-  <feature extension="dita.map.extensions" value=".ditamap"/>
   <feature extension="dita.html.extensions" value=".html"/>
   <feature extension="dita.html.extensions" value=".htm"/>
   <feature extension="dita.resource.extensions" value=".pdf"/>
@@ -86,6 +79,7 @@
   <template file="build_preprocess_template.xml"/>
   <template file="../../resource/messages_template.xml"/>
   <template file="../../xsl/common/allstrings_template.xml"/>
+  <template file="../../xsl/common/strings_template.xml"/>
   <template file="../../xsl/preprocess/maplink_template.xsl"/>
   <template file="../../xsl/preprocess/mapref_template.xsl"/>
   <template file="../../xsl/preprocess/mappull_template.xsl"/>

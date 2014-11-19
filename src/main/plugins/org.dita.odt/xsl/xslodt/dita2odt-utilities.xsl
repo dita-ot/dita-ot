@@ -26,36 +26,21 @@
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
-  version="1.0"
-  xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  xmlns:stringUtils="org.dita.dost.util.StringUtils" 
-  xmlns:styleUtils="org.dita.dost.util.StyleUtils" 
-  exclude-result-prefixes="stringUtils styleUtils ditamsg">
+  version="2.0"
+  xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg" 
+  exclude-result-prefixes="ditamsg">
   
   <!-- =========== I18N RELATED TEMPLATES, ODT REUSES RESOURCE FILES OF XHTML===============-->
+    <!-- Deprecated: generate text directly instead -->
     <xsl:template name="get-ascii">
       <xsl:param name="txt"></xsl:param>
-      <xsl:variable name="ancestorlang">
-        <xsl:call-template name="getLowerCaseLang"/>
-      </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'zh-cn')) or (string-length($ancestorlang)=2 and contains($ancestorlang,'zh')) )">
-          <xsl:value-of select="stringUtils:getAscii(string($txt))"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$txt"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="$txt"/>
     </xsl:template>
+  <!-- Deprecated: use getString instead -->
   <xsl:template name="getStringODT">
-    <xsl:param name="stringName"></xsl:param>
-    <xsl:variable name="translatedStr">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="$stringName"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:call-template name="get-ascii">
-      <xsl:with-param name="txt" select="$translatedStr"/>
+    <xsl:param name="stringName"/>
+    <xsl:call-template name="getString">
+      <xsl:with-param name="stringName" select="$stringName"/>
     </xsl:call-template>
   </xsl:template>
   
@@ -350,29 +335,17 @@
       count(ancestor::*[contains(@class, ' topic/li ')][1]
       /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
     
-    <xsl:variable name="fn_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="fn_depth" select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="list_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="list_depth" select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="dlist_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="dlist_depth" select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="table_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="stable_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="max_depth">
-      <xsl:value-of select="stringUtils:getMax(string($fn_depth), string($list_depth), string($dlist_depth), string($table_depth), string($stable_depth))"/>
-    </xsl:variable>
+    <xsl:variable name="max_depth" select="max(($fn_depth, $list_depth, $dlist_depth, $table_depth, $stable_depth))"/>
     
     <!-- if the table is under p(direct child) -->
     <xsl:choose>
@@ -400,7 +373,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:if test="$span_depth &gt;= 0">
@@ -409,14 +382,14 @@
             <!-- break list tag -->
             <xsl:call-template name="create_items_for_list">
               <xsl:with-param name="depth" select="$depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- start render table -->
             <xsl:call-template name="create_simpletable"/>
             <!-- start list tag again -->
             <xsl:call-template name="create_items_for_list">
               <xsl:with-param name="depth" select="$depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
             <!-- start p tag again if there are span tags-->
             <xsl:if test="$span_depth &gt;= 0">
@@ -425,7 +398,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is fn -->
@@ -437,7 +410,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -448,7 +421,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is table -->
@@ -461,7 +434,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -472,7 +445,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is simpletable -->
@@ -485,7 +458,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -496,7 +469,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
         </xsl:choose>
@@ -522,7 +495,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:if test="$span_depth &gt;= 0">
@@ -531,14 +504,14 @@
             <!-- break list tag -->
             <xsl:call-template name="create_items_for_list">
               <xsl:with-param name="depth" select="$depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- start render table -->
             <xsl:call-template name="create_simpletable"/>
             <!-- start list tag again -->
             <xsl:call-template name="create_items_for_list">
               <xsl:with-param name="depth" select="$depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
             <!-- start p tag again if there are span tags-->
             <xsl:if test="$span_depth &gt;= 0">
@@ -547,7 +520,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is fn -->
@@ -559,7 +532,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -570,7 +543,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is simpletable -->
@@ -583,7 +556,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -594,7 +567,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is table -->
@@ -607,7 +580,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -618,7 +591,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
         </xsl:choose>
@@ -633,7 +606,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag if there are span tags -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -644,7 +617,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:when>
       <!-- nested by table -->
@@ -657,7 +630,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag if there are span tags -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -668,7 +641,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:when>
       
@@ -680,7 +653,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag if there are span tags -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -691,7 +664,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -704,29 +677,17 @@
       count(ancestor::*[contains(@class, ' topic/li ')][1]
       /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
     
-    <xsl:variable name="fn_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="fn_depth" select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="list_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="list_depth" select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="dlist_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="dlist_depth" select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="table_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="stable_depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
-    </xsl:variable>
+    <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="max_depth">
-      <xsl:value-of select="stringUtils:getMax(string($fn_depth), string($list_depth), string($dlist_depth), string($table_depth), string($stable_depth))"/>
-    </xsl:variable>
+    <xsl:variable name="max_depth" select="max(($fn_depth, $list_depth, $dlist_depth, $table_depth, $stable_depth))"/>
     
     
     <!-- if the table is under p(direct child) -->
@@ -754,7 +715,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:if test="$span_depth &gt;= 0">
@@ -763,14 +724,14 @@
             <!-- break list tag -->
             <xsl:call-template name="create_items_for_list">
               <xsl:with-param name="depth" select="$depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- start render table -->
             <xsl:apply-templates/>
             <!-- start list tag again -->
             <xsl:call-template name="create_items_for_list">
               <xsl:with-param name="depth" select="$depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
             <!-- start p tag again if there are span tags-->
             <xsl:if test="$span_depth &gt;= 0">
@@ -779,7 +740,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is fn -->
@@ -791,7 +752,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -802,7 +763,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is table -->
@@ -815,7 +776,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -826,7 +787,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is simpletable -->
@@ -839,7 +800,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -850,7 +811,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
         </xsl:choose>
@@ -878,7 +839,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:if test="$span_depth &gt;= 0">
@@ -887,14 +848,14 @@
             <!-- break list tag -->
             <xsl:call-template name="create_items_for_list">
               <xsl:with-param name="depth" select="$depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- start render table -->
             <xsl:apply-templates/>
             <!-- start list tag again -->
             <xsl:call-template name="create_items_for_list">
               <xsl:with-param name="depth" select="$depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
             <!-- start p tag again if there are span tags-->
             <xsl:if test="$span_depth &gt;= 0">
@@ -903,7 +864,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is fn -->
@@ -915,7 +876,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -926,7 +887,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearest tag is  table -->
@@ -939,7 +900,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -950,7 +911,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
           <!-- nearst tag is simpletable -->
@@ -963,7 +924,7 @@
             <!-- break span tags -->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'0'"/>
+              <xsl:with-param name="order" select="0"/>
             </xsl:call-template>
             <!-- break first p tag if there are span tags -->
             <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -974,7 +935,7 @@
             <!--  start render span tags again-->
             <xsl:call-template name="break_span_tags">
               <xsl:with-param name="depth" select="$span_depth"/>
-              <xsl:with-param name="order" select="'1'"/>
+              <xsl:with-param name="order" select="1"/>
             </xsl:call-template>
           </xsl:when>
         </xsl:choose>
@@ -990,7 +951,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag if there are span tags -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -1001,7 +962,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:when>
       <!-- nested by table -->
@@ -1014,7 +975,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag if there are span tags -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -1025,7 +986,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:when>
       
@@ -1037,7 +998,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -1048,7 +1009,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -1149,7 +1110,7 @@
         <!-- break span tag(for flagging)-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="1"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break p tag -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -1171,7 +1132,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="1"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:when>
       
@@ -1186,7 +1147,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -1208,7 +1169,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:when>
       
@@ -1224,7 +1185,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -1246,7 +1207,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:when>
       
@@ -1260,7 +1221,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -1282,7 +1243,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:when>
       
@@ -1296,7 +1257,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -1318,7 +1279,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:when>
       <!-- nearest ancestor tag is fn -->
@@ -1329,7 +1290,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -1351,7 +1312,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:when>
       <!-- nested by other tags. -->
@@ -1362,7 +1323,7 @@
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
+          <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
         <!-- break first p tag -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
@@ -1384,7 +1345,7 @@
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
+          <xsl:with-param name="order" select="1"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -1470,36 +1431,20 @@
             <xsl:apply-templates/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="@href"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="@href"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="contains(@class,' topic/link ')">
         <xsl:choose>
           <xsl:when test="*[contains(@class,' topic/linktext ')]">
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
           </xsl:when>
           <xsl:when test="text()">
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="text()"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="text()"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt">
-                <xsl:value-of select="@href"/>
-              </xsl:with-param>
-            </xsl:call-template>
+            <xsl:value-of select="@href"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>

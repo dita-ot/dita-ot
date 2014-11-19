@@ -16,12 +16,12 @@
                     </chhead>
                     <chrow>
                         <choption>Minimal</choption>
-                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                        <chdesc><filepath>DITA-OT<keyword keyref="version"
                                 />_minimal_bin.tar.gz</filepath></chdesc>
                     </chrow>
                     <chrow>
                         <choption>Standard</choption>
-                        <chdesc><filepath>DITA-OT<keyword keyref="release.version"
+                        <chdesc><filepath>DITA-OT<keyword keyref="version"
                                 />_standard_bin.tar.gz</filepath></chdesc>
                     </chrow>
                 </choicetable>
@@ -80,29 +80,14 @@ export CLASSPATH=$DITA_HOME/lib/commons-codec-<keyword keyref="tool.codec.versio
             </step>
             <step>
                 <cmd>Set up the XSLT processor:</cmd>
-                <choicetable relcolwidth="1.0* 4.0*">
-                    <chhead>
-                        <choptionhd>Processor</choptionhd>
-                        <chdeschd>Action</chdeschd>
-                    </chhead>
-                    <chrow>
-                        <choption>Saxon</choption>
-                        <chdesc>
-                            <p>Set up the <varname>CLASSPATH</varname> environment variable to
-                                include the Saxon JAR files, for
-                                example:<codeblock>export CLASSPATH=&lt;saxon_dir>/saxon9.jar:&lt;saxon_dir>/saxon9-dom.jar:$CLASSPATH</codeblock></p>
-                            <p>Set up the <codeph>ANT_OPTS</codeph> environment variable, for
-                                example:
-                                <codeblock>export ANT_OPTS=$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl</codeblock></p>
-                        </chdesc>
-                    </chrow>
-                    <chrow>
-                        <choption>Xalan</choption>
-                        <chdesc>Set up the <varname>CLASSPATH</varname> environment variable to
-                            include the Xalan JAR files, for example:
-                            <codeblock>export CLASSPATH=&lt;xalan_dir>/xalan.jar:$CLASSPATH</codeblock></chdesc>
-                    </chrow>
-                </choicetable>
+                <info>
+                  <p>Set up the <varname>CLASSPATH</varname> environment variable to
+                      include the Saxon JAR files, for
+                      example:<codeblock>export CLASSPATH=&lt;saxon_dir>/saxon9.jar:&lt;saxon_dir>/saxon9-dom.jar:$CLASSPATH</codeblock></p>
+                  <p>Set up the <codeph>ANT_OPTS</codeph> environment variable, for
+                      example:
+                      <codeblock>export ANT_OPTS=$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl</codeblock></p>
+                </info>
             </step>
             <step importance="optional">
                 <cmd>For index processing, set up ICU for Java.</cmd>
@@ -118,7 +103,7 @@ export CLASSPATH=$DITA_HOME/lib/commons-codec-<keyword keyref="tool.codec.versio
             </step>
             <step importance="optional">
                 <cmd>For PDF output, set up the XSL-FO processor:</cmd>
-                <choicetable relcolwidth="1.0* 4.0*">
+                <choicetable relcolwidth=".75* 4.25*">
                     <chhead>
                         <choptionhd>Processor</choptionhd>
                         <chdeschd>Action</chdeschd>
@@ -153,7 +138,7 @@ export CLASSPATH=$DITA_HOME/lib/commons-codec-<keyword keyref="tool.codec.versio
                 <info>The <filepath>samples\ant_sample directory</filepath> contains Ant scripts
                     designed to build various output formats.</info>
                 <stepxmp>
-                    <codeblock>/usr/local/share/DITA-OT<keyword keyref="release.version"/>$ ant -f samples/ant_sample/sample_all.xml</codeblock>
+                    <codeblock>/usr/local/share/DITA-OT<keyword keyref="version"/>$ ant -f samples/ant_sample/sample_all.xml</codeblock>
                 </stepxmp>
                 <stepresult>The generated output is written to the
                             <filepath><varname>DITA-dir</varname>\out\samples directory</filepath>.

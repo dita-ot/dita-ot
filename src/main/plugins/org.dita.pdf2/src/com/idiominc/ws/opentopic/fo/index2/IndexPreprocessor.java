@@ -59,8 +59,6 @@ public final class IndexPreprocessor {
     private DITAOTLogger logger;
     private static final String elIndexRangeStartName = "start";
     private static final String elIndexRangeEndName = "end";
-    
-    public static final boolean USES_FRAME_MARKUP = Boolean.parseBoolean(Configuration.configuration.get("org.dita.pdf2.index.frame-markup"));
 
     /**
      * Create new index preprocessor.
@@ -314,11 +312,6 @@ public final class IndexPreprocessor {
             final String val = indexEntry.getValue();
             if (null != val) {
                 indexEntryNode.setAttribute("value", val);
-            }
-
-            final String so = indexEntry.getSoValue();
-            if (null != so) {
-                indexEntryNode.setAttribute("SO", so);
             }
 
             final String sort = indexEntry.getSortString();

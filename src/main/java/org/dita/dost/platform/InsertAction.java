@@ -8,65 +8,53 @@
  */
 package org.dita.dost.platform;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.ext.DefaultHandler2;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
  * InsertAction implements IAction and insert the resource
  * provided by plug-ins into the xsl files, ant scripts and xml catalog.
  * @author Zhang, Yuan Peng
  */
-class InsertAction extends DefaultHandler2 implements IAction {
+class InsertAction extends XMLFilterImpl implements IAction {
 
     protected final XMLReader reader;
     protected DITAOTLogger logger;
     protected final Set<String> fileNameSet;
-    protected final StringBuffer retBuf;
     protected final Hashtable<String,String> paramTable;
     protected int elemLevel = 0;
-    protected boolean inCdataSection = false;
     /** Current processing file. */
     protected String currentFile;
     /**
      * Default Constructor.
      */
     public InsertAction() {
-        fileNameSet = new LinkedHashSet<String>(INT_16);
+        fileNameSet = new LinkedHashSet<String>(16);
         logger = new DITAOTJavaLogger();
-        retBuf = new StringBuffer(INT_4096);
         paramTable = new Hashtable<String,String>();
         try {
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-            reader.setProperty(LEXICAL_HANDLER_PROPERTY, this);
-
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
-            reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
         }
     }
-
+    
     @Override
-    public void setInput(final String input) {
-        final StringTokenizer inputTokenizer = new StringTokenizer(input, Integrator.FEAT_VALUE_SEPARATOR);
-        while(inputTokenizer.hasMoreElements()){
-            fileNameSet.add(inputTokenizer.nextToken());
-        }
+    public void setInput(final List<String> input) {
+        fileNameSet.addAll(input);
     }
 
     @Override
@@ -76,15 +64,20 @@ class InsertAction extends DefaultHandler2 implements IAction {
 
     @Override
     public String getResult() {
+        throw new UnsupportedOperationException();
+    }
+    
+    @Override
+    public void getResult(final ContentHandler retBuf) throws SAXException {
+        setContentHandler(retBuf);
         try{
             for (final String fileName: fileNameSet) {
                 currentFile = fileName;
                 reader.parse(currentFile);
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
-        return retBuf.toString();
     }
 
     @Override
@@ -96,77 +89,33 @@ class InsertAction extends DefaultHandler2 implements IAction {
         this.logger = logger;
     }
 
+    // XMLFilter methods
+    
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
-        if(elemLevel != 0){
-            final int attLen = attributes.getLength();
-            retBuf.append(LINE_SEPARATOR);
-            retBuf.append("<").append(qName);
-            for (int i = 0; i < attLen; i++){
-                retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-                retBuf.append(StringUtils.escapeXML(attributes.getValue(i))).append("\"");
-            }
-            if(("public".equals(localName) ||
-                    "system".equals(localName) ||
-                    "uri".equals(localName))){
-                retBuf.append("/>");
-            }
-            else{
-                retBuf.append(">");
-            }
+        if (elemLevel != 0){
+            getContentHandler().startElement(uri, localName, qName, attributes);
         }
         elemLevel ++;
     }
 
     @Override
-    public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (inCdataSection) {
-            retBuf.append(ch, start, length);
-        } else {
-            final char[] esc = StringUtils.escapeXML(ch, start, length).toCharArray();
-            retBuf.append(esc, 0, esc.length);
-        }
-    }
-
-    @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         elemLevel --;
-        if(elemLevel != 0 &&
-                (!"public".equals(localName) &&
-                        !"system".equals(localName) &&
-                        !"uri".equals(localName))
-                ){
-            //retBuf.append(LINE_SEPARATOR);
-            retBuf.append("</").append(qName).append(">");
+        if (elemLevel != 0) {
+            getContentHandler().endElement(uri, localName, qName);
         }
-    }
-
-    @Override
-    public void ignorableWhitespace(final char[] ch, final int start, final int length) throws SAXException {
-        retBuf.append(ch, start, length);
     }
 
     @Override
     public void startDocument() throws SAXException {
         elemLevel = 0;
+        // suppress
     }
-
+    
     @Override
-    public void comment(final char[] ch, final int start, final int length) throws SAXException {
-        retBuf.append("<!--").append(ch, start, length).append("-->");
-    }
-
-    @Override
-    public void startCDATA() throws SAXException {
-        inCdataSection = true;
-        retBuf.append(CDATA_HEAD);
-
-    }
-
-    @Override
-    public void endCDATA() throws SAXException {
-        retBuf.append(CDATA_END);
-        inCdataSection = false;
+    public void endDocument() throws SAXException {
+        // suppress
     }
 
 }

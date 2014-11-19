@@ -9,6 +9,7 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Job;
 
 /**
  * Dummy pipeline module for testing.
@@ -28,6 +29,11 @@ public class DummyPipelineModule implements AbstractPipelineModule {
 
     public void setLogger(final DITAOTLogger logger) {
         // NOOP
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        // Noop
     }
 
 }

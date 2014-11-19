@@ -7,7 +7,7 @@
 <!-- book.xsl 
  | Merge DITA topics with "validation" of topic property
  *-->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
 <!-- Include error message template -->
 <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
@@ -145,7 +145,7 @@
     <xsl:when test="contains(.,'://') or ../@scope='external' or ../@scope='peer'">
       <xsl:copy/>
     </xsl:when>
-    <xsl:when test="(parent::*[contains(@class,' topic/xref ')] or parent::*[contains(@class,' topic/link ')]) and (not(../@format) or ../@format='dita' or ../@format='DITA')">
+    <xsl:when test="(parent::*[contains(@class,' topic/xref ')] or parent::*[contains(@class,' topic/link ')]) and (not(../@format) or ../@format='dita')">
       <xsl:choose>
         <xsl:when test="starts-with(.,'#')">
           <xsl:variable name="refer-path" select="substring-after(.,'#')"/>
@@ -202,9 +202,9 @@
           <xsl:if test="$current-doc and not($current-doc='')">
           <xsl:choose>
             <xsl:when test="$current-doc//*[contains(@class,' topic/topic ')]/@id">
-              <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="generate-id($current-doc//*[contains(@class,' topic/topic ')][1]/@id)"/></xsl:attribute>
+              <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="generate-id(($current-doc//*[contains(@class,' topic/topic ')])[1]/@id)"/></xsl:attribute>
             </xsl:when>
-            <xsl:otherwise><xsl:text>#</xsl:text><xsl:value-of select="generate-id($current-doc//*[contains(@class,' topic/topic ')][1])"/></xsl:otherwise>
+            <xsl:otherwise><xsl:text>#</xsl:text><xsl:value-of select="generate-id(($current-doc//*[contains(@class,' topic/topic ')])[1])"/></xsl:otherwise>
           </xsl:choose>
           </xsl:if>
         </xsl:otherwise>

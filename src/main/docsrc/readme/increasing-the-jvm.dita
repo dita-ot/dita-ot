@@ -32,9 +32,9 @@
             </step>
             <step>
                 <cmd>To persistently change the value, change the value allocated to the ANT_OPTS
-                    environment variable on your system. If you use the <filepath>startcmd</filepath> file
+                    environment variable on your system.<!-- If you use the <filepath>startcmd</filepath> file
                     from the Full Easy Install to set up a toolkit session, edit that file
-                    to change the value.</cmd>
+                    to change the value.--></cmd>
             </step>
         </steps-unordered>
     </taskbody>

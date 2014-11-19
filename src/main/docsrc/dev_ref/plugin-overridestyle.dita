@@ -51,10 +51,6 @@ navtitles in maps and causes             attributes to cascade).</dd>
 <dt><codeph>dita.xsl.maplink</codeph></dt>
 <dd>Overrides the preprocess step "maplink" (the step that generates
 map-based links).</dd>
-</dlentry><dlentry importance="deprecated">
-<dt><codeph>dita.xsl.fo</codeph></dt>
-<dd>Override the (now deprecated) original PDF output, which is still
-available with the transform type "legacypdf".</dd>
 </dlentry></dl>       </section>
 <example><title>Example</title><p>The following two files represent
 a complete, simple style plug-in. The <filepath>plugin.xml</filepath> file

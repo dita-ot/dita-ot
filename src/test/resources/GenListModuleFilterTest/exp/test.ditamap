@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?workdir /Users/jelovirt/Work/github/dita-ot/src/test/resources/GenListModuleFilterTest/src/test.ditamap?>
+<?workdir-uri file:/Users/jelovirt/Work/github/dita-ot/src/test/resources/GenListModuleFilterTest/src/test.ditamap?>
+<?path2project?>
+<?path2project-uri ./?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.2"
+  class="- map/map "
+  domains="(topic delay-d) (map mapgroup-d) (topic indexing-d) (map glossref-d) (topic hi-d) (topic ut-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)">
+  <title class="- topic/title ">DITA Topic Map</title>
+  <topicref href="topic.dita" class="- map/topicref "></topicref>
+  <topicref href="plain.dita" class="- map/topicref "></topicref>
+  
+  <topicref href="plain.dita" class="- map/topicref " copy-to="plain-copy-to.dita"></topicref>
+  
+  <topicref href="to-content.dita" class="- map/topicref " chunk="to-content"></topicref>
+  <topicref href="copy-to-to-content.dita" class="- map/topicref " chunk="to-content" copy-to="to-content-copy-to.dita"></topicref>
+  
+  <topicref href="keyword-keyref.dita" class="- map/topicref "></topicref>
+  <keydef class="+ map/topicref mapgropup-d/keydef " keys="keyword" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+</map>

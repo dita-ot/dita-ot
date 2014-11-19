@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+<!--  
   This file is part of the DITA Open Toolkit project.
   See the accompanying license.txt file for applicable licenses.
 -->
@@ -9,50 +9,44 @@
   <variable id="Body even footer"/>
   <variable id="Body first footer"/>
   <variable id="Body first header"/>
-  <variable id="Body odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
-  <variable id="Body even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Body odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Body even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
   <variable id="Preface odd footer"/>
   <variable id="Preface even footer"/>
   <variable id="Preface first footer"/>
-  <variable id="Preface odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;Inleiding&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
-  <variable id="Preface even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;Inleiding&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Preface odd header"><param ref-name="prodname"/> | Inleiding | <param ref-name="pagenum"/></variable>
+  <variable id="Preface even header"><param ref-name="pagenum"/> | Inleiding | <param ref-name="prodname"/></variable>
   <variable id="Preface first header"/>
   <variable id="Toc odd footer"/>
   <variable id="Toc even footer"/>
   <!-- Inhoud -->
-  <variable id="Toc odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
-  <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Toc odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Toc even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
   <variable id="Index odd footer"/>
   <variable id="Index even footer"/>
-  <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
-  <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+  <variable id="Index odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+  <variable id="Index even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
   <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
-  <variable id="Unordered List bullet">&#x2022;</variable>
+  <variable id="Unordered List bullet">•</variable>
   <variable id="Table of Contents">Inhoudsopgave</variable>
-  <variable id="Index">Index</variable>
+  
   <variable id="Index Continued String">Vervolg</variable>
   <variable id="Index See String">, zie </variable>
   <variable id="Index See Also String">Zie ook </variable>
-  <variable id="Table of Contents Chapter">Hoofdstuk&#xA0;<param ref-name="number"/>:&#xA0;</variable>
-  <variable id="Table of Contents Appendix">Bijlage&#xA0;<param ref-name="number"/>:&#xA0;</variable>
-  <variable id="Table of Contents Part">Deel&#xA0;<param ref-name="number"/>:&#xA0;</variable>
-  <variable id="Table of Contents Preface">Voorwoord:&#xA0;</variable>
-  <variable id="Table of Contents Notices"></variable>
+  <variable id="Table of Contents Chapter">Hoofdstuk <param ref-name="number"/>: </variable>
+  <variable id="Table of Contents Appendix">Bijlage <param ref-name="number"/>: </variable>
+  <variable id="Table of Contents Part">Deel <param ref-name="number"/>: </variable>
+  <variable id="Table of Contents Preface">Voorwoord: </variable>
+  <variable id="Table of Contents Notices"/>
   <variable id="Preface title">Voorwoord</variable>
   <variable id="Notices title">Let op</variable>
   <variable id="Mini Toc">Onderwerpen: </variable>
   <variable id="#note-separator">: </variable>
-  <variable id="Note">Opmerking</variable>
-  <variable id="Tip">Tip</variable>
-  <variable id="Important">Belangrijk</variable>
-  <variable id="Fastpath">Versnelde keuze</variable>
-  <variable id="Remember">Niet vergeten</variable>
-  <variable id="Attention">Waarschuwing</variable>
-  <variable id="Caution">Let op!</variable>
-  <variable id="Danger">Gevaar!</variable>
-  <variable id="Restriction">Beperking</variable>
-  <variable id="Figure">Figuur <param ref-name="number"/>: <param ref-name="title"/></variable>
-  <variable id="Table">Tabel <param ref-name="number"/>: <param ref-name="title"/></variable>
+
+  <variable id="Figure.title">Figuur <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Figure Number">Figuur <param ref-name="number"/></variable>
+  <variable id="Table.title">Tabel <param ref-name="number"/>: <param ref-name="title"/></variable>
+  <variable id="Table Number">Tabel <param ref-name="number"/></variable>
   <variable id="Related Links">Verwante onderwerpen</variable>
   <variable id="Cross-Reference">Verwijzing naar:</variable>
   <variable id="Content-Reference">Verwijzing naar:</variable>
@@ -80,14 +74,11 @@
   <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
   <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
   <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="Parent topic">Hoofdonderwerp</variable>
-  <variable id="Next topic">Volgend onderwerp</variable>
-  <variable id="Previous topic">Vorig onderwerp</variable>
+
   <variable id="Child topics">Onderliggende onderwerpen</variable>
-  <variable id="Related concepts">Verwante onderwerpen</variable>
-  <variable id="Related tasks">Verwante taken</variable>
+
   <variable id="Related references">Verwante verwijzingen</variable>
-  <variable id="Related information">Verwante informatie</variable>
+  
   <variable id="Contents button title">Inhoud</variable>
   <variable id="Index button title">Index</variable>
   <variable id="Index multiple entries separator">, </variable>
@@ -121,9 +112,8 @@
   <variable id="Task Result">Resultaten</variable>
   <variable id="Task Example">Voorbeeld</variable>
   <variable id="Task Postreq">Volgende stappen</variable>
-  <variable id="Option">Optie</variable>
-  <variable id="Description">Beschrijving</variable>
-  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+
+  <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>
   <variable id="#quote-end">”</variable>
 </vars>

@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 exclude-result-prefixes="dita-ot">
@@ -22,7 +22,6 @@
 <xsl:param name="WORKDIR" select="''"/>
 <xsl:param name="OUTEXT" select="'.html'"/>
 <xsl:param name="DBG" select="no"/>
-<xsl:param name="DITAEXT" select="'.xml'"/>
 <xsl:variable name="work.dir">
   <xsl:choose>
     <xsl:when test="$WORKDIR and not($WORKDIR='')">
@@ -109,7 +108,7 @@
 <!-- Format @href for the title attribute on the map element -->
 <xsl:template match="*" mode="format-href">
   <xsl:choose>
-    <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
+    <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
     <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
     <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
       <xsl:value-of select="$work.dir"/>
@@ -201,7 +200,7 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:choose>
-                <xsl:when test="@type='external' or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
+                <xsl:when test="@type='external' or not(not(@format) or @format='dita')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                 <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
                 <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
                   <xsl:call-template name="replace-extension">
@@ -232,7 +231,7 @@
         <xsl:if test="@href and not(@href='')">
                   <xsl:attribute name="href">
                     <xsl:choose>
-                      <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
+                      <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                       <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
                       <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">
                         <xsl:value-of select="$work.dir"/>

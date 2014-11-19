@@ -8,6 +8,7 @@
  */
 package org.dita.dost.writer;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,7 +17,6 @@ import java.util.List;
 import javax.xml.transform.Transformer;
 
 import org.xml.sax.SAXException;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
@@ -33,7 +33,7 @@ import org.dita.dost.util.XMLSerializer;
 public final class CHMIndexWriter extends AbstractExtendDitaWriter {
 
     @Override
-    public void write(final String filename) throws DITAOTException {
+    public void write(final File filename) throws DITAOTException {
         OutputStream out = null;
         try {
             out = new FileOutputStream(filename);
@@ -57,8 +57,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
             serializer.writeStartElement("body");
             serializer.writeStartElement("ul");
             final int termNum = termList.size();
-            for (int i = 0; i < termNum; i++) {
-                final IndexTerm term = termList.get(i);
+            for (final IndexTerm term : termList) {
                 outputIndexTerm(term, serializer);
             }
             serializer.writeEndElement(); // ul
@@ -72,7 +71,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
                 try {
                     out.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -119,8 +118,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
         serializer.writeEndElement(); // object
         if (subTerms != null && subTermNum > 0) {
             serializer.writeStartElement("ul");
-            for (int i = 0; i < subTermNum; i++) {
-                final IndexTerm subTerm = subTerms.get(i);
+            for (final IndexTerm subTerm : subTerms) {
                 outputIndexTerm(subTerm, serializer);
             }
             serializer.writeEndElement(); // ul
@@ -137,14 +135,13 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
         final List<IndexTerm> subTerms = term.getSubTerms();
         List<IndexTermTarget> subTargets = null;
         if (subTerms != null && ! subTerms.isEmpty()){
-            for (int i = 0; i < subTerms.size(); i++){
-                final IndexTerm subTerm = subTerms.get(i);
+            for (final IndexTerm subTerm : subTerms) {
                 subTargets = subTerm.getTargetList();
-                if (subTargets != null && !subTargets.isEmpty()){
+                if (subTargets != null && !subTargets.isEmpty()) {
                     //findTargets(subTerm);
                     //add targets(child term)
                     term.addTargets(subTerm.getTargetList());
-                }else{
+                } else {
                     //term.addTargets(subTerm.getTargetList());
                     //recursive search child's child term
                     findTargets(subTerm);
@@ -163,9 +160,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
      */
     @Override
     public String getIndexFileName(final String outputFileRoot) {
-        final StringBuffer indexFilename = new StringBuffer(outputFileRoot);
-        indexFilename.append(".hhk");
-        return indexFilename.toString();
+        return outputFileRoot + ".hhk";
     }
 
 }

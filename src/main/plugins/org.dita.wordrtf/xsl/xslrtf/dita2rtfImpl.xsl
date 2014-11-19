@@ -5,7 +5,7 @@
 <!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
 <xsl:stylesheet
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	version="1.0">
+	version="2.0">
 <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
 <xsl:import href="dita2rtf-utilities.xsl"/>
@@ -17,6 +17,8 @@
 <xsl:import href="pr-d.xsl"/>
 <xsl:import href="ui-d.xsl"/>
 <xsl:import href="sw-d.xsl"/>
+<xsl:import href="markup-d.xsl"/>
+<xsl:import href="xml-d.xsl"/>
 <xsl:import href="dita2rtf-task.xsl"/>
 <xsl:output method="text"/>
 
@@ -269,14 +271,12 @@
 contains(@class,' topic/simpletable ')]">\intbl </xsl:if>{\field{\*\fldinst {\s8 \f2\fs24\ul\cf1
 HYPERLINK <xsl:if test="$samefile='true'">\\l</xsl:if> "<xsl:value-of
 select="$href-value"/>"}}{\fldrslt {\s8 \f2\fs24\ul\cf1 <xsl:choose><xsl:when
-  test="@reftitle"><xsl:call-template name="get-ascii"><xsl:with-param name="txt"><xsl:value-of
-  select="@reftitle"/></xsl:with-param></xsl:call-template></xsl:when><xsl:otherwise><xsl:call-template
-    name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="@href"/></xsl:with-param></xsl:call-template></xsl:otherwise></xsl:choose>\s8 \f2\fs24\ul\cf1}}}\par\pard\ql\f2\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
+  test="@reftitle"><xsl:value-of
+  select="@reftitle"/></xsl:when><xsl:otherwise><xsl:value-of select="@href"/></xsl:otherwise></xsl:choose>\s8 \f2\fs24\ul\cf1}}}\par\pard\ql\f2\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if>
    </xsl:when>
    <xsl:when test="@reftitle and not(@reftitle='')"> <!-- Insert citation text -->
 \par\pard\plain\qr\f2\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or
-contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:call-template
-  name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="@reftitle"/></xsl:with-param></xsl:call-template>\par\pard\ql\f2\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if></xsl:when>
+contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:value-of select="@reftitle"/>\par\pard\ql\f2\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if></xsl:when>
    <xsl:otherwise><!--nop - do nothing--></xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -369,20 +369,20 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 <xsl:apply-templates/>
 </xsl:when>
 <xsl:otherwise>
-<xsl:call-template name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="@href"/></xsl:with-param></xsl:call-template>
+<xsl:value-of select="@href"/>
 </xsl:otherwise>
 </xsl:choose>
 </xsl:when>
 <xsl:when test="contains(@class,' topic/link ')">
 <xsl:choose>
 <xsl:when test="*[contains(@class,' topic/linktext ')]">
-<xsl:call-template name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="*[contains(@class,' topic/linktext ')]"/></xsl:with-param></xsl:call-template>
+<xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
 </xsl:when>
 <xsl:when test="text()">
-<xsl:call-template name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="text()"/></xsl:with-param></xsl:call-template>
+<xsl:value-of select="text()"/>
 </xsl:when>
 <xsl:otherwise>
-<xsl:call-template name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="@href"/></xsl:with-param></xsl:call-template>
+<xsl:value-of select="@href"/>
 </xsl:otherwise>
 </xsl:choose>
 </xsl:when>
@@ -439,9 +439,13 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 \par \plain\s0\f4\fs24\b <xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Danger'"/></xsl:call-template><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text>\pard \plain\s0\f4\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:apply-templates/>
 \par \plain\s0\f2\fs24
     </xsl:when>
+    <xsl:when test="@type='trouble'">
+\par \plain\s0\f4\fs24\b <xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Trouble'"/></xsl:call-template><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text>\pard \plain\s0\f4\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:apply-templates/>
+\par \plain\s0\f2\fs24
+    </xsl:when>
     <xsl:when test="@type='other'">
 \par \plain\s0\f4\fs24\b <xsl:choose><xsl:when test="@othertype and
-  not(@othertype='')"><xsl:call-template name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="@othertype"/></xsl:with-param></xsl:call-template></xsl:when><xsl:otherwise><xsl:text>[other]</xsl:text></xsl:otherwise></xsl:choose><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text>\pard \plain\s0\f4\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:apply-templates/>
+  not(@othertype='')"><xsl:value-of select="@othertype"/></xsl:when><xsl:otherwise><xsl:text>[other]</xsl:text></xsl:otherwise></xsl:choose><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text>\pard \plain\s0\f4\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:apply-templates/>
 \par \plain\s0\f2\fs24
     </xsl:when>
     <xsl:otherwise>
@@ -537,16 +541,12 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
             <xsl:value-of select="substring-before($txt,$newline)"/><xsl:text>\par </xsl:text><xsl:call-template name="gen-txt"><xsl:with-param name="txt" select="substring-after($txt,$newline)"/></xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="get-ascii">
-              <xsl:with-param name="txt" select="$txt"/>
-            </xsl:call-template>
+            <xsl:value-of select="$txt"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="get-ascii">
-          <xsl:with-param name="txt" select="$txt"/>
-        </xsl:call-template>
+        <xsl:value-of select="$txt"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -557,9 +557,9 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 <xsl:call-template name="gen-txt"><xsl:with-param name="txt" select="."/></xsl:call-template>
 </xsl:when>
 <xsl:otherwise>
-  <xsl:if test="normalize-space(substring(., 1, 1))='' and not(normalize-space(.)='')"><xsl:text> </xsl:text></xsl:if><xsl:call-template name="get-ascii">
-    <xsl:with-param name="txt"><xsl:value-of select="normalize-space(.)"/></xsl:with-param>
-  </xsl:call-template><xsl:if test="normalize-space(substring(.,
+  <xsl:if test="normalize-space(substring(., 1, 1))='' and not(normalize-space(.)='')"><xsl:text> </xsl:text></xsl:if>
+    <xsl:value-of select="normalize-space(.)"/>
+  <xsl:if test="normalize-space(substring(.,
     string-length(.), 1))='' and not(normalize-space(.)='')"><xsl:text> </xsl:text></xsl:if>
 </xsl:otherwise>
 </xsl:choose>

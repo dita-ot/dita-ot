@@ -55,7 +55,6 @@ creates <filepath>stage2.fo</filepath> in the temporary processing directory</st
 converts <filepath>stage2.fo</filepath> into <filepath>stage3.fo</filepath>, followed by an XSLT
 process that converts <filepath>stage3.fo</filepath> into <filepath>topic.fo</filepath>.</stentry>
 </strow>
-<strow/>
 </simpletable></dd>
 </dlentry>
 <dlentry>

@@ -13,13 +13,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -40,12 +38,11 @@ public final class MessageUtils {
     private static final String ELEMENT_RESPONSE = "response";
     private static final String ATTRIBUTE_ID = "id";
     private static final String ATTRIBUTE_TYPE = "type";
-    private static String defaultResource = "resource/messages.xml";
+    private static final String defaultResource = "resource/messages.xml";
 
     // Variables
 
-    private final Hashtable<String, MessageBean> hashTable = new Hashtable<String, MessageBean>();;
-    private final DITAOTLogger logger = new DITAOTJavaLogger();
+    private final Hashtable<String, MessageBean> hashTable = new Hashtable<String, MessageBean>();
     private static MessageUtils utils;
 
     // Constructors
@@ -107,9 +104,7 @@ public final class MessageUtils {
     	synchronized (hashTable) {
     		hashTable.clear();
 	        try {
-	            final DocumentBuilderFactory factory = DocumentBuilderFactory
-	                    .newInstance();
-	            final DocumentBuilder builder = factory.newDocumentBuilder();
+	            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
 	            final Document doc = builder.parse(in);
 	
 	            final Element messages = doc.getDocumentElement();
@@ -151,14 +146,10 @@ public final class MessageUtils {
         }
 
         final MessageBean hashMessage = hashTable.get(id);
-        if (hashMessage != null) {
-            return new MessageBean(hashMessage);
+        if (hashMessage == null) {
+            throw new IllegalArgumentException("Message for ID '" + id + "' not found");
         }
-
-        // return a empty message when no message found,
-        // and notify the user with a warning message.
-        logger.logWarn("  Can't find message for id: " + id);
-        return new MessageBean(id, "", "", "");
+        return new MessageBean(hashMessage);
     }
     
     /**

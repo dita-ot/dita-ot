@@ -11,8 +11,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -28,7 +30,9 @@ import org.dita.dost.platform.Integrator;
  */
 public final class Configuration {
 
-    private static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    public static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    /** Debug mode to aid in development, not intended for end users. */
+    public static final boolean DEBUG = false;
 
     /**
      * Immutable configuration properties.
@@ -55,13 +59,13 @@ public final class Configuration {
                 }
             }
         } catch (final IOException e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         } finally {
             if (plugingConfigurationInputStream != null) {
                 try {
                     plugingConfigurationInputStream.close();
                 } catch (final IOException ex) {
-                    logger.logError(ex.getMessage(), ex) ;
+                    logger.error(ex.getMessage(), ex) ;
                 }
             }
         }
@@ -84,13 +88,13 @@ public final class Configuration {
                 }
             }
         } catch (final IOException e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         } finally {
             if (configurationInputStream != null) {
                 try {
                     configurationInputStream.close();
                 } catch (final IOException ex) {
-                    logger.logError(ex.getMessage(), ex) ;
+                    logger.error(ex.getMessage(), ex) ;
                 }
             }
         }
@@ -115,5 +119,36 @@ public final class Configuration {
     /** Private constructor to disallow instance creation. */
     private Configuration() {
     }
+    
+    /** List of print-oriented transtypes. */
+    public static final List<String> printTranstype;
+    static {
+        final List<String> types = new ArrayList<String>();
+        final String printTranstypes = Configuration.configuration.get(CONF_PRINT_TRANSTYPES);
+        if (printTranstypes != null) {
+            if (printTranstypes.trim().length() > 0) {
+                for (final String transtype: printTranstypes.split(CONF_LIST_SEPARATOR)) {
+                    types.add(transtype.trim());
+                }
+            }
+        } else {
+            new DITAOTJavaLogger().error("Failed to read print transtypes from configuration, using defaults.");
+            types.add(TRANS_TYPE_PDF);
+        }
+        printTranstype = Collections.unmodifiableList(types);
+    }
 
+    /** Map of plug-in resource directories. */
+    public static final Map<String, File> pluginResourceDirs;
+    static {
+        final Map<String, File> ps = new HashMap<String, File>();
+        for (final Map.Entry<String, String> e: configuration.entrySet()) {
+            final String key = e.getKey();
+            if (key.startsWith("plugin.") && key.endsWith(".dir")) {
+                ps.put(key.substring(7, key.length() - 4), new File(e.getValue()));
+            }
+        }
+        pluginResourceDirs = Collections.unmodifiableMap(ps);
+    }
+    
 }

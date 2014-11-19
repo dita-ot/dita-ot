@@ -4,7 +4,7 @@
  <title>Ant</title>
  <shortdesc>Ant is a Java-based, open-source tool that is provided by the Apache Foundation. It can
   be used to declare a sequence of build actions. It is well suited for both development and
-  document builds. The full-easy-install version of the toolkit ships with a copy of
+  document builds. The <!--full-easy-install-->client version of the toolkit ships with a copy of
   Ant.</shortdesc>
  <prolog>
   <metadata>

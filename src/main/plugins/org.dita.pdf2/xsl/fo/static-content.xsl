@@ -85,8 +85,6 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:if>
         <xsl:call-template name="insertPrefaceFirstHeader"/>
         <xsl:call-template name="insertPrefaceFirstFooter"/>
-<!--        <xsl:call-template name="insertPrefaceLastHeader"/>-->
-<!--        <xsl:call-template name="insertPrefaceLastFooter"/>-->
     </xsl:template>
 
     <xsl:template name="insertFrontMatterStaticContents">
@@ -99,8 +97,17 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="$mirror-page-margins">
           <xsl:call-template name="insertFrontMatterEvenHeader"/>
         </xsl:if>
-<!--        <xsl:call-template name="insertPrefaceLastHeader"/>-->
-<!--        <xsl:call-template name="insertPrefaceLastFooter"/>-->
+    </xsl:template>
+  
+    <xsl:template name="insertBackCoverStaticContents">
+      <xsl:call-template name="insertBackCoverOddFooter"/>
+      <xsl:if test="$mirror-page-margins">
+        <xsl:call-template name="insertBackCoverEvenFooter"/>
+      </xsl:if>
+      <xsl:call-template name="insertBackCoverOddHeader"/>
+      <xsl:if test="$mirror-page-margins">
+        <xsl:call-template name="insertBackCoverEvenHeader"/>
+      </xsl:if>
     </xsl:template>
 
     <xsl:template name="insertGlossaryStaticContents">
@@ -115,7 +122,6 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="insertBodyOddHeader">
-
         <fo:static-content flow-name="odd-body-header">
             <fo:block xsl:use-attribute-sets="__body__odd__header">
                 <xsl:call-template name="insertVariable">
@@ -138,11 +144,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertBodyEvenHeader">
-
         <fo:static-content flow-name="even-body-header">
             <fo:block xsl:use-attribute-sets="__body__even__header">
                 <xsl:call-template name="insertVariable">
@@ -165,16 +169,17 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertBodyFirstHeader">
-
         <fo:static-content flow-name="first-body-header">
             <fo:block xsl:use-attribute-sets="__body__first__header">
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Body first header'"/>
                     <xsl:with-param name="theParameters">
+                        <prodname>
+                          <xsl:value-of select="$productName"/>
+                        </prodname>
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__first__header__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -189,11 +194,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertBodyFirstFooter">
-
         <fo:static-content flow-name="first-body-footer">
             <fo:block xsl:use-attribute-sets="__body__first__footer">
                 <xsl:call-template name="insertVariable">
@@ -213,7 +216,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertBodyLastHeader">
@@ -239,7 +241,6 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="insertBodyOddFooter">
-
         <fo:static-content flow-name="odd-body-footer">
             <fo:block xsl:use-attribute-sets="__body__odd__footer">
                 <xsl:call-template name="insertVariable">
@@ -259,11 +260,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertBodyEvenFooter">
-
         <fo:static-content flow-name="even-body-footer">
             <fo:block xsl:use-attribute-sets="__body__even__footer">
                 <xsl:call-template name="insertVariable">
@@ -283,7 +282,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertTocOddHeader">
@@ -309,7 +307,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertTocEvenHeader">
@@ -335,7 +332,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertTocOddFooter">
@@ -353,7 +349,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertTocEvenFooter">
@@ -371,7 +366,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertIndexOddHeader">
@@ -397,7 +391,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertIndexEvenHeader">
@@ -423,7 +416,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertIndexOddFooter">
@@ -441,7 +433,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertIndexEvenFooter">
@@ -459,11 +450,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertPrefaceOddHeader">
-
         <fo:static-content flow-name="odd-body-header">
             <fo:block xsl:use-attribute-sets="__body__odd__header">
                 <xsl:call-template name="insertVariable">
@@ -486,11 +475,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertPrefaceEvenHeader">
-
         <fo:static-content flow-name="even-body-header">
             <fo:block xsl:use-attribute-sets="__body__even__header">
                 <xsl:call-template name="insertVariable">
@@ -513,16 +500,17 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertPrefaceFirstHeader">
-
         <fo:static-content flow-name="first-body-header">
             <fo:block xsl:use-attribute-sets="__body__first__header">
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Preface first header'"/>
                     <xsl:with-param name="theParameters">
+                        <prodname>
+                          <xsl:value-of select="$productName"/>
+                        </prodname>
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__first__header__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -537,11 +525,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertPrefaceFirstFooter">
-
         <fo:static-content flow-name="first-body-footer">
             <fo:block xsl:use-attribute-sets="__body__first__footer">
                 <xsl:call-template name="insertVariable">
@@ -561,7 +547,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertPrefaceLastHeader">
@@ -587,7 +572,6 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="insertPrefaceOddFooter">
-
         <fo:static-content flow-name="odd-body-footer">
             <fo:block xsl:use-attribute-sets="__body__odd__footer">
                 <xsl:call-template name="insertVariable">
@@ -607,11 +591,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertPrefaceEvenFooter">
-
         <fo:static-content flow-name="even-body-footer">
             <fo:block xsl:use-attribute-sets="__body__even__footer">
                 <xsl:call-template name="insertVariable">
@@ -631,11 +613,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertFrontMatterOddHeader">
-
         <fo:static-content flow-name="odd-frontmatter-header">
             <fo:block xsl:use-attribute-sets="__body__odd__header">
                 <xsl:call-template name="insertVariable">
@@ -658,11 +638,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertFrontMatterEvenHeader">
-
         <fo:static-content flow-name="even-frontmatter-header">
             <fo:block xsl:use-attribute-sets="__body__even__header">
                 <xsl:call-template name="insertVariable">
@@ -685,9 +663,7 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
-
 
     <xsl:template name="insertFrontMatterLastHeader">
         <fo:static-content flow-name="last-frontmatter-header">
@@ -730,7 +706,6 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="insertFrontMatterOddFooter">
-
         <fo:static-content flow-name="odd-frontmatter-footer">
             <fo:block xsl:use-attribute-sets="__body__odd__footer">
                 <xsl:call-template name="insertVariable">
@@ -750,11 +725,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertFrontMatterEvenFooter">
-
         <fo:static-content flow-name="even-frontmatter-footer">
             <fo:block xsl:use-attribute-sets="__body__even__footer">
                 <xsl:call-template name="insertVariable">
@@ -774,7 +747,100 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
+    </xsl:template>
+  
+    <xsl:template name="insertBackCoverOddHeader">
+      <fo:static-content flow-name="odd-back-cover-header">
+        <fo:block xsl:use-attribute-sets="__body__odd__header">
+          <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Preface odd header'"/>
+            <xsl:with-param name="theParameters">
+              <prodname>
+                <xsl:value-of select="$productName"/>
+              </prodname>
+              <heading>
+                <fo:inline xsl:use-attribute-sets="__body__odd__header__heading">
+                  <fo:retrieve-marker retrieve-class-name="current-header"/>
+                </fo:inline>
+              </heading>
+              <pagenum>
+                <fo:inline xsl:use-attribute-sets="__body__odd__header__pagenum">
+                  <fo:page-number/>
+                </fo:inline>
+              </pagenum>
+            </xsl:with-param>
+          </xsl:call-template>
+        </fo:block>
+      </fo:static-content>
+    </xsl:template>
+    
+    <xsl:template name="insertBackCoverEvenHeader">
+      <fo:static-content flow-name="even-back-cover-header">
+        <fo:block xsl:use-attribute-sets="__body__even__header">
+          <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Preface even header'"/>
+            <xsl:with-param name="theParameters">
+              <prodname>
+                <xsl:value-of select="$productName"/>
+              </prodname>
+              <heading>
+                <fo:inline xsl:use-attribute-sets="__body__even__header__heading">
+                  <fo:retrieve-marker retrieve-class-name="current-header"/>
+                </fo:inline>
+              </heading>
+              <pagenum>
+                <fo:inline xsl:use-attribute-sets="__body__even__header__pagenum">
+                  <fo:page-number/>
+                </fo:inline>
+              </pagenum>
+            </xsl:with-param>
+          </xsl:call-template>
+        </fo:block>
+      </fo:static-content>
+    </xsl:template>
+    
+    <xsl:template name="insertBackCoverOddFooter">
+      <fo:static-content flow-name="odd-back-cover-footer">
+        <fo:block xsl:use-attribute-sets="__body__odd__footer">
+          <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Preface odd footer'"/>
+            <xsl:with-param name="theParameters">
+              <heading>
+                <fo:inline xsl:use-attribute-sets="__body__odd__footer__heading">
+                  <fo:retrieve-marker retrieve-class-name="current-header"/>
+                </fo:inline>
+              </heading>
+              <pagenum>
+                <fo:inline xsl:use-attribute-sets="__body__odd__footer__pagenum">
+                  <fo:page-number/>
+                </fo:inline>
+              </pagenum>
+            </xsl:with-param>
+          </xsl:call-template>
+        </fo:block>
+      </fo:static-content>
+    </xsl:template>
+    
+    <xsl:template name="insertBackCoverEvenFooter">
+      <fo:static-content flow-name="even-back-cover-footer">
+        <fo:block xsl:use-attribute-sets="__body__even__footer">
+          <xsl:call-template name="insertVariable">
+            <xsl:with-param name="theVariableID" select="'Preface even footer'"/>
+            <xsl:with-param name="theParameters">
+              <heading>
+                <fo:inline xsl:use-attribute-sets="__body__even__footer__heading">
+                  <fo:retrieve-marker retrieve-class-name="current-header"/>
+                </fo:inline>
+              </heading>
+              <pagenum>
+                <fo:inline xsl:use-attribute-sets="__body__even__footer__pagenum">
+                  <fo:page-number/>
+                </fo:inline>
+              </pagenum>
+            </xsl:with-param>
+          </xsl:call-template>
+        </fo:block>
+      </fo:static-content>
     </xsl:template>
 
     <xsl:template name="insertGlossaryOddHeader">
@@ -800,7 +866,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertGlossaryEvenHeader">
@@ -826,7 +891,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertGlossaryOddFooter">
@@ -844,7 +908,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
 
     <xsl:template name="insertGlossaryEvenFooter">
@@ -862,8 +925,6 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </fo:block>
         </fo:static-content>
-
     </xsl:template>
-
 
 </xsl:stylesheet>

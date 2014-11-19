@@ -8,9 +8,12 @@
  */
 package org.dita.dost.platform;
 
+import java.util.List;
 import java.util.Map;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * Interface.
@@ -21,7 +24,7 @@ public interface IAction {
      * Set the input string.
      * @param input input
      */
-    void setInput(String input);
+    void setInput(List<String> input);
     /**
      * Add input parameter.
      * @param name parameter name
@@ -33,6 +36,11 @@ public interface IAction {
      * @return result
      */
     String getResult();
+    /**
+     * Return the result.
+     * @param output output to write results to
+     */
+    void getResult(ContentHandler output) throws SAXException;
     /**
      * Set the feature table.
      * @param h hastable
