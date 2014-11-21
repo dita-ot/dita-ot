@@ -110,12 +110,6 @@ public final class Configuration {
         STRICT, SKIP, LAX
     }
     
-    public static final Mode processingMode;
-    static {
-        final String mode = Configuration.configuration.get("processing-mode");
-        processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
-    }
-    
     /** Private constructor to disallow instance creation. */
     private Configuration() {
     }

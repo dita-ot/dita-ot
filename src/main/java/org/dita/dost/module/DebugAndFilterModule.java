@@ -62,9 +62,9 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
+    private Mode processingMode;
     /** Generate {@code xtrf} and {@code xtrc} attributes */
-    final boolean genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
-
+    private boolean genDebugInfo;
     /** Absolute input map path. */
     private File inputMap;
     /** use grammar pool cache */
@@ -290,8 +290,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         validationFilter.setValidateMap(validateMap);
         validationFilter.setCurrentFile(toURI(inFile));
         validationFilter.setJob(job);
+        validationFilter.setProcessingMode(processingMode);
         pipe.add(validationFilter);
-
 
         final NormalizeFilter normalizeFilter = new NormalizeFilter();
         normalizeFilter.setLogger(logger);
@@ -327,9 +327,12 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             }
         }
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
-        validate = Boolean.valueOf(input.getAttribute("validate"));
+        validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
         setSystemId = "yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
         forceUnique = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE));
+        genDebugInfo = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR));
+        final String mode = input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
+        processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
 
         inputDir = job.getInputDir();
         if (!inputDir.isAbsolute()) {

@@ -417,6 +417,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
         assert fileToParse.isAbsolute();
         final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
+
         if (filterUtils != null) {
             final ProfilingFilter profilingFilter = new ProfilingFilter();
             profilingFilter.setLogger(logger);
@@ -424,23 +425,23 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             profilingFilter.setFilterUtils(filterUtils);
             pipe.add(profilingFilter);
         }
+        
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             exportAnchorsFilter.setCurrentDir(toFile(fileToParse).getParentFile().toURI());
             exportAnchorsFilter.setCurrentFile(fileToParse);
             exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
             pipe.add(exportAnchorsFilter);
         }
-        {
-            keydefFilter.setCurrentDir(toFile(fileToParse).getParentFile().toURI());
-            keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
-            pipe.add(keydefFilter);
-        }
-        {
-            listFilter.setCurrentDir(toFile(fileToParse).getParentFile().toURI());
-            listFilter.setCurrentFile(fileToParse);
-            listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
-            pipe.add(listFilter);
-        }
+
+        keydefFilter.setCurrentDir(toFile(fileToParse).getParentFile().toURI());
+        keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+        pipe.add(keydefFilter);
+
+        listFilter.setCurrentDir(toFile(fileToParse).getParentFile().toURI());
+        listFilter.setCurrentFile(fileToParse);
+        listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+        pipe.add(listFilter);
+
         return pipe;
     }
 

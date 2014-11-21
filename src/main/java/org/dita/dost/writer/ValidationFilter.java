@@ -5,11 +5,10 @@
 package org.dita.dost.writer;
 
 import static javax.xml.XMLConstants.*;
-import static org.dita.dost.util.Configuration.processingMode;
+import static org.dita.dost.util.Configuration.Mode;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
 
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Deque;
@@ -35,6 +34,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	private final Set<String> topicIds = new HashSet<String>();
 	private Map<String, Map<String, Set<String>>> validateMap = null;
 	private Locator locator;
+    /** Deque of domains attibute values */
 	private final Deque<String[][]> domains = new LinkedList<String[][]>();
     /** Current file, relative to temporary directory */
     private URI currentFile;
@@ -45,6 +45,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     private int columnNumber;
     /** Location of cols attribute */
     private Locator colsLocator;
+    private Mode processingMode;
 
     /**
 	 * Create new profiling filter.
@@ -71,7 +72,11 @@ public final class ValidationFilter extends AbstractXMLFilter {
     public void setJob(final Job job) {
         this.job = job;
     }
-	
+
+    public void setProcessingMode(final Mode processingMode) {
+        this.processingMode = processingMode;
+    }
+
 	// Locator methods
     
 	@Override
@@ -110,9 +115,11 @@ public final class ValidationFilter extends AbstractXMLFilter {
         domains.removeFirst();
         getContentHandler().endElement(uri, localName, qName);
     }
-	
+
+    // Validation methods
+
     /**
-     * Validate table cols attribute.
+     * Validate table {@code cols} attribute.
      *
      * @param atts attributes
      */
@@ -123,7 +130,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             try {
                 cols = Integer.parseInt(c.trim());
             } catch (final NumberFormatException e) {
-                if (Configuration.processingMode == Configuration.Mode.STRICT) {
+                if (processingMode == Mode.STRICT) {
                     throw new SAXException(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
                 } else {
                     logger.error(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
@@ -134,7 +141,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             columnNumber++;
         } else if (TOPIC_THEAD.matches(atts) || TOPIC_TBODY.matches(atts)) {
             if (cols != -1 && columnNumber > cols) {
-                if (Configuration.processingMode == Configuration.Mode.STRICT) {
+                if (processingMode == Mode.STRICT) {
                     throw new SAXException(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
                 } else {
                     logger.error(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
@@ -145,7 +152,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
 
     /**
-	 * Validate xml:lang attribute.
+	 * Validate and fix {@code xml:lang} attribute.
 	 * 
 	 * @return modified attributes, {@code null} if there have been no changes 
 	 */
@@ -155,11 +162,11 @@ public final class ValidationFilter extends AbstractXMLFilter {
 		if (lang != null) {
 			final int i = lang.indexOf('_');
 			if (i != -1) {
-				if (Configuration.processingMode == Configuration.Mode.STRICT) {
+				if (processingMode == Mode.STRICT) {
 					throw new SAXException(messageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
 				}
-				logger.error(messageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
-				if (Configuration.processingMode == Configuration.Mode.LAX) {
+                logger.error(messageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
+				if (processingMode == Mode.LAX) {
 					if (res == null) {
 						res = new AttributesImpl(atts);
 					}
@@ -171,7 +178,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
 
 	/**
-	 * Validate ID attribute.
+	 * Validate {@code id} attribute for uniqueness.
 	 */
     private void validateId(final Attributes atts) throws SAXException {
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
@@ -183,7 +190,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 			final String id = atts.getValue(ATTRIBUTE_NAME_ID);
 			if (id != null) {
 				if (topicIds.contains(id)) {
-					if (Configuration.processingMode == Configuration.Mode.STRICT) {
+					if (processingMode == Mode.STRICT) {
 						throw new SAXException(messageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());
 					} else {
 						logger.warn(messageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());			
@@ -195,7 +202,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
 
 	/**
-	 * Validate href attribute.
+	 * Validate and fix {@code href} attribute for URI validity.
 	 * 
 	 * @return modified attributes, {@code null} if there have been no changes
 	 */
@@ -262,7 +269,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
 
     /**
-     * Validate keys attribute
+     * Validate {@code keys} attribute
      */
     private void validateKeys(final Attributes atts) {
         final String keys = atts.getValue(ATTRIBUTE_NAME_KEYS);
@@ -276,7 +283,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
     
     /**
-     * Validate keyscope attribute
+     * Validate {@code keyscope} attribute
      */
     private void validateKeyscope(final Attributes atts) {
         final String keys = atts.getValue(ATTRIBUTE_NAME_KEYSCOPE);
@@ -354,7 +361,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
 
     /**
-     * Validate topicref format attribute.
+     * Validate and fix topicref {@code format} attribute.
      *
      * @param atts original attributes
      * @param modified modified attributes
@@ -378,10 +385,10 @@ public final class ValidationFilter extends AbstractXMLFilter {
                         case STRICT:
                             throw new RuntimeException(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
                         case SKIP:
-                            logger.error(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                                logger.error(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
                             break;
                         case LAX:
-                            logger.error(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
+                                logger.error(messageUtils.getMessage("DOTJ061E").setLocation(locator).toString());
                             if (res == null) {
                                 res = new AttributesImpl(atts);
                             }
@@ -393,5 +400,5 @@ public final class ValidationFilter extends AbstractXMLFilter {
         }
         return res;
     }
-    
+
 }
