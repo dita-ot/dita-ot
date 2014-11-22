@@ -163,7 +163,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             final TransformerFactory tf = TransformerFactory.newInstance();
             final Transformer serializer = tf.newTransformer();
             XMLReader xmlSource = reader;
-            for (final XMLFilter filter: getProcessingPipe(currentFile, f.file)) {
+            for (final XMLFilter filter: getProcessingPipe(currentFile.toURI())) {
                 filter.setParent(xmlSource);
                 xmlSource = filter;
             }
@@ -265,10 +265,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     /**
      * Get pipe line filters
      *
-     * @param fileToParse absolute path to current file being processed
-     * @param inFile relative file path
+     * @param fileToParse absolute URI to current file being processed
      */
-    private List<XMLFilter> getProcessingPipe(final File fileToParse, final File inFile) {
+    private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
         final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
 
         if (genDebugInfo) {
@@ -288,7 +287,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         final ValidationFilter validationFilter = new ValidationFilter();
         validationFilter.setLogger(logger);
         validationFilter.setValidateMap(validateMap);
-        validationFilter.setCurrentFile(toURI(inFile));
+        validationFilter.setCurrentFile(fileToParse);
         validationFilter.setJob(job);
         validationFilter.setProcessingMode(processingMode);
         pipe.add(validationFilter);

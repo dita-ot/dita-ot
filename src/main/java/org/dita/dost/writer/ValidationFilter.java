@@ -36,7 +36,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	private Locator locator;
     /** Deque of domains attibute values */
 	private final Deque<String[][]> domains = new LinkedList<String[][]>();
-    /** Current file, relative to temporary directory */
+    /** Absolute URI to current file */
     private URI currentFile;
     private Job job;
     /** Number of cols in tgroup */
@@ -66,6 +66,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     }
 
     public void setCurrentFile(final URI currentFile) {
+        assert currentFile.isAbsolute();
         this.currentFile = currentFile;
     }
 

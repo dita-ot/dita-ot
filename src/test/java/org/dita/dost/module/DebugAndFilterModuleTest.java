@@ -193,7 +193,7 @@ public class DebugAndFilterModuleTest {
         public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
             final String xtrf = atts.getValue("xtrf");
             assertNotNull(xtrf);
-            assertEquals(source.getAbsolutePath(), xtrf);
+            assertEquals(source.getAbsoluteFile().toURI().toString(), xtrf);
             final String xtrc = atts.getValue("xtrc");
             assertNotNull(xtrc);
             Integer c = counter.get(localName);

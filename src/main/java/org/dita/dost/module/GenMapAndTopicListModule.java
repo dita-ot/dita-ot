@@ -427,7 +427,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
         
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
-            exportAnchorsFilter.setCurrentDir(toFile(fileToParse).getParentFile().toURI());
             exportAnchorsFilter.setCurrentFile(fileToParse);
             exportAnchorsFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
             pipe.add(exportAnchorsFilter);
@@ -437,7 +436,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
         pipe.add(keydefFilter);
 
-        listFilter.setCurrentDir(toFile(fileToParse).getParentFile().toURI());
         listFilter.setCurrentFile(fileToParse);
         listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
         pipe.add(listFilter);

@@ -409,15 +409,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     public void setCurrentFile(final URI currentFile) {
         assert currentFile.isAbsolute();
         this.currentFile = currentFile;
-    }
-    
-    /**
-     * Set the relative directory of current file.
-     * 
-     * @param dir dir
-     */
-    public void setCurrentDir(final URI dir) {
-        currentDir = dir;
+        this.currentDir = currentFile.resolve(".");
     }
 
     /**
