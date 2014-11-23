@@ -45,7 +45,7 @@ import org.xml.sax.SAXParseException;
  * </p>
  */
 public final class GenListModuleReader extends AbstractXMLFilter {
-    
+
     /** Output utilities */
     private Job job;
     /** Absolute basedir of the current parsing file */
@@ -224,7 +224,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * Is the processed file a DITA map.
+     * Is the currently processed file a DITA map.
      *
      * @return {@code true} if DITA map, otherwise {@code false}
      */
@@ -463,7 +463,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         processRoleStack.clear();
         isRootElement = true;
         rootClass = null;
-        // Don't clean resourceOnlySet por crossSet
+        // Don't clean resourceOnlySet or crossSet
     }
 
     @Override
@@ -624,7 +624,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private void handleTopicRef(String localName, Attributes atts) {
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
         // onlyTopicInMap is on.
-        if (job.getOnlyTopicInMap() && canResolved()) {
+        if (job.getOnlyTopicInMap() && isDitaMap()) {
             // topicref(only defined in ditamap file.)
             if (MAP_TOPICREF.matches(classValue)) {
                 URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
@@ -882,12 +882,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if ((ATTRIBUTE_NAME_HREF.equals(attrName) || ATTRIBUTE_NAME_DATA.equals(attrName))
                 && (atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
                     || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)))
-                && (canResolved() || isSupportedImageFile(filename.getPath().toLowerCase()))) {
+                && (followLinks() || isSupportedImageFile(filename.getPath().toLowerCase()))) {
             nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
         }
 
         if (isFormatDita(attrFormat)) {
-            if (ATTRIBUTE_NAME_HREF.equals(attrName) && canResolved()) {
+            if (ATTRIBUTE_NAME_HREF.equals(attrName) && followLinks()) {
                 hrefTargets.add(filename);
                 toOutFile(filename);
                 if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
@@ -964,7 +964,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private void parseConactionAttr(final Attributes atts) {
         final String conaction = atts.getValue(ATTRIBUTE_NAME_CONACTION);
         if (conaction != null) {
-            if (conaction.equals("mark") || conaction.equals("pushreplace")) {
+            if (conaction.equals(ATTR_CONACTION_VALUE_MARK) || conaction.equals(ATTR_CONACTION_VALUE_PUSHREPLACE)) {
                 hasconaction = true;
             }
         }
@@ -985,20 +985,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * Check if {@link #currentFile} is a map
-     * 
-     * @return {@code} true if file is map, otherwise {@code false}
+     * Should links be followed.
      */
-    private boolean isMapFile() {
-        return isDitaMap();
-    }
-
-    private boolean canResolved() {
-        return (!job.getOnlyTopicInMap()) || isMapFile();
+    private boolean followLinks() {
+        return !job.getOnlyTopicInMap() || isDitaMap();
     }
 
     private void addToOutFilesSet(final URI hrefedFile) {
-        if (canResolved()) {
+        if (followLinks()) {
             outDitaFilesSet.add(hrefedFile);
         }
     }

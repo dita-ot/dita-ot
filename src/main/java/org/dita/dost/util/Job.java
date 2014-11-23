@@ -79,10 +79,10 @@ public final class Job {
     private static final String ATTRIBUTE_SUBSIDIARY_TARGET_LIST = "subtarget";
     private static final String ATTRIBUTE_CHUNK_TOPIC_LIST = "skip-chunk";
     
-    private static final String PROPERTY_OUTER_CONTROL = "outercontrol";
-    private static final String PROPERTY_ONLY_TOPIC_IN_MAP = "onlytopicinmap";
-    private static final String PROPERTY_GENERATE_COPY_OUTER = "generatecopyouter";
-    private static final String PROPERTY_OUTPUT_DIR = "outputDir";
+    private static final String PROPERTY_OUTER_CONTROL = ANT_INVOKER_EXT_PARAM_OUTTERCONTROL;
+    private static final String PROPERTY_ONLY_TOPIC_IN_MAP = ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP;
+    private static final String PROPERTY_GENERATE_COPY_OUTER = ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER;
+    private static final String PROPERTY_OUTPUT_DIR = ANT_INVOKER_EXT_PARAM_OUTPUTDIR;
     private static final String PROPERTY_INPUT_MAP_DIR = "InputMapDir";
     
     /** File name for key definition file */
@@ -808,8 +808,8 @@ public final class Job {
      * Set the onlytopicinmap.
      * @param flag onlytopicinmap flag
      */
-    public void setOnlyTopicInMap(final String flag){
-        prop.put(PROPERTY_ONLY_TOPIC_IN_MAP, Boolean.valueOf(flag).toString());
+    public void setOnlyTopicInMap(final boolean flag){
+        prop.put(PROPERTY_ONLY_TOPIC_IN_MAP, Boolean.toString(flag));
     }
 
     public Generate getGeneratecopyouter(){

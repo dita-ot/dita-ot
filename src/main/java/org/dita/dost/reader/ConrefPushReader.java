@@ -42,16 +42,7 @@ import org.xml.sax.XMLReader;
  *
  */
 public final class ConrefPushReader extends AbstractXMLReader {
-    
-    /** Conaction mark value */
-    public static final String ATTR_CONACTION_VALUE_MARK = "mark";
-    /** Conaction push after value */
-    public static final String ATTR_CONACTION_VALUE_PUSHAFTER = "pushafter";
-    /** Conaction push before value */
-    public static final String ATTR_CONACTION_VALUE_PUSHBEFORE = "pushbefore";
-    /** Conaction push replace value */
-    public static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
-    
+
     /** push table.*/
     private final Hashtable<File, Hashtable<MoveKey, DocumentFragment>> pushtable;
     /** Document used to construct push table DocumentFragments. */

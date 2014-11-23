@@ -895,9 +895,17 @@ public final class Constants {
     /**ATTR_PRINT_VALUE_PRINT_ONLY.*/
     public static final String ATTR_PRINT_VALUE_PRINT_ONLY = "printonly";
 
-    /**
-     * constants for filtering or flagging.
-     */
+    /** Conaction mark value */
+    public static final String ATTR_CONACTION_VALUE_MARK = "mark";
+    /** Conaction push after value */
+    public static final String ATTR_CONACTION_VALUE_PUSHAFTER = "pushafter";
+    /** Conaction push before value */
+    public static final String ATTR_CONACTION_VALUE_PUSHBEFORE = "pushbefore";
+    /** Conaction push replace value */
+    public static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
+
+
+    /** constants for filtering or flagging. */
     public static final String DEFAULT_ACTION = "default";
     /**chunk attribute.*/
     public static final String ATTRIBUTE_NAME_CHUNK = "chunk";
