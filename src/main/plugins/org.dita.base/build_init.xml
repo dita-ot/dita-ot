@@ -103,11 +103,6 @@
     <classpath refid="dost.jar.path" />
   </taskdef>
 
-  <taskdef name="config-logger"
-    classname="org.dita.dost.log.LogConfigTask">
-    <classpath refid="dost.jar.path" />
-  </taskdef>
-	
   <taskdef name="dita-ot-echo"
     classname="org.dita.dost.log.DITAOTEchoTask">
     <classpath refid="dost.jar.path" />
@@ -155,15 +150,9 @@
   <!-- property values end -->
 
   <target name="build-init"
-          depends="init-logger,
-                   check-arg,
+          depends="check-arg,
                    log-arg" />
-    
-  <!-- Only used when invoked with CommandLineInvoker -->
-  <target name="init-logger" description="Initialize log directory and file name">
-    <config-logger />
-  </target>
-  	
+
   <!-- property value validation begin -->
   <target name="check-arg"
     description="Validate and init input arguments">

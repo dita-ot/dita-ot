@@ -32,7 +32,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTFileLogger;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -68,9 +67,6 @@ public class DebugAndFilterModuleTest {
         props.setOutputDir(outDir);
         props.setProperty("user.input.dir", inputDir.getAbsolutePath());
         props.write();
-
-        DITAOTFileLogger.getInstance().setLogDir(tmpDir.getAbsolutePath());
-        DITAOTFileLogger.getInstance().setLogFile(DebugAndFilterModuleTest.class.getSimpleName() + ".log");
 
         final PipelineHashIO pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute("inputmap", inputMap.getPath());
