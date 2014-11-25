@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
@@ -282,7 +283,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         }
                         // ensure the newly chunked file to the old one
                         try {
-                            FileUtils.moveFile(from, target);
+                            deleteQuietly(target);
+                            moveFile(from, target);
                         } catch (final IOException e) {
                             logger.error("Failed to replace chunk topic: " + e.getMessage(), e);
 

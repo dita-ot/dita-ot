@@ -8,6 +8,7 @@
  */
 package org.dita.dost.util;
 
+import static org.apache.commons.io.FileUtils.*;
 import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +17,6 @@ import org.apache.tools.ant.Project;
 
 import org.apache.tools.ant.BuildException;
 import org.dita.dost.TestUtils;
-import org.dita.dost.util.DITAOTCopy;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class TestDITAOTCopy {
     public void testexecute() throws BuildException, IOException
     {
         final File myFile = new File(tempDir, "testbuild.xml");
-        FileUtils.copyFile(new File(srcDir, "testbuild.xml"), myFile);
+        copyFile(new File(srcDir, "testbuild.xml"), myFile);
         final File mydestFile = new File(tempDir, "testbuild.xml");
 
         final DITAOTCopy ditaotcopy= new DITAOTCopy();

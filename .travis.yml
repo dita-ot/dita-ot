@@ -7,7 +7,7 @@ before_script:
 - ant jar
 - ant -f src/main/integrator.xml strict
 script: ant test integration-test
-env: CLASSPATH=src/test/lib:src/test/resources:src/main/lib/dost.jar:src/main/lib/dost-configuration.jar:src/main:src/main/lib:src/main/resources:src/main/lib/commons-codec.jar:src/main/lib/xml-resolver.jar:src/main/lib/icu4j.jar:src/main/lib/xercesImpl.jar:src/main/lib/xml-apis.jar:src/main/lib/saxon.jar:src/main/lib/saxon-dom.jar
+env: CLASSPATH=src/test/lib:src/test/resources:src/main/lib/dost.jar:src/main/lib/dost-configuration.jar:src/main:src/main/lib:src/main/resources:src/main/lib/commons-io.jar:src/main/lib/commons-codec.jar:src/main/lib/xml-resolver.jar:src/main/lib/icu4j.jar:src/main/lib/xercesImpl.jar:src/main/lib/xml-apis.jar:src/main/lib/saxon.jar:src/main/lib/saxon-dom.jar
 branches:
   only:
   - /^(develop|hotfix\/.*)$/

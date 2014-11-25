@@ -4,11 +4,11 @@
  */
 package org.dita.dost.writer;
 
+import static org.apache.commons.io.FileUtils.*;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.util.Job;
@@ -20,7 +20,6 @@ import org.xml.sax.SAXException;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.util.FileUtils;
 
 public class CoderefResolverTest {
 
@@ -37,10 +36,10 @@ public class CoderefResolverTest {
     @Test
     public void testWrite() throws DITAOTException, SAXException, IOException {
         final File f = new File(tempDir, "test.dita");
-        FileUtils.copyFile(new File(srcDir, "test.dita"), f);
-        FileUtils.copyFile(new File(srcDir, "code.xml"), new File(tempDir, "code.xml"));
-        FileUtils.copyFile(new File(srcDir, "utf-8.xml"), new File(tempDir, "utf-8.xml"));
-        FileUtils.copyFile(new File(srcDir, "plain.txt"), new File(tempDir, "plain.txt"));
+        copyFile(new File(srcDir, "test.dita"), f);
+        copyFile(new File(srcDir, "code.xml"), new File(tempDir, "code.xml"));
+        copyFile(new File(srcDir, "utf-8.xml"), new File(tempDir, "utf-8.xml"));
+        copyFile(new File(srcDir, "plain.txt"), new File(tempDir, "plain.txt"));
 
         final CoderefResolver filter = new CoderefResolver();
         filter.setLogger(new TestUtils.TestLogger());

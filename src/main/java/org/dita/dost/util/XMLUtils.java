@@ -5,6 +5,7 @@
 package org.dita.dost.util;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.BufferedInputStream;
@@ -146,7 +147,8 @@ public final class XMLUtils {
         final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
         transform(inputFile, outputFile, filters);
         try {
-            FileUtils.moveFile(outputFile, inputFile);
+            deleteQuietly(inputFile);
+            moveFile(outputFile, inputFile);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {

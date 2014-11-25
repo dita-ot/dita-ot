@@ -9,6 +9,7 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
+import static org.apache.commons.io.FileUtils.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -286,7 +287,8 @@ public final class ConvertLang extends Task {
                 }
             }
             try {
-                FileUtils.moveFile(outputFile, inputFile);
+                deleteQuietly(inputFile);
+                moveFile(outputFile, inputFile);
             } catch (final Exception e) {
                 logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
             }
@@ -400,7 +402,8 @@ public final class ConvertLang extends Task {
                 }
             }
             try {
-                FileUtils.moveFile(outputFile, inputFile);
+                deleteQuietly(inputFile);
+                moveFile(outputFile, inputFile);
             } catch (final Exception e) {
                 logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
             }
@@ -467,7 +470,8 @@ public final class ConvertLang extends Task {
             }
         }
         try {
-            FileUtils.moveFile(outputFile, inputFile);
+            deleteQuietly(inputFile);
+            moveFile(outputFile, inputFile);
         } catch (final Exception e) {
             logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
         }
