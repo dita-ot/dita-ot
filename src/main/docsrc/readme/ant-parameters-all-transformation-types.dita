@@ -150,7 +150,7 @@
           <plentry id="outer.control">
             <pt><parmname>outer.control</parmname></pt>
             <pd id="outer.control.desc">Specifies how the DITA OT handles
-              content files that are located in or below the directory containing the master DITA
+              content files that are not located in or below the directory containing the master DITA
               map. The following values are supported:<ul>
                 <li><option>fail</option> – Fail quickly if files are going to be generated or
                   copied outside of the directory</li>
