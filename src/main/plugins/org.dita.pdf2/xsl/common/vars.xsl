@@ -36,6 +36,11 @@ See the accompanying license.txt file for applicable licenses.
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   exclude-result-prefixes="opentopic-vars xs">
 
+  <!-- Override template to get current language with fixed value -->
+  <xsl:template name="getLowerCaseLang" as="xs:string">
+    <xsl:value-of select="lower-case(translate($locale, '_', '-'))"/>
+  </xsl:template>
+
   <!-- Deprecated. Use getVariable template instead. -->
   <xsl:template name="insertVariable">
     <xsl:param name="theVariableID" as="xs:string"/>
