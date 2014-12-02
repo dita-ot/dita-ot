@@ -45,8 +45,8 @@ See the accompanying license.txt file for applicable licenses.
     
     <xsl:param name="bookmap-order" select="'discard'" as="xs:string"/>
   
-    <xsl:variable name="retain-bookmap-order" select="*[contains(@class,' bookmap/bookmap ')] and $bookmap-order eq 'retain'"/>
-    <xsl:variable name="writing-mode">
+    <xsl:variable name="retain-bookmap-order" select="*[contains(@class,' bookmap/bookmap ')] and $bookmap-order eq 'retain'" as="xs:boolean"/>
+    <xsl:variable name="writing-mode" as="xs:string">
       <xsl:variable name="lang" select="if (contains($locale, '_')) then substring-before($locale, '_') else $locale"/>
       <xsl:choose>
         <xsl:when test="some $l in ('ar', 'fa', 'he', 'ps', 'ur') satisfies $l eq $lang">rl</xsl:when>
@@ -56,17 +56,13 @@ See the accompanying license.txt file for applicable licenses.
     
     <xsl:variable name="mapType" as="xs:string">
         <xsl:choose>
-            <xsl:when test="/*[contains(@class, ' bookmap/bookmap ')]">
-                <xsl:value-of select="'bookmap'"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="'ditamap'"/>
-            </xsl:otherwise>
+            <xsl:when test="/*[contains(@class, ' bookmap/bookmap ')]">bookmap</xsl:when>
+            <xsl:otherwise>ditamap</xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
 
     <xsl:variable name="productName">
-        <xsl:variable name="mapProdname" select="(/*/opentopic:map//*[contains(@class, ' topic/prodname ')])[1]"/>
+        <xsl:variable name="mapProdname" select="(/*/opentopic:map//*[contains(@class, ' topic/prodname ')])[1]" as="element()?"/>
         <xsl:choose>
             <xsl:when test="$mapProdname">
                 <xsl:value-of select="$mapProdname"/>
@@ -79,7 +75,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:variable>
 
-    <xsl:variable name="map" select="//opentopic:map"/>
+    <xsl:variable name="map" select="//opentopic:map" as="element()?"/>
 
     <xsl:variable name="topicNumbers">
         <xsl:for-each select="//*[contains(@class, ' topic/topic ')]">
@@ -89,9 +85,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:for-each>
     </xsl:variable>
 
-  <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]"/>
-
-<!-- Root template, and topicref validation mooved from topic2fo_shell.xsl to add ability for customizaing   -->
+  <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]" as="element()*"/>
 
     <xsl:template name="validateTopicRefs">
         <xsl:apply-templates select="//opentopic:map" mode="topicref-validation"/>
@@ -150,7 +144,7 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
 
   <xsl:template match="/" mode="dita-ot:author-metadata" as="xs:string?">
-    <xsl:variable name="authorinformation" select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' xnal-d/authorinformation ')]"/>
+    <xsl:variable name="authorinformation" select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' xnal-d/authorinformation ')]" as="element()*"/>
     <xsl:choose>
       <xsl:when test="exists($authorinformation/descendant::*[contains(@class, ' xnal-d/personname ')])">
         <xsl:for-each select="$authorinformation/descendant::*[contains(@class, ' xnal-d/personname ')][1]">
@@ -176,7 +170,7 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
 
   <xsl:template match="/" mode="dita-ot:keywords-metadata" as="xs:string*">
-    <xsl:variable name="keywords" select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, 'topic/keyword ')]"/>
+    <xsl:variable name="keywords" select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, 'topic/keyword ')]" as="element()*"/>
     <xsl:for-each select="$keywords">
       <xsl:value-of>
         <xsl:apply-templates select="." mode="dita-ot:text-only"/>
@@ -209,7 +203,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:root>
     </xsl:template>
   
-  <xsl:variable name="map-based-page-sequence-generation" select="true()"/>
+  <xsl:variable name="map-based-page-sequence-generation" select="true()" as="xs:boolean"/>
   
   <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="generatePageSequences">
     <fo:page-sequence master-reference="ditamap-body-sequence" xsl:use-attribute-sets="__force__page__count">
