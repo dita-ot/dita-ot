@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="DITA-ant" xml:lang="en-us">
-<title>Publishing DITA content from Ant</title>
-<shortdesc>You can use Ant to invoke the DITA Open Toolkit (DITA-OT) and generate output. This is
-        the most robust method of transforming DITA content; you can use the complete set of
-        parameters that are supported by the toolkit.</shortdesc>
-</task>
