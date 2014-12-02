@@ -453,11 +453,9 @@
   </target>
 
   <target name="update-doc" unless="doc.skip">
-    <ant antfile="${src.dir}/integrator.xml" target="integrate">
-      <property name="basedir" value="${src.dir}"/>
-    </ant>
-    <ant antfile="${doc.dir}/build.xml">
-      <property name="basedir" value="${src.dir}"/>
+    <ant antfile="${src.dir}/integrator.xml" target="integrate" dir="${src.dir}"/>
+    <ant antfile="${doc.dir}/build.xml" dir="${doc.dir}">
+      <property name="dita.home" location="${src.dir}"/>
       <property name="output.dir" location="${work.dir}/htmlhelp"/>
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="preprocess.copy-generated-files.skip" value="true"/>
@@ -640,8 +638,10 @@
   <!-- Site -->
   
   <target name="site" description="Build project website">
-    <ant antfile="${basedir}/src/main/docsrc/build.xml" target="generate-msg-topic" dir="${basedir}/src/main"/>
-    <ant antfile="${basedir}/src/main/build.xml">
+    <ant antfile="${doc.dir}/build.xml" target="generate-msg-topic" dir="${doc.dir}">
+      <property name="dita.home" location="${src.dir}"/>
+    </ant>
+    <ant antfile="${src.dir}/build.xml">
       <property name="args.input" location="${doc.dir}/site.ditamap"/>
       <property name="output.dir" location="${basedir}/target/site"/>
       <property name="transtype" value="net.sourceforge.dita-ot.html"/>
