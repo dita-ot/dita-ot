@@ -91,7 +91,7 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]"/>
 
-<!-- Root template, and topicref validation mooved from topic2fo_shell.xsl to add ability for customizaing   -->
+<!-- Root template, and topicref validation mooved from topic2fo_shell.xsl to add ability for customizing   -->
 
     <xsl:template name="validateTopicRefs">
         <xsl:apply-templates select="//opentopic:map" mode="topicref-validation"/>
