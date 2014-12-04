@@ -453,12 +453,12 @@
 
 <!-- section processor - div with no generated title -->
 <xsl:template match="*[contains(@class, ' topic/section ')]" name="topic.section">
-  <div class="section">
+  <section class="section">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-toc-id"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates select="."  mode="section-fmt" />
-  </div><xsl:value-of select="$newline"/>
+  </section><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/section ')]" mode="section-fmt">
