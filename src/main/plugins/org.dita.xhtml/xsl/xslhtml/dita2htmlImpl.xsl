@@ -3977,49 +3977,87 @@
   </xsl:template>
   <xsl:template match="*" mode="chapterBody">
     <body>
-      <!-- Already put xml:lang on <html>; do not copy to body with commonattributes -->
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
-      <!--output parent or first "topic" tag's outputclass as class -->
-      <xsl:if test="@outputclass">
-       <xsl:attribute name="class" select="@outputclass"/>
-      </xsl:if>
-      <xsl:if test="self::dita">
-          <xsl:if test="*[contains(@class, ' topic/topic ')][1]/@outputclass">
-           <xsl:attribute name="class" select="*[contains(@class, ' topic/topic ')][1]/@outputclass"/>
-          </xsl:if>
-      </xsl:if>
-      <xsl:apply-templates select="." mode="addAttributesToBody"/>
-      <xsl:call-template name="setidaname"/>
+      <xsl:apply-templates select="." mode="addAttributesToHtmlBodyElement"/>
+      <xsl:call-template name="setaname"/>  <!-- For HTML4 compatibility, if needed -->
       <xsl:value-of select="$newline"/>
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-      <xsl:call-template name="generateBreadcrumbs"/>
-      <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
-      <xsl:call-template name="processHDR"/>
-      <xsl:if test="$INDEXSHOW = 'yes'">
-        <xsl:apply-templates select="/*/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')] |
-                                     /dita/*[1]/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')]"/>
-      </xsl:if>
+      <xsl:apply-templates select="." mode="addHeaderToHtmlBodyElement"/>
+
       <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
       <xsl:call-template name="gen-user-sidetoc"/>
-      <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
-      <!-- title content will appear here by fall-through -->
-      <!-- followed by prolog (but no fall-through is permitted for it) -->
-      <!-- followed by body content, again by fall-through in document order -->
-      <!-- followed by related links -->
-      <!-- followed by child topics by fall-through -->
-      
-      <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
-      <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here -->
-      <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+
+      <xsl:apply-templates select="." mode="addContentToHtmlBodyElement"/>
+      <xsl:apply-templates select="." mode="addFooterToHtmlBodyElement"/>
     </body>
     <xsl:value-of select="$newline"/>
+  </xsl:template>
+
+  <!-- Add all attributes. To add your own additional attributes, use mode="addAttributesToBody". -->
+  <xsl:template match="*" mode="addAttributesToHtmlBodyElement">
+    <!-- Already put xml:lang on <html>; do not copy to body with commonattributes -->
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <!--output parent or first "topic" tag's outputclass as class -->
+    <xsl:if test="@outputclass">
+      <xsl:attribute name="class" select="@outputclass"/>
+    </xsl:if>
+    <xsl:if test="self::dita">
+      <xsl:if test="*[contains(@class, ' topic/topic ')][1]/@outputclass">
+        <xsl:attribute name="class" select="*[contains(@class, ' topic/topic ')][1]/@outputclass"/>
+      </xsl:if>
+    </xsl:if>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates select="." mode="addAttributesToBody"/>
   </xsl:template>
 
   <!-- Override this template to add any standard attributes to
        the HTML <body> element. Current context is the root
        element of the doc. -->
   <xsl:template match="*" mode="addAttributesToBody">
+  </xsl:template>
+
+  <!-- Process <body> content that is appropriate for HTML5 header section. -->
+  <xsl:template match="*" mode="addHeaderToHtmlBodyElement">
+    <xsl:variable name="header-content" as="element()">
+      <header role="banner">
+        <xsl:call-template name="generateBreadcrumbs"/>
+        <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
+        <xsl:call-template name="processHDR"/>
+        <xsl:if test="$INDEXSHOW = 'yes'">
+          <xsl:apply-templates select="/*/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')] |
+                                       /dita/*[1]/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')]"/>
+        </xsl:if>
+      </header>
+    </xsl:variable>
+
+    <xsl:if test="$header-content/text() | $header-content/*">
+      <xsl:sequence select="$header-content"/>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*" mode="addContentToHtmlBodyElement">
+    <main role="main">
+      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+      <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
+                             <!-- title content will appear here by fall-through -->
+                             <!-- followed by prolog (but no fall-through is permitted for it) -->
+                             <!-- followed by body content, again by fall-through in document order -->
+                             <!-- followed by related links -->
+                             <!-- followed by child topics by fall-through -->
+      <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
+      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+    </main>
+  </xsl:template>
+
+  <xsl:template match="*" mode="addFooterToHtmlBodyElement">
+    <xsl:variable name="footer-content" as="element()">
+      <footer role="contentinfo">
+        <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here -->
+        <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
+      </footer>
+    </xsl:variable>
+    <xsl:sequence
+      select="if (exists($footer-content/text()) or exists($footer-content/*))
+            then $footer-content
+            else ()"/>
   </xsl:template>
   
   <xsl:template name="generateBreadcrumbs">

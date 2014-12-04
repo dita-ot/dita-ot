@@ -23,6 +23,10 @@
       <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>
     </xsl:element>
   </xsl:template>
+
+  <xsl:template match="header | footer | main" mode="add-xhtml-ns" priority="20">
+    <xsl:apply-templates select="node()" mode="add-xhtml-ns"/>
+  </xsl:template>
   
   <xsl:template match="@*[starts-with(name(), 'data-')]" mode="add-xhtml-ns" priority="10"/>
   
