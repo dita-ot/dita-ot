@@ -286,6 +286,9 @@
       </xsl:choose>
   </xsl:param>
   <article class="nested{$nestlevel}">
+    <xsl:attribute name="aria-labelledby">
+      <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="return-aria-label-id"/>
+    </xsl:attribute>
     <xsl:call-template name="gen-topic"/>
   </article>
   <xsl:value-of select="$newline"/>
@@ -334,9 +337,22 @@
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class">topictitle<xsl:value-of select="$headinglevel"/></xsl:with-param>
       </xsl:call-template>
+      <xsl:attribute name="id"><xsl:apply-templates select="." mode="return-aria-label-id"/></xsl:attribute>
       <xsl:apply-templates/>
   </xsl:element>
   <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]" mode="return-aria-label-id">
+  <xsl:choose>
+    <xsl:when test="@id">
+      <xsl:sequence select="dita-ot:generate-id(parent::*/@id, @id)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>ariaid-title</xsl:text>
+      <xsl:number count="*[contains(@class, ' topic/title ')][parent::*[contains(@class,' topic/topic ')]]" level="any"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- Hide titlealts - they need to get pulled into the proper places -->
@@ -4037,6 +4053,10 @@
   <xsl:template match="*" mode="addContentToHtmlBodyElement">
     <main role="main">
       <article role="article">
+        <xsl:attribute name="aria-labelledby">
+          <xsl:apply-templates select="*[contains(@class,' topic/title ')] |
+                                       self::dita/*[1]/*[contains(@class,' topic/title ')]" mode="return-aria-label-id"/>
+        </xsl:attribute>
         <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
         <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
                                <!-- title content will appear here by fall-through -->

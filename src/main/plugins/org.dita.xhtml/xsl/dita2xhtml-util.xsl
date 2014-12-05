@@ -25,9 +25,17 @@
   </xsl:template>
 
   <xsl:template match="article" mode="add-xhtml-ns" priority="20">
-    <xsl:element name="div" namespace="http://www.w3.org/1999/xhtml">
-      <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>
-    </xsl:element>
+    <xsl:choose>
+      <xsl:when test="parent::main">
+        <!-- Group for root document node does not need extra XHTML div -->
+        <xsl:apply-templates select="node()" mode="add-xhtml-ns"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="div" namespace="http://www.w3.org/1999/xhtml">
+          <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="section" mode="add-xhtml-ns" priority="20">
@@ -40,10 +48,6 @@
     <xsl:element name="div" namespace="http://www.w3.org/1999/xhtml">
       <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>
     </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="main/article" mode="add-xhtml-ns" priority="20">
-    <xsl:apply-templates select="node()" mode="add-xhtml-ns"/>
   </xsl:template>
 
   <xsl:template match="header | footer | main" mode="add-xhtml-ns" priority="20">
