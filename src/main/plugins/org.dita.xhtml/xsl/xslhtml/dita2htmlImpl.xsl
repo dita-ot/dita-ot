@@ -285,9 +285,10 @@
           <xsl:otherwise><xsl:value-of select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
       </xsl:choose>
   </xsl:param>
-<div class="nested{$nestlevel}">
- <xsl:call-template name="gen-topic"/>
-</div><xsl:value-of select="$newline"/>
+  <article class="nested{$nestlevel}">
+    <xsl:call-template name="gen-topic"/>
+  </article>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template name="gen-topic">
@@ -1549,7 +1550,7 @@
     <xsl:apply-templates select="." mode="dita2html:get-default-fig-class"/>
   </xsl:variable>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <div>
+  <figure>
     <xsl:if test="$default-fig-class != ''">
       <xsl:attribute name="class" select="$default-fig-class"/>
     </xsl:if>
@@ -1560,7 +1561,7 @@
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="place-fig-lbl"/>
     <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))][not(contains(@class, ' topic/desc '))] |text()|comment()|processing-instruction()"/>
-  </div>
+  </figure>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -4035,15 +4036,17 @@
 
   <xsl:template match="*" mode="addContentToHtmlBodyElement">
     <main role="main">
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-      <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
-                             <!-- title content will appear here by fall-through -->
-                             <!-- followed by prolog (but no fall-through is permitted for it) -->
-                             <!-- followed by body content, again by fall-through in document order -->
-                             <!-- followed by related links -->
-                             <!-- followed by child topics by fall-through -->
-      <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+      <article role="article">
+        <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+        <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
+                               <!-- title content will appear here by fall-through -->
+                               <!-- followed by prolog (but no fall-through is permitted for it) -->
+                               <!-- followed by body content, again by fall-through in document order -->
+                               <!-- followed by related links -->
+                               <!-- followed by child topics by fall-through -->
+        <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
+        <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+      </article>
     </main>
   </xsl:template>
 

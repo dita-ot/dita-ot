@@ -24,10 +24,26 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="article" mode="add-xhtml-ns" priority="20">
+    <xsl:element name="div" namespace="http://www.w3.org/1999/xhtml">
+      <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="section" mode="add-xhtml-ns" priority="20">
     <xsl:element name="div" namespace="http://www.w3.org/1999/xhtml">
       <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="figure" mode="add-xhtml-ns" priority="20">
+    <xsl:element name="div" namespace="http://www.w3.org/1999/xhtml">
+      <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="main/article" mode="add-xhtml-ns" priority="20">
+    <xsl:apply-templates select="node()" mode="add-xhtml-ns"/>
   </xsl:template>
 
   <xsl:template match="header | footer | main" mode="add-xhtml-ns" priority="20">
