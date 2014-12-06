@@ -553,7 +553,13 @@
     </javac>
   </target>
 
-  <target name="test" depends="compile, test-compile" description="Run unit tests">
+  <target name="test-recources">
+    <copy todir="${test.bin.dir}">
+      <fileset dir="${test.src.dir}/resources"/>
+    </copy>
+  </target>
+
+  <target name="test" depends="compile, test-compile, test-recources" description="Run unit tests">
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
@@ -561,7 +567,6 @@
     <junit printsummary="yes" haltonfailure="yes" showoutput="true">
       <classpath>
         <pathelement location="${test.bin.dir}"/>
-        <pathelement location="${test.src.dir}/resources"/>
         <path refid="test.path"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>
@@ -601,7 +606,7 @@
     </javac>
   </target>
   
-  <target name="integration-test" depends="compile, test-compile, integration-test-compile" description="Run integration tests">
+  <target name="integration-test" depends="compile, test-compile, test-recources, integration-test-compile" description="Run integration tests">
     <condition property="only-test.name" value="${test}" else="">
       <isset property="test"/>
     </condition>
@@ -613,7 +618,6 @@
       <classpath>
         <pathelement location="${integration-test.bin.dir}"/>
         <pathelement location="${test.bin.dir}"/>
-        <pathelement location="${test.src.dir}/resources"/>
         <path refid="test.path"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>
