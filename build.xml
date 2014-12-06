@@ -435,10 +435,14 @@
     </sequential>
   </target>
 	
-  <target name="jar.plug-ins" description="Build plug-in Java libraries">
+  <target name="jar.plug-ins" depends="compile" description="Build plug-in Java libraries">
+    <path id="base.compile.path">
+      <pathelement location="${bin.dir}"/>
+      <path refid="compile.path"/>
+    </path>
     <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="jar" inheritAll="false">
   	  <property name="basedir" value="${src.dir}/plugins/org.dita.pdf2"/>
-      <reference refid="compile.path" torefid="base.compile.path"/>
+      <reference refid="base.compile.path"/>
   	</ant>
   </target>
 
