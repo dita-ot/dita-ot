@@ -79,9 +79,6 @@
   </target>
 
   <target name="jar" depends="compile" description="Build Java libraries">
-    <copy todir="${bin.dir}/resource/">
-      <fileset dir="${resource.dir}" includes="messages.*"/>
-    </copy>
     <copy todir="${bin.dir}">
       <fileset dir="${java.dir}" includes="**/*.properties, **/*.xml"/>
     </copy>
