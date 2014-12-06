@@ -38,6 +38,10 @@
     <reason>Argument "%1" is deprecated.</reason>
     <response>Please use the argument "%2" instead.</response>
   </message>
+  <message id="DOTA013F" type="FATAL">
+    <reason>Cannot find the specified DITAVAL '%1'.</reason>
+    <response></response>
+  </message>
 
   <!-- Start of Java Messages -->
   <message id="DOTJ001F" type="FATAL">

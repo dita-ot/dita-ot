@@ -185,6 +185,17 @@
         <not><isset property="dita.input.valfile"/></not>
       </and>
     </condition>
+    <dita-ot-fail id="DOTA013F">
+      <condition>
+        <and>
+          <isset property="args.filter" />
+          <not>
+            <available file="${args.filter}" type="file" />
+          </not>
+        </and>
+      </condition>
+      <param name="1" location="${args.filter}"/>
+    </dita-ot-fail>
     <condition property="filter-stage" value="early">
       <not>
         <isset property="filter-stage"/>
