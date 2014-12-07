@@ -39,7 +39,7 @@ public final class MessageUtils {
     private static final String ATTRIBUTE_ID = "id";
     private static final String ATTRIBUTE_TYPE = "type";
     private static final String CLASSPATH_RESOURCE = "messages.xml";
-    private static final String RESOURCE = "resource/messages.xml";
+    private static final String RESOURCE = "resources/messages.xml";
 
     // Variables
 

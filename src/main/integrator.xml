@@ -42,7 +42,7 @@
     <integrate ditadir="${dita.dir}" strict="${strict}"/>
     <!-- place property files into a JAR so Ant will find them -->
     <jar destfile="${basedir}/lib/dost-configuration.jar">
-      <fileset dir="${basedir}/resource">
+      <fileset dir="${basedir}/resources">
         <include name="messages.xml"/>
       </fileset>
       <fileset dir="${basedir}/lib">

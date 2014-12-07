@@ -25,7 +25,7 @@
   <property name="xsl.dir" location="${src.dir}/xsl/"/>
   <property name="sample.dir" location="${src.dir}/samples/"/>
   <property name="css.dir" location="${src.dir}/css/"/>
-  <property name="resource.dir" location="${src.dir}/resource/"/>
+  <property name="resource.dir" location="${src.dir}/resources/"/>
 
   <property name="top.work.dir" location="${src.dir}"/>
   <property name="package.output.dir" location="${basedir}/target/dist"/>
@@ -84,7 +84,10 @@
     </copy>
     <jar destfile="${dost.jar}">
       <fileset dir="${bin.dir}"/>
-      <fileset dir="${src.dir}/resources"/>
+      <fileset dir="${src.dir}/resources">
+        <exclude name="messages.*"/>
+        <exclude name="messages_template.*"/>
+      </fileset>
     </jar>
   </target>
   
