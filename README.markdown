@@ -21,12 +21,16 @@ Building
 
         git clone git://github.com/dita-ot/dita-ot.git
 
-2. In the root directory, compile the Java code:
+1. Fetch the submodules:
+
+        git submodule update --init --recursive
+
+1. In the root directory, compile the Java code:
 
         ant jar
         ant jar.plug-ins
 
-3. Install plugins:
+1. Install plugins:
 
         ant -f src/main/integrator.xml
  
