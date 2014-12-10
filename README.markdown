@@ -23,7 +23,8 @@ Building
 
 2. In the root directory, compile the Java code:
 
-        ant jar jar.plug-ins
+        ant jar
+        ant jar.plug-ins
 
 3. Install plugins:
 
@@ -56,7 +57,8 @@ Distribution
 
 1. In the root directory, compile the Java code:
 
-        ant jar jar.plug-ins
+        ant jar
+        ant jar.plug-ins
      
 2. Add these files and directories to the `CLASSPATH` environment variable:
    * `src/main/`
