@@ -163,7 +163,7 @@
 
   <!--main template for setting up all links after the body - applied to the related-links container-->
   <xsl:template match="*[contains(@class, ' topic/related-links ')]" name="topic.related-links">
-    <nav>
+    <nav role="navigation">
       <xsl:call-template name="commonattributes"/>
       <xsl:if test="$include.roles = ('child', 'descendant')">
         <xsl:call-template name="ul-child-links"/>
