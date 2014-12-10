@@ -73,7 +73,7 @@ Distribution
    * `src/main/lib/commons-codec-1.4.jar`
    * `src/main/lib/saxon/saxon9-dom.jar`
    * `src/main/lib/saxon/saxon9.jar`
-   * `src/main/lib/resolver.jar`
+   * `src/main/lib/xml-resolver.jar`
    * `src/main/lib/icu4j.jar`
 
 3. Install plugins:
