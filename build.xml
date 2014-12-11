@@ -3,7 +3,7 @@
      See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole binary package for DITA Open Toolkit -->
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="build_DITA-OT_package" default="dist" basedir=".">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="build_DITA-OT_package" default="build" basedir=".">
   <description>Build binary packages for DITA Open Toolkit</description>
 
   <property file="${basedir}/src/main/lib/configuration.properties"/>
@@ -90,6 +90,30 @@
       </fileset>
     </jar>
   </target>
+  
+  <target name="jar.plug-ins" depends="compile" description="Build plug-in Java libraries">
+    <path id="base.compile.path">
+      <pathelement location="${bin.dir}"/>
+      <path refid="compile.path"/>
+    </path>
+    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="jar" inheritAll="false">
+      <property name="basedir" value="${src.dir}/plugins/org.dita.pdf2"/>
+      <reference refid="base.compile.path"/>
+    </ant>
+  </target>
+  
+  <target name="build" depends="jar, jar.plug-ins">
+    <path id="base.compile.path">
+      <pathelement location="${bin.dir}"/>
+      <path refid="compile.path"/>
+      <pathelement location="${src.dir}/resources"/>
+    </path>
+    <ant antfile="${src.dir}/integrator.xml" dir="${src.dir}">
+      <reference refid="base.compile.path"/>
+    </ant>
+  </target>
+  
+  <!-- Distribution -->
   
   <patternset id="pattern.global.excludes">
     <exclude name=".*"/>
@@ -438,17 +462,6 @@
     </sequential>
   </target>
 	
-  <target name="jar.plug-ins" depends="compile" description="Build plug-in Java libraries">
-    <path id="base.compile.path">
-      <pathelement location="${bin.dir}"/>
-      <path refid="compile.path"/>
-    </path>
-    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="jar" inheritAll="false">
-  	  <property name="basedir" value="${src.dir}/plugins/org.dita.pdf2"/>
-      <reference refid="base.compile.path"/>
-  	</ant>
-  </target>
-
   <target name="dist"
     depends="init-package, build-package-binary, cleanup" description="Build distribution packages"/>
 
