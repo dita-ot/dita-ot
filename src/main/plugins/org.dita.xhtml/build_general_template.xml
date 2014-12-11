@@ -208,8 +208,8 @@
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction"/>
       <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction"/>
       <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
-      <mapper type="regexp" 
-        from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
+      <mapper type="regexp"
+        from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(\w+))$$" 
         to="\2${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
