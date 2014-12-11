@@ -123,7 +123,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     }
 
     private void processFile(final FileInfo f) {
-        currentFile = new File(inputDir, f.file.getPath());
+        currentFile = new File(f.src);
         if (!currentFile.exists()) {
             // Assuming this is an copy-to target file, ignore it
             logger.debug("Ignoring a copy-to file " + f.file);
@@ -135,7 +135,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
             return;
         }
-        logger.info("Processing " + currentFile.getAbsolutePath());
+        logger.info("Processing " + f.src);
 
         final Set<File> schemaSet = dic.get(f.file);
         if (schemaSet != null && !schemaSet.isEmpty()) {
@@ -171,7 +171,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             // when reusing filter with multiple Transformers.
             xmlSource.setContentHandler(null);
 
-            final Source source = new SAXSource(xmlSource, new InputSource(currentFile.toURI().toString()));
+            final Source source = new SAXSource(xmlSource, new InputSource(f.src.toString()));
             final Result result = new StreamResult(out);
             serializer.transform(source, result);
         } catch (final RuntimeException e) {
@@ -273,7 +273,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         if (genDebugInfo) {
             final DebugFilter debugFilter = new DebugFilter();
             debugFilter.setLogger(logger);
-            debugFilter.setInputFile(fileToParse);
+            debugFilter.setInputFile(currentFile);
             pipe.add(debugFilter);
         }
 

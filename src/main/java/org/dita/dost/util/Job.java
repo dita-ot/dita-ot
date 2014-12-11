@@ -58,6 +58,7 @@ public final class Job {
 
     private static final String ELEMENT_FILES = "files";
     private static final String ELEMENT_FILE = "file";
+    private static final String ATTRIBUTE_SRC = "src";
     private static final String ATTRIBUTE_URI = "uri";
     private static final String ATTRIBUTE_PATH = "path";
     private static final String ATTRIBUTE_FORMAT = "format";
@@ -223,9 +224,15 @@ public final class Job {
             } else if (n.equals(ELEMENT_ENTRY)) {
                 key = atts.getValue(ATTRIBUTE_KEY);
             } else if (n.equals(ELEMENT_FILE)) {
-                final String uri = atts.getValue(ATTRIBUTE_URI);
-                final String path = atts.getValue(ATTRIBUTE_PATH);
-                final FileInfo i = uri != null ? new FileInfo(toURI(uri)) : new FileInfo(new File(path));
+                final URI src = toURI(atts.getValue(ATTRIBUTE_SRC));
+                final URI uri = toURI(atts.getValue(ATTRIBUTE_URI));
+                final File path = toFile(atts.getValue(ATTRIBUTE_PATH));
+                FileInfo i;
+                if (uri != null) {
+                    i = new FileInfo(src, uri, toFile(uri));
+                } else {
+                    i = new FileInfo(src, toURI(path), path);
+                }
                 i.format = atts.getValue(ATTRIBUTE_FORMAT);
                 try {
                     for (Map.Entry<String, Field> e: attrToFieldMap.entrySet()) {
@@ -316,6 +323,9 @@ public final class Job {
             out.writeStartElement(ELEMENT_FILES);
             for (final FileInfo i: files.values()) {
                 out.writeStartElement(ELEMENT_FILE);
+                if (i.src != null) {
+                    out.writeAttribute(ATTRIBUTE_SRC, i.src.toString());
+                }
                 out.writeAttribute(ATTRIBUTE_URI, i.uri.toString());
                 out.writeAttribute(ATTRIBUTE_PATH, i.file.getPath());
                 if (i.format != null) {
@@ -547,6 +557,8 @@ public final class Job {
      */
     public static final class FileInfo {
         
+        /** Absolute source URI. */
+        public final URI src;
         /** File URI. */
         public final URI uri;
         /** File path. */
@@ -586,13 +598,21 @@ public final class Job {
         /** File is used only as a source of a copy-to. */
         public boolean isCopyToSource;
         
+        FileInfo(final URI src, final URI uri, final File file) {
+            if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
+            this.src = src;
+            this.uri = uri != null ? uri : toURI(file);
+            this.file = uri != null ? toFile(uri) : file;
+        }
         FileInfo(final URI uri) {
             if (uri == null) throw new IllegalArgumentException(new NullPointerException());
+            this.src = null;
             this.uri = uri;
             this.file = toFile(uri);
         }
         FileInfo(final File file) {
             if (file == null) throw new IllegalArgumentException(new NullPointerException());
+            this.src = null;
             this.uri =  toURI(file);
             this.file = file;
         }
@@ -630,6 +650,7 @@ public final class Job {
         
         public static class Builder {
             
+            private URI src;
             private URI uri;
             private File file;
             private String format;
@@ -652,6 +673,7 @@ public final class Job {
         
             public Builder() {}
             public Builder(final FileInfo orig) {
+                src = orig.src;
                 uri = orig.uri;
                 file = orig.file;
                 format = orig.format;
@@ -677,6 +699,7 @@ public final class Job {
              * Add file info to this builder. Only non-null and true values will be added. 
              */
             public Builder add(final FileInfo orig) {
+                if (orig.src != null) src = orig.src;
                 if (orig.uri != null) uri = orig.uri;
                 if (orig.file != null) file = orig.file;
                 if (orig.format != null) format = orig.format;
@@ -699,6 +722,7 @@ public final class Job {
                 return this;
             }
             
+            public Builder src(final URI src) { this.src = src; return this; }
             public Builder uri(final URI uri) { this.uri = uri; this.file = null; return this; }
             public Builder file(final File file) { this.file = file; this.uri = null; return this; }
             public Builder format(final String format) { this.format = format; return this; }
@@ -720,10 +744,10 @@ public final class Job {
             public Builder isCopyToSource(final boolean isCopyToSource) { this.isCopyToSource = isCopyToSource; return this; }
             
             public FileInfo build() {
-                if (uri == null && file == null) {
-                    throw new IllegalStateException("uri and file may not be null");
+                if (src == null && uri == null && file == null) {
+                    throw new IllegalStateException("src, uri, and file may not be null");
                 }
-                final FileInfo fi = uri != null ? new FileInfo(uri) : new FileInfo(file);
+                final FileInfo fi = new FileInfo(src, uri, file);
                 fi.format = format;
                 fi.hasConref = hasConref;
                 fi.isChunked = isChunked;

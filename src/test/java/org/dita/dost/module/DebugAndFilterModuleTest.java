@@ -9,6 +9,7 @@ import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.dita.dost.util.URLUtils.toURI;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,6 +63,9 @@ public class DebugAndFilterModuleTest {
         tmpDir = new File(tempDir, "temp");
         TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
         final Job props = new Job(tmpDir);
+        for (final Job.FileInfo fi: props.getFileInfo()) {
+            props.add(new Job.FileInfo.Builder(fi).src(inputDir.toURI().resolve(fi.uri)).build());
+        }
         props.setInputFile(inputMap.getAbsoluteFile());
         props.setGeneratecopyouter("1");
         props.setOutputDir(outDir);
@@ -189,7 +193,8 @@ public class DebugAndFilterModuleTest {
         public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
             final String xtrf = atts.getValue("xtrf");
             assertNotNull(xtrf);
-            assertEquals(source.getAbsoluteFile().toURI().toString(), xtrf);
+            //assertEquals(source.getAbsoluteFile().toURI().toString(), xtrf);
+            assertEquals(toURI(source.getAbsoluteFile().getPath()).toString(), xtrf);
             final String xtrc = atts.getValue("xtrc");
             assertNotNull(xtrc);
             Integer c = counter.get(localName);

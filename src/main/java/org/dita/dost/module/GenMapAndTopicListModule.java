@@ -12,7 +12,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FileUtils.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -894,9 +893,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
         
         // assume empty Job
-        final File relativeRootFile = getRelativePath(new File(baseInputDir, "dummy"), new File(rootFile));
-        
-        job.setProperty(INPUT_DIR, baseInputDir.getAbsolutePath());
+        final File relativeRootFile = toFile(generateTempFileName(rootFile));
+
+        job.setProperty(INPUT_DIR, baseInputDir.toString());
         job.setProperty(INPUT_DITAMAP, relativeRootFile.toString());
 
         job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
@@ -924,8 +923,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         // output problem
         job.setProperty("tempdirToinputmapdir.relative.value", escapeRegExp(prefix));
         job.setProperty("uplevels", getLevelsPath());
-        for (final URI file: addFilePrefix(outDitaFilesSet)) {
-            job.getOrCreateFileInfo(file).isOutDita = true;
+
+        // keyed by src
+        final Map<URI, FileInfo> fileinfos = new HashMap<URI, FileInfo>();
+
+        for (final URI file: outDitaFilesSet) {
+            getOrCreateFileInfo(fileinfos, file).isOutDita = true;
         }
 //        // XXX: This loop is probably redundant
 //        for (FileInfo f: prop.getFileInfo().values()) {
@@ -933,66 +936,70 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 //                f.isActive = false;
 //            }
 //        }
-        for (final URI file: addFilePrefix(fullTopicSet)) {
-            final FileInfo ff = job.getOrCreateFileInfo(file);
+        for (final URI file: fullTopicSet) {
+            final FileInfo ff = getOrCreateFileInfo(fileinfos, file);
             ff.format = ATTR_FORMAT_VALUE_DITA;
         }
-        for (final URI file: addFilePrefix(fullMapSet)) {
-            final FileInfo ff = job.getOrCreateFileInfo(file);
+        for (final URI file: fullMapSet) {
+            final FileInfo ff = getOrCreateFileInfo(fileinfos, file);
             ff.format = ATTR_FORMAT_VALUE_DITAMAP;
         }        
-        for (final URI file: addFilePrefix(hrefTopicSet)) {
-            job.getOrCreateFileInfo(file).hasLink = true;
+        for (final URI file: hrefTopicSet) {
+            getOrCreateFileInfo(fileinfos, file).hasLink = true;
         }
-        for (final URI file: addFilePrefix(conrefSet)) {
-            job.getOrCreateFileInfo(file).hasConref = true;
+        for (final URI file: conrefSet) {
+            getOrCreateFileInfo(fileinfos, file).hasConref = true;
         }
-        for (final URI file: addFilePrefix(imageSet)) {
-            job.getOrCreateFileInfo(file).format = "image";
+        for (final URI file: imageSet) {
+            getOrCreateFileInfo(fileinfos, file).format = "image";
         }
-        for (final URI file: addFilePrefix(flagImageSet)) {
-            final FileInfo f = job.getOrCreateFileInfo(file);
+        for (final URI file: flagImageSet) {
+            final FileInfo f = getOrCreateFileInfo(fileinfos, file);
             f.isFlagImage = true;
             f.format = "image";
         }
-        for (final URI file: addFilePrefix(htmlSet)) {
-            job.getOrCreateFileInfo(file).format = "html";
+        for (final URI file: htmlSet) {
+            getOrCreateFileInfo(fileinfos, file).format = "html";
         }
-        for (final URI file: addFilePrefix(hrefTargetSet)) {
-            job.getOrCreateFileInfo(file).isTarget = true;
+        for (final URI file: hrefTargetSet) {
+            getOrCreateFileInfo(fileinfos, file).isTarget = true;
         }
-        for (final URI file: addFilePrefix(hrefWithIDSet)) {
-            job.getOrCreateFileInfo(file).isNonConrefTarget = true;
+        for (final URI file: hrefWithIDSet) {
+            getOrCreateFileInfo(fileinfos, file).isNonConrefTarget = true;
         }
-        for (final URI file: addFilePrefix(chunkTopicSet)) {
-            job.getOrCreateFileInfo(file).isSkipChunk = true;
+        for (final URI file: chunkTopicSet) {
+            getOrCreateFileInfo(fileinfos, file).isSkipChunk = true;
         }
-        for (final URI file: addFilePrefix(schemeSet)) {
-            job.getOrCreateFileInfo(file).isSubjectScheme = true;
+        for (final URI file: schemeSet) {
+            getOrCreateFileInfo(fileinfos, file).isSubjectScheme = true;
         }
-        for (final URI file: addFilePrefix(conrefTargetSet)) {
-            job.getOrCreateFileInfo(file).isConrefTarget = true;
+        for (final URI file: conrefTargetSet) {
+            getOrCreateFileInfo(fileinfos, file).isConrefTarget = true;
         }
-        for (final URI file: addFilePrefix(copytoSourceSet)) {
-            job.getOrCreateFileInfo(file).isCopyToSource = true;
+        for (final URI file: copytoSourceSet) {
+            getOrCreateFileInfo(fileinfos, file).isCopyToSource = true;
         }
-        for (final URI file: addFilePrefix(subsidiarySet)) {
-            job.getOrCreateFileInfo(file).isSubtarget = true;
+        for (final URI file: subsidiarySet) {
+            getOrCreateFileInfo(fileinfos, file).isSubtarget = true;
         }
-        for (final URI file: addFilePrefix(conrefpushSet)) {
-            job.getOrCreateFileInfo(file).isConrefPush = true;
+        for (final URI file: conrefpushSet) {
+            getOrCreateFileInfo(fileinfos, file).isConrefPush = true;
         }
-        for (final URI file: addFilePrefix(keyrefSet)) {
-            job.getOrCreateFileInfo(file).hasKeyref = true;
+        for (final URI file: keyrefSet) {
+            getOrCreateFileInfo(fileinfos, file).hasKeyref = true;
         }
-        for (final URI file: addFilePrefix(coderefSet)) {
-            job.getOrCreateFileInfo(file).hasCoderef = true;
+        for (final URI file: coderefSet) {
+            getOrCreateFileInfo(fileinfos, file).hasCoderef = true;
         }
-        for (final URI file: addFilePrefix(resourceOnlySet)) {
-            job.getOrCreateFileInfo(file).isResourceOnly = true;
+        for (final URI file: resourceOnlySet) {
+            getOrCreateFileInfo(fileinfos, file).isResourceOnly = true;
         }
         
         addFlagImagesSetToProperties(job, relFlagImagesSet);
+
+        for (final FileInfo fs: fileinfos.values()) {
+            job.add(fs);
+        }
 
         // Convert copyto map into set and output
         job.setCopytoMap(addFilePrefix(copytoMap));
@@ -1019,6 +1026,30 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), addFilePrefix(schemekeydefMap.values()));
     }
 
+    private FileInfo getOrCreateFileInfo(final Map<URI, FileInfo> fileinfos, final URI file) {
+        assert file.getFragment() == null;
+        final URI f = file.normalize();
+        FileInfo i = fileinfos.get(f);
+        if (i == null) {
+            i = new FileInfo.Builder().uri(generateTempFileName(file)).src(file).build();
+            fileinfos.put(i.src, i);
+        }
+        return i;
+    }
+
+    /**
+     * Generate temporary file name.
+     *
+     * @param src absolute source file URI
+     * @return relative temporary file URI
+     */
+    private URI generateTempFileName(final URI src) {
+        assert src.isAbsolute();
+        final URI b = baseInputDir.toURI();
+        final URI rel = toURI(b.relativize(src).toString());
+        return rel;
+    }
+
     private void writeExportAnchors() throws DITAOTException {
         if (INDEX_TYPE_ECLIPSEHELP.equals(transtype)) {
             // Output plugin id
@@ -1032,10 +1063,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             	export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
             	export.writeStartDocument();
             	export.writeStartElement("stub");
-                final URI b = baseInputDir.toURI();
             	for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
             		export.writeStartElement("file");
-            		export.writeAttribute("name", b.relativize(toFile(e.file).toURI()).toString());
+            		export.writeAttribute("name", generateTempFileName(toFile(e.file).toURI()).toString());
             		for (final String t: sort(e.topicids)) {
             			export.writeStartElement("topicid");
                 		export.writeAttribute("name", t);
@@ -1084,31 +1114,30 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         return sorted;
     }
 
-    /**
-     * FIXME: Add file prefix. For absolute paths the prefix is not added.
-     *
-     * @param set file paths
-     * @return file paths with prefix
-     */
-    private Set<URI> addFilePrefix(final Set<URI> set) {
-        final Set<URI> newSet = new HashSet<URI>(set.size());
-        final URI b = toURI(baseInputDir);
-        for (final URI file: set) {
-            final URI rel = b.relativize(file);
-            newSet.add(rel.normalize());
-        }
-        return newSet;
-    }
+//    /**
+//     * FIXME: Add file prefix. For absolute paths the prefix is not added.
+//     *
+//     * @param set file paths
+//     * @return file paths with prefix
+//     */
+//    private Set<URI> addFilePrefix(final Set<URI> set) {
+//        final Set<URI> newSet = new HashSet<URI>(set.size());
+//        final URI b = toURI(baseInputDir);
+//        for (final URI file: set) {
+//            final URI rel = b.relativize(file);
+//            newSet.add(rel.normalize());
+//        }
+//        return newSet;
+//    }
 
     private Map<URI, Set<URI>> addMapFilePrefix(final Map<URI, Set<URI>> map) {
         final Map<URI, Set<URI>> res = new HashMap<URI, Set<URI>>();
-        final URI b = toURI(baseInputDir);
         for (final Map.Entry<URI, Set<URI>> e: map.entrySet()) {
             final Set<URI> newSet = new HashSet<URI>(e.getValue().size());
             for (final URI file: e.getValue()) {
-                newSet.add(b.relativize(file));
+                newSet.add(generateTempFileName(file));
             }
-            res.put(e.getKey().equals(toURI("ROOT")) ? e.getKey() : getRelativePath(b, e.getKey()), newSet);
+            res.put(e.getKey().equals(toURI("ROOT")) ? e.getKey() : generateTempFileName(e.getKey()), newSet);
         }
         return res;
     }
@@ -1123,10 +1152,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private Map<URI, URI> addFilePrefix(final Map<URI, URI> set) {
         final Map<URI, URI> newSet = new HashMap<URI, URI>();
-        final URI b = toURI(baseInputDir);
         for (final Map.Entry<URI, URI> file: set.entrySet()) {
-            final URI key = b.relativize(file.getKey());
-            final URI value = b.relativize(file.getValue());
+            final URI key = generateTempFileName(file.getKey());
+            final URI value = generateTempFileName(file.getValue());
             newSet.put(key, value);
         }
         return newSet;
@@ -1134,9 +1162,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     private Collection<KeyDef> addFilePrefix(final Collection<KeyDef> keydefs) {
         final Collection<KeyDef> res = new ArrayList<KeyDef>(keydefs.size());
-        final URI b = baseInputDir.toURI();
         for (final KeyDef k: keydefs) {
-            final URI source = b.relativize(toFile(k.source).toURI());
+            final URI source = generateTempFileName(k.source);
             res.add(new KeyDef(k.keys, k.href, k.scope, source));
         }
         return res;
@@ -1150,14 +1177,13 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private void addKeyDefSetToProperties(final Job prop, final Map<String, KeyDef> keydefs) {
         // update value
-        final URI b = baseInputDir.toURI();
         final Collection<KeyDef> updated = new ArrayList<KeyDef>(keydefs.size());
         for (final KeyDef file: keydefs.values()) {
             final String keys = file.keys;
             final URI href = (file.href != null && ATTR_SCOPE_VALUE_LOCAL.equals(file.scope))
-                             ? b.relativize(file.href)
+                             ? generateTempFileName(file.href)
                              : file.href;
-            final URI source = b.relativize(file.source);
+            final URI source = generateTempFileName(file.source);
             final KeyDef keyDef = new KeyDef(keys, href, file.scope, source);
             updated.add(keyDef);
         }
