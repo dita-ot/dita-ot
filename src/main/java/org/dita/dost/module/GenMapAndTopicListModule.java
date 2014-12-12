@@ -160,8 +160,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private File ditavalFile;
     /** Number of directory levels base directory is adjusted. */
     private int uplevels = 0;
-    /** Prefix path. Either an empty string or a path which ends in {@link java.io.File#separator File.separator}. */
-    private String prefix = "";
 
     /** XMLReader instance for parsing dita file */
     private XMLReader reader;
@@ -706,22 +704,23 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private void updateBaseDirectory() {
         for (int i = uplevels; i > 0; i--) {
-            prefix = baseInputDir.getName() + File.separator + prefix;
             baseInputDir = baseInputDir.getParentFile();
         }
     }
 
     /**
      * Get up-levels absolute path.
-     * 
+     *
+     * @param rootTemp relative URI for temporary root file
      * @return path to up-level, e.g. {@code ../../}, may be empty string
      */
-    private String getLevelsPath() {
-        if (uplevels == 0) {
+    private String getLevelsPath(final URI rootTemp) {
+        final int u = rootTemp.toString().split(URI_SEPARATOR).length - 1;
+        if (u == 0) {
             return "";
         }
         final StringBuilder buff = new StringBuilder();
-        for (int current = uplevels; current > 0; current--) {
+        for (int current = u; current > 0; current--) {
             buff.append("..").append(File.separator);
         }
         return buff.toString();
@@ -896,36 +895,18 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
         
         // assume empty Job
-        final File relativeRootFile = toFile(tempFileNameScheme.generateTempFileName(rootFile));
+        final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
+        final File relativeRootFile = toFile(rootTemp);
 
         job.setProperty(INPUT_DIR, baseInputDir.toString());
         job.setProperty(INPUT_DITAMAP, relativeRootFile.toString());
 
         job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
         final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);
-        Writer bufferedWriter = null;
-        try {
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)));
-            bufferedWriter.write(relativeRootFile.toString());
-            bufferedWriter.flush();
-        } catch (final FileNotFoundException e) {
-            logger.error(e.getMessage(), e) ;
-        } catch (final IOException e) {
-            logger.error(e.getMessage(), e) ;
-        } finally {
-            if (bufferedWriter != null) {
-                try {
-                    bufferedWriter.close();
-                } catch (final IOException e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-            }
-        }
+        writeListFile(inputfile, relativeRootFile.toString());
 
-        // add out.dita.files,tempdirToinputmapdir.relative.value to solve the
-        // output problem
-        job.setProperty("tempdirToinputmapdir.relative.value", escapeRegExp(prefix));
-        job.setProperty("uplevels", getLevelsPath());
+        job.setProperty("tempdirToinputmapdir.relative.value", escapeRegExp(getPrefix(relativeRootFile)));
+        job.setProperty("uplevels", getLevelsPath(rootTemp));
 
         // keyed by src
         final Map<URI, FileInfo> fileinfos = new HashMap<URI, FileInfo>();
@@ -1027,6 +1008,49 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         writeExportAnchors();
 
         KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), addFilePrefix(schemekeydefMap.values()));
+    }
+
+    /**
+     * Write list file.
+     * @param inputfile output list file
+     * @param relativeRootFile list value
+     */
+    private void writeListFile(final File inputfile, final String relativeRootFile) {
+        Writer bufferedWriter = null;
+        try {
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)));
+            bufferedWriter.write(relativeRootFile);
+            bufferedWriter.flush();
+        } catch (final FileNotFoundException e) {
+            logger.error(e.getMessage(), e) ;
+        } catch (final IOException e) {
+            logger.error(e.getMessage(), e) ;
+        } finally {
+            if (bufferedWriter != null) {
+                try {
+                    bufferedWriter.close();
+                } catch (final IOException e) {
+                    logger.error(e.getMessage(), e) ;
+                }
+            }
+        }
+    }
+
+    /**
+     * Prefix path.
+     *
+     * @param relativeRootFile relative path for root temporary file
+     * @return either an empty string or a path which ends in {@link java.io.File#separator File.separator}
+     * */
+    private String getPrefix(final File relativeRootFile) {
+        String res;
+        final File p = relativeRootFile.getParentFile();
+        if (p != null) {
+            res = p.toString() + File.separator;
+        } else {
+            res = "";
+        }
+        return res;
     }
 
     private FileInfo getOrCreateFileInfo(final Map<URI, FileInfo> fileinfos, final URI file) {
