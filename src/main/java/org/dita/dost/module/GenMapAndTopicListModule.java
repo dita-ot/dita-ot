@@ -171,7 +171,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private boolean xmlValidate = true;
     private ContentHandler nullHandler;
     private FilterUtils filterUtils;
-    
+    private TempFileNameScheme tempFileNameScheme;
+
     /** Absolute path to input file. */
     private URI rootFile;
     /** File currently being processed */
@@ -266,7 +267,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
         listFilter.setInputFile(rootFile);
-        listFilter.setInputDir(rootFile.resolve("."));//baseInputDir
+        listFilter.setInputDir(rootFile.resolve("."));
         listFilter.setPrimaryDitamap(rootFile);
         listFilter.setJob(job);
         
@@ -701,7 +702,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     }
 
     /**
-     * Update base directory based on uplevels.
+     * Update base directory and prefix based on uplevels.
      */
     private void updateBaseDirectory() {
         for (int i = uplevels; i > 0; i--) {
@@ -888,12 +889,14 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if writing result files failed
      */
     private void outputResult() throws DITAOTException {
+        tempFileNameScheme = new DefaultTempFileScheme(baseInputDir.toURI());
+
         if (!job.tempDir.exists()) {
             job.tempDir.mkdirs();
         }
         
         // assume empty Job
-        final File relativeRootFile = toFile(generateTempFileName(rootFile));
+        final File relativeRootFile = toFile(tempFileNameScheme.generateTempFileName(rootFile));
 
         job.setProperty(INPUT_DIR, baseInputDir.toString());
         job.setProperty(INPUT_DITAMAP, relativeRootFile.toString());
@@ -1031,23 +1034,10 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final URI f = file.normalize();
         FileInfo i = fileinfos.get(f);
         if (i == null) {
-            i = new FileInfo.Builder().uri(generateTempFileName(file)).src(file).build();
+            i = new FileInfo.Builder().uri(tempFileNameScheme.generateTempFileName(file)).src(file).build();
             fileinfos.put(i.src, i);
         }
         return i;
-    }
-
-    /**
-     * Generate temporary file name.
-     *
-     * @param src absolute source file URI
-     * @return relative temporary file URI
-     */
-    private URI generateTempFileName(final URI src) {
-        assert src.isAbsolute();
-        final URI b = baseInputDir.toURI();
-        final URI rel = toURI(b.relativize(src).toString());
-        return rel;
     }
 
     private void writeExportAnchors() throws DITAOTException {
@@ -1065,7 +1055,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             	export.writeStartElement("stub");
             	for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
             		export.writeStartElement("file");
-            		export.writeAttribute("name", generateTempFileName(toFile(e.file).toURI()).toString());
+            		export.writeAttribute("name", tempFileNameScheme.generateTempFileName(toFile(e.file).toURI()).toString());
             		for (final String t: sort(e.topicids)) {
             			export.writeStartElement("topicid");
                 		export.writeAttribute("name", t);
@@ -1114,30 +1104,14 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         return sorted;
     }
 
-//    /**
-//     * FIXME: Add file prefix. For absolute paths the prefix is not added.
-//     *
-//     * @param set file paths
-//     * @return file paths with prefix
-//     */
-//    private Set<URI> addFilePrefix(final Set<URI> set) {
-//        final Set<URI> newSet = new HashSet<URI>(set.size());
-//        final URI b = toURI(baseInputDir);
-//        for (final URI file: set) {
-//            final URI rel = b.relativize(file);
-//            newSet.add(rel.normalize());
-//        }
-//        return newSet;
-//    }
-
     private Map<URI, Set<URI>> addMapFilePrefix(final Map<URI, Set<URI>> map) {
         final Map<URI, Set<URI>> res = new HashMap<URI, Set<URI>>();
         for (final Map.Entry<URI, Set<URI>> e: map.entrySet()) {
             final Set<URI> newSet = new HashSet<URI>(e.getValue().size());
             for (final URI file: e.getValue()) {
-                newSet.add(generateTempFileName(file));
+                newSet.add(tempFileNameScheme.generateTempFileName(file));
             }
-            res.put(e.getKey().equals(toURI("ROOT")) ? e.getKey() : generateTempFileName(e.getKey()), newSet);
+            res.put(e.getKey().equals(toURI("ROOT")) ? e.getKey() : tempFileNameScheme.generateTempFileName(e.getKey()), newSet);
         }
         return res;
     }
@@ -1153,8 +1127,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private Map<URI, URI> addFilePrefix(final Map<URI, URI> set) {
         final Map<URI, URI> newSet = new HashMap<URI, URI>();
         for (final Map.Entry<URI, URI> file: set.entrySet()) {
-            final URI key = generateTempFileName(file.getKey());
-            final URI value = generateTempFileName(file.getValue());
+            final URI key = tempFileNameScheme.generateTempFileName(file.getKey());
+            final URI value = tempFileNameScheme.generateTempFileName(file.getValue());
             newSet.put(key, value);
         }
         return newSet;
@@ -1163,7 +1137,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private Collection<KeyDef> addFilePrefix(final Collection<KeyDef> keydefs) {
         final Collection<KeyDef> res = new ArrayList<KeyDef>(keydefs.size());
         for (final KeyDef k: keydefs) {
-            final URI source = generateTempFileName(k.source);
+            final URI source = tempFileNameScheme.generateTempFileName(k.source);
             res.add(new KeyDef(k.keys, k.href, k.scope, source));
         }
         return res;
@@ -1181,9 +1155,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         for (final KeyDef file: keydefs.values()) {
             final String keys = file.keys;
             final URI href = (file.href != null && ATTR_SCOPE_VALUE_LOCAL.equals(file.scope))
-                             ? generateTempFileName(file.href)
+                             ? tempFileNameScheme.generateTempFileName(file.href)
                              : file.href;
-            final URI source = generateTempFileName(file.source);
+            final URI source = tempFileNameScheme.generateTempFileName(file.source);
             final KeyDef keyDef = new KeyDef(keys, href, file.scope, source);
             updated.add(keyDef);
         }
@@ -1248,5 +1222,31 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         prop.setProperty(org.dita.dost.util.Constants.REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
     }
-    
+
+    /**
+     * Temporary file name generator.
+     */
+    public static interface TempFileNameScheme {
+        /**
+         * Generate temporary file name.
+         *
+         * @param src absolute source file URI
+         * @return relative temporary file URI
+         */
+        public URI generateTempFileName(final URI src);
+    }
+
+    public static class DefaultTempFileScheme implements TempFileNameScheme {
+        final URI b;
+        public DefaultTempFileScheme(final URI b) {
+            this.b = b;
+        }
+        public URI generateTempFileName(final URI src) {
+            assert src.isAbsolute();
+            //final URI b = baseInputDir.toURI();
+            final URI rel = toURI(b.relativize(src).toString());
+            return rel;
+        }
+    }
+
 }
