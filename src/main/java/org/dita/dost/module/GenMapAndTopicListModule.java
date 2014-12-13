@@ -353,9 +353,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final String basedir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
         final String ditaInputDir = input.getAttribute(ANT_INVOKER_EXT_PARAM_INPUTDIR);
         if (ditaInputDir != null) {
-        	File inDir = new File(ditaInputDir);
+            File inDir = new File(ditaInputDir);
             if (!inDir.isAbsolute()) {
-            	// XXX Shouldn't this be resolved to current directory, not Ant script base directory?
+                // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
                 inDir = new File(basedir, ditaInputDir);
             }
             baseInputDir = inDir.getCanonicalFile();
@@ -364,16 +364,16 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final String ditaInput = input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP);
         File inFile = new File(ditaInput);
         if (!inFile.isAbsolute()) {
-        	if (baseInputDir != null) {
-        		inFile = new File(baseInputDir, ditaInput);
-        	} else {
-	            // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
-	            inFile = new File(basedir, ditaInput);
-        	}
+            if (baseInputDir != null) {
+                inFile = new File(baseInputDir, ditaInput);
+            } else {
+                // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
+                inFile = new File(basedir, ditaInput);
+            }
         }
         inFile = inFile.getCanonicalFile();
         if (baseInputDir == null) {
-        	baseInputDir = inFile.getParentFile().getCanonicalFile();
+            baseInputDir = inFile.getParentFile().getCanonicalFile();
         }
 
         if (!ditaDir.isAbsolute()) {
@@ -394,7 +394,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         rootFile = inFile.getAbsoluteFile().toURI();
         // create the keydef file for scheme files
-    	schemekeydefMap = new HashMap<String, KeyDef>();
+        schemekeydefMap = new HashMap<String, KeyDef>();
 
         // Set the mapDir
         job.setInputFile(inFile);
@@ -402,7 +402,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     private void processWaitList() throws DITAOTException {
         while (!waitList.isEmpty()) {
-        	currentFile = waitList.remove();
+            currentFile = waitList.remove();
             processFile(currentFile);
         }
     }
@@ -512,13 +512,18 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     }
 
+    /**
+     * Process results from parsing a single topic
+     *
+     * @param currentFile absolute URI processes files
+     */
     private void processParseResult(final URI currentFile) {
         final Map<URI, URI> cpMap = listFilter.getCopytoMap();
         final Map<String, KeyDef> kdMap = keydefFilter.getKeysDMap();
 
         // Category non-copyto result and update uplevels accordingly
         for (final Reference file: listFilter.getNonCopytoResult()) {
-            categorizeResultFile(file);
+            categorizeReferenceFile(file);
             updateUplevels(file.filename);
         }
 
@@ -549,7 +554,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             }
             // if the current file is also a schema file
             if (schemeSet.contains(currentFile)) {
-            	schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
+                schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
             }
         }
 
@@ -589,8 +594,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @param currentFile file path
      */
     private void categorizeCurrentFile(final URI currentFile) {
-        final String lcasefn = currentFile.getPath().toLowerCase();
-
         ditaSet.add(currentFile);
 
         if (listFilter.isDitaTopic()) {
@@ -638,7 +641,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * 
      * @param file file system path with optional format
      */
-    private void categorizeResultFile(final Reference file) {
+    private void categorizeReferenceFile(final Reference file) {
         final String lcasefn = file.filename.toString().toLowerCase();
 
         // avoid files referred by coderef being added into wait list
@@ -647,20 +650,13 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
         if (file.format == null || ATTR_FORMAT_VALUE_DITA.equals(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
             addToWaitList(file.filename);
-        } else if (!FileUtils.isSupportedImageFile(lcasefn)) {
-            // FIXME: Treating all non-image extensions as HTML/resource files is not correct if HTML/resource files
-            //        are defined by the file extension. Correct behaviour would be to remove this else block.
-            htmlSet.add(file.filename);
-        }
-        if (FileUtils.isSupportedImageFile(lcasefn)) {
-        	imageSet.add(file.filename);
+        } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format) || FileUtils.isSupportedImageFile(lcasefn)) {
+            imageSet.add(file.filename);
             final File image = toFile(file.filename);
             if (!image.exists()){
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX008W", image.getAbsolutePath()).toString());
             }
-        }
-
-        if (FileUtils.isHTMLFile(lcasefn) || FileUtils.isResourceFile(lcasefn)) {
+        } else { //if (FileUtils.isHTMLFile(lcasefn) || FileUtils.isResourceFile(lcasefn)) {
             htmlSet.add(file.filename);
         }
     }
@@ -935,15 +931,15 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             getOrCreateFileInfo(fileinfos, file).hasConref = true;
         }
         for (final URI file: imageSet) {
-            getOrCreateFileInfo(fileinfos, file).format = "image";
+            getOrCreateFileInfo(fileinfos, file).format = ATTR_FORMAT_VALUE_IMAGE;
         }
         for (final URI file: flagImageSet) {
             final FileInfo f = getOrCreateFileInfo(fileinfos, file);
             f.isFlagImage = true;
-            f.format = "image";
+            f.format = ATTR_FORMAT_VALUE_IMAGE;
         }
         for (final URI file: htmlSet) {
-            getOrCreateFileInfo(fileinfos, file).format = "html";
+            getOrCreateFileInfo(fileinfos, file).format = ATTR_FORMAT_VALUE_HTML;
         }
         for (final URI file: hrefTargetSet) {
             getOrCreateFileInfo(fileinfos, file).isTarget = true;
@@ -1073,51 +1069,51 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             OutputStream exportStream = null;
             XMLStreamWriter export = null;
             try {
-            	exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML));
-            	export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
-            	export.writeStartDocument();
-            	export.writeStartElement("stub");
-            	for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
-            		export.writeStartElement("file");
-            		export.writeAttribute("name", tempFileNameScheme.generateTempFileName(toFile(e.file).toURI()).toString());
-            		for (final String t: sort(e.topicids)) {
-            			export.writeStartElement("topicid");
-                		export.writeAttribute("name", t);
-                		export.writeEndElement();
-            		}
-            		for (final String i: sort(e.ids)) {
-            			export.writeStartElement("id");
-                		export.writeAttribute("name", i);
-                		export.writeEndElement();
-            		}
-            		for (final String k: sort(e.keys)) {
-            			export.writeStartElement("keyref");
-                		export.writeAttribute("name", k);
-                		export.writeEndElement();
-            		}
-            		export.writeEndElement();
-            	}
-            	export.writeEndElement();
-            	export.writeEndDocument();
+                exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML));
+                export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
+                export.writeStartDocument();
+                export.writeStartElement("stub");
+                for (final ExportAnchor e: exportAnchorsFilter.getExportAnchors()) {
+                    export.writeStartElement("file");
+                    export.writeAttribute("name", tempFileNameScheme.generateTempFileName(toFile(e.file).toURI()).toString());
+                    for (final String t: sort(e.topicids)) {
+                        export.writeStartElement("topicid");
+                        export.writeAttribute("name", t);
+                        export.writeEndElement();
+                    }
+                    for (final String i: sort(e.ids)) {
+                        export.writeStartElement("id");
+                        export.writeAttribute("name", i);
+                        export.writeEndElement();
+                    }
+                    for (final String k: sort(e.keys)) {
+                        export.writeStartElement("keyref");
+                        export.writeAttribute("name", k);
+                        export.writeEndElement();
+                    }
+                    export.writeEndElement();
+                }
+                export.writeEndElement();
+                export.writeEndDocument();
             } catch (final FileNotFoundException e) {
-				throw new DITAOTException("Failed to write export anchor file: " + e.getMessage(), e);
-			} catch (final XMLStreamException e) {
-				throw new DITAOTException("Failed to serialize export anchor file: " + e.getMessage(), e);
-			} finally {
-            	if (export != null) {
-            		try {
-						export.close();
-					} catch (final XMLStreamException e) {
-						logger.error("Failed to close export anchor file: " + e.getMessage(), e);
-					}
-            	}
-            	if (exportStream != null) {
-            		try {
-						exportStream.close();
-					} catch (final IOException e) {
-						logger.error("Failed to close export anchor file: " + e.getMessage(), e);
-					}
-            	}
+                throw new DITAOTException("Failed to write export anchor file: " + e.getMessage(), e);
+            } catch (final XMLStreamException e) {
+                throw new DITAOTException("Failed to serialize export anchor file: " + e.getMessage(), e);
+            } finally {
+                if (export != null) {
+                    try {
+                        export.close();
+                    } catch (final XMLStreamException e) {
+                        logger.error("Failed to close export anchor file: " + e.getMessage(), e);
+                    }
+                }
+                if (exportStream != null) {
+                    try {
+                        exportStream.close();
+                    } catch (final IOException e) {
+                        logger.error("Failed to close export anchor file: " + e.getMessage(), e);
+                    }
+                }
             }
         }
     }
@@ -1131,11 +1127,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private Map<URI, Set<URI>> addMapFilePrefix(final Map<URI, Set<URI>> map) {
         final Map<URI, Set<URI>> res = new HashMap<URI, Set<URI>>();
         for (final Map.Entry<URI, Set<URI>> e: map.entrySet()) {
+            final URI key = e.getKey();
             final Set<URI> newSet = new HashSet<URI>(e.getValue().size());
             for (final URI file: e.getValue()) {
                 newSet.add(tempFileNameScheme.generateTempFileName(file));
             }
-            res.put(e.getKey().equals(toURI("ROOT")) ? e.getKey() : tempFileNameScheme.generateTempFileName(e.getKey()), newSet);
+            res.put(key.equals(toURI("ROOT")) ? key : tempFileNameScheme.generateTempFileName(key), newSet);
         }
         return res;
     }

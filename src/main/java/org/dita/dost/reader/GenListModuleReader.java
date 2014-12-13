@@ -869,7 +869,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
         } else if (TOPIC_IMAGE.matches(attrClass)) {
             if (attrFormat == null) {
-                attrFormat = "image";
+                attrFormat = ATTR_FORMAT_VALUE_IMAGE;
             }
         }
         // files referred by coderef won't effect the uplevels, code has already returned.
@@ -1019,7 +1019,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * File reference with path and optional format.
      */
     public static class Reference {
+        /** Absolute URI reference */
         public final URI filename;
+        /** Format of the reference */
         public final String format;
 
         public Reference(final URI filename, final String format) {

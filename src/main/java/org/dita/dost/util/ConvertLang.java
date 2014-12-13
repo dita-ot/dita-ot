@@ -48,6 +48,10 @@ import org.w3c.dom.NodeList;
  * @author Zhang Di Hua
  */
 public final class ConvertLang extends Task {
+    
+    private static final String ATTRIBUTE_FORMAT_VALUE_WINDOWS = "windows";
+    private static final String ATTRIBUTE_FORMAT_VALUE_HTML = "html";
+
     private static final String tag1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     private static final String tag2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>[OPTIONS]";
     private static final String tag3 = "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;";

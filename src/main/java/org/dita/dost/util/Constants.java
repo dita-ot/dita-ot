@@ -663,7 +663,7 @@ public final class Constants {
     /**keyref attribute.*/
     public static final String ATTRIBUTE_NAME_KEYREF = "keyref";
     /**conkeyref attribute.*/
-    public static final String ATTRIBUTE_NAME_CONKEYREF	="conkeyref";
+    public static final String ATTRIBUTE_NAME_CONKEYREF ="conkeyref";
     /**keys attribute.*/
     public static final String ATTRIBUTE_NAME_KEYS = "keys";
     /**keys attribute.*/
@@ -691,16 +691,6 @@ public final class Constants {
     public static final String UNIX_SEPARATOR = "/";
     /** Windows path separator. */
     public static final String WINDOWS_SEPARATOR = "\\";
-
-    /**
-     * Constant for value of attribute format in dita files.
-     */
-    /** Constants for format attribute value dita*/
-    public static final String ATTRIBUTE_FORMAT_VALUE_DITA = "dita";
-    /** Constants for format attribute value html*/
-    public static final String ATTRIBUTE_FORMAT_VALUE_HTML = "html";
-    /** Constants for format attribute value windows*/
-    public static final String ATTRIBUTE_FORMAT_VALUE_WINDOWS = "windows";
 
     /** Constants for index type(javahelp).*/
     public static final String INDEX_TYPE_JAVAHELP = "javahelp";
@@ -873,6 +863,8 @@ public final class Constants {
     public static final String ATTR_FORMAT_VALUE_DITA = "dita";
     /**ATTR_FORMAT_VALUE_DITAMAP.*/
     public static final String ATTR_FORMAT_VALUE_DITAMAP = "ditamap";
+    public static final String ATTR_FORMAT_VALUE_IMAGE = "image";
+    public static final String ATTR_FORMAT_VALUE_HTML = "html";
     /**ATTRIBUTE_NAME_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_NAME_DITAARCHVERSION = "DITAArchVersion";
     /**ATTRIBUTE_PREFIX_DITAARCHVERSION.*/
