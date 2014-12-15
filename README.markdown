@@ -1,7 +1,7 @@
 DITA Open Toolkit [![Build Status](https://secure.travis-ci.org/dita-ot/dita-ot.png?branch=develop)](http://travis-ci.org/dita-ot/dita-ot)
 =================
 
-The DITA Open Toolkit, or DITA-OT for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.github.io](http://dita-ot.github.io/) for documentation, information about releases, and download packages.
+The DITA Open Toolkit, or DITA-OT for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.org](http://www.dita-ot.org/) for documentation, information about releases, and download packages.
 
 Prerequisites
 -------------
@@ -21,7 +21,7 @@ Building
 
         git clone git://github.com/dita-ot/dita-ot.git
 
-1. Fetch the submodules:
+2. Fetch the submodules:
 
         git submodule update --init --recursive
 
@@ -49,7 +49,7 @@ Usage
 
         dita [options]
         
-   See the [documentation](http://dita-ot.github.io/1.8/) for arguments and options.
+   See the [documentation](http://www.dita-ot.org/2.0/) for arguments and [options](http://www.dita-ot.org/2.0/readme/using-dita-command.html).
 
 Distribution
 ------------
@@ -70,7 +70,7 @@ Distribution
    * `src/main/lib/xml-resolver.jar`
    * `src/main/lib/icu4j.jar`
 
-2. Build distribution packages:
+3. Build distribution packages:
 
         ant dist
    
