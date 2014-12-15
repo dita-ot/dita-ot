@@ -25,13 +25,9 @@ Building
 
         git submodule update --init --recursive
 
-1. In the root directory, compile the Java code:
+3. In the root directory, run `ant` to compile the Java code and install plugins:
 
-        ant jar jar.plug-ins
-
-1. Install plugins:
-
-        ant -f src/main/integrator.xml
+        ant
  
 Usage
 -----
@@ -58,9 +54,9 @@ Usage
 Distribution
 ------------
 
-1. In the root directory, compile the Java code:
+1. In the root directory, run `ant` to compile the Java code and install plugins:
 
-        ant jar jar.plug-ins
+        ant
      
 2. Add these files and directories to the `CLASSPATH` environment variable:
    * `src/main/`
@@ -74,11 +70,7 @@ Distribution
    * `src/main/lib/xml-resolver.jar`
    * `src/main/lib/icu4j.jar`
 
-3. Install plugins:
-
-        ant -f src/main/integrator.xml
-
-4. Build distribution packages:
+2. Build distribution packages:
 
         ant dist
    
