@@ -21,11 +21,16 @@ Building
 
         git clone git://github.com/dita-ot/dita-ot.git
 
-2. In the root directory, compile the Java code:
+1. Fetch the submodules:
 
-        ant jar jar.plug-ins
+        git submodule update --init --recursive
 
-3. Install plugins:
+1. In the root directory, compile the Java code:
+
+        ant jar
+        ant jar.plug-ins
+
+1. Install plugins:
 
         ant -f src/main/integrator.xml
  
@@ -41,7 +46,7 @@ Usage
    * `src/main/lib/commons-codec-1.4.jar`
    * `src/main/lib/saxon/saxon9-dom.jar`
    * `src/main/lib/saxon/saxon9.jar`
-   * `src/main/lib/resolver.jar`
+   * `src/main/lib/xml-resolver.jar`
    * `src/main/lib/icu4j.jar`
 
 2. Change the directory to `src/main`.
@@ -56,7 +61,8 @@ Distribution
 
 1. In the root directory, compile the Java code:
 
-        ant jar jar.plug-ins
+        ant jar
+        ant jar.plug-ins
      
 2. Add these files and directories to the `CLASSPATH` environment variable:
    * `src/main/`
@@ -67,7 +73,7 @@ Distribution
    * `src/main/lib/commons-codec-1.4.jar`
    * `src/main/lib/saxon/saxon9-dom.jar`
    * `src/main/lib/saxon/saxon9.jar`
-   * `src/main/lib/resolver.jar`
+   * `src/main/lib/xml-resolver.jar`
    * `src/main/lib/icu4j.jar`
 
 3. Install plugins:
