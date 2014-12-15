@@ -45,9 +45,9 @@ Usage
    * `src/main/lib/icu4j.jar`
 
 2. Change the directory to `src/main`.
-3. Run DITA-OT:
+3. Run the `dita` command to generate output:
 
-        ant [options]
+        dita [options]
         
    See the [documentation](http://dita-ot.github.io/1.8/) for arguments and options.
 
