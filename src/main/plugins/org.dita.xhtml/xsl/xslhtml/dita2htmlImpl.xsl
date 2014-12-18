@@ -966,6 +966,9 @@
     <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
     <xsl:apply-templates select="../@xml:lang"/> 
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:for-each select="..">
+      <xsl:call-template name="commonattributes"/>
+    </xsl:for-each>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="$dt-class"/>
     </xsl:call-template>
@@ -1030,13 +1033,16 @@
 <xsl:template match="*[contains(@class, ' topic/dd ')]" name="topic.dd">
   <xsl:variable name="is-first-dd" select="empty(preceding-sibling::*[contains(@class, ' topic/dd ')])"/>
   <dd>
-    <xsl:if test="not($is-first-dd)">  <!-- para space before 2 thru N -->
-      <xsl:attribute name="class">ddexpand</xsl:attribute>
-    </xsl:if>
-    <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
-    <xsl:apply-templates select="../@xml:lang"/> 
-    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
-    <xsl:call-template name="commonattributes"/>
+    <xsl:for-each select="..">
+      <xsl:call-template name="commonattributes"/>
+    </xsl:for-each>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class">
+        <xsl:if test="not($is-first-dd)">  <!-- para space before 2 thru N -->
+          <xsl:text>ddexpand</xsl:text>
+        </xsl:if>    
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:apply-templates/>
