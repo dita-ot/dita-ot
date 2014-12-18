@@ -1,7 +1,7 @@
 DITA Open Toolkit [![Build Status](https://secure.travis-ci.org/dita-ot/dita-ot.png?branch=develop)](http://travis-ci.org/dita-ot/dita-ot)
 =================
 
-The DITA Open Toolkit, or DITA-OT for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.github.io](http://dita-ot.github.io/) for documentation, information about releases, and download packages.
+The DITA Open Toolkit, or DITA-OT for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.org](http://www.dita-ot.org/) for documentation, information about releases, and download packages.
 
 Prerequisites
 -------------
@@ -21,13 +21,13 @@ Building
 
         git clone git://github.com/dita-ot/dita-ot.git
 
-2. In the root directory, compile the Java code:
+2. Fetch the submodules:
 
-        ant jar jar.plug-ins
+        git submodule update --init --recursive
 
-3. Install plugins:
+3. In the root directory, run `ant` to compile the Java code and install plugins:
 
-        ant -f src/main/integrator.xml
+        ant
  
 Usage
 -----
@@ -41,22 +41,22 @@ Usage
    * `src/main/lib/commons-codec-1.4.jar`
    * `src/main/lib/saxon/saxon9-dom.jar`
    * `src/main/lib/saxon/saxon9.jar`
-   * `src/main/lib/resolver.jar`
+   * `src/main/lib/xml-resolver.jar`
    * `src/main/lib/icu4j.jar`
 
 2. Change the directory to `src/main`.
-3. Run DITA-OT:
+3. Run the `dita` command to generate output:
 
-        ant [options]
+        dita [options]
         
-   See the [documentation](http://dita-ot.github.io/1.8/) for arguments and options.
+   See the [documentation](http://www.dita-ot.org/2.0/) for arguments and [options](http://www.dita-ot.org/2.0/readme/using-dita-command.html).
 
 Distribution
 ------------
 
-1. In the root directory, compile the Java code:
+1. In the root directory, run `ant` to compile the Java code and install plugins:
 
-        ant jar jar.plug-ins
+        ant
      
 2. Add these files and directories to the `CLASSPATH` environment variable:
    * `src/main/`
@@ -67,14 +67,10 @@ Distribution
    * `src/main/lib/commons-codec-1.4.jar`
    * `src/main/lib/saxon/saxon9-dom.jar`
    * `src/main/lib/saxon/saxon9.jar`
-   * `src/main/lib/resolver.jar`
+   * `src/main/lib/xml-resolver.jar`
    * `src/main/lib/icu4j.jar`
 
-3. Install plugins:
-
-        ant -f src/main/integrator.xml
-
-4. Build distribution packages:
+3. Build distribution packages:
 
         ant dist
    
