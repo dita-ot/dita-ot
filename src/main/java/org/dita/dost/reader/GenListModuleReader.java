@@ -868,9 +868,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 schemeSet.add(filename);
             }
         } else if (TOPIC_IMAGE.matches(attrClass)) {
-            if (attrFormat == null) {
-                attrFormat = ATTR_FORMAT_VALUE_IMAGE;
-            }
+            attrFormat = ATTR_FORMAT_VALUE_IMAGE;
+        } else if (TOPIC_OBJECT.matches(attrClass)) {
+            attrFormat = ATTR_FORMAT_VALUE_HTML;
         }
         // files referred by coderef won't effect the uplevels, code has already returned.
         if (PR_D_CODEREF.matches(attrClass)) {
@@ -882,7 +882,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if ((ATTRIBUTE_NAME_HREF.equals(attrName) || ATTRIBUTE_NAME_DATA.equals(attrName))
                 && (atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
                     || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)))
-                && (followLinks() || isSupportedImageFile(filename.getPath().toLowerCase()))) {
+                && (followLinks()
+                    || (TOPIC_IMAGE.matches(attrClass) || TOPIC_OBJECT.matches(attrClass)))) {
             nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
         }
 

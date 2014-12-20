@@ -37,6 +37,7 @@ public final class FileUtils {
     /**
      * Supported image extensions. File extensions contain a leading dot.
      */
+    @Deprecated
     private final static List<String> supportedImageExtensions;
     static {
         final List<String> sie = new ArrayList<String>();
@@ -153,6 +154,7 @@ public final class FileUtils {
      * @param lcasefn filename
      * @return true if is supported image and false otherwise
      */
+    @Deprecated
     public static boolean isSupportedImageFile(final String lcasefn) {
         for (final String ext: supportedImageExtensions) {
             if (lcasefn.endsWith(ext)) {

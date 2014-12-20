@@ -650,7 +650,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
         if (file.format == null || ATTR_FORMAT_VALUE_DITA.equals(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
             addToWaitList(file.filename);
-        } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format) || FileUtils.isSupportedImageFile(lcasefn)) {
+        } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
             imageSet.add(file.filename);
             final File image = toFile(file.filename);
             if (!image.exists()){
