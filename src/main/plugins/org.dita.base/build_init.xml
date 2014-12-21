@@ -67,7 +67,6 @@
 		<isfalse value="${is64bit}"/>
   </condition>
 	
-	
 	<!-- For 64-bit machines, the value -d64 runs the
 	     the JVM in 64-bit mode. This parameter cannot
 	     be specified on 32-bit machines (that is, you cannot
@@ -93,38 +92,36 @@
 	  -->
 	<property name="baseJVMArgLine" value="${jvmArchFlag} -Xmx${maxJavaMemory}"/>
 
-  <path id="dost.jar.path">
-    <pathelement
-      location="${dita.dir}${file.separator}lib${file.separator}dost.jar" />
-  </path>
+  <!-- Deprecated -->
+  <path id="dost.jar.path" refid="dost.class.path"/>
 
   <taskdef name="pipeline"
     classname="org.dita.dost.invoker.ExtensibleAntInvoker">
-    <classpath refid="dost.jar.path" />
+    <classpath refid="dost.class.path" />
   </taskdef>
 
   <taskdef name="dita-ot-echo"
     classname="org.dita.dost.log.DITAOTEchoTask">
-    <classpath refid="dost.jar.path" />
+    <classpath refid="dost.class.path" />
   </taskdef>
 
   <taskdef name="dita-ot-fail"
     classname="org.dita.dost.log.DITAOTFailTask">
-    <classpath refid="dost.jar.path" />
+    <classpath refid="dost.class.path" />
   </taskdef>
 
   <taskdef name="dita-ot-copy"
     classname="org.dita.dost.util.DITAOTCopy">
-    <classpath refid="dost.jar.path" />
+    <classpath refid="dost.class.path" />
   </taskdef>
 	
   <taskdef name="job-property" classname="org.dita.dost.platform.JobPropertyTask">
-    <classpath refid="dost.jar.path"/>
+    <classpath refid="dost.class.path"/>
   </taskdef>
 	
   <typedef name="isabsolute"
     classname="org.dita.dost.util.IsAbsolute">
-    <classpath refid="dost.jar.path" />
+    <classpath refid="dost.class.path" />
   </typedef>
   
   <macrodef name="job-helper" >

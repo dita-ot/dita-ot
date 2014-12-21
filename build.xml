@@ -72,10 +72,7 @@
     <javac srcdir="${java.dir}" destdir="${bin.dir}"
            debug="on"
            source="1.7" target="1.7"
-           classpathref="compile.path">
-      <exclude name="org/dita/dost/invoker/JavaInvoker.java"/>
-      <exclude name="org/dita/dost/invoker/CommandLineInvoker"/>
-    </javac>
+           classpathref="compile.path"/>
   </target>
 
   <target name="jar" depends="compile" description="Build Java libraries">
@@ -109,7 +106,7 @@
       <pathelement location="${src.dir}/resources"/>
     </path>
     <ant antfile="${src.dir}/integrator.xml" dir="${src.dir}">
-      <reference refid="base.compile.path"/>
+      <reference refid="base.compile.path" torefid="dost.class.path"/>
     </ant>
   </target>
   
@@ -137,11 +134,9 @@
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/org.dita.*/**"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
-    <include name="resource/**"/>
-    <include name="schema/**"/>
+    <include name="resources/**"/>
     <include name="xsl/**"/>
     <include name="lib/dost.jar"/>
     <include name="lib/APACHE-LICENSE-2_0.html"/>
@@ -161,7 +156,6 @@
     <include name="build_demo.xml"/>
     <exclude name="catalog-dita.txt"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
@@ -174,9 +168,8 @@
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
-    <include name="resource/**"/>
+    <include name="resources/**"/>
     <include name="samples/**"/>
-    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>    
   </patternset>
@@ -190,7 +183,6 @@
     <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
@@ -201,9 +193,8 @@
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
-    <include name="resource/**"/>
+    <include name="resources/**"/>
     <include name="samples/**"/>
-    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>
   </patternset>
@@ -226,7 +217,6 @@
     <exclude name="src/**"/>
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
@@ -236,9 +226,8 @@
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
-    <include name="resource/**"/>
+    <include name="resources/**"/>
     <include name="samples/**"/>
-    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>
   </patternset>
