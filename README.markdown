@@ -53,8 +53,8 @@ Distribution
    * `src/main/lib/xml-apis.jar`
    * `src/main/lib/commons-codec.jar`
    * `src/main/lib/commons-io.jar`
-   * `src/main/lib/saxon9-dom.jar`
-   * `src/main/lib/saxon9.jar`
+   * `src/main/lib/saxon-dom.jar`
+   * `src/main/lib/saxon.jar`
    * `src/main/lib/xml-resolver.jar`
    * `src/main/lib/icu4j.jar`
 
