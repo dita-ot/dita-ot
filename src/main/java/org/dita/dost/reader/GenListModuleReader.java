@@ -46,6 +46,8 @@ import org.xml.sax.SAXParseException;
  */
 public final class GenListModuleReader extends AbstractXMLFilter {
 
+    public static final URI ROOT_URI = toURI("ROOT");
+
     /** Output utilities */
     private Job job;
     /** Absolute basedir of the current parsing file */
@@ -111,7 +113,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Subject scheme relative file paths. */
     private final Set<URI> schemeRefSet;
     /** Relationship graph between subject schema. Keys are subject scheme map paths and values
-     * are subject scheme map paths, both relative to base directory. A key {@code File("ROOT")} contains all subject scheme maps. */
+     * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps. */
     private final Map<URI, Set<URI>> schemeRelationGraph;
     /** Map to store referenced branches. */
     private final Map<URI, List<String>> validBranches;
@@ -237,7 +239,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get relationship graph between subject schema. Keys are subject scheme map paths and values
-     * are subject scheme map paths, both relative to base directory. A key {@code "ROOT"} contains all subject scheme maps.
+     * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps.
      *
      * @return relationship graph
      */
@@ -518,7 +520,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         // Generate Scheme relationship graph
         if (SUBJECTSCHEME_SUBJECTSCHEME.matches(classValue)) {
             // Make it easy to do the BFS later.
-            final URI key = toURI("ROOT");
+            final URI key = ROOT_URI;
             final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<URI>();
             children.add(currentFile);
             schemeRelationGraph.put(key, children);

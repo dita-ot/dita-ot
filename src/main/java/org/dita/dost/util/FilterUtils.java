@@ -82,6 +82,11 @@ public final class FilterUtils {
         this.logger = logger;
     }
 
+    @Override
+    public String toString() {
+        return filterMap.toString();
+    }
+
     /**
      * Check if the given Attributes need to be excluded.
      *

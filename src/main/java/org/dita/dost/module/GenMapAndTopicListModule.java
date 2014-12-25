@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Job.*;
@@ -1124,6 +1125,10 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         return sorted;
     }
 
+    /**
+     * Convert absolute paths to relative temporary directory paths
+     * @return map with relative keys and values
+     */
     private Map<URI, Set<URI>> addMapFilePrefix(final Map<URI, Set<URI>> map) {
         final Map<URI, Set<URI>> res = new HashMap<URI, Set<URI>>();
         for (final Map.Entry<URI, Set<URI>> e: map.entrySet()) {
@@ -1132,7 +1137,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             for (final URI file: e.getValue()) {
                 newSet.add(tempFileNameScheme.generateTempFileName(file));
             }
-            res.put(key.equals(toURI("ROOT")) ? key : tempFileNameScheme.generateTempFileName(key), newSet);
+            res.put(key.equals(ROOT_URI) ? key : tempFileNameScheme.generateTempFileName(key), newSet);
         }
         return res;
     }

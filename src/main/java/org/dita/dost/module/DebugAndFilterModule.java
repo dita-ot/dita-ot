@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getRelativePath;
 import static org.dita.dost.util.FileUtils.getRelativeUnixPath;
@@ -89,7 +90,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private XMLReader reader;
     /** Absolute path to current source file. */
     private File currentFile;
-    private Map<File, Set<File>> dic;
+    private Map<URI, Set<URI>> dic;
     private SubjectSchemeReader subjectSchemeReader;
     private FilterUtils baseFilterUtils;
     private ForceUniqueFilter forceUniqueFilter;
@@ -137,12 +138,12 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         }
         logger.info("Processing " + f.src);
 
-        final Set<File> schemaSet = dic.get(f.file);
+        final Set<URI> schemaSet = dic.get(f.uri);
         if (schemaSet != null && !schemaSet.isEmpty()) {
             logger.debug("Loading subject schemes");
             subjectSchemeReader.reset();
-            for (final File schema : schemaSet) {
-                subjectSchemeReader.loadSubjectScheme(new File(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
+            for (final URI schema : schemaSet) {
+                subjectSchemeReader.loadSubjectScheme(new File(job.tempDir.toURI().resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
             }
             validateMap = subjectSchemeReader.getValidValuesMap();
             defaultValueMap = subjectSchemeReader.getDefaultValueMap();
@@ -348,22 +349,22 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      */
     private void outputSubjectScheme() throws DITAOTException {
         try {
-            final Map<File, Set<File>> graph = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            final Map<URI, Set<URI>> graph = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
 
-            final Queue<File> queue = new LinkedList<File>(graph.keySet());
-            final Set<File> visitedSet = new HashSet<File>();
+            final Queue<URI> queue = new LinkedList<URI>(graph.keySet());
+            final Set<URI> visitedSet = new HashSet<URI>();
 
             final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setEntityResolver(CatalogUtils.getCatalogResolver());
 
             while (!queue.isEmpty()) {
-                final File parent = queue.poll();
-                final Set<File> children = graph.get(parent);
+                final URI parent = queue.poll();
+                final Set<URI> children = graph.get(parent);
 
                 if (children != null) {
                     queue.addAll(children);
                 }
-                if (new File("ROOT").equals(parent) || visitedSet.contains(parent)) {
+                if (ROOT_URI.equals(parent) || visitedSet.contains(parent)) {
                     continue;
                 }
                 visitedSet.add(parent);
@@ -376,7 +377,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     parentRoot = builder.parse(tmprel);
                 }
                 if (children != null) {
-                    for (final File childpath: children) {
+                    for (final URI childpath: children) {
                         final Document childRoot = builder.parse(new File(inputMap.getParentFile(), childpath.getPath()));
                         mergeScheme(parentRoot, childRoot);
                         generateScheme(new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION), childRoot);
