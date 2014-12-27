@@ -110,8 +110,6 @@
   Needed to help with debugging.
   default is 'no')-->
 <xsl:param name="DBG" select="'no'"/> <!-- "no" and "yes" are valid values; non-'yes' is ignored -->
-<!--embedding images as binary data -->
-<xsl:param name="ODTIMGEMBED" select="'yes'"/>
 
 <!-- Name of the keyref file that contains key definitions -->
 <xsl:param name="KEYREF-FILE" select="concat($WORKDIR,$PATH2PROJ,'keydef.xml')"/>

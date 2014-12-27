@@ -35,11 +35,6 @@
     <condition property="args.rellinks" value="none">
       <not><isset property="args.rellinks"/></not>
     </condition>
-    <condition property="args.odt.img.embed" value="yes">
-      <not>
-        <isset property="args.odt.img.embed"/>
-      </not>
-    </condition>
   </target>
   
   <target name="odt.image-metadata" description="Read image metadata">
@@ -104,7 +99,6 @@
       <param name="include.rellinks" expression="${include.rellinks}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
-      <param name="ODTIMGEMBED" expression="${args.odt.img.embed}" if="args.odt.img.embed"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -131,7 +125,6 @@
       <param name="include.rellinks" expression="${include.rellinks}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
-      <param name="ODTIMGEMBED" expression="${args.odt.img.embed}" if="args.odt.img.embed"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>

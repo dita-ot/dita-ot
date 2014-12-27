@@ -280,18 +280,9 @@
           </xsl:attribute>
           <xsl:attribute name="svg:height"><xsl:value-of select="$height"/>in</xsl:attribute>       
           <xsl:element name="draw:image">
-            <xsl:choose>
-              <xsl:when test="$ODTIMGEMBED = 'yes'">
-                <xsl:element name="office:binary-data">
-                  <xsl:value-of select="java:getBASE64($OUTPUTDIR, string(@href))" disable-output-escaping="yes"/>
-                </xsl:element>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:attribute name="xlink:href">
-                  <xsl:value-of select="translate(@href, '\', '/')"/>
-                </xsl:attribute>  
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:attribute name="xlink:href">
+              <xsl:value-of select="translate(@href, '\', '/')"/>
+            </xsl:attribute>  
           </xsl:element>
         </xsl:element>
       </xsl:when>
@@ -330,18 +321,9 @@
           </xsl:attribute>
           <xsl:attribute name="svg:height"><xsl:value-of select="$height"/>in</xsl:attribute>       
           <xsl:element name="draw:image">
-            <xsl:choose>
-              <xsl:when test="$ODTIMGEMBED = 'yes'">
-                <xsl:element name="office:binary-data">
-                  <xsl:value-of select="java:getBASE64($OUTPUTDIR, string($imgsrc))" disable-output-escaping="yes"/>
-                </xsl:element>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:attribute name="xlink:href">
-                  <xsl:value-of select="translate($imgsrc, '\', '/')"/>
-                </xsl:attribute>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:attribute name="xlink:href">
+              <xsl:value-of select="translate($imgsrc, '\', '/')"/>
+            </xsl:attribute>
           </xsl:element>
         </xsl:element>
       </xsl:when>
