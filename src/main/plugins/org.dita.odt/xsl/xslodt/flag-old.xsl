@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
- Sourceforge.net. See the accompanying license.txt file for 
- applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses. -->
 <!-- (c) Copyright IBM Corp. 2007 All Rights Reserved. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 <!-- ========== Flagging with flags & revisions ========== -->
@@ -19,17 +18,13 @@
   <xsl:call-template name="flagit-deprecated"/>
 </xsl:template>
 <xsl:template name="flagit-deprecated"> 
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
+  <xsl:variable name="domains" select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   <xsl:variable name="tmp_props">
     <xsl:call-template name="getExtProps">
       <xsl:with-param name="domains" select="$domains"/>
     </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="props">
-    <xsl:value-of select="substring-after($tmp_props, ',')"/>
-  </xsl:variable>
+  <xsl:variable name="props" select="substring-after($tmp_props, ',')"/>
  <!-- Test for the flagging attributes. If found, call 'mark-prop' with the values to use. Otherwise return -->
   <xsl:if test="@audience and not($FILTERFILE='')">
   <xsl:call-template name="mark-prop">
@@ -186,9 +181,7 @@
 <!-- No flagging attrs allowed to process in phrases - output a message when in debug mode. -->
 <xsl:template name="flagcheck">
   
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
+  <xsl:variable name="domains" select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, 'a(props')">
       <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
@@ -281,9 +274,7 @@
   </xsl:template>
 
 <xsl:template name="flagit-parent">
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
+  <xsl:variable name="domains" select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, 'a(props')">
       <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
@@ -506,8 +497,8 @@
    <xsl:when test="string-length($moreflags)>0">
     <!-- more values - call it again with remaining values -->
     <xsl:call-template name="mark-prop">
-     <xsl:with-param name="flag-att"><xsl:value-of select="$flag-att"/></xsl:with-param>
-     <xsl:with-param name="flag-att-val"><xsl:value-of select="$moreflags"/></xsl:with-param>
+     <xsl:with-param name="flag-att" select="$flag-att"/>
+     <xsl:with-param name="flag-att-val" select="$moreflags"/>
     </xsl:call-template>
    </xsl:when>
    <xsl:otherwise/> <!-- no more values -->
@@ -676,7 +667,7 @@
      <xsl:when test="string-length($morerevs)>0">
       <!-- more values - call it again with remaining values -->
       <xsl:call-template name="find-active-rev-flag">
-       <xsl:with-param name="allrevs"><xsl:value-of select="$morerevs"/></xsl:with-param>
+       <xsl:with-param name="allrevs" select="$morerevs"/>
       </xsl:call-template>
      </xsl:when>
      <xsl:otherwise> <!-- no more values - none found -->
@@ -729,7 +720,7 @@
      <xsl:when test="string-length($morerevs)>0">
       <!-- more values - call it again with remaining values -->
       <xsl:call-template name="find-active-rev-style">
-       <xsl:with-param name="allrevs"><xsl:value-of select="$morerevs"/></xsl:with-param>
+       <xsl:with-param name="allrevs" select="$morerevs"/>
       </xsl:call-template>
      </xsl:when>
      <xsl:otherwise/> <!-- no more values - none found -->

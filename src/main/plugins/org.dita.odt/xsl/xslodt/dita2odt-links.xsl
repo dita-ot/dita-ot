@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-	Sourceforge.net. See the accompanying license.txt file for 
-	applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses. -->
 <!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
 <xsl:stylesheet
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -47,33 +46,29 @@
 		<xsl:param name="linkScope"/>
         <xsl:choose>
             <!-- User specified description (from map or topic): use that. -->
-            <xsl:when test="*[contains(@class,' topic/desc ')] and
-                            processing-instruction()[name()='ditaot'][.='usershortdesc']">
-            	<xsl:element name="text:p">
-            		<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+            <xsl:when test="*[contains(@class,' topic/desc ')] and                             processing-instruction()[name()='ditaot'][.='usershortdesc']">
+            	<text:p text:style-name="Default_20_Text">
                     <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
-            	</xsl:element>
+            	</text:p>
             </xsl:when>
             <!-- External: do not attempt to retrieve. -->
             <xsl:when test="$linkScope='external'">
             </xsl:when>
             <!-- When the target has a short description and no local override, use the target -->
             <xsl:when test="$element/*[contains(@class, ' topic/shortdesc ')]">
-            	<xsl:element name="text:line-break"/>
-            	<xsl:element name="text:tab"/>
+            	<text:line-break/>
+            	<text:tab/>
             	<xsl:apply-templates select="$element/*[contains(@class, ' topic/shortdesc ')]" mode="dita-ot:text-only"/>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
 
     <xsl:template name="insertLinkDesc">
-        
-        <text:line-break>
+      <text:line-break>
             <text:tab>
                 <xsl:apply-templates select="*[contains(@class,' topic/desc ')]" mode="insert-description"/>
             </text:tab>
         </text:line-break>
-            
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/xref ') or contains(@class, ' topic/link ')]/*[contains(@class,' topic/desc ')]" priority="1"/>
@@ -118,8 +113,7 @@
                 <xsl:when test="not($element) or ($destination = '')">
                     <xsl:text>#none#</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains($element/@class,' topic/li ') and 
-                                contains($element/parent::*/@class,' topic/ol ')">
+                <xsl:when test="contains($element/@class,' topic/li ') and                                  contains($element/parent::*/@class,' topic/ol ')">
                     <!-- SF Bug 1839827: This causes preprocessor text to be used for links to OL/LI -->
                     <xsl:text>#none#</xsl:text>
                 </xsl:when>
@@ -128,8 +122,6 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-                
-
         <xsl:if test="not($titlePrefix = '')">
         	<!-- 
             <xsl:call-template name="insertVariable">
@@ -158,8 +150,7 @@
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/fig ')][*[contains(@class, ' topic/title ')]]" mode="retrieveReferenceTitle">
-        
-    	<!-- 
+      <!-- 
     	<xsl:call-template name="insertVariable">
             <xsl:with-param name="theVariableID" select="'Figure'"/>
             <xsl:with-param name="theParameters">
@@ -216,15 +207,13 @@
             <xsl:with-param name="theVariableID" select="'List item'"/>
         </xsl:call-template>
         -->
-    	<xsl:element name="text:p">
-    		<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-    		<xsl:element name="text:span">
-    			<xsl:attribute name="text:style-name">bold</xsl:attribute>
-    			<xsl:call-template name="getStringODT">
+    	<text:p text:style-name="Default_20_Text">
+    		<text:span text:style-name="bold">
+    			<xsl:call-template name="getString">
     				<xsl:with-param name="stringName" select="'List item'"/>
     			</xsl:call-template>
-    		</xsl:element>
-    	</xsl:element>
+    		</text:span>
+    	</text:p>
     	
     	
     </xsl:template>
@@ -235,19 +224,17 @@
 		    <xsl:with-param name="theVariableID" select="'Foot note'"/>
 		</xsl:call-template>
 		-->
-    	<xsl:element name="text:p">
-    		<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-    		<xsl:element name="text:span">
-    			<xsl:attribute name="text:style-name">bold</xsl:attribute>
-    			<xsl:call-template name="getStringODT">
+    	<text:p text:style-name="Default_20_Text">
+    		<text:span text:style-name="bold">
+    			<xsl:call-template name="getString">
     				<xsl:with-param name="stringName" select="'Foot note'"/>
     			</xsl:call-template>
-    		</xsl:element>
-    	</xsl:element>
+    		</text:span>
+    	</text:p>
     </xsl:template>
 
     <!-- Default rule: if element has a title, use that, otherwise return '#none#' -->
-    <xsl:template match="*" mode="retrieveReferenceTitle" >
+    <xsl:template match="*" mode="retrieveReferenceTitle">
         <xsl:choose>
             <xsl:when test="*[contains(@class,' topic/title ')]">
                 <xsl:value-of select="string(*[contains(@class, ' topic/title ')])"/>
@@ -296,7 +283,7 @@
 				<xsl:otherwise>
 					<xsl:choose>
 						<xsl:when test="*[not(contains(@class,' topic/desc '))] | text()">
-							<xsl:apply-templates select="*[not(contains(@class,' topic/desc '))] | text()" />
+							<xsl:apply-templates select="*[not(contains(@class,' topic/desc '))] | text()"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:value-of select="@href"/>
@@ -364,24 +351,20 @@
                 </xsl:apply-templates>
             </xsl:variable>
 
-            <xsl:variable name="linkTextContent">
-                <xsl:value-of select="$collectedLinks"/>
-            </xsl:variable>
+            <xsl:variable name="linkTextContent" select="$collectedLinks"/>
 
             <xsl:if test="normalize-space($linkTextContent)!=''">
-            	<xsl:element name="text:p">
-            		<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+            	<text:p text:style-name="Default_20_Text">
                 	<!-- 
 					<xsl:call-template name="insertVariable">
 		    				<xsl:with-param name="theVariableID" select="'Related Links'"/>
 			    	</xsl:call-template>
                 	-->
-                	<xsl:element name="text:span">
-                		<xsl:attribute name="text:style-name">bold</xsl:attribute>
-                		<xsl:call-template name="getStringODT">
+                	<text:span text:style-name="bold">
+                		<xsl:call-template name="getString">
                 			<xsl:with-param name="stringName" select="'Related Links'"/>
                 		</xsl:call-template>
-                	</xsl:element>
+                	</text:span>
             		<!-- 
                 	<text:line-break/>
                 	<text:tab/>
@@ -395,7 +378,7 @@
             		<xsl:apply-templates mode="processLink">
             			<xsl:with-param name="topicType" select="$topicType"/>
             		</xsl:apply-templates>
-                </xsl:element>
+                </text:p>
             </xsl:if>
 
         </xsl:if>
@@ -427,10 +410,8 @@
           </xsl:for-each>
       </xsl:param>
       <xsl:choose>
-        <xsl:when test="(@role and not(contains($includeRelatedLinkRoles, concat(' ', @role, ' ')))) or
-                        (not(@role) and not(contains($includeRelatedLinkRoles, ' #default ')))"/>
-        <xsl:when test="@role='child' and $chapterLayout='MINITOC' and
-                        ($topicType='topicChapter' or $topicType='topicAppendix' or $topicType='topicPart')">
+        <xsl:when test="(@role and not(contains($includeRelatedLinkRoles, concat(' ', @role, ' ')))) or                         (not(@role) and not(contains($includeRelatedLinkRoles, ' #default ')))"/>
+        <xsl:when test="@role='child' and $chapterLayout='MINITOC' and                         ($topicType='topicChapter' or $topicType='topicAppendix' or $topicType='topicPart')">
           <!-- When a minitoc already links to children, do not add them here -->
         </xsl:when>
         <xsl:otherwise>
@@ -456,8 +437,8 @@
         </xsl:variable>
 
             <!--<xsl:text>&#x2022; </xsl:text>-->
-    			<xsl:element name="text:line-break"/>
-    			<xsl:element name="text:tab"/>
+    			<text:line-break/>
+    			<text:tab/>
                 <text:a>
                     <xsl:call-template name="buildBasicLinkDestination">
                         <xsl:with-param name="scope" select="$linkScope"/>
@@ -479,7 +460,6 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </text:a>
-    
             <xsl:if test="not($linkScope = 'external') and not($referenceTitle = '')">
                 <xsl:call-template name="insertPageNumberCitation">
 					<xsl:with-param name="destination" select="$destination"/>
@@ -507,8 +487,7 @@
         <xsl:param name="scope"/>
         <xsl:param name="href"/>
         <xsl:choose>
-            <xsl:when test="(contains(@href, '://') and not(starts-with(@href, 'file://')))
-            or starts-with(@href, '/') or $scope = 'external'">
+            <xsl:when test="(contains(@href, '://') and not(starts-with(@href, 'file://')))             or starts-with(@href, '/') or $scope = 'external'">
             	<xsl:attribute name="xlink:href">
                     <xsl:value-of select="$href"/>
                 </xsl:attribute>
@@ -560,14 +539,12 @@
                     </xsl:call-template>
             	-->
             	<text:s/>
-            	<xsl:call-template name="getStringODT">
+            	<xsl:call-template name="getString">
             		<xsl:with-param name="stringName" select="'Page'"/>
             	</xsl:call-template>
             	<text:s/>
-            	<xsl:element name="text:bookmark-ref">
-            		<xsl:attribute name="text:reference-format">page</xsl:attribute>
-            		<xsl:attribute name="text:ref-name"><xsl:value-of select="$destination"/></xsl:attribute>
-            	</xsl:element>
+            	<text:bookmark-ref text:reference-format="page" text:ref-name="{$destination}">
+            	</text:bookmark-ref>
             </xsl:when>
             <xsl:otherwise>
             	<!-- 
@@ -582,14 +559,12 @@
                     </xsl:call-template>
             	-->
             	<text:s/>
-            	<xsl:call-template name="getStringODT">
+            	<xsl:call-template name="getString">
             		<xsl:with-param name="stringName" select="'On the page'"/>
             	</xsl:call-template>
             	<text:s/>
-            	<xsl:element name="text:bookmark-ref">
-            		<xsl:attribute name="text:reference-format">page</xsl:attribute>
-            		<xsl:attribute name="text:ref-name"><xsl:value-of select="$destination"/></xsl:attribute>
-            	</xsl:element>
+            	<text:bookmark-ref text:reference-format="page" text:ref-name="{$destination}">
+            	</text:bookmark-ref>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -605,8 +580,8 @@
 
 	<xsl:template match="*[contains(@class,' topic/linkinfo ')]" mode="processLink">
 		<text:line-break/>
-            <xsl:apply-templates/>
-    </xsl:template>
+    <xsl:apply-templates/>
+  </xsl:template>
 
 	<xsl:template match="*[contains(@class,' topic/linkpool ')]" mode="processLink">
         <xsl:param name="topicType"/>
@@ -624,15 +599,8 @@
 
     <xsl:template name="getDestinationIdImpl">
         <xsl:param name="href"/>
-        
-        <xsl:variable name="topic-id">
-            <xsl:value-of select="substring-after($href, '#')"/>
-        </xsl:variable>
-
-        <xsl:variable name="element-id">
-            <xsl:value-of select="substring-after($topic-id, '/')"/>
-        </xsl:variable>
-
+        <xsl:variable name="topic-id" select="substring-after($href, '#')"/>
+        <xsl:variable name="element-id" select="substring-after($topic-id, '/')"/>
         <xsl:choose>
             <xsl:when test="$element-id = ''">
                 <xsl:value-of select="$topic-id"/>
@@ -642,7 +610,6 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
         <!--Related links-->
 
 	<xsl:template name="buildRelationships">
@@ -673,15 +640,13 @@
 					<xsl:with-param name="theVariableID" select="'Related concepts'"/>
 				</xsl:call-template>
 				-->
-				<xsl:element name="text:p">
-					<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-					<xsl:element name="text:span">
-						<xsl:attribute name="text:style-name">bold</xsl:attribute>
-						<xsl:call-template name="getStringODT">
+				<text:p text:style-name="Default_20_Text">
+					<text:span text:style-name="bold">
+						<xsl:call-template name="getString">
 							<xsl:with-param name="stringName" select="'Related concepts'"/>
 						</xsl:call-template>
-					</xsl:element>
-				</xsl:element>
+					</text:span>
+				</text:p>
 			</xsl:variable>
 			<xsl:variable name="relatedTasksTitle">
 				<!-- 
@@ -689,15 +654,13 @@
 					<xsl:with-param name="theVariableID" select="'Related tasks'"/>
 				</xsl:call-template>
 				-->
-				<xsl:element name="text:p">
-					<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-					<xsl:element name="text:span">
-						<xsl:attribute name="text:style-name">bold</xsl:attribute>
-						<xsl:call-template name="getStringODT">
+				<text:p text:style-name="Default_20_Text">
+					<text:span text:style-name="bold">
+						<xsl:call-template name="getString">
 							<xsl:with-param name="stringName" select="'Related tasks'"/>
 						</xsl:call-template>
-					</xsl:element>
-				</xsl:element>
+					</text:span>
+				</text:p>
 			</xsl:variable>
 			<xsl:variable name="relatedReferencesTitle">
 				<!-- 
@@ -705,15 +668,13 @@
 					<xsl:with-param name="theVariableID" select="'Related references'"/>
 				</xsl:call-template>
 				-->
-				<xsl:element name="text:p">
-					<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-					<xsl:element name="text:span">
-						<xsl:attribute name="text:style-name">bold</xsl:attribute>
-						<xsl:call-template name="getStringODT">
+				<text:p text:style-name="Default_20_Text">
+					<text:span text:style-name="bold">
+						<xsl:call-template name="getString">
 							<xsl:with-param name="stringName" select="'Related references'"/>
 						</xsl:call-template>
-					</xsl:element>
-				</xsl:element>
+					</text:span>
+				</text:p>
 			</xsl:variable>
 			<xsl:variable name="relatedInformationTitle">
 				<!-- 
@@ -721,15 +682,13 @@
 					<xsl:with-param name="theVariableID" select="'Related information'"/>
 				</xsl:call-template>
 				-->
-				<xsl:element name="text:p">
-					<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-					<xsl:element name="text:span">
-						<xsl:attribute name="text:style-name">bold</xsl:attribute>
-						<xsl:call-template name="getStringODT">
+				<text:p text:style-name="Default_20_Text">
+					<text:span text:style-name="bold">
+						<xsl:call-template name="getString">
 							<xsl:with-param name="stringName" select="'Related information'"/>
 						</xsl:call-template>
-					</xsl:element>
-				</xsl:element>
+					</text:span>
+				</text:p>
 			</xsl:variable>
 
 
@@ -929,15 +888,13 @@
 				<xsl:with-param name="theVariableID" select="'Parent topic'"/>
 			</xsl:call-template>
 			-->
-			<xsl:element name="text:p">
-				<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-				<xsl:element name="text:span">
-					<xsl:attribute name="text:style-name">bold</xsl:attribute>
-					<xsl:call-template name="getStringODT">
+			<text:p text:style-name="Default_20_Text">
+				<text:span text:style-name="bold">
+					<xsl:call-template name="getString">
 						<xsl:with-param name="stringName" select="'Parent topic'"/>
 					</xsl:call-template>
-				</xsl:element>
-			</xsl:element>
+				</text:span>
+			</text:p>
 		</xsl:variable>
 		<xsl:call-template name="createMapLinks">
 			<xsl:with-param name="nodeSet" select="parent::*[contains(@class, ' topic/topic ')]"/>
@@ -953,15 +910,13 @@
 				<xsl:with-param name="theVariableID" select="'Next topic'"/>
 			</xsl:call-template>
 			-->
-			<xsl:element name="text:p">
-				<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-				<xsl:element name="text:span">
-					<xsl:attribute name="text:style-name">bold</xsl:attribute>
-					<xsl:call-template name="getStringODT">
+			<text:p text:style-name="Default_20_Text">
+				<text:span text:style-name="bold">
+					<xsl:call-template name="getString">
 						<xsl:with-param name="stringName" select="'Next topic'"/>
 					</xsl:call-template>
-				</xsl:element>
-			</xsl:element>
+				</text:span>
+			</text:p>
 		</xsl:variable>
 		<xsl:call-template name="createMapLinks">
 			<xsl:with-param name="nodeSet" select="following-sibling::*[contains(@class, ' topic/topic ')][1]"/>
@@ -977,15 +932,13 @@
 				<xsl:with-param name="theVariableID" select="'Previous topic'"/>
 			</xsl:call-template>
 			-->
-			<xsl:element name="text:p">
-				<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-				<xsl:element name="text:span">
-					<xsl:attribute name="text:style-name">bold</xsl:attribute>
-					<xsl:call-template name="getStringODT">
+			<text:p text:style-name="Default_20_Text">
+				<text:span text:style-name="bold">
+					<xsl:call-template name="getString">
 						<xsl:with-param name="stringName" select="'Previous topic'"/>
 					</xsl:call-template>
-				</xsl:element>
-			</xsl:element>
+				</text:span>
+			</text:p>
 		</xsl:variable>
 		<xsl:call-template name="createMapLinks">
 			<xsl:with-param name="nodeSet" select="preceding-sibling::*[contains(@class, ' topic/topic ')][1]"/>
@@ -1002,15 +955,13 @@
 				<xsl:with-param name="theVariableID" select="'Child topics'"/>
 			</xsl:call-template>
 			-->
-			<xsl:element name="text:p">
-				<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-				<xsl:element name="text:span">
-					<xsl:attribute name="text:style-name">bold</xsl:attribute>
-					<xsl:call-template name="getStringODT">
+			<text:p text:style-name="Default_20_Text">
+				<text:span text:style-name="bold">
+					<xsl:call-template name="getString">
 						<xsl:with-param name="stringName" select="'Child topics'"/>
 					</xsl:call-template>
-				</xsl:element>
-			</xsl:element>
+				</text:span>
+			</text:p>
 		</xsl:variable>
 		<xsl:call-template name="createMapLinks">
 			<xsl:with-param name="nodeSet" select="*[contains(@class, ' topic/topic ')] | *[contains(@class,' topic/dita ')]/*[contains(@class, ' topic/topic ')]"/>
@@ -1038,20 +989,18 @@
 						</xsl:call-template>
 					</xsl:when>
 					<xsl:when test="$listType = 'none'">
-						<xsl:element name="text:p">
-							<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+						<text:p text:style-name="Default_20_Text">
 							<xsl:for-each select="$nodeSet">
 									<text:a xlink:href="concat('#', @id)">
 										<xsl:apply-templates select="child::*[contains(@class, ' topic/title ')]" mode="insert-text"/>
 									</text:a>
 								<text:line-break/>
 							</xsl:for-each>
-						</xsl:element>
+						</text:p>
 					</xsl:when>
 				</xsl:choose>
 			</xsl:if>
 		</xsl:variable>
-
 		<xsl:if test="($linkNodes//text:list) or ($linkNodes//text:p)">
 			<xsl:if test="$title">
 				<xsl:value-of select="$title"/>
@@ -1062,7 +1011,6 @@
 
 	<xsl:template name="createMapLinksUnordered">
 		<xsl:param name="nodeSet"/>
-
 		<text:list text:style-name="list_style">
 			<xsl:for-each select="$nodeSet">
 				<text:list-item>
@@ -1071,21 +1019,18 @@
 							<xsl:with-param name="theVariableID" select="'Unordered List bullet'"/>
 							</xsl:call-template>
 						-->
-						<xsl:element name="text:p">
-							<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
-							<xsl:element name="text:span">
-								<xsl:attribute name="text:style-name">bold</xsl:attribute>
-								<xsl:call-template name="getStringODT">
+						<text:p text:style-name="Default_20_Text">
+							<text:span text:style-name="bold">
+								<xsl:call-template name="getString">
 									<xsl:with-param name="stringName" select="'Unordered List bullet'"/>
 								</xsl:call-template>
-							</xsl:element>
-						</xsl:element>
-						<xsl:element name="text:p">
-							<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+							</text:span>
+						</text:p>
+						<text:p text:style-name="Default_20_Text">
 							<text:a xlink:href="concat('#' , @id)">
 								<xsl:apply-templates select="child::*[contains(@class, ' topic/title ')]" mode="insert-text"/>
 							</text:a>
-						</xsl:element>
+						</text:p>
 				</text:list-item>
 			</xsl:for-each>
 		</text:list>
@@ -1093,22 +1038,19 @@
 
 	<xsl:template name="createMapLinksOrdered">
 		<xsl:param name="nodeSet"/>
-
 		<text:list text:style-nam="ordered_list_style">
 			<xsl:for-each select="$nodeSet">
 				<text:list-item>
 					
-						<xsl:element name="text:p">
-							<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+						<text:p text:style-name="Default_20_Text">
 							<xsl:value-of select="count(preceding-sibling::*[contains(@class,' topic/topic ')])"/>
-						</xsl:element>
+						</text:p>
 					
-						<xsl:element name="text:p">
-							<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+						<text:p text:style-name="Default_20_Text">
 							<text:a xlink:href="concat('#', @id)">
 								<xsl:apply-templates select="child::*[contains(@class, ' topic/title ')]" mode="insert-text"/>
 							</text:a>
-						</xsl:element>
+						</text:p>
 					
 				</text:list-item>
 			</xsl:for-each>
@@ -1119,7 +1061,6 @@
 		<xsl:param name="linkType"/>
 		<xsl:param name="title"/>
 		<xsl:variable name="id" select="@id"/>
-
 		<xsl:if test="$relatedTopicrefs/@id = $id">
 			<xsl:variable name="resultLinks">
 				<xsl:for-each select="$relatedTopicrefs[@id = $id]">
@@ -1136,12 +1077,11 @@
 								<xsl:if test="not($currPosition = $position)">
 									<xsl:for-each select="ancestor::*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position() = $position]//*[contains(@class, ' map/topicref ')]">
 										<xsl:variable name="relatedTopic" select="key('key_anchor',@id)[1]"/>
-										<xsl:element name="text:p">
-											<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+										<text:p text:style-name="Default_20_Text">
 											<text:a xlink:href="concat('#', $id)">
 												<xsl:apply-templates select="$relatedTopic/*[contains(@class,' topic/title ')]" mode="insert-text"/>
 											</text:a>
-										</xsl:element>
+										</text:p>
 									</xsl:for-each>
 								</xsl:if>
 							</xsl:if>
@@ -1152,42 +1092,38 @@
 								<xsl:choose>
 									<xsl:when test="$linkType = 'topic'">
 										<xsl:if test="contains($relatedTopic/@class, ' topic/topic ') and not(contains($relatedTopic/@class, ' concept/concept ') or contains($relatedTopic/@class, ' task/task ') or contains($relatedTopic/@class, ' reference/reference '))">
-											<xsl:element name="text:p">
-												<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+											<text:p text:style-name="Default_20_Text">
 												<text:a xlink:href="concat('#', $id)">
 													<xsl:apply-templates select="$relatedTopic/*[contains(@class,' topic/title ')]" mode="insert-text"/>
 												</text:a>
-											</xsl:element>
+											</text:p>
 										</xsl:if>
 									</xsl:when>
 									<xsl:when test="$linkType = 'task'">
 										<xsl:if test="contains($relatedTopic/@class, ' task/task ')">
-											<xsl:element name="text:p">
-												<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+											<text:p text:style-name="Default_20_Text">
 												<text:a xlink:href="concat('#', $id)">
 													<xsl:apply-templates select="$relatedTopic/*[contains(@class,' topic/title ')]" mode="insert-text"/>
 												</text:a>
-											</xsl:element>
+											</text:p>
 										</xsl:if>
 									</xsl:when>
 									<xsl:when test="$linkType = 'concept'">
 										<xsl:if test="contains($relatedTopic/@class, ' concept/concept ')">
-											<xsl:element name="text:p">
-												<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+											<text:p text:style-name="Default_20_Text">
 												<text:a xlink:href="concat('#', $id)">
 													<xsl:apply-templates select="$relatedTopic/*[contains(@class,' topic/title ')]" mode="insert-text"/>
 												</text:a>
-											</xsl:element>
+											</text:p>
 										</xsl:if>
 									</xsl:when>
 									<xsl:when test="$linkType = 'reference'">
 										<xsl:if test="contains($relatedTopic/@class, ' reference/reference ')">
-											<xsl:element name="text:p">
-												<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+											<text:p text:style-name="Default_20_Text">
 												<text:a xlink:href="concat('#', $id)">
 													<xsl:apply-templates select="$relatedTopic/*[contains(@class,' topic/title ')]" mode="insert-text"/>
 												</text:a>
-											</xsl:element>
+											</text:p>
 										</xsl:if>
 									</xsl:when>
 								</xsl:choose>
@@ -1198,10 +1134,9 @@
 			</xsl:variable>
 			<xsl:if test="$resultLinks/*">
 				<xsl:if test="$title">
-					<xsl:element name="text:p">
-						<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+					<text:p text:style-name="Default_20_Text">
 						<xsl:value-of select="$title"/>
-					</xsl:element>
+					</text:p>
 				</xsl:if>
 				<xsl:copy-of select="$resultLinks"/>
 			</xsl:if>
@@ -1224,25 +1159,20 @@
 		
 		<!--if there are any prereqs create a list with dups-->
 		<xsl:if test="descendant::*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])][@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='previous' or @role='cousin')]">
-			<xsl:element name="text:p">
-				<xsl:element name="text:span">
-					<xsl:attribute name="text:style-name">default_text_style</xsl:attribute>
-					<xsl:call-template name="getStringODT">
+			<text:p>
+				<text:span text:style-name="default_text_style">
+					<xsl:call-template name="getString">
 						<xsl:with-param name="stringName" select="'Prerequisites'"/>
 					</xsl:call-template>
-				</xsl:element>
-			</xsl:element>
+				</text:span>
+			</text:p>
 			
 			<!--only create link if there is an href, its importance is required, and the role is compatible (don't want a prereq showing up for a "next" or "parent" link, for example) - remove dups-->
-			<xsl:apply-templates mode="prereqs" select="descendant::*[generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
-				[@href]
-				[@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='previous' or @role='cousin')]
-				[not(ancestor::*[contains(@class, ' topic/linklist ')])]"/>
+			<xsl:apply-templates mode="prereqs" select="descendant::*[generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]     [@href]     [@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='previous' or @role='cousin')]     [not(ancestor::*[contains(@class, ' topic/linklist ')])]"/>
 		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template mode="prereqs" match="*[contains(@class, ' topic/link ')]" priority="2">
-		
 		<!-- Allow for unknown metadata (future-proofing) -->
 		<xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
 		<xsl:variable name="samefile">
@@ -1251,13 +1181,12 @@
 		<xsl:variable name="href-value">
 			<xsl:call-template name="format_href_value"/>
 		</xsl:variable>
-		<xsl:element name="text:p">
-			<xsl:attribute name="text:style-name">Default_20_Text</xsl:attribute>
+		<text:p text:style-name="Default_20_Text">
 			<xsl:call-template name="create_related_links">
 				<xsl:with-param name="samefile" select="$samefile"/>
 				<xsl:with-param name="href-value" select="$href-value"/>
 			</xsl:call-template>
-		</xsl:element>
+		</text:p>
 	</xsl:template>
 
 </xsl:stylesheet>

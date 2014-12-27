@@ -139,17 +139,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="@href">
         <xsl:param name="newid"/>
-        <xsl:variable name="topic-rest">
-            <xsl:value-of select="substring-after(., '#')"/>
-        </xsl:variable>
+        <xsl:variable name="topic-rest" select="substring-after(., '#')"/>
 
-        <xsl:variable name="topic-id">
-            <xsl:value-of select="substring-before($topic-rest, '/')"/>
-        </xsl:variable>
+        <xsl:variable name="topic-id" select="substring-before($topic-rest, '/')"/>
 
-        <xsl:variable name="element-id">
-            <xsl:value-of select="substring-after($topic-rest, '/')"/>
-        </xsl:variable>
+        <xsl:variable name="element-id" select="substring-after($topic-rest, '/')"/>
 
         <xsl:attribute name="href">
         <xsl:choose>
@@ -176,12 +170,8 @@ See the accompanying license.txt file for applicable licenses.
 	<xsl:template match="*[contains(@class,' map/topicref ')]/@href">
         <xsl:copy-of select="."/>
         <xsl:attribute name="id">
-            <xsl:variable name="fragmentId">
-            <xsl:value-of select="substring-after(.,'#')"/>
-            </xsl:variable>
-            <xsl:variable name="idcount">
-                <xsl:value-of select="count(../preceding::*[@href = current()][not(ancestor::*[contains(@class, ' map/reltable ')])]) + count(../ancestor::*[@href = current()])"/>
-            </xsl:variable>
+            <xsl:variable name="fragmentId" select="substring-after(.,'#')"/>
+            <xsl:variable name="idcount" select="count(../preceding::*[@href = current()][not(ancestor::*[contains(@class, ' map/reltable ')])]) + count(../ancestor::*[@href = current()])"/>
             <xsl:choose>
                 <xsl:when test="$idcount &gt; 0">
                         <xsl:value-of select="concat($fragmentId,'_ssol',$idcount)"/>

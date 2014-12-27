@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses. -->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <xsl:stylesheet 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
@@ -28,82 +27,42 @@
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
   version="2.0"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg" 
-  exclude-result-prefixes="ditamsg">
-  
-  <!-- =========== I18N RELATED TEMPLATES, ODT REUSES RESOURCE FILES OF XHTML===============-->
-    <!-- Deprecated: generate text directly instead -->
-    <xsl:template name="get-ascii">
-      <xsl:param name="txt"></xsl:param>
-      <xsl:value-of select="$txt"/>
-    </xsl:template>
-  <!-- Deprecated: use getString instead -->
-  <xsl:template name="getStringODT">
-    <xsl:param name="stringName"/>
-    <xsl:call-template name="getString">
-      <xsl:with-param name="stringName" select="$stringName"/>
-    </xsl:call-template>
-  </xsl:template>
-  
+  exclude-result-prefixes="ditamsg">  
   
   <!-- =========== TEMPLATES FOR CALCULATING NESTED TAGS 
       NOTE:SOME TAGS' NUMBER ARE MULTPLIED BY A NUMBER FOR FLAGGING STYLES.=========== -->
+  
   <xsl:template name="calculate_list_depth">
     <xsl:param name="list_class" select="' topic/li '"/>
-    
     <xsl:value-of select="count(ancestor::*[contains(@class, $list_class)])"/>
-    
   </xsl:template>
   
   <xsl:template name="calculate_span_depth_for_tag">
     <xsl:param name="tag_class" select="' topic/fn '"/>
     
-    <xsl:variable name="fig_count">
-      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/fig ')]) - 
-                             count(ancestor::*[contains(@class, $tag_class)][1]
-                            /ancestor::*[contains(@class, ' topic/fig ')])) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="fig_count" select="(count(ancestor::*[contains(@class, ' topic/fig ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/fig ')])) * 2"/>
     
-    <xsl:variable name="lq_count">
-      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/lq ')]) - 
-        count(ancestor::*[contains(@class, $tag_class)][1]
-        /ancestor::*[contains(@class, ' topic/lq ')])) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="lq_count" select="(count(ancestor::*[contains(@class, ' topic/lq ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/lq ')])) * 2"/>
     
-    <xsl:variable name="note_count">
-      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/note ')]) - 
-        count(ancestor::*[contains(@class, $tag_class)][1]
-        /ancestor::*[contains(@class, ' topic/note ')])) * 3"/>
-    </xsl:variable>
+    <xsl:variable name="note_count" select="(count(ancestor::*[contains(@class, ' topic/note ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/note ')])) * 3"/>
     
-    <xsl:variable name="itemgroup_count">
-      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/itemgroup ')]) - 
-                            count(ancestor::*[contains(@class, $tag_class)][1]
-                            /ancestor::*[contains(@class, ' topic/itemgroup ')])) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="itemgroup_count" select="(count(ancestor::*[contains(@class, ' topic/itemgroup ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/itemgroup ')])) * 2"/>
     
-    <xsl:variable name="p_count">
-      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/p ')]) - 
-        count(ancestor::*[contains(@class, $tag_class)][1]
-        /ancestor::*[contains(@class, ' topic/p ')])) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="p_count" select="(count(ancestor::*[contains(@class, ' topic/p ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/p ')])) * 2"/>
     
-    <xsl:variable name="draft-comment_count">
-      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/draft-comment ')]) - 
-                            count(ancestor::*[contains(@class, $tag_class)][1]
-                            /ancestor::*[contains(@class, ' topic/draft-comment ')])) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="draft-comment_count" select="(count(ancestor::*[contains(@class, ' topic/draft-comment ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/draft-comment ')])) * 2"/>
     
-    <xsl:variable name="required-cleanup_count">
-      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) - 
-                            count(ancestor::*[contains(@class, $tag_class)][1]
-                            /ancestor::*[contains(@class, ' topic/required-cleanup ')])) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="required-cleanup_count" select="(count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/required-cleanup ')])) * 2"/>
     
-    <xsl:variable name="dd_count">
-      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/dd ')]) - 
-                            count(ancestor::*[contains(@class, $tag_class)][1]
-                            /ancestor::*[contains(@class, ' topic/dd ')])) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="dd_count" select="(count(ancestor::*[contains(@class, ' topic/dd ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/dd ')])) * 2"/>
     
     <!-- sthead/thead count important! -->
     <xsl:variable name="thead_count">
@@ -118,19 +77,9 @@
       </xsl:choose>
     </xsl:variable>
     
-    <!-- thead count important! -->
-    <!-- 
-    <xsl:variable name="thead_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/thead ')]) - 
-        count(ancestor::*[contains(@class, $tag_class)][1]
-        /ancestor::*[contains(@class, ' topic/thead ')])"/>
-    </xsl:variable>
-    -->
-    
-    <xsl:variable name="total_count" select="$fig_count + $lq_count + 
-      $note_count + $itemgroup_count + $p_count + $draft-comment_count + 
+    <xsl:variable name="total_count" select="$fig_count + $lq_count +
+      $note_count + $itemgroup_count + $p_count + $draft-comment_count +
       $required-cleanup_count + $dd_count + $thead_count"/>
-    
     
     <xsl:choose>
       <!-- fn is rendered as text:p plus flagging styles-->
@@ -142,83 +91,45 @@
         <xsl:value-of select="$total_count - 1"/>
       </xsl:otherwise>
     </xsl:choose>
-    
-    
   </xsl:template>
   
   <xsl:template name="calculate_span_depth">
-    <xsl:variable name="desc_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/desc ')])"/>
-    </xsl:variable>
+    <xsl:variable name="desc_count" select="count(ancestor::*[contains(@class, ' topic/desc ')])"/>
     
-    <xsl:variable name="fig_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fig ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="fig_count" select="count(ancestor::*[contains(@class, ' topic/fig ')]) * 2"/>
     
-    <xsl:variable name="figgroup_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/figgroup ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="figgroup_count" select="count(ancestor::*[contains(@class, ' topic/figgroup ')]) * 2"/>
     
-    <xsl:variable name="lq_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/lq ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="lq_count" select="count(ancestor::*[contains(@class, ' topic/lq ')]) * 2"/>
     
-    <xsl:variable name="lines_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/lines ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="lines_count" select="count(ancestor::*[contains(@class, ' topic/lines ')]) * 2"/>
+
+    <!-- Add 1 for flagging sytles -->
+    <xsl:variable name="note_count" select="count(ancestor::*[contains(@class, ' topic/note ')]) * 3"/>
     
-    <xsl:variable name="note_count">
-      <!-- Add 1 for flagging sytles -->
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/note ')]) * 3"/>
-    </xsl:variable>
+    <xsl:variable name="p_count" select="count(ancestor::*[contains(@class, ' topic/p ')]) * 2"/>
     
-    <xsl:variable name="p_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/p ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="ph_count" select="count(ancestor::*[contains(@class, ' topic/ph ')]) * 2"/>
     
-    <xsl:variable name="ph_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/ph ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="pre_count" select="count(ancestor::*[contains(@class, ' topic/pre ')]) * 2"/>
     
-    <xsl:variable name="pre_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/pre ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="draft-comment_count" select="count(ancestor::*[contains(@class, ' topic/draft-comment ')]) * 2"/>
     
-    <xsl:variable name="draft-comment_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/draft-comment ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="required-cleanup_count" select="count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) * 2"/>
     
-    <xsl:variable name="required-cleanup_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="itemgroup_count" select="count(ancestor::*[contains(@class, ' topic/itemgroup ')]) * 2"/>
     
-    <xsl:variable name="itemgroup_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/itemgroup ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="dd_count" select="count(ancestor::*[contains(@class, ' topic/dd ')]) * 2"/>
     
-    <xsl:variable name="dd_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/dd ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="fn_count" select="count(ancestor::*[contains(@class, ' topic/fn ')]) * 2"/>
     
-    <xsl:variable name="fn_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fn ')]) * 2"/>
-    </xsl:variable>
+    <xsl:variable name="abstract_count" select="count(ancestor::*[contains(@class, ' topic/abstract ')])"/>
     
-    <xsl:variable name="abstract_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/abstract ')])"/>
-    </xsl:variable>
+    <xsl:variable name="bodydiv_count" select="count(ancestor::*[contains(@class, ' topic/bodydiv ')])"/>
     
-    <xsl:variable name="bodydiv_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/bodydiv ')])"/>
-    </xsl:variable>
+    <xsl:variable name="section_count" select="count(ancestor::*[contains(@class, ' topic/section ')]) * 2"/>
     
-    <xsl:variable name="section_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/section ')]) * 2"/>
-    </xsl:variable>
-    
-    <xsl:variable name="sectiondiv_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/sectiondiv ')])"/>
-    </xsl:variable>
+    <xsl:variable name="sectiondiv_count" select="count(ancestor::*[contains(@class, ' topic/sectiondiv ')])"/>
     
     <xsl:variable name="example_count">
       <xsl:choose>
@@ -229,25 +140,15 @@
       </xsl:choose>
     </xsl:variable>
     
-    <xsl:variable name="linkinfo_count">
-      <!-- 
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/linkinfo ')])"/>
-      -->
-      <xsl:value-of select="0"/>
-    </xsl:variable>
+    <xsl:variable name="linkinfo_count" select="0"/>
     
+    <xsl:variable name="related-links_count" select="count(ancestor::*[contains(@class, ' topic/related-links ')])"/>
     
-    <xsl:variable name="related-links_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/related-links ')])"/>
-    </xsl:variable>
+    <xsl:variable name="pd_count" select="count(ancestor::*[contains(@class, ' topic/pd ')])"/>
     
-    <xsl:variable name="pd_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/pd ')])"/>
-    </xsl:variable>
-    
-    <xsl:variable name="total_count" select="$desc_count + $fig_count + $figgroup_count 
-      + $lq_count + $lines_count + $note_count + $p_count + $ph_count + $pre_count + $draft-comment_count + $required-cleanup_count 
-      + $itemgroup_count + $dd_count + $fn_count + $abstract_count + $bodydiv_count + $section_count + $sectiondiv_count 
+    <xsl:variable name="total_count" select="$desc_count + $fig_count + $figgroup_count
+      + $lq_count + $lines_count + $note_count + $p_count + $ph_count + $pre_count + $draft-comment_count + $required-cleanup_count
+      + $itemgroup_count + $dd_count + $fn_count + $abstract_count + $bodydiv_count + $section_count + $sectiondiv_count
       + $example_count + $linkinfo_count + $related-links_count + $pd_count"/>
     
     <!-- remove the first one rendered by text:p -->
@@ -331,9 +232,8 @@
   </xsl:template>
   
   <xsl:template name="render_simpletable">
-    <xsl:variable name="dlentry_count_for_list" select="count(ancestor::*[contains(@class, ' topic/dlentry ')]) - 
-      count(ancestor::*[contains(@class, ' topic/li ')][1]
-      /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
+    <xsl:variable name="dlentry_count_for_list" select="count(ancestor::*[contains(@class, ' topic/dlentry ')]) -
+      count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*[contains(@class, ' topic/dlentry ')])"/>
     
     <xsl:variable name="fn_depth" select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
     
@@ -673,9 +573,7 @@
   
   
   <xsl:template name="render_table">
-    <xsl:variable name="dlentry_count_for_list" select="count(ancestor::*[contains(@class, ' topic/dlentry ')]) - 
-      count(ancestor::*[contains(@class, ' topic/li ')][1]
-      /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
+    <xsl:variable name="dlentry_count_for_list" select="count(ancestor::*[contains(@class, ' topic/dlentry ')]) -        count(ancestor::*[contains(@class, ' topic/li ')][1]       /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
     
     <xsl:variable name="fn_depth" select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
     
@@ -1048,10 +946,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1064,10 +961,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1080,10 +976,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1096,10 +991,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1119,10 +1013,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1156,10 +1049,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1194,10 +1086,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1230,10 +1121,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1266,10 +1156,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1299,10 +1188,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1332,10 +1220,9 @@
           <xsl:with-param name="family" select="'_list'"/>
         </xsl:apply-templates>
         <!-- start render list -->
-        <xsl:element name="text:list">
-          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+        <text:list text:style-name="{$list_style}">
           <xsl:apply-templates/>
-        </xsl:element>
+        </text:list>
         <!-- end flagging -->
         <xsl:apply-templates select="." mode="end-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1393,7 +1280,7 @@
     
     <xsl:choose>
       <xsl:when test="@href and not(@href='')">
-        <xsl:element name="text:a">
+        <text:a>
           <xsl:choose>
             <xsl:when test="$samefile='true'">
               <xsl:attribute name="xlink:href">
@@ -1410,9 +1297,9 @@
           <xsl:call-template name="gen-linktxt"/>
           <xsl:if test="contains(@class,' topic/link ')">
             <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
-            <xsl:element name="text:line-break"/>
+            <text:line-break/>
           </xsl:if>
-        </xsl:element>
+        </text:a>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="output-message">

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
- Sourceforge.net. See the accompanying license.txt file for 
- applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses. -->
 <!-- (c) Copyright IBM Corp. 2007, 2009 All Rights Reserved. -->
 <!-- Updates:
      20090421 robander: Updated so that "flagrules" in all templates
@@ -71,17 +70,13 @@
  -->
 
 <xsl:template name="getrules">
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
+  <xsl:variable name="domains" select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   <xsl:variable name="tmp_props">
     <xsl:call-template name="getExtProps">
       <xsl:with-param name="domains" select="$domains"/>
     </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="props">
-    <xsl:value-of select="substring-after($tmp_props, ',')"/>
-  </xsl:variable>
+  <xsl:variable name="props" select="substring-after($tmp_props, ',')"/>
  <!-- Test for the flagging attributes. If found, call 'gen-prop' with the values to use. Otherwise return -->
   <xsl:if test="@audience and not($FILTERFILE='')">
   <xsl:call-template name="gen-prop">
@@ -247,9 +242,7 @@
 <!-- No flagging attrs allowed to process in phrases - output a message when in debug mode. -->
 <xsl:template name="flagcheck">
   
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
+  <xsl:variable name="domains" select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, 'a(props')">
       <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
@@ -330,9 +323,7 @@
   </xsl:template>
 
 <xsl:template name="getrules-parent">
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
+  <xsl:variable name="domains" select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, 'a(props')">
       <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
@@ -549,8 +540,8 @@
    <xsl:when test="string-length($moreflags)>0">
     <!-- more values - call it again with remaining values -->
     <xsl:call-template name="gen-prop">
-     <xsl:with-param name="flag-att"><xsl:value-of select="$flag-att"/></xsl:with-param>
-     <xsl:with-param name="flag-att-val"><xsl:value-of select="$moreflags"/></xsl:with-param>
+     <xsl:with-param name="flag-att" select="$flag-att"/>
+     <xsl:with-param name="flag-att-val" select="$moreflags"/>
     </xsl:call-template>
    </xsl:when>
    <xsl:otherwise/> <!-- no more values -->
@@ -568,9 +559,7 @@
      <xsl:param name="cvffilename" select="@source"/>
      <xsl:param name="childnodes"/>
     <!--get the location of dita.xml.properties-->
-    <xsl:variable name="INITIAL-PROPERTIES-FILE">
-     <xsl:value-of select="translate(concat($WORKDIR , $PATH2PROJ , 'subject_scheme.dictionary'), '\', '/')"/>
-    </xsl:variable>
+    <xsl:variable name="INITIAL-PROPERTIES-FILE" select="translate(concat($WORKDIR , $PATH2PROJ , 'subject_scheme.dictionary'), '\', '/')"/>
   
     <xsl:variable name="PROPERTIES-FILE">
      <xsl:choose>
@@ -598,34 +587,14 @@
           <xsl:variable name="submfile">
               <xsl:value-of select="$cvffilename"/><xsl:text>.subm</xsl:text>
           </xsl:variable>
-          <xsl:variable name="cvffilepath">
-               <xsl:value-of select="concat($WORKDIR,$PATH2PROJ,$submfile)"/>
-          </xsl:variable>
+          <xsl:variable name="cvffilepath" select="concat($WORKDIR,$PATH2PROJ,$submfile)"/>
      <xsl:if test="document($cvffilepath,/)//*[@keys=$value]//*[@keys=$flag]">
          <!-- copy the child node for flag and just copy the first element whose keys=$flag-->
       <!--xsl:for-each select="document($cvffilepath,/)//*[@keys=$value]/*"-->
       <xsl:for-each select="document($cvffilepath,/)//*[@keys=$value]//*[@keys=$flag][1]">
-            <xsl:element name="prop">
-             <xsl:attribute name="att">
-              <xsl:value-of select="$att"/>
-             </xsl:attribute>
-             <xsl:attribute name="val">
-              <xsl:value-of select="@keys"/>
-             </xsl:attribute>
-             <xsl:attribute name="action">
-              <xsl:value-of select="'flag'"/>
-             </xsl:attribute>
-             <xsl:attribute name="backcolor">
-              <xsl:value-of select="$bgcolor"/>
-             </xsl:attribute>
-             <xsl:attribute name="color">
-              <xsl:value-of select="$fcolor"/>
-             </xsl:attribute>
-             <xsl:attribute name="style">
-              <xsl:value-of select="$style"/>
-             </xsl:attribute>
+            <prop att="{$att}" val="{@keys}" action="{'flag'}" backcolor="{$bgcolor}" color="{$fcolor}" style="{$style}">
              <xsl:copy-of select="$childnodes"/>
-            </xsl:element>
+            </prop>
            </xsl:for-each>
      </xsl:if>
   </xsl:if>
@@ -1199,7 +1168,7 @@
      <xsl:when test="string-length($morerevs)>0">
       <!-- more values - call it again with remaining values -->
       <xsl:call-template name="find-active-rev-flag">
-       <xsl:with-param name="allrevs"><xsl:value-of select="$morerevs"/></xsl:with-param>
+       <xsl:with-param name="allrevs" select="$morerevs"/>
       </xsl:call-template>
      </xsl:when>
      <xsl:otherwise> <!-- no more values - none found -->
@@ -1252,7 +1221,7 @@
      <xsl:when test="string-length($morerevs)>0">
       <!-- more values - call it again with remaining values -->
       <xsl:call-template name="find-active-rev-style">
-       <xsl:with-param name="allrevs"><xsl:value-of select="$morerevs"/></xsl:with-param>
+       <xsl:with-param name="allrevs" select="$morerevs"/>
       </xsl:call-template>
      </xsl:when>
      <xsl:otherwise/> <!-- no more values - none found -->
