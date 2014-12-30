@@ -100,8 +100,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private URI rootDir = null;
     /** Absolute system path to file being processed */
     private URI currentFile = null;
-    /** Absolute system path to input file */
-    private URI rootFilePath = null;
     /** Stack for @processing-role value */
     private final Stack<String> processRoleStack;
     /** Depth inside a @processing-role parent */
@@ -393,16 +391,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         this.rootDir = inputDir;
     }
 
-    
-    /**
-     * Set processing input file absolute path.
-     * 
-     * @param inputFile absolute path to root file
-     */
-    public void setInputFile(final URI inputFile) {
-        this.rootFilePath = inputFile;
-    }
-    
     /**
      * Set current file absolute path
      * 

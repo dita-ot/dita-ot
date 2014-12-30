@@ -265,7 +265,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private void initFilters() {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
-        listFilter.setInputFile(rootFile);
         listFilter.setInputDir(rootFile.resolve("."));
         listFilter.setPrimaryDitamap(rootFile);
         listFilter.setJob(job);
@@ -646,7 +645,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final String lcasefn = file.filename.toString().toLowerCase();
 
         // avoid files referred by coderef being added into wait list
-        if (subsidiarySet.contains(toFile(file.filename))) {
+        if (subsidiarySet.contains(file.filename)) {
             return;
         }
         if (file.format == null || ATTR_FORMAT_VALUE_DITA.equals(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {

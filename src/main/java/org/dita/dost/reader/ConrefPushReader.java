@@ -90,11 +90,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
     	return Collections.unmodifiableMap(pushtable);
     }
     
-    /**
-     * @param filename filename
-     */
     @Override
     public void read(final File filename) {
+        assert filename.isAbsolute();
         fileDir = filename.getParentFile().getAbsoluteFile();
         parsefilename = new File(filename.getName());
         start = false;

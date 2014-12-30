@@ -72,7 +72,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
                 logger.info("Processing " + file.getAbsolutePath());
 
                 subjectSchemeReader.reset();
-                final Set<URI> schemaSet = dic.get(f.file);
+                final Set<URI> schemaSet = dic.get(f.uri);
                 if (schemaSet != null && !schemaSet.isEmpty()) {
                     logger.info("Loading subject schemes");
                     for (final URI schema : schemaSet) {

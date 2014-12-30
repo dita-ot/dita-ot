@@ -98,7 +98,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	        domains.addFirst(domains.peekFirst());
 	    } 
 		AttributesImpl modified = null;
-		modified = validateLang(atts, modified);
+		modified = validateLang(atts, null);
 		validateId(atts);
 		modified = validateHref(atts, modified);
         modified = processFormatDitamap(atts, modified);

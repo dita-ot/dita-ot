@@ -79,8 +79,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     /** Absolute DITA-OT base path. */
     private File ditaDir;
     private File ditavalFile;
-    /** Absolute input directory path. */
-    private File inputDir;
     private FilterUtils filterUtils;
     /** Absolute path to current destination file. */
     private File outputFile;
@@ -334,7 +332,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         final String mode = input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
         processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
 
-        inputDir = job.getInputDir();
+        // Absolute input directory path
+        File inputDir = job.getInputDir();
         if (!inputDir.isAbsolute()) {
             inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
         }
