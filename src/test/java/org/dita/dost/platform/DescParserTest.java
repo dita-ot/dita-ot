@@ -18,6 +18,7 @@ import org.dita.dost.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 public class DescParserTest {
@@ -28,6 +29,7 @@ public class DescParserTest {
     @Before
     public void setUp() throws Exception {
         p.setPluginDir(resourceDir);
+        p.setContentHandler(new DefaultHandler());
         final XMLReader parser = XMLReaderFactory.createXMLReader();
         parser.setContentHandler(p);
         parser.parse(new File(resourceDir, "plugin.xml").toURI().toString());
