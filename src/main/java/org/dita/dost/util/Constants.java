@@ -56,6 +56,8 @@ public final class Constants {
     /**.pdf extension.*/
     public static final String FILE_EXTENSION_PDF = ".pdf";
 
+    public static final String RESOURCES_DIR = "resources";
+
     public static final DitaClass ABBREV_D_ABBREVIATED_FORM = new DitaClass("+ topic/term abbrev-d/abbreviated-form ");
     public static final DitaClass BOOKMAP_ABBREVLIST = new DitaClass("- map/topicref bookmap/abbrevlist ");
     public static final DitaClass BOOKMAP_AMENDMENTS = new DitaClass("- map/topicref bookmap/amendments ");

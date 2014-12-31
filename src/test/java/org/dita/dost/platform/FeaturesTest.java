@@ -32,7 +32,7 @@ public class FeaturesTest {
 
     @Test
     public void testGetLocation() {
-        assertEquals(new File("base", "plugins"), new Features(new File("base", "plugins"), new File("base")).getLocation());
+        assertEquals(new File("base", "plugins"), new Features(new File("base", "plugins"), new File("base")).getPluginDir());
     }
 
     @Test

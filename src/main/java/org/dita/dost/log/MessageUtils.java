@@ -8,6 +8,8 @@
  */
 package org.dita.dost.log;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -39,7 +41,7 @@ public final class MessageUtils {
     private static final String ATTRIBUTE_ID = "id";
     private static final String ATTRIBUTE_TYPE = "type";
     private static final String CLASSPATH_RESOURCE = "messages.xml";
-    private static final String RESOURCE = "resources/messages.xml";
+    private static final String RESOURCE = RESOURCES_DIR + "/" + CLASSPATH_RESOURCE;
 
     // Variables
 

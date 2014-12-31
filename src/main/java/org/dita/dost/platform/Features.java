@@ -30,7 +30,7 @@ import org.dita.dost.util.FileUtils;
 final class Features {
 
     private String id;
-    private final File location;
+    private final File pluginDir;
     private final File ditaDir;
     private final Map<String, ExtensionPoint> extensionPoints;
     private final Hashtable<String,List<String>> featureTable;
@@ -39,12 +39,12 @@ final class Features {
     private final List<String> templateList;
 
     /**
-     * Constructor init location.
-     * @param location location
+     * Constructor init pluginDir.
+     * @param pluginDir absolute plugin directory path
      * @param ditaDir base directory
      */
-    public Features(final File location, final File ditaDir) {
-        this.location = location;
+    public Features(final File pluginDir, final File ditaDir) {
+        this.pluginDir = pluginDir;
         this.ditaDir = ditaDir;
         extensionPoints= new HashMap<String, ExtensionPoint>();
         featureTable = new Hashtable<String, List<String>>(16);
@@ -54,11 +54,11 @@ final class Features {
     }
 
     /**
-     * Return the feature location.
-     * @return location
+     * Return the feature pluginDir.
+     * @return pluginDir
      */
-    public File getLocation(){
-        return location;
+    public File getPluginDir(){
+        return pluginDir;
     }
 
     /**
@@ -124,7 +124,7 @@ final class Features {
      * @param id feature id
      * @param attributes configuration element attributes
      */
-    public final void addFeature(final String id, final Attributes attributes){
+    public final void addFeature(final String id, final Attributes attributes) {
         boolean isFile;
         String value = attributes.getValue("file");
         if (value != null) {
@@ -138,11 +138,11 @@ final class Features {
         if (featureTable.containsKey(id)) {
             valueBuffer.addAll(featureTable.get(id));
         }
-        while(valueTokenizer.hasMoreElements()){
+        while (valueTokenizer.hasMoreElements()) {
             final String valueElement = valueTokenizer.nextToken();
-            if(valueElement!=null && valueElement.trim().length() != 0){
-                if(isFile && !FileUtils.isAbsolutePath(valueElement)){
-                    valueBuffer.add(location + File.separator + valueElement.trim());
+            if (valueElement != null && valueElement.trim().length() != 0) {
+                if (isFile && !FileUtils.isAbsolutePath(valueElement)) {
+                    valueBuffer.add(pluginDir + File.separator + valueElement.trim());
                 } else {
                     valueBuffer.add(valueElement.trim());
                 }

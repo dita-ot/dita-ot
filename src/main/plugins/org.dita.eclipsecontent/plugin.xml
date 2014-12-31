@@ -7,7 +7,9 @@
   <!-- extension points -->
   <extension-point id="dita.xsl.dynamicdita" name="Dynamic DITA XSLT import"/>
   <!-- extensions -->
-  <feature extension="dita.conductor.transtype.check" value="eclipsecontent"/>
+  <transtype name="eclipsecontent">
+    <param name="args.eclipsecontent.toc" desc="Specifies the name of the TOC file." type="file"/>
+  </transtype>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <template file="xsl/dita2dynamicdita_template.xsl"/>
 </plugin>

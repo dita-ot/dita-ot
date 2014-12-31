@@ -45,6 +45,7 @@
     <jar destfile="${basedir}/lib/dost-configuration.jar">
       <fileset dir="${basedir}/resources">
         <include name="messages.xml"/>
+        <include name="plugins.xml"/>
       </fileset>
       <fileset dir="${basedir}/lib">
         <include name="configuration.properties"/>

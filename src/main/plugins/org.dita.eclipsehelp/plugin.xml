@@ -10,7 +10,20 @@
   <extension-point id="dita.xsl.eclipse.toc" name="Eclipse TOC XSLT import"/>
   <extension-point id="dita.conductor.eclipse.toc.param" name="Eclipse Help TOC XSLT parameter"/>
   <!-- extensions -->
-  <feature extension="dita.conductor.transtype.check" value="eclipsehelp"/>
+  <transtype name="eclipsehelp" extends="base-html">
+    <param name="args.eclipsehelp.toc" desc="Specifies the name of the TOC file." type="file"/>
+    <param name="args.eclipsehelp.country" desc="Specifies the region for the language that is specified by the args." type="string"/> 
+    <param name="args.eclipsehelp.language" desc="Specifies the base language for translated content, such as en for English." type="string"/> 
+    <param name="args.eclipse.provider" desc="Specifies the name of the person or organization that provides the Eclipse help." type="string">
+      <val default="true">DITA</val>
+    </param>
+    <param name="args.eclipse.version" desc="Specifies the version number to include in the output." type="string">
+      <val default="true">0.0.0</val>
+    </param>
+    <param name="args.eclipse.symbolic.name" desc="Specifies the symbolic name (aka plugin ID) in the output for an Eclipse Help project." type="string">
+      <val default="true">org.sample.help.doc</val>
+    </param>
+  </transtype>
   <require plugin="org.dita.xhtml"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <template file="build_dita2eclipsehelp_template.xml"/>

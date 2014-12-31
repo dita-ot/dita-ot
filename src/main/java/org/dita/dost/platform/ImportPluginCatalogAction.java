@@ -41,13 +41,13 @@ final class ImportPluginCatalogAction extends ImportAction {
             final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
             if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
                 location.append("./");
-            } else if (f.getLocation().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
+            } else if (f.getPluginDir().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
                 location.append(
                         FileUtils.getRelativeUnixPath(
                                 new File(f.getDitaDir(), "plugin.xml").toURI().toString(),
-                                f.getLocation().toURI().toString()));
+                                f.getPluginDir().toURI().toString()));
             } else {
-                location.append(f.getLocation().toURI().toString());
+                location.append(f.getPluginDir().toURI().toString());
             }
             if (location.length() > 0 && !location.substring(location.length() - 1).equals(UNIX_SEPARATOR)) {
                 location.append(UNIX_SEPARATOR);
