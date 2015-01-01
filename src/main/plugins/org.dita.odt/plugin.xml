@@ -7,7 +7,7 @@
   <!-- extension points -->
   <extension-point id="dita.xsl.odt" name="ODT XSLT import"/>
   <!-- extensions -->
-  <transtype name="odt">
+  <transtype name="odt" desc="ODT">
     <param name="args.odt.img.embed" desc="Determines whether images are embedded as binary objects within the ODT file." type="enum">
       <val default="true">yes</val>
       <val>no</val>

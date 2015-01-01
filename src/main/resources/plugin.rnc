@@ -14,7 +14,8 @@ transtype =
   element transtype {
     attribute name {
       list { xsd:NCName+ }
-    }?,
+    },
+    attribute desc { text }?,
     attribute abstract { xsd:boolean }?,
     attribute extends {
       list { xsd:NCName+ }

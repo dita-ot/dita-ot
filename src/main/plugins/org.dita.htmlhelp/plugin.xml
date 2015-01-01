@@ -8,7 +8,7 @@
   <extension-point id="dita.xsl.htmlhelp.map2hhp" name="HTML Help project XSLT import"/>
   <extension-point id="dita.xsl.htmlhelp.map2hhc" name="HTML Help content XSLT import"/>
   <!-- extensions -->
-  <transtype name="htmlhelp" extends="base-html">
+  <transtype name="htmlhelp" extends="base-html" desc="HTMLHelp">
     <param name="args.htmlhelp.includefile" desc="Specifies the name of a file that you want included in the HTML Help." type="file"/>
   </transtype>
   <require plugin="org.dita.xhtml"/>
