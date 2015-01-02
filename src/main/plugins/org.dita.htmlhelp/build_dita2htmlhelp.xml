@@ -141,10 +141,10 @@
 
   <target name="dita.htmlhelp.convertlang">
     <taskdef name="check-lang" classname="org.dita.dost.util.CheckLang">
-      <classpath refid="dost.jar.path"/>
+      <classpath refid="dost.class.path"/>
     </taskdef>
     <taskdef name="convert-lang" classname="org.dita.dost.util.ConvertLang">
-      <classpath refid="dost.jar.path"/>
+      <classpath refid="dost.class.path"/>
     </taskdef>
     <check-lang message="Check Language"
                 basedir="${basedir}"

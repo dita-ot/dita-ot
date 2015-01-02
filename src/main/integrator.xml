@@ -26,7 +26,8 @@
   </condition>
   
   <path id="dost.class.path">
-    <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost-configuration.jar"/>
   </path>
   
   <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
@@ -42,9 +43,13 @@
     <integrate ditadir="${dita.dir}" strict="${strict}"/>
     <!-- place property files into a JAR so Ant will find them -->
     <jar destfile="${basedir}/lib/dost-configuration.jar">
+      <fileset dir="${basedir}/resources">
+        <include name="messages.xml"/>
+        <include name="plugins.xml"/>
+      </fileset>
       <fileset dir="${basedir}/lib">
         <include name="configuration.properties"/>
-        <include name="CatalogManager.properties"/>
+        <!--include name="CatalogManager.properties"/-->
         <include name="org.dita.dost.platform/plugin.properties"/>
       </fileset>
     </jar>
@@ -98,10 +103,11 @@
     <unzip src="${plugin.file}" dest="${dita.temp.dir}"/>
   </target>
   <target name="install.download" unless="install.file.exists">
-    <basename property="install.downlaod.file" file="${plugin.file}"/>
-    <get src="${plugin.file}" dest="${dita.temp.dir}/${install.downlaod.file}" ignoreerrors="false" verbose="on"/>
-    <unzip src="${dita.temp.dir}/${install.downlaod.file}" dest="${dita.temp.dir}"/>
-    <delete file="${dita.temp.dir}/${install.downlaod.file}"/>
+    <tempfile property="install.download.file.abs" destdir="${dita.temp.dir}" suffix=".zip"/>
+    <basename property="install.download.file" file="${install.download.file.abs}"/>
+    <get src="${plugin.file}" dest="${dita.temp.dir}/${install.download.file}" ignoreerrors="false" verbose="on"/>
+    <unzip src="${dita.temp.dir}/${install.download.file}" dest="${dita.temp.dir}"/>
+    <delete file="${dita.temp.dir}/${install.download.file}"/>
   </target>
   
   <target name="uninstall" description="Uninstall plug-in">

@@ -452,7 +452,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
   <xsl:choose>
     <xsl:when test="normalize-space(@href)='' or not(@href)"/>
     <!-- For non-DITA formats - use the href as is -->
-    <xsl:when test="(not(@format) and (@type='external' or @scope='external')) or (@format and not(@format='dita' or @format='DITA'))">
+    <xsl:when test="(not(@format) and (@type='external' or @scope='external')) or (@format and not(@format='dita'))">
       <xsl:value-of select="@href"/>
     </xsl:when>
     <!-- For DITA - process the internal href -->
@@ -463,7 +463,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
     </xsl:when>
     <!-- It's to a DITA file - process the file name (adding the html extension)
     and process the rest of the href -->
-    <xsl:when test="(not(@scope) or @scope='local' or @scope='peer') and (not(@format) or @format='dita' or @format='DITA')">
+    <xsl:when test="(not(@scope) or @scope='local' or @scope='peer') and (not(@format) or @format='dita')">
       <xsl:call-template name="replace-extension">
         <xsl:with-param name="filename" select="@href"/>
         <xsl:with-param name="extension" select="$OUTEXT"/>

@@ -18,8 +18,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -28,7 +26,7 @@ import javax.xml.transform.dom.DOMResult;
 
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
@@ -44,16 +42,7 @@ import org.xml.sax.XMLReader;
  *
  */
 public final class ConrefPushReader extends AbstractXMLReader {
-    
-    /** Conaction mark value */
-    public static final String ATTR_CONACTION_VALUE_MARK = "mark";
-    /** Conaction push after value */
-    public static final String ATTR_CONACTION_VALUE_PUSHAFTER = "pushafter";
-    /** Conaction push before value */
-    public static final String ATTR_CONACTION_VALUE_PUSHBEFORE = "pushbefore";
-    /** Conaction push replace value */
-    public static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
-    
+
     /** push table.*/
     private final Hashtable<File, Hashtable<MoveKey, DocumentFragment>> pushtable;
     /** Document used to construct push table DocumentFragments. */
@@ -101,11 +90,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
     	return Collections.unmodifiableMap(pushtable);
     }
     
-    /**
-     * @param filename filename
-     */
     @Override
     public void read(final File filename) {
+        assert filename.isAbsolute();
         fileDir = filename.getParentFile().getAbsoluteFile();
         parsefilename = new File(filename.getName());
         start = false;
@@ -113,8 +100,11 @@ public final class ConrefPushReader extends AbstractXMLReader {
         pushType = null;
         try{
             reader.parse(filename.toURI().toString());
+        } catch (final RuntimeException e) {
+            throw e;
         }catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
+            e.printStackTrace();
         }
     }
     
@@ -135,20 +125,15 @@ public final class ConrefPushReader extends AbstractXMLReader {
     public ConrefPushReader() {
         pushtable = new Hashtable<File, Hashtable<MoveKey,DocumentFragment>>();
         try{
-            reader = StringUtils.getXMLReader();
-            reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+            reader = XMLUtils.getXMLReader();
+            reader.setFeature(FEATURE_NAMESPACE_PREFIX, false);
             reader.setFeature(FEATURE_NAMESPACE, true);
             reader.setContentHandler(this);
         }catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
 
-        DocumentBuilder documentBuilder;
-        try {
-            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-        }
+        final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
         pushDocument = documentBuilder.newDocument();
     }
 
@@ -282,7 +267,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
                         // adjust href for pushbefore and replace
                         value = replaceURL(value);
                     }
-                    pushcontentWriter.writeAttribute(name,  value);
+                    final int offset = atts.getQName(index).indexOf(":");
+                    final String prefix = offset != -1 ? atts.getQName(index).substring(0, offset) : "";
+                    pushcontentWriter.writeAttribute(prefix, atts.getURI(index), atts.getLocalName(index), value);
                 }
     
             }
@@ -304,7 +291,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                         id = fragment;
                     }
                     //add id attribute
-                    pushcontentWriter.writeAttribute(ATTRIBUTE_NAME_ID,  id);
+                    pushcontentWriter.writeAttribute(ATTRIBUTE_NAME_ID, id);
                 }
             }
         } catch (final XMLStreamException e) {

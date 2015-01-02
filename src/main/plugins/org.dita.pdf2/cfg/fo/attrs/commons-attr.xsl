@@ -39,27 +39,27 @@ See the accompanying license.txt file for applicable licenses.
   <!-- common attribute sets -->
 
   <xsl:attribute-set name="common.border__top">
-    <xsl:attribute name="border-top-style">solid</xsl:attribute>
-    <xsl:attribute name="border-top-width">1pt</xsl:attribute>
-    <xsl:attribute name="border-top-color">black</xsl:attribute>
+    <xsl:attribute name="border-before-style">solid</xsl:attribute>
+    <xsl:attribute name="border-before-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-before-color">black</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="common.border__bottom">
-    <xsl:attribute name="border-bottom-style">solid</xsl:attribute>
-    <xsl:attribute name="border-bottom-width">1pt</xsl:attribute>
-    <xsl:attribute name="border-bottom-color">black</xsl:attribute>
+    <xsl:attribute name="border-after-style">solid</xsl:attribute>
+    <xsl:attribute name="border-after-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-after-color">black</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="common.border__right">
-    <xsl:attribute name="border-right-style">solid</xsl:attribute>
-    <xsl:attribute name="border-right-width">1pt</xsl:attribute>
-    <xsl:attribute name="border-right-color">black</xsl:attribute>
+    <xsl:attribute name="border-end-style">solid</xsl:attribute>
+    <xsl:attribute name="border-end-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-end-color">black</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="common.border__left">
-    <xsl:attribute name="border-left-style">solid</xsl:attribute>
-    <xsl:attribute name="border-left-width">1pt</xsl:attribute>
-    <xsl:attribute name="border-left-color">black</xsl:attribute>
+    <xsl:attribute name="border-start-style">solid</xsl:attribute>
+    <xsl:attribute name="border-start-width">1pt</xsl:attribute>
+    <xsl:attribute name="border-start-color">black</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="common.border" use-attribute-sets="common.border__top common.border__right common.border__bottom common.border__left"/>
@@ -107,8 +107,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="source">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="topic.title" use-attribute-sets="common.title">
-    <xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
+    <xsl:attribute-set name="topic.title" use-attribute-sets="common.title common.border__bottom">
+    <xsl:attribute name="border-after-width">3pt</xsl:attribute>
         <xsl:attribute name="space-before">0pt</xsl:attribute>
         <xsl:attribute name="space-after">16.8pt</xsl:attribute>
         <xsl:attribute name="font-size">18pt</xsl:attribute>
@@ -378,6 +378,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="note__label__warning">
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="note__label__trouble">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="note__label__other">
@@ -661,6 +664,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="__fo__root" use-attribute-sets="base-font">
         <xsl:attribute name="font-family">serif</xsl:attribute>
+        <!-- TODO: https://issues.apache.org/jira/browse/FOP-2409 -->
         <xsl:attribute name="xml:lang" select="translate($locale, '_', '-')"/>
         <xsl:attribute name="writing-mode" select="$writing-mode"/>
     </xsl:attribute-set>
@@ -668,7 +672,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__force__page__count">
         <xsl:attribute name="force-page-count">
             <xsl:choose>
-                <xsl:when test="name(/*) = 'bookmap'">
+                <xsl:when test="/*[contains(@class, ' bookmap/bookmap ')]">
                     <xsl:value-of select="'even'"/>
                 </xsl:when>
                 <xsl:otherwise>

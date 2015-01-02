@@ -3,7 +3,7 @@
      See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole binary package for DITA Open Toolkit -->
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="build_DITA-OT_package" default="dist" basedir=".">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="build_DITA-OT_package" default="build" basedir=".">
   <description>Build binary packages for DITA Open Toolkit</description>
 
   <property file="${basedir}/src/main/lib/configuration.properties"/>
@@ -25,7 +25,7 @@
   <property name="xsl.dir" location="${src.dir}/xsl/"/>
   <property name="sample.dir" location="${src.dir}/samples/"/>
   <property name="css.dir" location="${src.dir}/css/"/>
-  <property name="resource.dir" location="${src.dir}/resource/"/>
+  <property name="resource.dir" location="${src.dir}/resources/"/>
 
   <property name="top.work.dir" location="${src.dir}"/>
   <property name="package.output.dir" location="${basedir}/target/dist"/>
@@ -40,13 +40,13 @@
 
   <property name="dost.jar" location="${lib.dir}/dost.jar"/>
   <property name="binary-min" value="DITA-OT${otversion}_minimal_bin"/>
-  <property name="binary-big" value="DITA-OT${otversion}_full_easy_install_bin"/>
+  <!--property name="binary-big" value="DITA-OT${otversion}_full_easy_install_bin"/-->
   <property name="binary-client" value="DITA-OT${otversion}_client_bin"/>
   <property name="binary" value="DITA-OT${otversion}_standard_bin"/>
   <property name="win32.zip.suffix" value=".zip"/>
   <property name="linux.zip.suffix" value=".tar.gz"/>
 
-  <property name="tool.ant.version" value="1.9.2"/>
+  <property name="tool.ant.version" value="1.9.4"/>
 
   <target name="init-package" depends="clean-package">
     <mkdir dir="${package.output.dir}"/>
@@ -72,24 +72,45 @@
     <javac srcdir="${java.dir}" destdir="${bin.dir}"
            debug="on"
            source="1.7" target="1.7"
-           classpathref="compile.path">
-      <exclude name="org/dita/dost/invoker/JavaInvoker.java"/>
-      <exclude name="org/dita/dost/invoker/CommandLineInvoker"/>
-    </javac>
+           classpathref="compile.path"/>
   </target>
 
   <target name="jar" depends="compile" description="Build Java libraries">
-    <copy todir="${bin.dir}/resource/">
-      <fileset dir="${resource.dir}" includes="messages.*"/>
-    </copy>
     <copy todir="${bin.dir}">
       <fileset dir="${java.dir}" includes="**/*.properties, **/*.xml"/>
     </copy>
     <jar destfile="${dost.jar}">
       <fileset dir="${bin.dir}"/>
-      <fileset dir="${src.dir}/resources"/>
+      <fileset dir="${src.dir}/resources">
+        <exclude name="messages.*"/>
+        <exclude name="messages_template.*"/>
+      </fileset>
     </jar>
   </target>
+  
+  <target name="jar.plug-ins" depends="compile" description="Build plug-in Java libraries">
+    <path id="base.compile.path">
+      <pathelement location="${bin.dir}"/>
+      <path refid="compile.path"/>
+    </path>
+    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="jar" inheritAll="false">
+      <property name="basedir" value="${src.dir}/plugins/org.dita.pdf2"/>
+      <reference refid="base.compile.path"/>
+    </ant>
+  </target>
+  
+  <target name="build" depends="jar, jar.plug-ins">
+    <path id="base.compile.path">
+      <pathelement location="${bin.dir}"/>
+      <path refid="compile.path"/>
+      <pathelement location="${src.dir}/resources"/>
+    </path>
+    <ant antfile="${src.dir}/integrator.xml" dir="${src.dir}">
+      <reference refid="base.compile.path" torefid="dost.class.path"/>
+    </ant>
+  </target>
+  
+  <!-- Distribution -->
   
   <patternset id="pattern.global.excludes">
     <exclude name=".*"/>
@@ -103,46 +124,38 @@
 
   <patternset id="pattern.package.minimum">
     <patternset refid="pattern.global.excludes"/>
-    <exclude name="plugins/org.dita.pdf2/fop/build/"/>
-    <exclude name="plugins/org.dita.pdf2/fop/conf/"/>
-    <exclude name="plugins/org.dita.pdf2/fop/lib/"/>
-    <exclude name="plugins/org.dita.pdf2/lib/icu4j.jar"/>
+    <exclude name="plugins/org.dita.pdf2/fop/**"/>
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <exclude name="lib/saxon*"/>
     <exclude name="lib/icu4j.jar"/>
-    <exclude name="lib/log4j.properties"/>
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
     <include name="plugins/com.sophos.tocjs/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/org.dita.*/**"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
-    <include name="resource/**"/>
-    <include name="schema/**"/>
+    <include name="resources/**"/>
     <include name="xsl/**"/>
     <include name="lib/dost.jar"/>
     <include name="lib/APACHE-LICENSE-2_0.html"/>
     <include name="lib/xml-resolver.jar"/>
-    <include name="lib/CatalogManager.properties"/>
     <include name="lib/**"/>
   </patternset>
   <patternset id="pattern.package.ext-plugins.minimum">
-    <include name="h2d/**"/>
+    <exclude name="**/*"/>
+    <!--include name="h2d/**"/-->
   </patternset>
 
   <patternset id="pattern.package.client">
     <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
-    <exclude name="lib/log4j.properties"/>
     <exclude name="lib/saxon*"/>
-    <exclude name="startcmd.*"/>
+    <include name="startcmd.*"/>
     <include name="build_demo.xml"/>
     <exclude name="catalog-dita.txt"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
@@ -155,9 +168,8 @@
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
-    <include name="resource/**"/>
+    <include name="resources/**"/>
     <include name="samples/**"/>
-    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>    
   </patternset>
@@ -167,12 +179,10 @@
     <include name="legacypdf/**"/-->
   </patternset>
 
-  <patternset id="pattern.package.full">
+  <!--patternset id="pattern.package.full">
     <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
-    <exclude name="lib/log4j.properties"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
@@ -183,16 +193,16 @@
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
-    <include name="resource/**"/>
+    <include name="resources/**"/>
     <include name="samples/**"/>
-    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>
   </patternset>
   <patternset id="pattern.package.ext-plugins.full">
-    <include name="h2d/**"/>
-    <!--include name="legacypdf/**"/-->
-  </patternset>
+    <exclude name="**/*"/>
+    <!- -include name="h2d/**"/- ->
+    <!- -include name="legacypdf/**"/- ->
+  </patternset-->
 
   <patternset id="pattern.package.standard">
     <patternset refid="pattern.global.excludes"/>
@@ -200,15 +210,13 @@
     <exclude name="plugins/org.dita.pdf2/fop/conf/"/>
     <exclude name="plugins/org.dita.pdf2/fop/lib/"/>
     <exclude name="plugins/org.dita.pdf2/lib/icu4j.jar"/>
-    <exclude name="lib/saxon*"/>
+    <!--exclude name="lib/saxon*"/-->
     <exclude name="lib/icu4j.jar"/>
-    <exclude name="lib/log4j.properties"/>
     <exclude name="startcmd.*"/>
     <exclude name="buildPackage.*"/>
     <exclude name="src/**"/>
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
@@ -218,14 +226,14 @@
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
-    <include name="resource/**"/>
+    <include name="resources/**"/>
     <include name="samples/**"/>
-    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>
   </patternset>
   <patternset id="pattern.package.ext-plugins.standard">
-    <include name="h2d/**"/>
+    <exclude name="**/*"/>
+    <!--include name="h2d/**"/-->
     <!--include name="legacypdf/**"/-->
   </patternset>
     
@@ -325,6 +333,13 @@
         <include name="ant-apache-resolver.jar"/>
       </fileset>
     </copy>
+    <copy todir="${temp.dist.dir}/bin">
+      <fileset dir="${basedir}/target/tools/apache-ant-${tool.ant.version}/bin">
+        <include name="ant"/>
+        <include name="ant.bat"/>
+      </fileset>
+    </copy>
+    
     <!--copy todir="${temp.dist.dir}">
       <zipfileset src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip">
         <!- -exclude name="apache-ant-${tool.ant.version}/etc/**"/>
@@ -366,7 +381,7 @@
     </tar>
   </target>
 
-  <target name="package-binary-full" depends="dependencies">
+  <!--target name="package-binary-full" depends="dependencies">
     <fail unless="param.out.file">param.out.file not defined</fail>
     <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${otversion}"/>
     <delete dir="${temp.dist.dir}"/>
@@ -416,7 +431,7 @@
         <include name="*/startcmd.sh"/>
       </tarfileset>
     </tar>
-  </target>
+  </target-->
   
   <target name="build-package-binary" depends="jar, jar.plug-ins, update-doc">
     <mkdir dir="${out.dir}"/>
@@ -424,9 +439,9 @@
       <antcall target="package-binary-client">
         <param name="param.out.file" value="${binary-client}"/>
       </antcall>
-      <antcall target="package-binary-full">
+      <!--antcall target="package-binary-full">
         <param name="param.out.file" value="${binary-big}"/>
-      </antcall>
+      </antcall-->
       <antcall target="package-binary-standard">
         <param name="param.out.file" value="${binary}"/>
       </antcall>
@@ -436,13 +451,6 @@
     </sequential>
   </target>
 	
-  <target name="jar.plug-ins" description="Build plug-in Java libraries">
-    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="jar" inheritAll="false">
-  	  <property name="basedir" value="${src.dir}/plugins/org.dita.pdf2"/>
-      <reference refid="compile.path" torefid="base.compile.path"/>
-  	</ant>
-  </target>
-
   <target name="dist"
     depends="init-package, build-package-binary, cleanup" description="Build distribution packages"/>
 
@@ -450,12 +458,10 @@
     <delete dir="${work.dir}"/>
   </target>
 
-  <target name="update-doc">
-    <ant antfile="${src.dir}/integrator.xml" target="integrate">
-      <property name="basedir" value="${src.dir}"/>
-    </ant>
-    <ant antfile="${doc.dir}/build.xml">
-      <property name="basedir" value="${src.dir}"/>
+  <target name="update-doc" unless="doc.skip">
+    <ant antfile="${src.dir}/integrator.xml" target="integrate" dir="${src.dir}"/>
+    <ant antfile="${doc.dir}/build.xml" dir="${doc.dir}">
+      <property name="dita.home" location="${src.dir}"/>
       <property name="output.dir" location="${work.dir}/htmlhelp"/>
       <property name="base.temp.dir" location="${work.dir}"/>
       <property name="preprocess.copy-generated-files.skip" value="true"/>
@@ -552,7 +558,13 @@
     </javac>
   </target>
 
-  <target name="test" depends="compile, test-compile" description="Run unit tests">
+  <target name="test-recources">
+    <copy todir="${test.bin.dir}">
+      <fileset dir="${test.src.dir}/resources"/>
+    </copy>
+  </target>
+
+  <target name="test" depends="compile, test-compile, test-recources" description="Run unit tests">
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
@@ -560,7 +572,6 @@
     <junit printsummary="yes" haltonfailure="yes" showoutput="true">
       <classpath>
         <pathelement location="${test.bin.dir}"/>
-        <pathelement location="${test.src.dir}/resources"/>
         <path refid="test.path"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>
@@ -600,9 +611,9 @@
     </javac>
   </target>
   
-  <target name="integration-test" depends="compile, test-compile, integration-test-compile" description="Run integration tests">
-    <condition property="only-test.name" value="${only-test}" else="">
-      <isset property="only-test"/>
+  <target name="integration-test" depends="compile, test-compile, test-recources, integration-test-compile" description="Run integration tests">
+    <condition property="only-test.name" value="${test}" else="">
+      <isset property="test"/>
     </condition>
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
@@ -612,7 +623,6 @@
       <classpath>
         <pathelement location="${integration-test.bin.dir}"/>
         <pathelement location="${test.bin.dir}"/>
-        <pathelement location="${test.src.dir}/resources"/>
         <path refid="test.path"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>
@@ -638,8 +648,10 @@
   <!-- Site -->
   
   <target name="site" description="Build project website">
-    <ant antfile="${basedir}/src/main/docsrc/build.xml" target="generate-msg-topic" dir="${basedir}/src/main"/>
-    <ant antfile="${basedir}/src/main/build.xml">
+    <ant antfile="${doc.dir}/build.xml" target="generate-msg-topic" dir="${doc.dir}">
+      <property name="dita.home" location="${src.dir}"/>
+    </ant>
+    <ant antfile="${src.dir}/build.xml">
       <property name="args.input" location="${doc.dir}/site.ditamap"/>
       <property name="output.dir" location="${basedir}/target/site"/>
       <property name="transtype" value="net.sourceforge.dita-ot.html"/>

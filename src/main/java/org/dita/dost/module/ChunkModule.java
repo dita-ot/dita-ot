@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
@@ -24,17 +25,13 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.ChunkMapReader;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.TopicRefWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,9 +39,14 @@ import org.xml.sax.SAXException;
 
 /**
  * The chunking module class.
- * 
+ *
+ * Starting from map files, it parses and processes chunk attribute, writes out the chunked
+ * results and finally updates reference pointing to chunked topics in other topics.
  */
 final public class ChunkModule extends AbstractPipelineModuleImpl {
+
+    public static final DitaClass ECLIPSEMAP_PLUGIN = new DitaClass("- map/map eclipsemap/plugin ");
+    public static final String ROOT_CHUNK_OVERRIDE = "root-chunk-override";
 
     /**
      * using to save relative path when do rename action for newly chunked file
@@ -59,9 +61,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     }
 
     /**
-     * Entry point of chunk module. Starting from map files, it parses and
-     * processes chunk attribute, writes out the "chunked" results and finally
-     * update references pointing to "chunked" topics in other dita topics.
+     * Entry point of chunk module.
      * 
      * @param input Input parameters and resources.
      * @return null
@@ -74,7 +74,10 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(logger);
         mapReader.setJob(job);
-        mapReader.setup(transtype);
+        mapReader.supportToNavigation(INDEX_TYPE_ECLIPSEHELP.equals(transtype));
+        if (input.getAttribute(ROOT_CHUNK_OVERRIDE) != null) {
+            mapReader.setRootChunkOverride(input.getAttribute(ROOT_CHUNK_OVERRIDE));
+        }
 
         try {
             final File mapFile = new File(job.tempDir, job.getProperty(INPUT_DITAMAP)).getAbsoluteFile();
@@ -87,29 +90,45 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             } else {
                 mapReader.read(mapFile);
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
         }
 
         final Map<String, String> changeTable = mapReader.getChangeTable();
-        if (!changeTable.isEmpty()) {
-            // update dita.list to include new generated files
+        if (hasChanges(changeTable)) {
             updateList(changeTable, mapReader.getConflicTable());
-            // update references in dita files
             updateRefOfDita(changeTable, mapReader.getConflicTable());
         }
 
         return null;
     }
-    
-    private boolean isEclipseMap(final File mapFile) throws DITAOTException {
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-        try {
-            builder = factory.newDocumentBuilder();
-        } catch (final ParserConfigurationException e) {
-            throw new RuntimeException(e);
+
+    /**
+     * Test whether there are changes that require topic rewriting.
+     */
+    private boolean hasChanges(final Map<String, String> changeTable) {
+        if (changeTable.isEmpty()) {
+            return false;
         }
+        for (Map.Entry<String, String> e: changeTable.entrySet()) {
+            if (!e.getKey().equals(e.getValue())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check whether ditamap is an Eclipse specialization.
+     *
+     * @param mapFile ditamap file to test
+     * @return {@code true} if Eclipse specialization, otherwise {@code false}
+     * @throws DITAOTException if reading ditamap fails
+     */
+    private boolean isEclipseMap(final File mapFile) throws DITAOTException {
+        final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
         Document doc;
         try {
             doc = builder.parse(mapFile);
@@ -119,19 +138,22 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
         }
         final Element root = doc.getDocumentElement();
-        return root.getAttribute(ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ");
+        return ECLIPSEMAP_PLUGIN.matches(root);
     }
 
-    // update the href in ditamap and topic files
+    /**
+     * Update href attributes in ditamap and topic files.
+     */
     private void updateRefOfDita(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
         final TopicRefWriter topicRefWriter = new TopicRefWriter();
         topicRefWriter.setLogger(logger);
+        topicRefWriter.setJob(job);
         topicRefWriter.setChangeTable(changeTable);
         topicRefWriter.setup(conflictTable);
         try {
             for (final FileInfo f : job.getFileInfo()) {
                 if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                    topicRefWriter.setFixpath(relativePath2fix.get(f.file));
+                    topicRefWriter.setFixpath(relativePath2fix.get(f.file.toString()));
                     topicRefWriter.write(new File(job.tempDir.getAbsoluteFile(), f.file.getPath()).getAbsoluteFile());
                 }
             }
@@ -143,6 +165,9 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
 
     }
 
+    /**
+     * Update Job configuration to include new generated files
+     */
     private void updateList(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
         final File xmlDitalist = new File(job.tempDir, "dummy.xml");
 
@@ -258,7 +283,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         }
                         // ensure the newly chunked file to the old one
                         try {
-                            FileUtils.moveFile(from, target);
+                            deleteQuietly(target);
+                            moveFile(from, target);
                         } catch (final IOException e) {
                             logger.error("Failed to replace chunk topic: " + e.getMessage(), e);
 

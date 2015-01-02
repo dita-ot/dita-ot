@@ -66,8 +66,8 @@
     <xsl:when test="/*[contains(@class, ' map/map ')]/@xml:lang">
       <xsl:value-of select="lower-case(/*[contains(@class, ' map/map ')]/@xml:lang)"/>
     </xsl:when>
-    <xsl:when test="document((//*[contains(@class, ' map/topicref ')][@href and @href != '' and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang">
-      <xsl:value-of select="lower-case(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang)"/>
+    <xsl:when test="document((//*[contains(@class, ' map/topicref ')][@href and @href != '' and not(contains(@href,'://'))][not(@format) or @format='dita'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang">
+      <xsl:value-of select="lower-case(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang)"/>
     </xsl:when>
     <xsl:otherwise>en-us</xsl:otherwise>
   </xsl:choose>

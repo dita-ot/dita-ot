@@ -4,18 +4,14 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -49,21 +45,32 @@ public final class JobTest {
     }
 
     @Test
-    public void testGetCopytoMap() {
-        final Map<File, File> exp = new HashMap<File, File>();
-        exp.put(new File("foo"), new File("bar"));
-        exp.put(new File("baz"), new File("qux"));
+    public void testGetCopytoMap() throws URISyntaxException {
+        final Map<URI, URI> exp = new HashMap<URI, URI>();
+        exp.put(new URI("foo"), new URI("bar"));
+        exp.put(new URI("baz"), new URI("qux"));
         assertEquals(exp, job.getCopytoMap());
     }
 
     @Test
+    public void testGetFileInfo() throws URISyntaxException {
+        final URI relative = new URI("foo/bar.dita");
+        final URI absolute = tempDir.toURI().resolve(relative);
+        final Job.FileInfo fi = new Job.FileInfo.Builder().uri(relative).build();
+        job.add(fi);
+        assertEquals(fi, job.getFileInfo(relative));
+        assertEquals(fi, job.getFileInfo(absolute));
+        assertNull(job.getFileInfo((URI) null));
+    }
+
+    @Test
     public void testGetInputMap() {
-        assertEquals("foo", job.getInputMap());
+        assertEquals(new File("foo"), job.getInputMap());
     }
 
     @Test
     public void testGetValue() {
-        assertEquals("/foo/bar", job.getInputDir());
+        assertEquals(new File("/foo/bar"), job.getInputDir());
     }
 
     @AfterClass

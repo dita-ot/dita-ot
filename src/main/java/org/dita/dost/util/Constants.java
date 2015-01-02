@@ -56,6 +56,8 @@ public final class Constants {
     /**.pdf extension.*/
     public static final String FILE_EXTENSION_PDF = ".pdf";
 
+    public static final String RESOURCES_DIR = "resources";
+
     public static final DitaClass ABBREV_D_ABBREVIATED_FORM = new DitaClass("+ topic/term abbrev-d/abbreviated-form ");
     public static final DitaClass BOOKMAP_ABBREVLIST = new DitaClass("- map/topicref bookmap/abbrevlist ");
     public static final DitaClass BOOKMAP_AMENDMENTS = new DitaClass("- map/topicref bookmap/amendments ");
@@ -600,6 +602,8 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_CONREF = "conref";
     /**href attribute.*/
     public static final String ATTRIBUTE_NAME_HREF = "href";
+    /**mapref attribute.*/
+    public static final String ATTRIBUTE_NAME_MAPREF = "mapref";
     /**navtitle attribute.*/
     public static final String ATTRIBUTE_NAME_NAVTITLE = "navtitle";
     /**format attribute.*/
@@ -661,7 +665,7 @@ public final class Constants {
     /**keyref attribute.*/
     public static final String ATTRIBUTE_NAME_KEYREF = "keyref";
     /**conkeyref attribute.*/
-    public static final String ATTRIBUTE_NAME_CONKEYREF	="conkeyref";
+    public static final String ATTRIBUTE_NAME_CONKEYREF ="conkeyref";
     /**keys attribute.*/
     public static final String ATTRIBUTE_NAME_KEYS = "keys";
     /**keys attribute.*/
@@ -689,16 +693,6 @@ public final class Constants {
     public static final String UNIX_SEPARATOR = "/";
     /** Windows path separator. */
     public static final String WINDOWS_SEPARATOR = "\\";
-
-    /**
-     * Constant for value of attribute format in dita files.
-     */
-    /** Constants for format attribute value dita*/
-    public static final String ATTRIBUTE_FORMAT_VALUE_DITA = "dita";
-    /** Constants for format attribute value html*/
-    public static final String ATTRIBUTE_FORMAT_VALUE_HTML = "html";
-    /** Constants for format attribute value windows*/
-    public static final String ATTRIBUTE_FORMAT_VALUE_WINDOWS = "windows";
 
     /** Constants for index type(javahelp).*/
     public static final String INDEX_TYPE_JAVAHELP = "javahelp";
@@ -747,6 +741,8 @@ public final class Constants {
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";
     /**Constants for common params used in ant invoker(maplinks).*/
     public static final String ANT_INVOKER_PARAM_MAPLINKS = "maplinks";
+    /** Argument name for enabling profiling. */
+    public static final String ANT_INVOKER_PARAM_PROFILING_ENABLED = "profiling.enable";
 
     /**Constants for extensive params used in ant invoker(targetext).*/
     public static final String ANT_INVOKER_EXT_PARAM_TARGETEXT = "targetext";
@@ -781,6 +777,9 @@ public final class Constants {
     /**Constants for extensive params used in ant invoker(gramcache).*/
     public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE="gramcache";
     public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID="setsystemid";
+    public static final String ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE = "force-unique";
+    public static final String ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR = "generate-debug-attributes";
+    public static final String ANT_INVOKER_EXT_PARAM_PROCESSING_MODE = "processing-mode";
     /**Constants for line separator.*/
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
@@ -844,10 +843,6 @@ public final class Constants {
     public static final String SAX_DRIVER_SUN_HACK_CLASS = "com.sun.org.apache.xerces.internal.parsers.SAXParser";
     /**SAX_DRIVER_CRIMSON_CLASS.*/
     public static final String SAX_DRIVER_CRIMSON_CLASS = "org.apache.crimson.parser.XMLReaderImpl";
-    /**RESOLVER_CLASS.*/
-    public static final String RESOLVER_CLASS = "org.apache.xml.resolver.tools.CatalogResolver";
-    /**LEXICAL_HANDLER_PROPERTY.*/
-    public static final String LEXICAL_HANDLER_PROPERTY = "http://xml.org/sax/properties/lexical-handler";
     /**FEATURE_NAMESPACE_PREFIX.*/
     public static final String FEATURE_NAMESPACE_PREFIX = "http://xml.org/sax/features/namespace-prefixes";
     /**FEATURE_NAMESPACE.*/
@@ -870,12 +865,15 @@ public final class Constants {
     public static final String ATTR_FORMAT_VALUE_DITA = "dita";
     /**ATTR_FORMAT_VALUE_DITAMAP.*/
     public static final String ATTR_FORMAT_VALUE_DITAMAP = "ditamap";
+    public static final String ATTR_FORMAT_VALUE_IMAGE = "image";
+    public static final String ATTR_FORMAT_VALUE_HTML = "html";
     /**ATTRIBUTE_NAME_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_NAME_DITAARCHVERSION = "DITAArchVersion";
     /**ATTRIBUTE_PREFIX_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_PREFIX_DITAARCHVERSION = "ditaarch";
     /**ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = "xmlns:ditaarch";
+    public static final String DITA_NAMESPACE = "http://dita.oasis-open.org/architecture/2005/";
 
     /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE.*/
     public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE = " subjectScheme/";
@@ -891,9 +889,17 @@ public final class Constants {
     /**ATTR_PRINT_VALUE_PRINT_ONLY.*/
     public static final String ATTR_PRINT_VALUE_PRINT_ONLY = "printonly";
 
-    /**
-     * constants for filtering or flagging.
-     */
+    /** Conaction mark value */
+    public static final String ATTR_CONACTION_VALUE_MARK = "mark";
+    /** Conaction push after value */
+    public static final String ATTR_CONACTION_VALUE_PUSHAFTER = "pushafter";
+    /** Conaction push before value */
+    public static final String ATTR_CONACTION_VALUE_PUSHBEFORE = "pushbefore";
+    /** Conaction push replace value */
+    public static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
+
+
+    /** constants for filtering or flagging. */
     public static final String DEFAULT_ACTION = "default";
     /**chunk attribute.*/
     public static final String ATTRIBUTE_NAME_CHUNK = "chunk";
@@ -932,7 +938,12 @@ public final class Constants {
 
     /** Project reference name for job configuration object. */
     public static final String ANT_REFERENCE_JOB = "job";
-    
+
+    public static final String PI_PATH2PROJ_TARGET = "path2project";
+    public static final String PI_PATH2PROJ_TARGET_URI = "path2project-uri";
+    public static final String PI_WORKDIR_TARGET = "workdir";
+    public static final String PI_WORKDIR_TARGET_URI = "workdir-uri";
+
     /**
      * Instances should NOT be constructed in standard programming.
      */

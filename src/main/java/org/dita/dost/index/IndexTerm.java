@@ -10,10 +10,7 @@ package org.dita.dost.index;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import org.dita.dost.util.DITAOTCollator;
 
@@ -240,9 +237,9 @@ public final class IndexTerm implements Comparable<IndexTerm> {
         boolean eqSubTerms;
         boolean eqTermPrefix;
 
-        eqTermName =  termName == it.getTermName() || termName != null && termName.equals(it.getTermName());
-        eqTermPrefix = termPrefix == it.getTermPrefix() || termPrefix != null && termPrefix.equals(it.getTermPrefix());
-        eqTermKey =  termKey == it.getTermKey() || termKey != null && termKey.equals(it.getTermKey());
+        eqTermName = Objects.equals(termName, it.getTermName()) || termName != null && termName.equals(it.getTermName());
+        eqTermPrefix = Objects.equals(termPrefix, it.getTermPrefix()) || termPrefix != null && termPrefix.equals(it.getTermPrefix());
+        eqTermKey = Objects.equals(termKey, it.getTermKey()) || termKey != null && termKey.equals(it.getTermKey());
         eqTargetList = targetList == it.getTargetList() || targetList != null && targetList.equals(it.getTargetList());
         eqSubTerms =  subTerms == it.getSubTerms() || subTerms != null && subTerms.equals(it.getSubTerms());
 

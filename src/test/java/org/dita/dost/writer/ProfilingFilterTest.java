@@ -1,35 +1,27 @@
 package org.dita.dost.writer;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
+import java.util.Collections;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamSource;
 
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.XMLFilterImpl;
 
 public class ProfilingFilterTest {
 
@@ -42,24 +34,23 @@ public class ProfilingFilterTest {
 	
 	@Test
 	public void testNoFilter() throws Exception {
-		test(new FilterUtils(), "topic.dita", "topic.dita");
-		
-		final FilterUtils filterUtils = new FilterUtils();
+		test(new FilterUtils(Collections.EMPTY_MAP), "topic.dita", "topic.dita");
+
 		final DitaValReader filterReader = new DitaValReader();
 		filterReader.read(new File(getClass().getClassLoader().getResource("ProfilingFilterTest/src/topic1.ditaval").toURI()).getAbsoluteFile());
-        filterUtils.setFilterMap(filterReader.getFilterMap());
+        final FilterUtils filterUtils = new FilterUtils(filterReader.getFilterMap());
 		filterUtils.setLogger(new TestUtils.TestLogger());
         test(filterUtils, "topic.dita", "topic1.dita");
 
-        test(new FilterUtils(false), "map.ditamap", "map_xhtml.ditamap");
-        test(new FilterUtils(true), "map.ditamap", "map_pdf.ditamap");
+        test(new FilterUtils(false, Collections.EMPTY_MAP), "map.ditamap", "map_xhtml.ditamap");
+        test(new FilterUtils(true, Collections.EMPTY_MAP), "map.ditamap", "map_pdf.ditamap");
 	}
 	
 	private void test(final FilterUtils filterUtils, final String srcFile, final String expFile) throws Exception {
 		final Transformer t = TransformerFactory.newInstance().newTransformer();
 		final InputStream src = getClass().getClassLoader().getResourceAsStream("ProfilingFilterTest/src/" + srcFile);
 		final ProfilingFilter f = new ProfilingFilter();
-		f.setParent(StringUtils.getXMLReader());
+		f.setParent(XMLUtils.getXMLReader());
 		filterUtils.setLogger(new TestUtils.TestLogger());
 		f.setFilterUtils(filterUtils);
 		f.setLogger(new TestUtils.TestLogger());

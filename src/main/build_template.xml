@@ -22,7 +22,8 @@
     
   <path id="dost.class.path">
     <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction"/>
-    <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost-configuration.jar"/>
   </path>
   
   <target name="init">
@@ -35,9 +36,6 @@
       </condition>
       <param name="1" value="${transtype}"/>
     </dita-ot-fail>
-    <condition property="transtarget" value="pdf2" else="${transtype}">
-      <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
-    </condition>
     <condition property="clean.temp" value="true">
       <not><isset property="clean.temp"/></not>
     </condition>
@@ -45,7 +43,7 @@
       <isfalse value="${clean.temp}"/>
     </condition>
     <antcall>
-      <target name="dita2${transtarget}"/>
+      <target name="dita2${transtype}"/>
       <target name="clean-temp"/>
     </antcall>
   </target>

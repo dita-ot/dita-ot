@@ -10,6 +10,7 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -20,9 +21,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * String relevant utilities.
@@ -88,56 +94,6 @@ public final class StringUtils {
             }
         }
         return buf.toString();
-    }
-
-    /**
-     * Escape XML characters.
-     * Suggested by hussein_shafie
-     * @param s value needed to be escaped
-     * @return escaped value
-     */
-    public static String escapeXML(final String s){
-        final char[] chars = s.toCharArray();
-        return escapeXML(chars, 0, chars.length);
-    }
-
-    /**
-     * Escape XML characters.
-     * Suggested by hussein_shafie
-     * @param chars char arrays
-     * @param offset start position
-     * @param length arrays lenth
-     * @return escaped value
-     */
-    public static String escapeXML(final char[] chars, final int offset, final int length){
-        final StringBuilder escaped = new StringBuilder();
-
-        final int end = offset + length;
-        for (int i = offset; i < end; ++i) {
-            final char c = chars[i];
-
-            switch (c) {
-            case '\'':
-                escaped.append("&apos;");
-                break;
-            case '\"':
-                escaped.append("&quot;");
-                break;
-            case '<':
-                escaped.append("&lt;");
-                break;
-            case '>':
-                escaped.append("&gt;");
-                break;
-            case '&':
-                escaped.append("&amp;");
-                break;
-            default:
-                escaped.append(c);
-            }
-        }
-
-        return escaped.toString();
     }
 
     /**
@@ -244,42 +200,6 @@ public final class StringUtils {
                 return target + STRING_BLANK + value;
             }else{
                 return target + value;
-            }
-        }
-    }
-
-    /**
-     * Get preferred SAX parser.
-     * 
-     * Preferred XML readers are in order:
-     * 
-     * <ol>
-     *   <li>{@link org.dita.dost.util.Constants#SAX_DRIVER_DEFAULT_CLASS Xerces}</li>
-     *   <li>{@link org.dita.dost.util.Constants#SAX_DRIVER_SUN_HACK_CLASS Sun's Xerces}</li>
-     *   <li>{@link org.dita.dost.util.Constants#SAX_DRIVER_CRIMSON_CLASS Crimson}</li>
-     * </ol>
-     * 
-     * @return XML parser instance.
-     * @throws SAXException if instantiating XMLReader failed
-     */
-    public static XMLReader getXMLReader() throws SAXException {
-        if (System.getProperty(SAX_DRIVER_PROPERTY) != null) {
-            return XMLReaderFactory.createXMLReader();
-        }
-        try {
-            Class.forName(SAX_DRIVER_DEFAULT_CLASS);
-            return XMLReaderFactory.createXMLReader(SAX_DRIVER_DEFAULT_CLASS);
-        } catch (final ClassNotFoundException e) {
-            try {
-                Class.forName(SAX_DRIVER_SUN_HACK_CLASS);
-                return XMLReaderFactory.createXMLReader(SAX_DRIVER_SUN_HACK_CLASS);
-            } catch (final ClassNotFoundException ex) {
-                try {
-                    Class.forName(SAX_DRIVER_CRIMSON_CLASS);
-                    return XMLReaderFactory.createXMLReader(SAX_DRIVER_CRIMSON_CLASS);
-                } catch (final ClassNotFoundException exc){
-                    return XMLReaderFactory.createXMLReader();
-                }
             }
         }
     }

@@ -82,7 +82,7 @@ public class KeyDef {
     public static Collection<KeyDef> readKeydef(final File keydefFile) throws DITAOTException {
         final Collection<KeyDef> res = new ArrayList<KeyDef>();
         try {
-            final XMLReader parser = StringUtils.getXMLReader();
+            final XMLReader parser = XMLUtils.getXMLReader();
             parser.setContentHandler(new DefaultHandler() {
                 @Override
                 public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -114,7 +114,7 @@ public class KeyDef {
         XMLStreamWriter keydef = null;
         try {
             out = new FileOutputStream(keydefFile);
-            keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
+            keydef = XMLOutputFactory.newInstance().createXMLStreamWriter(out, "UTF-8");
             keydef.writeStartDocument();
             keydef.writeStartElement(ELEMENT_STUB);
             for (final KeyDef k: keydefs) {

@@ -46,6 +46,7 @@ final class CoderefModule extends AbstractPipelineModuleImpl {
         });
         if (!fis.isEmpty()) {
             final CoderefResolver writer = new CoderefResolver();
+            writer.setJob(job);
             writer.setLogger(logger);
             for (final FileInfo fi: fis) {
                 final File f = new File(job.tempDir, fi.file.getPath());

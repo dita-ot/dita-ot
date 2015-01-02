@@ -29,6 +29,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MergeMapParser;
+import org.dita.dost.util.CatalogUtils;
 
 /**
  * The module handles topic merge in issues as PDF.
@@ -92,29 +93,30 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         }
 
         OutputStream output = null;
-        try{
+        try {
             final File outputDir = out.getParentFile();
-            if (!outputDir.exists()){
+            if (!outputDir.exists()) {
                 outputDir.mkdirs();
             }
             output = new BufferedOutputStream(new FileOutputStream(out));
-            if (style != null){
+            if (style != null) {
                 final TransformerFactory factory = TransformerFactory.newInstance();
+                factory.setURIResolver(CatalogUtils.getCatalogResolver());
                 final Transformer transformer = factory.newTransformer(new StreamSource(style.toURI().toString()));
                 transformer.transform(new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray())),
                                       new StreamResult(output));
-            }else{
+            } else {
                 output.write(midBuffer.toByteArray());
                 output.flush();
             }
-        }catch (final Exception e){
+        } catch (final Exception e) {
             throw new DITAOTException("Failed to process merged topics: " + e.getMessage(), e);
-        }finally{
-            try{
-                if (output !=null){
+        } finally {
+            try {
+                if (output != null) {
                     output.close();
                 }
-            }catch (final Exception e){
+            } catch (final Exception e) {
                 logger.error("Failed to close output buffer: " + e.getMessage(), e);
             }
         }

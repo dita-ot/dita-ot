@@ -141,7 +141,7 @@ public class DefaultLogger implements BuildLogger {
         startTime = System.currentTimeMillis();
     }
 
-    static void throwableMessage(final StringBuffer m, final Throwable error, final boolean verbose) {
+    static void throwableMessage(final StringBuilder m, final Throwable error, final boolean verbose) {
         String msg = error.getMessage();
         final int i = msg.indexOf(": ");
         if (i != -1) {
@@ -161,7 +161,7 @@ public class DefaultLogger implements BuildLogger {
     @Override
     public void buildFinished(final BuildEvent event) {
         final Throwable error = event.getException();
-        final StringBuffer message = new StringBuffer();
+        final StringBuilder message = new StringBuilder();
         if (error == null) {
             // message.append(StringUtils.LINE_SEP);
             // message.append(getBuildSuccessfulMessage());

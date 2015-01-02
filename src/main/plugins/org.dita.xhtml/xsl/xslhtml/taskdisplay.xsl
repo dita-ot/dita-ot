@@ -11,7 +11,8 @@
      xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
      xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
      xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-     exclude-result-prefixes="related-links dita2html ditamsg">
+     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+     exclude-result-prefixes="related-links dita2html ditamsg xs">
 
 <!-- Determines whether to generate titles for task sections. Values are YES and NO. -->
 <xsl:param name="GENERATE-TASK-LABELS" select="'NO'"/>
@@ -308,6 +309,31 @@
     </xsl:when>
   </xsl:choose>
 </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' task/cmd ')]" name="topic.task.cmd">
+    <xsl:choose>
+      <xsl:when test="@keyref">
+        <xsl:apply-templates select="." mode="turning-to-link">
+          <xsl:with-param name="keys" select="@keyref"/>
+          <xsl:with-param name="type" select="'ph'"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <span>
+          <xsl:call-template name="commonattributes"/>
+          <xsl:call-template name="setidaname"/> 
+          <xsl:apply-templates/>  
+        </span>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="add-br-for-empty-cmd"/>
+  </xsl:template>
+  
+  <xsl:template name="add-br-for-empty-cmd">
+    <xsl:if test="string-length(normalize-space(.)) = 0">
+      <br/>
+    </xsl:if>
+  </xsl:template>
 
 <!-- nested steps - 1 level of nesting only -->
 <xsl:template match="*[contains(@class,' task/substeps ')]" name="topic.task.substeps">
@@ -769,27 +795,32 @@
 </xsl:template>
 
   <!-- Tasks have their own group. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group" name="related-links:group.task">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group"
+                name="related-links:group.task"
+                as="xs:string">
     <xsl:text>task</xsl:text>
   </xsl:template>
   
   <!-- Priority of task group. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group-priority" name="related-links:group-priority.task">
-    <xsl:value-of select="2"/>
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group-priority"
+                name="related-links:group-priority.task"
+                as="xs:integer">
+    <xsl:sequence select="2"/>
   </xsl:template>
   
   <!-- Task wrapper for HTML: "Related tasks" in <div>. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group" name="related-links:result.task">
-    <xsl:param name="links"/>
-    <xsl:if test="normalize-space($links)">
-    <div class="relinfo reltasks">
-      <strong>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Related tasks'"/>
-        </xsl:call-template>
-      </strong><br/><xsl:value-of select="$newline"/>
-      <xsl:copy-of select="$links"/>
-    </div><xsl:value-of select="$newline"/>
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group"
+                name="related-links:result.task" as="element(linklist)">
+    <xsl:param name="links" as="node()*"/>
+    <xsl:if test="normalize-space(string-join($links, ''))">
+      <linklist class="- topic/linklist " outputclass="relinfo reltasks">
+        <title class="- topic/title ">
+          <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'Related tasks'"/>
+          </xsl:call-template>
+        </title>
+        <xsl:copy-of select="$links"/>
+      </linklist>
     </xsl:if>
   </xsl:template>
   

@@ -13,13 +13,13 @@ import java.io.IOException;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.Job;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.ext.LexicalHandler;
 
 /**
  * AbstractXMLWriter class.
@@ -29,9 +29,10 @@ import org.xml.sax.ext.LexicalHandler;
  */
 
 abstract class AbstractXMLWriter implements AbstractWriter,
-ContentHandler, LexicalHandler, EntityResolver {
+ContentHandler, EntityResolver {
 
     protected DITAOTLogger logger;
+    protected Job job;
 
 
     @Override
@@ -85,35 +86,6 @@ ContentHandler, LexicalHandler, EntityResolver {
     }
 
     @Override
-    public void comment(final char[] ch, final int start, final int length) throws SAXException {
-    }
-
-    @Override
-    public void endCDATA() throws SAXException {
-    }
-
-    @Override
-    public void endDTD() throws SAXException {
-    }
-
-    @Override
-    public void endEntity(final String name) throws SAXException {
-    }
-
-    @Override
-    public void startCDATA() throws SAXException {
-    }
-
-    @Override
-    public void startDTD(final String name, final String publicId, final String systemId)
-            throws SAXException {
-    }
-
-    @Override
-    public void startEntity(final String name) throws SAXException {
-    }
-
-    @Override
     public InputSource resolveEntity(final String publicId, final String systemId)
             throws SAXException, IOException {
         return null;
@@ -125,6 +97,11 @@ ContentHandler, LexicalHandler, EntityResolver {
     @Override
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        this.job = job;
     }
     
 }

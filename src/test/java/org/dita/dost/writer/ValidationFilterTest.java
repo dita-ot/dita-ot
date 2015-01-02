@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger.Message;
+import org.dita.dost.util.Configuration;
 import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -22,6 +23,7 @@ public class ValidationFilterTest {
 	public void testXMLLang() throws SAXException {
 		final List<String> res = new ArrayList<String>();
 		final ValidationFilter f = new ValidationFilter();
+        f.setProcessingMode(Configuration.Mode.LAX);
 		f.setContentHandler(new DefaultHandler() {
 			@Override
 			public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -48,6 +50,7 @@ public class ValidationFilterTest {
 	public void testHref() throws SAXException, URISyntaxException {
 		final List<String> res = new ArrayList<String>();
 		final ValidationFilter f = new ValidationFilter();
+        f.setProcessingMode(Configuration.Mode.LAX);
 		f.setContentHandler(new DefaultHandler() {
 			@Override
 			public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {

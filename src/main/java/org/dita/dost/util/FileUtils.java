@@ -8,21 +8,13 @@
  */
 package org.dita.dost.util;
 
+import static org.apache.commons.io.FilenameUtils.*;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 
@@ -45,6 +37,7 @@ public final class FileUtils {
     /**
      * Supported image extensions. File extensions contain a leading dot.
      */
+    @Deprecated
     private final static List<String> supportedImageExtensions;
     static {
         final List<String> sie = new ArrayList<String>();
@@ -68,6 +61,7 @@ public final class FileUtils {
     /**
      * Supported HTML extensions. File extensions contain a leading dot.
      */
+    @Deprecated
     private final static List<String> supportedHTMLExtensions;
     static {
         final List<String> she = new ArrayList<String>();
@@ -85,6 +79,7 @@ public final class FileUtils {
     /**
      * Supported resource file extensions. File extensions contain a leading dot.
      */
+    @Deprecated
     private final static List<String> supportedResourceExtensions;
     static {
         final List<String> sre = new ArrayList<String>();
@@ -104,6 +99,7 @@ public final class FileUtils {
      * @param lcasefn file name
      * @return true if is html file and false otherwise
      */
+    @Deprecated
     public static boolean isHTMLFile(final String lcasefn) {
         for (final String ext: supportedHTMLExtensions) {
             if (lcasefn.endsWith(ext)) {
@@ -143,6 +139,7 @@ public final class FileUtils {
      * @param lcasefn file name in lower case.
      * @return {@code true} if file is a resource file, otherwise {@code false}
      */
+    @Deprecated
     public static boolean isResourceFile(final String lcasefn) {
         for (final String ext: supportedResourceExtensions) {
             if (lcasefn.endsWith(ext)) {
@@ -157,6 +154,7 @@ public final class FileUtils {
      * @param lcasefn filename
      * @return true if is supported image and false otherwise
      */
+    @Deprecated
     public static boolean isSupportedImageFile(final String lcasefn) {
         for (final String ext: supportedImageExtensions) {
             if (lcasefn.endsWith(ext)) {
@@ -212,14 +210,8 @@ public final class FileUtils {
     public static String getRelativePath(final String basePath, final String refPath, final String sep) {
         final StringBuilder upPathBuffer = new StringBuilder(128);
         final StringBuilder downPathBuffer = new StringBuilder(128);
-        final StringTokenizer mapTokenizer = new StringTokenizer(
-                normalize(FileUtils.separatorsToUnix(basePath),
-                        UNIX_SEPARATOR),
-                        UNIX_SEPARATOR);
-        final StringTokenizer topicTokenizer = new StringTokenizer(
-                normalize(FileUtils.separatorsToUnix(refPath),
-                        UNIX_SEPARATOR),
-                        UNIX_SEPARATOR);
+        final StringTokenizer mapTokenizer = new StringTokenizer(normalizePath(basePath, File.separator), File.separator);
+        final StringTokenizer topicTokenizer = new StringTokenizer(normalizePath(refPath, File.separator), File.separator);
 
         while (mapTokenizer.countTokens() > 1
                 && topicTokenizer.countTokens() > 1) {
@@ -359,12 +351,12 @@ public final class FileUtils {
      */
     @Deprecated
     public static File resolve(final String basedir, final String filepath) {
-        final File pathname = FileUtils.normalize(stripFragment(filepath));
+        final File pathname = new File(normalizePath(stripFragment(filepath), File.separator));
         if (basedir == null || basedir.length() == 0) {
             return pathname;
         }
         final String normilizedPath = new File(basedir, pathname.getPath()).getPath();
-        return FileUtils.normalize(normilizedPath);
+        return new File(normalizePath(normilizedPath, File.separator));
     }
     
     @Deprecated
@@ -375,29 +367,7 @@ public final class FileUtils {
     public static File resolve(final File basedir, final File filepath) {
         return resolve(basedir != null ? basedir.getPath() : null, filepath.getPath());
     }
-    
-    /**
-     * Remove redundant names ".." and "." from the given path.
-     * Use platform directory separator.
-     *
-     * @param path input path
-     * @return processed path
-     */
-    @Deprecated
-    public static File normalize(final String path) {
-        return new File(normalize(path, File.separator));
-    }
-    
-    /**
-     * Remove redundant names ".." and "." from the given path.
-     * 
-     * @param path input path
-     * @return processed path
-     */
-    public static File normalize(final File path) {
-        return new File(normalize(path.getPath(), File.separator));
-    }
-    
+
     /**
      * Remove redundant names ".." and "." from the given path and replace directory separators.
      * 
@@ -405,7 +375,7 @@ public final class FileUtils {
      * @param separator directory separator
      * @return processed path
      */
-    public static String normalize(final String path, final String separator) {
+    private static String normalizePath(final String path, final String separator) {
         final String p = path.replace(WINDOWS_SEPARATOR, separator).replace(UNIX_SEPARATOR, separator);
         // remove "." from the directory.
         final List<String> dirs = new LinkedList<String>();
@@ -490,52 +460,6 @@ public final class FileUtils {
     }
 
     /**
-     * Copy file from src to target, overwrite if needed.
-     * @param src source file
-     * @param target target file
-     */
-    public static void copyFile(final File src, final File target) {
-        FileInputStream fis = null;
-        FileOutputStream fos = null;
-        try {
-            fis = new FileInputStream(src);
-            fos = new FileOutputStream(target);
-            copy(fis, fos);
-        } catch (final IOException ex) {
-            logger.error(ex.getMessage(), ex) ;
-        } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (final Exception e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-            }
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (final Exception e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-            }
-        }
-    }
-    
-    /**
-     * Copy input stream to output stream
-     * @param fis input stream
-     * @param fos output stream
-     */
-    public static void copy(final InputStream fis, final OutputStream fos) throws IOException {
-        final byte[] buffer = new byte[1024 * 4];
-        int len;
-        while ((len = fis.read(buffer)) != -1) {
-            fos.write(buffer, 0, len);
-        }
-        fos.flush();
-    }
-
-    /**
      * Replace the file extension.
      * @param attValue value to be replaced
      * @param extName value used to replace with
@@ -584,33 +508,6 @@ public final class FileUtils {
             final int fileExtIndex = file.lastIndexOf(DOT);
             return (fileExtIndex != -1) ? file.substring(fileExtIndex + 1,
                     file.length()) : null;
-        }
-    }
-
-    /**
-     * Get the base name, minus the full path and extension, from a full filename.
-     *
-     * @param path the filename to query, null returns null
-     * @return the name of the file without the path, or an empty string if none exists
-     */
-    public static String getBaseName(final String path) {
-        if (path == null) {
-            return null;
-        }
-        final int pi = path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR).lastIndexOf(UNIX_SEPARATOR);
-        String file;
-        if (pi == path.length() - 1) {
-            return "";
-        } else if (pi != -1) {
-            file = path.substring(pi + 1);
-        } else {
-            file = path;
-        }
-        final int i = file.lastIndexOf(DOT);
-        if (i != -1) {
-            return file.substring(0, i);
-        } else {
-            return file;
         }
     }
 
@@ -794,8 +691,8 @@ public final class FileUtils {
      * @throws IOException
      */
     public static boolean directoryContains(final File directory, final File child) {
-        final File d = normalize(directory.getAbsolutePath());
-        final File c = normalize(child.getAbsolutePath());
+        final File d = new File(normalize(directory.getAbsolutePath()));
+        final File c = new File(normalize(child.getAbsolutePath()));
         if (d.equals(c)) {
             return false;
         } else {
@@ -803,20 +700,4 @@ public final class FileUtils {
         }
     }
 
-    /**
-     * Move file.
-     * 
-     * @param srcFile source file
-     * @param destFile destination
-     * @throws IOException if moving failed
-     */
-    public static void moveFile(File srcFile, File destFile) throws IOException {
-        if (destFile.exists() && !destFile.delete()) {
-            throw new IOException("Failed to remove " + destFile.getAbsolutePath());
-        }
-        if (!srcFile.renameTo(destFile)) {
-            throw new IOException("Failed to move " + srcFile.getAbsolutePath() + " tp " + destFile.getAbsolutePath());
-        }
-    }
-    
 }

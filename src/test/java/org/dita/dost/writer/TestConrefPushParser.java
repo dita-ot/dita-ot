@@ -8,17 +8,19 @@
  */
 package org.dita.dost.writer;
 
+import static org.apache.commons.io.FileUtils.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.dita.dost.util.Job;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -29,8 +31,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.reader.ConrefPushReader;
 import org.dita.dost.reader.ConrefPushReader.MoveKey;
 import org.dita.dost.util.Constants;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.writer.ConrefPushParser;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
@@ -53,10 +53,8 @@ public class TestConrefPushParser {
         tempDir = TestUtils.createTempDir(TestConrefPushParser.class);
 
         inputFile = new File(tempDir, "conrefpush_stub.xml");
-        FileUtils.copyFile(new File(srcDir, "conrefpush_stub.xml"),
-                inputFile);
-        FileUtils.copyFile(new File(srcDir, "conrefpush_stub2.xml"),
-                new File(tempDir, "conrefpush_stub2.xml"));
+        copyFile(new File(srcDir, "conrefpush_stub.xml"), inputFile);
+        copyFile(new File(srcDir, "conrefpush_stub2.xml"), new File(tempDir, "conrefpush_stub2.xml"));
     }
 
     @Test
@@ -100,6 +98,8 @@ public class TestConrefPushParser {
          * </ol>
          */
         final ConrefPushParser parser = new ConrefPushParser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir));
         final ConrefPushReader reader = new ConrefPushReader();
 
         reader.read(inputFile.getAbsoluteFile());
@@ -108,8 +108,8 @@ public class TestConrefPushParser {
         if(iter.hasNext()){
             final Map.Entry<File, Hashtable<MoveKey, DocumentFragment>> entry = iter.next();
             // initialize the parsed file
-            FileUtils.copyFile(new File(srcDir, "conrefpush_stub2_backup.xml"), entry.getKey());
-//            final Content content = new ContentImpl();
+            copyFile(new File(srcDir, "conrefpush_stub2_backup.xml"), entry.getKey());
+            //            final Content content = new ContentImpl();
 //            content.setValue(entry.getValue());
 //            parser.setContent(content);
             parser.setMoveTable(entry.getValue());

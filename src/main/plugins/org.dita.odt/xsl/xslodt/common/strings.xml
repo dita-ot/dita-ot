@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
+<langlist>
+  <lang xml:lang="de" filename="strings-de-de.xml"/>
+  <lang xml:lang="de-de" filename="strings-de-de.xml"/>
+  <lang xml:lang="en" filename="strings-en-us.xml"/>
+  <lang xml:lang="en-us" filename="strings-en-us.xml"/>
+  <lang xml:lang="es" filename="strings-es-es.xml"/>
+  <lang xml:lang="es-es" filename="strings-es-es.xml"/>
+  <lang xml:lang="fr" filename="strings-fr-fr.xml"/>
+  <lang xml:lang="fr-fr" filename="strings-fr-fr.xml"/>
+  <lang xml:lang="id" filename="strings-id-id.xml"/>
+  <lang xml:lang="id-id" filename="strings-id-id.xml"/>
+  <lang xml:lang="it" filename="strings-it-it.xml"/>
+  <lang xml:lang="it-it" filename="strings-it-it.xml"/>
+  <lang xml:lang="ja" filename="strings-ja-jp.xml"/>
+  <lang xml:lang="ja-jp" filename="strings-ja-jp.xml"/>
+  <lang xml:lang="kk" filename="strings-kk-kz.xml"/>
+  <lang xml:lang="kk-kz" filename="strings-kk-kz.xml"/>
+  <lang xml:lang="ms" filename="strings-ms-my.xml"/>
+  <lang xml:lang="ms-my" filename="strings-ms-my.xml"/>
+  <lang xml:lang="zh" filename="strings-zh-cn.xml"/>
+  <lang xml:lang="zh-cn" filename="strings-zh-cn.xml"/>
+</langlist>

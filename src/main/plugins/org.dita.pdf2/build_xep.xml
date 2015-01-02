@@ -103,7 +103,7 @@
     </condition>
     <mkdir dir="${dita.map.output.dir}"/>
     
-    <echo taskname="xeo">Processing ${pdf2.temp.dir}/topic.fo to ${outputFile}</echo>
+    <echo level="info" taskname="xep">Processing ${pdf2.temp.dir}/topic.fo to ${outputFile}</echo>
     <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode"
           failonerror="${xep.failOnError}" fork="true" maxmemory="${maxJavaMemory}" taskname="xep">
       <jvmarg line="${baseJVMArgLine}"/>

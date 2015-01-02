@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -14,6 +13,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.reader.AbstractReader;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
 /**
@@ -22,36 +23,44 @@ import org.w3c.dom.Document;
 public abstract class AbstractDomFilter implements AbstractReader {
 
     protected DITAOTLogger logger;
+    protected Job job;
 
     @Override
     public void read(final File filename) {
+        assert filename.isAbsolute();
         Document doc = null;
         try {
-            final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
             doc = builder.parse(filename);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error("Failed to parse " + filename.getAbsolutePath() + ":" + e.getMessage(), e);
             return;
         }
 
-        process(doc);
+        final Document resDoc = process(doc);
 
-        FileOutputStream file = null;
-        try {
-            file = new FileOutputStream(filename);
-            final StreamResult res = new StreamResult(file);
-            final DOMSource ds = new DOMSource(doc);
-            final Transformer tf = TransformerFactory.newInstance().newTransformer();
-            tf.transform(ds, res);
-        } catch (final Exception e) {
-            logger.error("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
-        } finally {
-            if (file != null) {
-                try {
-                    file.close();
-                } catch (final IOException e) {
-                    // NOOP
+        if (resDoc != null) {
+            FileOutputStream file = null;
+            try {
+                file = new FileOutputStream(filename);
+                final StreamResult res = new StreamResult(file);
+                final DOMSource ds = new DOMSource(resDoc);
+                final Transformer tf = TransformerFactory.newInstance().newTransformer();
+                tf.transform(ds, res);
+            } catch (final RuntimeException e) {
+                throw e;
+            } catch (final Exception e) {
+                logger.error("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
+            } finally {
+                if (file != null) {
+                    try {
+                        file.close();
+                    } catch (final IOException e) {
+                        // NOOP
+                    }
                 }
             }
         }
@@ -62,11 +71,16 @@ public abstract class AbstractDomFilter implements AbstractReader {
         this.logger = logger;
     }
 
+    public void setJob(final Job job) {
+        this.job = job;
+    }
+
     /**
      * Modify document.
      * 
      * @param doc document to modify
+     * @return modified document, may be argument document; if {@code null}, document is not serialized
      */
-    public abstract void process(final Document doc);
+    public abstract Document process(final Document doc);
 
 }

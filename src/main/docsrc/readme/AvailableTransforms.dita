@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
- "concept.dtd">
-<concept id="availabletransforms" xml:lang="en-us">
-  <title>DITA-OT transformations</title>
-  <shortdesc> The DITA Open Toolkit (DITA-OT) ships with several core transformations. Each core
-    transformation represents an implementation of all processing that is defined by OASIS in the
-    DITA specification.  </shortdesc>
-</concept>

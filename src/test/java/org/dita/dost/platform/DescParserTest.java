@@ -18,18 +18,18 @@ import org.dita.dost.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 public class DescParserTest {
 
     final File resourceDir = TestUtils.getResourceDir(DescParserTest.class);
-
-    final File base = new File("base", "plugins");
-    final String basePrefix = base.getPath() + File.separator;
-    final DescParser p = new DescParser(base, base.getParentFile());
+    final DescParser p = new DescParser(resourceDir);
 
     @Before
     public void setUp() throws Exception {
+        p.setPluginDir(resourceDir);
+        p.setContentHandler(new DefaultHandler());
         final XMLReader parser = XMLReaderFactory.createXMLReader();
         parser.setContentHandler(p);
         parser.parse(new File(resourceDir, "plugin.xml").toURI().toString());
@@ -78,18 +78,18 @@ public class DescParserTest {
     @Test
     public void testFileValueFeature() {
         final Features f = p.getFeatures();
-        assertEquals(asList(basePrefix + "foo", basePrefix + "bar"),
+        assertEquals(asList(new File(resourceDir, "foo").toString(), new File(resourceDir, "bar").toString()),
                 f.getFeature("type_file"));
-        assertEquals(asList(basePrefix + "foo", basePrefix + "bar"),
+        assertEquals(asList(new File(resourceDir, "foo").toString(), new File(resourceDir, "bar").toString()),
                 f.getFeature("multiple_type_file"));
     }
 
     @Test
     public void testFileFeature() {
         final Features f = p.getFeatures();
-        assertEquals(asList(basePrefix + "foo", basePrefix + "bar"),
+        assertEquals(asList(new File(resourceDir, "foo").toString(), new File(resourceDir, "bar").toString()),
                 f.getFeature("file"));
-        assertEquals(asList(basePrefix + "foo", basePrefix + "bar"),
+        assertEquals(asList(new File(resourceDir, "foo").toString(), new File(resourceDir, "bar").toString()),
                 f.getFeature("multiple_file"));
     }
 

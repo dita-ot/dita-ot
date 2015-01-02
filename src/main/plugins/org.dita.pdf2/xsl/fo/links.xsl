@@ -35,7 +35,9 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:opentopic-mapmerge="http://www.idiominc.com/opentopic/mapmerge"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-    exclude-result-prefixes="opentopic-mapmerge opentopic-func"
+    xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    exclude-result-prefixes="opentopic-mapmerge opentopic-func related-links xs"
     version="2.0">
   
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
@@ -272,7 +274,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:when>
         <xsl:when test="not(@scope = 'external' or not(empty(@format) or  @format = 'dita'))">
           <xsl:call-template name="insertPageNumberCitation">
-            <xsl:with-param name="isTitleEmpty" select="'yes'"/>
+            <xsl:with-param name="isTitleEmpty" select="true()"/>
             <xsl:with-param name="destination" select="$destination"/>
             <xsl:with-param name="element" select="$element"/>
           </xsl:call-template>
@@ -335,7 +337,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' topic/related-links ')]">
         <xsl:if test="exists($includeRelatedLinkRoles)">
-            <xsl:variable name="topicType">
+          <!--  
+          <xsl:variable name="topicType">
                 <xsl:for-each select="parent::*">
                     <xsl:call-template name="determineTopicType"/>
                 </xsl:for-each>
@@ -350,41 +353,126 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:variable name="linkTextContent" select="string($collectedLinks)"/>
 
             <xsl:if test="normalize-space($linkTextContent)!=''">
-                <fo:block xsl:use-attribute-sets="related-links">
+              <fo:block xsl:use-attribute-sets="related-links">
 
-            <fo:block xsl:use-attribute-sets="related-links.title">
-              <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'Related Links'"/>
-              </xsl:call-template>
-            </fo:block>
-
-            <fo:block xsl:use-attribute-sets="related-links__content">
-                        <xsl:copy-of select="$collectedLinks"/>
-                    </fo:block>
+                <fo:block xsl:use-attribute-sets="related-links.title">
+                  <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Related Links'"/>
+                  </xsl:call-template>
                 </fo:block>
+
+                <fo:block xsl:use-attribute-sets="related-links__content">
+                  <xsl:copy-of select="$collectedLinks"/>
+                </fo:block>
+              </fo:block>
             </xsl:if>
 
-        </xsl:if>
+            -->
+        <fo:block xsl:use-attribute-sets="related-links">
+          <fo:block xsl:use-attribute-sets="related-links__content">
+          <xsl:if test="$includeRelatedLinkRoles = ('child', 'descendant')">
+            <xsl:call-template name="ul-child-links"/>
+            <xsl:call-template name="ol-child-links"/>
+          </xsl:if>
+          <!--xsl:if test="$includeRelatedLinkRoles = ('next', 'previous', 'parent')">
+            <xsl:call-template name="next-prev-parent-links"/>
+          </xsl:if-->
+          <xsl:variable name="unordered-links" as="element(linklist)*">
+            <xsl:apply-templates select="." mode="related-links:group-unordered-links">
+              <xsl:with-param name="nodes"
+                              select="descendant::*[contains(@class, ' topic/link ')]
+                                                   [not(related-links:omit-from-unordered-links(.))]
+                                                   [generate-id(.) = generate-id(key('hideduplicates', related-links:hideduplicates(.))[1])]"/>
+            </xsl:apply-templates>
+          </xsl:variable>
+          <xsl:apply-templates select="$unordered-links"/>
+          <!--linklists - last but not least, create all the linklists and their links, with no sorting or re-ordering-->
+          <xsl:apply-templates select="*[contains(@class, ' topic/linklist ')]"/>
+          </fo:block>
+        </fo:block>
+      </xsl:if>
     </xsl:template>
+  
+  <xsl:template name="ul-child-links">
+    <xsl:variable name="children"
+                  select="descendant::*[contains(@class, ' topic/link ')]
+                                       [@role = ('child', 'descendant')]
+                                       [not(parent::*/@collection-type = 'sequence')]
+                                       [not(ancestor::*[contains(@class, ' topic/linklist ')])]"/>
+    <xsl:if test="$children">
+      <fo:list-block xsl:use-attribute-sets="related-links.ul">
+        <xsl:for-each select="$children[generate-id(.) = generate-id(key('link', related-links:link(.))[1])]">
+          <fo:list-item xsl:use-attribute-sets="related-links.ul.li">
+            <fo:list-item-label xsl:use-attribute-sets="related-links.ul.li__label">
+              <fo:block xsl:use-attribute-sets="related-links.ul.li__label__content">
+                <fo:inline>
+                  <xsl:call-template name="commonattributes"/>
+                </fo:inline>
+                <xsl:call-template name="insertVariable">
+                  <xsl:with-param name="theVariableID" select="'Unordered List bullet'"/>
+                </xsl:call-template>
+              </fo:block>
+            </fo:list-item-label>
+            <fo:list-item-body xsl:use-attribute-sets="related-links.ul.li__body">
+              <fo:block xsl:use-attribute-sets="related-links.ul.li__content">
+                <xsl:apply-templates select="."/>
+              </fo:block>
+            </fo:list-item-body>
+          </fo:list-item>
+        </xsl:for-each>
+      </fo:list-block>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="ol-child-links">
+    <xsl:variable name="children"
+                  select="descendant::*[contains(@class, ' topic/link ')]
+                                       [@role = ('child', 'descendant')]
+                                       [parent::*/@collection-type = 'sequence']
+                                       [not(ancestor::*[contains(@class, ' topic/linklist ')])]"/>
+    <xsl:if test="$children">
+      <fo:list-block xsl:use-attribute-sets="related-links.ol">
+        <xsl:for-each select="($children[generate-id(.) = generate-id(key('link', related-links:link(.))[1])])">
+          <fo:list-item xsl:use-attribute-sets="related-links.ol.li">
+            <fo:list-item-label xsl:use-attribute-sets="related-links.ol.li__label">
+              <fo:block xsl:use-attribute-sets="related-links.ol.li__label__content">
+                <fo:inline>
+                  <xsl:call-template name="commonattributes"/>
+                </fo:inline>
+                <xsl:call-template name="insertVariable">
+                  <xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
+                  <xsl:with-param name="theParameters">
+                    <number>
+                      <xsl:value-of select="position()"/>
+                    </number>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </fo:block>
+            </fo:list-item-label>
+            <fo:list-item-body xsl:use-attribute-sets="related-links.ol.li__body">
+              <fo:block xsl:use-attribute-sets="related-links.ol.li__content">
+                <xsl:apply-templates select="."/>
+              </fo:block>
+            </fo:list-item-body>
+          </fo:list-item>
+        </xsl:for-each>
+      </fo:list-block>
+    </xsl:if>
+  </xsl:template>
 
-    <xsl:template name="getLinkScope">
+    <xsl:template name="getLinkScope" as="xs:string">
         <xsl:choose>
-            <xsl:when test="@scope">
-                <xsl:value-of select="@scope"/>
-            </xsl:when>
-            <xsl:when test="contains(@class, ' topic/related-links ')">
-                <xsl:value-of select="'local'"/>
+            <xsl:when test="ancestor-or-self::*[@scope][1]/@scope">
+              <xsl:value-of select="ancestor-or-self::*[@scope][1]/@scope"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:for-each select="..">
-                    <xsl:call-template name="getLinkScope"/>
-                </xsl:for-each>
+              <xsl:value-of select="'local'"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/link ')]">
-      <xsl:param name="topicType">
+      <xsl:param name="topicType" as="xs:string?">
           <xsl:for-each select="ancestor::*[contains(@class,' topic/topic ')][1]">
               <xsl:call-template name="determineTopicType"/>
           </xsl:for-each>
@@ -393,7 +481,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:when test="(@role and not($includeRelatedLinkRoles = @role)) or
                         (not(@role) and not($includeRelatedLinkRoles = '#default'))"/>
         <xsl:when test="@role='child' and $chapterLayout='MINITOC' and
-                        ($topicType='topicChapter' or $topicType='topicAppendix' or $topicType='topicPart')">
+                        $topicType = ('topicChapter', 'topicAppendix', 'topicPart')">
           <!-- When a minitoc already links to children, do not add them here -->
         </xsl:when>
         <xsl:otherwise>
@@ -402,59 +490,59 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/link ')]" mode="processLink">
+  <xsl:template match="*[contains(@class,' topic/link ')]" mode="processLink">
     <xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
-    <xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
+    <xsl:variable name="element" select="key('key_anchor',$destination, $root)[1]"/>
 
     <xsl:variable name="referenceTitle" as="node()*">
-            <xsl:apply-templates select="." mode="insertReferenceTitle">
-                <xsl:with-param name="href" select="@href"/>
-                <xsl:with-param name="titlePrefix" select="''"/>
-                <xsl:with-param name="destination" select="$destination"/>
-                <xsl:with-param name="element" select="$element"/>
-            </xsl:apply-templates>
-        </xsl:variable>
-        <xsl:variable name="linkScope">
-            <xsl:call-template name="getLinkScope"/>
-        </xsl:variable>
+        <xsl:apply-templates select="." mode="insertReferenceTitle">
+            <xsl:with-param name="href" select="@href"/>
+            <xsl:with-param name="titlePrefix" select="''"/>
+            <xsl:with-param name="destination" select="$destination"/>
+            <xsl:with-param name="element" select="$element"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="linkScope" as="xs:string">
+        <xsl:call-template name="getLinkScope"/>
+    </xsl:variable>
 
-        <fo:block xsl:use-attribute-sets="link">
-            <fo:inline xsl:use-attribute-sets="link__content">
-                <fo:basic-link>
-                    <xsl:call-template name="buildBasicLinkDestination">
-                        <xsl:with-param name="scope" select="$linkScope"/>
-                        <xsl:with-param name="href" select="@href"/>
+    <fo:block xsl:use-attribute-sets="link">
+        <fo:inline xsl:use-attribute-sets="link__content">
+            <fo:basic-link>
+                <xsl:call-template name="buildBasicLinkDestination">
+                  <xsl:with-param name="scope" select="$linkScope"/>
+                  <xsl:with-param name="href" select="@href"/>
+                </xsl:call-template>
+                <xsl:choose>
+                  <xsl:when test="not($linkScope = 'external') and exists($referenceTitle)">
+                    <xsl:copy-of select="$referenceTitle"/>
+                  </xsl:when>
+                  <xsl:when test="not($linkScope = 'external')">
+                    <xsl:call-template name="insertPageNumberCitation">
+                      <xsl:with-param name="isTitleEmpty" select="true()"/>
+                      <xsl:with-param name="destination" select="$destination"/>
+                      <xsl:with-param name="element" select="$element"/>
                     </xsl:call-template>
-                    <xsl:choose>
-                      <xsl:when test="not($linkScope = 'external') and exists($referenceTitle)">
-                            <xsl:copy-of select="$referenceTitle"/>
-                        </xsl:when>
-                        <xsl:when test="not($linkScope = 'external')">
-                            <xsl:call-template name="insertPageNumberCitation">
-                                <xsl:with-param name="isTitleEmpty" select="'yes'"/>
-                <xsl:with-param name="destination" select="$destination"/>
-                <xsl:with-param name="element" select="$element"/>
-                            </xsl:call-template>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:apply-templates/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </fo:basic-link>
-            </fo:inline>
-          <xsl:if test="not($linkScope = 'external') and exists($referenceTitle)">
-                <xsl:call-template name="insertPageNumberCitation">
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:apply-templates/>
+                  </xsl:otherwise>
+                </xsl:choose>
+            </fo:basic-link>
+        </fo:inline>
+      <xsl:if test="not($linkScope = 'external') and exists($referenceTitle)">
+        <xsl:call-template name="insertPageNumberCitation">
           <xsl:with-param name="destination" select="$destination"/>
           <xsl:with-param name="element" select="$element"/>
         </xsl:call-template>
-            </xsl:if>
-                <xsl:call-template name="insertLinkShortDesc">
-          <xsl:with-param name="destination" select="$destination"/>
-          <xsl:with-param name="element" select="$element"/>
-          <xsl:with-param name="linkScope" select="$linkScope"/>
-        </xsl:call-template>
-        </fo:block>
-    </xsl:template>
+      </xsl:if>
+      <xsl:call-template name="insertLinkShortDesc">
+      <xsl:with-param name="destination" select="$destination"/>
+      <xsl:with-param name="element" select="$element"/>
+      <xsl:with-param name="linkScope" select="$linkScope"/>
+    </xsl:call-template>
+    </fo:block>
+  </xsl:template>
 
     <xsl:template name="buildBasicLinkDestination">
         <xsl:param name="scope" select="@scope"/>
@@ -489,9 +577,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="insertPageNumberCitation">
-        <xsl:param name="isTitleEmpty"/>
-        <xsl:param name="destination"/>
-        <xsl:param name="element"/>
+        <xsl:param name="isTitleEmpty" as="xs:boolean" select="false()"/>
+        <xsl:param name="destination" as="xs:string"/>
+        <xsl:param name="element" as="element()?"/>
 
         <xsl:choose>
             <xsl:when test="not($element) or ($destination = '')"/>
@@ -577,470 +665,133 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>
     
-        <!--Related links-->
-
-    <xsl:template match="*" mode="buildRelationships">
-      <xsl:variable name="parentCollectionType">
-        <xsl:call-template name="getCollectionType">
-          <xsl:with-param name="nodeType" select="'parent'"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:variable name="selfCollectionType">
-        <xsl:call-template name="getCollectionType">
-          <xsl:with-param name="nodeType" select="'self'"/>
-        </xsl:call-template>
-      </xsl:variable>
-
-      <xsl:variable name="relatedConceptsTitle">
-        <xsl:call-template name="insertVariable">
-          <xsl:with-param name="theVariableID" select="'Related concepts'"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:variable name="relatedTasksTitle">
-        <xsl:call-template name="insertVariable">
-          <xsl:with-param name="theVariableID" select="'Related tasks'"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:variable name="relatedReferencesTitle">
-        <xsl:call-template name="insertVariable">
-          <xsl:with-param name="theVariableID" select="'Related references'"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:variable name="relatedInformationTitle">
-        <xsl:call-template name="insertVariable">
-          <xsl:with-param name="theVariableID" select="'Related information'"/>
-        </xsl:call-template>
-      </xsl:variable>
-
-
-      <xsl:choose>
-        <xsl:when test="$selfCollectionType = 'none'">
-          <xsl:call-template name="linkToChilds">
-            <xsl:with-param name="listType" select="'none'"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="($selfCollectionType = 'unordered') or ($selfCollectionType = 'choice')  or ($selfCollectionType = 'family')">
-          <xsl:call-template name="linkToChilds">
-            <xsl:with-param name="listType" select="'bulleted'"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="$selfCollectionType = 'sequence'">
-          <xsl:call-template name="linkToChilds">
-            <xsl:with-param name="listType" select="'numbered'"/>
-          </xsl:call-template>
-        </xsl:when>
-      </xsl:choose>
-
-      <xsl:choose>
-        <xsl:when test="($parentCollectionType = 'none') or ($parentCollectionType = 'unordered') or ($parentCollectionType = 'choice')">
-          <xsl:call-template name="linkToParent"/>
-
-          <!-- Creating relationships to the concepts -->
-          <xsl:call-template name="createRelatedLinks">
-            <xsl:with-param name="linkType" select="'concept'"/>
-            <xsl:with-param name="title" select="$relatedConceptsTitle"/>
-          </xsl:call-template>
-
-          <!-- Creating relationships to the tasks -->
-          <xsl:call-template name="createRelatedLinks">
-            <xsl:with-param name="linkType" select="'task'"/>
-            <xsl:with-param name="title" select="$relatedTasksTitle"/>
-          </xsl:call-template>
-
-          <!-- Creating relationships to the references -->
-          <xsl:call-template name="createRelatedLinks">
-            <xsl:with-param name="linkType" select="'reference'"/>
-            <xsl:with-param name="title" select="$relatedReferencesTitle"/>
-          </xsl:call-template>
-
-          <!-- Creating relationships to the topics -->
-          <xsl:call-template name="createRelatedLinks">
-            <xsl:with-param name="linkType" select="'topic'"/>
-            <xsl:with-param name="title" select="$relatedInformationTitle"/>
-          </xsl:call-template>
-        </xsl:when>
-
-        <xsl:when test="$parentCollectionType = 'sequence'">
-          <xsl:call-template name="linkToParent"/>
-          <xsl:call-template name="linkToPrevious"/>
-          <xsl:call-template name="linkToNext"/>
-
-          <!-- Creating relationships to the concepts -->
-          <xsl:call-template name="createRelatedLinks">
-            <xsl:with-param name="linkType" select="'concept'"/>
-            <xsl:with-param name="title" select="$relatedConceptsTitle"/>
-          </xsl:call-template>
-
-          <!-- Creating relationships to the tasks -->
-          <xsl:call-template name="createRelatedLinks">
-            <xsl:with-param name="linkType" select="'task'"/>
-            <xsl:with-param name="title" select="$relatedTasksTitle"/>
-          </xsl:call-template>
-
-          <!-- Creating relationships to the references -->
-          <xsl:call-template name="createRelatedLinks">
-            <xsl:with-param name="linkType" select="'reference'"/>
-            <xsl:with-param name="title" select="$relatedReferencesTitle"/>
-          </xsl:call-template>
-
-          <!-- Creating relationships to the topics -->
-          <xsl:call-template name="createRelatedLinks">
-            <xsl:with-param name="linkType" select="'topic'"/>
-            <xsl:with-param name="title" select="$relatedInformationTitle"/>
-          </xsl:call-template>
-        </xsl:when>
-
-        <xsl:when test="$parentCollectionType = 'family'">
-          <xsl:call-template name="linkToParent"/>
-
-          <!-- Creating relationships to the concepts -->
-          <xsl:variable name="siblingConcepts" select="preceding-sibling::*[contains(@class, ' concept/concept ')] | following-sibling::*[contains(@class, ' concept/concept ')]"/>
-          <xsl:call-template name="createMapLinks">
-            <xsl:with-param name="nodeSet" select="$siblingConcepts"/>
-            <xsl:with-param name="title" select="$relatedConceptsTitle"/>
-          </xsl:call-template>
-          <xsl:choose>
-            <xsl:when test="$siblingConcepts">
-              <xsl:call-template name="createRelatedLinks">
-                <xsl:with-param name="linkType" select="'concept'"/>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="createRelatedLinks">
-                <xsl:with-param name="linkType" select="'concept'"/>
-                <xsl:with-param name="title" select="$relatedConceptsTitle"/>
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <!-- Creating relationships to the tasks -->
-          <xsl:variable name="siblingTasks" select="preceding-sibling::*[contains(@class, ' task/task ')] | following-sibling::*[contains(@class, ' task/task ')]"/>
-          <xsl:call-template name="createMapLinks">
-            <xsl:with-param name="nodeSet" select="$siblingTasks"/>
-            <xsl:with-param name="title" select="$relatedTasksTitle"/>
-          </xsl:call-template>
-          <xsl:choose>
-            <xsl:when test="$siblingTasks">
-              <xsl:call-template name="createRelatedLinks">
-                <xsl:with-param name="linkType" select="'task'"/>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="createRelatedLinks">
-                <xsl:with-param name="linkType" select="'task'"/>
-                <xsl:with-param name="title" select="$relatedTasksTitle"/>
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <!-- Creating relationships to the references -->
-          <xsl:variable name="siblingReferences" select="preceding-sibling::*[contains(@class, ' reference/reference ')] | following-sibling::*[contains(@class, ' reference/reference ')]"/>
-          <xsl:call-template name="createMapLinks">
-            <xsl:with-param name="nodeSet" select="$siblingReferences"/>
-            <xsl:with-param name="title" select="$relatedReferencesTitle"/>
-          </xsl:call-template>
-          <xsl:choose>
-            <xsl:when test="$siblingReferences">
-              <xsl:call-template name="createRelatedLinks">
-                <xsl:with-param name="linkType" select="'reference'"/>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="createRelatedLinks">
-                <xsl:with-param name="linkType" select="'reference'"/>
-                <xsl:with-param name="title" select="$relatedReferencesTitle"/>
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <!-- Creating relationships to the topics -->
-          <xsl:variable name="siblingTopics" select="preceding-sibling::*[contains(@class, ' topic/topic ') and not(contains(@class, ' concept/concept ') or contains(@class, ' task/task ') or contains(@class, ' reference/reference '))] | following-sibling::*[contains(@class, ' topic/topic ') and not(contains(@class, ' concept/concept ') or contains(@class, ' task/task ') or contains(@class, ' reference/reference '))]"/>
-          <xsl:call-template name="createMapLinks">
-            <xsl:with-param name="nodeSet" select="$siblingTopics"/>
-            <xsl:with-param name="title" select="$relatedInformationTitle"/>
-          </xsl:call-template>
-          <xsl:choose>
-            <xsl:when test="$siblingTopics">
-              <xsl:call-template name="createRelatedLinks">
-                <xsl:with-param name="linkType" select="'topic'"/>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="createRelatedLinks">
-                <xsl:with-param name="linkType" select="'topic'"/>
-                <xsl:with-param name="title" select="$relatedInformationTitle"/>
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-      </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="getCollectionType">
-    <xsl:param name="nodeType"/>
-    <xsl:variable name="collectionType">
-      <xsl:choose>
-        <xsl:when test="$nodeType = 'parent'">
-          <xsl:value-of select="parent::*/@collection-type"/>
-        </xsl:when>
-        <xsl:when test="$nodeType = 'self'">
-          <xsl:value-of select="@collection-type"/>
-        </xsl:when>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$collectionType = 'unordered'">
-        <xsl:value-of select="'none'"/>
-      </xsl:when>
-      <xsl:when test="$collectionType">
-        <xsl:value-of select="$collectionType"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="'none'"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  <xsl:template name="linkToParent">
-    <!-- Creating relationships to the parent -->
-    <xsl:variable name="linksTitle">
-      <xsl:call-template name="insertVariable">
-        <xsl:with-param name="theVariableID" select="'Parent topic'"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:call-template name="createMapLinks">
-      <xsl:with-param name="nodeSet" select="parent::*[contains(@class, ' topic/topic ')]"/>
-      <xsl:with-param name="title" select="$linksTitle"/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="linkToNext">
-    <!-- Creating relationships to the next sibling -->
-    <xsl:variable name="linksTitle">
-      <xsl:call-template name="insertVariable">
-        <xsl:with-param name="theVariableID" select="'Next topic'"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:call-template name="createMapLinks">
-      <xsl:with-param name="nodeSet" select="following-sibling::*[contains(@class, ' topic/topic ')][1]"/>
-      <xsl:with-param name="title" select="$linksTitle"/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="linkToPrevious">
-    <!-- Creating relationships to the previous sibling -->
-    <xsl:variable name="linksTitle">
-      <xsl:call-template name="insertVariable">
-        <xsl:with-param name="theVariableID" select="'Previous topic'"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:call-template name="createMapLinks">
-      <xsl:with-param name="nodeSet" select="preceding-sibling::*[contains(@class, ' topic/topic ')][1]"/>
-      <xsl:with-param name="title" select="$linksTitle"/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="linkToChilds">
-    <!-- Creating relationships to the childs -->
-    <xsl:param name="listType"/>
-    <xsl:variable name="linksTitle">
-      <xsl:call-template name="insertVariable">
-        <xsl:with-param name="theVariableID" select="'Child topics'"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:call-template name="createMapLinks">
-      <xsl:with-param name="nodeSet" select="*[contains(@class, ' topic/topic ')] | *[contains(@class,' topic/dita ')]/*[contains(@class, ' topic/topic ')]"/>
-      <xsl:with-param name="title" select="$linksTitle"/>
-      <xsl:with-param name="listType" select="$listType"/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="createMapLinks">
-    <xsl:param name="nodeSet"/>
-    <xsl:param name="title"/>
-    <xsl:param name="listType" select="'none'"/>
-
-    <xsl:variable name="linkNodes">
-      <xsl:if test="$nodeSet">
-        <xsl:choose>
-          <xsl:when test="$listType = 'bulleted'">
-            <xsl:call-template name="createMapLinksUnordered">
-              <xsl:with-param name="nodeSet" select="$nodeSet"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="$listType = 'numbered'">
-            <xsl:call-template name="createMapLinksOrdered">
-              <xsl:with-param name="nodeSet" select="$nodeSet"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="$listType = 'none'">
-            <fo:block xsl:use-attribute-sets="related-links">
-              <xsl:for-each select="$nodeSet">
-                <fo:block xsl:use-attribute-sets="related-links__content">
-                  <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="xref">
-                    <xsl:apply-templates select="child::*[contains(@class, ' topic/title ')]" mode="insert-text"/>
-                  </fo:basic-link>
-                </fo:block>
-              </xsl:for-each>
-            </fo:block>
-          </xsl:when>
-        </xsl:choose>
-      </xsl:if>
-    </xsl:variable>
-
-    <xsl:if test="($linkNodes//fo:list-block) or ($linkNodes//fo:block)">
-      <xsl:if test="$title">
-        <fo:block xsl:use-attribute-sets="related-links.title">
-          <xsl:value-of select="$title"/>
-        </fo:block>
-      </xsl:if>
-      <xsl:copy-of select="$linkNodes"/>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="createMapLinksUnordered">
-    <xsl:param name="nodeSet"/>
-
-    <fo:list-block xsl:use-attribute-sets="related-links.ul">
-      <xsl:for-each select="$nodeSet">
-        <fo:list-item xsl:use-attribute-sets="related-links.ul.li">
-          <fo:list-item-label xsl:use-attribute-sets="related-links.ul.li__label">
-            <fo:block xsl:use-attribute-sets="related-links.ul.li__label__content">
-              <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'Unordered List bullet'"/>
-              </xsl:call-template>
-            </fo:block>
-          </fo:list-item-label>
-
-          <fo:list-item-body xsl:use-attribute-sets="related-links.ul.li__body">
-            <fo:block xsl:use-attribute-sets="related-links.ul.li__content">
-              <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="xref">
-                <xsl:apply-templates select="child::*[contains(@class, ' topic/title ')]" mode="insert-text"/>
-              </fo:basic-link>
-            </fo:block>
-          </fo:list-item-body>
-        </fo:list-item>
-      </xsl:for-each>
-    </fo:list-block>
-  </xsl:template>
-
-  <xsl:template name="createMapLinksOrdered">
-    <xsl:param name="nodeSet"/>
-
-    <fo:list-block xsl:use-attribute-sets="related-links.ol">
-      <xsl:for-each select="$nodeSet">
-        <fo:list-item xsl:use-attribute-sets="related-links.ol.li">
-          <fo:list-item-label xsl:use-attribute-sets="related-links.ol.li__label">
-            <fo:block xsl:use-attribute-sets="related-links.ol.li__label__content">
-              <xsl:value-of select="count(preceding-sibling::*[contains(@class,' topic/topic ')])"/>
-            </fo:block>
-          </fo:list-item-label>
-
-          <fo:list-item-body xsl:use-attribute-sets="related-links.ol.li__body">
-            <fo:block xsl:use-attribute-sets="related-links.ol.li__content">
-              <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="xref">
-                <xsl:apply-templates select="child::*[contains(@class, ' topic/title ')]" mode="insert-text"/>
-              </fo:basic-link>
-            </fo:block>
-          </fo:list-item-body>
-        </fo:list-item>
-      </xsl:for-each>
-    </fo:list-block>
-  </xsl:template>
-
-  <xsl:template name="createRelatedLinks">
-    <xsl:param name="linkType"/>
-    <xsl:param name="title"/>
-    <xsl:variable name="id" select="@id"/>
-
-    <xsl:if test="$relatedTopicrefs/@id = $id">
-      <xsl:variable name="resultLinks">
-        <xsl:for-each select="$relatedTopicrefs[@id = $id]">
-          <xsl:choose>
-            <xsl:when test="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]">
-              <xsl:variable name="topicTypeCellSpec" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][@type = $linkType]"/>
-              <xsl:if test="$topicTypeCellSpec">
-                <xsl:variable name="currPosition" select="count(ancestor::*[contains(@class, ' map/relcell ')][1]/preceding-sibling::*) + 1"/>
-                <xsl:variable name="position">
-                  <xsl:for-each select="$topicTypeCellSpec">
-                    <xsl:value-of select="count(preceding-sibling::*) + 1"/>
-                  </xsl:for-each>
-                </xsl:variable>
-                <xsl:if test="not($currPosition = $position)">
-                  <xsl:for-each select="ancestor::*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position() = $position]//*[contains(@class, ' map/topicref ')]">
-                    <xsl:variable name="relatedTopic" select="key('key_anchor',@id)[1]"/>
-                    <fo:block xsl:use-attribute-sets="related-links__content">
-                      <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="xref">
-                        <xsl:apply-templates select="$relatedTopic/*[contains(@class,' topic/title ')]" mode="insert-text"/>
-                      </fo:basic-link>
-                    </fo:block>
-                  </xsl:for-each>
-                </xsl:if>
-              </xsl:if>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:for-each select="ancestor::*[contains(@class, ' map/relcell ')][1]/preceding-sibling::*//*[contains(@class, ' map/topicref ')] | ancestor::*[contains(@class, ' map/relcell ')][1]/following-sibling::*//*[contains(@class, ' map/topicref ')]">
-                <xsl:variable name="relatedTopic" select="key('key_anchor',@id)[1]"/>
-                <xsl:choose>
-                  <xsl:when test="$linkType = 'topic'">
-                    <xsl:if test="contains($relatedTopic/@class, ' topic/topic ') and not(contains($relatedTopic/@class, ' concept/concept ') or contains($relatedTopic/@class, ' task/task ') or contains($relatedTopic/@class, ' reference/reference '))">
-                      <fo:block xsl:use-attribute-sets="related-links__content">
-                        <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="xref">
-                          <xsl:apply-templates select="$relatedTopic/*[contains(@class,' topic/title ')]" mode="insert-text"/>
-                        </fo:basic-link>
-                      </fo:block>
-                    </xsl:if>
-                  </xsl:when>
-                  <xsl:when test="$linkType = 'task'">
-                    <xsl:if test="contains($relatedTopic/@class, ' task/task ')">
-                      <fo:block xsl:use-attribute-sets="related-links__content">
-                        <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="xref">
-                          <xsl:apply-templates select="$relatedTopic/*[contains(@class,' topic/title ')]" mode="insert-text"/>
-                        </fo:basic-link>
-                      </fo:block>
-                    </xsl:if>
-                  </xsl:when>
-                  <xsl:when test="$linkType = 'concept'">
-                    <xsl:if test="contains($relatedTopic/@class, ' concept/concept ')">
-                      <fo:block xsl:use-attribute-sets="related-links__content">
-                        <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="xref">
-                          <xsl:apply-templates select="$relatedTopic/*[contains(@class,' topic/title ')]" mode="insert-text"/>
-                        </fo:basic-link>
-                      </fo:block>
-                    </xsl:if>
-                  </xsl:when>
-                  <xsl:when test="$linkType = 'reference'">
-                    <xsl:if test="contains($relatedTopic/@class, ' reference/reference ')">
-                      <fo:block xsl:use-attribute-sets="related-links__content">
-                        <fo:basic-link internal-destination="{@id}" xsl:use-attribute-sets="xref">
-                          <xsl:apply-templates select="$relatedTopic/*[contains(@class,' topic/title ')]" mode="insert-text"/>
-                        </fo:basic-link>
-                      </fo:block>
-                    </xsl:if>
-                  </xsl:when>
-                </xsl:choose>
-              </xsl:for-each>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:for-each>
-      </xsl:variable>
-      <xsl:if test="$resultLinks/*">
-        <xsl:if test="$title">
-          <fo:block xsl:use-attribute-sets="related-links.title">
-            <xsl:value-of select="$title"/>
-          </fo:block>
-        </xsl:if>
-        <xsl:copy-of select="$resultLinks"/>
-      </xsl:if>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template name="brokenLinks">
     <xsl:param name="href"/>
+    <!-- FIXME: There is no message PDFX063W -->
     <xsl:call-template name="output-message">
       <xsl:with-param name="msgnum">063</xsl:with-param>
       <xsl:with-param name="msgsev">W</xsl:with-param>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/></xsl:with-param>
     </xsl:call-template>
+  </xsl:template>
+  
+  <!-- Links with @type="topic" belong in no-name group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:get-group-priority"
+                name="related-links:group-priority.topic" priority="-10"
+                as="xs:integer">
+    <xsl:call-template name="related-links:group-priority."/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:get-group"
+                name="related-links:group.topic" priority="-10"
+                as="xs:string">
+    <xsl:call-template name="related-links:group."/>
+  </xsl:template>
+  
+  <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <linklist>. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result."
+                as="element(linklist)" priority="-10">
+    <xsl:param name="links" as="node()*"/>
+    <xsl:if test="exists($links)">
+      <linklist class="- topic/linklist " outputclass="relinfo">
+        <title class="- topic/title ">
+          <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'Related information'"/>
+          </xsl:call-template>
+        </title>
+        <xsl:copy-of select="$links"/>
+      </linklist>
+    </xsl:if>
+  </xsl:template>
+  
+  <!-- Concepts have their own group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group"
+                name="related-links:group.concept"
+                as="xs:string">
+    <xsl:text>concept</xsl:text>
+  </xsl:template>
+  
+  <!-- Priority of concept group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group-priority"
+                name="related-links:group-priority.concept"
+                as="xs:integer">
+    <xsl:sequence select="3"/>
+  </xsl:template>
+  
+  <!-- Wrapper for concept group: "Related concepts" in a <div>. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group"
+                name="related-links:result.concept" as="element(linklist)">
+    <xsl:param name="links" as="node()*"/>
+    <xsl:if test="normalize-space(string-join($links, ''))">
+      <linklist class="- topic/linklist " outputclass="relinfo relconcepts">
+        <title class="- topic/title ">
+          <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'Related concepts'"/>
+          </xsl:call-template>
+        </title>
+        <xsl:copy-of select="$links"/>
+      </linklist>
+    </xsl:if>
+  </xsl:template>
+  
+  <!-- References have their own group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group"
+    name="related-links:group.reference"
+    as="xs:string">
+    <xsl:text>reference</xsl:text>
+  </xsl:template>
+  
+  <!-- Priority of reference group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group-priority"
+    name="related-links:group-priority.reference"
+    as="xs:integer">
+    <xsl:sequence select="1"/>
+  </xsl:template>
+  
+  <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group"
+    name="related-links:result.reference" as="element(linklist)">
+    <xsl:param name="links"/>
+    <xsl:if test="normalize-space(string-join($links, ''))">
+      <linklist class="- topic/linklist " outputclass="relinfo relref">
+        <title class="- topic/title ">
+          <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'Related reference'"/>
+          </xsl:call-template>
+        </title>
+        <xsl:copy-of select="$links"/>
+      </linklist>
+    </xsl:if>
+  </xsl:template>
+  
+  <!-- Tasks have their own group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group"
+                name="related-links:group.task"
+                as="xs:string">
+    <xsl:text>task</xsl:text>
+  </xsl:template>
+  
+  <!-- Priority of task group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group-priority"
+                name="related-links:group-priority.task"
+                as="xs:integer">
+    <xsl:sequence select="2"/>
+  </xsl:template>
+  
+  <!-- Task wrapper for HTML: "Related tasks" in <div>. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group"
+                name="related-links:result.task" as="element(linklist)">
+    <xsl:param name="links" as="node()*"/>
+    <xsl:if test="normalize-space(string-join($links, ''))">
+      <linklist class="- topic/linklist " outputclass="relinfo reltasks">
+        <title class="- topic/title ">
+          <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'Related tasks'"/>
+          </xsl:call-template>
+        </title>
+        <xsl:copy-of select="$links"/>
+      </linklist>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>

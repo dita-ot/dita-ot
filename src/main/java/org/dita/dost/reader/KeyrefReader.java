@@ -18,9 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -44,11 +43,7 @@ public final class KeyrefReader implements AbstractReader {
      */
     public KeyrefReader() {
         keyDefTable = new HashMap<String, Element>();
-        try {
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (final ParserConfigurationException e) {
-            throw new RuntimeException("Unable to initialize XML parser: " + e.getMessage(), e);
-        }
+        builder = XMLUtils.getDocumentBuilder();
     }
     
     @Override
@@ -104,7 +99,7 @@ public final class KeyrefReader implements AbstractReader {
     /**
      * Set keys to be read.
      * 
-     * @param set key set
+     * @param keys key set
      */
     public void setKeys(final Set<String> keys){
         this.keys = keys;

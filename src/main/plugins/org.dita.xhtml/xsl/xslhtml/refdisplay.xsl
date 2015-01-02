@@ -7,7 +7,8 @@
 <xsl:stylesheet version="2.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
      xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-     exclude-result-prefixes="related-links">
+     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+     exclude-result-prefixes="related-links xs">
 
 <!-- == REFERENCE UNIQUE SUBSTRUCTURES == -->
 
@@ -280,27 +281,32 @@
 </xsl:template>
 
   <!-- References have their own group. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group" name="related-links:group.reference">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group"
+                name="related-links:group.reference"
+                as="xs:string">
     <xsl:text>reference</xsl:text>
   </xsl:template>
   
   <!-- Priority of reference group. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group-priority" name="related-links:group-priority.reference">
-    <xsl:value-of select="1"/>
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group-priority"
+                name="related-links:group-priority.reference"
+                as="xs:integer">
+    <xsl:sequence select="1"/>
   </xsl:template>
   
   <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group" name="related-links:result.reference">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group"
+                name="related-links:result.reference" as="element(linklist)">
     <xsl:param name="links"/>
-    <xsl:if test="normalize-space($links)">
-    <div class="relinfo relref">
-      <strong>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Related reference'"/>
-        </xsl:call-template>
-      </strong><br/><xsl:value-of select="$newline"/>
-      <xsl:copy-of select="$links"/>
-    </div><xsl:value-of select="$newline"/>
+    <xsl:if test="normalize-space(string-join($links, ''))">
+      <linklist class="- topic/linklist " outputclass="relinfo relref">
+        <title class="- topic/title ">
+          <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'Related reference'"/>
+          </xsl:call-template>
+        </title>
+        <xsl:copy-of select="$links"/>
+      </linklist>
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>

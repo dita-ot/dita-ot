@@ -196,7 +196,7 @@
           <xsl:value-of select="$conref-source-topicid"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="ancestor-or-self::*[contains(@class, ' topic/topic ')][last()]/@id"/>
+          <xsl:value-of select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>

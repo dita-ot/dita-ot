@@ -16,7 +16,7 @@ import java.util.Set;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -45,7 +45,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
         logger = new DITAOTJavaLogger();
         paramTable = new Hashtable<String,String>();
         try {
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);

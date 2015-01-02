@@ -66,11 +66,12 @@ with those set forth herein.
       <istrue value="${org.dita.pdf2.use-out-temp}"/>
     </condition>
     
-    <condition property="args.rellinks" value="none">
+    <condition property="args.rellinks" value="nofamily">
       <not><isset property="args.rellinks"/></not>
     </condition>
   </target>
 
+  <target name="dita2pdf" depends="dita2pdf2"/>
   <target name="dita2pdf2" depends="dita2pdf2.init, build-init, preprocess, map2pdf2, topic2pdf2"/>
 
   <target name="transform.topic2pdf.init">
@@ -151,7 +152,7 @@ with those set forth herein.
 
   <target name="map2pdf2" unless="noMap">
     <dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
-    <pipeline message="topicmerge"
+    <pipeline message="topicmerge" taskname="topic-merge"
               inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
               tempdir="${dita.temp.dir.fullpath}">
       <module class="org.dita.dost.module.TopicMergeModule">

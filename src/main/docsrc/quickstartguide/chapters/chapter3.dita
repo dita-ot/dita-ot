@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"  "topic.dtd">
-<topic id="chapter3" xml:lang="en-us">
-<title>Debugging DITA-OT Transformations</title>
-<shortdesc>Transforming your DITA-compliant XML into documents.</shortdesc>
-<body>
-<p>Understanding the Role of the FO PlugIn. Debugging FO-generated tranformation files.</p>
-</body>
-</topic>

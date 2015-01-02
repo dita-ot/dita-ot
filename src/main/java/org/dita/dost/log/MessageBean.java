@@ -14,6 +14,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.w3c.dom.Element;
 import org.xml.sax.Locator;
 
 import org.xml.sax.Attributes;
@@ -134,6 +135,31 @@ public final class MessageBean {
         }
         final String xtrc = atts.getValue(ATTRIBUTE_NAME_XTRC);
         if (xtrc != null) {
+            final int sep = xtrc.indexOf(';');
+            if (sep != -1) {
+                final int delim = xtrc.indexOf(COLON, sep + 1);
+                if (delim != -1) {
+                    ret.srcLine = Integer.parseInt(xtrc.substring(sep + 1, delim));
+                    ret.srcColumn = Integer.parseInt(xtrc.substring(delim + 1));
+                }
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Set error location in source document.
+     * @param elem source element.
+     * @return message bean with location set
+     */
+    public MessageBean setLocation(final Element elem) {
+        final MessageBean ret = new MessageBean(this);
+        final String xtrf = elem.getAttribute(ATTRIBUTE_NAME_XTRF);
+        if (!xtrf.isEmpty()) {
+            ret.srcFile = xtrf;
+        }
+        final String xtrc = elem.getAttribute(ATTRIBUTE_NAME_XTRC);
+        if (!xtrc.isEmpty()) {
             final int sep = xtrc.indexOf(';');
             if (sep != -1) {
                 final int delim = xtrc.indexOf(COLON, sep + 1);

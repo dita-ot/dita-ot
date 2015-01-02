@@ -27,7 +27,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+This file is part of the DITA Open Toolkit project.
 See the accompanying license.txt file for applicable licenses.
 -->
 
@@ -41,6 +41,9 @@ See the accompanying license.txt file for applicable licenses.
                 exclude-result-prefixes="xs dita-ot">
 
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+
+  <xsl:variable name="msgprefix" select="'PDFX'"/>
 
     <xsl:output indent="no"/>
 

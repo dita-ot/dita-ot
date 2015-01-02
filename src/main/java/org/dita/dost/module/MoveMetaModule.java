@@ -29,10 +29,10 @@ import org.dita.dost.writer.DitaMapMetaWriter;
 import org.dita.dost.writer.DitaMetaWriter;
 
 /**
- * MoveMetaModule implement the move index step in preprocess. It reads the index
- * information from ditamap file and move these information to different
- * corresponding dita topic file.
- * 
+ * MoveMetaModule implement the move meta step in preprocess. It cascades metadata
+ * in maps and collects metadata for topics. The collected metadata is then inserted
+ * into maps and topics.
+ *
  * @author Zhang, Yuan Peng
  */
 final class MoveMetaModule extends AbstractPipelineModuleImpl {
@@ -69,19 +69,20 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 //FIXME: this reader gets the parent path of input file
                 metaReader.read(mapFile);
             }
-            final Map<URI, Hashtable<String, Element>> mapSet = metaReader.getMapping();
+            final Map<URI, Map<String, Element>> mapSet = metaReader.getMapping();
             
             if (!mapSet.isEmpty()) {
                 //process map first
                 final DitaMapMetaWriter mapInserter = new DitaMapMetaWriter();
                 mapInserter.setLogger(logger);
-                for (final Entry<URI, Hashtable<String, Element>> entry: mapSet.entrySet()) {
+                mapInserter.setJob(job);
+                for (final Entry<URI, Map<String, Element>> entry: mapSet.entrySet()) {
                     final URI targetFileName = entry.getKey();
-                    if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITAMAP )) {
+                    if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITAMAP)) {
                         mapInserter.setMetaTable(entry.getValue());
                         if (toFile(targetFileName).exists()) {
                             logger.info("Processing " + targetFileName);
-                            mapInserter.write(targetFileName);
+                            mapInserter.read(toFile(targetFileName));
                         } else {
                             logger.error("File " + targetFileName + " does not exist");
                         }
@@ -92,13 +93,14 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 //process topic
                 final DitaMetaWriter topicInserter = new DitaMetaWriter();
                 topicInserter.setLogger(logger);
-                for (final Map.Entry<URI, Hashtable<String, Element>> entry: mapSet.entrySet()) {
+                topicInserter.setJob(job);
+                for (final Map.Entry<URI, Map<String, Element>> entry: mapSet.entrySet()) {
                     final URI targetFileName = entry.getKey();
                     if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITA) || targetFileName.getPath().endsWith(FILE_EXTENSION_XML)) {
                         topicInserter.setMetaTable(entry.getValue());
                         if (toFile(targetFileName).exists()) {
                             logger.info("Processing " + targetFileName);
-                            topicInserter.write(targetFileName);
+                            topicInserter.read(toFile(targetFileName));
                         } else {
                             logger.error("File " + targetFileName + " does not exist");
                         }

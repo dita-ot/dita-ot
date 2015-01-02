@@ -27,6 +27,7 @@ import org.dita.dost.reader.IndexTermReader;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -133,7 +134,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         final DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
         ditamapIndexTermReader.setLogger(logger);
         
-        xmlReader = StringUtils.getXMLReader();
+        xmlReader = XMLUtils.getXMLReader();
 
         try {
             xmlReader.setContentHandler(handler);

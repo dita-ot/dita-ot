@@ -145,7 +145,7 @@
     <xsl:when test="contains(.,'://') or ../@scope='external' or ../@scope='peer'">
       <xsl:copy/>
     </xsl:when>
-    <xsl:when test="(parent::*[contains(@class,' topic/xref ')] or parent::*[contains(@class,' topic/link ')]) and (not(../@format) or ../@format='dita' or ../@format='DITA')">
+    <xsl:when test="(parent::*[contains(@class,' topic/xref ')] or parent::*[contains(@class,' topic/link ')]) and (not(../@format) or ../@format='dita')">
       <xsl:choose>
         <xsl:when test="starts-with(.,'#')">
           <xsl:variable name="refer-path" select="substring-after(.,'#')"/>

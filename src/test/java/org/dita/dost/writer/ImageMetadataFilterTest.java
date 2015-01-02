@@ -4,6 +4,7 @@
  */
 package org.dita.dost.writer;
 
+import static org.apache.commons.io.FileUtils.*;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
 import java.io.File;
@@ -18,7 +19,6 @@ import org.xml.sax.SAXException;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 
 public class ImageMetadataFilterTest {
@@ -36,12 +36,13 @@ public class ImageMetadataFilterTest {
     @Test
     public void testWrite() throws DITAOTException, SAXException, IOException {
         final File f = new File(tempDir, "test.dita");
-        FileUtils.copyFile(new File(srcDir, "test.dita"), f);
+        copyFile(new File(srcDir, "test.dita"), f);
 
         final Job job = new Job(tempDir);
         job.setProperty("uplevels", "");
         final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job);
         filter.setLogger(new TestUtils.TestLogger());
+        filter.setJob(job);
         filter.write(f.getAbsoluteFile());
 
         TestUtils.resetXMLUnit();
@@ -54,12 +55,13 @@ public class ImageMetadataFilterTest {
     public void testUplevelsWrite() throws DITAOTException, SAXException, IOException {
         final File f = new File(tempDir, "sub" + File.separator + "test.dita");
         f.getParentFile().mkdirs();
-        FileUtils.copyFile(new File(srcDir, "test.dita"), f);
+        copyFile(new File(srcDir, "test.dita"), f);
 
         final Job job = new Job(tempDir);
         job.setProperty("uplevels", ".." + File.separator);
         final ImageMetadataFilter filter = new ImageMetadataFilter(srcDir, job);
         filter.setLogger(new TestUtils.TestLogger());
+        filter.setJob(job);
         filter.write(f.getAbsoluteFile());
 
         TestUtils.resetXMLUnit();

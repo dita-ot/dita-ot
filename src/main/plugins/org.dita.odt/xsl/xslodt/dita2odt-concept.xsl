@@ -22,52 +22,46 @@
     xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
     xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
     xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" 
-    version="2.0" 
-    xmlns:java="org.dita.dost.util.ImgUtils" 
+    version="2.0"  
     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-    exclude-result-prefixes="java related-links">
+    exclude-result-prefixes="related-links">
     
-    <xsl:output method="xml"/>
-    <xsl:output indent="yes"/>
-    <xsl:strip-space elements="*"/>
+  <xsl:output method="xml"/>
+  <xsl:output indent="yes"/>
+  <xsl:strip-space elements="*"/>
 
-    <!-- Concepts have their own group. -->
-    <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group" name="related-links:group.concept">
-        <xsl:text>concept</xsl:text>
-    </xsl:template>
-    
-    <!-- Priority of concept group. -->
-    <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group-priority" name="related-links:group-priority.concept">
-        <xsl:value-of select="3"/>
-    </xsl:template>
-    
-    <!--Get Related Information -->
-    <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group" name="related-links:result.concept">
-        <xsl:param name="links"/>
-        
-        <xsl:variable name="samefile">
-            <xsl:call-template name="check_file_location"/>
-        </xsl:variable>
-        <xsl:variable name="href-value">
-            <xsl:call-template name="format_href_value"/>
-        </xsl:variable>
-        
-        <xsl:element name="text:p">
-            <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:call-template name="getStringODT">
-                    <xsl:with-param name="stringName" select="'Related concepts'"/>
-                </xsl:call-template>
-            </xsl:element>
-        </xsl:element>
-        
-        <xsl:element name="text:p">
-            <xsl:call-template name="create_related_links">
-                <xsl:with-param name="samefile" select="$samefile"/>
-                <xsl:with-param name="href-value" select="$href-value"/>
-            </xsl:call-template>
-        </xsl:element>
-        
-    </xsl:template>
-    
+  <!-- Concepts have their own group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group" name="related-links:group.concept">
+    <xsl:text>concept</xsl:text>
+  </xsl:template>
+
+  <!-- Priority of concept group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group-priority" name="related-links:group-priority.concept">
+    <xsl:value-of select="3"/>
+  </xsl:template>
+
+  <!--Get Related Information -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group" name="related-links:result.concept">
+    <xsl:param name="links"/>
+    <xsl:variable name="samefile">
+      <xsl:call-template name="check_file_location"/>
+    </xsl:variable>
+    <xsl:variable name="href-value">
+      <xsl:call-template name="format_href_value"/>
+    </xsl:variable>
+    <text:p>
+      <text:span text:style-name="bold">
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Related concepts'"/>
+        </xsl:call-template>
+      </text:span>
+    </text:p>
+    <text:p>
+      <xsl:call-template name="create_related_links">
+        <xsl:with-param name="samefile" select="$samefile"/>
+        <xsl:with-param name="href-value" select="$href-value"/>
+      </xsl:call-template>
+    </text:p>
+  </xsl:template>
+  
 </xsl:stylesheet>

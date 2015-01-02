@@ -256,7 +256,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Image path to use for a note of "tip" type. -->
     <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-
+    <variable id="trouble Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
     <!-- Image path to use for a note of "other" type. -->
     <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
 

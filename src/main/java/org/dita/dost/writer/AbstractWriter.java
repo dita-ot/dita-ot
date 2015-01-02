@@ -12,6 +12,7 @@ import java.io.File;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.Job;
 
 /**
  * AbstractWriter defines the method every writer class should implement.
@@ -35,5 +36,12 @@ public interface AbstractWriter {
      * @param logger logger to use for log message
      */
     public void setLogger(DITAOTLogger logger);
+
+    /**
+     * Set Job for module
+     *
+     * @param job Job configuration to use for processing
+     */
+    public void setJob(Job job);
 
 }

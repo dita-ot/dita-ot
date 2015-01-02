@@ -30,7 +30,9 @@ import org.dita.dost.platform.Integrator;
  */
 public final class Configuration {
 
-    private static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    public static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    /** Debug mode to aid in development, not intended for end users. */
+    public static final boolean DEBUG = false;
 
     /**
      * Immutable configuration properties.
@@ -106,12 +108,6 @@ public final class Configuration {
     /** Processing mode */
     public enum Mode {
         STRICT, SKIP, LAX
-    }
-    
-    public static final Mode processingMode;
-    static {
-        final String mode = Configuration.configuration.get("processing-mode");
-        processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
     }
     
     /** Private constructor to disallow instance creation. */

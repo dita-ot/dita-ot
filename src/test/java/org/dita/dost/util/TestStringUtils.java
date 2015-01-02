@@ -10,15 +10,11 @@ package org.dita.dost.util;
 
 import static org.junit.Assert.*;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
-import org.dita.dost.util.StringUtils;
 import org.junit.Test;
 
 public class TestStringUtils {
@@ -36,24 +32,6 @@ public class TestStringUtils {
         input.add("third");
         result = StringUtils.join(input, ";");
         assertEquals("first;second;third", result);
-    }
-
-    @Test
-    public void testEscapeXMLString() {
-        String result = null;
-        final String input = "<this is test of char update for xml href=\" see link: http://www.ibm.com/download.php?abc=123&def=456\">'test' </test>";
-        final String expected = "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
-        result = StringUtils.escapeXML(input);
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testEscapeXMLCharArrayIntInt() {
-        String result = null;
-        final char[] input = "<this is test of char update for xml href=\" see link: http://www.ibm.com/download.php?abc=123&def=456\">'test' </test>".toCharArray();
-        final String expected = "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
-        result = StringUtils.escapeXML(input,0,input.length);
-        assertEquals(expected, result);
     }
 
     @Test

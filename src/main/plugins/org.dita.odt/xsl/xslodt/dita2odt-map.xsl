@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses. -->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet 
@@ -64,10 +63,8 @@
   
   
   <xsl:template name="create_toc">
-    <text:table-of-content text:style-name="Sect1" text:protected="true"
-      text:name="Table of Contents1">
-      <text:table-of-content-source text:outline-level="10" text:use-index-marks="false"
-        text:use-index-source-styles="true">
+    <text:table-of-content text:style-name="Sect1" text:protected="true" text:name="Table of Contents1">
+      <text:table-of-content-source text:outline-level="10" text:use-index-marks="false" text:use-index-source-styles="true">
         <text:index-title-template text:style-name="Contents_20_Heading_TOC">Table of
           Contents</text:index-title-template>
         <text:table-of-content-entry-template text:outline-level="1" text:style-name="Contents_20_1_a">
@@ -193,8 +190,7 @@
         <!-- 
         <xsl:value-of select="child::*[contains(@class, ' map/topicmeta ')]/child::*[contains(@class, ' topic/navtitle ')]"/>
         -->
-        <xsl:apply-templates select="child::*[contains(@class, ' map/topicmeta ')]/child::*[contains(@class, ' topic/navtitle ')]" 
-          mode="dita-ot:text-only"/>
+        <xsl:apply-templates select="child::*[contains(@class, ' map/topicmeta ')]/child::*[contains(@class, ' topic/navtitle ')]" mode="dita-ot:text-only"/>
       </xsl:variable>
       <!-- href value -->
       <xsl:variable name="href" select="@href"/>
@@ -208,24 +204,14 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
-      <xsl:element name="text:p">
-        <xsl:attribute name="text:style-name">
-          <xsl:value-of select="concat('P', $level)"/>
-        </xsl:attribute>
-        <xsl:element name="text:a">
-          <xsl:attribute name="xlink:type">simple</xsl:attribute>
-          <xsl:attribute name="text:style-name">underline_none</xsl:attribute>
-          <xsl:attribute name="xlink:href">
-            <xsl:value-of select="concat($href, '')"/>
-          </xsl:attribute>
+      <text:p text:style-name="{concat('P', $level)}">
+        <text:a xlink:type="simple" text:style-name="underline_none" xlink:href="{concat($href, '')}">
           <xsl:value-of select="$navtitle"/>
-          <xsl:element name="text:tab"/>
-          <xsl:element name="text:bookmark-ref">
-            <xsl:attribute name="text:reference-format">page</xsl:attribute>
-            <xsl:attribute name="text:ref-name"><xsl:value-of select="substring-after($href, '#')"/></xsl:attribute>
-          </xsl:element>
-        </xsl:element>
-      </xsl:element>
+          <text:tab/>
+          <text:bookmark-ref text:reference-format="page" text:ref-name="{substring-after($href, '#')}">
+          </text:bookmark-ref>
+        </text:a>
+      </text:p>
     </xsl:if>
     <xsl:apply-templates select="child::*[contains(@class, ' map/topicref ')]" mode="toc"/>
   </xsl:template>
@@ -254,32 +240,21 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
-      <xsl:element name="text:p">
-        <xsl:attribute name="text:style-name">
-          <xsl:value-of select="concat('P', $level)"/>
-        </xsl:attribute>
-        <xsl:element name="text:a">
-          <xsl:attribute name="xlink:type">simple</xsl:attribute>
-          <xsl:attribute name="text:style-name">underline_none</xsl:attribute>
-          <xsl:attribute name="xlink:href">
-            <xsl:value-of select="concat($href, '')"/>
-          </xsl:attribute>
+      <text:p text:style-name="{concat('P', $level)}">
+        <text:a xlink:type="simple" text:style-name="underline_none" xlink:href="{concat($href, '')}">
           <xsl:value-of select="$title"/>
-          <xsl:element name="text:tab"/>
-          <xsl:element name="text:bookmark-ref">
-            <xsl:attribute name="text:reference-format">page</xsl:attribute>
-            <xsl:attribute name="text:ref-name"><xsl:value-of select="substring-after($href, '#')"/></xsl:attribute>
-          </xsl:element>
-        </xsl:element>
-      </xsl:element>
+          <text:tab/>
+          <text:bookmark-ref text:reference-format="page" text:ref-name="{substring-after($href, '#')}">
+          </text:bookmark-ref>
+        </text:a>
+      </text:p>
     </xsl:if>
     <xsl:apply-templates select="child::*[contains(@class, ' topic/topic ')]" mode="toc"/>
   </xsl:template>
   
   <!-- create map title -->
   <xsl:template name="create_map_title">
-    <xsl:apply-templates select="//opentopic:map/*[contains(@class, ' map/topicref ')][1]/*[contains(@class, ' map/topicmeta ')]
-      /*[contains(@class, ' topic/navtitle ')]" mode="create_title"/>
+    <xsl:apply-templates select="//opentopic:map/*[contains(@class, ' map/topicref ')][1]/*[contains(@class, ' map/topicmeta ')]       /*[contains(@class, ' topic/navtitle ')]" mode="create_title"/>
   </xsl:template>
   
   <!-- create topic title -->
@@ -288,10 +263,9 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/title ')]|*[contains(@class, ' topic/navtitle ')]" mode="create_title">
-    <xsl:element name="text:p">
-      <xsl:attribute name="text:style-name">Title</xsl:attribute>
+    <text:p text:style-name="Title">
       <xsl:apply-templates select="." mode="dita-ot:text-only"/>
-    </xsl:element>
+    </text:p>
     <!-- page break. -->
     <text:p text:style-name="PB"/>
   </xsl:template>
@@ -302,14 +276,13 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' bookmap/booktitle ')]" mode="create_book_title">
-    <xsl:element name="text:p">
-      <xsl:attribute name="text:style-name">Title</xsl:attribute>
+    <text:p text:style-name="Title">
       <xsl:apply-templates select="*[contains(@class, ' bookmap/booklibrary ')]" mode="dita-ot:text-only"/>
-      <xsl:element name="text:line-break"/>
+      <text:line-break/>
       <xsl:apply-templates select="*[contains(@class, ' bookmap/mainbooktitle ')]" mode="dita-ot:text-only"/>
-      <xsl:element name="text:line-break"/>
+      <text:line-break/>
       <xsl:apply-templates select="*[contains(@class, ' bookmap/booktitlealt ')]" mode="dita-ot:text-only"/>
-    </xsl:element>
+    </text:p>
     <!-- page break. -->
     <text:p text:style-name="PB"/>
   </xsl:template>
@@ -318,34 +291,28 @@
     <xsl:apply-templates select="*[contains(@class, ' bookmap/bookmap ')]
       /*[contains(@class, ' topic/topic ')]" mode="create_book_abstract"/>
   </xsl:template>
-    
+  
   <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="create_book_abstract">
     <xsl:variable name="topicType">
       <xsl:call-template name="determineTopicType"/>
     </xsl:variable>
-    
     <xsl:if test="$topicType = 'topicAbstract'">
       <xsl:apply-templates/>
     </xsl:if>
-    
   </xsl:template>
   
   <xsl:template name="create_book_notices">
     <xsl:apply-templates select="*[contains(@class, ' bookmap/bookmap ')]
       /*[contains(@class, ' topic/topic ')]" mode="create_book_notices"/>
   </xsl:template>
-    
+  
   <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="create_book_notices">
     <xsl:variable name="topicType">
       <xsl:call-template name="determineTopicType"/>
     </xsl:variable>
-    
     <xsl:if test="$topicType = 'topicNotices'">
       <xsl:apply-templates/>
     </xsl:if>
-    
   </xsl:template>
-  
-  
   
 </xsl:stylesheet>

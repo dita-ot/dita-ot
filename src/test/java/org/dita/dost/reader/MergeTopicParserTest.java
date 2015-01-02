@@ -11,7 +11,6 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.StringReader;
 import java.lang.reflect.Method;
 import java.net.URI;
 
@@ -22,12 +21,10 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.junit.BeforeClass;
 import org.xml.sax.InputSource;
-import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.MergeUtils;
-import org.dita.dost.writer.DitaWriter;
 import org.junit.Test;
 
 public class MergeTopicParserTest {

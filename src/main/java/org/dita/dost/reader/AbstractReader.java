@@ -22,8 +22,8 @@ public interface AbstractReader {
 
     /**
      * Use reader to parse a document.
-     * 
-     * @param filename filename
+     *
+     * @param filename absolute filename
      */
     void read(File filename);
 

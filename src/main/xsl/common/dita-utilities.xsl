@@ -54,7 +54,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:variable name="stringFiles" select="document($variableFiles.url)/langlist/lang"/>
+  <xsl:variable name="stringFiles" select="document($variableFiles.url)/langlist/lang" as="element(lang)*"/>
   
   <!-- Deprecated. Use getVariable template instead. -->
   <xsl:template name="getString">
@@ -282,36 +282,40 @@
   </xsl:template>
   
   <!-- Replace file extension in a URI -->
-  <xsl:template name="replace-extension">
-    <xsl:param name="filename"/>
-    <xsl:param name="extension"/>
+  <xsl:template name="replace-extension" as="xs:string">
+    <xsl:param name="filename" as="xs:string"/>
+    <xsl:param name="extension" as="xs:string"/>
     <xsl:param name="ignore-fragment" select="false()"/>
-    <xsl:variable name="f">
-      <xsl:call-template name="substring-before-last">
-        <xsl:with-param name="text">
-          <xsl:choose>
-            <xsl:when test="contains($filename, '#')">
-              <xsl:value-of select="substring-before($filename, '#')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="$filename"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:with-param>
-        <xsl:with-param name="delim" select="'.'"/>
-      </xsl:call-template>
+    <xsl:variable name="f" as="xs:string">
+      <xsl:value-of>
+       <xsl:call-template name="substring-before-last">
+         <xsl:with-param name="text">
+           <xsl:choose>
+             <xsl:when test="contains($filename, '#')">
+               <xsl:value-of select="substring-before($filename, '#')"/>
+             </xsl:when>
+             <xsl:otherwise>
+               <xsl:value-of select="$filename"/>
+             </xsl:otherwise>
+           </xsl:choose>
+         </xsl:with-param>
+         <xsl:with-param name="delim" select="'.'"/>
+       </xsl:call-template>
+      </xsl:value-of>
     </xsl:variable>
-    <xsl:if test="string($f)">
-      <xsl:value-of select="concat($f, $extension)"/>  
-    </xsl:if>
-    <xsl:if test="not($ignore-fragment) and contains($filename, '#')">
-      <xsl:value-of select="concat('#', substring-after($filename, '#'))"/>
-    </xsl:if>
+    <xsl:value-of>
+      <xsl:if test="string($f)">
+        <xsl:value-of select="concat($f, $extension)"/>  
+      </xsl:if>
+      <xsl:if test="not($ignore-fragment) and contains($filename, '#')">
+        <xsl:value-of select="concat('#', substring-after($filename, '#'))"/>
+      </xsl:if>
+    </xsl:value-of>
   </xsl:template>
   
   <xsl:template name="substring-before-last">
-    <xsl:param name="text"/>
-    <xsl:param name="delim"/>
+    <xsl:param name="text" as="xs:string"/>
+    <xsl:param name="delim" as="xs:string"/>
     
     <xsl:if test="string($text) and string($delim)">
       <xsl:value-of select="substring-before($text, $delim)" />
@@ -397,7 +401,42 @@
     <xsl:param name="href"/>
     <xsl:sequence select="contains(substring-after($href, '#'), '/')"/>
   </xsl:function>
+
+  <xsl:function name="dita-ot:normalize-uri" as="xs:string">
+    <xsl:param name="uri" as="xs:string"/>
+    <xsl:call-template name="dita-ot:normalize-uri">
+      <xsl:with-param name="src" select="tokenize($uri, '/')"/>
+    </xsl:call-template>
+  </xsl:function>
   
+  <xsl:template name="dita-ot:normalize-uri" as="xs:string">
+    <xsl:param name="src" as="xs:string*"/>
+    <xsl:param name="res" select="()" as="xs:string*"/>
+    
+    <xsl:choose>
+      <xsl:when test="empty($src)">
+        <xsl:value-of select="$res" separator="/"/>
+      </xsl:when>
+      <xsl:when test="$src[1] = '.'">
+        <xsl:call-template name="dita-ot:normalize-uri">
+          <xsl:with-param name="src" select="$src[position() ne 1]"/>
+          <xsl:with-param name="res" select="$res"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="$src[1] = '..' and exists($res) and not($res[position() eq last()] = ('..', ''))">
+        <xsl:call-template name="dita-ot:normalize-uri">
+          <xsl:with-param name="src" select="$src[position() ne 1]"/>
+          <xsl:with-param name="res" select="$res[position() ne last()]"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="dita-ot:normalize-uri">
+          <xsl:with-param name="src" select="$src[position() ne 1]"/>
+          <xsl:with-param name="res" select="($res, $src[1])"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>
 

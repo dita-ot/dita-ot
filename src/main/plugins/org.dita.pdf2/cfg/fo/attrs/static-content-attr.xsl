@@ -185,10 +185,10 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__chapter__frontmatter__name__container">
         <xsl:attribute name="font-size">20pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="border-top-style">solid</xsl:attribute>
-        <xsl:attribute name="border-bottom-style">solid</xsl:attribute>
-        <xsl:attribute name="border-top-width">2pt</xsl:attribute>
-        <xsl:attribute name="border-bottom-width">2pt</xsl:attribute>
+        <xsl:attribute name="border-before-style">solid</xsl:attribute>
+        <xsl:attribute name="border-after-style">solid</xsl:attribute>
+        <xsl:attribute name="border-before-width">2pt</xsl:attribute>
+        <xsl:attribute name="border-after-width">2pt</xsl:attribute>
         <xsl:attribute name="padding-top">10pt</xsl:attribute>
     </xsl:attribute-set>
 

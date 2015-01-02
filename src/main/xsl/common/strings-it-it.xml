@@ -72,13 +72,5 @@
 <str name="OpenQuote">"</str>
 <str name="CloseQuote">"</str>
 <str name="ColonSymbol">:</str>
-    
-<!-- For odt transform -->
-<str name="On the page"> alla pagina </str>
-<str name="Related Links">Collegamenti correlati</str>
-<str name="List item">Voce di elenco.</str>
-<str name="Foot note">Piè di pagina.</str>
-<str name="Page"> pagina </str>
-<str name="Unordered List bullet">&#8226;</str>
 
 </strings>
