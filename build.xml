@@ -120,6 +120,9 @@
     <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
     <exclude name="plugins/org.dita.pdf2/bin/**"/>
     <exclude name="plugins/org.dita.pdf2/lib/xep/**"/>
+    <!-- docs -->
+    <exclude name="docsrc/*.md"/>
+    <exclude name="docsrc/site.xml"/>
   </patternset>
 
   <patternset id="pattern.package.minimum">

@@ -765,8 +765,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:when test="$topicpos='otherfile' and $elemid!='#none#' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid]">
               <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
                 <xsl:with-param name="type" select="$localtype"/>
-                <xsl:with-param name="actual-class" select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][1]/@class"/>
-                <xsl:with-param name="actual-name" select="local-name($doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][1])"/>
+                <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid])[1]/@class"/>
+                <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid])[1])"/>
                 <xsl:with-param name="targetting">element</xsl:with-param>
               </xsl:apply-templates>
             </xsl:when>
@@ -774,8 +774,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:when test="$topicpos='otherfile' and $elemid='#none#' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]">
               <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
                 <xsl:with-param name="type" select="$localtype"/>
-                <xsl:with-param name="actual-class" select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid][1]/@class"/>
-                <xsl:with-param name="actual-name" select="local-name($doc//*[contains(@class, ' topic/topic ')][@id=$topicid][1])"/>
+                <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/@class"/>
+                <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1])"/>
                 <xsl:with-param name="targetting">topic</xsl:with-param>
               </xsl:apply-templates>
             </xsl:when>
@@ -783,8 +783,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:when test="$topicpos='firstinfile' and $doc//*[contains(@class, ' topic/topic ')]">
               <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
                 <xsl:with-param name="type" select="$localtype"/>
-                <xsl:with-param name="actual-class" select="$doc//*[contains(@class, ' topic/topic ')][1]/@class"/>
-                <xsl:with-param name="actual-name" select="local-name($doc//*[contains(@class, ' topic/topic ')][1])"/>
+                <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')])[1]/@class"/>
+                <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')])[1])"/>
                 <xsl:with-param name="targetting">topic</xsl:with-param>
               </xsl:apply-templates>
             </xsl:when>
@@ -815,8 +815,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                 <xsl:when test="$topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]">
                   <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
                     <xsl:with-param name="type" select="$localtype"/>
-                    <xsl:with-param name="actual-class" select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid][1]/@class"/>
-                    <xsl:with-param name="actual-name" select="local-name($doc//*[contains(@class, ' topic/topic ')][@id=$topicid][1])"/>
+                    <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/@class"/>
+                    <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1])"/>
                     <xsl:with-param name="targetting">topic</xsl:with-param>
                   </xsl:apply-templates>
                 </xsl:when>
@@ -824,8 +824,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                 <xsl:when test="$topicpos='firstinfile' and $doc//*[contains(@class, ' topic/topic ')]">
                   <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
                     <xsl:with-param name="type" select="$localtype"/>
-                    <xsl:with-param name="actual-class" select="$doc//*[contains(@class, ' topic/topic ')][1]/@class"/>
-                    <xsl:with-param name="actual-name" select="local-name($doc//*[contains(@class, ' topic/topic ')][1])"/>
+                    <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')])[1]/@class"/>
+                    <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')])[1])"/>
                     <xsl:with-param name="targetting">topic</xsl:with-param>
                   </xsl:apply-templates>
                 </xsl:when>

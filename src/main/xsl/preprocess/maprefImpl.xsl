@@ -20,7 +20,7 @@
   <xsl:param name="file-being-processed"/>
 
   <!-- list of attributes that can be overided. -->
-  <xsl:variable name="special-atts" select="('href', 'class', 'linking', 'toc', 'print', 'audience', 'product', 'platform', 'otherprops', 'props')" as="xs:string*"/>
+  <xsl:variable name="special-atts" select="('href', 'copy-to', 'class', 'linking', 'toc', 'print', 'audience', 'product', 'platform', 'otherprops', 'props')" as="xs:string*"/>
 
   <!-- the xsl:key to get all maprefs in the document in order to get reltable -->
   <xsl:key name="reltable" match="//*[contains(@class, ' map/topicref ')]" use="@format"/>
@@ -342,19 +342,21 @@
     <xsl:param name="parent-rev">#none#</xsl:param>
 
     <xsl:copy>
-      <xsl:choose>
-        <xsl:when test="not(@href) or @href=''"/>
-        <xsl:when test="$relative-path='#none#' or contains(@href,'://')">
-          <xsl:attribute name="href">
-            <xsl:value-of select="@href"/>
-          </xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="href">
-            <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, @href))"/>
-          </xsl:attribute>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:for-each select="@href | @copy-to">
+        <xsl:choose>
+          <xsl:when test=". = ''"/>
+          <xsl:when test="$relative-path = '#none#' or contains(.,'://')">
+            <xsl:attribute name="{name()}">
+              <xsl:value-of select="."/>
+            </xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="{name()}">
+              <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
+            </xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
       <xsl:attribute name="class">
         <xsl:choose>
           <xsl:when test="contains($refclass, ' mapgroup-d/mapref ')">
@@ -586,18 +588,17 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="@href" mode="reltable-copy">
+  <xsl:template match="@href | @copy-to" mode="reltable-copy">
     <xsl:param name="relative-path">#none#</xsl:param>
-    <xsl:attribute name="href">
+    <xsl:attribute name="{name()}">
       <xsl:choose>
-        <xsl:when test="not(contains(.,'://') or ../@scope='external' or $relative-path='#none#' or $relative-path='')">
-          <xsl:value-of select="concat($relative-path, .)"/>
+        <xsl:when test="not(contains(.,'://') or ../@scope = 'external' or $relative-path = ('#none#', ''))">
+          <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="."/>
         </xsl:otherwise>
       </xsl:choose>
-
     </xsl:attribute>
   </xsl:template>
 
