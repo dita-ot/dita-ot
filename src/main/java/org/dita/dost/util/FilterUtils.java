@@ -45,7 +45,8 @@ public final class FilterUtils {
         ATTRIBUTE_NAME_PRODUCT,
         ATTRIBUTE_NAME_OTHERPROPS,
         ATTRIBUTE_NAME_PROPS,
-        ATTRIBUTE_NAME_PRINT
+        ATTRIBUTE_NAME_PRINT,
+        ATTRIBUTE_NAME_DELIVERYTARGET
     };
     
     public static final FilterKey DEFAULT = new FilterKey(DEFAULT_ACTION, null);

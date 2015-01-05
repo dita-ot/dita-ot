@@ -1835,8 +1835,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*" mode="placeImage">
         <xsl:param name="imageAlign"/>
         <xsl:param name="href"/>
-        <xsl:param name="height" as="xs:double?"/>
-        <xsl:param name="width" as="xs:double?"/>
+        <xsl:param name="height" as="xs:string?"/>
+        <xsl:param name="width" as="xs:string?"/>
 <!--Using align attribute set according to image @align attribute-->
         <xsl:call-template name="processAttrSetReflection">
                 <xsl:with-param name="attrSet" select="concat('__align__', $imageAlign)"/>

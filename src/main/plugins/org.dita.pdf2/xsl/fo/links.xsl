@@ -320,6 +320,13 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="$footnote-target" mode="footnote-callout"/>
     </xsl:template>
 
+  <xsl:template match="*[contains(@class,' topic/xref ')][empty(@href)]" priority="2">
+    <fo:inline>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))] | text()" />
+    </fo:inline>
+  </xsl:template>
+
     <xsl:template match="*[contains(@class, ' topic/fn ')]" mode="footnote-callout">
             <fo:inline xsl:use-attribute-sets="fn__callout">
 
