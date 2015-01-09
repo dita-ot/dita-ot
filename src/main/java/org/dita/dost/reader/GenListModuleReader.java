@@ -961,7 +961,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
     }
 
-    private boolean isFormatDita(final String attrFormat) {
+    /**
+     * Check if format is DITA topic.
+     *
+     * @param attrFormat format attribute value, may be {@code null}
+     * @return {@code true} if DITA topic, otherwise {@code false}
+     */
+    public static boolean isFormatDita(final String attrFormat) {
         return attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA);
     }
 

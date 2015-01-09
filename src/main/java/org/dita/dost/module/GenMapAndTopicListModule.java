@@ -648,7 +648,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         if (subsidiarySet.contains(file.filename)) {
             return;
         }
-        if (file.format == null || ATTR_FORMAT_VALUE_DITA.equals(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
+        if (isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
             addToWaitList(file.filename);
         } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
             imageSet.add(file.filename);
