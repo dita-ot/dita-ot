@@ -4,6 +4,6 @@
   See the accompanying license.txt file for applicable licenses.
 -->
 <plugin id="org.dita.troff">
-  <transtype name="troff" desc="troff"/>
+  <transtype name="troff" desc="Troff"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
 </plugin>
