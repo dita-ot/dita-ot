@@ -66,6 +66,9 @@ if [ -z "$DITA_HOME" -o ! -d "$DITA_HOME" ] ; then
   DITA_HOME=`cd "$DITA_HOME" > /dev/null && pwd`
 fi
 
+# Set environment variables
+. $DITA_HOME/resources/env.sh
+
 # Add build script to arguments
 ant_exec_args="$ant_exec_args \"-buildfile\" \"$DITA_HOME/build.xml\" \"-main\" \"org.dita.dost.invoker.Main\""
 

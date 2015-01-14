@@ -9,25 +9,13 @@
 package org.dita.dost.platform;
 
 import static javax.xml.XMLConstants.*;
+import static org.apache.commons.io.IOUtils.closeQuietly;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
+import static org.dita.dost.util.URLUtils.toFile;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
@@ -65,6 +53,7 @@ public final class Integrator {
     public static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
     /** Feature name for print transformation types. */
     public static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
+    public static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
     public static final String ELEM_PLUGINS = "plugins";
 
     public static final String FEAT_VALUE_SEPARATOR = ",";
@@ -298,6 +287,90 @@ public final class Integrator {
                     logger.error(e.getMessage(), e) ;
                 }
             }
+        }
+
+        final Collection<File> jars = relativize(new HashSet<String>(featureTable.get(FEAT_LIB_EXTENSIONS)));
+        writeEnvShell(jars);
+        writeEnvBatch(jars);
+    }
+
+    private Collection<File> relativize(final Collection<String> src) {
+        final Collection<File> res = new ArrayList<File>(src.size());
+        final File base = new File(ditaDir, "dummy");
+        for (final String lib: src) {
+            res.add(FileUtils.getRelativePath(base, toFile(lib)));
+        }
+        return res;
+    }
+
+    private void writeEnvShell(final Collection<File> jars) {
+        Writer out = null;
+        try {
+            final File outFile = new File(ditaDir, "resources" + File.separator + "env.sh");
+            if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
+                throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
+            }
+            logger.debug("Generate environment shell " + outFile.getPath());
+            out = new BufferedWriter(new FileWriter(outFile));
+
+            out.write("#!/bin/sh\n");
+            boolean first = true;
+            for (final File relativeLib: jars) {
+                out.write("LOCALCLASSPATH=\"");
+                if (first) {
+                    first = false;
+                } else {
+                    out.write("$LOCALCLASSPATH:");
+                }
+                if (!relativeLib.isAbsolute()) {
+                    out.write("$DITA_HOME" + UNIX_SEPARATOR);
+                }
+                out.write(relativeLib.toString().replace(File.separator, UNIX_SEPARATOR));
+                out.write("\"\n");
+            }
+        } catch (final Exception e) {
+            if (strict) {
+                throw new RuntimeException("Failed to write environment shell: " + e.getMessage(), e);
+            } else {
+                logger.error(e.getMessage(), e) ;
+            }
+        } finally {
+            closeQuietly(out);
+        }
+    }
+
+    private void writeEnvBatch(final Collection<File> jars) {
+        Writer out = null;
+        try {
+            final File outFile = new File(ditaDir, "resources" + File.separator + "env.bat");
+            if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
+                throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
+            }
+            logger.debug("Generate environment batch " + outFile.getPath());
+            out = new BufferedWriter(new FileWriter(outFile));
+
+            boolean first = true;
+            for (final File relativeLib: jars) {
+                out.write("set \"CLASSPATH=");
+                if (first) {
+                    first = false;
+                } else {
+                    out.write("%CLASSPATH%;");
+                }
+                if (!relativeLib.isAbsolute()) {
+                    out.write("%DITA_HOME%" + WINDOWS_SEPARATOR);
+                }
+                out.write(relativeLib.toString().replace(File.separator, WINDOWS_SEPARATOR));
+                out.write("\"\r\n");
+            }
+        } catch (final Exception e) {
+            if (strict) {
+                throw new RuntimeException("Failed to write environment batch: " + e.getMessage(), e);
+            } else {
+                logger.error(e.getMessage(), e) ;
+            }
+        } finally {
+            closeQuietly(out);
         }
     }
 
