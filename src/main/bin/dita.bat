@@ -112,7 +112,7 @@ goto fend
 
 :checkJava
 rem Set environment variables
-call "%DITA_HOME%\resources\env.sh"
+call "%DITA_HOME%\resources\env.bat"
 
 set _JAVACMD=%JAVACMD%
 
