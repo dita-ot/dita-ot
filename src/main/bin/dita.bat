@@ -108,7 +108,7 @@ goto checkJava
 
 :noAntHome
 echo DITA_HOME is set incorrectly or ant could not be located. Please set DITA_HOME.
-goto fend
+goto end
 
 :checkJava
 rem Set environment variables
