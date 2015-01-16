@@ -681,7 +681,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
                        ? toURI(file.toString().substring(0, file.toString().indexOf(STICK)))
                        : file;
         final URI relative = getRelativePath(rootFile, f).normalize();
-        final int lastIndex = relative.getPath().lastIndexOf(".." + File.separator);
+        final int lastIndex = relative.getPath().lastIndexOf(".." + URI_SEPARATOR);
         if (lastIndex != -1) {
             final int newUplevels = lastIndex / 3 + 1;
             uplevels = Math.max(newUplevels, uplevels);
