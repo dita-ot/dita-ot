@@ -194,7 +194,7 @@ public class DebugAndFilterModuleTest {
             final String xtrf = atts.getValue("xtrf");
             assertNotNull(xtrf);
             //assertEquals(source.getAbsoluteFile().toURI().toString(), xtrf);
-            assertEquals(toURI(source.getAbsoluteFile().getPath()).toString(), xtrf);
+            assertEquals(source.getAbsolutePath(), xtrf);
             final String xtrc = atts.getValue("xtrc");
             assertNotNull(xtrc);
             Integer c = counter.get(localName);
