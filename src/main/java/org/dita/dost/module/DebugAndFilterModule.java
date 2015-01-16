@@ -669,7 +669,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     /**
      * Just for the overflowing files.
      * @param overflowingFile overflowingFile
-     * @return relative path to out
+     * @return relative system path to out which ends in {@link java.io.File#separator File.separator}
      */
     public static String getRelativePathFromOut(final File overflowingFile, final Job job) {
         final File relativePath = getRelativePath(job.getInputFile(), overflowingFile);
