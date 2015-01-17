@@ -52,7 +52,7 @@ import static org.dita.dost.util.URLUtils.*;
 public final class DitaWriterFilter extends AbstractXMLFilter {
 
     /** Default value map. */
-    private Map<String, Map<String, String>> defaultValueMap = null;
+    private Map<String, Map<String, String>> defaultValueMap;
     /** Absolute path to current source file. */
     private File currentFile;
     /** Absolute path to current destination file. */
@@ -65,7 +65,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
 
     /**
      * Set default value map.
-     * @param defaultMap default value map, may be {@code null}
+     * @param defaultMap default value map
      */
     public void setDefaultValueMap(final Map<String, Map<String, String>> defaultMap) {
         defaultValueMap  = defaultMap;
@@ -181,7 +181,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
      * @return attribute value or default
      */
     private String getAttributeValue(final String elemQName, final String attQName, final String value) {
-        if (StringUtils.isEmptyString(value) && defaultValueMap != null && !defaultValueMap.isEmpty()) {
+        if (StringUtils.isEmptyString(value) && !defaultValueMap.isEmpty()) {
             final Map<String, String> defaultMap = defaultValueMap.get(attQName);
             if (defaultMap != null) {
                 final String defaultValue = defaultMap.get(elemQName);

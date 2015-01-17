@@ -55,7 +55,7 @@ public class SubjectSchemeReader {
      * {@code Map<AttName, Map<ElemName, <Set<Value>>>}. For default element
      * mapping, the value is {@code *}.
      * 
-     * @return valid attribute values
+     * @return valid attribute values or empty map
      */
     public Map<String, Map<String, Set<String>>> getValidValuesMap() {
         return validValuesMap;
@@ -67,7 +67,7 @@ public class SubjectSchemeReader {
      * {@code Map<AttName, Map<ElemName, Default>>}. For default element
      * mapping, the value is {@code *}.
      * 
-     * @return default values
+     * @return default values or empty map
      */
     public Map<String, Map<String, String>> getDefaultValueMap() {
         return defaultValueMap;
@@ -237,7 +237,7 @@ public class SubjectSchemeReader {
                                         }
                                         if (!A.contains(subTree)) {
                                             // Add sub-tree to valid values map
-                                            putValuePairsIntoMap(subTree, elementName, attributeName);
+                                            putValuePairsIntoMap(subTree, elementName, attributeName, keyValue);
                                         }
                                         A.add(subTree);
                                         S.put(elementName, A);
@@ -290,8 +290,9 @@ public class SubjectSchemeReader {
      * @param subtree subject scheme definition element
      * @param elementName element name
      * @param attName attribute name
+     * @param category enumeration category name
      */
-    private void putValuePairsIntoMap(final Element subtree, final String elementName, final String attName) {
+    private void putValuePairsIntoMap(final Element subtree, final String elementName, final String attName, final String category) {
         if (subtree == null || attName == null) {
             return;
         }
@@ -319,7 +320,7 @@ public class SubjectSchemeReader {
             }
             if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
                 final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-                if (!StringUtils.isEmptyString(key)) {
+                if (!(key == null || key.trim().isEmpty() || key.equals(category))) {
                     valueSet.add(key);
                 }
             }

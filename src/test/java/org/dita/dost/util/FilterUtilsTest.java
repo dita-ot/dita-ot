@@ -37,7 +37,7 @@ public class FilterUtilsTest {
 
     @Test
     public void testNeedExcludeNoAttribute() {
-        final FilterUtils f = new FilterUtils(filterMap);
+        final FilterUtils f = new FilterUtils(false, filterMap);
 
         assertFalse(f.needExclude(new AttributesImpl(), new String[0][0]));
     }
@@ -46,7 +46,7 @@ public class FilterUtilsTest {
     public void testNeedExcludeDefaultExclude() {
         final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>(filterMap);
         fm.put(new FilterKey("platform", null), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(fm);
+        final FilterUtils f = new FilterUtils(false, fm);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(new AttributesImpl(), new String[0][0]));
@@ -59,7 +59,7 @@ public class FilterUtilsTest {
     public void testNeedExcludeDefaultInclude() {
         final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>(filterMap);
         fm.put(new FilterKey("platform", null), Action.INCLUDE);
-        final FilterUtils f = new FilterUtils(fm);
+        final FilterUtils f = new FilterUtils(false, fm);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("platform", "amiga unix windows"), new String[0][0]));
@@ -69,7 +69,7 @@ public class FilterUtilsTest {
 
     @Test
     public void testNeedExclude() {
-        final FilterUtils f = new FilterUtils(filterMap);
+        final FilterUtils f = new FilterUtils(false, filterMap);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("platform", "amiga unix windows"), new String[0][0]));
@@ -79,7 +79,7 @@ public class FilterUtilsTest {
 
     @Test
     public void testNeedExcludeMultipleAttributes() {
-        final FilterUtils f = new FilterUtils(filterMap);
+        final FilterUtils f = new FilterUtils(false, filterMap);
         f.setLogger(new TestUtils.TestLogger());
 
         final AttributesImpl amigaUnix = new AttributesImpl();
@@ -103,7 +103,7 @@ public class FilterUtilsTest {
         final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
         fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
         fm.put(new FilterKey("os", null), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(fm);
+        final FilterUtils f = new FilterUtils(false, fm);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("os", "amiga unix windows"), new String[][] {{"props", "os"}}));
@@ -118,7 +118,7 @@ public class FilterUtilsTest {
         final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
         fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
         fm.put(new FilterKey("os", null), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(fm);
+        final FilterUtils f = new FilterUtils(false, fm);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("props", "os(amiga unix windows)"), new String[][] {{"props", "os"}}));
@@ -133,7 +133,7 @@ public class FilterUtilsTest {
         final Map<FilterKey, Action> fm = new HashMap<FilterKey, Action>();
         fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
         fm.put(new FilterKey("os", null), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(fm);
+        final FilterUtils f = new FilterUtils(false, fm);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("otherprops", "os(amiga unix windows)"), new String[0][0]));
@@ -149,7 +149,7 @@ public class FilterUtilsTest {
         fm.put(new FilterKey("os", "amiga"), Action.INCLUDE);
         fm.put(new FilterKey("os", null), Action.EXCLUDE);
         fm.put(new FilterKey("platform", null), Action.EXCLUDE);
-        final FilterUtils f = new FilterUtils(fm);
+        final FilterUtils f = new FilterUtils(false, fm);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("platform", "os(amiga unix windows)"), new String[0][0]));
@@ -167,7 +167,7 @@ public class FilterUtilsTest {
         fm.put(new FilterKey("os", "windows"), Action.EXCLUDE);
         fm.put(new FilterKey("os", null), Action.INCLUDE);
         fm.put(new FilterKey("platform", null), Action.INCLUDE);
-        final FilterUtils f = new FilterUtils(fm);
+        final FilterUtils f = new FilterUtils(false, fm);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("platform", "os(amiga unix windows) database(mongo)"), new String[0][0]));
@@ -183,7 +183,7 @@ public class FilterUtilsTest {
         fm.put(new FilterKey("platform", "unix"), Action.EXCLUDE);
         fm.put(new FilterKey("platform", "windows"), Action.EXCLUDE);
         fm.put(new FilterKey("platform", null), Action.INCLUDE);
-        final FilterUtils f = new FilterUtils(fm);
+        final FilterUtils f = new FilterUtils(false, fm);
         f.setLogger(new TestUtils.TestLogger());
 
         assertFalse(f.needExclude(attr("platform", "windows database(mongodb couchbase) unix osx"), new String[0][0]));
@@ -193,7 +193,7 @@ public class FilterUtilsTest {
     
     @Test
     public void testGetUngroupedValue() {
-        final FilterUtils f = new FilterUtils(Collections.EMPTY_MAP);
+        final FilterUtils f = new FilterUtils(false, Collections.EMPTY_MAP);
         
         {
             final Map<String, List<String>> exp = new HashMap<String, List<String>>();
