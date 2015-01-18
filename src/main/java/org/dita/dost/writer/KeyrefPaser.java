@@ -260,11 +260,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 } else {
                     // Current element name equals the key reference element
                     // grab keyword or term from key definition
-                    NodeList nodeList = elem.getElementsByTagName(TOPIC_KEYWORD.localName);
-                    if (nodeList.getLength() == 0 ) {
-                        nodeList = elem.getElementsByTagName(TOPIC_TERM.localName);
-                    }
                     if (!hasSubElem.peek() && currentElement != null) {
+                        NodeList nodeList = elem.getElementsByTagName(TOPIC_KEYWORD.localName);
+                        if (nodeList.getLength() == 0 ) {
+                            nodeList = elem.getElementsByTagName(TOPIC_TERM.localName);
+                        }
                         if (nodeList.getLength() > 0) {
                             if (!currentElement.isRefType) {
                                 // only one keyword or term is used.
@@ -278,10 +278,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                     getContentHandler().startElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName, atts);
                                 }
                                 if (!currentElement.isEmpty) {
-                                    for (int index = 0; index < nodeList.getLength(); index++) {
-                                        final Node node = nodeList.item(index);
-                                        domToSax((Element) node, true);
-                                    }
+                                    domToSax((Element) nodeList.item(0), true);
                                 }
                                 if (TOPIC_LINK.matches(currentElement.type)) {
                                     getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
