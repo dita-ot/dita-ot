@@ -10,7 +10,6 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.StringUtils.*;
 import static org.dita.dost.reader.ChunkMapReader.*;
 
@@ -61,23 +60,23 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Flag for whether parsing file contains coderef */
     private boolean hasCodeRef = false;
     /** Set of all the non-conref and non-copyto targets refered in current parsing file */
-    private final Set<Reference> nonConrefCopytoTargets;
+    private final Set<Reference> nonConrefCopytoTargets = new LinkedHashSet<Reference>(64);
     /** Set of conref targets refered in current parsing file */
-    private final Set<URI> conrefTargets;
+    private final Set<URI> conrefTargets = new HashSet<URI>(32);
     /** Set of href nonConrefCopytoTargets refered in current parsing file */
-    private final Set<URI> hrefTargets;
+    private final Set<URI> hrefTargets = new HashSet<URI>(32);
     /** Set of href targets with anchor appended */
-    private final Set<URI> hrefTopicSet;
+    private final Set<URI> hrefTopicSet = new HashSet<URI>(32);
     /** Set of chunk targets */
-    private final Set<URI> chunkTopicSet;
+    private final Set<URI> chunkTopicSet = new HashSet<URI>(32);
     /** Set of subject schema files */
-    private final Set<URI> schemeSet;
+    private final Set<URI> schemeSet = new HashSet<URI>(32);
     /** Set of coderef or object target files */
-    private final Set<URI> subsidiarySet;
+    private final Set<URI> subsidiarySet = new HashSet<URI>(16);
     /** Set of sources of those copy-to that were ignored */
-    private final Set<URI> ignoredCopytoSourceSet;
+    private final Set<URI> ignoredCopytoSourceSet = new HashSet<URI>(16);
     /** Map of copy-to target to souce */
-    private final Map<URI, URI> copytoMap;
+    private final Map<URI, URI> copytoMap = new HashMap<URI, URI>(16);
     /** Flag for conrefpush */
     private boolean hasconaction = false;
     /** foreign/unknown nesting level */
@@ -93,62 +92,36 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Flag used to mark if current file is still valid after filtering */
     private boolean isValidInput = false;
     /** Contains the attribution specialization from props */
-    private String[][] props;
+    private String[][] props = null;
     /** Set of outer dita files */
-    private final Set<URI> outDitaFilesSet;
+    private final Set<URI> outDitaFilesSet = new HashSet<URI>(64);
     /** Absolute system path to input file parent directory */
     private URI rootDir = null;
     /** Absolute system path to file being processed */
     private URI currentFile = null;
     /** Stack for @processing-role value */
-    private final Stack<String> processRoleStack;
+    private final Stack<String> processRoleStack = new Stack<String>();
     /** Depth inside a @processing-role parent */
-    private int processRoleLevel;
+    private int processRoleLevel = 0;
     /** Topics with processing role of "resource-only" */
-    private final Set<URI> resourceOnlySet;
+    private final Set<URI> resourceOnlySet = new HashSet<URI>(32);
     /** Topics with processing role of "normal" */
-    private final Set<URI> crossSet;
+    private final Set<URI> normalProcessingRoleSet = new HashSet<URI>(32);
     /** Subject scheme relative file paths. */
-    private final Set<URI> schemeRefSet;
+    private final Set<URI> schemeRefSet = new HashSet<URI>(32);
     /** Relationship graph between subject schema. Keys are subject scheme map paths and values
      * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps. */
-    private final Map<URI, Set<URI>> schemeRelationGraph;
+    private final Map<URI, Set<URI>> schemeRelationGraph = new LinkedHashMap<URI, Set<URI>>();
     /** Map to store referenced branches. */
-    private final Map<URI, List<String>> validBranches;
+    private final Map<URI, List<String>> validBranches = new HashMap<URI, List<String>>(32);
     /** Int to mark referenced nested elements. */
-    private int level;
+    private int level = 0;
     /** Topicref stack */
-    private final Stack<String> topicrefStack;
+    private final Stack<String> topicrefStack = new Stack<String>();
     /** Store the primary ditamap file name. */
     private URI primaryDitamap;
     private boolean isRootElement = true;
     private DitaClass rootClass = null;
-
-    /**
-     * Constructor.
-     */
-    public GenListModuleReader() {
-        nonConrefCopytoTargets = new LinkedHashSet<Reference>(64);
-        hrefTargets = new HashSet<URI>(32);
-        hrefTopicSet = new HashSet<URI>(32);
-        chunkTopicSet = new HashSet<URI>(32);
-        schemeSet = new HashSet<URI>(32);
-        schemeRefSet = new HashSet<URI>(32);
-        conrefTargets = new HashSet<URI>(32);
-        copytoMap = new HashMap<URI, URI>(16);
-        subsidiarySet = new HashSet<URI>(16);
-        ignoredCopytoSourceSet = new HashSet<URI>(16);
-        outDitaFilesSet = new HashSet<URI>(64);
-        processRoleLevel = 0;
-        processRoleStack = new Stack<String>();
-        resourceOnlySet = new HashSet<URI>(32);
-        crossSet = new HashSet<URI>(32);
-        schemeRelationGraph = new LinkedHashMap<URI, Set<URI>>();
-        validBranches = new HashMap<URI, List<String>>(32);
-        level = 0;
-        topicrefStack = new Stack<String>();
-        props = null;
-    }
 
     /**
      * Set output utilities.
@@ -207,7 +180,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     public Set<URI> getResourceOnlySet() {
         final Set<URI> res = new HashSet<URI>(resourceOnlySet);
-        res.removeAll(crossSet);
+        res.removeAll(normalProcessingRoleSet);
         return res;
     }
 
@@ -453,7 +426,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         processRoleStack.clear();
         isRootElement = true;
         rootClass = null;
-        // Don't clean resourceOnlySet or crossSet
+        // Don't clean resourceOnlySet or normalProcessingRoleSet
     }
 
     @Override
@@ -482,7 +455,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 }
             } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processingRole)) {
                 if (href != null) {
-                    crossSet.add(currentDir.resolve(href));
+                    normalProcessingRoleSet.add(currentDir.resolve(href));
                 }
             }
         } else if (processRoleLevel > 0) {
@@ -494,12 +467,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 }
             } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processRoleStack.peek())) {
                 if (href != null) {
-                    crossSet.add(currentDir.resolve(href));
+                    normalProcessingRoleSet.add(currentDir.resolve(href));
                 }
             }
         } else {
             if (href != null) {
-                crossSet.add(currentDir.resolve(href));
+                normalProcessingRoleSet.add(currentDir.resolve(href));
             }
         }
 
@@ -604,7 +577,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
 
             final URI href = currentFile;
-            if (isDitaMap() && resourceOnlySet.contains(href) && !crossSet.contains(href)) {
+            if (isDitaMap() && resourceOnlySet.contains(href) && !normalProcessingRoleSet.contains(href)) {
                 processRoleLevel++;
                 processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
             }
