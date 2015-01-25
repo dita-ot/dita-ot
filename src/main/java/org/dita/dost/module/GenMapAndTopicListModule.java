@@ -69,9 +69,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     public static final String ELEMENT_STUB = "stub";
 
-    /** Set of all dita files */
-    private final Set<URI> ditaSet;
-
     /** Set of all topic files */
     private final Set<URI> fullTopicSet;
 
@@ -86,9 +83,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     /** Set of chunk topic with anchor ID */
     private final Set<URI> chunkTopicSet;
-
-    /** Set of map files containing href */
-    private final Set<URI> hrefMapSet;
 
     /** Set of dita files containing conref */
     private final Set<URI> conrefSet;
@@ -196,14 +190,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @throws SAXException never throw such exception
      */
     public GenMapAndTopicListModule() throws SAXException, ParserConfigurationException {
-        ditaSet = new HashSet<URI>(128);
         fullTopicSet = new HashSet<URI>(128);
         fullMapSet = new HashSet<URI>(128);
         hrefTopicSet = new HashSet<URI>(128);
         hrefWithIDSet = new HashSet<URI>(128);
         chunkTopicSet = new HashSet<URI>(128);
         schemeSet = new HashSet<URI>(128);
-        hrefMapSet = new HashSet<URI>(128);
         conrefSet = new HashSet<URI>(128);
         imageSet = new HashSet<URI>(128);
         flagImageSet = new LinkedHashSet<URI>(128);
@@ -547,9 +539,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             // key and value.keys will differ when keydef is a redirect to another keydef
             final String key = e.getKey();
             final KeyDef value = e.getValue();
-            if (keysDefMap.containsKey(key)) {
-                // ignore
-            } else {
+            if (!keysDefMap.containsKey(key)) {
                 keysDefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
             }
             // if the current file is also a schema file
@@ -594,8 +584,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @param currentFile file path
      */
     private void categorizeCurrentFile(final URI currentFile) {
-        ditaSet.add(currentFile);
-
         if (listFilter.isDitaTopic()) {
             hrefTargetSet.add(currentFile);
         }
@@ -625,25 +613,15 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         if (listFilter.isDitaMap()) {
             fullMapSet.add(currentFile);
-            if (listFilter.hasHref()) {
-                hrefMapSet.add(currentFile);
-            }
         }
     }
 
     /**
      * Categorize file.
      * 
-     * If {@code file} parameter contains a pipe character, the pipe character is followed
-     * by the format of the file.
-     * 
-     * TODO: Pass format as separate DITA class parameter.
-     * 
      * @param file file system path with optional format
      */
     private void categorizeReferenceFile(final Reference file) {
-        final String lcasefn = file.filename.toString().toLowerCase();
-
         // avoid files referred by coderef being added into wait list
         if (subsidiarySet.contains(file.filename)) {
             return;
@@ -656,7 +634,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             if (!image.exists()){
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX008W", image.getAbsolutePath()).toString());
             }
-        } else { //if (FileUtils.isHTMLFile(lcasefn) || FileUtils.isResourceFile(lcasefn)) {
+        } else {
             htmlSet.add(file.filename);
         }
     }
@@ -840,8 +818,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         copytoMap = tempMap;
 
-        // Add copy-to targets into ditaSet, fullTopicSet
-        ditaSet.addAll(copytoMap.keySet());
+        // Add copy-to targets into fullTopicSet
         fullTopicSet.addAll(copytoMap.keySet());
 
         // Get pure copy-to sources
@@ -855,8 +832,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         copytoSourceSet = pureCopytoSources;
 
-        // Remove pure copy-to sources from ditaSet, fullTopicSet
-        ditaSet.removeAll(pureCopytoSources);
+        // Remove pure copy-to sources from fullTopicSet
         fullTopicSet.removeAll(pureCopytoSources);
     }
 
@@ -873,8 +849,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
         conrefTargetSet = pureConrefTargets;
 
-        // Remove pure conref targets from ditaSet, fullTopicSet
-        ditaSet.removeAll(pureConrefTargets);
+        // Remove pure conref targets from fullTopicSet
         fullTopicSet.removeAll(pureConrefTargets);
     }
 

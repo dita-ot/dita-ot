@@ -279,7 +279,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             }
 
             if (chunkValue.contains(CHUNK_TO_CONTENT)) {
-                final String tmpContent = ((StringWriter) output).toString();
+                final String tmpContent = output.toString();
                 writeToContentChunk(tmpContent, outputFileName, needWriteDitaTag);
                 // restore back original output
                 output = tempWriter;

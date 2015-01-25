@@ -34,14 +34,13 @@ import org.xml.sax.XMLReader;
  * @author Zhang, Yuan Peng
  */
 public final class DitaIndexWriter extends AbstractXMLWriter {
-    private String firstMatchTopic;
+
     /** whether we have met <metadata> in <prolog> element */
     private boolean hasMetadataTillNow;
     /** whether we have met <prolog> in this topic we want */
     private boolean hasPrologTillNow;
 
     private String indexEntries;
-    private String lastMatchTopic;
     /** topic path that topicIdList need to match */
     private List<String> matchList;
     private OutputStreamWriter output;
@@ -51,7 +50,6 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     /** array list that is used to keep the hierarchy of topic id */
     private final List<String> topicIdList;
     private boolean hasWritten;
-    private final ArrayList<String> topicSpecList = new ArrayList<String>();
     private int topicLevel = -1;
 
 
@@ -61,11 +59,9 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     public DitaIndexWriter() {
         super();
         topicIdList = new ArrayList<String>(16);
-        firstMatchTopic = null;
         hasMetadataTillNow = false;
         hasPrologTillNow = false;
         indexEntries = null;
-        lastMatchTopic = null;
         matchList = null;
         output = null;
         startTopic = false;
@@ -122,10 +118,6 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
             topicIdList.remove(topicIdList.size() - 1);
         }
         try {
-            if (topicSpecList.contains(localName)){
-                topicLevel--;
-            }
-
             if (!hasMetadataTillNow && TOPIC_PROLOG.localName.equals(qName) && startTopic && !hasWritten) {
                 
                 writeStartElement(TOPIC_METADATA.localName, new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_METADATA.toString()).build());
@@ -135,7 +127,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
                 hasWritten = true;
             }
             writeEndElement(qName);
-            if (!hasPrologTillNow && startTopic && !hasWritten && !topicSpecList.contains(localName)) {
+            if (!hasPrologTillNow && startTopic && !hasWritten) {
                 // if <prolog> don't exist
                 writeStartElement(TOPIC_PROLOG.localName, new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_PROLOG.toString()).build());
                 writeStartElement(TOPIC_METADATA.localName, new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_METADATA.toString()).build());
@@ -217,13 +209,10 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
         int index = 0;
         matchList = new ArrayList<String>(16);
 
-        firstMatchTopic = (match.contains(SLASH)) ? match.substring(0, match.indexOf('/')) : match;
-
         while (index != -1) {
             final int end = match.indexOf(SLASH, index);
             if (end == -1) {
                 matchList.add(match.substring(index));
-                lastMatchTopic = match.substring(index);
                 index = end;
             } else {
                 matchList.add(match.substring(index, end));
