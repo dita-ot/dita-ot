@@ -10,11 +10,9 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.StringUtils.*;
 import static org.dita.dost.reader.ChunkMapReader.*;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -35,8 +33,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- * This class extends AbstractReader, used to parse relevant dita topics and
- * ditamap files for GenMapAndTopicListModule.
+ * Parse relevant DITA files and collect information.
  * 
  * <p>
  * <strong>Not thread-safe</strong>. Instances can be reused by calling
@@ -108,12 +105,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Relationship graph between subject schema. Keys are subject scheme map paths and values
      * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps. */
     private final Map<URI, Set<URI>> schemeRelationGraph = new LinkedHashMap<URI, Set<URI>>();
-    /** Map to store referenced branches. */
-    private final Map<URI, List<String>> validBranches = new HashMap<URI, List<String>>(32);
-    /** Int to mark referenced nested elements. */
-    private int level = 0;
-    /** Topicref stack */
-    private final Stack<String> topicrefStack = new Stack<String>();
     /** Store the primary ditamap file name. */
     private URI primaryDitamap;
     private boolean isRootElement = true;
@@ -416,8 +407,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         outDitaFilesSet.clear();
         schemeSet.clear();
         schemeRefSet.clear();
-        level = 0;
-        topicrefStack.clear();
         processRoleStack.clear();
         isRootElement = true;
         rootClass = null;
@@ -524,8 +513,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             isValidInput = true;
         }
 
-        handleTopicRef(localName, atts);
-
         parseConrefAttr(atts);
         parseAttribute(atts, ATTRIBUTE_NAME_HREF);
         parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
@@ -543,37 +530,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
             if (classValue != null) {
                 rootClass = new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS));
-            }
-        }
-    }
-
-    private void handleTopicRef(String localName, Attributes atts) {
-        final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        // onlyTopicInMap is on.
-        if (job.getOnlyTopicInMap() && isDitaMap()) {
-            // topicref(only defined in ditamap file.)
-            if (MAP_TOPICREF.matches(classValue)) {
-                URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-                if (hrefValue == null || hrefValue.toString().isEmpty()) {
-                    hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
-                }
-                if (hrefValue != null && !hrefValue.toString().isEmpty()) {
-                    // exclude external resources
-                    final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-                    if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
-                            || hrefValue.toString().contains(COLON_DOUBLE_SLASH) || hrefValue.toString().startsWith(SHARP)) {
-                        return;
-                    }
-                    // normalize href value.
-                    URI fileName = hrefValue;
-                    if (!fileName.isAbsolute()) {
-                        fileName = currentDir.resolve(fileName);
-                    }
-
-                    if (parseBranch(atts, hrefValue, fileName)) {
-                        topicrefStack.push(localName);
-                    }
-                }
             }
         }
     }
@@ -600,11 +556,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             topicGroupLevel--;
         }
 
-        if (!topicrefStack.isEmpty() && localName.equals(topicrefStack.peek())) {
-            level--;
-            topicrefStack.pop();
-        }
-        
         getContentHandler().endElement(uri, localName, qName);
     }
 
@@ -616,115 +567,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         processRoleStack.pop();
 
         getContentHandler().endDocument();
-    }
-
-    /**
-     * Method for see whether a branch should be parsed.
-     * 
-     * @param atts {@link Attributes}
-     * @param hrefValue {@link String}
-     * @param fileName normalized file name(remove '#')
-     * @return boolean
-     */
-    private boolean parseBranch(final Attributes atts, final URI hrefValue, final URI fileName) {
-        // current file is primary ditamap file.
-        // parse every branch.
-        if (currentDir == null && currentFile.equals(primaryDitamap)) {
-            // add branches into map
-            addReferredBranches(hrefValue, fileName);
-            return true;
-        } else {
-            // current file is a sub-ditamap one.
-            // get branch's id
-            final String id = atts.getValue(ATTRIBUTE_NAME_ID);
-            // this branch is not referenced
-            if (level == 0 && isEmptyString(id)) {
-                // There is occassion that the whole ditamap should be parsed
-                if (searchBrachesMap(id)) {
-                    // Add this branch into map for parsing.
-                    addReferredBranches(hrefValue, fileName);
-                    // update level
-                    level++;
-                    return true;
-                } else {
-                    return false;
-                }
-                // this brach is a decendent of a referenced one
-            } else if (level != 0) {
-                // Add this branch into map for parsing.
-                addReferredBranches(hrefValue, fileName);
-                // update level
-                level++;
-                return true;
-                // This branch has an id but is a new one
-            } else if (!isEmptyString(id)) {
-                // search branches map.
-                final boolean found = searchBrachesMap(id);
-                // branch is referenced
-                if (found) {
-                    // Add this branch into map for parsing.
-                    addReferredBranches(hrefValue, fileName);
-                    // update level
-                    level++;
-                    return true;
-                } else {
-                    // this branch is not referenced
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-    }
-
-    /**
-     * Search braches map with branch id and current file name.
-     * 
-     * @param id String branch id.
-     * @return boolean true if found and false otherwise.
-     */
-    private boolean searchBrachesMap(final String id) {
-        // caculate relative path for current file.
-        final URI currentFileAbsolute = currentFile;
-        // seach the map with id & current file name.
-        if (validBranches.containsKey(currentFileAbsolute)) {
-            final List<String> branchIdList = validBranches.get(currentFileAbsolute);
-            // the branch is referenced.
-            if (branchIdList.contains(id)) {
-                return true;
-            } else {// the whole map is referenced
-                // the branch is not referred
-                return branchIdList.size() == 0;
-            }
-        } else {
-            // current file is not refered
-            return false;
-        }
-    }
-
-    /**
-     * Add branches into map.
-     * 
-     * @param hrefValue
-     * @param fileName
-     */
-    private void addReferredBranches(final URI hrefValue, final URI fileName) {
-        final String branchId = hrefValue.getFragment();
-        // href value has branch id.
-        if (branchId != null) {
-            // The map contains the file name
-            if (validBranches.containsKey(fileName)) {
-                final List<String> branchIdList = validBranches.get(fileName);
-                branchIdList.add(branchId);
-            } else {
-                final List<String> branchIdList = new ArrayList<String>();
-                branchIdList.add(branchId);
-                validBranches.put(fileName, branchIdList);
-            }
-            // href value has no branch id
-        } else {
-            validBranches.put(fileName, new ArrayList<String>());
-        }
     }
     
     /**
