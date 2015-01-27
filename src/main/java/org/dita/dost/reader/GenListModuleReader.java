@@ -91,8 +91,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private int topicGroupLevel = 0;
     /** Flag used to mark if current file is still valid after filtering */
     private boolean isValidInput = false;
-    /** Contains the attribution specialization from props */
-    private String[][] props = null;
     /** Set of outer dita files */
     private final Set<URI> outDitaFilesSet = new HashSet<URI>(64);
     /** Absolute system path to input file parent directory */
@@ -101,8 +99,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private URI currentFile = null;
     /** Stack for @processing-role value */
     private final Stack<String> processRoleStack = new Stack<String>();
-    /** Depth inside a @processing-role parent */
-    private int processRoleLevel = 0;
     /** Topics with processing role of "resource-only" */
     private final Set<URI> resourceOnlySet = new HashSet<URI>(32);
     /** Topics with processing role of "normal" */
@@ -422,7 +418,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         schemeRefSet.clear();
         level = 0;
         topicrefStack.clear();
-        processRoleLevel = 0;
         processRoleStack.clear();
         isRootElement = true;
         rootClass = null;
@@ -434,44 +429,29 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (currentDir == null) {
             throw new IllegalStateException();
         }
+
+        processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_NORMAL);
+
         getContentHandler().startDocument();
     }
 
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
-        handleRootElement(localName, atts);
+        handleRootElement(atts);
 
-        final String processingRole = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
+        String processingRole = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
+        if (processingRole == null) {
+            processingRole = processRoleStack.peek();
+        }
+        processRoleStack.push(processingRole);
+
         final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        if (processingRole != null) {
-            processRoleStack.push(processingRole);
-            processRoleLevel++;
-            if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
-            } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
-                if (href != null) {
-                    resourceOnlySet.add(currentDir.resolve(href));
-                }
-            } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processingRole)) {
-                if (href != null) {
-                    normalProcessingRoleSet.add(currentDir.resolve(href));
-                }
-            }
-        } else if (processRoleLevel > 0) {
-            processRoleLevel++;
-            if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
-            } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleStack.peek())) {
-                if (href != null) {
-                    resourceOnlySet.add(currentDir.resolve(href));
-                }
-            } else if (ATTR_PROCESSING_ROLE_VALUE_NORMAL.equals(processRoleStack.peek())) {
-                if (href != null) {
-                    normalProcessingRoleSet.add(currentDir.resolve(href));
-                }
-            }
-        } else {
-            if (href != null) {
+        if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
+            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
+                resourceOnlySet.add(currentDir.resolve(href));
+            } else {
                 normalProcessingRoleSet.add(currentDir.resolve(href));
             }
         }
@@ -498,11 +478,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         if (foreignLevel > 0) {
-            // if it is an element nested in foreign/unknown element
-            // do not parse it
             foreignLevel++;
             return;
-        } else if (classValue != null && (TOPIC_FOREIGN.matches(classValue) || TOPIC_UNKNOWN.matches(classValue))) {
+        } else if (TOPIC_FOREIGN.matches(classValue) || TOPIC_UNKNOWN.matches(classValue)) {
             foreignLevel++;
         }
 
@@ -511,9 +489,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null) {
             chunkLevel++;
         }
+
         if (relTableLevel > 0) {
             relTableLevel++;
-        } else if (classValue != null && MAP_RELTABLE.matches(classValue)) {
+        } else if (MAP_RELTABLE.matches(classValue)) {
             relTableLevel++;
         }
 
@@ -526,8 +505,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         if (topicGroupLevel > 0) {
             topicGroupLevel++;
-        } else if (atts.getValue(ATTRIBUTE_NAME_CLASS) != null
-                && atts.getValue(ATTRIBUTE_NAME_CLASS).contains(MAPGROUP_D_TOPICGROUP.matcher)) {
+        } else if (MAPGROUP_D_TOPICGROUP.matches(classValue)) {
             topicGroupLevel++;
         }
 
@@ -535,22 +513,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
         }
 
-        if (classValue != null && TOPIC_TOPIC.matches(classValue)) {
+        if (TOPIC_TOPIC.matches(classValue)) {
             final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains == null) {
                 logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
-            } else {
-                props = getExtProps(domains);
             }
         }
 
-        /*
-         * For ditamap, set it to valid if element <map> or extended from <map>
-         * was found, this kind of element's class attribute must contains
-         * 'map/map'; For topic files, set it to valid if element <title> or
-         * extended from <title> was found, this kind of element's class
-         * attribute must contains 'topic/title'.
-         */
         if ((MAP_MAP.matches(classValue)) || (TOPIC_TITLE.matches(classValue))) {
             isValidInput = true;
         }
@@ -568,18 +537,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         getContentHandler().startElement(uri, localName, qName, atts);
     }
 
-    private void handleRootElement(final String localName, final Attributes atts) {
+    private void handleRootElement(final Attributes atts) {
         if (isRootElement) {
             isRootElement = false;
             final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
             if (classValue != null) {
                 rootClass = new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS));
-            }
-
-            final URI href = currentFile;
-            if (isDitaMap() && resourceOnlySet.contains(href) && !normalProcessingRoleSet.contains(href)) {
-                processRoleLevel++;
-                processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
             }
         }
     }
@@ -607,8 +570,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                         fileName = currentDir.resolve(fileName);
                     }
 
-                    final boolean canParse = parseBranch(atts, hrefValue, fileName);
-                    if (canParse) {
+                    if (parseBranch(atts, hrefValue, fileName)) {
                         topicrefStack.push(localName);
                     }
                 }
@@ -619,12 +581,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         // @processing-role
-        if (processRoleLevel > 0) {
-            if (processRoleLevel == processRoleStack.size()) {
-                processRoleStack.pop();
-            }
-            processRoleLevel--;
-        }
+        processRoleStack.pop();
+
         if (foreignLevel > 0) {
             foreignLevel--;
             return;
@@ -655,11 +613,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     @Override
     public void endDocument() throws SAXException {
-        if (processRoleLevel > 0) {
-            processRoleLevel--;
-            processRoleStack.pop();
-        }
-        
+        processRoleStack.pop();
+
         getContentHandler().endDocument();
     }
 
@@ -685,8 +640,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             // this branch is not referenced
             if (level == 0 && isEmptyString(id)) {
                 // There is occassion that the whole ditamap should be parsed
-                final boolean found = searchBrachesMap(id);
-                if (found) {
+                if (searchBrachesMap(id)) {
                     // Add this branch into map for parsing.
                     addReferredBranches(hrefValue, fileName);
                     // update level
@@ -792,8 +746,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
             if (PR_D_CODEREF.matches(attrClass)) {
-                // if current element is <coderef> or its specialization
-                // set hasCodeRef to true
                 hasCodeRef = true;
             } else {
                 hasHref = true;
