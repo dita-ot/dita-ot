@@ -12,7 +12,7 @@
   
   <xsl:param name="DEFAULTLANG">en-us</xsl:param>
   <xsl:param name="variableFiles.url" select="'plugin:org.dita.base:xsl/common/strings.xml'"/>
-  
+    
   <xsl:variable name="pixels-per-inch" select="number(96)"/>
   
   <!-- Function to determine the current language, and return it in lower case -->
@@ -398,6 +398,97 @@
     <xsl:sequence select="contains(substring-after($href, '#'), '/')"/>
   </xsl:function>
   
-
+  
+  <!-- Given an attribute that contains a real measurement value, convert it to pixels.
+    
+       Returns NaN if the attribute value is not a number or is in the unit 'em' or '*' (which
+       is relative to the current font context and so can't be meaningfully converted).
+  
+  -->
+  <xsl:function name="dita-ot:convertMeasurementToPixels" as="xs:double">
+    <xsl:param name="lengthSpec" as="xs:string"/><!-- A length specification: number + unit -->
+<!--    <xsl:message> + [DEBUG] dita-ot:convertMeasurementToPixels(): lengthSpec="<xsl:value-of select="$lengthSpec"/>"</xsl:message>-->
+    <xsl:variable name="unit" as="xs:string"
+      select="dita-ot:getMeasurementUnit($lengthSpec)"
+    />
+<!--    <xsl:message> + [DEBUG] dita-ot:convertMeasurementToPixels(): unit="<xsl:value-of select="$unit"/>"</xsl:message>-->
+    <xsl:variable name="result" as="xs:double">
+      <xsl:choose>
+        <xsl:when test="$unit = 'unitless'">
+          <xsl:sequence select="xs:double($lengthSpec)"/>
+        </xsl:when>
+        <xsl:when test="$unit = ('*', 'em', 'unrecognizedUnit')">
+          <xsl:sequence select="number('NaN')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="length" as="xs:double" 
+            select="number(substring($lengthSpec, 1, string-length($lengthSpec) - 2))"/>
+          <!-- 96 pixels per inch
+               37.8 pixels per cm
+               72 points per inch = 1.33 pixels per point
+               12 picas per point = 16 pixels per pica
+            -->
+          <xsl:choose>
+            <xsl:when test="$unit = 'in'">
+              <xsl:sequence select="$length * $pixels-per-inch"/>
+            </xsl:when>
+            <xsl:when test="$unit = 'cm'">
+              <xsl:sequence select="$length * 37.8"/>
+            </xsl:when>
+            <xsl:when test="$unit = 'mm'">
+              <xsl:sequence select="$length * 3.78"/>
+            </xsl:when>
+            <xsl:when test="$unit = 'pt'">
+              <xsl:sequence select="$length * 1.33"/>
+            </xsl:when>
+            <xsl:when test="$unit = 'pc'">
+              <xsl:sequence select="$length * 16.0"/>
+            </xsl:when>
+            <xsl:when test="$unit = 'px'">
+              <xsl:sequence select="$length"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:message> - [WARN] dita-ot:convertMeasurementToPixels(): Unexpected unit value "<xsl:value-of select="$unit"/>"</xsl:message>
+              <xsl:sequence select="number('NaN')"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+<!--    <xsl:message> + [DEBUG] dita-ot:convertMeasurementToPixels(): result="<xsl:value-of select="$result"/>"</xsl:message>-->
+    <xsl:sequence select="$result"/>
+  </xsl:function>
+  
+  <!-- Returns unit of measurement for the length specification. If there is no
+       explicit unit then the unit is "unitless". If the measurement is relative,
+       the unit is "*".
+    -->
+  <xsl:function name="dita-ot:getMeasurementUnit" as="xs:string">
+    <xsl:param name="lengthSpec" as="xs:string"/>
+    <xsl:variable name="unit" as="xs:string"
+      select="if (matches($lengthSpec, '[0-9]+[A-Za-z][A-Za-z]'))
+                 then lower-case(substring($lengthSpec, string-length($lengthSpec) - 1))
+              else if (matches($lengthSpec, '^[0-9]+$'))
+                 then 'unitless'
+              else if (ends-with($lengthSpec, '*'))
+                  then '*'
+                  else 'unrecognizedUnit'
+      "
+    />
+    <xsl:sequence select="$unit"/>    
+  </xsl:function>
+  
+  <!-- Returns true if the length specification is an absolute measurement unit -->
+  <xsl:function name="dita-ot:isAbsoluteMeasurement" as="xs:boolean">
+    <xsl:param name="lengthSpec" as="xs:string"/>
+    <xsl:variable name="unit" as="xs:string"
+      select="dita-ot:getMeasurementUnit($lengthSpec)"
+    />
+    <xsl:variable name="result" as="xs:boolean"
+      select="not($unit = ('*', 'unitless'))"
+    />
+    <xsl:sequence select="$result"/>
+  </xsl:function>
+  
 </xsl:stylesheet>
 

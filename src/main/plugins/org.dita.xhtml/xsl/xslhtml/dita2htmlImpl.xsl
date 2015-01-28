@@ -143,6 +143,26 @@
     </xsl:choose>
   </xsl:variable>
 
+  <!-- For table rendering: when true, treat absolute measurements as
+       relative, setting the HTML widths as percents rather than
+       as pixels.
+       
+       Default is "true".
+       
+    -->
+  <xsl:param name="table.absolute.as.relative" select="'true'"/>
+  <xsl:variable name="tableTreatAbsoluteAsRelative" as="xs:boolean"
+    select="matches($table.absolute.as.relative, 'true|yes|1|on', 'i')"
+  />
+  
+  <!-- Absolute width of page-wide tables in pixels. 600 is 6.25in, which is
+       a pretty typical offset column width for technical documentation.
+       
+    -->
+  <xsl:variable name="tableWidthFullPx" as="xs:double" select="600"/>
+  <!-- Absolute width of column-width tables in pixels -->
+  <xsl:variable name="tableWidthColumnPx" as="xs:double" select="400"/>
+
 <!-- =========== "GLOBAL" DECLARATIONS (see 35) =========== -->
 
 <!-- The document tree of filterfile returned by document($FILTERFILE,/)-->
@@ -1979,10 +1999,93 @@
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class, ' topic/tgroup ')]" name="topic.tgroup">
- <xsl:apply-templates/>
-</xsl:template>
+<xsl:template match="*[contains(@class,' topic/tgroup ')]" name="topic.tgroup">
+  <xsl:variable name="tableGeometry" as="element()">
+    <xsl:call-template name="construct-table-geometry"/>
+  </xsl:variable>
+<!--  <xsl:message> + [DEBUG] tgroup: columnGeometry=
+<xsl:sequence select="$columnGeometry"/>  
+  </xsl:message>
+-->
+  <xsl:apply-templates>
+   <xsl:with-param name="tableGeometry" as="element()" tunnel="yes" select="$tableGeometry"/>
+ </xsl:apply-templates>
+  
+  </xsl:template>
+  
+  <xsl:template name="construct-table-geometry">
+    <!-- Context item must be a tgroup element -->
+    
+    <xsl:variable name="colCount" as="xs:integer"
+      select="max(for $row in ./*/*[contains(@class, ' topic/row ')] 
+                      return count(*[contains(@class, ' topic/entry ')]))"
+    />
 
+
+    <!-- XML structure containing the calculated table and column geometry details -->
+    <tableGeometry>
+      <tableWidth><xsl:sequence 
+        select="if (ancestor::*[contains(@class, ' topic/table ')]/@pgwide = '1') 
+                   then $tableWidthFullPx 
+                   else $tableWidthColumnPx"
+      /></tableWidth><!-- Width of the table in pixels -->
+      <absoluteColumnWidth><!-- Sum of all absolute column widths, in pixels -->
+        <!-- NOTE: Second argument of sum() is value to return if first argument is an empty sequence -->
+        <xsl:sequence 
+          select="sum(for $colWidthAtt in *[contains(@class, ' topic/colspec ')]/@colwidth
+                             return if (dita-ot:isAbsoluteMeasurement(string($colWidthAtt)))
+                                       then dita-ot:convertMeasurementToPixels(string($colWidthAtt))
+                                       else 0, 0)"/>
+      </absoluteColumnWidth>
+      <xsl:value-of select="'&#x0a;'"/><!-- To make debugging easier -->
+      <xsl:choose>
+        <xsl:when test="*[contains(@class, ' topic/colspec ')]">
+          <xsl:value-of select="'&#x0a;'"/>
+          <colwidths>
+            <xsl:apply-templates mode="calc-column-geometry"
+              select="*[contains(@class, ' topic/colspec ')]" 
+            />
+          </colwidths>
+          <xsl:value-of select="'&#x0a;'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- Sequence of keywords, one for each colspec, indicating
+               if the column is relative ("relative") or absolute ("absolute") 
+            -->
+          <xsl:value-of select="'&#x0a;'"/>
+          <colwidths>
+            <xsl:for-each select="1 to $colCount">
+              <colwidth unit="*" colname="col{.}" colnum="{.}">1</colwidth>
+            </xsl:for-each>
+          </colwidths>
+          <xsl:value-of select="'&#x0a;'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </tableGeometry>
+  </xsl:template>
+
+  <xsl:template mode="calc-column-geometry" match="*[contains(@class, ' topic/colspec ')]">
+    <xsl:variable name="lengthSpec" as="xs:string?" select="@colwidth"/>
+    <xsl:choose>
+      <xsl:when test="$lengthSpec">
+        <colwidth 
+          unit="{dita-ot:getMeasurementUnit($lengthSpec)}"
+          >
+          <xsl:sequence select="@colname"/>
+          <xsl:sequence select="@colnum"/>
+          <xsl:value-of 
+            select="if ($lengthSpec) 
+                       then dita-ot:convertMeasurementToPixels($lengthSpec)
+                       else '1'"
+        /></colwidth>
+      </xsl:when>
+      <xsl:otherwise>
+        <colwidth unit="*">1</colwidth>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="'&#x0a;'"/>
+  </xsl:template>
+  
 <xsl:template match="*[contains(@class, ' topic/colspec ')]"></xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/spanspec ')]"></xsl:template>
@@ -2119,6 +2222,8 @@
 </xsl:template>
 
 <xsl:template name="doentry">
+  <xsl:param name="tableGeometry" as="element()?" tunnel="yes"/>
+
   <xsl:variable name="this-colname"><xsl:value-of select="@colname"/></xsl:variable>
   <!-- Rowsep/colsep: Skip if the last row or column. Only check the entry and colsep;
     if set higher, will already apply to the whole table. -->
@@ -2246,34 +2351,76 @@
       <xsl:call-template name="find-entry-start-position"/>
     </xsl:variable>
     <xsl:variable name="colspec" select="../../../*[contains(@class, ' topic/colspec ')][number($entrypos)]"/>
-    <xsl:variable name="totalwidth">  <!-- Total width of the column, in units -->
-      <xsl:apply-templates select="../../../*[contains(@class, ' topic/colspec ')][1]" mode="count-colwidth"/>
-    </xsl:variable>
-    <xsl:variable name="proportionalWidth" select="contains($colspec/@colwidth, '*')"/>
-    <xsl:variable name="thiswidth">   <!-- Width of this column, in units -->
+    <!-- WEK: Changes to logic for column width handling.
+      
+         Use the table geometry collected in the tgroup processing.
+    
+         If the column width is absolute (meaning it was an absolute
+         measurement in the original table), then output the width
+         in pixels or ems (if original unit was "em").
+         
+         If the column width is proportional, then output it as a
+         percentage value.
+         
+         When tableTreatAllAbsoluteAsRelative is true:
+        
+         If all the column widths are absolute (some measurement
+         unit), then covert them to percentages of the total
+         absolute column width.
+    -->
+    <xsl:variable name="effectiveTableGeometry" as="element()">
+      <!-- This handles the case where old custom code
+           overrides tgroup handling and doesn't construct
+           a tableGeometry parameter.
+        -->
       <xsl:choose>
-        <xsl:when test="$colspec/@colwidth">
-          <xsl:choose>
-            <xsl:when test="$proportionalWidth">
-              <xsl:value-of select="substring-before($colspec/@colwidth, '*')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="$colspec/@colwidth"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>1</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <!-- Width = width of this column / width of table, times 100 to make a percent -->
-    <xsl:attribute name="width">
-      <xsl:choose>
-        <xsl:when test="$proportionalWidth">
-          <xsl:value-of select="($thiswidth div $totalwidth) * 100"/>
-          <xsl:text>%</xsl:text>
+        <xsl:when test="$tableGeometry">
+          <xsl:sequence select="$tableGeometry"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="$thiswidth"/>
+          <xsl:for-each select="ancestor::*[contains(@class, ' topic/tgroup ')]">
+            <xsl:call-template name="construct-table-geometry"/>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="colwidthElem" as="element()?"
+      select="$effectiveTableGeometry/colwidths/colwidth[@colnum = $entrypos]"
+    />
+    <!-- FIXME: Its possible to not have a colwidth element for a column if the colspecs are not right, but 
+                it's not obvious how to report the problem in a way that allows finding the offending table.
+      -->
+    <xsl:variable name="availableWidth" as="xs:double"
+      select="xs:double($effectiveTableGeometry/tableWidth) - xs:double($effectiveTableGeometry/absoluteColumnWidth)"
+    />
+    <xsl:variable name="unit" select="if ($colwidthElem) then $colwidthElem/@unit else '*'" as="xs:string"/>
+    <xsl:attribute name="width">
+      <xsl:choose>
+        <xsl:when test="$unit = ('*', 'unitless')">
+          <xsl:value-of 
+            select="if ($colwidthElem) 
+                       then concat((xs:double($colwidthElem) div xs:double($availableWidth)) * 100, '%')
+                       else '20%'"/>
+        </xsl:when>
+        <xsl:when test="$unit = ('px', 'em')">
+          <!-- Preserve pixel and em units since we presume the author really wanted that width. 
+          
+               These are the only two absolute measurements that are reliably meaningful in an HTML
+               delivery context.
+          -->
+          <xsl:sequence select="concat(normalize-space($colwidthElem), $unit)"/>
+        </xsl:when>
+        <xsl:when test="$tableTreatAbsoluteAsRelative">
+          <xsl:variable name="percentage" as="xs:double"
+            select="if ($colwidthElem) 
+                       then (xs:double($colwidthElem) div xs:double($tableGeometry/absoluteColumnWidth)) * 100
+                       else 20"
+          />
+<!--          <xsl:message> + [DEBUG] $percentage="<xsl:sequence select="$percentage"/>"</xsl:message>-->
+          <xsl:value-of select="concat(format-number($percentage, '#.##'), '%')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="if ($colwidthElem) then concat($colwidthElem, 'px') else '100px'"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
