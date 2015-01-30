@@ -5,6 +5,7 @@
 package org.dita.dost.platform;
 
 import static org.apache.commons.io.FileUtils.*;
+import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
 import static org.junit.Assert.assertEquals;
 import static java.util.Arrays.*;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
@@ -25,11 +26,17 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class FileGeneratorTest {
 
@@ -44,17 +51,23 @@ public class FileGeneratorTest {
     }
     private final static Map<String, Features> plugins = new HashMap<String, Features>();
     static {
+        Document doc;
+        try {
+            doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        } catch (final ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
         final Features a = new Features(null, null);
-        final AttributesImpl aAtts = new AttributesImpl();
-        aAtts.addAttribute("", "value", "value", "CDATA", "foo,bar,baz");
-        aAtts.addAttribute("", "type", "type", "CDATA", "text");
-        a.addFeature("element", aAtts);
+        final Element aFeature = doc.createElement(FEATURE_ELEM);
+        aFeature.setAttribute("value", "foo,bar,baz");
+        aFeature.setAttribute("type", "text");
+        a.addFeature("element", aFeature);
         plugins.put("a", a);
         final Features b = new Features(null, null);
-        final AttributesImpl bAtts = new AttributesImpl();
-        bAtts.addAttribute("", "value", "value", "CDATA", "foo,bar,baz");
-        bAtts.addAttribute("", "type", "type", "CDATA", "text");
-        b.addFeature("attribute", bAtts);
+        final Element bFeature = doc.createElement(FEATURE_ELEM);
+        bFeature.setAttribute("value", "foo,bar,baz");
+        bFeature.setAttribute("type", "text");
+        b.addFeature("attribute", bFeature);
         plugins.put("b", b);
     }
 

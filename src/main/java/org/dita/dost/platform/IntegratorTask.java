@@ -39,7 +39,7 @@ public final class IntegratorTask extends Task {
         try {
             adaptee.execute();
         } catch (final Exception e) {
-            throw new BuildException("Integration failed: " + e.getMessage());
+            throw new BuildException("Integration failed: " + e.getMessage(), e);
         }
     }
 

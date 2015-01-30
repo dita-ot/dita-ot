@@ -21,18 +21,15 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-public class DescParserTest {
+public class PluginParserTest {
 
-    final File resourceDir = TestUtils.getResourceDir(DescParserTest.class);
-    final DescParser p = new DescParser(resourceDir);
+    final File resourceDir = TestUtils.getResourceDir(PluginParserTest.class);
+    final PluginParser p = new PluginParser(resourceDir);
 
     @Before
     public void setUp() throws Exception {
         p.setPluginDir(resourceDir);
-        p.setContentHandler(new DefaultHandler());
-        final XMLReader parser = XMLReaderFactory.createXMLReader();
-        parser.setContentHandler(p);
-        parser.parse(new File(resourceDir, "plugin.xml").toURI().toString());
+        p.parse(new File(resourceDir, "plugin.xml"));
     }
 
     @Test

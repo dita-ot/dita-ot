@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -105,33 +106,16 @@ final class Features {
     /**
      * Add feature to the feature table.
      * @param id feature id
-     * @param value feature value
-     * @param type feature type, may be {@code null}
-     * @deprecated use {@link #addFeature(String, Attributes)} instead
+     * @param elem configuration element
      */
-    @Deprecated
-    public void addFeature(final String id, final String value, final String type) {
-        final AttributesImpl atts = new AttributesImpl();
-        atts.addAttribute("", "value", "value", "CDATA", value);
-        if (type != null) {
-            atts.addAttribute("", "type", "type", "CDATA", type);
-        }
-        addFeature(id, atts);
-    }
-
-    /**
-     * Add feature to the feature table.
-     * @param id feature id
-     * @param attributes configuration element attributes
-     */
-    public final void addFeature(final String id, final Attributes attributes) {
+    public final void addFeature(final String id, final Element elem) {
         boolean isFile;
-        String value = attributes.getValue("file");
-        if (value != null) {
+        String value = elem.getAttribute("file");
+        if (!value.isEmpty()) {
             isFile = true;
         } else {
-            value = attributes.getValue("value");
-            isFile = "file".equals(attributes.getValue("type"));
+            value = elem.getAttribute("value");
+            isFile = "file".equals(elem.getAttribute("type"));
         }
         final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
         final List<String> valueBuffer = new ArrayList<String>();
