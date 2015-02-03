@@ -319,14 +319,8 @@ public final class Integrator {
             out = new BufferedWriter(new FileWriter(outFile));
 
             out.write("#!/bin/sh\n");
-            boolean first = true;
             for (final File relativeLib: jars) {
-                out.write("LOCALCLASSPATH=\"");
-                if (first) {
-                    first = false;
-                } else {
-                    out.write("$LOCALCLASSPATH:");
-                }
+                out.write("CLASSPATH=\"$CLASSPATH:");
                 if (!relativeLib.isAbsolute()) {
                     out.write("$DITA_HOME" + UNIX_SEPARATOR);
                 }
@@ -354,14 +348,8 @@ public final class Integrator {
             logger.debug("Generate environment batch " + outFile.getPath());
             out = new BufferedWriter(new FileWriter(outFile));
 
-            boolean first = true;
             for (final File relativeLib: jars) {
-                out.write("set \"CLASSPATH=");
-                if (first) {
-                    first = false;
-                } else {
-                    out.write("%CLASSPATH%;");
-                }
+                out.write("set \"CLASSPATH=%CLASSPATH%;");
                 if (!relativeLib.isAbsolute()) {
                     out.write("%DITA_HOME%" + WINDOWS_SEPARATOR);
                 }
