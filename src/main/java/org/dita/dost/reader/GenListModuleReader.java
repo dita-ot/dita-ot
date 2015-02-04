@@ -397,6 +397,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         topicGroupLevel = 0;
         isValidInput = false;
         hasconaction = false;
+        subsidiarySet.clear();
         nonConrefCopytoTargets.clear();
         hrefTargets.clear();
         hrefTopicSet.clear();
@@ -803,7 +804,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             final int prime = 31;
             int result = 1;
             result = prime * result + ((filename == null) ? 0 : filename.hashCode());
-            result = prime * result + ((format == null) ? 0 : format.hashCode());
+//            result = prime * result + ((format == null) ? 0 : format.hashCode());
             return result;
         }
 
@@ -826,13 +827,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             } else if (!filename.equals(other.filename)) {
                 return false;
             }
-            if (format == null) {
-                if (other.format != null) {
-                    return false;
-                }
-            } else if (!format.equals(other.format)) {
-                return false;
-            }
+//            if (format == null) {
+//                if (other.format != null) {
+//                    return false;
+//                }
+//            } else if (!format.equals(other.format)) {
+//                return false;
+//            }
             return true;
         }
     }

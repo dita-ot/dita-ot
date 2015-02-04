@@ -599,7 +599,7 @@ public final class Job {
         public boolean isCopyToSource;
         
         FileInfo(final URI src, final URI uri, final File file) {
-            if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
+            if (src == null && uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
             this.src = src;
             this.uri = uri != null ? uri : toURI(file);
             this.file = uri != null ? toFile(uri) : file;
