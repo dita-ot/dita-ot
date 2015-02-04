@@ -8,6 +8,7 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.reader.ChunkMapReader.*;
@@ -17,7 +18,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -736,7 +736,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * @return {@code true} if DITA topic, otherwise {@code false}
      */
     public static boolean isFormatDita(final String attrFormat) {
-        return attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA);
+        if (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA)) {
+            return true;
+        }
+        for (final String f: ditaFormat) {
+            if (f.equals(attrFormat)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

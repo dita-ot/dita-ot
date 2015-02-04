@@ -104,7 +104,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             init();
 
             for (final FileInfo f: job.getFileInfo()) {
-                if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)
+                if (isFormatDita(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)
                         || f.isConrefTarget || f.isCopyToSource) {
                     processFile(f);
                 }
@@ -161,7 +161,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
             final TransformerFactory tf = TransformerFactory.newInstance();
             final Transformer serializer = tf.newTransformer();
-            XMLReader xmlSource = reader;
+            XMLReader xmlSource = getXmlReader(f.format);
             for (final XMLFilter filter: getProcessingPipe(currentFile.toURI())) {
                 filter.setParent(xmlSource);
                 xmlSource = filter;
@@ -186,7 +186,29 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 }
             }
         }
+
+        if (isFormatDita(f.format)) {
+            f.format = ATTR_FORMAT_VALUE_DITA;
+        }
     }
+
+    private XMLReader getXmlReader(final String format) throws SAXException {
+        for (final Map.Entry<String, String> e: parserMap.entrySet()) {
+            if (format != null && format.equals(e.getKey())) {
+                try {
+                    return (XMLReader) this.getClass().forName(e.getValue()).newInstance();
+                } catch (final InstantiationException ex) {
+                    throw new SAXException(ex);
+                } catch (final IllegalAccessException ex) {
+                    throw new SAXException(ex);
+                } catch (final ClassNotFoundException ex) {
+                    throw new SAXException(ex);
+                }
+            }
+        }
+        return reader;
+    }
+
 
     private void init() throws IOException, DITAOTException, SAXException {
         // Output subject schemas

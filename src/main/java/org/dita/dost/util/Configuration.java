@@ -11,12 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.platform.Integrator;
@@ -145,4 +140,28 @@ public final class Configuration {
         pluginResourceDirs = Collections.unmodifiableMap(ps);
     }
     
+    public static final Map<String, String> parserMap;
+    static {
+        final Map<String, String> m = new HashMap<String, String>();
+        for (final Map.Entry<String, String> e: configuration.entrySet()) {
+            final String key = e.getKey();
+            if (key.startsWith("parser.")) {
+                m.put(key.substring(7), e.getValue());
+            }
+        }
+        parserMap = Collections.unmodifiableMap(m);
+    }
+
+    public static final Set<String> ditaFormat;
+    static {
+        final Set<String> s = new HashSet<String>();
+        for (final Map.Entry<String, String> e: configuration.entrySet()) {
+            final String key = e.getKey();
+            if (key.startsWith("parser.")) {
+                s.add(key.substring(7));
+            }
+        }
+        ditaFormat = Collections.unmodifiableSet(s);
+    }
+
 }

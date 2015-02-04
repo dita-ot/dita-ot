@@ -8,7 +8,8 @@ feature =
     attribute extension { xsd:NCName },
     (attribute file { text }
      | (attribute value { text },
-        attribute type { "file" | "text" }?))
+        attribute type { "file" | "text" }?))?,
+    anyElement*
   }
 transtype =
   element transtype {
@@ -63,5 +64,11 @@ metadata =
 template =
   element template {
     attribute file { text }
+  }
+anyElement =
+  element * {
+    (attribute * { text }
+     | text
+     | anyElement)*
   }
 start = plugin

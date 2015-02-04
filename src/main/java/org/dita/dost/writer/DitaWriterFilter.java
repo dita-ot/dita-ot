@@ -27,6 +27,7 @@ import java.util.Map;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.reader.GenListModuleReader.*;
 
 
 /**
@@ -166,6 +167,12 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
                 if (atts.getValue(ATTRIBUTE_NAME_SCOPE) == null ||
                         atts.getValue(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_LOCAL)){
                     attValue = replaceHREF(attQName, atts).toString();
+                }
+            } else if(ATTRIBUTE_NAME_FORMAT.equals(attQName)) {
+                final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+                // verify format is correct
+                if (isFormatDita(format)) {
+                    attValue = ATTR_FORMAT_VALUE_DITA;
                 }
             }
             XMLUtils.addOrSetAttribute(res, atts.getURI(i), atts.getLocalName(i), attQName, atts.getType(i), attValue);

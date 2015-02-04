@@ -445,7 +445,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final String[] params = { currentFile.toString() };
         
         try {
-            XMLReader xmlSource = reader;
+            XMLReader xmlSource = getXmlReader(ref.format);
             for (final XMLFilter f: getProcessingPipe(currentFile)) {
                 f.setParent(xmlSource);
                 f.setEntityResolver(CatalogUtils.getCatalogResolver());
@@ -502,6 +502,23 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         listFilter.reset();
         keydefFilter.reset();
 
+    }
+
+    private XMLReader getXmlReader(final String format) throws SAXException {
+        for (final Map.Entry<String, String> e: parserMap.entrySet()) {
+            if (format != null && format.equals(e.getKey())) {
+                try {
+                    return (XMLReader) this.getClass().forName(e.getValue()).newInstance();
+                } catch (final InstantiationException ex) {
+                    throw new SAXException(ex);
+                } catch (final IllegalAccessException ex) {
+                    throw new SAXException(ex);
+                } catch (final ClassNotFoundException ex) {
+                    throw new SAXException(ex);
+                }
+            }
+        }
+        return reader;
     }
 
     /**

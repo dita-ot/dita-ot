@@ -268,6 +268,7 @@ public final class Integrator {
                 configuration.put(name, FileUtils.getRelativePath(new File(ditaDir, "dummy"), f.getPluginDir()).getPath());
             }
         }
+        configuration.putAll(getParserConfiguration());
         
         OutputStream out = null;
         try {
@@ -297,6 +298,22 @@ public final class Integrator {
         final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS) ? relativize(new HashSet<String>(featureTable.get(FEAT_LIB_EXTENSIONS))) : Collections.EMPTY_SET;
         writeEnvShell(jars);
         writeEnvBatch(jars);
+    }
+
+    private Map<String, String> getParserConfiguration() {
+        final Map<String, String> res = new HashMap<String, String>();
+        final NodeList features = pluginsDoc.getElementsByTagName(FEATURE_ELEM);
+        for (int i = 0; i < features.getLength(); i++) {
+            final Element feature = (Element) features.item(i);
+            if (feature.getAttribute(FEATURE_ID_ATTR).equals("dita.parser")) {
+                final NodeList parsers = feature.getElementsByTagName("parser");
+                for (int j = 0; j < parsers.getLength(); j++) {
+                    final Element parser = (Element) parsers.item(j);
+                    res.put("parser." + parser.getAttribute("format"), parser.getAttribute("class"));
+                }
+            }
+        }
+        return res;
     }
 
     private Collection<File> relativize(final Collection<String> src) {

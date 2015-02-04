@@ -59,6 +59,7 @@
   <extension-point id="dita.xsl.mapref" name="Map reference XSLT import"/>
   <extension-point id="dita.xsl.mappull" name="Map pull XSLT import"/>
   <extension-point id="dita.xsl.maplink" name="Map link XSLT import"/>
+  <extension-point id="dita.parser" name="Custom DITA parser"/>
   <!-- extensions -->
   <transtype name="base" abstract="true">
     <param name="dita.preprocess.reloadstylesheet.topicpull" desc="Specifies whether the DITA-OT reloads the XSL style sheets that are used for the transformation." type="enum">

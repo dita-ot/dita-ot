@@ -68,6 +68,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
 
     @Override
     public void write(final File filename) throws DITAOTException {
+        assert filename.isAbsolute();
         // ignore in-exists file
         if (filename == null || !filename.exists()) {
             return;
