@@ -129,6 +129,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     /** List of parsed files */
     private final List<URI> doneList;
+    private final List<URI> failureList;
 
     /** Set of outer dita files */
     private final Set<URI> outDitaFilesSet;
@@ -205,6 +206,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         subsidiarySet = new HashSet<URI>(16);
         waitList = new LinkedList<Reference>();
         doneList = new LinkedList<URI>();
+        failureList = new LinkedList<URI>();
         conrefTargetSet = new HashSet<URI>(128);
         nonConrefCopytoTargetSet = new HashSet<URI>(128);
         copytoMap = new HashMap<URI, URI>();
@@ -455,12 +457,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             
             xmlSource.parse(currentFile.toString());
 
-            // don't put it into dita.list if it is invalid
             if (listFilter.isValidInput()) {
                 processParseResult(currentFile);
                 categorizeCurrentFile(ref);
             } else if (!currentFile.equals(rootFile)) {
                 logger.warn(MessageUtils.getInstance().getMessage("DOTJ021W", params).toString());
+                failureList.add(currentFile);
             }
         } catch (final RuntimeException e) {
             throw e;
@@ -474,18 +476,21 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             } else {
                 logger.error(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
             }
+            failureList.add(currentFile);
         } catch (final FileNotFoundException e) {
             if (currentFile.equals(rootFile)) {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTX008E", params).toString(), e);
             } else {
                 logger.error(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
             }
+            failureList.add(currentFile);
         } catch (final Exception e) {
             if (currentFile.equals(rootFile)) {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(),  e);
             } else {
                 logger.error(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
             }
+            failureList.add(currentFile);
         }
 
         if (!listFilter.isValidInput() && currentFile.equals(rootFile)) {
@@ -984,7 +989,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         addFlagImagesSetToProperties(job, relFlagImagesSet);
 
         for (final FileInfo fs: fileinfos.values()) {
-            job.add(fs);
+            if (!failureList.contains(fs.src)) {
+                job.add(fs);
+            }
         }
 
         // Convert copyto map into set and output
