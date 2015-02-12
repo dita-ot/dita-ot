@@ -114,7 +114,8 @@
           <text:p>
             <text:span>
               <xsl:choose>
-                <xsl:when test="parent::fig[contains(@frame,'top ')]">
+                <!-- FIXME: this will never match due to parent xsl:when -->
+                <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
                   <!-- NOP if there is already a break implied by a parent property -->
                 </xsl:when>
                 <xsl:otherwise>
@@ -144,7 +145,8 @@
           <text:p>
             <text:span>
               <xsl:choose>
-                <xsl:when test="parent::fig[contains(@frame,'top ')]">
+                <!-- FIXME: this will never match due to parent xsl:when -->
+                <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
                   <!-- NOP if there is already a break implied by a parent property -->
                 </xsl:when>
                 <xsl:otherwise>
@@ -173,7 +175,8 @@
           <text:p>
             <text:span>
               <xsl:choose>
-                <xsl:when test="parent::fig[contains(@frame,'top ')]">
+                <!-- FIXME: this will never match due to parent xsl:when -->
+                <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
                   <!-- NOP if there is already a break implied by a parent property -->
                 </xsl:when>
                 <xsl:otherwise>
@@ -201,7 +204,7 @@
         <xsl:otherwise>
           <text:span>
             <xsl:choose>
-              <xsl:when test="parent::fig[contains(@frame,'top ')]">
+              <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
                 <!-- NOP if there is already a break implied by a parent property -->
               </xsl:when>
               <xsl:otherwise>

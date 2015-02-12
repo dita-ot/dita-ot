@@ -1611,7 +1611,7 @@
 <xsl:template match="*[contains(@class, ' topic/image ')]" name="topic.image">
   <!-- build any pre break indicated by style -->
   <xsl:choose>
-    <xsl:when test="parent::fig[contains(@frame, 'top ')]">
+    <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame, 'top ')]">
       <!-- NOP if there is already a break implied by a parent property -->
     </xsl:when>
     <xsl:when test="@placement = 'break'">
