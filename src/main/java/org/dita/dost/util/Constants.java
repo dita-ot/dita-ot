@@ -598,6 +598,7 @@ public final class Constants {
     /**action element.*/
     public static final String ELEMENT_NAME_DITA = "dita";
 
+    public static final String ATTRIBUTE_NAME_ALIGN = "align";
     /**conref attribute.*/
     public static final String ATTRIBUTE_NAME_CONREF = "conref";
     /**href attribute.*/
