@@ -50,22 +50,17 @@
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-toc-id"/>
   <xsl:call-template name="setidaname"/>
-    <xsl:apply-templates select="."   mode="prereq-fmt" />
-</div><xsl:value-of select="$newline"/>
-</xsl:template>
-<xsl:template match="*[contains(@class,' task/prereq ')]" mode="prereq-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates select="." mode="dita2html:section-heading">
-     <!--xsl:with-param name="deftitle"></xsl:with-param-->
-     <xsl:with-param name="defaulttitle"></xsl:with-param>
+    <!--xsl:with-param name="deftitle"></xsl:with-param-->
+    <xsl:with-param name="defaulttitle"></xsl:with-param>
   </xsl:apply-templates>
   <!-- Title is not allowed now, but if we add it, make sure it is processed as in section -->
   <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>
-
-<!-- Insert pre-req links - after prereq section -->
+  
+  <!-- Insert pre-req links - after prereq section -->
   <xsl:apply-templates select="../following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
-
+  
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:if test="$link-top-section='yes'"> <!-- optional return to top - not used -->
     <p align="left"><a href="#TOP">
@@ -75,6 +70,7 @@
       </xsl:call-template>
     </a></p>
   </xsl:if>
+</div><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*" mode="make-steps-compact">
@@ -94,8 +90,9 @@
     <xsl:apply-templates select="." mode="make-steps-compact"/>
   </xsl:variable>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <xsl:apply-templates select="." mode="steps-fmt">
+  <xsl:apply-templates select="." mode="common-processing-within-steps">
     <xsl:with-param name="step_expand" select="$step_expand"/>
+    <xsl:with-param name="list-type" select="'ol'"/>
   </xsl:apply-templates>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
@@ -218,8 +215,9 @@
     <xsl:apply-templates select="." mode="make-steps-compact"/>
   </xsl:variable>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <xsl:apply-templates select="."  mode="stepsunord-fmt">
+  <xsl:apply-templates select="." mode="common-processing-within-steps">
     <xsl:with-param name="step_expand" select="$step_expand"/>
+    <xsl:with-param name="list-type" select="'ul'"/>
   </xsl:apply-templates>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
@@ -227,30 +225,10 @@
 <xsl:template match="*[contains(@class,' task/steps ')]" mode="steps-fmt">
   <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:param name="step_expand"/>
-  <xsl:apply-templates select="." mode="common-processing-within-steps">
-    <xsl:with-param name="step_expand" select="$step_expand"/>
-    <xsl:with-param name="list-type" select="'ol'"/>
-  </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*[contains(@class,' task/steps-unordered ')]" mode="stepsunord-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-  <xsl:param name="step_expand"/>
-  <xsl:apply-templates select="." mode="common-processing-within-steps">
-    <xsl:with-param name="step_expand" select="$step_expand"/>
-    <xsl:with-param name="list-type" select="'ul'"/>
-  </xsl:apply-templates>
 </xsl:template>
 
 <!-- only 1 step - output as a para -->
 <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep">
-  <xsl:param name="step_expand"/>
-  <xsl:apply-templates select="."  mode="onestep-fmt">
-    <xsl:with-param name="step_expand" select="$step_expand"/>
-  </xsl:apply-templates>
-</xsl:template>
-<xsl:template match="*[contains(@class,' task/step ')]" mode="onestep-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:param name="step_expand"/>
   <div class="p">
     <xsl:call-template name="commonattributes">
@@ -267,14 +245,6 @@
      Can deprecate this template which now simply passes processing on to steps-fmt? -->
 <xsl:template match="*[contains(@class,' task/step ')]" mode="steps">
   <xsl:param name="step_expand"/>
-  <xsl:apply-templates select="."  mode="steps-fmt">
-    <xsl:with-param name="step_expand" select="$step_expand"/>
-  </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*[contains(@class,' task/step ')]" mode="steps-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-  <xsl:param name="step_expand"/>
   <li>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class"><xsl:if test="$step_expand='yes'">stepexpand</xsl:if></xsl:with-param>
@@ -282,7 +252,7 @@
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates select="." mode="add-step-importance-flag"/>
     <xsl:apply-templates><xsl:with-param name="step_expand" select="$step_expand"/></xsl:apply-templates>
-  </li><xsl:value-of select="$newline"/>
+  </li><xsl:value-of select="$newline"/>  
 </xsl:template>
 
 <xsl:template match="*" mode="add-step-importance-flag">
@@ -343,40 +313,23 @@
   </xsl:variable>
   
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <xsl:apply-templates select="." mode="substeps-fmt">
-    <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
-  </xsl:apply-templates>
+  <xsl:call-template name="setaname"/>
+  <ol>
+    <xsl:if test="parent::*/parent::*[contains(@class,' task/steps ')]"> <!-- Is the grandparent an ordered step? -->
+      <xsl:attribute name="type">a</xsl:attribute>            <!-- yup, letter these steps -->
+    </xsl:if>                                                <!-- otherwise, default to numbered -->
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates>
+      <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
+    </xsl:apply-templates>
+  </ol><xsl:value-of select="$newline"/>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-</xsl:template>
-
-<xsl:template match="*[contains(@class,' task/substeps ')]" mode="substeps-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-<xsl:param name="sub_step_expand"/>
-  
-<xsl:call-template name="setaname"/>
-<ol>
- <xsl:if test="parent::*/parent::*[contains(@class,' task/steps ')]"> <!-- Is the grandparent an ordered step? -->
-  <xsl:attribute name="type">a</xsl:attribute>            <!-- yup, letter these steps -->
- </xsl:if>                                                <!-- otherwise, default to numbered -->
- <xsl:call-template name="commonattributes"/>
- <xsl:call-template name="setid"/>
- <xsl:apply-templates>
-  <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
- </xsl:apply-templates>
-</ol><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- 3517050 move rev test into mode="steps-fmt" to avoid wrapping <li> in another element.
      Can deprecate this template which now simply passes processing on to substep-fmt? -->
 <xsl:template match="*[contains(@class,' task/substep ')]" name="topic.task.substep">
-  <xsl:param name="sub_step_expand"/>
-  <xsl:apply-templates select="."  mode="substep-fmt">
-    <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
-  </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*[contains(@class,' task/substep ')]" mode="substep-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:param name="sub_step_expand"/>
   <li>
     <xsl:call-template name="commonattributes">
@@ -392,16 +345,12 @@
 
 <!-- choices contain choice items -->
 <xsl:template match="*[contains(@class,' task/choices ')]" name="topic.task.choices">
-  <xsl:apply-templates select="."  mode="choices-fmt" />
-</xsl:template>
-<xsl:template match="*[contains(@class,' task/choices ')]" mode="choices-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="setaname"/>
   <ul>
-   <xsl:call-template name="commonattributes"/>
-   <xsl:call-template name="setid"/>
-   <xsl:apply-templates/>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates/>
   </ul><xsl:value-of select="$newline"/>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
@@ -410,11 +359,6 @@
 
 <!-- choice table is like a simpletable - 2 columns, set heading -->
 <xsl:template match="*[contains(@class,' task/choicetable ')]" name="topic.task.choicetable">
-     <xsl:apply-templates select="."  mode="choicetable-fmt" />
-</xsl:template>
-<xsl:template match="*[contains(@class,' task/choicetable ')]" mode="get-output-class">choicetableborder</xsl:template>
-<xsl:template match="*[contains(@class,' task/choicetable ')]" mode="choicetable-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
  <!-- Find the total number of relative units for the table. If @relcolwidth="1* 2* 2*",
       the variable is set to 5. -->
  <xsl:variable name="totalwidth">
@@ -503,7 +447,8 @@
  </table><xsl:value-of select="$newline"/>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
-
+<xsl:template match="*[contains(@class,' task/choicetable ')]" mode="get-output-class">choicetableborder</xsl:template>
+ 
 <!-- headers are called above, hide the fall thru -->
 <xsl:template match="*[contains(@class,' task/chhead ')]" />
 <xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" />

@@ -474,16 +474,11 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-toc-id"/>
     <xsl:call-template name="setidaname"/>
-    <xsl:apply-templates select="."  mode="section-fmt" />
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <xsl:apply-templates select="." mode="dita2html:section-heading"/>
+    <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))] | text() | comment() | processing-instruction()"/>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </section><xsl:value-of select="$newline"/>
-</xsl:template>
-
-<xsl:template match="*[contains(@class, ' topic/section ')]" mode="section-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-  <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <xsl:apply-templates select="." mode="dita2html:section-heading"/>
-  <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))] | text() | comment() | processing-instruction()"/>
-  <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!-- example processor - div with no generated title -->
@@ -492,16 +487,11 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-toc-id"/>
     <xsl:call-template name="setidaname"/>
-    <xsl:apply-templates select="."  mode="example-fmt" />
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <xsl:apply-templates select="." mode="dita2html:section-heading"/>
+    <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))] | text() | comment() | processing-instruction()"/>	
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </div><xsl:value-of select="$newline"/>
-</xsl:template>
-
-<xsl:template match="*[contains(@class, ' topic/example ')]" mode="example-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-  <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <xsl:apply-templates select="." mode="dita2html:section-heading"/>
-  <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))] | text() | comment() | processing-instruction()"/>	
-  <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!-- ===================================================================== -->
@@ -745,37 +735,32 @@
   <blockquote>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
-    <xsl:apply-templates select="."  mode="lq-fmt" />
-  </blockquote><xsl:value-of select="$newline"/>
-</xsl:template>
-
-<xsl:template match="*[contains(@class, ' topic/lq ')]" mode="lq-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-  <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <xsl:apply-templates/>
-  <xsl:choose>
-   <xsl:when test="@href">
-    <br/><div style="text-align:right"><a>
-     <xsl:attribute name="href">
-       <xsl:call-template name="href"/>
-     </xsl:attribute>
-     <xsl:choose>
-      <xsl:when test="@type = 'external'">
-       <xsl:attribute name="target">_blank</xsl:attribute>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <xsl:apply-templates/>
+    <xsl:choose>
+      <xsl:when test="@href">
+        <br/><div style="text-align:right"><a>
+          <xsl:attribute name="href">
+            <xsl:call-template name="href"/>
+          </xsl:attribute>
+          <xsl:choose>
+            <xsl:when test="@type = 'external'">
+              <xsl:attribute name="target">_blank</xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise><!--nop - no target needed for internal or biblio types (OR-should internal force DITA xref-like processing? What is intent? @type is only internal/external/bibliographic) --></xsl:otherwise>
+          </xsl:choose>
+          <cite><xsl:choose>
+            <xsl:when test="@reftitle"><xsl:value-of select="@reftitle"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="@href"/></xsl:otherwise>
+          </xsl:choose></cite></a></div>
       </xsl:when>
-      <xsl:otherwise><!--nop - no target needed for internal or biblio types (OR-should internal force DITA xref-like processing? What is intent? @type is only internal/external/bibliographic) --></xsl:otherwise>
-     </xsl:choose>
-     <cite><xsl:choose>
-      <xsl:when test="@reftitle"><xsl:value-of select="@reftitle"/></xsl:when>
-      <xsl:otherwise><xsl:value-of select="@href"/></xsl:otherwise>
-      </xsl:choose></cite></a></div>
-   </xsl:when>
-   <xsl:when test="@reftitle"> <!-- Insert citation text -->
-     <br/><div style="text-align:right"><cite><xsl:value-of select="@reftitle"/></cite></div>
-   </xsl:when>
-   <xsl:otherwise><!--nop - do nothing--></xsl:otherwise>
-  </xsl:choose>
-  <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+      <xsl:when test="@reftitle"> <!-- Insert citation text -->
+        <br/><div style="text-align:right"><cite><xsl:value-of select="@reftitle"/></cite></div>
+      </xsl:when>
+      <xsl:otherwise><!--nop - do nothing--></xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  </blockquote><xsl:value-of select="$newline"/>
 </xsl:template>
 
 
@@ -784,13 +769,6 @@
 <!-- Unordered List -->
 <!-- handle all levels thru browser processing -->
 <xsl:template match="*[contains(@class, ' topic/ul ')]" name="topic.ul">
-  <!-- Starting in DITA-OT 1.7, no longer using extra <div> to preserve @rev.
-       Just continue to "ul-fmt" which is kept for backwards compatibility. -->
-  <xsl:apply-templates select="."  mode="ul-fmt" />
-</xsl:template>
-
-<xsl:template match="*[contains(@class, ' topic/ul ')]" mode="ul-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="setaname"/>
   <ul>
@@ -806,13 +784,6 @@
 <!-- Simple List -->
 <!-- handle all levels thru browser processing -->
 <xsl:template match="*[contains(@class, ' topic/sl ')]" name="topic.sl">
-  <!-- Starting in DITA-OT 1.7, no longer using extra <div> to preserve @rev.
-       Just continue to "sl-fmt" which is kept for backwards compatibility. -->
-  <xsl:apply-templates select="."  mode="sl-fmt" />
-</xsl:template>
-
-<xsl:template match="*[contains(@class, ' topic/sl ')]" mode="sl-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="setaname"/>
   <ul class="simple">
@@ -824,7 +795,7 @@
     <xsl:apply-templates/>
   </ul>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-<xsl:value-of select="$newline"/>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- Ordered List - 1st level - Handle levels 1 to 9 thru OL-TYPE attribution -->
@@ -922,12 +893,6 @@
 
 <!-- DL -->
 <xsl:template match="*[contains(@class, ' topic/dl ')]" name="topic.dl">
-  <!-- Starting in DITA-OT 1.7, no longer using extra <div> to preserve @rev.
-       Just continue to "dl-fmt" which is kept for backwards compatibility. -->
-  <xsl:apply-templates select="."  mode="dl-fmt" />
-</xsl:template>
-<xsl:template match="*[contains(@class, ' topic/dl ')]"  mode="dl-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:call-template name="setaname"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <dl>
@@ -1498,12 +1463,6 @@
 <!-- =========== RECORD END RESPECTING DATA =========== -->
 <!-- PRE -->
 <xsl:template match="*[contains(@class, ' topic/pre ')]" name="topic.pre">
-  <!-- Starting in DITA-OT 1.7, no longer using extra <div> to preserve @rev.
-       Just continue to "pre-fmt" which is kept for backwards compatibility. -->
-  <xsl:apply-templates select="."  mode="pre-fmt" />
-</xsl:template>
-<xsl:template match="*[contains(@class, ' topic/pre ')]" mode="pre-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:if test="contains(@frame, 'top')"><hr /></xsl:if>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="spec-title-nospace"/>
@@ -1518,15 +1477,8 @@
   <xsl:if test="contains(@frame, 'bot')"><hr /></xsl:if><xsl:value-of select="$newline"/>
 </xsl:template>
 
-
 <!-- lines - body font -->
 <xsl:template match="*[contains(@class, ' topic/lines ')]" name="topic.lines">
-  <!-- Starting in DITA-OT 1.7, no longer using extra <div> to preserve @rev.
-       Just continue to "lines-fmt" which is kept for backwards compatibility. -->
-  <xsl:apply-templates select="."  mode="lines-fmt" />
-</xsl:template>
-<xsl:template match="*[contains(@class, ' topic/lines ')]" mode="lines-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:if test="contains(@frame, 'top')"><hr /></xsl:if>
   <xsl:call-template name="spec-title-nospace"/>
   <p>
@@ -1551,23 +1503,6 @@
 
 <!-- =========== FIGURE =========== -->
 <xsl:template match="*[contains(@class, ' topic/fig ')]" name="topic.fig">
-  <xsl:apply-templates select="."  mode="fig-fmt" />
-</xsl:template>
-
-<!-- Determine the default XHTML class attribute for a figure -->
-<xsl:template match="*" mode="dita2html:get-default-fig-class">
-  <xsl:choose>
-    <xsl:when test="@frame = 'all'">figborder</xsl:when>
-    <xsl:when test="@frame = 'sides'">figsides</xsl:when>
-    <xsl:when test="@frame = 'top'">figtop</xsl:when>
-    <xsl:when test="@frame = 'bottom'">figbottom</xsl:when>
-    <xsl:when test="@frame = 'topbot'">figtopbot</xsl:when>
-    <xsl:otherwise>fignone</xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<xsl:template match="*[contains(@class, ' topic/fig ')]" mode="fig-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:variable name="default-fig-class">
     <xsl:apply-templates select="." mode="dita2html:get-default-fig-class"/>
   </xsl:variable>
@@ -1588,12 +1523,20 @@
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
+<!-- Determine the default XHTML class attribute for a figure -->
+<xsl:template match="*" mode="dita2html:get-default-fig-class">
+  <xsl:choose>
+    <xsl:when test="@frame = 'all'">figborder</xsl:when>
+    <xsl:when test="@frame = 'sides'">figsides</xsl:when>
+    <xsl:when test="@frame = 'top'">figtop</xsl:when>
+    <xsl:when test="@frame = 'bottom'">figbottom</xsl:when>
+    <xsl:when test="@frame = 'topbot'">figtopbot</xsl:when>
+    <xsl:otherwise>fignone</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- should not need priority, default is low enough; was set to 1 -->
 <xsl:template match="*[contains(@class, ' topic/figgroup ')]" name="topic.figgroup">
-  <xsl:apply-templates select="."  mode="figgroup-fmt" />
-</xsl:template>
-<xsl:template match="*[contains(@class, ' topic/figgroup ')]" mode="figgroup-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <!-- Figgroup can contain blocks, maybe this should be a div? -->
   <span>
     <xsl:call-template name="commonattributes"/>
@@ -1837,11 +1780,6 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/table ')]" name="topic.table">
-  <xsl:apply-templates select="."  mode="table-fmt" />
-</xsl:template>
-
-<xsl:template match="*[contains(@class, ' topic/table ')]" mode="table-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:value-of select="$newline"/>
   <!-- special case for IE & NS for frame & no rules - needs to be a double table -->
   <xsl:variable name="colsep">
@@ -2544,10 +2482,6 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/simpletable ')]" name="topic.simpletable">
-     <xsl:apply-templates select="."  mode="simpletable-fmt" />
-</xsl:template>
-<xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="simpletable-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <!-- Find the total number of relative units for the table. If @relcolwidth="1* 2* 2*",
        the variable is set to 5. -->
   <xsl:variable name="totalwidth">
