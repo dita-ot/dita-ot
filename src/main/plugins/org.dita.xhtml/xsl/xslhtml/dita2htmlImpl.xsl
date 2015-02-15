@@ -18,7 +18,6 @@
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
 <xsl:import href="plugin:org.dita.base:xsl/common/related-links.xsl"/>
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-<xsl:import href="flag-old.xsl"/>
 <xsl:include href="get-meta.xsl"/>
 <xsl:include href="rel-links.xsl"/>
 <xsl:include href="flag.xsl"/>
