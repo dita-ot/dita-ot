@@ -20,7 +20,6 @@
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
 <xsl:include href="get-meta.xsl"/>
 <xsl:include href="rel-links.xsl"/>
-<xsl:include href="flag.xsl"/>
 
 <!-- =========== OUTPUT METHOD =========== -->
 
@@ -2697,33 +2696,6 @@
           </xsl:attribute>
       </xsl:if>
   </xsl:if>
-</xsl:template>
-
-<!-- SF Report 2008294: support flagging in simpletable headers. Use common template to simplify
-                        sharing this with all simpletable entries and specializations. -->
-<xsl:template match="*" mode="start-stentry-flagging">
-  <!-- This template is deprecated in DITA-OT 1.7. -->
-  <xsl:param name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:param>
-  <xsl:call-template name="start-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  <xsl:call-template name="start-revflag-parent">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
-  <xsl:call-template name="start-revflag"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-</xsl:template>
-<xsl:template match="*" mode="end-stentry-flagging">
-  <!-- This template is deprecated in DITA-OT 1.7. -->
-  <xsl:param name="flagrules">
-    <xsl:call-template name="getrules"/>
-    <xsl:call-template name="getrules-parent"/>
-  </xsl:param>
-  <xsl:call-template name="end-revflag"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
-  <xsl:call-template name="end-revflag-parent">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit"><xsl:with-param name="flagrules" select="$flagrules"/></xsl:call-template>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/stentry ')]" name="topic.stentry">
