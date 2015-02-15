@@ -222,11 +222,6 @@
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' task/steps ')]" mode="steps-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-  <xsl:param name="step_expand"/>
-</xsl:template>
-
 <!-- only 1 step - output as a para -->
 <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep">
   <xsl:param name="step_expand"/>

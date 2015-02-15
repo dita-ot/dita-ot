@@ -3482,9 +3482,6 @@
 <!-- ========== "FORMAT" GLOBAL DECLARATIONS ========== -->
 
 <xsl:variable name="link-top-section">no</xsl:variable><!-- values: yes, no (or any not "yes") -->
-<!-- Deprecated in 1.8 -->
-<xsl:variable name="do-place-ing">no</xsl:variable><!-- values: yes, no (or any not "yes") -->
-
 
 <!-- ========== "FORMAT" MACROS  - Table title, figure title, InfoNavGraphic ========== -->
 <!--
@@ -3650,17 +3647,6 @@
 <xsl:template match="*[contains(@class, ' topic/figgroup ')]/*[contains(@class, ' topic/title ')]" name="topic.figgroup_title">
  <xsl:apply-templates/>
 </xsl:template>
-
-<!-- Deprecated in 1.8 -->
-<xsl:template name="proc-ing">
-  <xsl:if test="$do-place-ing = 'yes'"> <!-- set in a global variable, as with label placement, etc. -->
-    <img src="tip-ing.jpg" alt="tip-ing.jpg"/> <!-- this should be an xsl:choose with the approved list and a selection method-->
-    <!-- add any other required positioning controls, if needed, but must be valid in the location
-         from which the call to this template was made -->
-    <xsl:text>&#160;</xsl:text>  <!-- nbsp -->
-  </xsl:if>
-</xsl:template>
-
 
 <!-- ===================================================================== -->
 
