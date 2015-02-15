@@ -30,9 +30,6 @@
   <xsl:import href="plugin:org.dita.base:xsl/common/related-links.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/flag.xsl"/>
-  <!--
-  <xsl:import href="xslodt/flag-old.xsl"/>
-  -->
   <xsl:import href="xslodt/dita2odt-utilities.xsl"/>
   <xsl:import href="xslodt/dita2odt-table.xsl"/>
   <xsl:import href="xslodt/dita2odt-lists.xsl"/>
