@@ -639,11 +639,11 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   <!-- keep testing other values -->
   <xsl:choose>
    <xsl:when test="string-length($moreflags)>0">
-    <!-- more values - call it again with remaining values -->
-    <xsl:call-template name="gen-prop">
-     <xsl:with-param name="flag-att" select="$flag-att"/>
-     <xsl:with-param name="flag-att-val" select="$moreflags"/>
-    </xsl:call-template>
+     <!-- more values - call it again with remaining values -->
+     <xsl:call-template name="gen-prop">
+      <xsl:with-param name="flag-att" select="$flag-att"/>
+      <xsl:with-param name="flag-att-val" select="$moreflags"/>
+     </xsl:call-template>
    </xsl:when>
    <xsl:otherwise/> <!-- no more values -->
   </xsl:choose>
@@ -770,169 +770,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:template match="*" mode="getChildNode">
         <xsl:copy-of select="node()"/>
   </xsl:template>
- 
- <!-- Shortcuts for generating both rev flags and property flags -->
- <xsl:template name="start-flags-and-rev">
-   <xsl:param name="flagrules" as="element()*">
-     <xsl:call-template name="getrules"/>
-   </xsl:param>
-   <xsl:call-template name="start-flagit">
-     <xsl:with-param name="flagrules" select="$flagrules"/>     
-   </xsl:call-template>
-   <xsl:call-template name="start-revflag">
-     <xsl:with-param name="flagrules" select="$flagrules"/>
-   </xsl:call-template>
- </xsl:template>
- <xsl:template name="end-flags-and-rev">
-   <xsl:param name="flagrules" as="element()*">
-     <xsl:call-template name="getrules"/>
-   </xsl:param>
-   <xsl:call-template name="end-revflag">
-     <xsl:with-param name="flagrules" select="$flagrules"/>
-   </xsl:call-template>
-   <xsl:call-template name="end-flagit">
-     <xsl:with-param name="flagrules" select="$flagrules"/> 
-   </xsl:call-template>
- </xsl:template>
 
-<!-- Output starting flag only -->
-<xsl:template name="start-revflag">
- <xsl:param name="flagrules" as="element()*">
-   <xsl:call-template name="getrules"/>
- </xsl:param>
- <xsl:if test="@rev and not($FILTERFILEURL='')">
-  <xsl:call-template name="start-mark-rev">
-   <xsl:with-param name="revvalue" select="@rev"/>
-   <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
- </xsl:if>
-</xsl:template>
-
-<!-- Output ending flag only -->
-<xsl:template name="end-revflag">
- <xsl:param name="flagrules" as="element()*">
-   <xsl:call-template name="getrules"/>
- </xsl:param>
- <xsl:if test="@rev and not($FILTERFILEURL='')">
-  <xsl:call-template name="end-mark-rev">
-   <xsl:with-param name="revvalue" select="@rev"/>
-   <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
- </xsl:if>
-</xsl:template>
-
-<!-- for table entries - if the parent (row) has a rev but the cell does not - output the rev -->
-<xsl:template name="start-revflag-parent">
- <xsl:param name="flagrules" as="element()*">
-   <xsl:call-template name="getrules">
-     <xsl:with-param name="current" select=".."/>
-   </xsl:call-template>
- </xsl:param>
- <xsl:if test="../@rev and not(@rev) and not($FILTERFILEURL='')">
-  <xsl:call-template name="start-mark-rev">
-   <xsl:with-param name="revvalue" select="../@rev"/>
-   <xsl:with-param name="flagrules" select="$flagrules"/>   
-  </xsl:call-template>
- </xsl:if>
-</xsl:template>
-<xsl:template name="end-revflag-parent">
- <xsl:param name="flagrules" as="element()*">
-   <xsl:call-template name="getrules">
-     <xsl:with-param name="current" select=".."/>
-   </xsl:call-template>
- </xsl:param>
- <xsl:if test="../@rev and not(@rev) and not($FILTERFILEURL='')">
-  <xsl:call-template name="end-mark-rev">
-   <xsl:with-param name="revvalue" select="../@rev"/>
-   <xsl:with-param name="flagrules" select="$flagrules"/> 
-  </xsl:call-template>
- </xsl:if>
-</xsl:template>
-
-<!-- Output starting & ending flag for "blocked" text.
-     Use instead of 'apply-templates' for block areas (P, Note, DD, etc) -->
-<xsl:template name="revblock">
- <xsl:param name="flagrules" as="element()*">
-   <xsl:call-template name="getrules"/>
- </xsl:param>
- <xsl:variable name="revtest">
-   <xsl:apply-templates select="." mode="mark-revisions-for-draft"/>
- </xsl:variable>
- <xsl:choose>
-   <xsl:when test="$revtest=1"> <!-- rev mode with draft -->
-    <div class="{@rev}">
-      <xsl:call-template name="start-mark-rev">
-         <xsl:with-param name="revvalue" select="@rev"/>
-         <xsl:with-param name="flagrules" select="$flagrules"/> 
-      </xsl:call-template>
-      <xsl:apply-templates/>
-      <xsl:call-template name="end-mark-rev">
-        <xsl:with-param name="revvalue" select="@rev"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/> 
-      </xsl:call-template>
-    </div>
-   </xsl:when>
-   <xsl:when test="@rev and not($FILTERFILEURL='')">    <!-- normal rev mode -->
-     <xsl:call-template name="start-mark-rev">
-       <xsl:with-param name="revvalue" select="@rev"/>
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-     </xsl:call-template>
-     <xsl:apply-templates/>
-     <xsl:call-template name="end-mark-rev">
-       <xsl:with-param name="revvalue" select="@rev"/>
-       <xsl:with-param name="flagrules" select="$flagrules"/> 
-     </xsl:call-template>
-   </xsl:when>
-   <xsl:otherwise>
-     <xsl:apply-templates/>
-   </xsl:otherwise>
- </xsl:choose>
-</xsl:template>
-
-<!-- Output starting & ending flag & color for phrase text.
-     Use instead of 'apply-templates' for phrase areas (PH, B, DT, etc) -->
-<xsl:template name="revtext">
- <xsl:param name="flagrules" as="element()*">
-   <xsl:call-template name="getrules"/>
- </xsl:param>
- <xsl:variable name="revtest">
-   <xsl:apply-templates select="." mode="mark-revisions-for-draft"/>
- </xsl:variable>
-
-<xsl:choose>
-  <xsl:when test="$revtest=1">   <!-- Rev is active - add the SPAN -->
-   <span class="{@rev}">
-   <xsl:call-template name="start-mark-rev">
-    <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-   </xsl:call-template>
-   <xsl:call-template name="revstyle">
-    <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-   </xsl:call-template>
-   <xsl:call-template name="end-mark-rev">
-    <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-   </xsl:call-template>
-   </span>
-  </xsl:when>
-  <xsl:when test="@rev and not($FILTERFILEURL='')">         <!-- normal rev mode -->
-   <xsl:call-template name="start-mark-rev">
-    <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-   </xsl:call-template>
-   <xsl:call-template name="revstyle">
-    <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
-   </xsl:call-template>
-   <xsl:call-template name="end-mark-rev">
-    <xsl:with-param name="revvalue" select="@rev"/>
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-   </xsl:call-template>
-  </xsl:when>
-  <xsl:otherwise><xsl:apply-templates/></xsl:otherwise>  <!-- no rev mode -->
- </xsl:choose>
-</xsl:template>
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="start-mark-rev">
@@ -970,65 +808,15 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:if>
 </xsl:template>
 
-<!-- output the revision color & apply further templates-->
-<xsl:template name="revstyle">
- <xsl:param name="flagrules" as="element()*">
-   <xsl:call-template name="getrules"/>
- </xsl:param>
- <xsl:param name="revvalue"/>
- <xsl:choose>
-  <xsl:when test="$flagrules/revprop[@color or @backcolor]">
-   <font>
-    <xsl:apply-templates select="." mode="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:apply-templates>
-    <xsl:apply-templates/>
-   </font>
-  </xsl:when>
-  <xsl:otherwise>
-   <xsl:variable name="revcolor">
-    <xsl:call-template name="find-active-rev-style"> <!-- get 1st active rev color -->
-     <xsl:with-param name="allrevs" select="$revvalue"/>
-    </xsl:call-template>
-   </xsl:variable>
-   <xsl:choose>
-    <xsl:when test="string-length($revcolor)>0"> <!-- if there's a value, there's an active color -->
-     <font>
-      <xsl:attribute name="color">
-       <xsl:value-of select="$revcolor"/>
-      </xsl:attribute>
-      <xsl:apply-templates/>
-     </font>
-    </xsl:when>
-    <xsl:otherwise>
-     <xsl:apply-templates/> <!-- no active rev color - just apply templates -->
-    </xsl:otherwise>
-   </xsl:choose>
-  </xsl:otherwise>
- </xsl:choose> 
-</xsl:template>
-
 <!-- output the beginning revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
 <xsl:template name="start-revision-flag">
  <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
- <!--<xsl:variable name="biditest"> 
-  <xsl:call-template name="bidi-area"/>
- </xsl:variable>
- <xsl:choose>
-  <xsl:when test="$biditest='bidi'">
-    <xsl:call-template name="end-revflagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:when>
-  <xsl:otherwise>-->
-    <xsl:call-template name="start-revflagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  <!--</xsl:otherwise>
- </xsl:choose>-->
+  <xsl:call-template name="start-revflagit">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
 </xsl:template>
 
  <xsl:template name="start-revflagit">
@@ -1077,32 +865,9 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
- <!--<xsl:variable name="biditest">
-  <xsl:call-template name="bidi-area"/>
- </xsl:variable>
- <xsl:choose>
-  <xsl:when test="$biditest='bidi'">
-    <xsl:call-template name="start-revflagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-     </xsl:call-template>
-  </xsl:when>
-  <xsl:otherwise>-->
-    <xsl:call-template name="end-revflagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  <!--</xsl:otherwise>
- </xsl:choose>-->
-</xsl:template>
-
-<!-- Shortcut for old multi-line calls to find-active-rev-flag.
-     Return 1 for active revision when draft is on, return 0 otherwise. -->
- <xsl:template match="*" mode="mark-revisions-for-draft" as="xs:integer">
-  <xsl:choose>
-    <xsl:when test="@rev and not($FILTERFILEURL='') and ($DRAFT='yes')">
-      <xsl:call-template name="find-active-rev-flag"/>
-    </xsl:when>
-    <xsl:otherwise>0</xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="end-revflagit">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
 </xsl:template>
 
 <!-- Use @rev to find the first active flagged revision.
@@ -1141,24 +906,16 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:when test="$FILTERDOC/val/revprop[@val=$firstrev][@action='flag']">
      <xsl:value-of select="1"/> <!-- rev active -->
    </xsl:when>
-   <xsl:otherwise>              <!-- rev not active -->
-
-    <!-- keep testing other values -->
-    <xsl:choose>
-     <xsl:when test="string-length($morerevs)>0">
-      <!-- more values - call it again with remaining values -->
-      <xsl:call-template name="find-active-rev-flag">
-       <xsl:with-param name="allrevs" select="$morerevs"/>
-      </xsl:call-template>
-     </xsl:when>
-     <xsl:otherwise> <!-- no more values - none found -->
-      <xsl:value-of select="0"/>
-     </xsl:otherwise>
-    </xsl:choose>
-
+   <xsl:when test="string-length($morerevs) > 0">
+    <!-- more values - call it again with remaining values -->
+    <xsl:call-template name="find-active-rev-flag">
+     <xsl:with-param name="allrevs" select="$morerevs"/>
+    </xsl:call-template>
+   </xsl:when>
+   <xsl:otherwise> <!-- no more values - none found -->
+    <xsl:value-of select="0"/>
    </xsl:otherwise>
   </xsl:choose>
-
 </xsl:template>
 
 <!-- Use @rev to find the first active styled revision.
@@ -1196,20 +953,13 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
      <!-- rev active -->
      <xsl:value-of select="$FILTERDOC/val/revprop[@val=$firstrev]/@style"/>
    </xsl:when>
-   <xsl:otherwise>              <!-- rev not active -->
-
-    <!-- keep testing other values -->
-    <xsl:choose>
-     <xsl:when test="string-length($morerevs)>0">
-      <!-- more values - call it again with remaining values -->
-      <xsl:call-template name="find-active-rev-style">
-       <xsl:with-param name="allrevs" select="$morerevs"/>
-      </xsl:call-template>
-     </xsl:when>
-     <xsl:otherwise/> <!-- no more values - none found -->
-    </xsl:choose>
-
-   </xsl:otherwise>
+   <xsl:when test="string-length($morerevs)>0">
+    <!-- more values - call it again with remaining values -->
+    <xsl:call-template name="find-active-rev-style">
+     <xsl:with-param name="allrevs" select="$morerevs"/>
+    </xsl:call-template>
+   </xsl:when>
+   <xsl:otherwise/> <!-- no more values - none found -->
   </xsl:choose>
 
 </xsl:template>
@@ -1332,20 +1082,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:if>
   </xsl:template>
  
-  <xsl:template name="start-flagit">
-    <xsl:param name="flagrules" as="element()*">
-      <xsl:call-template name="getrules"/>
-    </xsl:param>
-    <xsl:apply-templates select="$flagrules/prop[1]" mode="start-flagit"/>
-  </xsl:template>
- 
- <xsl:template name="end-flagit">
-  <xsl:param name="flagrules" as="element()*">
-    <xsl:call-template name="getrules"/>
-  </xsl:param>
-  <xsl:apply-templates select="$flagrules/prop[last()]" mode="end-flagit"/>
- </xsl:template>
- 
  <xsl:template match="*" mode="ditamsg:cannot-flag-inline-element">
    <xsl:param name="attr-name"/>
    <xsl:call-template name="output-message">
@@ -1360,7 +1096,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     <xsl:with-param name="msgsev">W</xsl:with-param>
    </xsl:call-template>
  </xsl:template>
-
 
 <!-- ===================================================================== -->
 </xsl:stylesheet>
