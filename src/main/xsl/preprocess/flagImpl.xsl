@@ -371,11 +371,18 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
         <xsl:with-param name="flag-att-val" select="$current/@rev"/>
       </xsl:call-template>
     </xsl:if>
-    <xsl:if test="$propsExtensions!=''">
+    <xsl:if test="$propsExtensions != ''">
       <xsl:call-template name="ext-getrules">
         <xsl:with-param name="props" select="$propsExtensions"/>
         <xsl:with-param name="current" select="$current"/>
       </xsl:call-template>
+    </xsl:if>
+    <!-- default flags -->
+    <xsl:if test="$current/@audience | $current/@platform | $current/@product | $current/@otherprops">
+      <xsl:copy-of select="$FILTERDOC/val/prop[empty(@att) and @action = 'flag']"/>
+    </xsl:if>
+    <xsl:if test="$current/@rev">
+      <xsl:copy-of select="$FILTERDOC/val/revprop[empty(@att) and @action = 'flag']"/>
     </xsl:if>
   </xsl:if>
   </val>
@@ -1248,7 +1255,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       a parameter. Seems it would be better to make it a variable and move into
       the "if filterfile" section. Leaving alone now in case of any legacy overrides,
       and only trivial improvement from moving.  -->
-  <xsl:template match="*" mode="gen-style">
+  <xsl:template match="*" mode="gen-style" as="attribute(outputclass)?">
     <xsl:param name="flagrules" as="element()*">
       <xsl:call-template name="getrules"/>
     </xsl:param>
@@ -1292,17 +1299,16 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
             </xsl:if>     
           </xsl:attribute>
         </xsl:when>
-        <xsl:when test="not($conflictexist) and 
-                        ($flagrules/*[@color or @backcolor] or $validstyle)">
+        <xsl:when test="($flagrules/*[@color or @backcolor] or $validstyle)"><!--not($conflictexist) and -->
           <xsl:attribute name="outputclass">     
             <xsl:if test="$flagrules/*[@color]">
               <xsl:text>color:</xsl:text>
-              <xsl:value-of select="$flagrules/*[@color]/@color"/>
+              <xsl:value-of select="($flagrules/*[@color])[1]/@color"/>
               <xsl:text>;</xsl:text>
             </xsl:if>
             <xsl:if test="$flagrules/*[@backcolor]">
               <xsl:text>background-color:</xsl:text>
-              <xsl:value-of select="$flagrules/*[@backcolor]/@backcolor"/>
+              <xsl:value-of select="($flagrules/*[@backcolor])[1]/@backcolor"/>
               <xsl:text>;</xsl:text>
             </xsl:if>     
             <xsl:if test="$flagrules/*/@style='italics'">
