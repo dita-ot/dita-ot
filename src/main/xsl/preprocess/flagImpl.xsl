@@ -19,10 +19,11 @@
        <style-conflict> is included in <ditaval-startprop>.
 LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
               -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
   version="2.0"  
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  exclude-result-prefixes="ditamsg">
+  exclude-result-prefixes="xs ditamsg">
 
  <!-- ========== Flagging with flags & revisions ========== -->
 
@@ -50,7 +51,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
-  <xsl:variable name="FILTERDOC" select="document($FILTERFILEURL,/)"/>
+  <xsl:variable name="FILTERDOC" select="document($FILTERFILEURL,/)" as="document-node()"/>
 
   <xsl:variable name="GLOBAL-DOMAINS">
     <xsl:choose>
@@ -63,25 +64,16 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:variable name="allPropsAndRev">
-    <!-- First include defaults we always check for (not specialized) -->
-    <xsl:text>,audience,platform,product,otherprops,rev</xsl:text>
-    <xsl:call-template name="getExtProps">
-      <xsl:with-param name="domains" select="$GLOBAL-DOMAINS"/>
-    </xsl:call-template>
-  </xsl:variable>
-
-  <xsl:variable name="collectPropsExtensions">
-    <xsl:call-template name="getExtProps">
-      <xsl:with-param name="domains" select="$GLOBAL-DOMAINS"/>
-    </xsl:call-template>
-  </xsl:variable>
   <!-- Specialized attributes for analysis by flagging templates. Format is:
        props attr1,props attr2,props attr3 -->
-  <xsl:variable name="propsExtensions">
+  <xsl:variable name="propsExtensions" as="xs:string">
+    <xsl:variable name="collectPropsExtensions">
+      <xsl:call-template name="getExtProps">
+        <xsl:with-param name="domains" select="$GLOBAL-DOMAINS"/>
+      </xsl:call-template>
+    </xsl:variable>
     <xsl:value-of select="substring-after($collectPropsExtensions, ',')"/>
   </xsl:variable>
-
 
   <xsl:template match="/">
     <!-- Avoid all later checks by adding test here - if no filter file, copy full tree? -->
@@ -89,11 +81,11 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
 
   <xsl:template match="*">
-    <xsl:param name="flagrules">
+    <xsl:param name="flagrules" as="element()*">
       <xsl:call-template name="getrules"/>
     </xsl:param>
     <xsl:choose>
-      <xsl:when test="$flagrules/*">
+      <xsl:when test="exists($flagrules/*)">
         <xsl:variable name="conflictexist">
          <xsl:call-template name="conflict-check">
           <xsl:with-param name="flagrules" select="$flagrules"/>
@@ -143,7 +135,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
 
   <xsl:template match="*" mode="dita-start-flagit">
-   <xsl:param name="flagrules">
+   <xsl:param name="flagrules" as="element()*">
      <xsl:call-template name="getrules"/>
    </xsl:param>
    <xsl:apply-templates select="$flagrules/prop[1]" mode="start-flagit"/>
@@ -164,7 +156,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
 
   <xsl:template match="*" mode="dita-end-flagit">
-   <xsl:param name="flagrules">
+   <xsl:param name="flagrules" as="element()*">
      <xsl:call-template name="getrules"/>
    </xsl:param>
    <xsl:apply-templates select="$flagrules/prop[last()]" mode="end-flagit"/>
@@ -187,7 +179,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <!-- Output starting flag only -->
   <xsl:template match="*" mode="dita-start-revflag">
-   <xsl:param name="flagrules">
+   <xsl:param name="flagrules" as="element()*">
      <xsl:call-template name="getrules"/>
    </xsl:param>
    <xsl:if test="@rev and not($FILTERFILEURL='')">
@@ -200,7 +192,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <!-- Output ending flag only -->
   <xsl:template match="*" mode="dita-end-revflag">
-   <xsl:param name="flagrules">
+   <xsl:param name="flagrules" as="element()*">
      <xsl:call-template name="getrules"/>
    </xsl:param>
    <xsl:if test="@rev and not($FILTERFILEURL='')">
@@ -326,27 +318,17 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <!-- ========== COPIED FROM XHTML CODE ========== -->
   <!-- Test for in BIDI area: returns "bidi" when parent's @xml:lang is a bidi language; otherwise, leave blank -->
-  <xsl:template name="bidi-area">
-   <xsl:param name="parentlang">
+  <xsl:template name="bidi-area" as="xs:string?">
+   <xsl:param name="parentlang" as="xs:string">
     <xsl:call-template name="getLowerCaseLang"/>
    </xsl:param>
-   <xsl:variable name="direction">
+   <xsl:variable name="direction" as="xs:string">
      <xsl:apply-templates select="." mode="get-render-direction">
        <xsl:with-param name="lang" select="$parentlang"/>
      </xsl:apply-templates>
    </xsl:variable>
-   <xsl:choose>
-    <xsl:when test="$direction='rtl'">bidi</xsl:when>
-    <xsl:otherwise/>
-   </xsl:choose>
+   <xsl:value-of select="if ($direction = 'rtl') then 'bidi' else ()"/>
   </xsl:template>
-
-
-
-
-
-
-
  
  <!-- Flags - based on audience, product, platform, and otherprops in the source
   AND prop elements in the val file:
@@ -354,157 +336,135 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   For multiple attr values, output each flag in turn.
  -->
 
-<xsl:template name="getrules">
+<xsl:template name="getrules" as="element()*">
+  <xsl:param name="current" select="." as="element()"/>
+  <val>
  <!-- Test for the flagging attributes. If found, call 'gen-prop' with the values to use. Otherwise return -->
   <xsl:if test="normalize-space($FILTERFILEURL)!=''">
-    <xsl:if test="@audience">
+    <xsl:if test="$current/@audience">
       <xsl:call-template name="gen-prop">
         <xsl:with-param name="flag-att" select="'audience'"/>
-        <xsl:with-param name="flag-att-val" select="@audience"/>
+        <xsl:with-param name="flag-att-val" select="$current/@audience"/>
       </xsl:call-template>
     </xsl:if>
-    <xsl:if test="@platform">
+    <xsl:if test="$current/@platform">
       <xsl:call-template name="gen-prop">
         <xsl:with-param name="flag-att" select="'platform'"/>
-        <xsl:with-param name="flag-att-val" select="@platform"/>
+        <xsl:with-param name="flag-att-val" select="$current/@platform"/>
       </xsl:call-template>
     </xsl:if>
-    <xsl:if test="@product">
+    <xsl:if test="$current/@product">
       <xsl:call-template name="gen-prop">
         <xsl:with-param name="flag-att" select="'product'"/>
-        <xsl:with-param name="flag-att-val" select="@product"/>
+        <xsl:with-param name="flag-att-val" select="$current/@product"/>
       </xsl:call-template>
     </xsl:if>
-    <xsl:if test="@otherprops">
+    <xsl:if test="$current/@otherprops">
       <xsl:call-template name="gen-prop">
         <xsl:with-param name="flag-att" select="'otherprops'"/>
-        <xsl:with-param name="flag-att-val" select="@otherprops"/>
+        <xsl:with-param name="flag-att-val" select="$current/@otherprops"/>
       </xsl:call-template>
     </xsl:if>
- 
-    <xsl:if test="@rev">
+    <xsl:if test="$current/@rev">
       <xsl:call-template name="gen-prop">
         <xsl:with-param name="flag-att" select="'rev'"/>
-        <xsl:with-param name="flag-att-val" select="@rev"/>
+        <xsl:with-param name="flag-att-val" select="$current/@rev"/>
       </xsl:call-template>
     </xsl:if>
- 
     <xsl:if test="$propsExtensions!=''">
       <xsl:call-template name="ext-getrules">
         <xsl:with-param name="props" select="$propsExtensions"/>
+        <xsl:with-param name="current" select="$current"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:if>
+  </val>
 </xsl:template>
 
-  <xsl:template name="getExtProps">
-    <xsl:param name="domains"/>
-    <xsl:choose>
-      <xsl:when test="contains($domains, 'a(props')">
-        <xsl:text>,</xsl:text><xsl:value-of select="normalize-space(concat('props',substring-before(substring-after($domains,'a(props'), ')')))"/>
-        <xsl:call-template name="getExtProps">
-          <xsl:with-param name="domains" select="substring-after(substring-after($domains,'a(props'), ')')"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
+  <xsl:template name="getExtProps" as="xs:string*">
+    <xsl:param name="domains" as="xs:string"/>
+    <xsl:if test="contains($domains, 'a(props')">
+      <xsl:text>,</xsl:text>
+      <xsl:value-of select="normalize-space(concat('props',substring-before(substring-after($domains,'a(props'), ')')))"/>
+      <xsl:call-template name="getExtProps">
+        <xsl:with-param name="domains" select="substring-after(substring-after($domains,'a(props'), ')')"/>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:template>
 
-  <xsl:template name="ext-getrules">
-    <xsl:param name="props"/>
-    <xsl:choose>
-      <xsl:when test="contains($props,',')">
-        <xsl:variable name="propsValue">
-          <xsl:call-template name="getPropsValue">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="not($propsValue='')">
-          <xsl:call-template name="ext-gen-prop">
-            <xsl:with-param name="flag-att-path" select="substring-before($props,',')"/>
-            <xsl:with-param name="flag-att-val" select="$propsValue"/>
-          </xsl:call-template>
-        </xsl:if>
-        <xsl:call-template name="ext-getrules">
-          <xsl:with-param name="props" select="substring-after($props,',')"/>
+  <xsl:template name="ext-getrules" as="element()*">
+    <xsl:param name="props" as="xs:string?"/>
+    <xsl:param name="current" as="element()"/>
+    <xsl:if test="normalize-space($props)">
+      <xsl:variable name="head" select="if (contains($props, ',')) then substring-before($props,',') else $props" as="xs:string"/>
+      <xsl:variable name="tail" select="if (contains($props, ',')) then substring-after($props,',') else ()" as="xs:string?"/>
+      <xsl:variable name="propsValue" as="xs:string?">
+        <xsl:call-template name="getPropsValue">
+          <xsl:with-param name="propsPath" select="$head"/>
+          <xsl:with-param name="current" select="$current"/>
         </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:variable name="propsValue">
-          <xsl:call-template name="getPropsValue">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="not($propsValue='')">
-          <xsl:call-template name="ext-gen-prop">
-            <xsl:with-param name="flag-att-path" select="$props"/>
-            <xsl:with-param name="flag-att-val" select="$propsValue"/>
-          </xsl:call-template>
-        </xsl:if>
-      </xsl:otherwise>
-    </xsl:choose>
+      </xsl:variable>
+      <xsl:if test="not($propsValue='')">
+        <xsl:call-template name="ext-gen-prop">
+          <xsl:with-param name="flag-att-path" select="$head"/>
+          <xsl:with-param name="flag-att-val" select="$propsValue"/>
+        </xsl:call-template>
+      </xsl:if>
+      <xsl:call-template name="ext-getrules">
+        <xsl:with-param name="props" select="$tail"/>
+        <xsl:with-param name="current" select="$current"/>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:template>
   
-  <xsl:template name="getPropsValue">
-    <xsl:param name="propsPath"/>
-    <xsl:variable name="propName">
+  <xsl:template name="getPropsValue" as="xs:string?">
+    <xsl:param name="propsPath" as="xs:string"/>
+    <xsl:param name="current" as="element()"/>
+    <xsl:variable name="propName" as="xs:string">
       <xsl:call-template name="getLastPropName">
         <xsl:with-param name="propsPath" select="$propsPath"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="@*[name()=$propName]">
-        <xsl:value-of select="@*[name()=$propName]"/>
+      <xsl:when test="$current/@*[name() = $propName]">
+        <xsl:value-of select="$current/@*[name() = $propName]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="getGeneralValue">
           <xsl:with-param name="propName" select="$propName"/>
           <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propName))"/>
+          <xsl:with-param name="current" select="$current"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template name="getGeneralValue">
-    <xsl:param name="propsPath"/>
-    <xsl:param name="propName"/>
-    <xsl:variable name="propParentName">
+  <xsl:template name="getGeneralValue" as="xs:string?">
+    <xsl:param name="propsPath" as="xs:string"/>
+    <xsl:param name="propName" as="xs:string"/>
+    <xsl:param name="current" as="element()"/>
+    <xsl:variable name="propParentName" as="xs:string">
       <xsl:call-template name="getLastPropName">
         <xsl:with-param name="propsPath" select="$propsPath"/>
       </xsl:call-template>
     </xsl:variable>
     
     <xsl:choose>
-      <xsl:when test="contains(@*[name()=$propParentName],concat($propName,'('))">
-        <xsl:value-of select="substring-before(substring-after(@*[name()=$propParentName],concat($propName,'(')),')')"/>
+      <xsl:when test="contains($current/@*[name() = $propParentName], concat($propName,'('))">
+        <xsl:value-of select="substring-before(substring-after($current/@*[name() = $propParentName], concat($propName,'(')),')')"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="contains($propsPath,' ')">
-            <xsl:call-template name="getGeneralValue">
-              <xsl:with-param name="propName" select="$propName"/>
-              <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propParentName))"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise/>
-        </xsl:choose>
-      </xsl:otherwise>
+      <xsl:when test="contains($propsPath,' ')">
+        <xsl:call-template name="getGeneralValue">
+          <xsl:with-param name="propName" select="$propName"/>
+          <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propParentName))"/>
+          <xsl:with-param name="current" select="$current"/>
+        </xsl:call-template>
+      </xsl:when>
     </xsl:choose>
-    
   </xsl:template>
   
-  <xsl:template name="getLastPropName">
-    <xsl:param name="propsPath"/>
+  <xsl:template name="getLastPropName" as="xs:string">
+    <xsl:param name="propsPath" as="xs:string"/>
     <xsl:choose>
       <xsl:when test="contains($propsPath,' ')">
         <xsl:call-template name="getLastPropName">
@@ -521,12 +481,12 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     <xsl:param name="props"/>
     <xsl:choose>
       <xsl:when test="contains($props,',')">
-        <xsl:variable name="propsValue">
+        <xsl:variable name="propsValue" as="xs:string?">
           <xsl:call-template name="getPropsValue">
             <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
           </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="propName">
+        <xsl:variable name="propName" as="xs:string">
           <xsl:call-template name="getLastPropName">
             <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
           </xsl:call-template>
@@ -542,12 +502,12 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:variable name="propsValue">
+        <xsl:variable name="propsValue" as="xs:string?">
           <xsl:call-template name="getPropsValue">
             <xsl:with-param name="propsPath" select="$props"/>
           </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="propName">
+        <xsl:variable name="propName" as="xs:string">
           <xsl:call-template name="getLastPropName">
             <xsl:with-param name="propsPath" select="$props"/>
           </xsl:call-template>
@@ -561,152 +521,11 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:choose>
   </xsl:template>
 
-<xsl:template name="getrules-parent">
- <!-- Test for the flagging attributes on the parent.
-   If found and if the filterfile name was passed in,
-      call 'gen-prop' with the values to use. Otherwise return -->
-  <xsl:if test="normalize-space($FILTERFILEURL)!=''">
-    <xsl:if test="../@audience">
-      <xsl:call-template name="gen-prop">
-        <xsl:with-param name="flag-att" select="'audience'"/>
-        <xsl:with-param name="flag-att-val" select="../@audience"/>
-      </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="../@platform">
-      <xsl:call-template name="gen-prop">
-        <xsl:with-param name="flag-att" select="'platform'"/>
-        <xsl:with-param name="flag-att-val" select="../@platform"/>
-      </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="../@product">
-      <xsl:call-template name="gen-prop">
-        <xsl:with-param name="flag-att" select="'product'"/>
-        <xsl:with-param name="flag-att-val" select="../@product"/>
-      </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="../@otherprops">
-      <xsl:call-template name="gen-prop">
-        <xsl:with-param name="flag-att" select="'otherprops'"/>
-        <xsl:with-param name="flag-att-val" select="../@otherprops"/>
-      </xsl:call-template>
-    </xsl:if>
- 
-    <xsl:if test="../@rev and not(@rev)">
-      <xsl:call-template name="gen-prop">
-        <xsl:with-param name="flag-att" select="'rev'"/>
-        <xsl:with-param name="flag-att-val" select="../@rev"/>
-      </xsl:call-template>
-    </xsl:if>
- 
-    <xsl:if test="$propsExtensions!=''">
-      <xsl:call-template name="ext-getrules-parent">
-        <xsl:with-param name="props" select="$propsExtensions"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:if>
-</xsl:template>
-
-  <xsl:template name="ext-getrules-parent">
-    <xsl:param name="props"/>
-    <xsl:choose>
-      <xsl:when test="contains($props,',')">
-        <xsl:variable name="propsValue">
-          <xsl:call-template name="getPropsValue-parent">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="not($propsValue='')">
-          <xsl:call-template name="ext-gen-prop">
-            <xsl:with-param name="flag-att-path" select="substring-before($props,',')"/>
-            <xsl:with-param name="flag-att-val" select="$propsValue"/>
-          </xsl:call-template>
-        </xsl:if>        
-        <xsl:call-template name="ext-getrules-parent">
-          <xsl:with-param name="props" select="substring-after($props,',')"/>
-        </xsl:call-template>
-      </xsl:when>
-      
-      <xsl:otherwise>
-        <xsl:variable name="propsValue">
-          <xsl:call-template name="getPropsValue-parent">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="not($propsValue='')">
-          <xsl:call-template name="ext-gen-prop">
-            <xsl:with-param name="flag-att-path" select="$props"/>
-            <xsl:with-param name="flag-att-val" select="$propsValue"/>
-          </xsl:call-template>
-        </xsl:if>
-      </xsl:otherwise>
-    </xsl:choose>
-    
-  </xsl:template>
-  
-  <xsl:template name="getPropsValue-parent">
-    <xsl:param name="propsPath"/>
-    <xsl:variable name="propName">
-      <xsl:call-template name="getLastPropName">
-        <xsl:with-param name="propsPath" select="$propsPath"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="../@*[name()=$propName]">
-        <xsl:value-of select="../@*[name()=$propName]"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="getGeneralValue-parent">
-          <xsl:with-param name="propName" select="$propName"/>
-          <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propName))"/>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
-  <xsl:template name="getGeneralValue-parent">
-    <xsl:param name="propsPath"/>
-    <xsl:param name="propName"/>
-    <xsl:variable name="propParentName">
-      <xsl:call-template name="getLastPropName">
-        <xsl:with-param name="propsPath" select="$propsPath"/>
-      </xsl:call-template>
-    </xsl:variable>
-    
-    <xsl:choose>
-      <xsl:when test="contains(../@*[name()=$propParentName],concat($propName,'('))">
-        <xsl:value-of select="substring-before(substring-after(../@*[name()=$propParentName],concat($propName,'(')),')')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="contains($propsPath,' ')">
-            <xsl:call-template name="getGeneralValue-parent">
-              <xsl:with-param name="propName" select="$propName"/>
-              <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propParentName))"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise/>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-    
-  </xsl:template>
-  
-
 <!-- Use passed attr value to mark each active flag. -->
   <xsl:template name="ext-gen-prop">
     <xsl:param name="flag-att-path"/>
     <xsl:param name="flag-att-val"/>
-    <xsl:variable name="propName">
+    <xsl:variable name="propName" as="xs:string">
       <xsl:call-template name="getLastPropName">
         <xsl:with-param name="propsPath" select="$flag-att-path"/>
       </xsl:call-template>
@@ -732,12 +551,12 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:choose>
   </xsl:template>
 
- <xsl:template name="gen-prop">
-  <xsl:param name="flag-att"/>     <!-- attribute name -->
-  <xsl:param name="flag-att-val"/> <!-- content of attribute -->
+ <xsl:template name="gen-prop" as="element()*">
+  <xsl:param name="flag-att" as="xs:string"/>     <!-- attribute name -->
+  <xsl:param name="flag-att-val" as="xs:string"/> <!-- content of attribute -->
   
   <!-- Determine the first flag value, which is the value before the first space -->
-  <xsl:variable name="firstflag">
+  <xsl:variable name="firstflag" as="xs:string">
    <xsl:choose>
     <xsl:when test="contains($flag-att-val,' ')">
      <xsl:value-of select="substring-before($flag-att-val,' ')"/>
@@ -749,12 +568,14 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:variable>
   
   <!-- Determine the other flag values, after the first space -->
-  <xsl:variable name="moreflags">
+  <xsl:variable name="moreflags" as="xs:string">
    <xsl:choose>
     <xsl:when test="contains($flag-att-val,' ')">
      <xsl:value-of select="substring-after($flag-att-val,' ')"/>
     </xsl:when>
-    <xsl:otherwise/> <!-- no space, one value -->
+    <xsl:otherwise>
+      <xsl:value-of select="''"/>
+    </xsl:otherwise> <!-- no space, one value -->
    </xsl:choose>
   </xsl:variable>
   
@@ -883,8 +704,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:if>
  </xsl:template>
  <!-- check CURRENT File -->
- <xsl:template name="checkFile">
-    <xsl:param name="in"/>
+ <xsl:template name="checkFile" as="xs:string">
+    <xsl:param name="in" as="xs:string"/>
   <xsl:choose>
    <xsl:when test="starts-with($in, '.\')">
     <xsl:value-of select="substring-after($in, '.\')"/>
@@ -899,14 +720,14 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:choose>
  </xsl:template>
  <!-- get the scheme list -->
- <xsl:template match="*" mode="check">
+ <xsl:template match="*" mode="check" as="xs:string">
   <xsl:value-of select="."/>
  </xsl:template>
- <xsl:template match="*" mode="getVal">
+ <xsl:template match="*" mode="getVal" as="xs:string">
      <xsl:value-of select="@val"/>
  </xsl:template>
  <!-- get background color -->
- <xsl:template match="*" mode="getBgcolor">
+ <xsl:template match="*" mode="getBgcolor" as="xs:string">
   <xsl:choose>
    <xsl:when test="@backcolor">
     <xsl:value-of select="@backcolor"/>
@@ -917,7 +738,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:choose>
  </xsl:template>
  <!-- get font color -->
- <xsl:template match="*" mode="getColor">
+ <xsl:template match="*" mode="getColor" as="xs:string">
        <xsl:choose>
            <xsl:when test="@color">
             <xsl:value-of select="@color"/>
@@ -928,7 +749,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
        </xsl:choose>
  </xsl:template>
  <!-- get font style -->
- <xsl:template match="*" mode="getStyle">
+ <xsl:template match="*" mode="getStyle" as="xs:string">
   <xsl:choose>
    <xsl:when test="@style">
     <xsl:value-of select="@style"/>
@@ -945,31 +766,31 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  
  <!-- Shortcuts for generating both rev flags and property flags -->
  <xsl:template name="start-flags-and-rev">
-   <xsl:param name="flagrules">
+   <xsl:param name="flagrules" as="element()*">
      <xsl:call-template name="getrules"/>
    </xsl:param>
    <xsl:call-template name="start-flagit">
-     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+     <xsl:with-param name="flagrules" select="$flagrules"/>     
    </xsl:call-template>
    <xsl:call-template name="start-revflag">
      <xsl:with-param name="flagrules" select="$flagrules"/>
    </xsl:call-template>
  </xsl:template>
  <xsl:template name="end-flags-and-rev">
-   <xsl:param name="flagrules">
+   <xsl:param name="flagrules" as="element()*">
      <xsl:call-template name="getrules"/>
    </xsl:param>
    <xsl:call-template name="end-revflag">
      <xsl:with-param name="flagrules" select="$flagrules"/>
    </xsl:call-template>
    <xsl:call-template name="end-flagit">
-     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+     <xsl:with-param name="flagrules" select="$flagrules"/> 
    </xsl:call-template>
  </xsl:template>
 
 <!-- Output starting flag only -->
 <xsl:template name="start-revflag">
- <xsl:param name="flagrules">
+ <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
  <xsl:if test="@rev and not($FILTERFILEURL='')">
@@ -982,7 +803,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
 <!-- Output ending flag only -->
 <xsl:template name="end-revflag">
- <xsl:param name="flagrules">
+ <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
  <xsl:if test="@rev and not($FILTERFILEURL='')">
@@ -995,8 +816,10 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
 <!-- for table entries - if the parent (row) has a rev but the cell does not - output the rev -->
 <xsl:template name="start-revflag-parent">
- <xsl:param name="flagrules">
-   <xsl:call-template name="getrules-parent"/>
+ <xsl:param name="flagrules" as="element()*">
+   <xsl:call-template name="getrules">
+     <xsl:with-param name="current" select=".."/>
+   </xsl:call-template>
  </xsl:param>
  <xsl:if test="../@rev and not(@rev) and not($FILTERFILEURL='')">
   <xsl:call-template name="start-mark-rev">
@@ -1006,8 +829,10 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  </xsl:if>
 </xsl:template>
 <xsl:template name="end-revflag-parent">
- <xsl:param name="flagrules">
-   <xsl:call-template name="getrules-parent"/>
+ <xsl:param name="flagrules" as="element()*">
+   <xsl:call-template name="getrules">
+     <xsl:with-param name="current" select=".."/>
+   </xsl:call-template>
  </xsl:param>
  <xsl:if test="../@rev and not(@rev) and not($FILTERFILEURL='')">
   <xsl:call-template name="end-mark-rev">
@@ -1020,8 +845,12 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 <!-- Output starting & ending flag for "blocked" text.
      Use instead of 'apply-templates' for block areas (P, Note, DD, etc) -->
 <xsl:template name="revblock">
- <xsl:param name="flagrules"><xsl:call-template name="getrules"/></xsl:param>
- <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
+ <xsl:param name="flagrules" as="element()*">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
+ <xsl:variable name="revtest">
+   <xsl:apply-templates select="." mode="mark-revisions-for-draft"/>
+ </xsl:variable>
  <xsl:choose>
    <xsl:when test="$revtest=1"> <!-- rev mode with draft -->
     <div class="{@rev}">
@@ -1056,8 +885,12 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 <!-- Output starting & ending flag & color for phrase text.
      Use instead of 'apply-templates' for phrase areas (PH, B, DT, etc) -->
 <xsl:template name="revtext">
- <xsl:param name="flagrules"><xsl:call-template name="getrules"/></xsl:param>
- <xsl:variable name="revtest"><xsl:apply-templates select="." mode="mark-revisions-for-draft"/></xsl:variable>
+ <xsl:param name="flagrules" as="element()*">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
+ <xsl:variable name="revtest">
+   <xsl:apply-templates select="." mode="mark-revisions-for-draft"/>
+ </xsl:variable>
 
 <xsl:choose>
   <xsl:when test="$revtest=1">   <!-- Rev is active - add the SPAN -->
@@ -1096,11 +929,11 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="start-mark-rev">
- <xsl:param name="flagrules">
+ <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
  <xsl:param name="revvalue"/>
- <xsl:variable name="revtest">
+ <xsl:variable name="revtest" as="xs:integer">
   <xsl:call-template name="find-active-rev-flag">
    <xsl:with-param name="allrevs" select="$revvalue"/>
   </xsl:call-template>
@@ -1114,11 +947,11 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="end-mark-rev">
- <xsl:param name="flagrules">
+ <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
  <xsl:param name="revvalue"/>
- <xsl:variable name="revtest">
+ <xsl:variable name="revtest" as="xs:integer">
   <xsl:call-template name="find-active-rev-flag">
    <xsl:with-param name="allrevs" select="$revvalue"/>
   </xsl:call-template>
@@ -1132,7 +965,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
 <!-- output the revision color & apply further templates-->
 <xsl:template name="revstyle">
- <xsl:param name="flagrules">
+ <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
  <xsl:param name="revvalue"/>
@@ -1171,7 +1004,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 <!-- output the beginning revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
 <xsl:template name="start-revision-flag">
- <xsl:param name="flagrules">
+ <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
  <!--<xsl:variable name="biditest"> 
@@ -1192,13 +1025,13 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 </xsl:template>
 
  <xsl:template name="start-revflagit">
-  <xsl:param name="flagrules">
+  <xsl:param name="flagrules" as="element()*">
     <xsl:call-template name="getrules"/>
   </xsl:param>
-  <xsl:param name="lang">
+  <xsl:param name="lang" as="xs:string">
     <xsl:call-template name="getLowerCaseLang"/>
   </xsl:param>
-  <xsl:param name="biditest">
+  <xsl:param name="biditest" as="xs:string">
     <xsl:call-template name="bidi-area">
       <xsl:with-param name="parentlang" select="$lang"/>
     </xsl:call-template>
@@ -1212,13 +1045,13 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  </xsl:template>
  
  <xsl:template name="end-revflagit">
-  <xsl:param name="flagrules">
+  <xsl:param name="flagrules" as="element()*">
     <xsl:call-template name="getrules"/>
   </xsl:param>
-  <xsl:param name="lang">
+  <xsl:param name="lang" as="xs:string">
     <xsl:call-template name="getLowerCaseLang"/>
   </xsl:param>
-  <xsl:param name="biditest">
+  <xsl:param name="biditest" as="xs:string">
     <xsl:call-template name="bidi-area">
       <xsl:with-param name="parentlang" select="$lang"/>
     </xsl:call-template>
@@ -1234,7 +1067,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 <!-- output the ending revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
 <xsl:template name="end-revision-flag">
- <xsl:param name="flagrules">
+ <xsl:param name="flagrules" as="element()*">
    <xsl:call-template name="getrules"/>
  </xsl:param>
  <!--<xsl:variable name="biditest">
@@ -1256,7 +1089,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
 <!-- Shortcut for old multi-line calls to find-active-rev-flag.
      Return 1 for active revision when draft is on, return 0 otherwise. -->
-<xsl:template match="*" mode="mark-revisions-for-draft">
+ <xsl:template match="*" mode="mark-revisions-for-draft" as="xs:integer">
   <xsl:choose>
     <xsl:when test="@rev and not($FILTERFILEURL='') and ($DRAFT='yes')">
       <xsl:call-template name="find-active-rev-flag"/>
@@ -1270,11 +1103,11 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
      Return 0 for non-active. 
      NOTE: this template is only called when a filter file is available and
      when there is a revision to evaluate. -->
-<xsl:template name="find-active-rev-flag">
-  <xsl:param name="allrevs" select="@rev"/>
+<xsl:template name="find-active-rev-flag" as="xs:integer">
+  <xsl:param name="allrevs" select="@rev" as="xs:string"/>
 
   <!-- Determine the first rev value, which is the value before the first space -->
-  <xsl:variable name="firstrev">
+  <xsl:variable name="firstrev" as="xs:string">
    <xsl:choose>
     <xsl:when test="contains($allrevs,' ')">
      <xsl:value-of select="substring-before($allrevs,' ')"/>
@@ -1286,12 +1119,14 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:variable>
 
   <!-- Determine the other rev value, after the first space -->
-  <xsl:variable name="morerevs">
+  <xsl:variable name="morerevs" as="xs:string">
    <xsl:choose>
     <xsl:when test="contains($allrevs,' ')">
      <xsl:value-of select="substring-after($allrevs,' ')"/>
     </xsl:when>
-    <xsl:otherwise/> <!-- no space, one value -->
+    <xsl:otherwise>
+      <xsl:value-of select="''"/>
+    </xsl:otherwise> <!-- no space, one value -->
    </xsl:choose>
   </xsl:variable>
 
@@ -1323,10 +1158,10 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
      Return color setting when active.
      Return null for non-active. -->
 <xsl:template name="find-active-rev-style">
-  <xsl:param name="allrevs"/>
+  <xsl:param name="allrevs" as="xs:string"/>
 
   <!-- Determine the first rev value, which is the value before the first space -->
-  <xsl:variable name="firstrev">
+  <xsl:variable name="firstrev" as="xs:string">
    <xsl:choose>
     <xsl:when test="contains($allrevs,' ')">
      <xsl:value-of select="substring-before($allrevs,' ')"/>
@@ -1338,12 +1173,14 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:variable>
 
   <!-- Determine the other rev value, after the first space -->
-  <xsl:variable name="morerevs">
+  <xsl:variable name="morerevs" as="xs:string">
    <xsl:choose>
     <xsl:when test="contains($allrevs,' ')">
      <xsl:value-of select="substring-after($allrevs,' ')"/>
     </xsl:when>
-    <xsl:otherwise/> <!-- no space, one value -->
+    <xsl:otherwise>
+      <xsl:value-of select="''"/>
+    </xsl:otherwise> <!-- no space, one value -->
    </xsl:choose>
   </xsl:variable>
 
@@ -1370,30 +1207,30 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
 </xsl:template>
 
-  <xsl:template name="conflict-check">
-    <xsl:param name="flagrules">
+ <xsl:template name="conflict-check" as="xs:boolean">
+    <xsl:param name="flagrules" as="element()*">
       <xsl:call-template name="getrules"/>
     </xsl:param>
     <xsl:choose>
       <xsl:when test="normalize-space($FILTERFILEURL)=''">
-        <xsl:value-of select="'false'"/>
+        <xsl:sequence select="false()"/>
       </xsl:when>
       <xsl:when test="$flagrules/*">
         <xsl:apply-templates select="$flagrules/*[1]" mode="conflict-check"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="'false'"/>
+        <xsl:sequence select="false()"/>
       </xsl:otherwise>
     </xsl:choose>  
   </xsl:template>
  
- <xsl:template match="prop|revprop" mode="conflict-check">
+ <xsl:template match="prop|revprop" mode="conflict-check" as="xs:boolean">
   <xsl:param name="color"/>
   <xsl:param name="backcolor"/>
   
   <xsl:choose>   
    <xsl:when test="(@color and @color!='' and $color!='' and $color!=@color)or(@backcolor and @backcolor!='' and $backcolor!='' and $backcolor!=@backcolor)">
-    <xsl:value-of select="'true'"/>
+    <xsl:sequence select="true()"/>
    </xsl:when>
    <xsl:when test="following-sibling::*">
     <xsl:apply-templates select="following-sibling::*[1]" mode="conflict-check">
@@ -1402,7 +1239,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:apply-templates>
    </xsl:when>
    <xsl:otherwise>
-    <xsl:value-of select="'false'"/>
+    <xsl:sequence select="false()"/>
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
@@ -1412,10 +1249,10 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       the "if filterfile" section. Leaving alone now in case of any legacy overrides,
       and only trivial improvement from moving.  -->
   <xsl:template match="*" mode="gen-style">
-    <xsl:param name="flagrules">
+    <xsl:param name="flagrules" as="element()*">
       <xsl:call-template name="getrules"/>
     </xsl:param>
-    <xsl:param name="conflictexist">
+    <xsl:param name="conflictexist" as="xs:boolean">
      <xsl:call-template name="conflict-check">
         <xsl:with-param name="flagrules" select="$flagrules"/>
       </xsl:call-template>
@@ -1423,20 +1260,24 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
     <!-- Skip all further checking if there is no filter file -->
     <xsl:if test="normalize-space($FILTERFILEURL)!=''">
-      <xsl:variable name="validstyle">
+      <xsl:variable name="validstyle" as="xs:boolean">
         <!-- This variable is used to prevent using pre-OASIS or unrecognized ditaval styles -->
-        <xsl:if test="$conflictexist='false' and $flagrules/*[@style]">
-          <xsl:choose>
-            <xsl:when test="$flagrules/*/@style='italics'">YES</xsl:when>
-            <xsl:when test="$flagrules/*/@style='bold'">YES</xsl:when>
-            <xsl:when test="$flagrules/*/@style='underline'">YES</xsl:when>
-            <xsl:when test="$flagrules/*/@style='double-underline'">YES</xsl:when>
-            <xsl:when test="$flagrules/*/@style='overline'">YES</xsl:when>
-          </xsl:choose>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="not($conflictexist) and $flagrules/*[@style]">
+            <xsl:choose>
+              <xsl:when test="$flagrules/*/@style='italics'">true</xsl:when>
+              <xsl:when test="$flagrules/*/@style='bold'">true</xsl:when>
+              <xsl:when test="$flagrules/*/@style='underline'">true</xsl:when>
+              <xsl:when test="$flagrules/*/@style='double-underline'">true</xsl:when>
+              <xsl:when test="$flagrules/*/@style='overline'">true</xsl:when>
+              <xsl:otherwise>false</xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>false</xsl:otherwise>
+        </xsl:choose>
       </xsl:variable>
       <xsl:choose>  
-        <xsl:when test="$conflictexist='true' and $FILTERDOC/val/style-conflict[@foreground-conflict-color or @background-conflict-color]">
+        <xsl:when test="$conflictexist and $FILTERDOC/val/style-conflict[@foreground-conflict-color or @background-conflict-color]">
           <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
           <xsl:attribute name="outputclass">     
             <xsl:if test="$FILTERDOC/val/style-conflict[@foreground-conflict-color]">
@@ -1451,8 +1292,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
             </xsl:if>     
           </xsl:attribute>
         </xsl:when>
-        <xsl:when test="$conflictexist='false' and 
-                        ($flagrules/*[@color or @backcolor] or $validstyle='YES')">
+        <xsl:when test="not($conflictexist) and 
+                        ($flagrules/*[@color or @backcolor] or $validstyle)">
           <xsl:attribute name="outputclass">     
             <xsl:if test="$flagrules/*[@color]">
               <xsl:text>color:</xsl:text>
@@ -1486,14 +1327,14 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
  
   <xsl:template name="start-flagit">
-    <xsl:param name="flagrules">
+    <xsl:param name="flagrules" as="element()*">
       <xsl:call-template name="getrules"/>
     </xsl:param>
     <xsl:apply-templates select="$flagrules/prop[1]" mode="start-flagit"/>
   </xsl:template>
  
  <xsl:template name="end-flagit">
-  <xsl:param name="flagrules">
+  <xsl:param name="flagrules" as="element()*">
     <xsl:call-template name="getrules"/>
   </xsl:param>
   <xsl:apply-templates select="$flagrules/prop[last()]" mode="end-flagit"/>
