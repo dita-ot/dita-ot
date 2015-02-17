@@ -13,10 +13,8 @@
 <!--<xsl:param name="KEYREF-FILE" select="concat($WORKDIR,$PATH2PROJ,'keydef.xml')"/>-->
 
 <xsl:template match="*[contains(@class,' abbrev-d/abbreviated-form ')]" name="topic.abbreviated-form">
-  <xsl:variable name="keys" select="@keyref"/>
-  <xsl:variable name="target" select="$keydefs//*[@keys = $keys and normalize-space(@href)]/@href"/>
-  <xsl:if test="$keys and $target">
-    <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, $target)"/>
+  <xsl:if test="@keyref and @href">
+    <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, @href)"/>
     <xsl:variable name="entry-file-contents" select="document($entry-file, /)"/>
     <xsl:choose>
       <xsl:when test="$entry-file-contents//*[contains(@class,' glossentry/glossentry ')]">
@@ -26,7 +24,7 @@
       <xsl:otherwise>
         <!-- TODO: Throw a warning for incorrect usage of <abbreviated-form> -->
         <xsl:apply-templates select="." mode="ditamsg:no-glossentry-for-abbreviated-form">
-          <xsl:with-param name="keys" select="$keys"/>
+          <xsl:with-param name="keys" select="@keyref"/>
         </xsl:apply-templates>
       </xsl:otherwise>
     </xsl:choose>

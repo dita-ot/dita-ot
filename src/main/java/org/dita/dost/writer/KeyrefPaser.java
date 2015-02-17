@@ -95,16 +95,14 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         ki.add(new KeyrefInfo(TOPIC_SOURCE, ATTRIBUTE_NAME_HREF, false));
         ki.add(new KeyrefInfo(MAP_TOPICREF, ATTRIBUTE_NAME_HREF, false));
         ki.add(new KeyrefInfo(TOPIC_XREF, ATTRIBUTE_NAME_HREF, false));
-        ki.add(new KeyrefInfo(TOPIC_CITE, null, false));
-        ki.add(new KeyrefInfo(TOPIC_DT, null, false));
-        // links are processed for glossentry processing
+        ki.add(new KeyrefInfo(TOPIC_CITE, ATTRIBUTE_NAME_HREF, false, false));
+        ki.add(new KeyrefInfo(TOPIC_DT, ATTRIBUTE_NAME_HREF, false, false));
         ki.add(new KeyrefInfo(TOPIC_KEYWORD, ATTRIBUTE_NAME_HREF, false, false));
-        // links are processed for glossentry processing
         ki.add(new KeyrefInfo(TOPIC_TERM, ATTRIBUTE_NAME_HREF, false, false));
-        ki.add(new KeyrefInfo(TOPIC_PH, null, false));
-        ki.add(new KeyrefInfo(TOPIC_INDEXTERM, null, false));
-        ki.add(new KeyrefInfo(TOPIC_INDEX_BASE, null, false));
-        ki.add(new KeyrefInfo(TOPIC_INDEXTERMREF, null, false));
+        ki.add(new KeyrefInfo(TOPIC_PH, ATTRIBUTE_NAME_HREF, false, false));
+        ki.add(new KeyrefInfo(TOPIC_INDEXTERM, ATTRIBUTE_NAME_HREF, false, false));
+        ki.add(new KeyrefInfo(TOPIC_INDEX_BASE, ATTRIBUTE_NAME_HREF, false, false));
+        ki.add(new KeyrefInfo(TOPIC_INDEXTERMREF, ATTRIBUTE_NAME_HREF, false, false));
         keyrefInfos = Collections.unmodifiableList(ki);
     }
         
@@ -262,9 +260,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                     // grab keyword or term from key definition
                     if (!hasSubElem.peek() && currentElement != null) {
                         NodeList nodeList = elem.getElementsByTagName(TOPIC_KEYWORD.localName);
-                        if (nodeList.getLength() == 0 ) {
-                            nodeList = elem.getElementsByTagName(TOPIC_TERM.localName);
-                        }
+                        // XXX: No need to look for term as content model for keywords doesn't allow it
+//                        if (nodeList.getLength() == 0 ) {
+//                            nodeList = elem.getElementsByTagName(TOPIC_TERM.localName);
+//                        }
                         if (nodeList.getLength() > 0) {
                             if (!currentElement.isRefType) {
                                 // only one keyword or term is used.
@@ -468,7 +467,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         } else {
                             // @keyref not in topicref
                             // different elements have different attributes
-                            if (currentElement.isRefType) {
+//                            if (currentElement.isRefType) {
                                 // current element with href attribute
                                 for (int index = 0; index < attrs.getLength(); index++) {
                                     final Attr attr = (Attr) attrs.item(index);
@@ -478,20 +477,20 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                         XMLUtils.addOrSetAttribute(resAtts, attr);
                                     }
                                 }
-                            } else {
-                                // current element without href attribute
-                                // so attributes about href should not be copied.
-                                for (int index = 0; index < attrs.getLength(); index++) {
-                                    final Attr attr = (Attr) attrs.item(index);
-                                    if (!no_copy_topic.contains(attr.getNodeName())
-                                            && !(attr.getNodeName().equals(ATTRIBUTE_NAME_SCOPE)
-                                            || attr.getNodeName().equals(ATTRIBUTE_NAME_FORMAT)
-                                            || attr.getNodeName().equals(ATTRIBUTE_NAME_TYPE))) {
-                                        XMLUtils.removeAttribute(resAtts, attr.getNodeName());
-                                        XMLUtils.addOrSetAttribute(resAtts, attr);
-                                    }
-                                }
-                            }
+//                            } else {
+//                                // current element without href attribute
+//                                // so attributes about href should not be copied.
+//                                for (int index = 0; index < attrs.getLength(); index++) {
+//                                    final Attr attr = (Attr) attrs.item(index);
+//                                    if (!no_copy_topic.contains(attr.getNodeName())
+//                                            && !(attr.getNodeName().equals(ATTRIBUTE_NAME_SCOPE)
+//                                            || attr.getNodeName().equals(ATTRIBUTE_NAME_FORMAT)
+//                                            || attr.getNodeName().equals(ATTRIBUTE_NAME_TYPE))) {
+//                                        XMLUtils.removeAttribute(resAtts, attr.getNodeName());
+//                                        XMLUtils.addOrSetAttribute(resAtts, attr);
+//                                    }
+//                                }
+//                            }
 
                         }
                     } else {

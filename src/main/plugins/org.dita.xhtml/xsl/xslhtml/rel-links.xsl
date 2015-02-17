@@ -709,15 +709,19 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
      Normal treatment: if desc is present and not empty, create hovertext.
      Using title (for next/previous links, etc): always create, use title or target. -->
   <xsl:template match="*" mode="add-desc-as-hoverhelp">
-    <xsl:if test="*[contains(@class, ' topic/desc ')]">
-      <xsl:variable name="hovertext">
-        <xsl:apply-templates select="*[contains(@class, ' topic/desc ')][1]" mode="text-only"/>
-      </xsl:variable>
-      <xsl:if test="normalize-space($hovertext)">
-        <xsl:attribute name="title">
-          <xsl:value-of select="normalize-space($hovertext)"/>
-        </xsl:attribute>
-      </xsl:if>
+    <xsl:param name="hovertext"/>
+    <xsl:variable name="h">
+      <xsl:choose>
+        <xsl:when test="normalize-space($hovertext)">
+          <xsl:value-of select="$hovertext"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="*[contains(@class, ' topic/desc ')][1]" mode="text-only"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="normalize-space($h)">
+      <xsl:attribute name="title" select="normalize-space($h)"/>
     </xsl:if>
   </xsl:template>
   <xsl:template match="*" mode="add-title-as-hoverhelp">

@@ -277,7 +277,7 @@
   
   <xsl:template match="*[contains(@class, ' task/cmd ')]" name="topic.task.cmd">
     <xsl:choose>
-      <xsl:when test="@keyref">
+      <xsl:when test="@href and @keyref">
         <xsl:apply-templates select="." mode="turning-to-link">
           <xsl:with-param name="keys" select="@keyref"/>
           <xsl:with-param name="type" select="'ph'"/>

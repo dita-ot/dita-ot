@@ -109,7 +109,9 @@
 <xsl:param name="genDefMeta" select="'no'"/>
 
 <!-- Name of the keyref file that contains key definitions -->
+<!-- Deprecated since 2.1 -->
 <xsl:param name="KEYREF-FILE" select="concat($WORKDIR, $PATH2PROJ, 'keydef.xml')"/>
+<!-- Deprecated since 2.1 -->
 <xsl:variable name="keydefs" select="document($KEYREF-FILE)"/>
   
 <xsl:param name="BASEDIR"/>
@@ -954,36 +956,17 @@
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:apply-templates/>
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-    <xsl:apply-templates select="." mode="pull-in-title">
-      <xsl:with-param name="type" select="' dt '"/>
-      <xsl:with-param name="displaytext">
-        <xsl:apply-templates select="."  mode="dita-ot:text-only"/>
-      </xsl:with-param>
-    </xsl:apply-templates>
   </dt>
 </xsl:template>
 
 <!-- DL term -->
 <xsl:template match="*[contains(@class, ' topic/dt ')]" name="topic.dt">
-  <xsl:variable name="keys" select="@keyref"/>
-  <xsl:variable name="keydef" select="$keydefs//*[contains(@keys, $keys)]"/>
   <xsl:choose>
-    <xsl:when test="@keyref and $keydef">
-      <xsl:variable name="updatedTarget">
-        <xsl:apply-templates select="." mode="find-keyref-target">
-          <!--xsl:with-param name="target" select="$keydef/@href"/-->
-        </xsl:apply-templates>
-      </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="normalize-space($updatedTarget) != $OUTEXT">
-          <a href="{$updatedTarget}">
-            <xsl:apply-templates select="." mode="output-dt"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="." mode="output-dt"/>
-        </xsl:otherwise>
-      </xsl:choose>
+    <xsl:when test="@keyref and @href">
+      <a>
+        <xsl:apply-templates select="." mode="add-linking-attributes"/>
+        <xsl:apply-templates select="." mode="output-dt"/>
+      </a>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="." mode="output-dt"/>
@@ -1059,9 +1042,8 @@
 
 <xsl:template match="*[contains(@class, ' topic/ph ')]" name="topic.ph">
   <xsl:choose>
-    <xsl:when test="@keyref">
+    <xsl:when test="@keyref and @href">
       <xsl:apply-templates select="." mode="turning-to-link">
-        <xsl:with-param name="keys" select="@keyref"/>
         <xsl:with-param name="type" select="'ph'"/>
       </xsl:apply-templates>
     </xsl:when>
@@ -1080,9 +1062,8 @@
 
 <xsl:template match="*[contains(@class, ' topic/keyword ')]" name="topic.keyword">
   <xsl:choose>
-    <xsl:when test="@keyref">
+    <xsl:when test="@keyref and @href">
       <xsl:apply-templates select="." mode="turning-to-link">
-        <xsl:with-param name="keys" select="@keyref"/>
         <xsl:with-param name="type" select="'keyword'"/>
       </xsl:apply-templates>
     </xsl:when>
@@ -1181,9 +1162,8 @@
 <!-- citations -->
 <xsl:template match="*[contains(@class, ' topic/cite ')]" name="topic.cite">
   <xsl:choose>
-    <xsl:when test="@keyref">
+    <xsl:when test="@keyref and @href">
       <xsl:apply-templates select="." mode="turning-to-link">
-        <xsl:with-param name="keys" select="@keyref"/>
         <xsl:with-param name="type" select="'cite'"/>
       </xsl:apply-templates>
     </xsl:when>
@@ -1212,55 +1192,59 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/term ')]" mode="output-term">
-  <xsl:param name="displaytext" select="''"/>
+  <!-- Deprecated since 2.1 -->
+  <xsl:param name="displaytext"/>
   <dfn class="term">
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="setidaname"/>   
-    <xsl:apply-templates/>
-    <xsl:apply-templates select="." mode="pull-in-title">
-      <xsl:with-param name="type" select="' term '"/>
-      <xsl:with-param name="displaytext" select="normalize-space($displaytext)"/>
-    </xsl:apply-templates>
+    <xsl:call-template name="setidaname"/>
+    <xsl:choose>
+      <xsl:when test="normalize-space($displaytext)">
+        <xsl:value-of select="$displaytext"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
   </dfn>
 </xsl:template>
 
 <!-- Templates for internal usage in terms/abbreviation resolving -->
-<xsl:template name="getMatchingTarget">
-  <xsl:param name="m_glossid" select="''"/>
-  <xsl:param name="m_entry-file-contents"/>
-  <xsl:param name="m_reflang" select="en_US"/>
-  <xsl:variable name="glossentries" select="$m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')]"/>
+<xsl:template name="getMatchingTarget" as="element()?">
+  <xsl:param name="m_glossid" select="''" as="xs:string"/>
+  <xsl:param name="m_entry-file-contents" as="document-node()?"/>
+  <xsl:param name="m_reflang" select="'en-US'" as="xs:string"/>
+  <xsl:variable name="glossentries" select="$m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')]" as="element()*"/>
   <xsl:choose>
     <xsl:when test="$m_glossid = '' and $glossentries[lang($m_reflang)]">
-      <xsl:copy-of select="$glossentries[lang($m_reflang)]"/>
+      <xsl:sequence select="$glossentries[lang($m_reflang)]"/>
     </xsl:when>
     <xsl:when test="not($m_glossid = '') and $glossentries[@id = $m_glossid][lang($m_reflang)]">
-      <xsl:copy-of select="$glossentries[@id = $m_glossid][lang($m_reflang)]"/>
+      <xsl:sequence select="$glossentries[@id = $m_glossid][lang($m_reflang)]"/>
     </xsl:when>
     <xsl:when test="$m_glossid = '' and $glossentries[lang($DEFAULTLANG)]">
-      <xsl:copy-of select="$glossentries[lang($DEFAULTLANG)]"/>
+      <xsl:sequence select="$glossentries[lang($DEFAULTLANG)]"/>
     </xsl:when>
     <xsl:when test="not($m_glossid = '') and $glossentries[@id = $m_glossid][lang($DEFAULTLANG)]">
-      <xsl:copy-of select="$glossentries[@id = $m_glossid][lang($DEFAULTLANG)]"/>
+      <xsl:sequence select="$glossentries[@id = $m_glossid][lang($DEFAULTLANG)]"/>
     </xsl:when>
     <xsl:when test="$m_glossid = '' and $glossentries[not(@xml:lang) or normalize-space(@xml:lang) = '']">
-      <xsl:copy-of select="$glossentries[not(@xml:lang) or normalize-space(@xml:lang) = ''][1]"/>
+      <xsl:sequence select="$glossentries[not(@xml:lang) or normalize-space(@xml:lang) = ''][1]"/>
     </xsl:when>
     <xsl:when test="not($m_glossid = '') and $glossentries[@id = $m_glossid][not(@xml:lang) or normalize-space(@xml:lang) = '']">
-      <xsl:copy-of select="$glossentries[@id = $m_glossid][not(@xml:lang) or normalize-space(@xml:lang) = ''][1]"/>
+      <xsl:sequence select="$glossentries[@id = $m_glossid][not(@xml:lang) or normalize-space(@xml:lang) = ''][1]"/>
     </xsl:when>
-    <xsl:otherwise>
+    <!--xsl:otherwise>
       <xsl:value-of select="'#none#'"/>
-    </xsl:otherwise>
+    </xsl:otherwise-->
   </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*" mode="getMatchingSurfaceForm">
-  <xsl:param name="m_matched-target"/>
+  <xsl:param name="m_matched-target" as="element()?"/>
   <xsl:param name="m_keys"/>
   <xsl:choose>
-    <xsl:when test="not($m_matched-target = '#none#')">
-      <xsl:variable name="glossentry" select="$m_matched-target/*[contains(@class, ' glossentry/glossentry ')][1]"/>
+    <xsl:when test="exists($m_matched-target)">
+      <xsl:variable name="glossentry" select="$m_matched-target"/>
       <xsl:choose>
         <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(.) != '']">
           <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(.) != '']" mode="dita-ot:text-only"/>
@@ -1279,11 +1263,11 @@
 </xsl:template>
 
 <xsl:template match="*" mode="getMatchingGlossdef">
-  <xsl:param name="m_matched-target"/>
+  <xsl:param name="m_matched-target" as="element()?"/>
   <xsl:param name="m_keys"/>
   <xsl:choose>
-    <xsl:when test="not($m_matched-target = '#none#')">
-      <xsl:variable name="glossentry" select="$m_matched-target/*[contains(@class, ' glossentry/glossentry ')][1]"/>
+    <xsl:when test="exists($m_matched-target)">
+      <xsl:variable name="glossentry" select="$m_matched-target" as="element()?"/>
       <xsl:choose>
         <xsl:when test="$glossentry/*[contains(@class, ' glossentry/glossdef ')]">
           <xsl:apply-templates select="$glossentry/*[contains(@class, ' glossentry/glossdef ')]" mode="dita-ot:text-only"/>
@@ -1299,10 +1283,10 @@
       </xsl:choose>
     </xsl:when>
     <xsl:when test="normalize-space(.) = '' and
-                    (boolean(ancestor::*[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref',@keyref)[1]))">
+                    (boolean(ancestor::*[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref', @keyref)[1]))">
       <!-- Already generating a message when looking for the term, do not generate a "missing glossentry" message here too -->
     </xsl:when>
-    <xsl:when test="boolean(ancestor::*[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref',@keyref)[1])">
+    <xsl:when test="boolean(ancestor::*[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref', @keyref)[1])">
       <!-- Didn't look up term because it was specified, but this is the first occurrence
            and the glossentry was not found, so generate "missing glossentry" message -->
       <xsl:apply-templates select="." mode="ditamsg:no-glossentry-for-key">
@@ -1313,11 +1297,11 @@
 </xsl:template>
 
 <xsl:template match="*" mode="getMatchingAcronym">
-  <xsl:param name="m_matched-target"/>
+  <xsl:param name="m_matched-target" as="element()?"/>
   <xsl:param name="m_keys"/>
   <xsl:choose>
-    <xsl:when test="not($m_matched-target = '#none#')">
-      <xsl:variable name="glossentry" select="$m_matched-target/*[contains(@class, ' glossentry/glossentry ')][1]"/>
+    <xsl:when test="exists($m_matched-target)">
+      <xsl:variable name="glossentry" select="$m_matched-target"/>
       <xsl:choose>
         <xsl:when test="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value = 'preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(.) != '']">
           <xsl:apply-templates select="$glossentry//*[contains(@class, ' glossentry/glossStatus ')][@value = 'preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(.) != '']" mode="dita-ot:text-only"/>
@@ -1346,31 +1330,29 @@
 <xsl:key name="keyref" match="*[contains(@class, ' topic/term ')]" use="@keyref"/>
 <!-- terms and abbreviated-forms -->
 <xsl:template match="*[contains(@class, ' topic/term ')]" name="topic.term">
-  <xsl:variable name="keys" select="@keyref"/>
-  <xsl:variable name="keydef" select="$keydefs//*[@keys = $keys][normalize-space(@href)]"/>
+  <xsl:variable name="keys" select="@keyref" as="attribute()?"/>
   <xsl:choose>
-    <xsl:when test="@keyref and $keydef/@href">
-      <xsl:variable name="target" select="$keydef/@href"/>
-      <xsl:variable name="updatedTarget">
-        <xsl:apply-templates select="." mode="find-keyref-target">
-          <xsl:with-param name="target" select="$target"/>
-        </xsl:apply-templates>
+    <xsl:when test="@keyref and @href">
+      <xsl:variable name="updatedTarget" as="xs:string">
+        <xsl:apply-templates select="." mode="find-keyref-target"/>
       </xsl:variable>
-
-      <xsl:variable name="entry-file-uri" select="concat($WORKDIR, $PATH2PROJ, $target)"/>
       
-      <!-- Save glossary entry file contents into a variable to workaround the infamous putDocumentCache error in Xalan -->
-      <xsl:variable name="entry-file-contents" select="document($entry-file-uri, /)"/>
+      <xsl:variable name="entry-file-contents" as="document-node()?">
+        <xsl:if test="empty(@scope) or @scope = 'local'">
+          <xsl:variable name="entry-file-uri" select="concat($WORKDIR, $PATH2PROJ, @href)"/>        
+          <xsl:sequence select="document($entry-file-uri, /)"/>    
+        </xsl:if>
+      </xsl:variable>
       <!-- Glossary id defined in <glossentry> -->
-      <xsl:variable name="glossid" select="substring-after($updatedTarget, '#')"/>
+      <xsl:variable name="glossid" select="substring-after($updatedTarget, '#')" as="xs:string"/>
       <!--
           Language preference.
           NOTE: glossid overrides language preference.
       -->
-      <xsl:variable name="reflang">
+      <xsl:variable name="reflang" as="xs:string?">
         <xsl:call-template name="getLowerCaseLang"/>
       </xsl:variable>
-      <xsl:variable name="matched-target">
+      <xsl:variable name="matched-target" as="element()?">
         <xsl:call-template name="getMatchingTarget">
           <xsl:with-param name="m_entry-file-contents" select="$entry-file-contents"/>
           <xsl:with-param name="m_glossid" select="$glossid"/>
@@ -1382,24 +1364,20 @@
       <!-- Text should be displayed -->
       <xsl:variable name="displaytext">
         <xsl:choose>
-          <xsl:when test="normalize-space(.) != ''">
-            <xsl:apply-templates select="." mode="dita-ot:text-only"/>
+          <xsl:when test="normalize-space(.) != '' and empty(processing-instruction('ditaot')[. = 'gentext'])">
+            <xsl:apply-templates mode="dita-ot:text-only"/>
+          </xsl:when>
+          <xsl:when test="exists(ancestor::*[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref', @keyref)[1])">
+            <xsl:apply-templates select="." mode="getMatchingSurfaceForm">
+              <xsl:with-param name="m_matched-target" select="$matched-target"/>
+              <xsl:with-param name="m_keys" select="$keys"/>
+            </xsl:apply-templates>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:choose>
-              <xsl:when test="boolean(ancestor::*[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref',@keyref)[1])">
-                <xsl:apply-templates select="." mode="getMatchingSurfaceForm">
-                  <xsl:with-param name="m_matched-target" select="$matched-target"/>
-                  <xsl:with-param name="m_keys" select="$keys"/>
-                </xsl:apply-templates>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:apply-templates select="." mode="getMatchingAcronym">
-                  <xsl:with-param name="m_matched-target" select="$matched-target"/>
-                  <xsl:with-param name="m_keys" select="$keys"/>
-                </xsl:apply-templates>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="getMatchingAcronym">
+              <xsl:with-param name="m_matched-target" select="$matched-target"/>
+              <xsl:with-param name="m_keys" select="$keys"/>
+            </xsl:apply-templates>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
@@ -1414,20 +1392,16 @@
       </xsl:variable>
       <!-- End of hovertip text -->
 
-      <xsl:choose>
-        <xsl:when test="not(normalize-space($updatedTarget) = $OUTEXT)">
-          <a href="{$updatedTarget}" title="{normalize-space($hovertext)}">
-            <xsl:apply-templates select="." mode="output-term">
-              <xsl:with-param name="displaytext" select="normalize-space($displaytext)"/>
-            </xsl:apply-templates>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="." mode="output-term">
-            <xsl:with-param name="displaytext" select="normalize-space($displaytext)"/>
-          </xsl:apply-templates>
-        </xsl:otherwise>
-      </xsl:choose>
+      <a>
+        <xsl:apply-templates select="." mode="add-linking-attributes"/>
+        <xsl:apply-templates select="." mode="add-desc-as-hoverhelp">
+          <xsl:with-param name="hovertext" select="$hovertext">
+          </xsl:with-param>
+        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="output-term">
+          <xsl:with-param name="displaytext" select="normalize-space($displaytext)"/>
+        </xsl:apply-templates>
+      </a>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="." mode="output-term">
@@ -1517,7 +1491,7 @@
     <xsl:call-template name="setscale"/>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="place-fig-lbl"/>
-    <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))][not(contains(@class, ' topic/desc '))] |text()|comment()|processing-instruction()"/>
+    <xsl:apply-templates select="node() except *[contains(@class, ' topic/title ') or contains(@class, ' topic/desc ')]"/>
   </figure>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:value-of select="$newline"/>
@@ -2913,16 +2887,10 @@
      echoes the content back, indicating any nesting.  Useful view for authoring!-->
 <xsl:template match="*[contains(@class, ' topic/indexterm ')]" name="topic.indexterm">
  <xsl:if test="$INDEXSHOW = 'yes'">
-   <xsl:variable name="keys" select="@keyref"/>
-   <xsl:variable name="keydef" select="$keydefs//*[contains(@keys, $keys)]"/>
    <xsl:choose>
-     <xsl:when test="@keyref and $keydef">
-       <xsl:variable name="updatedTarget">
-         <xsl:apply-templates select="." mode="find-keyref-target">
-           <!--xsl:with-param name="target" select="$keydef/@href"/-->
-         </xsl:apply-templates>
-       </xsl:variable>
-       <a href="{$updatedTarget}">
+     <xsl:when test="@keyref and @href">
+       <a>
+         <xsl:apply-templates select="." mode="add-linking-attributes"/>
          <span style="margin: 1pt; background-color: #ffddff; border: 1pt black solid;">
            <xsl:call-template name="commonattributes"/>
            <xsl:apply-templates/>
@@ -4035,6 +4003,9 @@
     <xsl:apply-templates/>
   </xsl:template>
   
+  <!-- By default, ignore desc and force pull-processing -->
+  <xsl:template match="*[contains(@class, ' topic/desc ')]" name="topic.desc" priority="-10"/>
+  
   <!-- Add for bodydiv  and sectiondiv-->
   <xsl:template match="*[contains(@class, ' topic/bodydiv ') or contains(@class, ' topic/sectiondiv ')]">
     <div>
@@ -4046,10 +4017,10 @@
 
   <!-- Function to look up a target in the keyref file -->
   <xsl:template match="*" mode="find-keyref-target">
+    <!-- Deprecated since 2.1 -->
     <xsl:param name="keys" select="@keyref"/>
-    <xsl:param name="target">
-      <xsl:value-of select="$keydefs//*[@keys = $keys]/@href"/>
-    </xsl:param>
+    <!-- Deprecated since 2.1 -->
+    <xsl:param name="target" select="@href"/>
     <xsl:choose>
       <xsl:when test="contains($target, '://')">
         <xsl:value-of select="$target"/>
@@ -4068,6 +4039,7 @@
     </xsl:choose>
   </xsl:template>
 
+  <!-- Deprecated since 2.1 -->
   <!-- This template pulls in topic/title -->
   <!-- 20090330: Add error checking to ensre $keys is defined, that the key
                  is defined in KEYREF-FILE, and that $target != '' -->
@@ -4103,68 +4075,38 @@
   <!-- 20090331: Update to ensure cite with keyref continues to use <cite>,
                  plus move common code to single template -->
   <xsl:template match="*" mode="turning-to-link">
-    <xsl:param name="keys">#none#</xsl:param>
-    <xsl:param name="type"></xsl:param>
+    <xsl:param name="keys" select="@keyref" as="xs:string?"/>
+    <xsl:param name="type" select="name()" as="xs:string"/>
     <xsl:variable name="elementName" as="xs:string">
       <xsl:choose>
-        <xsl:when test="$type = 'cite' or contains($type, ' cite ')">cite</xsl:when>
+        <xsl:when test="$type = 'cite'">cite</xsl:when>
         <xsl:otherwise>span</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="keydef" select="$keydefs//*[contains(@keys, $keys)]"/>
-    <xsl:choose>
-      <xsl:when test="$keydef">
-        <xsl:variable name="updatedTarget">
-          <xsl:apply-templates select="." mode="find-keyref-target">
-            <!--xsl:with-param name="target" select="$keydef"/-->
-          </xsl:apply-templates>
-        </xsl:variable>
-        <xsl:choose>
-          <xsl:when test="normalize-space($updatedTarget) != $OUTEXT">
-            <a href="{$updatedTarget}">
-              <xsl:element name="{$elementName}">
-                <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
-                  <xsl:with-param name="type" select="$type"/>
-                </xsl:apply-templates>
-                <xsl:apply-templates select="." mode="pull-in-title">
-                  <xsl:with-param name="type" select="$type"/>
-                  <xsl:with-param name="displaytext">
-                    <xsl:apply-templates select="." mode="dita-ot:text-only"/>
-                  </xsl:with-param>
-                </xsl:apply-templates>
-              </xsl:element>
-            </a>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:element name="{$elementName}">
-              <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
-                <xsl:with-param name="type" select="$type"/>
-              </xsl:apply-templates>
-              <xsl:apply-templates select="." mode="pull-in-title">
-                <xsl:with-param name="type" select="$type"/>
-                <xsl:with-param name="displaytext">
-                  <xsl:apply-templates select="." mode="dita-ot:text-only"/>
-                </xsl:with-param>
-              </xsl:apply-templates>
-            </xsl:element>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:element name="{$elementName}">
-          <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
-            <xsl:with-param name="type" select="$type"/>
-          </xsl:apply-templates>
-        </xsl:element>
-      </xsl:otherwise>
-    </xsl:choose>
+    <a>
+      <xsl:apply-templates select="." mode="add-linking-attributes"/>
+      <xsl:apply-templates select="." mode="add-desc-as-hoverhelp"/>
+      <xsl:element name="{$elementName}">
+        <xsl:call-template name="commonattributes">
+          <xsl:with-param name="default-output-class">
+            <xsl:if test="normalize-space($type) != name()">
+              <xsl:value-of select="$type"/>
+            </xsl:if>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:apply-templates/>
+      </xsl:element>
+    </a>
   </xsl:template>
 
+  <!-- Deprecated since 2.1 -->
   <xsl:template match="*" mode="common-processing-phrase-within-link">
     <xsl:param name="type"/>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class">
-        <xsl:if test="normalize-space($type) != name()"><xsl:value-of select="$type"/></xsl:if>
+        <xsl:if test="normalize-space($type) != name()">
+          <xsl:value-of select="$type"/>
+        </xsl:if>
       </xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
