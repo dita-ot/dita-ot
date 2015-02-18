@@ -107,7 +107,7 @@
     </param>
     <param name="dita.dir" desc="Specifies where the DITA-OT is installed." type="dir"/>
     <param name="dita.temp.dir" desc="Specifies the location of the temporary directory." type="dir"/>
-    <param name="dita.input.valfile" desc="Specifies a filter file to be used to include, exclude, or flag content." type="file"/>
+    <param name="dita.input.valfile" deprecated="true" desc="Specifies a filter file to be used to include, exclude, or flag content. Note: Deprecated in favor of the args.filter parameter." type="file"/>
     <param name="filter-stage" desc="Specifies whether filtering is done before all other processing, or after key and conref processing." type="enum">
       <val default="true">early</val>
       <val>late</val>
