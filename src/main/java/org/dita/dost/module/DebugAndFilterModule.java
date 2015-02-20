@@ -370,7 +370,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 File tmprel = new File(FileUtils.resolve(job.tempDir, parent) + SUBJECT_SCHEME_EXTENSION);
                 Document parentRoot;
                 if (!tmprel.exists()) {
-                    final File src = new File(inputMap.getParentFile(), parent.getPath());
+                    final File src = new File(job.getInputDir(), parent.getPath());
                     parentRoot = builder.parse(src);
                 } else {
                     parentRoot = builder.parse(tmprel);

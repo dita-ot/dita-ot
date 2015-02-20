@@ -517,7 +517,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <!--finding type based on name of the target element in the first topic in another file-->
           <xsl:when test="$topicpos='firstinfile'">
             <xsl:choose>
-              <xsl:when test="$doc//*[contains(@class, ' topic/topic ')][1]">
+              <xsl:when test="($doc//*[contains(@class, ' topic/topic ')])[1]">
                 <xsl:attribute name="type">
                   <xsl:value-of select="local-name(($doc//*[contains(@class, $classval)])[1])"/>
                 </xsl:attribute>
@@ -554,8 +554,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="$topicpos='firstinfile' and $doc//*[contains(@class, ' topic/topic ')]">
             <xsl:call-template name="verify-type-value">
               <xsl:with-param name="type" select="$type"/>
-              <xsl:with-param name="actual-class" select="$doc//*[contains(@class, ' topic/topic ')][1]/@class"/>
-              <xsl:with-param name="actual-name" select="local-name($doc//*[contains(@class, ' topic/topic ')][1])"/>
+              <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')])[1]/@class"/>
+              <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')])[1])"/>
             </xsl:call-template>
           </xsl:when>
         </xsl:choose>

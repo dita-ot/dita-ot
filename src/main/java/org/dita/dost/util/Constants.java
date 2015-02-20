@@ -680,6 +680,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_TOC = "toc";
     /**print attribute.*/
     public static final String ATTRIBUTE_NAME_PRINT = "print";
+    public static final String ATTRIBUTE_NAME_DELIVERYTARGET = "deliveryTarget";
     /**cascade attribute.*/
     public static final String ATTRIBUTE_NAME_CASCADE = "cascade";
     public static final String ATTRIBUTE_NAME_COLS = "cols";

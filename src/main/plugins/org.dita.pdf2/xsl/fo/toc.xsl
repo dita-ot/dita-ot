@@ -118,7 +118,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' bookmap/chapter ')] |
-                         *[contains(@class, ' boookmap/bookmap ')]/opentopic:map/*[contains(@class, ' map/topicref ')]" mode="tocPrefix" priority="-1">
+                         *[contains(@class, ' bookmap/bookmap ')]/opentopic:map/*[contains(@class, ' map/topicref ')]" mode="tocPrefix" priority="-1">
         <xsl:call-template name="insertVariable">
             <xsl:with-param name="theVariableID" select="'Table of Contents Chapter'"/>
             <xsl:with-param name="theParameters">
