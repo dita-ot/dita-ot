@@ -29,11 +29,6 @@
         <include name="css/*.css"/>
       </fileset>
     </copy>
-    <copy todir="${output.dir}">
-      <fileset dir="${dita.plugin.net.sourceforge.dita-ot.html.dir}">
-        <include name="images/*.png"/>
-      </fileset>
-    </copy>
   </target>
     
 </project>
