@@ -84,17 +84,17 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private final static List<KeyrefInfo> keyrefInfos;
     static {
         final List<KeyrefInfo> ki = new ArrayList<KeyrefInfo>();
-        ki.add(new KeyrefInfo(TOPIC_AUTHOR, ATTRIBUTE_NAME_HREF, false));
-        ki.add(new KeyrefInfo(TOPIC_DATA, ATTRIBUTE_NAME_HREF, false));
-        ki.add(new KeyrefInfo(TOPIC_DATA_ABOUT, ATTRIBUTE_NAME_HREF, false));
-        ki.add(new KeyrefInfo(TOPIC_IMAGE, ATTRIBUTE_NAME_HREF, true));
-        ki.add(new KeyrefInfo(TOPIC_LINK, ATTRIBUTE_NAME_HREF, false));
-        ki.add(new KeyrefInfo(TOPIC_LQ, ATTRIBUTE_NAME_HREF, false));
-        ki.add(new KeyrefInfo(MAP_NAVREF, "mapref", true));
-        ki.add(new KeyrefInfo(TOPIC_PUBLISHER, ATTRIBUTE_NAME_HREF, false));
-        ki.add(new KeyrefInfo(TOPIC_SOURCE, ATTRIBUTE_NAME_HREF, false));
-        ki.add(new KeyrefInfo(MAP_TOPICREF, ATTRIBUTE_NAME_HREF, false));
-        ki.add(new KeyrefInfo(TOPIC_XREF, ATTRIBUTE_NAME_HREF, false));
+        ki.add(new KeyrefInfo(TOPIC_AUTHOR, ATTRIBUTE_NAME_HREF, false, true));
+        ki.add(new KeyrefInfo(TOPIC_DATA, ATTRIBUTE_NAME_HREF, false, true));
+        ki.add(new KeyrefInfo(TOPIC_DATA_ABOUT, ATTRIBUTE_NAME_HREF, false, true));
+        ki.add(new KeyrefInfo(TOPIC_IMAGE, ATTRIBUTE_NAME_HREF, true, false));
+        ki.add(new KeyrefInfo(TOPIC_LINK, ATTRIBUTE_NAME_HREF, false, true));
+        ki.add(new KeyrefInfo(TOPIC_LQ, ATTRIBUTE_NAME_HREF, false, true));
+        ki.add(new KeyrefInfo(MAP_NAVREF, "mapref", true, false));
+        ki.add(new KeyrefInfo(TOPIC_PUBLISHER, ATTRIBUTE_NAME_HREF, false, true));
+        ki.add(new KeyrefInfo(TOPIC_SOURCE, ATTRIBUTE_NAME_HREF, false, true));
+        ki.add(new KeyrefInfo(MAP_TOPICREF, ATTRIBUTE_NAME_HREF, false, false));
+        ki.add(new KeyrefInfo(TOPIC_XREF, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_CITE, ATTRIBUTE_NAME_HREF, false, false));
         ki.add(new KeyrefInfo(TOPIC_DT, ATTRIBUTE_NAME_HREF, false, false));
         ki.add(new KeyrefInfo(TOPIC_KEYWORD, ATTRIBUTE_NAME_HREF, false, false));
@@ -265,9 +265,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 //                            nodeList = elem.getElementsByTagName(TOPIC_TERM.localName);
 //                        }
                         if (nodeList.getLength() > 0) {
-                            if (!currentElement.isRefType) {
+                            if (!currentElement.hasNestedElements) {
                                 // only one keyword or term is used.
-                                domToSax((Element) nodeList.item(0), false);
+                                if (!currentElement.isEmpty) {
+                                    domToSax((Element) nodeList.item(0), false);
+                                }
                             } else {
                                 // If the key reference element carries href attribute
                                 // all keyword or term are used.
@@ -303,7 +305,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                         getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
                                     }
                                 }
-                            } else if (currentElement.isRefType) {
+                            } else if (currentElement.hasNestedElements) {
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
                                 if (linktext.getLength() > 0) {
                                     domToSax((Element) linktext.item(0), false);
@@ -443,7 +445,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             logger.info(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
                         }
 
-                    } else if (!currentElement.isRefType) {
+                    } else if (!currentElement.hasNestedElements) {
+                        // XXX: Does this ever occur, as every keyref element may contain a href
                         valid = true;
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
@@ -467,7 +470,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         } else {
                             // @keyref not in topicref
                             // different elements have different attributes
-//                            if (currentElement.isRefType) {
+//                            if (currentElement.hasNestedElements) {
                                 // current element with href attribute
                                 for (int index = 0; index < attrs.getLength(); index++) {
                                     final Attr attr = (Attr) attrs.item(index);
@@ -612,8 +615,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         final DitaClass type;
         /** Reference attribute name. */
         final String refAttr;
-        /** Element is reference type. */
-        final boolean isRefType;
+        /** Element has nested elements. */
+        final boolean hasNestedElements;
         /** Element is empty. */
         final boolean isEmpty;
         /**
@@ -622,13 +625,13 @@ public final class KeyrefPaser extends AbstractXMLFilter {
          * @param type element type
          * @param refAttr hyperlink attribute name
          * @param isEmpty flag if element is empty
-         * @param isRefType element is a reference type
+         * @param hasNestedElements element is a reference type
          */
-        KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty, final boolean isRefType) {
+        KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty, final boolean hasNestedElements) {
             this.type = type;
             this.refAttr = refAttr;
             this.isEmpty = isEmpty;
-            this.isRefType = isRefType;
+            this.hasNestedElements = hasNestedElements;
         }
         /**
          * Construct a new key reference info object.
