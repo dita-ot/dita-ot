@@ -5,7 +5,7 @@
   
   (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
   *-->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
   <xsl:import href="topicref.xsl"/>
   <!--<xsl:import href="topichead.xsl"/>-->
@@ -13,7 +13,6 @@
   <xsl:import href="gethref.xsl"/>
  
   <xsl:param name="contentwin"/>
-  <xsl:param name="ditaext"/>
   <xsl:param name="htmlext"/>
   <xsl:output method="text" encoding="UTF-8"/>
 

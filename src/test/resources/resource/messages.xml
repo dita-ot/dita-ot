@@ -389,6 +389,21 @@
     <response></response>
   </message>
   
+  <message id="DOTJ058E" type="ERROR">
+    <reason>Both %1 and %2 attributes defined.</reason>
+    <response>A single element may not contain both generalized and specialized values for the same attribute.</response>
+  </message>
+  
+  <message id="DOTJ059E" type="ERROR">
+    <reason>Invalid key scope name "%1".</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTJ064W" type="WARN">
+    <reason>Chunk attribute uses both "to-content" and "by-topic" that conflict with each other.</reason>
+    <response>Ignoring "by-topic" token.</response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

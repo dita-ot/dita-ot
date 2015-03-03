@@ -8,13 +8,11 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.invoker.ExtensibleAntInvoker.getJob;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
-import java.util.Set;
-
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -22,6 +20,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.util.Job.FileInfo;
 
 /**
  * This class is for get the first xml:lang value set in ditamap/topic files
@@ -32,11 +31,11 @@ import org.dita.dost.log.DITAOTAntLogger;
  */
 public final class CheckLang extends Task {
 
-    private String basedir;
+    private File basedir;
 
-    private String tempdir;
+    private File tempdir;
 
-    private String outputdir;
+    private File outputdir;
 
     private String inputmap;
 
@@ -50,28 +49,23 @@ public final class CheckLang extends Task {
     @Override
     public void execute(){
         logger = new DITAOTAntLogger(getProject());
-        logger.logInfo(message);
+        logger.info(message);
 
         new Properties();
         //ensure tempdir is absolute
-        if (!new File(tempdir).isAbsolute()) {
-            tempdir = new File(basedir, tempdir).getAbsolutePath();
+        if (!tempdir.isAbsolute()) {
+            tempdir = new File(basedir, tempdir.getPath()).getAbsoluteFile();
         }
         //ensure outdir is absolute
-        if (!new File(outputdir).isAbsolute()) {
-            outputdir = new File(basedir, outputdir).getAbsolutePath();
+        if (!outputdir.isAbsolute()) {
+            outputdir = new File(basedir, outputdir.getPath()).getAbsoluteFile();
         }
         //ensure inputmap is absolute
         if (!new File(inputmap).isAbsolute()) {
             inputmap = new File(tempdir, inputmap).getAbsolutePath();
         }
 
-        Job job = null;
-        try{
-            job = new Job(new File(tempdir));
-        }catch(final IOException e){
-            logger.logError(e.getMessage(), e) ;
-        }
+        final Job job = getJob(tempdir, getProject());
 
         final LangParser parser = new LangParser();
 
@@ -85,16 +79,17 @@ public final class CheckLang extends Task {
             if(!StringUtils.isEmptyString(langCode)){
                 setActiveProjectProperty("htmlhelp.locale", langCode);
             }else{
-                final Set<String> topicList = job.getSet(FULL_DITA_TOPIC_LIST);
                 //parse topic files
-                for(final String topicFileName : topicList){
-                    final File topicFile = new File(tempdir, topicFileName);
-                    if(topicFile.exists()){
-                        saxParser.parse(topicFile, parser);
-                        langCode = parser.getLangCode();
-                        if(!StringUtils.isEmptyString(langCode)){
-                            setActiveProjectProperty("htmlhelp.locale", langCode);
-                            break;
+                for (final FileInfo f: job.getFileInfo()){
+                    if (ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
+                        final File topicFile = new File(tempdir, f.file.getPath());
+                        if(topicFile.exists()){
+                            saxParser.parse(topicFile, parser);
+                            langCode = parser.getLangCode();
+                            if(!StringUtils.isEmptyString(langCode)){
+                                setActiveProjectProperty("htmlhelp.locale", langCode);
+                                break;
+                            }
                         }
                     }
                 }
@@ -131,11 +126,11 @@ public final class CheckLang extends Task {
         }
     }
 
-    public void setBasedir(final String basedir) {
+    public void setBasedir(final File basedir) {
         this.basedir = basedir;
     }
 
-    public void setTempdir(final String tempdir) {
+    public void setTempdir(final File tempdir) {
         this.tempdir = tempdir;
     }
 
@@ -147,7 +142,7 @@ public final class CheckLang extends Task {
         this.message = message;
     }
 
-    public void setOutputdir(final String outputdir) {
+    public void setOutputdir(final File outputdir) {
         this.outputdir = outputdir;
     }
 

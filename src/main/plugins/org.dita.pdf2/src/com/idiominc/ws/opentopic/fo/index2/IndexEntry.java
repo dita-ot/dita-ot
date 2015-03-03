@@ -56,17 +56,6 @@ public interface IndexEntry {
      */
     public String getValue();
 
-
-    /**
-     * @return index entry "so value".<br> "So value" is a value used in Japanese entries to help computer to sort the index
-     *         strings properly. In other words it specifies string used to sort entries. It called "so value" because the syntax
-     *         to specify it within strings is following: "index string value<so>index string pronunciation"
-     *         (h.e. after the "<so>" tag there is a "so value"). These so strings is being inserted either by the authors
-     *         or by the automatic translation tools.
-     */
-    public String getSoValue();
-
-
     /**
      * @return The string with formatting<br>
      *         <code>See "Adobe Framemaker 7.1" help, topic "Adding index markers" (page is "1_15_8_0.html") for details</code>
@@ -172,14 +161,6 @@ public interface IndexEntry {
      * @param theEndsRange
      */
     void setEndsRange(boolean theEndsRange);
-
-
-    /**
-     * Sets so value
-     *
-     * @param theSoValue
-     */
-    void setSoValue(String theSoValue);
 
 
     /**

@@ -22,16 +22,14 @@
   </target>
 
   <target name="tocjsInit">
-      <condition property="dita.plugin.com.sophos.tocjs.copydefaults" value="true">
-          <not>
-              <isset property="output.file" />
-          </not>
-      </condition>
-      <condition property="output.file" value="${output.dir}${file.separator}toctree.js">
-          <not>
-              <isset property="output.file" />
-          </not>
-      </condition>
+    <property name="html-version" value="html5"/>
+    <condition property="dita.plugin.com.sophos.tocjs.copydefaults" value="true">
+        <not>
+            <isset property="output.file" />
+        </not>
+    </condition>
+    <property name="output.file" value="${output.dir}${file.separator}toctree.js"/>
+    <property name="out.ext" value=".html"/>
   </target>
 
   <target name="topic2tocjs" if="noMap">
@@ -51,7 +49,6 @@
     <xslt in="${input}" out="${output.file}"
       style="${dita.plugin.com.sophos.tocjs.dir}/xsl/tocjs.xsl">
       <param name="contentwin" expression="${content.frame}" if="content.frame"/>
-      <param name="ditaext" expression="${dita.ext}" if="dita.ext"/>
       <param name="htmlext" expression="${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
@@ -67,7 +64,7 @@
           dir="${dita.plugin.com.sophos.tocjs.dir}${file.separator}basefiles"><include name="**/*"/></fileset></copy>
   </target>
 
-  <target name="tocjsDefaultXhtmlOutput" depends="dita.map.xhtml, copy-revflag, copy-css , dita.topics.xhtml, dita.inner.topics.xhtml, dita.outer.topics.xhtml">
+  <target name="tocjsDefaultXhtmlOutput" depends="dita.map.xhtml, copy-revflag, xhtml.topics, copy-css">
       <!-- Preprocess has already completed based on original dependencies;
            this target continues to XHTML for default output. Seems very 
            indirect way to create the XHTML, so would like something better,
@@ -77,11 +74,6 @@
 
   <target name="tocjsDefaultFrameset" if="dita.plugin.com.sophos.tocjs.copydefaults">
       <!-- Create the default frameset itself -->
-      <condition property="out.ext" value=".html">
-          <not>
-              <isset property="out.ext" />
-          </not>
-      </condition>
       <xslt
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
@@ -89,7 +81,6 @@
         extension="${out.ext}"
 		style="${dita.plugin.com.sophos.tocjs.dir}${file.separator}xsl${file.separator}frameset.xsl">
   	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="CSSPATH" expression="${CSSPATH}" if="csspath"/>
         <xmlcatalog refid="dita.catalog"/>

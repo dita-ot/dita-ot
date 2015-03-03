@@ -42,7 +42,7 @@ public class TestDITAOTCopy {
         final DITAOTCopy ditaotcopy= new DITAOTCopy();
         ditaotcopy.setProject(new Project());
         ditaotcopy.setIncludes(myFile.getPath());
-        ditaotcopy.setTodir(tempDir.getPath());
+        ditaotcopy.setTodir(tempDir);
         ditaotcopy.setRelativePaths(mydestFile.getName());
         ditaotcopy.execute();
 

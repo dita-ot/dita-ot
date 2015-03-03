@@ -15,12 +15,6 @@
       <xsl:when test="$property = 'canditopicslist'">
         <xsl:apply-templates select="job/files/file[@non-conref-target = 'true']"/>
       </xsl:when>
-      <xsl:when test="$property = 'chunkedditamaplist'">
-        <xsl:apply-templates select="job/files/file[@chunked-ditamap = 'true']"/>
-      </xsl:when>
-      <xsl:when test="$property = 'chunkedtopiclist'">
-        <xsl:apply-templates select="job/files/file[@chunked = 'true']"/>
-      </xsl:when>
       <xsl:when test="$property = 'codereflist'">
         <xsl:apply-templates select="job/files/file[@has-coderef = 'true']"/>
       </xsl:when>
@@ -40,13 +34,13 @@
         <xsl:apply-templates select="job/files/file[@flag-image = 'true']"/>
       </xsl:when>
       <xsl:when test="$property = 'fullditamaplist'">
-        <xsl:apply-templates select="job/files/file[@format = 'ditamap' and @active = 'true']"/>
+        <xsl:apply-templates select="job/files/file[@format = 'ditamap']"/>
       </xsl:when>
       <xsl:when test="$property = 'fullditamapandtopiclist'">
-        <xsl:apply-templates select="job/files/file[(@format = 'ditamap' or @format = 'dita') and @active = 'true']"/>
+        <xsl:apply-templates select="job/files/file[(@format = 'ditamap' or @format = 'dita')]"/>
       </xsl:when>
       <xsl:when test="$property = 'fullditatopiclist'">
-        <xsl:apply-templates select="job/files/file[@format = 'dita' and @active = 'true']"/>
+        <xsl:apply-templates select="job/files/file[@format = 'dita']"/>
       </xsl:when>
       <xsl:when test="$property = 'hrefditatopiclist'">
         <xsl:apply-templates select="job/files/file[@has-link = 'true']"/>
@@ -68,9 +62,6 @@
       </xsl:when>
       <xsl:when test="$property = 'resourceonlylist'">
         <xsl:apply-templates select="job/files/file[@resource-only = 'true']"/>
-      </xsl:when>
-      <xsl:when test="$property = 'skipchunklist'">
-        <xsl:apply-templates select="job/files/file[@skip-chunk = 'true']"/>
       </xsl:when>
       <xsl:when test="$property = 'subjectschemelist'">
         <xsl:apply-templates select="job/files/file[@subjectscheme = 'true']"/>

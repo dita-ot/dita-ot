@@ -32,9 +32,7 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:exsl="http://exslt.org/common"
-    exclude-result-prefixes="exsl"
-    version='1.0'>
+    version='2.0'>
 
 <!--
 A word of explanation:
@@ -54,7 +52,7 @@ list just like regular named attribute sets.
 
     <xsl:template name="new-attr-set-reflection">
         <xsl:param name="temp-element" />
-        <xsl:for-each select="exsl:node-set($temp-element)//@*">
+        <xsl:for-each select="$temp-element//@*">
             <xsl:attribute name="{name()}">
                 <xsl:value-of select="."/>
             </xsl:attribute>

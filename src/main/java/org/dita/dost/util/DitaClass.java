@@ -8,6 +8,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.util.regex.Pattern;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
@@ -52,13 +53,53 @@ public final class DitaClass {
         stringValue = sb.toString();
     }
 
+    /**
+     * Get class instance.
+     * @param cls DITA class, may be {@code null}
+     * @return DITA class, {@code null} if the input was {@code null} 
+     */
+    public static DitaClass getInstance(final String cls) {
+        if (cls == null) {
+            return null;
+        }
+        return new DitaClass(cls);
+    }
+    
+    /**
+     * Get class instance.
+     * @param atts attributes, may be {@code null}
+     * @return DITA class, {@code null} if the input didn't contains a class
+     */
+    public static DitaClass getInstance(final Attributes atts) {
+        if (atts == null) {
+            return null;
+        }
+        return getInstance(atts.getValue(ATTRIBUTE_NAME_CLASS));
+    }
+    
+    /**
+     * Get class instance.
+     * @param elem element, may be {@code null}
+     * @return DITA class, {@code null} if the input didn't contains a class
+     */
+    public static DitaClass getInstance(final Element elem) {
+        if (elem == null) {
+            return null;
+        }
+        final Attr attr = elem.getAttributeNode(ATTRIBUTE_NAME_CLASS);
+        if (attr == null) {
+            return null;
+        }
+        return getInstance(attr.getNodeValue());
+    }
+    
     // Public methods
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((stringValue == null) ? 0 : stringValue.hashCode());
+        result = prime * result + (stringValue.hashCode());
         return result;
     }
 
@@ -74,11 +115,7 @@ public final class DitaClass {
             return false;
         }
         final DitaClass other = (DitaClass) obj;
-        if (stringValue == null) {
-            if (other.stringValue != null) {
-                return false;
-            }
-        } else if (!stringValue.equals(other.stringValue)) {
+        if (!stringValue.equals(other.stringValue)) {
             return false;
         }
         return true;
@@ -101,7 +138,7 @@ public final class DitaClass {
      * @return {@code true} if given class matches this class, otherwise {@code false}
      */
     public boolean matches(final DitaClass cls) {
-        return cls != null && cls.toString().indexOf(matcher) != -1;
+        return cls != null && cls.toString().contains(matcher);
     }
 
     /**
@@ -111,7 +148,7 @@ public final class DitaClass {
      * @return {@code true} if given class matches this class, otherwise {@code false}
      */
     public boolean matches(final String classString) {
-        return classString != null && classString.indexOf(matcher) != -1;
+        return classString != null && classString.contains(matcher);
     }
 
     /**

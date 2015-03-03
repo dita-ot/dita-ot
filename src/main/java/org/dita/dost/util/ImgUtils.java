@@ -8,15 +8,14 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.INT_1024;
-import static org.dita.dost.util.Constants.INT_16;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Properties;
+import java.net.URI;
 
 import javax.imageio.ImageIO;
 
@@ -39,47 +38,6 @@ public final class ImgUtils {
     private ImgUtils(){
     }
     
-    private static String getImageOutPutPath(final String fileName) {
-    	final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		String uplevelPath = null;
-		final File outDir = OutputUtils.getOutputDir();
-		final String filename = FileUtils.separatorsToUnix(fileName);
-
-		File imgoutDir = outDir;
-		if (OutputUtils.getGeneratecopyouter() != OutputUtils.Generate.OLDSOLUTION) {
-			Properties propterties = null;
-			try {
-				propterties = ListUtils.getDitaList();
-				uplevelPath = propterties.getProperty("uplevels");
-				if (uplevelPath != null&&uplevelPath.length()>0){
-					imgoutDir = new File(outDir, uplevelPath);
-				}
-
-			} catch (final IOException e) {
-				throw new RuntimeException("Reading list file failed: "
-						+ e.getMessage(), e);
-			}
-		}
-		String imagePath = null;
-		try {
-			imagePath =new File(imgoutDir, filename).getCanonicalPath();
-		} catch (final IOException e) {
-			logger.logError(e.getMessage(), e) ;
-		}			
-		return imagePath;
-	}
-    
-    private static boolean checkDirName(final String dirName) {
-		final File outDir = OutputUtils.getOutputDir();
-		if (outDir != null) {
-			final String o = FileUtils.separatorsToUnix(outDir.getAbsolutePath());
-
-			if (FileUtils.separatorsToUnix(new File(dirName).getPath()).equalsIgnoreCase(o)) {
-				return true;
-			}
-		}
-		return false;
-	}
     /**
      * Get the image width.
      * @param dirName -
@@ -90,17 +48,15 @@ public final class ImgUtils {
      * @return int -
      * 				The width of the picture in pixels.
      */
+    @Deprecated
     public static int getWidth (final String dirName, final String fileName){
         final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		File imgInput = new File(dirName + File.separatorChar + fileName);		
-		if (checkDirName(dirName)) {
-            imgInput = new File(getImageOutPutPath(fileName));
-        }    
+		final File imgInput = new File(dirName, toFile(fileName).getPath());		
         try {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getWidth();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
             return -1;
         }
     }
@@ -115,17 +71,15 @@ public final class ImgUtils {
      * @return int -
      * 				The height of the picture in pixels.
      */
+    @Deprecated
     public static int getHeight (final String dirName, final String fileName){
         final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        File imgInput = new File(dirName+File.separatorChar+fileName);
-        if (checkDirName(dirName)) {
-            imgInput = new File(getImageOutPutPath(fileName));
-        }      
+        final File imgInput = new File(dirName, toFile(fileName).getPath());
         try {
             final BufferedImage img = ImageIO.read(imgInput);
             return img.getHeight();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E", dirName+File.separatorChar+fileName).toString(), e);
             return -1;
         }
     }
@@ -142,17 +96,13 @@ public final class ImgUtils {
      */
     public static String getBinData (final String dirName, final String fileName){
         final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        File imgInput = new File(dirName+File.separatorChar+fileName);
-        if (checkDirName(dirName)) {
-            imgInput = new File(getImageOutPutPath(fileName));
-        }      
+        final File imgInput = new File(dirName, toFile(fileName).getPath());
         FileInputStream binInput = null;
-        int bin;
         try{
             String binStr = null;
-            final StringBuffer ret = new StringBuffer(INT_16*INT_1024);
+            final StringBuilder ret = new StringBuilder(16*1024);
             binInput = new FileInputStream(imgInput);
-            bin = binInput.read();
+            int bin = binInput.read();
             while (bin != -1){
                 binStr = Integer.toHexString(bin);
                 if(binStr.length() < 2){
@@ -163,14 +113,16 @@ public final class ImgUtils {
             }
             return ret.toString();
         }catch (final Exception e){
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logError(e.getMessage(), e) ;
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
+            logger.error(e.getMessage(), e) ;
             return null;
         }finally{
-            try{
-                binInput.close();
-            }catch(final IOException ioe){
-                logger.logError(ioe.getMessage(), ioe) ;
+            if (binInput != null) {
+                try{
+                    binInput.close();
+                }catch(final IOException ioe){
+                    logger.error(ioe.getMessage(), ioe) ;
+                }
             }
         }
     }
@@ -185,10 +137,8 @@ public final class ImgUtils {
      */
     public static String getBASE64(final String dirName, final String fileName) {
         final DITAOTJavaLogger logger = new DITAOTJavaLogger();
-        File imgInput = new File(dirName+File.separatorChar+fileName);
-        if (checkDirName(dirName)) {
-            imgInput = new File(getImageOutPutPath(fileName));
-        }      
+        final URI imgInputURI = toURI(fileName);
+        final File imgInput = imgInputURI.isAbsolute() ? new File(imgInputURI) : new File(dirName, toFile(imgInputURI).getPath());
         //BASE64Encoder encoder = new BASE64Encoder();
         final Base64 encoder = new Base64();
         final byte   buff[]=new   byte[(int)imgInput.length()];
@@ -197,21 +147,22 @@ public final class ImgUtils {
             file = new FileInputStream(imgInput);
             file.read(buff);
             //String ret = encoder.encode(buff);
-            final String ret = encoder.encodeToString(buff);
-            return ret;
+            return encoder.encodeToString(buff);
         } catch (final FileNotFoundException e) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logError(e.getMessage(), e) ;
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
+            logger.error(e.getMessage(), e) ;
             return null;
         } catch (final IOException e) {
-            logger.logError(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
-            logger.logError(e.getMessage(), e) ;
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ023E").toString());
+            logger.error(e.getMessage(), e) ;
             return null;
         }finally{
-            try{
-                file.close();
-            }catch(final IOException ioe){
-                logger.logError(ioe.getMessage(), ioe) ;
+            if (file != null) {
+                try{
+                    file.close();
+                }catch(final IOException ioe){
+                    logger.error(ioe.getMessage(), ioe) ;
+                }
             }
         }
 

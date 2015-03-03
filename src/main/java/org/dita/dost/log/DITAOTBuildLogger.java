@@ -129,10 +129,10 @@ public final class DITAOTBuildLogger implements BuildLogger {
             numOfWarnings.incrementAndGet();
             if(!message.contains("[WARN]")) {
             	stream.println("Extra warnings counted");
-            	logger.logInfo("Extra warnings counted");
+            	logger.info("Extra warnings counted");
             } else {
             	stream.println("Normal warnings counted");
-            	logger.logInfo("Normal warnings counted");
+            	logger.info("Normal warnings counted");
             }
             break;
         case Project.MSG_INFO:
@@ -173,7 +173,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
     @Override
     public void buildFinished(final BuildEvent event) {
         final Throwable error = event.getException();
-        final StringBuffer message = new StringBuffer();
+        final StringBuilder message = new StringBuilder();
 
         message.append("Processing ended.");
         message.append(LINE_SEP);
@@ -206,12 +206,12 @@ public final class DITAOTBuildLogger implements BuildLogger {
 
         if (error == null) {
             printMessage(msg, out, Project.MSG_INFO);
-            logger.logInfo(msg);
+            logger.info(msg);
         } else {
             //fix the block problem which caused by the printMessage to err in java -jar lib/dost.jar ...
             //printMessage(msg, err, Project.MSG_ERR);
             printMessage(msg, out, Project.MSG_ERR);
-            logger.logError(msg);
+            logger.error(msg);
         }
 
         logger.closeLogger();
@@ -239,12 +239,11 @@ public final class DITAOTBuildLogger implements BuildLogger {
             return;
         }
 
-        final StringBuffer message = new StringBuffer();
+        final StringBuilder message = new StringBuilder();
         final Task eventTask = event.getTask();
         if (eventTask != null) {
             // Print out the name of the task if we're in one
-            final String label = new StringBuffer().append("  [").append(
-                    eventTask.getTaskName()).append("] ").toString();
+            final String label = "  [" + eventTask.getTaskName() + "] ";
 
             BufferedReader r = null;
             try {
@@ -265,10 +264,12 @@ public final class DITAOTBuildLogger implements BuildLogger {
                 // shouldn't be possible
                 message.append(label).append(event.getMessage());
             } finally {
-                try {
-                    r.close();
-                } catch (final IOException ioe) {
-
+                if (r != null) {
+                    try {
+                        r.close();
+                    } catch (final IOException ioe) {
+    
+                    }
                 }
             }
         } else {
@@ -283,7 +284,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
             // filter out message came from XSLT in console,
             // except those contains [DOTXxxx]
             if (eventTask != null && "xslt".equals(eventTask.getTaskName())
-                    && msg.indexOf("DOTX") == -1) {
+                    && !msg.contains("DOTX")) {
                 flag = true;
             }
 
@@ -297,14 +298,14 @@ public final class DITAOTBuildLogger implements BuildLogger {
             }
 
             // always log to log file
-            logger.logInfo(msg);
+            logger.info(msg);
         } else {
         	//for error msg return from CHM compiler, such as "[exec] Result: 1", just log it, not count it
-            if(eventTask!=null && "exec".equals(eventTask.getTaskName()) && msg.indexOf("ERROR") == -1) {
-            	logger.logError(msg);
+            if(eventTask!=null && "exec".equals(eventTask.getTaskName()) && !msg.contains("ERROR")) {
+            	logger.error(msg);
             } else {
             	printMessage(msg, err, priority);
-            	logger.logError(msg);
+            	logger.error(msg);
             }
         }
     }
@@ -371,7 +372,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
                 return;
             }
             printMessage(msg, out, Project.MSG_INFO);
-            logger.logInfo(msg);
+            logger.info(msg);
         }
     }
 
@@ -416,7 +417,6 @@ public final class DITAOTBuildLogger implements BuildLogger {
 
             if(!chkThrowableAlreadyCaptured(buildEx)){
                 numOfErrors.incrementAndGet();
-                return;
             }
 
         }else{
@@ -463,7 +463,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
             }
         }
 
-        if (captured == false) {
+        if (!captured) {
             exceptionsCaptured.add(parent);
         }
 
@@ -477,7 +477,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
             return;
         }
         final String upperMessage=message.toUpperCase();
-        if(upperMessage.indexOf("HHC")!=-1 && upperMessage.indexOf("ERROR:")!=-1){
+        if(upperMessage.contains("HHC") && upperMessage.contains("ERROR:")){
             numOfErrors.incrementAndGet();
         }
     }
@@ -494,7 +494,7 @@ public final class DITAOTBuildLogger implements BuildLogger {
             } else if (WARN.equals(type)) {
                 numOfWarnings.incrementAndGet();
                 out.println("Extra warnings counted");
-                logger.logInfo("Extra warnings counted");
+                logger.info("Extra warnings counted");
 
             } else if (INFO.equals(type)) {
                 numOfInfo.incrementAndGet();

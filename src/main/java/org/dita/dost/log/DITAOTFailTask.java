@@ -11,7 +11,6 @@ package org.dita.dost.log;
 import static org.dita.dost.log.MessageBean.*;
 
 import java.util.ArrayList;
-import java.util.Properties;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 import org.apache.tools.ant.taskdefs.condition.ConditionBase;
 
@@ -86,13 +85,13 @@ public final class DITAOTFailTask extends Exit {
                     throw new BuildException(msgBean.toString(),new DITAOTException(msgBean,ex,msgBean.toString()));
                 }
             } else if(ERROR.equals(type)){
-                logger.logError(msgBean.toString());
+                logger.error(msgBean.toString());
             } else if(WARN.equals(type)){
-                logger.logWarn(msgBean.toString());
+                logger.warn(msgBean.toString());
             } else if(INFO.equals(type)){
-                logger.logInfo(msgBean.toString());
+                logger.info(msgBean.toString());
             } else if(DEBUG.equals(type)){
-                logger.logDebug(msgBean.toString());
+                logger.debug(msgBean.toString());
             }
         }
         
@@ -180,19 +179,7 @@ public final class DITAOTFailTask extends Exit {
      */
     @Override
     public void setStatus(final int i) {
-        status = new Integer(i);
-    }
-
-    /**
-     * Set a multiline message.
-     * @param msg the message to display
-     */
-    @Override
-    public void addText(final String msg) {
-        if (message == null) {
-            message = "";
-        }
-        message += getProject().replaceProperties(msg);
+        status = i;
     }
 
     /**

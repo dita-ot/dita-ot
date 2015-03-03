@@ -8,12 +8,14 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.UTF8;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.StringTokenizer;
@@ -43,7 +45,7 @@ public final class URLUtils {
         if (file == null) {
             throw new MalformedURLException("The url is null");
         }
-        return new URL(correct(file.toURL().toString(), true));
+        return new URL(correct(file.toURI().toString(), true));
     }
 
     /**
@@ -95,7 +97,7 @@ public final class URLUtils {
             // Optimization, nothing to uncorrect here
             return s;
         }
-        final StringBuffer sbuf = new StringBuffer();
+        final StringBuilder sbuf = new StringBuilder();
         final int l = s.length();
         int ch = -1;
         int b = 0, sumb = 0;
@@ -218,7 +220,7 @@ public final class URLUtils {
         final String initialUrl = url;
 
         // If there is a % that means the URL was already corrected.
-        if (!forceCorrection && url.indexOf("%") != -1) {
+        if (!forceCorrection && url.contains("%")) {
             return initialUrl;
         }
 
@@ -234,14 +236,14 @@ public final class URLUtils {
         }
 
         // Buffer where eventual query string will be processed.
-        StringBuffer queryBuffer = null;
+        StringBuilder queryBuffer = null;
         if (!forceCorrection) {
             final int queryIndex = url.indexOf('?');
             if (queryIndex != -1) {
                 // We have a query
                 final String query = url.substring(queryIndex + 1);
                 url = url.substring(0, queryIndex);
-                queryBuffer = new StringBuffer(query.length());
+                queryBuffer = new StringBuilder(query.length());
                 // Tokenize by &
                 final StringTokenizer st = new StringTokenizer(query, "&");
                 while (st.hasMoreElements()) {
@@ -282,11 +284,7 @@ public final class URLUtils {
             return fileName;
         }else{
             final File file = new File(fileName);
-            try {
-                return file.toURI().toURL().toString();
-            } catch (final MalformedURLException e) {
-                return "";
-            }
+            return file.toURI().toString();
         }
 
     }
@@ -319,8 +317,8 @@ public final class URLUtils {
                 };
         final int len = escChs.length;
         char ch;
-        for (int i = 0; i < len; i++) {
-            ch = escChs[i];
+        for (char escCh : escChs) {
+            ch = escCh;
             gNeedEscaping[ch] = true;
             gAfterEscaping1[ch] = gHexChs[ch >> 4];
             gAfterEscaping2[ch] = gHexChs[ch & 0xf];
@@ -346,7 +344,7 @@ public final class URLUtils {
      */
     public static String clean(final String path, final boolean ascii) {
         int len = path.length(), ch;
-        final StringBuffer buffer = new StringBuffer(len*3);
+        final StringBuilder buffer = new StringBuilder(len*3);
         // Change C:/something to /C:/something
         if (len >= 2 && path.charAt(1) == ':') {
             ch = Character.toUpperCase(path.charAt(0));
@@ -408,5 +406,265 @@ public final class URLUtils {
         }
         return buffer.toString();
     }
+    
+    /**
+     * Test if URI path is absolute.
+     */
+    public static boolean isAbsolute(final URI uri) {
+        final String p = uri.getPath();
+        return p != null && p.startsWith(URI_SEPARATOR);
+    }
+    
+    /**
+     * Convert URI reference to system file path.
+     * 
+     * @filename URI to convert to system file path, may be relative or absolute
+     * @return file path, {@code null} if input was {@code null}
+     */
+    public static File toFile(final URI filename) {
+        if (filename == null) {
+            return null;
+        }
+        final URI f = stripFragment(filename);
+        if ("file".equals(f.getScheme()) && f.getPath() != null && f.isAbsolute()) {
+            return new File(f);
+        } else {
+            return toFile(f.toString());
+        }
+    }
+    
+    /**
+     * Convert URI or chimera references to file paths.
+     * 
+     * @param filename file reference
+     * @return file path, {@code null} if input was {@code null}
+     */
+    public static File toFile(final String filename) {
+        if (filename == null) {
+            return null;
+        }
+        String f = filename;
+        try {
+            f = URLDecoder.decode(filename, UTF8);
+        } catch (final UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        f = f.replace(WINDOWS_SEPARATOR, File.separator).replace(UNIX_SEPARATOR, File.separator);
+        return new File(f);
+    }
 
+    /**
+     * Covert file reference to URI. The difference between this method and
+     * {@link java.net.URI(java.io.File)} constructor is that this
+     * method doesn't make the URI absolute.
+     * 
+     * @param file system path to convert to a URI, may be {@code null}
+     * @return file URI, {@code null} if input was {@code null}
+     */
+    public static URI toURI(final File file) {
+        if (file == null) {
+            return null;
+        }
+        if (file.isAbsolute()) {
+            return file.toURI();
+        } else {
+            try {
+                return new URI(clean(file.getPath().replace(WINDOWS_SEPARATOR, URI_SEPARATOR), false));
+            } catch (final URISyntaxException e) {
+                throw new IllegalArgumentException(e.getMessage(), e);
+            }
+        }
+    }
+    
+    /**
+     * Covert file reference to URI. Fixes directory separators and escapes characters.
+     * 
+     * @param file The string to be parsed into a URI, may be {@code null}
+     * @return URI from parsing the given string, {@code null} if input was {@code null}
+     */
+    public static URI toURI(final String file) {
+        if (file == null) {
+            return null;
+        }
+        try {
+            return new URI(file);
+        } catch (final URISyntaxException e) {
+            try {
+                return new URI(clean(file.replace(WINDOWS_SEPARATOR, URI_SEPARATOR), false));
+            } catch (final URISyntaxException ex) {
+                throw new IllegalArgumentException(ex.getMessage(), ex);
+            }
+        }
+    }
+ 
+    /**
+     * Determines whether the parent directory contains the child element (a file or directory)
+     * 
+     * @param directory the file to consider as the parent
+     * @param child the file to consider as the child
+     * @return true is the candidate leaf is under by the specified composite, otherwise false
+     * @throws IOException
+     */
+    public static boolean directoryContains(final URI directory, final URI child) {
+        final String d = directory.normalize().toString();
+        final String c = child.normalize().toString();
+        if (d.equals(c)) {
+            return false;
+        } else {
+            return c.startsWith(d);
+        }
+    }
+ 
+    /**
+     * Strip fragment part from path.
+     * 
+     * @param path path
+     * @return path without path
+     */
+    public static URI stripFragment(final URI path) {
+        return setFragment(path, null);
+    }
+    
+    /**
+     * Create new URI with a given fragment.
+     * 
+     * @param path URI to set fragment on
+     * @param fragment new fragment, {@code null} for no fragment
+     * @return new URI instance with given fragment 
+     */
+    public static URI setFragment(final URI path, final String fragment) {
+        try {
+            if (path.getPath() != null) {
+                return new URI(path.getScheme(), path.getUserInfo(), path.getHost(), path.getPort(), path.getPath(), path.getQuery(), fragment);
+            } else {
+                return new URI(path.getScheme(), path.getSchemeSpecificPart(), fragment);
+            }
+        } catch (final URISyntaxException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Create new URI with a given path.
+     * 
+     * @param orig URI to set path on
+     * @param path new paht, {@code null} for no path
+     * @return new URI instance with given path
+     */
+    public static URI setPath(final URI orig, final String path) {
+        try {
+            return new URI(orig.getScheme(), orig.getUserInfo(), orig.getHost(), orig.getPort(), path, orig.getQuery(), orig.getFragment());
+        } catch (final URISyntaxException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Resolves absolute URI against another absolute URI.
+     * 
+     * @param base absolute base file URI
+     * @param ref absolute reference file URI
+     * @return relative URI if possible, otherwise original reference file URI argument
+     */
+    public static URI getRelativePath(final URI base, final URI ref) {
+        final String baseScheme = base.getScheme();
+        final String refScheme = ref.getScheme();
+        final String baseAuth = base.getAuthority();
+        final String refAuth = ref.getAuthority();
+        if (!(((baseScheme == null && refScheme == null) || (baseScheme != null && refScheme != null && baseScheme.equals(refScheme))) &&
+                ((baseAuth == null && refAuth == null) || (baseAuth != null && refAuth != null && baseAuth.equals(refAuth))))) {
+            return ref;
+        }
+        
+        URI rel;
+        if (base.getPath().equals(ref.getPath()) && ref.getFragment() != null) {
+            rel = toURI("");
+        } else {
+            final StringBuilder upPathBuffer = new StringBuilder(128);
+            final StringBuilder downPathBuffer = new StringBuilder(128);
+            String basePath = base.normalize().getPath();
+            if (basePath.endsWith("/")) {
+                basePath = basePath + "dummy";
+            }
+            String refPath = ref.normalize().getPath();
+            final StringTokenizer baseTokenizer = new StringTokenizer(basePath, URI_SEPARATOR);
+            final StringTokenizer refTokenizer = new StringTokenizer(refPath, URI_SEPARATOR);
+    
+            while (baseTokenizer.countTokens() > 1 && refTokenizer.countTokens() > 1) {
+                final String baseToken = baseTokenizer.nextToken();
+                final String refToken = refTokenizer.nextToken();
+                //if OS is Windows, we need to ignore case when comparing path names.
+                final boolean equals = OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)
+                                       ? baseToken.equalsIgnoreCase(refToken)
+                                       : baseToken.equals(refToken);
+                if (!equals) {
+                    if (baseToken.endsWith(COLON) || refToken.endsWith(COLON)) {
+                        //the two files are in different disks under Windows
+                        return ref;
+                    }
+                    upPathBuffer.append("..");
+                    upPathBuffer.append(URI_SEPARATOR);
+                    downPathBuffer.append(refToken);
+                    downPathBuffer.append(URI_SEPARATOR);
+                    break;
+                }
+            }
+    
+            while (baseTokenizer.countTokens() > 1) {
+                baseTokenizer.nextToken();
+                upPathBuffer.append("..");
+                upPathBuffer.append(URI_SEPARATOR);
+            }
+    
+            while (refTokenizer.hasMoreTokens()) {
+                downPathBuffer.append(refTokenizer.nextToken());
+                if (refTokenizer.hasMoreTokens()) {
+                    downPathBuffer.append(URI_SEPARATOR);
+                }
+            }
+            upPathBuffer.append(downPathBuffer);
+            
+            try {
+                rel = new URI(null, null, upPathBuffer.toString(), null, null);
+            } catch (final URISyntaxException e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
+        
+        return setFragment(rel, ref.getFragment());
+    }
+ 
+    /**
+     * Get relative path to base path.
+     * 
+     * <p>For {@code foo/bar/baz.txt} return {@code ../../}</p>
+     * 
+     * @param relativePath relative URI
+     * @return relative URI to base path, {@code null} if reference path was a single file
+     */
+    public static URI getRelativePath(final URI relativePath) {
+        final StringTokenizer tokenizer = new StringTokenizer(relativePath.toString(), URI_SEPARATOR);
+        final StringBuilder buffer = new StringBuilder();
+        if (tokenizer.countTokens() == 1){
+            return null;
+        }else{
+            while(tokenizer.countTokens() > 1){
+                tokenizer.nextToken();
+                buffer.append("..");
+                buffer.append(URI_SEPARATOR);
+            }
+            return toURI(buffer.toString());
+        }
+    }
+
+    public static boolean exists(final URI file) {
+        if (file.getScheme() == null) {
+            return new File(file.getPath()).exists();
+        } else if ("file".equals(file.getScheme())) {
+            return new File(file).exists();
+        } else  {
+            return false;
+        }
+    }
+    
 }

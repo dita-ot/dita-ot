@@ -7,8 +7,6 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
-import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -19,8 +17,6 @@ import org.xml.sax.SAXException;
  */
 public final class ProfilingFilter extends AbstractXMLFilter {
 
-	/** Transtype */
-	private String transtype;
 	/** when exclude is true the tag will be excluded. */
 	private boolean exclude;
 	/** foreign/unknown nesting level */
@@ -29,20 +25,16 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	private int level;
 	/** Contains the attribution specialization paths for {@code props} attribute */
 	private String[][] props;
-	private final DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
 	/** Filter utils */
 	private FilterUtils filterUtils;
+	/** Flag that an element has been written */
+	private boolean elementOutput;
 
 	/**
 	 * Create new profiling filter.
 	 */
 	public ProfilingFilter() {
 		super();
-	}
-	
-	@Override
-	public void setContent(final Content content) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -53,14 +45,12 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	public void setFilterUtils(final FilterUtils filterUtils) {
 		this.filterUtils = filterUtils;
 	}
-
+	
 	/**
-	 * Set transtype.
-	 * 
-	 * @param transtype the transtype to set
+	 * Get flag whether elements were output.
 	 */
-	public void setTranstype(final String transtype) {
-		this.transtype = transtype;
+	public boolean hasElementOutput() {
+	    return elementOutput;
 	}
 
 	// SAX methods
@@ -68,23 +58,17 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	@Override
 	public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
 			throws SAXException {
-		// increase element level for nested tags.
-		ditaAttrUtils.increasePrintLevel(atts.getValue(ATTRIBUTE_NAME_PRINT));
-		if (ditaAttrUtils.needExcludeForPrintAttri(transtype)) {
-			return;
-		}
-
 		if (foreignLevel > 0) {
 			foreignLevel++;
 		} else if (foreignLevel == 0) {
 			final String classAttr = atts.getValue(ATTRIBUTE_NAME_CLASS);
 			if (classAttr == null && !ELEMENT_NAME_DITA.equals(localName)) {
-				logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
+				logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
 			}
 			if (classAttr != null && (TOPIC_TOPIC.matches(classAttr) || MAP_MAP.matches(classAttr))) {
 				final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
 				if (domains == null) {
-					logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
+					logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
 				} else {
 					props = StringUtils.getExtProps(domains);
 				}
@@ -102,6 +86,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 				exclude = true;
 				level = 0;
 			} else {
+			    elementOutput = true;
 				getContentHandler().startElement(uri, localName, qName, atts);
 			}
 		}
@@ -110,14 +95,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	@Override
 	public void endElement(final String uri, final String localName, final String qName)
 			throws SAXException {
-		// need to skip the tag
-		if (ditaAttrUtils.needExcludeForPrintAttri(transtype)) {
-			// decrease level
-			ditaAttrUtils.decreasePrintLevel();
-			// don't write the end tag
-			return;
-		}
-
 		if (foreignLevel > 0) {
 			foreignLevel--;
 		}
@@ -148,7 +125,6 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 		if (!exclude) {
         	getContentHandler().endDocument();
         }
-		ditaAttrUtils.reset();
 	}
 
 	@Override
@@ -180,9 +156,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 		foreignLevel = 0;
 		level = 0;
 		props = null;
-		if (!exclude) {
-        	getContentHandler().startDocument();
-        }
-	}
+        getContentHandler().startDocument();
+    }
 	
 }

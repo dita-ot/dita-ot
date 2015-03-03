@@ -34,14 +34,11 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:exsl="http://exslt.org/common"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:comparer="com.idiominc.ws.opentopic.xsl.extension.CompareStrings"
-    extension-element-prefixes="exsl"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    exclude-result-prefixes="xs opentopic-index exsl comparer opentopic-func exslf ot-placeholder">
+    exclude-result-prefixes="xs opentopic-index comparer opentopic-func ot-placeholder">
 
   <xsl:variable name="index.continued-enabled" select="true()"/>
 
@@ -305,16 +302,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="opentopic-index:index.entry" mode="get-see-value">
         <fo:inline>
-          <xsl:choose>
-            <xsl:when test="$useFrameIndexMarkup ne 'true'">
-              <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="__formatText">
-                <xsl:with-param name="text" select="opentopic-index:formatted-value"/>
-            </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
+            <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
         </fo:inline>
@@ -399,21 +387,12 @@ See the accompanying license.txt file for applicable licenses.
                   <fo:table-cell>
                     <fo:block xsl:use-attribute-sets="index-indents" keep-together="always">
                       <xsl:if test="true() or count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
-                        <xsl:choose>
-                          <xsl:when test="$useFrameIndexMarkup ne 'true'">
-                            <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
-                            <fo:inline font-style="italic">
-                              <xsl:text> (</xsl:text>
-                              <xsl:value-of select="$continuedValue"/>
-                              <xsl:text>)</xsl:text>
-                            </fo:inline>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:call-template name="__formatText">
-                              <xsl:with-param name="text" select="concat(opentopic-index:formatted-value/text(), '&lt;italic&gt; (', $continuedValue, ')')"/>
-                            </xsl:call-template>
-                          </xsl:otherwise>
-                        </xsl:choose>
+                        <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
+                        <fo:inline font-style="italic">
+                          <xsl:text> (</xsl:text>
+                          <xsl:value-of select="$continuedValue"/>
+                          <xsl:text>)</xsl:text>
+                        </fo:inline>
                       </xsl:if>
                     </fo:block>
                   </fo:table-cell>
@@ -453,48 +432,6 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:choose>
  </xsl:template>
 
-  <xsl:param name="useFrameIndexMarkup" select="'false'"/>
-
-  <xsl:template name="__formatText">
-    <xsl:param name="text"/>
-    <xsl:param name="formatting" select="'Default Para Font'"/>
-    <xsl:choose>
-      <xsl:when test="starts-with($text, '&lt;')">
-        <xsl:variable name="formatting-name" select="substring-before(substring-after($text, '&lt;'), '&gt;')"/>
-        <xsl:call-template name="__formatText">
-          <xsl:with-param name="text" select="substring-after($text, '&gt;')"/>
-          <xsl:with-param name="formatting" select="$formatting-name"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="contains($text, '&lt;')">
-        <xsl:call-template name="__formatText">
-          <xsl:with-param name="text" select="substring-before($text, '&lt;')"/>
-          <xsl:with-param name="formatting" select="$formatting"/>
-        </xsl:call-template>
-        <xsl:call-template name="__formatText">
-          <xsl:with-param name="text" select="concat('&lt;', substring-after($text, '&lt;'))"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="$formatting = 'italic'">
-            <fo:inline font-style="italic">
-              <xsl:value-of select="$text"/>
-            </fo:inline>
-          </xsl:when>
-          <xsl:when test="$formatting = 'bold'">
-            <fo:inline font-weight="bold">
-              <xsl:value-of select="$text"/>
-            </fo:inline>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$text"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
   <xsl:template name="make-index-ref">
     <xsl:param name="idxs" select="()"/>
     <xsl:param name="inner-text" select="()"/>
@@ -521,16 +458,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="keep-with-previous">always</xsl:attribute>
       </xsl:if>
       <fo:inline>
-        <xsl:choose>
-          <xsl:when test="$useFrameIndexMarkup ne 'true'">
-            <xsl:apply-templates select="$inner-text/node()"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="__formatText">
-              <xsl:with-param name="text" select="$inner-text"/>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="$inner-text/node()"/>
       </fo:inline>
       <!-- XXX: XEP has this, should base too? -->
       <!--
@@ -559,17 +487,7 @@ See the accompanying license.txt file for applicable licenses.
     </fo:block>
   </xsl:template>
 
-  <exslf:function name="opentopic-func:getIndexEntry">
-    <xsl:param name="value"/>
-    <xsl:param name="refID"/>
-
-    <xsl:for-each select="$index-entries">
-      <xsl:variable name="entries" select="key('index-key',$value)"/>
-      <exslf:result select="$entries[opentopic-index:refID/@value = $refID]"/>
-    </xsl:for-each>
-  </exslf:function>
-  
-  <xsl:function version="2.0" name="opentopic-func:getIndexEntry">
+  <xsl:function name="opentopic-func:getIndexEntry">
     <xsl:param name="value"/>
     <xsl:param name="refID"/>
 
@@ -583,20 +501,16 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0)">
             <xsl:variable name="index">
                 <xsl:choose>
-                    <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
-                    <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/indexlist ')]">
+                    <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
+                    <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')]">
                         <xsl:apply-templates select="/" mode="index-postprocess"/>
                     </xsl:when>
-                    <xsl:when test="($ditaVersion &gt;= 1.1) and /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                    <xsl:when test="/*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                         <xsl:apply-templates select="/" mode="index-postprocess"/>
                     </xsl:when>
-                    <xsl:when test="$ditaVersion &gt;= 1.1"/>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="/" mode="index-postprocess"/>
-                    </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:if test="count(exsl:node-set($index)/*) > 0">
+            <xsl:if test="count($index/*) > 0">
                 <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="__force__page__count">
 
                     <xsl:call-template name="insertIndexStaticContents"/>

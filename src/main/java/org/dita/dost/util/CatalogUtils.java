@@ -11,12 +11,9 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.util.HashMap;
 
-import org.apache.xml.resolver.Catalog;
 import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
-import org.dita.dost.log.DITAOTJavaLogger;
 
 /**
  * General catalog file resolving utilities.
@@ -25,8 +22,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  */
 
 public final class CatalogUtils {
-    /**logger to log informations.*/
-    private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
+
     /**apache catalogResolver.*/
     private static CatalogResolver catalogResolver = null;
     /** Absolute directory to find catalog-dita.xml.*/
@@ -57,18 +53,10 @@ public final class CatalogUtils {
             manager.setIgnoreMissingProperties(true);
             manager.setUseStaticCatalog(false); // We'll use a private catalog.
             manager.setPreferPublic(true);
-
+            final File catalogFilePath = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base") + File.separator + FILE_NAME_CATALOG);
+            manager.setCatalogFiles(catalogFilePath.toURI().toASCIIString());
             //manager.setVerbosity(10);
             catalogResolver = new CatalogResolver(manager);
-
-            final File catalogFilePath = new File(ditaDir, FILE_NAME_CATALOG);
-
-            final Catalog catalog = catalogResolver.getCatalog();
-            try {
-                catalog.parseCatalog(catalogFilePath.toURI().toURL());
-            } catch (final Exception e) {
-                logger.logError(e.getMessage(), e) ;
-            }
         }
 
         return catalogResolver;

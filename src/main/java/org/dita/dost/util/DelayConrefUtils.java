@@ -16,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +24,6 @@ import java.util.Queue;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -73,22 +70,15 @@ public final class DelayConrefUtils {
      * @param id topic id
      * @return true if id find and false otherwise
      */
-    public boolean findTopicId(final String absolutePathToFile, final String id) {
+    public boolean findTopicId(final File absolutePathToFile, final String id) {
 
-        if(!FileUtils.fileExists(absolutePathToFile)){
+        if(!absolutePathToFile.exists()){
             return false;
         }
         try {
             //load the file
-            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            //factory.setFeature("http://xml.org/sax/features/validation", false);
-            final DocumentBuilder builder = factory.newDocumentBuilder();
-            try {
-                Class.forName(RESOLVER_CLASS);
-                builder.setEntityResolver(CatalogUtils.getCatalogResolver());
-            }catch (final ClassNotFoundException e){
-                builder.setEntityResolver(null);
-            }
+            final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
+            builder.setEntityResolver(CatalogUtils.getCatalogResolver());
             final Document root = builder.parse(new InputSource(new FileInputStream(absolutePathToFile)));
 
             //get root element
@@ -116,7 +106,7 @@ public final class DelayConrefUtils {
             return false;
 
         } catch (final Exception e) {
-            logger.logError("Failed to read document: " + e.getMessage(), e);
+            logger.error("Failed to read document: " + e.getMessage(), e);
         }
         return false;
     }
@@ -137,21 +127,9 @@ public final class DelayConrefUtils {
         try {
             //load export.xml only once
             if(root==null){
-                final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                //factory.setFeature("http://xml.org/sax/features/validation", false);
-                final DocumentBuilder builder = factory.newDocumentBuilder();
-                try {
-                    Class.forName(RESOLVER_CLASS);
-                    builder.setEntityResolver(CatalogUtils.getCatalogResolver());
-                }catch (final ClassNotFoundException e){
-                    builder.setEntityResolver(null);
-                }
+                final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
+                builder.setEntityResolver(CatalogUtils.getCatalogResolver());
                 root = builder.parse(new InputSource(new FileInputStream(exportFile)));
-            }
-            //if dita file's extension name is ".xml"
-            if(href.endsWith(FILE_EXTENSION_XML)){
-                //change the extension to ".dita"
-                href = href.replace(FILE_EXTENSION_XML, FILE_EXTENSION_DITA);
             }
             //get file node which contains the export node
             final Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
@@ -188,8 +166,8 @@ public final class DelayConrefUtils {
             e.printStackTrace();
         }
         final List<Boolean> list = new ArrayList<Boolean>();
-        list.add(Boolean.valueOf(idExported));
-        list.add(Boolean.valueOf(keyrefExported));
+        list.add(idExported);
+        list.add(keyrefExported);
         return list;
     }
     /**
@@ -242,31 +220,22 @@ public final class DelayConrefUtils {
             return;
         }
         final Properties prop = new Properties();
-        final Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
-        while (iter.hasNext()) {
-            final Map.Entry<String, Set<String>> entry = iter.next();
+        for (Map.Entry<String, Set<String>> entry : m.entrySet()) {
             final String key = entry.getKey();
-            final String value = StringUtils.assembleString(entry.getValue(),
+            final String value = StringUtils.join(entry.getValue(),
                     COMMA);
             prop.setProperty(key, value);
         }
         //File outputFile = new File(tempDir, filename);
 
-        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = null;
-        try {
-            db = dbf.newDocumentBuilder();
-        } catch (final ParserConfigurationException pce) {
-            assert (false);
-        }
+        final DocumentBuilder db = XMLUtils.getDocumentBuilder();
         final Document doc = db.newDocument();
         final Element properties = (Element) doc.appendChild(doc
                 .createElement("properties"));
 
         final Set<Object> keys = prop.keySet();
-        final Iterator<Object> i = keys.iterator();
-        while (i.hasNext()) {
-            final String key = (String) i.next();
+        for (Object key1 : keys) {
+            final String key = (String) key1;
             final Element entry = (Element) properties.appendChild(doc
                     .createElement("entry"));
             entry.setAttribute("key", key);
@@ -289,13 +258,13 @@ public final class DelayConrefUtils {
             final StreamResult sr = new StreamResult(out);
             t.transform(doms, sr);
         } catch (final Exception e) {
-            logger.logError("Failed to process map: " + e.getMessage(), e);
+            logger.error("Failed to process map: " + e.getMessage(), e);
         } finally {
             if (out != null) {
                 try {
                     out.close();
                 } catch (final IOException e) {
-                    logger.logError("Failed to close output stream: " + e.getMessage());
+                    logger.error("Failed to close output stream: " + e.getMessage());
                 }
             }
         }

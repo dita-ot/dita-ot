@@ -94,7 +94,7 @@ public class XMLUtilsTest {
     }
     
     @Test
-    public void testAttributesBuilder() {
+    public void testAttributesBuilder() throws ParserConfigurationException {
         final XMLUtils.AttributesBuilder b = new XMLUtils.AttributesBuilder(); 
         assertEquals(0, b.build().getLength());
         
@@ -104,6 +104,15 @@ public class XMLUtilsTest {
         assertEquals("bar", a.getValue("foo"));
         assertEquals("qux", a.getValue("prefix:foo"));
         assertEquals(2, a.getLength());
+        for (int i = 0; i < a.getLength(); i++) {
+            if (a.getQName(i).equals("prefix:foo")) {
+                assertEquals("uri", a.getURI(i));
+                assertEquals("foo", a.getLocalName(i));
+                assertEquals("prefix:foo", a.getQName(i));
+                assertEquals("CDATA", a.getType(i));
+                assertEquals("qux", a.getValue(i));
+            }
+        }
         
         b.add("foo", "quxx");
         final Attributes aa = b.build();
@@ -116,6 +125,39 @@ public class XMLUtilsTest {
         final Attributes aaa = b.build();
         assertEquals("all", aaa.getValue("baz"));
         assertEquals(3, aaa.getLength());
+
+        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        final Attr domAttr = doc.createAttributeNS(XML_NS_URI, "xml:space");
+        domAttr.setValue("preserve");
+        b.add(domAttr);
+        final Attributes a4 = b.build();
+        for (int i = 0; i < a4.getLength(); i++) {
+            if (a4.getQName(i).equals("xml:space")) {
+                assertEquals(XML_NS_URI, a4.getURI(i));
+                assertEquals("space", a4.getLocalName(i));
+                assertEquals("xml:space", a4.getQName(i));
+                assertEquals("preserve", a4.getValue(i));
+            }
+        }
+    }
+
+
+    @Test
+    public void testEscapeXMLString() {
+        String result = null;
+        final String input = "<this is test of char update for xml href=\" see link: http://www.ibm.com/download.php?abc=123&def=456\">'test' </test>";
+        final String expected = "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
+        result = XMLUtils.escapeXML(input);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testEscapeXMLCharArrayIntInt() {
+        String result = null;
+        final char[] input = "<this is test of char update for xml href=\" see link: http://www.ibm.com/download.php?abc=123&def=456\">'test' </test>".toCharArray();
+        final String expected = "&lt;this is test of char update for xml href=&quot; see link: http://www.ibm.com/download.php?abc=123&amp;def=456&quot;&gt;&apos;test&apos; &lt;/test&gt;";
+        result = XMLUtils.escapeXML(input, 0, input.length);
+        assertEquals(expected, result);
     }
 
 }

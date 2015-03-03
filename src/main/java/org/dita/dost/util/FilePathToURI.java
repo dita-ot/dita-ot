@@ -41,8 +41,8 @@ public final class FilePathToURI {
                 '|', '\\', '^', '~', '[', ']', '`', '\'', '&'};
         final int len = escChs.length;
         char ch;
-        for (int i = 0; i < len; i++) {
-            ch = escChs[i];
+        for (char escCh : escChs) {
+            ch = escCh;
             gNeedEscaping[ch] = true;
             gAfterEscaping1[ch] = gHexChs[ch >> 4];
             gAfterEscaping2[ch] = gHexChs[ch & 0xf];
@@ -78,7 +78,7 @@ public final class FilePathToURI {
      */
     public static String escapeSpecialAsciiAndNonAscii(final String path) {
         int len = path.length(), ch;
-        final StringBuffer buffer = new StringBuffer(len*3);
+        final StringBuilder buffer = new StringBuilder(len*3);
         // Change C:/something to /C:/something
         if (len >= 2 && path.charAt(1) == ':') {
             ch = Character.toUpperCase(path.charAt(0));

@@ -27,7 +27,7 @@
      xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
      xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
      xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
-     version="1.0">
+     version="2.0">
 
 <xsl:output method="xml"/>
 
@@ -397,11 +397,7 @@
           <xsl:element name="text:line-break"/>
           <xsl:element name="text:span">
                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-               <xsl:call-template name="get-ascii">
-                    <xsl:with-param name="txt">
-                         <xsl:value-of select="@spectitle"/>
-                    </xsl:with-param>
-               </xsl:call-template>
+               <xsl:value-of select="@spectitle"/>
           </xsl:element>
           <xsl:element name="text:line-break"/>
      </xsl:if>

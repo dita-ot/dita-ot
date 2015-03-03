@@ -5,7 +5,7 @@
 <!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
-  version="1.0">
+  version="2.0">
 
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>

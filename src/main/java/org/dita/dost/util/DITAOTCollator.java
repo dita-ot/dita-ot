@@ -20,7 +20,7 @@ import java.util.Locale;
  * @author Wu, Zhi Qiang
  */
 public final class DITAOTCollator implements Comparator {
-    static HashMap<Locale, DITAOTCollator> cache = new HashMap<Locale, DITAOTCollator>();
+    static final HashMap<Locale, DITAOTCollator> cache = new HashMap<Locale, DITAOTCollator>();
 
     /**
      * Return the DITAOTCollator instance, Locale.US is default.
@@ -73,8 +73,8 @@ public final class DITAOTCollator implements Comparator {
     @Override
     public int compare(final Object source, final Object target) {
         try {
-            return ((Integer) compareMethod.invoke(collatorInstance, new Object[] {
-                    source, target})).intValue();
+            return (Integer) compareMethod.invoke(collatorInstance, new Object[]{
+                    source, target});
         } catch (final Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -96,7 +96,7 @@ public final class DITAOTCollator implements Comparator {
         try {
             final Method m = c.getDeclaredMethod("getInstance",
                     new Class[] { Locale.class });
-            collatorInstance = m.invoke(null, new Object[] { locale });
+            collatorInstance = m.invoke(null, locale);
             compareMethod = c.getDeclaredMethod("compare", new Class[] {
                     Object.class, Object.class });
         } catch (final Exception e) {

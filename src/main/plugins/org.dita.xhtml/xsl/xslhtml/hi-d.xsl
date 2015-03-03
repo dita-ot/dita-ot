@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- hi-d.ent Phrase domain: b | i | u | tt | sup | sub -->
@@ -56,5 +56,21 @@
   <xsl:apply-templates/>
   </sub>
 </xsl:template>
+
+  <xsl:template match="*[contains(@class,' hi-d/line-through ')]" name="topic.hi-d.line-through">
+    <span style="text-decoration:line-through">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="setidaname"/>
+      <xsl:apply-templates/>
+    </span>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class,' hi-d/overline ')]" name="topic.hi-d.overline">
+    <span style="text-decoration:overline">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="setidaname"/>
+      <xsl:apply-templates/>
+    </span>
+  </xsl:template>  
 
 </xsl:stylesheet>

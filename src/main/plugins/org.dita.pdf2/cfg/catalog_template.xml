@@ -65,7 +65,7 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/sl.xml" uri="fo/i18n/sl.xml"/>
     <uri name="cfg:fo/i18n/sv_SE.xml" uri="fo/i18n/sv.xml"/>
     <uri name="cfg:fo/i18n/sv.xml" uri="fo/i18n/sv.xml"/>
-    <uri name="cfg:fo/i18n/zh_CN.xml" uri="fo/i18n/zh.xml"/>
+    <uri name="cfg:fo/i18n/zh_CN.xml" uri="fo/i18n/zh_CN.xml"/>
 
     <uri name="cfg:common/index/de_DE.xml" uri="common/index/de.xml"/>
     <uri name="cfg:common/index/de.xml" uri="common/index/de.xml"/>
@@ -91,7 +91,7 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/ru.xml" uri="common/index/ru.xml"/>
     <uri name="cfg:common/index/sv_SE.xml" uri="common/index/sv.xml"/>
     <uri name="cfg:common/index/sv.xml" uri="common/index/sv.xml"/>
-    <uri name="cfg:common/index/zh_CN.xml" uri="common/index/zh.xml"/>
+    <uri name="cfg:common/index/zh_CN.xml" uri="common/index/zh_CN.xml"/>
 
   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
                   id="org.dita.pdf2.catalog.relative"

@@ -269,6 +269,7 @@ public class IndexTermTest {
 
     @Test
     public void testGetTermFullName() {
+        IndexTerm.setTermLocale(null);
         assertEquals("simple", simple.getTermFullName());
         assertEquals("index term pre fixed", prefixed.getTermFullName());
         final IndexTerm empty = new IndexTerm();

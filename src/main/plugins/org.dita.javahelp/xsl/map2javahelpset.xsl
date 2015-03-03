@@ -6,7 +6,7 @@
 
 <xsl:stylesheet 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  
-  version="1.0">
+  version="2.0">
  
   <xsl:param name="javahelpmap"/>
   <xsl:param name="javahelptoc"/>
@@ -23,7 +23,7 @@
 
   <xsl:template match="*[contains(@class, ' map/map ')]">
 
-    <helpset version="1.0">
+    <helpset version="2.0">
       <title>
         <xsl:choose>
           <xsl:when test="*[contains(@class,' topic/title ')]">

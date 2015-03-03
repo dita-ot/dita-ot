@@ -24,9 +24,7 @@
 
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="1.0"
-                xmlns:exsl="http://exslt.org/common"
-                extension-element-prefixes="exsl">
+                version="2.0">
 
 <!-- Include error message template -->
 <xsl:include href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
@@ -44,7 +42,6 @@
 <xsl:param name="INCLUDEFILE" />
 <xsl:param name="HELPALIAS" />
 <xsl:param name="HELPMAP" />
-<xsl:param name="DITAEXT" select="'.xml'"/>
 
 
 <!-- Is there a way to prevent re-issuing the same filename, using keys? Doubt it... -->
@@ -61,18 +58,16 @@
      considered valid for inclusion in the project, so only those will be evaluated to
      find the default topic.
      ********************************************************************************* -->
-<xsl:variable name="lang-translate-uppercase">ABCDEFGHIJKLMNOPQRSTUVWXYZ_</xsl:variable>
-<xsl:variable name="lang-translate-lowercase">abcdefghijklmnopqrstuvwxyz-</xsl:variable>
 <!-- Language is that of map, else first topic with non-empty topicref, else English. --> 
 
 <xsl:template name="setup-options">
 <xsl:param name="target-language">
   <xsl:choose>
     <xsl:when test="/*[contains(@class, ' map/map ')]/@xml:lang">
-      <xsl:value-of select="translate(/*[contains(@class, ' map/map ')]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase)"/>
+      <xsl:value-of select="lower-case(/*[contains(@class, ' map/map ')]/@xml:lang)"/>
     </xsl:when>
-    <xsl:when test="document((//*[contains(@class, ' map/topicref ')][@href and @href != '' and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang">
-      <xsl:value-of select="translate(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase)"/>
+    <xsl:when test="document((//*[contains(@class, ' map/topicref ')][@href and @href != '' and not(contains(@href,'://'))][not(@format) or @format='dita'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang">
+      <xsl:value-of select="lower-case(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang)"/>
     </xsl:when>
     <xsl:otherwise>en-us</xsl:otherwise>
   </xsl:choose>
@@ -194,7 +189,7 @@ Default topic=</xsl:text>
 
 [FILES]
 </xsl:text>
-  <xsl:apply-templates select="exsl:node-set($temp)/filelist/*" mode="tempfile">
+  <xsl:apply-templates select="$temp/filelist/*" mode="tempfile">
     <xsl:sort select="@href"/>
   </xsl:apply-templates>
   <xsl:if test="string-length($INCLUDEFILE)>0">

@@ -1,0 +1,107 @@
+<?xml version="1.0" ?>
+<job>
+  <property name="resourceonlyfile">
+    <string>resourceonly.list</string>
+  </property>
+  <property name="user.input.file">
+    <string>maps/root-map-01.ditamap</string>
+  </property>
+  <property name="codereffile">
+    <string>coderef.list</string>
+  </property>
+  <property name="subtargetsfile">
+    <string>subtargets.list</string>
+  </property>
+  <property name="fullditamapfile">
+    <string>fullditamap.list</string>
+  </property>
+  <property name="fullditatopicfile">
+    <string>fullditatopic.list</string>
+  </property>
+  <property name="subjectschemefile">
+    <string>subjectscheme.list</string>
+  </property>
+  <property name="skipchunkfile">
+    <string>skipchunk.list</string>
+  </property>
+  <property name="flagimagefile">
+    <string>flagimage.list</string>
+  </property>
+  <property name="conreftargetsfile">
+    <string>conreftargets.list</string>
+  </property>
+  <property name="imagefile">
+    <string>image.list</string>
+  </property>
+  <property name="hreftargetsfile">
+    <string>hreftargets.list</string>
+  </property>
+  <property name="uplevels">
+    <string>../</string>
+  </property>
+  <property name="tempdirToinputmapdir.relative.value">
+    <string>maps/</string>
+  </property>
+  <property name="keyreffile">
+    <string>keyref.list</string>
+  </property>
+  <property name="fullditamapandtopicfile">
+    <string>fullditamapandtopic.list</string>
+  </property>
+  <property name="user.input.file.listfile">
+    <string>usr.input.file.list</string>
+  </property>
+  <property name="copytotarget2sourcemapfile">
+    <string>copytotarget2sourcemap.list</string>
+  </property>
+  <property name="conreffile">
+    <string>conref.list</string>
+  </property>
+  <property name="hrefditatopicfile">
+    <string>hrefditatopic.list</string>
+  </property>
+  <property name="outditafilesfile">
+    <string>outditafiles.list</string>
+  </property>
+  <property name="htmlfile">
+    <string>html.list</string>
+  </property>
+  <property name="canditopicsfile">
+    <string>canditopics.list</string>
+  </property>
+  <property name="user.input.dir">
+    <string>/Users/jelovirt/Work/github/dita-ot/src/test/resources/DebugAndFilterModuleTest/input</string>
+  </property>
+  <property name="relflagimagefile">
+    <string>relflagimage.list</string>
+  </property>
+  <property name="keyfile">
+    <string>key.list</string>
+  </property>
+  <property name="copytotarget2sourcemaplist">
+    <map>
+      <entry key="topics/copy-to.xml">
+        <string>topics/xreffin-topic-1.xml</string>
+      </entry>
+    </map>
+  </property>
+  <property name="copytosourcefile">
+    <string>copytosource.list</string>
+  </property>
+  <property name="conrefpushfile">
+    <string>conrefpush.list</string>
+  </property>
+  <property name="keylist">
+    <set>
+      <string>target_topic_1=topics/target-topic-a.xml(maps/root-map-01.ditamap)</string>
+      <string>target_topic_2=topics/target-topic-c.xml(maps/root-map-01.ditamap)</string>
+    </set>
+  </property>
+  <files>
+    <file uri="topics/target-topic-a.xml" path="topics/target-topic-a.xml" format="dita" out-dita="true" non-conref-target="true" target="true" active="true"/>
+    <file uri="maps/root-map-01.ditamap" path="maps/root-map-01.ditamap" format="ditamap" active="true"/>
+    <file uri="topics/target-topic-c.xml" path="topics/target-topic-c.xml" format="dita" out-dita="true" non-conref-target="true" target="true" active="true"/>
+    <file uri="topics/xreffin-topic-1.xml" path="topics/xreffin-topic-1.xml" format="dita" has-link="true" has-keyref="true" out-dita="true" non-conref-target="true" target="true" active="true"/>
+    <file uri="topics/copy-to.xml" path="topics/copy-to.xml" format="dita" active="true"/>
+  </files>
+</job>

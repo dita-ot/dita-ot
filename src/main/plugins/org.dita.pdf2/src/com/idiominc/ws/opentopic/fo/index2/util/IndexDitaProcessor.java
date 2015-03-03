@@ -53,7 +53,6 @@ public final class IndexDitaProcessor {
     
     private static String elIndexRangeStartName = "start";
     private static String elIndexRangeEndName = "end";
-    private static final String SO = "<so>";
     private static final String LT = "<";
     private static final String GT = ">";
     private static final String sortStart = "[";
@@ -153,13 +152,13 @@ public final class IndexDitaProcessor {
 
         if (!childEntrys.isEmpty() && !seeEntry.isEmpty()) {
             for (final IndexEntry e: seeEntry) {
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA067W", e.getFormattedString(), textValue).toString());
+                logger.warn(MessageUtils.getInstance().getMessage("DOTA067W", e.getFormattedString(), textValue).toString());
             }
             seeEntry.clear();
         }
         if (!childEntrys.isEmpty() && !seeAlsoEntry.isEmpty()) {
             for (final IndexEntry e: seeAlsoEntry) {
-                logger.logWarn(MessageUtils.getInstance().getMessage("DOTA068W", e.getFormattedString(), textValue).toString());
+                logger.warn(MessageUtils.getInstance().getMessage("DOTA068W", e.getFormattedString(), textValue).toString());
             }
             seeAlsoEntry.clear();
         }
@@ -201,18 +200,9 @@ public final class IndexDitaProcessor {
     }
 
     private static IndexEntry createIndexEntry(final List<Node> contents, String theValue, final String theSortString) {
-        String soString;
-        final int soIdxOf = theValue.indexOf(SO);
-        if (soIdxOf > 0 && USES_FRAME_MARKUP) {
-            soString = theValue.substring(soIdxOf + SO.length());
-            theValue = theValue.substring(0, soIdxOf);
-        } else {
-            soString = null;
-        }
+        final String strippedFormatting = theValue;
 
-        final String strippedFormatting = USES_FRAME_MARKUP ? stripFormatting(theValue) : theValue;
-
-        final IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, soString, theSortString, theValue, contents);
+        final IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, theSortString, theValue, contents);
         if (!theSortString.equals("")) {
             indexEntry.setSortString(theSortString);
         } else {
@@ -238,11 +228,7 @@ public final class IndexDitaProcessor {
         if (null != theString && theString.length() > 0) {
             String res = theString.replaceAll("[\\s\\n]+", " ").trim();
             res = res.replaceAll("[\\s]+$", ""); //replace in the end of string
-            if (!USES_FRAME_MARKUP) {
-                return res;
-            }
-            res = res.replaceAll("[\\s]+:", ":"); //replace spaces before ':'
-            return res.replaceAll(":[\\s]+", ":"); //replace spaces after ':'
+            return res;
         }
         return theString;
     }

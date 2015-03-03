@@ -18,9 +18,6 @@ import java.util.ResourceBundle;
 public final class Messages {
     /**message bundle name.*/
     private static final String BUNDLE_NAME = "org.dita.dost.index.messages"; //$NON-NLS-1$
-    /**read message resource file.*/
-    private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle
-            .getBundle(BUNDLE_NAME);
 
     /**
      * private constructor.
@@ -34,7 +31,8 @@ public final class Messages {
      * @return string
      */
     public static String getString (final String key, final Locale msgLocale){
-        RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, msgLocale);
+        /*read message resource file.*/
+        ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, msgLocale);
         try {
             return RESOURCE_BUNDLE.getString(key);
         } catch (final MissingResourceException e) {

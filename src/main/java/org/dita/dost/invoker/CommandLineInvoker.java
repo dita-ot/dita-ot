@@ -39,7 +39,7 @@ import org.dita.dost.util.Configuration;
 public final class CommandLineInvoker {
 
     /**logger.*/
-    private static DITAOTLogger logger = new DITAOTJavaLogger();
+    private static final DITAOTLogger logger = new DITAOTJavaLogger();
     /** Map to store input parameters.*/
     private static final Map<String, String> paramMap;
     static {
@@ -58,7 +58,6 @@ public final class CommandLineInvoker {
         pm.put("/cssroot", "args.cssroot");
         pm.put("/css", "args.css");
         pm.put("/filter", "args.filter");
-        pm.put("/ditaext", "dita.extname");
         pm.put("/outdir", "output.dir");
         pm.put("/transtype", "transtype");
         pm.put("/indexshow", "args.indexshow");
@@ -265,7 +264,7 @@ public final class CommandLineInvoker {
      * @throws IOException IOException
      */
     public void startAnt() throws IOException {
-        final List<String> cmd = new ArrayList<String>(INT_8);
+        final List<String> cmd = new ArrayList<String>(8);
         cmd.add(getCommandRunner());
         cmd.add("-f");
         cmd.add(antBuildFile);
@@ -290,7 +289,7 @@ public final class CommandLineInvoker {
      * @return Ant executable file name
      */
     private String getCommandRunner() {
-        return (OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS) != -1)
+        return (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS))
                 ? "ant.bat"
                         : "ant";
     }
@@ -317,7 +316,7 @@ public final class CommandLineInvoker {
                 try {
                     outReader.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -333,7 +332,7 @@ public final class CommandLineInvoker {
                 try {
                     errReader.close();
                 } catch (final IOException e) {
-                    logger.logError(e.getMessage(), e) ;
+                    logger.error(e.getMessage(), e) ;
                 }
             }
         }
@@ -361,7 +360,6 @@ public final class CommandLineInvoker {
         System.out.println("  /outdir:               specify the output directory");
         System.out.println("  /tempdir:              specify the temporary directory");
         System.out.println("  /logdir:               specify the log directory");
-        System.out.println("  /ditaext:              specify the file extension name to be used in the temp directory. Default is \".xml\"");
         System.out.println("  /filter:               specify the name of the file that contains the filter/flaggin/revision information");
         System.out.println("  /draft:                specify whether to output draft info. Valid values are \"no\" and \"yes\". Default is \"no\" (hide them).");
         System.out.println("  /artlbl:               specify whether to output artwork filenames. Valid values are \"no\" and \"yes\"");
@@ -419,7 +417,7 @@ public final class CommandLineInvoker {
                 invoker.startAnt();
             }
         } catch (final Exception e) {
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 

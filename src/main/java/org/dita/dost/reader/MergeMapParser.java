@@ -10,14 +10,12 @@ package org.dita.dost.reader;
 
 import static javax.xml.transform.OutputKeys.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.Properties;
-import java.util.Set;
+import java.net.URI;
 import java.util.Stack;
 
 import javax.xml.transform.TransformerFactory;
@@ -33,8 +31,8 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.MergeUtils;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 
 import org.xml.sax.Attributes;
@@ -55,8 +53,8 @@ public final class MergeMapParser extends XMLFilterImpl {
     private final XMLReader reader;
     private final MergeTopicParser topicParser;
     private final MergeUtils util;
-    private String dirPath = null;
-    private String tempdir = null;
+    private File dirPath = null;
+    private File tempdir = null;
 
     private final Stack<String> processStack;
     private int processLevel;
@@ -64,6 +62,7 @@ public final class MergeMapParser extends XMLFilterImpl {
     private final SAXTransformerFactory stf;
     private OutputStream output;
     private DITAOTLogger logger;
+    private Job job;
 
     /**
      * Default Constructor.
@@ -75,7 +74,7 @@ public final class MergeMapParser extends XMLFilterImpl {
         topicParser = new MergeTopicParser(util);
         topicBuffer = new ByteArrayOutputStream();
         try{
-            reader = StringUtils.getXMLReader();
+            reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
             
@@ -97,7 +96,20 @@ public final class MergeMapParser extends XMLFilterImpl {
         this.logger = logger;
         topicParser.setLogger(logger);
     }
+    
+    public final void setJob(final Job job) {
+        this.job = job;
+    }
 
+    /**
+     * Set merge output file
+     * 
+     * @param outputFile merge output file
+     */
+    public void setOutput(final File outputFile) {
+        topicParser.setOutput(outputFile);
+    }
+    
     /**
      * Set output.
      * 
@@ -113,22 +125,22 @@ public final class MergeMapParser extends XMLFilterImpl {
      * @param filename map file path
      * @param tmpDir temporary directory path, may be {@code null}
      */
-    public void read(final String filename, final String tmpDir) {
-        tempdir = tmpDir != null ? tmpDir : new File(filename).getParent();
+    public void read(final File filename, final File tmpDir) {
+        tempdir = tmpDir != null ? tmpDir : filename.getParentFile();
         try{
             final TransformerHandler s = stf.newTransformerHandler();
             s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION, "yes");
             s.setResult(new StreamResult(output));
             setContentHandler(s);
-            final File input = new File(filename);
-            dirPath = input.getParent();
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(input.getAbsolutePath(), logger));
+            dirPath = filename.getParentFile();
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(filename.getAbsolutePath(), logger));
             topicParser.getContentHandler().startDocument();
-            reader.parse(input.toURI().toString());
+            logger.info("Processing " + filename.getAbsolutePath());
+            reader.parse(filename.toURI().toString());
             topicParser.getContentHandler().endDocument();
             output.write(topicBuffer.toByteArray());
         }catch(final Exception e){
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
     }
 
@@ -140,7 +152,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                 value = processStack.pop();
             }
             processLevel--;
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(value)) {
+            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(value)) {
                 return;
             }
         }
@@ -149,7 +161,7 @@ public final class MergeMapParser extends XMLFilterImpl {
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (processStack.empty() || !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())){
+        if (processStack.empty() || !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processStack.peek())){
             getContentHandler().characters(ch, start, length);
         }
     }
@@ -161,66 +173,61 @@ public final class MergeMapParser extends XMLFilterImpl {
             processStack.push(attrValue);
             processLevel++;
             // @processing-role='resource-only'
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(attrValue)) {
+            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(attrValue)) {
                 return;
             }
         } else if (processLevel > 0) {
             processLevel++;
             // Child of @processing-role='resource-only'
-            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processStack.peek())) {
+            if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processStack.peek())) {
                 return;
             }
         }
         AttributesImpl atts = null;
         if (MAP_TOPICREF.matches(attributes)) {
-            String attValue = attributes.getValue(ATTRIBUTE_NAME_HREF);
+            URI attValue = toURI(attributes.getValue(ATTRIBUTE_NAME_HREF));
             if (attValue != null) {
                 atts = new AttributesImpl(attributes);
                 final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
                 final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-                if ((scopeValue == null || ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
-                        && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))) {
-                    final String ohref = attValue;
-                    final String copyToValue = atts.getValue(ATTRIBUTE_NAME_COPY_TO);
-                    if (!StringUtils.isEmptyString(copyToValue)) {
+                if ((scopeValue == null || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue))
+                        && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equals(formatValue))) {
+                    final URI ohref = attValue;
+                    final URI copyToValue = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
+                    if (copyToValue != null && !copyToValue.toString().isEmpty()) {
                         attValue = copyToValue;
                     }
-                    XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, ohref);
-                    if (util.isVisited(attValue)){
-                        attValue = SHARP + util.getIdValue(attValue);
+                    XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, ohref.toString());
+                    if (util.isVisited(attValue)) {
+                        attValue = toURI(SHARP + util.getIdValue(attValue));
                     } else {
                         //parse the topic
-                        String p = null;
-                        try {
-                            p = FileUtils.normalize(URLDecoder.decode(FileUtils.stripFragment(attValue), UTF8));
-                        } catch (final UnsupportedEncodingException e) {
-                        	throw new RuntimeException(e);
-                        }
+                        final URI p = stripFragment(attValue).normalize();
                         util.visit(p);
                         if (p != null) {
-                            final File f = new File(dirPath, p);
+                            final File f = new File(dirPath, toFile(p).getPath());
                             if (f.exists()) {
-                                topicParser.parse(p,dirPath);
+                                topicParser.parse(toFile(p).getPath(), dirPath);
                                 final String fileId = topicParser.getFirstTopicId();
                                 util.addId(attValue, fileId);
-                                if (FileUtils.getFragment(attValue) != null) {
-                                    util.addId(FileUtils.stripFragment(attValue), fileId);
+                                if (attValue.getFragment() != null) {
+                                    util.addId(stripFragment(attValue), fileId);
                                 }
-                                final String firstTopicId = SHARP + fileId;
+                                final URI firstTopicId = toURI(SHARP + fileId);
                                 if (util.getIdValue(attValue) != null) {
-                                	attValue = SHARP + util.getIdValue(attValue);
+                                	attValue = toURI(SHARP + util.getIdValue(attValue));
                                 } else {
                                 	attValue = firstTopicId;
                                 }                                                     
-                                XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId);
+                                XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId.toString());
                             } else {
-                                final String fileName = new File(dirPath, attValue).getAbsolutePath();
-                                logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
+                                final URI fileName = dirPath.toURI().resolve(attValue);
+                                logger.error(MessageUtils.getInstance().getMessage("DOTX008E", fileName.toString()).toString());
                             }
                         }
                         }
                     }
-                XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, attValue);
+                XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, attValue.toString());
             }
         }
         getContentHandler().startElement(uri, localName, qName, atts != null ? atts : attributes);
@@ -232,33 +239,30 @@ public final class MergeMapParser extends XMLFilterImpl {
         // compare visitedSet with the list
         // if list item not in visitedSet then call MergeTopicParser to parse it
         try{
-            final Job job = new Job(new File(tempdir));
-            final Set<String> resourceOnlySet = job.getSet(RESOURCE_ONLY_LIST);
-            final Set<String> skipTopicSet = job.getSet(CHUNK_TOPIC_LIST);
-            final Set<String> chunkedTopicSet = job.getSet(CHUNKED_TOPIC_LIST);
-            for (String element: job.getSet(HREF_TARGET_LIST)) {
-                if (!new File(dirPath).equals(new File(tempdir))) {
-                    element = FileUtils.getRelativePath(new File(dirPath,"a.ditamap").getAbsolutePath(),
-                                                               new File(tempdir, element).getAbsolutePath());
-                }
-                if (!util.isVisited(element)) {
-                    util.visit(element);
-                    if (!resourceOnlySet.contains(element) && (chunkedTopicSet.contains(element)
-                            || !skipTopicSet.contains(element))){
-                        //ensure the file exists
-                        final File f = new File(dirPath, element);
-                        if (f.exists()) {
-                            topicParser.parse(element, dirPath);
-                        } else {
-                            final String fileName = f.getAbsolutePath();
-                            logger.logError(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
+            for (final FileInfo f: job.getFileInfo()) {
+                if (f.isTarget) {
+                    String element = f.file.getPath();
+                    if (!dirPath.equals(tempdir)) {
+                        element = FileUtils.getRelativeUnixPath(new File(dirPath,"a.ditamap").getAbsolutePath(),
+                                                                   new File(tempdir, element).getAbsolutePath());
+                    }
+                    if (!util.isVisited(toURI(element))) {
+                        util.visit(toURI(element));
+                        if (!f.isResourceOnly && (f.isChunked || !f.isSkipChunk)){
+                            //ensure the file exists
+                            final File file = new File(dirPath, element);
+                            if (file.exists()) {
+                                topicParser.parse(element, dirPath);
+                            } else {
+                                final String fileName = file.getAbsolutePath();
+                                logger.error(MessageUtils.getInstance().getMessage("DOTX008E", fileName).toString());
+                            }
                         }
                     }
-
                 }
             }
         }catch (final Exception e){
-            logger.logError(e.getMessage(), e) ;
+            logger.error(e.getMessage(), e) ;
         }
         
         getContentHandler().endDocument();

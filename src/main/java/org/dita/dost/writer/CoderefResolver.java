@@ -9,22 +9,22 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.FileUtils;
 
 /**
@@ -67,17 +67,12 @@ public final class CoderefResolver extends AbstractXMLFilter {
     // AbstractWriter methods --------------------------------------------------
 
     @Override
-    public void setContent(final Content content) {
-        // NOOP
-    }
-
-    @Override
-    public void write(final String filename) throws DITAOTException {
+    public void write(final File filename) throws DITAOTException {
         // ignore in-exists file
-        if (filename == null || !new File(filename).exists()) {
+        if (filename == null || !filename.exists()) {
             return;
         }
-        currentFile = new File(filename);
+        currentFile = filename;
         super.write(filename);
     }
 
@@ -94,34 +89,34 @@ public final class CoderefResolver extends AbstractXMLFilter {
         if (PR_D_CODEREF.matches(atts)) {
             ignoreDepth++;
             try{
-                final String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
+                final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
                 if (hrefValue != null){
-                    final String codeFile = FileUtils.normalizeDirectory(currentFile.getParentFile().getAbsolutePath(), hrefValue);
-                    if (new File(codeFile).exists()){
+                    final File codeFile = FileUtils.resolve(currentFile.getParentFile().getAbsoluteFile(), toFile(hrefValue));
+                    if (codeFile.exists()){
                         final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT));
                         BufferedReader codeReader = null;
                         try {
-                            codeReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(codeFile)), charset));
+                            codeReader = new BufferedReader(new InputStreamReader(new FileInputStream(codeFile), charset));
                             copyLines(codeReader, new Range(hrefValue));
                         } catch (final Exception e) {
-                            logger.logError("Failed to process code reference " + codeFile, e);
+                            logger.error("Failed to process code reference " + codeFile, e);
                         } finally {
                             if (codeReader != null) {
                                 try {
                                     codeReader.close();
                                 } catch (final IOException e) {
-                                    logger.logError(e.getMessage(), e) ;
+                                    logger.error(e.getMessage(), e) ;
                                 }
                             }
                         }
                     } else {
-                        logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ051E", hrefValue).setLocation(atts).toString());
+                        logger.warn(MessageUtils.getInstance().getMessage("DOTJ051E", hrefValue.toString()).setLocation(atts).toString());
                     }
                 } else {
                     //logger.logDebug("Code reference target not defined");
                 }
             } catch (final Exception e) {
-                logger.logError(e.getMessage(), e) ;
+                logger.error(e.getMessage(), e) ;
             }
         } else {
             super.startElement(uri, localName, name, atts);
@@ -150,7 +145,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
     private void copyLines(final BufferedReader codeReader, final Range range) throws IOException, SAXException {
         boolean first = true;
         String line = codeReader.readLine();
-        for (int i = 1; line != null; i++) {
+        for (int i = 0; line != null; i++) {
             if (i >= range.start && i <= range.end) {
                 if (first) {
                     first = false;
@@ -170,19 +165,44 @@ public final class CoderefResolver extends AbstractXMLFilter {
     private static class Range {
         final int start;
         final int end;
-        Range(final String uri) {
-            final Pattern p = Pattern.compile(".+#line-range\\((\\d+)(?:,\\s*(\\d+))?\\)");
-            final Matcher m = p.matcher(uri);
-            if (m.matches()) {
-                this.start = Integer.parseInt(m.group(1));
-                if (m.group(2) != null) {
-                    this.end = Integer.parseInt(m.group(2));
-                } else {
-                    this.end = Integer.MAX_VALUE;
-                }
-            } else {
+        Range(final URI uri) {
+            final String fragment = uri.getFragment();
+            if (fragment == null) {
                 this.start = 0;
                 this.end = Integer.MAX_VALUE;
+            } else {
+                // RFC 5147
+                final Matcher m = Pattern.compile("^line=(?:(\\d+)|(\\d+)?,(\\d+)?)$").matcher(fragment);
+                if (m.matches()) {
+                    if (m.group(1) != null) {
+                        this.start = Integer.parseInt(m.group(1));
+                        this.end = this.start;
+                    } else {
+                        if (m.group(2) != null) {
+                            this.start = Integer.parseInt(m.group(2));
+                        } else {
+                            this.start = 0;
+                        }
+                        if (m.group(3) != null) {
+                            this.end = Integer.parseInt(m.group(3)) - 1;
+                        } else {
+                            this.end = Integer.MAX_VALUE;
+                        }
+                    }
+                } else {
+                    final Matcher mc = Pattern.compile("^line-range\\((\\d+)(?:,\\s*(\\d+))?\\)$").matcher(fragment);
+                    if (mc.matches()) {
+                        this.start = Integer.parseInt(mc.group(1)) - 1;
+                        if (mc.group(2) != null) {
+                            this.end = Integer.parseInt(mc.group(2)) - 1;
+                        } else {
+                            this.end = Integer.MAX_VALUE;
+                        }
+                    } else {
+                        this.start = 0;
+                        this.end = Integer.MAX_VALUE;
+                    }
+                }
             }
         }
     }
@@ -201,7 +221,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                 try {
                     c = Charset.forName(tokens[2].trim());
                 } catch (final RuntimeException e) {
-                    logger.logError(MessageUtils.getInstance().getMessage("DOTJ052E", tokens[2].trim()).toString());
+                    logger.error(MessageUtils.getInstance().getMessage("DOTJ052E", tokens[2].trim()).toString());
                 }
             }
         }

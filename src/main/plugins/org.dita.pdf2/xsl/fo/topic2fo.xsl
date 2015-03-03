@@ -43,7 +43,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
     <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
-
+    <xsl:import href="plugin:org.dita.base:xsl/common/related-links.xsl"/>
+  
     <xsl:import href="../common/attr-set-reflection.xsl"/>
     <xsl:import href="../common/vars.xsl"/>
 
@@ -85,7 +86,12 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="hi-domain.xsl"/>
     <xsl:import href="../../cfg/fo/attrs/ui-domain-attr.xsl"/>
     <xsl:import href="ui-domain.xsl"/>
+    <xsl:import href="ut-domain.xsl"/>
     <xsl:import href="abbrev-domain.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/markup-domain-attr.xsl"/>
+    <xsl:import href="markup-domain.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/xml-domain-attr.xsl"/>
+    <xsl:import href="xml-domain.xsl"/>
 
     <xsl:import href="../../cfg/fo/attrs/static-content-attr.xsl"/>
     <xsl:import href="static-content.xsl"/>
@@ -98,30 +104,6 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="learning-elements.xsl"/>
 
     <xsl:import href="flagging.xsl"/>
-
-<!--    <xsl:strip-space elements="*"/>-->
-
-    <!-- Parameters in the following group are always passed in from Ant. -->
-    <xsl:param name="locale"/>
-    <xsl:param name="customizationDir.url"/>
-    <xsl:param name="artworkPrefix"/>
-    <xsl:param name="publishRequiredCleanup"/>
-    <xsl:param name="DRAFT"/>
-    <xsl:param name="output.dir.url"/>
-    <xsl:param name="work.dir.url"/>
-    <xsl:param name="input.dir.url"/>
-    <xsl:param name="pdfFormatter" select="'fop'"/>
-
-    <!-- Parameters in the following group are passed in from Ant only to
-         change defaults for related XSLT parameters. -->
-    <xsl:param name="antArgsBookmarkStyle"/>
-    <xsl:param name="antArgsChapterLayout"/>
-    <xsl:param name="include.rellinks"/>
-    <xsl:param name="antArgsGenerateTaskLabels"/>
-
-    <!-- Remaining parameters are not passed in with the default Ant code. -->
-    <xsl:param name="tocMaximumLevel" select="4"/>
-    <xsl:param name="ditaVersion" select="number(/*[contains(@class,' map/map ')]/@ditaarch:DITAArchVersion)"/>
 
 
     <xsl:output method="xml" encoding="utf-8" indent="no"/>

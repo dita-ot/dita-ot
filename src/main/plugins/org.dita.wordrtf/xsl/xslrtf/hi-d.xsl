@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2005 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:output method="text"/>
@@ -32,5 +32,14 @@
 <xsl:template match="*[contains(@class,' hi-d/sub ')]">
 {\sub <xsl:apply-templates/>}
 </xsl:template>
+
+<xsl:template match="*[contains(@class,' hi-d/line-through ')]">
+  {\strike <xsl:apply-templates/>}
+</xsl:template>  
+
+<xsl:template match="*[contains(@class,' hi-d/overline ')]">
+  <!-- RTF does not support overline -->
+  <xsl:apply-templates/>
+</xsl:template>    
 
 </xsl:stylesheet>

@@ -8,10 +8,12 @@
  */
 package org.dita.dost.platform;
 
-import static org.dita.dost.util.Constants.*;
+import static javax.xml.XMLConstants.*;
+import static org.dita.dost.util.XMLUtils.*;
 
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * ImportAntLibAction class.
@@ -22,27 +24,27 @@ final class ImportAntLibAction extends ImportAction {
     /**
      * get result.
      * @return result
+     * @throws SAXException 
      */
     @Override
-    public String getResult() {
-        final StringBuilder retBuf = new StringBuilder();
+    public void getResult(final ContentHandler retBuf) throws SAXException {
         final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
         for (final String value: valueSet) {
-            retBuf.append(LINE_SEPARATOR);
-            final String resolvedValue = FileUtils.getRelativePath(
+            final String resolvedValue = FileUtils.getRelativeUnixPath(
                     templateFilePath, value);
             if(FileUtils.isAbsolutePath(resolvedValue)){
                 // if resolvedValue is absolute path
-                retBuf.append("<pathelement location=\"");
-                retBuf.append(StringUtils.escapeXML(resolvedValue));
-                retBuf.append("\"/>");
+                retBuf.startElement(NULL_NS_URI, "pathelement", "pathelement", new AttributesBuilder()
+                    .add("location", resolvedValue)
+                    .build());
+                retBuf.endElement(NULL_NS_URI, "pathelement", "pathelement");
             }else{// if resolvedValue is relative path
-                retBuf.append("<pathelement location=\"${dita.dir}${file.separator}");
-                retBuf.append(StringUtils.escapeXML(resolvedValue));
-                retBuf.append("\"/>");
+                retBuf.startElement(NULL_NS_URI, "pathelement", "pathelement", new AttributesBuilder()
+                    .add("location", "${dita.dir}${file.separator}" + resolvedValue)
+                    .build());
+                retBuf.endElement(NULL_NS_URI, "pathelement", "pathelement");
             }
         }
-        return retBuf.toString();
     }
 
 }

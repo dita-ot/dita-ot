@@ -35,14 +35,11 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:rx="http://www.renderx.com/XSL/Extensions"
-    xmlns:exsl="http://exslt.org/common"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:comparer="com.idiominc.ws.opentopic.xsl.extension.CompareStrings"
-    extension-element-prefixes="exsl"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    exclude-result-prefixes="xs opentopic-index exsl comparer rx opentopic-func exslf">
+    exclude-result-prefixes="xs opentopic-index comparer rx opentopic-func">
 
   <xsl:template match="/" mode="index-postprocess">
     <fo:block xsl:use-attribute-sets="__index__label" id="{$id.index}">
@@ -58,7 +55,7 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:template match="opentopic-index:index.entry" mode="index-postprocess">
     <xsl:variable name="value" select="@value"/>
     <xsl:choose>
-			<xsl:when test="opentopic-index:index.entry">
+      <xsl:when test="opentopic-index:index.entry">
         <fo:table rx:table-omit-initial-header="true" width="100%">
           <fo:table-header>
             <fo:table-row>
@@ -69,21 +66,12 @@ See the accompanying license.txt file for applicable licenses.
                   </xsl:if>
                   <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
                   <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
-                    <xsl:choose>
-                      <xsl:when test="$useFrameIndexMarkup ne 'true'">
-                        <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
-                        <fo:inline font-style="italic">
-                          <xsl:text> (</xsl:text>
-                          <xsl:value-of select="$continuedValue"/>
-                          <xsl:text>)</xsl:text>
-                        </fo:inline>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:call-template name="__formatText">
-                          <xsl:with-param name="text" select="concat(opentopic-index:formatted-value/text(), '&lt;italic&gt; (', $continuedValue, ')')"/>
-                        </xsl:call-template>
-                      </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
+                    <fo:inline font-style="italic">
+                      <xsl:text> (</xsl:text>
+                      <xsl:value-of select="$continuedValue"/>
+                      <xsl:text>)</xsl:text>
+                    </fo:inline>
                     <xsl:if test="$following-idx">
                       <xsl:text> </xsl:text>
                       <fo:index-page-citation-list>
@@ -173,25 +161,16 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:choose>
   </xsl:template>
 
-	<xsl:template match="*" mode="make-index-ref">
-		<xsl:param name="idxs" select="()"/>
-		<xsl:param name="inner-text" select="()"/>
-		<xsl:param name="no-page"/>
+  <xsl:template match="*" mode="make-index-ref">
+    <xsl:param name="idxs" select="()"/>
+    <xsl:param name="inner-text" select="()"/>
+    <xsl:param name="no-page"/>
     <fo:block id="{generate-id(.)}" xsl:use-attribute-sets="index.term">
       <xsl:if test="empty(preceding-sibling::opentopic-index:index.entry)">
         <xsl:attribute name="keep-with-previous">always</xsl:attribute>
       </xsl:if>
       <fo:inline>
-        <xsl:choose>
-          <xsl:when test="$useFrameIndexMarkup ne 'true'">
-            <xsl:apply-templates select="$inner-text/node()"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="__formatText">
-              <xsl:with-param name="text" select="$inner-text"/>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="$inner-text/node()"/>
       </fo:inline>
       <xsl:if test="$idxs">
         <xsl:for-each select="$idxs">
@@ -217,6 +196,6 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="opentopic-index:see-also-childs" mode="index-postprocess"/>
       </xsl:if>
     </fo:block>
-	</xsl:template>
+  </xsl:template>
 
 </xsl:stylesheet>

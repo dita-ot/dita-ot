@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2005 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:output method="text"/>
@@ -15,7 +15,7 @@
 
 <xsl:template match="*[contains(@class,' pr-d/codeblock ')]">
 <xsl:call-template name="gen-id"/><xsl:if test="@spectitle and not(@spectitle='')">\par
-  \plain\f4\fs24\b <xsl:call-template name="get-ascii"><xsl:with-param name="txt"><xsl:value-of select="@spectitle"/></xsl:with-param></xsl:call-template></xsl:if>
+  \plain\f4\fs24\b <xsl:value-of select="@spectitle"/></xsl:if>
 \par {\plain\f5\fs24
 <xsl:apply-templates/>}
 </xsl:template>

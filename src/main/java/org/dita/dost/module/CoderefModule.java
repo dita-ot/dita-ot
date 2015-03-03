@@ -8,36 +8,25 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.io.File;
-import java.io.IOException;
-import java.util.Set;
-
+import java.util.Collection;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.CoderefResolver;
 /**
  * Coderef Module class.
  *
  */
-final class CoderefModule implements AbstractPipelineModule {
-
-    private DITAOTLogger logger;
+final class CoderefModule extends AbstractPipelineModuleImpl {
 
     /**
      * Constructor.
      */
     public CoderefModule() {
         super();
-    }
-
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
     }
 
     /**
@@ -49,29 +38,22 @@ final class CoderefModule implements AbstractPipelineModule {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
-        if (logger == null) {
-            throw new IllegalStateException("Logger not set");
+        final Collection<FileInfo> fis = job.getFileInfo(new Filter() {
+            @Override
+            public boolean accept(final FileInfo f) {
+                return f.hasCoderef;
+            }
+        });
+        if (!fis.isEmpty()) {
+            final CoderefResolver writer = new CoderefResolver();
+            writer.setJob(job);
+            writer.setLogger(logger);
+            for (final FileInfo fi: fis) {
+                final File f = new File(job.tempDir, fi.file.getPath());
+                logger.info("Processing " + f.getAbsolutePath());
+                writer.write(f);
+            }
         }
-        final File tempDir = new File(input.getAttribute(ANT_INVOKER_PARAM_TEMPDIR));
-        if (!tempDir.isAbsolute()) {
-            throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
-        }
-
-        Job job = null;
-        try{
-            job = new Job(tempDir);
-        }catch(final IOException e){
-            throw new DITAOTException(e);
-        }
-
-        final Set<String> codereflist=job.getSet(CODEREF_LIST);
-        final CoderefResolver writer = new CoderefResolver();
-        writer.setLogger(logger);
-        for (final String fileName : codereflist) {
-            //FIXME:This writer deletes and renames files, have to
-            writer.write(new File(tempDir,fileName).getAbsolutePath());
-        }
-
         return null;
     }
 

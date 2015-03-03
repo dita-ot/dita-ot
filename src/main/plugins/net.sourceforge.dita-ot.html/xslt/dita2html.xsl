@@ -35,17 +35,17 @@
   <xsl:template match="*" mode="chapterBody">
     <xsl:call-template name="generateBreadcrumbs"/>
     <xsl:call-template name="gen-user-sidetoc"/>
-    <main class="span9">
+    <main class="col-md-9">
       <xsl:apply-templates/>
       <xsl:call-template name="gen-endnotes"/>
     </main>
   </xsl:template>
 
   <xsl:template match="*" mode="gen-user-sidetoc">
-    <nav class="span3">
+    <nav class="col-md-3">
       <!--xsl:apply-templates select="$input.map/*[contains(@class, ' map/map ')]" mode="toc-pull"/-->
-      <div class="well">
-        <ul class="nav nav-list">
+      <div class="well well-sm">
+        <ul class="nav bs-docs-sidenav">
           <xsl:apply-templates select="$current-topicrefs[1]" mode="toc-pull">
             <xsl:with-param name="pathFromMaplist" select="$PATH2PROJ"/>
             <xsl:with-param name="children">

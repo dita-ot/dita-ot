@@ -30,14 +30,11 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:exsl="http://exslt.org/common"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
-    extension-element-prefixes="exsl"
     xmlns:suitesol="http://suite-sol.com/namespaces/mapcounts"
-    exclude-result-prefixes="suitesol exsl opentopic-func exslf dita2xslfo">
+    exclude-result-prefixes="suitesol opentopic-func dita2xslfo">
    
   <xsl:template match="suitesol:flagging-inside">
       <xsl:call-template name="parseFlagStyle">
@@ -55,13 +52,13 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:value-of select="@id" />
          </xsl:attribute>
 
-         <!--        	 	
-       	 	change-bar-color 
-			change-bar-offset
-			change-bar-placement= start | end | left | right | inside | outside | alternate 
-			change-bar-style = none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
-			change-bar-width
-			-->
+         <!--             
+            change-bar-color 
+      change-bar-offset
+      change-bar-placement= start | end | left | right | inside | outside | alternate 
+      change-bar-style = none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
+      change-bar-width
+      -->
 
          <xsl:call-template name="parseChangeBarStyle">
             <xsl:with-param name="value">
@@ -111,12 +108,12 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:variable name="val" select="substring-after($value,':')"/>
 
             <!-- 
-       	 	change-bar-color 
-			change-bar-offset
-			change-bar-placement= start | end | left | right | inside | outside | alternate 
-			change-bar-style = none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
-			change-bar-width
-			-->
+            change-bar-color 
+      change-bar-offset
+      change-bar-placement= start | end | left | right | inside | outside | alternate 
+      change-bar-style = none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
+      change-bar-width
+      -->
 
             <xsl:choose>
                <xsl:when test="$attr='color'">
@@ -208,152 +205,6 @@ See the accompanying license.txt file for applicable licenses.
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   
-   <xsl:template match="*" mode="placeImage">
-      <xsl:param name="imageAlign"/>
-      <xsl:param name="href"/>
-      <xsl:param name="height"/>
-      <xsl:param name="width"/>
-      <!--Using align attribute set according to image @align attribute-->
-      <xsl:call-template name="processAttrSetReflection">
-         <xsl:with-param name="attrSet" select="concat('__align__', $imageAlign)"/>
-         <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
-      </xsl:call-template>
-      <fo:external-graphic src="url({$href})" xsl:use-attribute-sets="flag.image">
-         <xsl:apply-templates select="suitesol:flagging-inside"/>
-         <!--Setting image height if defined-->
-         <xsl:if test="$height">
-            <xsl:attribute name="content-height">
-               <!--The following test was commented out because most people found the behavior
-                 surprising.  It used to force images with a number specified for the dimensions
-                 *but no units* to act as a measure of pixels, *if* you were printing at 72 DPI.
-                 Uncomment if you really want it. -->
-              <xsl:choose>
-                <!--xsl:when test="not(string(number($height)) = 'NaN')">
-                  <xsl:value-of select="concat($height div 72,'in')"/>
-                </xsl:when-->
-                <xsl:when test="not(string(number($height)) = 'NaN')">
-                  <xsl:value-of select="concat($height, 'px')"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="$height"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:attribute>
-         </xsl:if>
-         <!--Setting image width if defined-->
-         <xsl:if test="$width">
-            <xsl:attribute name="content-width">
-              <xsl:choose>
-                <!--xsl:when test="not(string(number($width)) = 'NaN')">
-                  <xsl:value-of select="concat($width div 72,'in')"/>
-                </xsl:when-->
-                <xsl:when test="not(string(number($width)) = 'NaN')">
-                  <xsl:value-of select="concat($width, 'px')"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="$width"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:attribute>
-         </xsl:if>
-         <xsl:if test="not($width) and not($height) and @scale">
-            <xsl:attribute name="content-width">
-               <xsl:value-of select="concat(@scale,'%')"/>
-            </xsl:attribute>
-         </xsl:if>
-      </fo:external-graphic>
-   </xsl:template>
-
-   <!--xsl:template match="*" mode="placeNoteContent">
-      <fo:block xsl:use-attribute-sets="note" id="{@id}">
-         <xsl:apply-templates select="suitesol:flagging-inside"/>
-         <fo:inline xsl:use-attribute-sets="note__label">
-            <xsl:choose>
-               <xsl:when test="@type='note' or not(@type)">
-                  <fo:inline xsl:use-attribute-sets="note__label__note">
-                     <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Note'"/>
-                     </xsl:call-template>
-                  </fo:inline>
-               </xsl:when>
-               <xsl:when test="@type='tip'">
-                  <fo:inline xsl:use-attribute-sets="note__label__tip">
-                     <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Tip'"/>
-                     </xsl:call-template>
-                  </fo:inline>
-               </xsl:when>
-               <xsl:when test="@type='fastpath'">
-                  <fo:inline xsl:use-attribute-sets="note__label__fastpath">
-                     <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Fastpath'"/>
-                     </xsl:call-template>
-                  </fo:inline>
-               </xsl:when>
-               <xsl:when test="@type='restriction'">
-                  <fo:inline xsl:use-attribute-sets="note__label__restriction">
-                     <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Restriction'"/>
-                     </xsl:call-template>
-                  </fo:inline>
-               </xsl:when>
-               <xsl:when test="@type='important'">
-                  <fo:inline xsl:use-attribute-sets="note__label__important">
-                     <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Important'"/>
-                     </xsl:call-template>
-                  </fo:inline>
-               </xsl:when>
-               <xsl:when test="@type='remember'">
-                  <fo:inline xsl:use-attribute-sets="note__label__remember">
-                     <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Remember'"/>
-                     </xsl:call-template>
-                  </fo:inline>
-               </xsl:when>
-               <xsl:when test="@type='attention'">
-                  <fo:inline xsl:use-attribute-sets="note__label__attention">
-                     <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Attention'"/>
-                     </xsl:call-template>
-                  </fo:inline>
-               </xsl:when>
-               <xsl:when test="@type='caution'">
-                  <fo:inline xsl:use-attribute-sets="note__label__caution">
-                     <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Caution'"/>
-                     </xsl:call-template>
-                  </fo:inline>
-               </xsl:when>
-               <xsl:when test="@type='danger'">
-                  <fo:inline xsl:use-attribute-sets="note__label__danger">
-                     <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Danger'"/>
-                     </xsl:call-template>
-                  </fo:inline>
-               </xsl:when>
-               <xsl:when test="@type='other'">
-                  <fo:inline xsl:use-attribute-sets="note__label__other">
-                     <xsl:choose>
-                        <xsl:when test="@othertype">
-                           <xsl:value-of select="@othertype"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                           <xsl:text>[</xsl:text>
-                           <xsl:value-of select="@type"/>
-                           <xsl:text>]</xsl:text>
-                        </xsl:otherwise>
-                     </xsl:choose>
-                  </fo:inline>
-               </xsl:when>
-            </xsl:choose>
-            <xsl:text>: </xsl:text>
-         </fo:inline>
-         <xsl:text>  </xsl:text>
-         <xsl:apply-templates select="node()[not(name()='suitesol:flagging-inside')]"/>
-      </fo:block>
-   </xsl:template-->
    
    <xsl:template match="suitesol:flagging-outside">         
       <fo:block>

@@ -34,13 +34,11 @@ See the accompanying license.txt file for applicable licenses.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:exsl="http://exslt.org/common"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
-    xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+    xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    extension-element-prefixes="exsl"
-    exclude-result-prefixes="xs exsl opentopic exslf opentopic-func ot-placeholder"
+    exclude-result-prefixes="xs opentopic opentopic-func ot-placeholder opentopic-index"
     version="2.0">
   
     <xsl:variable name="map" select="//opentopic:map"/>
@@ -68,7 +66,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]"/>
             <xsl:choose>
               <!-- In a future version, suppressing Notices in the TOC should not be hard-coded. -->
-              <xsl:when test="$mapTopicref/self::*[contains(@class, ' bookmap/notices ')]"/>
+              <xsl:when test="$retain-bookmap-order and $mapTopicref/self::*[contains(@class, ' bookmap/notices ')]"/>
               <xsl:when test="$mapTopicref[@toc = 'yes' or not(@toc)] or
                               (not($mapTopicref) and $include = 'true')">
                     <fo:block xsl:use-attribute-sets="__toc__indent">
@@ -120,7 +118,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' bookmap/chapter ')] |
-                         *[contains(@class, ' boookmap/bookmap ')]/opentopic:map/*[contains(@class, ' map/topicref ')]" mode="tocPrefix" priority="-1">
+                         *[contains(@class, ' bookmap/bookmap ')]/opentopic:map/*[contains(@class, ' map/topicref ')]" mode="tocPrefix" priority="-1">
         <xsl:call-template name="insertVariable">
             <xsl:with-param name="theVariableID" select="'Table of Contents Chapter'"/>
             <xsl:with-param name="theParameters">
@@ -236,28 +234,22 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="createToc">
-
+      <xsl:if test="$generate-toc">
         <xsl:variable name="toc">
             <xsl:choose>
-                <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/toc ')][@href]"/>
-                <xsl:when test="($ditaVersion &gt;= 1.1) and $map//*[contains(@class,' bookmap/toc ')]">
+                <xsl:when test="$map//*[contains(@class,' bookmap/toc ')][@href]"/>
+                <xsl:when test="$map//*[contains(@class,' bookmap/toc ')]">
                     <xsl:apply-templates select="/" mode="toc"/>
                 </xsl:when>
-                <xsl:when test="($ditaVersion &gt;= 1.1) and /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                <xsl:when test="/*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                     <xsl:apply-templates select="/" mode="toc"/>
+                    <xsl:call-template name="toc.index"/>
                 </xsl:when>
-                <xsl:when test="$ditaVersion &gt;= 1.1"/>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="/" mode="toc"/>
-                </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-
-        <xsl:if test="count(exsl:node-set($toc)/*) > 0">
+        <xsl:if test="count($toc/*) > 0">
             <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="__force__page__count">
-
                 <xsl:call-template name="insertTocStaticContents"/>
-
                 <fo:flow flow-name="xsl-region-body">
                     <xsl:call-template name="createTocHeader"/>
                     <fo:block>
@@ -266,56 +258,63 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
                           </xsl:call-template>
                         </fo:marker>
-                        <xsl:copy-of select="exsl:node-set($toc)"/>
+                        <xsl:copy-of select="$toc"/>
                     </fo:block>
                 </fo:flow>
-
             </fo:page-sequence>
         </xsl:if>
+      </xsl:if>
     </xsl:template>
 
     <xsl:template name="processTocList">
         <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="__force__page__count">
-
             <xsl:call-template name="insertTocStaticContents"/>
-
             <fo:flow flow-name="xsl-region-body">
                 <xsl:call-template name="createTocHeader"/>
                 <fo:block>
                     <xsl:apply-templates/>
                 </fo:block>
             </fo:flow>
-
         </fo:page-sequence>
     </xsl:template>
 
-    <!-- FIXME: EXSLT functions in patters do not work with Saxon 9.1-9.3, but do work with Saxon 6.5 and Xalan 2.7.
-                Disable templates until code can be refactored to work with Saxon 9.*. -->
-    <!--
-    <xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicTocList']"  mode="toc" priority="10"/>
-    <xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicIndexList']"  mode="toc" priority="10"/>
-    -->
-    
   <xsl:template match="ot-placeholder:toc[$retain-bookmap-order]">
     <xsl:call-template name="createToc"/>
+  </xsl:template>
+    
+  <xsl:template match="ot-placeholder:indexlist" mode="toc" name="toc.index">
+    <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (exists($index-entries//opentopic-index:index.entry))">
+      <fo:block xsl:use-attribute-sets="__toc__indent__booklist">
+        <fo:block xsl:use-attribute-sets="__toc__topic__content__booklist">
+          <fo:basic-link internal-destination="{$id.index}" xsl:use-attribute-sets="__toc__link">
+            <fo:inline xsl:use-attribute-sets="__toc__title">
+              <xsl:call-template name="insertVariable">
+                <xsl:with-param name="theVariableID" select="'Index'"/>
+              </xsl:call-template>
+            </fo:inline>
+            <fo:inline xsl:use-attribute-sets="__toc__page-number">
+              <fo:leader xsl:use-attribute-sets="__toc__leader"/>
+              <fo:page-number-citation ref-id="{$id.index}"/>
+            </fo:inline>
+          </fo:basic-link>
+        </fo:block>
+      </fo:block>
+    </xsl:if>
   </xsl:template>
     
     <xsl:template match="ot-placeholder:glossarylist" mode="toc">
         <fo:block xsl:use-attribute-sets="__toc__indent__glossary">
             <fo:block xsl:use-attribute-sets="__toc__topic__content__glossary">
                 <fo:basic-link internal-destination="{$id.glossary}" xsl:use-attribute-sets="__toc__link">
-                    
                     <fo:inline xsl:use-attribute-sets="__toc__title">
                         <xsl:call-template name="insertVariable">
                             <xsl:with-param name="theVariableID" select="'Glossary'"/>
                         </xsl:call-template>
                     </fo:inline>
-                    
                     <fo:inline xsl:use-attribute-sets="__toc__page-number">
                         <fo:leader xsl:use-attribute-sets="__toc__leader"/>
                         <fo:page-number-citation ref-id="{$id.glossary}"/>
                     </fo:inline>
-                    
                 </fo:basic-link>
             </fo:block>
         </fo:block>
@@ -326,18 +325,15 @@ See the accompanying license.txt file for applicable licenses.
             <fo:block xsl:use-attribute-sets="__toc__indent__lot">
                 <fo:block xsl:use-attribute-sets="__toc__topic__content__lot">
                     <fo:basic-link internal-destination="{$id.lot}" xsl:use-attribute-sets="__toc__link">
-                        
                         <fo:inline xsl:use-attribute-sets="__toc__title">
                             <xsl:call-template name="insertVariable">
                                 <xsl:with-param name="theVariableID" select="'List of Tables'"/>
                             </xsl:call-template>
                         </fo:inline>
-                        
                         <fo:inline xsl:use-attribute-sets="__toc__page-number">
                             <fo:leader xsl:use-attribute-sets="__toc__leader"/>
                             <fo:page-number-citation ref-id="{$id.lot}"/>
                         </fo:inline>
-                        
                     </fo:basic-link>
                 </fo:block>
             </fo:block>
@@ -349,18 +345,15 @@ See the accompanying license.txt file for applicable licenses.
             <fo:block xsl:use-attribute-sets="__toc__indent__lof">
                 <fo:block xsl:use-attribute-sets="__toc__topic__content__lof">
                     <fo:basic-link internal-destination="{$id.lof}" xsl:use-attribute-sets="__toc__link">
-                        
                         <fo:inline xsl:use-attribute-sets="__toc__title">
                             <xsl:call-template name="insertVariable">
                                 <xsl:with-param name="theVariableID" select="'List of Figures'"/>
                             </xsl:call-template>
                         </fo:inline>
-                        
                         <fo:inline xsl:use-attribute-sets="__toc__page-number">
                             <fo:leader xsl:use-attribute-sets="__toc__leader"/>
                             <fo:page-number-citation ref-id="{$id.lof}"/>
                         </fo:inline>
-                        
                     </fo:basic-link>
                 </fo:block>
             </fo:block>

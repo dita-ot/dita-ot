@@ -45,6 +45,7 @@
 <str name="Remember">Remember</str>
 <str name="Restriction">Restriction</str>
 <str name="Warning">Warning</str>
+<str name="Trouble">Trouble</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Contents</str>
@@ -72,13 +73,5 @@
 <str name="OpenQuote">"</str>
 <str name="CloseQuote">"</str>
 <str name="ColonSymbol">:</str>
- 
-<!-- For odt transform -->
-<str name="On the page"> on page </str>
-<str name="Related Links">Related Links</str>
-<str name="List item">List item.</str>
-<str name="Foot note">Footnote.</str>
-<str name="Page"> page </str>
-<str name="Unordered List bullet">&#x2022;</str>
 
 </strings>

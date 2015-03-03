@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="configuring-the-dita-ot">
-    <title>Configuring the DITA Open Toolkit</title>
-    <shortdesc>The DITA OT uses <filepath>.properties</filepath> files that store configuration
-        settings for the DITA OT and its plug-ins. The configuration properties are available to
-        both Ant and Java processes, but unlike argument properties, they cannot be set at run
-        time.</shortdesc>
-</task>

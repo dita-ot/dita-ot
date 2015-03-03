@@ -26,7 +26,7 @@
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
-  version="1.0"
+  version="2.0"
   >
 
 <xsl:output method="xml"/>
@@ -147,9 +147,7 @@
             <xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:call-template name="get-ascii">
-          <xsl:with-param name="txt"><xsl:value-of select="."/></xsl:with-param>
-        </xsl:call-template>
+        <xsl:value-of select="."/>
     </xsl:element>
   </xsl:element>
 </xsl:template>
@@ -657,11 +655,7 @@
       <xsl:text>. </xsl:text>
     </xsl:otherwise>
   </xsl:choose>
-  <xsl:call-template name="get-ascii">
-    <xsl:with-param name="txt">
-      <xsl:value-of select="."/>
-    </xsl:with-param>
-  </xsl:call-template>
+  <xsl:value-of select="."/>
  </xsl:element>
 </xsl:template>
 

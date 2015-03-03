@@ -7,6 +7,11 @@
  * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
 package org.dita.dost.writer;
+
+import java.util.List;
+
+import org.dita.dost.index.IndexTerm;
+
 /**
  * Interface IDitaTranstypeIndexWriter.
  * 
@@ -20,4 +25,6 @@ public interface IDitaTranstypeIndexWriter {
      */
     public String getIndexFileName(String outputFileRoot);
 
+    public void setTermList(final List<IndexTerm> termList);
+    
 }

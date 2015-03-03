@@ -97,11 +97,7 @@ public final class LogUtils {
      * @return boolean
      */
     public  static boolean haveFatalOrError(){
-        if(numOfFatals>0 || numOfErrors>0) {
-            return true;
-        } else {
-            return false;
-        }
+        return numOfFatals > 0 || numOfErrors > 0;
     }
 
     /**

@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:import href="dita2docbook.xsl"/>
@@ -57,7 +57,7 @@
     </xsl:choose>
   </xsl:variable>
   <xsl:choose>
-  <xsl:when test="$hrefValue and not($hrefValue='')">
+  <xsl:when test="$hrefValue and not($hrefValue='') and (empty(@scope) or @scope = 'local')">
     <xsl:apply-templates select="document($hrefValue, /)/*">
       <xsl:with-param name="element" select="$element"/>
       <xsl:with-param name="childrefs"

@@ -20,10 +20,9 @@
 LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
               -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  version="1.0" 
-  xmlns:exsl="http://exslt.org/common" 
+  version="2.0"  
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  exclude-result-prefixes="exsl ditamsg">
+  exclude-result-prefixes="ditamsg">
 
  <!-- ========== Flagging with flags & revisions ========== -->
 
@@ -38,7 +37,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <xsl:param name="DBG" select="'no'"/>
   <xsl:param name="DRAFT" select="'no'"/>
-  <xsl:param name="DITAEXT" select="'.dita'"/>
   <xsl:param name="FILTERFILEURL"/>
   <xsl:param name="PATH2PROJ">
       <xsl:apply-templates select="/processing-instruction('path2project-uri')[1]" mode="get-path2project"/>
@@ -95,7 +93,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       <xsl:call-template name="getrules"/>
     </xsl:param>
     <xsl:choose>
-      <xsl:when test="exsl:node-set($flagrules)/*">
+      <xsl:when test="$flagrules/*">
         <xsl:variable name="conflictexist">
          <xsl:call-template name="conflict-check">
           <xsl:with-param name="flagrules" select="$flagrules"/>
@@ -148,7 +146,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:param name="flagrules">
      <xsl:call-template name="getrules"/>
    </xsl:param>
-   <xsl:apply-templates select="exsl:node-set($flagrules)/prop[1]" mode="start-flagit"/>
+   <xsl:apply-templates select="$flagrules/prop[1]" mode="start-flagit"/>
   </xsl:template>
 
   <xsl:template match="prop" mode="start-flagit">  
@@ -169,7 +167,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:param name="flagrules">
      <xsl:call-template name="getrules"/>
    </xsl:param>
-   <xsl:apply-templates select="exsl:node-set($flagrules)/prop[last()]" mode="end-flagit"/>
+   <xsl:apply-templates select="$flagrules/prop[last()]" mode="end-flagit"/>
   </xsl:template>
 
   <xsl:template match="prop" mode="end-flagit">  
@@ -230,8 +228,10 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
        <xsl:otherwise>
          <!-- Create default start revision reference? -->
          <xsl:call-template name="default-rev-start">
+           <!--
            <xsl:with-param name="lang" select="$lang"/>
            <xsl:with-param name="biditest" select="$biditest"/>
+           -->
          </xsl:call-template>
        </xsl:otherwise>
      </xsl:choose>
@@ -258,8 +258,10 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
         <xsl:otherwise>
           <!-- Create default end revision reference? -->
           <xsl:call-template name="default-rev-end">
+            <!--
             <xsl:with-param name="lang" select="$lang"/>
             <xsl:with-param name="biditest" select="$biditest"/>
+            -->
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
@@ -716,7 +718,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       </xsl:call-template>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="exsl:node-set($flag-result)/prop">
+      <xsl:when test="$flag-result/prop">
         <xsl:copy-of select="$flag-result"/>
       </xsl:when>
       <xsl:otherwise>
@@ -1135,7 +1137,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  </xsl:param>
  <xsl:param name="revvalue"/>
  <xsl:choose>
-  <xsl:when test="exsl:node-set($flagrules)/revprop[@color or @backcolor]">
+  <xsl:when test="$flagrules/revprop[@color or @backcolor]">
    <font>
     <xsl:apply-templates select="." mode="gen-style">
       <xsl:with-param name="flagrules" select="$flagrules"/>
@@ -1201,8 +1203,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       <xsl:with-param name="parentlang" select="$lang"/>
     </xsl:call-template>
   </xsl:param>
-  <xsl:if test="exsl:node-set($flagrules)/revprop[1]">
-    <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[1]" mode="start-revflagit">
+  <xsl:if test="$flagrules/revprop[1]">
+    <xsl:apply-templates select="$flagrules/revprop[1]" mode="start-revflagit">
       <xsl:with-param name="lang" select="$lang"/>
       <xsl:with-param name="biditest" select="$biditest"/>
     </xsl:apply-templates>
@@ -1221,8 +1223,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       <xsl:with-param name="parentlang" select="$lang"/>
     </xsl:call-template>
   </xsl:param>
-  <xsl:if test="exsl:node-set($flagrules)/revprop[1]">
-    <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[last()]" mode="end-revflagit">
+  <xsl:if test="$flagrules/revprop[1]">
+    <xsl:apply-templates select="$flagrules/revprop[last()]" mode="end-revflagit">
       <xsl:with-param name="lang" select="$lang"/>
       <xsl:with-param name="biditest" select="$biditest"/>
     </xsl:apply-templates>
@@ -1376,8 +1378,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       <xsl:when test="normalize-space($FILTERFILEURL)=''">
         <xsl:value-of select="'false'"/>
       </xsl:when>
-      <xsl:when test="exsl:node-set($flagrules)/*">
-        <xsl:apply-templates select="exsl:node-set($flagrules)/*[1]" mode="conflict-check"/>
+      <xsl:when test="$flagrules/*">
+        <xsl:apply-templates select="$flagrules/*[1]" mode="conflict-check"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="'false'"/>
@@ -1423,13 +1425,13 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     <xsl:if test="normalize-space($FILTERFILEURL)!=''">
       <xsl:variable name="validstyle">
         <!-- This variable is used to prevent using pre-OASIS or unrecognized ditaval styles -->
-        <xsl:if test="$conflictexist='false' and exsl:node-set($flagrules)/*[@style]">
+        <xsl:if test="$conflictexist='false' and $flagrules/*[@style]">
           <xsl:choose>
-            <xsl:when test="exsl:node-set($flagrules)/*/@style='italics'">YES</xsl:when>
-            <xsl:when test="exsl:node-set($flagrules)/*/@style='bold'">YES</xsl:when>
-            <xsl:when test="exsl:node-set($flagrules)/*/@style='underline'">YES</xsl:when>
-            <xsl:when test="exsl:node-set($flagrules)/*/@style='double-underline'">YES</xsl:when>
-            <xsl:when test="exsl:node-set($flagrules)/*/@style='overline'">YES</xsl:when>
+            <xsl:when test="$flagrules/*/@style='italics'">YES</xsl:when>
+            <xsl:when test="$flagrules/*/@style='bold'">YES</xsl:when>
+            <xsl:when test="$flagrules/*/@style='underline'">YES</xsl:when>
+            <xsl:when test="$flagrules/*/@style='double-underline'">YES</xsl:when>
+            <xsl:when test="$flagrules/*/@style='overline'">YES</xsl:when>
           </xsl:choose>
         </xsl:if>
       </xsl:variable>
@@ -1450,31 +1452,31 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
           </xsl:attribute>
         </xsl:when>
         <xsl:when test="$conflictexist='false' and 
-                        (exsl:node-set($flagrules)/*[@color or @backcolor] or $validstyle='YES')">
+                        ($flagrules/*[@color or @backcolor] or $validstyle='YES')">
           <xsl:attribute name="outputclass">     
-            <xsl:if test="exsl:node-set($flagrules)/*[@color]">
+            <xsl:if test="$flagrules/*[@color]">
               <xsl:text>color:</xsl:text>
-              <xsl:value-of select="exsl:node-set($flagrules)/*[@color]/@color"/>
+              <xsl:value-of select="$flagrules/*[@color]/@color"/>
               <xsl:text>;</xsl:text>
             </xsl:if>
-            <xsl:if test="exsl:node-set($flagrules)/*[@backcolor]">
+            <xsl:if test="$flagrules/*[@backcolor]">
               <xsl:text>background-color:</xsl:text>
-              <xsl:value-of select="exsl:node-set($flagrules)/*[@backcolor]/@backcolor"/>
+              <xsl:value-of select="$flagrules/*[@backcolor]/@backcolor"/>
               <xsl:text>;</xsl:text>
             </xsl:if>     
-            <xsl:if test="exsl:node-set($flagrules)/*/@style='italics'">
+            <xsl:if test="$flagrules/*/@style='italics'">
               <xsl:text>font-style:italic;</xsl:text>
             </xsl:if>     
-            <xsl:if test="exsl:node-set($flagrules)/*/@style='bold'">
+            <xsl:if test="$flagrules/*/@style='bold'">
               <xsl:text>font-weight:bold;</xsl:text>
             </xsl:if>     
-            <xsl:if test="exsl:node-set($flagrules)/*/@style='underline' or 
-                          exsl:node-set($flagrules)/*/@style='double-underline'">
+            <xsl:if test="$flagrules/*/@style='underline' or 
+                          $flagrules/*/@style='double-underline'">
               <!-- For double-underline, style="border-bottom: 3px double;" seems to work
                    in some cases, but not in all. For now, treat it as underline. -->
               <xsl:text>text-decoration:underline;</xsl:text>
             </xsl:if>     
-            <xsl:if test="exsl:node-set($flagrules)/*/@style='overline'">
+            <xsl:if test="$flagrules/*/@style='overline'">
               <xsl:text>text-decoration:overline;</xsl:text>
             </xsl:if>     
           </xsl:attribute>
@@ -1487,14 +1489,14 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     <xsl:param name="flagrules">
       <xsl:call-template name="getrules"/>
     </xsl:param>
-    <xsl:apply-templates select="exsl:node-set($flagrules)/prop[1]" mode="start-flagit"/>
+    <xsl:apply-templates select="$flagrules/prop[1]" mode="start-flagit"/>
   </xsl:template>
  
  <xsl:template name="end-flagit">
   <xsl:param name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:param>
-  <xsl:apply-templates select="exsl:node-set($flagrules)/prop[last()]" mode="end-flagit"/>
+  <xsl:apply-templates select="$flagrules/prop[last()]" mode="end-flagit"/>
  </xsl:template>
  
  <xsl:template match="*" mode="ditamsg:cannot-flag-inline-element">

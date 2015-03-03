@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- 
+<!--   
 Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
@@ -30,7 +29,6 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
 See the accompanying license.txt file for applicable licenses.
 -->
-
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
 
     <!-- 
@@ -62,10 +60,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Body first header"/>
 
     <!-- The header that appears on odd-numbered pages. -->
-    <variable id="Body odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Body odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on even-numbered pages. -->
-    <variable id="Body even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Body even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
 
     <!-- The footer that appears on Preface odd-numbered pages. -->
     <variable id="Preface odd footer"/>
@@ -77,10 +75,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Preface first footer"/>
 
     <!-- The header that appears on Preface odd-numbered pages. -->
-    <variable id="Preface odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;Introduction&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Preface odd header"><param ref-name="prodname"/> | Introduction | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on Preface even-numbered pages. -->
-    <variable id="Preface even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;Introduction&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Preface even header"><param ref-name="pagenum"/> | Introduction | <param ref-name="prodname"/></variable>
 
     <!-- The header that appears on Preface first page. -->
     <variable id="Preface first header"/>
@@ -95,11 +93,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The header that appears on the odd-numbered table of contents
          pages. --> 
-    <variable id="Toc odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Toc odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the odd-numbered table of contents
          pages. --> 
-    <variable id="Toc even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Toc even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
 
     <!-- The footer that appears on the odd-numbered index pages. -->
     <variable id="Index odd footer"/>
@@ -108,23 +106,20 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Index even footer"/>
 
     <!-- The header that appears on the odd-numbered index pages. -->
-    <variable id="Index odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Index odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the even-numbered index pages. -->
-    <variable id="Index even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Index even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
 
     <!-- The formatting used to display ordered lists (e.g., "1., 2." or 
          "1), 2)" -->
     <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
 
     <!-- The unordered list bullet   -->
-    <variable id="Unordered List bullet">&#x2022;</variable>
+    <variable id="Unordered List bullet">•</variable>
 
     <!-- The heading string to put at the top of the Table of Contents -->
     <variable id="Table of Contents">Contents</variable>
-
-    <!-- The heading string to put at the top of the Index -->
-    <variable id="Index">Index</variable>
 
     <variable id="Index Continued String">continued</variable>
 
@@ -135,19 +130,19 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Index See Also String">See also </variable>
 
     <!-- The string used to label a chapter within the table of contents. -->
-    <variable id="Table of Contents Chapter">Chapter&#xA0;<param ref-name="number"/>:&#xA0;</variable>
+    <variable id="Table of Contents Chapter">Chapter <param ref-name="number"/>: </variable>
 
     <!-- The string used to label an appendix within the table of contents. -->
-    <variable id="Table of Contents Appendix">Appendix&#xA0;<param ref-name="number"/>:&#xA0;</variable>
+    <variable id="Table of Contents Appendix">Appendix <param ref-name="number"/>: </variable>
 
     <!-- The string used to label an part within the table of contents. -->
-    <variable id="Table of Contents Part">Part&#xA0;<param ref-name="number"/>:&#xA0;</variable>
+    <variable id="Table of Contents Part">Part <param ref-name="number"/>: </variable>
 
     <!-- The string used to label an preface within the table of contents. -->
-    <variable id="Table of Contents Preface">Preface:&#xA0;</variable>
+    <variable id="Table of Contents Preface">Preface: </variable>
 
     <!-- The string used to label an preface within the table of contents. -->
-    <variable id="Table of Contents Notices"></variable>
+    <variable id="Table of Contents Notices"/>
 
     <!-- The string used to label an preface in body text. -->
     <variable id="Preface title">Preface</variable>
@@ -160,50 +155,19 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Mini Toc">Topics: </variable>
 
     <variable id="#note-separator">: </variable>
-    <!-- Text to use for 'Note' label generated from <note> element. -->
-    <variable id="Note">Note</variable>
+
     <!-- Text to use for 'Notice' label generated from <note> element. -->
     <variable id="Notice">Notice</variable>
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'tip'. -->
-    <variable id="Tip">Tip</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element
-         with 'type' attribute set to 'tip'. -->
-    <variable id="Important">Important</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'fastpath'. -->
-    <variable id="Fastpath">Fastpath</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'remember'. -->
-    <variable id="Remember">Remember</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'attention'. -->
-    <variable id="Attention">Attention</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'caution'. -->
-    <variable id="Caution">Caution</variable>
-
-    <!-- Text to use for 'Note' label generated from <note> element 
-         with 'type' attribute set to 'danger'. -->
-    <variable id="Danger">Danger</variable>
-    <!-- Text to use for 'Note' label generated from <note> element with 'type' attribute set to 'warning'. -->
-    <variable id="Warning">Warning</variable>
-    <!-- Text to use for 'Note' label generated from <note> element
-         with 'type' attribute set to 'restriction'. -->
-    <variable id="Restriction">Restriction</variable>
 
     <!-- Text to use for figure titles. Renders as part of <fig>/<title>
           elements. -->
-    <variable id="Figure">Figure <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Figure.title">Figure <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Figure Number">Figure <param ref-name="number"/></variable>
 
     <!-- Text to use for table titles. Renders as part of <table>/<title> 
          elements. -->
-    <variable id="Table">Table <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Table.title">Table <param ref-name="number"/>: <param ref-name="title"/></variable>
+    <variable id="Table Number">Table <param ref-name="number"/></variable>
 
     <!-- Text to use for related links label.
          Renders as part of <related-links> element. -->
@@ -292,37 +256,15 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Image path to use for a note of "tip" type. -->
     <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-
+    <variable id="trouble Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
     <!-- Image path to use for a note of "other" type. -->
     <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-
-    <!--
-        String used for links in end of document in XHTML
-    -->
-
-    <!-- The title of the links to parent -->
-    <variable id="Parent topic">Parent Topic</variable>
-
-    <!-- The title of the links to next topics -->
-    <variable id="Next topic">Next Topic</variable>
-
-    <!-- The title of the links to previous topics -->
-    <variable id="Previous topic">Previous Topic</variable>
 
     <!-- The title of the links to child topics -->
     <variable id="Child topics">Child Topics</variable>
 
-    <!-- The title of the links to Related concepts -->
-    <variable id="Related concepts">Related Concepts</variable>
-
-    <!-- The title of the links to Related tasks -->
-    <variable id="Related tasks">Related Tasks</variable>
-
     <!-- The title of the links to Related references -->
     <variable id="Related references">Related References</variable>
-
-    <!-- The title of the links to Related information -->
-    <variable id="Related information">Related Information</variable>
 
     <!--
        Strings used in the online-help publishing.
@@ -370,19 +312,19 @@ See the accompanying license.txt file for applicable licenses.
     <!-- The search by text button title in online-help output -->
     <variable id="Search text button title">Search</variable>
 
-	<variable id="Online Help Search Method Field">Search method</variable>
-	<variable id="Online Help Search Method Or">or</variable>
-	<variable id="Online Help Search Method And">and</variable>
-	<variable id="Search Highlight Switch">Highlight text in search results</variable>
-	<variable id="Search index next button title">Show Next</variable>
-	<variable id="Search Whole Words Switch">Find whole words only</variable>
-	<variable id="Search Case Sensitive Switch">Match case</variable>
-	<variable id="Search Stopped Message">The search was stopped after 50 hits.</variable>
-	<!--This one is a java script expression. So if the order of message should be another don't forget to add '+'
-	and quotes to the string expressions.-->
-	<variable id="Search Excluded Stop Words Message">"The following words were excluded from the search: "+<param ref-name="stop-words-list"/></variable>
-	<variable id="Search Search in Progress Message">Search in progress...</variable>
-	<variable id="Search Search Give No Results Message">No matches were found.</variable>
+  <variable id="Online Help Search Method Field">Search method</variable>
+  <variable id="Online Help Search Method Or">or</variable>
+  <variable id="Online Help Search Method And">and</variable>
+  <variable id="Search Highlight Switch">Highlight text in search results</variable>
+  <variable id="Search index next button title">Show Next</variable>
+  <variable id="Search Whole Words Switch">Find whole words only</variable>
+  <variable id="Search Case Sensitive Switch">Match case</variable>
+  <variable id="Search Stopped Message">The search was stopped after 50 hits.</variable>
+  <!--This one is a java script expression. So if the order of message should be another don't forget to add '+'
+  and quotes to the string expressions.-->
+  <variable id="Search Excluded Stop Words Message">"The following words were excluded from the search: "+<param ref-name="stop-words-list"/></variable>
+  <variable id="Search Search in Progress Message">Search in progress...</variable>
+  <variable id="Search Search Give No Results Message">No matches were found.</variable>
 
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">Optional:</variable>
@@ -404,10 +346,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Glossary even footer"/>
 
     <!-- The header that appears on the odd-numbered glossary pages. -->
-    <variable id="Glossary odd header"><param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the even-numbered glossary pages. -->
-    <variable id="Glossary even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="prodname"/></variable>
+    <variable id="Glossary even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
      
      <!-- The heading string to put at the top of the Glossary -->
      <variable id="Glossary">Glossary</variable>
@@ -417,9 +359,8 @@ See the accompanying license.txt file for applicable licenses.
      
      <!-- The heading string to put at the top of the List of Figures -->
      <variable id="List of Figures">List of Figures</variable>
-  <variable id="Option">Option</variable>
-  <variable id="Description">Description</variable>
-  <variable id="#menucascade-separator">&#xA0;&#x3E; </variable>
+
+  <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>
   <variable id="#quote-end">”</variable>
 </vars>

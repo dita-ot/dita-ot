@@ -12,9 +12,8 @@
 <concept id="tocjs_license" xml:lang="en-us">
  <title>License</title>
  <conbody>
-  <p>The tocjs plugin includes original code and code from the Yahoo UI Library treeview widget.
-   Both are licensed under the BSD license, and distributed with the DITA Open Toolkit under both
-   the Common Public License 1.0 and the Apache License 2.0.</p>
+  <p>The tocjs plugin includes original code and code from the Yahoo UI Library treeview widget. Both are licensed under the BSD license, and distributed with the DITA Open Toolkit under the Apache
+      License 2.0.</p>
   <section>
    <title>Conditions</title>
    <p>Redistribution and use in source and binary forms, with or without modification, are permitted

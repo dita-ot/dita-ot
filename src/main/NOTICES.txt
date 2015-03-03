@@ -1,8 +1,8 @@
 DITA Open Toolkit: Third Party Notices
 
-This Notices file contains certain notices and important information that the DITA Open Toolkit Project licensors and contributors (the ìProjectî) are required to provide to you with respect to certain third party components included in the DITA Open Toolkit (the ìProgramî).
+This Notices file contains certain notices and important information that the DITA Open Toolkit Project licensors and contributors (the ‚ÄúProject‚Äù) are required to provide to you with respect to certain third party components included in the DITA Open Toolkit (the ‚ÄúProgram‚Äù).
 
-Your use of the Program is governed by the license terms set forth in the ìlicense.txtî file or other license terms and conditions accompanying the Program, and NOT by any terms contained in this Notices file below.  The notices and information below are provided for informational purposes only.
+Your use of the Program is governed by the license terms set forth in the ‚Äúlicense.txt‚Äù file or other license terms and conditions accompanying the Program, and NOT by any terms contained in this Notices file below.  The notices and information below are provided for informational purposes only.
 
 This Notices file may identify information or components listed in the agreements for the Program that are not used by, or that were not shipped with, the Program as you installed it.
 
@@ -127,7 +127,7 @@ The Program includes the following software components, which were obtained unde
 
 DOM
 
-W3CÆ SOFTWARE NOTICE AND LICENSE
+W3C¬Æ SOFTWARE NOTICE AND LICENSE
 http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
 This work (and included software, documentation such as READMEs, or other related items) is being provided by the copyright holders under the following license. By obtaining, using and/or copying this work, you (the licensee) agree that you have read, understood, and will comply with the following terms and conditions.
 Permission to copy, modify, and distribute this software and its documentation, with or without modification, for any purpose and without fee or royalty is hereby granted, provided that you include the following on ALL copies of the software and documentation or portions thereof, including modifications:
@@ -141,9 +141,9 @@ The name and trademarks of copyright holders may NOT be used in advertising or p
 ===============================================================================
 The Program includes the following software components, which were obtained under the following terms and conditions: 
 
-DITA 1.1 DTDs, Schemas, and Specification
+DITA 1.1 DTDs and Schemas
 
-Copyright © OASISÆ 1993-2007. All Rights Reserved. OASIS trademark, IPR and other policies apply.
+Copyright ¬© OASIS¬Æ 1993-2007. All Rights Reserved. OASIS trademark, IPR and other policies apply.
 
 All capitalized terms in the following text have the meanings assigned to them in the OASIS Intellectual Property Rights Policy (the "OASIS IPR Policy"). The full Policy may be found at the OASIS website.
 
@@ -166,7 +166,7 @@ The Program includes the following software components, which were obtained unde
 
 DITA 1.2 DTDs and Schemas
 
-Copyright © OASISÆ 2010. All Rights Reserved.
+Copyright ¬© OASIS¬Æ 2010. All Rights Reserved.
 
 All capitalized terms in the following text have the meanings assigned to them in the OASIS Intellectual Property Rights Policy (the "OASIS IPR Policy"). The full Policy may be found at the OASIS website.
 

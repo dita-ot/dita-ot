@@ -1,19 +1,23 @@
 package org.dita.dost.util;
 
 import static org.junit.Assert.*;
+import static org.dita.dost.util.URLUtils.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.junit.Test;
 
 public class KeyDefTest {
 
     @Test
-    public void testKeyDefStringStringString() {
-        final KeyDef k = new KeyDef("foo", "bar", "scope", "baz");
+    public void testKeyDefStringStringString() throws URISyntaxException {
+        final KeyDef k = new KeyDef("foo", toURI("bar"), "scope", toURI("baz"));
         assertEquals("foo", k.keys);
-        assertEquals("bar", k.href);
+        assertEquals(new URI("bar"), k.href);
         assertEquals("scope", k.scope);
-        assertEquals("baz", k.source);
-        final KeyDef n = new KeyDef("foo", null, null, null);
+        assertEquals(new URI("baz"), k.source);
+        final KeyDef n = new KeyDef("foo", (URI) null, null, (URI) null);
         assertEquals("foo", n.keys);
         assertNull(n.href);
         assertNull(n.scope);
@@ -22,9 +26,9 @@ public class KeyDefTest {
     
     @Test
     public void testKeyDefToString() {
-        final KeyDef k = new KeyDef("foo", "bar", "scope", "baz");
+        final KeyDef k = new KeyDef("foo", toURI("bar"), "scope", toURI("baz"));
         assertEquals("foo=bar(scope)(baz)", k.toString());
-        final KeyDef n = new KeyDef("foo", null, null, null);
+        final KeyDef n = new KeyDef("foo", (URI) null, null, (URI) null);
         assertEquals("foo=", n.toString());
     }
 

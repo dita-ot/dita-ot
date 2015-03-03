@@ -18,7 +18,7 @@
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="1.0"
+                version="2.0"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 exclude-result-prefixes="dita-ot"
   >
@@ -37,10 +37,8 @@
 </xsl:text></xsl:variable>
 
 <!-- *************************** Command line parameters *********************** -->
-<xsl:param name="FILEREF" select="'file://'"/>
 <xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
 <xsl:param name="WORKDIR" select="'./'"/>
-<xsl:param name="DITAEXT" select="'.xml'"/>
 
 <!-- *********************************************************************************
      Setup the HTML wrapper for the table of contents
@@ -124,7 +122,7 @@
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="@format='dita' or @format='DITA'">
+    <xsl:when test="@format='dita'">
       <xsl:call-template name="output-toc-entry">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
@@ -303,12 +301,6 @@
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">
                 <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>
               </xsl:when>
-              <!--<xsl:when test="not(@href) or @href=''">
-                <xsl:variable name="parentHREF" select="parent::*[contains(@class, ' map/topicref ')]/@href"/>
-                <xsl:if test="$parentHREF!=''">
-                  <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before($parentHREF, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
-                </xsl:if>
-              </xsl:when>-->
               <xsl:otherwise> <!-- If non-DITA, keep the href as-is -->
                 <xsl:attribute name="value"><xsl:value-of select="@href"/></xsl:attribute>
               </xsl:otherwise>

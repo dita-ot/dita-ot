@@ -9,6 +9,8 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.StringUtils.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +22,6 @@ import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -89,14 +90,14 @@ public final class IndexTermReader extends AbstractXMLReader {
     public IndexTermReader(final IndexTermCollection result) {
         termStack = new Stack<IndexTerm>();
 		topicIdStack = new Stack<String>();
-		indexTermSpecList = new ArrayList<String>(INT_16);
-		indexSeeSpecList = new ArrayList<String>(INT_16);
-		indexSeeAlsoSpecList = new ArrayList<String>(INT_16);
-		indexSortAsSpecList = new ArrayList<String>(INT_16);
-		topicSpecList = new ArrayList<String>(INT_16);
-		titleSpecList = new ArrayList<String>(INT_16);
-		indexTermList = new ArrayList<IndexTerm>(INT_256);
-		titleMap = new HashMap<String, String>(INT_256);
+		indexTermSpecList = new ArrayList<String>(16);
+		indexSeeSpecList = new ArrayList<String>(16);
+		indexSeeAlsoSpecList = new ArrayList<String>(16);
+		indexSortAsSpecList = new ArrayList<String>(16);
+		topicSpecList = new ArrayList<String>(16);
+		titleSpecList = new ArrayList<String>(16);
+		indexTermList = new ArrayList<IndexTerm>(256);
+		titleMap = new HashMap<String, String>(256);
 		processRoleStack = new Stack<String>();
 		processRoleLevel = 0;
 		this.result = result != null ? result : IndexTermCollection.getInstantce();
@@ -135,19 +136,19 @@ public final class IndexTermReader extends AbstractXMLReader {
          * For title info
          */
         if (processRoleStack.isEmpty() ||
-                !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleStack.peek())) {
+                !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleStack.peek())) {
             if (!insideSortingAs && !termStack.empty()) {
                 final IndexTerm indexTerm = termStack.peek();
                 temp = trimSpaceAtStart(temp, indexTerm.getTermName());
-                indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, false));
+                indexTerm.setTermName(setOrAppend(indexTerm.getTermName(), temp, false));
             } else if (insideSortingAs && temp.length() > 0) {
                 final IndexTerm indexTerm = termStack.peek();
                 temp = trimSpaceAtStart(temp, indexTerm.getTermKey());
-                indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, false));
+                indexTerm.setTermKey(setOrAppend(indexTerm.getTermKey(), temp, false));
             } else if (inTitleElement) {
                 temp = trimSpaceAtStart(temp, title);
                 //Always append space if: <title>abc<ph/>df</title>
-                title = StringUtils.setOrAppend(title, temp, false);
+                title = setOrAppend(title, temp, false);
             }
         }
     }
@@ -156,8 +157,7 @@ public final class IndexTermReader extends AbstractXMLReader {
     public void endDocument() throws SAXException {
         final int size = indexTermList.size();
         updateIndexTermTargetName();
-        for(int i=0; i<size; i++){
-            final IndexTerm indexterm = indexTermList.get(i);
+        for (final IndexTerm indexterm : indexTermList) {
             //IndexTermCollection.getInstantce().addTerm(indexterm);
             result.addTerm(indexterm);
         }
@@ -175,7 +175,7 @@ public final class IndexTermReader extends AbstractXMLReader {
             }
             processRoleLevel--;
             if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
-                    .equalsIgnoreCase(role)) {
+                    .equals(role)) {
                 return;
             }
         }
@@ -189,7 +189,7 @@ public final class IndexTermReader extends AbstractXMLReader {
                     return;
                 } else{
                     term.setTermName("***");
-                    logger.logWarn(MessageUtils.getInstance().getMessage("DOTJ014W").toString());
+                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ014W").toString());
                 }
             }
 
@@ -236,7 +236,7 @@ public final class IndexTermReader extends AbstractXMLReader {
          */
         if (titleSpecList.contains(localName)) {
             inTitleElement = false;
-            if(!topicIdStack.empty() && !titleMap.containsKey(topicIdStack.empty())){
+            if(!topicIdStack.empty() && !titleMap.containsKey(topicIdStack.peek())){
                 //If this is the first topic title
                 if(titleMap.size() == 0) {
                     defaultTitle = title;
@@ -276,7 +276,7 @@ public final class IndexTermReader extends AbstractXMLReader {
             target.setTargetName(targetFile);
         }
         if(fragment != null) {
-            target.setTargetURI(targetFile + SHARP + fragment);
+            target.setTargetURI(setFragment(targetFile, fragment));
         } else {
             target.setTargetURI(targetFile);
         }
@@ -319,7 +319,7 @@ public final class IndexTermReader extends AbstractXMLReader {
                     .getValue(ATTRIBUTE_NAME_XML_LANG);
 
             if (xmlLang != null) {
-                IndexTerm.setTermLocale(StringUtils.getLocale(xmlLang));
+                IndexTerm.setTermLocale(getLocale(xmlLang));
             }
         }
 
@@ -466,8 +466,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         if(defaultTitle == null){
             defaultTitle = targetFile;
         }
-        for(int i=0; i<size; i++){
-            final IndexTerm indexterm = indexTermList.get(i);
+        for (final IndexTerm indexterm : indexTermList) {
             updateIndexTermTargetName(indexterm);
         }
     }
@@ -500,31 +499,6 @@ public final class IndexTermReader extends AbstractXMLReader {
         }
     }
 
-    /** Whitespace normalization state. */
-    private enum WhiteSpaceState { WORD, SPACE };
-
-    /**
-     * Normalize and collapse whitespaces from string buffer.
-     * 
-     * @param strBuffer The string buffer.
-     */
-    private void normalizeAndCollapseWhitespace(final StringBuilder strBuffer){
-        WhiteSpaceState currentState = WhiteSpaceState.WORD;
-        for (int i = strBuffer.length() - 1; i >= 0; i--) {
-            final char currentChar = strBuffer.charAt(i);
-            if (Character.isWhitespace(currentChar)) {
-                if (currentState == WhiteSpaceState.SPACE) {
-                    strBuffer.delete(i, i + 1);
-                } else if(currentChar != ' ') {
-                    strBuffer.replace(i, i + 1, " ");
-                }
-                currentState = WhiteSpaceState.SPACE;
-            } else {
-                currentState = WhiteSpaceState.WORD;
-            }
-        }
-    }
-
     /**
      * Trim whitespace from start of the string. If last character of termName and
      * first character of temp is a space character, remove leading string from temp 
@@ -533,7 +507,7 @@ public final class IndexTermReader extends AbstractXMLReader {
      * @param termName
      * @return trimmed temp value
      */
-    private String trimSpaceAtStart(final String temp, final String termName) {
+    private static String trimSpaceAtStart(final String temp, final String termName) {
         if(termName != null && termName.charAt(termName.length() - 1) == ' ') {
             if(temp.charAt(0) == ' ') {
                 return temp.substring(1);

@@ -10,8 +10,10 @@ package org.dita.dost.writer;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,9 +25,7 @@ import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.Content;
 import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
@@ -110,7 +110,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
         
     private Map<String, Element> definitionMap;
-    private File tempDir;
     /** File name with relative path to the temporary directory of input file. */
     private File inputFile;
 
@@ -133,7 +132,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * It is used to store the target of the keys
      * In the from the map <keys, target>.
      */
-    private Map<String, String> keyMap;
+    private Map<String, URI> keyMap;
 
     /**
      * It is used to indicate whether the keyref is valid.
@@ -162,7 +161,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private Element elem;
 
     /** Set of link targets which are not resource-only */
-    private Set<String> normalProcessingRoleTargets;
+    private Set<URI> normalProcessingRoleTargets;
     
     /**
      * Constructor.
@@ -172,27 +171,15 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         keyrefLevalStack = new Stack<Integer>();
         validKeyref = new Stack<Boolean>();
         empty = true;
-        keyMap = new HashMap<String, String>();
+        keyMap = new HashMap<String, URI>();
         elemName = new Stack<String>();
         hasSubElem = new Stack<Boolean>();
-    }
-    
-    public void setContent(final Content content) {
-        throw new UnsupportedOperationException();
     }
     
     public void setKeyDefinition(final Map<String, Element> definitionMap) {
         this.definitionMap = definitionMap;
     }
-    
-    /**
-     * Set temp dir.
-     * @param tempDir temp dir
-     */
-    public void setTempDir(final File tempDir) {
-        this.tempDir = tempDir;
-    }
-    
+
     /**
      * Set current file.
      */
@@ -204,14 +191,14 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * Set key map.
      * @param map key map
      */
-    public void setKeyMap(final Map<String, String> map) {
+    public void setKeyMap(final Map<String, URI> map) {
         keyMap = map;
     }
     
     /**
      * Get set of link targets which have normal processing role. Paths are relative to current file.
      */
-    public Set<String> getNormalProcessingRoleTargets() {
+    public Set<URI> getNormalProcessingRoleTargets() {
         return Collections.unmodifiableSet(normalProcessingRoleTargets);
     }
     
@@ -222,21 +209,21 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * @throws DITAOTException if key reference resolution failed
      */
     @Override
-    public void write(final String filename) throws DITAOTException {
-        super.write(new File(tempDir, inputFile.getPath()).getAbsolutePath());
+    public void write(final File filename) throws DITAOTException {
+        super.write(new File(job.tempDir, inputFile.getPath()).getAbsoluteFile());
     }
         
     // XML filter methods ------------------------------------------------------
 
     @Override
     public void startDocument() throws SAXException {
-        normalProcessingRoleTargets = new HashSet<String>();
+        normalProcessingRoleTargets = new HashSet<URI>();
         getContentHandler().startDocument();
     }
     
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (keyrefLeval != 0 && new String(ch,start,length).trim().length() == 0) {
+        if (keyrefLeval != 0 && (length == 0 || new String(ch,start,length).trim().length() == 0)) {
             if (!hasChecked) {
                 empty = true;
             }
@@ -258,61 +245,61 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 NodeList nodeList = null;
                 // If current element name doesn't equal the key reference element
                 // just grab the content from the matching element of key definition
-                if(!name.equals(elemName.peek())){
+                if (!name.equals(elemName.peek())) {
                     nodeList = elem.getElementsByTagName(name);
-                    if(nodeList.getLength() > 0){
+                    if (nodeList.getLength() > 0) {
                         final Node node = nodeList.item(0);
                         final NodeList nList = node.getChildNodes();
                         int index = 0;
-                        while(index < nList.getLength()){
+                        while (index < nList.getLength()) {
                             final Node n = nList.item(index++);
-                            if(n.getNodeType() == Node.TEXT_NODE){
+                            if (n.getNodeType() == Node.TEXT_NODE) {
                                 final char[] ch = n.getNodeValue().toCharArray();
                                 getContentHandler().characters(ch, 0, ch.length);
                                 break;
                             }
                         }
                     }
-                }else{
+                } else {
                     // Current element name equals the key reference element
                     // grab keyword or term from key definition
                     nodeList = elem.getElementsByTagName(TOPIC_KEYWORD.localName);
-                    if(nodeList.getLength() == 0 ){
+                    if (nodeList.getLength() == 0 ) {
                         nodeList = elem.getElementsByTagName(TOPIC_TERM.localName);
                     }
-                    if(!hasSubElem.peek()){
-                        if(nodeList.getLength() > 0){
-                            if(currentElement != null && !currentElement.isRefType){
+                    if (!hasSubElem.peek()) {
+                        if (nodeList.getLength() > 0) {
+                            if (currentElement != null && !currentElement.isRefType) {
                                 // only one keyword or term is used.
-                                domToSax((Element)nodeList.item(0), false);
-                            } else if(currentElement != null){
+                                domToSax((Element) nodeList.item(0), false);
+                            } else if (currentElement != null) {
                                 // If the key reference element carries href attribute
                                 // all keyword or term are used.
-                                if(TOPIC_LINK.matches(currentElement.type)){
+                                if (TOPIC_LINK.matches(currentElement.type)) {
                                     final AttributesImpl atts = new AttributesImpl();
                                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_LINKTEXT.toString());
                                     getContentHandler().startElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName, atts);
                                 }
                                 if (!currentElement.isEmpty) {
-                                    for(int index =0; index<nodeList.getLength(); index++){
+                                    for(int index = 0; index < nodeList.getLength(); index++) {
                                         final Node node = nodeList.item(index);
-                                        if(node.getNodeType() == Node.ELEMENT_NODE){
-                                            domToSax((Element)node, true);
+                                        if (node.getNodeType() == Node.ELEMENT_NODE) {
+                                            domToSax((Element) node, true);
                                         }
                                     }
                                 }
-                                if(TOPIC_LINK.matches(currentElement.type)){
+                                if (TOPIC_LINK.matches(currentElement.type)) {
                                     getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
                                 }
                             }
-                        }else{
-                            if(currentElement != null && TOPIC_LINK.matches(currentElement.type)){
+                        } else {
+                            if (currentElement != null && TOPIC_LINK.matches(currentElement.type)) {
                                 // If the key reference element is link or its specification,
                                 // should pull in the linktext
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
-                                if(linktext.getLength()>0){
-                                    domToSax((Element)linktext.item(0), true);
-                                }else if (!StringUtils.isEmptyString(elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE))){
+                                if (linktext.getLength() > 0) {
+                                    domToSax((Element) linktext.item(0), true);
+                                } else if (!StringUtils.isEmptyString(elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE))) {
                                     final AttributesImpl atts = new AttributesImpl();
                                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_LINKTEXT.toString());
                                     getContentHandler().startElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName, atts);
@@ -322,11 +309,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                     }
                                     getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
                                 }
-                            }else if(currentElement != null && currentElement.isRefType){
+                            } else if (currentElement != null && currentElement.isRefType) {
                                 final NodeList linktext = elem.getElementsByTagName(TOPIC_LINKTEXT.localName);
-                                if(linktext.getLength()>0){
-                                    domToSax((Element)linktext.item(0), false);
-                                }else{
+                                if (linktext.getLength() > 0) {
+                                    domToSax((Element) linktext.item(0), false);
+                                } else {
                                     if (elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE) != null) {
                                         final char[] ch = elem.getAttribute(ATTRIBUTE_NAME_NAVTITLE).toCharArray();
                                         getContentHandler().characters(ch, 0, ch.length);
@@ -339,7 +326,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 }
             }
         }
-        if (keyrefLeval != 0){
+        if (keyrefLeval != 0) {
             keyrefLeval--;
             empty = false;
         }
@@ -370,8 +357,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         boolean valid = false;
         if (atts.getIndex(ATTRIBUTE_NAME_KEYREF) == -1) {
             // If the keyrefLeval doesn't equal 0, it means that current element is under the key reference element
-            if(keyrefLeval != 0){
-                keyrefLeval ++;
+            if (keyrefLeval != 0) {
+                keyrefLeval++;
                 hasSubElem.pop();
                 hasSubElem.push(true);
             }
@@ -395,10 +382,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             //the @keyref could be in the following forms:
             // 1.keyName 2.keyName/elementId
             /*String definition = ((Hashtable<String, String>) content
-					.getValue()).get(atts
-					.getValue(ATTRIBUTE_NAME_KEYREF));*/
-            final String keyrefValue=atts.getValue(ATTRIBUTE_NAME_KEYREF);
-            final int slashIndex=keyrefValue.indexOf(SLASH);
+                    .getValue()).get(atts
+                    .getValue(ATTRIBUTE_NAME_KEYREF));*/
+            final String keyrefValue = atts.getValue(ATTRIBUTE_NAME_KEYREF);
+            final int slashIndex = keyrefValue.indexOf(SLASH);
             String keyName= keyrefValue;
             String elementId= "";
             if (slashIndex != -1) {
@@ -408,74 +395,60 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             elem = definitionMap.get(keyName);
 
             // If definition is not null
-            if(elem!=null){
+            if (elem!=null) {
                 final NamedNodeMap namedNodeMap = elem.getAttributes();
                 // first resolve the keyref attribute
                 if (currentElement != null && currentElement.refAttr != null) {
-                    final String target = keyMap.get(keyName);
-                    if (target != null && target.length() != 0) {
-                        String target_output = target;
+                    final URI target = keyMap.get(keyName);
+                    if (target != null && target.toString().length() != 0) {
+                        URI target_output = target;
                         // if the scope equals local, the target should be verified that
                         // it exists.
-                        final String scopeValue=elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
-                        final String formatValue=elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
+                        final String scopeValue = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
+                        final String formatValue = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
                         if (TOPIC_IMAGE.matches(currentElement.type)) {
                             valid = true;
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                            target_output = FileUtils.getRelativePath(inputFile.getPath(), target_output);
-                            target_output = normalizeHrefValue(target_output, elementId);
-                            XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
+                            target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(inputFile.getPath()), job.tempDir.toURI().resolve(target)), elementId);
+                            XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                         } else if (("".equals(scopeValue) || ATTR_SCOPE_VALUE_LOCAL.equals(scopeValue)) &&
-                                ("".equals(formatValue) || ATTR_FORMAT_VALUE_DITA.equals(formatValue)  || ATTR_FORMAT_VALUE_DITAMAP.equals(formatValue))){
-                            final File topicFile = new File(FileUtils.resolveFile(tempDir.getAbsolutePath(), URLUtils.decode(target)));
-                            if (topicFile.exists()) {  
-                                final String topicId = this.getFirstTopicId(topicFile);
-                                target_output = FileUtils.getRelativePath(new File(tempDir, inputFile.getPath()).getAbsolutePath(), new File(tempDir, target).getAbsolutePath());
+                                ("".equals(formatValue) || ATTR_FORMAT_VALUE_DITA.equals(formatValue)  || ATTR_FORMAT_VALUE_DITAMAP.equals(formatValue))) {
+                            final File topicFile = toFile(job.tempDir.toURI().resolve(stripFragment(target)));
+                            if (topicFile.exists()) {   
                                 valid = true;
-//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-//                                XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                                target_output = normalizeHrefValue(target_output, elementId, topicId);
-                                XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
+                                final String topicId = getFirstTopicId(topicFile);
+                                target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId, topicId);
+                                XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
-                                    // FIXME: This should be a relative to base directory, not current file
-                                    normalProcessingRoleTargets.add(FileUtils.stripFragment(target_output));
+                                    final URI f = toURI(inputFile).resolve(target_output);
+                                    normalProcessingRoleTargets.add(f);
                                 }
                             } else {
                                 // referenced file does not exist, emits a message.
                                 // Should only emit this if in a debug mode; comment out for now
                                 /*Properties prop = new Properties();
-								prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
-								javaLogger
-										.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", prop)
-												.toString());*/
+                                prop.put("%1", atts.getValue(ATTRIBUTE_NAME_KEYREF));
+                                javaLogger
+                                        .logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", prop)
+                                                .toString());*/
                             }
                         }
                         // scope equals peer or external
                         else {
                             valid = true;
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-//                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                             target_output = normalizeHrefValue(target_output, elementId);
-                            XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output);
+                            XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                         }
 
-                    } else if(target == null || target.length() == 0){
+                    } else if (target == null || target.toString().length() == 0) {
                         // Key definition does not carry an href or href equals "".
                         valid = true;
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                    }else{
+                    } else {
                         // key does not exist.
-                        logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
+                        logger.info(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
                     }
 
                 } else if (currentElement != null && !currentElement.isRefType) {
@@ -534,14 +507,12 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 } else {
                     // keyref is not valid, don't copy any attribute.
                 }
-            }else{
+            } else {
                 // key does not exist
-                logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
             }
 
             validKeyref.push(valid);
-
-
         }
 
         getContentHandler().startElement(uri, localName, name, resAtts);
@@ -555,14 +526,13 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * @param elem element to serialize
      * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
      */
-    private void domToSax(final Element elem, final boolean retainElements) throws SAXException{
-        // use retainElements to indicate that whether there is need to copy the element name
-        if(retainElements){
+    private void domToSax(final Element elem, final boolean retainElements) throws SAXException {
+        if (retainElements) {
             final AttributesImpl atts = new AttributesImpl();
             final NamedNodeMap namedNodeMap = elem.getAttributes();
-            for(int i=0; i<namedNodeMap.getLength(); i++){
+            for (int i = 0; i < namedNodeMap.getLength(); i++) {
                 final Attr a = (Attr) namedNodeMap.item(i);
-                if(a.getNodeName().equals(ATTRIBUTE_NAME_CLASS)) {
+                if (a.getNodeName().equals(ATTRIBUTE_NAME_CLASS)) {
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, changeclassValue(a.getNodeValue()));
                 } else {
                     XMLUtils.addOrSetAttribute(atts, a);
@@ -571,25 +541,22 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             getContentHandler().startElement(NULL_NS_URI, elem.getNodeName(), elem.getNodeName(), atts);
         }
         final NodeList nodeList = elem.getChildNodes();
-        for(int i=0; i<nodeList.getLength(); i++){
+        for (int i = 0; i<nodeList.getLength(); i++) {
             final Node node = nodeList.item(i);
-            if(node.getNodeType() == Node.ELEMENT_NODE){
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
                 final Element e = (Element) node;
-                //special process for tm tag.
-                if(TOPIC_TM.matches(e)){
+                // retain tm and text elements
+                if (TOPIC_TM.matches(e) || TOPIC_TEXT.matches(e)) {
                     domToSax(e, true);
-                }else{
-                    // If the type of current node is ELEMENT_NODE, process current node.
+                } else {
                     domToSax(e, retainElements);
                 }
-                // If the type of current node is ELEMENT_NODE, process current node.
-                //stringBuffer.append(nodeToString((Element)node, retainElements));
-            } else if(node.getNodeType() == Node.TEXT_NODE){
+            } else if (node.getNodeType() == Node.TEXT_NODE) {
                 final char[] ch = node.getNodeValue().toCharArray();
                 getContentHandler().characters(ch, 0, ch.length);
             }
         }
-        if(retainElements) {
+        if (retainElements) {
             getContentHandler().endElement(NULL_NS_URI, elem.getNodeName(), elem.getNodeName());
         }
     }
@@ -597,51 +564,48 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /**
      * Change map type to topic type. 
      */
-    private String changeclassValue(final String classValue){
-    	final DitaClass cls = new DitaClass(classValue);
-    	if (cls.equals(MAP_LINKTEXT)) {
-    		return TOPIC_LINKTEXT.toString();
-    	} else if (cls.equals(MAP_SEARCHTITLE)) {
-    		return TOPIC_SEARCHTITLE.toString();
-    	} else if (cls.equals(MAP_SHORTDESC)) {
-    		return TOPIC_SHORTDESC.toString();
-    	} else {
-    		return cls.toString();
-    	}
+    private String changeclassValue(final String classValue) {
+        final DitaClass cls = new DitaClass(classValue);
+        if (cls.equals(MAP_LINKTEXT)) {
+            return TOPIC_LINKTEXT.toString();
+        } else if (cls.equals(MAP_SEARCHTITLE)) {
+            return TOPIC_SEARCHTITLE.toString();
+        } else if (cls.equals(MAP_SHORTDESC)) {
+            return TOPIC_SHORTDESC.toString();
+        } else {
+            return cls.toString();
+        }
     }
     
     /**
      * change elementId into topicId if there is no topicId in key definition.
      */
-    private static String normalizeHrefValue(final String keyName, final String tail) {
-        final int sharpIndex=keyName.indexOf(SHARP);
-        if(sharpIndex == -1){
-            return keyName + tail.replaceAll(SLASH, SHARP);
+    private static URI normalizeHrefValue(final URI keyName, final String tail) {
+        if (keyName.getFragment() == null) {
+            return toURI(keyName + tail.replaceAll(SLASH, SHARP));
         }
-        return keyName + tail;
+        return toURI(keyName + tail);
     }
 
     /**
      * Get first topic id
      */
     private String getFirstTopicId(final File topicFile) {
-        final String path = topicFile.getParent();
-        final String name = topicFile.getName();
-        final String topicId = MergeUtils.getFirstTopicId(name, path, false);
-        return topicId;
+        final File path = topicFile.getParentFile();
+        final URI name = toURI(topicFile.getName());
+        return MergeUtils.getFirstTopicId(name, path, false);
     }
     
     /**
      * Insert topic id into href
      */
-    private static String normalizeHrefValue(final String fileName, final String tail, final String topicId) {
-        final int sharpIndex=fileName.indexOf(SHARP);
+    private static URI normalizeHrefValue(final URI fileName, final String tail, final String topicId) {
         //Insert first topic id only when topicid is not set in keydef
         //and keyref has elementid
-        if(sharpIndex == -1 && !"".equals(tail)){
-            return fileName + SHARP + topicId + tail;
+        if (fileName.getFragment() == null && !"".equals(tail)) {
+            return setFragment(fileName, topicId + tail);
         }
-        return fileName + tail;
+        return toURI(fileName + tail);
     }
 
     // Inner classes -----------------------------------------------------------
@@ -677,7 +641,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
          * @param isEmpty flag if element is empty
          */
         KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty) {
-        	this(type, refAttr, isEmpty, refAttr != null);
+            this(type, refAttr, isEmpty, refAttr != null);
         }
     }
     
