@@ -3,7 +3,8 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
-  exclude-result-prefixes="opentopic-func xs dita2xslfo"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  exclude-result-prefixes="opentopic-func xs dita2xslfo dita-ot"
   version="2.0">
 
     <xsl:variable name="tableAttrs" select="'../../cfg/fo/attrs/tables-attr.xsl'"/>
@@ -666,74 +667,17 @@
         </xsl:choose>
     </xsl:template>
 
-  <xsl:template name="getEntryNumber" as="xs:integer">
-        <xsl:param name="colname"/>
-        <xsl:param name="optionalName" select="''"/>
-
-        <xsl:choose>
-            <xsl:when test="not(string(number($colname)) = 'NaN')">
-              <xsl:sequence select="xs:integer($colname)"/>
-            </xsl:when>
-            <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][@colname = $colname]">
-                <xsl:for-each select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][@colname = $colname]">
-                    <xsl:choose>
-                        <xsl:when test="@colnum">
-                          <xsl:sequence select="xs:integer(@colnum)"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:sequence select="count(preceding-sibling::*[contains(@class, ' topic/colspec ')]) + 1"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:for-each>
-            </xsl:when>
-            <xsl:when test="not($optionalName = '') and ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][@colname = $optionalName]">
-                <xsl:for-each select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][@colname = $optionalName]">
-                    <xsl:choose>
-                        <xsl:when test="@colnum">
-                          <xsl:sequence select="xs:integer(@colnum)"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:sequence select="count(preceding-sibling::*[contains(@class, ' topic/colspec ')]) + 1"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:for-each>
-            </xsl:when>
-            <xsl:when test="not(string(number(translate($colname,'+-0123456789.abcdefghijklmnopqrstuvwxyz','0123456789')))='NaN')">
-              <xsl:sequence select="xs:integer(translate($colname,'0123456789.abcdefghijklmnopqrstuvwxyz','0123456789'))"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="-1"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
     <xsl:template name="applySpansAttrs">
         <xsl:if test="exists(@morerows) and xs:integer(@morerows) gt 0">
             <xsl:attribute name="number-rows-spanned">
               <xsl:value-of select="xs:integer(@morerows) + 1"/>
             </xsl:attribute>
         </xsl:if>
-
-        <xsl:if test="exists(@nameend) and exists(@namest)">
-          <xsl:variable name="startNum" as="xs:integer">
-                <xsl:call-template name="getEntryNumber">
-                    <xsl:with-param name="colname" select="@namest"/>
-                    <xsl:with-param name="optionalName" select="@colname"/>
-                </xsl:call-template>
-            </xsl:variable>
-
-          <xsl:variable name="endNum" as="xs:integer">
-                <xsl:call-template name="getEntryNumber">
-                    <xsl:with-param name="colname" select="@nameend"/>
-                </xsl:call-template>
-            </xsl:variable>
-
-          <xsl:if test="($startNum gt -1) and ($endNum gt -1) and ($endNum - $startNum) gt 0">
-                <xsl:attribute name="number-columns-spanned">
-                    <xsl:value-of select="($endNum - $startNum) + 1"/>
-                </xsl:attribute>
-            </xsl:if>
-        </xsl:if>
+      <xsl:if test="exists(@dita-ot:morecols) and xs:integer(@dita-ot:morecols) gt 0">
+        <xsl:attribute name="number-columns-spanned">
+        <xsl:value-of select="xs:integer(@dita-ot:morecols) + 1"/>
+        </xsl:attribute>
+      </xsl:if>
     </xsl:template>
 
     <xsl:template name="applyAlignAttrs">

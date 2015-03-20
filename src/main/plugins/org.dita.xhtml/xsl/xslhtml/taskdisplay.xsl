@@ -353,26 +353,7 @@
 <!-- task/choice - fall-thru -->
 
 <!-- choice table is like a simpletable - 2 columns, set heading -->
-<xsl:template match="*[contains(@class,' task/choicetable ')]" name="topic.task.choicetable">
- <!-- Find the total number of relative units for the table. If @relcolwidth="1* 2* 2*",
-      the variable is set to 5. -->
- <xsl:variable name="totalwidth">
-   <xsl:if test="@relcolwidth">
-     <xsl:call-template name="find-total-table-width"/>
-   </xsl:if>
- </xsl:variable>
- <!-- Find how much of the table each relative unit represents. If @relcolwidth is 1* 2* 2*,
-      there are 5 units. So, each unit takes up 100/5, or 20% of the table. Default to 0,
-      which the entries will ignore. -->
- <xsl:variable name="width-multiplier">
-   <xsl:choose>
-     <xsl:when test="@relcolwidth">
-       <xsl:value-of select="100 div $totalwidth"/>
-     </xsl:when>
-     <xsl:otherwise>0</xsl:otherwise>
-   </xsl:choose>
- </xsl:variable>
-  
+<xsl:template match="*[contains(@class,' task/choicetable ')]" name="topic.task.choicetable">  
  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
  <xsl:call-template name="setaname"/>
  <xsl:value-of select="$newline"/>
@@ -380,6 +361,7 @@
   <xsl:call-template name="commonattributes"/>
   <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
   <xsl:call-template name="setid"/><xsl:value-of select="$newline"/>
+  <xsl:call-template name="dita2html:simpletable-cols"/>
   <!--If the choicetable has no header - output a default one-->
   <xsl:choose>
   <xsl:when test="not(./*[contains(@class,' task/chhead ')])">
@@ -435,14 +417,15 @@
   </xsl:otherwise>
   </xsl:choose>
   <tbody>
-    <xsl:apply-templates>     <!-- width-multiplier will be used in the first row to set widths. -->
-      <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-    </xsl:apply-templates>
+    <xsl:apply-templates/>
   </tbody>
  </table><xsl:value-of select="$newline"/>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 <xsl:template match="*[contains(@class,' task/choicetable ')]" mode="get-output-class">choicetableborder</xsl:template>
+  <xsl:template match="*[contains(@class,' task/choicetable ')]" mode="dita2html:get-max-entry-count" as="xs:integer">
+    <xsl:sequence select="2"/>
+  </xsl:template>
  
 <!-- headers are called above, hide the fall thru -->
 <xsl:template match="*[contains(@class,' task/chhead ')]" />
@@ -462,11 +445,8 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/chrow ')]" name="topic.task.chrow">
- <xsl:param name="width-multiplier">0</xsl:param>
  <tr><xsl:call-template name="setid"/><xsl:call-template name="commonattributes"/>    
-    <xsl:apply-templates>     <!-- width-multiplier will be used in the first row to set widths. -->
-      <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-    </xsl:apply-templates>
+    <xsl:apply-templates/>
 </tr>
  <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -475,8 +455,6 @@
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template match="*[contains(@class,' task/choption ')]" name="topic.task.choption">
- <xsl:param name="width-multiplier">0</xsl:param>
-  
   <td valign="top">
    <!-- Add header attr for column header -->
    <xsl:attribute name="headers">
@@ -514,22 +492,6 @@
     </xsl:variable>
     <!-- Determine which column this entry is in. -->
     <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
-    <!-- If width-multiplier=0, then either @relcolwidth was not specified, or this is not the first
-         row, so do not create a width value. Otherwise, find out the relative width of this column. -->
-    <xsl:variable name="widthpercent">
-      <xsl:if test="$width-multiplier != 0">
-        <xsl:call-template name="get-current-entry-percentage">
-          <xsl:with-param name="multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-          <xsl:with-param name="entry-num"><xsl:value-of select="$thiscolnum"/></xsl:with-param>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <!-- If we calculated a width, create the width attribute. -->
-    <xsl:if test="string-length($widthpercent)>0">
-      <xsl:attribute name="width">
-        <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <!-- Does the column match? Is REV on for entry or row? -->
     <xsl:choose>
@@ -550,8 +512,6 @@
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template match="*[contains(@class,' task/chdesc ')]" name="topic.task.chdesc">
- <xsl:param name="width-multiplier">0</xsl:param>
-    
   <td valign="top">
    <!-- Add header attr, column header then option header -->
    <xsl:attribute name="headers">
@@ -602,22 +562,6 @@
     </xsl:variable>
     <!-- Determine which column this entry is in. -->
     <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
-    <!-- If width-multiplier=0, then either @relcolwidth was not specified, or this is not the first
-         row, so do not create a width value. Otherwise, find out the relative width of this column. -->
-    <xsl:variable name="widthpercent">
-      <xsl:if test="$width-multiplier != 0">
-        <xsl:call-template name="get-current-entry-percentage">
-          <xsl:with-param name="multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-          <xsl:with-param name="entry-num"><xsl:value-of select="$thiscolnum"/></xsl:with-param>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <!-- If we calculated a width, create the width attribute. -->
-    <xsl:if test="string-length($widthpercent)>0">
-      <xsl:attribute name="width">
-        <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <!-- Does the column match? Is REV on for entry or row? -->
     <xsl:choose>

@@ -1925,8 +1925,6 @@
 
 <xsl:template match="*[contains(@class, ' topic/colspec ')]"></xsl:template>
 
-<xsl:template match="*[contains(@class, ' topic/spanspec ')]"></xsl:template>
-
 <xsl:template match="*[contains(@class, ' topic/thead ')]" name="topic.thead">
   <thead>
     <!-- Get style from parent tgroup, then override with thead if specified locally -->
@@ -2025,7 +2023,7 @@
 <!-- do body entries -->
 <xsl:template name="topic.tbody_entry">
   <xsl:variable name="startpos">
-    <xsl:if test="../../../../@rowheader = 'firstcol'"><xsl:call-template name="find-entry-start-position"/></xsl:if>
+    <xsl:if test="../../../../@rowheader = 'firstcol' and @dita-ot:x = 1"></xsl:if>
   </xsl:variable>
   <xsl:choose>
     <xsl:when test="number($startpos) = 1"><th><xsl:call-template name="doentry"/></th></xsl:when>
@@ -2092,31 +2090,18 @@
       <xsl:value-of select="@morerows+1"/>
     </xsl:attribute>
   </xsl:if>
-  <xsl:if test="@spanname">
-    <xsl:attribute name="colspan"> <!-- get the number of columns to span from the corresponding spanspec -->
-      <xsl:call-template name="find-spanspec-colspan"/>
-    </xsl:attribute>
-  </xsl:if>
-  <xsl:if test="@namest and @nameend"> <!-- get the number of columns to span from the specified named column values -->
-    <xsl:attribute name="colspan">
-      <xsl:call-template name="find-colspan"/>
-    </xsl:attribute>
+  <xsl:if test="@dita-ot:morecols"> <!-- get the number of columns to span from the specified named column values -->
+    <xsl:attribute name="colspan" select="@dita-ot:morecols + 1"/>
   </xsl:if>
   <!-- If align is on the tgroup, use it (parent=row, then tbody|thead|tfoot, then tgroup) -->
   <xsl:if test="../../../@align">
     <xsl:attribute name="align" select="../../../@align"/>
   </xsl:if>
-  <!-- If align is specified on a colspec or spanspec, that takes priority over tgroup -->
+  <!-- If align is specified on a colspec, that takes priority over tgroup -->
   <xsl:if test="@colname">
     <!-- Removed $this-colname variable, because it is declared above -->
     <xsl:if test="../../../*[contains(@class, ' topic/colspec ')][@colname = $this-colname][@align]">
       <xsl:attribute name="align" select="../../../*[contains(@class, ' topic/colspec ')][@colname = $this-colname]/@align"/>
-    </xsl:if>
-  </xsl:if>
-  <xsl:if test="@spanname">
-    <xsl:variable name="this-spanname" select="@spanname"/>
-    <xsl:if test="../../../*[contains(@class, ' topic/spanspec ')][@spanname = $this-spanname][@align]">
-      <xsl:attribute name="align" select="../../../*[contains(@class, ' topic/spanspec ')][@spanname = $this-spanname]/@align"/>
     </xsl:if>
   </xsl:if>
   <!-- If align is locally specified, that takes priority over all -->
@@ -2140,11 +2125,10 @@
     <xsl:attribute name="valign">top</xsl:attribute>
    </xsl:otherwise>
   </xsl:choose>
+  <!-- TODO: Don't write width here, instead use cols -->
   <xsl:if test="../../../*[contains(@class, ' topic/colspec ')]/@colwidth and
-                not(@namest) and not(@nameend) and not(@spanspec)">
-    <xsl:variable name="entrypos">    <!-- Current column -->
-      <xsl:call-template name="find-entry-start-position"/>
-    </xsl:variable>
+                not(@namest) and not(@nameend)">
+    <xsl:variable name="entrypos" select="@dita-ot:x"/><!-- Current column -->
     <xsl:variable name="colspec" select="../../../*[contains(@class, ' topic/colspec ')][number($entrypos)]"/>
     <xsl:variable name="totalwidth">  <!-- Total width of the column, in units -->
       <xsl:apply-templates select="../../../*[contains(@class, ' topic/colspec ')][1]" mode="count-colwidth"/>
@@ -2182,9 +2166,7 @@
   <!-- If @rowheader='firstcol' on table, and this entry is in the first column,
        output an ID and the firstcol class -->
   <xsl:if test="../../../../@rowheader = 'firstcol'">
-    <xsl:variable name="startpos">
-      <xsl:call-template name="find-entry-start-position"/>
-    </xsl:variable>
+    <xsl:variable name="startpos" select="@dita-ot:x"/>
     <xsl:if test="number($startpos) = 1">
       <xsl:attribute name="class">firstcol</xsl:attribute>
       <xsl:attribute name="id" select="generate-id(.)"/>
@@ -2241,43 +2223,6 @@
   </xsl:choose>
 </xsl:template>
 
-<!-- Find the starting column of an entry in a row. -->
-<xsl:template name="find-entry-start-position">
-  <xsl:choose>
-
-    <!-- if the column number is specified, use it -->
-    <xsl:when test="@colnum">
-      <xsl:value-of select="@colnum"/>
-    </xsl:when>
-
-    <!-- If there is a defined column name, check the colspans to determine position -->
-    <xsl:when test="@colname">
-      <!-- count the number of colspans before the one this entry references, plus one -->
-      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = current()/@colname]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
-    </xsl:when>
-
-    <!-- If the starting column is defined, check colspans to determine position -->
-    <xsl:when test="@namest">
-      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = current()/@namest]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
-    </xsl:when>
-
-    <!-- Need a test for spanspec -->
-    <xsl:when test="@spanname">
-      <xsl:variable name="startspan">  <!-- starting column for this span -->
-        <xsl:value-of select="../../../*[contains(@class, ' topic/spanspec ')][@spanname = current()/@spanname]/@namest"/>
-      </xsl:variable>
-      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = $startspan]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
-    </xsl:when>
-
-    <!-- Otherwise, just use the count of cells in this row -->
-    <xsl:otherwise>
-      <xsl:variable name="prev-sib" select="count(preceding-sibling::*[contains(@class, ' topic/entry ')])"/>
-      <xsl:value-of select="$prev-sib+1"/>
-    </xsl:otherwise>
-
-  </xsl:choose>
-</xsl:template>
-
 <!-- Find the end column of a cell. If the cell does not span any columns,
      the end position is the same as the start position. -->
 <xsl:template name="find-entry-end-position">
@@ -2285,12 +2230,6 @@
   <xsl:choose>
     <xsl:when test="@nameend">
       <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = current()/@nameend]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
-    </xsl:when>
-    <xsl:when test="@spanname">
-      <xsl:variable name="endspan">  <!-- starting column for this span -->
-        <xsl:value-of select="../../../*[contains(@class, ' topic/spanspec ')][@spanname = current()/@spanname]/@nameend"/>
-      </xsl:variable>
-      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = $endspan]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="$startposition"/>
@@ -2302,9 +2241,7 @@
 <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="findmatch">
   <xsl:param name="startmatch" select="1"/>  <!-- start column of the tbody cell -->
   <xsl:param name="endmatch" select="1"/>    <!-- end column of the tbody cell -->
-  <xsl:variable name="entrystartpos">         <!-- start column of this thead cell -->
-    <xsl:call-template name="find-entry-start-position"/>
-  </xsl:variable>
+  <xsl:variable name="entrystartpos" select="@dita-ot:x"/>         <!-- start column of this thead cell -->
   <xsl:variable name="entryendpos">           <!-- end column of this thead cell -->
     <xsl:call-template name="find-entry-end-position">
       <xsl:with-param name="startposition" select="$entrystartpos"/>
@@ -2378,8 +2315,7 @@
 <!-- Add @headers to cells in the body of a table. -->
 <xsl:template name="add-headers-attribute">
   <!-- Determine the start column for the current cell -->
-  <xsl:variable name="entrystartpos">
-    <xsl:call-template name="find-entry-start-position"/>
+  <xsl:variable name="entrystartpos" select="@dita-ot:x">
   </xsl:variable>
   <!-- Determine the end column for the current cell -->
   <xsl:variable name="entryendpos">
@@ -2421,26 +2357,6 @@
    <xsl:if test="string-length($rowheader) > 0 or string-length($hdrattr) > 0">
     <xsl:attribute name="headers" select="concat($rowheader, $hdrattr)"/>
   </xsl:if>
-</xsl:template>
-
-<!-- Find the number of column spans between name-start and name-end attrs -->
-<xsl:template name="find-colspan">
-  <xsl:variable name="startpos">
-    <xsl:call-template name="find-entry-start-position"/>
-  </xsl:variable>
-  <xsl:variable name="endpos">
-    <xsl:call-template name="find-entry-end-position"/>
-  </xsl:variable>
-  <xsl:value-of select="$endpos - $startpos + 1"/>
-</xsl:template>
-
-<xsl:template name="find-spanspec-colspan">
-  <xsl:variable name="spanname" select="@spanname"/>
-  <xsl:variable name="startcolname" select="../../../*[contains(@class, ' topic/spanspec ')][@spanname = $spanname][1]/@namest"/>
-  <xsl:variable name="endcolname" select="../../../*[contains(@class, ' topic/spanspec ')][@spanname = $spanname][1]/@nameend"/>
-  <xsl:variable name="startpos" select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = $startcolname]/preceding-sibling::*)+1)"/>
-  <xsl:variable name="endpos" select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = $endcolname]/preceding-sibling::*)+1)"/>
-  <xsl:value-of select="$endpos - $startpos + 1"/>
 </xsl:template>
 
 <!-- end of table section -->
@@ -2492,19 +2408,44 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
     <xsl:call-template name="setscale"/>
-    <xsl:apply-templates select="." mode="dita2html:simpletable-heading">
-      <xsl:with-param name="width-multiplier" select="$width-multiplier"/>
-    </xsl:apply-templates>
-    <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]|processing-instruction()">     <!-- width-multiplier will be used in the first row to set widths. -->
-      <xsl:with-param name="width-multiplier" select="$width-multiplier"/>
-    </xsl:apply-templates>
+    <xsl:call-template name="dita2html:simpletable-cols"/>
+    <xsl:apply-templates select="." mode="dita2html:simpletable-heading"/>    
+    <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]|processing-instruction()"/>
   </table>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
+  
+  <xsl:template name="dita2html:simpletable-cols">
+    <xsl:variable name="col-count" as="xs:integer">
+      <xsl:apply-templates select="." mode="dita2html:get-max-entry-count"/>
+    </xsl:variable>
+    <xsl:variable name="col-widths" as="xs:double*">
+      <xsl:variable name="widths" select="tokenize(normalize-space(@relcolwidth), '\s+')" as="xs:string*"/>
+      <xsl:for-each select="$widths">
+        <xsl:sequence select="xs:double(substring(., 1, string-length(.) - 1))"/>
+      </xsl:for-each>
+      <xsl:for-each select="1 to ($col-count - count($widths))">
+        <xsl:sequence select="xs:double(1)"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="col-widths-sum" select="sum($col-widths)"/>
+    <xsl:for-each select="$col-widths">      
+      <col style="width:{(. div $col-widths-sum) * 100}%"/>
+    </xsl:for-each>    
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="dita2html:get-max-entry-count" as="xs:integer">
+    <xsl:variable name="counts" as="xs:integer*">
+      <xsl:for-each select="*[contains(@class, ' topic/sthead ')] |
+                            *[contains(@class, ' topic/strow ')]">
+        <xsl:sequence select="count(*[contains(@class, ' topic/stentry ')])"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:sequence select="max($counts)"/>
+  </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/strow ')]" name="topic.strow">
-  <xsl:param name="width-multiplier"/>
   <tr>
    <xsl:call-template name="setid"/>
     <xsl:call-template name="commonattributes"/>
@@ -2515,9 +2456,7 @@
       </xsl:when>
       <!-- Otherwise, this is the first row. Pass the percentage to all entries in this row. -->
       <xsl:otherwise>
-        <xsl:apply-templates>
-          <xsl:with-param name="width-multiplier" select="$width-multiplier"/>
-        </xsl:apply-templates>
+        <xsl:apply-templates/>
       </xsl:otherwise>
     </xsl:choose>
   </tr><xsl:value-of select="$newline"/>
@@ -2526,20 +2465,14 @@
 <!-- Specialized simpletables may match this rule to create default column 
      headings. By default, process the sthead if available. -->
 <xsl:template match="*" mode="dita2html:simpletable-heading">
-  <xsl:param name="width-multiplier"/>
-  <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]">
-    <xsl:with-param name="width-multiplier" select="$width-multiplier"/>
-  </xsl:apply-templates>
+  <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/sthead ')]" name="topic.sthead">
-  <xsl:param name="width-multiplier"/>
   <tr>
     <xsl:call-template name="commonattributes"/>
     <!-- There is only one sthead, so use the entries in the header to set relative widths. -->
-    <xsl:apply-templates>
-      <xsl:with-param name="width-multiplier" select="$width-multiplier"/>
-    </xsl:apply-templates>
+    <xsl:apply-templates/>
   </tr><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -2607,46 +2540,22 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/stentry ')]" name="topic.stentry">
-    <xsl:param name="width-multiplier" select="0"/>
     <xsl:choose>
         <xsl:when test="parent::*[contains(@class, ' topic/sthead ')]">
-            <xsl:call-template name="topic.sthead_stentry">
-                <xsl:with-param name="width-multiplier" select="$width-multiplier"/>
-            </xsl:call-template>
+            <xsl:call-template name="topic.sthead_stentry"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:call-template name="topic.strow_stentry">
-                <xsl:with-param name="width-multiplier" select="$width-multiplier"/>
-            </xsl:call-template>
+            <xsl:call-template name="topic.strow_stentry"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!-- sthead/stentry - bottom align the header text -->
 <xsl:template name="topic.sthead_stentry">
-  <xsl:param name="width-multiplier" select="0"/>
   <th valign="bottom">
     <xsl:call-template name="th-align"/>
-    <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum" select="number(count(preceding-sibling::*[contains(@class, ' topic/stentry ')])+1)"/>
-    <!-- If width-multiplier=0, then either @relcolwidth was not specified, or this is not the first
-         row, so do not create a width value. Otherwise, find out the relative width of this column. -->
-    <xsl:variable name="widthpercent">
-      <xsl:if test="$width-multiplier != 0">
-        <xsl:call-template name="get-current-entry-percentage">
-          <xsl:with-param name="multiplier" select="$width-multiplier"/>
-          <xsl:with-param name="entry-num" select="$thiscolnum"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="commonattributes"/>
-    <!-- If we calculated a width, create the width attribute. -->
-    <xsl:if test="string-length($widthpercent) > 0">
-      <xsl:attribute name="width">
-        <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:choose>
       <!-- If there is text, or a PI, or non-flagging element child -->
@@ -2679,7 +2588,6 @@
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template name="topic.strow_stentry">
- <xsl:param name="width-multiplier" select="0"/>
   <td valign="top">
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="set.stentry.headers"/>
@@ -2694,22 +2602,6 @@
     </xsl:variable>
     <!-- Determine which column this entry is in. -->
     <xsl:variable name="thiscolnum" select="number(count(preceding-sibling::*[contains(@class, ' topic/stentry ')])+1)"/>
-    <!-- If width-multiplier=0, then either @relcolwidth was not specified, or this is not the first
-         row, so do not create a width value. Otherwise, find out the relative width of this column. -->
-    <xsl:variable name="widthpercent">
-      <xsl:if test="$width-multiplier != 0">
-        <xsl:call-template name="get-current-entry-percentage">
-          <xsl:with-param name="multiplier" select="$width-multiplier"/>
-          <xsl:with-param name="entry-num" select="$thiscolnum"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <!-- If we calculated a width, create the width attribute. -->
-    <xsl:if test="string-length($widthpercent) > 0">
-      <xsl:attribute name="width">
-        <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:choose>
      <xsl:when test="$thiscolnum = $localkeycol">
@@ -2772,37 +2664,6 @@
     </xsl:choose>
   </xsl:if>
 </xsl:template>
-
-<!-- Find the width of the current cell. Multiplier is how much each unit of width is multiplied to total 100.
-     Entry-num is the current entry. Current-col is what column we are at when scanning @relcolwidth.
-     Relcolvalues is the unscanned part of @relcolwidth. -->
-<xsl:template name="get-current-entry-percentage">
-  <xsl:param name="multiplier" select="1" as="xs:double"/>  <!-- Each relative unit is worth this many percentage points -->
-  <xsl:param name="entry-num" as="xs:double"/>               <!-- The entry number of the cell we are evaluating now -->
-  <xsl:param name="current-col" select="1" as="xs:double"/> <!-- Position within the recursive call to evaluate @relcolwidth -->
-  <!-- relcolvalues begins with @relcolwidth. Each call to the template removes the first value. -->
-  <xsl:param name="relcolvalues" select="parent::*/parent::*/@relcolwidth"/>
-
-  <xsl:choose>
-    <!-- If the recursion has moved up to the proper cell, multiply $multiplier by the number of
-         relative units for this column. -->
-    <xsl:when test="$entry-num = $current-col">
-      <xsl:variable name="relcol" select="number(substring-before($relcolvalues, '*'))"/>
-      <xsl:value-of select="$relcol * $multiplier"/>
-    </xsl:when>
-    <!-- Otherwise, call this template again, removing the first value form @relcolwidth. Also add one
-         to $current-col. -->
-    <xsl:otherwise>
-      <xsl:call-template name="get-current-entry-percentage">
-        <xsl:with-param name="multiplier" select="$multiplier"/>
-        <xsl:with-param name="entry-num" select="$entry-num"/>
-        <xsl:with-param name="current-col" select="$current-col + 1"/>
-        <xsl:with-param name="relcolvalues" select="substring-after($relcolvalues, ' ')"/>
-      </xsl:call-template>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
 
 <!-- =========== FOOTNOTE =========== -->
 <xsl:template match="*[contains(@class, ' topic/fn ')]" name="topic.fn">

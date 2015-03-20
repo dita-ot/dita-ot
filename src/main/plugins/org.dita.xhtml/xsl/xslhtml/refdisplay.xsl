@@ -7,14 +7,18 @@
 <xsl:stylesheet version="2.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
      xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
+     xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
      xmlns:xs="http://www.w3.org/2001/XMLSchema"
-     exclude-result-prefixes="related-links xs">
+     exclude-result-prefixes="related-links xs dita2html">
 
 <!-- == REFERENCE UNIQUE SUBSTRUCTURES == -->
 
+  <xsl:template match="*[contains(@class,' reference/properties ')]" mode="dita2html:get-max-entry-count" as="xs:integer">
+    <xsl:sequence select="3"/>
+  </xsl:template>
+
 <!-- Process the header row in a properties table -->
 <xsl:template match="*[contains(@class,' reference/prophead ')]" name="topic.reference.prophead">
-  <xsl:param name="width-multiplier"/>
   <tr>
    <xsl:call-template name="setid"/>
    <xsl:call-template name="commonattributes"/>
@@ -23,9 +27,7 @@
           Otherwise, if it is ever in this table, create empty entry, and add ID for accessibility. -->
      <xsl:choose>      <!-- Process <proptype> -->
        <xsl:when test="*[contains(@class,' reference/proptypehd ')]">
-         <xsl:apply-templates select="*[contains(@class,' reference/proptypehd ')]">
-           <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-         </xsl:apply-templates>
+         <xsl:apply-templates select="*[contains(@class,' reference/proptypehd ')]"/>
        </xsl:when>
        <xsl:when test="following-sibling::*/*[contains(@class,' reference/proptype ')]">
          <th valign="bottom">           
@@ -39,9 +41,7 @@
      </xsl:choose>
      <xsl:choose>      <!-- Process <propvalue> -->
        <xsl:when test="*[contains(@class,' reference/propvaluehd ')]">
-         <xsl:apply-templates select="*[contains(@class,' reference/propvaluehd ')]">
-           <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-         </xsl:apply-templates>
+         <xsl:apply-templates select="*[contains(@class,' reference/propvaluehd ')]"/>
        </xsl:when>
        <xsl:when test="following-sibling::*/*[contains(@class,' reference/propvalue ')]">
          <th valign="bottom">           
@@ -55,9 +55,7 @@
      </xsl:choose>
      <xsl:choose>      <!-- Process <propdesc> -->
        <xsl:when test="*[contains(@class,' reference/propdeschd ')]">
-         <xsl:apply-templates select="*[contains(@class,' reference/propdeschd ')]">
-           <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-         </xsl:apply-templates>
+         <xsl:apply-templates select="*[contains(@class,' reference/propdeschd ')]"/>
        </xsl:when>
        <xsl:when test="following-sibling::*/*[contains(@class,' reference/propdesc ')]">
          <th valign="bottom">           
@@ -98,7 +96,6 @@
 <!-- Process a standard row in the properties table. Apply-templates on the entries one at a time;
      if one is missing which should be present, create an empty cell. -->
 <xsl:template match="*[contains(@class,' reference/property ')]" name="topic.reference.property">
-  <xsl:param name="width-multiplier"/>
   <!-- If there was no header, then this is the first child of properties; create default headers -->
   <xsl:if test=".=../*[1]">
     <tr><xsl:value-of select="$newline"/>
@@ -137,9 +134,7 @@
           - Otherwise, if it is in the table at all, create empty entry -->
      <xsl:choose>      <!-- Process or create proptype -->
        <xsl:when test="*[contains(@class,' reference/proptype ')]">
-         <xsl:apply-templates select="*[contains(@class,' reference/proptype ')]">
-           <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-         </xsl:apply-templates>
+         <xsl:apply-templates select="*[contains(@class,' reference/proptype ')]"/>
        </xsl:when>
        <xsl:when test="../*/*[contains(@class,' reference/proptype ')] | ../*[1]/*[contains(@class,' reference/proptypehd ')]">
          <td>    <!-- Create an empty cell. Add accessiblity attribute. -->
@@ -153,9 +148,7 @@
      </xsl:choose>
      <xsl:choose>      <!-- Process or create propvalue -->
        <xsl:when test="*[contains(@class,' reference/propvalue ')]">
-         <xsl:apply-templates select="*[contains(@class,' reference/propvalue ')]">
-           <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-         </xsl:apply-templates>
+         <xsl:apply-templates select="*[contains(@class,' reference/propvalue ')]"/>
        </xsl:when>
        <xsl:when test="../*/*[contains(@class,' reference/propvalue ')] | ../*[1]/*[contains(@class,' reference/propvaluehd ')]">
          <td>    <!-- Create an empty cell. Add accessiblity attribute. -->
@@ -169,9 +162,7 @@
      </xsl:choose>
      <xsl:choose>      <!-- Process or create propdesc -->
        <xsl:when test="*[contains(@class,' reference/propdesc ')]">
-         <xsl:apply-templates select="*[contains(@class,' reference/propdesc ')]">
-           <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-         </xsl:apply-templates>
+         <xsl:apply-templates select="*[contains(@class,' reference/propdesc ')]"/>
        </xsl:when>
        <xsl:when test="../*/*[contains(@class,' reference/propdesc ')] | ../*[1]/*[contains(@class,' reference/propdeschd ')]">
          <td>    <!-- Create an empty cell. Add accessiblity attribute. -->
@@ -187,25 +178,19 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' reference/proptype ')]" name="topic.reference.proptype">
-  <xsl:param name="width-multiplier">0</xsl:param>
   <xsl:apply-templates select="." mode="propertiesEntry">
-    <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
     <xsl:with-param name="elementType">type</xsl:with-param>
   </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' reference/propvalue ')]" name="topic.reference.propvalue">
-  <xsl:param name="width-multiplier">0</xsl:param>
   <xsl:apply-templates select="." mode="propertiesEntry">
-    <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
     <xsl:with-param name="elementType">value</xsl:with-param>
   </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' reference/propdesc ')]" name="topic.reference.propdesc">
-  <xsl:param name="width-multiplier">0</xsl:param>
   <xsl:apply-templates select="." mode="propertiesEntry">
-    <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
     <xsl:with-param name="elementType">desc</xsl:with-param>
   </xsl:apply-templates>
 </xsl:template>
@@ -213,7 +198,6 @@
 <!-- Template based on the stentry template in dit2htm. Only change is to add elementType
      paramenter, and call addPropertiesHeadersAttribute instead of output-stentry-headers. -->
 <xsl:template match="*" mode="propertiesEntry">
-  <xsl:param name="width-multiplier">0</xsl:param>
   <xsl:param name="elementType"/>
   <td valign="top">
     <xsl:call-template name="output-stentry-id"/>
@@ -232,22 +216,6 @@
     </xsl:variable>
     <!-- Determine which column this entry is in. -->
     <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
-    <!-- If width-multiplier=0, then either @relcolwidth was not specified, or this is not the first
-         row, so do not create a width value. Otherwise, find out the relative width of this column. -->
-    <xsl:variable name="widthpercent">
-      <xsl:if test="$width-multiplier != 0">
-        <xsl:call-template name="get-current-entry-percentage">
-          <xsl:with-param name="multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-          <xsl:with-param name="entry-num"><xsl:value-of select="$thiscolnum"/></xsl:with-param>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <!-- If we calculated a width, create the width attribute. -->
-    <xsl:if test="string-length($widthpercent)>0">
-      <xsl:attribute name="width">
-        <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:choose>
      <xsl:when test="$thiscolnum=$localkeycol">
