@@ -2364,24 +2364,6 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/simpletable ')]" name="topic.simpletable">
-  <!-- Find the total number of relative units for the table. If @relcolwidth="1* 2* 2*",
-       the variable is set to 5. -->
-  <xsl:variable name="totalwidth">
-    <xsl:if test="@relcolwidth">
-      <xsl:call-template name="find-total-table-width"/>
-    </xsl:if>
-  </xsl:variable>
-  <!-- Find how much of the table each relative unit represents. If @relcolwidth is 1* 2* 2*,
-       there are 5 units. So, each unit takes up 100/5, or 20% of the table. Default to 0,
-       which the entries will ignore. -->
-  <xsl:variable name="width-multiplier">
-    <xsl:choose>
-      <xsl:when test="@relcolwidth">
-        <xsl:value-of select="100 div $totalwidth"/>
-      </xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
   <xsl:call-template name="spec-title"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="setaname"/>
@@ -2591,7 +2573,23 @@
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template name="topic.strow_stentry">
-  <td>
+  <xsl:variable name="localkeycol">
+    <xsl:choose>
+      <xsl:when test="ancestor::*[contains(@class, ' topic/simpletable ')]/@keycol">
+        <xsl:value-of select="ancestor::*[contains(@class, ' topic/simpletable ')]/@keycol"/>
+      </xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <!-- Determine which column this entry is in. -->
+  <xsl:variable name="thiscolnum" select="number(count(preceding-sibling::*[contains(@class, ' topic/stentry ')])+1)"/>
+  <xsl:variable name="element-name">
+    <xsl:choose>
+      <xsl:when test="$thiscolnum = $localkeycol">th</xsl:when>
+      <xsl:otherwise>td</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:element name="{$element-name}">
     <xsl:call-template name="style">
       <xsl:with-param name="contents">
         <xsl:text>vertical-align:top;</xsl:text>
@@ -2600,30 +2598,13 @@
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="set.stentry.headers"/>
     <xsl:call-template name="commonattributes"/>
-    <xsl:variable name="localkeycol">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/simpletable ')]/@keycol">
-          <xsl:value-of select="ancestor::*[contains(@class, ' topic/simpletable ')]/@keycol"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum" select="number(count(preceding-sibling::*[contains(@class, ' topic/stentry ')])+1)"/>
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-    <xsl:choose>
-     <xsl:when test="$thiscolnum = $localkeycol">
-      <strong>
-        <xsl:call-template name="stentry-templates"/>
-      </strong>
-     </xsl:when>
-     <xsl:otherwise>
-       <xsl:call-template name="stentry-templates"/>
-     </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="stentry-templates"/>
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-  </td><xsl:value-of select="$newline"/>
+  </xsl:element>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
+  
 <xsl:template name="stentry-templates">
  <xsl:choose>
   <xsl:when test="not(*|text()|processing-instruction()) and @specentry">
@@ -2636,41 +2617,6 @@
    <xsl:apply-templates/>
   </xsl:otherwise>
  </xsl:choose>
-</xsl:template>
-
-
-<!-- Use @relcolwidth to find the total width of the table. That is, if the attribute is set
-     to 1* 2* 2* 1*, then the table is 6 units wide. -->
-<xsl:template name="find-total-table-width">
-  <!-- Start with relcolwidth, and each recursive call will remove the first value -->
-  <xsl:param name="relcolwidth" select="@relcolwidth"/>
-  <!-- Determine the first value, which is the value before the first asterisk -->
-  <xsl:variable name="firstval">
-    <xsl:if test="contains($relcolwidth, '*')">
-      <xsl:value-of select="substring-before($relcolwidth, '*')"/>
-    </xsl:if>
-  </xsl:variable>
-  <!-- Begin processing if we were able to find a first value -->
-  <xsl:if test="string-length($firstval) > 0">
-    <!-- Chop off the first value, and set morevals to the remainder -->
-    <xsl:variable name="morevals" select="substring-after($relcolwidth, ' ')"/>
-    <xsl:choose>
-      <!-- If there are additional values, call this template on the remainder.
-           Add the result of that call to the first value. -->
-      <xsl:when test="string-length($morevals) > 0">
-        <xsl:variable name="nextval">   <!-- The total of the remaining values -->
-          <xsl:call-template name="find-total-table-width">
-            <xsl:with-param name="relcolwidth" select="$morevals"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:value-of select="number($firstval) + number($nextval)"/>
-      </xsl:when>
-      <!-- If there are no more values, return the first (and only) value -->
-      <xsl:otherwise>
-        <xsl:value-of select="$firstval"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:if>
 </xsl:template>
 
 <!-- =========== FOOTNOTE =========== -->

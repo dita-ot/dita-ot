@@ -13,12 +13,109 @@
 
 <!-- == REFERENCE UNIQUE SUBSTRUCTURES == -->
 
+  <xsl:template match="*[contains(@class,' reference/properties ')]" name="reference.properties">
+    <xsl:call-template name="spec-title"/>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <xsl:call-template name="setaname"/>
+    <table cellpadding="4" cellspacing="0"><!--summary=""-->
+      <xsl:call-template name="setid"/>
+      <xsl:choose>
+        <xsl:when test="@frame = 'none'">
+          <xsl:attribute name="border">0</xsl:attribute>
+          <xsl:attribute name="class">simpletablenoborder</xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="border">1</xsl:attribute>
+          <xsl:attribute name="class">simpletableborder</xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
+      <xsl:call-template name="setscale"/>
+      <xsl:call-template name="dita2html:simpletable-cols"/>
+      
+      <xsl:variable name="header" select="*[contains(@class,' reference/prophead ')]"/>
+      <xsl:variable name="properties" select="*[contains(@class,' reference/property ')]"/>
+      <xsl:variable name="hasType" select="exists($header/*[contains(@class,' reference/proptypehd ')] | $properties/*[contains(@class,' reference/proptype ')])"/>
+      <xsl:variable name="hasValue" select="exists($header/*[contains(@class,' reference/propvaluehd ')] | $properties/*[contains(@class,' reference/propvalue ')])"/>
+      <xsl:variable name="hasDesc" select="exists($header/*[contains(@class,' reference/propdeschd ')] | $properties/*[contains(@class,' reference/propdesc ')])"/>
+      
+      <thead>
+        <xsl:apply-templates select="*[contains(@class, ' reference/prophead ')]">
+          <xsl:with-param name="hasType" select="$hasType"/>
+          <xsl:with-param name="hasValue" select="$hasValue"/>
+          <xsl:with-param name="hasDesc" select="$hasDesc"/>
+        </xsl:apply-templates>
+        <xsl:if test="empty(*[contains(@class, ' reference/prophead ')])">
+          <tr>
+            <xsl:value-of select="$newline"/>
+            <xsl:if test="$hasType">
+              <th id="{generate-id(parent::*)}-type">
+                <xsl:call-template name="style">
+                  <xsl:with-param name="contents">
+                    <xsl:text>vertical-align:bottom;</xsl:text>
+                    <xsl:call-template name="th-align"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="getString">
+                  <xsl:with-param name="stringName" select="'Type'"/>
+                </xsl:call-template>
+              </th>
+              <xsl:value-of select="$newline"/>
+            </xsl:if>
+            <xsl:if test="$hasValue">
+              <th id="{generate-id(parent::*)}-value">
+                <xsl:call-template name="style">
+                  <xsl:with-param name="contents">
+                    <xsl:text>vertical-align:bottom;</xsl:text>
+                    <xsl:call-template name="th-align"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="getString">
+                  <xsl:with-param name="stringName" select="'Value'"/>
+                </xsl:call-template>
+              </th>
+              <xsl:value-of select="$newline"/>
+            </xsl:if>
+            <xsl:if test="$hasDesc">
+              <th id="{generate-id(parent::*)}-desc">
+                <xsl:call-template name="style">
+                  <xsl:with-param name="contents">
+                    <xsl:text>vertical-align:bottom;</xsl:text>
+                    <xsl:call-template name="th-align"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="getString">
+                  <xsl:with-param name="stringName" select="'Description'"/>
+                </xsl:call-template>
+              </th>
+              <xsl:value-of select="$newline"/>
+            </xsl:if>
+          </tr>
+          <xsl:value-of select="$newline"/>
+        </xsl:if>
+      </thead>
+      <tbody>    
+        <xsl:apply-templates select="*[contains(@class, ' reference/property ')] | processing-instruction()">
+          <xsl:with-param name="hasType" select="$hasType"/>
+          <xsl:with-param name="hasValue" select="$hasValue"/>
+          <xsl:with-param name="hasDesc" select="$hasDesc"/>
+        </xsl:apply-templates>
+      </tbody>
+    </table>
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+    <xsl:value-of select="$newline"/>
+  </xsl:template>
+
   <xsl:template match="*[contains(@class,' reference/properties ')]" mode="dita2html:get-max-entry-count" as="xs:integer">
     <xsl:sequence select="3"/>
   </xsl:template>
 
 <!-- Process the header row in a properties table -->
 <xsl:template match="*[contains(@class,' reference/prophead ')]" name="topic.reference.prophead">
+  <xsl:param name="hasType" as="xs:boolean"/>
+  <xsl:param name="hasValue" as="xs:boolean"/>
+  <xsl:param name="hasDesc" as="xs:boolean"/>
   <tr>
    <xsl:call-template name="setid"/>
    <xsl:call-template name="commonattributes"/>
@@ -29,7 +126,7 @@
        <xsl:when test="*[contains(@class,' reference/proptypehd ')]">
          <xsl:apply-templates select="*[contains(@class,' reference/proptypehd ')]"/>
        </xsl:when>
-       <xsl:when test="following-sibling::*/*[contains(@class,' reference/proptype ')]">
+       <xsl:when test="$hasType">
          <th>
            <xsl:call-template name="style">
              <xsl:with-param name="contents">
@@ -48,7 +145,7 @@
        <xsl:when test="*[contains(@class,' reference/propvaluehd ')]">
          <xsl:apply-templates select="*[contains(@class,' reference/propvaluehd ')]"/>
        </xsl:when>
-       <xsl:when test="following-sibling::*/*[contains(@class,' reference/propvalue ')]">
+       <xsl:when test="$hasValue">
          <th>
            <xsl:call-template name="style">
              <xsl:with-param name="contents">
@@ -67,7 +164,7 @@
        <xsl:when test="*[contains(@class,' reference/propdeschd ')]">
          <xsl:apply-templates select="*[contains(@class,' reference/propdeschd ')]"/>
        </xsl:when>
-       <xsl:when test="following-sibling::*/*[contains(@class,' reference/propdesc ')]">
+       <xsl:when test="$hasDesc">
          <th>
            <xsl:call-template name="style">
              <xsl:with-param name="contents">
@@ -111,50 +208,9 @@
 <!-- Process a standard row in the properties table. Apply-templates on the entries one at a time;
      if one is missing which should be present, create an empty cell. -->
 <xsl:template match="*[contains(@class,' reference/property ')]" name="topic.reference.property">
-  <!-- If there was no header, then this is the first child of properties; create default headers -->
-  <xsl:if test=".=../*[1]">
-    <tr><xsl:value-of select="$newline"/>
-      <xsl:if test="../*/*[contains(@class,' reference/proptype ')]">
-        <th id="{generate-id(parent::*)}-type">
-          <xsl:call-template name="style">
-            <xsl:with-param name="contents">
-              <xsl:text>vertical-align:bottom;</xsl:text>
-              <xsl:call-template name="th-align"/>
-            </xsl:with-param>
-          </xsl:call-template>
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Type'"/>
-          </xsl:call-template>
-        </th><xsl:value-of select="$newline"/>
-      </xsl:if>
-      <xsl:if test="../*/*[contains(@class,' reference/propvalue ')]">
-        <th id="{generate-id(parent::*)}-value">
-          <xsl:call-template name="style">
-            <xsl:with-param name="contents">
-              <xsl:text>vertical-align:bottom;</xsl:text>
-              <xsl:call-template name="th-align"/>
-            </xsl:with-param>
-          </xsl:call-template>
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Value'"/>
-          </xsl:call-template>
-        </th><xsl:value-of select="$newline"/>
-      </xsl:if>
-      <xsl:if test="../*/*[contains(@class,' reference/propdesc ')]">
-        <th id="{generate-id(parent::*)}-desc">
-          <xsl:call-template name="style">
-            <xsl:with-param name="contents">
-              <xsl:text>vertical-align:bottom;</xsl:text>
-              <xsl:call-template name="th-align"/>
-            </xsl:with-param>
-          </xsl:call-template>
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Description'"/>
-          </xsl:call-template>
-        </th><xsl:value-of select="$newline"/>
-      </xsl:if>
-    </tr><xsl:value-of select="$newline"/>
-  </xsl:if>
+  <xsl:param name="hasType" as="xs:boolean"/>
+  <xsl:param name="hasValue" as="xs:boolean"/>
+  <xsl:param name="hasDesc" as="xs:boolean"/>
   <tr>
    <xsl:call-template name="setid"/>
    <xsl:call-template name="commonattributes"/>
@@ -166,45 +222,49 @@
        <xsl:when test="*[contains(@class,' reference/proptype ')]">
          <xsl:apply-templates select="*[contains(@class,' reference/proptype ')]"/>
        </xsl:when>
-       <xsl:when test="../*/*[contains(@class,' reference/proptype ')] | ../*[1]/*[contains(@class,' reference/proptypehd ')]">
+       <xsl:when test="$hasType">
          <td>    <!-- Create an empty cell. Add accessiblity attribute. -->
            <xsl:call-template name="addPropertiesHeadersAttribute">
              <xsl:with-param name="classVal"> reference/proptypehd </xsl:with-param>
              <xsl:with-param name="elementType">type</xsl:with-param>
            </xsl:call-template>
            <xsl:text>&#xA0;</xsl:text>
-         </td><xsl:value-of select="$newline"/>
+         </td>
+         <xsl:value-of select="$newline"/>
        </xsl:when>
      </xsl:choose>
      <xsl:choose>      <!-- Process or create propvalue -->
        <xsl:when test="*[contains(@class,' reference/propvalue ')]">
          <xsl:apply-templates select="*[contains(@class,' reference/propvalue ')]"/>
        </xsl:when>
-       <xsl:when test="../*/*[contains(@class,' reference/propvalue ')] | ../*[1]/*[contains(@class,' reference/propvaluehd ')]">
+       <xsl:when test="$hasValue">
          <td>    <!-- Create an empty cell. Add accessiblity attribute. -->
            <xsl:call-template name="addPropertiesHeadersAttribute">
              <xsl:with-param name="classVal"> reference/propvaluehd </xsl:with-param>
              <xsl:with-param name="elementType">value</xsl:with-param>
            </xsl:call-template>
            <xsl:text>&#xA0;</xsl:text>
-         </td><xsl:value-of select="$newline"/>
+         </td>
+         <xsl:value-of select="$newline"/>
        </xsl:when>
      </xsl:choose>
      <xsl:choose>      <!-- Process or create propdesc -->
        <xsl:when test="*[contains(@class,' reference/propdesc ')]">
          <xsl:apply-templates select="*[contains(@class,' reference/propdesc ')]"/>
        </xsl:when>
-       <xsl:when test="../*/*[contains(@class,' reference/propdesc ')] | ../*[1]/*[contains(@class,' reference/propdeschd ')]">
+       <xsl:when test="$hasDesc">
          <td>    <!-- Create an empty cell. Add accessiblity attribute. -->
            <xsl:call-template name="addPropertiesHeadersAttribute">
              <xsl:with-param name="classVal"> reference/propdeschd </xsl:with-param>
              <xsl:with-param name="elementType">desc</xsl:with-param>
            </xsl:call-template>
            <xsl:text>&#xA0;</xsl:text>
-         </td><xsl:value-of select="$newline"/>
+         </td>
+         <xsl:value-of select="$newline"/>
        </xsl:when>
      </xsl:choose>
-  </tr><xsl:value-of select="$newline"/>
+  </tr>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' reference/proptype ')]" name="topic.reference.proptype">
