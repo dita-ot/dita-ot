@@ -212,6 +212,10 @@ public final class NormalizeFilter extends AbstractXMLFilter {
         } else {
             colSpec.add(COLUMN_NAME_COL + columnNumber);
         }
+        final String colNum = res.getValue(ATTRIBUTE_NAME_COLNUM);
+        if (colNum == null || colNum.isEmpty()) {
+            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNUM, Integer.toString(columnNumber));
+        }
         columnNumberEnd = columnNumber;
         // change the col name of colspec
         XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);

@@ -1920,10 +1920,33 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/tgroup ')]" name="topic.tgroup">
- <xsl:apply-templates/>
+  <xsl:variable name="totalwidth" as="xs:double">
+    <xsl:variable name="relative-widths" as="xs:double*">
+      <xsl:for-each select="*[contains(@class, ' topic/colspec ')][contains(@colwidth, '*')]">
+        <xsl:sequence select="xs:double(translate(@colwidth, '*', ''))"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:sequence select="sum($relative-widths)"/>
+  </xsl:variable>
+  <xsl:apply-templates>
+    <xsl:with-param name="totalwidth" select="$totalwidth"/>
+  </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="*[contains(@class, ' topic/colspec ')]"></xsl:template>
+<xsl:template match="*[contains(@class, ' topic/colspec ')]">
+  <xsl:param name="totalwidth" as="xs:double"/>
+  <xsl:variable name="width" as="xs:string">
+    <xsl:choose>
+      <xsl:when test="contains(@colwidth, '*')">
+        <xsl:value-of select="concat((xs:double(translate(@colwidth, '*', '')) div $totalwidth) * 100, '%')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@colwidth"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <col style="width:{$width}"/>
+</xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/thead ')]" name="topic.thead">
   <thead>
@@ -1951,9 +1974,6 @@
   </thead><xsl:value-of select="$newline"/>
 </xsl:template>
 
-<!-- Table footer processing. Ignore fall-thru tfoot; process them from the table body -->
-<xsl:template match="*[contains(@class, ' topic/tfoot ')]"/>
-
 <xsl:template match="*[contains(@class, ' topic/tbody ')]" name="topic.tbody">
   <tbody>
     <!-- Get style from parent tgroup, then override with thead if specified locally -->
@@ -1972,14 +1992,7 @@
       <xsl:attribute name="valign" select="@valign"/>
     </xsl:if>
     <xsl:apply-templates/>
-    <!-- process table footer -->
-    <xsl:apply-templates select="../*[contains(@class, ' topic/tfoot ')]" mode="gen-tfoot" />
   </tbody><xsl:value-of select="$newline"/>
-</xsl:template>
-
-<!-- special mode for table footers -->
-<xsl:template match="*[contains(@class, ' topic/tfoot ')]" mode="gen-tfoot">
-  <xsl:apply-templates/><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/row ')]" name="topic.row">
@@ -2022,12 +2035,13 @@
 
 <!-- do body entries -->
 <xsl:template name="topic.tbody_entry">
-  <xsl:variable name="startpos">
-    <xsl:if test="../../../../@rowheader = 'firstcol' and @dita-ot:x = 1"></xsl:if>
-  </xsl:variable>
   <xsl:choose>
-    <xsl:when test="number($startpos) = 1"><th><xsl:call-template name="doentry"/></th></xsl:when>
-    <xsl:otherwise><td><xsl:call-template name="doentry"/></td></xsl:otherwise>
+    <xsl:when test="../../../../@rowheader = 'firstcol' and @dita-ot:x = 1">
+      <th><xsl:call-template name="doentry"/></th>
+    </xsl:when>
+    <xsl:otherwise>
+      <td><xsl:call-template name="doentry"/></td>
+    </xsl:otherwise>
   </xsl:choose>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -2093,7 +2107,7 @@
   <xsl:if test="@dita-ot:morecols"> <!-- get the number of columns to span from the specified named column values -->
     <xsl:attribute name="colspan" select="@dita-ot:morecols + 1"/>
   </xsl:if>
-  <!-- If align is on the tgroup, use it (parent=row, then tbody|thead|tfoot, then tgroup) -->
+  <!-- If align is on the tgroup, use it (parent=row, then tbody|thead, then tgroup) -->
   <xsl:if test="../../../@align">
     <xsl:attribute name="align" select="../../../@align"/>
   </xsl:if>
@@ -2125,43 +2139,6 @@
     <xsl:attribute name="valign">top</xsl:attribute>
    </xsl:otherwise>
   </xsl:choose>
-  <!-- TODO: Don't write width here, instead use cols -->
-  <xsl:if test="../../../*[contains(@class, ' topic/colspec ')]/@colwidth and
-                not(@namest) and not(@nameend)">
-    <xsl:variable name="entrypos" select="@dita-ot:x"/><!-- Current column -->
-    <xsl:variable name="colspec" select="../../../*[contains(@class, ' topic/colspec ')][number($entrypos)]"/>
-    <xsl:variable name="totalwidth">  <!-- Total width of the column, in units -->
-      <xsl:apply-templates select="../../../*[contains(@class, ' topic/colspec ')][1]" mode="count-colwidth"/>
-    </xsl:variable>
-    <xsl:variable name="proportionalWidth" select="contains($colspec/@colwidth, '*')"/>
-    <xsl:variable name="thiswidth">   <!-- Width of this column, in units -->
-      <xsl:choose>
-        <xsl:when test="$colspec/@colwidth">
-          <xsl:choose>
-            <xsl:when test="$proportionalWidth">
-              <xsl:value-of select="substring-before($colspec/@colwidth, '*')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="$colspec/@colwidth"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>1</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <!-- Width = width of this column / width of table, times 100 to make a percent -->
-    <xsl:attribute name="width">
-      <xsl:choose>
-        <xsl:when test="$proportionalWidth">
-          <xsl:value-of select="($thiswidth div $totalwidth) * 100"/>
-          <xsl:text>%</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$thiswidth"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
-  </xsl:if>
 
   <!-- If @rowheader='firstcol' on table, and this entry is in the first column,
        output an ID and the firstcol class -->
@@ -2200,27 +2177,6 @@
   <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:apply-templates select="../../*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:apply-templates select="../../../*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-</xsl:template>
-
-<!-- Starting with the first colspec, add up the total width for
-     this table. Width of a column is given in units: 1*, 43* 5*, etc -->
-<xsl:template match="*[contains(@class, ' topic/colspec ')]" mode="count-colwidth">
-  <xsl:param name="totalwidth" select="0"/> <!-- Total counted width so far -->
-  <xsl:variable name="thiswidth">            <!-- Width of this column -->
-    <xsl:choose>
-      <xsl:when test="@colwidth"><xsl:value-of select="substring-before(@colwidth, '*')"/></xsl:when>
-      <xsl:otherwise>1</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <!-- If there are more colspecs, continue, otherwise return the current count -->
-  <xsl:choose>
-    <xsl:when test="following-sibling::*[contains(@class, ' topic/colspec ')]">
-      <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/colspec ')][1]" mode="count-colwidth">
-        <xsl:with-param name="totalwidth" select="$totalwidth + $thiswidth"/>
-      </xsl:apply-templates>
-    </xsl:when>
-    <xsl:otherwise><xsl:value-of select="$totalwidth + $thiswidth"/></xsl:otherwise>
-  </xsl:choose>
 </xsl:template>
 
 <!-- Find the end column of a cell. If the cell does not span any columns,
