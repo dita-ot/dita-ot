@@ -30,9 +30,14 @@
          <xsl:apply-templates select="*[contains(@class,' reference/proptypehd ')]"/>
        </xsl:when>
        <xsl:when test="following-sibling::*/*[contains(@class,' reference/proptype ')]">
-         <th valign="bottom">           
+         <th>
+           <xsl:call-template name="style">
+             <xsl:with-param name="contents">
+               <xsl:text>vertical-align:bottom;</xsl:text>
+               <xsl:call-template name="th-align"/>
+             </xsl:with-param>
+           </xsl:call-template>           
            <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-type</xsl:attribute>
-           <xsl:call-template name="th-align"/>
            <xsl:call-template name="getString">
              <xsl:with-param name="stringName" select="'Type'"/>
            </xsl:call-template>
@@ -44,9 +49,14 @@
          <xsl:apply-templates select="*[contains(@class,' reference/propvaluehd ')]"/>
        </xsl:when>
        <xsl:when test="following-sibling::*/*[contains(@class,' reference/propvalue ')]">
-         <th valign="bottom">           
+         <th>
+           <xsl:call-template name="style">
+             <xsl:with-param name="contents">
+               <xsl:text>vertical-align:bottom;</xsl:text>
+               <xsl:call-template name="th-align"/>
+             </xsl:with-param>
+           </xsl:call-template>
            <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-value</xsl:attribute>
-           <xsl:call-template name="th-align"/>
            <xsl:call-template name="getString">
              <xsl:with-param name="stringName" select="'Value'"/>
            </xsl:call-template>
@@ -58,9 +68,14 @@
          <xsl:apply-templates select="*[contains(@class,' reference/propdeschd ')]"/>
        </xsl:when>
        <xsl:when test="following-sibling::*/*[contains(@class,' reference/propdesc ')]">
-         <th valign="bottom">           
+         <th>
+           <xsl:call-template name="style">
+             <xsl:with-param name="contents">
+               <xsl:text>vertical-align:bottom;</xsl:text>
+               <xsl:call-template name="th-align"/>
+             </xsl:with-param>
+           </xsl:call-template>           
            <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-desc</xsl:attribute>
-           <xsl:call-template name="th-align"/>
            <xsl:call-template name="getString">
              <xsl:with-param name="stringName" select="'Description'"/>
            </xsl:call-template>
@@ -100,24 +115,39 @@
   <xsl:if test=".=../*[1]">
     <tr><xsl:value-of select="$newline"/>
       <xsl:if test="../*/*[contains(@class,' reference/proptype ')]">
-        <th id="{generate-id(parent::*)}-type" valign="bottom">
-          <xsl:call-template name="th-align"/>
+        <th id="{generate-id(parent::*)}-type">
+          <xsl:call-template name="style">
+            <xsl:with-param name="contents">
+              <xsl:text>vertical-align:bottom;</xsl:text>
+              <xsl:call-template name="th-align"/>
+            </xsl:with-param>
+          </xsl:call-template>
           <xsl:call-template name="getString">
             <xsl:with-param name="stringName" select="'Type'"/>
           </xsl:call-template>
         </th><xsl:value-of select="$newline"/>
       </xsl:if>
       <xsl:if test="../*/*[contains(@class,' reference/propvalue ')]">
-        <th id="{generate-id(parent::*)}-value" valign="bottom">
-          <xsl:call-template name="th-align"/>
+        <th id="{generate-id(parent::*)}-value">
+          <xsl:call-template name="style">
+            <xsl:with-param name="contents">
+              <xsl:text>vertical-align:bottom;</xsl:text>
+              <xsl:call-template name="th-align"/>
+            </xsl:with-param>
+          </xsl:call-template>
           <xsl:call-template name="getString">
             <xsl:with-param name="stringName" select="'Value'"/>
           </xsl:call-template>
         </th><xsl:value-of select="$newline"/>
       </xsl:if>
       <xsl:if test="../*/*[contains(@class,' reference/propdesc ')]">
-        <th id="{generate-id(parent::*)}-desc" valign="bottom">
-          <xsl:call-template name="th-align"/>
+        <th id="{generate-id(parent::*)}-desc">
+          <xsl:call-template name="style">
+            <xsl:with-param name="contents">
+              <xsl:text>vertical-align:bottom;</xsl:text>
+              <xsl:call-template name="th-align"/>
+            </xsl:with-param>
+          </xsl:call-template>
           <xsl:call-template name="getString">
             <xsl:with-param name="stringName" select="'Description'"/>
           </xsl:call-template>
@@ -142,7 +172,7 @@
              <xsl:with-param name="classVal"> reference/proptypehd </xsl:with-param>
              <xsl:with-param name="elementType">type</xsl:with-param>
            </xsl:call-template>
-           <xsl:text disable-output-escaping="no">&#xA0;</xsl:text>
+           <xsl:text>&#xA0;</xsl:text>
          </td><xsl:value-of select="$newline"/>
        </xsl:when>
      </xsl:choose>
@@ -156,7 +186,7 @@
              <xsl:with-param name="classVal"> reference/propvaluehd </xsl:with-param>
              <xsl:with-param name="elementType">value</xsl:with-param>
            </xsl:call-template>
-           <xsl:text disable-output-escaping="no">&#xA0;</xsl:text>
+           <xsl:text>&#xA0;</xsl:text>
          </td><xsl:value-of select="$newline"/>
        </xsl:when>
      </xsl:choose>
@@ -170,7 +200,7 @@
              <xsl:with-param name="classVal"> reference/propdeschd </xsl:with-param>
              <xsl:with-param name="elementType">desc</xsl:with-param>
            </xsl:call-template>
-           <xsl:text disable-output-escaping="no">&#xA0;</xsl:text>
+           <xsl:text>&#xA0;</xsl:text>
          </td><xsl:value-of select="$newline"/>
        </xsl:when>
      </xsl:choose>
@@ -199,7 +229,12 @@
      paramenter, and call addPropertiesHeadersAttribute instead of output-stentry-headers. -->
 <xsl:template match="*" mode="propertiesEntry">
   <xsl:param name="elementType"/>
-  <td valign="top">
+  <td>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:top;</xsl:text>     
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="addPropertiesHeadersAttribute">
       <xsl:with-param name="classVal"> reference/prop<xsl:value-of select="$elementType"/>hd<xsl:text> </xsl:text></xsl:with-param>

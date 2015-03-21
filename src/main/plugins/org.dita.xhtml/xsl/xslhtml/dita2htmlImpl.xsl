@@ -1953,22 +1953,32 @@
     <!-- Get style from parent tgroup, then override with thead if specified locally -->
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
     <xsl:call-template name="commonattributes"/>
-    <xsl:choose>
-     <xsl:when test="@align">
-      <xsl:attribute name="align" select="@align"/>
-     </xsl:when>
-     <xsl:otherwise>
-      <xsl:call-template name="th-align"/>
-     </xsl:otherwise>
-    </xsl:choose>
+    
+    
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:choose>
+          <xsl:when test="@align">
+            <xsl:text>text-align:</xsl:text>
+            <xsl:value-of select="@align"/>
+            <xsl:text>;</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="th-align"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="@valign">
+          <xsl:text>vertical-align:</xsl:text>
+          <xsl:value-of select="@valign"/>
+          <xsl:text>;</xsl:text>
+        </xsl:if>
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:if test="@char">
       <xsl:attribute name="char" select="@char"/>
     </xsl:if>
     <xsl:if test="@charoff">
       <xsl:attribute name="charoff" select="@charoff"/>
-    </xsl:if>
-    <xsl:if test="@valign">
-      <xsl:attribute name="valign" select="@valign"/>
     </xsl:if>
     <xsl:apply-templates/>
   </thead><xsl:value-of select="$newline"/>
@@ -1979,17 +1989,25 @@
     <!-- Get style from parent tgroup, then override with thead if specified locally -->
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
     <xsl:call-template name="commonattributes"/>
-    <xsl:if test="@align">
-      <xsl:attribute name="align" select="@align"/>
-    </xsl:if>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:if test="@align">
+          <xsl:text>text-align:</xsl:text>
+          <xsl:value-of select="@align"/>
+          <xsl:text>;</xsl:text>
+        </xsl:if>
+        <xsl:if test="@valign">
+          <xsl:text>vertical-align:</xsl:text>
+          <xsl:value-of select="@valign"/>
+          <xsl:text>;</xsl:text>
+        </xsl:if>
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:if test="@char">
       <xsl:attribute name="char" select="@char"/>
     </xsl:if>
     <xsl:if test="@charoff">
       <xsl:attribute name="charoff" select="@charoff"/>
-    </xsl:if>
-    <xsl:if test="@valign">
-      <xsl:attribute name="valign" select="@valign"/>
     </xsl:if>
     <xsl:apply-templates/>
   </tbody><xsl:value-of select="$newline"/>
@@ -1999,17 +2017,25 @@
   <tr>
     <xsl:call-template name="setid"/>
     <xsl:call-template name="commonattributes"/>
-    <xsl:if test="@align">
-      <xsl:attribute name="align" select="@align"/>
-    </xsl:if>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:if test="@align">
+          <xsl:text>text-align:</xsl:text>
+          <xsl:value-of select="@align"/>
+          <xsl:text>;</xsl:text>
+        </xsl:if>
+        <xsl:if test="@valign">
+          <xsl:text>vertical-align:</xsl:text>
+          <xsl:value-of select="@valign"/>
+          <xsl:text>;</xsl:text>
+        </xsl:if>
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:if test="@char">
       <xsl:attribute name="char" select="@char"/>
     </xsl:if>
     <xsl:if test="@charoff">
       <xsl:attribute name="charoff" select="@charoff"/>
-    </xsl:if>
-    <xsl:if test="@valign">
-      <xsl:attribute name="valign" select="@valign"/>
     </xsl:if>
     <xsl:apply-templates/>
   </tr><xsl:value-of select="$newline"/>
@@ -2107,10 +2133,6 @@
   <xsl:if test="@dita-ot:morecols"> <!-- get the number of columns to span from the specified named column values -->
     <xsl:attribute name="colspan" select="@dita-ot:morecols + 1"/>
   </xsl:if>
-  <!-- If align is on the tgroup, use it (parent=row, then tbody|thead, then tgroup) -->
-  <xsl:if test="../../../@align">
-    <xsl:attribute name="align" select="../../../@align"/>
-  </xsl:if>
   <!-- If align is specified on a colspec, that takes priority over tgroup -->
   <xsl:if test="@colname">
     <!-- Removed $this-colname variable, because it is declared above -->
@@ -2119,27 +2141,41 @@
     </xsl:if>
   </xsl:if>
   <!-- If align is locally specified, that takes priority over all -->
-  <xsl:if test="@align">
-    <xsl:attribute name="align" select="@align"/>
-  </xsl:if>
+  <xsl:call-template name="style">
+    <xsl:with-param name="contents">
+      <xsl:choose>
+       <xsl:when test="@align">
+         <xsl:text>text-align:</xsl:text>
+         <xsl:value-of select="@align"/>
+         <xsl:text>;</xsl:text>
+       </xsl:when>
+        <xsl:when test="../../../@align">
+          <xsl:text>text-align:</xsl:text>
+          <xsl:value-of select="../../../@align"/>
+          <xsl:text>;</xsl:text>
+        </xsl:when>
+      </xsl:choose>
+      <xsl:text>vertical-align:</xsl:text>
+      <xsl:choose>
+        <xsl:when test="@valign">
+          <xsl:value-of  select="@valign"/>
+        </xsl:when>
+        <xsl:when test="ancestor::*[contains(@class, ' topic/row ')]/@valign">
+          <xsl:value-of select="ancestor::*[contains(@class, ' topic/row ')]/@valign"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>top</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>;</xsl:text>
+    </xsl:with-param>
+  </xsl:call-template>
   <xsl:if test="@char">
     <xsl:attribute name="char" select="@char"/>
   </xsl:if>
   <xsl:if test="@charoff">
     <xsl:attribute name="charoff" select="@charoff"/>
   </xsl:if>
-  <xsl:choose>
-   <xsl:when test="@valign">
-    <xsl:attribute name="valign" select="@valign"/>
-   </xsl:when>
-   <xsl:when test="ancestor::*[contains(@class, ' topic/row ')]/@valign">
-    <xsl:attribute name="valign" select="ancestor::*[contains(@class, ' topic/row ')]/@valign"/>
-   </xsl:when>
-   <xsl:otherwise>
-    <xsl:attribute name="valign">top</xsl:attribute>
-   </xsl:otherwise>
-  </xsl:choose>
-
   <!-- If @rowheader='firstcol' on table, and this entry is in the first column,
        output an ID and the firstcol class -->
   <xsl:if test="../../../../@rowheader = 'firstcol'">
@@ -2365,8 +2401,10 @@
     <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
     <xsl:call-template name="setscale"/>
     <xsl:call-template name="dita2html:simpletable-cols"/>
-    <xsl:apply-templates select="." mode="dita2html:simpletable-heading"/>    
-    <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]|processing-instruction()"/>
+    <xsl:apply-templates select="." mode="dita2html:simpletable-heading"/>
+    <tbody>    
+      <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]|processing-instruction()"/>
+    </tbody>
   </table>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:value-of select="$newline"/>
@@ -2421,7 +2459,9 @@
 <!-- Specialized simpletables may match this rule to create default column 
      headings. By default, process the sthead if available. -->
 <xsl:template match="*" mode="dita2html:simpletable-heading">
-  <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]"/>
+  <thead>
+    <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]"/>
+  </thead>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/sthead ')]" name="topic.sthead">
@@ -2508,8 +2548,13 @@
 
 <!-- sthead/stentry - bottom align the header text -->
 <xsl:template name="topic.sthead_stentry">
-  <th valign="bottom">
-    <xsl:call-template name="th-align"/>
+  <th>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:bottom;</xsl:text>
+        <xsl:call-template name="th-align"/>
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="commonattributes"/>
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
@@ -2537,14 +2582,21 @@
  <xsl:variable name="biditest" as="xs:boolean">
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
- <xsl:attribute name="align" select="if ($biditest) then 'right' else 'left'"/>
+  <xsl:text>text-align:</xsl:text>
+  <xsl:value-of select="if ($biditest) then 'right' else 'left'"/>
+  <xsl:text>;</xsl:text>
 </xsl:template>
 
 <!-- stentry  -->
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template name="topic.strow_stentry">
-  <td valign="top">
+  <td>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:top;</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="set.stentry.headers"/>
     <xsl:call-template name="commonattributes"/>
@@ -2641,15 +2693,15 @@
 <!-- =========== REQUIRED CLEANUP and REVIEW COMMENT =========== -->
 
 <xsl:template match="*[contains(@class, ' topic/required-cleanup ')]" mode="default-required-cleanup-style">
-  <xsl:attribute name="style">
-    <xsl:text>background-color: #FFFF99; color:#CC3333; border: 1pt black solid;</xsl:text>
-  </xsl:attribute>
+  <xsl:call-template name="style">
+    <xsl:with-param name="contents">background-color: #FFFF99; color:#CC3333; border: 1pt black solid;</xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/draft-comment ')]" mode="default-draft-comment-style">
-  <xsl:attribute name="style">
-    <xsl:text>background-color: #99FF99; border: 1pt black solid;</xsl:text>
-  </xsl:attribute>
+  <xsl:call-template name="style">
+    <xsl:with-param name="contents">background-color: #99FF99; border: 1pt black solid;</xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/required-cleanup ')]" name="topic.required-cleanup">
@@ -2950,6 +3002,12 @@
   </xsl:if>
 </xsl:template>
 
+  <xsl:template name="style">
+    <xsl:param name="contents"/>
+    <xsl:if test="normalize-space($contents)">
+      <xsl:attribute name="style" select="$contents"/>
+    </xsl:if>
+  </xsl:template>
 
 
 <!-- ===================================================================== -->

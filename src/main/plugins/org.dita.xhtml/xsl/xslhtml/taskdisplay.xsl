@@ -63,7 +63,13 @@
   
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:if test="$link-top-section='yes'"> <!-- optional return to top - not used -->
-    <p align="left"><a href="#TOP">
+    <p>
+      <xsl:call-template name="style">
+        <xsl:with-param name="contents">
+          <xsl:text>text-align:left;</xsl:text>
+        </xsl:with-param>
+      </xsl:call-template>
+      <a href="#TOP">
       <!--xsl:value-of select="$deftxt-linktop"/-->
       <xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'Return to Top'"/>
@@ -365,14 +371,24 @@
   <!--If the choicetable has no header - output a default one-->
   <xsl:choose>
   <xsl:when test="not(./*[contains(@class,' task/chhead ')])">
-   <thead><tr><th id="{generate-id(.)}-option" valign="bottom">
-    <xsl:call-template name="th-align"/>
+   <thead><tr><th id="{generate-id(.)}-option">
+     <xsl:call-template name="style">
+       <xsl:with-param name="contents">
+         <xsl:text>vertical-align:bottom;</xsl:text>
+         <xsl:call-template name="th-align"/>     
+       </xsl:with-param>
+     </xsl:call-template>    
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Option'"/>
     </xsl:call-template>
     </th><xsl:value-of select="$newline"/>
-    <th id="{generate-id(.)}-desc" valign="bottom">
-    <xsl:call-template name="th-align"/>
+    <th id="{generate-id(.)}-desc">
+      <xsl:call-template name="style">
+        <xsl:with-param name="contents">
+          <xsl:text>vertical-align:bottom;</xsl:text>
+          <xsl:call-template name="th-align"/>     
+        </xsl:with-param>
+      </xsl:call-template>
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Description'"/>
     </xsl:call-template>
@@ -384,8 +400,13 @@
        <xsl:call-template name="commonattributes"/>
      </xsl:for-each>
     <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
-    <th valign="bottom">     
-     <xsl:call-template name="th-align"/>
+    <th>     
+      <xsl:call-template name="style">
+        <xsl:with-param name="contents">
+          <xsl:text>vertical-align:bottom;</xsl:text>
+          <xsl:call-template name="th-align"/>     
+        </xsl:with-param>
+      </xsl:call-template>
      <xsl:attribute name="id">     
      <xsl:choose>
       <!-- if the option header has an ID, use that -->
@@ -399,8 +420,13 @@
      </xsl:attribute>
      <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" mode="chtabhdr"/>
     </th><xsl:value-of select="$newline"/>
-    <th valign="bottom">     
-     <xsl:call-template name="th-align"/>
+    <th>     
+      <xsl:call-template name="style">
+        <xsl:with-param name="contents">
+          <xsl:text>vertical-align:bottom;</xsl:text>
+          <xsl:call-template name="th-align"/>     
+        </xsl:with-param>
+      </xsl:call-template>
      <xsl:attribute name="id">
      <xsl:choose>
       <!-- if the description header has an ID, use that -->
@@ -455,7 +481,12 @@
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template match="*[contains(@class,' task/choption ')]" name="topic.task.choption">
-  <td valign="top">
+  <td>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:top;</xsl:text>     
+      </xsl:with-param>
+    </xsl:call-template>
    <!-- Add header attr for column header -->
    <xsl:attribute name="headers">
     <xsl:choose>
@@ -512,7 +543,12 @@
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template match="*[contains(@class,' task/chdesc ')]" name="topic.task.chdesc">
-  <td valign="top">
+  <td>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:top;</xsl:text>     
+      </xsl:with-param>
+    </xsl:call-template>
    <!-- Add header attr, column header then option header -->
    <xsl:attribute name="headers">
     <xsl:choose>
