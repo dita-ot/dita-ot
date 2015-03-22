@@ -289,7 +289,24 @@
      paramenter, and call addPropertiesHeadersAttribute instead of output-stentry-headers. -->
 <xsl:template match="*" mode="propertiesEntry">
   <xsl:param name="elementType"/>
-  <td>
+  
+  <xsl:variable name="localkeycol" as="xs:integer">
+    <xsl:choose>
+      <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol">
+        <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol"/>
+      </xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="element-name" as="xs:string">
+    <xsl:choose>
+      <xsl:when test="$localkeycol = 1 and $elementType = 'type'">th</xsl:when>
+      <xsl:when test="$localkeycol = 2 and $elementType = 'value'">th</xsl:when>
+      <xsl:when test="$localkeycol = 3 and $elementType = 'desc'">th</xsl:when>
+      <xsl:otherwise>td</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:element name="{$element-name}">
     <xsl:call-template name="style">
       <xsl:with-param name="contents">
         <xsl:text>vertical-align:top;</xsl:text>     
@@ -298,32 +315,14 @@
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="addPropertiesHeadersAttribute">
       <xsl:with-param name="classVal"> reference/prop<xsl:value-of select="$elementType"/>hd<xsl:text> </xsl:text></xsl:with-param>
-      <xsl:with-param name="elementType"><xsl:value-of select="$elementType"/></xsl:with-param>
+      <xsl:with-param name="elementType" select="$elementType"/>
     </xsl:call-template>
     <xsl:call-template name="commonattributes"/>
-    <xsl:variable name="localkeycol">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
-          <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-    <xsl:choose>
-     <xsl:when test="$thiscolnum=$localkeycol">
-      <strong>
-        <xsl:call-template name="propentry-templates"/>
-      </strong>
-     </xsl:when>
-     <xsl:otherwise>
-       <xsl:call-template name="propentry-templates"/>
-     </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="propentry-templates"/>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-  </td><xsl:value-of select="$newline"/>
+  </xsl:element>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template name="propentry-templates">

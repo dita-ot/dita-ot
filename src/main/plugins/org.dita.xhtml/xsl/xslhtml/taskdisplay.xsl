@@ -515,8 +515,8 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:variable name="localkeycol">
       <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
-          <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol"/>
+        <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol">
+          <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol"/>
         </xsl:when>
         <xsl:otherwise>0</xsl:otherwise>
       </xsl:choose>

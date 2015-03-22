@@ -2483,17 +2483,21 @@
      NOTE: I reference simpletable with parent::*/parent::* in order to avoid problems
      with nested simpletables. -->
 <xsl:template name="set.stentry.headers">
-  <xsl:if test="parent::*/parent::*/@keycol | parent::*/parent::*/*[contains(@class, ' topic/sthead ')]">
+  <xsl:variable name="keycol" select="parent::*/parent::*/@keycol"/>
+  <xsl:if test="$keycol | parent::*/parent::*/*[contains(@class, ' topic/sthead ')]">
       <xsl:variable name="thiscolnum"><xsl:number level="single" count="*[contains(@class, ' topic/stentry ')]"/></xsl:variable>
 
       <!-- If there is a keycol, and this is not the key column, get the ID for the keycol -->
       <xsl:variable name="keycolhead">
-          <xsl:if test="parent::*/parent::*/@keycol and $thiscolnum!=number(parent::*/parent::*/@keycol)">
+          <xsl:if test="$keycol and $thiscolnum != number($keycol)">
+            <xsl:variable name="col" select="../*[number($keycol)]"/>
               <xsl:choose>
-                  <xsl:when test="../*[number(parent::*/parent::*/@keycol)]/@id">
-                      <xsl:value-of select="../*[number(parent::*/parent::*/@keycol)]/@id"/>
+                  <xsl:when test="$col/@id">
+                      <xsl:value-of select="$col/@id"/>
                   </xsl:when>
-                  <xsl:otherwise><xsl:value-of select="generate-id(../*[number(parent::*/parent::*/@keycol)])"/></xsl:otherwise>
+                  <xsl:otherwise>
+                    <xsl:value-of select="generate-id($col)"/>
+                  </xsl:otherwise>
               </xsl:choose>
           </xsl:if>
       </xsl:variable>
