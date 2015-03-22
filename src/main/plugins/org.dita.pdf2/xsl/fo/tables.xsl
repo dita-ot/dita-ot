@@ -982,33 +982,15 @@
 
     <xsl:template name="createSimpleTableColumns">
         <xsl:param name="theColumnWidthes" select="'1*'"/>
-
-        <xsl:choose>
-            <xsl:when test="contains($theColumnWidthes, ' ')">
-                <fo:table-column>
-                    <xsl:attribute name="column-width">
-                        <xsl:call-template name="xcalcColumnWidth">
-                            <xsl:with-param name="theColwidth" select="substring-before($theColumnWidthes, ' ')"/>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                </fo:table-column>
-
-                <xsl:call-template name="createSimpleTableColumns">
-                    <xsl:with-param name="theColumnWidthes" select="substring-after($theColumnWidthes, ' ')"/>
-                </xsl:call-template>
-
-            </xsl:when>
-            <xsl:otherwise>
-                <fo:table-column>
-                    <xsl:attribute name="column-width">
-                        <xsl:call-template name="xcalcColumnWidth">
-                            <xsl:with-param name="theColwidth" select="$theColumnWidthes"/>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                </fo:table-column>
-            </xsl:otherwise>
-        </xsl:choose>
-
+        <xsl:for-each select="tokenize(normalize-space($theColumnWidthes), '\s+')">
+          <fo:table-column>
+            <xsl:attribute name="column-width">
+              <xsl:call-template name="xcalcColumnWidth">
+                <xsl:with-param name="theColwidth" select="."/>
+              </xsl:call-template>
+            </xsl:attribute>
+          </fo:table-column>
+        </xsl:for-each>
     </xsl:template>
 
     <!-- SourceForge RFE 2874200:
