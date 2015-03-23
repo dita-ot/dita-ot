@@ -504,9 +504,7 @@
     </xsl:template>
 
     <xsl:template name="processEntryContent">
-      <xsl:variable name="entryNumber" as="xs:integer">
-            <xsl:call-template name="countEntryNumber"/>
-        </xsl:variable>
+      <xsl:variable name="entryNumber" select="@dita-ot:x" as="xs:integer"/>
         <xsl:variable name="colspec" select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = $entryNumber]"/>
         <xsl:variable name="char">
             <xsl:choose>
@@ -570,24 +568,6 @@
             </xsl:when>
         </xsl:choose>
     </xsl:template>
-
-    <xsl:template name="countEntryNumber">
-        <xsl:choose>
-            <xsl:when test="@colname">
-                <xsl:variable name="colname" select="@colname"/>
-                <xsl:if test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][@colname = $colname]">
-                  <xsl:number select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][@colname = $colname]"/>
-                </xsl:if>
-            </xsl:when>
-            <xsl:when test="@colnum">
-              <xsl:sequence select="xs:integer(@colnum)"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:sequence select="xs:integer(-1)"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
 
     <xsl:template name="calculateColumnWidth.Proportional">
         <xsl:param name="colwidth" >1*</xsl:param>
@@ -745,7 +725,7 @@
         <xsl:variable name="rowsep" as="xs:string">
             <xsl:call-template name="getTableRowsep"/>
         </xsl:variable>
-        <xsl:variable name="frame">
+        <xsl:variable name="frame" as="xs:string">
           <xsl:variable name="f" select="ancestor::*[contains(@class, ' topic/table ')][1]/@frame"/>
           <xsl:choose>
             <xsl:when test="$f">
@@ -873,8 +853,8 @@
     </xsl:template>
 
     <xsl:template name="displayAtts">
-        <xsl:param name="element"/>
-        <xsl:variable name="frame">
+        <xsl:param name="element" as="element()"/>
+        <xsl:variable name="frame" as="xs:string">
           <xsl:choose>
             <xsl:when test="$element/@frame">
               <xsl:value-of select="$element/@frame"/>
@@ -997,12 +977,11 @@
          Fill in empty cells when one is missing from strow or sthead.
          Context for this call is strow or sthead. -->
     <xsl:template match="*" mode="fillInMissingSimpletableCells">
-        <xsl:param name="fill-in-count" select="0"/>
-        <xsl:if test="$fill-in-count >
-            0">
+        <xsl:param name="fill-in-count" select="0" as="xs:integer"/>
+        <xsl:if test="$fill-in-count > 0">
             <fo:table-cell xsl:use-attribute-sets="strow.stentry">
                 <xsl:call-template name="commonattributes"/>
-                <xsl:variable name="frame">
+                <xsl:variable name="frame" as="xs:string">
                     <xsl:choose>
                         <xsl:when test="../@frame">
                             <xsl:value-of select="../@frame"/>
@@ -1093,7 +1072,7 @@
         <fo:table-cell xsl:use-attribute-sets="sthead.stentry">
             <xsl:call-template name="commonattributes"/>
             <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
-            <xsl:variable name="frame">
+            <xsl:variable name="frame" as="xs:string">
                 <xsl:variable name="f" select="ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame"/>
                 <xsl:choose>
                     <xsl:when test="$f">
@@ -1139,7 +1118,7 @@
         <fo:table-cell xsl:use-attribute-sets="strow.stentry">
             <xsl:call-template name="commonattributes"/>
             <xsl:variable name="entryCol" select="count(preceding-sibling::*[contains(@class, ' topic/stentry ')]) + 1"/>
-            <xsl:variable name="frame">
+            <xsl:variable name="frame" as="xs:string">
                 <xsl:variable name="f" select="ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame"/>
                 <xsl:choose>
                     <xsl:when test="$f">
