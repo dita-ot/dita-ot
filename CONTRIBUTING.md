@@ -16,9 +16,9 @@ _or — even better:_
 If you know how to fix the issue yourself, that's great! Here's what to do:
 
 1. [Fork the repository][1],
-2. [Create a new branch][2], 
+2. [Create a new branch][3], 
 3. Make your changes on the new branch, and 
-3. [Send a pull request][3]. 
+3. [Send a pull request][2]. 
 
 ### Always create a branch for your changes
 
