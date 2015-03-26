@@ -66,7 +66,11 @@ See the accompanying license.txt file for applicable licenses.
 
       <xsl:if test="@relcolwidth">
         <xsl:variable name="fix-relcolwidth">
-          <xsl:apply-templates select="." mode="fix-relcolwidth"/>
+          <xsl:apply-templates select="." mode="fix-relcolwidth">
+            <xsl:with-param name="number-cells">
+              <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
+            </xsl:with-param>
+          </xsl:apply-templates>
         </xsl:variable>
         <xsl:call-template name="createSimpleTableColumns">
           <xsl:with-param name="theColumnWidthes" select="$fix-relcolwidth"/>
