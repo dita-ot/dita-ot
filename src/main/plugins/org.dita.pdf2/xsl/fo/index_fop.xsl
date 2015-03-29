@@ -46,7 +46,7 @@
           <xsl:variable name="links" as="element()*">
             <xsl:for-each select="$idxs">
               <xsl:variable name="currentValue" select="@value"/>
-              <xsl:for-each select="//opentopic-index:refID[not(ancestor::opentopic-index:index.groups)][@value]">
+              <xsl:for-each select="//opentopic-index:refID[not(ancestor::opentopic-index:index.groups)][not(ancestor::*[@no-page='true'])][@value]">
                 <xsl:variable name="value" select="concat(@value, '_unique_', generate-id(.))"/>
                 <xsl:variable name="refValue" select="concat($currentValue, '_unique_', generate-id(.))"/>
                 <xsl:choose>
