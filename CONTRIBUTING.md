@@ -8,6 +8,9 @@ If you find a bug — _and you don’t know how to fix it_, [create an issue](ht
 
 Before you do that, [review the open issues](https://github.com/dita-ot/dita-ot/issues) to make sure it hasn't already been reported.
 
+In addition to a complete issue description, a self-contained test case helps the developers to fix the bug. A test case is simply a set of
+files that can be used to reproduce the issue. [Gist](https://gist.github.com/) is an easy way to upload your test files and link it to the
+issue description.
 
 _or — even better:_
 
@@ -37,3 +40,4 @@ For more information, see [Contributing to Open Source on GitHub][6].
 [4]:    <http://nvie.com/posts/a-successful-git-branching-model/>
 [5]:    <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>
 [6]:    <https://guides.github.com/activities/contributing-to-open-source/>
+[7]: https://gist.github.com/
