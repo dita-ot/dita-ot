@@ -15,4 +15,12 @@
     <makeurl property="net.sourceforge.dita-ot.html.map.url" file="${dita.temp.dir}/${net.sourceforge.dita-ot.html.map}"/>
   </target>
   
+  <target name="dita2net.sourceforge.dita-ot.html"
+          depends="net.sourceforge.dita-ot.html.init,
+                   build-init,
+                   preprocess,
+                   copy-revflag,
+                   net.sourceforge.dita-ot.html,
+                   xhtml.topics"/>
+  
 </project>
