@@ -524,22 +524,6 @@
     </delete>
   </target>
 
-  <!-- Site -->
-  
-  <target name="site" description="Build project website">
-    <ant antfile="${doc.dir}/build.xml" target="generate-msg-topic" dir="${doc.dir}">
-      <property name="dita.home" location="${src.dir}"/>
-    </ant>
-    <ant antfile="${src.dir}/build.xml">
-      <property name="args.input" location="${doc.dir}/site.ditamap"/>
-      <property name="output.dir" location="${basedir}/target/site"/>
-      <property name="transtype" value="net.sourceforge.dita-ot.html"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-      <property name="args.rellinks" value="all"/>
-      <property name="args.gen.task.lbl" value="YES"/>
-    </ant>
-  </target>  
-
   <!-- Ivy -->
     
   <target name="check-ivy">
