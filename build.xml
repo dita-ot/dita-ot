@@ -40,7 +40,6 @@
 
   <property name="dost.jar" location="${lib.dir}/dost.jar"/>
   <property name="binary-min" value="DITA-OT${otversion}_minimal_bin"/>
-  <!--property name="binary-big" value="DITA-OT${otversion}_full_easy_install_bin"/-->
   <property name="binary-client" value="DITA-OT${otversion}_client_bin"/>
   <property name="binary" value="DITA-OT${otversion}_standard_bin"/>
   <property name="win32.zip.suffix" value=".zip"/>
@@ -182,31 +181,6 @@
     <include name="legacypdf/**"/-->
   </patternset>
 
-  <!--patternset id="pattern.package.full">
-    <patternset refid="pattern.global.excludes"/>
-    <exclude name="buildPackage.*"/>
-    <include name="*.*"/>
-    <include name="plugins/org.dita.specialization.eclipsemap/**"/>
-    <include name="plugins/org.dita.specialization.dita11/**"/>
-    <include name="plugins/org.dita.specialization.dita132/**"/>
-    <exclude name="plugins/org.dita.pdf2/src/**"/>
-    <include name="plugins/org.dita.pdf2/**"/>
-    <include name="plugins/com.sophos.tocjs/**"/>
-    <include name="docsrc/**"/>
-    <exclude name="demo/**"/>
-    <include name="dtd/**"/>
-    <include name="plugins/**"/>
-    <include name="resources/**"/>
-    <include name="samples/**"/>
-    <include name="xsl/**"/>
-    <include name="lib/**"/>
-  </patternset>
-  <patternset id="pattern.package.ext-plugins.full">
-    <exclude name="**/*"/>
-    <!- -include name="h2d/**"/- ->
-    <!- -include name="legacypdf/**"/- ->
-  </patternset-->
-
   <patternset id="pattern.package.standard">
     <patternset refid="pattern.global.excludes"/>
     <exclude name="plugins/org.dita.pdf2/fop/build/"/>
@@ -341,20 +315,7 @@
         <include name="ant"/>
         <include name="ant.bat"/>
       </fileset>
-    </copy>
-    
-    <!--copy todir="${temp.dist.dir}">
-      <zipfileset src="${basedir}/target/apache-ant-${tool.ant.version}-bin.zip">
-        <!- -exclude name="apache-ant-${tool.ant.version}/etc/**"/>
-        <exclude name="apache-ant-${tool.ant.version}/manual/**"/>
-        <include name="apache-ant-${tool.ant.version}/*"/>
-        <exclude name="apache-ant-${tool.ant.version}/bin/**"/- ->
-        <include name="apache-ant-${tool.ant.version}/lib/ant.jar"/>
-        <include name="apache-ant-${tool.ant.version}/lib/ant-launcher.jar"/>
-        <include name="apache-ant-${tool.ant.version}/lib/ant-apache-resolver.jar"/>
-      </zipfileset>
-      <mapper type="glob" from="apache-ant-${tool.ant.version}/*" to="*"/>
-    </copy-->
+    </copy>    
     <copy todir="${temp.dist.dir}/plugins">
       <fileset dir="${src.dir}/ext-plugins">
         <patternset refid="pattern.package.ext-plugins.client"/>
@@ -384,57 +345,6 @@
     </tar>
   </target>
 
-  <!--target name="package-binary-full" depends="dependencies">
-    <fail unless="param.out.file">param.out.file not defined</fail>
-    <property name="temp.dist.dir" location="${work.dir}/${param.out.file}/${package.name.root}${otversion}"/>
-    <delete dir="${temp.dist.dir}"/>
-    <mkdir dir="${temp.dist.dir}"/>
-    <copy todir="${temp.dist.dir}">
-      <fileset dir="${src.dir}">
-        <patternset refid="pattern.package.full"/>
-      </fileset>
-    </copy>
-    <mkdir dir="${temp.dist.dir}/tools/ant"/>
-    <copy todir="${temp.dist.dir}/tools/ant">
-      <fileset dir="${basedir}/target/tools/apache-ant-${tool.ant.version}">
-       <exclude name="etc/**"/>
-       <exclude name="manual/**"/>
-       <exclude name="fetch.xml"/>
-       <exclude name="get-m2.xml"/>
-       <exclude name="lib/*.pom"/>
-       <include name="*"/>
-       <include name="bin/**"/>
-       <include name="lib/**"/>
-     </fileset>
-    </copy>
-    <copy todir="${temp.dist.dir}/plugins">
-      <fileset dir="${src.dir}/ext-plugins">
-        <patternset refid="pattern.package.ext-plugins.full"/>
-      </fileset>
-    </copy>
-    <copy todir="${temp.dist.dir}">
-      <fileset dir="${out.dir}">
-        <patternset refid="pattern.package.doc"/>
-      </fileset>
-    </copy>
-    <ant antfile="${temp.dist.dir}/integrator.xml" dir="${temp.dist.dir}"/>
-    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="${work.dir}/${param.out.file}">
-        <exclude name="*/startcmd.sh"/>
-      </zipfileset>
-      <zipfileset dir="${work.dir}/${param.out.file}" filemode="755">
-        <include name="*/startcmd.sh"/>
-      </zipfileset>
-    </zip>
-    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip" longfile="gnu">
-      <tarfileset dir="${work.dir}/${param.out.file}">
-        <exclude name="*/startcmd.sh"/>
-      </tarfileset>
-      <tarfileset dir="${work.dir}/${param.out.file}" mode="755">
-        <include name="*/startcmd.sh"/>
-      </tarfileset>
-    </tar>
-  </target-->
   
   <target name="build-package-binary" depends="jar, jar.plug-ins, update-doc">
     <mkdir dir="${out.dir}"/>
@@ -442,9 +352,6 @@
       <antcall target="package-binary-client">
         <param name="param.out.file" value="${binary-client}"/>
       </antcall>
-      <!--antcall target="package-binary-full">
-        <param name="param.out.file" value="${binary-big}"/>
-      </antcall-->
       <antcall target="package-binary-standard">
         <param name="param.out.file" value="${binary}"/>
       </antcall>
@@ -472,37 +379,6 @@
       <property name="args.css" value="dita-ot-doc.css"/>
       <property name="args.cssroot" value="${doc.dir}/resource"/>
     </ant>
-    <!--
-    <ant antfile="${src.dir}/build.xml">
-      <property name="args.input" location="${doc.dir}/userguide-book.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}"/>
-      <property name="outputFile.base" value="userguide"/>
-      <property name="transtype" value="pdf"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-
-    <ant antfile="${src.dir}/build.xml">
-      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
-      <property name="output.dir" location="${work.dir}/htmlhelp"/>
-      <property name="transtype" value="htmlhelp"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <copy todir="${doc.out.dir}" failonerror="no">
-      <fileset dir="${work.dir}/htmlhelp">
-        <include name="*.chm"/>
-      </fileset>
-    </copy>
-
-    <ant antfile="${src.dir}/build.xml">
-      <property name="args.input" location="${doc.dir}/userguide.ditamap"/>
-      <property name="output.dir" location="${doc.out.dir}/html"/>
-      <property name="outputFile.base" value="index"/>
-      <property name="args.csspath" value="css"/>
-      <property name="transtype" value="tocjs"/>
-      <property name="base.temp.dir" location="${work.dir}"/>
-    </ant>
-    <move file="${doc.out.dir}/html/userguide.html" tofile="${doc.out.dir}/html/index.html"/>
-    -->
     <ant antfile="${src.dir}/build.xml">
       <property name="args.input" location="${doc.dir}/release-notes/rel${otrelease}.dita"/>
       <property name="output.dir" location="${work.dir}/relnotes"/>
