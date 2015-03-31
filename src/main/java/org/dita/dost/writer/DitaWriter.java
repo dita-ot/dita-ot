@@ -546,21 +546,25 @@ public final class DitaWriter extends AbstractXMLFilter {
 
                             if (href != null) {
                                 final String updatedHref = updateHref(href);
+                                final boolean keyrefExported = false;
 
-                                final String id = null;
+                                if (transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
+	                            final String id = null;
+        	                    final List<Boolean> list = delayConrefUtils.checkExport(href, id, attValue, tempDir);
+                	            keyrefExported = list.get(1).booleanValue();
+                                    //key is exported and transtype is eclipsehelp
+                                    if (keyrefExported) {
+                                        //remain the conkeyref attribute.
+                                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONKEYREF, attValue);
+                                    }
 
-                                final List<Boolean> list = delayConrefUtils.checkExport(href, id, attValue, tempDir);
-                                final boolean keyrefExported = list.get(1).booleanValue();
-                                //key is exported and transtype is eclipsehelp
-                                if (keyrefExported && transtype.equals(INDEX_TYPE_ECLIPSEHELP)) {
-                                    //remain the conkeyref attribute.
-                                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONKEYREF, attValue);
-                                } else {
-                                    //e.g conref = c.xml
-                                    String target = updatedHref;
-                                    target = replaceExtName(target);
-                                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, target);
-                                    conkeyrefValid = true;
+                                //key is not exported (either because transtype is not eclipsehelp or it is and not exported)
+                                if (!keyrefExported)) {
+                                        //e.g conref = c.xml
+                                        String target = updatedHref;
+                                        target = replaceExtName(target);
+                                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_CONREF, target);
+                                        conkeyrefValid = true;
                                 }
                             }
                         }else{
