@@ -4,7 +4,7 @@
   <!-- Start of Ant Messages -->
   <message id="DOTA001F" type="FATAL">
     <reason>&quot;%1&quot; is not a recognized transformation type.</reason>
-    <response>Supported transformation types are docbook, docx, eclipsecontent, eclipsehelp, htmlhelp, javahelp, net.sourceforge.dita-ot.html, odt, pdf, pdf2, tocjs, troff, wordrtf, xhtml.</response>
+    <response>Supported transformation types are docbook, docx, eclipsecontent, eclipsehelp, htmlhelp, javahelp, org.dita-ot.html, odt, pdf, pdf2, tocjs, troff, wordrtf, xhtml.</response>
   </message>
   
   <message id="DOTA002F" type="FATAL">

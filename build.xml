@@ -116,7 +116,7 @@
     <exclude name="local.properties"/>
     <exclude name="build.log"/>
     <exclude name="lib/commons-logging-1.1.1.jar"/>
-    <exclude name="plugins/net.sourceforge.dita-ot.html/**"/>
+    <exclude name="plugins/org.dita-ot.html/**"/>
     <exclude name="plugins/org.dita.pdf2/bin/**"/>
     <exclude name="plugins/org.dita.pdf2/lib/xep/**"/>
     <!-- docs -->
