@@ -255,6 +255,7 @@ public final class NormalizeFilter extends AbstractXMLFilter {
                 rowsMap = null;
                 colSpanMap = null;
             }
+            totalColumns = 0;
         }
         
         if (depth == 1) {
