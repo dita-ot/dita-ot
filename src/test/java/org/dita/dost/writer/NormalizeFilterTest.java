@@ -13,8 +13,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
@@ -33,25 +37,27 @@ public class NormalizeFilterTest {
         test("topic.dita");
 	}
 	
-	private void test(final String expFile) throws Exception {
+	private void test(final String file) throws Exception {
 		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		//dbf.setNamespaceAware(true);
+		dbf.setNamespaceAware(true);
 		final DocumentBuilder db = dbf.newDocumentBuilder();
+		final InputStream expStream = getClass().getClassLoader().getResourceAsStream("NormalizeFilterTest/exp/" + file);
 
 		final Transformer t = TransformerFactory.newInstance().newTransformer();
-		final InputStream src = getClass().getClassLoader().getResourceAsStream("NormalizeFilterTest/src/" + expFile);
+		final InputStream src = getClass().getClassLoader().getResourceAsStream("NormalizeFilterTest/src/" + file);
 		final NormalizeFilter f = new NormalizeFilter();
 		f.setParent(XMLUtils.getXMLReader());
 		f.setLogger(new TestUtils.TestLogger());
 		final SAXSource s = new SAXSource(f, new InputSource(src));
-		final Document act = db.newDocument();
-		final DOMResult d = new DOMResult(act);
-		t.transform(s, d);
-
-		final InputStream expStream = getClass().getClassLoader().getResourceAsStream("NormalizeFilterTest/exp/" + expFile);
-		final Document exp = db.parse(expStream);
-
-		assertXMLEqual(exp, act);
+		if (false) { // XXX: comparing resulting DOM document will fail even thought the XML content is identical
+			final Document act = db.newDocument();
+			t.transform(s, new DOMResult(act));
+			assertXMLEqual(db.parse(expStream), act);
+		} else {
+			final StringWriter w = new StringWriter();
+			t.transform(s, new StreamResult(w));
+			assertXMLEqual(new InputSource(expStream), new InputSource(new StringReader(w.toString())));
+		}
 	}
 
 }
