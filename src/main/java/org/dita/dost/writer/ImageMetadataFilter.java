@@ -7,7 +7,6 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
@@ -131,11 +130,8 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
                     r = i.next();
                     r.setInput(iis);
                     final int imageIndex = r.getMinIndex();
-                    final BufferedImage img = r.read(0);
-                    assert img.getWidth() == r.getWidth(imageIndex);
-                    assert img.getHeight() == r.getHeight(imageIndex);
-                    a.add(DITA_OT_NS, ATTR_IMAGE_WIDTH, DITA_OT_PREFIX + ":" + ATTR_IMAGE_WIDTH, "CDATA", Integer.toString(img.getWidth()));
-                    a.add(DITA_OT_NS, ATTR_IMAGE_HEIGHT, DITA_OT_PREFIX + ":" + ATTR_IMAGE_HEIGHT, "CDATA", Integer.toString(img.getHeight()));
+                    a.add(DITA_OT_NS, ATTR_IMAGE_WIDTH, DITA_OT_PREFIX + ":" + ATTR_IMAGE_WIDTH, "CDATA", Integer.toString(r.getWidth(imageIndex)));
+                    a.add(DITA_OT_NS, ATTR_IMAGE_HEIGHT, DITA_OT_PREFIX + ":" + ATTR_IMAGE_HEIGHT, "CDATA", Integer.toString(r.getHeight(imageIndex)));
                     final Element node = (Element) r.getImageMetadata(0).getAsTree("javax_imageio_1.0");
                     final NodeList hs = node.getElementsByTagName("HorizontalPixelSize");
                     if (hs != null && hs.getLength() == 1) {
