@@ -358,122 +358,143 @@
 
 <!-- task/choice - fall-thru -->
 
-<!-- choice table is like a simpletable - 2 columns, set heading -->
-<xsl:template match="*[contains(@class,' task/choicetable ')]" name="topic.task.choicetable">  
- <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
- <xsl:call-template name="setaname"/>
- <xsl:value-of select="$newline"/>
- <table border="1" frame="hsides" rules="rows" cellpadding="4" cellspacing="0" summary="" class="choicetableborder">
-  <xsl:call-template name="commonattributes"/>
-  <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
-  <xsl:call-template name="setid"/><xsl:value-of select="$newline"/>
-  <xsl:call-template name="dita2html:simpletable-cols"/>
-  <!--If the choicetable has no header - output a default one-->
-  <xsl:choose>
-  <xsl:when test="not(./*[contains(@class,' task/chhead ')])">
-   <thead><tr><th id="{generate-id(.)}-option">
-     <xsl:call-template name="style">
-       <xsl:with-param name="contents">
-         <xsl:text>vertical-align:bottom;</xsl:text>
-         <xsl:call-template name="th-align"/>     
-       </xsl:with-param>
-     </xsl:call-template>    
-    <xsl:call-template name="getString">
-      <xsl:with-param name="stringName" select="'Option'"/>
-    </xsl:call-template>
-    </th><xsl:value-of select="$newline"/>
-    <th id="{generate-id(.)}-desc">
-      <xsl:call-template name="style">
-        <xsl:with-param name="contents">
-          <xsl:text>vertical-align:bottom;</xsl:text>
-          <xsl:call-template name="th-align"/>     
-        </xsl:with-param>
-      </xsl:call-template>
-    <xsl:call-template name="getString">
-      <xsl:with-param name="stringName" select="'Description'"/>
-    </xsl:call-template>
-    </th></tr></thead><xsl:value-of select="$newline"/>
-  </xsl:when>
-  <xsl:otherwise>
-   <thead><tr>
-     <xsl:for-each select="*[contains(@class,' task/chhead ')]">
-       <xsl:call-template name="commonattributes"/>
-     </xsl:for-each>
-    <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
-    <th>     
-      <xsl:call-template name="style">
-        <xsl:with-param name="contents">
-          <xsl:text>vertical-align:bottom;</xsl:text>
-          <xsl:call-template name="th-align"/>     
-        </xsl:with-param>
-      </xsl:call-template>
-     <xsl:attribute name="id">     
-     <xsl:choose>
-      <!-- if the option header has an ID, use that -->
-      <xsl:when test="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id">
-       <xsl:value-of select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id"/><xsl:text>-option</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>  <!-- output a default option header ID -->
-       <xsl:value-of select="generate-id(.)"/><xsl:text>-option</xsl:text>
-      </xsl:otherwise>
-     </xsl:choose>
-     </xsl:attribute>
-     <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" mode="chtabhdr"/>
-    </th><xsl:value-of select="$newline"/>
-    <th>     
-      <xsl:call-template name="style">
-        <xsl:with-param name="contents">
-          <xsl:text>vertical-align:bottom;</xsl:text>
-          <xsl:call-template name="th-align"/>     
-        </xsl:with-param>
-      </xsl:call-template>
-     <xsl:attribute name="id">
-     <xsl:choose>
-      <!-- if the description header has an ID, use that -->
-      <xsl:when test="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id">
-       <xsl:value-of select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id"/><xsl:text>-desc</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>  <!-- output a default descr header ID -->
-       <xsl:value-of select="generate-id(.)"/><xsl:text>-desc</xsl:text>
-      </xsl:otherwise>
-     </xsl:choose>
-     </xsl:attribute>
-     <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]" mode="chtabhdr"/>
-    </th></tr></thead><xsl:value-of select="$newline"/>
-  </xsl:otherwise>
-  </xsl:choose>
-  <tbody>
-    <xsl:apply-templates/>
-  </tbody>
- </table><xsl:value-of select="$newline"/>
-  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-</xsl:template>
+  <!-- choice table is like a simpletable - 2 columns, set heading -->
+  <xsl:template match="*[contains(@class,' task/choicetable ')]" name="topic.task.choicetable">
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <xsl:call-template name="setaname"/>
+    <xsl:value-of select="$newline"/>
+    <table border="1" frame="hsides" rules="rows" cellpadding="4" cellspacing="0" summary="" class="choicetableborder">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
+      <xsl:call-template name="setid"/>
+      <xsl:value-of select="$newline"/>
+      <xsl:call-template name="dita2html:simpletable-cols"/>
+      <!--If the choicetable has no header - output a default one-->
+      <xsl:variable name="chhead" as="element()?">
+        <xsl:choose>
+          <xsl:when test="exists(*[contains(@class,' task/chhead ')])">
+            <xsl:sequence select="*[contains(@class,' task/chhead ')]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="gen-chhead"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:apply-templates select="$chhead"/>
+      <tbody>
+        <xsl:apply-templates select="*[contains(@class, ' task/chrow ')]"/>
+      </tbody>
+    </table>
+    <xsl:value-of select="$newline"/>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  </xsl:template>
+  
 <xsl:template match="*[contains(@class,' task/choicetable ')]" mode="get-output-class">choicetableborder</xsl:template>
   <xsl:template match="*[contains(@class,' task/choicetable ')]" mode="dita2html:get-max-entry-count" as="xs:integer">
     <xsl:sequence select="2"/>
   </xsl:template>
  
-<!-- headers are called above, hide the fall thru -->
-<xsl:template match="*[contains(@class,' task/chhead ')]" />
-<xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" />
-<xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]" />
+  <!-- Generate default choicetable header -->
+  <xsl:template name="gen-chhead" as="element()?">
+    <xsl:variable name="choicetable" select="ancestor-or-self::*[contains(@class,' task/choicetable ')][1]" as="element()"/>
+    <chhead class="- topic/sthead task/chhead ">
+      <choptionhd class="- topic/stentry task/choptionhd " id="{generate-id($choicetable)}">
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Option'"/>
+        </xsl:call-template>
+      </choptionhd>  
+      <chdeschd class="- topic/stentry task/chdeschd " id="{generate-id($choicetable)}">
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Description'"/>
+        </xsl:call-template>
+      </chdeschd>
+    </chhead>
+  </xsl:template>
+ 
+<xsl:template match="*[contains(@class,' task/chhead ')]">
+  <thead>
+    <tr>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:apply-templates select="*[contains(@class,' task/choptionhd ')]"/>
+      <xsl:apply-templates select="*[contains(@class,' task/chdeschd ')]"/>
+    </tr>
+  </thead>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+  
+<xsl:template match="*[contains(@class,' task/choptionhd ')]">
+  <th>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:bottom;</xsl:text>
+        <xsl:call-template name="th-align"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <xsl:attribute name="id">
+      <xsl:choose>
+        <!-- if the option header has an ID, use that -->
+        <xsl:when test="@id">
+          <xsl:value-of select="@id"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- output a default option header ID -->
+          <xsl:value-of select="generate-id(../..)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>-option</xsl:text>
+    </xsl:attribute>
+    <xsl:apply-templates select="." mode="chtabhdr"/>
+  </th>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+  
+<xsl:template match="*[contains(@class,' task/chdeschd ')]">
+  <th>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:bottom;</xsl:text>
+        <xsl:call-template name="th-align"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <xsl:attribute name="id">
+      <xsl:choose>
+        <!-- if the description header has an ID, use that -->
+        <xsl:when test="@id">
+          <xsl:value-of select="@id"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- output a default descr header ID -->
+          <xsl:value-of select="generate-id(../..)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>-desc</xsl:text>
+    </xsl:attribute>
+    <xsl:apply-templates select="." mode="chtabhdr"/>
+  </th>
+</xsl:template>
 
 <!-- Option & Description headers -->
-<xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" mode="chtabhdr">
+<xsl:template match="*[contains(@class,' task/choptionhd ')]" mode="chtabhdr">
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/>
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
-<xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]" mode="chtabhdr">
+  
+<xsl:template match="*[contains(@class,' task/chdeschd ')]" mode="chtabhdr">
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/>
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/chrow ')]" name="topic.task.chrow">
- <tr><xsl:call-template name="setid"/><xsl:call-template name="commonattributes"/>    
+ <tr>
+   <xsl:call-template name="setid"/>
+   <xsl:call-template name="commonattributes"/>    
     <xsl:apply-templates/>
-</tr>
+ </tr>
  <xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -481,7 +502,16 @@
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template match="*[contains(@class,' task/choption ')]" name="topic.task.choption">
-  <td>
+  <xsl:variable name="localkeycol" as="xs:integer">
+    <xsl:choose>
+      <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol">
+        <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol"/>
+      </xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>  
+  <xsl:variable name="element-name" select="if ($localkeycol = 1) then 'th' else 'td'"/>
+  <xsl:element name="{$element-name}">
     <xsl:call-template name="style">
       <xsl:with-param name="contents">
         <xsl:text>vertical-align:top;</xsl:text>     
@@ -491,14 +521,15 @@
    <xsl:attribute name="headers">
     <xsl:choose>
       <!-- First choice: if there is a user-specified header, and it has an ID -->
-      <xsl:when test="ancestor::*[contains(@class,' task/choicetable ')]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id">
-        <xsl:value-of select="ancestor::*[contains(@class,' task/choicetable ')]/*[1][contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id"/><xsl:text>-option</xsl:text>
+      <xsl:when test="ancestor::*[contains(@class,' task/choicetable ')][1]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id">
+        <xsl:value-of select="ancestor::*[contains(@class,' task/choicetable ')][1]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id"/>
       </xsl:when>
       <!-- Second choice: no user-specified header for this column. ID is based on the table's generated ID. -->
       <xsl:otherwise>
-        <xsl:value-of select="generate-id(ancestor::*[contains(@class,' task/choicetable ')])"/><xsl:text>-option</xsl:text>
+        <xsl:value-of select="generate-id(ancestor::*[contains(@class,' task/choicetable ')][1])"/>
       </xsl:otherwise>
     </xsl:choose>
+     <xsl:text>-option</xsl:text>
    </xsl:attribute>
    <!-- Add header attr, column header then row header -->
    <xsl:attribute name="id">
@@ -513,37 +544,26 @@
     </xsl:choose>
    </xsl:attribute>
     <xsl:call-template name="commonattributes"/>
-    <xsl:variable name="localkeycol">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol">
-          <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-    <!-- Does the column match? Is REV on for entry or row? -->
-    <xsl:choose>
-     <xsl:when test="$thiscolnum=$localkeycol">
-      <strong>
-        <xsl:call-template name="stentry-templates"/>
-      </strong>
-     </xsl:when>
-     <xsl:otherwise>
-       <xsl:call-template name="stentry-templates"/>
-     </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="stentry-templates"/>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-  </td><xsl:value-of select="$newline"/>
+  </xsl:element><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- specialization of stentry - chdesc -->
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template match="*[contains(@class,' task/chdesc ')]" name="topic.task.chdesc">
-  <td>
+  <xsl:variable name="localkeycol" as="xs:integer">
+    <xsl:choose>
+      <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol">
+        <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol"/>
+      </xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>  
+  <xsl:variable name="element-name" select="if ($localkeycol = 2) then 'th' else 'td'"/>
+  <xsl:element name="{$element-name}">
     <xsl:call-template name="style">
       <xsl:with-param name="contents">
         <xsl:text>vertical-align:top;</xsl:text>     
@@ -553,65 +573,35 @@
    <xsl:attribute name="headers">
     <xsl:choose>
       <!-- First choice: if there is a user-specified header, and it has an ID-->
-      <xsl:when test="ancestor::*[contains(@class,' task/choicetable ')]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id">
+      <xsl:when test="ancestor::*[contains(@class,' task/choicetable ')][1]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id">
        <!-- If there is a user-specified row ID -->
-        <xsl:value-of select="ancestor::*[contains(@class,' task/choicetable ')]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id"/><xsl:text>-desc </xsl:text>
-        <!-- add CHOption ID -->
-        <xsl:choose>
-         <xsl:when test="../*[contains(@class,' task/choption ')]/@id">
-          <xsl:value-of select="../*[contains(@class,' task/choption ')]/@id"/>
-         </xsl:when>
-         <xsl:otherwise>
-          <xsl:value-of select="generate-id(../*[contains(@class,' task/choption ')])"/>
-         </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="ancestor::*[contains(@class,' task/choicetable ')][1]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id"/>
       </xsl:when>
       <!-- Second choice: no user-specified header for this column. ID is based on the table's generated ID. -->
       <xsl:otherwise>
-        <xsl:value-of select="generate-id(ancestor::*[contains(@class,' task/choicetable ')])"/><xsl:text>-desc </xsl:text>
-        <!-- add CHOption ID -->
-        <xsl:choose>
-         <xsl:when test="../*[contains(@class,' task/choption ')]/@id">
-          <xsl:value-of select="../*[contains(@class,' task/choption ')]/@id"/>
-         </xsl:when>
-         <xsl:otherwise>
-          <xsl:value-of select="generate-id(../*[contains(@class,' task/choption ')])"/>
-         </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="generate-id(ancestor::*[contains(@class,' task/choicetable ')][1])"/>
       </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>-desc </xsl:text>
+     <!-- add CHOption ID -->
+    <xsl:choose>
+       <xsl:when test="../*[contains(@class,' task/choption ')]/@id">
+         <xsl:value-of select="../*[contains(@class,' task/choption ')]/@id"/>
+       </xsl:when>
+       <xsl:otherwise>
+         <xsl:value-of select="generate-id(../*[contains(@class,' task/choption ')])"/>
+       </xsl:otherwise>
     </xsl:choose>
    </xsl:attribute>
    <!-- If there is a user-specified ID, add it -->
    <xsl:if test="@id">
-    <xsl:attribute name="id">
-     <xsl:value-of select="@id"/>
-    </xsl:attribute>
+    <xsl:attribute name="id" select="@id"/>
    </xsl:if>
    <xsl:call-template name="commonattributes"/>
-    <xsl:variable name="localkeycol">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
-          <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-    <!-- Does the column match? Is REV on for entry or row? -->
-    <xsl:choose>
-     <xsl:when test="$thiscolnum=$localkeycol">
-      <strong>
-        <xsl:call-template name="stentry-templates"/>
-      </strong>
-     </xsl:when>
-     <xsl:otherwise>
-       <xsl:call-template name="stentry-templates"/>
-     </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="stentry-templates"/>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-  </td><xsl:value-of select="$newline"/>
+  </xsl:element><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/stepxmp ')]" name="topic.task.stepxmp">
