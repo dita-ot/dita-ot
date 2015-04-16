@@ -2,6 +2,8 @@
 <project name="build_FO_plugin" default="package-plugin" basedir=".">
   <description>Build jar for FO output</description>
 
+  <property file="${basedir}/../../../../build.properties"/><!-- let it find xep.dir -->
+  
   <property name="src.dir" location="${basedir}/src/"/>
   <property name="lib.dir" location="${basedir}/lib/"/>
   <property name="bin.dir" location="${basedir}/bin/"/>
@@ -21,7 +23,7 @@
 
   <path id="compile.path">
     <path refid="base.compile.path"/>
-    <pathelement location="${lib.dir}/xep/lib/xep.jar" />
+    <pathelement location="${xep.dir}/lib/xep.jar" /><!-- we should use the xep.dir, or not -->
   </path>
 
   <!--We will only build the XEP classes if XEP is in the compile.path-->
@@ -74,7 +76,9 @@
         <include name="README.txt"/>
         <include name="cfg/**"/>
         <include name="lib/**"/>
-        <exclude name="lib/xep/**"/>
+        <!-- <exclude name="lib/xep/**"/> not needed; you compile or you do not compile, am I wrong? 
+             This exclude is also in the main build.xml; I don't know if it needed or not.
+             -->
         <include name="src/**"/>
         <include name="xsl/**"/>
         <include name="Customization/**"/>
