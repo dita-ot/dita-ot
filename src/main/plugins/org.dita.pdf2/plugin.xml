@@ -42,10 +42,6 @@
       <val default="true">no</val>
     </param>
     <param name="args.fo.userconfig" desc="Specifies the user configuration file for FOP." type="file"/>
-    <param name="org.dita.pdf2.use-out-temp" desc="Legacy temporary file mode for generating topic.fo and graphics into output directory." deprecated="true" type="enum">
-      <val desc="use output directory for XSL FO file processing">true</val>
-      <val desc="use tempory folder for XSL FO processing" default="true">false</val>
-    </param>
     <param name="org.dita.pdf2.i18n.enabled" desc="Enables I18N font processing." type="enum">
       <val desc="Enables I18N processing" default="true">true</val>
       <val desc="Disables I18N processing">false</val>
