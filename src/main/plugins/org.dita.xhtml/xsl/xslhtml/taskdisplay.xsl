@@ -376,7 +376,10 @@
             <xsl:sequence select="*[contains(@class,' task/chhead ')]"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="gen-chhead"/>
+            <xsl:variable name="gen" as="element(gen)?">
+              <xsl:call-template name="gen-chhead"/>
+            </xsl:variable>
+            <xsl:sequence select="$gen/*"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
@@ -395,20 +398,24 @@
   </xsl:template>
  
   <!-- Generate default choicetable header -->
-  <xsl:template name="gen-chhead" as="element()?">
+  <xsl:template name="gen-chhead" as="element(gen)?">
     <xsl:variable name="choicetable" select="ancestor-or-self::*[contains(@class,' task/choicetable ')][1]" as="element()"/>
-    <chhead class="- topic/sthead task/chhead ">
-      <choptionhd class="- topic/stentry task/choptionhd " id="{generate-id($choicetable)}">
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Option'"/>
-        </xsl:call-template>
-      </choptionhd>  
-      <chdeschd class="- topic/stentry task/chdeschd " id="{generate-id($choicetable)}">
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Description'"/>
-        </xsl:call-template>
-      </chdeschd>
-    </chhead>
+    <!-- Generated header needs to be wrapped in gen element to allow correct language detection -->
+    <gen>
+      <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
+      <chhead class="- topic/sthead task/chhead ">
+       <choptionhd class="- topic/stentry task/choptionhd " id="{generate-id($choicetable)}">
+         <xsl:call-template name="getString">
+           <xsl:with-param name="stringName" select="'Option'"/>
+         </xsl:call-template>
+       </choptionhd>  
+       <chdeschd class="- topic/stentry task/chdeschd " id="{generate-id($choicetable)}">
+         <xsl:call-template name="getString">
+           <xsl:with-param name="stringName" select="'Description'"/>
+         </xsl:call-template>
+       </chdeschd>
+      </chhead>
+    </gen>
   </xsl:template>
  
 <xsl:template match="*[contains(@class,' task/chhead ')]">

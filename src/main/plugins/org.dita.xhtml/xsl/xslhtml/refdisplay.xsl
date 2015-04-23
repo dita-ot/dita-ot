@@ -44,11 +44,14 @@
             <xsl:sequence select="*[contains(@class, ' reference/prophead ')]"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="gen-prophead">
-              <xsl:with-param name="hasType" select="$hasType"/>
-              <xsl:with-param name="hasValue" select="$hasValue"/>
-              <xsl:with-param name="hasDesc" select="$hasDesc"/>
-            </xsl:call-template>
+            <xsl:variable name="gen" as="element(gen)?">
+              <xsl:call-template name="gen-prophead">
+                <xsl:with-param name="hasType" select="$hasType"/>
+                <xsl:with-param name="hasValue" select="$hasValue"/>
+                <xsl:with-param name="hasDesc" select="$hasDesc"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:sequence select="$gen/*"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
@@ -69,29 +72,33 @@
     <xsl:value-of select="$newline"/>
   </xsl:template>
 
-  <xsl:template name="gen-prophead" as="element()?">
+  <xsl:template name="gen-prophead" as="element(gen)?">
     <xsl:param name="hasType" as="xs:boolean"/>
     <xsl:param name="hasValue" as="xs:boolean"/>
     <xsl:param name="hasDesc" as="xs:boolean"/>
-    <prophead class="- topic/sthead reference/prophead ">
-      <xsl:if test="$hasType">
-       <proptypehd class="- topic/stentry reference/proptypehd " id="{generate-id()}-type">
-         <xsl:call-template name="getString">
-           <xsl:with-param name="stringName" select="'Type'"/>
-         </xsl:call-template>
-       </proptypehd>
-      </xsl:if>
-      <xsl:if test="$hasValue">
-        <propvaluehd class="- topic/stentry reference/propvaluehd " id="{generate-id()}-value">
-         <xsl:call-template name="getString">
-           <xsl:with-param name="stringName" select="'Value'"/>
-         </xsl:call-template>
-       </propvaluehd>
-      </xsl:if>
-      <xsl:if test="$hasDesc">
-        <xsl:call-template name="gen-propdeschd"/>
-      </xsl:if>
-    </prophead>
+    <!-- Generated header needs to be wrapped in gen element to allow correct language detection -->
+    <gen>
+      <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
+      <prophead class="- topic/sthead reference/prophead ">
+        <xsl:if test="$hasType">
+         <proptypehd class="- topic/stentry reference/proptypehd " id="{generate-id()}-type">
+           <xsl:call-template name="getString">
+             <xsl:with-param name="stringName" select="'Type'"/>
+           </xsl:call-template>
+         </proptypehd>
+        </xsl:if>
+        <xsl:if test="$hasValue">
+          <propvaluehd class="- topic/stentry reference/propvaluehd " id="{generate-id()}-value">
+           <xsl:call-template name="getString">
+             <xsl:with-param name="stringName" select="'Value'"/>
+           </xsl:call-template>
+         </propvaluehd>
+        </xsl:if>
+        <xsl:if test="$hasDesc">
+          <xsl:call-template name="gen-propdeschd"/>
+        </xsl:if>
+      </prophead>
+    </gen>
   </xsl:template>
   
   <xsl:template name="gen-propdeschd">
