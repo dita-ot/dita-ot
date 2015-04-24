@@ -87,7 +87,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     /** XMLReader instance for parsing dita file */
     private XMLReader reader;
     /** Absolute path to current source file. */
-    private File currentFile;
+    private URI currentFile;
     private Map<URI, Set<URI>> dic;
     private SubjectSchemeReader subjectSchemeReader;
     private FilterUtils baseFilterUtils;
@@ -122,8 +122,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     }
 
     private void processFile(final FileInfo f) {
-        currentFile = new File(f.src);
-        if (!currentFile.exists()) {
+        currentFile = f.src;
+        if (!exists(currentFile)) {
             // Assuming this is an copy-to target file, ignore it
             logger.debug("Ignoring a copy-to file " + f.file);
             return;
@@ -157,12 +157,12 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         try {
             out = new FileOutputStream(outputFile);
 
-            reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.getAbsolutePath(), logger));
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger));
 
             final TransformerFactory tf = TransformerFactory.newInstance();
             final Transformer serializer = tf.newTransformer();
             XMLReader xmlSource = getXmlReader(f.format);
-            for (final XMLFilter filter: getProcessingPipe(currentFile.toURI())) {
+            for (final XMLFilter filter: getProcessingPipe(currentFile)) {
                 filter.setParent(xmlSource);
                 xmlSource = filter;
             }
@@ -562,7 +562,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
         }
         if (forceUniqueFilter != null) {
-            copytoMap.putAll(forceUniqueFilter.copyToMap);
+            for (final Map.Entry<URI, URI> e: forceUniqueFilter.copyToMap.entrySet()) {
+                copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
+            }
         }
         
         for (final Map.Entry<File, File> entry: copytoMap.entrySet()) {

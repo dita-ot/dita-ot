@@ -18,7 +18,6 @@ import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
-import static org.dita.dost.util.FileUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.setFragment;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.*;
@@ -29,13 +28,13 @@ import static org.dita.dost.util.URLUtils.*;
 public final class ForceUniqueFilter extends AbstractXMLFilter {
 
     /** Absolute path to current source file. */
-    private File currentFile;
+    private URI currentFile;
     private Job job;
     private final Map<URI, Integer> topicrefCount = new HashMap<URI, Integer>();
     /** Generated copy-to mappings, key is target topic and value is source topic. */
-    public final Map<File, File> copyToMap = new HashMap<File, File>();
+    public final Map<URI, URI> copyToMap = new HashMap<URI, URI>();
 
-    public void setCurrentFile(final File currentFile) {
+    public void setCurrentFile(final URI currentFile) {
         this.currentFile = currentFile;
     }
 
@@ -68,10 +67,10 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
                     if (copyTo == null) { // skip we there is already a copy-to
                         final URI generatedCopyTo = generateCopyToTarget(href, count);
 
-                        final File source = resolve(currentFile.getParentFile(), toFile(file));
-                        final File target = resolve(currentFile.getParentFile(), toFile(stripFragment(generatedCopyTo)));
-                        final File relSource = getRelativePath(new File(job.getInputDir(), "dummy"), source);
-                        final File relTarget = getRelativePath(new File(job.getInputDir(), "dummy"), target);
+                        final URI source = currentFile.resolve(file);
+                        final URI target = currentFile.resolve(stripFragment(generatedCopyTo));
+                        final URI relSource = getRelativePath(job.getInputDir().toURI(), source);
+                        final URI relTarget = getRelativePath(job.getInputDir().toURI(), target);
                         copyToMap.put(relTarget, relSource);
 
                         final AttributesImpl buf = new AttributesImpl(atts);
@@ -99,7 +98,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
             ext.append('.');
             ext.append(getExtension(path.toString()));
             final URI dst = toURI(replaceExtension(path.toString(), ext.toString()));
-            final URI target = URLUtils.getRelativePath(new File(job.getInputDir(), "dummy").toURI(), currentFile.toURI().resolve(dst));
+            final URI target = URLUtils.getRelativePath(new File(job.getInputDir(), "dummy").toURI(), currentFile.resolve(dst));
             if (job.getFileInfo(target) == null) {
                 return setFragment(dst, fragment);
             }
