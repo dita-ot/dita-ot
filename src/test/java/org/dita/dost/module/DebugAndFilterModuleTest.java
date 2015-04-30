@@ -4,10 +4,12 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.dita.dost.util.URLUtils.toURI;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +33,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.DITAOTFileLogger;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -62,14 +63,14 @@ public class DebugAndFilterModuleTest {
         tmpDir = new File(tempDir, "temp");
         TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
         final Job props = new Job(tmpDir);
+        for (final Job.FileInfo fi: props.getFileInfo()) {
+            props.add(new Job.FileInfo.Builder(fi).src(inputDir.toURI().resolve(fi.uri)).build());
+        }
         props.setInputFile(inputMap.getAbsoluteFile());
         props.setGeneratecopyouter("1");
         props.setOutputDir(outDir);
         props.setProperty("user.input.dir", inputDir.getAbsolutePath());
         props.write();
-
-        DITAOTFileLogger.getInstance().setLogDir(tmpDir.getAbsolutePath());
-        DITAOTFileLogger.getInstance().setLogFile(DebugAndFilterModuleTest.class.getSimpleName() + ".log");
 
         final PipelineHashIO pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute("inputmap", inputMap.getPath());
@@ -89,6 +90,7 @@ public class DebugAndFilterModuleTest {
         pipelineInput.setAttribute("maplinks", new File(tmpDir, "maplinks.unordered").getPath());
         pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "yes");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "xhtml");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR, Boolean.TRUE.toString());
 
         final AbstractFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
@@ -191,7 +193,8 @@ public class DebugAndFilterModuleTest {
         public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
             final String xtrf = atts.getValue("xtrf");
             assertNotNull(xtrf);
-            assertEquals(source.getAbsolutePath(), xtrf);
+            //assertEquals(source.getAbsoluteFile().toURI().toString(), xtrf);
+            assertEquals(toURI(source.getAbsoluteFile().getPath()).toString(), xtrf);
             final String xtrc = atts.getValue("xtrc");
             assertNotNull(xtrc);
             Integer c = counter.get(localName);

@@ -19,7 +19,7 @@
     <xsl:comment>
      This file is generated based on the message information shipped
      in the DITA-OT, as defined in the file
-     DITA-OT/resource/messages.xml
+     DITA-OT/resources/messages.xml
      To regenerate this topic, run the following command:
      DITA-OT/doc/ant -f build.xml generate-msg-topic
 

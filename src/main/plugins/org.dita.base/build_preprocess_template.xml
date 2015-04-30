@@ -102,7 +102,6 @@
 
   <!-- gen-list
       Create the manifest files listing which files are referenced by the input file (even indirectly). -->
-  <!-- Deprecated -->
   <target name="gen-list"
     dita:depends="{depend.preprocess.gen-list.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
@@ -165,7 +164,6 @@
       Copy input files to ${dita.temp.dir} tree.
       While copying, populate default attributes like @class,
       add @xtrf and @xtrc and filter out elements according to valfile, if any. -->
-  <!-- Deprecated -->
   <target name="debug-filter"
     dita:depends="{depend.preprocess.debug-filter.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
@@ -182,6 +180,8 @@
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
         <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
         <param name="force-unique" value="${force-unique}" if="force-unique"/>
+        <param name="generate-debug-attributes" value="${generate-debug-attributes}" if="generate-debug-attributes"/>
+        <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
       </module>
     </pipeline>
     <job-helper file="user.input.file.list" property="user.input.file"/>

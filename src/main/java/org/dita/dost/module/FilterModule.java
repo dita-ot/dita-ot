@@ -7,9 +7,11 @@ package org.dita.dost.module;
 import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FilterUtils.*;
+import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -57,7 +59,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
 
         final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
-        Map<File, Set<File>> dic;
+        Map<URI, Set<URI>> dic;
         try {
             dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
         } catch (final IOException e) {
@@ -70,11 +72,11 @@ final class FilterModule extends AbstractPipelineModuleImpl {
                 logger.info("Processing " + file.getAbsolutePath());
 
                 subjectSchemeReader.reset();
-                final Set<File> schemaSet = dic.get(f.file);
+                final Set<URI> schemaSet = dic.get(f.uri);
                 if (schemaSet != null && !schemaSet.isEmpty()) {
                     logger.info("Loading subject schemes");
-                    for (final File schema : schemaSet) {
-                        subjectSchemeReader.loadSubjectScheme(new File(org.dita.dost.util.FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
+                    for (final URI schema : schemaSet) {
+                        subjectSchemeReader.loadSubjectScheme(new File(job.tempDir.toURI().resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
                     }
                 }
 

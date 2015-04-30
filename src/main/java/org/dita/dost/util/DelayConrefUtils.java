@@ -249,7 +249,7 @@ public final class DelayConrefUtils {
             t.setOutputProperty(OutputKeys.METHOD, "xml");
             t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
         } catch (final TransformerConfigurationException tce) {
-            assert (false);
+            throw new RuntimeException(tce);
         }
         final DOMSource doms = new DOMSource(doc);
         OutputStream out = null;

@@ -58,9 +58,7 @@ public class TestGenListModuleReader {
         reader.setLogger(new TestUtils.TestLogger());
 //        reader.initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalFile(), true);
         reader.setCurrentFile(rootFile.toURI());
-        reader.setCurrentDir(rootFile.getParentFile().toURI());
         reader.setInputDir(rootFile.getParentFile().toURI());
-        reader.setInputFile(rootFile.toURI());
         reader.setJob(new Job(tempDir));
         
         reader.setContentHandler(new DefaultHandler());

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses. -->
 <!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
   xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
   xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
@@ -23,7 +23,9 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
-  xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" version="2.0">
+  xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
+  exclude-result-prefixes="xs"
+  version="2.0">
   
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
@@ -586,9 +588,7 @@
   <!-- create header style -->
   <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
     <!--xsl:call-template name="gen-id"/-->
-    <xsl:variable name="depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])"/>
-    </xsl:variable>
+    <xsl:variable name="depth" select="count(ancestor::*[contains(@class,' topic/topic ')])" as="xs:integer"/>
     <xsl:call-template name="create-header-styles">
       <xsl:with-param name="depth" select="$depth"/>
     </xsl:call-template>
@@ -596,9 +596,7 @@
   
   <!-- create header style for section -->
   <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
-    <xsl:variable name="depth">
-      <xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')]) + 1"/>
-    </xsl:variable>
+    <xsl:variable name="depth" select="count(ancestor::*[contains(@class,' topic/topic ')]) + 1" as="xs:integer"/>
     <xsl:call-template name="create-header-styles">
       <xsl:with-param name="depth" select="$depth"/>
     </xsl:call-template>
@@ -618,21 +616,12 @@
   
   <!-- header styles -->
   <xsl:template name="create-header-styles">
-    <xsl:param name="depth"/>
+    <xsl:param name="depth" as="xs:integer"/>
     <xsl:value-of select="$newline"/>
-    <xsl:element name="style:style">
-      <xsl:attribute name="style:family">
-        <xsl:value-of select="'paragraph'"/>
-      </xsl:attribute>
-      <xsl:attribute name="style:parent-style-name">
-        <xsl:value-of select="'Heading'"/>
-      </xsl:attribute>
-      <xsl:attribute name="style:next-style-name">
-        <xsl:value-of select="'Common_Heading_Style'"/>
-      </xsl:attribute>
+    <style:style style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Common_Heading_Style">
       <!-- create book mark -->
       <xsl:choose>
-        <xsl:when test="$depth='1'">
+        <xsl:when test="$depth = 1">
           <xsl:attribute name="style:display-name">Heading 1</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_1</xsl:attribute>
           <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
@@ -643,7 +632,7 @@
             style:text-underline-type="single" style:text-underline-width="auto"
             style:text-underline-color="font-color"/>
         </xsl:when>
-        <xsl:when test="$depth='2'">
+        <xsl:when test="$depth = 2">
           <xsl:attribute name="style:display-name">Heading 2</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_2</xsl:attribute>
           <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
@@ -651,7 +640,7 @@
             style:font-size-asian="15pt" style:font-weight-asian="bold"
             style:font-size-complex="15pt" style:font-weight-complex="bold"/>
         </xsl:when>
-        <xsl:when test="$depth='3'">
+        <xsl:when test="$depth = 3">
           <xsl:attribute name="style:display-name">Heading 3</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_3</xsl:attribute>
           <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
@@ -659,7 +648,7 @@
             style:font-size-asian="14pt" style:font-weight-asian="bold"
             style:font-size-complex="14pt" style:font-weight-complex="bold"/>
         </xsl:when>
-        <xsl:when test="$depth='4'">
+        <xsl:when test="$depth = 4">
           <xsl:attribute name="style:display-name">Heading 4</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_4</xsl:attribute>
           <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
@@ -667,7 +656,7 @@
             style:font-size-asian="13pt" style:font-weight-asian="bold"
             style:font-size-complex="13pt" style:font-weight-complex="bold"/>
         </xsl:when>
-        <xsl:when test="$depth='5'">
+        <xsl:when test="$depth = 5">
           <xsl:attribute name="style:display-name">Heading 5</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_5</xsl:attribute>
           <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" />
@@ -684,7 +673,7 @@
             style:font-size-complex="11pt" style:font-weight-complex="bold"/>
         </xsl:otherwise>
       </xsl:choose>
-    </xsl:element>
+    </style:style>
   </xsl:template>
   
   <!--Create styles for list-->

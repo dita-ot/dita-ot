@@ -71,15 +71,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      */
     public void setCurrentFile(final URI currentFile) {
         this.currentFile = currentFile;
-    }
-    
-    /**
-     * Set the relative directory of current file.
-     * 
-     * @param dir dir
-     */
-    public void setCurrentDir(final URI dir) {
-        currentDir = dir;
+        this.currentDir = currentFile.resolve(".");
     }
 
     /**

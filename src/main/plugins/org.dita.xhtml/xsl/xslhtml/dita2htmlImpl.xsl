@@ -278,24 +278,30 @@
 
 <!-- child topics get a div wrapper and fall through -->
 <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="child.topic" name="child.topic">
-  <xsl:param name="nestlevel">
+  <xsl:param name="nestlevel" as="xs:integer">
       <xsl:choose>
           <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
           <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 9">9</xsl:when>
-          <xsl:otherwise><xsl:value-of select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
+          <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
       </xsl:choose>
   </xsl:param>
-<div class="nested{$nestlevel}">
- <xsl:call-template name="gen-topic"/>
-</div><xsl:value-of select="$newline"/>
+  <article class="nested{$nestlevel}">
+    <xsl:attribute name="aria-labelledby">
+      <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="return-aria-label-id"/>
+    </xsl:attribute>
+    <xsl:call-template name="gen-topic">
+      <xsl:with-param name="nestlevel" select="$nestlevel"/>
+    </xsl:call-template>
+  </article>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template name="gen-topic">
-  <xsl:param name="nestlevel">
+  <xsl:param name="nestlevel" as="xs:integer">
       <xsl:choose>
           <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
           <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 9">9</xsl:when>
-          <xsl:otherwise><xsl:value-of select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
+          <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
       </xsl:choose>
   </xsl:param>
  <xsl:choose>
@@ -322,10 +328,10 @@
 <!-- Condensed topic title into single template without priorities; use $headinglevel to set heading.
      If desired, somebody could pass in the value to manually set the heading level -->
 <xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]">
-  <xsl:param name="headinglevel">
+  <xsl:param name="headinglevel" as="xs:integer">
       <xsl:choose>
           <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 6">6</xsl:when>
-          <xsl:otherwise><xsl:value-of select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
+          <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
       </xsl:choose>
   </xsl:param>
   <xsl:element name="h{$headinglevel}">
@@ -333,9 +339,22 @@
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class">topictitle<xsl:value-of select="$headinglevel"/></xsl:with-param>
       </xsl:call-template>
+      <xsl:attribute name="id"><xsl:apply-templates select="." mode="return-aria-label-id"/></xsl:attribute>
       <xsl:apply-templates/>
   </xsl:element>
   <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]" mode="return-aria-label-id">
+  <xsl:choose>
+    <xsl:when test="@id">
+      <xsl:sequence select="dita-ot:generate-id(parent::*/@id, @id)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>ariaid-title</xsl:text>
+      <xsl:number count="*[contains(@class, ' topic/title ')][parent::*[contains(@class,' topic/topic ')]]" level="any"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- Hide titlealts - they need to get pulled into the proper places -->
@@ -453,12 +472,12 @@
 
 <!-- section processor - div with no generated title -->
 <xsl:template match="*[contains(@class, ' topic/section ')]" name="topic.section">
-  <div class="section">
+  <section class="section">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-toc-id"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates select="."  mode="section-fmt" />
-  </div><xsl:value-of select="$newline"/>
+  </section><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' topic/section ')]" mode="section-fmt">
@@ -947,6 +966,9 @@
     <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
     <xsl:apply-templates select="../@xml:lang"/> 
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <xsl:for-each select="..">
+      <xsl:call-template name="commonattributes"/>
+    </xsl:for-each>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="$dt-class"/>
     </xsl:call-template>
@@ -1011,13 +1033,16 @@
 <xsl:template match="*[contains(@class, ' topic/dd ')]" name="topic.dd">
   <xsl:variable name="is-first-dd" select="empty(preceding-sibling::*[contains(@class, ' topic/dd ')])"/>
   <dd>
-    <xsl:if test="not($is-first-dd)">  <!-- para space before 2 thru N -->
-      <xsl:attribute name="class">ddexpand</xsl:attribute>
-    </xsl:if>
-    <!-- Get xml:lang and ditaval styling from DLENTRY, then override with local -->
-    <xsl:apply-templates select="../@xml:lang"/> 
-    <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
-    <xsl:call-template name="commonattributes"/>
+    <xsl:for-each select="..">
+      <xsl:call-template name="commonattributes"/>
+    </xsl:for-each>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class">
+        <xsl:if test="not($is-first-dd)">  <!-- para space before 2 thru N -->
+          <xsl:text>ddexpand</xsl:text>
+        </xsl:if>    
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:apply-templates/>
@@ -1549,7 +1574,7 @@
     <xsl:apply-templates select="." mode="dita2html:get-default-fig-class"/>
   </xsl:variable>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <div>
+  <figure>
     <xsl:if test="$default-fig-class != ''">
       <xsl:attribute name="class" select="$default-fig-class"/>
     </xsl:if>
@@ -1560,7 +1585,7 @@
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="place-fig-lbl"/>
     <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))][not(contains(@class, ' topic/desc '))] |text()|comment()|processing-instruction()"/>
-  </div>
+  </figure>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -3977,21 +4002,46 @@
   </xsl:template>
   <xsl:template match="*" mode="chapterBody">
     <body>
-      <!-- Already put xml:lang on <html>; do not copy to body with commonattributes -->
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
-      <!--output parent or first "topic" tag's outputclass as class -->
-      <xsl:if test="@outputclass">
-       <xsl:attribute name="class" select="@outputclass"/>
-      </xsl:if>
-      <xsl:if test="self::dita">
-          <xsl:if test="*[contains(@class, ' topic/topic ')][1]/@outputclass">
-           <xsl:attribute name="class" select="*[contains(@class, ' topic/topic ')][1]/@outputclass"/>
-          </xsl:if>
-      </xsl:if>
-      <xsl:apply-templates select="." mode="addAttributesToBody"/>
-      <xsl:call-template name="setidaname"/>
+      <xsl:apply-templates select="." mode="addAttributesToHtmlBodyElement"/>
+      <xsl:call-template name="setaname"/>  <!-- For HTML4 compatibility, if needed -->
       <xsl:value-of select="$newline"/>
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+      <xsl:apply-templates select="." mode="addHeaderToHtmlBodyElement"/>
+
+      <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
+      <xsl:call-template name="gen-user-sidetoc"/>
+
+      <xsl:apply-templates select="." mode="addContentToHtmlBodyElement"/>
+      <xsl:apply-templates select="." mode="addFooterToHtmlBodyElement"/>
+    </body>
+    <xsl:value-of select="$newline"/>
+  </xsl:template>
+
+  <!-- Add all attributes. To add your own additional attributes, use mode="addAttributesToBody". -->
+  <xsl:template match="*" mode="addAttributesToHtmlBodyElement">
+    <!-- Already put xml:lang on <html>; do not copy to body with commonattributes -->
+    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+    <!--output parent or first "topic" tag's outputclass as class -->
+    <xsl:if test="@outputclass">
+      <xsl:attribute name="class" select="@outputclass"/>
+    </xsl:if>
+    <xsl:if test="self::dita">
+      <xsl:if test="*[contains(@class, ' topic/topic ')][1]/@outputclass">
+        <xsl:attribute name="class" select="*[contains(@class, ' topic/topic ')][1]/@outputclass"/>
+      </xsl:if>
+    </xsl:if>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates select="." mode="addAttributesToBody"/>
+  </xsl:template>
+
+  <!-- Override this template to add any standard attributes to
+       the HTML <body> element. Current context is the root
+       element of the doc. -->
+  <xsl:template match="*" mode="addAttributesToBody">
+  </xsl:template>
+
+  <!-- Process <body> content that is appropriate for HTML5 header section. -->
+  <xsl:template match="*" mode="addHeaderToHtmlBodyElement">
+    <xsl:variable name="header-content" as="node()*">
       <xsl:call-template name="generateBreadcrumbs"/>
       <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
       <xsl:call-template name="processHDR"/>
@@ -3999,27 +4049,45 @@
         <xsl:apply-templates select="/*/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')] |
                                      /dita/*[1]/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')]"/>
       </xsl:if>
-      <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
-      <xsl:call-template name="gen-user-sidetoc"/>
-      <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
-      <!-- title content will appear here by fall-through -->
-      <!-- followed by prolog (but no fall-through is permitted for it) -->
-      <!-- followed by body content, again by fall-through in document order -->
-      <!-- followed by related links -->
-      <!-- followed by child topics by fall-through -->
-      
-      <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
-      <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here -->
-      <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-    </body>
-    <xsl:value-of select="$newline"/>
+    </xsl:variable>
+
+    <xsl:if test="exists($header-content)">
+      <header role="banner">
+        <xsl:sequence select="$header-content"/>
+      </header>
+    </xsl:if>
   </xsl:template>
 
-  <!-- Override this template to add any standard attributes to
-       the HTML <body> element. Current context is the root
-       element of the doc. -->
-  <xsl:template match="*" mode="addAttributesToBody">
+  <xsl:template match="*" mode="addContentToHtmlBodyElement">
+    <main role="main">
+      <article role="article">
+        <xsl:attribute name="aria-labelledby">
+          <xsl:apply-templates select="*[contains(@class,' topic/title ')] |
+                                       self::dita/*[1]/*[contains(@class,' topic/title ')]" mode="return-aria-label-id"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+        <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
+                               <!-- title content will appear here by fall-through -->
+                               <!-- followed by prolog (but no fall-through is permitted for it) -->
+                               <!-- followed by body content, again by fall-through in document order -->
+                               <!-- followed by related links -->
+                               <!-- followed by child topics by fall-through -->
+        <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
+        <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+      </article>
+    </main>
+  </xsl:template>
+
+  <xsl:template match="*" mode="addFooterToHtmlBodyElement">
+    <xsl:variable name="footer-content" as="node()*">
+      <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here -->
+      <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
+    </xsl:variable>
+    <xsl:if test="exists($footer-content)">
+      <footer role="contentinfo">
+        <xsl:sequence select="$footer-content"/>
+      </footer>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template name="generateBreadcrumbs">
@@ -4031,8 +4099,7 @@
     <!-- Add user's running heading XHTML code snippet if requested to -->
     <xsl:if test="string-length($HDRFILE) > 0">
       <xsl:copy-of select="document($HDRFILE, /)"/>      
-    </xsl:if>
-    <xsl:value-of select="$newline"/>    
+    </xsl:if>    
   </xsl:template>
   
   <xsl:template name="processFTR">
@@ -4040,7 +4107,6 @@
     <xsl:if test="string-length($FTRFILE) > 0">
       <xsl:copy-of select="document($FTRFILE, /)"/>
     </xsl:if>
-    <xsl:value-of select="$newline"/>
   </xsl:template>
 
   <xsl:template name="get-file-name">

@@ -11,6 +11,7 @@ package org.dita.dost.writer;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
@@ -20,6 +21,7 @@ import org.dita.dost.module.DebugAndFilterModule;
 
 import java.io.File;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
@@ -55,9 +57,11 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     private File currentFile;
     /** Absolute path to current destination file. */
     private File outputFile;
-    private Job job;
     /** Foreign/unknown nesting level. */
     private int foreignLevel;
+    /** File infos by src. */
+    private Map<URI, FileInfo> fileInfoMap;
+
 
     /**
      * Set default value map.
@@ -75,8 +79,13 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         this.outputFile = outputFile;
     }
 
+    @Override
     public void setJob(final Job job) {
         this.job = job;
+        fileInfoMap = new HashMap<URI, FileInfo>();
+        for (final FileInfo f: job.getFileInfo()) {
+            fileInfoMap.put(f.src, f);
+        }
     }
 
     // ContentHandler methods
@@ -200,7 +209,15 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             }
             if (attValue.toString().length() != 0) {
                 final URI current = currentFile.toURI().resolve(attValue);
-                attValue = getRelativePath(currentFile.toURI(), current);
+                final FileInfo f = fileInfoMap.get(current);
+                if (f != null) {
+                    final FileInfo cfi = fileInfoMap.get(currentFile.toURI());
+                    final URI currrentFileTemp = job.tempDir.toURI().resolve(cfi.uri);
+                    final URI targetTemp = job.tempDir.toURI().resolve(f.uri);
+                    attValue = getRelativePath(currrentFileTemp, targetTemp);
+                } else {
+                    attValue = getRelativePath(currentFile.toURI(), current);
+                }
             }
             if (fragment != null) {
                 attValue = setFragment(attValue, fragment);

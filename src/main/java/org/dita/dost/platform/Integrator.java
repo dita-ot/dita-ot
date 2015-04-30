@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import static javax.xml.XMLConstants.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
 
@@ -31,18 +32,20 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.dita.dost.util.XMLUtils;
-import org.xml.sax.SAXException;
-
-import org.xml.sax.ErrorHandler;
-
-import org.xml.sax.SAXParseException;
+import org.xml.sax.*;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
-import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.AttributesImpl;
+
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * Integrator is the main class to control and excute the integration of the
@@ -62,10 +65,10 @@ public final class Integrator {
     public static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
     /** Feature name for print transformation types. */
     public static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
+    public static final String ELEM_PLUGINS = "plugins";
 
     public static final String FEAT_VALUE_SEPARATOR = ",";
     public static final String PARAM_VALUE_SEPARATOR = ";";
-    public static final String PARAM_NAME_SEPARATOR = "=";
 
     public static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
     public static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-]+)?)?)?");
@@ -77,6 +80,8 @@ public final class Integrator {
     /** Plugin configuration file. */
     private final Set<File> descSet;
     private final XMLReader reader;
+    private final TransformerHandler pluginsHandler;
+    private final DescParser parser;
     private DITAOTLogger logger;
     private final Set<String> loadedPlugin;
     private final Hashtable<String, List<String>> featureTable;
@@ -88,9 +93,49 @@ public final class Integrator {
     private Properties properties;
 
     /**
+     * Default Constructor.
+     */
+    public Integrator(final File ditaDir) {
+        this.ditaDir = ditaDir;
+        pluginTable = new HashMap<String, Features>(16);
+        descSet = new HashSet<File>(16);
+        loadedPlugin = new HashSet<String>(16);
+        featureTable = new Hashtable<String, List<String>>(16);
+        extensionPoints = new HashSet<String>();
+        try {
+            reader = XMLUtils.getXMLReader();
+        } catch (final Exception e) {
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
+        }
+        reader.setErrorHandler(new ErrorHandler() {
+            @Override
+            public void error(final SAXParseException e) throws SAXException {
+                throw e;
+            }
+            @Override
+            public void fatalError(final SAXParseException e) throws SAXException {
+                throw e;
+            }
+            @Override
+            public void warning(final SAXParseException e) throws SAXException {
+                throw e;
+            }
+        });
+        parser = new DescParser(ditaDir);
+        parser.setParent(reader);
+        try {
+            pluginsHandler = ((SAXTransformerFactory) TransformerFactory.newInstance()).newTransformerHandler();
+        } catch (final TransformerConfigurationException e) {
+            throw new RuntimeException("Failed to initializer plugins serializer: " + e.getMessage(), e);
+        }
+        pluginsHandler.setResult(new StreamResult(new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml")));
+        parser.setContentHandler(pluginsHandler);
+    }
+
+    /**
      * Execute point of Integrator.
      */
-    public void execute() {
+    public void execute() throws Exception {
         if (logger == null) {
             logger = new DITAOTJavaLogger();
         }
@@ -226,7 +271,7 @@ public final class Integrator {
                 //configuration.put(name, ditaDir.getAbsolutePath());
                 configuration.put(name, ".");
             } else {
-                configuration.put(name, FileUtils.getRelativePath(new File(ditaDir, "dummy"), f.getLocation()).getPath());
+                configuration.put(name, FileUtils.getRelativePath(new File(ditaDir, "dummy"), f.getPluginDir()).getPath());
             }
         }
         
@@ -307,7 +352,7 @@ public final class Integrator {
 
             for (final String templateName : pluginFeatures.getAllTemplates()) {
                 templateSet.add(FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy",
-                        pluginFeatures.getLocation() + File.separator + templateName));
+                        pluginFeatures.getPluginDir() + File.separator + templateName));
             }
             loadedPlugin.add(plugin);
             return true;
@@ -359,13 +404,17 @@ public final class Integrator {
     /**
      * Parse plugin configuration files.
      */
-    private void parsePlugin() {
+    private void parsePlugin() throws SAXException {
+        pluginsHandler.startDocument();
+        pluginsHandler.startElement(NULL_NS_URI, ELEM_PLUGINS, ELEM_PLUGINS, new AttributesImpl());
         if (!descSet.isEmpty()) {
             for (final File descFile : descSet) {
                 logger.debug("Read plug-in configuration " + descFile.getPath());
                 parseDesc(descFile);
             }
         }
+        pluginsHandler.endElement(NULL_NS_URI, ELEM_PLUGINS, ELEM_PLUGINS);
+        pluginsHandler.endDocument();
     }
 
     /**
@@ -375,23 +424,8 @@ public final class Integrator {
      */
     private void parseDesc(final File descFile) {
         try {
-            final DescParser parser = new DescParser(descFile.getParentFile(), ditaDir);
-            reader.setContentHandler(parser);
-            reader.setErrorHandler(new ErrorHandler() {
-                @Override
-                public void error(final SAXParseException e) throws SAXException {
-                    throw e;
-                }
-                @Override
-                public void fatalError(final SAXParseException e) throws SAXException {
-                    throw e;
-                }
-                @Override
-                public void warning(final SAXParseException e) throws SAXException {
-                    throw e;
-                }
-            });
-            reader.parse(descFile.getAbsolutePath());
+            parser.setPluginDir(descFile.getParentFile());
+            parser.parse(descFile.getAbsolutePath());
             final Features f = parser.getFeatures();
             final String id = f.getPluginId();
             validatePlugin(f);
@@ -472,32 +506,6 @@ public final class Integrator {
     }
 
     /**
-     * Default Constructor.
-     */
-    public Integrator() {
-        pluginTable = new HashMap<String, Features>(16);
-        descSet = new HashSet<File>(16);
-        loadedPlugin = new HashSet<String>(16);
-        featureTable = new Hashtable<String, List<String>>(16);
-        extensionPoints = new HashSet<String>();
-        try {
-            reader = XMLUtils.getXMLReader();
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Set the ditaDir.
-     * 
-     * @param ditadir dita directory
-     */
-    public void setDitaDir(final File ditadir) {
-        ditaDir = ditadir;
-    }
-
-
-    /**
      * Set the properties file.
      * 
      * @param propertiesfile properties file
@@ -544,19 +552,6 @@ public final class Integrator {
         } else {
             return StringUtils.join(buf, ",");
         }
-    }
-
-    /**
-     * Command line interface for testing.
-     * 
-     * @param args arguments
-     */
-    public static void main(final String[] args) {
-        final Integrator abc = new Integrator();
-        final File currentDir = new File(".");
-        abc.setDitaDir(currentDir);
-        abc.setProperties(new File("integrator.properties"));
-        abc.execute();
     }
 
 }

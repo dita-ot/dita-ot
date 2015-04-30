@@ -56,6 +56,8 @@ public final class Constants {
     /**.pdf extension.*/
     public static final String FILE_EXTENSION_PDF = ".pdf";
 
+    public static final String RESOURCES_DIR = "resources";
+
     public static final DitaClass ABBREV_D_ABBREVIATED_FORM = new DitaClass("+ topic/term abbrev-d/abbreviated-form ");
     public static final DitaClass BOOKMAP_ABBREVLIST = new DitaClass("- map/topicref bookmap/abbrevlist ");
     public static final DitaClass BOOKMAP_AMENDMENTS = new DitaClass("- map/topicref bookmap/amendments ");
@@ -663,7 +665,7 @@ public final class Constants {
     /**keyref attribute.*/
     public static final String ATTRIBUTE_NAME_KEYREF = "keyref";
     /**conkeyref attribute.*/
-    public static final String ATTRIBUTE_NAME_CONKEYREF	="conkeyref";
+    public static final String ATTRIBUTE_NAME_CONKEYREF ="conkeyref";
     /**keys attribute.*/
     public static final String ATTRIBUTE_NAME_KEYS = "keys";
     /**keys attribute.*/
@@ -692,16 +694,6 @@ public final class Constants {
     public static final String UNIX_SEPARATOR = "/";
     /** Windows path separator. */
     public static final String WINDOWS_SEPARATOR = "\\";
-
-    /**
-     * Constant for value of attribute format in dita files.
-     */
-    /** Constants for format attribute value dita*/
-    public static final String ATTRIBUTE_FORMAT_VALUE_DITA = "dita";
-    /** Constants for format attribute value html*/
-    public static final String ATTRIBUTE_FORMAT_VALUE_HTML = "html";
-    /** Constants for format attribute value windows*/
-    public static final String ATTRIBUTE_FORMAT_VALUE_WINDOWS = "windows";
 
     /** Constants for index type(javahelp).*/
     public static final String INDEX_TYPE_JAVAHELP = "javahelp";
@@ -787,6 +779,8 @@ public final class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE="gramcache";
     public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID="setsystemid";
     public static final String ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE = "force-unique";
+    public static final String ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR = "generate-debug-attributes";
+    public static final String ANT_INVOKER_EXT_PARAM_PROCESSING_MODE = "processing-mode";
     /**Constants for line separator.*/
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
@@ -872,6 +866,8 @@ public final class Constants {
     public static final String ATTR_FORMAT_VALUE_DITA = "dita";
     /**ATTR_FORMAT_VALUE_DITAMAP.*/
     public static final String ATTR_FORMAT_VALUE_DITAMAP = "ditamap";
+    public static final String ATTR_FORMAT_VALUE_IMAGE = "image";
+    public static final String ATTR_FORMAT_VALUE_HTML = "html";
     /**ATTRIBUTE_NAME_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_NAME_DITAARCHVERSION = "DITAArchVersion";
     /**ATTRIBUTE_PREFIX_DITAARCHVERSION.*/
@@ -894,9 +890,17 @@ public final class Constants {
     /**ATTR_PRINT_VALUE_PRINT_ONLY.*/
     public static final String ATTR_PRINT_VALUE_PRINT_ONLY = "printonly";
 
-    /**
-     * constants for filtering or flagging.
-     */
+    /** Conaction mark value */
+    public static final String ATTR_CONACTION_VALUE_MARK = "mark";
+    /** Conaction push after value */
+    public static final String ATTR_CONACTION_VALUE_PUSHAFTER = "pushafter";
+    /** Conaction push before value */
+    public static final String ATTR_CONACTION_VALUE_PUSHBEFORE = "pushbefore";
+    /** Conaction push replace value */
+    public static final String ATTR_CONACTION_VALUE_PUSHREPLACE = "pushreplace";
+
+
+    /** constants for filtering or flagging. */
     public static final String DEFAULT_ACTION = "default";
     /**chunk attribute.*/
     public static final String ATTRIBUTE_NAME_CHUNK = "chunk";

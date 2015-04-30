@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getRelativePath;
 import static org.dita.dost.util.FileUtils.getRelativeUnixPath;
@@ -62,9 +63,9 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
+    private Mode processingMode;
     /** Generate {@code xtrf} and {@code xtrc} attributes */
-    final boolean genDebugInfo = Boolean.parseBoolean(Configuration.configuration.get("generate-debug-attributes"));
-
+    private boolean genDebugInfo;
     /** Absolute input map path. */
     private File inputMap;
     /** use grammar pool cache */
@@ -78,8 +79,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     /** Absolute DITA-OT base path. */
     private File ditaDir;
     private File ditavalFile;
-    /** Absolute input directory path. */
-    private File inputDir;
     private FilterUtils filterUtils;
     /** Absolute path to current destination file. */
     private File outputFile;
@@ -89,7 +88,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private XMLReader reader;
     /** Absolute path to current source file. */
     private File currentFile;
-    private Map<File, Set<File>> dic;
+    private Map<URI, Set<URI>> dic;
     private SubjectSchemeReader subjectSchemeReader;
     private FilterUtils baseFilterUtils;
     private ForceUniqueFilter forceUniqueFilter;
@@ -123,7 +122,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     }
 
     private void processFile(final FileInfo f) {
-        currentFile = new File(inputDir, f.file.getPath());
+        currentFile = new File(f.src);
         if (!currentFile.exists()) {
             // Assuming this is an copy-to target file, ignore it
             logger.debug("Ignoring a copy-to file " + f.file);
@@ -135,14 +134,14 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
             return;
         }
-        logger.info("Processing " + currentFile.getAbsolutePath());
+        logger.info("Processing " + f.src);
 
-        final Set<File> schemaSet = dic.get(f.file);
+        final Set<URI> schemaSet = dic.get(f.uri);
         if (schemaSet != null && !schemaSet.isEmpty()) {
             logger.debug("Loading subject schemes");
             subjectSchemeReader.reset();
-            for (final File schema : schemaSet) {
-                subjectSchemeReader.loadSubjectScheme(new File(FileUtils.resolve(job.tempDir.getAbsolutePath(), schema.getPath()) + SUBJECT_SCHEME_EXTENSION));
+            for (final URI schema : schemaSet) {
+                subjectSchemeReader.loadSubjectScheme(new File(job.tempDir.toURI().resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
             }
             validateMap = subjectSchemeReader.getValidValuesMap();
             defaultValueMap = subjectSchemeReader.getDefaultValueMap();
@@ -163,7 +162,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             final TransformerFactory tf = TransformerFactory.newInstance();
             final Transformer serializer = tf.newTransformer();
             XMLReader xmlSource = reader;
-            for (final XMLFilter filter: getProcessingPipe(currentFile, f.file)) {
+            for (final XMLFilter filter: getProcessingPipe(currentFile.toURI())) {
                 filter.setParent(xmlSource);
                 xmlSource = filter;
             }
@@ -171,7 +170,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             // when reusing filter with multiple Transformers.
             xmlSource.setContentHandler(null);
 
-            final Source source = new SAXSource(xmlSource, new InputSource(currentFile.toURI().toString()));
+            final Source source = new SAXSource(xmlSource, new InputSource(f.src.toString()));
             final Result result = new StreamResult(out);
             serializer.transform(source, result);
         } catch (final RuntimeException e) {
@@ -265,16 +264,15 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     /**
      * Get pipe line filters
      *
-     * @param fileToParse absolute path to current file being processed
-     * @param inFile relative file path
+     * @param fileToParse absolute URI to current file being processed
      */
-    private List<XMLFilter> getProcessingPipe(final File fileToParse, final File inFile) {
+    private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
         final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
 
         if (genDebugInfo) {
             final DebugFilter debugFilter = new DebugFilter();
             debugFilter.setLogger(logger);
-            debugFilter.setInputFile(fileToParse);
+            debugFilter.setInputFile(currentFile);
             pipe.add(debugFilter);
         }
 
@@ -288,10 +286,10 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         final ValidationFilter validationFilter = new ValidationFilter();
         validationFilter.setLogger(logger);
         validationFilter.setValidateMap(validateMap);
-        validationFilter.setCurrentFile(toURI(inFile));
+        validationFilter.setCurrentFile(fileToParse);
         validationFilter.setJob(job);
+        validationFilter.setProcessingMode(processingMode);
         pipe.add(validationFilter);
-
 
         final NormalizeFilter normalizeFilter = new NormalizeFilter();
         normalizeFilter.setLogger(logger);
@@ -327,11 +325,15 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             }
         }
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
-        validate = Boolean.valueOf(input.getAttribute("validate"));
+        validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
         setSystemId = "yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
         forceUnique = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE));
+        genDebugInfo = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR));
+        final String mode = input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
+        processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
 
-        inputDir = job.getInputDir();
+        // Absolute input directory path
+        File inputDir = job.getInputDir();
         if (!inputDir.isAbsolute()) {
             inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
         }
@@ -346,22 +348,22 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      */
     private void outputSubjectScheme() throws DITAOTException {
         try {
-            final Map<File, Set<File>> graph = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
+            final Map<URI, Set<URI>> graph = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
 
-            final Queue<File> queue = new LinkedList<File>(graph.keySet());
-            final Set<File> visitedSet = new HashSet<File>();
+            final Queue<URI> queue = new LinkedList<URI>(graph.keySet());
+            final Set<URI> visitedSet = new HashSet<URI>();
 
             final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setEntityResolver(CatalogUtils.getCatalogResolver());
 
             while (!queue.isEmpty()) {
-                final File parent = queue.poll();
-                final Set<File> children = graph.get(parent);
+                final URI parent = queue.poll();
+                final Set<URI> children = graph.get(parent);
 
                 if (children != null) {
                     queue.addAll(children);
                 }
-                if (new File("ROOT").equals(parent) || visitedSet.contains(parent)) {
+                if (ROOT_URI.equals(parent) || visitedSet.contains(parent)) {
                     continue;
                 }
                 visitedSet.add(parent);
@@ -374,7 +376,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     parentRoot = builder.parse(tmprel);
                 }
                 if (children != null) {
-                    for (final File childpath: children) {
+                    for (final URI childpath: children) {
                         final Document childRoot = builder.parse(new File(inputMap.getParentFile(), childpath.getPath()));
                         mergeScheme(parentRoot, childRoot);
                         generateScheme(new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION), childRoot);

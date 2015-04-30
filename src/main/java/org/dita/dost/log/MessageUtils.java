@@ -8,6 +8,8 @@
  */
 package org.dita.dost.log;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -38,7 +40,8 @@ public final class MessageUtils {
     private static final String ELEMENT_RESPONSE = "response";
     private static final String ATTRIBUTE_ID = "id";
     private static final String ATTRIBUTE_TYPE = "type";
-    private static final String defaultResource = "resource/messages.xml";
+    private static final String CLASSPATH_RESOURCE = "messages.xml";
+    private static final String RESOURCE = RESOURCES_DIR + "/" + CLASSPATH_RESOURCE;
 
     // Variables
 
@@ -75,14 +78,15 @@ public final class MessageUtils {
     void loadDefaultMessages() {
 		InputStream msg = null;
 		try {
-		    if (new File(MessageUtils.defaultResource).exists()) {
-		    	msg = new FileInputStream(new File(MessageUtils.defaultResource));
+		    if (new File(RESOURCE).exists()) {
+		    	msg = new FileInputStream(new File(RESOURCE));
 		    } else {
-		    	msg = this.getClass().getClassLoader().getResourceAsStream(MessageUtils.defaultResource);
+		    	msg = this.getClass().getClassLoader().getResourceAsStream(CLASSPATH_RESOURCE);
 			}
-		    if (msg != null) {
-		        loadMessages(msg);
-		    }
+		    if (msg == null) {
+                throw new RuntimeException("Message configuration file not found");
+            }
+		    loadMessages(msg);
 		} catch (final Exception e) {
 		    throw new RuntimeException("Failed to load messages configuration file: " + e.getMessage(), e);
 		} finally {

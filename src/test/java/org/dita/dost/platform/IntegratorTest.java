@@ -62,19 +62,17 @@ public class IntegratorTest {
     }
 
     @Test
-    public void testIntegrator() {
-        new Integrator();
-    }
-
-    @Test
     public void testExecute() throws Exception {
         final File libDir = new File(tempDir, "lib");
         if (!libDir.exists() && !libDir.mkdirs()) {
             throw new IOException("Failed to create directory " + libDir);
         }
+        final File resourcesDir = new File(tempDir, "resources");
+        if (!resourcesDir.exists() && !resourcesDir.mkdirs()) {
+            throw new IOException("Failed to create directory " + resourcesDir);
+        }
 
-        final Integrator i = new Integrator();
-        i.setDitaDir(tempDir);
+        final Integrator i = new Integrator(tempDir);
         i.setProperties(new File(tempDir, "integrator.properties"));
         i.execute();
 

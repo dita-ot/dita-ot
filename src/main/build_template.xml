@@ -22,7 +22,8 @@
     
   <path id="dost.class.path">
     <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAntLibAction"/>
-    <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost-configuration.jar"/>
   </path>
   
   <target name="init">

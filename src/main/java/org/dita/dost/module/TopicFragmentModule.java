@@ -34,7 +34,7 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
         final Collection<FileInfo> fis = job.getFileInfo(new Filter() {
             @Override
             public boolean accept(final FileInfo f) {
-                return ATTRIBUTE_FORMAT_VALUE_DITA.equals(f.format);
+                return ATTR_FORMAT_VALUE_DITA.equals(f.format);
             }
         });
         for (final FileInfo f: fis) {

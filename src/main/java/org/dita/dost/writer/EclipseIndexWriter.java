@@ -125,7 +125,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         final List<IndexTerm> subTerms = term.getSubTerms();
         final int subTermNum = subTerms.size();
         outputIndexTermStartElement(term, serializer, indexsee);
-        if (subTerms != null && subTermNum > 0) {
+        if (subTermNum > 0) {
             for (final IndexTerm subTerm : subTerms) {
                 outputIndexTerm(subTerm, serializer, indexsee);
             }
@@ -195,7 +195,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         // Index-see and index-see-also terms should also generate links to its
         // target
         // Otherwise, the term won't be displayed in the index tab.
-        if (targets != null && !targets.isEmpty()) {
+        if (!targets.isEmpty()) {
             for (final IndexTermTarget target : targets) {
                 final String targetUri = target.getTargetURI();
                 final String targetName = target.getTargetName();
@@ -273,7 +273,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         // Index-see and index-see-also terms should also generate links to its
         // target
         // Otherwise, the term won't be displayed in the index tab.
-        if (targets != null && !targets.isEmpty()) {
+        if (!targets.isEmpty()) {
             for (final IndexTermTarget target : targets) {
                 final String targetUri = target.getTargetURI();
                 final String targetName = target.getTargetName();
@@ -303,7 +303,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
 
     private List<IndexTerm> cloneIndextermList (final List<IndexTerm> termList){
         final List<IndexTerm> termListClone = new ArrayList<IndexTerm>(termList.size());
-        if (termList != null && !termList.isEmpty()){
+        if (!termList.isEmpty()){
             for (IndexTerm aTermList : termList) {
                 termListClone.add(aTermList);
             }
@@ -325,7 +325,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
                 inIndexsee = true;
                 serializer.writeStartElement("see");
                 serializer.writeAttribute("keyword", term.getTermName());
-            } else if (term.getTermPrefix() == null && inIndexsee) { // subterm of an indexsee.
+            } else if (inIndexsee) { // subterm of an indexsee.
                 serializer.writeStartElement("subpath");
                 serializer.writeAttribute("keyword", term.getTermName());
                 serializer.writeEndElement(); // subpath
@@ -353,7 +353,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
             if (term.getTermPrefix() != null) {
                 serializer.writeEndElement(); // see
                 inIndexsee = false;
-            } else if (term.getTermPrefix() == null && inIndexsee) {
+            } else if (inIndexsee) {
                 // NOOP
             } else {
                 serializer.writeEndElement(); // entry

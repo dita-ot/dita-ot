@@ -38,27 +38,12 @@
     <reason>Argument "%1" is deprecated.</reason>
     <response>Please use the argument "%2" instead.</response>
   </message>
+  <message id="DOTA013F" type="FATAL">
+    <reason>Cannot find the specified DITAVAL '%1'.</reason>
+    <response></response>
+  </message>
 
   <!-- Start of Java Messages -->
-  <message id="DOTJ001F" type="FATAL">
-    <reason>Invalid command line syntax for the parameter '%1'.</reason>
-    <response>Parameters to the command line tool should use the syntax /parameter:value.</response>
-  </message>
-  
-  <message id="DOTJ002F" type="FATAL">
-    <reason>Unsupported parameter '%1'.</reason>
-    <response>Please refer to the DITA-OT User Guide for supported parameters.</response>
-  </message>
-  
-  <message id="DOTJ003F" type="FATAL">
-    <reason>Parameter '%1' was specified without a value.</reason>
-    <response>Parameters to the command line tool should use the syntax /parameter:value.</response>
-  </message>
-  
-  <message id="DOTJ004F" type="FATAL">
-    <reason>Cannot create temporary processing directory '%1'.</reason>
-    <response>Please ensure that you have permission to create the directory '%1'.</response>
-  </message>
   
   <!-- DOTJ005F appears to indicate an internal programming error, failed to create
        a new module in ModuleFactory.java. This message should be updated
@@ -67,11 +52,6 @@
   <message id="DOTJ005F" type="FATAL">
     <reason>Failed to create new instance for '%1'.</reason>
     <response>Please ensure that '%1' exists and that you have permission to access it.</response>
-  </message>
-  
-  <message id="DOTJ006F" type="FATAL">
-    <reason>An Ant build file used the following illegal syntax when calling AntInvoker: extparam='%1'.</reason>
-    <response>Please correct the call to AntInvoker when directly calling DITA-OT Java code from Ant; for example, extparam="maplinks=XXXX;other=YYYY".</response>
   </message>
   
   <message id="DOTJ007E" type="ERROR">
@@ -100,30 +80,6 @@
     <response>Setting the term to ***.</response>
   </message>
   
-  <!-- I was not able to produce this message, tried passing in:
-       -Dargs.logdir= (Ant gave an error about missing value)
-       -Dargs.logdir="" (no problems)
-       /logdir="" (message about invalid syntax) 
-
-       Message still exists in the code. -->
-  <message id="DOTJ015F" type="FATAL">
-    <reason>Log directory cannot be null.</reason>
-    <response>Please specify a valid directory for the build log.</response>
-  </message>
-  
-  <message id="DOTJ016F" type="FATAL">
-    <reason>Failed to create log directory '%1'.</reason>
-    <response>Please specify a valid directory for the build log.</response>
-  </message>
-
-  <!-- DOTJ017F appears if you use the Command line tool and forget to specify an input file:
-       java -jar lib/dost.jar /transtype:xhtml
-       May also appear if you set up Ant properties to create a log, but forget the input file. -->
-  <message id="DOTJ017F" type="FATAL">
-    <reason>No input file was specified; failed to initialize log name based on input file.</reason>
-    <response></response>
-  </message>
-
   <message id="DOTJ018I" type="INFO">
     <reason>Log file '%1' was generated successfully in directory '%2'.</reason>
     <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the DITA-OT user guide.</response>

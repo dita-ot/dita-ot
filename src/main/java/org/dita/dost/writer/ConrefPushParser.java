@@ -8,6 +8,7 @@
  */
 package org.dita.dost.writer;
 
+import static org.apache.commons.io.FilenameUtils.*;
 import static javax.xml.XMLConstants.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.reader.ConrefPushReader.*;
@@ -26,8 +27,6 @@ import java.util.Stack;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
@@ -171,7 +170,7 @@ public final class ConrefPushParser extends AbstractXMLFilter {
      */
     private void updateList(final File filename) {
         try {
-            final URI reletivePath = toURI(filename.getAbsolutePath().substring(FileUtils.normalize(tempDir.toString()).getPath().length() + 1));
+            final URI reletivePath = toURI(filename.getAbsolutePath().substring(new File(normalize(tempDir.toString())).getPath().length() + 1));
             final FileInfo f = job.getOrCreateFileInfo(reletivePath);
             if (hasConref) {
                 f.hasConref = true;

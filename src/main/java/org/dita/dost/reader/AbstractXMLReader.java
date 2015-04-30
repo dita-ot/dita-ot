@@ -36,7 +36,7 @@ ContentHandler, EntityResolver {
 
     @Override
     public void read(final File filename) {
-        // NOOP
+        throw new UnsupportedOperationException();
     }
 
     @Override

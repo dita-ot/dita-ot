@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
@@ -152,7 +153,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         try {
             for (final FileInfo f : job.getFileInfo()) {
                 if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                    topicRefWriter.setFixpath(relativePath2fix.get(f.file));
+                    topicRefWriter.setFixpath(relativePath2fix.get(f.file.toString()));
                     topicRefWriter.write(new File(job.tempDir.getAbsoluteFile(), f.file.getPath()).getAbsoluteFile());
                 }
             }
@@ -282,7 +283,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         }
                         // ensure the newly chunked file to the old one
                         try {
-                            FileUtils.moveFile(from, target);
+                            deleteQuietly(target);
+                            moveFile(from, target);
                         } catch (final IOException e) {
                             logger.error("Failed to replace chunk topic: " + e.getMessage(), e);
 

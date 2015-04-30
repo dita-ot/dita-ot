@@ -4,7 +4,10 @@
   See the accompanying license.txt file for applicable licenses.
 -->
 <plugin id="org.dita.javahelp">
-  <feature extension="dita.conductor.transtype.check" value="javahelp"/>
+  <transtype name="javahelp" extends="base-html" desc="JavaHelp">
+    <param name="args.javahelp.map" desc="Specifies the name of the ditamap file for a JavaHelp project." type="file"/>
+    <param name="args.javahelp.toc" desc="Specifies the name of the file containing the TOC in your JavaHelp output." type="file"/>
+  </transtype>
   <require plugin="org.dita.xhtml"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
 </plugin>

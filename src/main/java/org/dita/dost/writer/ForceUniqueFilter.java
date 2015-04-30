@@ -57,7 +57,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
             final String processingRole = res.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
             if (href != null &&
                     (scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL)) &&
-                    (format == null || format.equals(ATTRIBUTE_FORMAT_VALUE_DITA)) &&
+                    (format == null || format.equals(ATTR_FORMAT_VALUE_DITA)) &&
                     (processingRole == null || processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_NORMAL))) {
                 final URI file = stripFragment(href);
                 Integer count = topicrefCount.containsKey(file) ? topicrefCount.get(file) : 0;

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses. -->
 <!-- (c) Copyright IBM Corp. 2005 All Rights Reserved. -->
 <xsl:stylesheet 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -47,7 +46,7 @@
   <xsl:if test="$column &gt; 0">
     <table:table-column/>
     <xsl:call-template name="create_columns_for_table">
-      <xsl:with-param name="column" select="$column - 1"></xsl:with-param>
+      <xsl:with-param name="column" select="$column - 1"/>
     </xsl:call-template>
   </xsl:if>  
 </xsl:template>
@@ -68,10 +67,8 @@
     <xsl:with-param name="family" select="'_table'"/>
   </xsl:apply-templates>
   
-  <xsl:element name="table:table">
-    <xsl:attribute name="table:name">
-      <xsl:value-of select="concat('Table', $tablenameId)"/>
-    </xsl:attribute>
+  <table:table table:name="{concat('Table', $tablenameId)}">
+    
     <!-- table background flagging -->
     <xsl:apply-templates select="parent::*[contains(@class, ' topic/table ')]" mode="start-add-odt-flags">
       <xsl:with-param name="family" select="'_table_attr'"/>
@@ -80,7 +77,7 @@
       <xsl:with-param name="column" select="$columnNum"/>
     </xsl:call-template>
     <xsl:call-template name="dotable"/> 
-  </xsl:element>
+  </table:table>
   <!-- end flagging -->
   <xsl:apply-templates select="parent::*[contains(@class, ' topic/table ')]" mode="end-add-odt-flags">
     <xsl:with-param name="family" select="'_table'"/>
@@ -120,10 +117,8 @@
   <xsl:variable name="tbl-count-actual" select="count(preceding::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]/*[contains(@class,' topic/title ')])+1"/>
 
   
-  <xsl:element name="text:p">
-    <xsl:attribute name="text:style-name">center</xsl:attribute>
-    <xsl:element name="text:span">
-      <xsl:attribute name="text:style-name">bold</xsl:attribute>
+  <text:p text:style-name="center">
+    <text:span text:style-name="bold">
         <xsl:choose>
           <!-- Hungarian: "1.
           Table " -->
@@ -139,30 +134,28 @@
       </xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="getStringODT">
-              <xsl:with-param
-              name="stringName" select="'Table'"/>
+            <xsl:call-template name="getString">
+              <xsl:with-param name="stringName" select="'Table'"/>
             </xsl:call-template>
             <xsl:text> </xsl:text>
             <xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:value-of select="."/>
-    </xsl:element>
-  </xsl:element>
+    </text:span>
+  </text:p>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/desc ')]">
-  <xsl:element name="text:p">
-    <xsl:attribute name="text:style-name">center</xsl:attribute>
+  <text:p text:style-name="center">
       <xsl:apply-templates/>
-    </xsl:element>
+    </text:p>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/colspec ')]"/>
 
 
-<xsl:template match="*[contains(@class,' topic/spanspec ')]"></xsl:template>
+<xsl:template match="*[contains(@class,' topic/spanspec ')]"/>
 
 <xsl:template match="*[contains(@class,' topic/thead ')]" name="topic.thead">
   <xsl:apply-templates/>
@@ -174,7 +167,7 @@
 <xsl:template match="*[contains(@class,' topic/tbody ')]" name="topic.tbody">
   <xsl:apply-templates/>
     <!-- process table footer -->
-    <xsl:apply-templates select="../*[contains(@class,' topic/tfoot ')]" mode="gen-tfoot" />
+    <xsl:apply-templates select="../*[contains(@class,' topic/tfoot ')]" mode="gen-tfoot"/>
 </xsl:template>
 
 <!-- special mode for table footers -->
@@ -186,16 +179,16 @@
   
   <xsl:choose>
     <xsl:when test="parent::*[contains(@class,' topic/thead ')]">
-      <xsl:element name="table:table-header-rows">
-        <xsl:element name="table:table-row">
+      <table:table-header-rows>
+        <table:table-row>
           <xsl:apply-templates select="*[contains(@class,' topic/entry ')][1]"/>
-        </xsl:element>
-      </xsl:element>
+        </table:table-row>
+      </table:table-header-rows>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:element name="table:table-row">
+      <table:table-row>
         <xsl:apply-templates select="*[contains(@class,' topic/entry ')][1]"/>
-      </xsl:element>
+      </table:table-row>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -248,8 +241,7 @@
         </xsl:otherwise>
     </xsl:choose>
     -->
-    <xsl:element name="table:table-cell">
-      <xsl:attribute name="office:value-type">string</xsl:attribute>
+    <table:table-cell office:value-type="string">
       <xsl:if test="$colspan &gt; 1">
         <xsl:attribute name="table:number-columns-spanned">
           <xsl:value-of select="$colspan"/>
@@ -263,12 +255,11 @@
       </xsl:if>
       <xsl:call-template name="create_style_table"/>
       
-      <xsl:element name="text:p">
-      	<xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>  
+      <text:p text:style-name="indent_paragraph_style">
       	<xsl:apply-templates/>
-      </xsl:element>
+      </text:p>
       
-    </xsl:element>
+    </table:table-cell>
     <!-- render col spanned cell.-->
     <!-- 
     <xsl:call-template name="emit-empty-cell-for-colspan">
@@ -389,9 +380,7 @@
     </xsl:when>
 
     <xsl:when test="not(../../../*[contains(@class,' topic/colspec ')])">
-      <xsl:variable name="prev-sib">
-        <xsl:value-of select="count(preceding-sibling::*)"/>
-      </xsl:variable>
+      <xsl:variable name="prev-sib" select="count(preceding-sibling::*)"/>
       <xsl:value-of select="$prev-sib+1"/>
     </xsl:when>
 
@@ -416,9 +405,7 @@
 
     <!-- Otherwise, just use the count of cells in this row -->
     <xsl:otherwise>
-      <xsl:variable name="prev-sib">
-        <xsl:value-of select="count(preceding-sibling::*)"/>
-      </xsl:variable>
+      <xsl:variable name="prev-sib" select="count(preceding-sibling::*)"/>
       <xsl:value-of select="$prev-sib+1"/>
     </xsl:otherwise>
 
@@ -462,25 +449,17 @@
 </xsl:template>
 
 <xsl:template name="find-spanspec-colspan">
-  <xsl:variable name="spanname"><xsl:value-of select="@spanname"/></xsl:variable>
-  <xsl:variable name="startcolname">
-    <xsl:value-of select="../../../*[contains(@class,' topic/spanspec ')][@spanname=$spanname][1]/@namest"/>
-  </xsl:variable>
-  <xsl:variable name="endcolname">
-    <xsl:value-of select="../../../*[contains(@class,' topic/spanspec ')][@spanname=$spanname][1]/@nameend"/>
-  </xsl:variable>
-  <xsl:variable name="startpos">
-    <xsl:value-of select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=$startcolname]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
-  </xsl:variable>
-  <xsl:variable name="endpos">
-    <xsl:value-of select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=$endcolname]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
-  </xsl:variable>
+  <xsl:variable name="spanname" select="@spanname"/>
+  <xsl:variable name="startcolname" select="../../../*[contains(@class,' topic/spanspec ')][@spanname=$spanname][1]/@namest"/>
+  <xsl:variable name="endcolname" select="../../../*[contains(@class,' topic/spanspec ')][@spanname=$spanname][1]/@nameend"/>
+  <xsl:variable name="startpos" select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=$startcolname]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
+  <xsl:variable name="endpos" select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=$endcolname]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
   <xsl:value-of select="$endpos - $startpos + 1"/>
 </xsl:template>
 
   <xsl:template name="emit-empty-cell">
     <xsl:param name="currentpos" select="1"/>
-    <xsl:param name="startpos" select="1"></xsl:param>
+    <xsl:param name="startpos" select="1"/>
     <xsl:if test="$startpos &gt; $currentpos">
       <xsl:variable name="colspan">
         <xsl:apply-templates select="../preceding-sibling::*[*[contains(@class,' topic/entry ')][@morerows][@colnum=$currentpos or @colname=concat('col',$currentpos) or @namest=concat('col',$currentpos)]][1]/*[contains(@class,' topic/entry ')][@morerows][@colnum=$currentpos or @colname=concat('col',$currentpos) or @namest=concat('col',$currentpos)]" mode="find-colspan"/>
@@ -523,7 +502,7 @@
   
   <xsl:template match="*[contains(@class,' topic/colspec ')]" mode="count-colwidth">
     <xsl:param name="colnum" select="1"/>
-    <xsl:param name="span-width" select="0"></xsl:param>
+    <xsl:param name="span-width" select="0"/>
     <xsl:variable name="width">
       <xsl:choose>
         <xsl:when test="@colwidth and not(@colwidth='' or @colwidth='*')">
@@ -582,10 +561,7 @@
     <xsl:with-param name="family" select="'_table'"/>
   </xsl:apply-templates>
   
-  <xsl:element name="table:table">
-    <xsl:attribute name="table:name">
-      <xsl:value-of select="concat('Table', $tablenameId)"/>
-    </xsl:attribute>
+  <table:table table:name="{concat('Table', $tablenameId)}">
     <!-- table background flagging -->
     <xsl:apply-templates select="." mode="start-add-odt-flags">
       <xsl:with-param name="family" select="'_table_attr'"/>
@@ -597,7 +573,7 @@
       <xsl:with-param name="column" select="$colnumNum"/>
     </xsl:call-template>
     <xsl:call-template name="dotable"/> 
-  </xsl:element>
+  </table:table>
   <!-- end flagging -->
   <xsl:apply-templates select="." mode="end-add-odt-flags">
     <xsl:with-param name="family" select="'_table'"/>
@@ -623,7 +599,7 @@
   <xsl:if test="$column &gt; 0">
     <table:table-column/>
     <xsl:call-template name="create_columns_for_simpletable">
-      <xsl:with-param name="column" select="$column - 1"></xsl:with-param>
+      <xsl:with-param name="column" select="$column - 1"/>
     </xsl:call-template>
   </xsl:if>  
 </xsl:template>
@@ -635,19 +611,18 @@
   <xsl:variable name="tbl-count-actual" select="count(preceding::*[contains(@class,' topic/table ')
     or contains(@class,' topic/simpletable ')]/*[contains(@class,' topic/title ')])+1"/>
 
-  <xsl:element name="text:p">
-    <xsl:attribute name="text:style-name">bold</xsl:attribute>
+  <text:p text:style-name="bold">
   <xsl:choose>
     <!-- Hungarian: "1.Table " -->
     <xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'hu-hu')) or (string-length($ancestorlang)=2 and contains($ancestorlang,'hu')) )">
       <xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
-      <xsl:call-template name="getStringODT">
+      <xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'Table'"/>
       </xsl:call-template><xsl:text> 
       </xsl:text>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:call-template name="getStringODT">
+      <xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'Table'"/>
       </xsl:call-template>
       <xsl:text> </xsl:text>
@@ -656,23 +631,23 @@
     </xsl:otherwise>
   </xsl:choose>
   <xsl:value-of select="."/>
- </xsl:element>
+ </text:p>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/sthead ')]">
 
-  <xsl:element name="table:table-header-rows">
-    <xsl:element name="table:table-row">
+  <table:table-header-rows>
+    <table:table-row>
       <xsl:apply-templates mode="emit-cell-style"/>
-    </xsl:element>
-  </xsl:element>
+    </table:table-row>
+  </table:table-header-rows>
 </xsl:template>
   
 <xsl:template match="*[contains(@class,' topic/strow ')]">
 
-  <xsl:element name="table:table-row">
+  <table:table-row>
     <xsl:apply-templates mode="emit-cell-style"/>
-  </xsl:element>
+  </table:table-row>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/stentry ')]" mode="emit-cell-style">
@@ -681,27 +656,22 @@
     <!--xsl:apply-templates select="../*[contains(@class,' topic/stentry ')][1]" mode="count-rowwidth"/-->
   </xsl:variable>
    <!--  
-    <xsl:variable name="thiswidth-twips">
-      <xsl:value-of select="$table-row-width div $totalcols"/>
-    </xsl:variable>
+    <xsl:variable name="thiswidth-twips" select="$table-row-width div $totalcols"/>
     <xsl:value-of select="$valign"/>
    -->
-  <xsl:element name="table:table-cell">
-    <xsl:attribute name="office:value-type">string</xsl:attribute>
+  <table:table-cell office:value-type="string">
     <xsl:call-template name="create_style_stable"/>
     
-    <xsl:element name="text:p">
-      <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>  
+    <text:p text:style-name="indent_paragraph_style">
       <xsl:apply-templates/>
-    </xsl:element>
-  </xsl:element>
+    </text:p>
+  </table:table-cell>
 </xsl:template>
   
 <xsl:template match="text()" mode="tags_in_sthead">
-  <xsl:element name="text:span">
-    <xsl:attribute name="text:style-name">bold</xsl:attribute>
+  <text:span text:style-name="bold">
     <xsl:apply-templates select="."/>
-  </xsl:element>  
+  </text:span>  
 </xsl:template>
   
 <xsl:template match="*" mode="tags_in_sthead">
@@ -712,9 +682,7 @@
 
 <xsl:template name="create_style_stable">
   <!-- create style attribute -->
-  <xsl:variable name="colpos">
-    <xsl:value-of select="position()"/>
-  </xsl:variable>
+  <xsl:variable name="colpos" select="position()"/>
   
   <xsl:variable name="rowpos">
     <xsl:choose>

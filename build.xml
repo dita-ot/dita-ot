@@ -3,7 +3,7 @@
      See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole binary package for DITA Open Toolkit -->
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="build_DITA-OT_package" default="dist" basedir=".">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="build_DITA-OT_package" default="build" basedir=".">
   <description>Build binary packages for DITA Open Toolkit</description>
 
   <property file="${basedir}/src/main/lib/configuration.properties"/>
@@ -25,7 +25,7 @@
   <property name="xsl.dir" location="${src.dir}/xsl/"/>
   <property name="sample.dir" location="${src.dir}/samples/"/>
   <property name="css.dir" location="${src.dir}/css/"/>
-  <property name="resource.dir" location="${src.dir}/resource/"/>
+  <property name="resource.dir" location="${src.dir}/resources/"/>
 
   <property name="top.work.dir" location="${src.dir}"/>
   <property name="package.output.dir" location="${basedir}/target/dist"/>
@@ -72,24 +72,45 @@
     <javac srcdir="${java.dir}" destdir="${bin.dir}"
            debug="on"
            source="1.7" target="1.7"
-           classpathref="compile.path">
-      <exclude name="org/dita/dost/invoker/JavaInvoker.java"/>
-      <exclude name="org/dita/dost/invoker/CommandLineInvoker"/>
-    </javac>
+           classpathref="compile.path"/>
   </target>
 
   <target name="jar" depends="compile" description="Build Java libraries">
-    <copy todir="${bin.dir}/resource/">
-      <fileset dir="${resource.dir}" includes="messages.*"/>
-    </copy>
     <copy todir="${bin.dir}">
       <fileset dir="${java.dir}" includes="**/*.properties, **/*.xml"/>
     </copy>
     <jar destfile="${dost.jar}">
       <fileset dir="${bin.dir}"/>
-      <fileset dir="${src.dir}/resources"/>
+      <fileset dir="${src.dir}/resources">
+        <exclude name="messages.*"/>
+        <exclude name="messages_template.*"/>
+      </fileset>
     </jar>
   </target>
+  
+  <target name="jar.plug-ins" depends="compile" description="Build plug-in Java libraries">
+    <path id="base.compile.path">
+      <pathelement location="${bin.dir}"/>
+      <path refid="compile.path"/>
+    </path>
+    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="jar" inheritAll="false">
+      <property name="basedir" value="${src.dir}/plugins/org.dita.pdf2"/>
+      <reference refid="base.compile.path"/>
+    </ant>
+  </target>
+  
+  <target name="build" depends="jar, jar.plug-ins">
+    <path id="base.compile.path">
+      <pathelement location="${bin.dir}"/>
+      <path refid="compile.path"/>
+      <pathelement location="${src.dir}/resources"/>
+    </path>
+    <ant antfile="${src.dir}/integrator.xml" dir="${src.dir}">
+      <reference refid="base.compile.path" torefid="dost.class.path"/>
+    </ant>
+  </target>
+  
+  <!-- Distribution -->
   
   <patternset id="pattern.global.excludes">
     <exclude name=".*"/>
@@ -116,11 +137,9 @@
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/org.dita.*/**"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
-    <include name="resource/**"/>
-    <include name="schema/**"/>
+    <include name="resources/**"/>
     <include name="xsl/**"/>
     <include name="lib/dost.jar"/>
     <include name="lib/APACHE-LICENSE-2_0.html"/>
@@ -140,7 +159,6 @@
     <include name="build_demo.xml"/>
     <exclude name="catalog-dita.txt"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
@@ -153,9 +171,8 @@
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
-    <include name="resource/**"/>
+    <include name="resources/**"/>
     <include name="samples/**"/>
-    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>    
   </patternset>
@@ -169,7 +186,6 @@
     <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
@@ -180,9 +196,8 @@
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
-    <include name="resource/**"/>
+    <include name="resources/**"/>
     <include name="samples/**"/>
-    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>
   </patternset>
@@ -205,7 +220,6 @@
     <exclude name="src/**"/>
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <include name="*.*"/>
-    <include name="css/**"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
     <include name="plugins/org.dita.specialization.dita132/**"/>
@@ -215,9 +229,8 @@
     <exclude name="demo/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
-    <include name="resource/**"/>
+    <include name="resources/**"/>
     <include name="samples/**"/>
-    <include name="schema/**"/>
     <include name="xsl/**"/>
     <include name="lib/**"/>
   </patternset>
@@ -441,13 +454,6 @@
     </sequential>
   </target>
 	
-  <target name="jar.plug-ins" description="Build plug-in Java libraries">
-    <ant antfile="${src.dir}/plugins/org.dita.pdf2/buildPackage.xml" target="jar" inheritAll="false">
-  	  <property name="basedir" value="${src.dir}/plugins/org.dita.pdf2"/>
-      <reference refid="compile.path" torefid="base.compile.path"/>
-  	</ant>
-  </target>
-
   <target name="dist"
     depends="init-package, build-package-binary, cleanup" description="Build distribution packages"/>
 
@@ -555,7 +561,13 @@
     </javac>
   </target>
 
-  <target name="test" depends="compile, test-compile" description="Run unit tests">
+  <target name="test-recources">
+    <copy todir="${test.bin.dir}">
+      <fileset dir="${test.src.dir}/resources"/>
+    </copy>
+  </target>
+
+  <target name="test" depends="compile, test-compile, test-recources" description="Run unit tests">
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
@@ -563,7 +575,6 @@
     <junit printsummary="yes" haltonfailure="yes" showoutput="true">
       <classpath>
         <pathelement location="${test.bin.dir}"/>
-        <pathelement location="${test.src.dir}/resources"/>
         <path refid="test.path"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>
@@ -603,7 +614,7 @@
     </javac>
   </target>
   
-  <target name="integration-test" depends="compile, test-compile, integration-test-compile" description="Run integration tests">
+  <target name="integration-test" depends="compile, test-compile, test-recources, integration-test-compile" description="Run integration tests">
     <condition property="only-test.name" value="${test}" else="">
       <isset property="test"/>
     </condition>
@@ -615,7 +626,6 @@
       <classpath>
         <pathelement location="${integration-test.bin.dir}"/>
         <pathelement location="${test.bin.dir}"/>
-        <pathelement location="${test.src.dir}/resources"/>
         <path refid="test.path"/>
         <pathelement location="${bin.dir}"/>
         <pathelement location="${src.dir}/resources"/>

@@ -67,7 +67,6 @@
 		<isfalse value="${is64bit}"/>
   </condition>
 	
-	
 	<!-- For 64-bit machines, the value -d64 runs the
 	     the JVM in 64-bit mode. This parameter cannot
 	     be specified on 32-bit machines (that is, you cannot
@@ -93,43 +92,36 @@
 	  -->
 	<property name="baseJVMArgLine" value="${jvmArchFlag} -Xmx${maxJavaMemory}"/>
 
-  <path id="dost.jar.path">
-    <pathelement
-      location="${dita.dir}${file.separator}lib${file.separator}dost.jar" />
-  </path>
+  <!-- Deprecated -->
+  <path id="dost.jar.path" refid="dost.class.path"/>
 
   <taskdef name="pipeline"
     classname="org.dita.dost.invoker.ExtensibleAntInvoker">
-    <classpath refid="dost.jar.path" />
+    <classpath refid="dost.class.path" />
   </taskdef>
 
-  <taskdef name="config-logger"
-    classname="org.dita.dost.log.LogConfigTask">
-    <classpath refid="dost.jar.path" />
-  </taskdef>
-	
   <taskdef name="dita-ot-echo"
     classname="org.dita.dost.log.DITAOTEchoTask">
-    <classpath refid="dost.jar.path" />
+    <classpath refid="dost.class.path" />
   </taskdef>
 
   <taskdef name="dita-ot-fail"
     classname="org.dita.dost.log.DITAOTFailTask">
-    <classpath refid="dost.jar.path" />
+    <classpath refid="dost.class.path" />
   </taskdef>
 
   <taskdef name="dita-ot-copy"
     classname="org.dita.dost.util.DITAOTCopy">
-    <classpath refid="dost.jar.path" />
+    <classpath refid="dost.class.path" />
   </taskdef>
 	
   <taskdef name="job-property" classname="org.dita.dost.platform.JobPropertyTask">
-    <classpath refid="dost.jar.path"/>
+    <classpath refid="dost.class.path"/>
   </taskdef>
 	
   <typedef name="isabsolute"
     classname="org.dita.dost.util.IsAbsolute">
-    <classpath refid="dost.jar.path" />
+    <classpath refid="dost.class.path" />
   </typedef>
   
   <macrodef name="job-helper" >
@@ -155,15 +147,9 @@
   <!-- property values end -->
 
   <target name="build-init"
-          depends="init-logger,
-                   check-arg,
+          depends="check-arg,
                    log-arg" />
-    
-  <!-- Only used when invoked with CommandLineInvoker -->
-  <target name="init-logger" description="Initialize log directory and file name">
-    <config-logger />
-  </target>
-  	
+
   <!-- property value validation begin -->
   <target name="check-arg"
     description="Validate and init input arguments">
@@ -196,6 +182,17 @@
         <not><isset property="dita.input.valfile"/></not>
       </and>
     </condition>
+    <dita-ot-fail id="DOTA013F">
+      <condition>
+        <and>
+          <isset property="args.filter" />
+          <not>
+            <available file="${args.filter}" type="file" />
+          </not>
+        </and>
+      </condition>
+      <param name="1" location="${args.filter}"/>
+    </dita-ot-fail>
     <condition property="filter-stage" value="early">
       <not>
         <isset property="filter-stage"/>

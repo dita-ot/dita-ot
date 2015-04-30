@@ -11,13 +11,7 @@ package org.dita.dost.util;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.io.*;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -186,28 +180,6 @@ public class TestFileUtils {
             assertEquals(new File("file.xml"), FileUtils.resolve((String) null,"file.xml"));
         }
     }
-
-    @Test
-    public void testNormalizeStringStringWindows() {
-        assertEquals("a\\c\\file.xml",FileUtils.normalize("a\\b\\..\\c\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("a\\b\\file.xml",FileUtils.normalize("a\\.\\b\\.\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("..\\a\\file.xml",FileUtils.normalize("..\\a\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("..\\file.xml", FileUtils.normalize("a\\..\\..\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("file.xml", FileUtils.normalize("a\\b\\..\\..\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("\\a\\b\\file.xml", FileUtils.normalize("\\a\\.\\b\\c\\..\\file.xml", SEPARATOR_WINDOWS));
-        assertEquals("\\\\server\\dir\\file.xml", FileUtils.normalize("\\\\server\\a\\..\\dir\\file.xml", SEPARATOR_WINDOWS));
-    }
-
-    @Test
-    public void testNormalizeStringStringUnix() {
-        assertEquals("a/c/file.xml",FileUtils.normalize("a/b/../c/file.xml", SEPARATOR_UNIX));
-        assertEquals("a/b/file.xml",FileUtils.normalize("a/./b/./file.xml", SEPARATOR_UNIX));
-        assertEquals("../a/file.xml",FileUtils.normalize("../a/file.xml", SEPARATOR_UNIX));
-        assertEquals("../file.xml", FileUtils.normalize("a/../../file.xml", SEPARATOR_UNIX));
-        assertEquals("file.xml", FileUtils.normalize("a/b/../../file.xml", SEPARATOR_UNIX));
-        assertEquals("/a/b/file.xml", FileUtils.normalize("/a/./b/c/../file.xml", SEPARATOR_UNIX));
-        assertEquals("//server/dir/file.xml", FileUtils.normalize("//server/a/../dir/file.xml", SEPARATOR_UNIX));
-    }
     
     @Test
     public void testIsAbsolutePath() {
@@ -227,30 +199,6 @@ public class TestFileUtils {
         }
     }
 
-    @Test
-    public void testCopyFile() throws IOException {
-        final File src = new File(srcDir, "ibmrnr.txt");
-        final File dst = new File(tempDir, "ibmrnr.txt");
-        assertFalse(dst.exists());
-        FileUtils.copyFile(src, dst);
-        assertTrue(dst.exists());
-        assertEquals(TestUtils.readFileToString(src),
-                TestUtils.readFileToString(dst));
-    }
-
-    @Test
-    public void testCopy() throws IOException {
-    	final Random random = new Random(System.currentTimeMillis());
-    	for (final int len: new int[] { 0, 1024, 1024 * 4, 1024 * 9 }) {
-    		final byte[] list = new byte[len];
-        	random.nextBytes(list);
-    		final ByteArrayInputStream in = new ByteArrayInputStream(list);
-    		final ByteArrayOutputStream out = new ByteArrayOutputStream();
-    		FileUtils.copy(in, out);
-    		assertArrayEquals(list, out.toByteArray());
-    	}
-    }
-    
     @Test
     public void testReplaceExtName() {
         // initial the extName of Class DebugAndFilterModule.
@@ -279,17 +227,6 @@ public class TestFileUtils {
         assertEquals("xml", FileUtils.getExtension("file.name.xml#topicid"));
         assertNull(FileUtils.getExtension("file"));
     }
-
-    @Test
-    public void testGetBaseName() {
-        assertNull(FileUtils.getBaseName(null));
-        assertEquals("c", FileUtils.getBaseName("a/b/c.txt"));
-        assertEquals("a", FileUtils.getBaseName("a.txt"));
-        assertEquals("a", FileUtils.getBaseName("a"));
-        assertEquals("c", FileUtils.getBaseName("a/b/c"));
-        assertEquals("", FileUtils.getBaseName("a/b/c/"));
-    }
-
     
     @Test
     public void testDeriveFilename() {

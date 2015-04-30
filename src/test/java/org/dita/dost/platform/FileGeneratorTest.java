@@ -4,6 +4,7 @@
  */
 package org.dita.dost.platform;
 
+import static org.apache.commons.io.FileUtils.*;
 import static org.junit.Assert.assertEquals;
 import static java.util.Arrays.*;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
@@ -12,7 +13,6 @@ import static javax.xml.XMLConstants.NULL_NS_URI;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,8 +62,7 @@ public class FileGeneratorTest {
     public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(getClass());
         tempFile = new File(tempDir, "dummy_template.xml");
-        FileUtils.copyFile(new File(resourceDir, "src" + File.separator + "dummy_template.xml"),
-                tempFile);
+        copyFile(new File(resourceDir, "src" + File.separator + "dummy_template.xml"), tempFile);
         TestUtils.resetXMLUnit();
     }
 

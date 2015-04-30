@@ -13,6 +13,7 @@
   <extension-point id="dita.image.extensions" name="Image file extension"/>
   <extension-point id="dita.html.extensions" name="HTML file extension"/>
   <extension-point id="dita.resource.extensions" name="Resource file extension"/>
+  <!-- deprecated -->
   <extension-point id="dita.conductor.transtype.check" name="Transtype check"/>
   <extension-point id="dita.transtype.print" name="Print transtype"/>
   <extension-point id="dita.conductor.target" name="Ant conductor"/>
@@ -59,6 +60,91 @@
   <extension-point id="dita.xsl.mappull" name="Map pull XSLT import"/>
   <extension-point id="dita.xsl.maplink" name="Map link XSLT import"/>
   <!-- extensions -->
+  <transtype name="base" abstract="true">
+    <param name="dita.preprocess.reloadstylesheet.topicpull" desc="Specifies whether the DITA-OT reloads the XSL style sheets that are used for the transformation." type="enum">
+      <val>true</val>
+      <val default="true">false</val>
+    </param>
+    <param name="args.gen.task.lbl" desc="Specifies whether to generate headings for sections within task topics." type="enum">
+      <val>YES</val>
+      <val>NO</val>
+    </param>
+    <param name="args.rellinks" desc="Specifies which links to include in the output." type="enum">
+      <val desc="No links are included.">none</val>
+      <val desc="All links are included.">all</val>
+      <val desc="Parent, child, next, and previous links are not included.">nofamily</val>
+    </param>
+    <param name="args.debug" desc="Specifies whether debugging information is included in the log." type="enum">
+      <val>yes</val>
+      <val default="true">no</val>
+    </param>
+    <param name="args.draft" desc="Specifies whether the content of &lt;draft-comment&gt; and &lt;required-cleanup&gt; elements is included in the output." type="enum">
+      <val>yes</val>
+      <val default="true">no</val>
+    </param>
+    <param name="args.figurelink.style" desc="Specifies how cross references to figures are styled in output." type="enum">
+      <val>NUMBER</val>
+      <val>TITLE</val>
+      <val>NUMTITLE</val>
+    </param>
+    <param name="args.filter" desc="Specifies a filter file to be used to include, exclude, or flag content." type="file"/>
+    <param name="args.grammar.cache" desc="Specifies whether the grammar-caching feature of the XML parser is used." type="enum">
+      <val>yes</val>
+      <val default="true">no</val>
+    </param>
+    <param name="args.input" desc="Specifies the master file for your documentation project." type="file" required="true"/>
+    <param name="args.input.dir" desc="Specifies the base directory for your documentation project." type="dir"/>
+    <param name="args.logdir" desc="Specifies the location where the DITA-OT places log files for your project." type="dir"/>
+    <param name="args.tablelink.style" desc="Specifies how cross references to tables are styled." type="enum">
+      <val>NUMBER</val>
+      <val>TITLE</val>
+      <val>NUMTITLE</val>
+    </param>
+    <param name="clean.temp" desc="Specifies whether the DITA-OT deletes the files in the temporary directory after it finishes a build." type="enum">
+      <val default="true">yes</val>
+      <val>no</val>
+    </param>
+    <param name="dita.dir" desc="Specifies where the DITA-OT is installed." type="dir"/>
+    <param name="dita.temp.dir" desc="Specifies the location of the temporary directory." type="dir"/>
+    <param name="dita.input.valfile" desc="Specifies a filter file to be used to include, exclude, or flag content." type="file"/>
+    <param name="filter-stage" desc="Specifies whether filtering is done before all other processing, or after key and conref processing." type="enum">
+      <val default="true">early</val>
+      <val>late</val>
+    </param>
+    <param name="force-unique" desc="Generate copy-to attributes to duplicate topicref elements." type="enum">
+      <val>true</val>
+      <val default="true">false</val>
+    </param>
+    <param name="generate.copy.outer" desc="Specifies whether to generate output files for content that is not located in or beneath the directory containing the DITA map file." type="enum">
+      <val desc="Do not generate output for content that is located outside the DITA map directory." default="true">1</val>
+      <val desc="Shift the output directory so that it contains all output for the publication.">3</val>
+    </param>
+    <param name="onlytopic.in.map" desc="Specifies whether files that are linked to, or referenced with a @conref attribute, generate output." type="enum">
+      <val>true</val>
+      <val default="true">false</val>
+    </param>
+    <param name="outer.control" desc="Specifies how the DITA OT handles content files that are located in or below the directory containing the master DITA map." type="enum">
+      <val desc="Fail quickly if files are going to be generated or copied outside of the directory.">fail</val>
+      <val desc="Complete the operation if files will be generated or copied outside of the directory, but log a warning." default="true">warn</val>
+      <val desc="Quietly finish with only those files; do not generate warnings or errors.">quiet</val>
+    </param>
+    <param name="output.dir" desc="Specifies the name and location of the output directory." type="dir"/>
+    <param name="root-chunk-override" desc="Override for map chunk attribute value." type="string"/>
+    <param name="transtype" desc="Specifies the output format." type="file" required="true"/>
+    <param name="validate" desc="Specifies whether the DITA-OT validates the content." type="enum">
+      <val default="true">true</val>
+      <val>false</val>
+    </param>
+    <param name="generate-debug-attributes" desc="Specifies whether the @xtrf and @xtrc debugging attributes are generated in the temporary files." type="enum">
+      <val desc="Enables generation of debugging attributes" default="true">true</val>
+      <val desc="Disables generation of debugging attributes">false</val>
+    </param>
+    <param name="processing-mode" desc="Specifies how the DITA-OT handles errors and error recovery." type="enum">
+      <val desc="When an error is encountered, the DITA-OT stops processing">strict</val>
+      <val desc="When an error is encountered, the DITA-OT attempts to recover from it" default="true">lax</val>
+      <val desc="When an error is encountered, the DITA continues processing but does not attempt error recovery">skip</val>
+    </param>
+  </transtype>
   <feature extension="dita.image.extensions" value=".gif"/>
   <feature extension="dita.image.extensions" value=".eps"/>
   <feature extension="dita.image.extensions" value=".jpg"/>
@@ -77,7 +163,7 @@
   <template file="../../catalog-dita_template.xml"/>
   <template file="../../build_template.xml"/>
   <template file="build_preprocess_template.xml"/>
-  <template file="../../resource/messages_template.xml"/>
+  <template file="../../resources/messages_template.xml"/>
   <template file="../../xsl/common/allstrings_template.xml"/>
   <template file="../../xsl/common/strings_template.xml"/>
   <template file="../../xsl/preprocess/maplink_template.xsl"/>

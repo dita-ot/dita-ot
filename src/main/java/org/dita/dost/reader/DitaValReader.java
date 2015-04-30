@@ -88,6 +88,7 @@ public final class DitaValReader extends AbstractXMLReader {
 
     @Override
     public void read(final File input) {
+        assert input.isAbsolute();
         ditaVal = input;
 
         try {

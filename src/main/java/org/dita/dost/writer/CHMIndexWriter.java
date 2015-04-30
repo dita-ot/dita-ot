@@ -99,7 +99,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
         serializer.writeEndElement(); // param
         //if term doesn't has target to link to, it won't appear in the index tab
         //we need to create links for such terms
-        if (targets == null || targets.isEmpty()){
+        if (targets.isEmpty()){
             findTargets(term);
             targets = term.getTargetList();
             targetNum = targets.size();
@@ -116,7 +116,7 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
             serializer.writeEndElement(); // param
         }
         serializer.writeEndElement(); // object
-        if (subTerms != null && subTermNum > 0) {
+        if (subTermNum > 0) {
             serializer.writeStartElement("ul");
             for (final IndexTerm subTerm : subTerms) {
                 outputIndexTerm(subTerm, serializer);

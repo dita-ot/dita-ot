@@ -27,6 +27,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
 
     @Override
     public void read(final File filename) {
+        assert filename.isAbsolute();
         Document doc = null;
         try {
             final DocumentBuilder builder = XMLUtils.getDocumentBuilder();

@@ -45,7 +45,9 @@ import org.xml.sax.SAXParseException;
  * </p>
  */
 public final class GenListModuleReader extends AbstractXMLFilter {
-    
+
+    public static final URI ROOT_URI = toURI("ROOT");
+
     /** Output utilities */
     private Job job;
     /** Absolute basedir of the current parsing file */
@@ -98,8 +100,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private URI rootDir = null;
     /** Absolute system path to file being processed */
     private URI currentFile = null;
-    /** Absolute system path to input file */
-    private URI rootFilePath = null;
     /** Stack for @processing-role value */
     private final Stack<String> processRoleStack;
     /** Depth inside a @processing-role parent */
@@ -111,7 +111,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Subject scheme relative file paths. */
     private final Set<URI> schemeRefSet;
     /** Relationship graph between subject schema. Keys are subject scheme map paths and values
-     * are subject scheme map paths, both relative to base directory. A key {@code File("ROOT")} contains all subject scheme maps. */
+     * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps. */
     private final Map<URI, Set<URI>> schemeRelationGraph;
     /** Map to store referenced branches. */
     private final Map<URI, List<String>> validBranches;
@@ -224,7 +224,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * Is the processed file a DITA map.
+     * Is the currently processed file a DITA map.
      *
      * @return {@code true} if DITA map, otherwise {@code false}
      */
@@ -237,7 +237,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
     /**
      * Get relationship graph between subject schema. Keys are subject scheme map paths and values
-     * are subject scheme map paths, both relative to base directory. A key {@code "ROOT"} contains all subject scheme maps.
+     * are subject scheme map paths, both relative to base directory. A key {@link #ROOT_URI} contains all subject scheme maps.
      *
      * @return relationship graph
      */
@@ -391,16 +391,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         this.rootDir = inputDir;
     }
 
-    
-    /**
-     * Set processing input file absolute path.
-     * 
-     * @param inputFile absolute path to root file
-     */
-    public void setInputFile(final URI inputFile) {
-        this.rootFilePath = inputFile;
-    }
-    
     /**
      * Set current file absolute path
      * 
@@ -409,15 +399,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     public void setCurrentFile(final URI currentFile) {
         assert currentFile.isAbsolute();
         this.currentFile = currentFile;
-    }
-    
-    /**
-     * Set the relative directory of current file.
-     * 
-     * @param dir dir
-     */
-    public void setCurrentDir(final URI dir) {
-        currentDir = dir;
+        this.currentDir = currentFile.resolve(".");
     }
 
     /**
@@ -471,7 +453,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         processRoleStack.clear();
         isRootElement = true;
         rootClass = null;
-        // Don't clean resourceOnlySet por crossSet
+        // Don't clean resourceOnlySet or crossSet
     }
 
     @Override
@@ -526,7 +508,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         // Generate Scheme relationship graph
         if (SUBJECTSCHEME_SUBJECTSCHEME.matches(classValue)) {
             // Make it easy to do the BFS later.
-            final URI key = toURI("ROOT");
+            final URI key = ROOT_URI;
             final Set<URI> children = schemeRelationGraph.containsKey(key) ? schemeRelationGraph.get(key) : new LinkedHashSet<URI>();
             children.add(currentFile);
             schemeRelationGraph.put(key, children);
@@ -632,7 +614,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private void handleTopicRef(String localName, Attributes atts) {
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
         // onlyTopicInMap is on.
-        if (job.getOnlyTopicInMap() && canResolved()) {
+        if (job.getOnlyTopicInMap() && isDitaMap()) {
             // topicref(only defined in ditamap file.)
             if (MAP_TOPICREF.matches(classValue)) {
                 URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
@@ -876,9 +858,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 schemeSet.add(filename);
             }
         } else if (TOPIC_IMAGE.matches(attrClass)) {
-            if (attrFormat == null) {
-                attrFormat = "image";
-            }
+            attrFormat = ATTR_FORMAT_VALUE_IMAGE;
+        } else if (TOPIC_OBJECT.matches(attrClass)) {
+            attrFormat = ATTR_FORMAT_VALUE_HTML;
         }
         // files referred by coderef won't effect the uplevels, code has already returned.
         if (PR_D_CODEREF.matches(attrClass)) {
@@ -890,12 +872,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if ((ATTRIBUTE_NAME_HREF.equals(attrName) || ATTRIBUTE_NAME_DATA.equals(attrName))
                 && (atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
                     || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)))
-                && (canResolved() || isSupportedImageFile(filename.getPath().toLowerCase()))) {
+                && (followLinks()
+                    || (TOPIC_IMAGE.matches(attrClass) || TOPIC_OBJECT.matches(attrClass)))) {
             nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
         }
 
         if (isFormatDita(attrFormat)) {
-            if (ATTRIBUTE_NAME_HREF.equals(attrName) && canResolved()) {
+            if (ATTRIBUTE_NAME_HREF.equals(attrName) && followLinks()) {
                 hrefTargets.add(filename);
                 toOutFile(filename);
                 if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
@@ -972,7 +955,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private void parseConactionAttr(final Attributes atts) {
         final String conaction = atts.getValue(ATTRIBUTE_NAME_CONACTION);
         if (conaction != null) {
-            if (conaction.equals("mark") || conaction.equals("pushreplace")) {
+            if (conaction.equals(ATTR_CONACTION_VALUE_MARK) || conaction.equals(ATTR_CONACTION_VALUE_PUSHREPLACE)) {
                 hasconaction = true;
             }
         }
@@ -993,20 +976,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * Check if {@link #currentFile} is a map
-     * 
-     * @return {@code} true if file is map, otherwise {@code false}
+     * Should links be followed.
      */
-    private boolean isMapFile() {
-        return isDitaMap();
-    }
-
-    private boolean canResolved() {
-        return (!job.getOnlyTopicInMap()) || isMapFile();
+    private boolean followLinks() {
+        return !job.getOnlyTopicInMap() || isDitaMap();
     }
 
     private void addToOutFilesSet(final URI hrefedFile) {
-        if (canResolved()) {
+        if (followLinks()) {
             outDitaFilesSet.add(hrefedFile);
         }
     }
@@ -1033,7 +1010,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      * File reference with path and optional format.
      */
     public static class Reference {
+        /** Absolute URI reference */
         public final URI filename;
+        /** Format of the reference */
         public final String format;
 
         public Reference(final URI filename, final String format) {

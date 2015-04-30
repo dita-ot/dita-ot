@@ -26,7 +26,8 @@
   </condition>
   
   <path id="dost.class.path">
-    <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost.jar"/>
+    <pathelement location="${dita.dir}/lib/dost-configuration.jar"/>
   </path>
   
   <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
@@ -42,6 +43,10 @@
     <integrate ditadir="${dita.dir}" strict="${strict}"/>
     <!-- place property files into a JAR so Ant will find them -->
     <jar destfile="${basedir}/lib/dost-configuration.jar">
+      <fileset dir="${basedir}/resources">
+        <include name="messages.xml"/>
+        <include name="plugins.xml"/>
+      </fileset>
       <fileset dir="${basedir}/lib">
         <include name="configuration.properties"/>
         <!--include name="CatalogManager.properties"/-->

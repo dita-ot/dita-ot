@@ -204,28 +204,26 @@ public final class MergeMapParser extends XMLFilterImpl {
                         //parse the topic
                         final URI p = stripFragment(attValue).normalize();
                         util.visit(p);
-                        if (p != null) {
-                            final File f = new File(dirPath, toFile(p).getPath());
-                            if (f.exists()) {
-                                topicParser.parse(toFile(p).getPath(), dirPath);
-                                final String fileId = topicParser.getFirstTopicId();
-                                util.addId(attValue, fileId);
-                                if (attValue.getFragment() != null) {
-                                    util.addId(stripFragment(attValue), fileId);
-                                }
-                                final URI firstTopicId = toURI(SHARP + fileId);
-                                if (util.getIdValue(attValue) != null) {
-                                	attValue = toURI(SHARP + util.getIdValue(attValue));
-                                } else {
-                                	attValue = firstTopicId;
-                                }                                                     
-                                XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId.toString());
-                            } else {
-                                final URI fileName = dirPath.toURI().resolve(attValue);
-                                logger.error(MessageUtils.getInstance().getMessage("DOTX008E", fileName.toString()).toString());
+                        final File f = new File(dirPath, toFile(p).getPath());
+                        if (f.exists()) {
+                            topicParser.parse(toFile(p).getPath(), dirPath);
+                            final String fileId = topicParser.getFirstTopicId();
+                            util.addId(attValue, fileId);
+                            if (attValue.getFragment() != null) {
+                                util.addId(stripFragment(attValue), fileId);
                             }
+                            final URI firstTopicId = toURI(SHARP + fileId);
+                            if (util.getIdValue(attValue) != null) {
+                                attValue = toURI(SHARP + util.getIdValue(attValue));
+                            } else {
+                                attValue = firstTopicId;
+                            }
+                            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_FIRST_TOPIC_ID, firstTopicId.toString());
+                        } else {
+                            final URI fileName = dirPath.toURI().resolve(attValue);
+                            logger.error(MessageUtils.getInstance().getMessage("DOTX008E", fileName.toString()).toString());
                         }
-                        }
+                    }
                     }
                 XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_HREF, attValue.toString());
             }
