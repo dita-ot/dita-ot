@@ -120,11 +120,14 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 parser.setCurrentFile(file);
                 parser.setKeyMap(keymap);
                 filters.add(parser);
-                
-                XMLUtils.transform(new File(job.tempDir, file.getPath()), filters);
-                
-                // validate resource-only list
-                normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
+
+                try {
+                    XMLUtils.transform(new File(job.tempDir, file.getPath()), filters);
+                    // validate resource-only list
+                    normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
+                } catch (final DITAOTException e) {
+                    logger.error("Failed to process key references: " + e.getMessage(), e);
+                }
             }
             for (final URI file: normalProcessingRole) {
                 final FileInfo f = job.getFileInfo(file);
