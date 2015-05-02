@@ -45,8 +45,12 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
             
             final TopicFragmentFilter filter = new TopicFragmentFilter();
             filters.add(filter);
-                            
-            XMLUtils.transform(file, filters);
+
+            try {
+                XMLUtils.transform(file, filters);
+            } catch (final DITAOTException e) {
+                logger.error("Failed to process same topic fragment identifiers: " + e.getMessage(), e);
+            }
         }
         return null;
     }
