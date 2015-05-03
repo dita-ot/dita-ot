@@ -30,7 +30,7 @@
     </target>
 
     <target name="dita.map.xhtml"
-            depends="dita.map.xhtml.init, dita.map.xhtml.toc , dita.out.map.xhtml.toc" />
+            depends="dita.map.xhtml.init, dita.map.xhtml.toc" />
 
     <target name="dita.map.xhtml.init" unless="noMap">
       <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/map2${html-version}-cover.xsl">
@@ -48,11 +48,15 @@
 
   	
     <target name="dita.map.xhtml.toc"
-            unless="noMap" if="old.transform"
+            unless="noMap"
             description="Build HTML TOC file">
+        <local name="xhtml.toc.output.dir"/>
+        <condition property="xhtml.toc.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
+          <isset property="inner.transform"/>
+        </condition>      
         <xslt
               basedir="${dita.temp.dir}"
-              destdir="${output.dir}"
+              destdir="${xhtml.toc.output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${args.xhtml.toc.xsl}">
@@ -63,14 +67,13 @@
             <param name="CSSPATH" expression="${user.csspath}" if="user.csspath" />
             <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class" />
             <dita:extension id="dita.conductor.xhtml.toc.param" behavior="org.dita.dost.platform.InsertAction"/>
-            <mapper type="glob"
-                    from="*${dita.input.filename}"
-                    to="*${args.xhtml.toc}${out.ext}" />
+            <mergemapper to="${args.xhtml.toc}${out.ext}"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
     
 
+    <!-- Deprecated since 2.1 -->
     <target name="dita.out.map.xhtml.toc"
             unless="noMap" if="inner.transform"
             description="Build HTML TOC file,which will adjust the directory">
