@@ -10,7 +10,7 @@
 <xsl:template match="*[contains(@class,' task/steps ') or contains(@class,' task/steps-unordered ')]" name="topic.task.steps">
   <xsl:choose>
     <xsl:when test="not(*[2])">
-      <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+      <block><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-imports/>
@@ -21,7 +21,7 @@
 <xsl:template match="*[contains(@class,' task/step ')]/@importance |
                      *[contains(@class,' task/substep ')]/@importance">
   <xsl:if test=".='optional' or .='required'">
-    <text style="bold"><xsl:call-template name="debug"/>
+    <text style="bold"><xsl:call-template name="commonatts"/>
       <xsl:if test=".='optional'">
         <xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Optional'"/></xsl:call-template>
       </xsl:if>
@@ -46,7 +46,7 @@
         </xsl:choose>
       </xsl:variable>
       <block leadin="{$listintro}" indent="{string-length($listintro)}">
-          <xsl:call-template name="debug"/>
+          <xsl:call-template name="commonatts"/>
           <xsl:if test="parent::*[@compact='yes']">
               <xsl:attribute name="compact">yes</xsl:attribute>
           </xsl:if>
@@ -66,7 +66,7 @@
     <xsl:apply-templates select="." mode="get-list-number"/><xsl:text> </xsl:text>
   </xsl:variable>
   <block leadin="{$listintro}" indent="{string-length($listintro)}">
-      <xsl:call-template name="debug"/>
+      <xsl:call-template name="commonatts"/>
       <xsl:if test="parent::*[@compact='yes']"><xsl:attribute name="compact">yes</xsl:attribute></xsl:if>
       <xsl:apply-templates select="@importance"/>
       <xsl:apply-templates/>
@@ -75,16 +75,16 @@
 
 <xsl:template match="*[contains(@class,' task/choicetable ')]" mode="default-simpletable-headers">
   <xsl:value-of select="$newline"/>
-  <thead><xsl:call-template name="debug"/>
-    <row><xsl:call-template name="debug"/>
+  <thead><xsl:call-template name="commonatts"/>
+    <row><xsl:call-template name="commonatts"/>
       <xsl:value-of select="$newline"/>
-      <entry><xsl:call-template name="debug"/>
+      <entry><xsl:call-template name="commonatts"/>
         <xsl:call-template name="getString">
           <xsl:with-param name="stringName" select="'Option'"/>
         </xsl:call-template>
       </entry>
       <xsl:value-of select="$newline"/>
-      <entry><xsl:call-template name="debug"/>
+      <entry><xsl:call-template name="commonatts"/>
         <xsl:call-template name="getString">
           <xsl:with-param name="stringName" select="'Description'"/>
         </xsl:call-template>

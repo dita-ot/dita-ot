@@ -5,7 +5,7 @@
                 version="2.0">
   
   <xsl:template match="*[contains(@class,' markup-d/markupname ')]">
-    <text style="tt"><xsl:call-template name="debug"/>
+    <text style="tt"><xsl:call-template name="commonatts"/>
       <xsl:apply-templates/>
     </text>
   </xsl:template>

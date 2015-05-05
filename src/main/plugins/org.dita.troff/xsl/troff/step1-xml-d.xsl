@@ -5,7 +5,7 @@
                 version="2.0">
   
   <xsl:template match="*[contains(@class,' xml-d/numcharrer ')]">
-    <text style="tt"><xsl:call-template name="debug"/>
+    <text style="tt"><xsl:call-template name="commonatts"/>
       <xsl:text>&amp;#</xsl:text>  
       <xsl:apply-templates/>
       <xsl:text>;</xsl:text>
@@ -13,7 +13,7 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' xml-d/parameterentity ')]">
-    <text style="tt"><xsl:call-template name="debug"/>
+    <text style="tt"><xsl:call-template name="commonatts"/>
       <xsl:text>%</xsl:text>  
       <xsl:apply-templates/>
       <xsl:text>;</xsl:text>
@@ -21,7 +21,7 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' xml-d/textentity ')]">
-    <text style="tt"><xsl:call-template name="debug"/>
+    <text style="tt"><xsl:call-template name="commonatts"/>
       <xsl:text>&amp;</xsl:text>  
       <xsl:apply-templates/>
       <xsl:text>;</xsl:text>
@@ -29,7 +29,7 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' xml-d/xmlelement ')]">
-    <text style="tt"><xsl:call-template name="debug"/>
+    <text style="tt"><xsl:call-template name="commonatts"/>
       <xsl:text>&lt;</xsl:text>  
       <xsl:apply-templates/>
       <xsl:text>&gt;</xsl:text>
@@ -37,20 +37,20 @@
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' xml-d/xmlatt ')]">
-    <text style="tt"><xsl:call-template name="debug"/>
+    <text style="tt"><xsl:call-template name="commonatts"/>
       <xsl:text>@</xsl:text>  
       <xsl:apply-templates/>
     </text>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' xml-d/xmlnsname ')]">
-    <text style="tt"><xsl:call-template name="debug"/>
+    <text style="tt"><xsl:call-template name="commonatts"/>
       <xsl:apply-templates/>
     </text>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' xml-d/xmlpi ')]">
-    <text style="tt"><xsl:call-template name="debug"/>
+    <text style="tt"><xsl:call-template name="commonatts"/>
       <xsl:apply-templates/>
     </text>
   </xsl:template>
