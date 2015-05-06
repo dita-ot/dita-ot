@@ -10,7 +10,7 @@
                 >
 
 <!--
-   ALL ELEMENTS CAN TAKE @xtrf and @xtrc
+   ALL ELEMENTS CAN TAKE @xtrf, @xtrc, @xml:lang
    
    Attributes on dita: 
    
@@ -72,7 +72,7 @@
 <!-- Copy debug attributes to the elements we are creating -->
 <xsl:template name="debug"><xsl:apply-templates select="@xtrf|@xtrc"/></xsl:template>
 <xsl:template match="@xtrf|@xtrc">
-  <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+  <xsl:copy/>
 </xsl:template>
 
 <!-- Copy attributes that can appear on any element in the intermediate syntax -->
@@ -81,7 +81,7 @@
   <xsl:apply-templates select="@xml:lang"/>
 </xsl:template>
 <xsl:template match="@xml:lang">
-  <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+  <xsl:copy/>
 </xsl:template>
 
 <!-- Root rule. Intermediate format will always have a <dita> wrapper. -->
