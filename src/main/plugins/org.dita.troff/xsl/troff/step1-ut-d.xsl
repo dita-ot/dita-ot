@@ -9,7 +9,7 @@
 
 <xsl:template match="*[contains(@class, ' ut-d/imagemap ')]">
   <!-- Only use the image -->
-  <block>
+  <block><xsl:call-template name="commonatts"/>
     <xsl:choose>
       <xsl:when test="*[contains(@class, ' ut-d/imagemap ')]/*[contains(@class,' topic/image ')]/*[contains(@class,' topic/alt ')]">
         <xsl:apply-templates select="*[contains(@class, ' ut-d/imagemap ')]/*[contains(@class,' topic/image ')]/*[contains(@class,' topic/alt ')]"/>

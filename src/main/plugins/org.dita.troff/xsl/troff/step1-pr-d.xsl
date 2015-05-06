@@ -13,16 +13,16 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/codeph ')]">
-  <text style="tt"><xsl:call-template name="debug"/><xsl:apply-templates/></text>
+  <text style="tt"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/parmname ')]">
   <xsl:choose>
     <xsl:when test="@importance='default'">
-      <text style="bold"><text style="underlined"><xsl:call-template name="debug"/><xsl:apply-templates/></text></text>
+      <text style="bold"><text style="underlined"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text></text>
     </xsl:when>
     <xsl:otherwise>
-      <text style="bold"><xsl:call-template name="debug"/><xsl:apply-templates/></text>
+      <text style="bold"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -30,10 +30,10 @@
 <xsl:template match="*[contains(@class,' pr-d/var ')]">
   <xsl:choose>
     <xsl:when test="@importance='default'">
-      <text style="italic"><text style="underlined"><xsl:call-template name="debug"/><xsl:apply-templates/></text></text>
+      <text style="italic"><text style="underlined"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text></text>
     </xsl:when>
     <xsl:otherwise>
-      <text style="italic"><xsl:call-template name="debug"/><xsl:apply-templates/></text>
+      <text style="italic"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

@@ -8,19 +8,19 @@
 <xsl:output method="xml"/>
 
 <xsl:template match="*[contains(@class,' sw-d/msgph ')]">
-  <text style="tt"><xsl:apply-templates/></text>
+  <text style="tt"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/systemoutput ')]">
-  <text style="tt"><xsl:apply-templates/></text>
+  <text style="tt"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/userinput ')]">
-  <text style="tt"><xsl:apply-templates/></text>
+  <text style="tt"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/varname ')]">
-  <text style="italics"><xsl:apply-templates/></text>
+  <text style="italics"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
 </xsl:template>
 
 </xsl:stylesheet>

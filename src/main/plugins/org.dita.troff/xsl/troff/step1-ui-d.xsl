@@ -9,19 +9,20 @@
 
 <xsl:template match="*[contains(@class, ' ui-d/screen ')]">
   <block xml:space="preserve">
+    <xsl:call-template name="commonatts"/>
     <xsl:apply-templates/>
   </block>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' ui-d/shortcut ')]">
-  <text style="underline"><xsl:apply-templates/></text>
+  <text style="underline"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' ui-d/uicontrol ')]">
   <xsl:if test="parent::*[contains(@class,' ui-d/menucascade ')] and preceding-sibling::*[contains(@class, ' ui-d/uicontrol ')]">
     <xsl:text> -> </xsl:text>
   </xsl:if>
-  <text style="bold"><xsl:apply-templates/></text>
+  <text style="bold"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
 </xsl:template>
 
 <!--<xsl:template match="*[contains(@class, ' ui-d/uicontrol ')]" mode="text-only">

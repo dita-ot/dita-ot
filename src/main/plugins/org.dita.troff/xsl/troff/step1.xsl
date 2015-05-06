@@ -10,7 +10,7 @@
                 >
 
 <!--
-   ALL ELEMENTS CAN TAKE @xtrf and @xtrc
+   ALL ELEMENTS CAN TAKE @xtrf, @xtrc, @xml:lang
    
    Attributes on dita: 
    
@@ -72,7 +72,16 @@
 <!-- Copy debug attributes to the elements we are creating -->
 <xsl:template name="debug"><xsl:apply-templates select="@xtrf|@xtrc"/></xsl:template>
 <xsl:template match="@xtrf|@xtrc">
-  <xsl:attribute name="{name()}"><xsl:value-of select="."/></xsl:attribute>
+  <xsl:copy/>
+</xsl:template>
+
+<!-- Copy attributes that can appear on any element in the intermediate syntax -->
+<xsl:template name="commonatts">
+  <xsl:call-template name="debug"/>
+  <xsl:apply-templates select="@xml:lang"/>
+</xsl:template>
+<xsl:template match="@xml:lang">
+  <xsl:copy/>
 </xsl:template>
 
 <!-- Root rule. Intermediate format will always have a <dita> wrapper. -->
@@ -96,14 +105,14 @@
 <xsl:template match="*[contains(@class,' topic/topic ')]">
     <xsl:choose>
         <xsl:when test="parent::*[contains(@class,' topic/topic ')]">
-          <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+          <block><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
         </xsl:when>
         <xsl:when test="parent::dita and preceding-sibling::*">
-            <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+            <block><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
         </xsl:when>
         <xsl:otherwise>
             <!-- First topic in the file. Call debug: attributes go on <dita>. -->
-            <xsl:call-template name="debug"/>
+            <xsl:call-template name="commonatts"/>
             <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
@@ -111,8 +120,8 @@
 
 <!-- Place the topic's title in a block for centering -->
 <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
-    <block position="center"><xsl:call-template name="debug"/>
-      <text style="bold"><xsl:call-template name="debug"/><xsl:apply-templates/></text>
+    <block position="center"><xsl:call-template name="commonatts"/>
+      <text style="bold"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
     </block>
     <xsl:apply-templates select="." mode="check-for-prereq"/>
 </xsl:template>
@@ -123,7 +132,7 @@
                      *[contains(@class,' topic/shortdesc ')] |
                      *[contains(@class,' topic/fig ')]">
     <!-- save frame on figure? -->
-  <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+  <block><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
   <xsl:if test="contains(@class,' topic/shortdesc ')">
     <xsl:apply-templates select="." mode="check-for-prereq"/>
   </xsl:if>
@@ -134,7 +143,7 @@
   <xsl:variable name="fignum">
     <xsl:value-of select="count(preceding::*[contains(@class,' topic/fig ')])+1"/>
   </xsl:variable>
-  <block><xsl:call-template name="debug"/>
+  <block><xsl:call-template name="commonatts"/>
     <text style="bold">
       <xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Figure'"/></xsl:call-template>
       <xsl:text> </xsl:text><xsl:value-of select="$fignum"/>. <xsl:text/>
@@ -143,7 +152,7 @@
   </block>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
-  <block><xsl:call-template name="debug"/>
+  <block><xsl:call-template name="commonatts"/>
     <text style="bold"><xsl:apply-templates/></text>
   </block>
 </xsl:template>
@@ -153,7 +162,7 @@
      This is used to distinguish sections, usually with titles, which can get special 
      formatting as such in output formats like troff. -->
 <xsl:template match="*[contains(@class,' topic/section ')] | *[contains(@class,' topic/example ')]">
-  <section><xsl:call-template name="debug"/>
+  <section><xsl:call-template name="commonatts"/>
     <!-- Ensure the title comes first -->
     <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
     <xsl:apply-templates select="text()|*[not(contains(@class,' topic/title '))]"/>
@@ -161,20 +170,20 @@
 </xsl:template>
 <!-- Match section or example titles -->
 <xsl:template match="*[contains(@class,' topic/section ') or contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]">
-  <sectiontitle><xsl:call-template name="debug"/><xsl:apply-templates/></sectiontitle>
+  <sectiontitle><xsl:call-template name="commonatts"/><xsl:apply-templates/></sectiontitle>
 </xsl:template>
 
 <!-- If needed, these can be broken apart to indicate that pre uses monospace. Could do this
      by adding @style to the block. -->
 <xsl:template match="*[contains(@class,' topic/pre ')] |
                      *[contains(@class,' topic/lines ')]">
-    <block xml:space="preserve"><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+    <block xml:space="preserve"><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
 </xsl:template>
 
 <!-- Indent lq 6 spaces, and treat as any other block. -->
 <xsl:template match="*[contains(@class,' topic/lq ')]">
     <block indent="6">
-      <xsl:call-template name="debug"/>
+      <xsl:call-template name="commonatts"/>
       <xsl:apply-templates/>
       <xsl:if test="@reftitle"><text style="italics"><xsl:text> </xsl:text><xsl:value-of select="@reftitle"/></text></xsl:if>
       <xsl:if test="@href"><text> [<xsl:value-of select="@href"/>]</text></xsl:if>
@@ -227,8 +236,8 @@
         <xsl:call-template name="getString"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template>
         <xsl:text> </xsl:text>
     </xsl:variable>
-    <block><xsl:call-template name="debug"/>
-        <text style="bold"><xsl:call-template name="debug"/><xsl:value-of select="$noteText"/></text>
+    <block><xsl:call-template name="commonatts"/>
+        <text style="bold"><xsl:call-template name="commonatts"/><xsl:value-of select="$noteText"/></text>
         <xsl:apply-templates/>
     </block>                                 
 </xsl:template>
@@ -236,19 +245,19 @@
 <!-- All lists are block elements. Store @compact information on the children. -->
 <xsl:template match="*[contains(@class,' topic/ul ')] | *[contains(@class,' topic/ol ')] | *[contains(@class,' topic/sl ')]">
     <block>
-        <xsl:call-template name="debug"/><xsl:apply-templates/>
+        <xsl:call-template name="commonatts"/><xsl:apply-templates/>
     </block>
 </xsl:template>
 
 <!-- Simple list items do not get any lead-in text. Just indent 3 spaces for each one. -->
 <xsl:template match="*[contains(@class,' topic/sli ')]">
-    <block compact="yes" indent="3"><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+    <block compact="yes" indent="3"><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
 </xsl:template>
 
 <!-- Ul elements always have * for lead-in text. Add 3 to indent, and store @compact. -->
 <xsl:template match="*[contains(@class,' topic/ul ')]/*[contains(@class,' topic/li ')]">
     <block leadin="*  " indent="3">
-        <xsl:call-template name="debug"/>
+        <xsl:call-template name="commonatts"/>
         <xsl:if test="parent::*[@compact='yes']">
             <xsl:attribute name="compact">yes</xsl:attribute>
         </xsl:if>
@@ -284,7 +293,7 @@
         <xsl:apply-templates select="." mode="get-list-number"/><xsl:text> </xsl:text>
     </xsl:variable>
     <block leadin="{$listintro}" indent="{string-length($listintro)}">
-        <xsl:call-template name="debug"/>
+        <xsl:call-template name="commonatts"/>
         <xsl:if test="parent::*[@compact='yes']">
             <xsl:attribute name="compact">yes</xsl:attribute>
         </xsl:if>
@@ -294,7 +303,7 @@
 
 <!-- Drop dl into a block. Descendants will pick up the proper indenting/formatting. -->
 <xsl:template match="*[contains(@class,' topic/dl ')]">
-    <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+    <block><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
 </xsl:template>
 
 <!-- Dlentry and dlhead do not need to create additional blocks; children will get blocks. -->
@@ -304,14 +313,14 @@
 
 <!-- Terms and term headings should go into block elements. Bold the term contents -->
 <xsl:template match="*[contains(@class,' topic/dt ')]|*[contains(@class,' topic/dthd ')]">
-    <block><xsl:call-template name="debug"/>
+    <block><xsl:call-template name="commonatts"/>
       <!-- When there are 2 terms, do not create an extra line between them. If this is the first term,
            keep the extra space between it and the previous dlentry. -->
       <xsl:if test="preceding-sibling::*[1][contains(@class,' topic/dt ')] or
                     ../../@compact='yes'">
         <xsl:attribute name="compact">yes</xsl:attribute>
       </xsl:if>
-      <text style="bold"><xsl:call-template name="debug"/>
+      <text style="bold"><xsl:call-template name="commonatts"/>
         <xsl:apply-templates/>
       </text>
     </block>
@@ -320,13 +329,13 @@
 <!-- Indent the definition 9 spaces. The compact=yes value ensures it will appear on the
      line after the term. May want to bold ddhd? -->
 <xsl:template match="*[contains(@class,' topic/dd ')]|*[contains(@class,' topic/ddhd ')]">
-    <block indent="9" compact="yes"><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+    <block indent="9" compact="yes"><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
 </xsl:template>
 
 <!-- Table formatting based off of DL formatting; first column aligns to start of 'page',
      second and following columns indent -->
 <xsl:template match="*[contains(@class,' topic/simpletable ') or contains(@class,' topic/table ')]">
-  <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+  <block><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
 </xsl:template>
 
 <!-- strow and sthead do not need to create additional blocks; children will get blocks. -->
@@ -343,10 +352,10 @@
   <xsl:choose>
     <xsl:when test="preceding-sibling::*[contains(@class,' topic/stentry ')]">
       <block indent="9" compact="no">
-        <xsl:call-template name="debug"/>
+        <xsl:call-template name="commonatts"/>
         <xsl:choose>
           <xsl:when test="parent::*[contains(@class,' topic/sthead ')]">
-            <text style="bold"><xsl:call-template name="debug"/><xsl:apply-templates/></text>
+            <text style="bold"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates/>
@@ -355,8 +364,8 @@
       </block>
     </xsl:when>
     <xsl:otherwise>
-      <block indent="3"><xsl:call-template name="debug"/>
-        <text style="bold"><xsl:call-template name="debug"/>
+      <block indent="3"><xsl:call-template name="commonatts"/>
+        <text style="bold"><xsl:call-template name="commonatts"/>
           <xsl:apply-templates/>
         </text>
       </block>
@@ -369,10 +378,10 @@
   <xsl:choose>
     <xsl:when test="preceding-sibling::*[contains(@class,' topic/entry ')]">
       <block indent="9" compact="no">
-        <xsl:call-template name="debug"/>
+        <xsl:call-template name="commonatts"/>
         <xsl:choose>
           <xsl:when test="parent::*/parent::*[contains(@class,' topic/thead ')]">
-            <text style="bold"><xsl:call-template name="debug"/><xsl:apply-templates/></text>
+            <text style="bold"><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates/>
@@ -381,8 +390,8 @@
       </block>
     </xsl:when>
     <xsl:otherwise>
-      <block indent="3"><xsl:call-template name="debug"/>
-        <text style="bold"><xsl:call-template name="debug"/>
+      <block indent="3"><xsl:call-template name="commonatts"/>
+        <text style="bold"><xsl:call-template name="commonatts"/>
           <xsl:apply-templates/>
         </text>
       </block>
@@ -402,12 +411,12 @@
     <xsl:choose>
         <xsl:when test="@placement='break'">
             <block>
-              <xsl:call-template name="debug"/>
-              <text><xsl:call-template name="debug"/><xsl:call-template name="output-alt-text"/></text>
+              <xsl:call-template name="commonatts"/>
+              <text><xsl:call-template name="commonatts"/><xsl:call-template name="output-alt-text"/></text>
             </block>
         </xsl:when>
         <xsl:otherwise>
-            <text><xsl:call-template name="debug"/><xsl:call-template name="output-alt-text"/></text>
+            <text><xsl:call-template name="commonatts"/><xsl:call-template name="output-alt-text"/></text>
         </xsl:otherwise>
     </xsl:choose>
     <!-- standalone image in text, need to add newlines after -->
@@ -417,14 +426,14 @@
 <xsl:template match="*[contains(@class,' topic/ph ')] |
                      *[contains(@class,' topic/keyword ')] |
                      *[contains(@class,' topic/term ')]">
-    <text><xsl:call-template name="debug"/><xsl:apply-templates/></text>
+    <text><xsl:call-template name="commonatts"/><xsl:apply-templates/></text>
 </xsl:template>
 
 <xsl:template name="output-quote">
   <xsl:text/>"<xsl:apply-templates/>"<xsl:text/>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/q ')]">
-    <text><xsl:call-template name="debug"/><xsl:call-template name="output-quote"/></text>
+    <text><xsl:call-template name="commonatts"/><xsl:call-template name="output-quote"/></text>
 </xsl:template>
 
 <xsl:template name="default-state-contents">
@@ -436,10 +445,10 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/state ')]" name="topic.state">
-  <text><xsl:call-template name="debug"/><xsl:call-template name="default-state-contents"/></text>
+  <text><xsl:call-template name="commonatts"/><xsl:call-template name="default-state-contents"/></text>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/boolean ')]" name="topic.boolean">
-  <text><xsl:call-template name="debug"/><xsl:call-template name="default-boolean-contents"/></text>
+  <text><xsl:call-template name="commonatts"/><xsl:call-template name="default-boolean-contents"/></text>
 </xsl:template>
 
 <!-- TRADEMARK PROCESSING TAKEN FROM XHTML OUTPUT, MODIFIED TO INCLUDE <text>  -->
@@ -535,14 +544,14 @@
 
 <!-- How to put object into text? Basic processing will just use <desc> -->
 <xsl:template match="*[contains(@class,' topic/object ')]">
-  <block><xsl:call-template name="debug"/><xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/></block>
+  <block><xsl:call-template name="commonatts"/><xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/></block>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/prolog ')] | *[contains(@class,' topic/titlealts ')]"/>
 
 <xsl:template match="*[contains(@class,' topic/body ')]">
     <block>
-      <xsl:call-template name="debug"/>
+      <xsl:call-template name="commonatts"/>
       <xsl:apply-templates select="." mode="check-for-prereq"/>
       <xsl:apply-templates/>
     </block>
@@ -553,16 +562,16 @@
 <xsl:template match="*[contains(@class,' topic/required-cleanup ')]">
   <xsl:if test="$DRAFT='yes'">
     <block>
-      <xsl:call-template name="debug"/>
-      <block><xsl:call-template name="debug"/>
-        <text><xsl:call-template name="debug"/>
+      <xsl:call-template name="commonatts"/>
+      <block><xsl:call-template name="commonatts"/>
+        <text><xsl:call-template name="commonatts"/>
           <xsl:text>********* </xsl:text>
           <xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Required cleanup'"/></xsl:call-template>
           <xsl:text> *********</xsl:text>
         </text>
       </block>
-      <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
-      <block><xsl:call-template name="debug"/><text>******************************</text></block>
+      <block><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
+      <block><xsl:call-template name="commonatts"/><text>******************************</text></block>
     </block>
   </xsl:if>
 </xsl:template>
@@ -572,16 +581,16 @@
 <xsl:template match="*[contains(@class,' topic/draft-comment ')]">
   <xsl:if test="$DRAFT='yes'">
     <block>
-      <xsl:call-template name="debug"/>
-      <block><xsl:call-template name="debug"/>
-        <text><xsl:call-template name="debug"/>
+      <xsl:call-template name="commonatts"/>
+      <block><xsl:call-template name="commonatts"/>
+        <text><xsl:call-template name="commonatts"/>
           <xsl:text>********* </xsl:text>
           <xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Draft comment'"/></xsl:call-template>
           <xsl:text> *********</xsl:text>
         </text>
       </block>
-      <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
-      <block><xsl:call-template name="debug"/><text>******************************</text></block>
+      <block><xsl:call-template name="commonatts"/><xsl:apply-templates/></block>
+      <block><xsl:call-template name="commonatts"/><text>******************************</text></block>
     </block>
   </xsl:if>
 </xsl:template>
@@ -717,7 +726,7 @@
   </xsl:variable>
 
   <block>
-    <xsl:call-template name="debug"/>
+    <xsl:call-template name="commonatts"/>
     <xsl:apply-templates select="$ul-children" mode="reformat-links"/>
     <xsl:apply-templates select="$ol-children" mode="reformat-links"/>
     <xsl:apply-templates select="$next-previous-parent" mode="reformat-links"/>
