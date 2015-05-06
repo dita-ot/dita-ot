@@ -51,24 +51,6 @@
 <xsl:variable name="newline"><xsl:text>
 </xsl:text></xsl:variable>
 
-<!-- The next 4 functions must be defined for rel-links -->
-<xsl:template name="start-revflag"/>
-<xsl:template name="end-revflag"/>
-<xsl:template name="start-flagit"/>
-<xsl:template name="end-flagit"/>
-<xsl:template name="commonattributes">
-  <xsl:param name="default-output-class"/>
-</xsl:template>
-<xsl:template name="gen-style"/>
-<xsl:template name="getrules"/>
-<xsl:template name="conflict-check"/>
-<xsl:template name="end-flags-and-rev">
-  <xsl:param name="flagrules"/>
-</xsl:template>
-<xsl:template name="start-flags-and-rev">
-  <xsl:param name="flagrules"/>
-</xsl:template>
-
 <!-- Copy debug attributes to the elements we are creating -->
 <xsl:template name="debug"><xsl:apply-templates select="@xtrf|@xtrc"/></xsl:template>
 <xsl:template match="@xtrf|@xtrc">
