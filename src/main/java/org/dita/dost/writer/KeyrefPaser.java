@@ -403,7 +403,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             // it exists.
                             if (TOPIC_IMAGE.matches(currentElement.type)) {
                                 valid = true;
-                                target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(inputFile.getPath()), job.tempDir.toURI().resolve(target)), elementId);
+                                target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId);
                                 XMLUtils.addOrSetAttribute(resAtts, currentElement.refAttr, target_output.toString());
                             } else if (isLocalDita(elem)) {
                                 final File topicFile = toFile(job.tempDir.toURI().resolve(stripFragment(target)));
