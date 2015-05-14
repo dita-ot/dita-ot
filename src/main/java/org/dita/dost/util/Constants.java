@@ -8,6 +8,8 @@
  */
 package org.dita.dost.util;
 
+import static javax.xml.XMLConstants.*;
+
 /**
  * This class contains all the constants used in DITA-OT.
  * 
@@ -874,7 +876,7 @@ public final class Constants {
     /**ATTRIBUTE_PREFIX_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_PREFIX_DITAARCHVERSION = "ditaarch";
     /**ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION.*/
-    public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = "xmlns:ditaarch";
+    public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = XMLNS_ATTRIBUTE + ":ditaarch";
     public static final String DITA_NAMESPACE = "http://dita.oasis-open.org/architecture/2005/";
 
     /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE.*/

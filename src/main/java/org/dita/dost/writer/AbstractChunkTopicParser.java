@@ -8,6 +8,9 @@
  */
 package org.dita.dost.writer;
 
+import static org.dita.dost.writer.ImageMetadataFilter.*;
+import static javax.xml.XMLConstants.*;
+
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.util.DitaClass;
@@ -397,8 +400,11 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
             }
             resAtts.setValue(i, attrValue);
         }
-        if (TOPIC_TOPIC.matches(classValue) && resAtts.getValue("xmlns:ditaarch") == null) {
+        if (TOPIC_TOPIC.matches(classValue) && resAtts.getValue(ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION) == null) {
             addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, DITA_NAMESPACE);
+        }
+        if (TOPIC_TOPIC.matches(classValue) && resAtts.getValue(XMLNS_ATTRIBUTE + ":" + DITA_OT_PREFIX) == null) {
+            addOrSetAttribute(resAtts, XMLNS_ATTRIBUTE + ":" + DITA_OT_PREFIX, DITA_OT_NS);
         }
         return resAtts;
     }

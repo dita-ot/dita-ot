@@ -56,9 +56,9 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     @Override
-    public void write(final File filename) throws DITAOTException {
+    public void write(final File fileDir) throws DITAOTException {
         // pass map's directory path
-        filePath = filename;
+        filePath = fileDir;
         try {
             output = new StringWriter();
             processChunk(rootTopicref, null);
@@ -225,6 +225,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                     currentParsingFileTopicIDChangeTable = new HashMap<String, String>();
                     // TODO recursive point
+                    logger.info("Processing " + currentParsingFile.toURI());
                     reader.parse(currentParsingFile.toURI().toString());
                     if (currentParsingFileTopicIDChangeTable.size() > 0) {
                         final URI href = toURI(topicref.getAttribute(ATTRIBUTE_NAME_HREF));
