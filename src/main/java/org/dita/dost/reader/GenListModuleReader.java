@@ -440,9 +440,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
             if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
-                resourceOnlySet.add(currentDir.resolve(href));
+                resourceOnlySet.add(stripFragment(currentDir.resolve(href)));
             } else {
-                normalProcessingRoleSet.add(currentDir.resolve(href));
+                normalProcessingRoleSet.add(stripFragment(currentDir.resolve(href)));
             }
         }
 
