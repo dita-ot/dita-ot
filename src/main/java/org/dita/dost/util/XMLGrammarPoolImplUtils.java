@@ -40,6 +40,18 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
     public Grammar[] retrieveInitialGrammarSet(final String grammarType) {
         return INITIAL_GRAMMAR_SET;
     }
+    
+    /**
+     * @see org.apache.xerces.util.XMLGrammarPoolImpl#putGrammar(org.apache.xerces.xni.grammars.Grammar)
+     */
+    @Override
+    public void putGrammar(Grammar grammar) {
+     //Avoid caching any type of XSD grammar
+     if(grammar instanceof org.apache.xerces.impl.xs.SchemaGrammar){
+      return;
+     }
+     super.putGrammar(grammar);
+    }
 
     /**
      * Returns the hash code value for the given grammar description.
