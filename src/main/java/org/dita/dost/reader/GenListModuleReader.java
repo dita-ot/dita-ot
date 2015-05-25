@@ -69,7 +69,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     /** Set of subject schema files */
     private final Set<URI> schemeSet = new HashSet<URI>(32);
     /** Set of coderef or object target files */
-    private final Set<URI> subsidiarySet = new HashSet<URI>(16);
+    private final Set<URI> coderefTargetSet = new HashSet<URI>(16);
     /** Set of sources of those copy-to that were ignored */
     private final Set<URI> ignoredCopytoSourceSet = new HashSet<URI>(16);
     /** Map of copy-to target to souce */
@@ -265,13 +265,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         for (final URI f : ignoredCopytoSourceSet) {
             nonCopytoSet.add(new Reference(stripFragment(f)));
         }
-        for (final URI filename : subsidiarySet) {
+        for (final URI filename : coderefTargetSet) {
             // only activated on /generateout:3 & is out file.
             if (isOutFile(filename) && job.getGeneratecopyouter() == Job.Generate.OLDSOLUTION) {
                 nonCopytoSet.add(new Reference(stripFragment(filename)));
             }
         }
-        // nonCopytoSet.addAll(subsidiarySet);
+        // nonCopytoSet.addAll(coderefTargetSet);
         return nonCopytoSet;
     }
 
@@ -294,12 +294,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * Get subsidiary targets.
+     * Get coderef targets.
      * 
-     * @return Returns the subsidiarySet.
+     * @return Returns coderef targets.
      */
-    public Set<URI> getSubsidiaryTargets() {
-        return subsidiarySet;
+    public Set<URI> getCoderefTargets() {
+        return coderefTargetSet;
     }
 
     /**
@@ -397,7 +397,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         topicGroupLevel = 0;
         isValidInput = false;
         hasconaction = false;
-        subsidiarySet.clear();
+        coderefTargetSet.clear();
         nonConrefCopytoTargets.clear();
         hrefTargets.clear();
         hrefTopicSet.clear();
@@ -632,7 +632,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
         // files referred by coderef won't effect the uplevels, code has already returned.
         if (PR_D_CODEREF.matches(attrClass)) {
-            subsidiarySet.add(filename);
+            coderefTargetSet.add(filename);
             return;
         }
 
