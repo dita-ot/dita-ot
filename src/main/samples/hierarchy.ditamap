@@ -6,7 +6,7 @@
      applicable licenses.-->
 <!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
  *-->
-<map title="Eclipse content aggregated by a map">
+<map title="Working in the garage">
 <topicref href="tasks/garagetaskoverview.xml" type="concept">
   <topicref href="tasks/changingtheoil.xml" type="task"/>
   <topicref href="tasks/organizing.xml" type="task"/>
