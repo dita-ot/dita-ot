@@ -250,7 +250,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
 
     <xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
-    <xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
+    <xsl:variable name="element" select="key('key_anchor',$destination, $root)[1]"/>
 
     <xsl:variable name="referenceTitle" as="node()*">
       <xsl:apply-templates select="." mode="insertReferenceTitle">
