@@ -560,7 +560,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
  <xsl:template name="gen-prop" as="element()*">
   <xsl:param name="flag-att" as="xs:string"/>     <!-- attribute name -->
-  <xsl:param name="flag-att-val" as="xs:string"/> <!-- content of attribute -->
+  <xsl:param name="flag-att-val" as="xs:string?"/> <!-- content of attribute -->
   
   <!-- Determine the first flag value, which is the value before the first space -->
   <xsl:variable name="firstflag" as="xs:string">
