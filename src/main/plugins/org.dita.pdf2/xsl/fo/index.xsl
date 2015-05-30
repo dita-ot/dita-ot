@@ -326,17 +326,24 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:template match="opentopic-index:index.entry" mode="index-postprocess">
     <xsl:variable name="value" select="@value"/>
+    
+    <xsl:variable name="markerName" as="xs:string"
+       select="concat('index-continued-', count(ancestor-or-self::opentopic-index:index.entry))"
+    />
+
     <xsl:choose>
       <xsl:when test="opentopic-index:index.entry">
         <fo:table>
           <xsl:if test="$index.continued-enabled">
             <fo:table-header>
-              <fo:retrieve-table-marker retrieve-class-name="index-continued" retrieve-position-within-table="last-starting"/>
+              <fo:retrieve-table-marker retrieve-class-name="{$markerName}"
+                  retrieve-position-within-table="last-starting"
+              />
             </fo:table-header>
           </xsl:if>
           <fo:table-body>
             <xsl:if test="$index.continued-enabled">
-              <fo:marker marker-class-name="index-continued"/>
+              <fo:marker marker-class-name="{$markerName}"/>
             </xsl:if>
             <fo:table-row>
               <fo:table-cell>
@@ -382,7 +389,7 @@ See the accompanying license.txt file for applicable licenses.
           </fo:table-body>
           <fo:table-body>
             <xsl:if test="$index.continued-enabled">
-              <fo:marker marker-class-name="index-continued">
+              <fo:marker marker-class-name="{$markerName}">
                 <fo:table-row>
                   <fo:table-cell>
                     <fo:block xsl:use-attribute-sets="index-indents" keep-together="always">
