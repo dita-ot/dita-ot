@@ -9,6 +9,8 @@
 
   <xsl:import href="plugin:org.dita.xhtml:xsl/map2htmtoc/map2htmlImpl.xsl"/>
 
+  <dita:extension id="dita.xsl.html.cover" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+
   <xsl:template match="*[contains(@class, ' map/map ')]">
     <xsl:apply-templates select="." mode="root_element"/>
   </xsl:template>
@@ -84,7 +86,5 @@
       </xsl:choose>
     </title>
   </xsl:template>
-
-  <dita:extension id="dita.xsl.html.cover" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
 </xsl:stylesheet>
