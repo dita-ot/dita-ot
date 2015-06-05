@@ -3844,7 +3844,8 @@
   </xsl:template>
 
   <!-- Add for "New <data> element (#9)" in DITA 1.1 -->
-  <xsl:template match="*[contains(@class, ' topic/data ')]" />
+  <xsl:template match="*[contains(@class, ' topic/data ')] |
+                       *[contains(@class, ' topic/data-about ')]" />
 
   <!-- Add for "Support foreign content vocabularies such as 
     MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
