@@ -125,39 +125,6 @@
         <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
       </module>
     </pipeline>
-    <!-- generate list files -->
-    <job-helper file="outditafiles.list" property="outditafileslist"/>
-    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
-    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
-    <job-helper file="fullditamap.list" property="fullditamaplist"/>
-    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
-    <job-helper file="conref.list" property="conreflist"/>
-    <job-helper file="image.list" property="imagelist"/>
-    <job-helper file="flagimage.list" property="flagimagelist"/>
-    <job-helper file="html.list" property="htmllist"/>
-    <job-helper file="hreftargets.list" property="hreftargetslist"/>
-    <job-helper file="canditopics.list" property="canditopicslist"/>
-    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
-    <job-helper file="conreftargets.list" property="conreftargetslist"/>
-    <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-helper file="subtargets.list" property="subtargetslist"/>
-    <job-helper file="resourceonly.list" property="resourceonlylist"/>
-    <property name="outditafilesfile" value="outditafiles.list"/>
-    <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
-    <property name="fullditatopicfile" value="fullditatopic.list"/>
-    <property name="fullditamapfile" value="fullditamap.list"/>
-    <property name="hrefditatopicfile" value="hrefditatopic.list"/>
-    <property name="conreffile" value="conref.list"/>
-    <property name="imagefile" value="image.list"/>
-    <property name="flagimagefile" value="flagimage.list"/>
-    <property name="htmlfile" value="html.list"/>
-    <property name="hreftargetsfile" value="hreftargets.list"/>
-    <property name="canditopicsfile" value="canditopics.list"/>
-    <property name="subjectschemefile" value="subjectscheme.list"/>
-    <property name="conreftargetsfile" value="conreftargets.list"/>
-    <property name="copytosourcefile" value="copytosource.list"/>
-    <property name="subtargetsfile" value="subtargets.list"/>
-    <property name="resourceonlyfile" value="resourceonly.list"/>
   </target>
 
   <!-- debug-filter
@@ -184,6 +151,24 @@
         <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
       </module>
     </pipeline>
+    <!-- generate list files -->
+    <job-helper file="outditafiles.list" property="outditafileslist"/>
+    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
+    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="fullditamap.list" property="fullditamaplist"/>
+    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
+    <job-helper file="conref.list" property="conreflist"/>
+    <!-- Deprecated since 2.1 -->
+    <job-helper file="image.list" property="imagelist"/>
+    <job-helper file="flagimage.list" property="flagimagelist"/>
+    <!-- Deprecated since 2.1 -->
+    <job-helper file="html.list" property="htmllist"/>
+    <job-helper file="canditopics.list" property="canditopicslist"/>
+    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
+    <job-helper file="conreftargets.list" property="conreftargetslist"/>
+    <job-helper file="copytosource.list" property="copytosourcelist"/>
+    <job-helper file="subtargets.list" property="subtargetslist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>    
     <job-helper file="user.input.file.list" property="user.input.file"/>
     <job-helper file="hreftargets.list" property="hreftargetslist"/>
     <job-helper file="conref.list" property="conreflist"/>
@@ -194,6 +179,24 @@
     <job-helper file="canditopics.list" property="canditopicslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-property dir="${dita.temp.dir}"/>
+    <property name="outditafilesfile" value="outditafiles.list"/>
+    <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
+    <property name="fullditatopicfile" value="fullditatopic.list"/>
+    <property name="fullditamapfile" value="fullditamap.list"/>
+    <property name="hrefditatopicfile" value="hrefditatopic.list"/>
+    <property name="conreffile" value="conref.list"/>
+    <!-- Deprecated since 2.1 -->
+    <property name="imagefile" value="image.list"/>
+    <property name="flagimagefile" value="flagimage.list"/>
+    <!-- Deprecated since 2.1 -->
+    <property name="htmlfile" value="html.list"/>
+    <property name="hreftargetsfile" value="hreftargets.list"/>
+    <property name="canditopicsfile" value="canditopics.list"/>
+    <property name="subjectschemefile" value="subjectscheme.list"/>
+    <property name="conreftargetsfile" value="conreftargets.list"/>
+    <property name="copytosourcefile" value="copytosource.list"/>
+    <property name="subtargetsfile" value="subtargets.list"/>
+    <property name="resourceonlyfile" value="resourceonly.list"/>
     <dirname property="_dita.map.output.dir" file="${output.dir}/${user.input.file}" />
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
