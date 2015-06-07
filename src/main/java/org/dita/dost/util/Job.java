@@ -84,7 +84,7 @@ public final class Job {
     private static final String PROPERTY_ONLY_TOPIC_IN_MAP = ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP;
     private static final String PROPERTY_GENERATE_COPY_OUTER = ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER;
     private static final String PROPERTY_OUTPUT_DIR = ANT_INVOKER_EXT_PARAM_OUTPUTDIR;
-    private static final String PROPERTY_INPUT_MAP_DIR = "InputMapDir";
+    private static final String PROPERTY_INPUT_MAP = "InputMapDir";
     
     /** File name for key definition file */
     public static final String KEYDEF_LIST_FILE = "keydef.xml";
@@ -869,7 +869,7 @@ public final class Job {
      * @return absolute input file path
      */
     public File getInputFile(){
-        return new File(prop.get(PROPERTY_INPUT_MAP_DIR).toString());
+        return new File(prop.get(PROPERTY_INPUT_MAP).toString());
     }
 
     /**
@@ -877,7 +877,7 @@ public final class Job {
      * @param inputFile absolute input map path
      */
     public void setInputFile(final File inputFile){
-        prop.put(PROPERTY_INPUT_MAP_DIR, inputFile.getAbsolutePath());
+        prop.put(PROPERTY_INPUT_MAP, inputFile.getAbsolutePath());
     }
 
     
