@@ -82,15 +82,15 @@
       <prophead class="- topic/sthead reference/prophead ">
         <xsl:if test="$hasType">
          <proptypehd class="- topic/stentry reference/proptypehd " id="{generate-id()}-type">
-           <xsl:call-template name="getString">
-             <xsl:with-param name="stringName" select="'Type'"/>
+           <xsl:call-template name="getVariable">
+             <xsl:with-param name="id" select="'Type'"/>
            </xsl:call-template>
          </proptypehd>
         </xsl:if>
         <xsl:if test="$hasValue">
           <propvaluehd class="- topic/stentry reference/propvaluehd " id="{generate-id()}-value">
-           <xsl:call-template name="getString">
-             <xsl:with-param name="stringName" select="'Value'"/>
+           <xsl:call-template name="getVariable">
+             <xsl:with-param name="id" select="'Value'"/>
            </xsl:call-template>
          </propvaluehd>
         </xsl:if>
@@ -104,8 +104,8 @@
   <xsl:template name="gen-propdeschd">
     <xsl:variable name="properties" select="ancestor-or-self::*[contains(@class,' reference/properties ')][1]"/>
     <propdeschd class="- topic/stentry reference/propdeschd " id="{generate-id($properties)}-desc">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Description'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Description'"/>
       </xsl:call-template>
     </propdeschd>
   </xsl:template>
@@ -139,8 +139,8 @@
              </xsl:with-param>
            </xsl:call-template>           
            <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-type</xsl:attribute>
-           <xsl:call-template name="getString">
-             <xsl:with-param name="stringName" select="'Type'"/>
+           <xsl:call-template name="getVariable">
+             <xsl:with-param name="id" select="'Type'"/>
            </xsl:call-template>
          </th><xsl:value-of select="$newline"/>
        </xsl:when>
@@ -158,8 +158,8 @@
              </xsl:with-param>
            </xsl:call-template>
            <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-value</xsl:attribute>
-           <xsl:call-template name="getString">
-             <xsl:with-param name="stringName" select="'Value'"/>
+           <xsl:call-template name="getVariable">
+             <xsl:with-param name="id" select="'Value'"/>
            </xsl:call-template>
          </th><xsl:value-of select="$newline"/>
        </xsl:when>
@@ -180,8 +180,8 @@
              </xsl:with-param>
            </xsl:call-template>           
            <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-desc</xsl:attribute>
-           <xsl:call-template name="getString">
-             <xsl:with-param name="stringName" select="'Description'"/>
+           <xsl:call-template name="getVariable">
+             <xsl:with-param name="id" select="'Description'"/>
            </xsl:call-template>
          </th><xsl:value-of select="$newline"/>
        </xsl:when>
@@ -371,8 +371,8 @@
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " outputclass="relinfo relref">
         <title class="- topic/title ">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Related reference'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Related reference'"/>
           </xsl:call-template>
         </title>
         <xsl:copy-of select="$links"/>

@@ -299,8 +299,8 @@
     <xsl:param name="alttext"/>
     <xsl:choose>
       <xsl:when test="$alttext != ''">
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="$alttext"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="$alttext"/>
         </xsl:call-template>
       </xsl:when>
      <xsl:when test="*[contains(@class,' topic/alt ')]">

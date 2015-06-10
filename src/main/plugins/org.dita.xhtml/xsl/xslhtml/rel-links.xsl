@@ -150,8 +150,8 @@
       <dl class="prereqlinks">
         <xsl:value-of select="$newline"/>
         <dt class="prereq">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Prerequisites'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Prerequisites'"/>
           </xsl:call-template>
         </dt>
         <xsl:value-of select="$newline"/>
@@ -291,8 +291,8 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:if test="exists($links)">
       <linklist class="- topic/linklist " outputclass="relinfo">
         <title class="- topic/title ">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Related information'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Related information'"/>
           </xsl:call-template>
         </title>
         <xsl:copy-of select="$links"/>
@@ -369,13 +369,13 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
       <!--use string as output link text for now, use image eventually-->
       <xsl:choose>
         <xsl:when test="@role = 'next'">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Next topic'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Next topic'"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="@role = 'previous'">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Previous topic'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Previous topic'"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise><!--both role values tested - no otherwise--></xsl:otherwise>
@@ -401,11 +401,11 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <strong>
       <!-- Allow for unknown metadata (future-proofing) -->
       <xsl:apply-templates select="*[contains(@class, ' topic/data ') or contains(@class, ' topic/foreign ')]"/>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Next topic'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Next topic'"/>
       </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'ColonSymbol'"/>
       </xsl:call-template>
     </strong>
     <xsl:text> </xsl:text>
@@ -416,11 +416,11 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <strong>
       <!-- Allow for unknown metadata (future-proofing) -->
       <xsl:apply-templates select="*[contains(@class, ' topic/data ') or contains(@class, ' topic/foreign ')]"/>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Previous topic'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Previous topic'"/>
       </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'ColonSymbol'"/>
       </xsl:call-template>
     </strong>
     <xsl:text> </xsl:text>
@@ -431,11 +431,11 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <strong>
       <!-- Allow for unknown metadata (future-proofing) -->
       <xsl:apply-templates select="*[contains(@class, ' topic/data ') or contains(@class, ' topic/foreign ')]"/>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Parent topic'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Parent topic'"/>
       </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'ColonSymbol'"/>
       </xsl:call-template>
     </strong>
     <xsl:text> </xsl:text>

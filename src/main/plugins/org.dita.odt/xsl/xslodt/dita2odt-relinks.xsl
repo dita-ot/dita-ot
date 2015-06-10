@@ -187,8 +187,8 @@
     <xsl:if test="descendant::*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])][@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='previous' or @role='cousin')]">
       <text:p>
         <text:span text:style-name="default_text_style">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Prerequisites'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Prerequisites'"/>
           </xsl:call-template>
         </text:span>
       </text:p>
@@ -357,8 +357,8 @@
     </xsl:variable>
     <text:p>
       <text:span text:style-name="bold">
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Related information'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Related information'"/>
         </xsl:call-template>
       </text:span>
     </text:p>

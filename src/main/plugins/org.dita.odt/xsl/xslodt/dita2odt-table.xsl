@@ -134,8 +134,8 @@
       </xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="getString">
-              <xsl:with-param name="stringName" select="'Table'"/>
+            <xsl:call-template name="getVariable">
+              <xsl:with-param name="id" select="'Table'"/>
             </xsl:call-template>
             <xsl:text> </xsl:text>
             <xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
@@ -616,14 +616,14 @@
     <!-- Hungarian: "1.Table " -->
     <xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'hu-hu')) or (string-length($ancestorlang)=2 and contains($ancestorlang,'hu')) )">
       <xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Table'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Table'"/>
       </xsl:call-template><xsl:text> 
       </xsl:text>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Table'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Table'"/>
       </xsl:call-template>
       <xsl:text> </xsl:text>
       <xsl:value-of select="$tbl-count-actual"/>

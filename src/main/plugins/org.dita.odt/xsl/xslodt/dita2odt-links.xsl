@@ -209,8 +209,8 @@
         -->
     	<text:p text:style-name="Default_20_Text">
     		<text:span text:style-name="bold">
-    			<xsl:call-template name="getString">
-    				<xsl:with-param name="stringName" select="'List item'"/>
+    			<xsl:call-template name="getVariable">
+    				<xsl:with-param name="id" select="'List item'"/>
     			</xsl:call-template>
     		</text:span>
     	</text:p>
@@ -226,8 +226,8 @@
 		-->
     	<text:p text:style-name="Default_20_Text">
     		<text:span text:style-name="bold">
-    			<xsl:call-template name="getString">
-    				<xsl:with-param name="stringName" select="'Foot note'"/>
+    			<xsl:call-template name="getVariable">
+    				<xsl:with-param name="id" select="'Foot note'"/>
     			</xsl:call-template>
     		</text:span>
     	</text:p>
@@ -361,8 +361,8 @@
 			    	</xsl:call-template>
                 	-->
                 	<text:span text:style-name="bold">
-                		<xsl:call-template name="getString">
-                			<xsl:with-param name="stringName" select="'Related Links'"/>
+                		<xsl:call-template name="getVariable">
+                			<xsl:with-param name="id" select="'Related Links'"/>
                 		</xsl:call-template>
                 	</text:span>
             		<!-- 
@@ -539,8 +539,8 @@
                     </xsl:call-template>
             	-->
             	<text:s/>
-            	<xsl:call-template name="getString">
-            		<xsl:with-param name="stringName" select="'Page'"/>
+            	<xsl:call-template name="getVariable">
+            		<xsl:with-param name="id" select="'Page'"/>
             	</xsl:call-template>
             	<text:s/>
             	<text:bookmark-ref text:reference-format="page" text:ref-name="{$destination}">
@@ -559,8 +559,8 @@
                     </xsl:call-template>
             	-->
             	<text:s/>
-            	<xsl:call-template name="getString">
-            		<xsl:with-param name="stringName" select="'On the page'"/>
+            	<xsl:call-template name="getVariable">
+            		<xsl:with-param name="id" select="'On the page'"/>
             	</xsl:call-template>
             	<text:s/>
             	<text:bookmark-ref text:reference-format="page" text:ref-name="{$destination}">
@@ -642,8 +642,8 @@
 				-->
 				<text:p text:style-name="Default_20_Text">
 					<text:span text:style-name="bold">
-						<xsl:call-template name="getString">
-							<xsl:with-param name="stringName" select="'Related concepts'"/>
+						<xsl:call-template name="getVariable">
+							<xsl:with-param name="id" select="'Related concepts'"/>
 						</xsl:call-template>
 					</text:span>
 				</text:p>
@@ -656,8 +656,8 @@
 				-->
 				<text:p text:style-name="Default_20_Text">
 					<text:span text:style-name="bold">
-						<xsl:call-template name="getString">
-							<xsl:with-param name="stringName" select="'Related tasks'"/>
+						<xsl:call-template name="getVariable">
+							<xsl:with-param name="id" select="'Related tasks'"/>
 						</xsl:call-template>
 					</text:span>
 				</text:p>
@@ -670,8 +670,8 @@
 				-->
 				<text:p text:style-name="Default_20_Text">
 					<text:span text:style-name="bold">
-						<xsl:call-template name="getString">
-							<xsl:with-param name="stringName" select="'Related references'"/>
+						<xsl:call-template name="getVariable">
+							<xsl:with-param name="id" select="'Related references'"/>
 						</xsl:call-template>
 					</text:span>
 				</text:p>
@@ -684,8 +684,8 @@
 				-->
 				<text:p text:style-name="Default_20_Text">
 					<text:span text:style-name="bold">
-						<xsl:call-template name="getString">
-							<xsl:with-param name="stringName" select="'Related information'"/>
+						<xsl:call-template name="getVariable">
+							<xsl:with-param name="id" select="'Related information'"/>
 						</xsl:call-template>
 					</text:span>
 				</text:p>
@@ -890,8 +890,8 @@
 			-->
 			<text:p text:style-name="Default_20_Text">
 				<text:span text:style-name="bold">
-					<xsl:call-template name="getString">
-						<xsl:with-param name="stringName" select="'Parent topic'"/>
+					<xsl:call-template name="getVariable">
+						<xsl:with-param name="id" select="'Parent topic'"/>
 					</xsl:call-template>
 				</text:span>
 			</text:p>
@@ -912,8 +912,8 @@
 			-->
 			<text:p text:style-name="Default_20_Text">
 				<text:span text:style-name="bold">
-					<xsl:call-template name="getString">
-						<xsl:with-param name="stringName" select="'Next topic'"/>
+					<xsl:call-template name="getVariable">
+						<xsl:with-param name="id" select="'Next topic'"/>
 					</xsl:call-template>
 				</text:span>
 			</text:p>
@@ -934,8 +934,8 @@
 			-->
 			<text:p text:style-name="Default_20_Text">
 				<text:span text:style-name="bold">
-					<xsl:call-template name="getString">
-						<xsl:with-param name="stringName" select="'Previous topic'"/>
+					<xsl:call-template name="getVariable">
+						<xsl:with-param name="id" select="'Previous topic'"/>
 					</xsl:call-template>
 				</text:span>
 			</text:p>
@@ -957,8 +957,8 @@
 			-->
 			<text:p text:style-name="Default_20_Text">
 				<text:span text:style-name="bold">
-					<xsl:call-template name="getString">
-						<xsl:with-param name="stringName" select="'Child topics'"/>
+					<xsl:call-template name="getVariable">
+						<xsl:with-param name="id" select="'Child topics'"/>
 					</xsl:call-template>
 				</text:span>
 			</text:p>
@@ -1021,8 +1021,8 @@
 						-->
 						<text:p text:style-name="Default_20_Text">
 							<text:span text:style-name="bold">
-								<xsl:call-template name="getString">
-									<xsl:with-param name="stringName" select="'Unordered List bullet'"/>
+								<xsl:call-template name="getVariable">
+									<xsl:with-param name="id" select="'Unordered List bullet'"/>
 								</xsl:call-template>
 							</text:span>
 						</text:p>
@@ -1161,8 +1161,8 @@
 		<xsl:if test="descendant::*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])][@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='previous' or @role='cousin')]">
 			<text:p>
 				<text:span text:style-name="default_text_style">
-					<xsl:call-template name="getString">
-						<xsl:with-param name="stringName" select="'Prerequisites'"/>
+					<xsl:call-template name="getVariable">
+						<xsl:with-param name="id" select="'Prerequisites'"/>
 					</xsl:call-template>
 				</text:span>
 			</text:p>

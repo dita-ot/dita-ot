@@ -301,8 +301,8 @@
        </xsl:when>
        <xsl:otherwise>
          <xsl:text>(C) </xsl:text>
-         <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Copyright'"/>
+         <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Copyright'"/>
          </xsl:call-template>
        </xsl:otherwise>
      </xsl:choose>
@@ -329,8 +329,8 @@
        </xsl:when>
        <xsl:otherwise>
          <xsl:text>(C) </xsl:text>
-         <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Copyright'"/>
+         <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Copyright'"/>
          </xsl:call-template>
        </xsl:otherwise>
      </xsl:choose>

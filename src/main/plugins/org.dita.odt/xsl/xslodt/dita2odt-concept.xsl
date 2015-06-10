@@ -51,8 +51,8 @@
     </xsl:variable>
     <text:p>
       <text:span text:style-name="bold">
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Related concepts'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Related concepts'"/>
         </xsl:call-template>
       </text:span>
     </text:p>

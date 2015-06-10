@@ -1043,7 +1043,7 @@
  <!-- 
   <img src="{$PATH2PROJ}{$deltaname}">
   <xsl:attribute name='alt'>
-   <xsl:call-template name="getString">
+   <xsl:call-template name="getVariable">
     <xsl:with-param name="stringName" select="'Start of change'"/>
    </xsl:call-template>
   </xsl:attribute>
@@ -1079,8 +1079,8 @@
   </xsl:when>
   
   <xsl:otherwise>
-   <xsl:call-template name="getString">
-    <xsl:with-param name="stringName" select="'Start of change'"/>
+   <xsl:call-template name="getVariable">
+    <xsl:with-param name="id" select="'Start of change'"/>
    </xsl:call-template>
   </xsl:otherwise>
  </xsl:choose>
@@ -1120,8 +1120,8 @@
   </xsl:when>
   
   <xsl:otherwise>
-   <xsl:call-template name="getString">
-    <xsl:with-param name="stringName" select="'End of change'"/>
+   <xsl:call-template name="getVariable">
+    <xsl:with-param name="id" select="'End of change'"/>
    </xsl:call-template>
   </xsl:otherwise>
  </xsl:choose>

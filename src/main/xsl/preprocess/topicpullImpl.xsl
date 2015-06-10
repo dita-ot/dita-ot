@@ -1347,7 +1347,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           </xsl:choose>
         </xsl:variable>
         <xsl:apply-templates select="." mode="topicpull:figure-linktext">
-          <xsl:with-param name="figtext"><xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Figure'"/></xsl:call-template></xsl:with-param>
+          <xsl:with-param name="figtext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Figure'"/></xsl:call-template></xsl:with-param>
           <xsl:with-param name="figcount" select="$fig-count-actual"/>
           <xsl:with-param name="figtitle">
             <xsl:choose>
@@ -1371,7 +1371,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           </xsl:choose>
         </xsl:variable>
         <xsl:apply-templates select="." mode="topicpull:figure-linktext">
-          <xsl:with-param name="figtext"><xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Figure'"/></xsl:call-template></xsl:with-param>
+          <xsl:with-param name="figtext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Figure'"/></xsl:call-template></xsl:with-param>
           <xsl:with-param name="figcount" select="$fig-count-actual"/>
           <xsl:with-param name="figtitle">
             <xsl:choose>
@@ -1400,8 +1400,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:when>
       <xsl:otherwise> <!-- Default: FIGURELINK='NUMBER' -->
         <xsl:value-of select="$figtext"/>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'figure-number-separator'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'figure-number-separator'"/>
         </xsl:call-template>
         <xsl:value-of select="$figcount"/>
       </xsl:otherwise>
@@ -1419,8 +1419,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:when>
       <xsl:otherwise> <!-- Default: FIGURELINK='NUMBER' -->
         <xsl:value-of select="$figcount"/>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'figure-number-separator'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'figure-number-separator'"/>
         </xsl:call-template>
         <xsl:value-of select="$figtext"/>
       </xsl:otherwise>
@@ -1476,7 +1476,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           </xsl:choose>
         </xsl:variable>
         <xsl:apply-templates select="." mode="topicpull:table-linktext">
-          <xsl:with-param name="tbltext"><xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Table'"/></xsl:call-template></xsl:with-param>
+          <xsl:with-param name="tbltext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Table'"/></xsl:call-template></xsl:with-param>
           <xsl:with-param name="tblcount" select="$tbl-count-actual"/>
           <xsl:with-param name="tbltitle">
             <xsl:choose>
@@ -1500,7 +1500,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           </xsl:choose>
         </xsl:variable>
         <xsl:apply-templates select="." mode="topicpull:table-linktext">
-          <xsl:with-param name="tbltext"><xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Table'"/></xsl:call-template></xsl:with-param>
+          <xsl:with-param name="tbltext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Table'"/></xsl:call-template></xsl:with-param>
           <xsl:with-param name="tblcount" select="$tbl-count-actual"/>
           <xsl:with-param name="tbltitle">
             <xsl:choose>
@@ -1529,8 +1529,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:when>
       <xsl:otherwise> <!-- Default: TABLELINK='NUMBER' -->
         <xsl:value-of select="$tbltext"/>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'figure-number-separator'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'figure-number-separator'"/>
         </xsl:call-template>
         <xsl:value-of select="$tblcount"/>
       </xsl:otherwise>
@@ -1547,8 +1547,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:when>
       <xsl:otherwise> <!-- Default: TABLELINK='NUMBER' -->
         <xsl:value-of select="$tblcount"/>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'figure-number-separator'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'figure-number-separator'"/>
         </xsl:call-template>
         <xsl:value-of select="$tbltext"/>
       </xsl:otherwise>

@@ -71,8 +71,8 @@
       </xsl:call-template>
       <a href="#TOP">
       <!--xsl:value-of select="$deftxt-linktop"/-->
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Return to Top'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Return to Top'"/>
       </xsl:call-template>
     </a></p>
   </xsl:if>
@@ -114,8 +114,8 @@
   </xsl:param>
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_procedure'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_procedure'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -260,21 +260,21 @@
   <xsl:choose>
     <xsl:when test="@importance='optional'">
       <strong>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Optional'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Optional'"/>
         </xsl:call-template>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'ColonSymbol'"/>
         </xsl:call-template><xsl:text> </xsl:text>
       </strong>
     </xsl:when>
     <xsl:when test="@importance='required'">
       <strong>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Required'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Required'"/>
         </xsl:call-template>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'ColonSymbol'"/>
         </xsl:call-template><xsl:text> </xsl:text>
       </strong>
     </xsl:when>
@@ -405,13 +405,13 @@
       <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
       <chhead class="- topic/sthead task/chhead ">
        <choptionhd class="- topic/stentry task/choptionhd " id="{generate-id($choicetable)}">
-         <xsl:call-template name="getString">
-           <xsl:with-param name="stringName" select="'Option'"/>
+         <xsl:call-template name="getVariable">
+           <xsl:with-param name="id" select="'Option'"/>
          </xsl:call-template>
        </choptionhd>  
        <chdeschd class="- topic/stentry task/chdeschd " id="{generate-id($choicetable)}">
-         <xsl:call-template name="getString">
-           <xsl:with-param name="stringName" select="'Description'"/>
+         <xsl:call-template name="getVariable">
+           <xsl:with-param name="id" select="'Description'"/>
          </xsl:call-template>
        </chdeschd>
       </chhead>
@@ -638,8 +638,8 @@
 <xsl:template match="*[contains(@class,' task/prereq ')]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_prereq'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_prereq'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -648,8 +648,8 @@
 <xsl:template match="*[contains(@class,' task/context ')]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_context'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_context'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -658,8 +658,8 @@
 <xsl:template match="*[contains(@class,' task/result ')]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_results'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_results'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -668,8 +668,8 @@
 <xsl:template match="*[contains(@class,' task/postreq ')]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_postreq'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_postreq'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -678,8 +678,8 @@
 <xsl:template match="*[contains(@class,' task/taskbody ')]/*[contains(@class,' topic/example ')][not(*[contains(@class,' topic/title ')])]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_example'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_example'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -732,8 +732,8 @@
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " outputclass="relinfo reltasks">
         <title class="- topic/title ">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Related tasks'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Related tasks'"/>
           </xsl:call-template>
         </title>
         <xsl:copy-of select="$links"/>

@@ -25,8 +25,8 @@
         <xsl:if test="normalize-space(string-join($links, ''))">
           <linklist class="- topic/linklist " outputclass="relinfo relconcepts">
             <title class="- topic/title ">
-                  <xsl:call-template name="getString">
-                      <xsl:with-param name="stringName" select="'Related concepts'"/>
+                  <xsl:call-template name="getVariable">
+                      <xsl:with-param name="id" select="'Related concepts'"/>
                   </xsl:call-template>
               </title>
               <xsl:copy-of select="$links"/>

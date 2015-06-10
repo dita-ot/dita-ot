@@ -279,8 +279,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:param>
     <startflag imageref="{$PATH2PROJ}{$startRevImage}">
       <alt-text>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Start of change'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Start of change'"/>
         </xsl:call-template>
       </alt-text>
     </startflag>-->
@@ -298,8 +298,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:param>
     <endflag imageref="{$PATH2PROJ}{$endRevImage}">
       <alt-text>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'End of change'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'End of change'"/>
         </xsl:call-template>
       </alt-text>
     </endflag>-->

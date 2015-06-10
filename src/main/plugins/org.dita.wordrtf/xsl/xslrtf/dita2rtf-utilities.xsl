@@ -13,8 +13,8 @@
 
   <xsl:template name="getStringRTF">
     <xsl:param name="stringName"/>
-    <xsl:call-template name="getString">
-      <xsl:with-param name="stringName" select="$stringName"/>
+    <xsl:call-template name="getVariable">
+      <xsl:with-param name="id" select="$stringName"/>
     </xsl:call-template>
   </xsl:template>
 
