@@ -59,6 +59,12 @@
   <!-- Deprecated. Use getVariable template instead. -->
   <xsl:template name="getString">
     <xsl:param name="stringName"/>
+    
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=getString</xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="getVariable">
       <xsl:with-param name="id" select="string($stringName)"/>
     </xsl:call-template>
@@ -236,6 +242,12 @@
 <!-- Deprecated: use replace-extension instead -->
 <xsl:template match="*" mode="parseHrefUptoExtension">
   <xsl:param name="href" select="@href"/>
+  
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">069</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=parseHrefUptoExtension</xsl:with-param>
+  </xsl:call-template>  
   <xsl:variable name="uptoDot"><xsl:value-of select="substring-before($href,'.')"/></xsl:variable>
   <xsl:variable name="afterDot"><xsl:value-of select="substring-after($href,'.')"/></xsl:variable>
   <xsl:value-of select="$uptoDot"/>

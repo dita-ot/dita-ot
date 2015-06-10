@@ -77,6 +77,7 @@
     <target name="dita.out.map.xhtml.toc"
             unless="noMap" if="inner.transform"
             description="Build HTML TOC file,which will adjust the directory">
+        <dita-ot-echo id="DOTX070W"><param name="1" value="dita.out.map.xhtml.toc"/></dita-ot-echo>
         <xslt
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"

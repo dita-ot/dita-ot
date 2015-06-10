@@ -1194,6 +1194,7 @@
 <xsl:template match="*[contains(@class, ' topic/term ')]" mode="output-term">
   <!-- Deprecated since 2.1 -->
   <xsl:param name="displaytext"/>
+  
   <dfn class="term">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
@@ -3878,6 +3879,7 @@
     <xsl:param name="keys" select="@keyref"/>
     <!-- Deprecated since 2.1 -->
     <xsl:param name="target" select="@href"/>
+    
     <xsl:choose>
       <xsl:when test="contains($target, '://')">
         <xsl:value-of select="$target"/>
@@ -3904,6 +3906,12 @@
     <xsl:param name="type"/>
     <xsl:param name="displaytext" select="''"/>
     <xsl:param name="keys" select="@keyref"/>
+    
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">069</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=pull-in-title</xsl:with-param>
+    </xsl:call-template>
     <xsl:choose>
       <xsl:when test="$displaytext = '' and $keys != ''">
         <xsl:variable name="target">
@@ -3959,6 +3967,12 @@
   <!-- Deprecated since 2.1 -->
   <xsl:template match="*" mode="common-processing-phrase-within-link">
     <xsl:param name="type"/>
+    
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">069</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=common-processing-phrase-within-link</xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class">
         <xsl:if test="normalize-space($type) != name()">

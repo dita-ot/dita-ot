@@ -639,6 +639,16 @@
     <reason>A topicref element that references a map contains child topicref elements.</reason>
     <response>Child topicref elements are ignored.</response>
   </message>
+  
+  <message id="DOTX069W" type="WARN">
+    <reason>Template mode "%1" is deprecated.</reason>
+    <response>Remove references to this template mode from your custom XSLT or plug-ins.</response>
+  </message>
+  
+  <message id="DOTX070W" type="WARN">
+    <reason>Target "%1" is deprecated.</reason>
+    <response>Remove references to this target from your custom Ant files.</response>
+  </message>
 
   <!-- End of XSL Messages --> 
       
