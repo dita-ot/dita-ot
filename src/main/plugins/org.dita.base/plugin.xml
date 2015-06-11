@@ -74,6 +74,7 @@
     <param name="args.rellinks" desc="Specifies which links to include in the output." type="enum">
       <val desc="No links are included.">none</val>
       <val desc="All links are included.">all</val>
+      <val desc="Parent links are not included.">noparent</val>
       <val desc="Parent, child, next, and previous links are not included.">nofamily</val>
     </param>
     <param name="args.debug" desc="Specifies whether debugging information is included in the log." type="enum">
