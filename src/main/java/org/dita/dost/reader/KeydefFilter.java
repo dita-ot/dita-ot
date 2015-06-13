@@ -10,7 +10,6 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.net.URI;

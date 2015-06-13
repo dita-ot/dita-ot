@@ -30,7 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class KeyDef {
     
-    public static final String ELEMENT_STUB = "stub";
+    private static final String ELEMENT_STUB = "stub";
     private static final String ATTRIUBTE_SOURCE = "source";
     private static final String ATTRIBUTE_HREF = "href";
     private static final String ATTRIBUTE_SCOPE = "scope";

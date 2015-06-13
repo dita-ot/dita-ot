@@ -7,6 +7,7 @@ package org.dita.dost.writer;
 import static java.util.Arrays.asList;
 
 import java.io.File;
+import java.util.Collections;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -24,11 +25,11 @@ import org.xml.sax.helpers.XMLFilterImpl;
 public abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter {
 
     protected DITAOTLogger logger;
-    protected Job job;
+    Job job;
 
     @Override
     public void write(final File filename) throws DITAOTException {
-        XMLUtils.transform(filename, asList((XMLFilter) this));
+        XMLUtils.transform(filename, Collections.singletonList((XMLFilter) this));
     }
 
     @Override

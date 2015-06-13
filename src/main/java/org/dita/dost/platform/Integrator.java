@@ -51,18 +51,18 @@ public final class Integrator {
     private static final String CONF_PLUGIN_IGNORES = "plugin.ignores";
     private static final String CONF_PLUGIN_DIRS = "plugindirs";
     /** Feature name for supported image extensions. */
-    public static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
+    private static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
     /** Feature name for supported image extensions. */
-    public static final String FEAT_HTML_EXTENSIONS = "dita.html.extensions";
+    private static final String FEAT_HTML_EXTENSIONS = "dita.html.extensions";
     /** Feature name for supported resource file extensions. */
-    public static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
+    private static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
     /** Feature name for print transformation types. */
-    public static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
-    public static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
-    public static final String ELEM_PLUGINS = "plugins";
+    private static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
+    private static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
+    private static final String ELEM_PLUGINS = "plugins";
 
     public static final String FEAT_VALUE_SEPARATOR = ",";
-    public static final String PARAM_VALUE_SEPARATOR = ";";
+    private static final String PARAM_VALUE_SEPARATOR = ";";
 
     public static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
     public static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-]+)?)?)?");
@@ -70,7 +70,7 @@ public final class Integrator {
     /** Plugin table which contains detected plugins. */
     private final Map<String, Features> pluginTable;
     private final Set<String> templateSet = new HashSet<String>(16);
-    private File ditaDir;
+    private final File ditaDir;
     /** Plugin configuration file. */
     private final Set<File> descSet;
     private final XMLReader reader;
@@ -487,7 +487,7 @@ public final class Integrator {
     /**
      * Parse plugin configuration files.
      */
-    private void parsePlugin() throws TransformerException {
+    private void parsePlugin() {
         final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
         pluginsDoc.appendChild(root);
         if (!descSet.isEmpty()) {

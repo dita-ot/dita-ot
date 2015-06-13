@@ -11,7 +11,6 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FilterUtils.DEFAULT;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +20,6 @@ import java.util.*;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.XMLUtils;

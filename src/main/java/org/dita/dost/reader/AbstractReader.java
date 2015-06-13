@@ -32,6 +32,6 @@ public interface AbstractReader {
      * 
      * @param logger logger to use for log message
      */
-    public void setLogger(DITAOTLogger logger);
+    void setLogger(DITAOTLogger logger);
 
 }

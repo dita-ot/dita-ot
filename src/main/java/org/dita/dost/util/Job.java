@@ -642,9 +642,9 @@ public final class Job {
                     '}';
         }
 
-        public static interface Filter {
+        public interface Filter {
             
-            public boolean accept(FileInfo f);
+            boolean accept(FileInfo f);
             
         }
         

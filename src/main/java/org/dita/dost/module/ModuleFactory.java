@@ -26,7 +26,7 @@ public final class ModuleFactory {
     /**
      * Automatically generated constructor: ModuleFactory.
      */
-    public ModuleFactory() {
+    private ModuleFactory() {
 
     }
 

@@ -550,7 +550,7 @@ public final class FileUtils {
      * 
      * @return {@code true} if platform is Windows, otherwise {@code fasel}
      */
-    public static boolean isWindows() {
+    private static boolean isWindows() {
         final String osName = System.getProperty("os.name");
         return osName.startsWith("Win");
 

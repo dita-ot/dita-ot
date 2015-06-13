@@ -7,7 +7,6 @@ package org.dita.dost.module;
 import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FilterUtils.*;
-import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.IOException;

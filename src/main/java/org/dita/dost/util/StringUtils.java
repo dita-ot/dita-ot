@@ -10,7 +10,6 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -20,15 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
-import org.xml.sax.*;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * String relevant utilities.

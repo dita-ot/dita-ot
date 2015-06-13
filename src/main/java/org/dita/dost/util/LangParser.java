@@ -20,7 +20,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author william
  *
  */
-public final class LangParser extends DefaultHandler {
+final class LangParser extends DefaultHandler {
 
     private String langCode = null;
 

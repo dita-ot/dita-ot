@@ -58,7 +58,7 @@ public final class DitaClass {
      * @param cls DITA class, may be {@code null}
      * @return DITA class, {@code null} if the input was {@code null} 
      */
-    public static DitaClass getInstance(final String cls) {
+    private static DitaClass getInstance(final String cls) {
         if (cls == null) {
             return null;
         }
@@ -115,10 +115,7 @@ public final class DitaClass {
             return false;
         }
         final DitaClass other = (DitaClass) obj;
-        if (!stringValue.equals(other.stringValue)) {
-            return false;
-        }
-        return true;
+        return stringValue.equals(other.stringValue);
     }
 
     /**

@@ -23,7 +23,7 @@ import org.w3c.dom.Document;
 public abstract class AbstractDomFilter implements AbstractReader {
 
     protected DITAOTLogger logger;
-    protected Job job;
+    private Job job;
 
     @Override
     public void read(final File filename) {
@@ -82,6 +82,6 @@ public abstract class AbstractDomFilter implements AbstractReader {
      * @param doc document to modify
      * @return modified document, may be argument document; if {@code null}, document is not serialized
      */
-    public abstract Document process(final Document doc);
+    protected abstract Document process(final Document doc);
 
 }

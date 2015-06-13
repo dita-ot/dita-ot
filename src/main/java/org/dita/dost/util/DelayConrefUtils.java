@@ -177,7 +177,7 @@ public final class DelayConrefUtils {
      * @param tagName search tag name
      * @return search result, null of either input is invalid or the looking result is not found.
      */
-    public Element searchForKey(final Element root, final String key, final String tagName) {
+    private Element searchForKey(final Element root, final String key, final String tagName) {
         if (root == null || StringUtils.isEmptyString(key)) {
             return null;
         }

@@ -48,9 +48,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.*;
-import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.util.*;
-import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.ExportAnchorsFilter.ExportAnchor;
 import org.dita.dost.writer.ProfilingFilter;
@@ -1269,14 +1267,14 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /**
      * Temporary file name generator.
      */
-    public static interface TempFileNameScheme {
+    public interface TempFileNameScheme {
         /**
          * Generate temporary file name.
          *
          * @param src absolute source file URI
          * @return relative temporary file URI
          */
-        public URI generateTempFileName(final URI src);
+        URI generateTempFileName(final URI src);
     }
 
     public static class DefaultTempFileScheme implements TempFileNameScheme {

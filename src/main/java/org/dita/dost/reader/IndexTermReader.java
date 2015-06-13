@@ -409,7 +409,6 @@ public final class IndexTermReader extends AbstractXMLReader {
      */
     private void handleSpecialization(final String localName, final String classAttr) {
         if (classAttr == null) {
-            return;
         } else if (TOPIC_INDEXTERM.matches(classAttr)) {
             // add the element name to the indexterm specialization element
             // list if it does not already exist in that list.

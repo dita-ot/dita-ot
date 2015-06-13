@@ -138,7 +138,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      * @param aFileName file name to be replaced
      * @return replaced file name
      */
-    public String replaceExtName(final String aFileName){
+    private String replaceExtName(final String aFileName){
         final int index = aFileName.indexOf(SHARP);
         if (aFileName.startsWith(SHARP)){
             return aFileName;

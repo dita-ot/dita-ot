@@ -31,7 +31,7 @@ final class InsertDependsAction implements IAction {
     /** Action value. */
     private List<String> value;
     /** Plug-in features. */
-    protected Map<String, Features> featureTable = null;
+    private Map<String, Features> featureTable = null;
     /**
      * Constructor.
      */

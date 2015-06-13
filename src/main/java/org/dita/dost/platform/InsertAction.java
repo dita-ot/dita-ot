@@ -30,13 +30,13 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 class InsertAction extends XMLFilterImpl implements IAction {
 
-    protected final XMLReader reader;
-    protected DITAOTLogger logger;
-    protected final Set<String> fileNameSet;
-    protected final Hashtable<String,String> paramTable;
-    protected int elemLevel = 0;
+    private final XMLReader reader;
+    private DITAOTLogger logger;
+    private final Set<String> fileNameSet;
+    final Hashtable<String,String> paramTable;
+    private int elemLevel = 0;
     /** Current processing file. */
-    protected String currentFile;
+    String currentFile;
     /**
      * Default Constructor.
      */

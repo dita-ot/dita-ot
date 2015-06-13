@@ -11,7 +11,7 @@ package org.dita.dost.util;
 /**
  * Used to escape a file path to a URI.
  */
-public final class FilePathToURI {
+final class FilePathToURI {
     
     /**
      * Private default constructor to make class uninstantiable.
@@ -76,7 +76,7 @@ public final class FilePathToURI {
      * @param path The path to be escaped.
      * @return The escaped path.
      */
-    public static String escapeSpecialAsciiAndNonAscii(final String path) {
+    private static String escapeSpecialAsciiAndNonAscii(final String path) {
         int len = path.length(), ch;
         final StringBuilder buffer = new StringBuilder(len*3);
         // Change C:/something to /C:/something

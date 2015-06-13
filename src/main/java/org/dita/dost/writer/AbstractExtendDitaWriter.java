@@ -19,11 +19,11 @@ import org.dita.dost.util.Job;
 
 public abstract class AbstractExtendDitaWriter implements AbstractWriter, IExtendDitaWriter, IDitaTranstypeIndexWriter {
 
-    protected PipelineHashIO pipelineHashMap = null;
-    protected DITAOTLogger logger;
-    protected Job job;
+    private PipelineHashIO pipelineHashMap = null;
+    DITAOTLogger logger;
+    private Job job;
     /** List of indexterms */
-    protected List<IndexTerm> termList = null;
+    List<IndexTerm> termList = null;
 
     // AbstractWriter methods
     

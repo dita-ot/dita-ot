@@ -46,7 +46,7 @@ import org.xml.sax.XMLReader;
  */
 public final class MergeMapParser extends XMLFilterImpl {
     
-    public static final String ATTRIBUTE_NAME_FIRST_TOPIC_ID = "first_topic_id";
+    private static final String ATTRIBUTE_NAME_FIRST_TOPIC_ID = "first_topic_id";
     public static final String ATTRIBUTE_NAME_OHREF = "ohref";
     public static final String ATTRIBUTE_NAME_OID = "oid";
     

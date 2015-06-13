@@ -8,10 +8,8 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
 
-import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +17,6 @@ import java.util.regex.Pattern;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
-import org.dita.dost.reader.DitaValReader;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

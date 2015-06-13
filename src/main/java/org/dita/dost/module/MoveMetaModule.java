@@ -15,7 +15,6 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Map.Entry;
 

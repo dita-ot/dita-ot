@@ -14,9 +14,9 @@ final class ExtensionPoint {
     /** Extension point ID. */
     final String id;
     /** Extension point name. */
-    final String name;
+    private final String name;
     /** Plug-in defining the extension point. */
-    final String plugin;
+    private final String plugin;
 
     /**
      * Extension point constructor.

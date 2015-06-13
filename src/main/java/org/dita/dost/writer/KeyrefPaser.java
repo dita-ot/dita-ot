@@ -298,10 +298,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                         final AttributesImpl atts = new AttributesImpl();
                                         XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_LINKTEXT.toString());
                                         getContentHandler().startElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName, atts);
-                                        if (navtitle != null) {
-                                            final char[] ch = navtitle.toCharArray();
-                                            getContentHandler().characters(ch, 0, ch.length);
-                                        }
+                                        final char[] ch = navtitle.toCharArray();
+                                        getContentHandler().characters(ch, 0, ch.length);
                                         getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
                                     }
                                 }

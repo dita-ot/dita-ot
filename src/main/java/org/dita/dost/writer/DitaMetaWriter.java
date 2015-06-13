@@ -17,7 +17,7 @@ import static org.dita.dost.util.Constants.*;
  */
 public final class DitaMetaWriter extends AbstractDitaMetaWriter {
 
-    private static final List<DitaClass> titlealtsPosition = Collections.unmodifiableList(Arrays.asList(
+    private static final List<DitaClass> titlealtsPosition = Collections.unmodifiableList(Collections.singletonList(
             TOPIC_TITLE
     ));
     private static final List<DitaClass> titlealtsOrder = Collections.unmodifiableList(Arrays.asList(

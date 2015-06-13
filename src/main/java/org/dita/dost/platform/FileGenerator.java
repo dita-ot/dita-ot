@@ -10,11 +10,7 @@ package org.dita.dost.platform;
 
 import static java.util.Arrays.*;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
@@ -32,9 +28,9 @@ import org.xml.sax.helpers.XMLFilterImpl;
 final class FileGenerator extends XMLFilterImpl {
 
     private static final String EXTENSION_ID_ATTR = "id";
-    public static final String EXTENSION_ELEM = "extension";
-    public static final String EXTENSION_ATTR = "extension";
-    public static final String BEHAVIOR_ATTR = "behavior";
+    private static final String EXTENSION_ELEM = "extension";
+    private static final String EXTENSION_ATTR = "extension";
+    private static final String BEHAVIOR_ATTR = "behavior";
     
     public static final String PARAM_LOCALNAME = "localname";
     public static final String PARAM_TEMPLATE = "template";
@@ -86,7 +82,7 @@ final class FileGenerator extends XMLFilterImpl {
         templateFile = fileName;
 
         try{
-            final List<XMLFilter> filters = Arrays.asList((XMLFilter) this);
+            final List<XMLFilter> filters = Collections.singletonList((XMLFilter) this);
             XMLUtils.transform(fileName, outputFile, filters);
         } catch (final Exception e){
             logger.error(e.getMessage(), e) ;

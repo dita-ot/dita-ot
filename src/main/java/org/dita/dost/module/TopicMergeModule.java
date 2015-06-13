@@ -98,8 +98,8 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         OutputStream output = null;
         try {
             final File outputDir = out.getParentFile();
-            if (!outputDir.exists()) {
-                outputDir.mkdirs();
+            if (!outputDir.exists() && !outputDir.mkdirs()) {
+                logger.error("Failed to create directory " + outputDir.getAbsolutePath());
             }
             output = new BufferedOutputStream(new FileOutputStream(out));
             if (style != null) {

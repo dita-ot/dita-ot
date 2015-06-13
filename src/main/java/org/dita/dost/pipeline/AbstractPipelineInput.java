@@ -20,7 +20,7 @@ public interface AbstractPipelineInput {
      * @param name attribute name
      * @param value attribute value
      */
-    public void setAttribute(String name, String value);
+    void setAttribute(String name, String value);
 
     /**
      * Get the attribute value.
@@ -28,6 +28,6 @@ public interface AbstractPipelineInput {
      * @param name attribute name
      * @return String attribute value, <code>null</code> if not defined.
      */
-    public String getAttribute(String name);
+    String getAttribute(String name);
 
 }

@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.w3c.dom.Element;
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.AttributesImpl;
 
 import org.dita.dost.util.FileUtils;
 

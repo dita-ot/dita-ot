@@ -17,24 +17,24 @@ import java.io.IOException;
  */
 public class PluginParser {
 
-    public static final String EXTENSION_POINT_ELEM = "extension-point";
-    public static final String EXTENSION_POINT_NAME_ATTR = "name";
-    public static final String EXTENSION_POINT_ID_ATTR = "id";
-    public static final String TEMPLATE_ELEM = "template";
-    public static final String TEMPLATE_FILE_ATTR = "file";
-    public static final String META_ELEM = "meta";
-    public static final String META_VALUE_ATTR = "value";
-    public static final String META_TYPE_ATTR = "type";
-    public static final String REQUIRE_ELEM = "require";
-    public static final String REQUIRE_IMPORTANCE_ATTR = "importance";
-    public static final String REQUIRE_PLUGIN_ATTR = "plugin";
+    private static final String EXTENSION_POINT_ELEM = "extension-point";
+    private static final String EXTENSION_POINT_NAME_ATTR = "name";
+    private static final String EXTENSION_POINT_ID_ATTR = "id";
+    private static final String TEMPLATE_ELEM = "template";
+    private static final String TEMPLATE_FILE_ATTR = "file";
+    private static final String META_ELEM = "meta";
+    private static final String META_VALUE_ATTR = "value";
+    private static final String META_TYPE_ATTR = "type";
+    private static final String REQUIRE_ELEM = "require";
+    private static final String REQUIRE_IMPORTANCE_ATTR = "importance";
+    private static final String REQUIRE_PLUGIN_ATTR = "plugin";
     public static final String FEATURE_ELEM = "feature";
-    public static final String TRANSTYPE_ELEM = "transtype";
-    public static final String TRANSTYPE_ABSTRACT_ATTR = "abstract";
-    public static final String TRANSTYPE_NAME_ATTR = "name";
+    private static final String TRANSTYPE_ELEM = "transtype";
+    private static final String TRANSTYPE_ABSTRACT_ATTR = "abstract";
+    private static final String TRANSTYPE_NAME_ATTR = "name";
     public static final String FEATURE_ID_ATTR = "extension";
     public static final String PLUGIN_ELEM = REQUIRE_PLUGIN_ATTR;
-    public static final String PLUGIN_ID_ATTR = "id";
+    private static final String PLUGIN_ID_ATTR = "id";
 
     private final File ditaDir;
     private final DocumentBuilder builder;

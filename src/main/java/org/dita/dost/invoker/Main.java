@@ -1111,37 +1111,36 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * Prints the usage information for this class to <code>System.out</code>.
      */
     private static void printUsage() {
-        final String lSep = System.getProperty("line.separator");
         final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita -f <name> -i <file> [options]" + lSep);
-        msg.append("   or: dita -install <file>" + lSep);
-        msg.append("   or: dita -uninstall <id>" + lSep);
-        msg.append("   or: dita -help" + lSep);
-        msg.append("   or: dita -version" + lSep);        
-        msg.append("Arguments: " + lSep);
-        msg.append("  -f, -format <name>     transformation type" + lSep);
-        msg.append("  -i, -input <file>      input file" + lSep);
-        msg.append("  -install <file>        install plug-in from a ZIP file" + lSep);
-        msg.append("  -uninstall <id>        uninstall plug-in with the ID" + lSep);
-        msg.append("  -h, -help              print this message" + lSep);
-        msg.append("  -version               print version information and exit" + lSep);
-        msg.append("Options: " + lSep);
-        msg.append("  -o, -output <dir>      output directory" + lSep);   
+        msg.append("Usage: dita -f <name> -i <file> [options]\n");
+        msg.append("   or: dita -install <file>\n");
+        msg.append("   or: dita -uninstall <id>\n");
+        msg.append("   or: dita -help\n");
+        msg.append("   or: dita -version\n");
+        msg.append("Arguments: \n");
+        msg.append("  -f, -format <name>     transformation type\n");
+        msg.append("  -i, -input <file>      input file\n");
+        msg.append("  -install <file>        install plug-in from a ZIP file\n");
+        msg.append("  -uninstall <id>        uninstall plug-in with the ID\n");
+        msg.append("  -h, -help              print this message\n");
+        msg.append("  -version               print version information and exit\n");
+        msg.append("Options: \n");
+        msg.append("  -o, -output <dir>      output directory\n");
         // msg.append("  -projecthelp, -p       print project help information" + lSep);
         // msg.append("  -diagnostics           print information that might be helpful to"
         // + lSep);
         // msg.append("                         diagnose or report problems." +
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
-        msg.append("  -filter <file>         filter and flagging file" + lSep);
-        msg.append("  -temp <dir>            temporary directory" + lSep);
-        msg.append("  -v, -verbose           verbose logging" + lSep);
-        msg.append("  -d, -debug             print debugging information" + lSep);
+        msg.append("  -filter <file>         filter and flagging file\n");
+        msg.append("  -temp <dir>            temporary directory\n");
+        msg.append("  -v, -verbose           verbose logging\n");
+        msg.append("  -d, -debug             print debugging information\n");
         // msg.append("  -emacs, -e             produce logging information without adornments"
         // + lSep);
         // msg.append("  -lib <path>            specifies a path to search for jars and classes"
         // + lSep);
-        msg.append("  -l, logfile <file>     use given file for log" + lSep);
+        msg.append("  -l, logfile <file>     use given file for log\n");
         // msg.append("  -logger <classname>    the class which is to perform logging"
         // + lSep);
         // msg.append("  -listener <classname>  add an instance of class as a project listener"
@@ -1151,11 +1150,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("  -buildfile <file>      use given buildfile" + lSep);
         // msg.append("    -file    <file>              ''" + lSep);
         // msg.append("    -f       <file>              ''" + lSep);
-        msg.append("  -D<property>=<value>   use value for given property" + lSep);
+        msg.append("  -D<property>=<value>   use value for given property\n");
         // msg.append("  -keep-going, -k        execute all targets that do not depend"
         // + lSep);
         // msg.append("                         on failed target(s)" + lSep);
-        msg.append("  -propertyfile <name>   load all properties from file with -D" + lSep);
+        msg.append("  -propertyfile <name>   load all properties from file with -D\n");
         msg.append("                         properties taking precedence");
         // msg.append("  -inputhandler <class>  the class which will handle input requests"
         // + lSep);

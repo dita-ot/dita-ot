@@ -596,7 +596,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * @param copytoTargetFilename
      * @param inputMapInTemp
      */
-    public void copyFileWithPIReplaced(final File src, final File target, final File copytoTargetFilename, final File inputMapInTemp) {
+    private void copyFileWithPIReplaced(final File src, final File target, final File copytoTargetFilename, final File inputMapInTemp) {
         if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
             logger.error("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
             return;
@@ -607,7 +607,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         
         logger.info("Processing " + src.getAbsolutePath() + " to " + target.getAbsolutePath());
         try {
-            XMLUtils.transform(src, target, Arrays.asList(filter));
+            XMLUtils.transform(src, target, Collections.singletonList(filter));
         } catch (final DITAOTException e) {
             logger.error("Failed to write copy-to file: " + e.getMessage(), e);
         }
@@ -695,7 +695,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * @param overflowingFile overflowingFile
      * @return relative system path to out which ends in {@link java.io.File#separator File.separator}
      */
-    public static String getRelativePathFromOut(final File overflowingFile, final Job job) {
+    private static String getRelativePathFromOut(final File overflowingFile, final Job job) {
         final File relativePath = getRelativePath(job.getInputFile(), overflowingFile);
         final File outputDir = job.getOutputDir().getAbsoluteFile();
         final File outputPathName = new File(outputDir, "index.html");

@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
  */
 final class ImportPluginCatalogAction extends ImportAction {
 
-    public static final String PLUGIN_URI_SCHEME = "plugin";
+    private static final String PLUGIN_URI_SCHEME = "plugin";
 
     public ImportPluginCatalogAction() {
         super();
