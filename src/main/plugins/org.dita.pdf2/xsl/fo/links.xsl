@@ -559,7 +559,9 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="(contains($href, '://') and not(starts-with($href, 'file://')))
             or starts-with($href, '/') or $scope = 'external' or not(empty($format) or  $format = 'dita')">
                 <xsl:attribute name="external-destination">
-                    <xsl:value-of select="concat('url(', $href, ')')"/>
+                    <xsl:text>url('</xsl:text>
+                    <xsl:value-of select="$href"/>
+                    <xsl:text>')</xsl:text>
                 </xsl:attribute>
             </xsl:when>
           <xsl:when test="$scope = 'peer'">
