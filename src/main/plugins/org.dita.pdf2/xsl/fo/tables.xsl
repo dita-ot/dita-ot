@@ -540,10 +540,10 @@
                     <xsl:value-of select="ancestor::*[contains(@class, ' topic/tbody ')][1]/@align"/>
                 </xsl:when>
                 <xsl:when test="ancestor::*[contains(@class, ' topic/thead ')][1][@align]">
-                    <xsl:value-of select="ancestor::*[contains(@class, ' topic/tbody ')][1]/@align"/>
+                    <xsl:value-of select="ancestor::*[contains(@class, ' topic/thead ')][1]/@align"/>
                 </xsl:when>
                 <xsl:when test="ancestor::*[contains(@class, ' topic/tgroup ')][1][@align]">
-                    <xsl:value-of select="ancestor::*[contains(@class, ' topic/tbody ')][1]/@align"/>
+                    <xsl:value-of select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/@align"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
@@ -559,12 +559,12 @@
         </xsl:variable>
 
         <xsl:choose>
-            <xsl:when test="not($align = '')">
+            <xsl:when test="not(normalize-space($align) = '')">
                 <xsl:attribute name="text-align">
                     <xsl:value-of select="$align"/>
                 </xsl:attribute>
             </xsl:when>
-            <xsl:when test="($align = '') and contains(@class, ' topic/colspec ')"/>
+            <xsl:when test="(normalize-space($align) = '') and contains(@class, ' topic/colspec ')"/>
             <xsl:otherwise>
                 <xsl:attribute name="text-align">from-table-column()</xsl:attribute>
             </xsl:otherwise>
