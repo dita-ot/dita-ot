@@ -13,9 +13,8 @@
 
 <dita:extension id="dita.xsl.htmlhelp.map2hhp" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
-<xsl:output method="xml"
+<xsl:output method="text"
             encoding="UTF-8"
-            indent="no"
 />
 
 </xsl:stylesheet>
