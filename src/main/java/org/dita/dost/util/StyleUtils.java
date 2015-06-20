@@ -19,7 +19,7 @@ import java.util.Map;
  * @author Zhang Di Hua
  *
  */
-final class StyleUtils {
+public final class StyleUtils {
 
 
     //list for style name in xslt for hi-d tags
