@@ -163,6 +163,7 @@
   <feature extension="dita.resource.extensions" value=".swf"/>
   <feature extension="dita.basedir-resource-directory" value="true"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <feature extension="dita.xsl.strings" file="../../xsl/common/common-strings.xml"/>
   <template file="../../catalog-dita_template.xml"/>
   <template file="../../build_template.xml"/>
   <template file="build_preprocess_template.xml"/>
