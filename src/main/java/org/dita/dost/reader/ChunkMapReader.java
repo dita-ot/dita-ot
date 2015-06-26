@@ -571,6 +571,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * @return map of changed files
      */
     public Map<String, String> getChangeTable() {
+        for (final Map.Entry<String, String> e: changeTable.entrySet()) {
+            assert new File(e.getKey()).isAbsolute();
+            assert new File(e.getValue()).isAbsolute();
+        }
         return Collections.unmodifiableMap(changeTable);
     }
 
@@ -580,6 +584,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * @return conflict table
      */
     public Map<String, String> getConflicTable() {
+        for (final Map.Entry<String, String> e: conflictTable.entrySet()) {
+            assert new File(e.getKey()).isAbsolute();
+            assert new File(e.getValue()).isAbsolute();
+        }
         return conflictTable;
     }
 

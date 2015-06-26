@@ -10,7 +10,6 @@ package org.dita.dost.module;
 
 import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.getRelativePath;
 import static org.dita.dost.util.FileUtils.getRelativeUnixPath;
 import static org.dita.dost.util.FileUtils.resolve;
 import static org.dita.dost.util.Job.*;
@@ -67,7 +66,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private boolean genDebugInfo;
     /** Absolute input map path. */
-    private File inputMap;
+    private URI inputMap;
     /** use grammar pool cache */
     private boolean gramcache = true;
     private boolean setSystemId;
@@ -125,7 +124,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         currentFile = f.src;
         if (!exists(currentFile)) {
             // Assuming this is an copy-to target file, ignore it
-            logger.debug("Ignoring a copy-to file " + f.file);
+            logger.debug("Ignoring a copy-to file " + f.src);
             return;
         }
         outputFile = new File(job.tempDir, f.file.getPath());
@@ -331,7 +330,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     }
 
     private void readArguments(AbstractPipelineInput input) {
-        final String baseDir = input.getAttribute(ANT_INVOKER_PARAM_BASEDIR);
+        final File baseDir = toFile(input.getAttribute(ANT_INVOKER_PARAM_BASEDIR));
         ditaDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         profilingEnabled = true;
@@ -355,11 +354,11 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
 
         // Absolute input directory path
-        File inputDir = job.getInputDir();
+        URI inputDir = job.getInputDir();
         if (!inputDir.isAbsolute()) {
-            inputDir = new File(baseDir, inputDir.getPath()).getAbsoluteFile();
+            inputDir = baseDir.toURI().resolve(inputDir);
         }
-        inputMap = new File(inputDir, job.getInputMap().getPath()).getAbsoluteFile();
+        inputMap = inputDir.resolve(job.getInputMap());
     }
 
 
@@ -389,17 +388,17 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     continue;
                 }
                 visitedSet.add(parent);
-                File tmprel = new File(FileUtils.resolve(job.tempDir, parent) + SUBJECT_SCHEME_EXTENSION);
-                Document parentRoot;
+                final File tmprel = new File(FileUtils.resolve(job.tempDir, parent) + SUBJECT_SCHEME_EXTENSION);
+                final Document parentRoot;
                 if (!tmprel.exists()) {
-                    final File src = new File(job.getInputDir(), parent.getPath());
-                    parentRoot = builder.parse(src);
+                    final URI src = job.getInputDir().resolve(parent);
+                    parentRoot = builder.parse(src.toString());
                 } else {
                     parentRoot = builder.parse(tmprel);
                 }
                 if (children != null) {
                     for (final URI childpath: children) {
-                        final Document childRoot = builder.parse(new File(inputMap.getParentFile(), childpath.getPath()));
+                        final Document childRoot = builder.parse(inputMap.resolve(childpath.getPath()).toString());
                         mergeScheme(parentRoot, childRoot);
                         generateScheme(new File(job.tempDir, childpath.getPath() + SUBJECT_SCHEME_EXTENSION), childRoot);
                     }
@@ -687,7 +686,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 return new File(getRelativeUnixPath(traceFilename.getAbsolutePath(), inputMap.getAbsolutePath())).getParentFile();
             }
         } else {
-            return getRelativePath(filename);
+            return FileUtils.getRelativePath(filename);
         }
     }
     /**
@@ -696,11 +695,11 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * @return relative system path to out which ends in {@link java.io.File#separator File.separator}
      */
     private static String getRelativePathFromOut(final File overflowingFile, final Job job) {
-        final File relativePath = getRelativePath(job.getInputFile(), overflowingFile);
+        final URI relativePath = getRelativePath(job.getInputFile(), overflowingFile.toURI());
         final File outputDir = job.getOutputDir().getAbsoluteFile();
         final File outputPathName = new File(outputDir, "index.html");
         final File finalOutFilePathName = resolve(outputDir, relativePath.getPath());
-        final File finalRelativePathName = getRelativePath(finalOutFilePathName, outputPathName);
+        final File finalRelativePathName = FileUtils.getRelativePath(finalOutFilePathName, outputPathName);
         File parentDir = finalRelativePathName.getParentFile();
         if (parentDir == null || parentDir.getPath().isEmpty()) {
             parentDir = new File(".");
@@ -716,7 +715,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * @return {@code true} if outside start directory, otherwise {@code false}
      */
     private static boolean isOutFile(final File filePathName, final File inputMap){
-        final File relativePath = getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
+        final File relativePath = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
         return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
     }
 

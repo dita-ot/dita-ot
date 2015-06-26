@@ -100,6 +100,22 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
+    private static class FileOrUriArgument extends Argument {
+        FileOrUriArgument(final String property) {
+            super(property);
+        }
+
+        @Override
+        String getValue(final String value) {
+            final File f = new File(value);
+            if (f.exists()) {
+                return f.getAbsolutePath();
+            } else {
+                return value;
+            }
+        }
+    }
+
     /**
      * A Set of args are are handled by the launcher and should not be seen by
      * Main.
@@ -119,8 +135,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ARGUMENTS.put("-f", new StringArgument("transtype"));
         ARGUMENTS.put("-format", new StringArgument("transtype"));
         ARGUMENTS.put("-transtype", new StringArgument("transtype"));
-        ARGUMENTS.put("-i", new FileArgument("args.input"));
-        ARGUMENTS.put("-input", new FileArgument("args.input"));
+        ARGUMENTS.put("-i", new FileOrUriArgument("args.input"));
+        ARGUMENTS.put("-input", new FileOrUriArgument("args.input"));
         ARGUMENTS.put("-o", new FileArgument("output.dir"));
         ARGUMENTS.put("-output", new FileArgument("output.dir"));
         ARGUMENTS.put("-filter", new FileArgument("args.filter"));

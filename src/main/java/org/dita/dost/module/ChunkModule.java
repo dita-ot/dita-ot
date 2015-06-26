@@ -15,6 +15,7 @@ import static org.dita.dost.util.FileUtils.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -80,7 +81,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
 
         try {
-            final File mapFile = new File(job.tempDir, job.getProperty(INPUT_DITAMAP)).getAbsoluteFile();
+            final File mapFile = new File(job.tempDir.toURI().resolve(job.getInputMap()));
             if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile)) {
                 for (final FileInfo f : job.getFileInfo()) {
                     if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
@@ -169,12 +170,12 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      * Update Job configuration to include new generated files
      */
     private void updateList(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
-        final File xmlDitalist = new File(job.tempDir, "dummy.xml");
+        final URI xmlDitalist = new File(job.tempDir, "dummy.xml").toURI();
 
-        final Set<String> hrefTopics = new HashSet<String>();
+        final Set<URI> hrefTopics = new HashSet<URI>();
         for (final FileInfo f : job.getFileInfo()) {
             if (f.isNonConrefTarget) {
-                hrefTopics.add(f.file.getPath());
+                hrefTopics.add(f.uri);
             }
         }
         for (final FileInfo f : job.getFileInfo()) {
@@ -184,11 +185,11 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     // This entry does not have an anchor, we assume that this
                     // topic will
                     // be fully chunked. Thus it should not produce any output.
-                    final Iterator<String> hrefit = hrefTopics.iterator();
+                    final Iterator<URI> hrefit = hrefTopics.iterator();
                     while (hrefit.hasNext()) {
-                        final String ent = hrefit.next();
-                        if (resolve(job.tempDir.getAbsolutePath(), ent).getPath().equals(
-                                resolve(job.tempDir.getAbsolutePath(), s).getPath())) {
+                        final URI ent = hrefit.next();
+                        if (resolve(job.tempDir.getAbsoluteFile(), ent).equals(
+                                resolve(job.tempDir.getAbsolutePath(), s))) {
                             // The entry in hrefTopics points to the same target
                             // as entry in chunkTopics, it should be removed.
                             hrefit.remove();
@@ -200,36 +201,37 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        final Set<String> topicList = new LinkedHashSet<String>(128);
-        final Set<String> oldTopicList = new HashSet<String>();
+        final Set<URI> topicList = new LinkedHashSet<URI>(128);
+        final Set<URI> oldTopicList = new HashSet<URI>();
         for (final FileInfo f : job.getFileInfo()) {
             if (ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
-                oldTopicList.add(f.file.getPath());
+                oldTopicList.add(f.uri);
             }
         }
-        for (final String hrefTopic : hrefTopics) {
-            final String t = getRelativePath(xmlDitalist.getAbsolutePath(), resolve(job.tempDir.getAbsolutePath(), stripFragment(hrefTopic)).getPath(), File.separator);
+        for (final URI hrefTopic : hrefTopics) {
+            final URI t = getRelativePath(xmlDitalist, job.tempDir.toURI().resolve(stripFragment(hrefTopic.toString())));
             topicList.add(t);
             if (oldTopicList.contains(t)) {
                 oldTopicList.remove(t);
             }
         }
         
-        final Set<String> chunkedTopicSet = new LinkedHashSet<String>(128);
-        final Set<String> chunkedDitamapSet = new LinkedHashSet<String>(128);
-        final Set<String> ditamapList = new HashSet<String>();
+        final Set<URI> chunkedTopicSet = new LinkedHashSet<URI>(128);
+        final Set<URI> chunkedDitamapSet = new LinkedHashSet<URI>(128);
+        final Set<URI> ditamapList = new HashSet<URI>();
         for (final FileInfo f : job.getFileInfo()) {
             if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                ditamapList.add(f.file.getPath());
+                ditamapList.add(f.uri);
             }
         }
+        // XXX: Change to <File, File>
         for (final Map.Entry<String, String> entry : changeTable.entrySet()) {
             final String oldFile = entry.getKey();
             if (entry.getValue().equals(oldFile)) {
                 // newly chunked file
-                String newChunkedFile = entry.getValue();
-                newChunkedFile = getRelativePath(xmlDitalist.getAbsolutePath(), newChunkedFile, File.separator);
-                final String extName = getExtension(newChunkedFile);
+                URI newChunkedFile = new File(entry.getValue()).toURI();
+                newChunkedFile = getRelativePath(xmlDitalist, newChunkedFile);
+                final String extName = getExtension(newChunkedFile.getPath());
                 if (extName != null && !extName.equalsIgnoreCase(ATTR_FORMAT_VALUE_DITAMAP)) {
                     chunkedTopicSet.add(newChunkedFile);
                     if (!topicList.contains(newChunkedFile)) {
@@ -252,13 +254,13 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             }
         }
         // removed extra topic files
-        for (final String s : oldTopicList) {
-            if (!StringUtils.isEmptyString(s)) {
-                final File f = new File(job.tempDir, s);
+        for (final URI s : oldTopicList) {
+//            if (!StringUtils.isEmptyString(s)) {
+                final File f = new File(job.tempDir.toURI().resolve(s));
                 if (f.exists() && !f.delete()) {
                     logger.error("Failed to delete " + f.getAbsolutePath());
                 }
-            }
+//            }
         }
 
         // TODO we have refined topic list and removed extra topic files, next
@@ -270,21 +272,20 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 // original topic file
                 final String targetPath = conflictTable.get(entry.getKey());
                 if (targetPath != null) {
-                    final File target = new File(targetPath);
-                    if (!target.getAbsoluteFile().exists()) {
+                    final URI target = new File(targetPath).toURI();
+                    if (!new File(target).exists()) {
                         // newly chunked file
-                        final File from = new File(entry.getValue());
-                        String relativePath = getRelativePath(xmlDitalist.getAbsolutePath(), from.getAbsolutePath(), File.separator);
-                        final String relativeTargetPath = getRelativePath(xmlDitalist.getAbsolutePath(),
-                                target.getAbsolutePath(), File.separator);
-                        if (relativeTargetPath.lastIndexOf(SLASH) != -1) {
-                            relativePath2fix.put(relativeTargetPath,
-                                    relativeTargetPath.substring(0, relativeTargetPath.lastIndexOf(SLASH) + 1));
+                        final URI from = new File(entry.getValue()).toURI();
+                        URI relativePath = getRelativePath(xmlDitalist, from);
+                        final URI relativeTargetPath = getRelativePath(xmlDitalist, target);
+                        if (relativeTargetPath.getPath().lastIndexOf(File.separator) != -1) {
+                            relativePath2fix.put(relativeTargetPath.getPath(),
+                                    relativeTargetPath.getPath().substring(0, relativeTargetPath.getPath().lastIndexOf(File.separator) + 1));
                         }
                         // ensure the newly chunked file to the old one
                         try {
-                            deleteQuietly(target);
-                            moveFile(from, target);
+                            deleteQuietly(new File(target));
+                            moveFile(new File(from), new File(target));
                         } catch (final IOException e) {
                             logger.error("Failed to replace chunk topic: " + e.getMessage(), e);
 
@@ -295,7 +296,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         if (chunkedTopicSet.contains(relativePath)) {
                             chunkedTopicSet.remove(relativePath);
                         }
-                        relativePath = getRelativePath(xmlDitalist.getAbsolutePath(), target.getAbsolutePath(), File.separator);
+                        relativePath = getRelativePath(xmlDitalist, target);
                         topicList.add(relativePath);
                         chunkedTopicSet.add(relativePath);
                     } else {
@@ -305,35 +306,35 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        final Set<String> all = new HashSet<String>();
+        final Set<URI> all = new HashSet<URI>();
         all.addAll(topicList);
         all.addAll(ditamapList);
         all.addAll(chunkedDitamapSet);
         all.addAll(chunkedTopicSet);
         
         // remove redundant topic information
-        for (final String file: oldTopicList) {
+        for (final URI file: oldTopicList) {
             if (!all.contains(file)) {
-                job.remove(job.getOrCreateFileInfo(toURI(file)));
+                job.remove(job.getOrCreateFileInfo(file));
             }
         }
         
-        for (final String file : topicList) {
-            final FileInfo ff = job.getOrCreateFileInfo(toURI(file));
+        for (final URI file : topicList) {
+            final FileInfo ff = job.getOrCreateFileInfo(file);
             ff.format = ATTR_FORMAT_VALUE_DITA;
         }
-        for (final String file : ditamapList) {
-            final FileInfo ff = job.getOrCreateFileInfo(toURI(file));
+        for (final URI file : ditamapList) {
+            final FileInfo ff = job.getOrCreateFileInfo(file);
             ff.format = ATTR_FORMAT_VALUE_DITAMAP;
         }
 
-        for (final String file : chunkedDitamapSet) {
-            final FileInfo f = job.getOrCreateFileInfo(toURI(file));
+        for (final URI file : chunkedDitamapSet) {
+            final FileInfo f = job.getOrCreateFileInfo(file);
             f.format = ATTR_FORMAT_VALUE_DITAMAP;
             f.isResourceOnly = false;
         }
-        for (final String file : chunkedTopicSet) {
-            final FileInfo f = job.getOrCreateFileInfo(toURI(file));
+        for (final URI file : chunkedTopicSet) {
+            final FileInfo f = job.getOrCreateFileInfo(file);
             f.format = ATTR_FORMAT_VALUE_DITA;
             f.isResourceOnly = false;
         }

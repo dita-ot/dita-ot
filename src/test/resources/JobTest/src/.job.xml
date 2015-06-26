@@ -3,6 +3,9 @@
   <property name="user.input.file">
     <string>foo</string>
   </property>
+  <property name="user.input.file.uri">
+    <string>foo</string>
+  </property>
   <property name="copytotarget2sourcemaplist">
     <map>
       <entry key="baz">
@@ -15,6 +18,9 @@
   </property>
   <property name="user.input.dir">
     <string>/foo/bar</string>
+  </property>
+  <property name="user.input.dir.uri">
+    <string>file:/foo/bar</string>
   </property>
   <files>
     <file uri="foo2" path="foo2" conref-target="true"/>

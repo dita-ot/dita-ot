@@ -724,12 +724,16 @@ public final class Constants {
     /** Constant for generated property file name(subrelation.xml).*/
     public static final String FILE_NAME_SUBJECT_RELATION = "subrelation.xml";
 
-    /** Property name for input file system path */
+    /** Property name for input file system path. Deprecated since 2.2 */
+    @Deprecated
     public static final String INPUT_DITAMAP = "user.input.file";
+    public static final String INPUT_DITAMAP_URI = "user.input.file.uri";
     /** Property name for input file list file list file, i.e. file which points to a file which points to the input file */
     public static final String INPUT_DITAMAP_LIST_FILE_LIST = "user.input.file.listfile";
-    /** Property name for input directory system path */
+    /** Property name for input directory system path. Deprecated since 2.2 */
+    @Deprecated
     public static final String INPUT_DIR = "user.input.dir";
+    public static final String INPUT_DIR_URI = "user.input.dir.uri";
     /** Property name for copy-to target2sourcemap list file */
     public static final String COPYTO_TARGET_TO_SOURCE_MAP_LIST = "copytotarget2sourcemaplist";
     /** Property name for relflag image list file */

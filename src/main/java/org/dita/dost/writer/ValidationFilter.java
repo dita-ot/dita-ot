@@ -222,7 +222,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     break;
                 case LAX:
                     try {
-                        final String u = new URI(URLUtils.clean(FileUtils.separatorsToUnix(href))).toASCIIString();
+                        final String u = new URI(URLUtils.clean(href)).toASCIIString();
                         if (res == null) {
 							res = new AttributesImpl(atts);
 						}
