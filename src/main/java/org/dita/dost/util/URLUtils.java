@@ -89,7 +89,7 @@ public final class URLUtils {
      *            the string to be decoded
      * @return the decoded string
      */
-    public static String uncorrect(final String s) {
+    private static String uncorrect(final String s) {
         if (s == null) {
             return null;
         }
@@ -212,7 +212,7 @@ public final class URLUtils {
      *            query.
      * @return The corrected URL.
      */
-    public static String correct(String url, final boolean forceCorrection) {
+    private static String correct(String url, final boolean forceCorrection) {
         if (url == null) {
             return null;
         }

@@ -8,14 +8,13 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.FileUtils.*;
+import static org.apache.commons.io.FilenameUtils.*;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.getRelativePath;
-import static org.dita.dost.util.FileUtils.resolve;
 import static org.dita.dost.util.StringUtils.join;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getElementNode;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getText;
-import static org.dita.dost.util.FileUtils.*;
 import static java.util.Arrays.*;
 
 import java.io.*;
@@ -53,8 +52,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
     public static final String CHUNK_SELECT_BRANCH = "select-branch";
     public static final String CHUNK_SELECT_TOPIC = "select-topic";
     public static final String CHUNK_SELECT_DOCUMENT = "select-document";
-    public static final String CHUNK_BY_DOCUMENT = "by-document";
-    public static final String CHUNK_BY_TOPIC = "by-topic";
+    private static final String CHUNK_BY_DOCUMENT = "by-document";
+    private static final String CHUNK_BY_TOPIC = "by-topic";
     public static final String CHUNK_TO_CONTENT = "to-content";
     public static final String CHUNK_TO_NAVIGATION = "to-navigation";
 
@@ -176,7 +175,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
             final String oldpath = newFile.getAbsolutePath();
             newFile = resolve(inputFile.getParentFile().getAbsolutePath(), newFilename);
             // Mark up the possible name changing, in case that references might be updated.
-            conflictTable.put(newFile.getAbsolutePath(), normalize(oldpath).getPath());
+            conflictTable.put(newFile.getAbsolutePath(), normalize(oldpath));
         }
         changeTable.put(newFile.getAbsolutePath(), newFile.getAbsolutePath());
 
@@ -377,7 +376,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
      *
      * @return generated file name
      */
-    protected String generateFilename() {
+    private String generateFilename() {
         return chunkFilenameGenerator.generateFilename("XChunk", FILE_EXTENSION_DITA);
     }
 

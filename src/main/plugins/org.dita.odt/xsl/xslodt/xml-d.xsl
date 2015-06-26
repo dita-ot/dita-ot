@@ -29,10 +29,9 @@
   <xsl:template match="*[contains(@class,' xml-d/xmlelement ')]">
     <xsl:choose>
       <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
-        <xsl:element name="text:p">
-          <xsl:element name="text:span">
-            <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-            <xsl:element name="text:span">
+        <text:p>
+          <text:span text:style-name="Courier_New">
+            <text:span>
               <!-- start add rev flagging styles -->
               <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
               <xsl:text>&lt;</xsl:text>
@@ -40,27 +39,24 @@
               <xsl:text>&gt;</xsl:text>
               <!-- end add rev flagging styles -->
               <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-            </xsl:element>
-          </xsl:element>
-        </xsl:element>
+            </text:span>
+          </text:span>
+        </text:p>
       </xsl:when>
       <!-- nested by entry -->
       <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
-        <xsl:element name="text:p">
+        <text:p>
           <!-- alignment styles -->
           <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+              <text:span text:style-name="bold">
+                <text:span text:style-name="Courier_New">
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:text>&lt;</xsl:text>
@@ -68,14 +64,14 @@
                     <xsl:text>&gt;</xsl:text>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:text>&lt;</xsl:text>
@@ -83,24 +79,23 @@
                   <xsl:text>&gt;</xsl:text>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by stentry -->
       <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
-        <xsl:element name="text:p">
+        <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
-              parent::*[contains(@class, ' topic/sthead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/               parent::*[contains(@class, ' topic/sthead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:text>&lt;</xsl:text>
@@ -108,14 +103,14 @@
                     <xsl:text>&gt;</xsl:text>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:text>&lt;</xsl:text>
@@ -123,17 +118,17 @@
                   <xsl:text>&gt;</xsl:text>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by other tags -->
       <xsl:otherwise>
-        <xsl:element name="text:span">
-          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-          <xsl:element name="text:span">
+        <text:span text:style-name="Courier_New">
+          
+          <text:span>
             <!-- start add rev flagging styles -->
             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
             <xsl:text>&lt;</xsl:text>
@@ -141,8 +136,8 @@
             <xsl:text>&gt;</xsl:text>
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-          </xsl:element>
-        </xsl:element>
+          </text:span>
+        </text:span>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -150,114 +145,112 @@
   <xsl:template match="*[contains(@class,' xml-d/xmlatt ')]">
     <xsl:choose>
       <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
-        <xsl:element name="text:p">
-          <xsl:element name="text:span">
-            <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-            <xsl:element name="text:span">
+        <text:p>
+          <text:span text:style-name="Courier_New">
+            
+            <text:span>
               <!-- start add rev flagging styles -->
               <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
               <xsl:text>@</xsl:text>
               <xsl:apply-templates/>
               <!-- end add rev flagging styles -->
               <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-            </xsl:element>
-          </xsl:element>
-        </xsl:element>
+            </text:span>
+          </text:span>
+        </text:p>
       </xsl:when>
       <!-- nested by entry -->
       <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
-        <xsl:element name="text:p">
+        <text:p>
           <!-- alignment styles -->
           <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:text>@</xsl:text>
                     <xsl:apply-templates/>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:text>@</xsl:text>
                   <xsl:apply-templates/>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by stentry -->
       <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
-        <xsl:element name="text:p">
+        <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
-              parent::*[contains(@class, ' topic/sthead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/               parent::*[contains(@class, ' topic/sthead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:text>@</xsl:text>
                     <xsl:apply-templates/>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:text>@</xsl:text>
                   <xsl:apply-templates/>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by other tags -->
       <xsl:otherwise>
-        <xsl:element name="text:span">
-          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-          <xsl:element name="text:span">
+        <text:span text:style-name="Courier_New">
+          
+          <text:span>
             <!-- start add rev flagging styles -->
             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
             <xsl:text>@</xsl:text>
             <xsl:apply-templates/>
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-          </xsl:element>
-        </xsl:element>
+          </text:span>
+        </text:span>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -265,10 +258,10 @@
   <xsl:template match="*[contains(@class,' xml-d/textentity ')]">
     <xsl:choose>
       <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
-        <xsl:element name="text:p">
-          <xsl:element name="text:span">
-            <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-            <xsl:element name="text:span">
+        <text:p>
+          <text:span text:style-name="Courier_New">
+            
+            <text:span>
               <!-- start add rev flagging styles -->
               <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
               <xsl:text>&amp;</xsl:text>
@@ -276,27 +269,26 @@
               <xsl:text>;</xsl:text>
               <!-- end add rev flagging styles -->
               <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-            </xsl:element>
-          </xsl:element>
-        </xsl:element>
+            </text:span>
+          </text:span>
+        </text:p>
       </xsl:when>
       <!-- nested by entry -->
       <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
-        <xsl:element name="text:p">
+        <text:p>
           <!-- alignment styles -->
           <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:text>&amp;</xsl:text>
@@ -304,14 +296,14 @@
                     <xsl:text>;</xsl:text>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:text>&amp;</xsl:text>
@@ -319,24 +311,23 @@
                   <xsl:text>;</xsl:text>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by stentry -->
       <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
-        <xsl:element name="text:p">
+        <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
-              parent::*[contains(@class, ' topic/sthead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/               parent::*[contains(@class, ' topic/sthead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:text>&amp;</xsl:text>
@@ -344,14 +335,14 @@
                     <xsl:text>;</xsl:text>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:text>&amp;</xsl:text>
@@ -359,17 +350,17 @@
                   <xsl:text>;</xsl:text>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by other tags -->
       <xsl:otherwise>
-        <xsl:element name="text:span">
-          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-          <xsl:element name="text:span">
+        <text:span text:style-name="Courier_New">
+          
+          <text:span>
             <!-- start add rev flagging styles -->
             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
             <xsl:text>&amp;</xsl:text>
@@ -377,8 +368,8 @@
             <xsl:text>;</xsl:text>
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-          </xsl:element>
-        </xsl:element>
+          </text:span>
+        </text:span>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -386,10 +377,10 @@
   <xsl:template match="*[contains(@class,' xml-d/parameterentity ')]">
     <xsl:choose>
       <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
-        <xsl:element name="text:p">
-          <xsl:element name="text:span">
-            <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-            <xsl:element name="text:span">
+        <text:p>
+          <text:span text:style-name="Courier_New">
+            
+            <text:span>
               <!-- start add rev flagging styles -->
               <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
               <xsl:text>%</xsl:text>
@@ -397,27 +388,26 @@
               <xsl:text>;</xsl:text>
               <!-- end add rev flagging styles -->
               <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-            </xsl:element>
-          </xsl:element>
-        </xsl:element>
+            </text:span>
+          </text:span>
+        </text:p>
       </xsl:when>
       <!-- nested by entry -->
       <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
-        <xsl:element name="text:p">
+        <text:p>
           <!-- alignment styles -->
           <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:text>%</xsl:text>
@@ -425,14 +415,14 @@
                     <xsl:text>;</xsl:text>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:text>%</xsl:text>
@@ -440,24 +430,23 @@
                   <xsl:text>;</xsl:text>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by stentry -->
       <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
-        <xsl:element name="text:p">
+        <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
-              parent::*[contains(@class, ' topic/sthead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/               parent::*[contains(@class, ' topic/sthead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:text>%</xsl:text>
@@ -465,14 +454,14 @@
                     <xsl:text>;</xsl:text>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:text>%</xsl:text>
@@ -480,17 +469,17 @@
                   <xsl:text>;</xsl:text>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by other tags -->
       <xsl:otherwise>
-        <xsl:element name="text:span">
-          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-          <xsl:element name="text:span">
+        <text:span text:style-name="Courier_New">
+          
+          <text:span>
             <!-- start add rev flagging styles -->
             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
             <xsl:text>%</xsl:text>
@@ -498,8 +487,8 @@
             <xsl:text>;</xsl:text>
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-          </xsl:element>
-        </xsl:element>
+          </text:span>
+        </text:span>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -507,10 +496,10 @@
   <xsl:template match="*[contains(@class,' xml-d/numcharref ')]">
     <xsl:choose>
       <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
-        <xsl:element name="text:p">
-          <xsl:element name="text:span">
-            <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-            <xsl:element name="text:span">
+        <text:p>
+          <text:span text:style-name="Courier_New">
+            
+            <text:span>
               <!-- start add rev flagging styles -->
               <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
               <xsl:text>&amp;#</xsl:text>
@@ -518,27 +507,26 @@
               <xsl:text>;</xsl:text>
               <!-- end add rev flagging styles -->
               <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-            </xsl:element>
-          </xsl:element>
-        </xsl:element>
+            </text:span>
+          </text:span>
+        </text:p>
       </xsl:when>
       <!-- nested by entry -->
       <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
-        <xsl:element name="text:p">
+        <text:p>
           <!-- alignment styles -->
           <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:text>&amp;#</xsl:text>
@@ -546,14 +534,14 @@
                     <xsl:text>;</xsl:text>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:text>&amp;#</xsl:text>
@@ -561,24 +549,23 @@
                   <xsl:text>;</xsl:text>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by stentry -->
       <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
-        <xsl:element name="text:p">
+        <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
-              parent::*[contains(@class, ' topic/sthead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/               parent::*[contains(@class, ' topic/sthead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:text>&amp;#</xsl:text>
@@ -586,14 +573,14 @@
                     <xsl:text>;</xsl:text>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:text>&amp;#</xsl:text>
@@ -601,17 +588,17 @@
                   <xsl:text>;</xsl:text>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by other tags -->
       <xsl:otherwise>
-        <xsl:element name="text:span">
-          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-          <xsl:element name="text:span">
+        <text:span text:style-name="Courier_New">
+          
+          <text:span>
             <!-- start add rev flagging styles -->
             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
             <xsl:text>&amp;#</xsl:text>
@@ -619,8 +606,8 @@
             <xsl:text>;</xsl:text>
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-          </xsl:element>
-        </xsl:element>
+          </text:span>
+        </text:span>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -628,218 +615,213 @@
   <xsl:template match="*[contains(@class,' xml-d/xmlnsname ')]">
     <xsl:choose>
       <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
-        <xsl:element name="text:p">
-          <xsl:element name="text:span">
-            <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-            <xsl:element name="text:span">
+        <text:p>
+          <text:span text:style-name="Courier_New">
+            
+            <text:span>
               <!-- start add rev flagging styles -->
               <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
               <xsl:apply-templates/>
               <!-- end add rev flagging styles -->
               <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-            </xsl:element>
-          </xsl:element>
-        </xsl:element>
+            </text:span>
+          </text:span>
+        </text:p>
       </xsl:when>
       <!-- nested by entry -->
       <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
-        <xsl:element name="text:p">
+        <text:p>
           <!-- alignment styles -->
           <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:apply-templates/>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:apply-templates/>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by stentry -->
       <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
-        <xsl:element name="text:p">
+        <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
-              parent::*[contains(@class, ' topic/sthead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/               parent::*[contains(@class, ' topic/sthead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:apply-templates/>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:apply-templates/>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by other tags -->
       <xsl:otherwise>
-        <xsl:element name="text:span">
-          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-          <xsl:element name="text:span">
+        <text:span text:style-name="Courier_New">
+          
+          <text:span>
             <!-- start add rev flagging styles -->
             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
             <xsl:apply-templates/>
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-          </xsl:element>
-        </xsl:element>
+          </text:span>
+        </text:span>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class,' xml-d/xmlnsname ')] |
-                       *[contains(@class,' xml-d/xmlpi ')]">
+  <xsl:template match="*[contains(@class,' xml-d/xmlnsname ')] |                        *[contains(@class,' xml-d/xmlpi ')]">
     <xsl:choose>
       <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
-        <xsl:element name="text:p">
-          <xsl:element name="text:span">
-            <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-            <xsl:element name="text:span">
+        <text:p>
+          <text:span text:style-name="Courier_New">
+            
+            <text:span>
               <!-- start add rev flagging styles -->
               <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
               <xsl:apply-templates/>
               <!-- end add rev flagging styles -->
               <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-            </xsl:element>
-          </xsl:element>
-        </xsl:element>
+            </text:span>
+          </text:span>
+        </text:p>
       </xsl:when>
       <!-- nested by entry -->
       <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
-        <xsl:element name="text:p">
+        <text:p>
           <!-- alignment styles -->
           <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:apply-templates/>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:apply-templates/>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by stentry -->
       <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
-        <xsl:element name="text:p">
+        <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
-              parent::*[contains(@class, ' topic/sthead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:element name="text:span">
-                  <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                  <xsl:element name="text:span">
+            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/               parent::*[contains(@class, ' topic/sthead ')]">
+              <text:span text:style-name="bold">
+                
+                <text:span text:style-name="Courier_New">
+                  
+                  <text:span>
                     <!-- start add rev flagging styles -->
                     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                     <xsl:apply-templates/>
                     <!-- end add rev flagging styles -->
                     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                  </xsl:element>
-                </xsl:element>
-              </xsl:element>
+                  </text:span>
+                </text:span>
+              </text:span>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                <xsl:element name="text:span">
+              <text:span text:style-name="Courier_New">
+                
+                <text:span>
                   <!-- start add rev flagging styles -->
                   <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
                   <xsl:apply-templates/>
                   <!-- end add rev flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-                </xsl:element>
-              </xsl:element>
+                </text:span>
+              </text:span>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
+        </text:p>
       </xsl:when>
       <!-- nested by other tags -->
       <xsl:otherwise>
-        <xsl:element name="text:span">
-          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-          <xsl:element name="text:span">
+        <text:span text:style-name="Courier_New">
+          
+          <text:span>
             <!-- start add rev flagging styles -->
             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
             <xsl:apply-templates/>
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
-          </xsl:element>
-        </xsl:element>
+          </text:span>
+        </text:span>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

@@ -56,8 +56,8 @@ public interface AbstractFacade {
     AbstractPipelineOutput execute(AbstractPipelineModule module,
             AbstractPipelineInput input) throws DITAOTException;
         
-    public void setLogger(DITAOTLogger logger);
+    void setLogger(DITAOTLogger logger);
 
-    public void setJob(Job job);
+    void setJob(Job job);
 
 }

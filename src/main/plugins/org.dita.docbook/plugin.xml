@@ -7,7 +7,7 @@
   <!-- extension points -->
   <extension-point id="dita.xsl.docbook" name="Docbook XSLT import"/>
   <!-- extensions -->
-  <feature extension="dita.conductor.transtype.check" value="docbook"/>
+  <transtype name="docbook" desc="DocBook"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <template file="xsl/dita2docbook_template.xsl"/>
 </plugin>

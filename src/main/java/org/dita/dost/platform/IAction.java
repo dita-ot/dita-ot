@@ -50,5 +50,5 @@ public interface IAction {
      * Set logger.
      * @param logger logger instance
      */
-    public void setLogger(DITAOTLogger logger);
+    void setLogger(DITAOTLogger logger);
 }

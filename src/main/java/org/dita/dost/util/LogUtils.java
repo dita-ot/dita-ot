@@ -50,7 +50,7 @@ public final class LogUtils {
     /**
      * Increase info number by 1.
      */
-    public static void increaseNumOfInfo(){
+    private static void increaseNumOfInfo(){
         numOfInfo++;
     }
     /**

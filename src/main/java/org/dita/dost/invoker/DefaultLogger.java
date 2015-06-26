@@ -41,23 +41,23 @@ import org.apache.tools.ant.util.FileUtils;
  * are being executed, and any messages that get logged.
  * 
  */
-public class DefaultLogger implements BuildLogger {
+class DefaultLogger implements BuildLogger {
     /**
      * Size of left-hand column for right-justified task name.
      * 
      * @see #messageLogged(BuildEvent)
      */
-    public static final int LEFT_COLUMN_SIZE = 12;
+    private static final int LEFT_COLUMN_SIZE = 12;
 
     // CheckStyle:VisibilityModifier OFF - bc
     /** PrintStream to write non-error messages to */
-    protected PrintStream out;
+    private PrintStream out;
 
     /** PrintStream to write error messages to */
-    protected PrintStream err;
+    private PrintStream err;
 
     /** Lowest level of message to write out */
-    protected int msgOutputLevel = Project.MSG_ERR;
+    private int msgOutputLevel = Project.MSG_ERR;
 
     /** Time of the start of the build */
     private long startTime = System.currentTimeMillis();
@@ -68,7 +68,7 @@ public class DefaultLogger implements BuildLogger {
     // CheckStyle:ConstantNameCheck ON
 
     /** Whether or not to use emacs-style output */
-    protected boolean emacsMode = false;
+    private boolean emacsMode = false;
 
     // CheckStyle:VisibilityModifier ON
 
@@ -141,7 +141,7 @@ public class DefaultLogger implements BuildLogger {
         startTime = System.currentTimeMillis();
     }
 
-    static void throwableMessage(final StringBuilder m, final Throwable error, final boolean verbose) {
+    private static void throwableMessage(final StringBuilder m, final Throwable error, final boolean verbose) {
         String msg = error.getMessage();
         final int i = msg.indexOf(": ");
         if (i != -1) {
@@ -342,7 +342,7 @@ public class DefaultLogger implements BuildLogger {
      * @param priority The priority of the message. (Ignored in this
      *            implementation.)
      */
-    protected void printMessage(final String message, final PrintStream stream, final int priority) {
+    private void printMessage(final String message, final PrintStream stream, final int priority) {
         stream.println(message);
     }
 
@@ -352,7 +352,7 @@ public class DefaultLogger implements BuildLogger {
      * 
      * @param message Message being logged. Should not be <code>null</code>.
      */
-    protected void log(final String message) {
+    private void log(final String message) {
     }
 
     /**

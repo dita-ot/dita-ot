@@ -55,16 +55,7 @@ with those set forth herein.
       <param name="1" location="${args.xsl.pdf}"/>
     </dita-ot-fail>
     
-    <condition property="preprocess.copy-image.skip" value="true">
-      <isfalse value="${org.dita.pdf2.use-out-temp}"/>
-    </condition>
-    <condition property="retain.topic.fo" value="true">
-      <isfalse value="${org.dita.pdf2.use-out-temp}"/>
-    </condition>
-    <!-- Legacy: pass empty input directory -->
-    <condition property="user.input.dir.url" value="">
-      <istrue value="${org.dita.pdf2.use-out-temp}"/>
-    </condition>
+    <property name="preprocess.copy-image.skip" value="true"/>
     
     <condition property="args.rellinks" value="nofamily">
       <not><isset property="args.rellinks"/></not>
@@ -75,9 +66,7 @@ with those set forth herein.
   <target name="dita2pdf2" depends="dita2pdf2.init, build-init, preprocess, map2pdf2, topic2pdf2"/>
 
   <target name="transform.topic2pdf.init">
-    <condition property="pdf2.temp.dir" value="${dita.temp.dir}" else="${dita.map.output.dir}">
-      <isfalse value="${org.dita.pdf2.use-out-temp}"/>
-    </condition>
+    <property name="pdf2.temp.dir" value="${dita.temp.dir}"/>
     
     <property name="customization.dir" value="${dita.plugin.org.dita.pdf2.dir}/Customization"/>
     <property file="${customization.dir}/build.properties"/>
@@ -437,16 +426,7 @@ with those set forth herein.
                         transform.topic2fo,
                         {depend.org.dita.pdf2.format.pre},
                         transform.fo2pdf,
-                        {depend.org.dita.pdf2.format.post},
-                        delete.fo2pdf.topic.fo"/>
-
-  <target name="delete.fo2pdf.topic.fo" unless="retain.topic.fo">
-    <delete>
-      <!--Deleting the stage files isn't necessary, since it will be cleaned by clean-temp, and is useful for debugging.-->
-      <!--<fileset dir="${dita.temp.dir}" includes="stage?.*"/>-->
-      <fileset dir="${pdf2.temp.dir}" includes="topic.fo"/>
-    </delete>
-  </target>
+                        {depend.org.dita.pdf2.format.post}"/>
 
   <target name="transform.fo2pdf"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"

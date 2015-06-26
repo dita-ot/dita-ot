@@ -9,6 +9,8 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.writer.ImageMetadataFilter.*;
+import static javax.xml.XMLConstants.*;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -74,7 +76,8 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         try {
             midBuffer = new ByteArrayOutputStream();
             midBuffer.write(XML_HEAD.getBytes(UTF8));
-            midBuffer.write("<dita-merge xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\">".getBytes(UTF8));
+            midBuffer.write(("<dita-merge " + ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION + "='" + DITA_NAMESPACE + "' "
+                    + XMLNS_ATTRIBUTE + ":" + DITA_OT_PREFIX + "='" + DITA_OT_NS + "'>").getBytes(UTF8));
             mapParser.setOutputStream(midBuffer);
             mapParser.read(ditaInput, job.tempDir);
             midBuffer.write("</dita-merge>".getBytes(UTF8));
@@ -95,8 +98,8 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         OutputStream output = null;
         try {
             final File outputDir = out.getParentFile();
-            if (!outputDir.exists()) {
-                outputDir.mkdirs();
+            if (!outputDir.exists() && !outputDir.mkdirs()) {
+                logger.error("Failed to create directory " + outputDir.getAbsolutePath());
             }
             output = new BufferedOutputStream(new FileOutputStream(out));
             if (style != null) {
@@ -104,11 +107,13 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
                 factory.setURIResolver(CatalogUtils.getCatalogResolver());
                 final Transformer transformer = factory.newTransformer(new StreamSource(style.toURI().toString()));
                 transformer.transform(new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray())),
-                                      new StreamResult(output));
+                        new StreamResult(output));
             } else {
                 output.write(midBuffer.toByteArray());
                 output.flush();
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             throw new DITAOTException("Failed to process merged topics: " + e.getMessage(), e);
         } finally {

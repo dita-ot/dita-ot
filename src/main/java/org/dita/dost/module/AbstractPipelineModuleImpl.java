@@ -15,8 +15,8 @@ import org.dita.dost.util.Job;
  */
 public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModule {
 
-    protected DITAOTLogger logger;
-    protected Job job;
+    DITAOTLogger logger;
+    Job job;
 
     @Override
     public void setLogger(final DITAOTLogger logger) {

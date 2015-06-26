@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -71,15 +70,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      */
     public void setCurrentFile(final URI currentFile) {
         this.currentFile = currentFile;
-    }
-    
-    /**
-     * Set the relative directory of current file.
-     * 
-     * @param dir dir
-     */
-    public void setCurrentDir(final URI dir) {
-        currentDir = dir;
+        this.currentDir = currentFile.resolve(".");
     }
 
     /**

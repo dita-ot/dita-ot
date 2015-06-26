@@ -6,5 +6,7 @@
 	url = git://github.com/dita-ot/ext-plugins.git
 [submodule "src/main/docsrc"]
 	path = src/main/docsrc
-	url = https://github.com/dita-ot/docs.git
-
+	url = git://github.com/dita-ot/docs.git
+[submodule "src/main/plugins/org.dita-ot.html"]
+	path = src/main/plugins/org.dita-ot.html
+	url = git://github.com/dita-ot/org.dita-ot.html.git

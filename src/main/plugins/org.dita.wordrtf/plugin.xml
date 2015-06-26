@@ -7,7 +7,7 @@
   <!-- extension points -->
   <extension-point id="dita.xsl.rtf" name="RTF XSLT import"/>
   <!-- extensions -->
-  <feature extension="dita.conductor.transtype.check" value="wordrtf"/>
+  <transtype name="wordrtf" desc="Word RTF"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <template file="xsl/dita2rtf_template.xsl"/>
 </plugin>

@@ -18,11 +18,22 @@
     </xsl:element>
   </xsl:template>
   
-  <xsl:template match="nav" mode="add-xhtml-ns" priority="20">
+  <xsl:template match="nav | section | figure | article" mode="add-xhtml-ns" priority="20">
     <xsl:element name="div" namespace="http://www.w3.org/1999/xhtml">
-      <xsl:apply-templates select="@* | node()" mode="add-xhtml-ns"/>
+      <xsl:apply-templates select="@* except @role | node()" mode="add-xhtml-ns"/>
     </xsl:element>
   </xsl:template>
+
+  <!-- Group for root document node does not need extra XHTML div -->
+  <xsl:template match="main/article" mode="add-xhtml-ns" priority="30">
+    <xsl:apply-templates select="node()" mode="add-xhtml-ns"/>
+  </xsl:template>
+
+  <xsl:template match="header | footer | main" mode="add-xhtml-ns" priority="20">
+    <xsl:apply-templates select="node()" mode="add-xhtml-ns"/>
+  </xsl:template>
+  
+  <xsl:template match="div/@role" mode="add-xhtml-ns" priority="10"/>
   
   <xsl:template match="@*[starts-with(name(), 'data-')]" mode="add-xhtml-ns" priority="10"/>
   

@@ -40,8 +40,8 @@ public interface AbstractPipelineModule {
      * 
      * @param logger logger to use for log message
      */
-    public void setLogger(DITAOTLogger logger);
+    void setLogger(DITAOTLogger logger);
 
-    public void setJob(Job job);
+    void setJob(Job job);
     
 }

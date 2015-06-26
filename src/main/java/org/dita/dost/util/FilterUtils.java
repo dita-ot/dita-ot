@@ -8,10 +8,8 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
 
-import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +17,6 @@ import java.util.regex.Pattern;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
-import org.dita.dost.reader.DitaValReader;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -54,8 +51,9 @@ public final class FilterUtils {
     private DITAOTLogger logger;
     private final Map<FilterKey, Action> filterMap;
     private final Set<FilterKey> notMappingRules = new HashSet<FilterKey>();
+    private boolean logMissingAction;
 
-    public FilterUtils(final Map<FilterKey, Action> filterMap) {
+    private FilterUtils(final Map<FilterKey, Action> filterMap) {
         this.filterMap = new HashMap<FilterKey, Action>(filterMap);
     }
 
@@ -76,11 +74,17 @@ public final class FilterUtils {
         }
         dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, null), Action.INCLUDE);
         dfm.putAll(filterMap);
+        this.logMissingAction = !filterMap.isEmpty();
         this.filterMap = dfm;
     }
 
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+    }
+
+    @Override
+    public String toString() {
+        return filterMap.toString();
     }
 
     /**
@@ -283,7 +287,7 @@ public final class FilterUtils {
         for (final String attSubValue: attValue) {
             final FilterKey filterKey = new FilterKey(attName, attSubValue);
             final Action filterAction = filterMap.get(filterKey);
-            if (filterAction == null) {
+            if (filterAction == null && logMissingAction) {
                 if (!alreadyShowed(filterKey)) {
                     logger.info(MessageUtils.getInstance().getMessage("DOTJ031I", filterKey.toString()).toString());
                 }
@@ -376,6 +380,7 @@ public final class FilterUtils {
             }
             final FilterUtils filterUtils = new FilterUtils(buf);
             filterUtils.setLogger(logger);
+            filterUtils.logMissingAction = logMissingAction;
             return filterUtils;
         } else {
             return this;

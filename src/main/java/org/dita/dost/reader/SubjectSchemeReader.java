@@ -6,6 +6,7 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.*;
 import java.net.URI;
@@ -54,7 +55,7 @@ public class SubjectSchemeReader {
      * {@code Map<AttName, Map<ElemName, <Set<Value>>>}. For default element
      * mapping, the value is {@code *}.
      * 
-     * @return valid attribute values
+     * @return valid attribute values or empty map
      */
     public Map<String, Map<String, Set<String>>> getValidValuesMap() {
         return validValuesMap;
@@ -66,7 +67,7 @@ public class SubjectSchemeReader {
      * {@code Map<AttName, Map<ElemName, Default>>}. For default element
      * mapping, the value is {@code *}.
      * 
-     * @return default values
+     * @return default values or empty map
      */
     public Map<String, Map<String, String>> getDefaultValueMap() {
         return defaultValueMap;
@@ -93,8 +94,8 @@ public class SubjectSchemeReader {
      *
      * @param inputFile XML properties file absolute path
      */
-    public static Map<File, Set<File>> readMapFromXML(final File inputFile) throws IOException {
-        final Map<File, Set<File>> graph = new HashMap<File, Set<File>>();
+    public static Map<URI, Set<URI>> readMapFromXML(final File inputFile) throws IOException {
+        final Map<URI, Set<URI>> graph = new HashMap<URI, Set<URI>>();
         if (!inputFile.exists()) {
             return Collections.EMPTY_MAP;
         }
@@ -119,11 +120,11 @@ public class SubjectSchemeReader {
         for (final Map.Entry<Object, Object> entry: prop.entrySet()) {
             final String key = (String) entry.getKey();
             final String value = (String) entry.getValue();
-            final Set<File> r = new HashSet<File>();
+            final Set<URI> r = new HashSet<URI>();
             for (final String v: StringUtils.restoreSet(value, COMMA)) {
-                r.add(new File(v));
+                r.add(toURI(v));
             }
-            graph.put(new File(key), r);
+            graph.put(toURI(key), r);
         }
 
         return Collections.unmodifiableMap(graph);
@@ -172,8 +173,9 @@ public class SubjectSchemeReader {
      * @param scheme absolute path for subject scheme
      */
     public void loadSubjectScheme(final File scheme) {
+        assert scheme.isAbsolute();
         if (!scheme.exists()) {
-            return;
+            throw new IllegalStateException();
         }
         logger.debug("Load subject scheme " + scheme);
 
@@ -235,7 +237,7 @@ public class SubjectSchemeReader {
                                         }
                                         if (!A.contains(subTree)) {
                                             // Add sub-tree to valid values map
-                                            this.putValuePairsIntoMap(subTree, elementName, attributeName);
+                                            putValuePairsIntoMap(subTree, elementName, attributeName, keyValue);
                                         }
                                         A.add(subTree);
                                         S.put(elementName, A);
@@ -288,8 +290,9 @@ public class SubjectSchemeReader {
      * @param subtree subject scheme definition element
      * @param elementName element name
      * @param attName attribute name
+     * @param category enumeration category name
      */
-    private void putValuePairsIntoMap(final Element subtree, final String elementName, final String attName) {
+    private void putValuePairsIntoMap(final Element subtree, final String elementName, final String attName, final String category) {
         if (subtree == null || attName == null) {
             return;
         }
@@ -317,7 +320,7 @@ public class SubjectSchemeReader {
             }
             if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
                 final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-                if (!StringUtils.isEmptyString(key)) {
+                if (!(key == null || key.trim().isEmpty() || key.equals(category))) {
                     valueSet.add(key);
                 }
             }

@@ -25,9 +25,9 @@ public final class SAXExceptionWrapper extends SAXParseException {
     /** Message & location. */
     String messageWithLocation;
     /** SAX parse exception. */
-    SAXParseException saxParseException;
+    private SAXParseException saxParseException;
     /** Source file where the exception is thrown. */
-    String sourceFile;
+    private String sourceFile;
 
     /**
      * Constructor.

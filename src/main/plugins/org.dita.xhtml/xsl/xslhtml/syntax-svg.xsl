@@ -58,7 +58,7 @@
 
 <xsl:template match="*[contains(@class,' pr-d/kwd ')]" priority="2">
 <text style="font-size: 11; font-family: Arial; font-weight: bold; stroke:none; fill:blue;">
-  <xsl:if test="name(parent::*)='groupchoice'"><xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if></xsl:if>
+  <xsl:if test="parent::*[contains(@class, ' pr-d/groupchoice ')]"><xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if></xsl:if>
   <xsl:if test="@importance='optional'"> [</xsl:if>
   <xsl:choose>
     <xsl:when test="@importance='default'"><u><xsl:value-of select="."/></u></xsl:when>

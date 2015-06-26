@@ -4,6 +4,8 @@
  */
 package org.dita.dost;
 
+import static org.apache.commons.io.FileUtils.*;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -29,13 +31,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.xml.resolver.tools.CatalogResolver;
-
 import org.custommonkey.xmlunit.XMLUnit;
 
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.CatalogUtils;
-import org.dita.dost.util.FileUtils;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -241,7 +240,7 @@ public class TestUtils {
      */
     public static void copy(final File src, final File dst) throws IOException {
         if (src.isFile()) {
-            FileUtils.copyFile(src, dst);
+            copyFile(src, dst);
         } else {
             if (!dst.exists() && !dst.mkdirs()) {
                 throw new IOException("Failed to create directory " + dst);

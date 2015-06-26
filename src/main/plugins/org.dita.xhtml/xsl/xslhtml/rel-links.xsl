@@ -150,8 +150,8 @@
       <dl class="prereqlinks">
         <xsl:value-of select="$newline"/>
         <dt class="prereq">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Prerequisites'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Prerequisites'"/>
           </xsl:call-template>
         </dt>
         <xsl:value-of select="$newline"/>
@@ -163,7 +163,7 @@
 
   <!--main template for setting up all links after the body - applied to the related-links container-->
   <xsl:template match="*[contains(@class, ' topic/related-links ')]" name="topic.related-links">
-    <nav>
+    <nav role="navigation">
       <xsl:call-template name="commonattributes"/>
       <xsl:if test="$include.roles = ('child', 'descendant')">
         <xsl:call-template name="ul-child-links"/>
@@ -291,8 +291,8 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:if test="exists($links)">
       <linklist class="- topic/linklist " outputclass="relinfo">
         <title class="- topic/title ">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Related information'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Related information'"/>
           </xsl:call-template>
         </title>
         <xsl:copy-of select="$links"/>
@@ -369,13 +369,13 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
       <!--use string as output link text for now, use image eventually-->
       <xsl:choose>
         <xsl:when test="@role = 'next'">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Next topic'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Next topic'"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:when test="@role = 'previous'">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Previous topic'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Previous topic'"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise><!--both role values tested - no otherwise--></xsl:otherwise>
@@ -401,11 +401,11 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <strong>
       <!-- Allow for unknown metadata (future-proofing) -->
       <xsl:apply-templates select="*[contains(@class, ' topic/data ') or contains(@class, ' topic/foreign ')]"/>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Next topic'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Next topic'"/>
       </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'ColonSymbol'"/>
       </xsl:call-template>
     </strong>
     <xsl:text> </xsl:text>
@@ -416,11 +416,11 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <strong>
       <!-- Allow for unknown metadata (future-proofing) -->
       <xsl:apply-templates select="*[contains(@class, ' topic/data ') or contains(@class, ' topic/foreign ')]"/>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Previous topic'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Previous topic'"/>
       </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'ColonSymbol'"/>
       </xsl:call-template>
     </strong>
     <xsl:text> </xsl:text>
@@ -431,11 +431,11 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <strong>
       <!-- Allow for unknown metadata (future-proofing) -->
       <xsl:apply-templates select="*[contains(@class, ' topic/data ') or contains(@class, ' topic/foreign ')]"/>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Parent topic'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Parent topic'"/>
       </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'ColonSymbol'"/>
       </xsl:call-template>
     </strong>
     <xsl:text> </xsl:text>
@@ -709,15 +709,19 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
      Normal treatment: if desc is present and not empty, create hovertext.
      Using title (for next/previous links, etc): always create, use title or target. -->
   <xsl:template match="*" mode="add-desc-as-hoverhelp">
-    <xsl:if test="*[contains(@class, ' topic/desc ')]">
-      <xsl:variable name="hovertext">
-        <xsl:apply-templates select="*[contains(@class, ' topic/desc ')][1]" mode="text-only"/>
-      </xsl:variable>
-      <xsl:if test="normalize-space($hovertext)">
-        <xsl:attribute name="title">
-          <xsl:value-of select="normalize-space($hovertext)"/>
-        </xsl:attribute>
-      </xsl:if>
+    <xsl:param name="hovertext"/>
+    <xsl:variable name="h">
+      <xsl:choose>
+        <xsl:when test="normalize-space($hovertext)">
+          <xsl:value-of select="$hovertext"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="*[contains(@class, ' topic/desc ')][1]" mode="text-only"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="normalize-space($h)">
+      <xsl:attribute name="title" select="normalize-space($h)"/>
     </xsl:if>
   </xsl:template>
   <xsl:template match="*" mode="add-title-as-hoverhelp">

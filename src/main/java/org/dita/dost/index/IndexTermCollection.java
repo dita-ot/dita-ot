@@ -264,7 +264,7 @@ public final class IndexTermCollection {
      *  Get input parameters from ANT pipeline module.
      *  @return PipelineHashIO The hashmap containing some module parameters.
      */
-    public PipelineHashIO getPipelineHashIO() {
+    private PipelineHashIO getPipelineHashIO() {
         return pipelineHashIO;
     }
 

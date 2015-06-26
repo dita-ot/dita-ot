@@ -7,7 +7,17 @@
   <!-- extension points -->
   <extension-point id="dita.xsl.dynamicdita" name="Dynamic DITA XSLT import"/>
   <!-- extensions -->
-  <feature extension="dita.conductor.transtype.check" value="eclipsecontent"/>
+  <transtype name="eclipsecontent" desc="Eclipse content">
+    <param name="args.eclipse.provider" desc="The provider name of the eclipse help output." type="string">
+      <val default="true">DITA</val>
+    </param>
+    <param name="args.eclipse.version"
+      desc="The version number of the eclipse help output. 
+      Tip: The toolkit ignores the value of this property when processing an Eclipse Collection Map, eclipse.dtd." type="string">
+      <val default="true">1.0</val>
+    </param>
+    <param name="args.eclipsecontent.toc" desc="Specifies the name of the TOC file." type="file"/>
+  </transtype>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <template file="xsl/dita2dynamicdita_template.xsl"/>
 </plugin>

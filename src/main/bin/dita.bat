@@ -111,6 +111,9 @@ echo DITA_HOME is set incorrectly or ant could not be located. Please set DITA_H
 goto end
 
 :checkJava
+rem Set environment variables
+call "%DITA_HOME%\resources\env.bat"
+
 set _JAVACMD=%JAVACMD%
 
 if "%JAVA_HOME%" == "" goto noJavaHome

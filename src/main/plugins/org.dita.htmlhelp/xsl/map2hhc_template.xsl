@@ -12,9 +12,10 @@
 
 <dita:extension id="dita.xsl.htmlhelp.map2hhc" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
-<xsl:output method="xml"
+<xsl:output method="html"
             encoding="UTF-8"
             indent="no"
+            omit-xml-declaration="yes"
 />
 
 </xsl:stylesheet>

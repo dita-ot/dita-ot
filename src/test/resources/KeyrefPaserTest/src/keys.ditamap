@@ -167,6 +167,7 @@
         <shortdesc>xref shortdesc</shortdesc>
         <keywords>
           <keyword>xref keyword</keyword>
+          <keyword>xref keyword B</keyword>
         </keywords>
       </topicmeta>
     </keydef>
@@ -348,6 +349,7 @@
         <shortdesc>xref shortdesc</shortdesc>
         <keywords>
           <keyword>xref keyword</keyword>
+          <keyword>xref keyword B</keyword>
         </keywords>
       </topicmeta>
     </keydef>

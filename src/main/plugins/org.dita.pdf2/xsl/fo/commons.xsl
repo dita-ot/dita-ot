@@ -1565,7 +1565,7 @@ See the accompanying license.txt file for applicable licenses.
                         <fo:table-row>
                                 <fo:table-cell xsl:use-attribute-sets="note__image__entry">
                                     <fo:block>
-                                        <fo:external-graphic src="url({concat($artworkPrefix, $noteImagePath)})" xsl:use-attribute-sets="image"/>
+                                        <fo:external-graphic src="url('{concat($artworkPrefix, $noteImagePath)}')" xsl:use-attribute-sets="image"/>
                                     </fo:block>
                                 </fo:table-cell>
                                 <fo:table-cell xsl:use-attribute-sets="note__text__entry">
@@ -1842,7 +1842,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:with-param name="attrSet" select="concat('__align__', $imageAlign)"/>
                 <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
             </xsl:call-template>
-        <fo:external-graphic src="url({$href})" xsl:use-attribute-sets="image">
+        <fo:external-graphic src="url('{$href}')" xsl:use-attribute-sets="image">
             <!--Setting image height if defined-->
             <xsl:if test="$height">
                 <xsl:attribute name="content-height">

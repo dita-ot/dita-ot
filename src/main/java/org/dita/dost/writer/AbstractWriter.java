@@ -35,13 +35,13 @@ public interface AbstractWriter {
      * 
      * @param logger logger to use for log message
      */
-    public void setLogger(DITAOTLogger logger);
+    void setLogger(DITAOTLogger logger);
 
     /**
      * Set Job for module
      *
      * @param job Job configuration to use for processing
      */
-    public void setJob(Job job);
+    void setJob(Job job);
 
 }

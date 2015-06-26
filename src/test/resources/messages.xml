@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="utf-8"?><!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.--><!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. --><messages>
+  <!-- Start of Ant Messages -->
+  <message id="DOTA001F" type="FATAL">
+    <reason>&quot;%1&quot; is not a recognized transformation type.</reason>
+    <response>Supported transformation types are docbook, docx, eclipsecontent, eclipsehelp, htmlhelp, javahelp, org.dita-ot.html, odt, pdf, pdf2, tocjs, troff, wordrtf, xhtml.</response>
+  </message>
+  
+  <message id="DOTA002F" type="FATAL">
+    <reason>Input file is not specified, or is specified using the wrong parameter.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTA069F" type="FATAL">
+    <reason>Input file &apos;%1&apos; cannot be located or read.</reason>
+    <response>Ensure that file was specified properly and that you have permission to access it.</response>
+  </message>
+  
+  <message id="DOTA003F" type="FATAL">
+    <reason>Cannot find the user specified XSLT stylesheet &apos;%1&apos;.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTA004F" type="FATAL">
+    <reason>Invalid DITA topic extension &apos;%1&apos;.</reason>
+    <response>Supported values are &apos;.dita&apos; and &apos;.xml&apos;.</response>
+  </message>
+  
+  <message id="DOTA006W" type="WARN">
+    <reason>Absolute paths on the local file system are not supported for the CSSPATH parameter.</reason>
+    <response>Please use a relative path or full URI instead.</response>
+  </message>
+  
+  <message id="DOTA007E" type="ERROR">
+    <reason>Cannot find the running-footer file &quot;%1&quot;.</reason>
+    <response>Please double check the value to ensure it is specified correctly.</response>
+  </message>
+  
+  <message id="DOTA008E" type="ERROR">
+    <reason>Cannot find the running-header file &quot;%1&quot;.</reason>
+    <response>Please double check the value to ensure it is specified correctly.</response>
+  </message>
+  
+  <message id="DOTA009E" type="ERROR">
+    <reason>Cannot find the specified heading file &quot;%1&quot;.</reason>
+    <response>Please double check the value to ensure it is specified correctly.</response>
+  </message>
+  
+  <message id="DOTA010E" type="ERROR">
+    <reason>The Apache FOP program cannot be found in the default location.</reason>
+    <response>Please place FOP into the default directory demo/fo/fop/ or update the build file to support your local configuration.</response>
+  </message>
+
+  <message id="DOTA011W" type="WARN">
+    <reason>Argument &quot;%1&quot; is deprecated.</reason>
+    <response>This argument is no longer supported in the toolkit.</response>
+  </message>
+  <message id="DOTA012W" type="WARN">
+    <reason>Argument &quot;%1&quot; is deprecated.</reason>
+    <response>Please use the argument &quot;%2&quot; instead.</response>
+  </message>
+
+  <!-- Start of Java Messages -->
+  <message id="DOTJ001F" type="FATAL">
+    <reason>Invalid command line syntax for the parameter &apos;%1&apos;.</reason>
+    <response>Parameters to the command line tool should use the syntax /parameter:value.</response>
+  </message>
+  
+  <message id="DOTJ002F" type="FATAL">
+    <reason>Unsupported parameter &apos;%1&apos;.</reason>
+    <response>Please refer to the DITA-OT User Guide for supported parameters.</response>
+  </message>
+  
+  <message id="DOTJ003F" type="FATAL">
+    <reason>Parameter &apos;%1&apos; was specified without a value.</reason>
+    <response>Parameters to the command line tool should use the syntax /parameter:value.</response>
+  </message>
+  
+  <message id="DOTJ004F" type="FATAL">
+    <reason>Cannot create temporary processing directory &apos;%1&apos;.</reason>
+    <response>Please ensure that you have permission to create the directory &apos;%1&apos;.</response>
+  </message>
+  
+  <!-- DOTJ005F appears to indicate an internal programming error, failed to create
+       a new module in ModuleFactory.java. This message should be updated
+       to indicate it is an internal programming error and should be reported to the
+       toolkit development team. -->&gt;
+  <message id="DOTJ005F" type="FATAL">
+    <reason>Failed to create new instance for &apos;%1&apos;.</reason>
+    <response>Please ensure that &apos;%1&apos; exists and that you have permission to access it.</response>
+  </message>
+  
+  <message id="DOTJ006F" type="FATAL">
+    <reason>An Ant build file used the following illegal syntax when calling AntInvoker: extparam=&apos;%1&apos;.</reason>
+    <response>Please correct the call to AntInvoker when directly calling DITA-OT Java code from Ant; for example, extparam=&quot;maplinks=XXXX;other=YYYY&quot;.</response>
+  </message>
+  
+  <message id="DOTJ007E" type="ERROR">
+    <reason>Duplicate condition in filter file for rule &apos;%1&apos;.</reason>
+    <response>The first encountered condition will be used.</response>
+  </message>
+  
+  <!-- Would like to improve / shorten DOTJ009E but not sure how to modify. -->
+  
+  <message id="DOTJ009E" type="ERROR">
+    <reason>Cannot overwrite file &apos;%1&apos; with file &apos;%2&apos;. The modified result may not be consumed by the following steps in the transform pipeline.</reason>
+    <response>Check to see whether the file is locked by some other application during the transformation process.</response>
+  </message>
+  
+  <!-- 2012-06-08: These messages no longer exist in the code; commenting out. -->
+  
+  <!--<message id="DOTJ010E" type="ERROR">
+    <reason>Cannot find %1 in the extparam for index generation.</reason>
+    <response>Please specify %1 in the extparam attribute in your Ant call to the toolkit index sort.</response>
+  </message>
+  <message id="DOTJ011E" type="ERROR">
+    <reason>Failed to load the input file '%1' for index generation due the following exception; no index information will be generated.</reason>
+    <response>Please ensure '%1' exists and you have permission to access it.</response>
+  </message>-->
+  
+  <message id="DOTJ012F" type="FATAL">
+    <reason>Failed to parse the input file &apos;%1&apos;.</reason>
+    <response>The XML parser reported the following error: </response>
+  </message>
+  
+  <message id="DOTJ013E" type="ERROR">
+    <reason>Failed to parse the referenced file &apos;%1&apos;.</reason>
+    <response>The XML parser reported the following error: </response>
+  </message>
+  
+  <message id="DOTJ014W" type="WARN">
+    <reason>Found an indexterm element with no content. Setting the term to ***.</reason>
+    <response></response>
+  </message>
+  
+  <!-- I was not able to produce this message, tried passing in:
+       -Dargs.logdir= (Ant gave an error about missing value)
+       -Dargs.logdir="" (no problems)
+       /logdir="" (message about invalid syntax) 
+
+       Message still exists in the code. -->
+  <message id="DOTJ015F" type="FATAL">
+    <reason>Log directory cannot be null.</reason>
+    <response>Please specify a valid directory for the build log.</response>
+  </message>
+  
+  <message id="DOTJ016F" type="FATAL">
+    <reason>Failed to create log directory &apos;%1&apos;.</reason>
+    <response>Please specify a valid directory for the build log.</response>
+  </message>
+
+  <!-- DOTJ017F appears if you use the Command line tool and forget to specify an input file:
+       java -jar lib/dost.jar /transtype:xhtml
+       May also appear if you set up Ant properties to create a log, but forget the input file. -->
+  <message id="DOTJ017F" type="FATAL">
+    <reason>No input file was specified; failed to initialize log name based on input file.</reason>
+    <response></response>
+  </message>
+
+  <message id="DOTJ018I" type="INFO">
+    <reason>Log file &apos;%1&apos; was generated successfully in directory &apos;%2&apos;.</reason>
+    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the DITA-OT user guide.</response>
+  </message>
+
+  <!-- 2012-06-08: This message no longer exists in the code; commenting out. -->
+  
+  <!--<message id="DOTJ019E" type="ERROR">
+    <reason>Failed to generate log file.</reason>
+    <response>Please correct any other errors and try the build again.</response>
+  </message>-->
+  
+  <message id="DOTJ020W" type="WARN">
+    <reason>At least one plug-in in &apos;%1&apos; is required by plug-in &apos;%2&apos;. Plug-in &apos;%2&apos; cannot be loaded.</reason>
+    <response>Check and see whether all prerequisite plug-ins are installed in toolkit.</response>
+  </message>
+  
+  <!-- 2012-06-12: Still need to reproduce and edit this message -->
+  <message id="DOTJ021W" type="WARN">
+    <reason>File &apos;%1&apos; will not generate output since it is invalid or all of its content has been filtered out by the ditaval file.</reason>
+    <response>Please check the file &apos;%1&apos; and the ditaval file to see if this is the intended result.</response>
+  </message>
+  
+  <!--message id="DOTJ021E" type="ERROR">
+    <reason>Failed to get the image file specified '%1' in ODT generation</reason>
+    <response>Check whether the image exists and copied to output directory before the final step of ODT generation.</response>
+  </message-->
+  
+  <message id="DOTJ022F" type="FATAL">
+    <reason>Failed to parse the input file &apos;%1&apos; because all of its content has been filtered out.</reason>
+    <response>This will happen if the input file has filter conditions on the root element, and a ditaval excludes all content based on those conditions.</response>
+  </message>
+
+  <message id="DOTJ023E" type="ERROR">
+    <reason>Failed to get the specified image file &apos;%1&apos;, so it will not be included with your output.</reason>
+    <response></response>
+  </message>
+  
+  <!-- This message may no longer appear; if so, we should remove it -->
+  <!--<message id="DOTJ024W" type="WARN">
+    <reason>Extension name of picture file '%1' is not supported for the current output format.</reason>
+    <response>Please convert your picture to JPEG or GIF style.</response>
+  </message>-->
+  
+  <message id="DOTJ025E" type="ERROR">
+    <reason>The input to the &quot;topic merge&quot; transform process could not be found.</reason>
+    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT User Guide for additional causes.</response>
+  </message>
+  
+  <message id="DOTJ026E" type="ERROR">
+    <reason>The &quot;topic merge&quot; did not generate any output.</reason>
+    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT User Guide for additional causes.</response>
+  </message>
+  
+  <!-- 2012-06-08: This message no longer exists in the code; commenting out. -->
+
+  <!--<message id="DOTJ027W" type="WARN">
+    <reason>The file '%1' contains a space in its file name. This file might not be transformed properly.</reason>
+    <response>Some stages in the toolkit do not work well with spaces in the file name, so try removing the space in the file name and restart the transformation.</response>
+  </message>-->
+  
+  <message id="DOTJ028E" type="ERROR">
+    <reason>No format attribute was found on a reference to file &apos;%1&apos;, which does not appear to be a DITA file.</reason>
+    <response>If this is not a DITA file, set the format attribute to an appropriate value, otherwise set the format attribute to &quot;dita&quot;.</response>
+  </message> 
+  
+  <message id="DOTJ029I" type="INFO">
+    <reason>No &apos;domains&apos; attribute was found for element &apos;&lt;%1&gt;&apos;.</reason>
+    <response>This generally indicates that your DTD or Schema was not developed properly according to the DITA specification.</response>
+  </message> 
+  
+  <message id="DOTJ030I" type="INFO">
+    <reason>No &apos;class&apos; attribute for was found for element &apos;&lt;%1&gt;&apos;.</reason>
+    <response>This generally indicates that your DTD or Schema was not developed properly according to the DITA specification.</response>
+  </message> 
+  
+  <message id="DOTJ031I" type="INFO">
+    <reason>No specified rule for &apos;%1&apos; was found in the ditaval file. This value will use the default action, or a parent prop action if specified. </reason>
+    <response>To remove this message, you can specify a rule for &apos;%1&apos; in the ditaval file. </response>
+  </message> 
+  
+  <!-- 2012-06-08: This message no longer exists in the code; commenting out. --> 
+  
+  <!--<message id="DOTJ032E" type="ERROR">
+    <reason>An empty @href attribute is found in chunk processing.</reason>
+    <response>Please specify a value for the @href attribute, or remove it entirely.</response>
+  </message> -->
+  
+  <!-- 2012-06-12: Still need to reproduce and edit this message -->
+  <message id="DOTJ033E" type="ERROR">
+    <reason>No valid content is found in topicref &apos;%1&apos; during chunk processing.</reason>
+    <response>Please specify an existing and valid topic for the topicref.</response>
+  </message> 
+  
+  <!-- 2012-06-12: Still need to reproduce and edit this message -->
+  <message id="DOTJ034F" type="FATAL">
+    <reason>Failed to parse the input file &apos;%1&apos; (the content of the file is not valid).</reason>
+    <response>If the input file &apos;%1&apos; does not have a DOCTYPE declaration, please make sure that all class attributes are present in the file.</response>
+  </message>
+  
+  <!-- 2012-06-12: Still need to edit this message -->
+  <message id="DOTJ035F" type="FATAL">
+    <reason>The file &quot;%1&quot; referenced by &quot;%2&quot; is outside the scope of the input dita/map directory.</reason>
+    <response>If you want to lower the severity level, please use the Ant parameter &apos;outer.control&apos;, and set the value to &quot;warn&quot; or &quot;quiet&quot;. Otherwise, move the referenced file &quot;%1&quot; into the input dita/map directory.</response>
+  </message>
+  
+  <!-- 2012-06-12: Still need to edit this message -->
+  <message id="DOTJ036W" type="WARN">
+    <reason>The file &quot;%1&quot; referenced by &quot;%2&quot; is outside the scope of the input dita/map directory.</reason>
+    <response>If you do not want to see the warning message, please use the Ant parameter &apos;outer.control&apos;, and set the value to &quot;quiet&quot;. Otherwise, move the referenced file &quot;%1&quot; into the input dita/map directory.</response>
+  </message>
+  
+  <!-- 2012-06-12: Still need to edit this message -->
+  <message id="DOTJ037W" type="WARN">
+    <reason>The XML schema and DTD validation function of the parser is turned off.</reason>
+    <response>Please make sure the input is normalized DITA with class attributes included, otherwise it will not be processed correctly.</response>
+  </message>
+  
+  <message id="DOTJ038E" type="ERROR">
+    <reason>The tag &quot;%1&quot; is specialized from unrecognized metadata.</reason>
+    <response>Please make sure that tag &quot;%1&quot; is specialized from an existing metadata tag in the core DITA vocabulary.</response>
+  </message>
+  
+  <message id="DOTJ039E" type="ERROR">
+    <reason>There is no target specified for conref push action &quot;pushafter&quot;. Found in file=&quot;%1&quot;, element=&quot;%2&quot;.</reason>
+    <response>Please add &lt;elementname conref=&quot;pushtarget&quot; conaction=&quot;mark&quot;&gt; before current element.</response>
+  </message>
+  
+  <message id="DOTJ040E" type="ERROR">
+    <reason>An element uses the attribute conaction=&quot;replace&quot;, but a conref attribute is not found in the expected location. Found in file=&quot;%1&quot;, element=&quot;%2&quot;.</reason>
+    <response></response>
+  </message>
+  
+  <!-- Note, the following message comes from the Java conref-push module, XSL based message later catches regular conref (DOTX014E and DOTX015)-->
+  <message id="DOTJ041E" type="ERROR">
+    <reason>The attribute conref=&quot;%1&quot; uses invalid syntax.</reason>
+    <response>The value should contain &apos;#&apos; followed by a topic or map ID, optionally followed by &apos;/elemID&apos; for a sub-topic element.</response>
+  </message>
+  
+  <message id="DOTJ042E" type="ERROR">
+    <reason>Two elements both use conref push to replace the target &quot;%1&quot;.</reason>
+    <response>Please delete one of the duplicate &quot;replace&quot; actions.</response>
+  </message>
+  
+  <message id="DOTJ043W" type="WARN">
+    <reason>The conref push function is trying to replace an element that does not exist (element &quot;%1&quot; in file &quot;%2&quot;).</reason>
+    <response></response>
+  </message>
+  
+  <!-- 2012-06-12: Still need to reproduce and edit this message -->
+  <message id="DOTJ044W" type="WARN">
+    <reason>There is a redundant conref action &quot;pushbefore&quot;. Found in file=&quot;%1&quot;, element=&quot;%2&quot;.</reason>
+    <response>Please make sure that &quot;mark&quot; and &quot;pushbefore&quot; occur in pairs.</response>
+  </message>
+  
+  <!-- Default behavior should treat this as an info message, but several releases ago it caused
+       an error. Uncomment if we add an OPTIONAL parameter to report duplicate keys from
+       one map as warnings -->
+  <!--<message id="DOTJ045W" type="WARN">
+    <reason>The key "%1" is defined more than once in the same map file. The reference href="%2" is ignored.</reason>
+    <response>Please make sure the key name is unique in a single map.</response>
+  </message>-->
+  
+  <message id="DOTJ045I" type="INFO">
+    <reason>The key &quot;%1&quot; is defined more than once in the same map file. The reference href=&quot;%2&quot; is ignored.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTJ046E" type="ERROR">
+    <reason>Conkeyref=&quot;%1&quot; can not be resolved because it does not contain a key or the key is not defined.</reason>
+    <response>The build will use the conref attribute for fallback, if one exists.</response>
+  </message>
+  
+  <message id="DOTJ047I" type="INFO">
+    <reason>Unable to find key definition for keyref=&quot;%1&quot;, href may be used as fallback if it exists.</reason>
+    <response></response>
+  </message>
+  
+  <!-- 2012-06-12: this message is commented out in the Java code; commenting out here as well -->
+  
+  <!--<message id="DOTJ048I" type="INFO">
+    <reason>Key definition "%1"="%2" in "%3" has been defined in another file, so it is ignored.</reason>
+    <response>Please make sure the key uses the expected value.</response>
+  </message>-->
+  
+  <message id="DOTJ049W" type="WARN">
+  	<reason>The attribute value %1=&quot;%3&quot; on element &quot;%2&quot; does not comply with the specified subject scheme.</reason>
+  	<response>According to the subject scheme map, the following values are valid for the %1 attribute: %4</response>
+  </message>
+  
+  <message id="DOTJ050W" type="WARN">
+    <reason>Found an &lt;index-see&gt; or &lt;index-see-also&gt; reference to the term &apos;%1&apos;, but that term is not defined in the index.</reason>
+    <response></response>
+  </message>
+  
+  <!-- Long term, would like to split this into two messages. One for file not found, another for file outside the scope of the map. -->
+  <message id="DOTJ051E" type="ERROR">
+  	<reason>Unable to load target for coderef &quot;%1&quot;.</reason>
+  	<response></response>
+  </message>
+  
+  <message id="DOTJ052E" type="ERROR">
+    <reason>Code reference charset &quot;%1&quot; not supported.</reason>
+    <response>See the DITA-OT User guide for supported charset values on the format attribute.</response>
+  </message>
+  
+  <message id="DOTJ053W" type="WARN">
+    <reason>Input file &apos;%1&apos; is not valid DITA file name.</reason>
+    <response>Please check &apos;%1&apos; to see if it is correct. The extensions &quot;.dita&quot; or &quot;.xml&quot; are supported for DITA topics.</response>
+  </message>
+
+  <message id="DOTJ054E" type="ERROR">
+    <reason>Unable to parse invalid %1 attribute value &quot;%2&quot;</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTJ055E" type="ERROR">
+    <reason>Invalid key name &quot;%1&quot;.</reason>
+    <response></response>
+  </message>
+
+  <message id="DOTJ056E" type="ERROR">
+    <reason>Invalid xml:lang &quot;%1&quot;.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTJ057E" type="ERROR">
+    <reason>The id attribute value &quot;%1&quot; is not unique within the topic that contains it.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTJ058E" type="ERROR">
+    <reason>Both %1 and %2 attributes defined.</reason>
+    <response>A single element may not contain both generalized and specialized values for the same attribute.</response>
+  </message>
+  
+  <message id="DOTJ059E" type="ERROR">
+    <reason>Invalid key scope name "%1".</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTJ064W" type="WARN">
+    <reason>Chunk attribute uses both "to-content" and "by-topic" that conflict with each other.</reason>
+    <response>Ignoring "by-topic" token.</response>
+  </message>
+
+  <!-- End of Java Messages -->
+    
+  <!-- Start of XSL Messages -->  
+  <message id="DOTX001W" type="WARN">
+    <reason>No string named &apos;%1&apos; was found for language &apos;%2&apos;. Using the default language &apos;%3&apos;.</reason>
+    <response>Add a mapping between default language and desired language for the string &apos;%1&apos;.</response>
+  </message>
+  
+  <message id="DOTX002W" type="WARN">
+    <reason>The title element or attribute in the ditamap is required for Eclipse output.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX003I" type="INFO">
+    <reason>The anchorref attribute should either reference another dita map or an Eclipse XML TOC file. The value &apos;%1&apos; does not appear to reference either.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX004I" type="INFO">
+    <reason>Found a navref element that does not reference anything.</reason>
+    <response>The navref element should either reference another dita map or an Eclipse XML file.</response>
+  </message>
+  
+  <message id="DOTX005E" type="ERROR">
+    <reason>Unable to find navigation title for reference to &apos;%1&apos;.</reason>
+    <response>The build will use &apos;%1&apos; as the title in the Eclipse Table of Contents.</response>
+  </message>
+  
+  <message id="DOTX006E" type="ERROR">
+    <reason>Unknown file extension in href=&quot;%1&quot;.</reason>
+    <response>References to non-DITA resources should set the format attribute to match the resource (for example, &apos;txt&apos;, &apos;pdf&apos;, or &apos;html&apos;).</response>
+  </message>
+  
+  <message id="DOTX007I" type="INFO">
+    <reason>Only DITA topics, HTML files, and images may be included in your compiled CHM file. The reference to &quot;%1&quot; will be ignored.</reason>
+    <response>To remove this message, you can set the toc=&quot;no&quot; or processing-role=&quot;resource-only&quot; attribute on your topicref.</response>
+  </message>
+  
+  <!-- As of 20012-06-13, DOTX008W is only called for HTML Help and map2htmtoc -->
+  <message id="DOTX008W" type="WARN">
+    <reason>File &apos;%1&apos; cannot be loaded, and no navigation title is specified for the table of contents.</reason>
+    <response></response>
+  </message>
+
+  <!-- DOTX008E uses the XSLT prefix DOTX, but generated only from Java code. -->
+  <message id="DOTX008E" type="ERROR">
+    <reason>File &apos;%1&apos; does not exist or cannot be loaded.</reason>
+    <response></response>
+  </message>
+
+  <!-- As of 20012-06-13, 009W is only called for HTML Help and map2htmtoc -->
+  <message id="DOTX009W" type="WARN">
+    <reason>Could not retrieve a title from &apos;%1&apos;. Using &apos;%2&apos; instead.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX010E" type="ERROR">
+    <reason>Unable to find target for conref=&quot;%1&quot;.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX011W" type="WARN">
+    <reason>There is more than one possible target for the reference conref=&quot;%1&quot;. Only the first will be used.</reason>
+    <response>Remove the duplicate id in the referenced file.</response>
+  </message>
+  
+  <!-- This message can no longer appear, though the template for producing it remains in conrefImpl.xsl -->
+  <message id="DOTX012W" type="WARN">
+    <reason>When you conref another topic or an item in another topic, the domains attribute of the target topic must be equal to or a subset of the current topic&apos;s domains attribute.</reason>
+    <response>Put your target under an appropriate domain. You can see the messages guide for more help.</response>
+  </message>
+  
+  <message id="DOTX013E" type="ERROR">
+    <reason>A element with attribute conref=&quot;%1&quot; indirectly includes itself, which results in an infinite loop.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX014E" type="ERROR">
+    <reason>The attribute conref=&quot;%1&quot; uses invalid syntax.</reason>
+    <response>Conref references to a map element should contain &apos;#&apos; followed by an ID, such as mymap.ditamap#mytopicrefid.</response>
+  </message>
+  
+  <message id="DOTX015E" type="ERROR">
+    <reason>The attribute conref=&quot;%1&quot; uses invalid syntax.</reason>
+    <response>The value should contain &apos;#&apos; followed by a topic or map ID, optionally followed by &apos;/elemID&apos; for a sub-topic element.</response>
+  </message>
+  
+  <message id="DOTX016W" type="WARN">
+    <reason>A reference to &quot;%2&quot; appears to reference a DITA document, but the format attribute has inherited a value of &quot;%1&quot;. The document will not be processed as DITA.</reason>
+    <response></response>
+  </message>
+  
+  <!-- Should likely be "warning" instead of "error", as related toolkit problems were fixed in very early releases.
+       Now this serves only to catch likely problems with the source content. Keeping as "error" to avoid meaningless churn. -->
+  <message id="DOTX017E" type="ERROR">
+    <reason>Found a link or cross reference with an empty href attribute (href=&quot;&quot;).</reason>
+    <response>Remove the empty href attribute or provide a value.</response>
+  </message>
+  
+  <!-- 018 currently not used, commented out due to SF bug 1771123 -->
+  <message id="DOTX018I" type="INFO">
+    <reason>The type attribute on a topicref was set to &apos;%1&apos;, but the topicref references a more specific &apos;%2&apos; topic. Note that the type attribute cascades in maps, so the value &apos;%1&apos; may come from an ancestor topicref.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX019W" type="WARN">
+    <reason>The type attribute on a topicref was set to &apos;%1&apos;, but the topicref references a &apos;%2&apos; topic. This may cause your links to sort incorrectly in the output. Note that the type attribute cascades in maps, so the value &apos;%1&apos; may come from an ancestor topicref.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX020E" type="ERROR">
+    <reason>Missing navtitle attribute or element for peer topic &quot;%1&quot;.</reason>
+    <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
+  </message>
+  
+  <message id="DOTX021E" type="ERROR">
+    <reason>Missing navtitle attribute or element for non-DITA resource &quot;%1&quot;.</reason>
+    <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
+  </message>
+  
+  <message id="DOTX022W" type="WARN">
+    <reason>Unable to retrieve navtitle from target: &apos;%1&apos;. Using linktext (specified in topicmeta) as the navigation title.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX023W" type="WARN">
+    <reason>Unable to retrieve navtitle from target: &apos;%1&apos;.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX024E" type="ERROR">
+    <reason>Missing linktext and navtitle for peer topic &quot;%1&quot;.</reason>
+    <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
+  </message>
+  
+  <message id="DOTX025E" type="ERROR">
+    <reason>Missing linktext and navtitle for non-DITA resource &quot;%1&quot;.</reason>
+    <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
+  </message>
+  
+  <message id="DOTX026W" type="WARN">
+    <reason>Unable to retrieve linktext from target: &apos;%1&apos;. Using navigation title as fallback.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX027W" type="WARN">
+    <reason>Unable to retrieve linktext from target: &apos;%1&apos;.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX028E" type="ERROR">
+    <reason>Link or cross reference must contain a valid href or keyref attribute; no link target is specified.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX029I" type="INFO">
+    <reason>The type attribute on a %1 element was set to %3, but the reference is to a more specific %4 %2. This may cause your links to sort incorrectly in the output.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX030W" type="WARN">
+    <reason>The type attribute on a %1 element was set to %3, but the reference is to a %4 %2. This may cause your links to sort incorrectly in the output.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX031E" type="ERROR">
+    <reason>The file %1 is not available to resolve link information.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX032E" type="ERROR">
+    <reason>Unable to retrieve link text from target: &apos;%1&apos;. </reason>
+    <response>If the target is not accessible at build time, or does not have a title, provide the link text inside the reference.</response>
+  </message>
+  
+  <message id="DOTX033E" type="ERROR">
+    <reason>Unable to generate link text for a cross reference to a list item: &apos;%1&apos;</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX034E" type="ERROR">
+    <reason>Unable to generate link text for a cross reference to an undered list item: &apos;%1&apos;</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX035E" type="ERROR">
+    <reason>Unable to generate the correct number for a cross reference to a footnote: &apos;%1&apos;</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX036E" type="ERROR">
+    <reason>Unable to generate link text for a cross reference to a dlentry (the dlentry or term could not be found): &apos;%1&apos;</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX037W" type="WARN">
+    <reason>No title found for this document; using &quot;***&quot; in XHTML title bar.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX038I" type="INFO">
+    <reason>The longdescref attribute on tag &apos;%1&apos; will be ignored. Accessibility for object elements needs to be handled another way.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX039W" type="WARN">
+    <reason>Required cleanup area found.</reason>
+    <response>To remove this message and hide the content, build your content without using the DRAFT parameter.</response>
+  </message>
+  
+  <message id="DOTX040I" type="INFO">
+    <reason>Draft comment area found.</reason>
+    <response>To remove this message and hide the comments, build your content without using the DRAFT parameter.</response>
+  </message>
+  
+  <message id="DOTX041W" type="WARN">
+    <reason>Found more than one title element in a section. Using the first one for the section&apos;s title.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX042I" type="INFO">
+    <reason>DITAVAL based flagging is not currently supported for inline phrases in XHTML; ignoring flag value on &apos;%1&apos; attribute.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX043I" type="INFO">
+    <reason>The link to &apos;%1&apos; may appear more than once in &apos;%2&apos;.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX044E" type="ERROR">
+    <reason>The area element in an image map does not specify a link target.</reason>
+    <response>Please add an xref element with a link target to the area element.</response>
+  </message>
+  
+  <message id="DOTX045W" type="WARN">
+    <reason>The area element in an image map should specify link text for greater accessibility.</reason>
+    <response>Link text should be specified directly when the target is not a local DITA resource.</response>
+  </message>
+  
+  <message id="DOTX046W" type="WARN">
+    <reason>Area shape should be: default, rect, circle, poly, or blank (no value). The value &apos;%1&apos; is not recognized.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX047W" type="WARN">
+    <reason>Area coordinates are blank. Coordinate points for the shape need to be specified.</reason>
+    <response></response>
+  </message>
+  
+  <!-- 2012-06-14: revising this message. Originally generated for all local HTML references, but those are included
+       (message was innacurate). Modifying to generate only for peer / external topics, which may not be available. -->
+  <message id="DOTX048I" type="INFO">
+    <reason>In order to include peer or external topic &apos;%1&apos; in your help file, you may need to recompile the CHM file after making the file available.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX049I" type="INFO">
+    <reason>References to non-dita files will be ignored by the PDF, ODT, and RTF output transforms.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX050W" type="WARN">
+    <reason>Default id &quot;org.sample.help.doc&quot; is used for Eclipse plug-in.</reason>
+    <response>If you want to use your own plug-in id, please specify it using the id attribute on your map.</response>
+  </message>
+  
+  <!-- As of March 2012, cannot find this warning in our XSL. Likely should be removed,
+       unless there is another way it is generated. -->
+  <!-- 2012-06-14: commenting out -->
+  <!--<message id="DOTX051W" type="WARN">
+    <reason>The %1 to '%2' with @format='%3' can not be recognized, output it without creating a hyperlink.</reason>
+    <response>Set @format='dita' for %1 to DITA topic, set @format='html' for HTML files, other format is not supported.</response>
+  </message>-->
+  
+  <message id="DOTX052W" type="WARN">
+    <reason>No string named &apos;%1&apos; was found when creating generated text; using the value &apos;%1&apos; in your output file.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX053E" type="ERROR">
+    <reason>A element that references another map indirectly includes itself, which results in an infinite loop. The original map reference is to &apos;%1&apos;.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX054W" type="WARN">
+    <reason>Conflict text style is applied on the current element based on DITAVAL flagging rules.</reason>
+    <response>Please check ditaval and dita source to make sure there is no style conflict on the element which needs to be flagged.</response>
+  </message>
+  
+  <message id="DOTX055W" type="WARN">
+    <reason>Customized stylesheet uses deprecated template &quot;flagit&quot;. Conditional processing is no longer supported using this template.</reason>
+    <response>Please update your stylesheet to use template &quot;start-flagit&quot; instead of deprecated template &quot;flagit&quot;.</response>
+  </message>
+  
+  <message id="DOTX056W" type="WARN">
+    <reason>The file &apos;%1&apos; is not available to resolve link information.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX057W" type="WARN">
+    <reason>The link or cross reference target &apos;%1&apos; cannot be found, which may cause errors creating links or cross references in your output file.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX058W" type="WARN">
+    <reason>No glossary entry was found associated with key &apos;%1&apos; on %2 element. The build will try to determine the best display text and hover text for terms and abbreviations.</reason>
+    <response></response>
+  </message>
+  
+  <!-- As of March 2012, cannot find this warning in our XSL. Likely should be removed,
+       unless there is another way it is generated. -->
+  <!-- 2012-06-14: commenting out -->
+  
+  <!--<message id="DOTX059I" type="INFO">
+    <reason>No language specification was found when referring to a glossary, falling back to default language 'en'.</reason>
+    <response>Specify language preference when referring to a glossary.</response>
+  </message>-->
+  
+  <message id="DOTX060W" type="WARN">
+    <reason>Key &apos;%1&apos; was used in an abbreviated-form element, but the key is not associated with a glossary entry.</reason>
+    <response>Abbreviated-form should ONLY be used to reference to a glossary entry.</response>
+  </message>
+  
+  <message id="DOTX061W" type="WARN">
+    <reason>ID &apos;%1&apos; was used in topicref tag but did not reference a topic element. The href attribute on a topicref element should only reference topic level elements.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX062I" type="INFO">
+    <reason>It appears that this document uses constraints, but the conref processor cannot validate that the target of a conref is valid.</reason>
+    <response>To enable constraint checking, please upgrade to an XSLT 2.0 processor.</response>
+  </message>
+  
+  <message id="DOTX063W" type="WARN">
+    <reason>The dita document &apos;%1&apos; is linked to from your content, but is not referenced by a topicref tag in the ditamap file.</reason>
+    <response>Include the topic in your map to avoid a broken link.</response>
+  </message>
+  
+  <message id="DOTX064W" type="WARN">
+    <reason>The copy-to attribute [copy-to=&quot;%1&quot;] uses the name of a file that already exists, so this attribute is ignored.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX065W" type="WARN">
+    <reason>Two unique source files each specify copy-to=&quot;%2&quot;, which results in a collision. The value associated with href=&quot;%1&quot; is ignored.</reason>
+    <response></response>
+  </message>
+  
+  <message id="DOTX066W" type="WARN">
+    <reason>Template &quot;%1&quot; is deprecated.</reason>
+    <response>Remove references to this template from your custom XSLT or plug-ins.</response>
+  </message>
+  
+  <message id="DOTX067E" type="ERROR">
+    <reason>No string named &apos;%1&apos; was found for language &apos;%2&apos;.</reason>
+    <response>Add a mapping for the string &apos;%1&apos;.</response>
+  </message>
+
+  <message id="DOTX068W" type="WARN">
+    <reason>A topicref element that references a map contains child topicref elements.</reason>
+    <response>Child topicref elements are ignored.</response>
+  </message>
+
+  <!-- End of XSL Messages --> 
+  
+  <message id="DOTA066F" type="FATAL">
+    <reason>Cannot find the user specified XSLT stylesheet &apos;%1&apos;.</reason>
+    <response></response>
+  </message>
+    
+  <!-- DOTA067W and DOTA068W actually come from Java code inside the PDF plug-in.
+       DOTA prefix is innacurate. No reason to change at this point. -->
+  <message id="DOTA067W" type="WARN">
+    <reason>Ignoring index-see &apos;%1&apos; inside parent index entry &apos;%2&apos; because the parent indexterm contains indexterm children.</reason>
+    <response>According to the DITA Specification, the index-see element should be ignored if the parent indexterm contains other indexterm children.</response>
+  </message>
+  
+  <message id="DOTA068W" type="WARN">
+    <reason>Ignoring index-see-also &apos;%1&apos; inside parent index entry &apos;%2&apos; because the parent indexterm contains indexterm children.</reason>
+    <response>According to the DITA Specification, the index-see-also element should be ignored if the parent indexterm contains other indexterm children.</response>
+  </message>
+    
+  <message id="DOTA069W" type="WARN">
+    <reason>Target &quot;%1&quot; is deprecated.</reason>
+    <response>Remove references to this target from your custom XSLT or plug-ins.</response>
+  </message>
+    
+  <!-- Add any messages defined by plugins. -->
+  <!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
+  <!-- Java -->
+  
+<message id="PDFJ001E" type="ERROR">
+    
+<reason>Index entry &apos;%1&apos; is dropped, because corresponding group is not found.</reason>
+    
+<response></response>
+  </message>
+  
+<message id="PDFJ002E" type="ERROR">
+    
+<reason>Build stopped. Problems occured during Index preprocess task. Please check the messages above.</reason>
+    
+<response></response>
+  </message>
+  <!-- XSLT -->
+  
+<message id="PDFX001W" type="WARN">
+    
+<reason>There is no index entry found which closing range for ID=&quot;%1&quot;.</reason>
+    
+<response></response>
+  </message>
+  
+<message id="PDFX002W" type="WARN">
+    
+<reason>There are multiple index entry found which is opening range for ID=&quot;%1&quot; but there is only one which close it or ranges are overlapping.</reason>
+    
+<response></response>
+  </message>
+  
+<message id="PDFX003W" type="WARN">
+    
+<reason>There are multiple index entry found which closing range for ID=&quot;%1&quot;.</reason>
+    
+<response></response>
+  </message>
+  
+<message id="PDFX004F" type="FATAL">
+    
+<reason>Empty href was specified for some topic reference.</reason>
+    
+<response>Please correct your ditamap or bookmap file.</response>
+  </message>
+  
+<message id="PDFX005F" type="FATAL">
+    
+<reason>Topic reference (href : %1) not found.</reason>
+    
+<response>Reference may be incorrect. Please correct your ditamap or bookmap file.</response>
+  </message>
+  
+<message id="PDFX006E" type="ERROR">
+    
+<reason>Number of columns must be specified.</reason>
+    
+<response></response>
+  </message>
+  
+<message id="PDFX007W" type="WARN">
+    
+<reason>There is no index entry found which opening range for ID=&quot;%1&quot;.</reason>
+    
+<response></response>
+  </message>
+  
+<message id="PDFX008W" type="WARN">
+    
+<reason>Font definition not found for the logical name or alias &apos;%1&apos;.</reason>
+    
+<response></response>
+  </message>
+  
+<message id="PDFX009E" type="ERROR">
+    
+<reason>Attribute set reflection can&apos;t handle XSLT element %1.</reason>
+    
+<response></response>
+  </message>
+  
+<message id="PDFX010W" type="WARN">
+    
+<reason>Index generation is not supported in FOP.</reason>
+    
+<response></response>
+  </message>
+  
+<message id="PDFX011E" type="ERROR">
+    
+<reason>Both index-see and %1 defined for index entry &apos;%2&apos;.</reason>
+    
+<response>Recovering by treating the index-see as an index-see-also.</response>
+  </message>
+
+</messages>

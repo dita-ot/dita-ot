@@ -20,8 +20,8 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 public final class TopicFragmentFilter extends XMLFilterImpl {
 
-    final Deque<DitaClass> classes = new LinkedList<DitaClass>();
-    final Deque<String> topics = new ArrayDeque<String>();
+    private final Deque<DitaClass> classes = new LinkedList<DitaClass>();
+    private final Deque<String> topics = new ArrayDeque<String>();
     
     @Override
     public void startElement(final String uri,

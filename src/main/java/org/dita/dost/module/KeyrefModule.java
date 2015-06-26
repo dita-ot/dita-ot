@@ -30,7 +30,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
-import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.XMLUtils;
@@ -120,11 +119,14 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 parser.setCurrentFile(file);
                 parser.setKeyMap(keymap);
                 filters.add(parser);
-                
-                XMLUtils.transform(new File(job.tempDir, file.getPath()), filters);
-                
-                // validate resource-only list
-                normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
+
+                try {
+                    XMLUtils.transform(new File(job.tempDir, file.getPath()), filters);
+                    // validate resource-only list
+                    normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
+                } catch (final DITAOTException e) {
+                    logger.error("Failed to process key references: " + e.getMessage(), e);
+                }
             }
             for (final URI file: normalProcessingRole) {
                 final FileInfo f = job.getFileInfo(file);

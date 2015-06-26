@@ -78,8 +78,8 @@
     <meta name="copyright">
       <xsl:attribute name="content">
         <xsl:text>(C) </xsl:text>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Copyright'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Copyright'"/>
         </xsl:call-template>
         <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
       </xsl:attribute>
@@ -88,8 +88,8 @@
     <meta name="DC.rights.owner">
       <xsl:attribute name="content">
         <xsl:text>(C) </xsl:text>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Copyright'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Copyright'"/>
         </xsl:call-template>
         <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
       </xsl:attribute>

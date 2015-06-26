@@ -21,27 +21,25 @@ import org.dita.dost.log.DITAOTAntLogger;
  */
 public final class IntegratorTask extends Task {
 
-    private final Integrator adaptee;
+    private File propertiesFile;
+    private boolean strict;
     private File ditaDir;
-
-    /**
-     * Default Constructor.
-     */
-    public IntegratorTask() {
-        adaptee = new Integrator();
-    }
 
     @Override
     public void execute() throws BuildException {
         final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
         logger.setTarget(getOwningTarget());
         logger.setTask(this);
+        final Integrator adaptee = new Integrator(ditaDir != null ? ditaDir : getProject().getBaseDir());
         adaptee.setLogger(logger);
-        adaptee.setDitaDir(ditaDir != null ? ditaDir : getProject().getBaseDir());
+        adaptee.setStrict(strict);
+        if (propertiesFile != null) {
+            adaptee.setProperties(propertiesFile);
+        }
         try {
             adaptee.execute();
         } catch (final Exception e) {
-            throw new BuildException("Integration failed: " + e.getMessage());
+            throw new BuildException("Integration failed: " + e.getMessage(), e);
         }
     }
 
@@ -63,7 +61,8 @@ public final class IntegratorTask extends Task {
      */
     @Deprecated
     public void setProperties(final File propertiesFile) {
-        adaptee.setProperties(propertiesFile);
+        this.propertiesFile = propertiesFile;
+
     }
 
     /**
@@ -71,7 +70,7 @@ public final class IntegratorTask extends Task {
      * @param strict {@code true} for strict mode, {@code false} for lax mode
      */
     public void setStrict(final boolean strict) {
-        adaptee.setStrict(strict);
+        this.strict = strict;
     }
 
 }

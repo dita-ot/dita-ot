@@ -31,8 +31,8 @@ import org.xml.sax.SAXException;
 abstract class AbstractXMLWriter implements AbstractWriter,
 ContentHandler, EntityResolver {
 
-    protected DITAOTLogger logger;
-    protected Job job;
+    DITAOTLogger logger;
+    Job job;
 
 
     @Override

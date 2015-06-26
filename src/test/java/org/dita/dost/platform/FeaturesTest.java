@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static java.util.Arrays.*;
+import static org.dita.dost.platform.PluginParser.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,9 +22,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class FeaturesTest {
+
+    private static Document doc;
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+       doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+    }
 
     @Test
     public void testFeaturesString() {
@@ -32,7 +45,7 @@ public class FeaturesTest {
 
     @Test
     public void testGetLocation() {
-        assertEquals(new File("base", "plugins"), new Features(new File("base", "plugins"), new File("base")).getLocation());
+        assertEquals(new File("base", "plugins"), new Features(new File("base", "plugins"), new File("base")).getPluginDir());
     }
 
     @Test
@@ -62,7 +75,7 @@ public class FeaturesTest {
     @Test
     public void testGetFeature() {
         final Features f = new Features(new File("base", "plugins"), new File("base"));
-        f.addFeature("foo", "bar", null);
+        f.addFeature("foo", getElement("bar", null));
 
         assertEquals(asList("bar"), f.getFeature("foo"));
     }
@@ -70,9 +83,9 @@ public class FeaturesTest {
     @Test
     public void testGetAllFeatures() {
         final Features f = new Features(new File("base", "plugins"), new File("base"));
-        f.addFeature("foo", "bar", null);
-        f.addFeature("foo", "baz", null);
-        f.addFeature("bar", "qux", null);
+        f.addFeature("foo", getElement("bar", null));
+        f.addFeature("foo", getElement("baz", null));
+        f.addFeature("bar", getElement("qux", null));
 
         final Map<String, List<String>> exp = new HashMap<String, List<String>>();
         exp.put("foo", asList("bar", "baz"));
@@ -84,13 +97,10 @@ public class FeaturesTest {
     @Test
     public void testAddFeature() {
         final Features f = new Features(new File("base", "plugins"), new File("base"));
-        try {
-            f.addFeature("foo", null, null);
-            fail();
-        } catch (final NullPointerException e) {}
-        f.addFeature("foo", " bar, baz ", null);
+        f.addFeature("foo", getElement(null, null));
+        f.addFeature("foo", getElement(" bar, baz ", null));
         assertEquals(asList("bar", "baz"), f.getFeature("foo"));
-        f.addFeature("foo", "bar, baz", "file");
+        f.addFeature("foo", getElement("bar, baz", "file"));
         assertEquals(asList("bar","baz",
                 "base" + File.separator + "plugins" + File.separator + "bar",
                 "base" + File.separator + "plugins" + File.separator + "baz"),
@@ -202,6 +212,17 @@ public class FeaturesTest {
         });
         assertArrayEquals(new String[] {"bar", "foo", "foo", null},
                 act.toArray(new String[0]));
+    }
+
+    private static Element getElement(final String value, final String type) {
+        final Element feature = doc.createElement(FEATURE_ELEM);
+        if (value != null) {
+            feature.setAttribute("value", value);
+        }
+        if (type != null) {
+            feature.setAttribute("type", type);
+        }
+        return feature;
     }
 
 }

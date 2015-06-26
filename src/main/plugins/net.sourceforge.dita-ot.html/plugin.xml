@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<plugin id="net.sourceforge.dita-ot.html">
-  <feature extension="package.version" value="1.5.3"/>
-  <feature extension="dita.conductor.transtype.check" value="net.sourceforge.dita-ot.html"/>
-  <feature extension="dita.conductor.target.relative" file="build.xml"/>
-  <feature extension="dita.conductor.xhtml.param" file="params.xml"/>
-</plugin>

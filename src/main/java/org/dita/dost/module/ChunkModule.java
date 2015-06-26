@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
@@ -44,13 +45,13 @@ import org.xml.sax.SAXException;
  */
 final public class ChunkModule extends AbstractPipelineModuleImpl {
 
-    public static final DitaClass ECLIPSEMAP_PLUGIN = new DitaClass("- map/map eclipsemap/plugin ");
-    public static final String ROOT_CHUNK_OVERRIDE = "root-chunk-override";
+    private static final DitaClass ECLIPSEMAP_PLUGIN = new DitaClass("- map/map eclipsemap/plugin ");
+    private static final String ROOT_CHUNK_OVERRIDE = "root-chunk-override";
 
     /**
      * using to save relative path when do rename action for newly chunked file
      */
-    final Map<String, String> relativePath2fix = new HashMap<String, String>();
+    private final Map<String, String> relativePath2fix = new HashMap<String, String>();
 
     /**
      * Constructor.
@@ -152,7 +153,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         try {
             for (final FileInfo f : job.getFileInfo()) {
                 if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                    topicRefWriter.setFixpath(relativePath2fix.get(f.file));
+                    topicRefWriter.setFixpath(relativePath2fix.get(f.file.toString()));
                     topicRefWriter.write(new File(job.tempDir.getAbsoluteFile(), f.file.getPath()).getAbsoluteFile());
                 }
             }
@@ -254,8 +255,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         for (final String s : oldTopicList) {
             if (!StringUtils.isEmptyString(s)) {
                 final File f = new File(job.tempDir, s);
-                if (f.exists()) {
-                    f.delete();
+                if (f.exists() && !f.delete()) {
+                    logger.error("Failed to delete " + f.getAbsolutePath());
                 }
             }
         }
@@ -282,7 +283,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         }
                         // ensure the newly chunked file to the old one
                         try {
-                            FileUtils.moveFile(from, target);
+                            deleteQuietly(target);
+                            moveFile(from, target);
                         } catch (final IOException e) {
                             logger.error("Failed to replace chunk topic: " + e.getMessage(), e);
 
@@ -362,7 +364,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * Generator fror chunk filenames and identifiers.
      */
-    public static interface ChunkFilenameGenerator {
+    public interface ChunkFilenameGenerator {
 
         /**
          * Generate file name
@@ -371,14 +373,14 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
          * @param extension file extension
          * @return generated file name
          */
-        public String generateFilename(final String prefix, final String extension);
+        String generateFilename(final String prefix, final String extension);
 
         /**
          * Generate ID.
          * 
          * @return generated ID
          */
-        public String generateID();
+        String generateID();
 
     }
 

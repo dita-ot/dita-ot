@@ -57,9 +57,9 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     @Override
-    public void write(final File filename) throws DITAOTException {
+    public void write(final File fileDir) throws DITAOTException {
         // pass map's directory path
-        filePath = filename;
+        filePath = fileDir;
         final String hrefValue = getValue(rootTopicref, ATTRIBUTE_NAME_HREF);
         final String copytoValue = getValue(rootTopicref, ATTRIBUTE_NAME_COPY_TO);
         final String scopeValue = getCascadeValue(rootTopicref, ATTRIBUTE_NAME_SCOPE);
@@ -215,6 +215,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 }
 
                 reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile.getPath(), logger));
+                logger.info("Processing " + currentParsingFile.toURI());
                 reader.parse(currentParsingFile.toURI().toString());
                 output.flush();
 

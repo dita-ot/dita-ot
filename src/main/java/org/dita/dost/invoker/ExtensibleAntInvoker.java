@@ -208,7 +208,7 @@ public final class ExtensibleAntInvoker extends Task {
      * @return job configuration
      */
     public static Job getJob(final File tempDir, final Project project) {
-        Job job = (Job) project.getReference(ANT_REFERENCE_JOB);
+        Job job = project.getReference(ANT_REFERENCE_JOB);
         if (job != null && job.isStale(tempDir)) {
             project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
             job = null;

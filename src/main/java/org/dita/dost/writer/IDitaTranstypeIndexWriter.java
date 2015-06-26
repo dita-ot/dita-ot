@@ -23,8 +23,8 @@ public interface IDitaTranstypeIndexWriter {
      * @param outputFileRoot root
      * @return index file name
      */
-    public String getIndexFileName(String outputFileRoot);
+    String getIndexFileName(String outputFileRoot);
 
-    public void setTermList(final List<IndexTerm> termList);
+    void setTermList(final List<IndexTerm> termList);
     
 }

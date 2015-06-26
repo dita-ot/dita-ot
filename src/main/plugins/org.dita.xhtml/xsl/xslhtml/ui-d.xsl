@@ -9,10 +9,6 @@
 
 <!-- Screen -->
 <xsl:template match="*[contains(@class,' ui-d/screen ')]" name="topic.ui-d.screen">
-     <xsl:apply-templates select="."  mode="screen-fmt" />
-</xsl:template>
-<xsl:template match="*[contains(@class,' ui-d/screen ')]" mode="screen-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="spec-title-nospace"/>
   <pre class="screen">

@@ -13,7 +13,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,9 +57,7 @@ public class TestGenListModuleReader {
         reader.setLogger(new TestUtils.TestLogger());
 //        reader.initXMLReader(ditaDir, validate, new File(rootFile.getPath()).getCanonicalFile(), true);
         reader.setCurrentFile(rootFile.toURI());
-        reader.setCurrentDir(rootFile.getParentFile().toURI());
         reader.setInputDir(rootFile.getParentFile().toURI());
-        reader.setInputFile(rootFile.toURI());
         reader.setJob(new Job(tempDir));
         
         reader.setContentHandler(new DefaultHandler());
@@ -88,7 +85,7 @@ public class TestGenListModuleReader {
         final Set<URI> outDita = reader.getOutDitaFilesSet();
         final Set<URI> outFiles = reader.getOutFilesSet();
         final Set<URI> resourceOnlySet = reader.getResourceOnlySet();
-        final Set<URI> subsidiaryTargets = reader.getSubsidiaryTargets();
+        final Set<URI> subsidiaryTargets = reader.getCoderefTargets();
 
         assertEquals(0, conref.size());
 

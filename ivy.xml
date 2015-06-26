@@ -6,6 +6,7 @@
     <conf name="test"/>
   </configurations>
   <dependencies>
+    <dependency org="commons-io" name="commons-io" rev="2.4"/>
     <dependency org="commons-codec" name="commons-codec" rev="1.9"/>
     <dependency org="xerces" name="xercesImpl" rev="2.11.0"/>
     <dependency org="xml-apis" name="xml-apis" rev="1.4.01"/>
@@ -15,6 +16,9 @@
       <artifact name="saxon" type="jar" m:classifier="dom"/>
     </dependency>
     <dependency org="com.ibm.icu" name="icu4j" rev="54.1"/>
+    <dependency org="org.apache.ant" name="ant" rev="1.9.4"/>
+    <dependency org="org.apache.ant" name="ant-launcher" rev="1.9.4"/>
+    <dependency org="org.apache.ant" name="ant-apache-resolver" rev="1.9.4"/>
     <dependency org="nu.validator.htmlparser" name="htmlparser" rev="1.4" conf="test->default"/>
     <dependency org="junit" name="junit" rev="4.11" conf="test->default"/>
     <dependency org="xmlunit" name="xmlunit" rev="1.5" conf="test->default"/>

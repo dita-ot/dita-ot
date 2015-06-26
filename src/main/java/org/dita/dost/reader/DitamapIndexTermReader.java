@@ -9,8 +9,10 @@
 
 package org.dita.dost.reader;
 
+import static org.apache.commons.io.FilenameUtils.*;
 import static org.dita.dost.util.Constants.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -188,7 +190,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
                 buffer.append(SLASH);
             }
             buffer.append(href);
-            targetURI = FileUtils.normalize(buffer.toString()).getPath();
+            targetURI = new File(normalize(buffer.toString())).getPath();
         }else{
             targetURI = href;
         }

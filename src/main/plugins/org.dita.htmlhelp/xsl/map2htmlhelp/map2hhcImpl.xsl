@@ -28,8 +28,6 @@
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
 
-<xsl:output method="html" indent="no"/>
-
 <!-- Set the prefix for error message numbers -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
 

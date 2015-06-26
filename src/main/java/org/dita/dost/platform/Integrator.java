@@ -8,41 +8,37 @@
  */
 package org.dita.dost.platform;
 
+import static org.apache.commons.io.IOUtils.closeQuietly;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
+import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.platform.PluginParser.*;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.dita.dost.util.XMLUtils;
-import org.xml.sax.SAXException;
-
-import org.xml.sax.ErrorHandler;
-
-import org.xml.sax.SAXParseException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.*;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
-import org.xml.sax.XMLReader;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * Integrator is the main class to control and excute the integration of the
@@ -55,17 +51,18 @@ public final class Integrator {
     private static final String CONF_PLUGIN_IGNORES = "plugin.ignores";
     private static final String CONF_PLUGIN_DIRS = "plugindirs";
     /** Feature name for supported image extensions. */
-    public static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
+    private static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
     /** Feature name for supported image extensions. */
-    public static final String FEAT_HTML_EXTENSIONS = "dita.html.extensions";
+    private static final String FEAT_HTML_EXTENSIONS = "dita.html.extensions";
     /** Feature name for supported resource file extensions. */
-    public static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
+    private static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
     /** Feature name for print transformation types. */
-    public static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
+    private static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
+    private static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
+    private static final String ELEM_PLUGINS = "plugins";
 
     public static final String FEAT_VALUE_SEPARATOR = ",";
-    public static final String PARAM_VALUE_SEPARATOR = ";";
-    public static final String PARAM_NAME_SEPARATOR = "=";
+    private static final String PARAM_VALUE_SEPARATOR = ";";
 
     public static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
     public static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-]+)?)?)?");
@@ -73,10 +70,12 @@ public final class Integrator {
     /** Plugin table which contains detected plugins. */
     private final Map<String, Features> pluginTable;
     private final Set<String> templateSet = new HashSet<String>(16);
-    private File ditaDir;
+    private final File ditaDir;
     /** Plugin configuration file. */
     private final Set<File> descSet;
     private final XMLReader reader;
+    private final Document pluginsDoc;
+    private final PluginParser parser;
     private DITAOTLogger logger;
     private final Set<String> loadedPlugin;
     private final Hashtable<String, List<String>> featureTable;
@@ -88,9 +87,47 @@ public final class Integrator {
     private Properties properties;
 
     /**
+     * Default Constructor.
+     */
+    public Integrator(final File ditaDir) {
+        this.ditaDir = ditaDir;
+        pluginTable = new HashMap<String, Features>(16);
+        descSet = new HashSet<File>(16);
+        loadedPlugin = new HashSet<String>(16);
+        featureTable = new Hashtable<String, List<String>>(16);
+        extensionPoints = new HashSet<String>();
+        try {
+            reader = XMLUtils.getXMLReader();
+        } catch (final Exception e) {
+            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
+        }
+        reader.setErrorHandler(new ErrorHandler() {
+            @Override
+            public void error(final SAXParseException e) throws SAXException {
+                throw e;
+            }
+            @Override
+            public void fatalError(final SAXParseException e) throws SAXException {
+                throw e;
+            }
+            @Override
+            public void warning(final SAXParseException e) throws SAXException {
+                throw e;
+            }
+        });
+        parser = new PluginParser(ditaDir);
+        try {
+            pluginsDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        } catch (final ParserConfigurationException e) {
+            throw new RuntimeException("Failed to create compound document: " + e.getMessage(), e);
+        }
+//        pluginsDoc.setResult(new StreamResult(new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml")));
+    }
+
+    /**
      * Execute point of Integrator.
      */
-    public void execute() {
+    public void execute() throws Exception {
         if (logger == null) {
             logger = new DITAOTJavaLogger();
         }
@@ -163,7 +200,9 @@ public final class Integrator {
     /**
      * Generate and process plugin files.
      */
-    private void integrate() {
+    private void integrate() throws Exception {
+        writePlugins();
+
         // Collect information for each feature id and generate a feature table.
         final FileGenerator fileGen = new FileGenerator(featureTable, pluginTable);
         fileGen.setLogger(logger);
@@ -226,9 +265,10 @@ public final class Integrator {
                 //configuration.put(name, ditaDir.getAbsolutePath());
                 configuration.put(name, ".");
             } else {
-                configuration.put(name, FileUtils.getRelativePath(new File(ditaDir, "dummy"), f.getLocation()).getPath());
+                configuration.put(name, FileUtils.getRelativePath(new File(ditaDir, "dummy"), f.getPluginDir()).getPath());
             }
         }
+        configuration.putAll(getParserConfiguration());
         
         OutputStream out = null;
         try {
@@ -253,6 +293,94 @@ public final class Integrator {
                     logger.error(e.getMessage(), e) ;
                 }
             }
+        }
+
+        final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS) ? relativize(new HashSet<String>(featureTable.get(FEAT_LIB_EXTENSIONS))) : Collections.EMPTY_SET;
+        writeEnvShell(jars);
+        writeEnvBatch(jars);
+    }
+
+    private Map<String, String> getParserConfiguration() {
+        final Map<String, String> res = new HashMap<String, String>();
+        final NodeList features = pluginsDoc.getElementsByTagName(FEATURE_ELEM);
+        for (int i = 0; i < features.getLength(); i++) {
+            final Element feature = (Element) features.item(i);
+            if (feature.getAttribute(FEATURE_ID_ATTR).equals("dita.parser")) {
+                final NodeList parsers = feature.getElementsByTagName("parser");
+                for (int j = 0; j < parsers.getLength(); j++) {
+                    final Element parser = (Element) parsers.item(j);
+                    res.put("parser." + parser.getAttribute("format"), parser.getAttribute("class"));
+                }
+            }
+        }
+        return res;
+    }
+
+    private Collection<File> relativize(final Collection<String> src) {
+        final Collection<File> res = new ArrayList<File>(src.size());
+        final File base = new File(ditaDir, "dummy");
+        for (final String lib: src) {
+            res.add(FileUtils.getRelativePath(base, toFile(lib)));
+        }
+        return res;
+    }
+
+    private void writeEnvShell(final Collection<File> jars) {
+        Writer out = null;
+        try {
+            final File outFile = new File(ditaDir, "resources" + File.separator + "env.sh");
+            if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
+                throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
+            }
+            logger.debug("Generate environment shell " + outFile.getPath());
+            out = new BufferedWriter(new FileWriter(outFile));
+
+            out.write("#!/bin/sh\n");
+            for (final File relativeLib: jars) {
+                out.write("CLASSPATH=\"$CLASSPATH:");
+                if (!relativeLib.isAbsolute()) {
+                    out.write("$DITA_HOME" + UNIX_SEPARATOR);
+                }
+                out.write(relativeLib.toString().replace(File.separator, UNIX_SEPARATOR));
+                out.write("\"\n");
+            }
+        } catch (final Exception e) {
+            if (strict) {
+                throw new RuntimeException("Failed to write environment shell: " + e.getMessage(), e);
+            } else {
+                logger.error(e.getMessage(), e) ;
+            }
+        } finally {
+            closeQuietly(out);
+        }
+    }
+
+    private void writeEnvBatch(final Collection<File> jars) {
+        Writer out = null;
+        try {
+            final File outFile = new File(ditaDir, "resources" + File.separator + "env.bat");
+            if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
+                throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
+            }
+            logger.debug("Generate environment batch " + outFile.getPath());
+            out = new BufferedWriter(new FileWriter(outFile));
+
+            for (final File relativeLib: jars) {
+                out.write("set \"CLASSPATH=%CLASSPATH%;");
+                if (!relativeLib.isAbsolute()) {
+                    out.write("%DITA_HOME%" + WINDOWS_SEPARATOR);
+                }
+                out.write(relativeLib.toString().replace(File.separator, WINDOWS_SEPARATOR));
+                out.write("\"\r\n");
+            }
+        } catch (final Exception e) {
+            if (strict) {
+                throw new RuntimeException("Failed to write environment batch: " + e.getMessage(), e);
+            } else {
+                logger.error(e.getMessage(), e) ;
+            }
+        } finally {
+            closeQuietly(out);
         }
     }
 
@@ -307,7 +435,7 @@ public final class Integrator {
 
             for (final String templateName : pluginFeatures.getAllTemplates()) {
                 templateSet.add(FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy",
-                        pluginFeatures.getLocation() + File.separator + templateName));
+                        pluginFeatures.getPluginDir() + File.separator + templateName));
             }
             loadedPlugin.add(plugin);
             return true;
@@ -360,11 +488,27 @@ public final class Integrator {
      * Parse plugin configuration files.
      */
     private void parsePlugin() {
+        final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
+        pluginsDoc.appendChild(root);
         if (!descSet.isEmpty()) {
             for (final File descFile : descSet) {
                 logger.debug("Read plug-in configuration " + descFile.getPath());
-                parseDesc(descFile);
+                final Element plugin = parseDesc(descFile);
+                if (plugin != null) {
+                    root.appendChild(pluginsDoc.importNode(plugin, true));
+                }
             }
+        }
+    }
+
+    private void writePlugins() throws TransformerException {
+        final File plugins = new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml");
+        logger.debug("Writing " + plugins);
+        try {
+            final Transformer serializer = TransformerFactory.newInstance().newTransformer();
+            serializer.transform(new DOMSource(pluginsDoc), new StreamResult(plugins));
+        } catch (final TransformerConfigurationException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -373,31 +517,18 @@ public final class Integrator {
      * 
      * @param descFile plugin configuration
      */
-    private void parseDesc(final File descFile) {
+    private Element parseDesc(final File descFile) {
         try {
-            final DescParser parser = new DescParser(descFile.getParentFile(), ditaDir);
-            reader.setContentHandler(parser);
-            reader.setErrorHandler(new ErrorHandler() {
-                @Override
-                public void error(final SAXParseException e) throws SAXException {
-                    throw e;
-                }
-                @Override
-                public void fatalError(final SAXParseException e) throws SAXException {
-                    throw e;
-                }
-                @Override
-                public void warning(final SAXParseException e) throws SAXException {
-                    throw e;
-                }
-            });
-            reader.parse(descFile.getAbsolutePath());
+            parser.setPluginDir(descFile.getParentFile());
+            final Element root = parser.parse(descFile.getAbsoluteFile());
             final Features f = parser.getFeatures();
             final String id = f.getPluginId();
             validatePlugin(f);
-            setDefaultValues(f);
             extensionPoints.addAll(f.getExtensionPoints().keySet());
             pluginTable.put(id, f);
+            return root;
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final SAXParseException e) {
             final RuntimeException ex = new RuntimeException("Failed to parse " + descFile.getAbsolutePath() + ": " + e.getMessage(), e);
             if (strict) {
@@ -412,6 +543,7 @@ public final class Integrator {
                 logger.error(e.getMessage(), e) ;
             }
         }
+        return null;
     }
 
     /**
@@ -461,43 +593,6 @@ public final class Integrator {
     }
 
     /**
-     * Set default values.
-     * 
-     * @param f Features to set defaults to
-     */
-    private void setDefaultValues(final Features f) {
-        if (f.getFeature("package.version") == null) {
-            f.addFeature("package.version", "0.0.0", null);
-        }
-    }
-
-    /**
-     * Default Constructor.
-     */
-    public Integrator() {
-        pluginTable = new HashMap<String, Features>(16);
-        descSet = new HashSet<File>(16);
-        loadedPlugin = new HashSet<String>(16);
-        featureTable = new Hashtable<String, List<String>>(16);
-        extensionPoints = new HashSet<String>();
-        try {
-            reader = XMLUtils.getXMLReader();
-        } catch (final Exception e) {
-            throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Set the ditaDir.
-     * 
-     * @param ditadir dita directory
-     */
-    public void setDitaDir(final File ditadir) {
-        ditaDir = ditadir;
-    }
-
-
-    /**
      * Set the properties file.
      * 
      * @param propertiesfile properties file
@@ -544,19 +639,6 @@ public final class Integrator {
         } else {
             return StringUtils.join(buf, ",");
         }
-    }
-
-    /**
-     * Command line interface for testing.
-     * 
-     * @param args arguments
-     */
-    public static void main(final String[] args) {
-        final Integrator abc = new Integrator();
-        final File currentDir = new File(".");
-        abc.setDitaDir(currentDir);
-        abc.setProperties(new File("integrator.properties"));
-        abc.execute();
     }
 
 }

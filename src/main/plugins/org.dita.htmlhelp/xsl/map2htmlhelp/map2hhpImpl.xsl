@@ -29,8 +29,6 @@
 <!-- Include error message template -->
 <xsl:include href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
-<xsl:output method="text"/>
-
 <!-- Set the prefix for error message numbers -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
 

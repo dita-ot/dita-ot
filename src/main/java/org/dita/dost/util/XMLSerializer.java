@@ -180,7 +180,7 @@ public class XMLSerializer {
      * @throws IllegalStateException if start element is not open
      * @throws IllegalArgumentException if prefix is already bound
      */
-    public void writeNamespace(final String prefix, final String uri) throws SAXException {
+    public void writeNamespace(final String prefix, final String uri) {
         if (!openStartElement) {
             throw new IllegalStateException("Current state does not allow Namespace writing");
         }
@@ -216,7 +216,7 @@ public class XMLSerializer {
      * @throws SAXException if processing the event failed
      * @throws IllegalStateException if start element is not open
      */
-    public void writeAttribute(final String uri, final String qName, final String value) throws SAXException {
+    public void writeAttribute(final String uri, final String qName, final String value) {
         if (!openStartElement) {
             throw new IllegalStateException("Current state does not allow Attribute writing");
         }

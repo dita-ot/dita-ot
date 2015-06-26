@@ -50,31 +50,33 @@
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-toc-id"/>
   <xsl:call-template name="setidaname"/>
-    <xsl:apply-templates select="."   mode="prereq-fmt" />
-</div><xsl:value-of select="$newline"/>
-</xsl:template>
-<xsl:template match="*[contains(@class,' task/prereq ')]" mode="prereq-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates select="." mode="dita2html:section-heading">
-     <!--xsl:with-param name="deftitle"></xsl:with-param-->
-     <xsl:with-param name="defaulttitle"></xsl:with-param>
+    <!--xsl:with-param name="deftitle"></xsl:with-param-->
+    <xsl:with-param name="defaulttitle"></xsl:with-param>
   </xsl:apply-templates>
   <!-- Title is not allowed now, but if we add it, make sure it is processed as in section -->
   <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>
-
-<!-- Insert pre-req links - after prereq section -->
+  
+  <!-- Insert pre-req links - after prereq section -->
   <xsl:apply-templates select="../following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
-
+  
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   <xsl:if test="$link-top-section='yes'"> <!-- optional return to top - not used -->
-    <p align="left"><a href="#TOP">
+    <p>
+      <xsl:call-template name="style">
+        <xsl:with-param name="contents">
+          <xsl:text>text-align:left;</xsl:text>
+        </xsl:with-param>
+      </xsl:call-template>
+      <a href="#TOP">
       <!--xsl:value-of select="$deftxt-linktop"/-->
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Return to Top'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Return to Top'"/>
       </xsl:call-template>
     </a></p>
   </xsl:if>
+</div><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*" mode="make-steps-compact">
@@ -94,8 +96,9 @@
     <xsl:apply-templates select="." mode="make-steps-compact"/>
   </xsl:variable>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <xsl:apply-templates select="." mode="steps-fmt">
+  <xsl:apply-templates select="." mode="common-processing-within-steps">
     <xsl:with-param name="step_expand" select="$step_expand"/>
+    <xsl:with-param name="list-type" select="'ol'"/>
   </xsl:apply-templates>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
@@ -111,8 +114,8 @@
   </xsl:param>
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_procedure'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_procedure'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -218,39 +221,15 @@
     <xsl:apply-templates select="." mode="make-steps-compact"/>
   </xsl:variable>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <xsl:apply-templates select="."  mode="stepsunord-fmt">
-    <xsl:with-param name="step_expand" select="$step_expand"/>
-  </xsl:apply-templates>
-  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-</xsl:template>
-
-<xsl:template match="*[contains(@class,' task/steps ')]" mode="steps-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-  <xsl:param name="step_expand"/>
-  <xsl:apply-templates select="." mode="common-processing-within-steps">
-    <xsl:with-param name="step_expand" select="$step_expand"/>
-    <xsl:with-param name="list-type" select="'ol'"/>
-  </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*[contains(@class,' task/steps-unordered ')]" mode="stepsunord-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-  <xsl:param name="step_expand"/>
   <xsl:apply-templates select="." mode="common-processing-within-steps">
     <xsl:with-param name="step_expand" select="$step_expand"/>
     <xsl:with-param name="list-type" select="'ul'"/>
   </xsl:apply-templates>
+  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!-- only 1 step - output as a para -->
 <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep">
-  <xsl:param name="step_expand"/>
-  <xsl:apply-templates select="."  mode="onestep-fmt">
-    <xsl:with-param name="step_expand" select="$step_expand"/>
-  </xsl:apply-templates>
-</xsl:template>
-<xsl:template match="*[contains(@class,' task/step ')]" mode="onestep-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:param name="step_expand"/>
   <div class="p">
     <xsl:call-template name="commonattributes">
@@ -267,14 +246,6 @@
      Can deprecate this template which now simply passes processing on to steps-fmt? -->
 <xsl:template match="*[contains(@class,' task/step ')]" mode="steps">
   <xsl:param name="step_expand"/>
-  <xsl:apply-templates select="."  mode="steps-fmt">
-    <xsl:with-param name="step_expand" select="$step_expand"/>
-  </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*[contains(@class,' task/step ')]" mode="steps-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-  <xsl:param name="step_expand"/>
   <li>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class"><xsl:if test="$step_expand='yes'">stepexpand</xsl:if></xsl:with-param>
@@ -282,28 +253,28 @@
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates select="." mode="add-step-importance-flag"/>
     <xsl:apply-templates><xsl:with-param name="step_expand" select="$step_expand"/></xsl:apply-templates>
-  </li><xsl:value-of select="$newline"/>
+  </li><xsl:value-of select="$newline"/>  
 </xsl:template>
 
 <xsl:template match="*" mode="add-step-importance-flag">
   <xsl:choose>
     <xsl:when test="@importance='optional'">
       <strong>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Optional'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Optional'"/>
         </xsl:call-template>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'ColonSymbol'"/>
         </xsl:call-template><xsl:text> </xsl:text>
       </strong>
     </xsl:when>
     <xsl:when test="@importance='required'">
       <strong>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Required'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Required'"/>
         </xsl:call-template>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'ColonSymbol'"/>
         </xsl:call-template><xsl:text> </xsl:text>
       </strong>
     </xsl:when>
@@ -312,7 +283,7 @@
   
   <xsl:template match="*[contains(@class, ' task/cmd ')]" name="topic.task.cmd">
     <xsl:choose>
-      <xsl:when test="@keyref">
+      <xsl:when test="@href and @keyref">
         <xsl:apply-templates select="." mode="turning-to-link">
           <xsl:with-param name="keys" select="@keyref"/>
           <xsl:with-param name="type" select="'ph'"/>
@@ -343,40 +314,23 @@
   </xsl:variable>
   
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-  <xsl:apply-templates select="." mode="substeps-fmt">
-    <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
-  </xsl:apply-templates>
+  <xsl:call-template name="setaname"/>
+  <ol>
+    <xsl:if test="parent::*/parent::*[contains(@class,' task/steps ')]"> <!-- Is the grandparent an ordered step? -->
+      <xsl:attribute name="type">a</xsl:attribute>            <!-- yup, letter these steps -->
+    </xsl:if>                                                <!-- otherwise, default to numbered -->
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates>
+      <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
+    </xsl:apply-templates>
+  </ol><xsl:value-of select="$newline"/>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-</xsl:template>
-
-<xsl:template match="*[contains(@class,' task/substeps ')]" mode="substeps-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
-<xsl:param name="sub_step_expand"/>
-  
-<xsl:call-template name="setaname"/>
-<ol>
- <xsl:if test="parent::*/parent::*[contains(@class,' task/steps ')]"> <!-- Is the grandparent an ordered step? -->
-  <xsl:attribute name="type">a</xsl:attribute>            <!-- yup, letter these steps -->
- </xsl:if>                                                <!-- otherwise, default to numbered -->
- <xsl:call-template name="commonattributes"/>
- <xsl:call-template name="setid"/>
- <xsl:apply-templates>
-  <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
- </xsl:apply-templates>
-</ol><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- 3517050 move rev test into mode="steps-fmt" to avoid wrapping <li> in another element.
      Can deprecate this template which now simply passes processing on to substep-fmt? -->
 <xsl:template match="*[contains(@class,' task/substep ')]" name="topic.task.substep">
-  <xsl:param name="sub_step_expand"/>
-  <xsl:apply-templates select="."  mode="substep-fmt">
-    <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
-  </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="*[contains(@class,' task/substep ')]" mode="substep-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:param name="sub_step_expand"/>
   <li>
     <xsl:call-template name="commonattributes">
@@ -392,142 +346,162 @@
 
 <!-- choices contain choice items -->
 <xsl:template match="*[contains(@class,' task/choices ')]" name="topic.task.choices">
-  <xsl:apply-templates select="."  mode="choices-fmt" />
-</xsl:template>
-<xsl:template match="*[contains(@class,' task/choices ')]" mode="choices-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="setaname"/>
   <ul>
-   <xsl:call-template name="commonattributes"/>
-   <xsl:call-template name="setid"/>
-   <xsl:apply-templates/>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setid"/>
+    <xsl:apply-templates/>
   </ul><xsl:value-of select="$newline"/>
   <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <!-- task/choice - fall-thru -->
 
-<!-- choice table is like a simpletable - 2 columns, set heading -->
-<xsl:template match="*[contains(@class,' task/choicetable ')]" name="topic.task.choicetable">
-     <xsl:apply-templates select="."  mode="choicetable-fmt" />
-</xsl:template>
-<xsl:template match="*[contains(@class,' task/choicetable ')]" mode="get-output-class">choicetableborder</xsl:template>
-<xsl:template match="*[contains(@class,' task/choicetable ')]" mode="choicetable-fmt">
-  <!-- This template is deprecated in DITA-OT 1.7. Processing will moved into the main element rule. -->
- <!-- Find the total number of relative units for the table. If @relcolwidth="1* 2* 2*",
-      the variable is set to 5. -->
- <xsl:variable name="totalwidth">
-   <xsl:if test="@relcolwidth">
-     <xsl:call-template name="find-total-table-width"/>
-   </xsl:if>
- </xsl:variable>
- <!-- Find how much of the table each relative unit represents. If @relcolwidth is 1* 2* 2*,
-      there are 5 units. So, each unit takes up 100/5, or 20% of the table. Default to 0,
-      which the entries will ignore. -->
- <xsl:variable name="width-multiplier">
-   <xsl:choose>
-     <xsl:when test="@relcolwidth">
-       <xsl:value-of select="100 div $totalwidth"/>
-     </xsl:when>
-     <xsl:otherwise>0</xsl:otherwise>
-   </xsl:choose>
- </xsl:variable>
+  <!-- choice table is like a simpletable - 2 columns, set heading -->
+  <xsl:template match="*[contains(@class,' task/choicetable ')]" name="topic.task.choicetable">
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
+    <xsl:call-template name="setaname"/>
+    <xsl:value-of select="$newline"/>
+    <table border="1" frame="hsides" rules="rows" cellpadding="4" cellspacing="0" summary="" class="choicetableborder">
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
+      <xsl:call-template name="setid"/>
+      <xsl:value-of select="$newline"/>
+      <xsl:call-template name="dita2html:simpletable-cols"/>
+      <!--If the choicetable has no header - output a default one-->
+      <xsl:variable name="chhead" as="element()?">
+        <xsl:choose>
+          <xsl:when test="exists(*[contains(@class,' task/chhead ')])">
+            <xsl:sequence select="*[contains(@class,' task/chhead ')]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:variable name="gen" as="element(gen)?">
+              <xsl:call-template name="gen-chhead"/>
+            </xsl:variable>
+            <xsl:sequence select="$gen/*"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:apply-templates select="$chhead"/>
+      <tbody>
+        <xsl:apply-templates select="*[contains(@class, ' task/chrow ')]"/>
+      </tbody>
+    </table>
+    <xsl:value-of select="$newline"/>
+    <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+  </xsl:template>
   
- <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
- <xsl:call-template name="setaname"/>
- <xsl:value-of select="$newline"/>
- <table border="1" frame="hsides" rules="rows" cellpadding="4" cellspacing="0" summary="" class="choicetableborder">
-  <xsl:call-template name="commonattributes"/>
-  <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
-  <xsl:call-template name="setid"/><xsl:value-of select="$newline"/>
-  <!--If the choicetable has no header - output a default one-->
-  <xsl:choose>
-  <xsl:when test="not(./*[contains(@class,' task/chhead ')])">
-   <thead><tr><th id="{generate-id(.)}-option" valign="bottom">
-    <xsl:call-template name="th-align"/>
-    <xsl:call-template name="getString">
-      <xsl:with-param name="stringName" select="'Option'"/>
-    </xsl:call-template>
-    </th><xsl:value-of select="$newline"/>
-    <th id="{generate-id(.)}-desc" valign="bottom">
-    <xsl:call-template name="th-align"/>
-    <xsl:call-template name="getString">
-      <xsl:with-param name="stringName" select="'Description'"/>
-    </xsl:call-template>
-    </th></tr></thead><xsl:value-of select="$newline"/>
-  </xsl:when>
-  <xsl:otherwise>
-   <thead><tr>
-     <xsl:for-each select="*[contains(@class,' task/chhead ')]">
-       <xsl:call-template name="commonattributes"/>
-     </xsl:for-each>
-    <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
-    <th valign="bottom">     
-     <xsl:call-template name="th-align"/>
-     <xsl:attribute name="id">     
-     <xsl:choose>
-      <!-- if the option header has an ID, use that -->
-      <xsl:when test="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id">
-       <xsl:value-of select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id"/><xsl:text>-option</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>  <!-- output a default option header ID -->
-       <xsl:value-of select="generate-id(.)"/><xsl:text>-option</xsl:text>
-      </xsl:otherwise>
-     </xsl:choose>
-     </xsl:attribute>
-     <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" mode="chtabhdr"/>
-    </th><xsl:value-of select="$newline"/>
-    <th valign="bottom">     
-     <xsl:call-template name="th-align"/>
-     <xsl:attribute name="id">
-     <xsl:choose>
-      <!-- if the description header has an ID, use that -->
-      <xsl:when test="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id">
-       <xsl:value-of select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id"/><xsl:text>-desc</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>  <!-- output a default descr header ID -->
-       <xsl:value-of select="generate-id(.)"/><xsl:text>-desc</xsl:text>
-      </xsl:otherwise>
-     </xsl:choose>
-     </xsl:attribute>
-     <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]" mode="chtabhdr"/>
-    </th></tr></thead><xsl:value-of select="$newline"/>
-  </xsl:otherwise>
-  </xsl:choose>
-  <tbody>
-    <xsl:apply-templates>     <!-- width-multiplier will be used in the first row to set widths. -->
-      <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-    </xsl:apply-templates>
-  </tbody>
- </table><xsl:value-of select="$newline"/>
-  <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+<xsl:template match="*[contains(@class,' task/choicetable ')]" mode="get-output-class">choicetableborder</xsl:template>
+  <xsl:template match="*[contains(@class,' task/choicetable ')]" mode="dita2html:get-max-entry-count" as="xs:integer">
+    <xsl:sequence select="2"/>
+  </xsl:template>
+ 
+  <!-- Generate default choicetable header -->
+  <xsl:template name="gen-chhead" as="element(gen)?">
+    <xsl:variable name="choicetable" select="ancestor-or-self::*[contains(@class,' task/choicetable ')][1]" as="element()"/>
+    <!-- Generated header needs to be wrapped in gen element to allow correct language detection -->
+    <gen>
+      <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
+      <chhead class="- topic/sthead task/chhead ">
+       <choptionhd class="- topic/stentry task/choptionhd " id="{generate-id($choicetable)}">
+         <xsl:call-template name="getVariable">
+           <xsl:with-param name="id" select="'Option'"/>
+         </xsl:call-template>
+       </choptionhd>  
+       <chdeschd class="- topic/stentry task/chdeschd " id="{generate-id($choicetable)}">
+         <xsl:call-template name="getVariable">
+           <xsl:with-param name="id" select="'Description'"/>
+         </xsl:call-template>
+       </chdeschd>
+      </chhead>
+    </gen>
+  </xsl:template>
+ 
+<xsl:template match="*[contains(@class,' task/chhead ')]">
+  <thead>
+    <tr>
+      <xsl:call-template name="commonattributes"/>
+      <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+      <xsl:apply-templates select="*[contains(@class,' task/choptionhd ')]"/>
+      <xsl:apply-templates select="*[contains(@class,' task/chdeschd ')]"/>
+    </tr>
+  </thead>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
-
-<!-- headers are called above, hide the fall thru -->
-<xsl:template match="*[contains(@class,' task/chhead ')]" />
-<xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" />
-<xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]" />
+  
+<xsl:template match="*[contains(@class,' task/choptionhd ')]">
+  <th>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:bottom;</xsl:text>
+        <xsl:call-template name="th-align"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <xsl:attribute name="id">
+      <xsl:choose>
+        <!-- if the option header has an ID, use that -->
+        <xsl:when test="@id">
+          <xsl:value-of select="@id"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- output a default option header ID -->
+          <xsl:value-of select="generate-id(../..)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>-option</xsl:text>
+    </xsl:attribute>
+    <xsl:apply-templates select="." mode="chtabhdr"/>
+  </th>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+  
+<xsl:template match="*[contains(@class,' task/chdeschd ')]">
+  <th>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:bottom;</xsl:text>
+        <xsl:call-template name="th-align"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <xsl:attribute name="id">
+      <xsl:choose>
+        <!-- if the description header has an ID, use that -->
+        <xsl:when test="@id">
+          <xsl:value-of select="@id"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- output a default descr header ID -->
+          <xsl:value-of select="generate-id(../..)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>-desc</xsl:text>
+    </xsl:attribute>
+    <xsl:apply-templates select="." mode="chtabhdr"/>
+  </th>
+</xsl:template>
 
 <!-- Option & Description headers -->
-<xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" mode="chtabhdr">
+<xsl:template match="*[contains(@class,' task/choptionhd ')]" mode="chtabhdr">
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/>
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
-<xsl:template match="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]" mode="chtabhdr">
+  
+<xsl:template match="*[contains(@class,' task/chdeschd ')]" mode="chtabhdr">
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/>
   <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/chrow ')]" name="topic.task.chrow">
- <xsl:param name="width-multiplier">0</xsl:param>
- <tr><xsl:call-template name="setid"/><xsl:call-template name="commonattributes"/>    
-    <xsl:apply-templates>     <!-- width-multiplier will be used in the first row to set widths. -->
-      <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-    </xsl:apply-templates>
-</tr>
+ <tr>
+   <xsl:call-template name="setid"/>
+   <xsl:call-template name="commonattributes"/>    
+    <xsl:apply-templates/>
+ </tr>
  <xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -535,21 +509,34 @@
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template match="*[contains(@class,' task/choption ')]" name="topic.task.choption">
- <xsl:param name="width-multiplier">0</xsl:param>
-  
-  <td valign="top">
+  <xsl:variable name="localkeycol" as="xs:integer">
+    <xsl:choose>
+      <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol">
+        <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol"/>
+      </xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>  
+  <xsl:variable name="element-name" select="if ($localkeycol = 1) then 'th' else 'td'"/>
+  <xsl:element name="{$element-name}">
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:top;</xsl:text>     
+      </xsl:with-param>
+    </xsl:call-template>
    <!-- Add header attr for column header -->
    <xsl:attribute name="headers">
     <xsl:choose>
       <!-- First choice: if there is a user-specified header, and it has an ID -->
-      <xsl:when test="ancestor::*[contains(@class,' task/choicetable ')]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id">
-        <xsl:value-of select="ancestor::*[contains(@class,' task/choicetable ')]/*[1][contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id"/><xsl:text>-option</xsl:text>
+      <xsl:when test="ancestor::*[contains(@class,' task/choicetable ')][1]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id">
+        <xsl:value-of select="ancestor::*[contains(@class,' task/choicetable ')][1]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id"/>
       </xsl:when>
       <!-- Second choice: no user-specified header for this column. ID is based on the table's generated ID. -->
       <xsl:otherwise>
-        <xsl:value-of select="generate-id(ancestor::*[contains(@class,' task/choicetable ')])"/><xsl:text>-option</xsl:text>
+        <xsl:value-of select="generate-id(ancestor::*[contains(@class,' task/choicetable ')][1])"/>
       </xsl:otherwise>
     </xsl:choose>
+     <xsl:text>-option</xsl:text>
    </xsl:attribute>
    <!-- Add header attr, column header then row header -->
    <xsl:attribute name="id">
@@ -564,134 +551,64 @@
     </xsl:choose>
    </xsl:attribute>
     <xsl:call-template name="commonattributes"/>
-    <xsl:variable name="localkeycol">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
-          <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
-    <!-- If width-multiplier=0, then either @relcolwidth was not specified, or this is not the first
-         row, so do not create a width value. Otherwise, find out the relative width of this column. -->
-    <xsl:variable name="widthpercent">
-      <xsl:if test="$width-multiplier != 0">
-        <xsl:call-template name="get-current-entry-percentage">
-          <xsl:with-param name="multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-          <xsl:with-param name="entry-num"><xsl:value-of select="$thiscolnum"/></xsl:with-param>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <!-- If we calculated a width, create the width attribute. -->
-    <xsl:if test="string-length($widthpercent)>0">
-      <xsl:attribute name="width">
-        <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-    <!-- Does the column match? Is REV on for entry or row? -->
-    <xsl:choose>
-     <xsl:when test="$thiscolnum=$localkeycol">
-      <strong>
-        <xsl:call-template name="stentry-templates"/>
-      </strong>
-     </xsl:when>
-     <xsl:otherwise>
-       <xsl:call-template name="stentry-templates"/>
-     </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="stentry-templates"/>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-  </td><xsl:value-of select="$newline"/>
+  </xsl:element><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- specialization of stentry - chdesc -->
 <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
 <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
 <xsl:template match="*[contains(@class,' task/chdesc ')]" name="topic.task.chdesc">
- <xsl:param name="width-multiplier">0</xsl:param>
-    
-  <td valign="top">
+  <xsl:variable name="localkeycol" as="xs:integer">
+    <xsl:choose>
+      <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol">
+        <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol"/>
+      </xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>  
+  <xsl:variable name="element-name" select="if ($localkeycol = 2) then 'th' else 'td'"/>
+  <xsl:element name="{$element-name}">
+    <xsl:call-template name="style">
+      <xsl:with-param name="contents">
+        <xsl:text>vertical-align:top;</xsl:text>     
+      </xsl:with-param>
+    </xsl:call-template>
    <!-- Add header attr, column header then option header -->
    <xsl:attribute name="headers">
     <xsl:choose>
       <!-- First choice: if there is a user-specified header, and it has an ID-->
-      <xsl:when test="ancestor::*[contains(@class,' task/choicetable ')]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id">
+      <xsl:when test="ancestor::*[contains(@class,' task/choicetable ')][1]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id">
        <!-- If there is a user-specified row ID -->
-        <xsl:value-of select="ancestor::*[contains(@class,' task/choicetable ')]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id"/><xsl:text>-desc </xsl:text>
-        <!-- add CHOption ID -->
-        <xsl:choose>
-         <xsl:when test="../*[contains(@class,' task/choption ')]/@id">
-          <xsl:value-of select="../*[contains(@class,' task/choption ')]/@id"/>
-         </xsl:when>
-         <xsl:otherwise>
-          <xsl:value-of select="generate-id(../*[contains(@class,' task/choption ')])"/>
-         </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="ancestor::*[contains(@class,' task/choicetable ')][1]/*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id"/>
       </xsl:when>
       <!-- Second choice: no user-specified header for this column. ID is based on the table's generated ID. -->
       <xsl:otherwise>
-        <xsl:value-of select="generate-id(ancestor::*[contains(@class,' task/choicetable ')])"/><xsl:text>-desc </xsl:text>
-        <!-- add CHOption ID -->
-        <xsl:choose>
-         <xsl:when test="../*[contains(@class,' task/choption ')]/@id">
-          <xsl:value-of select="../*[contains(@class,' task/choption ')]/@id"/>
-         </xsl:when>
-         <xsl:otherwise>
-          <xsl:value-of select="generate-id(../*[contains(@class,' task/choption ')])"/>
-         </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="generate-id(ancestor::*[contains(@class,' task/choicetable ')][1])"/>
       </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>-desc </xsl:text>
+     <!-- add CHOption ID -->
+    <xsl:choose>
+       <xsl:when test="../*[contains(@class,' task/choption ')]/@id">
+         <xsl:value-of select="../*[contains(@class,' task/choption ')]/@id"/>
+       </xsl:when>
+       <xsl:otherwise>
+         <xsl:value-of select="generate-id(../*[contains(@class,' task/choption ')])"/>
+       </xsl:otherwise>
     </xsl:choose>
    </xsl:attribute>
    <!-- If there is a user-specified ID, add it -->
    <xsl:if test="@id">
-    <xsl:attribute name="id">
-     <xsl:value-of select="@id"/>
-    </xsl:attribute>
+    <xsl:attribute name="id" select="@id"/>
    </xsl:if>
    <xsl:call-template name="commonattributes"/>
-    <xsl:variable name="localkeycol">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
-          <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum"><xsl:value-of select="number(count(preceding-sibling::*[contains(@class,' topic/stentry ')])+1)"/></xsl:variable>
-    <!-- If width-multiplier=0, then either @relcolwidth was not specified, or this is not the first
-         row, so do not create a width value. Otherwise, find out the relative width of this column. -->
-    <xsl:variable name="widthpercent">
-      <xsl:if test="$width-multiplier != 0">
-        <xsl:call-template name="get-current-entry-percentage">
-          <xsl:with-param name="multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
-          <xsl:with-param name="entry-num"><xsl:value-of select="$thiscolnum"/></xsl:with-param>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <!-- If we calculated a width, create the width attribute. -->
-    <xsl:if test="string-length($widthpercent)>0">
-      <xsl:attribute name="width">
-        <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-    <!-- Does the column match? Is REV on for entry or row? -->
-    <xsl:choose>
-     <xsl:when test="$thiscolnum=$localkeycol">
-      <strong>
-        <xsl:call-template name="stentry-templates"/>
-      </strong>
-     </xsl:when>
-     <xsl:otherwise>
-       <xsl:call-template name="stentry-templates"/>
-     </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="stentry-templates"/>
     <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-  </td><xsl:value-of select="$newline"/>
+  </xsl:element><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/stepxmp ')]" name="topic.task.stepxmp">
@@ -721,8 +638,8 @@
 <xsl:template match="*[contains(@class,' task/prereq ')]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_prereq'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_prereq'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -731,8 +648,8 @@
 <xsl:template match="*[contains(@class,' task/context ')]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_context'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_context'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -741,8 +658,8 @@
 <xsl:template match="*[contains(@class,' task/result ')]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_results'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_results'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -751,8 +668,8 @@
 <xsl:template match="*[contains(@class,' task/postreq ')]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_postreq'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_postreq'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -761,8 +678,8 @@
 <xsl:template match="*[contains(@class,' task/taskbody ')]/*[contains(@class,' topic/example ')][not(*[contains(@class,' topic/title ')])]" mode="dita2html:section-heading">
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'task_example'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'task_example'"/>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>
@@ -815,8 +732,8 @@
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " outputclass="relinfo reltasks">
         <title class="- topic/title ">
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'Related tasks'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Related tasks'"/>
           </xsl:call-template>
         </title>
         <xsl:copy-of select="$links"/>

@@ -34,11 +34,11 @@ public class ProfilingFilterTest {
 	
 	@Test
 	public void testNoFilter() throws Exception {
-		test(new FilterUtils(Collections.EMPTY_MAP), "topic.dita", "topic.dita");
+		test(new FilterUtils(false, Collections.EMPTY_MAP), "topic.dita", "topic.dita");
 
 		final DitaValReader filterReader = new DitaValReader();
 		filterReader.read(new File(getClass().getClassLoader().getResource("ProfilingFilterTest/src/topic1.ditaval").toURI()).getAbsoluteFile());
-        final FilterUtils filterUtils = new FilterUtils(filterReader.getFilterMap());
+        final FilterUtils filterUtils = new FilterUtils(false, filterReader.getFilterMap());
 		filterUtils.setLogger(new TestUtils.TestLogger());
         test(filterUtils, "topic.dita", "topic1.dita");
 

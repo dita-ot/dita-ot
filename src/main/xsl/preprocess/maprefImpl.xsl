@@ -137,6 +137,16 @@
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
+            <xsl:variable name="target" as="element()?">
+              <xsl:choose>
+                <xsl:when test="not(contains(@href,'://') or $element-id='#none#' or $file/*[contains(@class,' map/map ')][@id = $element-id])">
+                  <xsl:sequence select="$file//*[contains(@class,' map/topicref ')][@id=$element-id]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:sequence select="$file/*"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
             <xsl:variable name="contents" as="node()*">
               <xsl:choose>
                 <!-- see whether it is reference to a file or a reference to specific element -->
@@ -177,6 +187,9 @@
                     <xsl:when test="@linking and not(@linking='')">
                       <xsl:value-of select="@linking"/>
                     </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@linking][1]/@linking">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@linking][1]/@linking"/>
+                    </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
                 </xsl:with-param>
@@ -187,6 +200,9 @@
                     </xsl:when>
                     <xsl:when test="@toc and not(@toc='')">
                       <xsl:value-of select="@toc"/>
+                    </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@toc][1]/@toc">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@toc][1]/@toc"/>
                     </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
@@ -199,6 +215,9 @@
                     <xsl:when test="@print and not(@print='')">
                       <xsl:value-of select="@print"/>
                     </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@print][1]/@print">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@print][1]/@print"/>
+                    </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
                 </xsl:with-param>
@@ -209,6 +228,9 @@
                     </xsl:when>
                     <xsl:when test="@audience and not(@audience='')">
                       <xsl:value-of select="@audience"/>
+                    </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@audience][1]/@audience">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@audience][1]/@audience"/>
                     </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
@@ -221,6 +243,9 @@
                     <xsl:when test="@product and not(@product='')">
                       <xsl:value-of select="@product"/>
                     </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@product][1]/@product">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@product][1]/@product"/>
+                    </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
                 </xsl:with-param>
@@ -231,6 +256,9 @@
                     </xsl:when>
                     <xsl:when test="@platform and not(@platform='')">
                       <xsl:value-of select="@platform"/>
+                    </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@platform][1]/@platform">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@platform][1]/@platform"/>
                     </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
@@ -243,6 +271,9 @@
                     <xsl:when test="@otherprops and not(@otherprops='')">
                       <xsl:value-of select="@otherprops"/>
                     </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@otherprops][1]/@otherprops">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@otherprops][1]/@otherprops"/>
+                    </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
                 </xsl:with-param>
@@ -254,6 +285,9 @@
                     <xsl:when test="@props and not(@props='')">
                       <xsl:value-of select="@props"/>
                     </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@props][1]/@props">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@props][1]/@props"/>
+                    </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
                 </xsl:with-param>
@@ -264,6 +298,9 @@
                     </xsl:when>
                     <xsl:when test="@processing-role and not(@processing-role='')">
                       <xsl:value-of select="@processing-role"/>
+                    </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@processing-role][1]/@processing-role">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@processing-role][1]/@processing-role"/>
                     </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
@@ -278,6 +315,9 @@
                     <xsl:when test="@importance and not(@importance='')">
                       <xsl:value-of select="@importance"/>
                     </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@importance][1]/@importance">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@importance][1]/@importance"/>
+                    </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
                 </xsl:with-param>
@@ -290,6 +330,9 @@
                     <xsl:when test="@search and not(@search='')">
                       <xsl:value-of select="@search"/>
                     </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@search][1]/@search">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@search][1]/@search"/>
+                    </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>
                 </xsl:with-param>
@@ -301,6 +344,9 @@
                     </xsl:when>
                     <xsl:when test="@rev and not(@rev='')">
                       <xsl:value-of select="@rev"/>
+                    </xsl:when>
+                    <xsl:when test="$target/ancestor-or-self::*[@rev][1]/@rev">
+                      <xsl:value-of select="$target/ancestor-or-self::*[@rev][1]/@rev"/>
                     </xsl:when>
                     <xsl:otherwise>#none#</xsl:otherwise>
                   </xsl:choose>

@@ -59,6 +59,12 @@
   <!-- Deprecated. Use getVariable template instead. -->
   <xsl:template name="getString">
     <xsl:param name="stringName"/>
+    
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">066</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=getString</xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="getVariable">
       <xsl:with-param name="id" select="string($stringName)"/>
     </xsl:call-template>
@@ -173,39 +179,38 @@
     <!-- We handle units of cm, mm, in, pt, pc, px.  We also accept em,
       but just treat 1em=1pc.  An omitted unit is taken as px. -->
     
-    <xsl:variable name="dimenx" select="concat('00',$dimen)"/>
-    <xsl:variable name="units" select="substring($dimenx,string-length($dimenx)-1)"/>
-    <xsl:variable name="numeric-value" select="number(substring($dimenx,1,string-length($dimenx)-2))"/>
+    <xsl:variable name="units" select="substring($dimen, string-length($dimen) - 1)"/>
+    <xsl:variable name="numeric-value" select="number(substring($dimen, 1, string-length($dimen) - 2))"/>
     <xsl:choose>
-      <xsl:when test="string(number($units))!='NaN' and string(number($numeric-value))!='NaN'">
+      <xsl:when test="string(number($dimen)) != 'NaN'">
         <!-- Since $units is a number, the input was unitless, so we default
           the unit to pixels and just return the input value -->
-        <xsl:value-of select="round(number(concat($numeric-value,$units)))"/>
+        <xsl:value-of select="round(number($dimen))"/>
       </xsl:when>
-      <xsl:when test="string(number($numeric-value))='NaN'">
+      <xsl:when test="string($numeric-value) = 'NaN'">
         <!-- If the input isn't valid, just return 100% -->
         <xsl:value-of select="'100%'"/>
       </xsl:when>
       <xsl:when test="$units='cm'">
-        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch div 2.54))"/>
+        <xsl:value-of select="round($numeric-value * $pixels-per-inch div 2.54)"/>
       </xsl:when>
       <xsl:when test="$units='mm'">
-        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch div 25.4))"/>
+        <xsl:value-of select="round($numeric-value * $pixels-per-inch div 25.4)"/>
       </xsl:when>
       <xsl:when test="$units='in'">
-        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch))"/>
+        <xsl:value-of select="round($numeric-value * $pixels-per-inch)"/>
       </xsl:when>
       <xsl:when test="$units='pt'">
-        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch div 72))"/>
+        <xsl:value-of select="round($numeric-value * $pixels-per-inch div 72)"/>
       </xsl:when>
       <xsl:when test="$units='pc'">
-        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch div 6))"/>
+        <xsl:value-of select="round($numeric-value * $pixels-per-inch div 6)"/>
       </xsl:when>
       <xsl:when test="$units='px'">
-        <xsl:value-of select="number(round($numeric-value))"/>
+        <xsl:value-of select="round($numeric-value)"/>
       </xsl:when>
       <xsl:when test="$units='em'">
-        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch div 6))"/>
+        <xsl:value-of select="round($numeric-value * $pixels-per-inch div 6)"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- If the input isn't valid, just return 100% -->
@@ -237,6 +242,12 @@
 <!-- Deprecated: use replace-extension instead -->
 <xsl:template match="*" mode="parseHrefUptoExtension">
   <xsl:param name="href" select="@href"/>
+  
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">069</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=parseHrefUptoExtension</xsl:with-param>
+  </xsl:call-template>  
   <xsl:variable name="uptoDot"><xsl:value-of select="substring-before($href,'.')"/></xsl:variable>
   <xsl:variable name="afterDot"><xsl:value-of select="substring-after($href,'.')"/></xsl:variable>
   <xsl:value-of select="$uptoDot"/>

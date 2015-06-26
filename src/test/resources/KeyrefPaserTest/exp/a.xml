@@ -93,19 +93,19 @@
         <xref keyref="xref_link" scope="external" href="a.xml" type="dead" format="dead">
           <keyword>xref keyword</keyword>
         </xref>
-        <cite keyref="cite_link">cite keyword</cite>
+        <cite keyref="cite_link" href="a.xml">cite keyword</cite>
         <keyword keyref="keyword_link" href="a.xml">keyword keyword</keyword>
-        <ph keyref="ph_link">ph keyword</ph>
+        <ph keyref="ph_link" href="a.xml">ph keyword</ph>
         <term keyref="term_link" href="a.xml">term keyword</term>
-        <indexterm keyref="indexterm_link">indexterm keyword</indexterm>
+        <indexterm keyref="indexterm_link" href="a.xml">indexterm keyword</indexterm>
         <indexterm>
-          <index-base keyref="index-base_link">index-base keyword</index-base>
+          <index-base keyref="index-base_link" href="a.xml">index-base keyword</index-base>
         </indexterm>
-        <indextermref keyref="indextermref_link">indextermref keyword</indextermref>
+        <indextermref keyref="indextermref_link" href="a.xml">indextermref keyword</indextermref>
       </p>
       <dl>
         <dlentry>
-          <dt keyref="dt_link">dt keyword</dt>
+          <dt keyref="dt_link" href="a.xml">dt keyword</dt>
           <dd/>
         </dlentry>
       </dl>

@@ -7,10 +7,12 @@ import static org.dita.dost.util.XMLUtils.AttributesBuilder;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger.Message;
+import org.dita.dost.util.Configuration;
 import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -22,6 +24,8 @@ public class ValidationFilterTest {
 	public void testXMLLang() throws SAXException {
 		final List<String> res = new ArrayList<String>();
 		final ValidationFilter f = new ValidationFilter();
+        f.setValidateMap(Collections.EMPTY_MAP);
+        f.setProcessingMode(Configuration.Mode.LAX);
 		f.setContentHandler(new DefaultHandler() {
 			@Override
 			public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -48,6 +52,8 @@ public class ValidationFilterTest {
 	public void testHref() throws SAXException, URISyntaxException {
 		final List<String> res = new ArrayList<String>();
 		final ValidationFilter f = new ValidationFilter();
+        f.setValidateMap(Collections.EMPTY_MAP);
+        f.setProcessingMode(Configuration.Mode.LAX);
 		f.setContentHandler(new DefaultHandler() {
 			@Override
 			public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -73,6 +79,7 @@ public class ValidationFilterTest {
 	@Test
     public void testId() throws SAXException, URISyntaxException {
         final ValidationFilter f = new ValidationFilter();
+        f.setValidateMap(Collections.EMPTY_MAP);
         f.setContentHandler(new DefaultHandler());
         final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
         f.setLogger(l);
@@ -110,6 +117,7 @@ public class ValidationFilterTest {
 	@Test
     public void testKeys() throws SAXException, URISyntaxException {
         final ValidationFilter f = new ValidationFilter();
+        f.setValidateMap(Collections.EMPTY_MAP);
         f.setContentHandler(new DefaultHandler());
         final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
         f.setLogger(l);
@@ -141,6 +149,7 @@ public class ValidationFilterTest {
 	   @Test
 	    public void testKeyscope() throws SAXException, URISyntaxException {
 	        final ValidationFilter f = new ValidationFilter();
+            f.setValidateMap(Collections.EMPTY_MAP);
 	        f.setContentHandler(new DefaultHandler());
 	        final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
 	        f.setLogger(l);
@@ -172,6 +181,7 @@ public class ValidationFilterTest {
     @Test
     public void testAttributeGeneralization() throws SAXException {
         final ValidationFilter f = new ValidationFilter();
+        f.setValidateMap(Collections.EMPTY_MAP);
         f.setContentHandler(new DefaultHandler());
         final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
         f.setLogger(l);

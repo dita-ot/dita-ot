@@ -7,6 +7,7 @@ package org.dita.dost.writer;
 import static javax.xml.XMLConstants.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.configuration;
+import static org.dita.dost.writer.ImageMetadataFilter.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -34,6 +35,9 @@ public final class NormalizeFilter extends AbstractXMLFilter {
     private static final String ATTRIBUTE_NAME_COLNUM = "colnum";
     private static final String ATTRIBUTE_NAME_COLWIDTH = "colwidth";
     private static final String COLUMN_NAME_COL = "col";
+    private static final String ATTR_MORECOLS = "morecols";
+    private static final String ATTR_X = "x";
+    private static final String ATTR_Y = "y";
 
     private List<String> colSpec;
     /** ColumnNumber is used to adjust column name */
@@ -63,6 +67,7 @@ public final class NormalizeFilter extends AbstractXMLFilter {
     private final Deque<String> classStack = new LinkedList<String>();
     /** Number of cols in tgroup */
     private int cols;
+    private int depth;
 
     public NormalizeFilter() {
         super();
@@ -83,6 +88,7 @@ public final class NormalizeFilter extends AbstractXMLFilter {
         columnNumberEndStack = new ArrayDeque<Integer>();
         rowsMapStack = new ArrayDeque<Map<String, Integer>>();
         colSpanMapStack = new ArrayDeque<Map<String, Integer>>();
+        depth = 0;
     }
 
     // SAX methods
@@ -90,6 +96,11 @@ public final class NormalizeFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
+        depth++;
+        if (depth == 1) {
+            super.startPrefixMapping(DITA_OT_PREFIX, DITA_OT_NS);
+        }
+
         final AttributesImpl res = new AttributesImpl(atts);
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
         classStack.addFirst(cls);
@@ -137,17 +148,7 @@ public final class NormalizeFilter extends AbstractXMLFilter {
         } else if (TOPIC_ENTRY.matches(cls)) {
             columnNumber = getStartNumber(atts, columnNumberEnd);
             if (columnNumber > columnNumberEnd) {
-                // The first row
-                if (rowNumber == 1) {
-                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
-                    if (atts.getValue(ATTRIBUTE_NAME_NAMEST) != null) {
-                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + columnNumber);
-                    }
-                    if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null) {
-                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(atts, columnNumber));
-                    }
-                // other row
-                } else {
+                if (rowNumber != 1) {
                     int offset = 0;
                     int currentCol = columnNumber;
                     while (currentCol <= totalColumns) {
@@ -178,14 +179,18 @@ public final class NormalizeFilter extends AbstractXMLFilter {
                         rowsMap.put(pos, Integer.parseInt(atts.getValue(ATTRIBUTE_NAME_MOREROWS)) + rowNumber);
                         colSpanMap.put(pos, getColumnSpan(atts));
                     }
-                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
-                    if (atts.getValue(ATTRIBUTE_NAME_NAMEST) != null) {
-                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + columnNumber);
-                    }
-                    if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null) {
-                        XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(atts, columnNumber));
-                    }
                 }
+                XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL + columnNumber);
+                if (atts.getValue(ATTRIBUTE_NAME_NAMEST) != null) {
+                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL + columnNumber);
+                }
+                if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null) {
+                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(atts, columnNumber));
+                    XMLUtils.addOrSetAttribute(res, DITA_NAMESPACE, ATTR_MORECOLS, DITA_OT_PREFIX + ":" + ATTR_MORECOLS, "CDATA", Integer.toString(getEndNumber(atts, columnNumber) - columnNumber));
+                }
+                // Add extensions
+                XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(columnNumber));
+                XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_Y, DITA_OT_PREFIX + ":" + ATTR_Y, "CDATA", Integer.toString(rowNumber));
             }
             columnNumberEnd = getEndNumber(atts, columnNumber);
         } else if (MAP_MAP.matches(cls)) {
@@ -206,6 +211,10 @@ public final class NormalizeFilter extends AbstractXMLFilter {
             colSpec.add(res.getValue(ATTRIBUTE_NAME_COLNAME));
         } else {
             colSpec.add(COLUMN_NAME_COL + columnNumber);
+        }
+        final String colNum = res.getValue(ATTRIBUTE_NAME_COLNUM);
+        if (colNum == null || colNum.isEmpty()) {
+            XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLNUM, Integer.toString(columnNumber));
         }
         columnNumberEnd = columnNumber;
         // change the col name of colspec
@@ -246,8 +255,13 @@ public final class NormalizeFilter extends AbstractXMLFilter {
                 rowsMap = null;
                 colSpanMap = null;
             }
+            totalColumns = 0;
         }
         
+        if (depth == 1) {
+            super.endPrefixMapping(DITA_OT_PREFIX);
+        }
+        depth--;
     }
 
     // Private methods

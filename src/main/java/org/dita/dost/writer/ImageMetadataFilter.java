@@ -7,7 +7,6 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
@@ -120,28 +119,39 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         logger.info("Reading " + imgInput);
         final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder();
         try {
-            final ImageInputStream iis = ImageIO.createImageInputStream(imgInput);
-            final Iterator<ImageReader> i = ImageIO.getImageReaders(iis);
-            if (!i.hasNext()) {
-                logger.info("Image " + imgInput + " format not supported");
-            } else {
-                final ImageReader r = i.next();
-                r.setInput(iis);
-                final BufferedImage img = r.read(0);
-                a.add(DITA_OT_NS, ATTR_IMAGE_WIDTH, DITA_OT_PREFIX + ":" + ATTR_IMAGE_WIDTH, "CDATA", Integer.toString(img.getWidth()));
-                a.add(DITA_OT_NS, ATTR_IMAGE_HEIGHT, DITA_OT_PREFIX + ":" + ATTR_IMAGE_HEIGHT, "CDATA", Integer.toString(img.getHeight()));
-                final Element node = (Element) r.getImageMetadata(0).getAsTree("javax_imageio_1.0");
-                final NodeList hs = node.getElementsByTagName("HorizontalPixelSize");
-                if(hs != null && hs.getLength() == 1) {
-                    final float v =  Float.parseFloat(((Element) hs.item(0)).getAttribute("value"));
-                    final int dpi = Math.round(MM_TO_INCH / v);
-                    a.add(DITA_OT_NS, ATTR_HORIZONTAL_DPI, DITA_OT_PREFIX + ":" + ATTR_HORIZONTAL_DPI, "CDATA", Integer.toString(dpi));
+            ImageReader r = null;
+            ImageInputStream iis = null;
+            try {
+                iis = ImageIO.createImageInputStream(imgInput);
+                final Iterator<ImageReader> i = ImageIO.getImageReaders(iis);
+                if (!i.hasNext()) {
+                    logger.info("Image " + imgInput + " format not supported");
+                } else {
+                    r = i.next();
+                    r.setInput(iis);
+                    final int imageIndex = r.getMinIndex();
+                    a.add(DITA_OT_NS, ATTR_IMAGE_WIDTH, DITA_OT_PREFIX + ":" + ATTR_IMAGE_WIDTH, "CDATA", Integer.toString(r.getWidth(imageIndex)));
+                    a.add(DITA_OT_NS, ATTR_IMAGE_HEIGHT, DITA_OT_PREFIX + ":" + ATTR_IMAGE_HEIGHT, "CDATA", Integer.toString(r.getHeight(imageIndex)));
+                    final Element node = (Element) r.getImageMetadata(0).getAsTree("javax_imageio_1.0");
+                    final NodeList hs = node.getElementsByTagName("HorizontalPixelSize");
+                    if (hs != null && hs.getLength() == 1) {
+                        final float v = Float.parseFloat(((Element) hs.item(0)).getAttribute("value"));
+                        final int dpi = Math.round(MM_TO_INCH / v);
+                        a.add(DITA_OT_NS, ATTR_HORIZONTAL_DPI, DITA_OT_PREFIX + ":" + ATTR_HORIZONTAL_DPI, "CDATA", Integer.toString(dpi));
+                    }
+                    final NodeList vs = node.getElementsByTagName("VerticalPixelSize");
+                    if (vs != null && vs.getLength() == 1) {
+                        final float v = Float.parseFloat(((Element) vs.item(0)).getAttribute("value"));
+                        final int dpi = Math.round(MM_TO_INCH / v);
+                        a.add(DITA_OT_NS, ATTR_VERTICAL_DPI, DITA_OT_PREFIX + ":" + ATTR_VERTICAL_DPI, "CDATA", Integer.toString(dpi));
+                    }
                 }
-                final NodeList vs = node.getElementsByTagName("VerticalPixelSize");
-                if(vs != null && vs.getLength() == 1) {
-                    final float v =  Float.parseFloat(((Element) vs.item(0)).getAttribute("value"));
-                    final int dpi = Math.round(MM_TO_INCH / v);
-                    a.add(DITA_OT_NS, ATTR_VERTICAL_DPI, DITA_OT_PREFIX + ":" + ATTR_VERTICAL_DPI, "CDATA", Integer.toString(dpi));
+            } finally {
+                if (r != null) {
+                    r.dispose();
+                }
+                if (iis != null) {
+                    iis.close();
                 }
             }
         } catch (final Exception e) {

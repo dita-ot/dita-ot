@@ -33,7 +33,7 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 
-    <xsl:attribute-set name="codeph" use-attribute-sets="base-font">
+    <xsl:attribute-set name="codeph">
         <xsl:attribute name="font-family">monospace</xsl:attribute>
     </xsl:attribute-set>
 

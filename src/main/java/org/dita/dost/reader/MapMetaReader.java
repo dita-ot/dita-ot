@@ -38,7 +38,7 @@ public final class MapMetaReader extends AbstractDomFilter {
      */
     private final Map<URI, Map<String, Element>> resultTable = new HashMap<URI, Map<String, Element>>(16);
 
-    public static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<String>(asList(
+    private static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<String>(asList(
             TOPIC_CRITDATES.matcher,
             TOPIC_PERMISSIONS.matcher,
             TOPIC_PUBLISHER.matcher,

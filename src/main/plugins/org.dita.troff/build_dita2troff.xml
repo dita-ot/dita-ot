@@ -5,32 +5,37 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2troff">
 
+  <target name="dita2troff-ast.init">
+    <property name="troff-ast.xsl" location="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-ast-shell.xsl"/>
+  </target>
   <target name="dita2troff.init">
     <property name="out.ext" value=".cli"/>
-    <property name="troff.step1.xsl" location="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step1-shell.xsl"/>
     <property name="troff.step2.xsl" location="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl"/>
   </target>
+
   <target name="dita2troff"
-    depends="dita2troff.init, build-init, preprocess, dita.topic.troff, dita.inner.topic.troff">
+    depends="dita2troff-ast.init, dita2troff.init, build-init, preprocess, dita.topic.troff-ast, dita.topic.troff, dita.inner.topic.troff">
   </target>
 
-  <target name="dita.topic.troff" unless="noTopic" if="old.transform"
-    description="Build troff output from dita inner and outer topics,which will adjust the directory.">
-    <!-- step 1 -->
+  <target name="dita.topic.troff-ast" unless="noTopic" depends="dita2troff-ast.init"
+    description="Build Troff-specific AST output from dita topics.">
     <xslt basedir="${dita.temp.dir}"
       destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       extension=".dita"
       classpathref="dost.class.path"
-      style="${troff.step1.xsl}">
+      style="${troff-ast.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <mapper type="glob" from="*" to="*.tr1" />
+      <mapper type="glob" from="*" to="*.ast" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <move todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.tr1" />
-      <mapper type="glob" from="*.tr1" to="*" />
+      <fileset dir="${dita.temp.dir}" includes="**/*.ast" />
+      <mapper type="glob" from="*.ast" to="*" />
     </move>
-    <!-- step 2 -->
+  </target>
+
+  <target name="dita.topic.troff" unless="noTopic" if="old.transform"
+    description="Build troff output from dita inner and outer topics,which will adjust the directory.">
     <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension="${out.ext}"
       classpathref="dost.class.path"
@@ -44,24 +49,6 @@
   <!--The new solution which divides the whole process into the inner and outer steps  -->
     <target name="dita.inner.topic.troff" unless="noTopic" if="inner.transform"
     description="Build troff output from inner dita topics">
-    <!-- step 1 -->
-    <xslt basedir="${dita.temp.dir}"
-      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" 
-      extension=".dita"
-      classpathref="dost.class.path"
-      style="${troff.step1.xsl}">
-    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-      <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
-      <!--<mapper type="regexp" 
-        from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
-        to="\2.dita"/>-->
-      <mapper type="glob" from="*" to="*.tr1" />
-      <xmlcatalog refid="dita.catalog"/>
-    </xslt>
-    <move todir="${dita.temp.dir}">
-      <fileset dir="${dita.temp.dir}" includes="**/*.tr1" />
-      <mapper type="glob" from="*.tr1" to="*" />
-    </move>
 	<echo level="info">the ditmapoutputdir is ${dita.map.output.dir}</echo>
     <!-- step 2 -->
     <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
