@@ -105,13 +105,12 @@
   <patternset id="pattern.package.client">
     <patternset refid="pattern.global.excludes"/>
     <exclude name="buildPackage.*"/>
-    <exclude name="startcmd.*"/>
-    <include name="build_demo.xml"/>
+    <exclude name="build_demo.xml"/>
     <exclude name="catalog-dita.txt"/>
     <include name="*.*"/>
     <include name="plugins/org.dita.specialization.eclipsemap/**"/>
     <include name="plugins/org.dita.specialization.dita11/**"/>
-    <include name="plugins/org.dita.specialization.dita132/**"/>
+    <exclude name="plugins/org.dita.specialization.dita132/**"/>
     <exclude name="plugins/org.dita.pdf2/src/**"/>
     <include name="plugins/org.dita.pdf2/**"/>
     <include name="plugins/com.sophos.tocjs/**"/>
@@ -124,7 +123,11 @@
     <include name="resources/**"/>
     <include name="samples/**"/>
     <include name="xsl/**"/>
-    <include name="lib/**"/>    
+    <include name="lib/**"/>
+    <!-- legacy build scripts -->
+    <include name="startcmd.*"/>
+    <include name="bin/ant"/> 
+    <include name="bin/ant.*"/>   
   </patternset>
   <patternset id="pattern.package.ext-plugins.client">
     <exclude name="**/*"/>
@@ -171,17 +174,21 @@
     <zip destfile="${package.output.dir}/${binary-client}.zip" filesonly="true">
       <zipfileset dir="${work.dir}/${binary-client}">
         <exclude name="${binary-client}/bin/*"/>
+        <exclude name="${binary-client}/startcmd.*"/>
       </zipfileset>
       <zipfileset dir="${work.dir}/${binary-client}" filemode="755">
         <include name="${binary-client}/bin/*"/>
+        <include name="${binary-client}/startcmd.*"/>
       </zipfileset>
     </zip>
     <tar destfile="${package.output.dir}/${binary-client}.tar.gz" compression="gzip" longfile="gnu">
       <tarfileset dir="${work.dir}/${binary-client}">
         <exclude name="${binary-client}/bin/*"/>
+        <exclude name="${binary-client}/startcmd.*"/>
       </tarfileset>
       <tarfileset dir="${work.dir}/${binary-client}" mode="755">
         <include name="${binary-client}/bin/*"/>
+        <include name="${binary-client}/startcmd.*"/>
       </tarfileset>
     </tar>
   </target>
