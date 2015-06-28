@@ -2,8 +2,8 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
   <keydef keys="empty"/>
-  <keydef keys="third"/>
-  <keydef keys="second"/>
+  <keydef keys="third" href="a.xml" />
+  <keydef keys="second" href="a.xml" />
   <keydef keys="all" href="a.xml" collection-type="family" format="html" id="override" linking="sourceonly" locktitle="yes" navtitle="override" processing-role="normal">
     <topicmeta>
       <navtitle>navtitle</navtitle>
