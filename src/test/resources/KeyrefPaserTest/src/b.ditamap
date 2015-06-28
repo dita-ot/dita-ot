@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
-  <topicref keyref="all"/>
+  <topicref keyref="third"/>
+  <topicref keys="third" keyref="second"/>
+  <topicref keys="second" keyref="all"/>
   <topicref keys="all" href="b.xml" collection-type="choice" format="dita" id="all" linking="normal" locktitle="no" navtitle="all" processing-role="resource-only">
     <topicmeta>
       <navtitle>override navtitle</navtitle>

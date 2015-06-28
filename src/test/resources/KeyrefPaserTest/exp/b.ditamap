@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map>
-  <topicref keyref="all" href="a.xml" collection-type="family" format="html" linking="sourceonly"
+  <!-- FIXME: This should have @href, @collection-type, @format, @linking, @locktitle and @navtitle from "all" keydef -->
+  <topicref keyref="third"/>
+  <!-- FIXME: This should have @href, @collection-type, @format, @linking, @locktitle and @navtitle from "all" keydef -->
+  <topicref keys="third" keyref="second"/>
+  <topicref keys="second" keyref="all" href="a.xml" collection-type="family" format="html" linking="sourceonly"
     locktitle="yes" navtitle="override"/>
   <topicref keys="all" href="b.xml" collection-type="choice" format="dita" id="all" linking="normal"
     locktitle="no" navtitle="all" processing-role="resource-only">
