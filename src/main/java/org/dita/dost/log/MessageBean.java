@@ -9,8 +9,8 @@
 package org.dita.dost.log;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -39,7 +39,7 @@ public final class MessageBean {
     private final String reason;
 
     private final String response;
-    private String srcFile;
+    private URI srcFile;
     private int srcLine = -1;
     private int srcColumn = -1;
 
@@ -109,13 +109,11 @@ public final class MessageBean {
         }
         final MessageBean ret = new MessageBean(this);
         if (locator.getSystemId() != null) {
-            URI s;
             try {
-                s = new URI(locator.getSystemId());
+                ret.srcFile = new URI(locator.getSystemId());
             } catch (final URISyntaxException e) {
                 throw new RuntimeException("Failed to parse URI '" + locator.getSystemId() + "': " + e.getMessage(), e);
             }
-            ret.srcFile = new File(s).getAbsolutePath();
         }
         ret.srcLine = locator.getLineNumber(); 
         ret.srcColumn = locator.getColumnNumber();
@@ -129,7 +127,7 @@ public final class MessageBean {
      */
     public MessageBean setLocation(final Attributes atts) {
         final MessageBean ret = new MessageBean(this);
-        final String xtrf = atts.getValue(ATTRIBUTE_NAME_XTRF);
+        final URI xtrf = toURI(atts.getValue(ATTRIBUTE_NAME_XTRF));
         if (xtrf != null) {
             ret.srcFile = xtrf;
         }
@@ -156,7 +154,7 @@ public final class MessageBean {
         final MessageBean ret = new MessageBean(this);
         final String xtrf = elem.getAttribute(ATTRIBUTE_NAME_XTRF);
         if (!xtrf.isEmpty()) {
-            ret.srcFile = xtrf;
+            ret.srcFile = toURI(xtrf);
         }
         final String xtrc = elem.getAttribute(ATTRIBUTE_NAME_XTRC);
         if (!xtrc.isEmpty()) {
