@@ -72,8 +72,8 @@ public final class JobTest {
     }
 
     @Test
-    public void testGetValue() {
-        assertEquals(new File("/foo/bar").toURI(), job.getInputDir());
+    public void testGetValue() throws URISyntaxException {
+        assertEquals(new URI("file:/foo/bar"), job.getInputDir());
     }
 
     @AfterClass
