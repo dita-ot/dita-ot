@@ -411,8 +411,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     void updateList() {
         try {
-            // XXX: This may have to use new
-            // File(resolve(filePath,FILE_NAME_DITA_LIST_XML)).getParent()
+            // XXX: Why do we need to update copy-to map because all copy-to have been processed already
             final Map<URI, URI> copytotarget2sourcemaplist = job.getCopytoMap();
             copytotarget2source.putAll(copytotarget2sourcemaplist);
             for (final String file : copytoSource) {
@@ -513,6 +512,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      *         {@code null} string is returned.
      */
     String getFirstTopicId(final String absolutePathToFile) {
+        assert new File(absolutePathToFile).isAbsolute();
         if (absolutePathToFile == null || !isAbsolutePath(absolutePathToFile)) {
             return null;
         }

@@ -5,6 +5,8 @@
 package org.dita.dost.util;
 
 import static org.junit.Assert.*;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +37,8 @@ public final class JobTest {
 
     @Test
     public void testGetProperty() {
-        assertEquals("/foo/bar", job.getProperty("user.input.dir"));
+        assertEquals("/foo/bar", job.getProperty(INPUT_DIR));
+        assertEquals("file:/foo/bar", job.getProperty(INPUT_DIR_URI));
     }
 
     @Test
@@ -65,12 +68,12 @@ public final class JobTest {
 
     @Test
     public void testGetInputMap() {
-        assertEquals(new File("foo"), job.getInputMap());
+        assertEquals(toURI("foo"), job.getInputMap());
     }
 
     @Test
-    public void testGetValue() {
-        assertEquals(new File("/foo/bar"), job.getInputDir());
+    public void testGetValue() throws URISyntaxException {
+        assertEquals(new URI("file:/foo/bar"), job.getInputDir());
     }
 
     @AfterClass

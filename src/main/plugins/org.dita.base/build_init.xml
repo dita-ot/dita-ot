@@ -124,6 +124,10 @@
     <classpath refid="dost.class.path" />
   </typedef>
   
+  <typedef name="dita-fileset" classname="org.dita.dost.util.JobSourceSet">
+    <classpath refid="dost.class.path" />
+  </typedef>
+
   <macrodef name="job-helper" >
     <attribute name="file"/>
     <attribute name="property"/>

@@ -332,7 +332,7 @@ public final class URLUtils {
      * @return cleaned URI
      */
     public static String clean(final String path) {
-        return clean(path, true);
+        return clean(path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR), true);
     }
     
     /**
@@ -486,6 +486,9 @@ public final class URLUtils {
         if (file == null) {
             return null;
         }
+        if (File.separatorChar == '\\' && file.indexOf('\\') != -1) {
+            return toURI(new File(file));
+        }
         try {
             return new URI(file);
         } catch (final URISyntaxException e) {
@@ -548,12 +551,27 @@ public final class URLUtils {
      * Create new URI with a given path.
      * 
      * @param orig URI to set path on
-     * @param path new paht, {@code null} for no path
+     * @param path new path, {@code null} for no path
      * @return new URI instance with given path
      */
     public static URI setPath(final URI orig, final String path) {
         try {
             return new URI(orig.getScheme(), orig.getUserInfo(), orig.getHost(), orig.getPort(), path, orig.getQuery(), orig.getFragment());
+        } catch (final URISyntaxException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Create new URI with a given scheme.
+     *
+     * @param orig URI to set scheme on
+     * @param scheme new scheme, {@code null} for no scheme
+     * @return new URI instance with given path
+     */
+    public static URI setScheme(final URI orig, final String scheme) {
+        try {
+            return new URI(scheme, orig.getUserInfo(), orig.getHost(), orig.getPort(), orig.getPath(), orig.getQuery(), orig.getFragment());
         } catch (final URISyntaxException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -662,8 +680,9 @@ public final class URLUtils {
             return new File(file.getPath()).exists();
         } else if ("file".equals(file.getScheme())) {
             return new File(file).exists();
-        } else  {
-            return false;
+        } else {
+            // Assume non-file URIs always exists and force fetching them
+            return true;
         }
     }
     

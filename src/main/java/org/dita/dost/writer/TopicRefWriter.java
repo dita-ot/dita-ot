@@ -46,14 +46,23 @@ public final class TopicRefWriter extends AbstractXMLFilter {
      * @param conflictTable conflictTable
      */
     public void setup(final Map<String, String> conflictTable) {
+        for (final Map.Entry<String, String> e: changeTable.entrySet()) {
+            assert new File(e.getKey()).isAbsolute();
+            assert new File(e.getValue()).isAbsolute();
+        }
         this.conflictTable = conflictTable;
     }
 
     public void setChangeTable(final Map<String, String> changeTable) {
+        for (final Map.Entry<String, String> e: changeTable.entrySet()) {
+            assert new File(e.getKey()).isAbsolute();
+            assert new File(e.getValue()).isAbsolute();
+        }
         this.changeTable = changeTable;
     }
 
     public void setFixpath(final String fixpath) {
+        assert fixpath != null ? new File(fixpath).isAbsolute() : true;
         this.fixpath = fixpath;
     }
 

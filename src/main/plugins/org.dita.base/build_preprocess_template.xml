@@ -38,45 +38,9 @@
     description="Preprocessing ended" />
   
   <target name="preprocess.init">
-    <dita-ot-fail id="DOTA069F">
-      <condition>
-        <and>
-          <isset property="args.input"/>
-          <not>
-            <isset property="args.input.dir"/>
-          </not>
-          <not>
-            <available file="${args.input}" type="file"/>
-          </not>
-        </and>
-      </condition>
-      <param name="1" location="${args.input}"/>
-    </dita-ot-fail>
-    <dita-ot-fail id="DOTA069F">
-      <condition>
-        <and>
-          <isset property="args.input"/>
-          <isset property="args.input.dir"/>
-          <not>
-            <or>
-              <available file="${args.input}" type="file"/>
-              <available file="${args.input.dir}/${args.input}" type="file"/>
-            </or>
-          </not>
-        </and>
-      </condition>
-      <param name="1" location="${args.input}"/>
-    </dita-ot-fail>
     <dita-ot-fail id="DOTA002F">
       <condition>
-        <and>
-          <not>
-            <isset property="args.input"/>
-          </not>
-          <not>
-            <isset property="args.input.uri"/>
-          </not>
-        </and>
+        <not><isset property="args.input"/></not>
       </condition>
     </dita-ot-fail>
     
@@ -563,43 +527,25 @@
      
   <target name="copy-image"
     unless="preprocess.copy-image.skip"
-    dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
+    dita:depends="{depend.preprocess.copy-image.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
     description="Copy image files">
     <condition property="copy-image.todir" value="${output.dir}/${uplevels}" else="${output.dir}">
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
-    <copy todir="${copy-image.todir}">
-      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />
+    <copy todir="${copy-image.todir}" failonerror="false">
+      <dita-fileset format="image" />
     </copy>
   </target>
   
-  <target name="copy-image-check">
-    <condition property="preprocess.copy-image.skip">
-      <or>
-        <isset property="preprocess.copy-files.skip"/>
-        <isset property="noImagelist"/>
-      </or>
-    </condition>
-  </target>
-
   <target name="copy-html"
-    dita:depends="{depend.preprocess.copy-html.pre},copy-html-check"
+    dita:depends="{depend.preprocess.copy-html.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-html.skip"
     description="Copy html files">
-    <copy todir="${output.dir}">
-      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${htmlfile}"/>
+    <copy todir="${output.dir}" failonerror="false">
+      <dita-fileset format="html" />
     </copy>
-  </target>
-
-  <target name="copy-html-check">
-    <condition property="preprocess.copy-html.skip">
-      <or>
-        <isset property="preprocess.copy-files.skip"/>
-        <length file="${dita.temp.dir}/${htmlfile}" length="0"/>
-      </or>
-    </condition>
   </target>
   
   <target name="copy-flag"

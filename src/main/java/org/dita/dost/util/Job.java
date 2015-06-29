@@ -84,8 +84,11 @@ public final class Job {
     private static final String PROPERTY_ONLY_TOPIC_IN_MAP = ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP;
     private static final String PROPERTY_GENERATE_COPY_OUTER = ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER;
     private static final String PROPERTY_OUTPUT_DIR = ANT_INVOKER_EXT_PARAM_OUTPUTDIR;
+    /** Deprecated since 2.2 */
+    @Deprecated
     private static final String PROPERTY_INPUT_MAP = "InputMapDir";
-    
+    private static final String PROPERTY_INPUT_MAP_URI = "InputMapDir.uri";
+
     /** File name for key definition file */
     public static final String KEYDEF_LIST_FILE = "keydef.xml";
     /** File name for key definition file */
@@ -422,7 +425,7 @@ public final class Job {
     }
     
     /**
-     * Return the copy-to map.
+     * Return the copy-to map from target to source.
      *
      * @return copy-to map, empty map if no mapping is defined
      */
@@ -440,7 +443,7 @@ public final class Job {
     }
     
     /**
-     * Set copy-to map.
+     * Set copy-to map from target to source.
      */
     public void setCopytoMap(final Map<URI, URI> value) {
         final Map<String, String> res = new HashMap<String, String>();
@@ -455,8 +458,8 @@ public final class Job {
      *
      * @return input file path relative to input directory
      */
-    public File getInputMap() {
-       return new File(getProperty(INPUT_DITAMAP));
+    public URI getInputMap() {
+       return toURI(getProperty(INPUT_DITAMAP_URI));
     }
 
     /**
@@ -464,8 +467,8 @@ public final class Job {
      * 
      * @return absolute input directory path 
      */
-    public File getInputDir() {
-        return new File(getProperty(INPUT_DIR));
+    public URI getInputDir() {
+        return toURI(getProperty(INPUT_DIR_URI));
     }
 
     /**
@@ -845,7 +848,15 @@ public final class Job {
      * @param flag generatecopyouter flag
      */
     public void setGeneratecopyouter(final String flag){
-        prop.put(PROPERTY_GENERATE_COPY_OUTER, Generate.get(Integer.parseInt(flag)).toString());
+        setGeneratecopyouter(Generate.get(Integer.parseInt(flag)));
+    }
+
+    /**
+     * Set the generatecopyouter.
+     * @param flag generatecopyouter flag
+     */
+    public void setGeneratecopyouter(final Generate flag){
+        prop.put(PROPERTY_GENERATE_COPY_OUTER, flag.toString());
     }
  
     /**
@@ -868,16 +879,21 @@ public final class Job {
      * Get input file path.
      * @return absolute input file path
      */
-    public File getInputFile(){
-        return new File(prop.get(PROPERTY_INPUT_MAP).toString());
+    public URI getInputFile() {
+        return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
     }
 
     /**
      * Set input map path.
      * @param inputFile absolute input map path
      */
-    public void setInputFile(final File inputFile){
-        prop.put(PROPERTY_INPUT_MAP, inputFile.getAbsolutePath());
+    public void setInputFile(final URI inputFile) {
+        assert inputFile.isAbsolute();
+        prop.put(PROPERTY_INPUT_MAP_URI, inputFile.toString());
+        // Deprecated since 2.1
+        if (inputFile.getScheme().equals("file")) {
+            prop.put(PROPERTY_INPUT_MAP, new File(inputFile).getAbsolutePath());
+        }
     }
 
     

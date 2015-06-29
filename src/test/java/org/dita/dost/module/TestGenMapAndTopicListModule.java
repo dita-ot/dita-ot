@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
 import static org.junit.Assert.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
@@ -90,9 +91,9 @@ public class TestGenMapAndTopicListModule {
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ENCODING, "en-US");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT, ".html");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE, Boolean.TRUE.toString());
-        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, "1");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, Integer.toString(NOT_GENERATEOUTTER.type));
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL, "warn");
-        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP, "false");
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP, Boolean.FALSE.toString());
         //pipelineInput.setAttribute("ditalist", new File(tempDir, FILE_NAME_DITA_LIST).getPath());
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_MAPLINKS, new File(tempDir, "maplinks.unordered").getPath());
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "no");

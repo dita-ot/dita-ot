@@ -207,7 +207,7 @@ public final class FileUtils {
      * @param sep path separator
      * @return relative path using {@link Constants#UNIX_SEPARATOR} path separator
      */
-    public static String getRelativePath(final String basePath, final String refPath, final String sep) {
+    private static String getRelativePath(final String basePath, final String refPath, final String sep) {
         final StringBuilder upPathBuffer = new StringBuilder(128);
         final StringBuilder downPathBuffer = new StringBuilder(128);
         final StringTokenizer mapTokenizer = new StringTokenizer(normalizePath(basePath, File.separator), File.separator);
@@ -292,7 +292,7 @@ public final class FileUtils {
      * @return relative path to base path, {@code null} if reference path was a single file
      */
     private static String getRelativePathForPath(final String relativePath, final String sep) {
-        final StringTokenizer tokenizer = new StringTokenizer(separatorsToUnix(relativePath), UNIX_SEPARATOR);
+        final StringTokenizer tokenizer = new StringTokenizer(relativePath.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR), UNIX_SEPARATOR);
         final StringBuilder buffer = new StringBuilder();
         if (tokenizer.countTokens() == 1){
             return null;
@@ -425,16 +425,6 @@ public final class FileUtils {
         }
 
         return buff.toString();
-    }
-
-    /**
-     * Translate path separators from Windows to Unix.
-     * @param path path to translate
-     * @return UNIX path
-     */
-    @Deprecated
-    public static String separatorsToUnix(final String path) {
-        return path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
     }
 
 
