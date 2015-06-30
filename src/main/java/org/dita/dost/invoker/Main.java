@@ -209,7 +209,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     /** File that we are using for configuration. */
     private File buildFile; /* null */
-    
+    /** Run integrator */
+    private boolean install;
     /** Plug-in installation file. May be either a system path or a URL. */
     private String installFile;
     
@@ -532,7 +533,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 Diagnostics.doReport(System.out, msgOutputLevel);
             }
             return;
-        } else if (installFile != null || uninstallId != null) {
+        } else if (install) {
             buildFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
             targets.clear();
             if (installFile != null) {
@@ -543,9 +544,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 } else {
                     definedProps.put("plugin.file", installFile);
                 }
-            } else {
+            } else if (uninstallId != null) {
                 targets.add("uninstall");
                 definedProps.put("plugin.id", uninstallId);
+            } else {
+                targets.add("integrate");
             }
         } else {
             if (!definedProps.containsKey("transtype")) {
@@ -648,10 +651,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     /** Handle the -install argument */
     private int handleArgInstall(final String[] args, int pos) {
-        try {
+        install = true;
+        if (pos + 1 < args.length && !args[pos + 1].startsWith("-")) {
             installFile = args[++pos];
-        } catch (final ArrayIndexOutOfBoundsException aioobe) {
-            throw new BuildException("You must specify a installation package when using the -install argument");
         }
         return pos;
     }
@@ -659,6 +661,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /** Handle the -uninstall argument */
     private int handleArgUninstall(final String[] args, int pos) {
         try {
+            install = true;
             uninstallId = args[++pos];
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
             throw new BuildException("You must specify a installation package when using the -uninstall argument");
@@ -1129,14 +1132,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static void printUsage() {
         final StringBuilder msg = new StringBuilder();
         msg.append("Usage: dita -f <name> -i <file> [options]\n");
-        msg.append("   or: dita -install <file>\n");
+        msg.append("   or: dita -install [<file>]\n");
         msg.append("   or: dita -uninstall <id>\n");
         msg.append("   or: dita -help\n");
         msg.append("   or: dita -version\n");
         msg.append("Arguments: \n");
         msg.append("  -f, -format <name>     transformation type\n");
         msg.append("  -i, -input <file>      input file\n");
-        msg.append("  -install <file>        install plug-in from a ZIP file\n");
+        msg.append("  -install [<file>]      install plug-in from a ZIP file or reload plugins\n");
         msg.append("  -uninstall <id>        uninstall plug-in with the ID\n");
         msg.append("  -h, -help              print this message\n");
         msg.append("  -version               print version information and exit\n");
