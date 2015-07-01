@@ -89,6 +89,8 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
                         cache.put(imgInput, m);
                     }
                     a.addAll(m);
+                } else {
+                    logger.error("Image file " + imgInput + " not found");
                 }
             }
             depth = 1;

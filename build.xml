@@ -327,7 +327,7 @@
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
     <mkdir dir="${test.log.dir}"/>
-    <junit printsummary="false" haltonfailure="yes" showoutput="false" logfailedtests="true">
+    <junit printsummary="false" haltonfailure="yes" showoutput="false" logfailedtests="true" haltonerror="true">
       <classpath>
         <pathelement location="${integration-test.bin.dir}"/>
         <pathelement location="${test.bin.dir}"/>
