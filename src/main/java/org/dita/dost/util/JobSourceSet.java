@@ -1,5 +1,6 @@
 package org.dita.dost.util;
 
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.AbstractFileSet;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
@@ -47,6 +48,8 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
                     final File srcFile = new File(f.src);
                     if (srcFile.exists()) {
                         res.add(new FileResource(srcFile));
+                    } else {
+                        log("File " + f.src + " not found", Project.MSG_ERR);
                     }
                 } else {
                     try {
