@@ -41,17 +41,21 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
                     return f.format != null && f.format.equals(format);
                 }
             })) {
+                log("Scanning for " + f.file.getPath(), Project.MSG_VERBOSE);
                 final File tempFile = new File(job.tempDir, f.file.getPath());
                 if (tempFile.exists()) {
+                    log("Found temporary directory file " + tempFile, Project.MSG_VERBOSE);
                     res.add(new FileResource(tempFile));
                 } else if (f.src.getScheme().equals("file")) {
                     final File srcFile = new File(f.src);
                     if (srcFile.exists()) {
+                        log("Found source directory file " + srcFile, Project.MSG_VERBOSE);
                         res.add(new FileResource(srcFile));
                     } else {
                         log("File " + f.src + " not found", Project.MSG_ERR);
                     }
                 } else {
+                    log("Found source URI " + f.src.toString(), Project.MSG_VERBOSE);
                     try {
                         res.add(new URLResource(f.src.toURL()));
                     } catch (final MalformedURLException e) {
