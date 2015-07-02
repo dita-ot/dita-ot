@@ -7,6 +7,7 @@
   <description>Build binary packages for DITA Open Toolkit</description>
 
   <property file="${basedir}/src/main/lib/configuration.properties"/>
+  <property environment="env."/>
 
   <condition property="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe">
     <available file="C:\Program Files\HTML Help Workshop\hhc.exe"/>
@@ -323,6 +324,9 @@
     <condition property="only-test.name" value="${test}" else="">
       <isset property="test"/>
     </condition>
+    <condition property="log-level" value="${env.LOG_LEVEL}" else="-2">
+      <isset property="env.LOG_LEVEL"/>
+    </condition>
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
@@ -339,6 +343,7 @@
       <sysproperty key="dita.dir" value="${src.dir}"/>
       <sysproperty key="basedir" value="${test.suite.dir}"/>
       <sysproperty key="only-test" value="${only-test.name}"/>
+      <sysproperty key="log-level" value="${log-level}"/>
       <formatter type="plain" usefile="false"/>
       <formatter type="plain" usefile="true"/>
       <test name="org.dita.dost.IntegrationTest" fork="no" todir="${test.log.dir}"/>
