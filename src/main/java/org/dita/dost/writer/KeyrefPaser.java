@@ -25,10 +25,7 @@ import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.MergeUtils;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.*;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -125,11 +122,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private int keyrefLeval;
 
-    /**
-     * It is used to store the target of the keys
-     * In the from the map <keys, target>.
-     */
-    private Map<String, URI> keyMap;
+    private Map<String, KeyDef> keyMap;
 
     /**
      * It is used to indicate whether the keyref is valid.
@@ -168,7 +161,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         keyrefLevalStack = new Stack<Integer>();
         validKeyref = new Stack<Boolean>();
         empty = true;
-        keyMap = new HashMap<String, URI>();
+        keyMap = new HashMap<String, KeyDef>();
         elemName = new Stack<String>();
         hasSubElem = new Stack<Boolean>();
     }
@@ -188,7 +181,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * Set key map.
      * @param map key map
      */
-    public void setKeyMap(final Map<String, URI> map) {
+    public void setKeyMap(final Map<String, KeyDef> map) {
         keyMap = map;
     }
     
@@ -394,7 +387,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                     final NamedNodeMap attrs = elem.getAttributes();
                     // first resolve the keyref attribute
                     if (currentElement.refAttr != null) {
-                        final URI target = keyMap.get(keyName);
+                        final KeyDef keyDef = keyMap.get(keyName);
+                        final URI target = keyDef != null ? keyDef.href : null;
                         if (target != null && target.toString().length() != 0) {
                             URI target_output = target;
                             // if the scope equals local, the target should be verified that

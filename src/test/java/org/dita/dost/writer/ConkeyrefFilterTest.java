@@ -7,8 +7,9 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
@@ -22,10 +23,16 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class ConkeyrefFilterTest {
 
+    private Map<String, KeyDef> toMap(final KeyDef keyDef) {
+        final Map<String, KeyDef> res = new HashMap<String, KeyDef>();
+        res.put(keyDef.keys, keyDef);
+        return res;
+    }
+    
     @Test
     public void testKey() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", toURI("library.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
+        f.setKeyDefinitions(toMap(new KeyDef("foo", toURI("library.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -41,7 +48,7 @@ public class ConkeyrefFilterTest {
     @Test
     public void testKeyAndElement() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", toURI("library.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
+        f.setKeyDefinitions(toMap(new KeyDef("foo", toURI("library.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -57,7 +64,7 @@ public class ConkeyrefFilterTest {
     @Test
     public void testElementInTarget() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", toURI("library.dita#baz"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
+        f.setKeyDefinitions(toMap(new KeyDef("foo", toURI("library.dita#baz"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -74,7 +81,7 @@ public class ConkeyrefFilterTest {
     public void testRelativePaths() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
         f.setCurrentFile(new File("product/sub folder/this.dita"));
-        f.setKeyDefinitions(Arrays.asList(new KeyDef("foo", toURI("common/library.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
+        f.setKeyDefinitions(toMap(new KeyDef("foo", toURI("common/library.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"))));
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -90,7 +97,7 @@ public class ConkeyrefFilterTest {
     @Test
     public void testMissingKey() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setKeyDefinitions(Collections.<KeyDef> emptyList());
+        f.setKeyDefinitions(Collections.<String, KeyDef> emptyMap());
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {

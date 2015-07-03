@@ -28,6 +28,7 @@ import javax.xml.transform.sax.TransformerHandler;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyDef;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class KeyrefPaserTest {
     private static CatalogResolver resolver;
 
     private static Map<String, Element> keyDefinition;
-    private final static Map<String, URI> keymap = new HashMap<String, URI>();
+    private final static Map<String, KeyDef> keymap = new HashMap<String, KeyDef>();
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -150,11 +151,12 @@ public class KeyrefPaserTest {
         final Map<String, Element> keys = new HashMap<String, Element>();
         final NodeList keydefs = document.getElementsByTagName("keydef");
         for (int i = 0; i < keydefs.getLength(); i++) {
-            final Element keydef = (Element) keydefs.item(i);
-            keymap.put(keydef.getAttribute("keys"), new URI(keydef.getAttribute("href")));
+            final Element elem = (Element) keydefs.item(i);
+            final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")), null, null);
+            keymap.put(keyDef.keys, keyDef);
             final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-            doc.appendChild(doc.importNode(keydef, true));
-            keys.put(keydef.getAttribute("keys"), keydef);
+            doc.appendChild(doc.importNode(elem, true));
+            keys.put(elem.getAttribute("keys"), elem);
         }
         keyDefinition = Collections.unmodifiableMap(keys);
     }

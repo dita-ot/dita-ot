@@ -34,11 +34,8 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
     /** Delayed conref utils, may be {@code null} */
     private DelayConrefUtils delayConrefUtils;
     
-    public void setKeyDefinitions(final Collection<KeyDef> keydefs) {
-        keys = new HashMap<String, KeyDef>();
-        for (final KeyDef k : keydefs) {
-            keys.put(k.keys, k);
-        }
+    public void setKeyDefinitions(final Map<String, KeyDef> keys) {
+        this.keys = keys;
     }
 
     public void setCurrentFile(final File inputFile) {

@@ -67,12 +67,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         if (!fis.isEmpty()) {
             // TODO: If map merge is done before key processing, this needs to be rewritten to just read the single map and take submap wrappers into consideration.
             // maps of keyname and target
-            final Map<String, URI> keymap = new HashMap<String, URI>();
+            final Map<String, KeyDef> keymap = new HashMap<String, KeyDef>();
             // store the key name defined in a map(keyed by ditamap file)
             final Hashtable<URI, Set<String>> maps = new Hashtable<URI, Set<String>>();
             final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(job.tempDir, KEYDEF_LIST_FILE));
             for (final KeyDef keyDef: keydefs) {
-                keymap.put(keyDef.keys, keyDef.href);
+                keymap.put(keyDef.keys, keyDef);
                 // map file which define the keys
                 final URI map = keyDef.source;
                 // put the keyname into corresponding map which defines it.
@@ -107,7 +107,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
                 conkeyrefFilter.setLogger(logger);
                 conkeyrefFilter.setJob(job);
-                conkeyrefFilter.setKeyDefinitions(keydefs);
+                conkeyrefFilter.setKeyDefinitions(keymap);
                 conkeyrefFilter.setCurrentFile(file);
                 conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
                 filters.add(conkeyrefFilter);
