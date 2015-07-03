@@ -39,25 +39,9 @@
 
   <xsl:template match="*[contains(@class, ' map/topicref ')][@format = 'ditamap']" priority="10">
     <xsl:param name="refclass" select="@class"/>
-    <!-- get the current element's @class value -->
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
-    <!-- need this to resolve multiple mapref -->
-    <xsl:param name="parent-linking" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-toc" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-print" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-audience" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-product" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-platform" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-otherprops" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-props" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-processing-role" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
-    <!-- record each target's id of mapref to prevent loop reference -->
-    <!-- params to tell refer type:whole map file or just a branch -->
     <xsl:param name="referTypeFlag" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-importance" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-search" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-rev" as="xs:string">#none#</xsl:param>
 
     <xsl:choose>
       <xsl:when test="generate-id(.) = $mapref-id-path">
@@ -150,9 +134,9 @@
             <xsl:variable name="contents" as="node()*">
               <xsl:choose>
                 <!-- see whether it is reference to a file or a reference to specific element -->
-                <xsl:when test="not(contains(@href,'://') or $element-id='#none#' or $file/*[contains(@class,' map/map ')][@id = $element-id])">
+                <xsl:when test="not(contains(@href,'://') or $element-id = '#none#' or $file/*[contains(@class,' map/map ')][@id = $element-id])">
                   <!-- reference to an element -->
-                  <xsl:sequence select="$file//*[contains(@class,' map/topicref ')][@id=$element-id]"/>
+                  <xsl:sequence select="$file//*[contains(@class,' map/topicref ')][@id = $element-id]"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <!-- reference to file -->
@@ -161,12 +145,13 @@
               </xsl:choose>
             </xsl:variable>
             <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ">
+              <xsl:apply-templates select="@linking | @print | @toc | @audience | @product | @platform | @otherprops | @props | @processing-role | @importance | @search | @rev"/>
               <xsl:apply-templates select="$contents">
                 <xsl:with-param name="refclass" select="$refclass"/>
                 <xsl:with-param name="mapref-id-path" select="$updated-id-path"/>
                 <xsl:with-param name="relative-path">
                   <xsl:choose>
-                    <xsl:when test="not($relative-path='#none#' or $relative-path='')">
+                    <xsl:when test="not($relative-path = ('#none#', ''))">
                       <xsl:value-of select="$relative-path"/>
                       <xsl:call-template name="find-relative-path">
                         <xsl:with-param name="remainingpath" select="@href"/>
@@ -179,94 +164,7 @@
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:with-param>
-                <xsl:with-param name="parent-linking">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'linking'"/>
-                    <xsl:with-param name="parent-value" select="$parent-linking"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="parent-toc">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'toc'"/>
-                    <xsl:with-param name="parent-value" select="$parent-toc"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="parent-print">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'print'"/>
-                    <xsl:with-param name="parent-value" select="$parent-print"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="parent-audience">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'audience'"/>
-                    <xsl:with-param name="parent-value" select="$parent-audience"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="parent-product">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'product'"/>
-                    <xsl:with-param name="parent-value" select="$parent-product"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="parent-platform">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'platform'"/>
-                    <xsl:with-param name="parent-value" select="$parent-platform"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="parent-otherprops">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'otherprops'"/>
-                    <xsl:with-param name="parent-value" select="$parent-otherprops"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="parent-props">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'props'"/>
-                    <xsl:with-param name="parent-value" select="$parent-props"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="parent-processing-role">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'processing-role'"/>
-                    <xsl:with-param name="parent-value" select="$parent-processing-role"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
                 <xsl:with-param name="referTypeFlag" select="'element'"/>
-                <!-- importance -->
-                <xsl:with-param name="parent-importance">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'importance'"/>
-                    <xsl:with-param name="parent-value" select="$parent-importance"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <!-- search -->
-                <xsl:with-param name="parent-search">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'search'"/>
-                    <xsl:with-param name="parent-value" select="$parent-search"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <!-- rev -->
-                <xsl:with-param name="parent-rev">
-                  <xsl:call-template name="get-attribute">
-                    <xsl:with-param name="attribute-name" select="'rev'"/>
-                    <xsl:with-param name="parent-value" select="$parent-rev"/>
-                    <xsl:with-param name="target" select="$target"/>
-                  </xsl:call-template>
-                </xsl:with-param>
               </xsl:apply-templates>
             </submap>
           </xsl:otherwise>
@@ -281,38 +179,11 @@
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template name="get-attribute" as="xs:string">
-    <xsl:param name="attribute-name" as="xs:string"/>
-    <xsl:param name="parent-value" as="xs:string"/>
-    <xsl:param name="target" as="node()?"/>
-    <xsl:sequence select="(
-      $parent-value[. != '#none#'],
-      @*[local-name() = $attribute-name],
-      $target/ancestor-or-self::*[@*[local-name() = $attribute-name]][1]/@*[local-name() = $attribute-name],
-      '#none#')[1]"/>
-  </xsl:template>
-
   <xsl:template match="*[contains(@class, ' map/topicref ')]" priority="5">
     <xsl:param name="refclass" select="@class"/>
-    <!-- get the current element's @class value -->
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
-    <!-- need this to resolve multiple mapref -->
-    <xsl:param name="parent-linking" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-toc" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-print" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-audience" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-product" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-platform" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-otherprops" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-props" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-processing-role" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
-    <!-- record each target's id of mapref to prevent loop reference -->
-    <!-- params to tell refer type:whole map file or just a branch -->
     <xsl:param name="referTypeFlag" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-importance" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-search" as="xs:string">#none#</xsl:param>
-    <xsl:param name="parent-rev" as="xs:string">#none#</xsl:param>
 
     <xsl:copy>
       <xsl:for-each select="@href | @copy-to">
@@ -336,7 +207,7 @@
            <xsl:value-of select="@class"/>
           </xsl:when>
           <!-- if the element is not at the top level of reference target, @class equals to $refclass -->
-          <xsl:when test="not(contains(@class,substring($refclass, 3)))">
+          <xsl:when test="not(contains(@class, substring($refclass, 3)))">
             <xsl:value-of select="$refclass"/>
           </xsl:when>
           <xsl:otherwise>
@@ -348,62 +219,50 @@
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'linking'"/>
-        <xsl:with-param name="parent-value" select="$parent-linking"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'toc'"/>
-        <xsl:with-param name="parent-value" select="$parent-toc"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'print'"/>
-        <xsl:with-param name="parent-value" select="$parent-print"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'audience'"/>
-        <xsl:with-param name="parent-value" select="$parent-audience"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'product'"/>
-        <xsl:with-param name="parent-value" select="$parent-product"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'platform'"/>
-        <xsl:with-param name="parent-value" select="$parent-platform"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'otherprops'"/>
-        <xsl:with-param name="parent-value" select="$parent-otherprops"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'props'"/>
-        <xsl:with-param name="parent-value" select="$parent-props"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'processing-role'"/>
-        <xsl:with-param name="parent-value" select="$parent-processing-role"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'importance'"/>
-        <xsl:with-param name="parent-value" select="$parent-importance"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'search'"/>
-        <xsl:with-param name="parent-value" select="$parent-search"/>
       </xsl:call-template>
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'rev'"/>
-        <xsl:with-param name="parent-value" select="$parent-rev"/>
       </xsl:call-template>
       <xsl:apply-templates select="@*[not(local-name() = $special-atts)] | node()">
         <xsl:with-param name="relative-path" select="$relative-path"/>
@@ -415,59 +274,21 @@
   </xsl:template>
   
   <xsl:template name="generate-attribute">
-    <!-- params to tell refer type:whole map file or just a branch -->
     <xsl:param name="referTypeFlag" as="xs:string">#none#</xsl:param>
-    <!-- need this to resolve multiple mapref -->
-    <xsl:param name="parent-value" as="xs:string">#none#</xsl:param>
     <xsl:param name="name"/>
     
     <xsl:variable name="current-attr" select="@*[local-name() = $name]" as="attribute()?"/>
     <xsl:choose>
-      <!-- refer to a map file -->
-      <xsl:when test="$referTypeFlag = 'file'">
-        <xsl:choose>
-          <!-- first use local attribute -->
-          <xsl:when test="$current-attr and not($current-attr = '')">
-            <xsl:attribute name="{$name}">
-              <xsl:value-of select="$current-attr"/>
-            </xsl:attribute>
-          </xsl:when>
-          <!-- second use attribute in referencing file-->
-          <xsl:when test="not($parent-value='#none#')">
-            <xsl:attribute name="{$name}">
-              <xsl:value-of select="$parent-value"/>
-            </xsl:attribute>
-          </xsl:when>
-          <!-- third use attribute set on map tag -->
-          <xsl:when test="ancestor-or-self::*[contains(@class, ' map/map ')]/@*[local-name() = $name]">
-            <xsl:attribute name="{$name}">
-              <xsl:value-of select="ancestor-or-self::*[contains(@class, ' map/map ')]/@*[local-name() = $name]"/>
-            </xsl:attribute>
-          </xsl:when>
-        </xsl:choose>
-      </xsl:when>
       <!-- refer to an element in map file -->
       <xsl:when test="$referTypeFlag = 'element'">
-        <!-- second use attribute in referencing file to override local one-->
-        <xsl:choose>
-          <xsl:when test="not($parent-value='#none#')">
-            <xsl:attribute name="{$name}">
-              <xsl:value-of select="$parent-value"/>
-            </xsl:attribute>
-          </xsl:when>
-          <xsl:when test="$current-attr and not($current-attr = '')">
-            <xsl:attribute name="{$name}">
-              <xsl:value-of select="$current-attr"/>
-            </xsl:attribute>
-          </xsl:when>
-        </xsl:choose>
+        <xsl:if test="ancestor-or-self::*/@*[local-name() = $name]">
+          <xsl:copy-of select="ancestor-or-self::*[@*[local-name() = $name]][1]/@*[local-name() = $name]"/>
+        </xsl:if>
       </xsl:when>
       <!-- for sub element -->
       <xsl:otherwise>
         <xsl:if test="$current-attr and not($current-attr = '')">
-          <xsl:attribute name="{$name}">
-            <xsl:value-of select="$current-attr"/>
-          </xsl:attribute>
+          <xsl:copy-of select="$current-attr"/>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
@@ -488,6 +309,7 @@
       <xsl:with-param name="mapref-id-path" select="$mapref-id-path"/>
     </xsl:apply-templates>
   </xsl:template>
+  
   <xsl:template match="*[contains(@class,' map/topicref ')]" mode="mapref">
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
@@ -539,11 +361,12 @@
       </xsl:when>
     </xsl:choose>
   </xsl:template>
+  
   <xsl:template match="*[contains(@class,' map/map ')]" mode="mapref">
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
     <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
-      <xsl:with-param name="relative-path" select="$relative-path"/>
+      <xsl:with-param name="relative-path" select="$relative-path" tunnel="yes"/>
     </xsl:apply-templates>
     <!--xsl:copy-of select="*[contains(@class,' map/reltable ')]"/-->
     <xsl:call-template name="gen-reltable">
@@ -553,16 +376,13 @@
   </xsl:template>
 
   <xsl:template match="@* | node()" mode="reltable-copy">
-    <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="reltable-copy">
-        <xsl:with-param name="relative-path" select="$relative-path"/>
-      </xsl:apply-templates>
+      <xsl:apply-templates select="@* | node()" mode="reltable-copy"/>
     </xsl:copy>
   </xsl:template>
 
   <xsl:template match="@href | @copy-to" mode="reltable-copy">
-    <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
+    <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
     <xsl:attribute name="{name()}">
       <xsl:choose>
         <xsl:when test="not(contains(.,'://') or ../@scope = 'external' or $relative-path = ('#none#', ''))">
@@ -727,12 +547,12 @@
   <xsl:template name="find-relative-path">
     <xsl:param name="remainingpath"/>
     <xsl:if test="contains($remainingpath,'/')">
-      <xsl:value-of select="substring-before($remainingpath,'/')"/>/<xsl:text/>
+      <xsl:value-of select="substring-before($remainingpath,'/')"/>
+      <xsl:text>/</xsl:text>
       <xsl:call-template name="find-relative-path">
         <xsl:with-param name="remainingpath" select="substring-after($remainingpath,'/')"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
-
 
 </xsl:stylesheet>
