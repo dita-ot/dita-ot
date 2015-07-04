@@ -14,7 +14,6 @@
 
   <xsl:import href="../common/dita-utilities.xsl"/>
   <xsl:import href="../common/output-message.xsl"/>
-  <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
   <xsl:param name="file-being-processed"/>
@@ -53,67 +52,53 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:variable name="filename">
-          <xsl:choose>
-            <!-- resolve the file name, if the @href contains :// then don't do anything -->
-            <xsl:when test="contains(@href,'://')">
-              <xsl:value-of select="@href"/>
-            </xsl:when>
-            <xsl:when test="starts-with(@href,'#')">
-              <xsl:value-of select="$file-being-processed"/>
-            </xsl:when>
-            <!-- if @href contains # get the part before # -->
-            <xsl:when test="contains(@href,'#')">
-              <xsl:value-of select="substring-before(@href,'#')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="@href"/>
-            </xsl:otherwise>
-          </xsl:choose>
+        <xsl:variable name="updated-id-path" select="($mapref-id-path, generate-id(.))" as="xs:string*"/>
+        <xsl:variable name="file" as="document-node()?">
+          <xsl:variable name="fileurl" as="xs:string?">
+            <xsl:variable name="WORKDIR" as="xs:string">
+              <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
+            </xsl:variable>
+            <xsl:choose>
+              <xsl:when test="empty(@href)"/>
+              <xsl:when test="contains(@href, '://')">
+                <xsl:value-of select="@href"/>
+              </xsl:when>
+              <xsl:when test="starts-with(@href, '#')">
+                <xsl:value-of select="concat($WORKDIR, $file-being-processed)"/>
+              </xsl:when>
+              <xsl:when test="contains(@href, '#')">
+                <xsl:value-of select="concat($WORKDIR, substring-before(@href, '#'))"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat($WORKDIR, @href)"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:if test="exists($fileurl)">
+            <xsl:sequence select="document($fileurl, /)"/>
+          </xsl:if>
         </xsl:variable>
-        <xsl:variable name="element-id">
-          <xsl:choose>
-            <xsl:when test="contains(@href,'#')">
-              <xsl:value-of select="substring-after(@href,'#')"/>
-            </xsl:when>
-            <xsl:otherwise>#none#</xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="WORKDIR">
-          <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
-        </xsl:variable>
-        <!-- update mapref id path -->
-        <xsl:variable name="updated-id-path" select="($mapref-id-path, generate-id(.))"/>
-        <!-- get the file handle by getting workdir and use document() to get the file -->
-        <xsl:variable name="fileurl-origin">
-          <xsl:choose>
-            <xsl:when test="contains(@href,'://')">
-              <xsl:value-of select="@href"/>
-            </xsl:when>
-            <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="empty($file) or empty($file/*/*)">
+            <xsl:variable name="filename" as="xs:string?">
               <xsl:choose>
-                <xsl:when test="starts-with(@href,'#')">
-                  <xsl:value-of select="concat($WORKDIR, $file-being-processed)"/>
+                <xsl:when test="empty(@href)"/>
+                <!-- resolve the file name, if the @href contains :// then don't do anything -->
+                <xsl:when test="contains(@href,'://')">
+                  <xsl:value-of select="@href"/>
                 </xsl:when>
-                <xsl:when test="contains(@href, '#')">
-                  <xsl:value-of select="concat($WORKDIR, substring-before(@href, '#'))"/>
+                <xsl:when test="starts-with(@href,'#')">
+                  <xsl:value-of select="$file-being-processed"/>
+                </xsl:when>
+                <!-- if @href contains # get the part before # -->
+                <xsl:when test="contains(@href,'#')">
+                  <xsl:value-of select="substring-before(@href,'#')"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:value-of select="concat($WORKDIR, @href)"/>
+                  <xsl:value-of select="@href"/>
                 </xsl:otherwise>
               </xsl:choose>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="fileurl">
-          <xsl:call-template name="replace-blank">
-            <xsl:with-param name="file-origin" select="$fileurl-origin"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="file" select="document($fileurl,/)"/>
-        <xsl:choose>
-          <!-- verify the validity of $file -->
-          <xsl:when test="empty($file) or empty($file/*/*)">
+            </xsl:variable>
             <xsl:call-template name="output-message">
               <xsl:with-param name="msgnum">031</xsl:with-param>
               <xsl:with-param name="msgsev">E</xsl:with-param>
@@ -121,26 +106,19 @@
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:variable name="target" as="element()?">
-              <xsl:choose>
-                <xsl:when test="not(contains(@href,'://') or $element-id='#none#' or $file/*[contains(@class,' map/map ')][@id = $element-id])">
-                  <xsl:sequence select="$file//*[contains(@class,' map/topicref ')][@id=$element-id]"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:sequence select="$file/*"/>
-                </xsl:otherwise>
-              </xsl:choose>
+            <xsl:variable name="element-id" as="xs:string?">
+              <xsl:if test="contains(@href, '#')">
+                <xsl:value-of select="substring-after(@href, '#')"/>
+              </xsl:if>
             </xsl:variable>
             <xsl:variable name="contents" as="node()*">
               <xsl:choose>
-                <!-- see whether it is reference to a file or a reference to specific element -->
-                <xsl:when test="not(contains(@href,'://') or $element-id = '#none#' or $file/*[contains(@class,' map/map ')][@id = $element-id])">
-                  <!-- reference to an element -->
+                <xsl:when test="not(contains(@href,'://') or empty($element-id) or $file/*[contains(@class,' map/map ')][@id = $element-id])">
                   <xsl:sequence select="$file//*[contains(@class,' map/topicref ')][@id = $element-id]"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <!-- reference to file -->
-                  <xsl:sequence select="$file/*/*[contains(@class,' map/topicref ')] | $file/*/processing-instruction()"/>
+                  <xsl:sequence select="$file/*/*[contains(@class,' map/topicref ')] |
+                                        $file/*/processing-instruction()"/>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
@@ -277,19 +255,14 @@
     <xsl:param name="referTypeFlag" as="xs:string">#none#</xsl:param>
     <xsl:param name="name"/>
     
-    <xsl:variable name="current-attr" select="@*[local-name() = $name]" as="attribute()?"/>
     <xsl:choose>
       <!-- refer to an element in map file -->
       <xsl:when test="$referTypeFlag = 'element'">
-        <xsl:if test="ancestor-or-self::*/@*[local-name() = $name]">
-          <xsl:copy-of select="ancestor-or-self::*[@*[local-name() = $name]][1]/@*[local-name() = $name]"/>
-        </xsl:if>
+        <xsl:copy-of select="ancestor-or-self::*[@*[local-name() = $name]][1]/@*[local-name() = $name]"/>
       </xsl:when>
       <!-- for sub element -->
       <xsl:otherwise>
-        <xsl:if test="$current-attr and not($current-attr = '')">
-          <xsl:copy-of select="$current-attr"/>
-        </xsl:if>
+        <xsl:copy-of select="@*[local-name() = $name]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -313,7 +286,7 @@
   <xsl:template match="*[contains(@class,' map/topicref ')]" mode="mapref">
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
-    <xsl:variable name="linking">
+    <xsl:variable name="linking" as="xs:string?">
       <xsl:choose>
         <xsl:when test="empty(@linking)">
           <xsl:call-template name="inherit">
@@ -335,15 +308,11 @@
       </xsl:when>
       <xsl:when test="not($linking='none') and @href and not(contains(@href,'#'))">
         <xsl:variable name="update-id-path" select="($mapref-id-path, generate-id(.))"/>
-        <xsl:variable name="href">
-          <xsl:call-template name="replace-blank">
-            <xsl:with-param name="file-origin" select="@href"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:apply-templates select="document($href,/)/*[contains(@class,' map/map ')]" mode="mapref">
+        <xsl:variable name="href" select="@href" as="xs:string?"/>
+        <xsl:apply-templates select="document($href, /)/*[contains(@class,' map/map ')]" mode="mapref">
           <xsl:with-param name="relative-path">
             <xsl:choose>
-              <xsl:when test="not($relative-path='#none#' or $relative-path='')">
+              <xsl:when test="not($relative-path = '#none#' or $relative-path='')">
                 <xsl:value-of select="$relative-path"/>
                 <xsl:call-template name="find-relative-path">
                   <xsl:with-param name="remainingpath" select="@href"/>
@@ -394,7 +363,6 @@
       </xsl:choose>
     </xsl:attribute>
   </xsl:template>
-
 
   <!-- RDA: FUNCTIONS TO IMPROVE OVERRIDE CAPABILITIES FOR INHERITING ATTRIBUTES -->
 
