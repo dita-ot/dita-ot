@@ -10,6 +10,7 @@ package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,34 +66,18 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         });
         if (!fis.isEmpty()) {
-            // TODO: If map merge is done before key processing, this needs to be rewritten to just read the single map and take submap wrappers into consideration.
-            // maps of keyname and target
             final Map<String, KeyDef> keymap = new HashMap<String, KeyDef>();
-            // store the key name defined in a map(keyed by ditamap file)
-            final Hashtable<URI, Set<String>> maps = new Hashtable<URI, Set<String>>();
             final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(job.tempDir, KEYDEF_LIST_FILE));
             for (final KeyDef keyDef: keydefs) {
                 keymap.put(keyDef.keys, keyDef);
-                // map file which define the keys
-                final URI map = keyDef.source;
-                // put the keyname into corresponding map which defines it.
-                //a map file can define many keys
-                if (maps.containsKey(map)) {
-                    maps.get(map).add(keyDef.keys);
-                } else {
-                    final Set<String> set = new HashSet<String>();
-                    set.add(keyDef.keys);
-                    maps.put(map, set);
-                }
             }
             
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
-            for(final URI mapFile: maps.keySet()){
-                logger.info("Reading " + job.tempDir.toURI().resolve(mapFile).toString());
-                reader.setKeys(maps.get(mapFile));
-                reader.read(job.tempDir.toURI().resolve(mapFile));
-            }
+            final URI mapFile = job.getInputMap();
+            logger.info("Reading " + job.tempDir.toURI().resolve(mapFile).toString());
+            reader.read(job.tempDir.toURI().resolve(mapFile));
+
             final Map<String, Element> keyDefinition = reader.getKeyDefinition();
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;

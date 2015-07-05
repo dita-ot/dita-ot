@@ -12,17 +12,13 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.net.URI;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Element;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.dita.dost.log.DITAOTLogger;
 import org.xml.sax.InputSource;
 
@@ -31,12 +27,31 @@ import org.xml.sax.InputSource;
  */
 public final class KeyrefReader implements AbstractReader {
 
+    private static final List<String> ATTS = Collections.unmodifiableList(Arrays.asList(
+            ATTRIBUTE_NAME_HREF,
+            ATTRIBUTE_NAME_AUDIENCE,
+            ATTRIBUTE_NAME_PLATFORM,
+            ATTRIBUTE_NAME_PRODUCT,
+            ATTRIBUTE_NAME_OTHERPROPS,
+            "rev",
+            ATTRIBUTE_NAME_PROPS,
+            "linking",
+            ATTRIBUTE_NAME_TOC,
+            ATTRIBUTE_NAME_PRINT,
+            "search",
+            ATTRIBUTE_NAME_FORMAT,
+            ATTRIBUTE_NAME_SCOPE,
+            ATTRIBUTE_NAME_TYPE,
+            ATTRIBUTE_NAME_XML_LANG,
+            "dir",
+            "translate",
+            ATTRIBUTE_NAME_PROCESSING_ROLE,
+            ATTRIBUTE_NAME_CASCADE));
+
     private DITAOTLogger logger;
     private final DocumentBuilder builder;
     /** Key definition map, where map key is the key name and map value is XML definition */  
     private final Map<String, Element> keyDefTable;
-
-    private Set<String> keys;
 
     /**
      * Constructor.
@@ -78,31 +93,118 @@ public final class KeyrefReader implements AbstractReader {
             logger.error("Failed to parse map: " + e.getMessage(), e);
             return;
         }
+        readMergedMap(doc);
+        resolveIntermediate();
+    }
+    
+    private static final DitaClass SUBMAP = new DitaClass("+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ");
+
+    private void readMergedMap(final Document doc) {
+        // get maps
+        final List<Element> maps = new ArrayList<Element>();
+        maps.add(doc.getDocumentElement());
         final NodeList elems = doc.getDocumentElement().getElementsByTagName("*");
         for (int i = 0; i < elems.getLength(); i++) {
             final Element elem = (Element) elems.item(i);
             final String classValue = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
-            final String keyName = elem.getAttribute(ATTRIBUTE_NAME_KEYS);
-            if (!keyName.isEmpty() && MAP_TOPICREF.matches(classValue)) {
-                for (final String key: keyName.trim().split("\\s+")) {
-                  if (keys.contains(key) && !keyDefTable.containsKey(key)){
-                      final Document d = builder.newDocument();
-                      final Element copy = (Element) d.importNode(elem, true);
-                      d.appendChild(copy);
-                      keyDefTable.put(key, copy);
-                  }
-              }
+            if (MAP_MAP.matches(classValue) || SUBMAP.matches(classValue)) {
+                maps.add(elem);
+            }
+        }
+        for (final Element map: maps) {
+            readMap(map);
+        }
+    }
+
+    private void readMap(final Element map) {
+        final NodeList elems = map.getChildNodes();
+        for (int i = 0; i < elems.getLength(); i++) {
+            if (elems.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                final Element elem = (Element) elems.item(i);
+                final String keyName = elem.getAttribute(ATTRIBUTE_NAME_KEYS);
+                if (!keyName.isEmpty()) {
+                    for (final String key: keyName.trim().split("\\s+")) {
+                        if (!keyDefTable.containsKey(key)) {
+                            final Document d = builder.newDocument();
+                            final Element copy = (Element) d.importNode(elem, true);
+                            d.appendChild(copy);
+                            keyDefTable.put(key, copy);
+                        }
+                    }
+                }
+                final String classValue = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
+                if (!SUBMAP.matches(classValue)) {
+                    readMap(elem);
+                }
             }
         }
     }
-    
-    /**
-     * Set keys to be read.
-     * 
-     * @param keys key set
-     */
-    public void setKeys(final Set<String> keys){
-        this.keys = keys;
+
+    /** Resolve intermediate key references. */
+    private void resolveIntermediate() {
+        final Map<String, Element> entries = new HashMap<String, Element>(keyDefTable);
+        for (final Map.Entry<String, Element> e: entries.entrySet()) {
+            final Element res = resolveIntermediate(e.getValue());
+            keyDefTable.put(e.getKey(), res);
+        }
     }
-    
+
+    private Element resolveIntermediate(final Element elem) {
+        final String keyref = elem.getAttribute(ATTRIBUTE_NAME_KEYREF);
+        if (!keyref.isEmpty() && keyDefTable.containsKey(keyref)) {
+            Element defElem = keyDefTable.get(keyref);
+            final String defElemKeyref = defElem.getAttribute(ATTRIBUTE_NAME_KEYREF);
+            if (!defElemKeyref.isEmpty()) {
+                defElem = resolveIntermediate(defElem);
+            }
+            final Element res = mergeMetadata(defElem, elem);
+            res.removeAttribute(ATTRIBUTE_NAME_KEYREF);
+            return res;
+        } else {
+            return elem;
+        }
+    }
+
+    private Element mergeMetadata(final Element defElem, final Element elem) {
+        final Element res = (Element) elem.cloneNode(true);
+        final Document d = res.getOwnerDocument();
+        final Element defMeta = getTopicmeta(defElem);
+        if (defMeta != null) {
+            Element resMeta = getTopicmeta(res);
+            if (resMeta == null) {
+                resMeta = d.createElement(MAP_TOPICMETA.localName);
+                resMeta.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICMETA.toString());
+                res.appendChild(resMeta);
+            }
+            final NodeList cs = defMeta.getChildNodes();
+            for (int i = 0; i < cs.getLength(); i++) {
+                final Node c = cs.item(i);
+                final Node copy = d.importNode(c, true);
+                resMeta.appendChild(copy);
+            }
+        }
+
+        for (final String attr: ATTS) {
+            if (res.getAttributeNode(attr) == null) {
+                final Attr defAttr = defElem.getAttributeNode(attr);
+                if (defAttr != null) {
+                    final Attr copy = (Attr) d.importNode(defAttr, true);
+                    res.setAttributeNode(copy);
+                }
+            }
+        }
+        return res;
+    }
+
+    private Element getTopicmeta(final Element topicref) {
+        final NodeList ns = topicref.getChildNodes();
+        for (int i = 0; i < ns.getLength(); i++) {
+            final Node n = ns.item(i);
+            if (MAP_TOPICMETA.matches(n)) {
+                return (Element) n;
+            }
+        }
+        return null;
+    }
+
 }

@@ -39,19 +39,18 @@ public class TestKeyrefReader {
 
     @Test
     public void testKeyrefReader() throws Exception {
-        final String path = System.getProperty("user.dir");
         final File filename = new File(srcDir, "keyrefreader.xml");
 
-        final Set <String> set = new HashSet<String> ();
-        set.add("blatview");
-        set.add("blatfeference");
-        set.add("blatintro");
-        set.add("keyword");
-        set.add("escape");
-        set.add("top");
-        set.add("nested");
+//        final Set <String> set = new HashSet<String> ();
+//        set.add("blatview");
+//        set.add("blatfeference");
+//        set.add("blatintro");
+//        set.add("keyword");
+//        set.add("escape");
+//        set.add("top");
+//        set.add("nested");
         final KeyrefReader keyrefreader = new KeyrefReader();
-        keyrefreader.setKeys(set);
+//        keyrefreader.setKeys(set);
         keyrefreader.read(toURI(filename.getAbsolutePath()));
         final Map<String, Element> act= keyrefreader.getKeyDefinition();
 
@@ -64,6 +63,29 @@ public class TestKeyrefReader {
         exp.put("top", "<topicref keys='top' class='- map/topicref ' navtitle='top'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>top keyword</keyword></keywords></topicmeta><topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref></topicref>");
         exp.put("nested", "<topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref>");
         
+        TestUtils.resetXMLUnit();
+        XMLUnit.setIgnoreWhitespace(true);
+        assertEquals(exp.keySet(), act.keySet());
+        for (Map.Entry<String, String> e: exp.entrySet()) {
+            final Document ev = keyDefToDoc(e.getValue());
+            final Document av = act.get(e.getKey()).getOwnerDocument();
+            assertXMLEqual(ev, av);
+        }
+    }
+
+    @Test
+    public void testMergeMap() throws Exception {
+        final File filename = new File(srcDir, "merged.xml");
+
+        final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.read(toURI(filename.getAbsolutePath()));
+        final Map<String, Element> act= keyrefreader.getKeyDefinition();
+
+        final Map<String, String> exp = new HashMap<String, String>();
+        exp.put("toner-specs", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-specs\" href=\"toner-type-a-specs.dita\"/>");
+        exp.put("toner-handling", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-handling\" href=\"toner-type-b-handling.dita\"/>");
+        exp.put("toner-disposal", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-disposal\" href=\"toner-type-c-disposal.dita\"/>");
+
         TestUtils.resetXMLUnit();
         XMLUnit.setIgnoreWhitespace(true);
         assertEquals(exp.keySet(), act.keySet());
