@@ -142,9 +142,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /** Set of files with "@processing-role=resource-only" */
     private final Set<URI> resourceOnlySet;
 
-    /** Map of all key definitions */
-    private final Map<String, KeyDef> keysDefMap;
-
     /** Absolute basedir for processing */
     private URI baseInputDir;
 
@@ -214,7 +211,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         outDitaFilesSet = new HashSet<URI>(128);
         relFlagImagesSet = new LinkedHashSet<URI>(128);
         conrefpushSet = new HashSet<URI>(128);
-        keysDefMap = new HashMap<String, KeyDef>();
         keyrefSet = new HashSet<URI>(128);
         coderefSet = new HashSet<URI>(128);
 
@@ -557,12 +553,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             // key and value.keys will differ when keydef is a redirect to another keydef
             final String key = e.getKey();
             final KeyDef value = e.getValue();
-            if (!keysDefMap.containsKey(key)) {
-                keysDefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
-            }
-            // if the current file is also a schema file
             if (schemeSet.contains(currentFile)) {
-                schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
+                schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile, null));
             }
         }
 
@@ -985,7 +977,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         // Convert copyto map into set and output
         job.setCopytoMap(addFilePrefix(copytoMap));
-        writeKeyDefinition(keysDefMap);
 
         try {
             logger.info("Serializing job specification");
@@ -1168,34 +1159,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final Collection<KeyDef> res = new ArrayList<KeyDef>(keydefs.size());
         for (final KeyDef k: keydefs) {
             final URI source = tempFileNameScheme.generateTempFileName(k.source);
-            res.add(new KeyDef(k.keys, k.href, k.scope, source));
+            res.add(new KeyDef(k.keys, k.href, k.scope, source, null));
         }
         return res;
-    }
-    
-    /**
-     * Add key definition to job configuration
-     *
-     * @param keydefs key defintions to add
-     */
-    private void writeKeyDefinition(final Map<String, KeyDef> keydefs) {
-        // update value
-        final Collection<KeyDef> updated = new ArrayList<KeyDef>(keydefs.size());
-        for (final KeyDef file: keydefs.values()) {
-            final String keys = file.keys;
-            final URI href = (file.href != null && ATTR_SCOPE_VALUE_LOCAL.equals(file.scope))
-                             ? tempFileNameScheme.generateTempFileName(file.href)
-                             : file.href;
-            final URI source = tempFileNameScheme.generateTempFileName(file.source);
-            final KeyDef keyDef = new KeyDef(keys, href, file.scope, source);
-            updated.add(keyDef);
-        }
-        // write key definition
-        try {
-            KeyDef.writeKeydef(new File(job.tempDir, KEYDEF_LIST_FILE), updated);
-        } catch (final DITAOTException e) {
-            logger.error("Failed to write key definition file: " + e.getMessage(), e);
-        }
     }
 
     /**

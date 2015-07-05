@@ -9,6 +9,7 @@
 package org.dita.dost.reader;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.net.URI;
@@ -17,6 +18,7 @@ import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.dita.dost.util.DitaClass;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 import org.dita.dost.log.DITAOTLogger;
@@ -51,13 +53,13 @@ public final class KeyrefReader implements AbstractReader {
     private DITAOTLogger logger;
     private final DocumentBuilder builder;
     /** Key definition map, where map key is the key name and map value is XML definition */  
-    private final Map<String, Element> keyDefTable;
+    private final Map<String, KeyDef> keyDefTable;
 
     /**
      * Constructor.
      */
     public KeyrefReader() {
-        keyDefTable = new HashMap<String, Element>();
+        keyDefTable = new HashMap<String, KeyDef>();
         builder = XMLUtils.getDocumentBuilder();
     }
     
@@ -76,7 +78,7 @@ public final class KeyrefReader implements AbstractReader {
      * 
      * @return key definition map where map key is key name and map value is XML definition of the key 
      */
-    public Map<String, Element> getKeyDefinition() {
+    public Map<String, KeyDef> getKeyDefinition() {
         return Collections.unmodifiableMap(keyDefTable);
     }
 
@@ -128,7 +130,12 @@ public final class KeyrefReader implements AbstractReader {
                             final Document d = builder.newDocument();
                             final Element copy = (Element) d.importNode(elem, true);
                             d.appendChild(copy);
-                            keyDefTable.put(key, copy);
+                            final String h = copy.getAttribute(ATTRIBUTE_NAME_HREF);
+                            final URI href = h.isEmpty() ? null : toURI(h);
+                            final String s = copy.getAttribute(ATTRIBUTE_NAME_SCOPE);
+                            final String scope = s.isEmpty() ? null : s;
+                            final KeyDef keyDef = new KeyDef(key, href, scope, null, copy);
+                            keyDefTable.put(key, keyDef);
                         }
                     }
                 }
@@ -142,26 +149,28 @@ public final class KeyrefReader implements AbstractReader {
 
     /** Resolve intermediate key references. */
     private void resolveIntermediate() {
-        final Map<String, Element> entries = new HashMap<String, Element>(keyDefTable);
-        for (final Map.Entry<String, Element> e: entries.entrySet()) {
-            final Element res = resolveIntermediate(e.getValue());
+        final Map<String, KeyDef> entries = new HashMap<String, KeyDef>(keyDefTable);
+        for (final Map.Entry<String, KeyDef> e: entries.entrySet()) {
+            final KeyDef res = resolveIntermediate(e.getValue());
             keyDefTable.put(e.getKey(), res);
         }
     }
 
-    private Element resolveIntermediate(final Element elem) {
+    private KeyDef resolveIntermediate(final KeyDef keyDef) {
+        final Element elem = keyDef.element;
         final String keyref = elem.getAttribute(ATTRIBUTE_NAME_KEYREF);
         if (!keyref.isEmpty() && keyDefTable.containsKey(keyref)) {
-            Element defElem = keyDefTable.get(keyref);
+            KeyDef keyRefDef = keyDefTable.get(keyref);
+            Element defElem = keyRefDef.element;
             final String defElemKeyref = defElem.getAttribute(ATTRIBUTE_NAME_KEYREF);
             if (!defElemKeyref.isEmpty()) {
-                defElem = resolveIntermediate(defElem);
+                keyRefDef = resolveIntermediate(keyRefDef);
             }
-            final Element res = mergeMetadata(defElem, elem);
+            final Element res = mergeMetadata(keyRefDef.element, elem);
             res.removeAttribute(ATTRIBUTE_NAME_KEYREF);
-            return res;
+            return new KeyDef(keyDef.keys, keyRefDef.href, keyRefDef.scope, keyRefDef.source, res);
         } else {
-            return elem;
+            return keyDef;
         }
     }
 

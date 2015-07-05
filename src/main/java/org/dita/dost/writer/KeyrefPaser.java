@@ -103,7 +103,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         keyrefInfos = Collections.unmodifiableList(ki);
     }
         
-    private Map<String, Element> definitionMap;
+    private Map<String, KeyDef> definitionMap;
     /** File name with relative path to the temporary directory of input file. */
     private File inputFile;
 
@@ -122,7 +122,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private int keyrefLeval;
 
-    private Map<String, KeyDef> keyMap;
 
     /**
      * It is used to indicate whether the keyref is valid.
@@ -148,7 +147,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private final Stack<Boolean> hasSubElem;
 
     /** Current key definition. */
-    private Element elem;
+    private KeyDef keyDef;
 
     /** Set of link targets which are not resource-only */
     private Set<URI> normalProcessingRoleTargets;
@@ -161,12 +160,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         keyrefLevalStack = new Stack<Integer>();
         validKeyref = new Stack<Boolean>();
         empty = true;
-        keyMap = new HashMap<String, KeyDef>();
         elemName = new Stack<String>();
         hasSubElem = new Stack<Boolean>();
     }
     
-    public void setKeyDefinition(final Map<String, Element> definitionMap) {
+    public void setKeyDefinition(final Map<String, KeyDef> definitionMap) {
         this.definitionMap = definitionMap;
     }
 
@@ -175,14 +173,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     public void setCurrentFile(final File inputFile) {
         this.inputFile = inputFile;
-    }
-    
-    /**
-     * Set key map.
-     * @param map key map
-     */
-    public void setKeyMap(final Map<String, KeyDef> map) {
-        keyMap = map;
     }
     
     /**
@@ -227,6 +217,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         if (keyrefLeval != 0 && empty && !elemName.peek().equals(MAP_TOPICREF.localName)) {
+            final Element elem = keyDef.element;
             // If current element is in the scope of key reference element
             // and the element is empty
             if (!validKeyref.isEmpty() && validKeyref.peek()) {
@@ -379,15 +370,16 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 keyName = keyrefValue.substring(0, slashIndex);
                 elementId = keyrefValue.substring(slashIndex);
             }
-            elem = definitionMap.get(keyName);
+
+            keyDef = definitionMap.get(keyName);
+            final Element elem = keyDef != null ? keyDef.element : null;
 
             // If definition is not null
-            if (elem != null) {
+            if (keyDef != null) {
                 if (currentElement != null) {
                     final NamedNodeMap attrs = elem.getAttributes();
                     // first resolve the keyref attribute
                     if (currentElement.refAttr != null) {
-                        final KeyDef keyDef = keyMap.get(keyName);
                         final URI target = keyDef != null ? keyDef.href : null;
                         if (target != null && target.toString().length() != 0) {
                             URI target_output = target;

@@ -66,19 +66,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         });
         if (!fis.isEmpty()) {
-            final Map<String, KeyDef> keymap = new HashMap<String, KeyDef>();
-            final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(job.tempDir, KEYDEF_LIST_FILE));
-            for (final KeyDef keyDef: keydefs) {
-                keymap.put(keyDef.keys, keyDef);
-            }
-            
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
             final URI mapFile = job.getInputMap();
             logger.info("Reading " + job.tempDir.toURI().resolve(mapFile).toString());
             reader.read(job.tempDir.toURI().resolve(mapFile));
 
-            final Map<String, Element> keyDefinition = reader.getKeyDefinition();
+            final Map<String, KeyDef> keyDefinition = reader.getKeyDefinition();
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
             
@@ -92,7 +86,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
                 conkeyrefFilter.setLogger(logger);
                 conkeyrefFilter.setJob(job);
-                conkeyrefFilter.setKeyDefinitions(keymap);
+                conkeyrefFilter.setKeyDefinitions(keyDefinition);
                 conkeyrefFilter.setCurrentFile(file);
                 conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
                 filters.add(conkeyrefFilter);
@@ -102,7 +96,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 parser.setJob(job);
                 parser.setKeyDefinition(keyDefinition);
                 parser.setCurrentFile(file);
-                parser.setKeyMap(keymap);
                 filters.add(parser);
 
                 try {
@@ -128,6 +121,19 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         }
         return null;
+    }
+
+    /**
+     * Add key definition to job configuration
+     *
+     * @param keydefs key defintions to add
+     */
+    private void writeKeyDefinition(final Map<String, KeyDef> keydefs) {
+        try {
+            KeyDef.writeKeydef(new File(job.tempDir, KEYDEF_LIST_FILE), keydefs.values());
+        } catch (final DITAOTException e) {
+            logger.error("Failed to write key definition file: " + e.getMessage(), e);
+        }
     }
 
 }
