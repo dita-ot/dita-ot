@@ -18,6 +18,7 @@
                   preprocess.init,
                   gen-list,
                   debug-filter,
+                  mapref,
                   copy-files,
                   keyref,
                   conrefpush,
@@ -25,7 +26,6 @@
                   profile,
                   topic-fragment,
                   coderef,
-                  mapref,
                   move-meta-entries,
                   mappull,
                   chunk,
@@ -331,6 +331,19 @@
       <module class="org.dita.dost.module.KeyrefModule">
         <param name="transtype" value="${transtype}"/>
       </module>
+    </pipeline>
+    <pipeline message="Resolve mapref in ditamap" taskname="mapref">
+      <xslt basedir="${dita.temp.dir}"
+            reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
+            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
+            filenameparameter="file-being-processed">
+        <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
+        <param name="TRANSTYPE" expression="${transtype}" />
+        <param name="child-topicref-warning" expression="false"/>
+        <param name="keep-submap-href" expression="false"/>
+        <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
     </pipeline>
   </target>
   
