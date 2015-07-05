@@ -20,6 +20,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.dita.dost.exception.DITAOTException;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -41,6 +42,7 @@ public class KeyDef {
     public final URI href;
     public final String scope;
     public final URI source;
+    public final Element element;
     
     /**
      * Construct new key definition.
@@ -50,13 +52,15 @@ public class KeyDef {
      * @param scope link scope, may be {@code null}
      * @param source key definition source, may be {@code null}
      */
-    public KeyDef(final String keys, final URI href, final String scope, final URI source) {
+    public KeyDef(final String keys, final URI href, final String scope, final URI source, final Element element) {
+        //assert href.isAbsolute();
         this.keys = keys;
         this.href = href;
         this.scope = scope;
         this.source = source;
+        this.element = element;
     }
-    
+
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder().append(keys).append(EQUAL);
@@ -79,6 +83,7 @@ public class KeyDef {
      * @return list of key definitions
      * @throws DITAOTException if reading configuration file failed
      */
+    @Deprecated
     public static Collection<KeyDef> readKeydef(final File keydefFile) throws DITAOTException {
         final Collection<KeyDef> res = new ArrayList<KeyDef>();
         try {
@@ -91,7 +96,8 @@ public class KeyDef {
                         res.add(new KeyDef(atts.getValue(ATTRIBUTE_KEYS),
                                            toURI(atts.getValue(ATTRIBUTE_HREF)),
                                            atts.getValue(ATTRIBUTE_SCOPE),
-                                           toURI(atts.getValue(ATTRIUBTE_SOURCE))));
+                                           toURI(atts.getValue(ATTRIUBTE_SOURCE)),
+                                           null));
                     }
                 }
             });
@@ -109,6 +115,7 @@ public class KeyDef {
      * @param keydefs list of key definitions
      * @throws DITAOTException if writing configuration file failed
      */
+    @Deprecated
     public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
         OutputStream out = null;
         XMLStreamWriter keydef = null;

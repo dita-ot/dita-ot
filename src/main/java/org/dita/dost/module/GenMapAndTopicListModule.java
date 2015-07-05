@@ -558,11 +558,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             final String key = e.getKey();
             final KeyDef value = e.getValue();
             if (!keysDefMap.containsKey(key)) {
-                keysDefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
+                keysDefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile, null));
             }
             // if the current file is also a schema file
             if (schemeSet.contains(currentFile)) {
-                schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
+                schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile, null));
             }
         }
 
@@ -1168,7 +1168,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final Collection<KeyDef> res = new ArrayList<KeyDef>(keydefs.size());
         for (final KeyDef k: keydefs) {
             final URI source = tempFileNameScheme.generateTempFileName(k.source);
-            res.add(new KeyDef(k.keys, k.href, k.scope, source));
+            res.add(new KeyDef(k.keys, k.href, k.scope, source, null));
         }
         return res;
     }
@@ -1187,7 +1187,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
                              ? tempFileNameScheme.generateTempFileName(file.href)
                              : file.href;
             final URI source = tempFileNameScheme.generateTempFileName(file.source);
-            final KeyDef keyDef = new KeyDef(keys, href, file.scope, source);
+            final KeyDef keyDef = new KeyDef(keys, href, file.scope, source, null);
             updated.add(keyDef);
         }
         // write key definition

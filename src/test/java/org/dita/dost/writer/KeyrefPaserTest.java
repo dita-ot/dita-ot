@@ -49,7 +49,7 @@ public class KeyrefPaserTest {
     private static final File expDir = new File(resourceDir, "exp");
     private static CatalogResolver resolver;
 
-    private static Map<String, Element> keyDefinition;
+    private static Map<String, KeyDef> keyDefinition;
     private final static Map<String, KeyDef> keymap = new HashMap<String, KeyDef>();
 
     @BeforeClass
@@ -152,13 +152,13 @@ public class KeyrefPaserTest {
         final NodeList keydefs = document.getElementsByTagName("keydef");
         for (int i = 0; i < keydefs.getLength(); i++) {
             final Element elem = (Element) keydefs.item(i);
-            final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")), null, null);
-            keymap.put(keyDef.keys, keyDef);
             final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
             doc.appendChild(doc.importNode(elem, true));
             keys.put(elem.getAttribute("keys"), elem);
+            final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")), null, null, elem);
+            keymap.put(keyDef.keys, keyDef);
         }
-        keyDefinition = Collections.unmodifiableMap(keys);
+        keyDefinition = Collections.unmodifiableMap(keymap);
     }
     
 }

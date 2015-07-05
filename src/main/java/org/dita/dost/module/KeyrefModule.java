@@ -78,7 +78,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             logger.info("Reading " + job.tempDir.toURI().resolve(mapFile).toString());
             reader.read(job.tempDir.toURI().resolve(mapFile));
 
-            final Map<String, Element> keyDefinition = reader.getKeyDefinition();
+            final Map<String, KeyDef> keyDefinition = reader.getKeyDefinition();
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
             

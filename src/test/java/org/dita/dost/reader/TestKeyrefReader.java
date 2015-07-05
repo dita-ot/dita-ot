@@ -22,6 +22,7 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.dita.dost.util.KeyDef;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -52,7 +53,7 @@ public class TestKeyrefReader {
         final KeyrefReader keyrefreader = new KeyrefReader();
 //        keyrefreader.setKeys(set);
         keyrefreader.read(toURI(filename.getAbsolutePath()));
-        final Map<String, Element> act= keyrefreader.getKeyDefinition();
+        final Map<String, KeyDef> act= keyrefreader.getKeyDefinition();
 
         final Map<String, String> exp = new HashMap<String, String>();
         exp.put("blatfeference", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
@@ -68,7 +69,7 @@ public class TestKeyrefReader {
         assertEquals(exp.keySet(), act.keySet());
         for (Map.Entry<String, String> e: exp.entrySet()) {
             final Document ev = keyDefToDoc(e.getValue());
-            final Document av = act.get(e.getKey()).getOwnerDocument();
+            final Document av = act.get(e.getKey()).element.getOwnerDocument();
             assertXMLEqual(ev, av);
         }
     }
@@ -79,7 +80,7 @@ public class TestKeyrefReader {
 
         final KeyrefReader keyrefreader = new KeyrefReader();
         keyrefreader.read(toURI(filename.getAbsolutePath()));
-        final Map<String, Element> act= keyrefreader.getKeyDefinition();
+        final Map<String, KeyDef> act= keyrefreader.getKeyDefinition();
 
         final Map<String, String> exp = new HashMap<String, String>();
         exp.put("toner-specs", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-specs\" href=\"toner-type-a-specs.dita\"/>");
@@ -91,7 +92,7 @@ public class TestKeyrefReader {
         assertEquals(exp.keySet(), act.keySet());
         for (Map.Entry<String, String> e: exp.entrySet()) {
             final Document ev = keyDefToDoc(e.getValue());
-            final Document av = act.get(e.getKey()).getOwnerDocument();
+            final Document av = act.get(e.getKey()).element.getOwnerDocument();
             assertXMLEqual(ev, av);
         }
     }
