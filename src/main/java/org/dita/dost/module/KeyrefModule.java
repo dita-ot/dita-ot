@@ -123,4 +123,17 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
+    /**
+     * Add key definition to job configuration
+     *
+     * @param keydefs key defintions to add
+     */
+    private void writeKeyDefinition(final Map<String, KeyDef> keydefs) {
+        try {
+            KeyDef.writeKeydef(new File(job.tempDir, KEYDEF_LIST_FILE), keydefs.values());
+        } catch (final DITAOTException e) {
+            logger.error("Failed to write key definition file: " + e.getMessage(), e);
+        }
+    }
+
 }

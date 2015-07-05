@@ -177,24 +177,6 @@ public class TestGenMapAndTopicListModule {
         
         final Job job = new Job(tempDirParallel);
         assertEquals(".." + File.separator, job.getProperty("uplevels"));
-
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        final DocumentBuilder builder = factory.newDocumentBuilder();
-        final Document document = builder.parse(new File(tempDirParallel, KEYDEF_LIST_FILE));
-        final Element elem = document.getDocumentElement();
-        final NodeList nodeList = elem.getElementsByTagName("keydef");
-        final Map<String, List<String>> expKeyDef = new HashMap<String, List<String>>();
-        expKeyDef.put("target_topic_2", Arrays.asList("target_topic_2", "topics" + URI_SEPARATOR + "target-topic-c.xml", "maps" + URI_SEPARATOR + "root-map-01.ditamap"));
-        expKeyDef.put("target_topic_1", Arrays.asList("target_topic_1", "topics" + URI_SEPARATOR + "target-topic%20a.xml", "maps" + URI_SEPARATOR + "root-map-01.ditamap"));
-        expKeyDef.put("target_topic_3", Arrays.asList("target_topic_3", "topics" + URI_SEPARATOR + "target-topic-c.xml", "maps" + URI_SEPARATOR + "root-map-01.ditamap"));
-        expKeyDef.put("target_topic_4", Arrays.asList("target_topic_4", "http://www.example.com/?foo=bar&baz=qux#quxx", "maps" + URI_SEPARATOR + "root-map-01.ditamap"));
-        for(int i = 0; i< nodeList.getLength();i++){
-            final Element el = (Element) nodeList.item(i);
-            final List<String> exp = expKeyDef.get(el.getAttribute("keys"));
-            assertEquals(exp.get(0), el.getAttribute("keys"));
-            assertEquals(exp.get(1), el.getAttribute("href"));
-            assertEquals(exp.get(2), el.getAttribute("source"));
-        }
     }
     
     @Test
@@ -267,24 +249,6 @@ public class TestGenMapAndTopicListModule {
                 
         final Job job = new Job(tempDirAbove);
         assertEquals("", job.getProperty("uplevels"));
-        
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        final DocumentBuilder builder = factory.newDocumentBuilder();
-        final Document document = builder.parse(new File(tempDirAbove, KEYDEF_LIST_FILE));
-        final Element elem = document.getDocumentElement();
-        final NodeList nodeList = elem.getElementsByTagName("keydef");
-        final Map<String, List<String>> expKeyDef = new HashMap<String, List<String>>();
-        expKeyDef.put("target_topic_2", Arrays.asList("target_topic_2", "topics" + URI_SEPARATOR + "target-topic-c.xml", "root-map-02.ditamap"));
-        expKeyDef.put("target_topic_1", Arrays.asList("target_topic_1", "topics" + URI_SEPARATOR + "target-topic%20a.xml", "root-map-02.ditamap"));
-        expKeyDef.put("target_topic_3", Arrays.asList("target_topic_3", "topics" + URI_SEPARATOR + "target-topic-c.xml", "root-map-02.ditamap"));
-        expKeyDef.put("target_topic_4", Arrays.asList("target_topic_4", "http://www.example.com/?foo=bar&baz=qux#quxx", "root-map-02.ditamap"));
-        for(int i = 0; i< nodeList.getLength();i++){
-            final Element el = (Element) nodeList.item(i);
-            final List<String> exp = expKeyDef.get(el.getAttribute("keys"));
-            assertEquals(exp.get(0), el.getAttribute("keys"));
-            assertEquals(exp.get(1), el.getAttribute("href"));
-            assertEquals(exp.get(2), el.getAttribute("source"));
-        }
     }
         
     private Properties readProperties(final File f)

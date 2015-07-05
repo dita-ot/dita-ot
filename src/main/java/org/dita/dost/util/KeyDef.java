@@ -75,38 +75,6 @@ public class KeyDef {
         }
         return buf.toString();
     }
-    
-    /**
-     * Read key definition XML configuration file
-     * 
-     * @param keydefFile key definition file
-     * @return list of key definitions
-     * @throws DITAOTException if reading configuration file failed
-     */
-    @Deprecated
-    public static Collection<KeyDef> readKeydef(final File keydefFile) throws DITAOTException {
-        final Collection<KeyDef> res = new ArrayList<KeyDef>();
-        try {
-            final XMLReader parser = XMLUtils.getXMLReader();
-            parser.setContentHandler(new DefaultHandler() {
-                @Override
-                public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-                    final String n = localName != null ? localName : qName;
-                    if (n.equals(ELEMENT_KEYDEF)) {
-                        res.add(new KeyDef(atts.getValue(ATTRIBUTE_KEYS),
-                                           toURI(atts.getValue(ATTRIBUTE_HREF)),
-                                           atts.getValue(ATTRIBUTE_SCOPE),
-                                           toURI(atts.getValue(ATTRIUBTE_SOURCE)),
-                                           null));
-                    }
-                }
-            });
-            parser.parse(keydefFile.toURI().toString());
-        } catch (final Exception e) {
-            throw new DITAOTException("Failed to read key definition file " + keydefFile + ": " + e.getMessage(), e);
-        }
-        return res;
-    }
 
     /**
      * Write key definition XML configuration file
@@ -115,7 +83,6 @@ public class KeyDef {
      * @param keydefs list of key definitions
      * @throws DITAOTException if writing configuration file failed
      */
-    @Deprecated
     public static void writeKeydef(final File keydefFile, final Collection<KeyDef> keydefs) throws DITAOTException {
         OutputStream out = null;
         XMLStreamWriter keydef = null;
