@@ -50,7 +50,6 @@ public class KeyrefPaserTest {
     private static CatalogResolver resolver;
 
     private static Map<String, KeyDef> keyDefinition;
-    private final static Map<String, KeyDef> keymap = new HashMap<String, KeyDef>();
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -77,7 +76,6 @@ public class KeyrefPaserTest {
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File("a.xml"));
-        parser.setKeyMap(keymap);
         parser.write(new File("a.xml"));
 
         assertXMLEqual(new InputSource(new File(expDir, "a.xml").toURI().toString()),
@@ -91,7 +89,6 @@ public class KeyrefPaserTest {
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File("b.ditamap"));
-        parser.setKeyMap(keymap);
         parser.write(new File("b.ditamap"));
 
         assertXMLEqual(new InputSource(new File(expDir, "b.ditamap").toURI().toString()),
@@ -150,6 +147,7 @@ public class KeyrefPaserTest {
 
         final Map<String, Element> keys = new HashMap<String, Element>();
         final NodeList keydefs = document.getElementsByTagName("keydef");
+        final Map<String, KeyDef> keymap = new HashMap<>();
         for (int i = 0; i < keydefs.getLength(); i++) {
             final Element elem = (Element) keydefs.item(i);
             final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();

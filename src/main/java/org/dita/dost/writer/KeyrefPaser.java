@@ -122,7 +122,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private int keyrefLeval;
 
-    private Map<String, KeyDef> keyMap;
 
     /**
      * It is used to indicate whether the keyref is valid.
@@ -161,7 +160,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         keyrefLevalStack = new Stack<Integer>();
         validKeyref = new Stack<Boolean>();
         empty = true;
-        keyMap = new HashMap<String, KeyDef>();
         elemName = new Stack<String>();
         hasSubElem = new Stack<Boolean>();
     }
@@ -175,14 +173,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     public void setCurrentFile(final File inputFile) {
         this.inputFile = inputFile;
-    }
-    
-    /**
-     * Set key map.
-     * @param map key map
-     */
-    public void setKeyMap(final Map<String, KeyDef> map) {
-        keyMap = map;
     }
     
     /**
@@ -390,7 +380,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                     final NamedNodeMap attrs = elem.getAttributes();
                     // first resolve the keyref attribute
                     if (currentElement.refAttr != null) {
-                        final KeyDef keyDef = keyMap.get(keyName);
                         final URI target = keyDef != null ? keyDef.href : null;
                         if (target != null && target.toString().length() != 0) {
                             URI target_output = target;

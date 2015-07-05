@@ -66,12 +66,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         });
         if (!fis.isEmpty()) {
-            final Map<String, KeyDef> keymap = new HashMap<String, KeyDef>();
-            final Collection<KeyDef> keydefs = KeyDef.readKeydef(new File(job.tempDir, KEYDEF_LIST_FILE));
-            for (final KeyDef keyDef: keydefs) {
-                keymap.put(keyDef.keys, keyDef);
-            }
-            
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
             final URI mapFile = job.getInputMap();
@@ -92,7 +86,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
                 conkeyrefFilter.setLogger(logger);
                 conkeyrefFilter.setJob(job);
-                conkeyrefFilter.setKeyDefinitions(keymap);
+                conkeyrefFilter.setKeyDefinitions(keyDefinition);
                 conkeyrefFilter.setCurrentFile(file);
                 conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
                 filters.add(conkeyrefFilter);
@@ -102,7 +96,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 parser.setJob(job);
                 parser.setKeyDefinition(keyDefinition);
                 parser.setCurrentFile(file);
-                parser.setKeyMap(keymap);
                 filters.add(parser);
 
                 try {
