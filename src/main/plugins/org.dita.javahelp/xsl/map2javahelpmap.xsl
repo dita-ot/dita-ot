@@ -41,6 +41,14 @@
     </xsl:if>
     <xsl:apply-templates select="$subtopicNodes"/>
   </xsl:if>
+  
+  <xsl:if test="$title">
+    <xsl:if test="@copy-to">
+        <xsl:variable name="targetID" select="translate(substring-before(@copy-to, '.dita'), '\/.', '___')"/>     
+        <xsl:variable name="urlID" select="concat(substring-before(@copy-to, '.dita'), '.html')"/>      
+        <mapID target="{$targetID}" url="{$urlID}"/>
+    </xsl:if>
+  </xsl:if>
 </xsl:template>
 
 <!-- suppress default processing because title not used in JavaHelp map -->
