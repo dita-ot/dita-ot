@@ -1340,8 +1340,8 @@
       
       <xsl:variable name="entry-file-contents" as="document-node()?">
         <xsl:if test="empty(@scope) or @scope = 'local'">
-          <xsl:variable name="entry-file-uri" select="concat($WORKDIR, $PATH2PROJ, @href)"/>        
-          <xsl:sequence select="document($entry-file-uri, /)"/>    
+          <xsl:variable name="entry-file-uri" select="concat($WORKDIR, @href)"/>
+          <xsl:sequence select="document($entry-file-uri, /)"/>
         </xsl:if>
       </xsl:variable>
       <!-- Glossary id defined in <glossentry> -->
