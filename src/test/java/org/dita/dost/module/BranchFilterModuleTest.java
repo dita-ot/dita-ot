@@ -52,8 +52,7 @@ public class BranchFilterModuleTest {
 
     @After
     public void tearDown() throws Exception {
-//        TestUtils.forceDelete(tempDir);
-        System.err.println(tempDir.getAbsolutePath());
+        TestUtils.forceDelete(tempDir);
     }
 
     @Test

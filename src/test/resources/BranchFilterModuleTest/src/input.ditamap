@@ -17,6 +17,7 @@
       </ditavalmeta>
     </ditavalref>
     <topicref class="- map/topicref " href="perform-install.dita" keyscope="perform-install"/>
+    <topicref class="- map/topicref " href="perform-install.dita" copy-to="installation-procedure.dita" keyscope="perform-install"/>
     <topicref class="- map/topicref " href="configure.dita" keyscope="configure">
       <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="novice.ditaval" processing-role="resource-only">
         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
@@ -33,4 +34,5 @@
     </topicref>
     <topicref class="- map/topicref " href="http://example.com/install.dita" scope="external"/>
   </topicref>
+  <topicref class="- map/topicref " href="install.dita" copy-to="getting-started.dita"/>
 </map>

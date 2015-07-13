@@ -5,6 +5,7 @@
   <topicref class="- map/topicref " href="install.dita" keyscope="install">
     <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="linux.ditaval" processing-role="resource-only"/>
     <topicref class="- map/topicref " href="perform-install.dita" keyscope="perform-install"/>
+    <topicref class="- map/topicref " href="perform-install.dita" copy-to="installation-procedure.dita" keyscope="perform-install"/>
     <topicref class="- map/topicref " href="configure-novice.dita" keyscope="novice-configure">
       <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="novice.ditaval" processing-role="resource-only">
         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
@@ -31,6 +32,7 @@
       </ditavalmeta>
     </ditavalref>
     <topicref class="- map/topicref " href="perform-install-mac.dita" keyscope="mac-perform-install"/>
+    <topicref class="- map/topicref " href="installation-procedure-mac.dita" keyscope="mac-perform-install"/>
     <topicref class="- map/topicref " href="configure-novice-mac.dita" keyscope="mac-novice-configure">
       <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="novice.ditaval" processing-role="resource-only">
         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
@@ -57,6 +59,7 @@
       </ditavalmeta>
     </ditavalref>
     <topicref class="- map/topicref " href="perform-install-win.dita" keyscope="win-perform-install"/>
+    <topicref class="- map/topicref " href="installation-procedure-win.dita" keyscope="win-perform-install"/>
     <topicref class="- map/topicref " href="configure-novice-win.dita" keyscope="win-novice-configure">
       <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="novice.ditaval" processing-role="resource-only">
         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
@@ -75,4 +78,5 @@
     </topicref>
     <topicref class="- map/topicref " href="http://example.com/install.dita" scope="external"/>
   </topicref>
+  <topicref class="- map/topicref " href="install.dita" copy-to="getting-started.dita"/>
 </map>

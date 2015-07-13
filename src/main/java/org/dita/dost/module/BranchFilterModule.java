@@ -143,26 +143,21 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         // collect href and copy-to
         final Map<URI, List<Attr>> refs = new HashMap<>();
         for (final Element e: getBranchTopicref(root)) {
-            final Attr copyTo = e.getAttributeNode(BRANCH_COPY_TO);
-            if (copyTo != null) {
-                final URI h = map.resolve(copyTo.getValue());
+            Attr attr = e.getAttributeNode(BRANCH_COPY_TO);
+            if (attr == null) {
+                attr = e.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+                if (attr == null) {
+                    attr = e.getAttributeNode(ATTRIBUTE_NAME_HREF);
+                }
+            }
+            if (attr != null) {
+                final URI h = map.resolve(attr.getValue());
                 List<Attr> attrs = refs.get(h);
                 if (attrs == null) {
                     attrs = new ArrayList<>();
                 }
-                attrs.add(copyTo);
+                attrs.add(attr);
                 refs.put(h, attrs);
-            } else {
-                final Attr href = e.getAttributeNode(ATTRIBUTE_NAME_HREF);
-                if (href != null) {
-                    final URI h = map.resolve(href.getValue());
-                    List<Attr> attrs = refs.get(h);
-                    if (attrs == null) {
-                        attrs = new ArrayList<>();
-                    }
-                    attrs.add(href);
-                    refs.put(h, attrs);
-                }
             }
         }
         // check and rewrite
@@ -191,10 +186,10 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                         : (gen + suffix);
                     logger.error(MessageUtils.getInstance().getMessage("DOTJ065E", attr.getValue() ,gen)
                             .setLocation((Element) attr.getOwnerElement()).toString());
-                    if (attr.getName().equals(ATTRIBUTE_NAME_HREF)) {
-                        attr.getOwnerElement().setAttribute(BRANCH_COPY_TO, gen);
-                    } else {
+                    if (attr.getName().equals(BRANCH_COPY_TO)) {
                         attr.setValue(gen);
+                    } else {
+                        attr.getOwnerElement().setAttribute(BRANCH_COPY_TO, gen);
                     }
                 }
             }
@@ -334,7 +329,8 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         final List<FilterUtils> fs = combineFilterUtils(topicref, filters);
 
         final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
-        if (!fs.isEmpty() && skipFilter == null) {
+        if (!fs.isEmpty() && skipFilter == null
+                && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))) {
             final List<XMLFilter> pipe = new ArrayList<>();
             // TODO: replace multiple profiling filters with a merged filter utils
             for (final FilterUtils f : fs) {
@@ -506,10 +502,14 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     private void processAttributes(final Element elem, final Branch filter) {
         if (filter.resourcePrefix != null || filter.resourceSuffix != null) {
             final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
+            final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
             final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
-            if (!href.isEmpty() && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
+            if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
                 elem.setAttribute(BRANCH_COPY_TO,
-                        generateCopyTo(href, filter).toString());
+                        generateCopyTo(copyTo.isEmpty() ? href : copyTo, filter).toString());
+                if (!copyTo.isEmpty()) {
+                    elem.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
+                }
             }
         }
 
