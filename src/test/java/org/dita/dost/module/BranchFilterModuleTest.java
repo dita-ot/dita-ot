@@ -1,11 +1,12 @@
 package org.dita.dost.module;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-import static org.junit.Assert.*;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
@@ -38,13 +39,21 @@ public class BranchFilterModuleTest {
         job.add(new Job.FileInfo.Builder()
                 .src(new File(tempDir, "input.ditamap").toURI())
                 .uri(new URI("input.ditamap"))
+                .format(ATTR_FORMAT_VALUE_DITAMAP)
                 .build());
+        for (final String uri: Arrays.asList("install.dita", "perform-install.dita", "configure.dita")) {
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(tempDir, uri).toURI())
+                    .uri(new URI(uri))
+                    .format(ATTR_FORMAT_VALUE_DITA)
+                    .build());
+        }
     }
 
     @After
     public void tearDown() throws Exception {
-        TestUtils.forceDelete(tempDir);
-        //System.err.println(tempDir.getAbsolutePath());
+//        TestUtils.forceDelete(tempDir);
+        System.err.println(tempDir.getAbsolutePath());
     }
 
     @Test

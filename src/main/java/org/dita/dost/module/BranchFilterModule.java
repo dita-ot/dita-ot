@@ -54,6 +54,7 @@ import org.xml.sax.XMLFilter;
 final class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     private static final String SKIP_FILTER = "skip-filter";
+    private static final String BRANCH_COPY_TO = "filter-copy-to";
 
     private final DocumentBuilder builder;
     private final DitaValReader ditaValReader;
@@ -141,11 +142,8 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     private void rewriteDuplicates(final Element root) {
         // collect href and copy-to
         final Map<URI, List<Attr>> refs = new HashMap<>();
-        for (final Element e: getChildElements(root, MAP_TOPICREF, true)) {
-            if (!isDitaFormat(e.getAttributeNode(ATTRIBUTE_NAME_FORMAT))) {
-                continue;
-            }
-            final Attr copyTo = e.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+        for (final Element e: getBranchTopicref(root)) {
+            final Attr copyTo = e.getAttributeNode(BRANCH_COPY_TO);
             if (copyTo != null) {
                 final URI h = map.resolve(copyTo.getValue());
                 List<Attr> attrs = refs.get(h);
@@ -194,12 +192,30 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                     logger.error(MessageUtils.getInstance().getMessage("DOTJ065E", attr.getValue() ,gen)
                             .setLocation((Element) attr.getOwnerElement()).toString());
                     if (attr.getName().equals(ATTRIBUTE_NAME_HREF)) {
-                        attr.getOwnerElement().setAttribute(ATTRIBUTE_NAME_COPY_TO, gen);
+                        attr.getOwnerElement().setAttribute(BRANCH_COPY_TO, gen);
                     } else {
                         attr.setValue(gen);
                     }
                 }
             }
+        }
+    }
+
+    /** Get topicrefs that are part of a branch */
+    private List<Element> getBranchTopicref(final Element root) {
+        final List<Element> res = new ArrayList<>();
+        walkBranchTopicref(root, false, res);
+        return res;
+    }
+
+    /** Walker to collect topicrefs that are part of a branch. */
+    private void walkBranchTopicref(final Element elem, final boolean inBranch, final List<Element> res) {
+        final boolean b = inBranch || !getChildElements(elem, DITAVAREF_D_DITAVALREF).isEmpty();
+        if (b && MAP_TOPICREF.matches(elem) && isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT))) {
+            res.add(elem);
+        }
+        for (final Element child: getChildElements(elem)) {
+            walkBranchTopicref(child, b, res);
         }
     }
 
@@ -268,7 +284,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     private void generateCopies(final Element topicref, final List<FilterUtils> filters) {
         final List<FilterUtils> fs = combineFilterUtils(topicref, filters);
 
-        final String copyTo = topicref.getAttribute(ATTRIBUTE_NAME_COPY_TO);
+        final String copyTo = topicref.getAttribute(BRANCH_COPY_TO);
         if (!copyTo.isEmpty()) {
             final URI dstUri = map.resolve(copyTo);
             final URI dstAbsUri = job.tempDir.toURI().resolve(dstUri);
@@ -298,7 +314,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                     logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
                 }
                 topicref.setAttribute(ATTRIBUTE_NAME_HREF, copyTo);
-                topicref.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
+                topicref.removeAttribute(BRANCH_COPY_TO);
                 // disable filtering again
                 topicref.setAttribute(SKIP_FILTER, Boolean.TRUE.toString());
             }
@@ -489,8 +505,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         if (filter.resourcePrefix != null || filter.resourceSuffix != null) {
             final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
             if (!href.isEmpty()) {
-                // TODO: Should this use a custom attribute since there may be copy-to attributes already in the source?
-                elem.setAttribute(ATTRIBUTE_NAME_COPY_TO,
+                elem.setAttribute(BRANCH_COPY_TO,
                         generateCopyTo(href, filter).toString());
             }
         }
