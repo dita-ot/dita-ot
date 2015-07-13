@@ -31,5 +31,6 @@
         </ditavalmeta>
       </ditavalref>
     </topicref>
+    <topicref class="- map/topicref " href="http://example.com/install.dita" scope="external"/>
   </topicref>
 </map>

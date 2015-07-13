@@ -21,6 +21,7 @@
         </ditavalmeta>
       </ditavalref>
     </topicref>
+    <topicref class="- map/topicref " href="http://example.com/install.dita" scope="external"/>
   </topicref>
   <topicref class="- map/topicref " href="install-mac.dita" keyscope="mac-install">
     <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="mac.ditaval" processing-role="resource-only">
@@ -46,6 +47,7 @@
         </ditavalmeta>
       </ditavalref>
     </topicref>
+    <topicref class="- map/topicref " href="http://example.com/install.dita" scope="external"/>
   </topicref>
   <topicref class="- map/topicref " href="install-win.dita" keyscope="win-install">
     <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="win.ditaval" processing-role="resource-only">
@@ -71,5 +73,6 @@
         </ditavalmeta>
       </ditavalref>
     </topicref>
+    <topicref class="- map/topicref " href="http://example.com/install.dita" scope="external"/>
   </topicref>
 </map>

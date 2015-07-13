@@ -211,7 +211,9 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     /** Walker to collect topicrefs that are part of a branch. */
     private void walkBranchTopicref(final Element elem, final boolean inBranch, final List<Element> res) {
         final boolean b = inBranch || !getChildElements(elem, DITAVAREF_D_DITAVALREF).isEmpty();
-        if (b && MAP_TOPICREF.matches(elem) && isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT))) {
+        if (b && MAP_TOPICREF.matches(elem)
+                && isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT))
+                && !elem.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
             res.add(elem);
         }
         for (final Element child: getChildElements(elem)) {
@@ -504,7 +506,8 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     private void processAttributes(final Element elem, final Branch filter) {
         if (filter.resourcePrefix != null || filter.resourceSuffix != null) {
             final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
-            if (!href.isEmpty()) {
+            final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
+            if (!href.isEmpty() && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
                 elem.setAttribute(BRANCH_COPY_TO,
                         generateCopyTo(href, filter).toString());
             }
