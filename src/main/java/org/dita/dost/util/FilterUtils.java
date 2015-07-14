@@ -53,7 +53,8 @@ public final class FilterUtils {
     private final Set<FilterKey> notMappingRules = new HashSet<FilterKey>();
     private boolean logMissingAction;
 
-    private FilterUtils(final Map<FilterKey, Action> filterMap) {
+    public FilterUtils(final Map<FilterKey, Action> filterMap) {
+        this.logMissingAction = !filterMap.isEmpty();
         this.filterMap = new HashMap<FilterKey, Action>(filterMap);
     }
 

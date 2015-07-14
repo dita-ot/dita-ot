@@ -590,7 +590,13 @@ public final class Constants {
     public static final DitaClass XNAL_D_THOROUGHFARE = new DitaClass("+ topic/ph xnal-d/thoroughfare ");
     public static final DitaClass XNAL_D_URL = new DitaClass("+ topic/data xnal-d/url ");
     public static final DitaClass XNAL_D_URLS = new DitaClass("+ topic/data xnal-d/urls ");
-
+    public static final DitaClass DITAVAREF_D_DITAVALREF = new DitaClass("+ map/topicref ditavalref-d/ditavalref ");
+    public static final DitaClass DITAVAREF_D_DITAVALMETA = new DitaClass("+ map/topicmeta ditavalref-d/ditavalmeta ");
+    public static final DitaClass DITAVAREF_D_DVR_RESOURCEPREFIX = new DitaClass("+ topic/data ditavalref-d/dvrResourcePrefix ");
+    public static final DitaClass DITAVAREF_D_DVR_RESOURCESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrResourceSuffix ");
+    public static final DitaClass DITAVAREF_D_DVR_KEYSCOPEPREFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopePrefix ");
+    public static final DitaClass DITAVAREF_D_DVR_KEYSCOPESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopeSuffix ");
+    
     /**maplinks element.*/
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
     /**prop element.*/
@@ -873,6 +879,7 @@ public final class Constants {
     public static final String ATTR_FORMAT_VALUE_DITA = "dita";
     /**ATTR_FORMAT_VALUE_DITAMAP.*/
     public static final String ATTR_FORMAT_VALUE_DITAMAP = "ditamap";
+    public static final String ATTR_FORMAT_VALUE_DITAVAL = "ditaval";
     public static final String ATTR_FORMAT_VALUE_IMAGE = "image";
     public static final String ATTR_FORMAT_VALUE_HTML = "html";
     /**ATTRIBUTE_NAME_DITAARCHVERSION.*/

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<val>
+  <prop action="include" att="platform" val="win" />
+  <prop action="exclude" att="platform" val="mac" />
+  <prop action="exclude" att="platform" val="linux" />
+</val>

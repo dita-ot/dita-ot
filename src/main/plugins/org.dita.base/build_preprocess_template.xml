@@ -19,6 +19,7 @@
                   gen-list,
                   debug-filter,
                   mapref,
+                  branch-filter,
                   copy-files,
                   keyref,
                   conrefpush,
@@ -208,6 +209,12 @@
       </not-->
       <istrue value="${filter-on-parse}"/>
     </condition>
+  </target>
+  
+  <target name="branch-filter">
+    <pipeline tempdir="${dita.temp.dir}" taskname="branch-filter" message="Filter branches">
+      <module class="org.dita.dost.module.BranchFilterModule"/>
+    </pipeline>
   </target>
   
   <!-- conref push

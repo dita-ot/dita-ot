@@ -91,7 +91,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private final Set<URI> coderefSet;
 
     /** Set of all images */
-    private final Set<URI> imageSet;
+    private final Set<Reference> formatSet;
 
     /** Set of all images used for flagging */
     private final Set<URI> flagImageSet;
@@ -195,7 +195,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         chunkTopicSet = new HashSet<URI>(128);
         schemeSet = new HashSet<URI>(128);
         conrefSet = new HashSet<URI>(128);
-        imageSet = new HashSet<URI>(128);
+        formatSet = new HashSet<>();
         flagImageSet = new LinkedHashSet<URI>(128);
         htmlSet = new HashSet<URI>(128);
         hrefTargetSet = new HashSet<URI>(128);
@@ -647,10 +647,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         if (isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
             addToWaitList(file);
         } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
-            imageSet.add(file.filename);
-            if (!exists(file.filename)){
+            formatSet.add(file);
+            if (!exists(file.filename)) {
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX008W", file.filename.toString()).toString());
             }
+        } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
+            formatSet.add(file);
         } else {
             htmlSet.add(file.filename);
         }
@@ -918,8 +920,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         for (final URI file: conrefSet) {
             getOrCreateFileInfo(fileinfos, file).hasConref = true;
         }
-        for (final URI file: imageSet) {
-            getOrCreateFileInfo(fileinfos, file).format = ATTR_FORMAT_VALUE_IMAGE;
+        for (final Reference file: formatSet) {
+            getOrCreateFileInfo(fileinfos, file.filename).format = file.format;
         }
         for (final URI file: flagImageSet) {
             final FileInfo f = getOrCreateFileInfo(fileinfos, file);

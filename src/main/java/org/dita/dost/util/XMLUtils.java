@@ -8,14 +8,8 @@ import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URI;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -203,6 +197,79 @@ public final class XMLUtils {
                     out.close();
                 } catch (final IOException e) {
                     // ignore
+                }
+            }
+        }
+    }
+
+    /**
+     * Transform file with XML filters.
+     *
+     * @param input input file
+     * @param output output file
+     * @param filters XML filters to transform file with, may be an empty list
+     */
+    public static void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+        InputSource src = null;
+        StreamResult result = null;
+        try {
+            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            XMLReader reader = getXMLReader();
+            for (final XMLFilter filter : filters) {
+                // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
+                // when reusing filter with multiple Transformers.
+                filter.setContentHandler(null);
+                filter.setParent(reader);
+                reader = filter;
+            }
+            src = new InputSource(input.toString());
+            final Source source = new SAXSource(reader, src);
+            result = new StreamResult(output.toString());
+            transformer.transform(source, result);
+        } catch (final RuntimeException e) {
+            throw e;
+        } catch (final Exception e) {
+            throw new DITAOTException("Failed to transform " + input + ": " + e.getMessage(), e);
+        } finally {
+            try {
+                close(src);
+            } catch (final IOException e) {
+                // NOOP
+            }
+            try {
+                close(result);
+            } catch (final IOException e) {
+                // NOOP
+            }
+        }
+    }
+
+    /** Close input source. */
+    public static void close(final InputSource input) throws IOException {
+        if (input != null) {
+            final InputStream i = input.getByteStream();
+            if (i != null) {
+                i.close();
+            } else {
+                final Reader w = input.getCharacterStream();
+                if (w != null) {
+                    w.close();
+                }
+            }
+        }
+    }
+
+    /** Close result. */
+    public static void close(final Result result) throws IOException {
+        if (result != null && result instanceof StreamResult) {
+            final StreamResult r = (StreamResult) result;
+            final OutputStream o = r.getOutputStream();
+            if (o != null) {
+                o.close();
+            } else {
+                final Writer w = r.getWriter();
+                if (w != null) {
+                    w.close();
                 }
             }
         }

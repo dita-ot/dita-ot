@@ -641,7 +641,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 && (atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
                     || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)))
                 && (followLinks()
-                    || (TOPIC_IMAGE.matches(attrClass) || TOPIC_OBJECT.matches(attrClass)))) {
+                    || (TOPIC_IMAGE.matches(attrClass) || TOPIC_OBJECT.matches(attrClass) || DITAVAREF_D_DITAVALREF.matches(attrClass)))) {
             nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
         }
 
