@@ -10,6 +10,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.*;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -36,6 +37,55 @@ public final class XMLUtils {
 
     /** Private constructor to make class uninstantiable. */
     private XMLUtils() {}
+
+    /**
+     * List descendant elements by DITA class.
+     *
+     * @param elem root element
+     * @param cls DITA class to match elements
+     * @param deep {@code true} to read descendants, {@code false} to read only direct children
+     * @raturn list of matching elements
+     */
+    public static List<Element> getChildElements(final Element elem, final DitaClass cls, final boolean deep) {
+        final NodeList children = deep ? elem.getElementsByTagName("*") : elem.getChildNodes();
+        final List<Element> res = new ArrayList<>(children.getLength());
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (cls.matches(child)) {
+                res.add((Element) child);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * List chilid elements by DITA class.
+     *
+     * @param elem root element
+     * @param cls DITA class to match elements
+     * @raturn list of matching elements
+     */
+    public static List<Element> getChildElements(final Element elem, final DitaClass cls) {
+        return getChildElements(elem, cls, false);
+    }
+
+    /**
+     * List child elements elements.
+     *
+     * @param elem root element
+     * @raturn list of matching elements
+     */
+    public static List<Element> getChildElements(final Element elem) {
+        final NodeList children = elem.getChildNodes();
+        final List<Element> res = new ArrayList<>(children.getLength());
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                res.add((Element) child);
+            }
+        }
+        return res;
+    }
 
     /**
      * Add or set attribute.

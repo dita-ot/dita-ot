@@ -549,35 +549,5 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         }
         return toURI(buf.toString());
     }
-
-    /** List descendant elements by DITA class. */
-    private static List<Element> getChildElements(final Element elem, final DitaClass cls, final boolean deep) {
-        final NodeList children = deep ? elem.getElementsByTagName("*") : elem.getChildNodes();
-        final List<Element> res = new ArrayList<>(children.getLength());
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node child = children.item(i);
-            if (cls.matches(child)) {
-                res.add((Element) child);
-            }
-        }
-        return res;
-    }
-
-    private static List<Element> getChildElements(final Element elem, final DitaClass cls) {
-        return getChildElements(elem, cls, false);
-    }
-
-    /** List all child elements. */
-    private static List<Element> getChildElements(final Element elem) {
-        final NodeList children = elem.getChildNodes();
-        final List<Element> res = new ArrayList<>(children.getLength());
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node child = children.item(i);
-            if (child.getNodeType() == Node.ELEMENT_NODE) {
-                res.add((Element) child);
-            }
-        }
-        return res;
-    }
     
 }
