@@ -42,6 +42,12 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
+  <dita:extension id="dita.xsl.xslfo.i18n-postprocess"
+     behavior="org.dita.dost.platform.ImportXSLAction"
+     xmlns:dita="http://dita-ot.sourceforge.net"
+  />
+  
+
     <xsl:param name="debug-enabled" select="'false'"/>
   <xsl:variable name="msgprefix" select="'PDFX'"/>
 
