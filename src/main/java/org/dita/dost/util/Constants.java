@@ -597,6 +597,8 @@ public final class Constants {
     public static final DitaClass DITAVAREF_D_DVR_KEYSCOPEPREFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopePrefix ");
     public static final DitaClass DITAVAREF_D_DVR_KEYSCOPESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopeSuffix ");
     
+    public static final DitaClass SUBMAP = new DitaClass("+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ");
+
     /**maplinks element.*/
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
     /**prop element.*/
