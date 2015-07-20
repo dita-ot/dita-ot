@@ -76,7 +76,18 @@ public final class XMLUtils {
      * @raturn list of matching elements
      */
     public static List<Element> getChildElements(final Element elem) {
-        final NodeList children = elem.getChildNodes();
+        return getChildElements(elem, false);
+    }
+
+    /**
+     * List child elements elements.
+     *
+     * @param elem root element
+     * @param deep {@code true} to read descendants, {@code false} to read only direct children
+     * @raturn list of matching elements
+     */
+    public static List<Element> getChildElements(final Element elem, final boolean deep) {
+        final NodeList children = deep ? elem.getElementsByTagName("*") : elem.getChildNodes();
         final List<Element> res = new ArrayList<>(children.getLength());
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
