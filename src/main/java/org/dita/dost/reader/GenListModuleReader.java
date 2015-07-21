@@ -710,6 +710,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         final String conkeyref = atts.getValue(ATTRIBUTE_NAME_CONKEYREF);
         if (conkeyref != null) {
             hasConRef = true;
+            hasKeyRef = true;
         }
     }
 

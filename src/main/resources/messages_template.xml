@@ -214,8 +214,13 @@
   </message>
   
   <message id="DOTJ047I" type="INFO">
-    <reason>Unable to find key definition for keyref="%1", href may be used as fallback if it exists.</reason>
-    <response></response>
+    <reason>Unable to find key definition for key reference "%1" in root scope.</reason>
+    <response>The href attribute may be used as fallback if it exists</response>
+  </message>
+  
+  <message id="DOTJ048I" type="INFO">
+    <reason>Unable to find key definition for key reference "%1" in scope "%2".</reason>
+    <response>The href attribute may be used as fallback if it exists</response>
   </message>
   
   <message id="DOTJ049W" type="WARN">

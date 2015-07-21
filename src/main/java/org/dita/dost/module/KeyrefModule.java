@@ -11,31 +11,29 @@ package org.dita.dost.module;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.dita.dost.util.DelayConrefUtils;
+import org.dita.dost.util.*;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 import org.xml.sax.XMLFilter;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.Job.FileInfo.Filter;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ConkeyrefFilter;
 import org.dita.dost.writer.KeyrefPaser;
+
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * Keyref Module.
@@ -46,6 +44,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     /** Delayed conref utils. */
     private DelayConrefUtils delayConrefUtils;
     private String transtype;
+    final Set<URI> normalProcessingRole = new HashSet<URI>();
+    final Map<URI, Integer> usage = new HashMap<>();
 
     /**
      * Entry point of KeyrefModule.
@@ -57,55 +57,39 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
-        final Collection<FileInfo> fis = job.getFileInfo(new Filter() {
+        final Collection<FileInfo> fis = new HashSet(job.getFileInfo(new Filter() {
             @Override
             public boolean accept(final FileInfo f) {
-                //Conref Module will change file's content, it is possible that tags with @keyref are copied in
-                //while keyreflist is hard update with xslt.
-                return f.hasKeyref || f.hasConref;
+                return f.hasKeyref;
             }
-        });
+        }));
         if (!fis.isEmpty()) {
+            final Document doc = readMap();
+
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
             final URI mapFile = job.getInputMap();
             logger.info("Reading " + job.tempDir.toURI().resolve(mapFile).toString());
-            reader.read(job.tempDir.toURI().resolve(mapFile));
+            reader.read(job.tempDir.toURI().resolve(mapFile), doc);
 
-            final Map<String, KeyDef> keyDefinition = reader.getKeyDefinition();
+            final KeyScope rootScope = reader.getKeyDefinition();
+            final List<ResolveTask> jobs = collectProcessingTopics(fis, rootScope, doc);
+            writeMap(doc);
+
             transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
             delayConrefUtils = transtype.equals(INDEX_TYPE_ECLIPSEHELP) ? new DelayConrefUtils() : null;
-            
-            final Set<URI> normalProcessingRole = new HashSet<URI>();
-            for (final FileInfo f: fis) {
-                final File file = f.file;
-                logger.info("Processing " + new File(job.tempDir, file.getPath()).getAbsolutePath());
-                
-                final List<XMLFilter> filters = new ArrayList<XMLFilter>();
-                
-                final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
-                conkeyrefFilter.setLogger(logger);
-                conkeyrefFilter.setJob(job);
-                conkeyrefFilter.setKeyDefinitions(keyDefinition);
-                conkeyrefFilter.setCurrentFile(file);
-                conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
-                filters.add(conkeyrefFilter);
-                
-                final KeyrefPaser parser = new KeyrefPaser();
-                parser.setLogger(logger);
-                parser.setJob(job);
-                parser.setKeyDefinition(keyDefinition);
-                parser.setCurrentFile(file);
-                filters.add(parser);
-
-                try {
-                    XMLUtils.transform(new File(job.tempDir, file.getPath()), filters);
-                    // validate resource-only list
-                    normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
-                } catch (final DITAOTException e) {
-                    logger.error("Failed to process key references: " + e.getMessage(), e);
+            for (final ResolveTask r: jobs) {
+                if (r.out != null) {
+                    processFile(r);
                 }
             }
+            for (final ResolveTask r: jobs) {
+                if (r.out == null) {
+                    processFile(r);
+                }
+            }
+
+            // Store job configuration updates
             for (final URI file: normalProcessingRole) {
                 final FileInfo f = job.getFileInfo(file);
                 if (f != null) {
@@ -123,6 +107,116 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
+    /** Collect topics for key reference processing and modify map to reflect new file names. */
+    private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) throws DITAOTException {
+        final List<ResolveTask> res = new ArrayList<ResolveTask>();
+        // Collect topics from map and rewrite topicrefs for duplicates
+        walkMap(doc.getDocumentElement(), rootScope, res);
+        // Collect topics not in map and map itself
+        for (final FileInfo f: fis) {
+            if (!usage.containsKey(f.uri)) {
+                res.add(processTopic(f, rootScope));
+            }
+        }
+        return res;
+    }
+
+    /** Tuple class for key reference processing info. */
+    private static class ResolveTask {
+        final KeyScope scope;
+        final FileInfo in;
+        final FileInfo out;
+        private ResolveTask(final KeyScope scope, final FileInfo in, final FileInfo out) {
+            this.scope = scope;
+            this.in = in;
+            this.out = out;
+        }
+    }
+
+   /** Recursively walk map and process topics that have keyrefs. */
+    private void walkMap(final Element elem, final KeyScope scope, final List<ResolveTask> res) {
+        KeyScope s = scope;
+        if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
+            s = s.getChildScope(elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE));
+        }
+        if (elem.getAttributeNode(ATTRIBUTE_NAME_HREF) != null) {
+            final URI href = stripFragment(job.getInputMap().resolve(elem.getAttribute(ATTRIBUTE_NAME_HREF)));
+            final FileInfo fi = job.getFileInfo(href);
+            if (fi != null && fi.hasKeyref) {
+                res.add(processTopic(fi, s));
+                final Integer used = usage.get(fi.uri);
+                if (used > 1) {
+                    elem.setAttribute(ATTRIBUTE_NAME_HREF,
+                            addSuffix(toURI(elem.getAttribute(ATTRIBUTE_NAME_HREF)), "-" + used).toString());
+                }
+            }
+        }
+        for (final Element child: getChildElements(elem, MAP_TOPICREF)) {
+            walkMap(child, s, res);
+        }
+    }
+
+    /**
+     * Determine how topic is processed for key reference processing.
+     *
+     * @return key reference processing
+     */
+    private ResolveTask processTopic(final FileInfo f, final KeyScope scope) {
+        final Integer used = usage.containsKey(f.uri) ? usage.get(f.uri) + 1 : 1;
+        usage.put(f.uri, used);
+
+        if (used > 1) {
+            final URI out = addSuffix(f.uri, "-" + used);
+            final FileInfo fo = new FileInfo.Builder(f).uri(out).build();
+            // TODO: Should this be added when content is actually generated?
+            job.add(fo);
+            return new ResolveTask(scope, f, fo);
+        } else {
+            return new ResolveTask(scope, f, null);
+        }
+    }
+
+    /**
+     * Process key references in a topic. Topic is stored with a new name if it's
+     * been processed before.
+     */
+    private void processFile(final ResolveTask r) {
+        final List<XMLFilter> filters = new ArrayList<>();
+
+        final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
+        conkeyrefFilter.setLogger(logger);
+        conkeyrefFilter.setJob(job);
+        conkeyrefFilter.setKeyDefinitions(r.scope);
+        conkeyrefFilter.setCurrentFile(r.in.file);
+        conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
+        filters.add(conkeyrefFilter);
+
+        final KeyrefPaser parser = new KeyrefPaser();
+        parser.setLogger(logger);
+        parser.setJob(job);
+        parser.setKeyDefinition(r.scope);
+        parser.setCurrentFile(r.in.file);
+        filters.add(parser);
+
+        try {
+            logger.debug("Using " + (r.scope.name != null ? r.scope.name + " scope" : "root scope"));
+            if (r.out != null) {
+                logger.info("Processing " + job.tempDir.toURI().resolve(r.in.uri) +
+                        " to " + job.tempDir.toURI().resolve(r.out.uri));
+                XMLUtils.transform(new File(job.tempDir, r.in.file.getPath()),
+                                   new File(job.tempDir, r.out.file.getPath()),
+                                   filters);
+            } else {
+                logger.info("Processing " + job.tempDir.toURI().resolve(r.in.uri));
+                XMLUtils.transform(new File(job.tempDir, r.in.file.getPath()), filters);
+            }
+            // validate resource-only list
+            normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
+        } catch (final DITAOTException e) {
+            logger.error("Failed to process key references: " + e.getMessage(), e);
+        }
+    }
+
     /**
      * Add key definition to job configuration
      *
@@ -135,5 +229,41 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             logger.error("Failed to write key definition file: " + e.getMessage(), e);
         }
     }
+
+    private Document readMap() throws DITAOTException {
+        InputSource in = null;
+        try {
+            in = new InputSource(job.tempDir.toURI().resolve(job.getInputMap()).toString());
+            return XMLUtils.getDocumentBuilder().parse(in);
+        } catch (final Exception e) {
+            throw new DITAOTException("Failed to parse map: " + e.getMessage(), e);
+        } finally {
+            try {
+                close(in);
+            } catch (IOException e) {
+                logger.error("Failed to close input: " + e.getMessage(), e);
+            }
+        }
+    }
+
+    private void writeMap(final Document doc) throws DITAOTException {
+        Result out = null;
+        try {
+            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            out = new StreamResult(new File(job.tempDir.toURI().resolve(job.getInputMap())));
+            transformer.transform(new DOMSource(doc), out);
+        } catch (final TransformerConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (final TransformerException e) {
+            throw new DITAOTException("Failed to write map: " + e.getMessageAndLocation(), e);
+        } finally {
+            try {
+                close(out);
+            } catch (IOException e) {
+                logger.error("Failed to close result: " + e.getMessage(), e);
+            }
+        }
+    }
+
 
 }
