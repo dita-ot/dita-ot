@@ -117,6 +117,16 @@
                 <xsl:value-of select="substring-after($href, '#')"/>
               </xsl:if>
             </xsl:variable>
+            <xsl:variable name="target" as="element()?">
+              <xsl:choose>
+                <xsl:when test="exists($element-id)">
+                  <xsl:sequence select="$file//*[@id = $element-id]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:sequence select="$file/*"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
             <xsl:variable name="contents" as="node()*">
               <xsl:choose>
                 <xsl:when test="not(contains($href,'://') or empty($element-id) or $file/*[contains(@class,' map/map ')][@id = $element-id])">
@@ -146,7 +156,14 @@
                 </xsl:if>
                 <xsl:value-of select="$href"/>
               </xsl:attribute>
-              <xsl:apply-templates select="@* except (@class, @href, @dita-ot:orig-href, @format, @dita-ot:orig-format, @keys)"/>
+              <xsl:if test="@keyscope | $target[@keyscope and contains(@class, ' map/map ')]">
+                <xsl:attribute name="keyscope">
+                  <xsl:value-of select="@keyscope"/>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="$target[contains(@class, ' map/map ')]/@keyscope"/>
+                </xsl:attribute>
+              </xsl:if>
+              <xsl:apply-templates select="@* except (@class, @href, @dita-ot:orig-href, @format, @dita-ot:orig-format, @keys, @keyscope)"/>
               <xsl:apply-templates select="$contents">
                 <xsl:with-param name="refclass" select="$refclass"/>
                 <xsl:with-param name="mapref-id-path" select="$updated-id-path"/>

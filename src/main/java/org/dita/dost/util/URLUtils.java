@@ -686,4 +686,16 @@ public final class URLUtils {
         }
     }
     
+    public static URI addSuffix(final URI orig, final String suffix) {
+        final String fragment = orig.getFragment();
+        final String u = stripFragment(orig).toString();
+        final int idx = u.lastIndexOf(".");
+        final URI res;
+        if (idx != -1) {
+            res = toURI(u.toString().substring(0, idx) + suffix + u.toString().substring(idx));
+        } else {
+            res = toURI(u.toString() + suffix);
+        }
+        return setFragment(res, fragment);
+    }
 }

@@ -29,6 +29,7 @@ import org.apache.xml.resolver.tools.CatalogResolver;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
+import org.dita.dost.util.KeyScope;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class KeyrefPaserTest {
     private static final File expDir = new File(resourceDir, "exp");
     private static CatalogResolver resolver;
 
-    private static Map<String, KeyDef> keyDefinition;
+    private static KeyScope keyDefinition;
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -156,7 +157,7 @@ public class KeyrefPaserTest {
             final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")), null, null, elem);
             keymap.put(keyDef.keys, keyDef);
         }
-        keyDefinition = Collections.unmodifiableMap(keymap);
+        keyDefinition = new KeyScope(keymap);
     }
     
 }

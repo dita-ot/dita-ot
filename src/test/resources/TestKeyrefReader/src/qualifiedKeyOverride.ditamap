@@ -1,0 +1,11 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Map Structure Precedence Test</title>
+  <keydef class="+ map/topicref mapgroup-d/keydef " href="one.dita" keys="test1 scope1.test1" processing-role="resource-only"/>
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup " keyscope="scope1 scope2">
+    <keydef class="+ map/topicref mapgroup-d/keydef " href="two.dita" keys="test1" processing-role="resource-only"/>
+    <keydef class="+ map/topicref mapgroup-d/keydef " href="three.dita" keys="test2" processing-role="resource-only"/>
+  </topicgroup>
+  <keydef class="+ map/topicref mapgroup-d/keydef " href="four.dita" keys="test2 scope1.test2" processing-role="resource-only"/>
+</map>

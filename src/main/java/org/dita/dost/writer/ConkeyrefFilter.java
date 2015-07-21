@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.DelayConrefUtils;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -30,11 +27,11 @@ import org.xml.sax.helpers.AttributesImpl;
 public final class ConkeyrefFilter extends AbstractXMLFilter {
 
     private File inputFile;
-    private Map<String, KeyDef> keys;
+    private KeyScope keys;
     /** Delayed conref utils, may be {@code null} */
     private DelayConrefUtils delayConrefUtils;
     
-    public void setKeyDefinitions(final Map<String, KeyDef> keys) {
+    public void setKeyDefinitions(final KeyScope keys) {
         this.keys = keys;
     }
 

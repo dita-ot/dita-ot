@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.*;
 import org.w3c.dom.Attr;
@@ -103,7 +104,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         keyrefInfos = Collections.unmodifiableList(ki);
     }
         
-    private Map<String, KeyDef> definitionMap;
+    private KeyScope definitionMap;
     /** File name with relative path to the temporary directory of input file. */
     private File inputFile;
 
@@ -164,7 +165,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         hasSubElem = new Stack<Boolean>();
     }
     
-    public void setKeyDefinition(final Map<String, KeyDef> definitionMap) {
+    public void setKeyDefinition(final KeyScope definitionMap) {
         this.definitionMap = definitionMap;
     }
 
@@ -217,10 +218,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         if (keyrefLeval != 0 && empty && !elemName.peek().equals(MAP_TOPICREF.localName)) {
-            final Element elem = keyDef.element;
             // If current element is in the scope of key reference element
             // and the element is empty
             if (!validKeyref.isEmpty() && validKeyref.peek()) {
+                final Element elem = keyDef.element;
                 // Key reference is valid,
                 // need to pull matching content from the key definition
                 // If current element name doesn't equal the key reference element
@@ -426,7 +427,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                         } else {
                             // key does not exist.
-                            logger.info(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
+                            final MessageBean m = definitionMap.name == null
+                                    ? MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
+                                    : MessageUtils.getInstance().getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                            logger.info(m.setLocation(atts).toString());
                         }
 
                     } else if (!currentElement.hasNestedElements) {
@@ -486,7 +490,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 }
             } else {
                 // key does not exist
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
+                final MessageBean m = definitionMap.name == null
+                        ? MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
+                        : MessageUtils.getInstance().getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                logger.info(m.setLocation(atts).toString());
             }
 
             validKeyref.push(valid);
