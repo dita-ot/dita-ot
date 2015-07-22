@@ -222,7 +222,7 @@ public final class NormalizeFilter extends AbstractXMLFilter {
         // total columns count
         totalColumns = columnNumberEnd;
         final String colWidth = res.getValue(ATTRIBUTE_NAME_COLWIDTH);
-        if (colWidth == null || colWidth.isEmpty()) {
+        if (colWidth == null || colWidth.isEmpty() || colWidth.equals("*")) {
             XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLWIDTH, "1*");
         }
     }
