@@ -53,6 +53,7 @@ public class ConkeyrefFilterTest {
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
+                // FIXME: this would be right only for maps, for topics the root topic ID should be added
                 assertEquals("library.dita#bar", atts.getValue(ATTRIBUTE_NAME_CONREF));
             }
         });
@@ -69,7 +70,7 @@ public class ConkeyrefFilterTest {
         f.setContentHandler(new DefaultHandler() {
             @Override
             public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-                assertEquals("library.dita#bar", atts.getValue(ATTRIBUTE_NAME_CONREF));
+                assertEquals("library.dita#baz/bar", atts.getValue(ATTRIBUTE_NAME_CONREF));
             }
         });
         
