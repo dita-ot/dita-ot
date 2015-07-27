@@ -47,11 +47,23 @@ configurations {
     integrationTestRuntime.extendsFrom testRuntime
 }
 
-task integrationTest(type: Test) {
+def integrationTestSystemProperties = [
+        dita_dir : "${projectDir}/src/main",
+        basedir : "${projectDir}/src/test/testsuite"
+]
+if (System.getProperty("only_test") != null) {
+    integrationTestSystemProperties["only_test"] = System.getProperty("only_test")
+}
+if (System.getProperty("log_level") != null) {
+    integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
+}
+
+task integrationTest(type: Test, dependsOn: 'buildLocal') {
     minHeapSize = "128m"
     maxHeapSize = "512m"
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
+    systemProperties = integrationTestSystemProperties
 }
 
 // Install
