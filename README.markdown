@@ -21,11 +21,15 @@ Building
 
         git clone git://github.com/dita-ot/dita-ot.git
 
-2. Fetch the submodules:
+2. Move to the DITA-OT directory:
+
+        cd dita-ot
+
+3. Fetch the submodules:
 
         git submodule update --init --recursive
 
-3. In the root directory, run `ant` to compile the Java code and install plugins:
+4. In the root directory, run `ant` to compile the Java code and install plugins:
 
         ant
  
