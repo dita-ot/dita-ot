@@ -340,10 +340,10 @@
         <pathelement location="${src.dir}/resources"/>
         <path refid="compile.path"/>
       </classpath>
-      <sysproperty key="dita.dir" value="${src.dir}"/>
+      <sysproperty key="dita_dir" value="${src.dir}"/>
       <sysproperty key="basedir" value="${test.suite.dir}"/>
-      <sysproperty key="only-test" value="${only-test.name}"/>
-      <sysproperty key="log-level" value="${log-level}"/>
+      <sysproperty key="only_test" value="${only-test.name}"/>
+      <sysproperty key="log_level" value="${log-level}"/>
       <formatter type="plain" usefile="false"/>
       <formatter type="plain" usefile="true"/>
       <test name="org.dita.dost.IntegrationTest" fork="no" todir="${test.log.dir}"/>
