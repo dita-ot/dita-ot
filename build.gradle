@@ -71,7 +71,9 @@ task initInstall(dependsOn: jar) << {
 }
 task copyInstall(type: Copy, dependsOn: initInstall) {
     from (configurations.runtime.allArtifacts.files)
-    from (configurations.runtime)
+    from (configurations.runtime) {
+        rename "ant-launcher(-.+?)\\.jar", "ant-launcher.jar"
+    }
     destinationDir = file("src/main/lib")
 }
 task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall"]) << {
@@ -97,6 +99,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
     }
     from (configurations.runtime) {
         into "lib"
+        rename "ant-launcher(-.+?)\\.jar", "ant-launcher.jar"
     }
     from ("src/main") {
         exclude ".*"
