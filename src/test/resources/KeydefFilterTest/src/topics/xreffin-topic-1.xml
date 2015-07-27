@@ -1,20 +1,14 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/topic.dtd">
-<topic
-  id="topic-1">
-  <title>XReffing Topic 1</title>
-  <body>
-    <p>This topic has an xref to the key "target_topic_1": <xref
-        keyref="target_topic_1"/>. It should resolve to topic A in the context of Root Map 01 and
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  id="topic-1" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">XReffing Topic 1</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">This topic has an xref to the key "target_topic_1": <xref class="- topic/xref " keyref="target_topic_1"/>. It should resolve to topic A in the context of Root Map 01 and
       topic B in the context of Root Map 02.</p>
-    <p>This is an xref to the key "target_topic_2": <xref
-        keyref="target_topic_2"/>. It should resolve to topic C in both maps.</p>
-    <p>This is an xref to the undefined key "target_topic_3": <xref
-        keyref="target_topic_3"/>. It should result in an "undefined key" message from the processor
-      and result in an empty xref.</p>
-    <p>This is an xref to the undefined key "target_topic_3" where the xref also specifies an href=
-      value, which should be used as the fallback. The link should be to topic C: <xref
-        keyref="target_topic_3"
-        href="target-topic-c.xml"/>.</p>
+    <p class="- topic/p ">This is an xref to the key "target_topic_2": <xref class="- topic/xref " keyref="target_topic_2"/>. It should resolve to topic C in both maps.</p>
+    <p class="- topic/p ">This is an xref to the undefined key "target_topic_3": <xref class="- topic/xref " keyref="target_topic_3"/>. It should result in an "undefined key" message from the
+      processor and result in an empty xref.</p>
+    <p class="- topic/p ">This is an xref to the undefined key "target_topic_3" where the xref also specifies an href= value, which should be used as the fallback. The link should be to topic C: <xref
+        class="- topic/xref " href="target-topic-c.xml" keyref="target_topic_3"/>.</p>
   </body>
 </topic>

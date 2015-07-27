@@ -1,97 +1,95 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
-<map>
-  <!-- FIXME: This should have @collection-type, @format, @linking, @locktitle and @navtitle from "all" keydef -->
-  <topicref keyref="third" href="a.xml" />
-  <!-- FIXME: This should have @collection-type, @format, @linking, @locktitle and @navtitle from "all" keydef -->
-  <topicref keys="third" keyref="second" href="a.xml" />
-  <topicref keys="second" keyref="all" href="a.xml" collection-type="family" format="html" linking="sourceonly"
-    locktitle="yes" navtitle="override"/>
-  <topicref keys="all" href="a.xml" collection-type="choice" format="dita" id="all" linking="normal"
-    locktitle="no" navtitle="all" processing-role="resource-only">
-    <topicmeta>
-      <navtitle>override navtitle</navtitle>
-      <linktext>override linktext</linktext>
-      <searchtitle>override searchtitle</searchtitle>
-      <shortdesc>override shortdesc</shortdesc>
-      <author>override author</author>
-      <source>override source</source>
-      <publisher>override publisher</publisher>
-      <copyright>
-        <copyryear year="2011"/>
-        <copyrholder>override Example</copyrholder>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+  ditaarch:DITAArchVersion="1.2">
+
+  <topicref class="- map/topicref " href="a.xml" keyref="third"/>
+
+  <topicref class="- map/topicref " href="a.xml" keyref="second" keys="third"/>
+  <topicref class="- map/topicref " collection-type="family" format="html" href="a.xml" keyref="all" keys="second" linking="sourceonly" locktitle="yes" navtitle="override"/>
+  <topicref class="- map/topicref " collection-type="choice" format="dita" href="a.xml" id="all" keys="all" linking="normal" locktitle="no" navtitle="all" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">override navtitle</navtitle>
+      <linktext class="- map/linktext ">override linktext</linktext>
+      <searchtitle class="- map/searchtitle ">override searchtitle</searchtitle>
+      <shortdesc class="- map/shortdesc ">override shortdesc</shortdesc>
+      <author class="- topic/author ">override author</author>
+      <source class="- topic/source ">override source</source>
+      <publisher class="- topic/publisher ">override publisher</publisher>
+      <copyright class="- topic/copyright ">
+        <copyryear class="- topic/copyryear " year="2011"/>
+        <copyrholder class="- topic/copyrholder ">override Example</copyrholder>
       </copyright>
-      <critdates>
-        <created date="2012-08-17"/>
+      <critdates class="- topic/critdates ">
+        <created class="- topic/created " date="2012-08-17"/>
       </critdates>
-      <permissions view="classified"/>
-      <metadata>
-        <audience name="override-metadata-audience"/>
-        <category>override metadata category</category>
-        <keywords>
-          <keyword>override metadata keywords</keyword>
+      <permissions class="- topic/permissions " view="classified"/>
+      <metadata class="- topic/metadata ">
+        <audience class="- topic/audience " name="override-metadata-audience"/>
+        <category class="- topic/category ">override metadata category</category>
+        <keywords class="- topic/keywords ">
+          <keyword class="- topic/keyword ">override metadata keywords</keyword>
         </keywords>
-        <prodinfo>
-          <prodname>override metadata test</prodname>
-          <vrmlist>
-            <vrm version="2"/>
+        <prodinfo class="- topic/prodinfo ">
+          <prodname class="- topic/prodname ">override metadata test</prodname>
+          <vrmlist class="- topic/vrmlist ">
+            <vrm class="- topic/vrm " version="2"/>
           </vrmlist>
         </prodinfo>
-        <othermeta name="override-metadata-othermeta" content="override-metadata-othermeta"/>
-        <data>override metadata data</data>
-        <data-about>
-          <data>override metadata data-about</data>
+        <othermeta class="- topic/othermeta " content="override-metadata-othermeta" name="override-metadata-othermeta"/>
+        <data class="- topic/data ">override metadata data</data>
+        <data-about class="- topic/data-about ">
+          <data class="- topic/data ">override metadata data-about</data>
         </data-about>
-        <foreign>override metadata foreign</foreign>
-        <unknown>override metadata unknown</unknown>
+        <foreign class="- topic/foreign ">override metadata foreign</foreign>
+        <unknown class="- topic/unknown ">override metadata unknown</unknown>
       </metadata>
-      <audience name="override-audience"/>
-      <category>override category</category>
-      <keywords>
-        <keyword>override keywords</keyword>
+      <audience class="- topic/audience " name="override-audience"/>
+      <category class="- topic/category ">override category</category>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">override keywords</keyword>
       </keywords>
-      <exportanchors>
-        <anchorid id="override-anchorid"/>
+      <exportanchors class="+ topic/keywords delay-d/exportanchors ">
+        <anchorid class="+ topic/keyword delay-d/anchorid " id="override-anchorid"/>
       </exportanchors>
-      <prodinfo>
-        <prodname>override test</prodname>
-        <vrmlist>
-          <vrm version="2"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">override test</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="2"/>
         </vrmlist>
       </prodinfo>
-      <othermeta name="override-othermeta" content="override-othermeta"/>
-      <resourceid id="override-resourceid"/>
-      <data>override data</data>
-      <data-about>
-        <data>override data-about</data>
+      <othermeta class="- topic/othermeta " content="override-othermeta" name="override-othermeta"/>
+      <resourceid class="- topic/resourceid " id="override-resourceid"/>
+      <data class="- topic/data ">override data</data>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">override data-about</data>
       </data-about>
-      <foreign>override foreign</foreign>
-      <unknown>override unknown</unknown>
+      <foreign class="- topic/foreign ">override foreign</foreign>
+      <unknown class="- topic/unknown ">override unknown</unknown>
     </topicmeta>
   </topicref>
-  <topicgroup>
-    <topicref keyref="topicref"/>
-    <topicref keyref="empty"/>
-    <topicref keyref="author"/>
-    <topicref keyref="data"/>
-    <topicref keyref="data-about"/>
-    <topicref keyref="publisher"/>
-    <topicref keyref="source"/>
-    <topicref keyref="indexterm"/>
-    <topicref keyref="index-base"/>
-    <topicref keyref="indextermref"/>
-    <navref keyref="navref"/>
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
+    <topicref class="- map/topicref " keyref="topicref"/>
+    <topicref class="- map/topicref " keyref="empty"/>
+    <topicref class="- map/topicref " keyref="author"/>
+    <topicref class="- map/topicref " keyref="data"/>
+    <topicref class="- map/topicref " keyref="data-about"/>
+    <topicref class="- map/topicref " keyref="publisher"/>
+    <topicref class="- map/topicref " keyref="source"/>
+    <topicref class="- map/topicref " keyref="indexterm"/>
+    <topicref class="- map/topicref " keyref="index-base"/>
+    <topicref class="- map/topicref " keyref="indextermref"/>
+    <navref class="- map/navref " keyref="navref"/>
   </topicgroup>
-  <topicgroup>
-    <topicref keyref="topicref_link" scope="external" href="a.xml" type="dead" format="dead"/>
-    <topicref keyref="author_link" href="a.xml"/>
-    <topicref keyref="data_link" href="a.xml"/>
-    <topicref keyref="data-about_link" href="a.xml"/>
-    <topicref keyref="publisher_link" href="a.xml"/>
-    <topicref keyref="source_link" href="a.xml"/>
-    <topicref keyref="indexterm_link" href="a.xml"/>
-    <topicref keyref="index-base_link" href="a.xml"/>
-    <topicref keyref="indextermref_link" href="a.xml"/>
-    <navref keyref="navref_link" mapref="a.xml"/>
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
+    <topicref class="- map/topicref " format="dead" href="a.xml" keyref="topicref_link" scope="external" type="dead"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="author_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="data_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="data-about_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="publisher_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="source_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="indexterm_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="index-base_link"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="indextermref_link"/>
+    <navref class="- map/navref " keyref="navref_link" mapref="a.xml"/>
   </topicgroup>
 </map>

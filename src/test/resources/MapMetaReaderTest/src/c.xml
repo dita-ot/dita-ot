@@ -1,46 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
-<topic id="c">
-  <title>c</title>
-  <prolog>
-    <author>topic author</author>
-    <source>topic source</source>
-    <publisher>topic publisher</publisher>
-    <copyright>
-      <copyryear year="2012"/>
-      <copyrholder>topic copyrholder</copyrholder>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  id="c" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">c</title>
+  <prolog class="- topic/prolog ">
+    <author class="- topic/author ">topic author</author>
+    <source class="- topic/source ">topic source</source>
+    <publisher class="- topic/publisher ">topic publisher</publisher>
+    <copyright class="- topic/copyright ">
+      <copyryear class="- topic/copyryear " year="2012"/>
+      <copyrholder class="- topic/copyrholder ">topic copyrholder</copyrholder>
     </copyright>
-    <critdates>
-      <created date="2012"/>
-      <revised modified="2012"/>
+    <critdates class="- topic/critdates ">
+      <created class="- topic/created " date="2012"/>
+      <revised class="- topic/revised " modified="2012"/>
     </critdates>
-    <permissions view="topic permissins"/>
-    <metadata>
-      <audience/>
-      <category>topic category</category>
-      <keywords>
-        <keyword>topic keyword</keyword>
+    <permissions class="- topic/permissions " view="topic permissins"/>
+    <metadata class="- topic/metadata ">
+      <audience class="- topic/audience "/>
+      <category class="- topic/category ">topic category</category>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topic keyword</keyword>
       </keywords>
-      <prodinfo>
-        <prodname>topic prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="3.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topic prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="3.0"/>
         </vrmlist>
       </prodinfo>
-      <othermeta name="othermeta" content="topic othermeta"/>
-      <data>topic data</data>
-      <data-about>
-        <data>topic data</data>
+      <othermeta class="- topic/othermeta " content="topic othermeta" name="othermeta"/>
+      <data class="- topic/data ">topic data</data>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topic data</data>
       </data-about>
-      <foreign>topic foreign</foreign>
-      <unknown>topic unknown</unknown>
+      <foreign class="- topic/foreign ">topic foreign</foreign>
+      <unknown class="- topic/unknown ">topic unknown</unknown>
     </metadata>
-    <resourceid id="foo"/>
-    <data>topic datafoo</data>
-    <data-about>
-      <data>topic datafoo</data>
+    <resourceid class="- topic/resourceid " id="foo"/>
+    <data class="- topic/data ">topic datafoo</data>
+    <data-about class="- topic/data-about ">
+      <data class="- topic/data ">topic datafoo</data>
     </data-about>
-    <foreign>topic foreign</foreign>
-    <unknown>topic unknown</unknown>    
+    <foreign class="- topic/foreign ">topic foreign</foreign>
+    <unknown class="- topic/unknown ">topic unknown</unknown>
   </prolog>
 </topic>
