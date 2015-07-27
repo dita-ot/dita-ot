@@ -19,7 +19,11 @@ sourceSets {
         }
     }
 }
+
 jar.archiveName = "${project.name}.jar"
+jar.include "com/idiominc/**"
+jar.include "com/suite/**"
+jar.include "org/dita/dost/pdf2/**"
 
 task copyInstall(type: Copy) {
     from (configurations.runtime.allArtifacts.files)
@@ -32,4 +36,3 @@ task copyDistTemp(type: Copy) {
     }
     destinationDir = file("${rootProject.buildDir}/tmp/dist")
 }
-copyDistTemp.mustRunAfter rootProject.copyDistTemp

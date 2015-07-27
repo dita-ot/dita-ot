@@ -74,7 +74,7 @@ task copyInstall(type: Copy, dependsOn: initInstall) {
     from (configurations.runtime)
     destinationDir = file("src/main/lib")
 }
-task buildLocal(dependsOn: copyInstall) << {
+task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall"]) << {
     description "Build archives and install all plugins with dependencies"
     ant.ant([antfile: "integrator.xml", dir: file("src/main")])
 }
@@ -132,7 +132,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task integrateDistTemp(dependsOn: copyDistTemp) << {
+task integrateDistTemp(dependsOn: [copyDistTemp, ":fo:copyDistTemp"]) << {
     def antClassLoader = org.apache.tools.ant.Project.class.classLoader
     configurations.runtime.each { File f ->
         antClassLoader.addURL(f.toURI().toURL())
