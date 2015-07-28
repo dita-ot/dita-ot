@@ -78,8 +78,8 @@ task initInstall(dependsOn: jar) << {
     configurations.runtime.allArtifacts.files.each { File f ->
         antClassLoader.addURL(f.toURI().toURL())
     }
-    antClassLoader.addURL(file("src/main/lib").toURI().toURL())
-    antClassLoader.addURL(file("src/main/resources").toURI().toURL())
+    antClassLoader.addURL(file("${projectDir}/src/main/lib").toURI().toURL())
+    antClassLoader.addURL(file("${projectDir}/src/main/resources").toURI().toURL())
 }
 task copyInstall(type: Copy, dependsOn: initInstall) {
     from (configurations.runtime.allArtifacts.files)
@@ -155,15 +155,18 @@ task integrateDistTemp(dependsOn: [copyDistTemp, ":fo:copyDistTemp"]) << {
     configurations.runtime.allArtifacts.files.each { File f ->
         antClassLoader.addURL(f.toURI().toURL())
     }
-    antClassLoader.addURL(file("${distTempDir}/lib").toURI().toURL())
-    antClassLoader.addURL(file("${distTempDir}/resources").toURI().toURL())
-    antClassLoader.addURL(file("${distTempDir}/plugins/org.dita.pdf2/lib/fo.jar").toURI().toURL())
+    antClassLoader.addURL(file("${projectDir}/src/main/lib").toURI().toURL())
+    antClassLoader.addURL(file("${projectDir}/src/main/resources").toURI().toURL())
+    antClassLoader.addURL(file("${projectDir}/src/main/plugins/org.dita.pdf2/lib/fo.jar").toURI().toURL())
 
     ant.ant([antfile: "${distTempDir}/integrator.xml", dir: distTempDir])
 }
 
 task generateDocs(dependsOn: integrateDistTemp) << {
-    ant.ant([antfile: "${distTempDir}/docsrc/build.xml", dir: "${distTempDir}/docsrc"])
+    ant.ant([antfile: "${distTempDir}/docsrc/build.xml", dir: "${distTempDir}/docsrc"]) {
+        // Override system DITA_HOME default priority
+        property(name: "dita.home", location: distTempDir)
+    }
 }
 
 task distZip(type: Zip, dependsOn: [jar, generateDocs]) {

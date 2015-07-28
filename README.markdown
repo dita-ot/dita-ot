@@ -41,7 +41,11 @@ Usage
 Distribution
 ------------
 
-1. In the root directory, build distribution packages:
+1. In the root directory, set up build environment:
+
+        ./gradlew
+
+2. Build distribution packages:
 
         ./gradlew dist
    
