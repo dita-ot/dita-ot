@@ -67,6 +67,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     public static final String ELEMENT_STUB = "stub";
+    private Mode processingMode;
     /** FileInfos keyed by src. */
     private final Map<URI, FileInfo> fileinfos = new HashMap<URI, FileInfo>();
     /** Set of all topic files */
@@ -324,6 +325,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
         setSystemid = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
+        final String mode = input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
+        processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
 
         // For the output control
         job.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
@@ -467,6 +470,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             }
             if (currentFile.equals(rootFile)) {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage(), sax);
+            } else if (processingMode == Mode.STRICT) {
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
             } else {
                 logger.error(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
             }
@@ -474,6 +479,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         } catch (final FileNotFoundException e) {
             if (currentFile.equals(rootFile)) {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTA069F", params).toString(), e);
+            } else if (processingMode == Mode.STRICT) {
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTX008E", params).toString() + ": " + e.getMessage(), e);
             } else {
                 logger.error(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
             }
@@ -481,6 +488,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         } catch (final Exception e) {
             if (currentFile.equals(rootFile)) {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(),  e);
+            } else if (processingMode == Mode.STRICT) {
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
             } else {
                 logger.error(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
             }

@@ -88,6 +88,7 @@
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
         <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
+        <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
       </module>
     </pipeline>
   </target>
