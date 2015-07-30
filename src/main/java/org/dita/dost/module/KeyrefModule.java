@@ -19,6 +19,7 @@ import java.net.URI;
 import java.util.*;
 
 import org.dita.dost.util.*;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -139,15 +140,18 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
             s = s.getChildScope(elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE));
         }
-        if (elem.getAttributeNode(ATTRIBUTE_NAME_HREF) != null) {
-            final URI href = stripFragment(job.getInputMap().resolve(elem.getAttribute(ATTRIBUTE_NAME_HREF)));
+        Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+        if (hrefNode == null) {
+            hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
+        }
+        if (hrefNode != null) {
+            final URI href = stripFragment(job.getInputMap().resolve(hrefNode.getValue()));
             final FileInfo fi = job.getFileInfo(href);
             if (fi != null && fi.hasKeyref) {
                 res.add(processTopic(fi, s));
                 final Integer used = usage.get(fi.uri);
                 if (used > 1) {
-                    elem.setAttribute(ATTRIBUTE_NAME_HREF,
-                            addSuffix(toURI(elem.getAttribute(ATTRIBUTE_NAME_HREF)), "-" + used).toString());
+                    hrefNode.setValue(addSuffix(toURI(hrefNode.getValue()), "-" + used).toString());
                 }
             }
         }
