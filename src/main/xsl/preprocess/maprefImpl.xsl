@@ -34,7 +34,7 @@
 
   <xsl:template match="*[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']
                         [empty(@href | @dita-ot:orig-href) or
-                         @processing-role = 'resource-only' or
+                         (:@processing-role = 'resource-only' or:)
                          @scope = ('peer', 'external')]" priority="15">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()"/>
