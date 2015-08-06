@@ -1891,7 +1891,8 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:attribute name="content-height">scale-to-fit</xsl:attribute>
             <xsl:attribute name="scaling">uniform</xsl:attribute>
           </xsl:if>
-          <xsl:apply-templates select="node() except (*[contains(@class, ' topic/alt ') or
+          <xsl:apply-templates select="node() except (text(),
+                                                      *[contains(@class, ' topic/alt ') or
                                                         contains(@class, ' topic/longdescref ')])"/>
         </fo:external-graphic>
     </xsl:template>

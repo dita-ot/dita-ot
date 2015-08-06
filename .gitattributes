@@ -43,6 +43,7 @@
 *.hs text=auto
 *.bat text=auto eol=crlf
 *.sh text=auto eol=lf
+/src/main/bin/ant text=auto eol=lf
 /src/main/bin/dita text=auto eol=lf
  
 *.csproj text=auto merge=union
