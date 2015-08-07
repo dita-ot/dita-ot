@@ -68,7 +68,7 @@ public final class MergeMapParser extends XMLFilterImpl {
      * Default Constructor.
      */
     public MergeMapParser() {
-        processStack = new Stack<String>();
+        processStack = new Stack<>();
         processLevel = 0;
         util = new MergeUtils();
         topicParser = new MergeTopicParser(util);

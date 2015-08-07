@@ -64,7 +64,7 @@ public final class NormalizeFilter extends AbstractXMLFilter {
     private Map<String, Integer> rowsMap;
     private Map<String, Integer> colSpanMap;
     /** DITA class stack */
-    private final Deque<String> classStack = new LinkedList<String>();
+    private final Deque<String> classStack = new LinkedList<>();
     /** Number of cols in tgroup */
     private int cols;
     private int depth;
@@ -78,16 +78,16 @@ public final class NormalizeFilter extends AbstractXMLFilter {
         // initialize total column count
         totalColumns = 0;
         // initialize the map
-        rowsMap = new HashMap<String, Integer>();
-        colSpanMap = new HashMap<String, Integer>();
+        rowsMap = new HashMap<>();
+        colSpanMap = new HashMap<>();
         colSpec = null;
         // initial the stack
-        colSpecStack = new ArrayDeque<List<String>>();
-        rowNumStack = new ArrayDeque<Integer>();
-        columnNumberStack = new ArrayDeque<Integer>();
-        columnNumberEndStack = new ArrayDeque<Integer>();
-        rowsMapStack = new ArrayDeque<Map<String, Integer>>();
-        colSpanMapStack = new ArrayDeque<Map<String, Integer>>();
+        colSpecStack = new ArrayDeque<>();
+        rowNumStack = new ArrayDeque<>();
+        columnNumberStack = new ArrayDeque<>();
+        columnNumberEndStack = new ArrayDeque<>();
+        rowsMapStack = new ArrayDeque<>();
+        colSpanMapStack = new ArrayDeque<>();
         depth = 0;
     }
 
@@ -116,10 +116,10 @@ public final class NormalizeFilter extends AbstractXMLFilter {
             }
             columnNumber = 1; // initialize the column number
             columnNumberEnd = 0;// totally columns
-            rowsMap = new HashMap<String, Integer>();
-            colSpanMap = new HashMap<String, Integer>();
+            rowsMap = new HashMap<>();
+            colSpanMap = new HashMap<>();
             // new table initialize the col list
-            colSpec = new ArrayList<String>(16);
+            colSpec = new ArrayList<>(16);
             // new table initialize the col list
             rowNumber = 0;
             try {

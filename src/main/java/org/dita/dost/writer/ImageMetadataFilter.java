@@ -45,7 +45,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private final String uplevels;
     private File currentFile = null;
     private int depth = 0;
-    private final Map<File, Attributes> cache = new HashMap<File, Attributes>();
+    private final Map<File, Attributes> cache = new HashMap<>();
     private final Job job;
 
     // Constructors ------------------------------------------------------------

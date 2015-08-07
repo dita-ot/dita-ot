@@ -26,7 +26,7 @@ public final class DITAOTEchoTask extends Echo {
     private String id = null;
 
     /** Nested params. */
-    private final ArrayList<Param> params = new ArrayList<Param>();
+    private final ArrayList<Param> params = new ArrayList<>();
     private DITAOTLogger logger;
     
     /**
@@ -83,7 +83,7 @@ public final class DITAOTEchoTask extends Echo {
      * @return parameter values where array index corresponds to parameter name
      */
     private String[] readParamValues() throws BuildException {
-        final ArrayList<String> prop = new ArrayList<String>();
+        final ArrayList<String> prop = new ArrayList<>();
         for (final Param p : params) {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");

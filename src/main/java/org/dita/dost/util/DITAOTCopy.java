@@ -128,7 +128,7 @@ public final class DITAOTCopy extends Task {
             return Collections.emptyList();
         }
         if (includesFile != null) {
-            final List<String> res = new ArrayList<String>();
+            final List<String> res = new ArrayList<>();
             BufferedReader r = null;
             try {
                 r = new BufferedReader(new FileReader(includesFile));

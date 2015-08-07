@@ -23,7 +23,7 @@ import static org.dita.dost.util.Constants.*;
  */
 public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
 
-    private static final Set<DitaClass> uniqueSet = Collections.unmodifiableSet(new HashSet<DitaClass>(Arrays.asList(
+    private static final Set<DitaClass> uniqueSet = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
             TOPIC_CRITDATES,
             TOPIC_PERMISSIONS,
             TOPIC_PUBLISHER,
@@ -78,7 +78,7 @@ public abstract class AbstractDitaMetaWriter extends AbstractDomFilter {
      * @return list of metadata elements, may be empty
      */
     private List<Element> getNewChildren(final DitaClass cls, final Document doc) {
-        final List<Element> res = new ArrayList<Element>();
+        final List<Element> res = new ArrayList<>();
         if (metaTable.containsKey(cls.matcher)) {
             metaTable.get(cls.matcher);
             final NodeList list = metaTable.get(cls.matcher).getChildNodes();

@@ -41,7 +41,7 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
             final File file = new File(job.tempDir, f.file.getPath());
             logger.info("Processing " + file.getAbsolutePath());
             
-            final List<XMLFilter> filters = new ArrayList<XMLFilter>();
+            final List<XMLFilter> filters = new ArrayList<>();
             
             final TopicFragmentFilter filter = new TopicFragmentFilter();
             filters.add(filter);

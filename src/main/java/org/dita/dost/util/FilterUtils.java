@@ -50,12 +50,12 @@ public final class FilterUtils {
 
     private DITAOTLogger logger;
     private final Map<FilterKey, Action> filterMap;
-    private final Set<FilterKey> notMappingRules = new HashSet<FilterKey>();
+    private final Set<FilterKey> notMappingRules = new HashSet<>();
     private boolean logMissingAction;
 
     public FilterUtils(final Map<FilterKey, Action> filterMap) {
         this.logMissingAction = !filterMap.isEmpty();
-        this.filterMap = new HashMap<FilterKey, Action>(filterMap);
+        this.filterMap = new HashMap<>(filterMap);
     }
 
     /**
@@ -64,7 +64,7 @@ public final class FilterUtils {
      * @param isPrintType transformation output is print-oriented
      */
     public FilterUtils(final boolean isPrintType, final Map<FilterKey, Action> filterMap) {
-        final Map<FilterKey, Action> dfm = new HashMap<FilterKey, Action>();
+        final Map<FilterKey, Action> dfm = new HashMap<>();
         dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_YES), Action.INCLUDE);
         if (isPrintType) {
             dfm.put(new FilterKey(ATTRIBUTE_NAME_PRINT, ATTR_PRINT_VALUE_PRINT_ONLY), Action.INCLUDE);
@@ -140,7 +140,7 @@ public final class FilterUtils {
     private final Pattern groupPattern = Pattern.compile("(\\w+)\\((.+?)\\)");
     
     public Map<String, List<String>> getGroups(final String value) {
-        final Map<String, List<String>> res = new HashMap<String, List<String>>();
+        final Map<String, List<String>> res = new HashMap<>();
         
         final StringBuilder buf = new StringBuilder();
         int previousEnd = 0;
@@ -151,7 +151,7 @@ public final class FilterUtils {
             if (!v.trim().isEmpty()) {
                 final String k = m.group(1);
                 if (res.containsKey(k)) {
-                    final List<String> l = new ArrayList<String>(res.get(k));
+                    final List<String> l = new ArrayList<>(res.get(k));
                     l.addAll(Arrays.asList(v.trim().split("\\s+")));
                     res.put(k, l);
                 } else {
@@ -375,7 +375,7 @@ public final class FilterUtils {
      */
     public FilterUtils refine(final Map<String, Map<String, Set<Element>>> bindingMap) {
         if (bindingMap != null && !bindingMap.isEmpty()) {
-            final Map<FilterKey, Action> buf = new HashMap<FilterKey, Action>(filterMap);
+            final Map<FilterKey, Action> buf = new HashMap<>(filterMap);
             for (final Map.Entry<FilterKey, Action> e: filterMap.entrySet()) {
                 refineAction(e.getValue(), e.getKey(), bindingMap, buf);
             }
@@ -416,7 +416,7 @@ public final class FilterUtils {
         if (root == null || keyValue == null) {
             return null;
         }
-        final LinkedList<Element> queue = new LinkedList<Element>();
+        final LinkedList<Element> queue = new LinkedList<>();
         queue.add(root);
         while (!queue.isEmpty()) {
             final Element node = queue.removeFirst();
@@ -447,7 +447,7 @@ public final class FilterUtils {
             return;
         }
 
-        final LinkedList<Element> queue = new LinkedList<Element>();
+        final LinkedList<Element> queue = new LinkedList<>();
 
         // Skip the sub-tree root because it has been added already.
         NodeList children = subTree.getChildNodes();

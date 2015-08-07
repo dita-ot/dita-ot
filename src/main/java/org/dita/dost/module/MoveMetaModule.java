@@ -52,7 +52,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        final Collection<FileInfo> fis = new ArrayList<FileInfo>(); 
+        final Collection<FileInfo> fis = new ArrayList<>();
         //for (final FileInfo f: job.getFileInfo()) {
         //    if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
         //        fis.add(f);

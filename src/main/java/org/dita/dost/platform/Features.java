@@ -45,11 +45,11 @@ final class Features {
     public Features(final File pluginDir, final File ditaDir) {
         this.pluginDir = pluginDir;
         this.ditaDir = ditaDir;
-        extensionPoints= new HashMap<String, ExtensionPoint>();
-        featureTable = new Hashtable<String, List<String>>(16);
-        requireList = new ArrayList<PluginRequirement>(8);
-        metaTable = new Hashtable<String,String>(16);
-        templateList = new ArrayList<String>(8);
+        extensionPoints= new HashMap<>();
+        featureTable = new Hashtable<>(16);
+        requireList = new ArrayList<>(8);
+        metaTable = new Hashtable<>(16);
+        templateList = new ArrayList<>(8);
     }
 
     /**
@@ -116,7 +116,7 @@ final class Features {
             isFile = "file".equals(elem.getAttribute("type"));
         }
         final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
-        final List<String> valueBuffer = new ArrayList<String>();
+        final List<String> valueBuffer = new ArrayList<>();
         if (featureTable.containsKey(id)) {
             valueBuffer.addAll(featureTable.get(id));
         }

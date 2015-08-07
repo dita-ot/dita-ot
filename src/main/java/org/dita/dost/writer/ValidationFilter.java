@@ -31,11 +31,11 @@ import org.xml.sax.helpers.LocatorImpl;
 public final class ValidationFilter extends AbstractXMLFilter {
 
     private final MessageUtils messageUtils = MessageUtils.getInstance();
-	private final Set<String> topicIds = new HashSet<String>();
+	private final Set<String> topicIds = new HashSet<>();
 	private Map<String, Map<String, Set<String>>> validateMap = null;
 	private Locator locator;
     /** Deque of domains attibute values */
-	private final Deque<String[][]> domains = new LinkedList<String[][]>();
+	private final Deque<String[][]> domains = new LinkedList<>();
     /** Absolute URI to current file */
     private URI currentFile;
     private Job job;

@@ -36,16 +36,16 @@ public final class MapMetaReader extends AbstractDomFilter {
     /**
      * Cascaded metadata. Contents <topic absolute URI, <class matcher, cascading metadata elements>>.
      */
-    private final Map<URI, Map<String, Element>> resultTable = new HashMap<URI, Map<String, Element>>(16);
+    private final Map<URI, Map<String, Element>> resultTable = new HashMap<>(16);
 
-    private static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<String>(asList(
+    private static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<>(asList(
             TOPIC_CRITDATES.matcher,
             TOPIC_PERMISSIONS.matcher,
             TOPIC_PUBLISHER.matcher,
             TOPIC_SOURCE.matcher,
             MAP_SEARCHTITLE.matcher
-            )));
-    private static final Set<String> cascadeSet = Collections.unmodifiableSet(new HashSet<String>(asList(
+    )));
+    private static final Set<String> cascadeSet = Collections.unmodifiableSet(new HashSet<>(asList(
             TOPIC_AUDIENCE.matcher,
             TOPIC_AUTHOR.matcher,
             TOPIC_SOURCE.matcher,
@@ -56,8 +56,8 @@ public final class MapMetaReader extends AbstractDomFilter {
             TOPIC_PRODINFO.matcher,
             TOPIC_OTHERMETA.matcher,
             TOPIC_PUBLISHER.matcher
-            )));
-    private static final Set<String> metaSet = Collections.unmodifiableSet(new HashSet<String>(asList(
+    )));
+    private static final Set<String> metaSet = Collections.unmodifiableSet(new HashSet<>(asList(
             MAP_SEARCHTITLE.matcher,
             TOPIC_AUTHOR.matcher,
             TOPIC_SOURCE.matcher,
@@ -75,7 +75,7 @@ public final class MapMetaReader extends AbstractDomFilter {
             TOPIC_DATA_ABOUT.matcher,
             TOPIC_FOREIGN.matcher,
             TOPIC_UNKNOWN.matcher
-            )));
+    )));
     private static final List<String> metaPos = Collections.unmodifiableList(asList(
             MAP_SEARCHTITLE.matcher,
             TOPIC_AUTHOR.matcher,
@@ -114,7 +114,7 @@ public final class MapMetaReader extends AbstractDomFilter {
      */
     public MapMetaReader() {
         super();
-        globalMeta = new HashMap<String, Element>(16);
+        globalMeta = new HashMap<>(16);
         resultDoc = XMLUtils.getDocumentBuilder().newDocument();
         resultTable.clear();
     }
@@ -275,7 +275,7 @@ public final class MapMetaReader extends AbstractDomFilter {
      * @return a clone of the original map
      */
     private Map<String, Element> cloneElementMap(final Map<String, Element> current) {
-        final Map<String, Element> topicMetaTable = new HashMap<String, Element>(16);
+        final Map<String, Element> topicMetaTable = new HashMap<>(16);
         for (final Entry<String, Element> topicMetaItem: current.entrySet()) {
             topicMetaTable.put(topicMetaItem.getKey(), (Element) resultDoc.importNode(topicMetaItem.getValue(), true));
         }
@@ -284,7 +284,7 @@ public final class MapMetaReader extends AbstractDomFilter {
 
 
     private Map<String, Element> handleMeta(final Element meta, final Map<String, Element> inheritance) {
-        final Map<String, Element> topicMetaTable = new HashMap<String, Element>(16);
+        final Map<String, Element> topicMetaTable = new HashMap<>(16);
         getMeta(meta, topicMetaTable);
         return mergeMeta(topicMetaTable, inheritance, cascadeSet);
     }
@@ -323,7 +323,7 @@ public final class MapMetaReader extends AbstractDomFilter {
         // Otherwise enableSet should be metaSet in order to merge all
         // metadata.
         if (topicMetaTable == null) {
-            topicMetaTable = new HashMap<String, Element>(16);
+            topicMetaTable = new HashMap<>(16);
         }
         for (String key : enableSet) {
             if (inheritance.containsKey(key)) {

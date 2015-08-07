@@ -45,7 +45,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     /** Delayed conref utils. */
     private DelayConrefUtils delayConrefUtils;
     private String transtype;
-    final Set<URI> normalProcessingRole = new HashSet<URI>();
+    final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
 
     /**
@@ -110,7 +110,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
     /** Collect topics for key reference processing and modify map to reflect new file names. */
     private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) throws DITAOTException {
-        final List<ResolveTask> res = new ArrayList<ResolveTask>();
+        final List<ResolveTask> res = new ArrayList<>();
         // Collect topics from map and rewrite topicrefs for duplicates
         walkMap(doc.getDocumentElement(), rootScope, res);
         // Collect topics not in map and map itself

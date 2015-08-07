@@ -59,9 +59,9 @@ public final class DitaValReader extends AbstractXMLReader {
      */
     public DitaValReader() {
         super();
-        filterMap = new HashMap<FilterKey, Action>();
-        imageList = new ArrayList<URI>(256);
-        relFlagImageList= new ArrayList<URI>(256);
+        filterMap = new HashMap<>();
+        imageList = new ArrayList<>(256);
+        relFlagImageList= new ArrayList<>(256);
 
         try {
             reader = XMLUtils.getXMLReader();
@@ -110,7 +110,7 @@ public final class DitaValReader extends AbstractXMLReader {
         }
 
         if (bindingMap != null && !bindingMap.isEmpty()) {
-            final Map<FilterKey, Action> buf = new HashMap<FilterKey, Action>(filterMap);
+            final Map<FilterKey, Action> buf = new HashMap<>(filterMap);
             for (final Map.Entry<FilterKey, Action> e: buf.entrySet()) {
                 refineAction(e.getValue(), e.getKey());
             }
@@ -185,7 +185,7 @@ public final class DitaValReader extends AbstractXMLReader {
             return;
         }
 
-        final LinkedList<Element> queue = new LinkedList<Element>();
+        final LinkedList<Element> queue = new LinkedList<>();
 
         // Skip the sub-tree root because it has been added already.
         NodeList children = subTree.getChildNodes();
@@ -225,7 +225,7 @@ public final class DitaValReader extends AbstractXMLReader {
         if (root == null || keyValue == null) {
             return null;
         }
-        final LinkedList<Element> queue = new LinkedList<Element>();
+        final LinkedList<Element> queue = new LinkedList<>();
         queue.add(root);
         while (!queue.isEmpty()) {
             final Element node = queue.removeFirst();

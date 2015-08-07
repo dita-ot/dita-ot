@@ -28,7 +28,7 @@ AbstractPipelineOutput {
      */
     public PipelineHashIO() {
         super();
-        hash = new HashMap<String, String>();
+        hash = new HashMap<>();
     }
 
     /**

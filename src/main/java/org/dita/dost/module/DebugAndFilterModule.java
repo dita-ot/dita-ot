@@ -196,11 +196,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             if (format != null && format.equals(e.getKey())) {
                 try {
                     return (XMLReader) this.getClass().forName(e.getValue()).newInstance();
-                } catch (final InstantiationException ex) {
-                    throw new SAXException(ex);
-                } catch (final IllegalAccessException ex) {
-                    throw new SAXException(ex);
-                } catch (final ClassNotFoundException ex) {
+                } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
                     throw new SAXException(ex);
                 }
             }
@@ -259,9 +255,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 logger.info("Using Xerces grammar pool for DTD and schema caching.");
             } catch (final NoClassDefFoundError e) {
                 logger.debug("Xerces not available, not using grammar caching");
-            } catch (final SAXNotRecognizedException e) {
-                logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-            } catch (final SAXNotSupportedException e) {
+            } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
                 logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
             }
         }
@@ -288,7 +282,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * @param fileToParse absolute URI to current file being processed
      */
     private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
-        final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
+        final List<XMLFilter> pipe = new ArrayList<>();
 
         if (genDebugInfo) {
             final DebugFilter debugFilter = new DebugFilter();
@@ -371,8 +365,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         try {
             final Map<URI, Set<URI>> graph = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
 
-            final Queue<URI> queue = new LinkedList<URI>(graph.keySet());
-            final Set<URI> visitedSet = new HashSet<URI>();
+            final Queue<URI> queue = new LinkedList<>(graph.keySet());
+            final Set<URI> visitedSet = new HashSet<>();
 
             final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setEntityResolver(CatalogUtils.getCatalogResolver());
@@ -415,7 +409,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     }
 
     private void mergeScheme(final Document parentRoot, final Document childRoot) {
-        final Queue<Element> pQueue = new LinkedList<Element>();
+        final Queue<Element> pQueue = new LinkedList<>();
         pQueue.offer(parentRoot.getDocumentElement());
 
         while (!pQueue.isEmpty()) {
@@ -485,7 +479,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         if (root == null || StringUtils.isEmptyString(key)) {
             return null;
         }
-        final Queue<Element> queue = new LinkedList<Element>();
+        final Queue<Element> queue = new LinkedList<>();
         queue.offer(root);
 
         while (!queue.isEmpty()) {
@@ -556,7 +550,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * Execute copy-to task, generate copy-to targets base on sources
      */
     private void performCopytoTask() {
-        final Map<File, File> copytoMap = new HashMap<File, File>();
+        final Map<File, File> copytoMap = new HashMap<>();
         for (final Map.Entry<URI, URI> e: job.getCopytoMap().entrySet()) {
             copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
         }
@@ -637,34 +631,39 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         @Override
         public void processingInstruction(final String target, final String data) throws SAXException {
             String d = data;
-            if(target.equals(PI_WORKDIR_TARGET)) {
-                if (workdir != null) {
-                    try {
-                        if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
-                            d = workdir.getCanonicalPath();
-                        } else {
-                            d = UNIX_SEPARATOR + workdir.getCanonicalPath();
+            switch (target) {
+                case PI_WORKDIR_TARGET:
+                    if (workdir != null) {
+                        try {
+                            if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
+                                d = workdir.getCanonicalPath();
+                            } else {
+                                d = UNIX_SEPARATOR + workdir.getCanonicalPath();
+                            }
+                        } catch (final IOException e) {
+                            throw new RuntimeException("Failed to get canonical path for working directory: " + e.getMessage(), e);
                         }
-                    } catch (final IOException e) {
-                        throw new RuntimeException("Failed to get canonical path for working directory: " + e.getMessage(), e);
                     }
-                }
-            } else if(target.equals(PI_WORKDIR_TARGET_URI)) {
-                if (workdir != null) {
-                    d = workdir.toURI().toString();
-                }
-            } else if (target.equals(PI_PATH2PROJ_TARGET)) {
-                if (path2project != null) {
-                    d = path2project.getPath();
-                }
-            } else if (target.equals(PI_PATH2PROJ_TARGET_URI)) {
-                if (path2project != null) {
-                    d = toURI(path2project).toString();
-                    if (!d.endsWith(URI_SEPARATOR)) {
-                        d = d + URI_SEPARATOR;
+                    break;
+                case PI_WORKDIR_TARGET_URI:
+                    if (workdir != null) {
+                        d = workdir.toURI().toString();
                     }
-                }
-            }            
+                    break;
+                case PI_PATH2PROJ_TARGET:
+                    if (path2project != null) {
+                        d = path2project.getPath();
+                    }
+                    break;
+                case PI_PATH2PROJ_TARGET_URI:
+                    if (path2project != null) {
+                        d = toURI(path2project).toString();
+                        if (!d.endsWith(URI_SEPARATOR)) {
+                            d = d + URI_SEPARATOR;
+                        }
+                    }
+                    break;
+            }
             getContentHandler().processingInstruction(target, d);
         }
         

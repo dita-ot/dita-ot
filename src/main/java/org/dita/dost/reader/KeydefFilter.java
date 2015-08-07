@@ -52,8 +52,8 @@ public final class KeydefFilter extends AbstractXMLFilter {
      * Constructor.
      */
     public KeydefFilter() {
-        keysDefMap = new HashMap<String, KeyDef>();
-        keysRefMap = new HashMap<String, String>();
+        keysDefMap = new HashMap<>();
+        keysRefMap = new HashMap<>();
     }
 
     /**
@@ -176,7 +176,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
      * Get multi-level keys list
      */
     private List<String> getKeysList(final String key, final Map<String, String> keysRefMap) {
-        final List<String> list = new ArrayList<String>();
+        final List<String> list = new ArrayList<>();
         // Iterate the map to look for multi-level keys
         for (Entry<String, String> entry : keysRefMap.entrySet()) {
             // Multi-level key found
@@ -202,7 +202,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
         String key = null;
         KeyDef value = null;
         // tempMap storing values to avoid ConcurrentModificationException
-        final Map<String, KeyDef> tempMap = new HashMap<String, KeyDef>();
+        final Map<String, KeyDef> tempMap = new HashMap<>();
         for (Entry<String, KeyDef> entry : keysDefMap.entrySet()) {
             key = entry.getKey();
             value = entry.getValue();

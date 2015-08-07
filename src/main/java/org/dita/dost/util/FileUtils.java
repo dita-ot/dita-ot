@@ -40,7 +40,7 @@ public final class FileUtils {
     @Deprecated
     private final static List<String> supportedImageExtensions;
     static {
-        final List<String> sie = new ArrayList<String>();
+        final List<String> sie = new ArrayList<>();
         final String imageExtensions = Configuration.configuration.get(CONF_SUPPORTED_IMAGE_EXTENSIONS);
         if (imageExtensions != null && imageExtensions.length()>0) {
             Collections.addAll(sie, imageExtensions.split(CONF_LIST_SEPARATOR));
@@ -64,7 +64,7 @@ public final class FileUtils {
     @Deprecated
     private final static List<String> supportedHTMLExtensions;
     static {
-        final List<String> she = new ArrayList<String>();
+        final List<String> she = new ArrayList<>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_HTML_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
             Collections.addAll(she, extensions.split(CONF_LIST_SEPARATOR));
@@ -82,7 +82,7 @@ public final class FileUtils {
     @Deprecated
     private final static List<String> supportedResourceExtensions;
     static {
-        final List<String> sre = new ArrayList<String>();
+        final List<String> sre = new ArrayList<>();
         final String extensions = Configuration.configuration.get(CONF_SUPPORTED_RESOURCE_EXTENSIONS);
         if (extensions != null && extensions.length()>0) {
             Collections.addAll(sre, extensions.split(CONF_LIST_SEPARATOR));
@@ -378,7 +378,7 @@ public final class FileUtils {
     private static String normalizePath(final String path, final String separator) {
         final String p = path.replace(WINDOWS_SEPARATOR, separator).replace(UNIX_SEPARATOR, separator);
         // remove "." from the directory.
-        final List<String> dirs = new LinkedList<String>();
+        final List<String> dirs = new LinkedList<>();
         final StringTokenizer tokenizer = new StringTokenizer(p, separator);
         while (tokenizer.hasMoreTokens()) {
             final String token = tokenizer.nextToken();

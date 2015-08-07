@@ -302,7 +302,7 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
      */
 
     private List<IndexTerm> cloneIndextermList (final List<IndexTerm> termList){
-        final List<IndexTerm> termListClone = new ArrayList<IndexTerm>(termList.size());
+        final List<IndexTerm> termListClone = new ArrayList<>(termList.size());
         if (!termList.isEmpty()){
             for (IndexTerm aTermList : termList) {
                 termListClone.add(aTermList);
