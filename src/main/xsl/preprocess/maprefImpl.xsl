@@ -33,7 +33,7 @@
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']
-                        [empty(@href | @dita-ot:orig-href) or
+                        [empty(@href(: | @dita-ot:orig-href:)) or
                          (:@processing-role = 'resource-only' or:)
                          @scope = ('peer', 'external')]" priority="15">
     <xsl:copy>
@@ -164,6 +164,7 @@
                 </xsl:attribute>
               </xsl:if>
               <xsl:apply-templates select="@* except (@class, @href, @dita-ot:orig-href, @format, @dita-ot:orig-format, @keys, @keyscope)"/>
+              <xsl:apply-templates select="*[contains(@class, ' ditavalref-d/ditavalref ')]"/>
               <xsl:apply-templates select="$contents">
                 <xsl:with-param name="refclass" select="$refclass"/>
                 <xsl:with-param name="mapref-id-path" select="$updated-id-path"/>
@@ -187,7 +188,8 @@
             </submap>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:if test="$child-topicref-warning = 'true' and *[contains(@class, ' map/topicref ')]">
+        <xsl:if test="$child-topicref-warning = 'true' and *[contains(@class, ' map/topicref ')]
+                                                            [not(contains(@class, ' ditavalref-d/ditavalref '))]">
           <xsl:call-template name="output-message">
             <xsl:with-param name="msgnum">068</xsl:with-param>
             <xsl:with-param name="msgsev">W</xsl:with-param>

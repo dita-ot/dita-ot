@@ -328,8 +328,10 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     private void filterTopics(final Element topicref, final List<FilterUtils> filters) {
         final List<FilterUtils> fs = combineFilterUtils(topicref, filters);
 
+        final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
         final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
         if (!fs.isEmpty() && skipFilter == null
+                && !href.isEmpty()
                 && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))) {
             final List<XMLFilter> pipe = new ArrayList<>();
             // TODO: replace multiple profiling filters with a merged filter utils
@@ -340,7 +342,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                 writer.setFilterUtils(f);
                 pipe.add(writer);
             }
-            final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
+
             final URI srcAbsUri = job.tempDir.toURI().resolve(map.resolve(href));
             logger.info("Filtering " + srcAbsUri);
             try {
