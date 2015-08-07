@@ -61,6 +61,7 @@
     <xsl:param name="stringName"/>
     
     <xsl:call-template name="output-message">
+      <xsl:with-param name="msgcat">DOTX</xsl:with-param>
       <xsl:with-param name="msgnum">066</xsl:with-param>
       <xsl:with-param name="msgsev">W</xsl:with-param>
       <xsl:with-param name="msgparams">%1=getString</xsl:with-param>

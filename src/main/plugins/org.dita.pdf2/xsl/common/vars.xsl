@@ -47,6 +47,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="theParameters" as="document-node()*"/>
     
     <xsl:call-template name="output-message">
+      <xsl:with-param name="msgcat">DOTX</xsl:with-param>
       <xsl:with-param name="msgnum">066</xsl:with-param>
       <xsl:with-param name="msgsev">W</xsl:with-param>
       <xsl:with-param name="msgparams">%1=insertVariable</xsl:with-param>
