@@ -19,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.*;
@@ -313,6 +314,22 @@ public final class XMLUtils {
                 i.close();
             } else {
                 final Reader w = input.getCharacterStream();
+                if (w != null) {
+                    w.close();
+                }
+            }
+        }
+    }
+
+    /** Close source. */
+    public static void close(final Source input) throws IOException {
+        if (input != null && input instanceof StreamSource) {
+            final StreamSource s = (StreamSource) input;
+            final InputStream i = s.getInputStream();
+            if (i != null) {
+                i.close();
+            } else {
+                final Reader w = s.getReader();
                 if (w != null) {
                     w.close();
                 }
