@@ -54,4 +54,9 @@ AbstractPipelineOutput {
         value = hash.get(name);
         return value;
     }
+
+    @Override
+    public Map<String, String> getAttributes() {
+        return new HashMap<>(hash);
+    }
 }
