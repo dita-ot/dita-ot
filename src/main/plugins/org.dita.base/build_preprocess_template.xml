@@ -28,7 +28,6 @@
                   topic-fragment,
                   coderef,
                   move-meta-entries,
-                  mappull,
                   chunk,
                   maplink,
                   topicpull,
@@ -233,7 +232,8 @@
   </target>
   
   <!-- move-meta-entries
-      Push information from <topicmeta> in the map into the corresponding topics. -->
+      Push information from <topicmeta> in the map into the corresponding topics and
+      pull metadata (such as navtitle) into the map from the referenced topics. -->
   <target name="move-meta-entries" 
     dita:depends="{depend.preprocess.move-meta-entries.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
@@ -242,7 +242,12 @@
     <pipeline message="Move metadata entries." taskname="move-meta"
       inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}">
-      <module class="org.dita.dost.module.MoveMetaModule"/>
+      <module class="org.dita.dost.module.MoveMetaModule">
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl"/>
+        <param name="TRANSTYPE" expression="${transtype}" />
+        <param name="conserve-memory" expression="${conserve-memory}" if="conserve-memory"/>
+        <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
+      </module>
     </pipeline>
   </target>
   
@@ -357,28 +362,16 @@
   
   <!-- mappull
       Pull metadata (such as navtitle) into the map from the referenced topics. -->
+  <!-- Deprecated in 2.2 -->
   <target name="mappull"
     dita:depends="{depend.preprocess.mappull.pre},mappull-check"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.mappull.skip"
     description="Pull the navtitle and topicmeta from topics to ditamap">
-    <dirname property="mappull.workdir" file="${dita.temp.dir}/${user.input.file}" />
-    <condition property="dita.preprocess.reloadstylesheet.mappull" value="${dita.preprocess.reloadstylesheet}">
-      <not><isset property="dita.preprocess.reloadstylesheet.mappull"/></not>
-    </condition>
-    <pipeline message="Pull the navtitle and topicmeta from topics to ditamap" taskname="mappull">
-      <xslt basedir="${dita.temp.dir}"
-          reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl">
-        <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
-        <param name="TRANSTYPE" expression="${transtype}" />
-        <param name="conserve-memory" expression="${conserve-memory}" if="conserve-memory"/>
-        <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
-        <xmlcatalog refid="dita.catalog"/>
-      </xslt>
-    </pipeline>
+    <echo level="warn">WARN: Mappull target has been merged with move-meta-entries and is deprecated.</echo>
   </target>
   
+  <!-- Deprecated in 2.2 -->
   <target name="mappull-check">
     <condition property="preprocess.mappull.skip">
       <isset property="noMap"/>
