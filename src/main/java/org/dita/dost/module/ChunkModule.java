@@ -178,22 +178,22 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
         for (final FileInfo f : job.getFileInfo()) {
             if (f.isSkipChunk) {
-                final String s = f.file.getPath();
-                if (!StringUtils.isEmptyString(s) && getFragment(s) == null) {
+                final URI s = f.uri;
+                if (s.getFragment() == null) {
                     // This entry does not have an anchor, we assume that this
                     // topic will
                     // be fully chunked. Thus it should not produce any output.
                     final Iterator<URI> hrefit = hrefTopics.iterator();
                     while (hrefit.hasNext()) {
                         final URI ent = hrefit.next();
-                        if (resolve(job.tempDir.getAbsoluteFile(), ent).equals(
-                                resolve(job.tempDir.getAbsolutePath(), s))) {
+                        if (resolve(job.tempDir, ent).equals(
+                                resolve(job.tempDir, s))) {
                             // The entry in hrefTopics points to the same target
                             // as entry in chunkTopics, it should be removed.
                             hrefit.remove();
                         }
                     }
-                } else if (!StringUtils.isEmptyString(s) && hrefTopics.contains(s)) {
+                } else if (hrefTopics.contains(s)) {
                     hrefTopics.remove(s);
                 }
             }
