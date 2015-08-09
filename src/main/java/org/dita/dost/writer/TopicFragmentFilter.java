@@ -33,9 +33,16 @@ public final class TopicFragmentFilter extends XMLFilterImpl {
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : null;
         classes.addFirst(cls);
         if (TOPIC_TOPIC.matches(cls)) {
-            topics.addFirst(atts.getValue(ATTRIBUTE_NAME_ID));
+            final String id = atts.getValue(ATTRIBUTE_NAME_ID);
+            if (id != null) {
+                topics.addFirst(id);
+            }
         } else {
-            URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+            URI href = null;
+            final String hrefAsString = atts.getValue(ATTRIBUTE_NAME_HREF);
+            if (hrefAsString != null) {
+                href = toURI(hrefAsString);
+            }
             final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
             if (href != null && (format == null || format.equals(ATTR_FORMAT_VALUE_DITA))) {
                 final String fragment = href.getFragment(); 
