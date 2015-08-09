@@ -23,7 +23,7 @@ import org.w3c.dom.Document;
 public abstract class AbstractDomFilter implements AbstractReader {
 
     protected DITAOTLogger logger;
-    private Job job;
+    protected Job job;
 
     @Override
     public void read(final File filename) {

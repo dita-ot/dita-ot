@@ -148,9 +148,10 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
             mapInserter.setLogger(logger);
             mapInserter.setJob(job);
             for (final Entry<URI, Map<String, Element>> entry : mapSet.entrySet()) {
-                final URI targetFileName = entry.getKey();
+                final FileInfo fi = job.getFileInfo(entry.getKey());
+                final URI targetFileName = job.tempDir.toURI().resolve(fi.uri);
                 assert targetFileName.isAbsolute();
-                if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITAMAP)) {
+                if (fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
                     mapInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
                         logger.info("Processing " + targetFileName);
@@ -166,9 +167,10 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
             topicInserter.setLogger(logger);
             topicInserter.setJob(job);
             for (final Entry<URI, Map<String, Element>> entry : mapSet.entrySet()) {
-                final URI targetFileName = entry.getKey();
+                final FileInfo fi = job.getFileInfo(entry.getKey());
+                final URI targetFileName = job.tempDir.toURI().resolve(fi.uri);
                 assert targetFileName.isAbsolute();
-                if (targetFileName.getPath().endsWith(FILE_EXTENSION_DITA) || targetFileName.getPath().endsWith(FILE_EXTENSION_XML)) {
+                if (fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
                     topicInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
                         logger.info("Processing " + targetFileName);
@@ -188,6 +190,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
     private Map<URI, Map<String, Element>> getMapMetadata(final Collection<FileInfo> fis) {
         final MapMetaReader metaReader = new MapMetaReader();
         metaReader.setLogger(logger);
+        metaReader.setJob(job);
         for (final FileInfo f : fis) {
             final File mapFile = new File(job.tempDir, f.file.getPath());
             logger.info("Processing " + mapFile.toURI());

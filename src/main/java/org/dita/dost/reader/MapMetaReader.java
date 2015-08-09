@@ -34,7 +34,7 @@ import org.w3c.dom.NodeList;
 public final class MapMetaReader extends AbstractDomFilter {
 
     /**
-     * Cascaded metadata. Contents <topic absolute URI, <class matcher, cascading metadata elements>>.
+     * Cascaded metadata. Contents <topic relative URI, <class matcher, cascading metadata elements>>.
      */
     private final Map<URI, Map<String, Element>> resultTable = new HashMap<>(16);
 
@@ -223,10 +223,10 @@ public final class MapMetaReader extends AbstractDomFilter {
                 URI topicPath;
                 if (copytoAttr != null) {
                     final URI copyToUri = stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
-                    topicPath = filePath.toURI().resolve(copyToUri);
+                    topicPath = job.tempDir.toURI().relativize(filePath.toURI().resolve(copyToUri));
                 } else {
                     final URI hrefUri = stripFragment(URLUtils.toURI(hrefAttr.getNodeValue()));
-                    topicPath = filePath.toURI().resolve(hrefUri);
+                    topicPath = job.tempDir.toURI().relativize(filePath.toURI().resolve(hrefUri));
                 }
                 if (resultTable.containsKey(topicPath)) {
                     //if the result table already contains some result
