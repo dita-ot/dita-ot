@@ -244,7 +244,6 @@
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.MoveMetaModule">
         <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl"/>
-        <param name="TRANSTYPE" expression="${transtype}" />
         <param name="conserve-memory" expression="${conserve-memory}" if="conserve-memory"/>
         <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
@@ -319,7 +318,6 @@
           reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
         style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
         <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
-        <param name="TRANSTYPE" expression="${transtype}" />
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
