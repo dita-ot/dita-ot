@@ -128,7 +128,9 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         final FileInfo in;
         final FileInfo out;
         private ResolveTask(final KeyScope scope, final FileInfo in, final FileInfo out) {
+            assert scope != null;
             this.scope = scope;
+            assert in != null;
             this.in = in;
             this.out = out;
         }
@@ -139,6 +141,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         KeyScope s = scope;
         if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
             s = s.getChildScope(elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE));
+            assert s != null;
         }
         Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
         if (hrefNode == null) {

@@ -158,9 +158,12 @@
               </xsl:attribute>
               <xsl:if test="@keyscope | $target[@keyscope and contains(@class, ' map/map ')]">
                 <xsl:attribute name="keyscope">
-                  <xsl:value-of select="@keyscope"/>
-                  <xsl:text> </xsl:text>
-                  <xsl:value-of select="$target[contains(@class, ' map/map ')]/@keyscope"/>
+                  <xsl:variable name="keyscope">
+                    <xsl:value-of select="@keyscope"/>
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="$target[contains(@class, ' map/map ')]/@keyscope"/>
+                  </xsl:variable>
+                  <xsl:value-of select="normalize-space($keyscope)"/>
                 </xsl:attribute>
               </xsl:if>
               <xsl:apply-templates select="@* except (@class, @href, @dita-ot:orig-href, @format, @dita-ot:orig-format, @keys, @keyscope)"/>
