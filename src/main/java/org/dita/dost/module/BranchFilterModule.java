@@ -9,6 +9,7 @@ import static org.dita.dost.util.StringUtils.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -303,6 +304,10 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                     writer.setFilterUtils(f);
                     pipe.add(writer);
                 }
+                final File dstDirUri = new File(dstAbsUri.resolve("."));
+                if (!dstDirUri.exists() && !dstDirUri.mkdirs()) {
+                    logger.error("Failed to create directory " + dstDirUri);
+                }
                 try {
                     XMLUtils.transform(srcAbsUri,
                                        dstAbsUri,
@@ -428,7 +433,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     }
     
     /** Immutable branch definition. */
-    private static class Branch {
+    public static class Branch {
         /** Empty root branch */
         static final Branch EMPTY = new Branch();
         final String resourcePrefix;
@@ -441,7 +446,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
             this.keyscopePrefix = null;
             this.keyscopeSuffix = null;
         }
-        private Branch(String resourcePrefix, String resourceSuffix, String keyscopePrefix, String keyscopeSuffix) {
+        Branch(String resourcePrefix, String resourceSuffix, String keyscopePrefix, String keyscopeSuffix) {
 //            final URI prefix = toURI(resourcePrefix).normalize();
 //            if (prefix.toString().startsWith("..")) {
 //                throw new Exception("ERROR: Resource prefix may not start with ..");
@@ -534,17 +539,23 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         }
     }
     
-    private URI generateCopyTo(final String href, final Branch filter) {
+    static URI generateCopyTo(final String href, final Branch filter) {
         final StringBuilder buf = new StringBuilder(href);
         final String suffix = filter.resourceSuffix;
         if (suffix != null) {
-            buf.insert(buf.lastIndexOf("."), suffix);
+            final int sep = buf.lastIndexOf(URI_SEPARATOR);
+            final int i = buf.lastIndexOf(".");
+            if (i != -1 && (sep == -1 || i > sep)) {
+                buf.insert(i, suffix);
+            } else {
+                buf.append(suffix);
+            }
         }
         final String prefix = filter.resourcePrefix;
         if (prefix != null) {
             final int i = buf.lastIndexOf(URI_SEPARATOR);
             if (i != -1) {
-                buf.insert(i, prefix);
+                buf.insert(i + 1, prefix);
             } else {
                 buf.insert(0, prefix);
             }

@@ -1,11 +1,14 @@
 package org.dita.dost.module;
 
+import static junit.framework.Assert.assertEquals;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.module.BranchFilterModule.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import org.custommonkey.xmlunit.XMLUnit;
@@ -63,7 +66,27 @@ public class BranchFilterModuleTest {
         
         m.processMap(new File(tempDir, "input.ditamap").toURI());
         assertXMLEqual(new InputSource(new File(expDir, "input.ditamap").toURI().toString()),
-                       new InputSource(new File(tempDir, "input.ditamap").toURI().toString()));
+                new InputSource(new File(tempDir, "input.ditamap").toURI().toString()));
+    }
+
+    @Test
+    public void testGenerateCopyTo() throws URISyntaxException {
+        assertEquals(new URI("foo.bar"), generateCopyTo("foo.bar", new Branch(null, null, null, null)));
+        assertEquals(new URI("baz-foo.bar"), generateCopyTo("foo.bar", new Branch("baz-", null, null, null)));
+        assertEquals(new URI("foo-baz.bar"), generateCopyTo("foo.bar", new Branch(null, "-baz", null, null)));
+        assertEquals(new URI("qux-foo-baz.bar"), generateCopyTo("foo.bar", new Branch("qux-", "-baz", null, null)));
+        assertEquals(new URI("sub.dir/foo.bar"), generateCopyTo("sub.dir/foo.bar", new Branch(null, null, null, null)));
+        assertEquals(new URI("sub.dir/baz-foo.bar"), generateCopyTo("sub.dir/foo.bar", new Branch("baz-", null, null, null)));
+        assertEquals(new URI("sub.dir/foo-baz.bar"), generateCopyTo("sub.dir/foo.bar", new Branch(null, "-baz", null, null)));
+        assertEquals(new URI("sub.dir/qux-foo-baz.bar"), generateCopyTo("sub.dir/foo.bar", new Branch("qux-", "-baz", null, null)));
+        assertEquals(new URI("foo"), generateCopyTo("foo", new Branch(null, null, null, null)));
+        assertEquals(new URI("baz-foo"), generateCopyTo("foo", new Branch("baz-", null, null, null)));
+        assertEquals(new URI("foo-baz"), generateCopyTo("foo", new Branch(null, "-baz", null, null)));
+        assertEquals(new URI("qux-foo-baz"), generateCopyTo("foo", new Branch("qux-", "-baz", null, null)));
+        assertEquals(new URI("sub.dir/foo"), generateCopyTo("sub.dir/foo", new Branch(null, null, null, null)));
+        assertEquals(new URI("sub.dir/baz-foo"), generateCopyTo("sub.dir/foo", new Branch("baz-", null, null, null)));
+        assertEquals(new URI("sub.dir/foo-baz"), generateCopyTo("sub.dir/foo", new Branch(null, "-baz", null, null)));
+        assertEquals(new URI("sub.dir/qux-foo-baz"), generateCopyTo("sub.dir/foo", new Branch("qux-", "-baz", null, null)));
     }
 
 }
