@@ -185,7 +185,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                     gen = idx != -1
                         ? (gen.substring(0, idx) + suffix + gen.substring(idx))
                         : (gen + suffix);
-                    logger.error(MessageUtils.getInstance().getMessage("DOTJ065E", attr.getValue() ,gen)
+                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ065W", attr.getValue() ,gen)
                             .setLocation((Element) attr.getOwnerElement()).toString());
                     if (attr.getName().equals(BRANCH_COPY_TO)) {
                         attr.setValue(gen);
