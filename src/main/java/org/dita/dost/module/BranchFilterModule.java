@@ -142,8 +142,8 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     /** Rewrite href or copy-to if duplicates exist. */
     private void rewriteDuplicates(final Element root) {
         // collect href and copy-to
-        final Map<URI, List<Attr>> refs = new HashMap<>();
-        for (final Element e: getBranchTopicref(root)) {
+        final Map<URI, Map<Set<URI>, List<Attr>>> refs = new HashMap<>();
+        for (final Element e: getTopicrefs(root)) {
             Attr attr = e.getAttributeNode(BRANCH_COPY_TO);
             if (attr == null) {
                 attr = e.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
@@ -152,70 +152,111 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                 }
             }
             if (attr != null) {
-                final URI h = map.resolve(attr.getValue());
-                List<Attr> attrs = refs.get(h);
+                final URI h = stripFragment(map.resolve(attr.getValue()));
+                Map<Set<URI>, List<Attr>> attrsMap = refs.get(h);
+                if (attrsMap == null) {
+                    attrsMap = new HashMap<>();
+                    refs.put(h, attrsMap);
+                }
+                final Set<URI> currentFilter = getBranchFilters(e);
+                List<Attr> attrs = attrsMap.get(currentFilter);
                 if (attrs == null) {
                     attrs = new ArrayList<>();
+                    attrsMap.put(currentFilter, attrs);
                 }
                 attrs.add(attr);
-                refs.put(h, attrs);
             }
         }
         // check and rewrite
-        for (final Map.Entry<URI, List<Attr>> ref: refs.entrySet()) {
-            final List<Attr> attrs = ref.getValue();
-            if (attrs.size() > 1) {
-                Attr first = null;
-                // TODO: Choose plain topic that is not part of branch as best choice
-                for (final Attr attr: attrs) {
-                    if (attr.getName().equals(ATTRIBUTE_NAME_HREF)) {
-                        first = attr;
-                        break;
-                    }
+        for (final Map.Entry<URI, Map<Set<URI>, List<Attr>>> ref: refs.entrySet()) {
+            final Map<Set<URI>, List<Attr>> attrsMaps = ref.getValue();
+            if (attrsMaps.size() > 1) {
+                if (attrsMaps.containsKey(Collections.EMPTY_LIST)) {
+                    attrsMaps.remove(Collections.EMPTY_LIST);
+                } else {
+                    Set<URI> first = attrsMaps.keySet().iterator().next();
+                    attrsMaps.remove(first);
                 }
-                if (first == null) {
-                    first = attrs.get(0);
-                }
-                attrs.remove(first);
-                for (int i = 0; i < attrs.size(); i++) {
-                    final Attr attr = attrs.get(i);
-                    String gen = attr.getValue();
-                    final String suffix = "-" + (i + 1);
-                    final int idx = gen.lastIndexOf(".");
-                    gen = idx != -1
-                        ? (gen.substring(0, idx) + suffix + gen.substring(idx))
-                        : (gen + suffix);
-                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ065W", attr.getValue() ,gen)
-                            .setLocation((Element) attr.getOwnerElement()).toString());
-                    if (attr.getName().equals(BRANCH_COPY_TO)) {
-                        attr.setValue(gen);
-                    } else {
-                        attr.getOwnerElement().setAttribute(BRANCH_COPY_TO, gen);
+                int i = 1;
+                for (final Map.Entry<Set<URI>, List<Attr>> attrsMap: attrsMaps.entrySet()) {
+                    final String suffix = "-" + i;
+                    final List<Attr> attrs = attrsMap.getValue();
+                    for (final Attr attr: attrs) {
+                        final String gen = addSuffix(attr.getValue(), suffix);
+                        logger.warn(MessageUtils.getInstance().getMessage("DOTJ065W", attr.getValue(), gen)
+                                .setLocation((Element) attr.getOwnerElement()).toString());
+                        if (attr.getName().equals(BRANCH_COPY_TO)) {
+                            attr.setValue(gen);
+                        } else {
+                            attr.getOwnerElement().setAttribute(BRANCH_COPY_TO, gen);
+                        }
                     }
+                    i++;
                 }
             }
         }
     }
 
-    /** Get topicrefs that are part of a branch */
-    private List<Element> getBranchTopicref(final Element root) {
-        final List<Element> res = new ArrayList<>();
-        walkBranchTopicref(root, false, res);
+    private Set<URI> getBranchFilters(final Element e) {
+        final Set<URI> res = new HashSet<>();
+        Element current = e;
+        while (current != null) {
+            final List<Element> ditavalref = getChildElements(current, DITAVAREF_D_DITAVALREF);
+            if (!ditavalref.isEmpty()) {
+                res.add(toURI(ditavalref.get(0).getAttribute(ATTRIBUTE_NAME_HREF)));
+            }
+            final Node parent = current.getParentNode();
+            if (parent != null && parent.getNodeType() == Node.ELEMENT_NODE) {
+                current = (Element) parent;
+            } else {
+                break;
+            }
+        }
         return res;
     }
 
-    /** Walker to collect topicrefs that are part of a branch. */
-    private void walkBranchTopicref(final Element elem, final boolean inBranch, final List<Element> res) {
-        final boolean b = inBranch || !getChildElements(elem, DITAVAREF_D_DITAVALREF).isEmpty();
-        if (b && MAP_TOPICREF.matches(elem)
-                && isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT))
-                && !elem.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
-            res.add(elem);
-        }
-        for (final Element child: getChildElements(elem)) {
-            walkBranchTopicref(child, b, res);
-        }
+    /** Add suffix to file name */
+    private static String addSuffix(final String href, final String suffix) {
+        final int idx = href.lastIndexOf(".");
+        return idx != -1
+                ? (href.substring(0, idx) + suffix + href.substring(idx))
+                : (href + suffix);
     }
+
+    /** Get all topicrefs */
+    private List<Element> getTopicrefs(final Element root) {
+        final List<Element> res = new ArrayList<>();
+        final NodeList all = root.getElementsByTagName("*");
+        for (int i = 0; i < all.getLength(); i++) {
+            final Element elem = (Element) all.item(i);
+            if (MAP_TOPICREF.matches(elem)
+                    && isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT))
+                    && !elem.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
+                res.add(elem);
+            }
+        }
+        return res;
+    }
+
+//    /** Get topicrefs that are part of a branch */
+//    private List<Element> getBranchTopicrefs(final Element root) {
+//        final List<Element> res = new ArrayList<>();
+//        walkBranchTopicref(root, false, res);
+//        return res;
+//    }
+//
+//    /** Walker to collect topicrefs that are part of a branch. */
+//    private void walkBranchTopicref(final Element elem, final boolean inBranch, final List<Element> res) {
+//        final boolean b = inBranch || !getChildElements(elem, DITAVAREF_D_DITAVALREF).isEmpty();
+//        if (b && MAP_TOPICREF.matches(elem)
+//                && isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT))
+//                && !elem.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
+//            res.add(elem);
+//        }
+//        for (final Element child: getChildElements(elem)) {
+//            walkBranchTopicref(child, b, res);
+//        }
+//    }
 
     private boolean isDitaFormat(final Attr formatAttr) {
         return formatAttr == null ||
