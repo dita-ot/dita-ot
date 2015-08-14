@@ -154,7 +154,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 res.add(processTopic(fi, s));
                 final Integer used = usage.get(fi.uri);
                 if (used > 1) {
-                    hrefNode.setValue(addSuffix(toURI(hrefNode.getValue()), "-" + used).toString());
+                    hrefNode.setValue(addSuffix(toURI(hrefNode.getValue()), "-" + (used - 1)).toString());
                 }
             }
         }
@@ -173,7 +173,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         usage.put(f.uri, used);
 
         if (used > 1) {
-            final URI out = addSuffix(f.uri, "-" + used);
+            final URI out = addSuffix(f.uri, "-" + (used - 1));
             final FileInfo fo = new FileInfo.Builder(f).uri(out).build();
             // TODO: Should this be added when content is actually generated?
             job.add(fo);
