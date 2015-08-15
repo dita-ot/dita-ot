@@ -24,6 +24,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -370,7 +371,7 @@ public class TestKeyrefReader {
         keyrefreader.read(filename.toURI(), readMap(filename));
         final KeyScope root = keyrefreader.getKeyDefinition();
 
-        log(root, "");
+//        log(root, "");
 
         final KeyScope a2 = root.getChildScope("A").getChildScope("A-2");
         assertEquals(10, a2.keySet().size());
@@ -394,11 +395,34 @@ public class TestKeyrefReader {
 
     }
 
+    @Test
+    public void testKeysAndScope() throws DITAOTException {
+        final File filename = new File(srcDir, "keysAndScope.ditamap");
+
+        final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.read(filename.toURI(), readMap(filename));
+        final KeyScope root = keyrefreader.getKeyDefinition();
+
+        assertEquals(2, root.keySet().size());
+
+        final KeyScope a2 = root.getChildScope("potatoes");
+        assertEquals(3, a2.keySet().size());
+        assertEquals("potatoes.dita", a2.get("potatoes.vegetable").href.toString());
+        assertEquals("potatoes.dita", a2.get("vegetable").href.toString());
+        assertEquals("carrots.dita", a2.get("carrots.vegetable").href.toString());
+
+        final KeyScope b = root.getChildScope("carrots");
+        assertEquals(3, b.keySet().size());
+        assertEquals("potatoes.dita", b.get("potatoes.vegetable").href.toString());
+        assertEquals("carrots.dita", b.get("vegetable").href.toString());
+        assertEquals("carrots.dita", b.get("carrots.vegetable").href.toString());
+    }
+
     /** Debug logging. */
     private void log(final KeyScope scope, final String indent) {
         System.err.println(indent + "scope: " + scope.name);
-        for (final String key: scope.keySet()) {
-            System.err.println(indent + " * " + key);
+        for (final Map.Entry<String, KeyDef> key: scope.keyDefinition.entrySet()) {
+            System.err.println(indent + " * " + key.getKey() + "=" + key.getValue().href);
         }
         for (final KeyScope child: scope.childScopes.values()) {
             log(child, indent + "  ");
