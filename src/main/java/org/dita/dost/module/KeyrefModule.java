@@ -138,28 +138,34 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
    /** Recursively walk map and process topics that have keyrefs. */
     private void walkMap(final Element elem, final KeyScope scope, final List<ResolveTask> res) {
-        KeyScope s = scope;
+        List<KeyScope> ss = Collections.singletonList(scope);
         if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
-            s = s.getChildScope(elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE));
-            assert s != null;
+            ss = new ArrayList<>();
+            for (final String keyscope: elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE).trim().split("\\s+")) {
+                final KeyScope s = scope.getChildScope(keyscope);
+                assert s != null;
+                ss.add(s);
+            }
         }
         Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
         if (hrefNode == null) {
             hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
         }
-        if (hrefNode != null) {
-            final URI href = stripFragment(job.getInputMap().resolve(hrefNode.getValue()));
-            final FileInfo fi = job.getFileInfo(href);
-            if (fi != null && fi.hasKeyref) {
-                res.add(processTopic(fi, s));
-                final Integer used = usage.get(fi.uri);
-                if (used > 1) {
-                    hrefNode.setValue(addSuffix(toURI(hrefNode.getValue()), "-" + (used - 1)).toString());
+        for (final KeyScope s: ss) {
+            if (hrefNode != null) {
+                final URI href = stripFragment(job.getInputMap().resolve(hrefNode.getValue()));
+                final FileInfo fi = job.getFileInfo(href);
+                if (fi != null && fi.hasKeyref) {
+                    res.add(processTopic(fi, s));
+                    final Integer used = usage.get(fi.uri);
+                    if (used > 1) {
+                        hrefNode.setValue(addSuffix(toURI(hrefNode.getValue()), "-" + (used - 1)).toString());
+                    }
                 }
             }
-        }
-        for (final Element child: getChildElements(elem, MAP_TOPICREF)) {
-            walkMap(child, s, res);
+            for (final Element child : getChildElements(elem, MAP_TOPICREF)) {
+                walkMap(child, s, res);
+            }
         }
     }
 

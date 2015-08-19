@@ -418,6 +418,29 @@ public class TestKeyrefReader {
         assertEquals("carrots.dita", b.get("carrots.vegetable").href.toString());
     }
 
+    @Test
+    public void testMultipleValues() throws DITAOTException {
+        final File filename = new File(srcDir, "multipleValues.ditamap");
+
+        final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.read(filename.toURI(), readMap(filename));
+        final KeyScope root = keyrefreader.getKeyDefinition();
+
+        assertEquals(4, root.keySet().size());
+
+        final KeyScope c1 = root.getChildScope("potatoes");
+        assertEquals(5, c1.keySet().size());
+
+        final KeyScope c2 = root.getChildScope("patate");
+        assertEquals(5, c2.keySet().size());
+
+        final KeyScope c3 = root.getChildScope("carrot");
+        assertEquals(5, c3.keySet().size());
+
+        final KeyScope c4 = root.getChildScope("morcov");
+        assertEquals(5, c4.keySet().size());
+    }
+
     /** Debug logging. */
     private void log(final KeyScope scope, final String indent) {
         System.err.println(indent + "scope: " + scope.name);

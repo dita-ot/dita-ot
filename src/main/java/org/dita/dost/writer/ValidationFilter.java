@@ -289,7 +289,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     private void validateKeyscope(final Attributes atts) {
         final String keys = atts.getValue(ATTRIBUTE_NAME_KEYSCOPE);
         if (keys != null) {
-            for (final String key : keys.split(" ")) {
+            for (final String key : keys.trim().split("\\s+")) {
                 if (!isValidKeyName(key)) {
                     logger.error(messageUtils.getMessage("DOTJ059E", key).toString());
                 }
