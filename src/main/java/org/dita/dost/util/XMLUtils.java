@@ -194,6 +194,21 @@ public final class XMLUtils {
     }
     
     /**
+     * Transform file with XML filters. Only file URIs are supported.
+     *
+     * @param input absolute URI to transform and replace
+     * @param filters XML filters to transform file with, may be an empty list
+     */
+    public static void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
+        assert input.isAbsolute();
+        if (!input.getScheme().equals("file")) {
+            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
+        }
+
+        transform(new File(input), filters);
+    }
+
+    /**
      * Transform file with XML filters.
      * 
      * @param inputFile file to transform and replace
