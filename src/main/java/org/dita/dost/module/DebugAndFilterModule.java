@@ -17,10 +17,7 @@ import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FilterUtils.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.util.*;
 
@@ -62,6 +59,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
+    private final Map<File, File> copytoMap = new HashMap<>();
     private Mode processingMode;
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private boolean genDebugInfo;
@@ -122,8 +120,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
     private void processFile(final FileInfo f) {
         currentFile = f.src;
-        if (!exists(currentFile)) {
-            // Assuming this is an copy-to target file, ignore it
+        if (copytoMap.containsKey(f.file)) {
             logger.debug("Ignoring a copy-to file " + f.src);
             return;
         }
@@ -353,6 +350,10 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             inputDir = baseDir.toURI().resolve(inputDir);
         }
         inputMap = inputDir.resolve(job.getInputMap());
+
+        for (final Map.Entry<URI, URI> e: job.getCopytoMap().entrySet()) {
+            copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
+        }
     }
 
 
@@ -550,17 +551,14 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * Execute copy-to task, generate copy-to targets base on sources
      */
     private void performCopytoTask() {
-        final Map<File, File> copytoMap = new HashMap<>();
-        for (final Map.Entry<URI, URI> e: job.getCopytoMap().entrySet()) {
-            copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
-        }
+        final Map<File, File> copyTo = new HashMap<>(copytoMap);
         if (forceUniqueFilter != null) {
             for (final Map.Entry<URI, URI> e: forceUniqueFilter.copyToMap.entrySet()) {
-                copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
+                copyTo.put(toFile(e.getKey()), toFile(e.getValue()));
             }
         }
         
-        for (final Map.Entry<File, File> entry: copytoMap.entrySet()) {
+        for (final Map.Entry<File, File> entry: copyTo.entrySet()) {
             final File copytoTarget = entry.getKey();
             final File copytoSource = entry.getValue();
             final File srcFile = new File(job.tempDir, copytoSource.getPath());
