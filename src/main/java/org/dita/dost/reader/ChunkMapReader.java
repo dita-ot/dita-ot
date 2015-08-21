@@ -137,7 +137,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
                     final Element currentElem = (Element) node;
                     if (MAP_RELTABLE.matches(currentElem)) {
                         updateReltable(currentElem);
-                    } else if (MAP_TOPICREF.matches(currentElem) && !MAPGROUP_D_TOPICGROUP.matches(currentElem)) {
+                    } else if (MAPGROUP_D_TOPICGROUP.matches(currentElem)) {
+                    	processChildTopicref(currentElem);
+                    } else if (MAP_TOPICREF.matches(currentElem)) {
                         processTopicref(currentElem);
                     }
 
