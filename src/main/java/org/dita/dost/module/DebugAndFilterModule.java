@@ -120,7 +120,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
     private void processFile(final FileInfo f) {
         currentFile = f.src;
-        if (copytoMap.containsKey(f.file)) {
+        if (!exists(f.src)) { //copytoMap.containsKey(f.file)
             logger.debug("Ignoring a copy-to file " + f.src);
             return;
         }
