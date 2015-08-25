@@ -7,7 +7,9 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
+import org.apache.commons.codec.binary.Base64;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
@@ -126,7 +129,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             ImageReader r = null;
             ImageInputStream iis = null;
             try {
-                in = imgInput.toURL().openConnection().getInputStream();
+                in = getInputStream(imgInput);
                 iis = ImageIO.createImageInputStream(in);
                 final Iterator<ImageReader> i = ImageIO.getImageReaders(iis);
                 if (!i.hasNext()) {
@@ -166,6 +169,23 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             logger.error("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);
         }
         return a.build();
+    }
+
+    private InputStream getInputStream(final URI imgInput) throws IOException {
+        if (imgInput.getScheme().equals("data")) {
+            final String data = imgInput.getSchemeSpecificPart();
+            final int separator = data.indexOf(',');
+            final String metadata = data.substring(0, separator);
+            if (metadata.endsWith(";base64")) {
+                logger.info("Base-64 encoded data URI");
+                return new ByteArrayInputStream(Base64.decodeBase64(data.substring(separator + 1)));
+            } else {
+                logger.info("ASCII encoded data URI");
+                return new ByteArrayInputStream(data.substring(separator).getBytes());
+            }
+        } else {
+            return imgInput.toURL().openConnection().getInputStream();
+        }
     }
 
     private URI getImageFile(final URI href) {
