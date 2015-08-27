@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import static javax.xml.XMLConstants.*;
 import static org.apache.commons.io.IOUtils.closeQuietly;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
@@ -495,6 +496,7 @@ public final class Integrator {
                 logger.debug("Read plug-in configuration " + descFile.getPath());
                 final Element plugin = parseDesc(descFile);
                 if (plugin != null) {
+                    plugin.setAttributeNS(XML_NS_URI, XML_NS_PREFIX + ":base", descFile.toURI().resolve(".").toString());
                     root.appendChild(pluginsDoc.importNode(plugin, true));
                 }
             }
