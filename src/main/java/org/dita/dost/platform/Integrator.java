@@ -12,10 +12,12 @@ import static javax.xml.XMLConstants.*;
 import static org.apache.commons.io.IOUtils.closeQuietly;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
+import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.platform.PluginParser.*;
 
 import java.io.*;
+import java.net.URI;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -492,11 +494,13 @@ public final class Integrator {
         final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
         pluginsDoc.appendChild(root);
         if (!descSet.isEmpty()) {
+            final URI b = new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml").toURI();
             for (final File descFile : descSet) {
                 logger.debug("Read plug-in configuration " + descFile.getPath());
                 final Element plugin = parseDesc(descFile);
                 if (plugin != null) {
-                    plugin.setAttributeNS(XML_NS_URI, XML_NS_PREFIX + ":base", descFile.toURI().resolve(".").toString());
+                    final URI base = getRelativePath(b, descFile.toURI());
+                    plugin.setAttributeNS(XML_NS_URI, XML_NS_PREFIX + ":base", base.toString());
                     root.appendChild(pluginsDoc.importNode(plugin, true));
                 }
             }
