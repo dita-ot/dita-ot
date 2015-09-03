@@ -16,6 +16,7 @@ import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FilterUtils.*;
+import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.*;
 import java.net.URI;
@@ -28,6 +29,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
@@ -47,6 +50,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.*;
+import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 
@@ -149,6 +153,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             filterUtils = baseFilterUtils.refine(subjectSchemeReader.getSubjectSchemeMap());
         }
 
+        InputSource in = null;
         OutputStream out = null;
         try {
             out = new FileOutputStream(outputFile);
@@ -156,8 +161,12 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger));
 
             final TransformerFactory tf = TransformerFactory.newInstance();
-            final Transformer serializer = tf.newTransformer();
-            XMLReader xmlSource = getXmlReader(f.format);
+//            final Transformer serializer = tf.newTransformer();
+            final SAXTransformerFactory stf = (SAXTransformerFactory) tf;
+            final TransformerHandler serializer = stf.newTransformerHandler();
+
+            XMLReader parser = getXmlReader(f.format);
+            XMLReader xmlSource = parser;
             for (final XMLFilter filter: getProcessingPipe(currentFile)) {
                 filter.setParent(xmlSource);
                 xmlSource = filter;
@@ -166,9 +175,19 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             // when reusing filter with multiple Transformers.
             xmlSource.setContentHandler(null);
 
-            final Source source = new SAXSource(xmlSource, new InputSource(f.src.toString()));
+            try {
+                final LexicalHandler lexicalHandler = new DTDForwardHandler(xmlSource);
+                parser.setProperty("http://xml.org/sax/properties/lexical-handler", lexicalHandler);
+                parser.setFeature("http://xml.org/sax/features/lexical-handler", true);
+            } catch (final SAXNotRecognizedException e) {}
+
+            in = new InputSource(f.src.toString());
+//            final Source source = new SAXSource(xmlSource, in);
             final Result result = new StreamResult(out);
-            serializer.transform(source, result);
+//            serializer.transform(source, result);
+            serializer.setResult(result);
+            xmlSource.setContentHandler(serializer);
+            xmlSource.parse(new InputSource(f.src.toString()));
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
@@ -180,6 +199,11 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 }catch (final Exception e) {
                     logger.error(e.getMessage(), e) ;
                 }
+            }
+            try {
+                close(in);
+            } catch (final IOException e) {
+                logger.error(e.getMessage(), e) ;
             }
         }
 
@@ -716,4 +740,39 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
     }
 
+    /**
+     * Lexical handler to forward DTD declaration into processing instructions.
+     */
+    private final class DTDForwardHandler implements LexicalHandler {
+
+        private final XMLReader parser;
+
+        public DTDForwardHandler(XMLReader parser) {
+            this.parser = parser;
+        }
+
+        @Override
+        public void startDTD(final String name, final String publicId, final String systemId) throws SAXException {
+            parser.getContentHandler().processingInstruction("doctype-public", publicId);
+            parser.getContentHandler().processingInstruction("doctype-system", systemId);
+        }
+
+        @Override
+        public void endDTD() throws SAXException {}
+
+        @Override
+        public void startEntity(String name) throws SAXException {}
+
+        @Override
+        public void endEntity(String name) throws SAXException {}
+
+        @Override
+        public void startCDATA() throws SAXException {}
+
+        @Override
+        public void endCDATA() throws SAXException {}
+
+        @Override
+        public void comment(char[] ch, int start, int length) throws SAXException {}
+    }
 }
