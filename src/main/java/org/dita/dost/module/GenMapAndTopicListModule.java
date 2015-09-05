@@ -642,7 +642,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private void categorizeReferenceFile(final Reference file) {
         // avoid files referred by coderef being added into wait list
-        if (coderefTargetSet.contains(file.filename)) {
+        if (coderefTargetSet.contains(file.filename) || listFilter.getCoderefTargets().contains(file.filename)) {
             return;
         }
         if (isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
