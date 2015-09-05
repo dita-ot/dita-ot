@@ -1,0 +1,10 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  id="topic-d" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Target Topic D</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">This is topic D.</p>
+    <codeblock class="+ topic/pre pr-d/codeblock "><coderef class="+ topic/xref pr-d/coderef " href="../aux/test.json" format="txt"/></codeblock>
+    <p class="- topic/p "><image class="- topic/image " href="../images/carwash.jpg"/></p>
+  </body>
+</topic>
