@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -72,6 +73,28 @@ public class TestUtils {
         }
     }
     
+    /**
+     * Get source DITA directory.
+     *
+     * @return directory
+     * @throws RuntimeException if retrieveing the directory failed
+     */
+    public static File getSourceDitaDir() throws RuntimeException {
+        final String path = System.getProperty("java.class.path");
+        final StringTokenizer st = new StringTokenizer(path, System.getProperty("path.separator"));
+        while (st.hasMoreTokens()) {
+            final String token = st.nextToken();
+            if (token.endsWith("build/resources/test")) {
+                final String buildRoot = token.substring(0, token.length() - "build/resources/test".length());
+                File mainDir = new File(buildRoot + "src/main");
+                if (mainDir.isDirectory()) {
+                    return mainDir;
+                }
+            }
+        }
+        throw new RuntimeException("Failed to find src/main directory.");
+    }
+
     /**
      * Create temporary directory based on test class.
      * 
@@ -307,11 +330,11 @@ public class TestUtils {
         }
         
         public void info(final String msg) {
-            //System.out.println(msg);
+            System.out.println(msg);
         }
 
         public void warn(final String msg) {
-            //System.err.println(msg);
+            System.err.println(msg);
         }
 
         public void error(final String msg) {
@@ -328,7 +351,7 @@ public class TestUtils {
         }
 
         public void debug(final String msg) {
-            //System.out.println(msg);
+            System.out.println(msg);
         }
 
     }
