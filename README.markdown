@@ -1,7 +1,7 @@
 DITA Open Toolkit [![Build Status](https://secure.travis-ci.org/dita-ot/dita-ot.png?branch=develop)](http://travis-ci.org/dita-ot/dita-ot)
 =================
 
-The DITA Open Toolkit, or DITA-OT for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.org](http://www.dita-ot.org/) for documentation, information about releases, and download packages.
+The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.org](http://www.dita-ot.org/) for documentation, information about releases, and download packages.
 
 Prerequisites
 -------------
@@ -36,7 +36,7 @@ Usage
 
         src/main/bin/dita [options]
         
-   See the [documentation](http://www.dita-ot.org/2.1/) for arguments and [options](http://www.dita-ot.org/2.1/readme/using-dita-command.html).
+   See the [documentation](http://www.dita-ot.org/2.1/) for arguments and [options](http://www.dita-ot.org/2.1/getting-started/using-dita-command.html).
 
 Distribution
 ------------
