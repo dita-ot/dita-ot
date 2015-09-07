@@ -56,7 +56,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     File currentParsingFile = null;
     File outputFile = null;
-    private final Stack<File> outputFileNameStack = new Stack<File>();
+    private final Stack<File> outputFileNameStack = new Stack<>();
 
     String targetTopicId = null;
 
@@ -68,14 +68,14 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     private int includelevel = 0;
     private int skipLevel = 0;
 
-    private final Set<String> topicSpecSet = new HashSet<String>(16);
+    private final Set<String> topicSpecSet = new HashSet<>(16);
 
     boolean startFromFirstTopic = false;
 
     Writer output = null;
 
-    private final Stack<Writer> outputStack = new Stack<Writer>();
-    private final Stack<Element> stubStack = new Stack<Element>();
+    private final Stack<Writer> outputStack = new Stack<>();
+    private final Stack<Element> stubStack = new Stack<>();
 
     // stub is used as the anchor to mark where to insert generated child
     // topicref inside current topicref
@@ -85,13 +85,13 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     // insert generated topicref sibling to current topicref
     Element siblingStub = null;
 
-    Set<String> topicID = new HashSet<String>();
+    Set<String> topicID = new HashSet<>();
 
-    final Set<String> copyto = new HashSet<String>();
+    final Set<String> copyto = new HashSet<>();
 
-    final Set<String> copytoSource = new HashSet<String>();
+    final Set<String> copytoSource = new HashSet<>();
 
-    final Map<URI, URI> copytotarget2source = new HashMap<URI, URI>();
+    final Map<URI, URI> copytotarget2source = new HashMap<>();
 
     Map<String, String> currentParsingFileTopicIDChangeTable;
 
@@ -537,7 +537,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     private static final List<String> excludeList;
     static {
-        final List<String> el = new ArrayList<String>();
+        final List<String> el = new ArrayList<>();
         el.add(TOPIC_INDEXTERM.toString());
         el.add(TOPIC_DRAFT_COMMENT.toString());
         el.add(TOPIC_REQUIRED_CLEANUP.toString());
@@ -561,7 +561,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         if (root == null) {
             return null;
         }
-        final Queue<Element> queue = new LinkedList<Element>();
+        final Queue<Element> queue = new LinkedList<>();
         queue.offer(root);
         while (!queue.isEmpty()) {
             final Element pe = queue.poll();

@@ -14,7 +14,7 @@
 
 <xsl:template match="*[contains(@class,' abbrev-d/abbreviated-form ')]" name="topic.abbreviated-form">
   <xsl:if test="@keyref and @href">
-    <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, @href)"/>
+    <xsl:variable name="entry-file" select="concat($WORKDIR, @href)"/>
     <xsl:variable name="entry-file-contents" select="document($entry-file, /)"/>
     <xsl:choose>
       <xsl:when test="$entry-file-contents//*[contains(@class,' glossentry/glossentry ')]">

@@ -41,9 +41,9 @@ class InsertAction extends XMLFilterImpl implements IAction {
      * Default Constructor.
      */
     public InsertAction() {
-        fileNameSet = new LinkedHashSet<String>(16);
+        fileNameSet = new LinkedHashSet<>(16);
         logger = new DITAOTJavaLogger();
-        paramTable = new Hashtable<String,String>();
+        paramTable = new Hashtable<>();
         try {
             reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);

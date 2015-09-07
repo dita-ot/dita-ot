@@ -46,7 +46,7 @@
     <table class="- topic/table " colsep="1" frame="all" rowsep="1">
       <tgroup class="- topic/tgroup " cols="5">
         <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth=" 1*  "/>
-        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="*"/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="1*"/>
         <colspec class="- topic/colspec " colname="col3" colnum="3" colwidth="1*"/>
         <colspec class="- topic/colspec " colname="col4" colnum="4" colwidth="35%"/>
         <colspec class="- topic/colspec " colname="col5" colnum="5" colwidth="100pt"/>

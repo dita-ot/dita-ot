@@ -24,7 +24,7 @@ final class PluginRequirement {
      * Constructor.
      */
     public PluginRequirement() {
-        plugins = new ArrayList<String>();
+        plugins = new ArrayList<>();
         required = true;
     }
     /**

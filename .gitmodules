@@ -1,9 +1,6 @@
 [submodule "src/test/testsuite"]
 	path = src/test/testsuite
 	url = git://github.com/dita-ot/testsuite.git
-[submodule "src/main/ext-plugins"]
-	path = src/main/ext-plugins
-	url = git://github.com/dita-ot/ext-plugins.git
 [submodule "src/main/docsrc"]
 	path = src/main/docsrc
 	url = git://github.com/dita-ot/docs.git

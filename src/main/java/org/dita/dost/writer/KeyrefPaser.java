@@ -24,11 +24,9 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.MergeUtils;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.*;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -50,7 +48,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private static final Set<String> no_copy;
     static {
-        final Set<String> nc = new HashSet<String>();
+        final Set<String> nc = new HashSet<>();
         nc.add(ATTRIBUTE_NAME_ID);
         nc.add(ATTRIBUTE_NAME_CLASS);
         nc.add(ATTRIBUTE_NAME_XTRC);
@@ -68,7 +66,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private static final Set<String> no_copy_topic;
     static {
-        final Set<String> nct = new HashSet<String>();
+        final Set<String> nct = new HashSet<>();
         nct.addAll(no_copy);
         nct.add("query");
         nct.add("search");
@@ -83,7 +81,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /** List of key reference element definitions. */
     private final static List<KeyrefInfo> keyrefInfos;
     static {
-        final List<KeyrefInfo> ki = new ArrayList<KeyrefInfo>();
+        final List<KeyrefInfo> ki = new ArrayList<>();
         ki.add(new KeyrefInfo(TOPIC_AUTHOR, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_DATA, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_DATA_ABOUT, ATTRIBUTE_NAME_HREF, false, true));
@@ -106,7 +104,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         keyrefInfos = Collections.unmodifiableList(ki);
     }
         
-    private Map<String, Element> definitionMap;
+    private KeyScope definitionMap;
     /** File name with relative path to the temporary directory of input file. */
     private File inputFile;
 
@@ -125,11 +123,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private int keyrefLeval;
 
-    /**
-     * It is used to store the target of the keys
-     * In the from the map <keys, target>.
-     */
-    private Map<String, URI> keyMap;
 
     /**
      * It is used to indicate whether the keyref is valid.
@@ -155,7 +148,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private final Stack<Boolean> hasSubElem;
 
     /** Current key definition. */
-    private Element elem;
+    private KeyDef keyDef;
 
     /** Set of link targets which are not resource-only */
     private Set<URI> normalProcessingRoleTargets;
@@ -165,15 +158,14 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     public KeyrefPaser() {
         keyrefLeval = 0;
-        keyrefLevalStack = new Stack<Integer>();
-        validKeyref = new Stack<Boolean>();
+        keyrefLevalStack = new Stack<>();
+        validKeyref = new Stack<>();
         empty = true;
-        keyMap = new HashMap<String, URI>();
-        elemName = new Stack<String>();
-        hasSubElem = new Stack<Boolean>();
+        elemName = new Stack<>();
+        hasSubElem = new Stack<>();
     }
     
-    public void setKeyDefinition(final Map<String, Element> definitionMap) {
+    public void setKeyDefinition(final KeyScope definitionMap) {
         this.definitionMap = definitionMap;
     }
 
@@ -182,14 +174,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     public void setCurrentFile(final File inputFile) {
         this.inputFile = inputFile;
-    }
-    
-    /**
-     * Set key map.
-     * @param map key map
-     */
-    public void setKeyMap(final Map<String, URI> map) {
-        keyMap = map;
     }
     
     /**
@@ -214,7 +198,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     @Override
     public void startDocument() throws SAXException {
-        normalProcessingRoleTargets = new HashSet<URI>();
+        normalProcessingRoleTargets = new HashSet<>();
         getContentHandler().startDocument();
     }
     
@@ -237,6 +221,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             // If current element is in the scope of key reference element
             // and the element is empty
             if (!validKeyref.isEmpty() && validKeyref.peek()) {
+                final Element elem = keyDef.element;
                 // Key reference is valid,
                 // need to pull matching content from the key definition
                 // If current element name doesn't equal the key reference element
@@ -386,15 +371,17 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 keyName = keyrefValue.substring(0, slashIndex);
                 elementId = keyrefValue.substring(slashIndex);
             }
-            elem = definitionMap.get(keyName);
+
+            keyDef = definitionMap.get(keyName);
+            final Element elem = keyDef != null ? keyDef.element : null;
 
             // If definition is not null
-            if (elem != null) {
+            if (keyDef != null) {
                 if (currentElement != null) {
                     final NamedNodeMap attrs = elem.getAttributes();
                     // first resolve the keyref attribute
                     if (currentElement.refAttr != null) {
-                        final URI target = keyMap.get(keyName);
+                        final URI target = keyDef != null ? keyDef.href : null;
                         if (target != null && target.toString().length() != 0) {
                             URI target_output = target;
                             // if the scope equals local, the target should be verified that
@@ -440,7 +427,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                         } else {
                             // key does not exist.
-                            logger.info(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
+                            final MessageBean m = definitionMap.name == null
+                                    ? MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
+                                    : MessageUtils.getInstance().getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                            logger.info(m.setLocation(atts).toString());
                         }
 
                     } else if (!currentElement.hasNestedElements) {
@@ -500,7 +490,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 }
             } else {
                 // key does not exist
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF)).setLocation(atts).toString());
+                final MessageBean m = definitionMap.name == null
+                        ? MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
+                        : MessageUtils.getInstance().getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                logger.info(m.setLocation(atts).toString());
             }
 
             validKeyref.push(valid);

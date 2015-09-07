@@ -28,7 +28,7 @@ AbstractPipelineOutput {
      */
     public PipelineHashIO() {
         super();
-        hash = new HashMap<String, String>();
+        hash = new HashMap<>();
     }
 
     /**
@@ -53,5 +53,10 @@ AbstractPipelineOutput {
         String value = null;
         value = hash.get(name);
         return value;
+    }
+
+    @Override
+    public Map<String, String> getAttributes() {
+        return new HashMap<>(hash);
     }
 }

@@ -7,7 +7,7 @@
     <topicref class="- map/topicref " href="blatviewduplicate.dita" keys="blatview" locktitle="yes" navtitle="blatview duplicate"></topicref>
     
     <!-- skipped key -->
-    <topicref class="- map/topicref " href="blatexample.dita" keys="blatexample" locktitle="yes" navtitle="blatexample"></topicref>
+    <!--topicref class="- map/topicref " href="blatexample.dita" keys="blatexample" locktitle="yes" navtitle="blatexample"></topicref-->
     
     <!-- skipped topicref -->
     <topicref class="- map/topicref " href="keyRef_blatexample.dita" locktitle="yes" navtitle="keyRef_blatexample"></topicref>

@@ -169,4 +169,11 @@ public class URLUtilsTest {
         assertEquals(new URI("foo"), URLUtils.stripFragment(new URI("foo")));
     }
 
+    @Test
+    public void testAddSuffix() throws URISyntaxException {
+        assertEquals(new URI("foo-1.bar"), URLUtils.addSuffix(new URI("foo.bar"), "-1"));
+        assertEquals(new URI("baz/foo-1.bar"), URLUtils.addSuffix(new URI("baz/foo.bar"), "-1"));
+        assertEquals(new URI("baz.qux/foo-1.bar"), URLUtils.addSuffix(new URI("baz.qux/foo.bar"), "-1"));
+    }
+
 }

@@ -35,9 +35,9 @@ public class SubjectSchemeReader {
     private final Map<String, Map<String, String>> defaultValueMap;
 
     public SubjectSchemeReader() {
-        validValuesMap = new HashMap<String, Map<String, Set<String>>>();
-        defaultValueMap = new HashMap<String, Map<String, String>>();
-        bindingMap = new HashMap<String, Map<String, Set<Element>>>();
+        validValuesMap = new HashMap<>();
+        defaultValueMap = new HashMap<>();
+        bindingMap = new HashMap<>();
     }
     
     /**
@@ -95,7 +95,7 @@ public class SubjectSchemeReader {
      * @param inputFile XML properties file absolute path
      */
     public static Map<URI, Set<URI>> readMapFromXML(final File inputFile) throws IOException {
-        final Map<URI, Set<URI>> graph = new HashMap<URI, Set<URI>>();
+        final Map<URI, Set<URI>> graph = new HashMap<>();
         if (!inputFile.exists()) {
             return Collections.EMPTY_MAP;
         }
@@ -120,7 +120,7 @@ public class SubjectSchemeReader {
         for (final Map.Entry<Object, Object> entry: prop.entrySet()) {
             final String key = (String) entry.getKey();
             final String value = (String) entry.getValue();
-            final Set<URI> r = new HashSet<URI>();
+            final Set<URI> r = new HashSet<>();
             for (final String v: StringUtils.restoreSet(value, COMMA)) {
                 r.add(toURI(v));
             }
@@ -205,7 +205,7 @@ public class SubjectSchemeReader {
                                     attributeName = node.getAttribute(ATTRIBUTE_NAME_NAME);
                                     Map<String, Set<Element>> S = bindingMap.get(attributeName);
                                     if (S == null) {
-                                        S = new HashMap<String, Set<Element>>();
+                                        S = new HashMap<>();
                                         bindingMap.put(attributeName, S);
                                     }
                                 } else if (SUBJECTSCHEME_DEFAULTSUBJECT.matches(attrValue)) {
@@ -214,7 +214,7 @@ public class SubjectSchemeReader {
                                     if (keyValue != null) {
                                         Map<String, String> S = defaultValueMap.get(attributeName);
                                         if (S == null) {
-                                            S = new HashMap<String, String>();
+                                            S = new HashMap<>();
                                         }
                                         S.put(elementName, keyValue);
                                         defaultValueMap.put(attributeName, S);
@@ -229,11 +229,11 @@ public class SubjectSchemeReader {
                                     if (subTree != null) {
                                         Map<String, Set<Element>> S = bindingMap.get(attributeName);
                                         if (S == null) {
-                                            S = new HashMap<String, Set<Element>>();
+                                            S = new HashMap<>();
                                         }
                                         Set<Element> A = S.get(elementName);
                                         if (A == null) {
-                                            A = new HashSet<Element>();
+                                            A = new HashSet<>();
                                         }
                                         if (!A.contains(subTree)) {
                                             // Add sub-tree to valid values map
@@ -264,7 +264,7 @@ public class SubjectSchemeReader {
         if (root == null || keyValue == null) {
             return null;
         }
-        final LinkedList<Element> queue = new LinkedList<Element>();
+        final LinkedList<Element> queue = new LinkedList<>();
         queue.add(root);
         while (!queue.isEmpty()) {
             final Element node = queue.removeFirst();
@@ -299,15 +299,15 @@ public class SubjectSchemeReader {
 
         Map<String, Set<String>> valueMap = validValuesMap.get(attName);
         if (valueMap == null) {
-            valueMap = new HashMap<String, Set<String>>();
+            valueMap = new HashMap<>();
         }
 
         Set<String> valueSet = valueMap.get(elementName);
         if (valueSet == null) {
-            valueSet = new HashSet<String>();
+            valueSet = new HashSet<>();
         }
 
-        final LinkedList<Element> queue = new LinkedList<Element>();
+        final LinkedList<Element> queue = new LinkedList<>();
         queue.offer(subtree);
 
         while (!queue.isEmpty()) {

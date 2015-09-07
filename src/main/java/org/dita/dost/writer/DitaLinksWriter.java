@@ -48,7 +48,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
      */
     public DitaLinksWriter() {
         super();
-        topicSpecList = new ArrayList<String>();
+        topicSpecList = new ArrayList<>();
         try {
             saxToDomTransformer = TransformerFactory.newInstance().newTransformer();
         } catch (final TransformerConfigurationException e) {
@@ -72,7 +72,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
             return;
         }
         curMatchTopic = indexEntries.containsKey(SHARP) ? SHARP : null;
-        topicIdStack = new ArrayDeque<String>();
+        topicIdStack = new ArrayDeque<>();
         super.write(filename);
     }
 

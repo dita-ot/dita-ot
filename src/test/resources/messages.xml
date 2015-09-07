@@ -403,6 +403,11 @@
     <reason>Chunk attribute uses both "to-content" and "by-topic" that conflict with each other.</reason>
     <response>Ignoring "by-topic" token.</response>
   </message>
+  
+  <message id="DOTJ065E" type="ERROR">
+    <reason>Branch filter generated topic %1 used more than once.</reason>
+    <response>Renaming %1 to %2.</response>
+  </message>
 
   <!-- End of Java Messages -->
     

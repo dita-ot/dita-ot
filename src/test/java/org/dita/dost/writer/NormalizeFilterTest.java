@@ -1,63 +1,47 @@
 package org.dita.dost.writer;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.XMLUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static javax.xml.XMLConstants.NULL_NS_URI;
+import static org.dita.dost.util.Constants.*;
+import static org.junit.Assert.*;
 
 public class NormalizeFilterTest {
 
-	@BeforeClass
-    public static void setUp() {
-		TestUtils.resetXMLUnit();
-		XMLUnit.setIgnoreWhitespace(true);
-        XMLUnit.setIgnoreComments(true);
-		//XMLUnit.setIgnoreAttributeOrder(true);
-	}
-	
-	@Test
-	public void testNoFilter() throws Exception {
-        test("topic.dita");
-	}
-	
-	private void test(final String file) throws Exception {
-		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setNamespaceAware(true);
-		final DocumentBuilder db = dbf.newDocumentBuilder();
-		final InputStream expStream = getClass().getClassLoader().getResourceAsStream("NormalizeFilterTest/exp/" + file);
+    @Test
+    public void testCascade() throws Exception {
+        final NormalizeFilter f = new NormalizeFilter();
+        f.setLogger(new TestUtils.TestLogger());
+        f.setContentHandler(new DefaultHandler() {
+            @Override
+            public void startElement(String uri, String localName,
+                                     String qName, Attributes attributes) throws SAXException {
+                assertEquals(ATTRIBUTE_CASCADE_VALUE_NOMERGE, attributes.getValue(ATTRIBUTE_NAME_CASCADE));
+            }
+        });
+        f.startElement(NULL_NS_URI, MAP_MAP.localName, MAP_MAP.localName, new XMLUtils.AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CLASS, MAP_MAP.toString()).build());
+    }
 
-		final Transformer t = TransformerFactory.newInstance().newTransformer();
-		final InputStream src = getClass().getClassLoader().getResourceAsStream("NormalizeFilterTest/src/" + file);
-		final NormalizeFilter f = new NormalizeFilter();
-		f.setParent(XMLUtils.getXMLReader());
-		f.setLogger(new TestUtils.TestLogger());
-		final SAXSource s = new SAXSource(f, new InputSource(src));
-		if (false) { // XXX: comparing resulting DOM document will fail even thought the XML content is identical
-			final Document act = db.newDocument();
-			t.transform(s, new DOMResult(act));
-			assertXMLEqual(db.parse(expStream), act);
-		} else {
-			final StringWriter w = new StringWriter();
-			t.transform(s, new StreamResult(w));
-			assertXMLEqual(new InputSource(expStream), new InputSource(new StringReader(w.toString())));
-		}
-	}
+    @Test
+    public void testExistingCascade() throws Exception {
+        final NormalizeFilter f = new NormalizeFilter();
+        f.setLogger(new TestUtils.TestLogger());
+        f.setContentHandler(new DefaultHandler() {
+            @Override
+            public void startElement(String uri, String localName,
+                                     String qName, Attributes attributes) throws SAXException {
+                assertEquals(ATTRIBUTE_CASCADE_VALUE_MERGE, attributes.getValue(ATTRIBUTE_NAME_CASCADE));
+            }
+        });
+        f.startElement(NULL_NS_URI, MAP_MAP.localName, MAP_MAP.localName, new XMLUtils.AttributesBuilder()
+                .add(ATTRIBUTE_NAME_CLASS, MAP_MAP.toString())
+                .add(ATTRIBUTE_NAME_CASCADE, ATTRIBUTE_CASCADE_VALUE_MERGE).build());
+    }
 
 }

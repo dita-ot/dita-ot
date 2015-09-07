@@ -1,298 +1,298 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
-<map title="test">
-  <topicmeta>
-    <navtitle>map navtitle</navtitle>
-    <linktext>map linktext</linktext>
-    <searchtitle>map searchtitle</searchtitle>
-    <shortdesc>map shortdesc</shortdesc>
-    <author>map author</author>
-    <source>map source</source>
-    <publisher>map publisher</publisher>
-    <copyright>
-      <copyryear year="2010"/>
-      <copyrholder>map copyrholder</copyrholder>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+  title="test" ditaarch:DITAArchVersion="1.2">
+  <topicmeta class="- map/topicmeta ">
+    <navtitle class="- topic/navtitle ">map navtitle</navtitle>
+    <linktext class="- map/linktext ">map linktext</linktext>
+    <searchtitle class="- map/searchtitle ">map searchtitle</searchtitle>
+    <shortdesc class="- map/shortdesc ">map shortdesc</shortdesc>
+    <author class="- topic/author ">map author</author>
+    <source class="- topic/source ">map source</source>
+    <publisher class="- topic/publisher ">map publisher</publisher>
+    <copyright class="- topic/copyright ">
+      <copyryear class="- topic/copyryear " year="2010"/>
+      <copyrholder class="- topic/copyrholder ">map copyrholder</copyrholder>
     </copyright>
-    <critdates>
-      <created date="2010"/>
-      <revised modified="2010"/>
+    <critdates class="- topic/critdates ">
+      <created class="- topic/created " date="2010"/>
+      <revised class="- topic/revised " modified="2010"/>
     </critdates>
-    <permissions view="map permissins"/>
-    <metadata>
-      <audience/>
-      <category>map category</category>
-      <keywords>
-        <keyword>map keyword</keyword>
+    <permissions class="- topic/permissions " view="map permissins"/>
+    <metadata class="- topic/metadata ">
+      <audience class="- topic/audience "/>
+      <category class="- topic/category ">map category</category>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">map keyword</keyword>
       </keywords>
-      <prodinfo>
-        <prodname>map prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="1.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">map prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
         </vrmlist>
       </prodinfo>
-      <othermeta content="map othermeta" name="othermeta"/>
-      <data>map data</data>
-      <data-about>
-        <data>map data</data>
+      <othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+      <data class="- topic/data ">map data</data>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">map data</data>
       </data-about>
-      <foreign>map foreign</foreign>
-      <unknown>map unknown</unknown>
+      <foreign class="- topic/foreign ">map foreign</foreign>
+      <unknown class="- topic/unknown ">map unknown</unknown>
     </metadata>
-    <audience/>
-    <category>map category</category>
-    <keywords>
-      <keyword>map keyword</keyword>
+    <audience class="- topic/audience "/>
+    <category class="- topic/category ">map category</category>
+    <keywords class="- topic/keywords ">
+      <keyword class="- topic/keyword ">map keyword</keyword>
     </keywords>
-    <exportanchors>
-      <anchorkey keyref="map anchorkey"/>
+    <exportanchors class="+ topic/keywords delay-d/exportanchors ">
+      <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="map anchorkey"/>
     </exportanchors>
-    <prodinfo>
-      <prodname>map prodnamefoo</prodname>
-      <vrmlist>
-        <vrm version="1.0"/>
+    <prodinfo class="- topic/prodinfo ">
+      <prodname class="- topic/prodname ">map prodnamefoo</prodname>
+      <vrmlist class="- topic/vrmlist ">
+        <vrm class="- topic/vrm " version="1.0"/>
       </vrmlist>
     </prodinfo>
-    <othermeta content="map othermeta" name="othermeta"/>
-    <resourceid id="foo"/>
-    <data>map datafoo</data>
-    <data-about>
-      <data>map datafoo</data>
+    <othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+    <resourceid class="- topic/resourceid " id="foo"/>
+    <data class="- topic/data ">map datafoo</data>
+    <data-about class="- topic/data-about ">
+      <data class="- topic/data ">map datafoo</data>
     </data-about>
-    <foreign>map foreign</foreign>
-    <unknown>map unknown</unknown>
+    <foreign class="- topic/foreign ">map foreign</foreign>
+    <unknown class="- topic/unknown ">map unknown</unknown>
   </topicmeta>
-  <topicref href="a.xml">
-    <topicmeta>
-      <author>map author</author>
-      <source>map source</source>
-      <publisher>map publisher</publisher>
-      <copyright>
-        <copyryear year="2010"/>
-        <copyrholder>map copyrholder</copyrholder>
+  <topicref class="- map/topicref " href="a.xml">
+    <topicmeta class="- map/topicmeta ">
+      <author class="- topic/author ">map author</author>
+      <source class="- topic/source ">map source</source>
+      <publisher class="- topic/publisher ">map publisher</publisher>
+      <copyright class="- topic/copyright ">
+        <copyryear class="- topic/copyryear " year="2010"/>
+        <copyrholder class="- topic/copyrholder ">map copyrholder</copyrholder>
       </copyright>
-      <critdates>
-        <created date="2010"/>
-        <revised modified="2010"/>
+      <critdates class="- topic/critdates ">
+        <created class="- topic/created " date="2010"/>
+        <revised class="- topic/revised " modified="2010"/>
       </critdates>
-      <permissions view="map permissins"/>
-      <audience/>
-      <audience/>
-      <category>map category</category>
-      <category>map category</category>
-      <prodinfo>
-        <prodname>map prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="1.0"/>
+      <permissions class="- topic/permissions " view="map permissins"/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <category class="- topic/category ">map category</category>
+      <category class="- topic/category ">map category</category>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">map prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
         </vrmlist>
       </prodinfo>
-      <prodinfo>
-        <prodname>map prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="1.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">map prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
         </vrmlist>
       </prodinfo>
-      <othermeta content="map othermeta" name="othermeta"/>
-      <othermeta content="map othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
     </topicmeta>
   </topicref>
-  <topicref href="b.xml">
-    <topicmeta>
-      <searchtitle>topicref searchtitle</searchtitle>
-      <author>topicref author</author>
-      <author>map author</author>
-      <source>topicref source</source>
-      <publisher>topicref publisher</publisher>
-      <copyright>
-        <copyryear year="2011"/>
-        <copyrholder>topicref copyrholder</copyrholder>
+  <topicref class="- map/topicref " href="b.xml">
+    <topicmeta class="- map/topicmeta ">
+      <searchtitle class="- map/searchtitle ">topicref searchtitle</searchtitle>
+      <author class="- topic/author ">topicref author</author>
+      <author class="- topic/author ">map author</author>
+      <source class="- topic/source ">topicref source</source>
+      <publisher class="- topic/publisher ">topicref publisher</publisher>
+      <copyright class="- topic/copyright ">
+        <copyryear class="- topic/copyryear " year="2011"/>
+        <copyrholder class="- topic/copyrholder ">topicref copyrholder</copyrholder>
       </copyright>
-      <copyright>
-        <copyryear year="2010"/>
-        <copyrholder>map copyrholder</copyrholder>
+      <copyright class="- topic/copyright ">
+        <copyryear class="- topic/copyryear " year="2010"/>
+        <copyrholder class="- topic/copyrholder ">map copyrholder</copyrholder>
       </copyright>
-      <critdates>
-        <created date="2011"/>
-        <revised modified="2011"/>
+      <critdates class="- topic/critdates ">
+        <created class="- topic/created " date="2011"/>
+        <revised class="- topic/revised " modified="2011"/>
       </critdates>
-      <permissions view="topicref permissins"/>
-      <audience/>
-      <audience/>
-      <audience/>
-      <audience/>
-      <category>topicref category</category>
-      <category>topicref category</category>
-      <category>map category</category>
-      <category>map category</category>
-      <keywords>
-        <keyword>topicref keyword</keyword>
+      <permissions class="- topic/permissions " view="topicref permissins"/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <category class="- topic/category ">topicref category</category>
+      <category class="- topic/category ">topicref category</category>
+      <category class="- topic/category ">map category</category>
+      <category class="- topic/category ">map category</category>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword</keyword>
       </keywords>
-      <keywords>
-        <keyword>topicref keyword</keyword>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword</keyword>
       </keywords>
-      <exportanchors>
-        <anchorkey keyref="topicref anchorkey"/>
+      <exportanchors class="+ topic/keywords delay-d/exportanchors ">
+        <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="topicref anchorkey"/>
       </exportanchors>
-      <prodinfo>
-        <prodname>topicref prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="2.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topicref prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="2.0"/>
         </vrmlist>
       </prodinfo>
-      <prodinfo>
-        <prodname>topicref prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="2.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topicref prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="2.0"/>
         </vrmlist>
       </prodinfo>
-      <prodinfo>
-        <prodname>map prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="1.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">map prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
         </vrmlist>
       </prodinfo>
-      <prodinfo>
-        <prodname>map prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="1.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">map prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
         </vrmlist>
       </prodinfo>
-      <othermeta content="topicref othermeta" name="othermeta"/>
-      <othermeta content="topicref othermeta" name="othermeta"/>
-      <othermeta content="map othermeta" name="othermeta"/>
-      <othermeta content="map othermeta" name="othermeta"/>
-      <resourceid id="foo"/>
-      <data>topicref data</data>
-      <data>topicref datafoo</data>
-      <data-about>
-        <data>topicref data</data>
+      <othermeta class="- topic/othermeta " content="topicref othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="topicref othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+      <resourceid class="- topic/resourceid " id="foo"/>
+      <data class="- topic/data ">topicref data</data>
+      <data class="- topic/data ">topicref datafoo</data>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topicref data</data>
       </data-about>
-      <data-about>
-        <data>topicref datafoo</data>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topicref datafoo</data>
       </data-about>
-      <foreign>topicref foreign</foreign>
-      <foreign>topicref foreign</foreign>
-      <unknown>topicref unknown</unknown>
-      <unknown>topicref unknown</unknown>
-      <linktext>topicref linktext</linktext>
-      <shortdesc>topicref shortdesc</shortdesc>
-      <navtitle>topicref navtitle</navtitle>
+      <foreign class="- topic/foreign ">topicref foreign</foreign>
+      <foreign class="- topic/foreign ">topicref foreign</foreign>
+      <unknown class="- topic/unknown ">topicref unknown</unknown>
+      <unknown class="- topic/unknown ">topicref unknown</unknown>
+      <linktext class="- map/linktext ">topicref linktext</linktext>
+      <shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
+      <navtitle class="- topic/navtitle ">topicref navtitle</navtitle>
     </topicmeta>
   </topicref>
-  <topicref href="c.xml">
-    <topicmeta>
-      <author>map author</author>
-      <source>map source</source>
-      <publisher>map publisher</publisher>
-      <copyright>
-        <copyryear year="2010"/>
-        <copyrholder>map copyrholder</copyrholder>
+  <topicref class="- map/topicref " href="c.xml">
+    <topicmeta class="- map/topicmeta ">
+      <author class="- topic/author ">map author</author>
+      <source class="- topic/source ">map source</source>
+      <publisher class="- topic/publisher ">map publisher</publisher>
+      <copyright class="- topic/copyright ">
+        <copyryear class="- topic/copyryear " year="2010"/>
+        <copyrholder class="- topic/copyrholder ">map copyrholder</copyrholder>
       </copyright>
-      <critdates>
-        <created date="2010"/>
-        <revised modified="2010"/>
+      <critdates class="- topic/critdates ">
+        <created class="- topic/created " date="2010"/>
+        <revised class="- topic/revised " modified="2010"/>
       </critdates>
-      <permissions view="map permissins"/>
-      <audience/>
-      <audience/>
-      <category>map category</category>
-      <category>map category</category>
-      <prodinfo>
-        <prodname>map prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="1.0"/>
+      <permissions class="- topic/permissions " view="map permissins"/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <category class="- topic/category ">map category</category>
+      <category class="- topic/category ">map category</category>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">map prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
         </vrmlist>
       </prodinfo>
-      <prodinfo>
-        <prodname>map prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="1.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">map prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
         </vrmlist>
       </prodinfo>
-      <othermeta content="map othermeta" name="othermeta"/>
-      <othermeta content="map othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
     </topicmeta>
   </topicref>
-  <topicref href="d.xml">
-    <topicmeta>
-      <searchtitle>topicref searchtitle</searchtitle>
-      <author>topicref author</author>
-      <author>map author</author>
-      <source>topicref source</source>
-      <publisher>topicref publisher</publisher>
-      <copyright>
-        <copyryear year="2011"/>
-        <copyrholder>topicref copyrholder</copyrholder>
+  <topicref class="- map/topicref " href="d.xml">
+    <topicmeta class="- map/topicmeta ">
+      <searchtitle class="- map/searchtitle ">topicref searchtitle</searchtitle>
+      <author class="- topic/author ">topicref author</author>
+      <author class="- topic/author ">map author</author>
+      <source class="- topic/source ">topicref source</source>
+      <publisher class="- topic/publisher ">topicref publisher</publisher>
+      <copyright class="- topic/copyright ">
+        <copyryear class="- topic/copyryear " year="2011"/>
+        <copyrholder class="- topic/copyrholder ">topicref copyrholder</copyrholder>
       </copyright>
-      <copyright>
-        <copyryear year="2010"/>
-        <copyrholder>map copyrholder</copyrholder>
+      <copyright class="- topic/copyright ">
+        <copyryear class="- topic/copyryear " year="2010"/>
+        <copyrholder class="- topic/copyrholder ">map copyrholder</copyrholder>
       </copyright>
-      <critdates>
-        <created date="2011"/>
-        <revised modified="2011"/>
+      <critdates class="- topic/critdates ">
+        <created class="- topic/created " date="2011"/>
+        <revised class="- topic/revised " modified="2011"/>
       </critdates>
-      <permissions view="topicref permissins"/>
-      <audience/>
-      <audience/>
-      <audience/>
-      <audience/>
-      <category>topicref category</category>
-      <category>topicref category</category>
-      <category>map category</category>
-      <category>map category</category>
-      <keywords>
-        <keyword>topicref keyword</keyword>
+      <permissions class="- topic/permissions " view="topicref permissins"/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <category class="- topic/category ">topicref category</category>
+      <category class="- topic/category ">topicref category</category>
+      <category class="- topic/category ">map category</category>
+      <category class="- topic/category ">map category</category>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword</keyword>
       </keywords>
-      <keywords>
-        <keyword>topicref keyword</keyword>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword</keyword>
       </keywords>
-      <exportanchors>
-        <anchorkey keyref="topicref anchorkey"/>
+      <exportanchors class="+ topic/keywords delay-d/exportanchors ">
+        <anchorkey class="+ topic/keyword delay-d/anchorkey " keyref="topicref anchorkey"/>
       </exportanchors>
-      <prodinfo>
-        <prodname>topicref prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="2.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topicref prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="2.0"/>
         </vrmlist>
       </prodinfo>
-      <prodinfo>
-        <prodname>topicref prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="2.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topicref prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="2.0"/>
         </vrmlist>
       </prodinfo>
-      <prodinfo>
-        <prodname>map prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="1.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">map prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
         </vrmlist>
       </prodinfo>
-      <prodinfo>
-        <prodname>map prodnamefoo</prodname>
-        <vrmlist>
-          <vrm version="1.0"/>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">map prodnamefoo</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
         </vrmlist>
       </prodinfo>
-      <othermeta content="topicref othermeta" name="othermeta"/>
-      <othermeta content="topicref othermeta" name="othermeta"/>
-      <othermeta content="map othermeta" name="othermeta"/>
-      <othermeta content="map othermeta" name="othermeta"/>
-      <resourceid id="foo"/>
-      <data>topicref data</data>
-      <data>topicref datafoo</data>
-      <data-about>
-        <data>topicref data</data>
+      <othermeta class="- topic/othermeta " content="topicref othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="topicref othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="map othermeta" name="othermeta"/>
+      <resourceid class="- topic/resourceid " id="foo"/>
+      <data class="- topic/data ">topicref data</data>
+      <data class="- topic/data ">topicref datafoo</data>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topicref data</data>
       </data-about>
-      <data-about>
-        <data>topicref datafoo</data>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topicref datafoo</data>
       </data-about>
-      <foreign>topicref foreign</foreign>
-      <foreign>topicref foreign</foreign>
-      <unknown>topicref unknown</unknown>
-      <unknown>topicref unknown</unknown>
-      <linktext>topicref linktext</linktext>
-      <shortdesc>topicref shortdesc</shortdesc>
-      <navtitle>topicref navtitle</navtitle>
+      <foreign class="- topic/foreign ">topicref foreign</foreign>
+      <foreign class="- topic/foreign ">topicref foreign</foreign>
+      <unknown class="- topic/unknown ">topicref unknown</unknown>
+      <unknown class="- topic/unknown ">topicref unknown</unknown>
+      <linktext class="- map/linktext ">topicref linktext</linktext>
+      <shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
+      <navtitle class="- topic/navtitle ">topicref navtitle</navtitle>
     </topicmeta>
   </topicref>
 </map>

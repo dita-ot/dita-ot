@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.DelayConrefUtils;
-import org.dita.dost.util.KeyDef;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -30,15 +27,12 @@ import org.xml.sax.helpers.AttributesImpl;
 public final class ConkeyrefFilter extends AbstractXMLFilter {
 
     private File inputFile;
-    private Map<String, KeyDef> keys;
+    private KeyScope keys;
     /** Delayed conref utils, may be {@code null} */
     private DelayConrefUtils delayConrefUtils;
     
-    public void setKeyDefinitions(final Collection<KeyDef> keydefs) {
-        keys = new HashMap<String, KeyDef>();
-        for (final KeyDef k : keydefs) {
-            keys.put(k.keys, k);
-        }
+    public void setKeyDefinitions(final KeyScope keys) {
+        this.keys = keys;
     }
 
     public void setCurrentFile(final File inputFile) {
@@ -76,8 +70,13 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
                 final KeyDef k = keys.get(key);
                 if (k.href != null && (k.scope == null || k.scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
                     URI target = getRelativePath(k.href);
-                    if (id != null) {
+                    final String keyFragment = k.href.getFragment();
+                    if (id != null && keyFragment != null) {
+                        target = setFragment(target, keyFragment + SLASH + id);
+                    } else if (id != null) {
                         target = setFragment(target, id);
+                    } else if (keyFragment != null){
+                        target = setFragment(target, keyFragment);
                     }
                     XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_CONREF, target.toString());
                 } else {

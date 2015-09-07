@@ -67,8 +67,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     public static final String ELEMENT_STUB = "stub";
+    private Mode processingMode;
     /** FileInfos keyed by src. */
-    private final Map<URI, FileInfo> fileinfos = new HashMap<URI, FileInfo>();
+    private final Map<URI, FileInfo> fileinfos = new HashMap<>();
     /** Set of all topic files */
     private final Set<URI> fullTopicSet;
 
@@ -91,7 +92,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private final Set<URI> coderefSet;
 
     /** Set of all images */
-    private final Set<URI> imageSet;
+    private final Set<Reference> formatSet;
 
     /** Set of all images used for flagging */
     private final Set<URI> flagImageSet;
@@ -142,9 +143,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /** Set of files with "@processing-role=resource-only" */
     private final Set<URI> resourceOnlySet;
 
-    /** Map of all key definitions */
-    private final Map<String, KeyDef> keysDefMap;
-
     /** Absolute basedir for processing */
     private URI baseInputDir;
 
@@ -191,37 +189,36 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @throws SAXException never throw such exception
      */
     public GenMapAndTopicListModule() throws SAXException, ParserConfigurationException {
-        fullTopicSet = new HashSet<URI>(128);
-        fullMapSet = new HashSet<URI>(128);
-        hrefTopicSet = new HashSet<URI>(128);
-        hrefWithIDSet = new HashSet<URI>(128);
-        chunkTopicSet = new HashSet<URI>(128);
-        schemeSet = new HashSet<URI>(128);
-        conrefSet = new HashSet<URI>(128);
-        imageSet = new HashSet<URI>(128);
-        flagImageSet = new LinkedHashSet<URI>(128);
-        htmlSet = new HashSet<URI>(128);
-        hrefTargetSet = new HashSet<URI>(128);
-        coderefTargetSet = new HashSet<URI>(16);
-        waitList = new LinkedList<Reference>();
-        doneList = new LinkedList<URI>();
-        failureList = new LinkedList<URI>();
-        conrefTargetSet = new HashSet<URI>(128);
-        nonConrefCopytoTargetSet = new HashSet<URI>(128);
-        copytoMap = new HashMap<URI, URI>();
-        copytoSourceSet = new HashSet<URI>(128);
-        ignoredCopytoSourceSet = new HashSet<URI>(128);
-        outDitaFilesSet = new HashSet<URI>(128);
-        relFlagImagesSet = new LinkedHashSet<URI>(128);
-        conrefpushSet = new HashSet<URI>(128);
-        keysDefMap = new HashMap<String, KeyDef>();
-        keyrefSet = new HashSet<URI>(128);
-        coderefSet = new HashSet<URI>(128);
+        fullTopicSet = new HashSet<>(128);
+        fullMapSet = new HashSet<>(128);
+        hrefTopicSet = new HashSet<>(128);
+        hrefWithIDSet = new HashSet<>(128);
+        chunkTopicSet = new HashSet<>(128);
+        schemeSet = new HashSet<>(128);
+        conrefSet = new HashSet<>(128);
+        formatSet = new HashSet<>();
+        flagImageSet = new LinkedHashSet<>(128);
+        htmlSet = new HashSet<>(128);
+        hrefTargetSet = new HashSet<>(128);
+        coderefTargetSet = new HashSet<>(16);
+        waitList = new LinkedList<>();
+        doneList = new LinkedList<>();
+        failureList = new LinkedList<>();
+        conrefTargetSet = new HashSet<>(128);
+        nonConrefCopytoTargetSet = new HashSet<>(128);
+        copytoMap = new HashMap<>();
+        copytoSourceSet = new HashSet<>(128);
+        ignoredCopytoSourceSet = new HashSet<>(128);
+        outDitaFilesSet = new HashSet<>(128);
+        relFlagImagesSet = new LinkedHashSet<>(128);
+        conrefpushSet = new HashSet<>(128);
+        keyrefSet = new HashSet<>(128);
+        coderefSet = new HashSet<>(128);
 
-        schemeDictionary = new HashMap<URI, Set<URI>>();
+        schemeDictionary = new HashMap<>();
 
         // @processing-role
-        resourceOnlySet = new HashSet<URI>(128);
+        resourceOnlySet = new HashSet<>(128);
     }
 
     @Override
@@ -245,8 +242,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             outputResult();
         } catch (final DITAOTException e) {
             throw e;
-        } catch (final SAXException e) {
-            throw new DITAOTException(e.getMessage(), e);
         } catch (final Exception e) {
             throw new DITAOTException(e.getMessage(), e);
         }
@@ -308,9 +303,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
                 logger.info("Using Xerces grammar pool for DTD and schema caching.");
             } catch (final NoClassDefFoundError e) {
                 logger.debug("Xerces not available, not using grammar caching");
-            } catch (final SAXNotRecognizedException e) {
-                logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-            } catch (final SAXNotSupportedException e) {
+            } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
                 logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
             }
         }
@@ -328,6 +321,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
         setSystemid = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
+        final String mode = input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
+        processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
 
         // For the output control
         job.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
@@ -386,7 +381,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
 
         // create the keydef file for scheme files
-        schemekeydefMap = new HashMap<String, KeyDef>();
+        schemekeydefMap = new HashMap<>();
 
         // Set the mapDir
         job.setInputFile(rootFile);
@@ -405,7 +400,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
         assert fileToParse.isAbsolute();
-        final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
+        final List<XMLFilter> pipe = new ArrayList<>();
 
         if (filterUtils != null) {
             final ProfilingFilter profilingFilter = new ProfilingFilter();
@@ -471,6 +466,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             }
             if (currentFile.equals(rootFile)) {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage(), sax);
+            } else if (processingMode == Mode.STRICT) {
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
             } else {
                 logger.error(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
             }
@@ -478,6 +475,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         } catch (final FileNotFoundException e) {
             if (currentFile.equals(rootFile)) {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTA069F", params).toString(), e);
+            } else if (processingMode == Mode.STRICT) {
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTX008E", params).toString() + ": " + e.getMessage(), e);
             } else {
                 logger.error(MessageUtils.getInstance().getMessage("DOTX008E", params).toString());
             }
@@ -485,6 +484,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         } catch (final Exception e) {
             if (currentFile.equals(rootFile)) {
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(),  e);
+            } else if (processingMode == Mode.STRICT) {
+                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
             } else {
                 logger.error(MessageUtils.getInstance().getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
             }
@@ -512,11 +513,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             if (format != null && format.equals(e.getKey())) {
                 try {
                     return (XMLReader) this.getClass().forName(e.getValue()).newInstance();
-                } catch (final InstantiationException ex) {
-                    throw new SAXException(ex);
-                } catch (final IllegalAccessException ex) {
-                    throw new SAXException(ex);
-                } catch (final ClassNotFoundException ex) {
+                } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
                     throw new SAXException(ex);
                 }
             }
@@ -557,12 +554,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             // key and value.keys will differ when keydef is a redirect to another keydef
             final String key = e.getKey();
             final KeyDef value = e.getValue();
-            if (!keysDefMap.containsKey(key)) {
-                keysDefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
-            }
-            // if the current file is also a schema file
             if (schemeSet.contains(currentFile)) {
-                schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile));
+                schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, currentFile, null));
             }
         }
 
@@ -580,7 +573,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         if (schemeSet != null && !schemeSet.isEmpty()) {
             Set<URI> children = schemeDictionary.get(currentFile);
             if (children == null) {
-                children = new HashSet<URI>();
+                children = new HashSet<>();
             }
             children.addAll(schemeSet);
             schemeDictionary.put(currentFile, children);
@@ -588,7 +581,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             for (final URI filename: hrfSet) {
                 children = schemeDictionary.get(filename);
                 if (children == null) {
-                    children = new HashSet<URI>();
+                    children = new HashSet<>();
                 }
                 children.addAll(schemeSet);
                 schemeDictionary.put(filename, children);
@@ -649,16 +642,18 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private void categorizeReferenceFile(final Reference file) {
         // avoid files referred by coderef being added into wait list
-        if (coderefTargetSet.contains(file.filename)) {
+        if (listFilter.getCoderefTargets().contains(file.filename)) {
             return;
         }
         if (isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format)) {
             addToWaitList(file);
         } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
-            imageSet.add(file.filename);
-            if (!exists(file.filename)){
+            formatSet.add(file);
+            if (!exists(file.filename)) {
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX008W", file.filename.toString()).toString());
             }
+        } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
+            formatSet.add(file);
         } else {
             htmlSet.add(file.filename);
         }
@@ -817,7 +812,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private void handleCopyto() {
         // Validate copy-to map, remove those without valid sources
-        final Map<URI, URI> tempMap = new HashMap<URI, URI>();
+        final Map<URI, URI> tempMap = new HashMap<>();
         for (final URI target: copytoMap.keySet()) {
             final URI source = copytoMap.get(target);
             assert source.isAbsolute();
@@ -838,8 +833,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         copytoMap = tempMap;
 
         // Get pure copy-to sources
-        final Set<URI> pureCopytoSources = new HashSet<URI>(128);
-        final Set<URI> totalCopytoSources = new HashSet<URI>(128);
+        final Set<URI> pureCopytoSources = new HashSet<>(128);
+        final Set<URI> totalCopytoSources = new HashSet<>(128);
         totalCopytoSources.addAll(copytoMap.values());
         totalCopytoSources.addAll(ignoredCopytoSourceSet);
         for (final URI src: totalCopytoSources) {
@@ -859,7 +854,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     private void handleConref() {
         // Get pure conref targets
-        final Set<URI> pureConrefTargets = new HashSet<URI>(128);
+        final Set<URI> pureConrefTargets = new HashSet<>(128);
         for (final URI target: conrefTargetSet) {
             if (!nonConrefCopytoTargetSet.contains(target)) {
                 pureConrefTargets.add(target);
@@ -926,8 +921,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         for (final URI file: conrefSet) {
             getOrCreateFileInfo(fileinfos, file).hasConref = true;
         }
-        for (final URI file: imageSet) {
-            getOrCreateFileInfo(fileinfos, file).format = ATTR_FORMAT_VALUE_IMAGE;
+        for (final Reference file: formatSet) {
+            getOrCreateFileInfo(fileinfos, file.filename).format = file.format;
         }
         for (final URI file: flagImageSet) {
             final FileInfo f = getOrCreateFileInfo(fileinfos, file);
@@ -985,7 +980,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         // Convert copyto map into set and output
         job.setCopytoMap(addFilePrefix(copytoMap));
-        writeKeyDefinition(keysDefMap);
 
         try {
             logger.info("Serializing job specification");
@@ -1020,8 +1014,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)));
             bufferedWriter.write(relativeRootFile);
             bufferedWriter.flush();
-        } catch (final FileNotFoundException e) {
-            logger.error(e.getMessage(), e) ;
         } catch (final IOException e) {
             logger.error(e.getMessage(), e) ;
         } finally {
@@ -1126,7 +1118,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     }
 
     private List<String> sort(final Set<String> set) {
-        final List<String> sorted = new ArrayList<String>(set);
+        final List<String> sorted = new ArrayList<>(set);
         Collections.sort(sorted);
         return sorted;
     }
@@ -1136,10 +1128,10 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @return map with relative keys and values
      */
     private Map<URI, Set<URI>> addMapFilePrefix(final Map<URI, Set<URI>> map) {
-        final Map<URI, Set<URI>> res = new HashMap<URI, Set<URI>>();
+        final Map<URI, Set<URI>> res = new HashMap<>();
         for (final Map.Entry<URI, Set<URI>> e: map.entrySet()) {
             final URI key = e.getKey();
-            final Set<URI> newSet = new HashSet<URI>(e.getValue().size());
+            final Set<URI> newSet = new HashSet<>(e.getValue().size());
             for (final URI file: e.getValue()) {
                 newSet.add(tempFileNameScheme.generateTempFileName(file));
             }
@@ -1155,7 +1147,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @return file paths with prefix
      */
     private Map<URI, URI> addFilePrefix(final Map<URI, URI> set) {
-        final Map<URI, URI> newSet = new HashMap<URI, URI>();
+        final Map<URI, URI> newSet = new HashMap<>();
         for (final Map.Entry<URI, URI> file: set.entrySet()) {
             final URI key = tempFileNameScheme.generateTempFileName(file.getKey());
             final URI value = tempFileNameScheme.generateTempFileName(file.getValue());
@@ -1165,37 +1157,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     }
 
     private Collection<KeyDef> addFilePrefix(final Collection<KeyDef> keydefs) {
-        final Collection<KeyDef> res = new ArrayList<KeyDef>(keydefs.size());
+        final Collection<KeyDef> res = new ArrayList<>(keydefs.size());
         for (final KeyDef k: keydefs) {
             final URI source = tempFileNameScheme.generateTempFileName(k.source);
-            res.add(new KeyDef(k.keys, k.href, k.scope, source));
+            res.add(new KeyDef(k.keys, k.href, k.scope, source, null));
         }
         return res;
-    }
-    
-    /**
-     * Add key definition to job configuration
-     *
-     * @param keydefs key defintions to add
-     */
-    private void writeKeyDefinition(final Map<String, KeyDef> keydefs) {
-        // update value
-        final Collection<KeyDef> updated = new ArrayList<KeyDef>(keydefs.size());
-        for (final KeyDef file: keydefs.values()) {
-            final String keys = file.keys;
-            final URI href = (file.href != null && ATTR_SCOPE_VALUE_LOCAL.equals(file.scope))
-                             ? tempFileNameScheme.generateTempFileName(file.href)
-                             : file.href;
-            final URI source = tempFileNameScheme.generateTempFileName(file.source);
-            final KeyDef keyDef = new KeyDef(keys, href, file.scope, source);
-            updated.add(keyDef);
-        }
-        // write key definition
-        try {
-            KeyDef.writeKeydef(new File(job.tempDir, KEYDEF_LIST_FILE), updated);
-        } catch (final DITAOTException e) {
-            logger.error("Failed to write key definition file: " + e.getMessage(), e);
-        }
     }
 
     /**
@@ -1206,7 +1173,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @param set absolute flag image files
      */
     private void addFlagImagesSetToProperties(final Job prop, final Set<URI> set) {
-        final Set<URI> newSet = new LinkedHashSet<URI>(128);
+        final Set<URI> newSet = new LinkedHashSet<>(128);
         for (final URI file: set) {
 //            assert file.isAbsolute();
             if (file.isAbsolute()) {
@@ -1235,8 +1202,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             }
             bufferedWriter.flush();
             bufferedWriter.close();
-        } catch (final FileNotFoundException e) {
-            logger.error(e.getMessage(), e) ;
         } catch (final IOException e) {
             logger.error(e.getMessage(), e) ;
         } finally {

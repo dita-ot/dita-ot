@@ -13,6 +13,8 @@
     <feature extension="dita.xsl.mapref" file="xsl/mapref-plugin.xsl"/>
     <feature extension="dita.xsl.mappull"
       file="xsl/mappull-plugin.xsl"/>
+    <feature extension="dita.preprocess.mappull.param" file="params.xml"/>
+    <feature extension="dita.preprocess.mapref.param" file="params.xml"/>
     <feature extension="dita.xsl.eclipse.plugin"
       file="xsl/map2plugin.xsl"/>
     <feature extension="dita.conductor.target" file="script.xml"/>

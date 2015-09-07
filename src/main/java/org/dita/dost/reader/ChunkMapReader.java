@@ -63,9 +63,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
     /** Input file's parent directory */
     private File fileDir = null;
     // ChunkTopicParser assumes keys and values are chimera paths, i.e. systems paths with fragments.
-    private final LinkedHashMap<String, String> changeTable = new LinkedHashMap<String, String>(128);
+    private final LinkedHashMap<String, String> changeTable = new LinkedHashMap<>(128);
 
-    private final Map<String, String> conflictTable = new HashMap<String, String>(128);
+    private final Map<String, String> conflictTable = new HashMap<>(128);
 
     private boolean supportToNavigation;
 
@@ -137,7 +137,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
                     final Element currentElem = (Element) node;
                     if (MAP_RELTABLE.matches(currentElem)) {
                         updateReltable(currentElem);
-                    } else if (MAP_TOPICREF.matches(currentElem) && !MAPGROUP_D_TOPICGROUP.matches(currentElem)) {
+                    } else if (MAPGROUP_D_TOPICGROUP.matches(currentElem)) {
+                    	processChildTopicref(currentElem);
+                    } else if (MAP_TOPICREF.matches(currentElem)) {
                         processTopicref(currentElem);
                     }
 
@@ -433,9 +435,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
             serializer.writeEndElement(); // topic
             serializer.writeEndDocument();
             serializer.close();
-        } catch (final IOException e) {
-            logger.error("Failed to write generated chunk: " + e.getMessage(), e);
-        } catch (final SAXException e) {
+        } catch (final IOException | SAXException e) {
             logger.error("Failed to write generated chunk: " + e.getMessage(), e);
         } finally {
             if (output != null) {

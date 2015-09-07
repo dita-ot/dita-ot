@@ -19,7 +19,6 @@
       <val default="true">discard</val>
     </param>
     <param name="args.bookmark.style" desc="Specifies whether PDF bookmarks are by default expanded or collapsed." type="enum">
-      <val>COLLAPSED</val>
       <val>EXPANDED</val>
       <val>COLLAPSE</val>
     </param>

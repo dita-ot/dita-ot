@@ -88,17 +88,17 @@ public final class IndexTermReader extends AbstractXMLReader {
     private final IndexTermCollection result;
 
     public IndexTermReader(final IndexTermCollection result) {
-        termStack = new Stack<IndexTerm>();
-		topicIdStack = new Stack<String>();
-		indexTermSpecList = new ArrayList<String>(16);
-		indexSeeSpecList = new ArrayList<String>(16);
-		indexSeeAlsoSpecList = new ArrayList<String>(16);
-		indexSortAsSpecList = new ArrayList<String>(16);
-		topicSpecList = new ArrayList<String>(16);
-		titleSpecList = new ArrayList<String>(16);
-		indexTermList = new ArrayList<IndexTerm>(256);
-		titleMap = new HashMap<String, String>(256);
-		processRoleStack = new Stack<String>();
+        termStack = new Stack<>();
+		topicIdStack = new Stack<>();
+		indexTermSpecList = new ArrayList<>(16);
+		indexSeeSpecList = new ArrayList<>(16);
+		indexSeeAlsoSpecList = new ArrayList<>(16);
+		indexSortAsSpecList = new ArrayList<>(16);
+		topicSpecList = new ArrayList<>(16);
+		titleSpecList = new ArrayList<>(16);
+		indexTermList = new ArrayList<>(256);
+		titleMap = new HashMap<>(256);
+		processRoleStack = new Stack<>();
 		processRoleLevel = 0;
 		this.result = result != null ? result : IndexTermCollection.getInstantce();
     }

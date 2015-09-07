@@ -1,0 +1,12 @@
+<map class="- map/map ">
+  <keydef class="+ map/topicref mapgropup-d/keydef " keys="toner-specs" href="toner-type-a-specs.dita"/>
+  <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ">
+    <keydef class="+ map/topicref mapgropup-d/keydef " keys="toner-specs" href="toner-type-b-specs.dita"/>
+    <keydef class="+ map/topicref mapgropup-d/keydef " keys="toner-handling" href="toner-type-b-handling.dita"/>
+  </submap>
+  <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ">
+    <keydef class="+ map/topicref mapgropup-d/keydef " keys="toner-specs" href="toner-type-c-specs.dita"/>
+    <keydef class="+ map/topicref mapgropup-d/keydef " keys="toner-handling" href="toner-type-c-handling.dita"/>
+    <keydef class="+ map/topicref mapgropup-d/keydef " keys="toner-disposal" href="toner-type-c-disposal.dita"/>
+  </submap>
+</map>

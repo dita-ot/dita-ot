@@ -58,7 +58,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
 
     //initialization for rtlLocaleList
     static{
-        rtlLocaleList = new ArrayList<String>(2);
+        rtlLocaleList = new ArrayList<>(2);
         rtlLocaleList.add("ar_EG");
         rtlLocaleList.add("he_IL");
     }
@@ -67,8 +67,8 @@ public final class IndexTerm implements Comparable<IndexTerm> {
      * Constructor.
      */
     public IndexTerm() {
-        subTerms = new ArrayList<IndexTerm>(1);
-        targetList = new ArrayList<IndexTermTarget>(1);
+        subTerms = new ArrayList<>(1);
+        targetList = new ArrayList<>(1);
     }
 
     /**

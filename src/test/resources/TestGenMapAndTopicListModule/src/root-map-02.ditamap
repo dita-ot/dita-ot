@@ -1,16 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "../../../../dtd/technicalContent/dtd/map.dtd">
-<map>
-  <title>Root Map 02</title>
-  <topicref
-    href="topics/xreffin-topic-1.xml"/>
-  <topicref
-    href="topics/target-topic%20a.xml"
-    keys="target_topic_1"/>
-  <topicref
-    href="topics/target-topic-c.xml"
-    keys="target_topic_2 target_topic_3"/>
-  <keydef
-    href="http://www.example.com/?foo=bar&amp;baz=qux#quxx" scope="external" format="html"
-    keys="target_topic_4"/>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+  ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Root Map 02</title>
+  <topicref class="- map/topicref " href="topics/xreffin-topic-1.xml"/>
+  <topicref class="- map/topicref " href="topics/target-topic%20a.xml" keys="target_topic_1"/>
+  <topicref class="- map/topicref " href="topics/target-topic-c.xml" keys="target_topic_2 target_topic_3"/>
+  <keydef class="+ map/topicref mapgroup-d/keydef " format="html" href="http://www.example.com/?foo=bar&amp;baz=qux#quxx" keys="target_topic_4" processing-role="resource-only" scope="external"/>
 </map>

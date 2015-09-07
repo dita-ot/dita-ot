@@ -45,7 +45,7 @@ public final class MessageUtils {
 
     // Variables
 
-    private final Hashtable<String, MessageBean> hashTable = new Hashtable<String, MessageBean>();
+    private final Hashtable<String, MessageBean> hashTable = new Hashtable<>();
     private static MessageUtils utils;
 
     // Constructors

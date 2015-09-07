@@ -14,6 +14,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.dita.dost.util.Job;
 import org.xml.sax.InputSource;
 
 import org.apache.xml.resolver.tools.ResolvingXMLReader;
@@ -39,7 +40,7 @@ public class MapMetaReaderTest {
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
     private static File tempDir;
-    private static AbstractReader reader;
+    private static MapMetaReader reader;
     //private static final File baseDir = new File(resourceDir, "DITA-OT1.5");
 
     @BeforeClass
@@ -52,6 +53,7 @@ public class MapMetaReaderTest {
 
         reader = new MapMetaReader();
         reader.setLogger(new TestUtils.TestLogger());
+        reader.setJob(new Job(tempDir));
 
         final File mapFile = new File(tempDir, "test.ditamap");
         reader.read(mapFile.getAbsoluteFile());

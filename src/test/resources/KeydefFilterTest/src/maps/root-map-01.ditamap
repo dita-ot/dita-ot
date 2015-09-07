@@ -1,23 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "../../../../../dtd/technicalContent/dtd/map.dtd">
-<map>
-  <title>Root Map 01</title>
-  <topicref
-    href="../topics/xreffin-topic-1.xml"/>
-  <topicref
-    href="../topics/target-topic-a.xml"
-    keys="target_topic_1"/>
-  <topicref
-    href="../topics/target-topic-c.xml"
-    keys="target_topic_2" scope="local"/>
-  <topicref
-    href="../topics/peer.xml"
-    keys="peer" scope="peer"/>
-  <topicref
-    href="http://www.example.com/external.xml"
-    keys="external" scope="external"/>
-  <topicref
-    keys="target_topic_3" keyref="target_topic_1"/>
-  <topicref
-    keys="target_topic_4" keyref="target_topic_3"/>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+  ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Root Map 01</title>
+  <topicref class="- map/topicref " href="../topics/xreffin-topic-1.xml"/>
+  <topicref class="- map/topicref " href="../topics/target-topic-a.xml" keys="target_topic_1"/>
+  <topicref class="- map/topicref " href="../topics/target-topic-c.xml" keys="target_topic_2" scope="local"/>
+  <topicref class="- map/topicref " href="../topics/peer.xml" keys="peer" scope="peer"/>
+  <topicref class="- map/topicref " href="http://www.example.com/external.xml" keys="external" scope="external"/>
+  <topicref class="- map/topicref " keyref="target_topic_1" keys="target_topic_3"/>
+  <topicref class="- map/topicref " keyref="target_topic_3" keys="target_topic_4"/>
 </map>

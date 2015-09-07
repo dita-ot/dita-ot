@@ -8,14 +8,9 @@ import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -24,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.*;
@@ -42,6 +38,66 @@ public final class XMLUtils {
 
     /** Private constructor to make class uninstantiable. */
     private XMLUtils() {}
+
+    /**
+     * List descendant elements by DITA class.
+     *
+     * @param elem root element
+     * @param cls DITA class to match elements
+     * @param deep {@code true} to read descendants, {@code false} to read only direct children
+     * @raturn list of matching elements
+     */
+    public static List<Element> getChildElements(final Element elem, final DitaClass cls, final boolean deep) {
+        final NodeList children = deep ? elem.getElementsByTagName("*") : elem.getChildNodes();
+        final List<Element> res = new ArrayList<>(children.getLength());
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (cls.matches(child)) {
+                res.add((Element) child);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * List chilid elements by DITA class.
+     *
+     * @param elem root element
+     * @param cls DITA class to match elements
+     * @raturn list of matching elements
+     */
+    public static List<Element> getChildElements(final Element elem, final DitaClass cls) {
+        return getChildElements(elem, cls, false);
+    }
+
+    /**
+     * List child elements elements.
+     *
+     * @param elem root element
+     * @raturn list of matching elements
+     */
+    public static List<Element> getChildElements(final Element elem) {
+        return getChildElements(elem, false);
+    }
+
+    /**
+     * List child elements elements.
+     *
+     * @param elem root element
+     * @param deep {@code true} to read descendants, {@code false} to read only direct children
+     * @raturn list of matching elements
+     */
+    public static List<Element> getChildElements(final Element elem, final boolean deep) {
+        final NodeList children = deep ? elem.getElementsByTagName("*") : elem.getChildNodes();
+        final List<Element> res = new ArrayList<>(children.getLength());
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                res.add((Element) child);
+            }
+        }
+        return res;
+    }
 
     /**
      * Add or set attribute.
@@ -138,6 +194,21 @@ public final class XMLUtils {
     }
     
     /**
+     * Transform file with XML filters. Only file URIs are supported.
+     *
+     * @param input absolute URI to transform and replace
+     * @param filters XML filters to transform file with, may be an empty list
+     */
+    public static void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
+        assert input.isAbsolute();
+        if (!input.getScheme().equals("file")) {
+            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
+        }
+
+        transform(new File(input), filters);
+    }
+
+    /**
      * Transform file with XML filters.
      * 
      * @param inputFile file to transform and replace
@@ -203,6 +274,95 @@ public final class XMLUtils {
                     out.close();
                 } catch (final IOException e) {
                     // ignore
+                }
+            }
+        }
+    }
+
+    /**
+     * Transform file with XML filters.
+     *
+     * @param input input file
+     * @param output output file
+     * @param filters XML filters to transform file with, may be an empty list
+     */
+    public static void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+        InputSource src = null;
+        StreamResult result = null;
+        try {
+            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            XMLReader reader = getXMLReader();
+            for (final XMLFilter filter : filters) {
+                // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
+                // when reusing filter with multiple Transformers.
+                filter.setContentHandler(null);
+                filter.setParent(reader);
+                reader = filter;
+            }
+            src = new InputSource(input.toString());
+            final Source source = new SAXSource(reader, src);
+            result = new StreamResult(output.toString());
+            transformer.transform(source, result);
+        } catch (final RuntimeException e) {
+            throw e;
+        } catch (final Exception e) {
+            throw new DITAOTException("Failed to transform " + input + ": " + e.getMessage(), e);
+        } finally {
+            try {
+                close(src);
+            } catch (final IOException e) {
+                // NOOP
+            }
+            try {
+                close(result);
+            } catch (final IOException e) {
+                // NOOP
+            }
+        }
+    }
+
+    /** Close input source. */
+    public static void close(final InputSource input) throws IOException {
+        if (input != null) {
+            final InputStream i = input.getByteStream();
+            if (i != null) {
+                i.close();
+            } else {
+                final Reader w = input.getCharacterStream();
+                if (w != null) {
+                    w.close();
+                }
+            }
+        }
+    }
+
+    /** Close source. */
+    public static void close(final Source input) throws IOException {
+        if (input != null && input instanceof StreamSource) {
+            final StreamSource s = (StreamSource) input;
+            final InputStream i = s.getInputStream();
+            if (i != null) {
+                i.close();
+            } else {
+                final Reader w = s.getReader();
+                if (w != null) {
+                    w.close();
+                }
+            }
+        }
+    }
+
+    /** Close result. */
+    public static void close(final Result result) throws IOException {
+        if (result != null && result instanceof StreamResult) {
+            final StreamResult r = (StreamResult) result;
+            final OutputStream o = r.getOutputStream();
+            if (o != null) {
+                o.close();
+            } else {
+                final Writer w = r.getWriter();
+                if (w != null) {
+                    w.close();
                 }
             }
         }

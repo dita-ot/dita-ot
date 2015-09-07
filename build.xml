@@ -7,6 +7,7 @@
   <description>Build binary packages for DITA Open Toolkit</description>
 
   <property file="${basedir}/src/main/lib/configuration.properties"/>
+  <property environment="env."/>
 
   <condition property="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe">
     <available file="C:\Program Files\HTML Help Workshop\hhc.exe"/>
@@ -254,7 +255,7 @@
     <mkdir dir="${test.bin.dir}"/>
     <javac destdir="${test.bin.dir}"
            debug="on"
-           source="1.6" target="1.6">
+           source="1.7" target="1.7">
       <src>
         <pathelement location="${test.java.dir}"/>
       </src>
@@ -323,11 +324,14 @@
     <condition property="only-test.name" value="${test}" else="">
       <isset property="test"/>
     </condition>
+    <condition property="log-level" value="${env.LOG_LEVEL}" else="-2">
+      <isset property="env.LOG_LEVEL"/>
+    </condition>
     <delete failonerror="false">
       <fileset dir="${test.log.dir}" erroronmissingdir="false"/>
     </delete>
     <mkdir dir="${test.log.dir}"/>
-    <junit printsummary="false" haltonfailure="yes" showoutput="false" logfailedtests="true">
+    <junit printsummary="false" haltonfailure="yes" showoutput="false" logfailedtests="true" haltonerror="true">
       <classpath>
         <pathelement location="${integration-test.bin.dir}"/>
         <pathelement location="${test.bin.dir}"/>
@@ -336,9 +340,10 @@
         <pathelement location="${src.dir}/resources"/>
         <path refid="compile.path"/>
       </classpath>
-      <sysproperty key="dita.dir" value="${src.dir}"/>
+      <sysproperty key="dita_dir" value="${src.dir}"/>
       <sysproperty key="basedir" value="${test.suite.dir}"/>
-      <sysproperty key="only-test" value="${only-test.name}"/>
+      <sysproperty key="only_test" value="${only-test.name}"/>
+      <sysproperty key="log_level" value="${log-level}"/>
       <formatter type="plain" usefile="false"/>
       <formatter type="plain" usefile="true"/>
       <test name="org.dita.dost.IntegrationTest" fork="no" todir="${test.log.dir}"/>

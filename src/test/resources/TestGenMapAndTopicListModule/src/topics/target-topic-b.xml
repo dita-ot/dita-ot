@@ -1,9 +1,8 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/topic.dtd">
-<topic
-  id="topic-1">
-  <title>Target Topic B</title>
-  <body>
-    <p>This is topic B.</p>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  id="topic-1" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Target Topic B</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">This is topic B.</p>
   </body>
 </topic>

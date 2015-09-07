@@ -83,7 +83,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void setJob(final Job job) {
         this.job = job;
-        fileInfoMap = new HashMap<URI, FileInfo>();
+        fileInfoMap = new HashMap<>();
         for (final FileInfo f: job.getFileInfo()) {
             fileInfoMap.put(f.src, f);
         }

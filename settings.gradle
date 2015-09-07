@@ -1,0 +1,5 @@
+rootProject.name = 'dost'
+
+include 'src/main/plugins/org.dita.pdf2'
+
+project(":src/main/plugins/org.dita.pdf2").name = 'fo'

@@ -31,20 +31,20 @@ import org.xml.sax.helpers.LocatorImpl;
 public final class ValidationFilter extends AbstractXMLFilter {
 
     private final MessageUtils messageUtils = MessageUtils.getInstance();
-	private final Set<String> topicIds = new HashSet<String>();
+	private final Set<String> topicIds = new HashSet<>();
 	private Map<String, Map<String, Set<String>>> validateMap = null;
 	private Locator locator;
     /** Deque of domains attibute values */
-	private final Deque<String[][]> domains = new LinkedList<String[][]>();
+	private final Deque<String[][]> domains = new LinkedList<>();
     /** Absolute URI to current file */
     private URI currentFile;
     private Job job;
-    /** Number of cols in tgroup */
-    private int cols;
-    /** Number or colspecs encountered */
-    private int columnNumber;
-    /** Location of cols attribute */
-    private Locator colsLocator;
+//    /** Number of cols in tgroup */
+//    private int cols;
+//    /** Number or colspecs encountered */
+//    private int columnNumber;
+//    /** Location of cols attribute */
+//    private Locator colsLocator;
     private Mode processingMode;
 
     /**
@@ -106,7 +106,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 		validateKeyscope(atts);
 		validateAttributeValues(qName, atts);
 		validateAttributeGeneralization(atts);
-        validateCols(atts);
+//        validateCols(atts);
 
 		getContentHandler().startElement(uri, localName, qName, modified != null ? modified : atts);
 	}
@@ -119,38 +119,38 @@ public final class ValidationFilter extends AbstractXMLFilter {
 
     // Validation methods
 
-    /**
-     * Validate table {@code cols} attribute.
-     *
-     * @param atts attributes
-     */
-    private void validateCols(final Attributes atts) throws SAXException  {
-        if (TOPIC_TGROUP.matches(atts)) {
-            colsLocator = locator != null ? new LocatorImpl(locator) : null;
-            final String c = atts.getValue(ATTRIBUTE_NAME_COLS);
-            try {
-                cols = Integer.parseInt(c.trim());
-            } catch (final NumberFormatException e) {
-                if (processingMode == Mode.STRICT) {
-                    throw new SAXException(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
-                } else {
-                    logger.error(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
-                }
-                cols = -1;
-            }
-        } else if (TOPIC_COLSPEC.matches(atts)) {
-            columnNumber++;
-        } else if (TOPIC_THEAD.matches(atts) || TOPIC_TBODY.matches(atts)) {
-            if (cols != -1 && columnNumber > cols) {
-                if (processingMode == Mode.STRICT) {
-                    throw new SAXException(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
-                } else {
-                    logger.error(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
-                }
-            }
-            columnNumber = 0;
-        }
-    }
+//    /**
+//     * Validate table {@code cols} attribute.
+//     *
+//     * @param atts attributes
+//     */
+//    private void validateCols(final Attributes atts) throws SAXException  {
+//        if (TOPIC_TGROUP.matches(atts)) {
+//            colsLocator = locator != null ? new LocatorImpl(locator) : null;
+//            final String c = atts.getValue(ATTRIBUTE_NAME_COLS);
+//            try {
+//                cols = Integer.parseInt(c.trim());
+//            } catch (final NumberFormatException e) {
+//                if (processingMode == Mode.STRICT) {
+//                    throw new SAXException(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
+//                } else {
+//                    logger.error(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
+//                }
+//                cols = -1;
+//            }
+//        } else if (TOPIC_COLSPEC.matches(atts)) {
+//            columnNumber++;
+//        } else if (TOPIC_THEAD.matches(atts) || TOPIC_TBODY.matches(atts)) {
+//            if (cols != -1 && columnNumber > cols) {
+//                if (processingMode == Mode.STRICT) {
+//                    throw new SAXException(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
+//                } else {
+//                    logger.error(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
+//                }
+//            }
+//            columnNumber = 0;
+//        }
+//    }
 
     /**
 	 * Validate and fix {@code xml:lang} attribute.
@@ -289,7 +289,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     private void validateKeyscope(final Attributes atts) {
         final String keys = atts.getValue(ATTRIBUTE_NAME_KEYSCOPE);
         if (keys != null) {
-            for (final String key : keys.split(" ")) {
+            for (final String key : keys.trim().split("\\s+")) {
                 if (!isValidKeyName(key)) {
                     logger.error(messageUtils.getMessage("DOTJ059E", key).toString());
                 }

@@ -84,7 +84,7 @@ public final class DelayConrefUtils {
             //get root element
             final Element doc = root.getDocumentElement();
             //do BFS
-            final Queue<Element> queue = new LinkedList<Element>();
+            final Queue<Element> queue = new LinkedList<>();
             queue.offer(doc);
             while (!queue.isEmpty()) {
                 final Element pe = queue.poll();
@@ -165,7 +165,7 @@ public final class DelayConrefUtils {
         } catch (final Exception e) {
             e.printStackTrace();
         }
-        final List<Boolean> list = new ArrayList<Boolean>();
+        final List<Boolean> list = new ArrayList<>();
         list.add(idExported);
         list.add(keyrefExported);
         return list;
@@ -181,7 +181,7 @@ public final class DelayConrefUtils {
         if (root == null || StringUtils.isEmptyString(key)) {
             return null;
         }
-        final Queue<Element> queue = new LinkedList<Element>();
+        final Queue<Element> queue = new LinkedList<>();
         queue.offer(root);
 
         while (!queue.isEmpty()) {

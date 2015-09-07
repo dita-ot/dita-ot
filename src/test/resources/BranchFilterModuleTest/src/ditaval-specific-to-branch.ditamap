@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+  ditaarch:DITAArchVersion="1.3">
+  <topicref class="- map/topicref " href="intro.dita"/>
+  <topicref class="- map/topicref " href="install.dita">
+    <ditavalref class="+ map/topicref ditavalref-d/ditavalref " href="novice.ditaval"/>
+    <topicref class="- map/topicref " href="do-stuff.dita"/>
+    <topicref class="- map/topicref " href="advanced-stuff.dita" audience="admin"/>
+    <!-- more topics -->
+  </topicref>
+  <!-- Several chapters worth of other material -->
+</map>

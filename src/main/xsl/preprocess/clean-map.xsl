@@ -21,4 +21,6 @@
     <xsl:apply-templates/>
   </xsl:template>
   
+  <xsl:template match="*[contains(@class, ' ditaot-d/keydef ')]"/>
+  
 </xsl:stylesheet>

@@ -30,9 +30,9 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
     /** Absolute path to current source file. */
     private URI currentFile;
     private Job job;
-    private final Map<URI, Integer> topicrefCount = new HashMap<URI, Integer>();
+    private final Map<URI, Integer> topicrefCount = new HashMap<>();
     /** Generated copy-to mappings, key is target topic and value is source topic. */
-    public final Map<URI, URI> copyToMap = new HashMap<URI, URI>();
+    public final Map<URI, URI> copyToMap = new HashMap<>();
 
     public void setCurrentFile(final URI currentFile) {
         this.currentFile = currentFile;
