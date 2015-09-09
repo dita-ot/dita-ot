@@ -36,7 +36,7 @@ final class InsertDependsAction implements IAction {
      * Constructor.
      */
     public InsertDependsAction() {
-        paramTable = new Hashtable<String,String>();
+        paramTable = new Hashtable<>();
     }
     
     @Override
@@ -50,7 +50,7 @@ final class InsertDependsAction implements IAction {
      */
     @Override
     public String getResult() {
-        final List<String> result = new ArrayList<String>();
+        final List<String> result = new ArrayList<>();
         for (final String t: value) {
             final String token = t.trim();
             // Pieces which are surrounded with braces are extension points.

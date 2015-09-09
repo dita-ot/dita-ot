@@ -120,7 +120,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * A Set of args are are handled by the launcher and should not be seen by
      * Main.
      */
-    private static final Set<String> LAUNCH_COMMANDS = new HashSet<String>();
+    private static final Set<String> LAUNCH_COMMANDS = new HashSet<>();
     static {
         LAUNCH_COMMANDS.add("-lib");
         LAUNCH_COMMANDS.add("-cp");
@@ -130,7 +130,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         LAUNCH_COMMANDS.add("-main");
     }
 
-    private static final Map<String, Argument> ARGUMENTS = new HashMap<String, Argument>();
+    private static final Map<String, Argument> ARGUMENTS = new HashMap<>();
     static {
         ARGUMENTS.put("-f", new StringArgument("transtype"));
         ARGUMENTS.put("-format", new StringArgument("transtype"));
@@ -142,14 +142,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ARGUMENTS.put("-filter", new FileArgument("args.filter"));
         ARGUMENTS.put("-temp", new FileArgument("dita.temp.dir"));
     }
-    private static final Map<String, String> RESERVED_PROPERTIES = new HashMap<String, String>();
+    private static final Map<String, String> RESERVED_PROPERTIES = new HashMap<>();
     static {
         for (final Map.Entry<String, Argument> a: ARGUMENTS.entrySet()) {
             RESERVED_PROPERTIES.put(a.getValue().property, a.getKey());
         }
     }
 
-    private static final Map<String, Argument> LEGACY_ARGUMENTS = new HashMap<String, Argument>();
+    private static final Map<String, Argument> LEGACY_ARGUMENTS = new HashMap<>();
     static {
         // LEGACY_ARGUMENTS.put("/basedir", new StringArgument("basedir"));
         // LEGACY_ARGUMENTS.put("/ditadir", new StringArgument("dita.dir"));
@@ -224,16 +224,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static PrintStream err = System.err;
 
     /** The build targets. */
-    private final Vector<String> targets = new Vector<String>();
+    private final Vector<String> targets = new Vector<>();
 
     /** Set of properties that can be used by tasks. */
-    private final Map<String, Object> definedProps = new HashMap<String, Object>();
+    private final Map<String, Object> definedProps = new HashMap<>();
 
     /** Names of classes to add as listeners to project. */
-    private final Vector<String> listeners = new Vector<String>(1);
+    private final Vector<String> listeners = new Vector<>(1);
 
     /** File names of property files to load on startup. */
-    private final Vector<String> propertyFiles = new Vector<String>(1);
+    private final Vector<String> propertyFiles = new Vector<>(1);
 
     /** Indicates whether this build is to support interactive input */
     private boolean allowInput = true;
@@ -975,7 +975,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
                 // resolve properties
                 final PropertyHelper propertyHelper = PropertyHelper.getPropertyHelper(project);
-                final HashMap<String, Object> props = new HashMap<String, Object>(definedProps);
+                final HashMap<String, Object> props = new HashMap<>(definedProps);
                 new ResolvePropertyMap(project, propertyHelper, propertyHelper.getExpanders()).resolveAllProperties(
                         props, null, false);
 
@@ -1023,12 +1023,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 System.setErr(savedErr);
                 System.setIn(savedIn);
             }
-        } catch (final RuntimeException exc) {
+        } catch (final RuntimeException | Error exc) {
             error = exc;
             throw exc;
-        } catch (final Error e) {
-            error = e;
-            throw e;
         } finally {
             if (!projectHelp) {
                 try {
@@ -1229,7 +1226,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * @return the filtered targets.
      */
     private static Map<String, Target> removeDuplicateTargets(final Map<String, Target> targets) {
-        final Map<Location, Target> locationMap = new HashMap<Location, Target>();
+        final Map<Location, Target> locationMap = new HashMap<>();
         for (final Map.Entry<String, Target> entry : targets.entrySet()) {
             final String name = entry.getKey();
             final Target target = entry.getValue();
@@ -1243,7 +1240,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 // wins
             }
         }
-        final Map<String, Target> ret = new HashMap<String, Target>();
+        final Map<String, Target> ret = new HashMap<>();
         for (final Target target : locationMap.values()) {
             ret.put(target.getName(), target);
         }
@@ -1268,11 +1265,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         Target currentTarget;
         // split the targets in top-level and sub-targets depending
         // on the presence of a description
-        final Vector<String> topNames = new Vector<String>();
-        final Vector<String> topDescriptions = new Vector<String>();
-        final Vector<Enumeration<String>> topDependencies = new Vector<Enumeration<String>>();
-        final Vector<String> subNames = new Vector<String>();
-        final Vector<Enumeration<String>> subDependencies = new Vector<Enumeration<String>>();
+        final Vector<String> topNames = new Vector<>();
+        final Vector<String> topDescriptions = new Vector<>();
+        final Vector<Enumeration<String>> topDependencies = new Vector<>();
+        final Vector<String> subNames = new Vector<>();
+        final Vector<Enumeration<String>> subDependencies = new Vector<>();
 
         for (Target target : ptargets.values()) {
             currentTarget = target;

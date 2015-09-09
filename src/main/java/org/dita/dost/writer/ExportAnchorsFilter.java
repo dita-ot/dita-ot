@@ -29,18 +29,18 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     /** Basedir of the current parsing file */
     private URI currentDir = null;
     /** Topicmeta set for merge multiple exportanchors into one. Each topicmeta/prolog can define many exportanchors */
-    private final Set<String> topicMetaSet = new HashSet<String>(16);
+    private final Set<String> topicMetaSet = new HashSet<>(16);
     /** Flag to show whether a file has <exportanchors> tag */
     private boolean hasExport = false;
     /** Absolute system path to file being processed */
     private URI currentFile = null;
-    private final List<ExportAnchor> exportAnchors = new ArrayList<ExportAnchor>();
+    private final List<ExportAnchor> exportAnchors = new ArrayList<>();
     private ExportAnchor currentExportAnchor;
     /** Refered topic id */
     private String topicId = "";
     private URI rootFilePath = null;
     /** Map to store plugin id */
-    private final Map<String, Set<String>> pluginMap = new HashMap<String, Set<String>>();
+    private final Map<String, Set<String>> pluginMap = new HashMap<>();
     /** Store the href of topicref tag */
     private URI topicHref;
     /** For topic/dita files whether a </file> tag should be added */
@@ -253,9 +253,9 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
 
     public static class ExportAnchor {
         public final URI file;
-        public final Set<String> topicids = new HashSet<String>();
-        public final Set<String> keys = new HashSet<String>();
-        public final Set<String> ids = new HashSet<String>();
+        public final Set<String> topicids = new HashSet<>();
+        public final Set<String> keys = new HashSet<>();
+        public final Set<String> ids = new HashSet<>();
 
         public ExportAnchor(final URI file) {
             this.file = file;

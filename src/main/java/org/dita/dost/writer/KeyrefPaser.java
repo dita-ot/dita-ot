@@ -48,7 +48,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private static final Set<String> no_copy;
     static {
-        final Set<String> nc = new HashSet<String>();
+        final Set<String> nc = new HashSet<>();
         nc.add(ATTRIBUTE_NAME_ID);
         nc.add(ATTRIBUTE_NAME_CLASS);
         nc.add(ATTRIBUTE_NAME_XTRC);
@@ -66,7 +66,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     private static final Set<String> no_copy_topic;
     static {
-        final Set<String> nct = new HashSet<String>();
+        final Set<String> nct = new HashSet<>();
         nct.addAll(no_copy);
         nct.add("query");
         nct.add("search");
@@ -81,7 +81,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /** List of key reference element definitions. */
     private final static List<KeyrefInfo> keyrefInfos;
     static {
-        final List<KeyrefInfo> ki = new ArrayList<KeyrefInfo>();
+        final List<KeyrefInfo> ki = new ArrayList<>();
         ki.add(new KeyrefInfo(TOPIC_AUTHOR, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_DATA, ATTRIBUTE_NAME_HREF, false, true));
         ki.add(new KeyrefInfo(TOPIC_DATA_ABOUT, ATTRIBUTE_NAME_HREF, false, true));
@@ -158,11 +158,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     public KeyrefPaser() {
         keyrefLeval = 0;
-        keyrefLevalStack = new Stack<Integer>();
-        validKeyref = new Stack<Boolean>();
+        keyrefLevalStack = new Stack<>();
+        validKeyref = new Stack<>();
         empty = true;
-        elemName = new Stack<String>();
-        hasSubElem = new Stack<Boolean>();
+        elemName = new Stack<>();
+        hasSubElem = new Stack<>();
     }
     
     public void setKeyDefinition(final KeyScope definitionMap) {
@@ -198,7 +198,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     @Override
     public void startDocument() throws SAXException {
-        normalProcessingRoleTargets = new HashSet<URI>();
+        normalProcessingRoleTargets = new HashSet<>();
         getContentHandler().startDocument();
     }
     

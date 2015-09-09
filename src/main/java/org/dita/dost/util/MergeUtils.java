@@ -38,7 +38,7 @@ public final class MergeUtils {
      */
     public MergeUtils() {
         super();
-        idMap = new Hashtable<URI, String>();
+        idMap = new Hashtable<>();
         visitSet = Collections.synchronizedSet(new HashSet<URI>(256));
         index = 0;
     }

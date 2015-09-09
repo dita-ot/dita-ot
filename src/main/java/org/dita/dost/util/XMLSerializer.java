@@ -48,7 +48,7 @@ public class XMLSerializer {
     private OutputStream outStream;
     private Writer outWriter;
 
-    private final LinkedList<QName> elementStack = new LinkedList<QName>();
+    private final LinkedList<QName> elementStack = new LinkedList<>();
     private AttributesImpl openAttributes;
     private boolean openStartElement;
 
@@ -359,7 +359,7 @@ public class XMLSerializer {
             localName = i != -1 ? qName.substring(i + 1) : qName;
             prefix = i != -1 ? qName.substring(0, i) : DEFAULT_NS_PREFIX;
             this.qName = qName;
-            mappings = new ArrayList<NamespaceMapping>(5);
+            mappings = new ArrayList<>(5);
         }
 
     }

@@ -32,7 +32,7 @@ public final class DebugFilter extends AbstractXMLFilter {
 
     private String inputFile;
 	private Locator locator;
-	private final Map<String, Integer> counterMap = new HashMap<String, Integer>();
+	private final Map<String, Integer> counterMap = new HashMap<>();
 	private int foreignLevel;
 	
 	/**

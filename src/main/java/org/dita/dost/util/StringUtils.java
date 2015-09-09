@@ -122,13 +122,13 @@ public final class StringUtils {
      * @return list of {@code props} attribute specializations
      */
     public static String[][] getExtProps(final String domains){
-        final List<String[]> propsBuffer = new ArrayList<String[]>();
+        final List<String[]> propsBuffer = new ArrayList<>();
         int propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS);
         int propsEnd = domains.indexOf(")",propsStart);
         while (propsStart != -1 && propsEnd != -1){
             final String propPath = domains.substring(propsStart+2,propsEnd).trim();
             final StringTokenizer propPathTokenizer = new StringTokenizer(propPath, STRING_BLANK);
-            final List<String> propList = new ArrayList<String>(128);
+            final List<String> propList = new ArrayList<>(128);
             while(propPathTokenizer.hasMoreTokens()){
                 propList.add(propPathTokenizer.nextToken());
             }
@@ -146,7 +146,7 @@ public final class StringUtils {
      * @return string set
      */
     public static Set<String> restoreSet(final String s, final String delim) {
-        final Set<String> copytoSet = new HashSet<String>();
+        final Set<String> copytoSet = new HashSet<>();
 
         if (StringUtils.isEmptyString(s)) {
             return copytoSet;

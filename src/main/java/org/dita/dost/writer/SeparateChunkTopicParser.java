@@ -260,9 +260,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         try {
             final Document doc = builder.parse(absolutePathToFile);
             return doc.getDocumentElement();
-        } catch (final SAXException e) {
-            e.printStackTrace();
-        } catch (final IOException e) {
+        } catch (final SAXException | IOException e) {
             e.printStackTrace();
         }
         return null;

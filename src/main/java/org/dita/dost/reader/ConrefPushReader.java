@@ -112,9 +112,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
         pushcontentDocumentFragment = pushDocument.createDocumentFragment();
         try {
             return XMLOutputFactory.newInstance().createXMLStreamWriter(new DOMResult(pushcontentDocumentFragment));
-        } catch (final XMLStreamException e) {
-            throw new RuntimeException(e);
-        } catch (FactoryConfigurationError e) {
+        } catch (final XMLStreamException | FactoryConfigurationError e) {
             throw new RuntimeException(e);
         }
     }
@@ -123,7 +121,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
      * Constructor.
      */
     public ConrefPushReader() {
-        pushtable = new Hashtable<File, Hashtable<MoveKey,DocumentFragment>>();
+        pushtable = new Hashtable<>();
         try{
             reader = XMLUtils.getXMLReader();
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, false);
@@ -341,7 +339,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             table = pushtable.get(key);
         } else {
             //if there is nothing else push to the same file
-            table = new Hashtable<MoveKey, DocumentFragment>();
+            table = new Hashtable<>();
             pushtable.put(key, table);
         }
 

@@ -154,10 +154,9 @@
     <response>If you want to lower the severity level, please use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the referenced file "%1" into the input dita/map directory.</response>
   </message>
   
-  <!-- 2012-06-12: Still need to edit this message -->
   <message id="DOTJ036W" type="WARN">
     <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
-    <response>If you do not want to see the warning message, please use the Ant parameter 'outer.control', and set the value to "quiet". Otherwise, move the referenced file "%1" into the input dita/map directory.</response>
+    <response></response>
   </message>
   
   <!-- 2012-06-12: Still need to edit this message -->
@@ -304,7 +303,7 @@
     <response>Ignoring "by-topic" token.</response>
   </message>
 
-  <message id="DOTJ065E" type="ERROR">
+  <message id="DOTJ065W" type="WARN">
     <reason>Branch filter generated topic %1 used more than once.</reason>
     <response>Renaming %1 to %2.</response>
   </message>

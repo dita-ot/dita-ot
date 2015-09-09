@@ -19,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.*;
@@ -193,6 +194,21 @@ public final class XMLUtils {
     }
     
     /**
+     * Transform file with XML filters. Only file URIs are supported.
+     *
+     * @param input absolute URI to transform and replace
+     * @param filters XML filters to transform file with, may be an empty list
+     */
+    public static void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
+        assert input.isAbsolute();
+        if (!input.getScheme().equals("file")) {
+            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
+        }
+
+        transform(new File(input), filters);
+    }
+
+    /**
      * Transform file with XML filters.
      * 
      * @param inputFile file to transform and replace
@@ -313,6 +329,22 @@ public final class XMLUtils {
                 i.close();
             } else {
                 final Reader w = input.getCharacterStream();
+                if (w != null) {
+                    w.close();
+                }
+            }
+        }
+    }
+
+    /** Close source. */
+    public static void close(final Source input) throws IOException {
+        if (input != null && input instanceof StreamSource) {
+            final StreamSource s = (StreamSource) input;
+            final InputStream i = s.getInputStream();
+            if (i != null) {
+                i.close();
+            } else {
+                final Reader w = s.getReader();
                 if (w != null) {
                     w.close();
                 }

@@ -52,7 +52,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * using to save relative path when do rename action for newly chunked file
      */
-    private final Map<String, String> relativePath2fix = new HashMap<String, String>();
+    private final Map<String, String> relativePath2fix = new HashMap<>();
 
     /**
      * Constructor.
@@ -133,9 +133,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         Document doc;
         try {
             doc = builder.parse(mapFile);
-        } catch (final SAXException e) {
-            throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
-        } catch (IOException e) {
+        } catch (final SAXException | IOException e) {
             throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
         }
         final Element root = doc.getDocumentElement();
@@ -172,7 +170,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     private void updateList(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
         final URI xmlDitalist = new File(job.tempDir, "dummy.xml").toURI();
 
-        final Set<URI> hrefTopics = new HashSet<URI>();
+        final Set<URI> hrefTopics = new HashSet<>();
         for (final FileInfo f : job.getFileInfo()) {
             if (f.isNonConrefTarget) {
                 hrefTopics.add(f.uri);
@@ -180,29 +178,29 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
         for (final FileInfo f : job.getFileInfo()) {
             if (f.isSkipChunk) {
-                final String s = f.file.getPath();
-                if (!StringUtils.isEmptyString(s) && getFragment(s) == null) {
+                final URI s = f.uri;
+                if (s.getFragment() == null) {
                     // This entry does not have an anchor, we assume that this
                     // topic will
                     // be fully chunked. Thus it should not produce any output.
                     final Iterator<URI> hrefit = hrefTopics.iterator();
                     while (hrefit.hasNext()) {
                         final URI ent = hrefit.next();
-                        if (resolve(job.tempDir.getAbsoluteFile(), ent).equals(
-                                resolve(job.tempDir.getAbsolutePath(), s))) {
+                        if (resolve(job.tempDir, ent).equals(
+                                resolve(job.tempDir, s))) {
                             // The entry in hrefTopics points to the same target
                             // as entry in chunkTopics, it should be removed.
                             hrefit.remove();
                         }
                     }
-                } else if (!StringUtils.isEmptyString(s) && hrefTopics.contains(s)) {
+                } else if (hrefTopics.contains(s)) {
                     hrefTopics.remove(s);
                 }
             }
         }
 
-        final Set<URI> topicList = new LinkedHashSet<URI>(128);
-        final Set<URI> oldTopicList = new HashSet<URI>();
+        final Set<URI> topicList = new LinkedHashSet<>(128);
+        final Set<URI> oldTopicList = new HashSet<>();
         for (final FileInfo f : job.getFileInfo()) {
             if (ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
                 oldTopicList.add(f.uri);
@@ -216,9 +214,9 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             }
         }
         
-        final Set<URI> chunkedTopicSet = new LinkedHashSet<URI>(128);
-        final Set<URI> chunkedDitamapSet = new LinkedHashSet<URI>(128);
-        final Set<URI> ditamapList = new HashSet<URI>();
+        final Set<URI> chunkedTopicSet = new LinkedHashSet<>(128);
+        final Set<URI> chunkedDitamapSet = new LinkedHashSet<>(128);
+        final Set<URI> ditamapList = new HashSet<>();
         for (final FileInfo f : job.getFileInfo()) {
             if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                 ditamapList.add(f.uri);
@@ -306,7 +304,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        final Set<URI> all = new HashSet<URI>();
+        final Set<URI> all = new HashSet<>();
         all.addAll(topicList);
         all.addAll(ditamapList);
         all.addAll(chunkedDitamapSet);

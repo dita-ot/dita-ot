@@ -112,7 +112,7 @@ public final class KeyrefReader implements AbstractReader {
         final Map<String, KeyDef> keyDefs = new HashMap<>();
         readScope(root, keyDefs);
         readChildScopes(root, childScopes);
-        String keyscope = root.getAttribute(ATTRIBUTE_NAME_KEYSCOPE).trim();
+        final String keyscope = root.getAttribute(ATTRIBUTE_NAME_KEYSCOPE).trim();
         if (keyscope.isEmpty()) {
             return asList(new KeyScope(null, keyDefs, childScopes));
         } else {
@@ -163,9 +163,9 @@ public final class KeyrefReader implements AbstractReader {
 
     /** Recursively read key definitions from a single map fragment. */
     private void readMap(final Element map, final Map<String, KeyDef> keyDefs) {
+        readKeyDefinition(map, keyDefs);
         for (final Element elem: getChildElements(map)) {
             if (!(SUBMAP.matches(elem) || elem.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null)) {
-                readKeyDefinition(elem, keyDefs);
                 readMap(elem, keyDefs);
             }
         }

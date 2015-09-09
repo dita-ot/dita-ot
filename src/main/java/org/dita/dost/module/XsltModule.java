@@ -37,7 +37,7 @@ import org.xml.sax.XMLReader;
 public final class XsltModule extends AbstractPipelineModuleImpl {
 
     private Templates templates;
-    private final Map<String, String> params = new HashMap<String, String>();
+    private final Map<String, String> params = new HashMap<>();
     private File style;
     private File in;
     private File out;

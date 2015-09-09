@@ -107,9 +107,7 @@ public class KeyDef {
                 keydef.writeEndElement();
             }        
             keydef.writeEndDocument();
-        } catch (final XMLStreamException e) {
-            throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
-        } catch (final IOException e) {
+        } catch (final XMLStreamException | IOException e) {
             throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
         } finally {
             if (keydef != null) {

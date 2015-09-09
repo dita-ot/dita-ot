@@ -7,7 +7,10 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,6 +20,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
+import org.apache.commons.codec.binary.Base64;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
@@ -45,7 +49,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private final String uplevels;
     private File currentFile = null;
     private int depth = 0;
-    private final Map<File, Attributes> cache = new HashMap<File, Attributes>();
+    private final Map<URI, Attributes> cache = new HashMap<>();
     private final Job job;
 
     // Constructors ------------------------------------------------------------
@@ -81,8 +85,8 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         if (TOPIC_IMAGE.matches(atts)) {
             final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder(atts);
             if (atts.getValue(ATTRIBUTE_NAME_HREF) != null) {
-                final File imgInput = getImageFile(toURI(atts.getValue(ATTRIBUTE_NAME_HREF)));
-                if (imgInput.exists()) {
+                final URI imgInput = getImageFile(toURI(atts.getValue(ATTRIBUTE_NAME_HREF)));
+                if (exists(imgInput)) {
                     Attributes m = cache.get(imgInput);
                     if (m == null) {
                         m = readMetadata(imgInput);
@@ -117,14 +121,16 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
 
     // Private methods ---------------------------------------------------------
     
-    private Attributes readMetadata(final File imgInput) {
+    private Attributes readMetadata(final URI imgInput) {
         logger.info("Reading " + imgInput);
         final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder();
         try {
+            InputStream in = null;
             ImageReader r = null;
             ImageInputStream iis = null;
             try {
-                iis = ImageIO.createImageInputStream(imgInput);
+                in = getInputStream(imgInput);
+                iis = ImageIO.createImageInputStream(in);
                 final Iterator<ImageReader> i = ImageIO.getImageReaders(iis);
                 if (!i.hasNext()) {
                     logger.info("Image " + imgInput + " format not supported");
@@ -155,6 +161,9 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
                 if (iis != null) {
                     iis.close();
                 }
+                if (in != null) {
+                    in.close();
+                }
             }
         } catch (final Exception e) {
             logger.error("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);
@@ -162,14 +171,31 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         return a.build();
     }
 
-    private File getImageFile(final URI href) {
+    private InputStream getInputStream(final URI imgInput) throws IOException {
+        if (imgInput.getScheme().equals("data")) {
+            final String data = imgInput.getSchemeSpecificPart();
+            final int separator = data.indexOf(',');
+            final String metadata = data.substring(0, separator);
+            if (metadata.endsWith(";base64")) {
+                logger.info("Base-64 encoded data URI");
+                return new ByteArrayInputStream(Base64.decodeBase64(data.substring(separator + 1)));
+            } else {
+                logger.info("ASCII encoded data URI");
+                return new ByteArrayInputStream(data.substring(separator).getBytes());
+            }
+        } else {
+            return imgInput.toURL().openConnection().getInputStream();
+        }
+    }
+
+    private URI getImageFile(final URI href) {
         URI fileDir = tempDir.toURI().relativize(currentFile.getParentFile().toURI());
         if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
             fileDir = fileDir.resolve(uplevels.replace(File.separator, URI_SEPARATOR));
         }
         final URI fileName = fileDir.resolve(href);
         final URI imgInputUri = outputDir.toURI().resolve(fileName);
-        return new File(imgInputUri);
+        return imgInputUri;
     }
     
 }

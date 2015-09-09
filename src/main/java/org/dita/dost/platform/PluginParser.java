@@ -82,9 +82,7 @@ public class PluginParser {
         final Document doc;
         try {
             doc = builder.parse(file);
-        } catch (final SAXException e) {
-            throw new Exception("Failed to parse " + file + ": " + e.getMessage(), e);
-        } catch (final IOException e) {
+        } catch (final SAXException | IOException e) {
             throw new Exception("Failed to parse " + file + ": " + e.getMessage(), e);
         }
 

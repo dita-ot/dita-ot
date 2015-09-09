@@ -57,6 +57,8 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
                     } else {
                         log("File " + f.src + " not found", Project.MSG_ERR);
                     }
+                } else if (f.src.getScheme().equals("data")) {
+                    log("Ignore data URI", Project.MSG_VERBOSE);
                 } else {
                     log("Found source URI " + f.src.toString(), Project.MSG_VERBOSE);
                     try {

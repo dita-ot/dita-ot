@@ -121,9 +121,9 @@ public final class ConrefPushParser extends AbstractXMLFilter {
      * Constructor.
      */
     public ConrefPushParser() {
-        topicSpecSet = new HashSet<String>();
-        levelForPushAfterStack = new Stack<Integer>();
-        contentForPushAfterStack = new Stack<DocumentFragment>();
+        topicSpecSet = new HashSet<>();
+        levelForPushAfterStack = new Stack<>();
+        contentForPushAfterStack = new Stack<>();
     }
 
     public void setMoveTable(final Hashtable<MoveKey, DocumentFragment> movetable) {
@@ -149,10 +149,10 @@ public final class ConrefPushParser extends AbstractXMLFilter {
         hasPushafter = false;
         level = 0;
         levelForPushAfter = 0;
-        idStack = new Stack<String>();
-        topicSpecSet = new HashSet<String>();
-        levelForPushAfterStack = new Stack<Integer>();
-        contentForPushAfterStack = new Stack<DocumentFragment>();
+        idStack = new Stack<>();
+        topicSpecSet = new HashSet<>();
+        levelForPushAfterStack = new Stack<>();
+        contentForPushAfterStack = new Stack<>();
 
         super.write(filename);
 

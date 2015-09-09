@@ -29,7 +29,7 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 final class InsertAntActionRelative extends InsertAction {
 
-    private static final Map<String, String> relativeAttrs = new HashMap<String, String>();
+    private static final Map<String, String> relativeAttrs = new HashMap<>();
     static {
         relativeAttrs.put("import", "file");
         relativeAttrs.put("lang", "filename");

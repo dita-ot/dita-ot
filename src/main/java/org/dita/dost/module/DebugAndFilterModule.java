@@ -16,11 +16,9 @@ import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.Configuration.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FilterUtils.*;
+import static org.dita.dost.util.XMLUtils.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.util.*;
 
@@ -31,6 +29,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
@@ -50,6 +50,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.*;
+import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 
@@ -62,6 +63,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
+    private final Map<File, File> copytoMap = new HashMap<>();
     private Mode processingMode;
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private boolean genDebugInfo;
@@ -122,8 +124,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
     private void processFile(final FileInfo f) {
         currentFile = f.src;
-        if (!exists(currentFile)) {
-            // Assuming this is an copy-to target file, ignore it
+        if (!exists(f.src)) { //copytoMap.containsKey(f.file)
             logger.debug("Ignoring a copy-to file " + f.src);
             return;
         }
@@ -152,6 +153,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             filterUtils = baseFilterUtils.refine(subjectSchemeReader.getSubjectSchemeMap());
         }
 
+        InputSource in = null;
         OutputStream out = null;
         try {
             out = new FileOutputStream(outputFile);
@@ -159,8 +161,12 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger));
 
             final TransformerFactory tf = TransformerFactory.newInstance();
-            final Transformer serializer = tf.newTransformer();
-            XMLReader xmlSource = getXmlReader(f.format);
+//            final Transformer serializer = tf.newTransformer();
+            final SAXTransformerFactory stf = (SAXTransformerFactory) tf;
+            final TransformerHandler serializer = stf.newTransformerHandler();
+
+            XMLReader parser = getXmlReader(f.format);
+            XMLReader xmlSource = parser;
             for (final XMLFilter filter: getProcessingPipe(currentFile)) {
                 filter.setParent(xmlSource);
                 xmlSource = filter;
@@ -169,9 +175,19 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             // when reusing filter with multiple Transformers.
             xmlSource.setContentHandler(null);
 
-            final Source source = new SAXSource(xmlSource, new InputSource(f.src.toString()));
+            try {
+                final LexicalHandler lexicalHandler = new DTDForwardHandler(xmlSource);
+                parser.setProperty("http://xml.org/sax/properties/lexical-handler", lexicalHandler);
+                parser.setFeature("http://xml.org/sax/features/lexical-handler", true);
+            } catch (final SAXNotRecognizedException e) {}
+
+            in = new InputSource(f.src.toString());
+//            final Source source = new SAXSource(xmlSource, in);
             final Result result = new StreamResult(out);
-            serializer.transform(source, result);
+//            serializer.transform(source, result);
+            serializer.setResult(result);
+            xmlSource.setContentHandler(serializer);
+            xmlSource.parse(new InputSource(f.src.toString()));
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
@@ -183,6 +199,11 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 }catch (final Exception e) {
                     logger.error(e.getMessage(), e) ;
                 }
+            }
+            try {
+                close(in);
+            } catch (final IOException e) {
+                logger.error(e.getMessage(), e) ;
             }
         }
 
@@ -196,11 +217,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             if (format != null && format.equals(e.getKey())) {
                 try {
                     return (XMLReader) this.getClass().forName(e.getValue()).newInstance();
-                } catch (final InstantiationException ex) {
-                    throw new SAXException(ex);
-                } catch (final IllegalAccessException ex) {
-                    throw new SAXException(ex);
-                } catch (final ClassNotFoundException ex) {
+                } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
                     throw new SAXException(ex);
                 }
             }
@@ -259,9 +276,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 logger.info("Using Xerces grammar pool for DTD and schema caching.");
             } catch (final NoClassDefFoundError e) {
                 logger.debug("Xerces not available, not using grammar caching");
-            } catch (final SAXNotRecognizedException e) {
-                logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-            } catch (final SAXNotSupportedException e) {
+            } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
                 logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
             }
         }
@@ -288,7 +303,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * @param fileToParse absolute URI to current file being processed
      */
     private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
-        final List<XMLFilter> pipe = new ArrayList<XMLFilter>();
+        final List<XMLFilter> pipe = new ArrayList<>();
 
         if (genDebugInfo) {
             final DebugFilter debugFilter = new DebugFilter();
@@ -359,6 +374,10 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             inputDir = baseDir.toURI().resolve(inputDir);
         }
         inputMap = inputDir.resolve(job.getInputMap());
+
+        for (final Map.Entry<URI, URI> e: job.getCopytoMap().entrySet()) {
+            copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
+        }
     }
 
 
@@ -371,8 +390,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         try {
             final Map<URI, Set<URI>> graph = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_RELATION));
 
-            final Queue<URI> queue = new LinkedList<URI>(graph.keySet());
-            final Set<URI> visitedSet = new HashSet<URI>();
+            final Queue<URI> queue = new LinkedList<>(graph.keySet());
+            final Set<URI> visitedSet = new HashSet<>();
 
             final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setEntityResolver(CatalogUtils.getCatalogResolver());
@@ -415,7 +434,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     }
 
     private void mergeScheme(final Document parentRoot, final Document childRoot) {
-        final Queue<Element> pQueue = new LinkedList<Element>();
+        final Queue<Element> pQueue = new LinkedList<>();
         pQueue.offer(parentRoot.getDocumentElement());
 
         while (!pQueue.isEmpty()) {
@@ -485,7 +504,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         if (root == null || StringUtils.isEmptyString(key)) {
             return null;
         }
-        final Queue<Element> queue = new LinkedList<Element>();
+        final Queue<Element> queue = new LinkedList<>();
         queue.offer(root);
 
         while (!queue.isEmpty()) {
@@ -556,17 +575,14 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * Execute copy-to task, generate copy-to targets base on sources
      */
     private void performCopytoTask() {
-        final Map<File, File> copytoMap = new HashMap<File, File>();
-        for (final Map.Entry<URI, URI> e: job.getCopytoMap().entrySet()) {
-            copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
-        }
+        final Map<File, File> copyTo = new HashMap<>(copytoMap);
         if (forceUniqueFilter != null) {
             for (final Map.Entry<URI, URI> e: forceUniqueFilter.copyToMap.entrySet()) {
-                copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
+                copyTo.put(toFile(e.getKey()), toFile(e.getValue()));
             }
         }
         
-        for (final Map.Entry<File, File> entry: copytoMap.entrySet()) {
+        for (final Map.Entry<File, File> entry: copyTo.entrySet()) {
             final File copytoTarget = entry.getKey();
             final File copytoSource = entry.getValue();
             final File srcFile = new File(job.tempDir, copytoSource.getPath());
@@ -637,34 +653,39 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         @Override
         public void processingInstruction(final String target, final String data) throws SAXException {
             String d = data;
-            if(target.equals(PI_WORKDIR_TARGET)) {
-                if (workdir != null) {
-                    try {
-                        if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
-                            d = workdir.getCanonicalPath();
-                        } else {
-                            d = UNIX_SEPARATOR + workdir.getCanonicalPath();
+            switch (target) {
+                case PI_WORKDIR_TARGET:
+                    if (workdir != null) {
+                        try {
+                            if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
+                                d = workdir.getCanonicalPath();
+                            } else {
+                                d = UNIX_SEPARATOR + workdir.getCanonicalPath();
+                            }
+                        } catch (final IOException e) {
+                            throw new RuntimeException("Failed to get canonical path for working directory: " + e.getMessage(), e);
                         }
-                    } catch (final IOException e) {
-                        throw new RuntimeException("Failed to get canonical path for working directory: " + e.getMessage(), e);
                     }
-                }
-            } else if(target.equals(PI_WORKDIR_TARGET_URI)) {
-                if (workdir != null) {
-                    d = workdir.toURI().toString();
-                }
-            } else if (target.equals(PI_PATH2PROJ_TARGET)) {
-                if (path2project != null) {
-                    d = path2project.getPath();
-                }
-            } else if (target.equals(PI_PATH2PROJ_TARGET_URI)) {
-                if (path2project != null) {
-                    d = toURI(path2project).toString();
-                    if (!d.endsWith(URI_SEPARATOR)) {
-                        d = d + URI_SEPARATOR;
+                    break;
+                case PI_WORKDIR_TARGET_URI:
+                    if (workdir != null) {
+                        d = workdir.toURI().toString();
                     }
-                }
-            }            
+                    break;
+                case PI_PATH2PROJ_TARGET:
+                    if (path2project != null) {
+                        d = path2project.getPath();
+                    }
+                    break;
+                case PI_PATH2PROJ_TARGET_URI:
+                    if (path2project != null) {
+                        d = toURI(path2project).toString();
+                        if (!d.endsWith(URI_SEPARATOR)) {
+                            d = d + URI_SEPARATOR;
+                        }
+                    }
+                    break;
+            }
             getContentHandler().processingInstruction(target, d);
         }
         
@@ -719,4 +740,39 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
     }
 
+    /**
+     * Lexical handler to forward DTD declaration into processing instructions.
+     */
+    private final class DTDForwardHandler implements LexicalHandler {
+
+        private final XMLReader parser;
+
+        public DTDForwardHandler(XMLReader parser) {
+            this.parser = parser;
+        }
+
+        @Override
+        public void startDTD(final String name, final String publicId, final String systemId) throws SAXException {
+            parser.getContentHandler().processingInstruction("doctype-public", publicId);
+            parser.getContentHandler().processingInstruction("doctype-system", systemId);
+        }
+
+        @Override
+        public void endDTD() throws SAXException {}
+
+        @Override
+        public void startEntity(String name) throws SAXException {}
+
+        @Override
+        public void endEntity(String name) throws SAXException {}
+
+        @Override
+        public void startCDATA() throws SAXException {}
+
+        @Override
+        public void endCDATA() throws SAXException {}
+
+        @Override
+        public void comment(char[] ch, int start, int length) throws SAXException {}
+    }
 }
