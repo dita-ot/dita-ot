@@ -1,6 +1,7 @@
 # Gradle task artifacts & build results
 .gradle/*
 build/
+target/
 
 # JAR files retrieved during the build process
 src/main/lib/*.jar
