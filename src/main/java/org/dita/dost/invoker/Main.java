@@ -140,6 +140,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ARGUMENTS.put("-o", new FileArgument("output.dir"));
         ARGUMENTS.put("-output", new FileArgument("output.dir"));
         ARGUMENTS.put("-filter", new FileArgument("args.filter"));
+        ARGUMENTS.put("-t", new FileArgument("dita.temp.dir"));
         ARGUMENTS.put("-temp", new FileArgument("dita.temp.dir"));
     }
     private static final Map<String, String> RESERVED_PROPERTIES = new HashMap<>();
@@ -1149,7 +1150,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
         msg.append("  -filter <file>         filter and flagging file\n");
-        msg.append("  -temp <dir>            temporary directory\n");
+        msg.append("  -t, -temp <dir>        temporary directory\n");
         msg.append("  -v, -verbose           verbose logging\n");
         msg.append("  -d, -debug             print debugging information\n");
         // msg.append("  -emacs, -e             produce logging information without adornments"
