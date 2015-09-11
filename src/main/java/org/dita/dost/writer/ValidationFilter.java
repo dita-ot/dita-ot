@@ -11,11 +11,7 @@ import static org.dita.dost.util.URLUtils.toURI;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.*;
@@ -99,7 +95,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	    } 
 		AttributesImpl modified = null;
 		modified = validateLang(atts, null);
-		validateId(atts);
+		modified = validateId(localName, atts, modified);
 		modified = validateHref(atts, modified);
         modified = processFormatDitamap(atts, modified);
 		validateKeys(atts);
@@ -181,10 +177,31 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	/**
 	 * Validate {@code id} attribute for uniqueness.
 	 */
-    private void validateId(final Attributes atts) throws SAXException {
+    private AttributesImpl validateId(final String localName, final Attributes atts, final AttributesImpl modified) throws SAXException {
+        AttributesImpl res = modified;
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        if (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls)) {
-			topicIds.clear();
+        if (MAP_MAP.matches(cls)) {
+            topicIds.clear();
+        } else if (TOPIC_TOPIC.matches(cls)) {
+            final String id = atts.getValue(ATTRIBUTE_NAME_ID);
+            if (id == null) {
+                switch (processingMode) {
+                case STRICT:
+                    throw new SAXException(messageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
+                case LAX:
+                    if (res == null) {
+                        res = new AttributesImpl(atts);
+                    }
+                    final String gen = "gen_" + UUID.randomUUID().toString();
+                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_ID, gen);
+                    logger.error(messageUtils.getMessage("DOTJ066E", localName, gen).setLocation(locator).toString());
+                    break;
+                case SKIP:
+                    logger.error(messageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
+                    break;
+                }
+            }
+            topicIds.clear();
         } else if (TOPIC_RESOURCEID.matches(cls) || DELAY_D_ANCHORID.matches(cls)) {
             // not considered a normal element ID
         } else {
@@ -200,6 +217,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 				topicIds.add(id);
 			}
 		}
+        return res;
     }
 
 	/**
