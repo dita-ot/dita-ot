@@ -844,7 +844,7 @@ public final class GenListModuleReader extends AbstractXMLReader {
             logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
         }
 
-        if (classValue != null && TOPIC_TOPIC.matches(classValue)) {
+        if (classValue != null && (TOPIC_TOPIC.matches(classValue) || MAP_MAP.matches(classValue))) {
             domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains == null) {
                 logger.logInfo(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
