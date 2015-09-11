@@ -481,7 +481,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
         }
 
-        if (TOPIC_TOPIC.matches(classValue)) {
+        if (TOPIC_TOPIC.matches(classValue) || MAP_MAP.matches(classValue)) {
             final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains == null) {
                 logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
