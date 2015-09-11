@@ -77,7 +77,7 @@
 
   <!--Set up and run Antenna House-->
   <target name="transform.fo2pdf.ah" depends="transform.fo2pdf.ah.test-use, transform.fo2pdf.ah.init" if="use.ah.pdf.formatter">
-    <condition property="has.axf.option">
+    <condition property="axf.opt" value="${env.AXF_OPT}">
       <and>
         <not><equals arg1="${env.AXF_OPT}" arg2=""/></not>
         <available file="${env.AXF_OPT}"/>
@@ -173,7 +173,7 @@
     <antcall target="transform.fo2pdf.ah.hasoption"/>
   </target>
 
-  <target name="transform.fo2pdf.ah.nooption" unless="has.axf.option">
+  <target name="transform.fo2pdf.ah.nooption" unless="axf.opt">
     <echo level="info" taskname="ahf">Processing ${pdf2.temp.dir}/topic.fo to ${outputFile}</echo>
     <exec executable="${axf.cmd}" resultproperty="errCode" output="${dita.temp.dir}/pdf2.ah.log">
       <arg value="-d"/>
@@ -190,7 +190,7 @@
     <log-processor file="${dita.temp.dir}/pdf2.ah.log" taskname="ahf"/>
   </target>
 
-  <target name="transform.fo2pdf.ah.hasoption" if="has.axf.option">
+  <target name="transform.fo2pdf.ah.hasoption" if="axf.opt">
     <echo level="info" taskname="ahf" >Processing ${pdf2.temp.dir}/topic.fo to ${outputFile}</echo>
     <exec executable="${axf.cmd}" resultproperty="errCode" output="${dita.temp.dir}/pdf2.ah.log">
       <arg value="-d"/>
@@ -204,7 +204,7 @@
       <arg value="-peb"/>
       <arg value="1"/>
       <arg value="-i"/>
-      <arg value="${env.AXF_OPT}"/>
+      <arg value="${axf.opt}"/>
     </exec>
     <log-processor file="${dita.temp.dir}/pdf2.ah.log" taskname="ahf"/>
   </target>
