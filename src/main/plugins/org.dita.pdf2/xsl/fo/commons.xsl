@@ -2041,6 +2041,8 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Process common attributes -->
     <xsl:template name="commonattributes">
       <xsl:apply-templates select="@id"/>
+      <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')] |
+                                   *[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="flag-attributes"/>
     </xsl:template>
 
     <!-- Get ID for an element, generate ID if not explicitly set. -->

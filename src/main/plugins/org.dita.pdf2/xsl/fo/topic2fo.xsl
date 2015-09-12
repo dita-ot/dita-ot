@@ -104,6 +104,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="learning-elements.xsl"/>
 
     <xsl:import href="flagging.xsl"/>
+    <xsl:import href="flagging-from-preprocess.xsl"/>
 
 
     <xsl:output method="xml" encoding="utf-8" indent="no"/>

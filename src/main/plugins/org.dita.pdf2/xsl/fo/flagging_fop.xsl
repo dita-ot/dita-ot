@@ -12,6 +12,9 @@
   <!-- FOP crashes if changebar elements appear in fo:block or fo:inline,
        which is where all are currently generated -->
   <xsl:template match="suitesol:changebar-start"/>
-  <xsl:template match="suitesol:changebar-end"/>      
+  <xsl:template match="suitesol:changebar-end"/>   
+     
+  <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]/revprop" mode="changebar"/>
+  <xsl:template match="*[contains(@class,' ditaot-d/ditaval-endprop ')]/revprop" mode="changebar"/>
 
 </xsl:stylesheet>
