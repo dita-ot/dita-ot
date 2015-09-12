@@ -43,6 +43,7 @@
       <val default="true">no</val>
     </param>
     <param name="args.fo.userconfig" desc="Specifies the user configuration file for FOP." type="file"/>
+    <param name="axf.opt" desc="Specifies the user configuration file for Antenna House Formatter." type="file"/>
     <param name="org.dita.pdf2.i18n.enabled" desc="Enables I18N font processing." type="enum">
       <val desc="Enables I18N processing" default="true">true</val>
       <val desc="Disables I18N processing">false</val>
