@@ -1798,6 +1798,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/image ')]">
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <xsl:choose>
             <xsl:when test="empty(@href)"/>
             <xsl:when test="@placement = 'break'">
@@ -1823,6 +1824,7 @@ See the accompanying license.txt file for applicable licenses.
                 </fo:inline>
             </xsl:otherwise>
         </xsl:choose>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
   
   <!-- Test whether URI is absolute -->

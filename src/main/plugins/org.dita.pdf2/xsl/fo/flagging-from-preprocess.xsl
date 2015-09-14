@@ -22,21 +22,55 @@ See the accompanying license.txt file for applicable licenses.
   </ditaval-endprop>
   -->
 
-  <xsl:template match="*[contains(@class,' topic/image ')]/*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]" priority="10"/>
-  <xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]" priority="10"/>
-  <xsl:template match="*[contains(@class,' topic/simpletable ')]/*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]" priority="10"/>
-  <xsl:template match="*[contains(@class,' topic/thead ')]/*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]" priority="10"/>
-  <xsl:template match="*[contains(@class,' topic/tgroup ')]/*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]" priority="10"/>
-  <xsl:template match="*[contains(@class,' topic/tbody ')]/*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]" priority="10"/>
-  <xsl:template match="*[contains(@class,' topic/row ')]/*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]" priority="10"/>
-  <xsl:template match="*[contains(@class,' topic/strow ')]/*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]" priority="10"/>
-  <xsl:template match="*[contains(@class,' topic/sthead ')]/*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]" priority="10"/>
-
-
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]
                         [parent::*[contains(@class,' topic/ol ') or contains(@class,' topic/ul ') or
                                    contains(@class,' topic/sl ')]]" priority="10">
     <!-- Process with "outofline" in lists.xsl -->
+  </xsl:template>
+  <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]
+                        [parent::*[contains(@class,' topic/dl ') or contains(@class,' topic/dlhead ') or
+                                   contains(@class,' topic/dlentry ')]]" priority="10">
+    <!-- Process with "outofline" in tables.xsl -->
+  </xsl:template>
+  <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]
+                        [parent::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ') or
+                                   contains(@class,' topic/tgroup ') or contains(@class,' topic/tbody ') or
+                                   contains(@class,' topic/thead ') or contains(@class,' topic/sthead ') or
+                                   contains(@class,' topic/row ') or contains(@class,' topic/strow ')]]" priority="10">
+    <!-- Process with "outofline" in tables.xsl -->
+  </xsl:template>
+  <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]
+                        [parent::*[contains(@class,' topic/image ')]]" priority="10">
+    <!-- Process with "outofline" in commons.xsl -->
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class,' topic/stentry ')]" mode="ancestor-start-flag">
+    <!-- If first stentry in a row, pick up start flag from the row -->
+    <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/stentry ')])">
+      <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template match="*[contains(@class,' topic/stentry ')]" mode="ancestor-end-flag">
+    <!-- If last stentry in a row, pick up end flag from the row -->
+    <xsl:if test="not(following-sibling::*[contains(@class,' topic/stentry ')])">
+      <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template match="*[contains(@class,' topic/entry ')]" mode="ancestor-start-flag">
+    <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/entry ')])">
+      <!-- check tgroup, tbody or thead, row -->
+      <xsl:apply-templates select="../../../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
+      <xsl:apply-templates select="../../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
+      <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template match="*[contains(@class,' topic/entry ')]" mode="ancestor-end-flag">
+    <xsl:if test="not(following-sibling::*[contains(@class,' topic/entry ')])">
+      <!-- check row, tbody or thead, tgroup -->
+      <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
+      <xsl:apply-templates select="../../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
+      <xsl:apply-templates select="../../../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
+    </xsl:if>
   </xsl:template>
 
     <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')] |
@@ -133,7 +167,17 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:choose>
           </xsl:for-each>
         </xsl:variable>
-        <xsl:apply-templates select="$flags"/>
+        <xsl:choose>
+          <xsl:when test="parent::*[contains(@class,' topic/dl ') or
+                                    contains(@class,' topic/image ')]">
+            <fo:inline xsl:use-attribute-sets="image__inline">
+              <xsl:apply-templates select="$flags"/>
+            </fo:inline>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="$flags"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:if>
     </xsl:template>
 
