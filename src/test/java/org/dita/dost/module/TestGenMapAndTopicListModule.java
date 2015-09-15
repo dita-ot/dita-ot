@@ -9,6 +9,7 @@
 package org.dita.dost.module;
 
 import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
+import static org.dita.dost.util.Job.Generate.OLDSOLUTION;
 import static org.junit.Assert.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
@@ -69,17 +70,17 @@ public class TestGenMapAndTopicListModule {
         final File inputDirParallel = new File("maps");
         final File inputMapParallel = new File(inputDirParallel, "root-map-01.ditamap");
         final File outDirParallel = new File(tempDirParallel, "out");
-        generate(inputDirParallel, inputMapParallel, outDirParallel, tempDirParallel);
+        generate(inputDirParallel, inputMapParallel, outDirParallel, tempDirParallel, Integer.toString(NOT_GENERATEOUTTER.type));
         
         tempDirAbove = new File(tempDir, "above");
         tempDirAbove.mkdirs();
         final File inputDirAbove = new File(".");
         final File inputMapAbove = new File(inputDirAbove, "root-map-02.ditamap");
         final File outDirAbove = new File(tempDirAbove, "out");
-        generate(inputDirAbove, inputMapAbove, outDirAbove, tempDirAbove);
+        generate(inputDirAbove, inputMapAbove, outDirAbove, tempDirAbove, Integer.toString(NOT_GENERATEOUTTER.type));
     }
 
-    private static void generate(final File inputDir, final File inputMap, final File outDir, final File tempDir) throws DITAOTException, IOException {
+    private static void generate(final File inputDir, final File inputMap, final File outDir, final File tempDir, final String genCopy) throws DITAOTException, IOException {
         final PipelineHashIO pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_INPUTMAP, inputMap.getPath());
         pipelineInput.setAttribute(ANT_INVOKER_PARAM_BASEDIR, srcDir.getAbsolutePath());
@@ -91,7 +92,7 @@ public class TestGenMapAndTopicListModule {
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ENCODING, "en-US");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT, ".html");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE, Boolean.FALSE.toString());
-        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, Integer.toString(NOT_GENERATEOUTTER.type));
+        pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, genCopy);
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_OUTTERCONTROL, "warn");
         pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP, Boolean.FALSE.toString());
         //pipelineInput.setAttribute("ditalist", new File(tempDir, FILE_NAME_DITA_LIST).getPath());
@@ -102,6 +103,9 @@ public class TestGenMapAndTopicListModule {
         facade.setLogger(new TestUtils.TestLogger());
         facade.setJob(new Job(tempDir));
         facade.execute("GenMapAndTopicList", pipelineInput);
+        if (genCopy.equals(Integer.toString(OLDSOLUTION.type))) {
+            facade.execute("Coderef", null);
+        }
     }
         
     @Test
@@ -249,6 +253,29 @@ public class TestGenMapAndTopicListModule {
                 
         final Job job = new Job(tempDirAbove);
         assertEquals("", job.getProperty("uplevels"));
+    }
+
+    @Test
+    public void testFileContentBelow() throws Exception{
+        final File tempDirBelow = new File(tempDir, "below");
+        tempDirBelow.mkdirs();
+        final File inputDirBelow = new File("below");
+        final File inputMapBelow = new File(inputDirBelow, "maps/root-map-03.ditamap");
+        final File outDirBelow = new File(tempDirBelow, "out");
+        try {
+            generate(inputDirBelow, inputMapBelow, outDirBelow, tempDirBelow, Integer.toString(OLDSOLUTION.type));
+        } catch (Exception e) {
+            // This method tests that coderef code is not parsed. Generation may have failed for a different reason.
+            fail(e.getMessage());
+        }
+                
+        final Job job = new Job(tempDirBelow);
+        assertEquals(".." + File.separator, job.getProperty("uplevels"));
+
+        final File json = new File("auxiliary/test.json");
+        final Map<File, FileInfo> map = job.getFileInfoMap();
+        assertTrue("auxiliary/test.json was not found.", map.containsKey(json));
+        assertTrue("auxiliary/test.json was not a subtarget.", map.get(json).isSubtarget);
     }
         
     private Properties readProperties(final File f)
