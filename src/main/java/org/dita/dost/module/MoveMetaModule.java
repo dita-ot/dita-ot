@@ -148,7 +148,12 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
             mapInserter.setLogger(logger);
             mapInserter.setJob(job);
             for (final Entry<URI, Map<String, Element>> entry : mapSet.entrySet()) {
-                final FileInfo fi = job.getFileInfo(entry.getKey());
+                final URI key = entry.getKey();
+                final FileInfo fi = job.getFileInfo(key);
+                if (fi == null) {
+                    logger.error("File " + new File(job.tempDir, key.getPath()) + " was not found.");
+                    continue;
+                }
                 final URI targetFileName = job.tempDir.toURI().resolve(fi.uri);
                 assert targetFileName.isAbsolute();
                 if (fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
@@ -167,7 +172,12 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
             topicInserter.setLogger(logger);
             topicInserter.setJob(job);
             for (final Entry<URI, Map<String, Element>> entry : mapSet.entrySet()) {
-                final FileInfo fi = job.getFileInfo(entry.getKey());
+                final URI key = entry.getKey();
+                final FileInfo fi = job.getFileInfo(key);
+                if (fi == null) {
+                    logger.error("File " + new File(job.tempDir, key.getPath()) + " was not found.");
+                    continue;
+                }
                 final URI targetFileName = job.tempDir.toURI().resolve(fi.uri);
                 assert targetFileName.isAbsolute();
                 if (fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
