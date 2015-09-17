@@ -1129,14 +1129,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      */
     private static void printUsage() {
         final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita -f <name> -i <file> [options]\n");
+        msg.append("Usage: dita -i <file> -f <name> [options]\n");
         msg.append("   or: dita -install [<file>]\n");
         msg.append("   or: dita -uninstall <id>\n");
         msg.append("   or: dita -help\n");
         msg.append("   or: dita -version\n");
         msg.append("Arguments: \n");
-        msg.append("  -f, -format <name>     transformation type\n");
         msg.append("  -i, -input <file>      input file\n");
+        msg.append("  -f, -format <name>     output format (transformation type)\n");
         msg.append("  -install [<file>]      install plug-in from a ZIP file or reload plugins\n");
         msg.append("  -uninstall <id>        uninstall plug-in with the ID\n");
         msg.append("  -h, -help              print this message\n");
