@@ -153,7 +153,7 @@
   <target name="transform.fo2pdf.fop" depends="transform.fo2pdf.fop.test-use, transform.fo2pdf.fop.init" if="use.fop.pdf.formatter">
     <!--Check fop lib-->
     <antcall target="checkFOPLib"/>
-    <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
+    <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop" classpathref="dost.class.path">
       <classpath>
         <fileset dir="${fop.home}/lib">
           <include name="*.jar"/>
