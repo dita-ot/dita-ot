@@ -254,7 +254,13 @@
   
   <!-- create map title -->
   <xsl:template name="create_map_title">
-    <xsl:apply-templates select="//opentopic:map/*[contains(@class, ' map/topicref ')][1]/*[contains(@class, ' map/topicmeta ')]       /*[contains(@class, ' topic/navtitle ')]" mode="create_title"/>
+    <xsl:apply-templates
+      select="($map/*[contains(@class, ' topic/title ')],
+               /*/@title,
+               //opentopic:map/*[contains(@class, ' map/topicref ')][1]
+                              /*[contains(@class, ' map/topicmeta ')]
+                              /*[contains(@class, ' topic/navtitle ')])[1]"
+      mode="create_title"/>
   </xsl:template>
   
   <!-- create topic title -->
@@ -262,7 +268,7 @@
     <xsl:apply-templates select="/*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]" mode="create_title"/>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' topic/title ')]|*[contains(@class, ' topic/navtitle ')]" mode="create_title">
+  <xsl:template match="*[contains(@class, ' topic/title ')] | @title | *[contains(@class, ' topic/navtitle ')]" mode="create_title">
     <text:p text:style-name="Title">
       <xsl:apply-templates select="." mode="dita-ot:text-only"/>
     </text:p>
