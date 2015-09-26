@@ -53,6 +53,7 @@
       <val>no</val>
     </param>
     <param name="args.xsl" desc="Specifies a custom XSL file to be used instead of the default XSL transformation." type="file"/>
+    <param name="args.xhtml.toc.xsl" desc="Specifies a custom XSL file to be used to TOC transformation." type="file"/>
   </transtype>
   <transtype name="html5 xhtml" extends="base-html" desc="HTML">
     <param name="args.xhtml.contenttarget" desc="Specifies the value of the @target attribute on the &lt;base&gt; element in the TOC file." type="string">
