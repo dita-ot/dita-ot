@@ -129,7 +129,7 @@
     <param name="outer.control" desc="Specifies how the DITA-OT handles content files that are not located in or below the directory containing the master DITA map." type="enum">
       <val desc="Fail quickly if files are going to be generated or copied outside of the directory.">fail</val>
       <val desc="Complete the operation if files will be generated or copied outside of the directory, but log a warning." default="true">warn</val>
-      <val desc="Quietly finish with only those files; do not generate warnings or errors.">quiet</val>
+      <val desc="Quietly finish without generating warnings or errors.">quiet</val>
     </param>
     <param name="output.dir" desc="Specifies the name and location of the output directory." type="dir"/>
     <param name="root-chunk-override" desc="Override for map chunk attribute value." type="string"/>
