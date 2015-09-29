@@ -67,6 +67,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/sv.xml" uri="fo/i18n/sv.xml"/>
     <uri name="cfg:fo/i18n/zh_CN.xml" uri="fo/i18n/zh_CN.xml"/>
 
+    <uri name="cfg:common/index/da_DK.xml" uri="common/index/da.xml"/>
+    <uri name="cfg:common/index/da.xml" uri="common/index/da.xml"/>
     <uri name="cfg:common/index/de_DE.xml" uri="common/index/de.xml"/>
     <uri name="cfg:common/index/de.xml" uri="common/index/de.xml"/>
     <uri name="cfg:common/index/en_US.xml" uri="common/index/en.xml"/>
@@ -79,12 +81,16 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/fr.xml" uri="common/index/fr.xml"/>
     <uri name="cfg:common/index/he_IL.xml" uri="common/index/he.xml"/>
     <uri name="cfg:common/index/he.xml" uri="common/index/he.xml"/>
+    <uri name="cfg:common/index/is_IS.xml" uri="common/index/is.xml"/>
+    <uri name="cfg:common/index/is.xml" uri="common/index/is.xml"/>
     <uri name="cfg:common/index/it_IT.xml" uri="common/index/it.xml"/>
     <uri name="cfg:common/index/it.xml" uri="common/index/it.xml"/>
     <uri name="cfg:common/index/ja_JP.xml" uri="common/index/ja.xml"/>
     <uri name="cfg:common/index/ja.xml" uri="common/index/ja.xml"/>
     <uri name="cfg:common/index/nl_NL.xml" uri="common/index/nl.xml"/>
     <uri name="cfg:common/index/nl.xml" uri="common/index/nl.xml"/>
+    <uri name="cfg:common/index/no_NO.xml" uri="common/index/no.xml"/>
+    <uri name="cfg:common/index/no.xml" uri="common/index/no.xml"/>
     <uri name="cfg:common/index/ro_RO.xml" uri="common/index/ro.xml"/>
     <uri name="cfg:common/index/ro.xml" uri="common/index/ro.xml"/>
     <uri name="cfg:common/index/ru_RU.xml" uri="common/index/ru.xml"/>
