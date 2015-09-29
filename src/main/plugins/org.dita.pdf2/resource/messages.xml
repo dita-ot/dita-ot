@@ -18,6 +18,10 @@
     <reason>Build stopped. Problems occured during Index preprocess task. Please check the messages above.</reason>
     <response/>
   </message>
+  <message id="PDFJ003I" type="INFO">
+    <reason>Index entry '%1' is moved to "Special characters" group.</reason>
+    <response/>
+  </message>
   <message id="XEPJ001W" type="WARN">
     <reason>%1</reason>
     <response/>
