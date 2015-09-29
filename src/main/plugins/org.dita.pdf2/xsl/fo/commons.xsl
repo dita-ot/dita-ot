@@ -1812,7 +1812,7 @@ See the accompanying license.txt file for applicable licenses.
                     </fo:block>
                     <xsl:if test="$artLabel='yes'">
                       <fo:block>
-                        <fo:inline xsl:use-attribute-sets="image.artlabel"><xsl:value-of select="@href"/></fo:inline>
+                        <xsl:apply-templates select="." mode="image.artlabel"/>
                       </fo:block>
                     </xsl:if>
             </xsl:when>
@@ -1827,10 +1827,18 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:apply-templates>
                 </fo:inline>
                 <xsl:if test="$artLabel='yes'">
-                  <fo:inline xsl:use-attribute-sets="image.artlabel"><xsl:text> </xsl:text><xsl:value-of select="@href"/><xsl:text> </xsl:text></fo:inline>
+                  <xsl:apply-templates select="." mode="image.artlabel"/>
                 </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="*" mode="image.artlabel">
+      <fo:inline xsl:use-attribute-sets="image.artlabel">
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="@href"/>
+        <xsl:text> </xsl:text>
+      </fo:inline>
     </xsl:template>
   
   <!-- Test whether URI is absolute -->
