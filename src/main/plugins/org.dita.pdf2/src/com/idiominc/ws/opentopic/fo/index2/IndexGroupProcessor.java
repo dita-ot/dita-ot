@@ -109,8 +109,7 @@ public final class IndexGroupProcessor {
 
             if (groupMembers.length > 0) {
                 //Find entries by comaping first letter with a chars in current config entry
-                for (final String key2 : new ArrayList<String>(indexMap.keySet())) {
-                    final String key = key2;
+                for (final String key : new ArrayList<String>(indexMap.keySet())) {
                     if (key.length() > 0) {
                         final String value = getValue((IndexEntry) indexMap.get(key));
                         //						final char c = value.charAt(0);
@@ -149,8 +148,7 @@ public final class IndexGroupProcessor {
             final ConfigEntry configEntry = group.getConfigEntry();
             final String configKey = configEntry.getKey();
             if (configKey.equals(SPECIAL_CHARACTER_GROUP_KEY)) {
-              for (final String key2 : new ArrayList<String>(indexMap.keySet())) {
-                    final String key = key2;
+              for (final String key : new ArrayList<String>(indexMap.keySet())) {
                     if (key.length() > 0) {
                         final String value = getValue((IndexEntry) indexMap.get(key));
                         //						final char c = value.charAt(0);
@@ -164,8 +162,7 @@ public final class IndexGroupProcessor {
 
         //No recognized "Special characters" group; uncategorized terms have no place to go, must be dropped
         if (!indexMap.isEmpty()) {
-            for (final String key2 : new ArrayList<String>(indexMap.keySet())) {
-                final String key = key2;
+            for (final String key : new ArrayList<String>(indexMap.keySet())) {
                 if (key.length() > 0) {
                     final IndexEntry entry = (IndexEntry) indexMap.get(key);
                     logger.error(MessageUtils.getInstance().getMessage("PDFJ001E", entry.toString()).toString());
