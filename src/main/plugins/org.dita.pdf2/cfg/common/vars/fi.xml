@@ -62,18 +62,18 @@
   <variable id="On the page"/>
   <variable id="Page"> sivu <param ref-name="pagenum"/></variable>
   <variable id="This link"><!--TODO:this link--></variable>
-  <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="note Note Image Path"></variable>
+  <variable id="notice Note Image Path"></variable>
   <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="important Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="remember Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="fastpath Note Image Path"></variable>
+  <variable id="important Note Image Path"></variable>
+  <variable id="remember Note Image Path"></variable>
+  <variable id="restriction Note Image Path"></variable>
+  <variable id="tip Note Image Path"></variable>
+  <variable id="other Note Image Path"></variable>
 
   <variable id="Child topics"><!--TODO:Child Topics--></variable>
 
