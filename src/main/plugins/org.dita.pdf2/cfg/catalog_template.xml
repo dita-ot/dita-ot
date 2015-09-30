@@ -39,6 +39,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <uri name="cfg:fo/font-mappings.xml" uri="fo/font-mappings.xml"/>
 
+    <uri name="cfg:fo/i18n/da_DK.xml" uri="fo/i18n/da.xml"/>
+    <uri name="cfg:fo/i18n/da.xml" uri="fo/i18n/da.xml"/>
     <uri name="cfg:fo/i18n/de_DE.xml" uri="fo/i18n/de.xml"/>
     <uri name="cfg:fo/i18n/de.xml" uri="fo/i18n/de.xml"/>
     <uri name="cfg:fo/i18n/en_US.xml" uri="fo/i18n/en.xml"/>
@@ -51,12 +53,16 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/fr.xml" uri="fo/i18n/fr.xml"/>
     <uri name="cfg:fo/i18n/he_IL.xml" uri="fo/i18n/he.xml"/>
     <uri name="cfg:fo/i18n/he.xml" uri="fo/i18n/he.xml"/>
+    <uri name="cfg:fo/i18n/is_IS.xml" uri="fo/i18n/is.xml"/>
+    <uri name="cfg:fo/i18n/is.xml" uri="fo/i18n/is.xml"/>
     <uri name="cfg:fo/i18n/it_IT.xml" uri="fo/i18n/it.xml"/>
     <uri name="cfg:fo/i18n/it.xml" uri="fo/i18n/it.xml"/>
     <uri name="cfg:fo/i18n/ja_JP.xml" uri="fo/i18n/ja.xml"/>
     <uri name="cfg:fo/i18n/ja.xml" uri="fo/i18n/ja.xml"/>
     <uri name="cfg:fo/i18n/nl_NL.xml" uri="fo/i18n/nl.xml"/>
     <uri name="cfg:fo/i18n/nl.xml" uri="fo/i18n/nl.xml"/>
+    <uri name="cfg:fo/i18n/no_NO.xml" uri="fo/i18n/no.xml"/>
+    <uri name="cfg:fo/i18n/no.xml" uri="fo/i18n/no.xml"/>
     <uri name="cfg:fo/i18n/ro_RO.xml" uri="fo/i18n/ro.xml"/>
     <uri name="cfg:fo/i18n/ro.xml" uri="fo/i18n/ro.xml"/>
     <uri name="cfg:fo/i18n/ru_RU.xml" uri="fo/i18n/ru.xml"/>
