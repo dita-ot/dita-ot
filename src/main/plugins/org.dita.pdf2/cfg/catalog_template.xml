@@ -39,6 +39,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <uri name="cfg:fo/font-mappings.xml" uri="fo/font-mappings.xml"/>
 
+    <uri name="cfg:fo/i18n/ca_ES.xml" uri="fo/i18n/ca.xml"/>
+    <uri name="cfg:fo/i18n/ca.xml" uri="fo/i18n/ca.xml"/>
     <uri name="cfg:fo/i18n/da_DK.xml" uri="fo/i18n/da.xml"/>
     <uri name="cfg:fo/i18n/da.xml" uri="fo/i18n/da.xml"/>
     <uri name="cfg:fo/i18n/de_DE.xml" uri="fo/i18n/de.xml"/>
@@ -63,6 +65,9 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/nl.xml" uri="fo/i18n/nl.xml"/>
     <uri name="cfg:fo/i18n/no_NO.xml" uri="fo/i18n/no.xml"/>
     <uri name="cfg:fo/i18n/no.xml" uri="fo/i18n/no.xml"/>
+    <uri name="cfg:fo/i18n/pt_PT.xml" uri="fo/i18n/pt.xml"/>
+    <uri name="cfg:fo/i18n/pt.xml" uri="fo/i18n/pt.xml"/>
+    <uri name="cfg:fo/i18n/pt_BR.xml" uri="fo/i18n/pt_BR.xml"/>
     <uri name="cfg:fo/i18n/ro_RO.xml" uri="fo/i18n/ro.xml"/>
     <uri name="cfg:fo/i18n/ro.xml" uri="fo/i18n/ro.xml"/>
     <uri name="cfg:fo/i18n/ru_RU.xml" uri="fo/i18n/ru.xml"/>
@@ -73,6 +78,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/sv.xml" uri="fo/i18n/sv.xml"/>
     <uri name="cfg:fo/i18n/zh_CN.xml" uri="fo/i18n/zh_CN.xml"/>
 
+    <uri name="cfg:common/index/ca_ES.xml" uri="common/index/ca.xml"/>
+    <uri name="cfg:common/index/ca.xml" uri="common/index/ca.xml"/>
     <uri name="cfg:common/index/da_DK.xml" uri="common/index/da.xml"/>
     <uri name="cfg:common/index/da.xml" uri="common/index/da.xml"/>
     <uri name="cfg:common/index/de_DE.xml" uri="common/index/de.xml"/>
@@ -97,6 +104,9 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/nl.xml" uri="common/index/nl.xml"/>
     <uri name="cfg:common/index/no_NO.xml" uri="common/index/no.xml"/>
     <uri name="cfg:common/index/no.xml" uri="common/index/no.xml"/>
+    <uri name="cfg:common/index/pt_PT.xml" uri="common/index/pt.xml"/>
+    <uri name="cfg:common/index/pt.xml" uri="common/index/pt.xml"/>
+    <uri name="cfg:common/index/pt_BR.xml" uri="common/index/pt_BR.xml"/>
     <uri name="cfg:common/index/ro_RO.xml" uri="common/index/ro.xml"/>
     <uri name="cfg:common/index/ro.xml" uri="common/index/ro.xml"/>
     <uri name="cfg:common/index/ru_RU.xml" uri="common/index/ru.xml"/>
