@@ -2,6 +2,7 @@
 <!-- This file is part of the DITA Open Toolkit project.
      See the accompanying license.txt file for applicable licenses. -->
 <langlist>
+  <lang filename="ca.xml" xml:lang="ca"/>
   <lang filename="da.xml" xml:lang="da"/>
   <lang filename="de.xml" xml:lang="de"/>
   <lang filename="en.xml" xml:lang="en"/>
