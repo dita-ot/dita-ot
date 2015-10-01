@@ -75,10 +75,22 @@
         <group.label>A</group.label>
         <group.members>
           <char.set>a</char.set>
-          <char.set>ă</char.set>
-          <char.set>â</char.set>
           <char.set>A</char.set>
+        </group.members>
+      </index.group>
+      <index.group>
+        <group.key>Ă</group.key>
+        <group.label>Ă</group.label>
+        <group.members>
+          <char.set>ă</char.set>
           <char.set>Ă</char.set>
+        </group.members>
+      </index.group>
+      <index.group>
+        <group.key>Â</group.key>
+        <group.label>Â</group.label>
+        <group.members>
+          <char.set>â</char.set>
           <char.set>Â</char.set>
         </group.members>
       </index.group>
