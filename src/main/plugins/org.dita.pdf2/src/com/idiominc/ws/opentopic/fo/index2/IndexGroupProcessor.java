@@ -47,6 +47,8 @@ See the accompanying license.txt file for applicable licenses.
 public final class IndexGroupProcessor {
     
     private DITAOTLogger logger;
+
+    public static final String SPECIAL_CHARACTER_GROUP_KEY = "Specials";
     
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
@@ -107,8 +109,7 @@ public final class IndexGroupProcessor {
 
             if (groupMembers.length > 0) {
                 //Find entries by comaping first letter with a chars in current config entry
-                for (final String key2 : new ArrayList<String>(indexMap.keySet())) {
-                    final String key = key2;
+                for (final String key : new ArrayList<String>(indexMap.keySet())) {
                     if (key.length() > 0) {
                         final String value = getValue((IndexEntry) indexMap.get(key));
                         //						final char c = value.charAt(0);
@@ -140,9 +141,28 @@ public final class IndexGroupProcessor {
              */
         }
 
+        //If some terms remain uncategorized, and a recognized special character
+        //group is available, place remaining terms in that group
+        for (int i = 0; i < IndexGroups.length; i++) {
+            final MyIndexGroup group = IndexGroups[i];
+            final ConfigEntry configEntry = group.getConfigEntry();
+            final String configKey = configEntry.getKey();
+            if (configKey.equals(SPECIAL_CHARACTER_GROUP_KEY)) {
+              for (final String key : new ArrayList<String>(indexMap.keySet())) {
+                    if (key.length() > 0) {
+                        final String value = getValue((IndexEntry) indexMap.get(key));
+                        //						final char c = value.charAt(0);
+                        logger.info(MessageUtils.getInstance().getMessage("PDFJ003I", value).toString());
+                        final IndexEntry entry = (IndexEntry) indexMap.remove(key);
+                        group.addEntry(entry);
+                    }
+                }
+            }
+        }
+
+        //No recognized "Special characters" group; uncategorized terms have no place to go, must be dropped
         if (!indexMap.isEmpty()) {
-            for (final String key2 : new ArrayList<String>(indexMap.keySet())) {
-                final String key = key2;
+            for (final String key : new ArrayList<String>(indexMap.keySet())) {
                 if (key.length() > 0) {
                     final IndexEntry entry = (IndexEntry) indexMap.get(key);
                     logger.error(MessageUtils.getInstance().getMessage("PDFJ001E", entry.toString()).toString());

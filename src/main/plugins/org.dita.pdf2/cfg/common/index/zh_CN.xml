@@ -49,7 +49,7 @@ with those set forth herein.
     <collation.sequence></collation.sequence>
     <index.groups>
       <index.group>
-        <group.key>\</group.key>
+        <group.key>Specials</group.key>
         <group.label>符號</group.label>
         <group.members>
           <char.set>`</char.set>

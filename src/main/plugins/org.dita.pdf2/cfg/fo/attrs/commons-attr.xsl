@@ -655,6 +655,11 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="image">
     </xsl:attribute-set>
 
+    <xsl:attribute-set name="image.artlabel">
+      <xsl:attribute name="font-weight">bold</xsl:attribute>
+      <xsl:attribute name="font-style">italic</xsl:attribute>
+    </xsl:attribute-set>
+
     <xsl:attribute-set name="flag.image" use-attribute-sets="image">
     </xsl:attribute-set>
 
