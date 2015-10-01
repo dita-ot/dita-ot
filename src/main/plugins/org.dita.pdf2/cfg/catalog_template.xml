@@ -119,6 +119,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/ru.xml" uri="common/index/ru.xml"/>
     <uri name="cfg:common/index/sk_SK.xml" uri="common/index/sk.xml"/>
     <uri name="cfg:common/index/sk.xml" uri="common/index/sk.xml"/>
+    <uri name="cfg:common/index/sl_SL.xml" uri="common/index/sl.xml"/>
+    <uri name="cfg:common/index/sl.xml" uri="common/index/sl.xml"/>
     <uri name="cfg:common/index/sv_SE.xml" uri="common/index/sv.xml"/>
     <uri name="cfg:common/index/sv.xml" uri="common/index/sv.xml"/>
     <uri name="cfg:common/index/zh_CN.xml" uri="common/index/zh_CN.xml"/>
