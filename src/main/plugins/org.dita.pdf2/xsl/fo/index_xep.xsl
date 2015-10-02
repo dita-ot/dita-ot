@@ -43,8 +43,8 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:template match="/" mode="index-postprocess">
     <fo:block xsl:use-attribute-sets="__index__label" id="{$id.index}">
-      <xsl:call-template name="insertVariable">
-        <xsl:with-param name="theVariableID" select="'Index'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Index'"/>
       </xsl:call-template>
     </fo:block>
     <rx:flow-section column-count="2">

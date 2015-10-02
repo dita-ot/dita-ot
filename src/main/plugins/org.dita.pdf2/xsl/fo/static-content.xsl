@@ -124,9 +124,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBodyOddHeader">
         <fo:static-content flow-name="odd-body-header">
             <fo:block xsl:use-attribute-sets="__body__odd__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Body odd header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Body odd header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -149,9 +149,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBodyEvenHeader">
         <fo:static-content flow-name="even-body-header">
             <fo:block xsl:use-attribute-sets="__body__even__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Body even header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Body even header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -174,9 +174,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBodyFirstHeader">
         <fo:static-content flow-name="first-body-header">
             <fo:block xsl:use-attribute-sets="__body__first__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Body first header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Body first header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                           <xsl:value-of select="$productName"/>
                         </prodname>
@@ -199,9 +199,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBodyFirstFooter">
         <fo:static-content flow-name="first-body-footer">
             <fo:block xsl:use-attribute-sets="__body__first__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Body first footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Body first footer'"/>
+                    <xsl:with-param name="params">
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__first__footer__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -243,9 +243,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBodyOddFooter">
         <fo:static-content flow-name="odd-body-footer">
             <fo:block xsl:use-attribute-sets="__body__odd__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Body odd footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Body odd footer'"/>
+                    <xsl:with-param name="params">
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__odd__footer__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -265,9 +265,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBodyEvenFooter">
         <fo:static-content flow-name="even-body-footer">
             <fo:block xsl:use-attribute-sets="__body__even__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Body even footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Body even footer'"/>
+                    <xsl:with-param name="params">
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__even__footer__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -287,9 +287,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertTocOddHeader">
         <fo:static-content flow-name="odd-toc-header">
             <fo:block xsl:use-attribute-sets="__toc__odd__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Toc odd header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Toc odd header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -312,9 +312,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertTocEvenHeader">
         <fo:static-content flow-name="even-toc-header">
             <fo:block xsl:use-attribute-sets="__toc__even__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Toc even header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Toc even header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -337,9 +337,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertTocOddFooter">
         <fo:static-content flow-name="odd-toc-footer">
             <fo:block xsl:use-attribute-sets="__toc__odd__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Toc odd footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Toc odd footer'"/>
+                    <xsl:with-param name="params">
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__toc__odd__footer__pagenum">
                                 <fo:page-number/>
@@ -354,9 +354,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertTocEvenFooter">
         <fo:static-content flow-name="even-toc-footer">
             <fo:block xsl:use-attribute-sets="__toc__even__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Toc even footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Toc even footer'"/>
+                    <xsl:with-param name="params">
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__toc__even__footer__pagenum">
                                 <fo:page-number/>
@@ -371,9 +371,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertIndexOddHeader">
         <fo:static-content flow-name="odd-index-header">
             <fo:block xsl:use-attribute-sets="__index__odd__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Index odd header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Index odd header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -396,9 +396,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertIndexEvenHeader">
         <fo:static-content flow-name="even-index-header">
             <fo:block xsl:use-attribute-sets="__index__even__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Index even header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Index even header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -421,9 +421,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertIndexOddFooter">
         <fo:static-content flow-name="odd-index-footer">
             <fo:block xsl:use-attribute-sets="__index__odd__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Index odd footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Index odd footer'"/>
+                    <xsl:with-param name="params">
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__index__odd__footer__pagenum">
                                 <fo:page-number/>
@@ -438,9 +438,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertIndexEvenFooter">
         <fo:static-content flow-name="even-index-footer">
             <fo:block xsl:use-attribute-sets="__index__even__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Index even footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Index even footer'"/>
+                    <xsl:with-param name="params">
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__index__even__footer__pagenum">
                                 <fo:page-number/>
@@ -455,9 +455,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertPrefaceOddHeader">
         <fo:static-content flow-name="odd-body-header">
             <fo:block xsl:use-attribute-sets="__body__odd__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface odd header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface odd header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -480,9 +480,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertPrefaceEvenHeader">
         <fo:static-content flow-name="even-body-header">
             <fo:block xsl:use-attribute-sets="__body__even__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface even header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface even header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -505,9 +505,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertPrefaceFirstHeader">
         <fo:static-content flow-name="first-body-header">
             <fo:block xsl:use-attribute-sets="__body__first__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface first header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface first header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                           <xsl:value-of select="$productName"/>
                         </prodname>
@@ -530,9 +530,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertPrefaceFirstFooter">
         <fo:static-content flow-name="first-body-footer">
             <fo:block xsl:use-attribute-sets="__body__first__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface first footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface first footer'"/>
+                    <xsl:with-param name="params">
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__first__footer__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -574,9 +574,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertPrefaceOddFooter">
         <fo:static-content flow-name="odd-body-footer">
             <fo:block xsl:use-attribute-sets="__body__odd__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface odd footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface odd footer'"/>
+                    <xsl:with-param name="params">
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__odd__footer__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -596,9 +596,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertPrefaceEvenFooter">
         <fo:static-content flow-name="even-body-footer">
             <fo:block xsl:use-attribute-sets="__body__even__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface even footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface even footer'"/>
+                    <xsl:with-param name="params">
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__even__footer__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -618,9 +618,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertFrontMatterOddHeader">
         <fo:static-content flow-name="odd-frontmatter-header">
             <fo:block xsl:use-attribute-sets="__body__odd__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface odd header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface odd header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -643,9 +643,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertFrontMatterEvenHeader">
         <fo:static-content flow-name="even-frontmatter-header">
             <fo:block xsl:use-attribute-sets="__body__even__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface even header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface even header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -668,9 +668,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertFrontMatterLastHeader">
         <fo:static-content flow-name="last-frontmatter-header">
             <fo:block xsl:use-attribute-sets="__body__even__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface even header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface even header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -708,9 +708,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertFrontMatterOddFooter">
         <fo:static-content flow-name="odd-frontmatter-footer">
             <fo:block xsl:use-attribute-sets="__body__odd__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface odd footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface odd footer'"/>
+                    <xsl:with-param name="params">
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__odd__footer__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -730,9 +730,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertFrontMatterEvenFooter">
         <fo:static-content flow-name="even-frontmatter-footer">
             <fo:block xsl:use-attribute-sets="__body__even__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Preface even footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Preface even footer'"/>
+                    <xsl:with-param name="params">
                         <heading>
                             <fo:inline xsl:use-attribute-sets="__body__even__footer__heading">
                                 <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -752,9 +752,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBackCoverOddHeader">
       <fo:static-content flow-name="odd-back-cover-header">
         <fo:block xsl:use-attribute-sets="__body__odd__header">
-          <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Preface odd header'"/>
-            <xsl:with-param name="theParameters">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Preface odd header'"/>
+            <xsl:with-param name="params">
               <prodname>
                 <xsl:value-of select="$productName"/>
               </prodname>
@@ -777,9 +777,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBackCoverEvenHeader">
       <fo:static-content flow-name="even-back-cover-header">
         <fo:block xsl:use-attribute-sets="__body__even__header">
-          <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Preface even header'"/>
-            <xsl:with-param name="theParameters">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Preface even header'"/>
+            <xsl:with-param name="params">
               <prodname>
                 <xsl:value-of select="$productName"/>
               </prodname>
@@ -802,9 +802,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBackCoverOddFooter">
       <fo:static-content flow-name="odd-back-cover-footer">
         <fo:block xsl:use-attribute-sets="__body__odd__footer">
-          <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Preface odd footer'"/>
-            <xsl:with-param name="theParameters">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Preface odd footer'"/>
+            <xsl:with-param name="params">
               <heading>
                 <fo:inline xsl:use-attribute-sets="__body__odd__footer__heading">
                   <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -824,9 +824,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertBackCoverEvenFooter">
       <fo:static-content flow-name="even-back-cover-footer">
         <fo:block xsl:use-attribute-sets="__body__even__footer">
-          <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Preface even footer'"/>
-            <xsl:with-param name="theParameters">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Preface even footer'"/>
+            <xsl:with-param name="params">
               <heading>
                 <fo:inline xsl:use-attribute-sets="__body__even__footer__heading">
                   <fo:retrieve-marker retrieve-class-name="current-header"/>
@@ -846,9 +846,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertGlossaryOddHeader">
         <fo:static-content flow-name="odd-glossary-header">
             <fo:block xsl:use-attribute-sets="__glossary__odd__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Glossary odd header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Glossary odd header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -871,9 +871,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertGlossaryEvenHeader">
         <fo:static-content flow-name="even-glossary-header">
             <fo:block xsl:use-attribute-sets="__glossary__even__header">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Glossary even header'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Glossary even header'"/>
+                    <xsl:with-param name="params">
                         <prodname>
                             <xsl:value-of select="$productName"/>
                         </prodname>
@@ -896,9 +896,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertGlossaryOddFooter">
         <fo:static-content flow-name="odd-glossary-footer">
             <fo:block xsl:use-attribute-sets="__glossary__odd__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Glossary odd footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Glossary odd footer'"/>
+                    <xsl:with-param name="params">
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__glossary__odd__footer__pagenum">
                                 <fo:page-number/>
@@ -913,9 +913,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertGlossaryEvenFooter">
         <fo:static-content flow-name="even-glossary-footer">
             <fo:block xsl:use-attribute-sets="__glossary__even__footer">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Glossary even footer'"/>
-                    <xsl:with-param name="theParameters">
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Glossary even footer'"/>
+                    <xsl:with-param name="params">
                         <pagenum>
                             <fo:inline xsl:use-attribute-sets="__glossary__even__footer__pagenum">
                                 <fo:page-number/>
