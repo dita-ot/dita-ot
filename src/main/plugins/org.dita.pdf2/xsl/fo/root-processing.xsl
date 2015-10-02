@@ -68,8 +68,8 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:value-of select="$mapProdname"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Product Name'"/>
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Product Name'"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>

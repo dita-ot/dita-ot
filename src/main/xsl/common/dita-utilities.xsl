@@ -72,7 +72,7 @@
   
   <xsl:template name="getVariable">
     <xsl:param name="id" as="xs:string"/>
-    <xsl:param name="params" as="element()*"/>
+    <xsl:param name="params" as="node()*"/>
         
     <xsl:variable name="ancestorlang" as="xs:string*">
       <xsl:variable name="l" as="xs:string*">
@@ -99,10 +99,10 @@
   
   <xsl:template name="findString">
     <xsl:param name="id" as="xs:string"/>
-    <xsl:param name="params" as="element()*"/>
+    <xsl:param name="params" as="node()*"/>
     <xsl:param name="ancestorlang" as="xs:string*"/>
     <xsl:param name="defaultlang" as="xs:string*"/>
-        
+
     <xsl:variable name="l" select="($ancestorlang, $defaultlang)[1]" as="xs:string?"/>
     <xsl:choose>
       <xsl:when test="exists($l)">
