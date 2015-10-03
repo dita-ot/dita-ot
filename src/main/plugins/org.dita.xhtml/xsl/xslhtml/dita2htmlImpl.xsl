@@ -3109,6 +3109,7 @@
 <xsl:template name="sect-heading">
   <xsl:param name="defaulttitle"/> <!-- get param by reference -->
   <xsl:call-template name="output-message">
+    <xsl:with-param name="msgcat">DOTX</xsl:with-param>
     <xsl:with-param name="msgnum">066</xsl:with-param>
     <xsl:with-param name="msgsev">W</xsl:with-param>
     <xsl:with-param name="msgparams">%1=sect-heading</xsl:with-param>
