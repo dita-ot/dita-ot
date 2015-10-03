@@ -60,12 +60,12 @@
   <xsl:template name="createLOTHeader">
     <fo:block xsl:use-attribute-sets="__lotf__heading" id="{$id.lot}">
       <fo:marker marker-class-name="current-header">
-        <xsl:call-template name="insertVariable">
-          <xsl:with-param name="theVariableID" select="'List of Tables'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'List of Tables'"/>
         </xsl:call-template>
       </fo:marker>
-      <xsl:call-template name="insertVariable">
-        <xsl:with-param name="theVariableID" select="'List of Tables'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'List of Tables'"/>
       </xsl:call-template>
     </fo:block>
   </xsl:template>
@@ -80,9 +80,9 @@
           </xsl:attribute>
           
           <fo:inline xsl:use-attribute-sets="__lotf__title">
-            <xsl:call-template name="insertVariable">
-              <xsl:with-param name="theVariableID" select="'Table'"/>
-              <xsl:with-param name="theParameters">
+            <xsl:call-template name="getVariable">
+              <xsl:with-param name="id" select="'Table'"/>
+              <xsl:with-param name="params">
                 <number>
                   <xsl:variable name="id">
                     <xsl:call-template name="get-id"/>
@@ -136,12 +136,12 @@
   <xsl:template name="createLOFHeader">
     <fo:block xsl:use-attribute-sets="__lotf__heading" id="{$id.lof}">
       <fo:marker marker-class-name="current-header">
-        <xsl:call-template name="insertVariable">
-          <xsl:with-param name="theVariableID" select="'List of Figures'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'List of Figures'"/>
         </xsl:call-template>
       </fo:marker>
-      <xsl:call-template name="insertVariable">
-        <xsl:with-param name="theVariableID" select="'List of Figures'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'List of Figures'"/>
       </xsl:call-template>
     </fo:block>
   </xsl:template>
@@ -156,9 +156,9 @@
           </xsl:attribute>
           
           <fo:inline xsl:use-attribute-sets="__lotf__title">
-            <xsl:call-template name="insertVariable">
-              <xsl:with-param name="theVariableID" select="'Figure'"/>
-              <xsl:with-param name="theParameters">
+            <xsl:call-template name="getVariable">
+              <xsl:with-param name="id" select="'Figure'"/>
+              <xsl:with-param name="params">
                 <number>
                   <xsl:variable name="id">
                     <xsl:call-template name="get-id"/>

@@ -97,8 +97,8 @@ See the accompanying license.txt file for applicable licenses.
                               | /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                     <fo:bookmark internal-destination="{$id.toc}">
                         <fo:bookmark-title>
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Table of Contents'"/>
                             </xsl:call-template>
                         </fo:bookmark-title>
                     </fo:bookmark>
@@ -122,8 +122,8 @@ See the accompanying license.txt file for applicable licenses.
                                   | /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                         <fo:bookmark internal-destination="{$id.index}">
                             <fo:bookmark-title>
-                                <xsl:call-template name="insertVariable">
-                                    <xsl:with-param name="theVariableID" select="'Index'"/>
+                                <xsl:call-template name="getVariable">
+                                    <xsl:with-param name="id" select="'Index'"/>
                                 </xsl:call-template>
                             </fo:bookmark-title>
                         </fo:bookmark>
@@ -146,8 +146,8 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:attribute name="starting-state">hide</xsl:attribute>
             </xsl:if>
             <fo:bookmark-title>
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Table of Contents'"/>
                 </xsl:call-template>
             </fo:bookmark-title>
         </fo:bookmark>
@@ -159,8 +159,8 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:attribute name="starting-state">hide</xsl:attribute>
             </xsl:if>
             <fo:bookmark-title>
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Index'"/>
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Index'"/>
                 </xsl:call-template>
             </fo:bookmark-title>
         </fo:bookmark>
@@ -172,8 +172,8 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:attribute name="starting-state">hide</xsl:attribute>
             </xsl:if>
             <fo:bookmark-title>
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Glossary'"/>
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Glossary'"/>
                 </xsl:call-template>
             </fo:bookmark-title>
             
@@ -188,8 +188,8 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:attribute name="starting-state">hide</xsl:attribute>
                 </xsl:if>
                 <fo:bookmark-title>
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'List of Tables'"/>
+                    <xsl:call-template name="getVariable">
+                        <xsl:with-param name="id" select="'List of Tables'"/>
                     </xsl:call-template>
                 </fo:bookmark-title>
                 
@@ -205,8 +205,8 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:attribute name="starting-state">hide</xsl:attribute>
                 </xsl:if>
                 <fo:bookmark-title>
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'List of Figures'"/>
+                    <xsl:call-template name="getVariable">
+                        <xsl:with-param name="id" select="'List of Figures'"/>
                     </xsl:call-template>
                 </fo:bookmark-title>
                 

@@ -256,9 +256,9 @@
     <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]">
         <fo:block xsl:use-attribute-sets="table.title">
             <xsl:call-template name="commonattributes"/>
-            <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'Table.title'"/>
-                <xsl:with-param name="theParameters">
+            <xsl:call-template name="getVariable">
+                <xsl:with-param name="id" select="'Table.title'"/>
+                <xsl:with-param name="params">
                     <number>
                         <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
                     </number>
