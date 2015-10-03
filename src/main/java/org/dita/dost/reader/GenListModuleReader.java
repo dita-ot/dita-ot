@@ -266,12 +266,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             nonCopytoSet.add(new Reference(stripFragment(f)));
         }
         for (final URI filename : coderefTargetSet) {
-            // only activated on /generateout:3 & is out file.
-            if (isOutFile(filename) && job.getGeneratecopyouter() == Job.Generate.OLDSOLUTION) {
-                nonCopytoSet.add(new Reference(stripFragment(filename)));
-            }
+            nonCopytoSet.add(new Reference(stripFragment(filename)));
         }
-        // nonCopytoSet.addAll(coderefTargetSet);
         return nonCopytoSet;
     }
 
