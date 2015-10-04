@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="org.dita.pdf2.xep">
+  <require plugin="org.dita.pdf2"/>
+  <!-- extensions -->
+  <feature extension="depend.org.dita.pdf2.init.pre" value="transform.fo2pdf.xep.init"/>
+  <feature extension="depend.org.dita.pdf2.format" value="transform.fo2pdf.xep"/>
+  <feature extension="dita.conductor.lib.import" file="lib/xep.jar"/>
+  <transtype name="pdf" desc="PDF">
+    <param name="pdf.formatter" desc="Specifies the XSL processor." type="enum">
+      <val desc="RenderX XEP Engine">xep</val>
+    </param>
+    <param name="custom.xep.config" desc="Specifies the user configuration file for RenderX." type="file"/>
+  </transtype>
+  <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
+  <feature extension="dita.conductor.pdf2.formatter.check" value="xep"/>
+  <template file="xsl/fo/topic2fo_shell_xep_template.xsl"/>
+</plugin>
