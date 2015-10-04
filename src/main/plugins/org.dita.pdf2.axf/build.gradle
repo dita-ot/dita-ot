@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'org.dita-ot.pdf'
+
+description = """DITA Open Toolkit PDF plug-in for AntennaHouse Renderer."""
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile rootProject
+}
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+jar.archiveName = "${project.name}.jar"
+//jar.include "com/idiominc/**"
+
+task copyInstall(type: Copy) {
+    from (configurations.runtime.allArtifacts.files)
+    destinationDir = file("lib")
+}
+
+task copyDistTemp(type: Copy) {
+    from (configurations.runtime.allArtifacts.files) {
+        into "plugins/org.dita.pdf2.axf/lib"
+    }
+    destinationDir = file("${rootProject.buildDir}/tmp/dist")
+}

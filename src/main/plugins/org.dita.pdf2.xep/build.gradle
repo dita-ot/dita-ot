@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'org.dita-ot.pdf'
+
+description = """DITA Open Toolkit PDF plug-in for RenderX."""
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile rootProject
+//    compile group: 'org.apache.xmlgraphics', name: 'fop', version: '1.1'
+}
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+jar.archiveName = "${project.name}.jar"
+jar.include "com/idiominc/**"
+
+task copyInstall(type: Copy) {
+    from (configurations.runtime.allArtifacts.files)
+    destinationDir = file("lib")
+}
+
+task copyDistTemp(type: Copy) {
+    from (configurations.runtime.allArtifacts.files) {
+        into "plugins/org.dita.pdf2.xep/lib"
+    }
+    destinationDir = file("${rootProject.buildDir}/tmp/dist")
+}
