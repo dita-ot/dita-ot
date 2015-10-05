@@ -13,10 +13,6 @@
       <val>yes</val>
       <val>no</val>
     </param>
-    <param name="retain.topic.fo" desc="Specifies whether to retain the generated FO file." type="enum" deprecated="true">
-      <val>yes</val>
-      <val default="true">no</val>
-    </param>
     <param name="axf.opt" desc="Specifies the user configuration file for Antenna House Formatter." type="file"/>
   </transtype>
   <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
