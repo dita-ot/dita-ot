@@ -1798,6 +1798,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/image ')]">
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <xsl:choose>
             <xsl:when test="empty(@href)"/>
             <xsl:when test="@placement = 'break'">
@@ -1831,6 +1832,7 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
 
     <xsl:template match="*" mode="image.artlabel">
@@ -2057,6 +2059,8 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Process common attributes -->
     <xsl:template name="commonattributes">
       <xsl:apply-templates select="@id"/>
+      <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')] |
+                                   *[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="flag-attributes"/>
     </xsl:template>
 
     <!-- Get ID for an element, generate ID if not explicitly set. -->

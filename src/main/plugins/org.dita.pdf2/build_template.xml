@@ -298,12 +298,13 @@ with those set forth herein.
       <not><isset property="_org.dita.pdf2.valfile"/></not>
     </condition>
     <makeurl property="_org.dita.pdf2.valfile.url" file="${_org.dita.pdf2.valfile}" validate="no"/>
-    <xslt in="${dita.temp.dir}/stage1.xml" out="${dita.temp.dir}/stage1a.xml" style="${xsl.fo.dir}/flagging-preprocess.xsl">
+    <copy file="${dita.temp.dir}/stage1.xml" tofile="${dita.temp.dir}/stage1a.xml"/>
+    <!--<xslt in="${dita.temp.dir}/stage1.xml" out="${dita.temp.dir}/stage1a.xml" style="${xsl.fo.dir}/flagging-preprocess.xsl">
       <param name="filterFile" expression="${_org.dita.pdf2.valfile.url}"/>
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
-    </xslt>
+    </xslt>-->
   </target>
   <target name="transform.topic2fo.flagging.no-filter" unless="dita.input.valfile">
     <copy file="${dita.temp.dir}/stage1.xml" tofile="${dita.temp.dir}/stage1a.xml"/>
