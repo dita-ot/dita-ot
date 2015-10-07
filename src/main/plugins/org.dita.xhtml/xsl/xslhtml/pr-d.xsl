@@ -30,11 +30,11 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/codeph ')]" name="topic.pr-d.codeph">
- <samp class="codeph">
+ <code>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
-  </samp>
+  </code>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/kwd ')]" name="topic.pr-d.kwd">
