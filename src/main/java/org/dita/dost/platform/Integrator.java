@@ -8,31 +8,20 @@
  */
 package org.dita.dost.platform;
 
-import static javax.xml.XMLConstants.*;
-import static org.apache.commons.io.IOUtils.closeQuietly;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Configuration.*;
-import static org.dita.dost.util.URLUtils.getRelativePath;
-import static org.dita.dost.util.URLUtils.toFile;
-import static org.dita.dost.platform.PluginParser.*;
-
-import java.io.*;
-import java.net.URI;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
-
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.*;
-
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -42,6 +31,22 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.*;
+import java.net.URI;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.regex.Pattern;
+
+import static java.util.Arrays.asList;
+import static javax.xml.XMLConstants.XML_NS_PREFIX;
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.apache.commons.io.IOUtils.closeQuietly;
+import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
+import static org.dita.dost.platform.PluginParser.FEATURE_ID_ATTR;
+import static org.dita.dost.util.Configuration.configuration;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.getRelativePath;
+import static org.dita.dost.util.URLUtils.toFile;
 
 /**
  * Integrator is the main class to control and excute the integration of the
@@ -51,6 +56,7 @@ import javax.xml.transform.stream.StreamResult;
  */
 public final class Integrator {
 
+    private static final String CONF_PLUGIN_ORDER = "plugin.order";
     private static final String CONF_PLUGIN_IGNORES = "plugin.ignores";
     private static final String CONF_PLUGIN_DIRS = "plugindirs";
     /** Feature name for supported image extensions. */
@@ -86,7 +92,7 @@ public final class Integrator {
     private File propertiesFile;
     private final Set<String> extensionPoints;
     private boolean strict = false;
-
+    private final Map<String, Integer> pluginOrder = new HashMap<>();
     private Properties properties;
 
     /**
@@ -157,6 +163,8 @@ public final class Integrator {
                     }
                 }
             }
+        } else {
+            properties.putAll(Configuration.configuration);
         }
         if (!properties.containsKey(CONF_PLUGIN_DIRS)) {
             properties.setProperty(CONF_PLUGIN_DIRS, configuration.containsKey(CONF_PLUGIN_DIRS) ? configuration.get(CONF_PLUGIN_DIRS) : "plugins;demo");
@@ -171,6 +179,16 @@ public final class Integrator {
         final Set<String> pluginIgnores = new HashSet<>();
         if (properties.getProperty(CONF_PLUGIN_IGNORES) != null) {
             pluginIgnores.addAll(Arrays.asList(properties.getProperty(CONF_PLUGIN_IGNORES).split(PARAM_VALUE_SEPARATOR)));
+        }
+
+        final String pluginOrderProperty = properties.getProperty(CONF_PLUGIN_ORDER);
+        if (pluginOrderProperty != null) {
+            final List<String> plugins = asList(pluginOrderProperty.trim().split("\\s+"));
+            Collections.reverse(plugins);
+            int priority = 1;
+            for (final String plugin: plugins) {
+                pluginOrder.put(plugin, priority++);
+            }
         }
 
         for (final String tmpl : properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
@@ -209,7 +227,7 @@ public final class Integrator {
         // Collect information for each feature id and generate a feature table.
         final FileGenerator fileGen = new FileGenerator(featureTable, pluginTable);
         fileGen.setLogger(logger);
-        for (final String currentPlugin : pluginTable.keySet()) {
+        for (final String currentPlugin : orderPlugins(pluginTable.keySet())) {
             loadPlugin(currentPlugin);
         }
 
@@ -301,6 +319,25 @@ public final class Integrator {
         final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS) ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS))) : Collections.EMPTY_SET;
         writeEnvShell(jars);
         writeEnvBatch(jars);
+    }
+
+    private Iterable<String> orderPlugins(final Set<String> ids) {
+        final List<String> res = new ArrayList<>(ids);
+        Collections.sort(res, new Comparator<String>() {
+            @Override
+            public int compare(final String s1, final String s2) {
+                final int score1 = pluginOrder.containsKey(s1) ? pluginOrder.get(s1) : 0;
+                final int score2 = pluginOrder.containsKey(s2) ? pluginOrder.get(s2) : 0;
+                if (score1 < score2) {
+                    return 1;
+                } else if (score1 > score2) {
+                    return -1;
+                } else {
+                    return s1.compareTo(s2);
+                }
+            }
+        });
+        return res;
     }
 
     private Map<String, String> getParserConfiguration() {
