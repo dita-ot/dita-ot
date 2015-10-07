@@ -5,7 +5,10 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="2.0">
+    xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    version="2.0"
+    exclude-result-prefixes="xs dita-ot">
 
   <!-- For reference, flagging info as it appears in the topics: -->
   <!--<ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop ">
@@ -78,17 +81,22 @@ See the accompanying license.txt file for applicable licenses.
       <!-- Style flags called from common attributes -->
       <!--<xsl:apply-templates select="." mode="flag-attributes"/>-->
       <xsl:apply-templates select="revprop[@changebar]" mode="changebar">
-        <xsl:with-param name="changebar-id" select="concat(generate-id(parent::*),'-cbar')"/>
+        <xsl:with-param name="changebar-id" select="dita-ot:generate-changebar-id(.)"/>
       </xsl:apply-templates>
       <xsl:apply-templates select="." mode="flag-images"/>
     </xsl:template>
     <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')] |
                          *[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline">
       <xsl:apply-templates select="revprop[@changebar]" mode="changebar">
-        <xsl:with-param name="changebar-id" select="concat(generate-id(parent::*),'-cbar')"/>
+        <xsl:with-param name="changebar-id" select="dita-ot:generate-changebar-id(.)"/>
       </xsl:apply-templates>
       <xsl:apply-templates select="." mode="flag-images"/>
     </xsl:template>
+  
+  <xsl:function name="dita-ot:generate-changebar-id" as="xs:string">
+    <xsl:param name="current" as="element()"/>
+    <xsl:value-of select="concat(generate-id($current/parent::*), '-cbar')"/>
+  </xsl:function>
 
     <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes">
       <xsl:apply-templates select=".//prop/@backcolor | .//prop/@color | .//prop/@style |
@@ -99,10 +107,10 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="@backcolor" mode="flag-attributes">
-      <xsl:attribute name="background-color"><xsl:value-of select="."/></xsl:attribute>
+      <xsl:attribute name="background-color" select="."/>
     </xsl:template>
     <xsl:template match="@color" mode="flag-attributes">
-      <xsl:attribute name="color"><xsl:value-of select="."/></xsl:attribute>
+      <xsl:attribute name="color" select="."/>
     </xsl:template>
     <xsl:template match="@style" mode="flag-attributes">
       <xsl:choose>
@@ -116,7 +124,7 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:attribute name="text-decoration">underline</xsl:attribute>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:attribute name="text-decoration"><xsl:value-of select="."/></xsl:attribute>
+          <xsl:attribute name="text-decoration" select="."/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
@@ -125,9 +133,7 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:param name="changebar-id"/>
       <xsl:param name="changebar-style">
         <xsl:choose>
-          <xsl:when test="@changebar='none' or @changebar='hidden' or @changebar='dotted' or
-                          @changebar='dashed' or @changebar='solid' or @changebar='double' or
-                          @changebar='groove' or @changebar='ridge' or @changebar='inset' or @changebar='outset'">
+          <xsl:when test="@changebar = ('none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset')">
             <xsl:value-of select="@changebar"/>
           </xsl:when>
           <xsl:otherwise>groove</xsl:otherwise>
