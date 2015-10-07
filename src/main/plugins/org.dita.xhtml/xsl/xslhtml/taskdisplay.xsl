@@ -115,7 +115,12 @@
   <xsl:apply-templates select="." mode="generate-task-label">
     <xsl:with-param name="use-label">
       <xsl:call-template name="getVariable">
-        <xsl:with-param name="id" select="'task_procedure'"/>
+        <xsl:with-param name="id">
+          <xsl:choose>
+            <xsl:when test="contains(@class,' task/steps ')">task_procedure</xsl:when>
+            <xsl:otherwise>task_procedure_unordered</xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:with-param>
   </xsl:apply-templates>

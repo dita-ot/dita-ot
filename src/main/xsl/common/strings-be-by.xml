@@ -59,6 +59,7 @@
   <str name="task_postreq">Далейшыя дзеяннi</str>
   <str name="task_prereq">Перад пачаткам работы</str>
   <str name="task_procedure">Парадак выканання</str>
+  <str name="task_procedure_unordered">Парадак выканання</str>
   <str name="task_results">Рэзультаты</str>
 
   <str name="Copyright">Copyright</str> 

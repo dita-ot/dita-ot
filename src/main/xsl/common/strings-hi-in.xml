@@ -63,6 +63,7 @@
 <str name="task_postreq">क्या करने के लिए अगले</str>
 <str name="task_prereq">इससे पहले कि आप शुरू</str>
 <str name="task_procedure">प्रक्रिया</str>
+<str name="task_procedure_unordered">प्रक्रिया</str>
 <str name="task_results">परिणाम</str>
 
 <str name="Copyright">कॉपीराइट</str>

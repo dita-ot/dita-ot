@@ -64,6 +64,7 @@
 <str name="task_postreq">What to do next</str>
 <str name="task_prereq">Before you begin</str>
 <str name="task_procedure">Procedure</str>
+<str name="task_procedure_unordered">Procedure</str>
 <str name="task_results">Results</str>
 
 <str name="Copyright">Copyright</str>

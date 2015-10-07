@@ -64,6 +64,7 @@
 <str name="task_postreq">สิ่งที่ต้องทำต่อไป</str>
 <str name="task_prereq">ก่อนเริ่มต้นภารกิจ</str>
 <str name="task_procedure">กระบวนการ</str>
+<str name="task_procedure_unordered">กระบวนการ</str>
 <str name="task_results">ผลลัพธ์</str>
 
 <str name="Copyright">ลิขสิทธิ์ของ</str>

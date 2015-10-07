@@ -64,6 +64,7 @@
 <str name="task_postreq">איך להמשיך</str>
 <str name="task_prereq">לפני שתתחילו</str>
 <str name="task_procedure">נוהל</str>
+<str name="task_procedure_unordered">נוהל</str>
 <str name="task_results">תוצאות</str>
 
 <str name="Copyright">Copyright</str>
