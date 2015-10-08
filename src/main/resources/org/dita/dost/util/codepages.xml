@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <codepages>
   <language lang="en-us">
-    <cp format="ibmiddoc" encoding="850"/>
-    <cp format="html" encoding="819" charset="iso-8859-1"/>
-    <cp format="windows" encoding="1252" charset="windows-1252"/>
+    <cp format="ibmiddoc" encoding="utf-8"/>
+    <cp format="html" encoding="utf-8" charset="utf-8"/>
+    <cp format="windows" encoding="utf-8" charset="utf-8"/>
   </language>
   <language lang="ar-eg">
     <cp format="ibmiddoc" encoding="864"/>

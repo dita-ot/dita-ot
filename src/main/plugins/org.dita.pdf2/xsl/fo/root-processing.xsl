@@ -224,7 +224,8 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:call-template name="startPageNumbering"/>
           <xsl:call-template name="insertBodyStaticContents"/>
           <fo:flow flow-name="xsl-region-body">
-            <xsl:for-each select="opentopic:map/*[contains(@class, ' map/topicref ')]">
+            <!-- For each top level topicref (topicref which does not have an ancestor topicref) + for each topicref inside a mapgroup. -->
+            <xsl:for-each select="opentopic:map//*[contains(@class, ' map/topicref ')][not(contains(@class, ' mapgroup-d/topicgroup '))][not(ancestor::*[contains(@class, ' map/topicref ') and not(contains(@class, ' mapgroup-d/topicgroup '))])]">
               <xsl:for-each select="key('topic-id', @id)">
                 <xsl:apply-templates select="." mode="processTopic"/>
               </xsl:for-each>
