@@ -81,7 +81,7 @@
           
           <fo:inline xsl:use-attribute-sets="__lotf__title">
             <xsl:call-template name="getVariable">
-              <xsl:with-param name="id" select="'Table'"/>
+              <xsl:with-param name="id" select="'Table.title'"/>
               <xsl:with-param name="params">
                 <number>
                   <xsl:variable name="id">
@@ -157,7 +157,7 @@
           
           <fo:inline xsl:use-attribute-sets="__lotf__title">
             <xsl:call-template name="getVariable">
-              <xsl:with-param name="id" select="'Figure'"/>
+              <xsl:with-param name="id" select="'Figure.title'"/>
               <xsl:with-param name="params">
                 <number>
                   <xsl:variable name="id">
