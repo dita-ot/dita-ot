@@ -294,15 +294,17 @@ See the accompanying license.txt file for applicable licenses.
     
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">可选：</variable>
+    <variable id="Required Step">必需：</variable>
 
-    <!--Labels for task sections-->
-    <variable id="Task Prereq">开始之前</variable>
-    <variable id="Task Context">关于此任务</variable>
-    <variable id="Task Steps">过程</variable>
-  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
-    <variable id="Task Result">结果</variable>
-    <variable id="Task Example">示例</variable>
-    <variable id="Task Postreq">下一步做什么</variable>
+    <!--Labels for task sections, now reused from common-->
+    <variable id="Task Prereq"></variable>
+    <variable id="Task Context"></variable>
+    <variable id="Task Steps"></variable>
+    <variable id="#steps-unordered-label"></variable>
+    <variable id="Task Result"></variable>
+    <variable id="Task Example"></variable>
+    <variable id="Task Postreq"></variable>
+
     <variable id="Glossary odd footer"/>
     <variable id="Glossary even footer"/>
     <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>

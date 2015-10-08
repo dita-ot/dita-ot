@@ -64,6 +64,7 @@
 <str name="task_postreq">下一步做什么</str>
 <str name="task_prereq">开始之前</str>
 <str name="task_procedure">过程</str>
+<str name="task_procedure_unordered">过程</str>
 <str name="task_results">结果</str>
 
 <str name="Copyright">版权</str>

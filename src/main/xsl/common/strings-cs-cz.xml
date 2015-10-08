@@ -64,6 +64,7 @@
 <str name="task_postreq">Jak pokračovat dále</str>
 <str name="task_prereq">Než začnete</str>
 <str name="task_procedure">Procedura</str>
+<str name="task_procedure_unordered">Procedura</str>
 <str name="task_results">Výsledky</str>
 
 <str name="Copyright">Copyright</str>

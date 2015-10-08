@@ -64,6 +64,7 @@
 <str name="task_example">Ejemplo</str>
 <str name="task_postreq">Qué hacer a continuación</str>
 <str name="task_procedure">Procedimiento</str>
+<str name="task_procedure_unordered">Procedimiento</str>
 <str name="task_results">Resultados</str>
 
 <str name="Copyright">Copyright</str>

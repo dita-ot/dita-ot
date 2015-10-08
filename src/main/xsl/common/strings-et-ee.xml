@@ -64,6 +64,7 @@
 <str name="task_postreq">Mis saab edasi?</str>
 <str name="task_prereq">Enne alustamist</str>
 <str name="task_procedure">Toimimisviis</str>
+<str name="task_procedure_unordered">Toimimisviis</str>
 <str name="task_results">Tulemused</str>
 
 <str name="Copyright">Autoriõigus</str>

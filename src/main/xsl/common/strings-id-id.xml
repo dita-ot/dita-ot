@@ -59,6 +59,7 @@
 <str name="task_postreq">Yang harus dilakukan berikutnya</str>
 <str name="task_prereq">Sebelum Anda mulai</str>
 <str name="task_procedure">Prosedur</str>
+<str name="task_procedure_unordered">Prosedur</str>
 <str name="task_results">Hasil</str>
 
 <str name="Copyright">Hak cipta</str>

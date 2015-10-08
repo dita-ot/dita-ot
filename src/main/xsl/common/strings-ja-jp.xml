@@ -64,6 +64,7 @@
 <str name="task_prereq">始める前に</str>
 <str name="task_postreq">次のタスク</str>
 <str name="task_procedure">手順</str>
+<str name="task_procedure_unordered">手順</str>
 <str name="task_results">タスクの結果</str>
 
 <str name="Copyright">Copyright</str>

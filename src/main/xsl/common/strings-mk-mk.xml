@@ -64,6 +64,7 @@
 <str name="task_postreq">Што да направите следно</str>
 <str name="task_prereq">Пред да започнете</str>
 <str name="task_procedure">Процедура</str>
+<str name="task_procedure_unordered">Процедура</str>
 <str name="task_results">Резултати</str>
 
 <str name="Copyright">Авторски права</str>

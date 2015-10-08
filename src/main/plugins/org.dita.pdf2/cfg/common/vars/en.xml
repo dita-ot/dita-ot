@@ -330,15 +330,16 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">Optional:</variable>
+    <variable id="Required Step">Required:</variable>
 
-    <!--Labels for task sections-->
-    <variable id="Task Prereq">Before you begin</variable>
-    <variable id="Task Context">About this task</variable>
-    <variable id="Task Steps">Procedure</variable>
-  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
-    <variable id="Task Result">Results</variable>
-    <variable id="Task Example">Example</variable>
-    <variable id="Task Postreq">What to do next</variable>
+    <!--Labels for task sections, now reused from common-->
+    <variable id="Task Prereq"></variable>
+    <variable id="Task Context"></variable>
+    <variable id="Task Steps"></variable>
+    <variable id="#steps-unordered-label"></variable>
+    <variable id="Task Result"></variable>
+    <variable id="Task Example"></variable>
+    <variable id="Task Postreq"></variable>
     
     <!--Glossary Variables-->
     <!-- The footer that appears on the odd-numbered glossary pages. -->
