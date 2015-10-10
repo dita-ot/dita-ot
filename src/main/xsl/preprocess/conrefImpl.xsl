@@ -182,7 +182,7 @@
       </xsl:call-template>
     </xsl:variable>
     <!-- get domains attribute in the target file -->
-    <xsl:variable name="domains" select="document($file, /)/*/@domains | document($file, /)/dita/*[@domains][1]/@domains"/>
+    <xsl:variable name="domains" select="(document($file, /)/*/@domains | document($file, /)/dita/*[@domains][1]/@domains)[1]" as="xs:string"/>
     <!--the file name is useful to href when resolveing conref -->
     <xsl:variable name="conref-filename" as="xs:string">
       <xsl:call-template name="replace-blank">
