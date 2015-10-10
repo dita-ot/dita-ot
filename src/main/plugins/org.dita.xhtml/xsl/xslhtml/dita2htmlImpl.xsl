@@ -1751,6 +1751,13 @@
   
 <xsl:variable name="table.align-default" select="'left'" as="xs:string"/>
 
+<!-- XML Exchange Table Model Document Type Definition default is all -->
+<xsl:variable name="table.frame-default" select="'all'"/>
+<!-- XML Exchange Table Model Document Type Definition default is 1 -->
+<xsl:variable name="table.rowsep-default" select="'0'"/>
+<!-- XML Exchange Table Model Document Type Definition default is 1 -->
+<xsl:variable name="table.colsep-default" select="'0'"/>
+
 <xsl:template match="*[contains(@class, ' topic/table ')]" mode="generate-table-summary-attribute">
   <!-- Override this to use a local convention for setting table's @summary attribute,
        until OASIS provides a standard mechanism for setting. -->
@@ -1931,7 +1938,14 @@
     </xsl:variable>
     <xsl:sequence select="sum($relative-widths)"/>
   </xsl:variable>
-  <xsl:apply-templates>
+  <xsl:if test="exists(*[contains(@class, ' topic/colspec ')])">
+    <colgroup>
+      <xsl:apply-templates select="*[contains(@class, ' topic/colspec ')]">
+        <xsl:with-param name="totalwidth" select="$totalwidth"/>
+      </xsl:apply-templates>
+    </colgroup>
+  </xsl:if>
+  <xsl:apply-templates select="* except *[contains(@class, ' topic/colspec ')]">
     <xsl:with-param name="totalwidth" select="$totalwidth"/>
   </xsl:apply-templates>
 </xsl:template>
@@ -2090,13 +2104,16 @@
       <xsl:when test="$table/@frame and $table/@frame != ''">
         <xsl:value-of select="$table/@frame"/>
       </xsl:when>
-      <xsl:otherwise>all</xsl:otherwise>
+      <xsl:otherwise>
+        <xsl:value-of select="$table.frame-default"/>
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>  
   <xsl:variable name="rowsep" as="xs:integer">
+    <xsl:variable name="last-row" select="(../../../*/*[contains(@class, ' topic/row ')])[last()]" as="element()"/>
     <xsl:choose>
-      <!-- If there are more rows, keep rows on -->
-      <xsl:when test="not(../following-sibling::*)">        
+      <!-- If there are more rows, keep rows on -->      
+      <xsl:when test="not(. &lt;&lt; $last-row)">
         <xsl:choose>
           <xsl:when test="$framevalue = 'all' or $framevalue = 'bottom' or $framevalue = 'topbot'">1</xsl:when>
           <xsl:otherwise>0</xsl:otherwise>
@@ -2105,13 +2122,16 @@
       <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
       <xsl:when test="$row/@rowsep"><xsl:value-of select="$row/@rowsep"/></xsl:when>
       <xsl:when test="$colspec/@rowsep"><xsl:value-of select="$colspec/@rowsep"/></xsl:when>
-      <xsl:otherwise>1</xsl:otherwise>
+      <xsl:when test="$table/@rowsep"><xsl:value-of select="$table/@rowsep"/></xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$table.rowsep-default"/>
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
   <xsl:variable name="colsep" as="xs:integer">
     <xsl:choose>
       <!-- If there are more columns, keep rows on -->
-      <xsl:when test="not(following-sibling::*)">
+      <xsl:when test="empty(following-sibling::*)">
         <xsl:choose>
           <xsl:when test="$framevalue = 'all' or $framevalue = 'sides'">1</xsl:when>
           <xsl:otherwise>0</xsl:otherwise>
@@ -2119,7 +2139,10 @@
       </xsl:when>
       <xsl:when test="@colsep"><xsl:value-of select="@colsep"/></xsl:when>
       <xsl:when test="$colspec/@colsep"><xsl:value-of select="$colspec/@colsep"/></xsl:when>
-      <xsl:otherwise>1</xsl:otherwise>
+      <xsl:when test="$table/@colsep"><xsl:value-of select="$table/@colsep"/></xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$table.colsep-default"/>
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
   <xsl:variable name="firstcol" as="xs:boolean" select="$table/@rowheader = 'firstcol' and @dita-ot:x = '1'"/>  
