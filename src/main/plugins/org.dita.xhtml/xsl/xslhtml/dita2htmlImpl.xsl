@@ -1931,7 +1931,14 @@
     </xsl:variable>
     <xsl:sequence select="sum($relative-widths)"/>
   </xsl:variable>
-  <xsl:apply-templates>
+  <xsl:if test="exists(*[contains(@class, ' topic/colspec ')])">
+    <colgroup>
+      <xsl:apply-templates select="*[contains(@class, ' topic/colspec ')]">
+        <xsl:with-param name="totalwidth" select="$totalwidth"/>
+      </xsl:apply-templates>
+    </colgroup>
+  </xsl:if>
+  <xsl:apply-templates select="* except *[contains(@class, ' topic/colspec ')]">
     <xsl:with-param name="totalwidth" select="$totalwidth"/>
   </xsl:apply-templates>
 </xsl:template>
