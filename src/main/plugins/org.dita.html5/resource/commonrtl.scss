@@ -1,0 +1,36 @@
+@import "commonltr";
+
+.linklist {
+  margin-bottom: 1em;
+}
+.linklistwithchild {
+  margin-top: 1em;
+  margin-right: 1.5em;
+}
+.sublinklist {
+  margin-top: 1em;
+  margin-right: 1.5em;
+}
+
+
+dt.prereq {
+  margin-right: 20px;
+}
+
+
+
+.cellrowborder {
+  border-right: none;
+  border-left: solid 1px;
+}
+.row-nocellborder {
+  border-right: none;
+  border-left: hidden;
+}
+.cell-norowborder {
+  border-right: none;
+  border-left: solid 1px;
+}
+.nocellnorowborder {
+  border-left: hidden;
+}
