@@ -36,7 +36,7 @@
     <mkdir dir="${user.csspath.real}"/>
     <!-- Always copy system default css files -->
     <copy todir="${user.csspath.real}">
-      <fileset dir="${dita.plugin.org.dita.html5.dir}/resource" includes="*.css"/>
+      <fileset dir="${dita.plugin.org.dita.html5.dir}/css" includes="*.css"/>
     </copy>
     <!-- Copy user specify css file when required -->
     <antcall target="html5-copy-css-user"/>
