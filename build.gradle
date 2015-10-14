@@ -88,7 +88,7 @@ task copyInstall(type: Copy, dependsOn: initInstall) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall"]) << {
+task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compassCompile"]) << {
     description "Build archives and install all plugins with dependencies"
     ant.ant([antfile: "integrator.xml", dir: file("src/main")])
 }

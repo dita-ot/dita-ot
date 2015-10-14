@@ -1,0 +1,10 @@
+plugins {
+  id "com.github.robfletcher.compass" version "2.0.6"
+}
+
+compass {
+  cssDir = file("css")
+  sassDir = file("css")
+  environment = "production"
+  outputStyle = "compressed"
+}
