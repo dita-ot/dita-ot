@@ -51,8 +51,8 @@ def integrationTestSystemProperties = [
         dita_dir : "${projectDir}/src/main",
         basedir : "${projectDir}/src/test/testsuite"
 ]
-if (System.getProperty("only_test") != null) {
-    integrationTestSystemProperties["only_test"] = System.getProperty("only_test")
+if (System.getProperty("test") != null) {
+    integrationTestSystemProperties["test"] = System.getProperty("test")
 }
 if (System.getProperty("log_level") != null) {
     integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
