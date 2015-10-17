@@ -6,5 +6,5 @@ compass {
   cssDir = file("css")
   sassDir = file("css")
   environment = "production"
-  outputStyle = "compressed"
+  outputStyle = "expanded"
 }

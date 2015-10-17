@@ -130,6 +130,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         //include "lib/**/*.properties"
         include "lib/configuration.properties"
         exclude "plugins/org.dita-ot.html/**"
+        exclude "plugins/org.dita.html5/build"
         exclude "plugins/org.dita.specialization.dita132/**"
         exclude "plugins/org.dita.pdf2/src/**"
         exclude "plugins/org.dita.pdf2/bin/**"
