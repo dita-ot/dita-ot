@@ -288,6 +288,10 @@ div.imageright {
 div.imagejustify {
   text-align: justify;
 }
+
+table {
+  border-collapse: collapse;
+}
 /* The cell border can be turned on with
    {border-right:solid}
    This value creates a very thick border in Firefox (does not match other tables)
@@ -317,4 +321,25 @@ div.imagejustify {
   border: none;
   border-right: hidden;
   border-bottom: hidden;
+}
+
+.table-border {
+  border-top: solid 1px;
+  border-right: solid 1px;
+  border-bottom: solid 1px;
+  border-left: solid 1px;
+}
+
+.table-rules-all {
+  border: solid 1px;
+}
+.table-rules-sides {
+  border-right: solid 1px;
+  border-left: solid 1px;
+}
+.table-rules-top {
+  border-top: solid 1px;
+}
+.table-rules-bottom {
+  border-bottom: solid 1px;
 }
