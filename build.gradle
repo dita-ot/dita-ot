@@ -88,7 +88,7 @@ task copyInstall(type: Copy, dependsOn: initInstall) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall"]) << {
+task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compassCompile"]) << {
     description "Build archives and install all plugins with dependencies"
     ant.ant([antfile: "integrator.xml", dir: file("src/main")])
 }
@@ -130,6 +130,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         //include "lib/**/*.properties"
         include "lib/configuration.properties"
         exclude "plugins/org.dita-ot.html/**"
+        exclude "plugins/org.dita.html5/build"
         exclude "plugins/org.dita.specialization.dita132/**"
         exclude "plugins/org.dita.pdf2/src/**"
         exclude "plugins/org.dita.pdf2/bin/**"

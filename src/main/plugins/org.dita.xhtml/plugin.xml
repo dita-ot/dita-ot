@@ -65,7 +65,6 @@
     <param name="args.xhtml.toc.xsl" desc="Specifies a custom XSL file to be used for TOC generation." type="file"/>
   </transtype>
   <transtype name="xhtml" extends="common-html" desc="XHTML"/>
-  <transtype name="html5" extends="common-html" desc="HTML5"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
   <template file="build_general_template.xml"/>
