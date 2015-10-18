@@ -12,8 +12,15 @@
   <extension-point id="dita.xsl.html5.toc" name="HTML/XHTML TOC XSLT import"/>
   <extension-point id="dita.xsl.html5.cover" name="HTML/XHTML Cover XSLT import"/>
   <!-- extensions -->
-  <transtype name="html5" extends="common-html" desc="HTML5"/>
+  <transtype name="html5" extends="common-html" desc="HTML5">
+    <param name="nav-toc" type="enum" deprecated="Generate navigation TOC into topic pages">
+      <val default="true" desc="no TOC">none</val>
+      <val desc="partial TOC that show current topic">partial</val>
+      <val desc="full TOC">full</val>
+    </param>
+  </transtype>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <feature extension="dita.conductor.xhtml.param" file="params.xml"/>
   <!--feature extension="dita.xsl.messages" file="resource/messages.xml"/-->
   <template file="build_dita2html5_template.xml"/>
   <!--template file="xsl/dita2html-base_template.xsl"/>

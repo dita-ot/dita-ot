@@ -6,7 +6,8 @@
   <target name="dita2html5"
           depends="html5.init,
                    build-init,
-                   preprocess, 
+                   preprocess,
+                   html5.topic.init,
                    html5.topic,
                    html5.map,
                    html5.css"/>
@@ -23,6 +24,18 @@
         <isset property="args.xhtml.toc.xsl" />
       </not>
     </condition>
+    <condition property="html5.nav-toc" value="${nav-toc}" else="none">
+      <isset property="nav-toc"/>
+    </condition>
+  </target>
+  
+  <target name="html5.topic.init" unless="noMap">
+    <loadfile property="html5.map" srcfile="${dita.temp.dir}/${user.input.file.listfile}">
+      <filterchain>
+        <headfilter lines="1"/>
+      </filterchain>
+    </loadfile>
+    <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}"/>
   </target>
   
   <target name="html5.topic" depends="xhtml.topics"/>
