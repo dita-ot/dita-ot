@@ -142,68 +142,15 @@ dt.prereq {
 .note {
   margin-top: 1em;
   margin-bottom: 1em;
-  .notetitle {
+  .notetitle,
+  .note__title {
     font-weight: bold;
   }
   .notelisttitle {
     @extend .notetitle;
   }
 }
-.tip {
-  @extend .note;
-  .tiptitle {
-    @extend .notetitle;
-  }
-}
-.fastpath {
-  @extend .note;
-  .fastpathtitle {
-    @extend .notetitle;
-  }
-}
-.important {
-  @extend .note;
-  .importanttitle {
-    @extend .notetitle;
-  }
-}
-.remember {
-  @extend .note;
-  .remembertitle {
-    @extend .notetitle;
-  }
-}
-.restriction {
-  @extend .note;
-  .restrictiontitle {
-    @extend .notetitle;
-  }
-}
-.attention {
-  @extend .note;
-  .attentiontitle {
-    @extend .notetitle;
-  }
-}
-.danger {
-  @extend .note;
-  .dangertitle {
-    @extend .notetitle;
-  }
-}
-.caution {
-  @extend .notetitle;
-  margin-bottom: 1em;
-  .cautiontitle {
-    @extend .notetitle;
-  }
-}
-.warning {
-  @extend .note;
-  .warningtitle {
-    @extend .notetitle;
-  }
-}
+
 /* Simple lists do not get a bullet */
 ul.simple {
   list-style-type: none;
