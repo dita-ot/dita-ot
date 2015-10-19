@@ -25,7 +25,10 @@
     </condition>
     
     <condition property="temp.transformation.file" value="${dita.plugin.org.dita.pdf2.fop.dir}/xsl/fo/topic2fo_shell_fop.xsl">
-      <isset property="use.fop.pdf.formatter"/>
+      <and>
+        <not><isset property="args.xsl.pdf"/></not>
+        <isset property="use.fop.pdf.formatter"/>
+      </and>
     </condition>
     
     <!-- default output format -->

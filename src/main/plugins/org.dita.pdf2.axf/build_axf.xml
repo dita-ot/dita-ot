@@ -16,9 +16,11 @@
              classpathref="project.class.path"/>
     
     <condition property="temp.transformation.file" value="${dita.plugin.org.dita.pdf2.axf.dir}/xsl/fo/topic2fo_shell_axf.xsl">
-      <isset property="use.ah.pdf.formatter"/>
+      <and>
+        <not><isset property="args.xsl.pdf"/></not>
+        <isset property="use.ah.pdf.formatter"/>
+      </and>
     </condition>
-    <echo>temp.transformation.file: ${temp.transformation.file}</echo>
     <!-- default output format -->
     <condition property="axf.formatter.output-format" value="@PDF">
       <not><isset property="axf.formatter.output-format"/></not>
