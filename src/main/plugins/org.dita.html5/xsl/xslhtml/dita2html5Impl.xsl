@@ -103,5 +103,6 @@
   </xsl:template>
   
   <xsl:include href="tables.xsl"/>
+  <xsl:include href="nav.xsl"/>
   
 </xsl:stylesheet>

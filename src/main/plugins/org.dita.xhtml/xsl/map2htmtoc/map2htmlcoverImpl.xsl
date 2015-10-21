@@ -35,7 +35,10 @@
           <xsl:apply-templates select="@title"/>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="." mode="toc"/>
+      <xsl:variable name="map" as="element()*">
+        <xsl:apply-templates select="." mode="normalize-map"/>
+      </xsl:variable>
+      <xsl:apply-templates select="$map" mode="toc"/>
       <xsl:call-template name="gen-endnotes"/>
       <xsl:call-template name="gen-user-footer"/>
       <xsl:call-template name="processFTR"/>
