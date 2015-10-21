@@ -7,7 +7,6 @@
           depends="html5.init,
                    build-init,
                    preprocess,
-                   html5.topic.init,
                    html5.topic,
                    html5.map,
                    html5.css"/>
@@ -38,7 +37,7 @@
     <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}"/>
   </target>
   
-  <target name="html5.topic" depends="xhtml.topics"/>
+  <target name="html5.topic" depends="html5.topic.init, xhtml.topics"/>
   
   <target name="html5.map" depends="dita.map.xhtml"/>
   

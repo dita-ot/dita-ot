@@ -13,7 +13,9 @@
   <xsl:param name="FILENAME" as="xs:string?"/>
   <xsl:param name="input.map.url" as="xs:string?"/>
   
-  <xsl:variable name="input.map" select="document($input.map.url)" as="document-node()?"/>
+  <xsl:variable name="input.map" as="document-node()?">
+    <xsl:apply-templates select="document($input.map.url)" mode="normalize-map"/>
+  </xsl:variable>
 
   <xsl:template match="*" mode="gen-user-sidetoc">
     <xsl:if test="$nav-toc = ('partial', 'full')">
@@ -159,58 +161,60 @@
     <xsl:variable name="title">
       <xsl:apply-templates select="." mode="get-navtitle"/>
     </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="normalize-space($title)">
-          <li>
-            <xsl:if test=". is $current-topicref">
-              <xsl:attribute name="class">active</xsl:attribute>
-            </xsl:if>
-            <xsl:choose>
-              <xsl:when test="normalize-space(@href)">
-                <a>
-                  <xsl:attribute name="href">
-                    <xsl:if test="not(@scope = 'external')">
-                      <xsl:value-of select="$pathFromMaplist"/>
-                    </xsl:if>
-                    <xsl:choose>
-                      <xsl:when test="@copy-to and not(contains(@chunk, 'to-content')) and 
-                                      (not(@format) or @format = 'dita' or @format = 'ditamap') ">
-                        <xsl:call-template name="replace-extension">
-                          <xsl:with-param name="filename" select="@copy-to"/>
-                          <xsl:with-param name="extension" select="$OUTEXT"/>
-                        </xsl:call-template>
-                        <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
-                          <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
-                        </xsl:if>
-                      </xsl:when>
-                      <xsl:when test="not(@scope = 'external') and (not(@format) or @format = 'dita' or @format = 'ditamap')">
-                        <xsl:call-template name="replace-extension">
-                          <xsl:with-param name="filename" select="@href"/>
-                          <xsl:with-param name="extension" select="$OUTEXT"/>
-                        </xsl:call-template>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="@href"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:attribute>
-                  <xsl:value-of select="$title"/>
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
+    <xsl:choose>
+      <xsl:when test="normalize-space($title)">
+        <li>
+          <xsl:if test=". is $current-topicref">
+            <xsl:attribute name="class">active</xsl:attribute>
+          </xsl:if>
+          <xsl:choose>
+            <xsl:when test="normalize-space(@href)">
+              <a>
+                <xsl:attribute name="href">
+                  <xsl:if test="not(@scope = 'external')">
+                    <xsl:value-of select="$pathFromMaplist"/>
+                  </xsl:if>
+                  <xsl:choose>
+                    <xsl:when test="@copy-to and not(contains(@chunk, 'to-content')) and 
+                                    (not(@format) or @format = 'dita' or @format = 'ditamap') ">
+                      <xsl:call-template name="replace-extension">
+                        <xsl:with-param name="filename" select="@copy-to"/>
+                        <xsl:with-param name="extension" select="$OUTEXT"/>
+                      </xsl:call-template>
+                      <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
+                        <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
+                      </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="not(@scope = 'external') and (not(@format) or @format = 'dita' or @format = 'ditamap')">
+                      <xsl:call-template name="replace-extension">
+                        <xsl:with-param name="filename" select="@href"/>
+                        <xsl:with-param name="extension" select="$OUTEXT"/>
+                      </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="@href"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:attribute>
                 <xsl:value-of select="$title"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:if test="exists($children)">
-              <ul>
-                <xsl:apply-templates select="$children" mode="#current">
-                  <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
-                </xsl:apply-templates>
-              </ul>
-            </xsl:if>
-          </li>
-        </xsl:when>
-      </xsl:choose>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <span>
+                <xsl:value-of select="$title"/>
+              </span>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:if test="exists($children)">
+            <ul>
+              <xsl:apply-templates select="$children" mode="#current">
+                <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+              </xsl:apply-templates>
+            </ul>
+          </xsl:if>
+        </li>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
   
   <xsl:function name="dita-ot:get-path">
@@ -246,6 +250,18 @@
         <xsl:value-of select="$path"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <!-- Normalize map -->
+  
+  <xsl:template match="/ | @* | node()" mode="normalize-map">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()" mode="normalize-map"/>
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]" mode="normalize-map">
+    <xsl:apply-templates select="* except *[contains(@class, ' map/topicmeta ')]" mode="normalize-map"/>
   </xsl:template>
 
 </xsl:stylesheet>
