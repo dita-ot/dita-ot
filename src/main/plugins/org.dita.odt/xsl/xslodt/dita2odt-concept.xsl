@@ -31,17 +31,17 @@
   <xsl:strip-space elements="*"/>
 
   <!-- Concepts have their own group. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group" name="related-links:group.concept">
+  <xsl:template match="link[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group" name="related-links:group.concept">
     <xsl:text>concept</xsl:text>
   </xsl:template>
 
   <!-- Priority of concept group. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group-priority" name="related-links:group-priority.concept">
+  <xsl:template match="link[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group-priority" name="related-links:group-priority.concept">
     <xsl:value-of select="3"/>
   </xsl:template>
 
   <!--Get Related Information -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group" name="related-links:result.concept">
+  <xsl:template match="link[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group" name="related-links:result.concept">
     <xsl:param name="links"/>
     <xsl:variable name="samefile">
       <xsl:call-template name="check_file_location"/>

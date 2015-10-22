@@ -15,12 +15,12 @@
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
-  <xsl:template match="*[contains(@class, ' map/map ')]">
+  <xsl:template match="map[contains(@class, ' map/map ')]">
     <xsl:element name="plugin">
       <xsl:attribute name="name">
         <xsl:choose>
-          <xsl:when test="*[contains(@class, ' topic/title ')]">
-            <xsl:value-of select="*[contains(@class, ' topic/title ')]"/>
+          <xsl:when test="title[contains(@class, ' topic/title ')]">
+            <xsl:value-of select="title[contains(@class, ' topic/title ')]"/>
           </xsl:when>
           <xsl:when test="@title">
             <xsl:value-of select="@title"/>

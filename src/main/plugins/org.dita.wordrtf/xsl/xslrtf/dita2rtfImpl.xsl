@@ -33,22 +33,22 @@
   <xsl:call-template name="root"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/topic ')]">
+<xsl:template match="topic[contains(@class, ' topic/topic ')]">
 <xsl:call-template name="gen-id"/>
 <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
+<xsl:template match="topic[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]">
   <xsl:call-template name="gen-id"/>
   <xsl:variable name="depth">
-    <xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])"/>
+    <xsl:value-of select="count(ancestor::topic[contains(@class, ' topic/topic ')])"/>
   </xsl:variable>
   <xsl:call-template name="block-title">
     <xsl:with-param name="depth" select="$depth"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
+<xsl:template match="section[contains(@class, ' topic/section ')]/title[contains(@class, ' topic/title ')]">
 <xsl:call-template name="gen-id"/>\par \plain\f4\fs36\b <xsl:apply-templates/>
 \par \plain\f2\fs24
 </xsl:template>
@@ -59,21 +59,21 @@
 <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/section ')]">
+<xsl:template match="section[contains(@class, ' topic/section ')]">
 <xsl:call-template name="gen-id"/>\par \pard \s0\f2\fs24 <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/example ')]">
+<xsl:template match="example[contains(@class, ' topic/example ')]">
 <xsl:call-template name="gen-id"/>\par \pard \s0\f2\fs24 <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]">
+<xsl:template match="example[contains(@class, ' topic/example ')]/title[contains(@class, ' topic/title ')]">
 <xsl:call-template name="gen-id"/>\plain\f4\fs24\b <xsl:apply-templates/>\par \plain\f2\fs24 
 </xsl:template>
 
 <!-- =========== block things ============ -->
 
-<xsl:template match="*[contains(@class,' topic/p ')]">
+<xsl:template match="p[contains(@class, ' topic/p ')]">
 <xsl:call-template name="gen-id"/><xsl:call-template name="block-p"/>
 </xsl:template>
 
@@ -88,7 +88,7 @@
   <xsl:call-template name="inline-em"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/q ')]"><xsl:call-template name="gen-id"/><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'OpenQuote'"/></xsl:call-template><xsl:apply-templates/><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'CloseQuote'"/></xsl:call-template></xsl:template>
+<xsl:template match="q[contains(@class, ' topic/q ')]"><xsl:call-template name="gen-id"/><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'OpenQuote'"/></xsl:call-template><xsl:apply-templates/><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'CloseQuote'"/></xsl:call-template></xsl:template>
 
 
 
@@ -205,7 +205,7 @@
 <xsl:template name="block-p">
   <!-- Tagsmiths: Suppress \par \pard when the context is first p in li -->
   <xsl:choose>
-    <xsl:when test="parent::*[contains(@class,' topic/li ')] and position() = 1">
+    <xsl:when test="parent::li[contains(@class, ' topic/li ')] and position() = 1">
       <!-- Tagsmiths: this next line resets the style, font, and size to 
         the same values used in by p in other contexts. -->
       <xsl:text>\s0\f2\fs24 </xsl:text>
@@ -233,7 +233,7 @@
 \par
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/lq ')]" name="topic.lq">
+<xsl:template match="lq[contains(@class, ' topic/lq ')]" name="topic.lq">
   <xsl:variable name="samefile">
     <xsl:choose>
       <xsl:when test="@href and starts-with(@href,'#')">
@@ -303,7 +303,7 @@ contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:value-of select="@
 {\bkmkstart <xsl:value-of select="$name"/>}{\bkmkend <xsl:value-of select="$name"/>}
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/xref ')]|*[contains(@class,' topic/link ')]">
+<xsl:template match="xref[contains(@class, ' topic/xref ')]|link[contains(@class, ' topic/link ')]">
   <xsl:variable name="samefile">
     <xsl:choose>
       <xsl:when test="@href and starts-with(@href,'#')">
@@ -336,11 +336,11 @@ contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:value-of select="@
   </xsl:variable>
   <xsl:call-template name="gen-id"/>
 <xsl:choose>
-<xsl:when test="@href and not(@href='')"><xsl:if test="not(preceding-sibling::*[contains(@class,' topic/link ')]) and contains(@class,' topic/link ')">\par </xsl:if>
+<xsl:when test="@href and not(@href='')"><xsl:if test="not(preceding-sibling::link[contains(@class, ' topic/link ')]) and contains(@class,' topic/link ')">\par </xsl:if>
 {\field{\*\fldinst {\s8 \f2\fs24\ul\cf1 HYPERLINK <xsl:if test="$samefile='true'">\\l</xsl:if>
 "<xsl:value-of select="$href-value"/>"}}{\fldrslt {\s8 \f2\fs24\ul\cf1 <xsl:call-template
 name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
-<xsl:if test="contains(@class,' topic/link ')"><xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>\par </xsl:if>
+<xsl:if test="contains(@class,' topic/link ')"><xsl:apply-templates select="desc[contains(@class, ' topic/desc ')]"/>\par </xsl:if>
 </xsl:when>
 <xsl:otherwise>
   <xsl:call-template name="output-message">
@@ -352,11 +352,11 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/cite ')]">
+<xsl:template match="cite[contains(@class, ' topic/cite ')]">
   <xsl:text>{\i </xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/desc ')]">
+<xsl:template match="desc[contains(@class, ' topic/desc ')]">
 <xsl:if test="../@role='child'">\par \plain\s0\f4\fs24 <xsl:apply-templates/> 
 \plain\s0\f2\fs24 </xsl:if>
 </xsl:template>
@@ -375,8 +375,8 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 </xsl:when>
 <xsl:when test="contains(@class,' topic/link ')">
 <xsl:choose>
-<xsl:when test="*[contains(@class,' topic/linktext ')]">
-<xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
+<xsl:when test="linktext[contains(@class, ' topic/linktext ')]">
+<xsl:value-of select="linktext[contains(@class, ' topic/linktext ')]"/>
 </xsl:when>
 <xsl:when test="text()">
 <xsl:value-of select="text()"/>
@@ -389,19 +389,19 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 </xsl:choose>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/prolog ')]"/>
-<xsl:template match="*[contains(@class,' topic/titlealts ')]"/>
+<xsl:template match="prolog[contains(@class, ' topic/prolog ')]"/>
+<xsl:template match="titlealts[contains(@class, ' topic/titlealts ')]"/>
 
 <!-- Added for DITA 1.1 "Shortdesc proposal" -->
-<xsl:template match="*[contains(@class,' topic/abstract ')]">
+<xsl:template match="abstract[contains(@class, ' topic/abstract ')]">
 <xsl:apply-templates/>\par
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+<xsl:template match="shortdesc[contains(@class, ' topic/shortdesc ')]">
 <xsl:apply-templates/>\par
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note">
+<xsl:template match="note[contains(@class, ' topic/note ')]" name="topic.note">
   <xsl:choose>
     <xsl:when test="@type='note'">
 \par \plain\s0\f4\fs24\b <xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Note'"/></xsl:call-template><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text>\pard \plain\s0\f4\fs24<xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:apply-templates/>
@@ -461,7 +461,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 </xsl:call-template>
 </xsl:variable>
 <xsl:choose>
-<xsl:when test="ancestor::*[contains(@class,' topic/pre ')] or ancestor::*[contains(@class,' topic/lines ')]">
+<xsl:when test="ancestor::pre[contains(@class, ' topic/pre ')] or ancestor::lines[contains(@class, ' topic/lines ')]">
 <xsl:value-of select="$gentext"/>
 </xsl:when>
 <xsl:otherwise>
@@ -535,7 +535,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 <xsl:variable name="newline"><xsl:text>
 </xsl:text></xsl:variable>    
     <xsl:choose>
-      <xsl:when test="ancestor::*[contains(@class,' topic/pre ')] or ancestor::*[contains(@class,' topic/lines ')]">
+      <xsl:when test="ancestor::pre[contains(@class, ' topic/pre ')] or ancestor::lines[contains(@class, ' topic/lines ')]">
         <xsl:choose>
           <xsl:when test="contains($txt,$newline)">
             <xsl:value-of select="substring-before($txt,$newline)"/><xsl:text>\par </xsl:text><xsl:call-template name="gen-txt"><xsl:with-param name="txt" select="substring-after($txt,$newline)"/></xsl:call-template>
@@ -553,7 +553,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 
 <xsl:template match="text()">
 <xsl:choose>
-<xsl:when test="ancestor::*[contains(@class,' topic/pre ')] or ancestor::*[contains(@class,' topic/lines ')]">
+<xsl:when test="ancestor::pre[contains(@class, ' topic/pre ')] or ancestor::lines[contains(@class, ' topic/lines ')]">
 <xsl:call-template name="gen-txt"><xsl:with-param name="txt" select="."/></xsl:call-template>
 </xsl:when>
 <xsl:otherwise>
@@ -565,23 +565,23 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 </xsl:choose>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/draft-comment ')]">
+<xsl:template match="draft-comment[contains(@class, ' topic/draft-comment ')]">
 <xsl:if test="$DRAFT='yes'">
 <xsl:text>\par \plain\s0\f4\fs24\cb3\b </xsl:text><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Draft comment'"/></xsl:call-template><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text><xsl:text>\pard \plain\s0\f4\fs24\cb3</xsl:text><xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl</xsl:if><xsl:text> </xsl:text><xsl:apply-templates/><xsl:text>\par \plain\s0\f2\fs24</xsl:text>
 </xsl:if>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/boolean ')]">
+<xsl:template match="boolean[contains(@class, ' topic/boolean ')]">
 <xsl:text>{\plain\s0\f4\fs24\cf4 boolean: </xsl:text><xsl:value-of select="@state"/><xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/state ')]">
+<xsl:template match="state[contains(@class, ' topic/state ')]">
   <xsl:text>{\plain\s0\f4\fs24\cf3 </xsl:text>
   <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@name"/><xsl:text>=</xsl:text><xsl:value-of select="@value"/>
   <xsl:text>}</xsl:text>  
 </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/tm ')]">
+  <xsl:template match="tm[contains(@class, ' topic/tm ')]">
     <xsl:text>{\plain\s0\f4\fs24 </xsl:text><xsl:apply-templates/>
     <xsl:choose>
       <xsl:when test="@tmtype='tm'">
@@ -598,7 +598,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
   </xsl:template>
 
   <xsl:template
-    match="*[contains(@class,' topic/required-cleanup ')]">
+    match="required-cleanup[contains(@class, ' topic/required-cleanup ')]">
     <xsl:if test="$DRAFT='yes'">
       <xsl:text>\par \plain\s0\f4\fs24\cb3\b</xsl:text>
       <xsl:call-template name="getStringRTF">
@@ -619,7 +619,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
   </xsl:template>
 
   <!-- Add for "New <data> element (#9)" in DITA 1.1 -->
-  <xsl:template match="*[contains(@class,' topic/data ')]" />
+  <xsl:template match="data[contains(@class, ' topic/data ')]" />
 
   <!-- Add for "Support foreign content vocabularies such as 
     MathML and SVG with <unknown> (#35) " in DITA 1.1 -->

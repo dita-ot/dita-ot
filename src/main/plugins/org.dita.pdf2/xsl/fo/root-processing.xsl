@@ -62,7 +62,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:variable>
 
     <xsl:variable name="productName">
-        <xsl:variable name="mapProdname" select="(/*/opentopic:map//*[contains(@class, ' topic/prodname ')])[1]" as="element()?"/>
+        <xsl:variable name="mapProdname" select="(/*/opentopic:map//prodname[contains(@class, ' topic/prodname ')])[1]" as="element()?"/>
         <xsl:choose>
             <xsl:when test="$mapProdname">
                 <xsl:value-of select="$mapProdname"/>
@@ -78,14 +78,14 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="map" select="//opentopic:map" as="element()?"/>
 
     <xsl:variable name="topicNumbers">
-        <xsl:for-each select="//*[contains(@class, ' topic/topic ')]">
+        <xsl:for-each select="//topic[contains(@class, ' topic/topic ')]">
             <topic guid="{generate-id()}">
                 <xsl:call-template name="commonattributes"/>
             </topic>
         </xsl:for-each>
     </xsl:variable>
 
-  <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]" as="element()*"/>
+  <xsl:variable name="relatedTopicrefs" select="//reltable[contains(@class, ' map/reltable ')]//topicref[contains(@class, ' map/topicref ')]" as="element()*"/>
 
     <xsl:template name="validateTopicRefs">
         <xsl:apply-templates select="//opentopic:map" mode="topicref-validation"/>
@@ -95,7 +95,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates mode="topicref-validation"/>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="topicref-validation">
+    <xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="topicref-validation">
         <xsl:if test="@href = ''">
           <xsl:call-template name="output-message">
             <xsl:with-param name="msgnum">004</xsl:with-param>
@@ -127,17 +127,17 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/booktitle ')]/*[contains(@class,' bookmap/mainbooktitle ')][1]" mode="dita-ot:text-only"/>
         </xsl:value-of>
       </xsl:when>
-      <xsl:when test="exists($map/*[contains(@class,' topic/title ')])">
+      <xsl:when test="exists($map/title[contains(@class, ' topic/title ')])">
         <xsl:value-of>
-          <xsl:apply-templates select="$map/*[contains(@class,' topic/title ')][1]" mode="dita-ot:text-only"/>
+          <xsl:apply-templates select="$map/title[contains(@class, ' topic/title ')][1]" mode="dita-ot:text-only"/>
         </xsl:value-of>
       </xsl:when>
-      <xsl:when test="exists(//*[contains(@class, ' map/map ')]/@title)">
-        <xsl:value-of select="//*[contains(@class, ' map/map ')]/@title"/>
+      <xsl:when test="exists(//map[contains(@class, ' map/map ')]/@title)">
+        <xsl:value-of select="//map[contains(@class, ' map/map ')]/@title"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of>
-          <xsl:apply-templates select="descendant::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]" mode="dita-ot:text-only"/>
+          <xsl:apply-templates select="descendant::topic[contains(@class, ' topic/topic ')][1]/title[contains(@class, ' topic/title ')]" mode="dita-ot:text-only"/>
         </xsl:value-of>
       </xsl:otherwise>
     </xsl:choose>
@@ -161,16 +161,16 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:apply-templates select="$authorinformation/descendant::*[contains(@class, ' xnal-d/organizationname ')]" mode="dita-ot:text-only"/>
         </xsl:value-of>
       </xsl:when>
-      <xsl:when test="exists($map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/author ')])">
+      <xsl:when test="exists($map/*[contains(@class, ' bookmap/bookmeta ')]/author[contains(@class, ' topic/author ')])">
         <xsl:value-of>
-          <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/author ')]" mode="dita-ot:text-only"/>
+          <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/bookmeta ')]/author[contains(@class, ' topic/author ')]" mode="dita-ot:text-only"/>
         </xsl:value-of>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
 
   <xsl:template match="/" mode="dita-ot:keywords-metadata" as="xs:string*">
-    <xsl:variable name="keywords" select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, 'topic/keyword ')]" as="element()*"/>
+    <xsl:variable name="keywords" select="$map/*[contains(@class, ' bookmap/bookmeta ')]/keywords[contains(@class, ' topic/keywords ')]/*[contains(@class, 'topic/keyword ')]" as="element()*"/>
     <xsl:for-each select="$keywords">
       <xsl:value-of>
         <xsl:apply-templates select="." mode="dita-ot:text-only"/>
@@ -180,14 +180,14 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:template match="/" mode="dita-ot:subject-metadata" as="xs:string?">
     <xsl:choose>
-      <xsl:when test="exists($map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' map/shortdesc ')])">
+      <xsl:when test="exists($map/*[contains(@class, ' bookmap/bookmeta ')]/shortdesc[contains(@class, ' map/shortdesc ')])">
         <xsl:value-of>
-          <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' map/shortdesc ')]" mode="dita-ot:text-only"/>
+          <xsl:apply-templates select="$map/*[contains(@class, ' bookmap/bookmeta ')]/shortdesc[contains(@class, ' map/shortdesc ')]" mode="dita-ot:text-only"/>
         </xsl:value-of>
       </xsl:when>
-      <xsl:when test="exists($map/*[contains(@class, ' topic/shortdesc ')])">
+      <xsl:when test="exists($map/shortdesc[contains(@class, ' topic/shortdesc ')])">
         <xsl:value-of>
-          <xsl:apply-templates select="$map/*[contains(@class, ' topic/shortdesc ')]" mode="dita-ot:text-only"/>
+          <xsl:apply-templates select="$map/shortdesc[contains(@class, ' topic/shortdesc ')]" mode="dita-ot:text-only"/>
         </xsl:value-of>
       </xsl:when>
     </xsl:choose>
@@ -205,7 +205,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:variable name="map-based-page-sequence-generation" select="true()" as="xs:boolean"/>
   
-  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="generatePageSequences">
+  <xsl:template match="topic[contains(@class, ' topic/topic ')]" mode="generatePageSequences">
     <fo:page-sequence master-reference="ditamap-body-sequence" xsl:use-attribute-sets="__force__page__count">
       <xsl:call-template name="startPageNumbering"/>
       <xsl:call-template name="insertBodyStaticContents"/>
@@ -215,7 +215,7 @@ See the accompanying license.txt file for applicable licenses.
     </fo:page-sequence>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' map/map ')]" mode="generatePageSequences">
+  <xsl:template match="map[contains(@class, ' map/map ')]" mode="generatePageSequences">
     <xsl:call-template name="createFrontMatter"/>
     <xsl:call-template name="createToc"/>
     <xsl:choose>
@@ -224,7 +224,7 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:call-template name="startPageNumbering"/>
           <xsl:call-template name="insertBodyStaticContents"/>
           <fo:flow flow-name="xsl-region-body">
-            <xsl:for-each select="opentopic:map/*[contains(@class, ' map/topicref ')]">
+            <xsl:for-each select="opentopic:map/topicref[contains(@class, ' map/topicref ')]">
               <xsl:for-each select="key('topic-id', @id)">
                 <xsl:apply-templates select="." mode="processTopic"/>
               </xsl:for-each>
@@ -246,12 +246,12 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:call-template name="createFrontMatter"/>
     <xsl:choose>
       <xsl:when test="$map-based-page-sequence-generation">
-        <xsl:apply-templates select="opentopic:map/*[contains(@class, ' map/topicref ')]" mode="generatePageSequences"/>
+        <xsl:apply-templates select="opentopic:map/topicref[contains(@class, ' map/topicref ')]" mode="generatePageSequences"/>
       </xsl:when>
       <!-- legacy topic based page-sequence generation -->
       <xsl:otherwise>
         <xsl:if test="not($retain-bookmap-order)">
-          <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
+          <xsl:apply-templates select="/bookmap/topic[contains(@class, ' topic/topic ')]" mode="process-notices"/>
           <xsl:call-template name="createToc"/>
         </xsl:if>
         <xsl:apply-templates/>
@@ -266,7 +266,7 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:template match="*" mode="generatePageSequences" priority="-1">
     <xsl:apply-templates select="*" mode="generatePageSequences"/>
   </xsl:template>
-  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generatePageSequences" priority="0">
+  <xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="generatePageSequences" priority="0">
     <xsl:for-each select="key('topic-id', @id)">
       <xsl:call-template name="processTopicSimple"/>
     </xsl:for-each>
@@ -367,7 +367,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:for-each>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-notices">
+  <xsl:template match="topic[contains(@class, ' topic/topic ')]" mode="process-notices">
     <xsl:variable name="topicType">
       <xsl:call-template name="determineTopicType"/>
     </xsl:variable>
@@ -376,7 +376,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:if>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' map/map ')]">
+  <xsl:template match="map[contains(@class, ' map/map ')]">
     <xsl:apply-templates/>
   </xsl:template>
 

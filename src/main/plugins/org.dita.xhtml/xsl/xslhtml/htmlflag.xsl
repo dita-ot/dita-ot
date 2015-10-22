@@ -37,24 +37,24 @@
                          contains(@class,' topic/sthead ') or
                          contains(@class,' topic/strow ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For notes, process out-of-line to keep start flag ahead of generated heading -->
-  <xsl:template match="*[contains(@class,' topic/note ')]" mode="processFlagsInline">no</xsl:template>
+  <xsl:template match="note[contains(@class, ' topic/note ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For fig, process out-of-line to keep start flag ahead of generated heading -->
-  <xsl:template match="*[contains(@class,' topic/fig ')]" mode="processFlagsInline">no</xsl:template>
+  <xsl:template match="fig[contains(@class, ' topic/fig ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For pre, process out-of-line to keep start flag ahead of block, otherwise it throws off spacing -->
-  <xsl:template match="*[contains(@class,' topic/pre ')]" mode="processFlagsInline">no</xsl:template>
+  <xsl:template match="pre[contains(@class, ' topic/pre ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For root topic, process out-of-line to get flags around headers/footers -->
-  <xsl:template match="/*[contains(@class,' topic/topic ')]" mode="processFlagsInline">no</xsl:template>
+  <xsl:template match="/topic[contains(@class, ' topic/topic ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For body, process out-of-line to get ahead of shortdesc/abstract, after links -->
-  <xsl:template match="*[contains(@class,' topic/body ')]" mode="processFlagsInline">no</xsl:template>
+  <xsl:template match="body[contains(@class, ' topic/body ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For section or example, process out-of-line to get ahead flags ahead of the title -->
   <xsl:template match="*[contains(@class,' topic/section ') or 
                          contains(@class,' topic/example ')]" mode="processFlagsInline">no</xsl:template>
   <!-- For lq, process out-of-line to get end flags after citation info -->
-  <xsl:template match="*[contains(@class,' topic/lq ')]" mode="processFlagsInline">no</xsl:template>
+  <xsl:template match="lq[contains(@class, ' topic/lq ')]" mode="processFlagsInline">no</xsl:template>
   <!-- Image should not hit this in fallthrough, but is explicitly processed before/after <img> -->
-  <xsl:template match="*[contains(@class,' topic/image ')]" mode="processFlagsInline">no</xsl:template>
+  <xsl:template match="image[contains(@class, ' topic/image ')]" mode="processFlagsInline">no</xsl:template>
   <!-- If a tm symbol is generated, flag should go after -->
-  <xsl:template match="*[contains(@class,' topic/tm ')]" mode="processFlagsInline">no</xsl:template>
+  <xsl:template match="tm[contains(@class, ' topic/tm ')]" mode="processFlagsInline">no</xsl:template>
 
   <!-- Link processing often works as fallthrough, but often not; do make link processing easier,
        handle all instances out-of-line. -->

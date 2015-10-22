@@ -22,7 +22,7 @@
 
 <xsl:template match="*[contains(@class,' pr-d/fragment ')]" mode="process-syntaxdiagram">
 	<div>
-	<a><xsl:attribute name="name"><xsl:value-of select="*[contains(@class,' topic/title ')]"/></xsl:attribute> </a>
+	<a><xsl:attribute name="name"><xsl:value-of select="title[contains(@class, ' topic/title ')]"/></xsl:attribute> </a>
 	<xsl:apply-templates mode="process-syntaxdiagram"/>
 	</div>
 </xsl:template>
@@ -38,13 +38,13 @@
 
 <!-- titles for logical containers -->
 
-<xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]" mode="process-syntaxdiagram">
+<xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/title[contains(@class, ' topic/title ')]" mode="process-syntaxdiagram">
 	<h3>
 	<xsl:value-of select="."/>
 	</h3>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' topic/title ')]" mode="process-syntaxdiagram">
+<xsl:template match="*[contains(@class,' pr-d/fragment ')]/title[contains(@class, ' topic/title ')]" mode="process-syntaxdiagram">
 	<h4><xsl:apply-templates mode="process-syntaxdiagram"/></h4>
 </xsl:template>
 
@@ -94,7 +94,7 @@ and if so, produce an associative link. -->
 
 <!-- handle group titles (by skipping over them for now -->
 
-<xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/*[contains(@class,' topic/title ')]|*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' topic/title ')]|*[contains(@class,' pr-d/groupseq ')]/*[contains(@class,' topic/title ')]" mode="process-syntaxdiagram"/>  <!-- Consume title -->
+<xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/title[contains(@class, ' topic/title ')]|*[contains(@class,' pr-d/groupseq ')]/title[contains(@class, ' topic/title ')]|*[contains(@class,' pr-d/groupseq ')]/title[contains(@class, ' topic/title ')]" mode="process-syntaxdiagram"/>  <!-- Consume title -->
 
 
 <!-- okay, here we have to work each permutation because figgroup/figroup fallback is too general -->

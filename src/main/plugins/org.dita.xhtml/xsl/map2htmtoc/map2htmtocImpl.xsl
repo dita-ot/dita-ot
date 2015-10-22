@@ -74,7 +74,7 @@
 
 <!-- If there is no copyright in the document, make the standard one -->
 <xsl:template name="generateDefaultCopyright">
-  <xsl:if test="not(//*[contains(@class,' topic/copyright ')])">
+  <xsl:if test="not(//copyright[contains(@class, ' topic/copyright ')])">
     <meta name="copyright">
       <xsl:attribute name="content">
         <xsl:text>(C) </xsl:text>
@@ -113,15 +113,15 @@
 
 <xsl:template name="generateMapTitle">
   <!-- Title processing - special handling for short descriptions -->
-  <xsl:if test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')] or /*[contains(@class,' map/map ')]/@title">
+  <xsl:if test="/map[contains(@class, ' map/map ')]/title[contains(@class, ' topic/title ')] or /map[contains(@class, ' map/map ')]/@title">
   <title>
     <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
     <xsl:choose>
-      <xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
-        <xsl:value-of select="normalize-space(/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')])"/>
+      <xsl:when test="/map[contains(@class, ' map/map ')]/title[contains(@class, ' topic/title ')]">
+        <xsl:value-of select="normalize-space(/map[contains(@class, ' map/map ')]/title[contains(@class, ' topic/title ')])"/>
       </xsl:when>
-      <xsl:when test="/*[contains(@class,' map/map ')]/@title">
-        <xsl:value-of select="/*[contains(@class,' map/map ')]/@title"/>
+      <xsl:when test="/map[contains(@class, ' map/map ')]/@title">
+        <xsl:value-of select="/map[contains(@class, ' map/map ')]/@title"/>
       </xsl:when>
     </xsl:choose>
   </title><xsl:value-of select="$newline"/>

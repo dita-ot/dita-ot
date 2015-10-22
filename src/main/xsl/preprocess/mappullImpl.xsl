@@ -73,7 +73,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
   </xsl:template>
 
   <!-- Default rule for processing a topicref element. -->
-  <xsl:template match="*[contains(@class, ' map/topicref ')]">
+  <xsl:template match="topicref[contains(@class, ' map/topicref ')]">
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <!-- used for mapref source ditamap to retain the relative path information of the target ditamap -->
     <xsl:param name="parent-linking" as="xs:string">#none#</xsl:param>
@@ -291,7 +291,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:value-of>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' map/relcell ')]" mode="mappull:merge-inherit-attribute" as="xs:string">
+  <xsl:template match="relcell[contains(@class, ' map/relcell ')]" mode="mappull:merge-inherit-attribute" as="xs:string">
     <xsl:param name="attrib" as="xs:string"/>
     <xsl:value-of>
       <xsl:value-of select="@*[local-name() = $attrib]"/>
@@ -301,7 +301,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:apply-templates>
       <xsl:text> </xsl:text>
       <xsl:variable name="position" select="1 + count(preceding-sibling::*)" as="xs:integer"/>
-      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][$position ]" mode="mappull:merge-inherit-attribute">
+      <xsl:apply-templates select="ancestor::reltable[contains(@class, ' map/reltable ')]/relheader[contains(@class, ' map/relheader ')]/relcolspec[contains(@class, ' map/relcolspec ')][$position ]" mode="mappull:merge-inherit-attribute">
         <xsl:with-param name="attrib" select="$attrib"/>
       </xsl:apply-templates>
     </xsl:value-of>
@@ -334,7 +334,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:apply-templates select=".." mode="mappull:inherit-one-level"><xsl:with-param name="attrib" select="$attrib"/></xsl:apply-templates>
         </xsl:variable>
         <xsl:variable name="colspec" as="xs:string?">
-          <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position ]" mode="mappull:inherit-one-level">
+          <xsl:apply-templates select="ancestor::reltable[contains(@class, ' map/reltable ')]/relheader[contains(@class, ' map/relheader ')]/relcolspec[contains(@class, ' map/relcolspec ')][position()=$position ]" mode="mappull:inherit-one-level">
             <xsl:with-param name="attrib" select="$attrib"/>
           </xsl:apply-templates>
         </xsl:variable>
@@ -342,7 +342,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:when test="$row!=''"><xsl:value-of select="$row"/></xsl:when>
           <xsl:when test="$colspec!=''"><xsl:value-of select="$colspec"/></xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]" mode="mappull:inherit-attribute">
+            <xsl:apply-templates select="ancestor::reltable[contains(@class, ' map/reltable ')]" mode="mappull:inherit-attribute">
               <xsl:with-param name="attrib" select="$attrib"/>
             </xsl:apply-templates>
           </xsl:otherwise>
@@ -517,7 +517,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <!--finding type based on name of the target element in the first topic in another file-->
           <xsl:when test="$topicpos='firstinfile'">
             <xsl:choose>
-              <xsl:when test="($doc//*[contains(@class, ' topic/topic ')])[1]">
+              <xsl:when test="($doc//topic[contains(@class, ' topic/topic ')])[1]">
                 <xsl:attribute name="type">
                   <xsl:value-of select="local-name(($doc//*[contains(@class, $classval)])[1])"/>
                 </xsl:attribute>
@@ -551,11 +551,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
           </xsl:when>
 
           <!--finding type based on name of the target element in the first topic in another file-->
-          <xsl:when test="$topicpos='firstinfile' and $doc//*[contains(@class, ' topic/topic ')]">
+          <xsl:when test="$topicpos='firstinfile' and $doc//topic[contains(@class, ' topic/topic ')]">
             <xsl:call-template name="verify-type-value">
               <xsl:with-param name="type" select="$type"/>
-              <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')])[1]/@class"/>
-              <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')])[1])"/>
+              <xsl:with-param name="actual-class" select="($doc//topic[contains(@class, ' topic/topic ')])[1]/@class"/>
+              <xsl:with-param name="actual-name" select="local-name(($doc//topic[contains(@class, ' topic/topic ')])[1])"/>
             </xsl:call-template>
           </xsl:when>
         </xsl:choose>
@@ -578,15 +578,15 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:when
         test="$scope='external' and not($format='dita')">
         <xsl:choose>
-          <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
-            <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
+          <xsl:when test="*/navtitle[contains(@class, ' topic/navtitle ')]">
+            <xsl:value-of select="*/navtitle[contains(@class, ' topic/navtitle ')]"/>
           </xsl:when>
           <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
-          <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-            <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+          <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]">
+            <xsl:copy-of select="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]/node()"/>
           </xsl:when>
-          <xsl:when test="*/*[contains(@class,' map/linktext ')]">
-            <xsl:value-of select="*/*[contains(@class,' map/linktext ')]"/>
+          <xsl:when test="*/linktext[contains(@class, ' map/linktext ')]">
+            <xsl:value-of select="*/linktext[contains(@class, ' map/linktext ')]"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="@href"/>
@@ -596,22 +596,22 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <!--if it's external and dita, leave it undefined as fallback, so the file extension can be processed in the final output stage-->
       <xsl:when test="$scope='external'">
         <xsl:choose>
-          <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
-            <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
+          <xsl:when test="*/navtitle[contains(@class, ' topic/navtitle ')]">
+            <xsl:value-of select="*/navtitle[contains(@class, ' topic/navtitle ')]"/>
           </xsl:when>
           <xsl:when test="@navtitle">
             <xsl:value-of select="@navtitle"/>
           </xsl:when>
-          <xsl:when test="*/*[contains(@class,' map/linktext ')]">
-            <xsl:value-of select="*/*[contains(@class,' map/linktext ')]"/>
+          <xsl:when test="*/linktext[contains(@class, ' map/linktext ')]">
+            <xsl:value-of select="*/linktext[contains(@class, ' map/linktext ')]"/>
           </xsl:when>
           <xsl:otherwise>#none#</xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="$scope='peer'">
         <xsl:choose>
-          <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
-            <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
+          <xsl:when test="*/navtitle[contains(@class, ' topic/navtitle ')]">
+            <xsl:value-of select="*/navtitle[contains(@class, ' topic/navtitle ')]"/>
           </xsl:when>          
           <xsl:when test="@navtitle">
             <xsl:value-of select="@navtitle"/>
@@ -634,21 +634,21 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
         <xsl:choose>
           <xsl:when
-            test="$target[contains(@class, $classval)]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
+            test="$target[contains(@class, $classval)]/titlealts[contains(@class, ' topic/titlealts ')]/navtitle[contains(@class, ' topic/navtitle ')]">
             <xsl:apply-templates
-              select="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
+              select="($target[contains(@class, $classval)])[1]/titlealts[contains(@class, ' topic/titlealts ')]/navtitle[contains(@class, ' topic/navtitle ')]"
               mode="get-title-content"/>
           </xsl:when>
           <xsl:when
-            test="$target[contains(@class, $classval)]/*[contains(@class, ' topic/title ')]">
+            test="$target[contains(@class, $classval)]/title[contains(@class, ' topic/title ')]">
             <xsl:apply-templates
-              select="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/title ')]"
+              select="($target[contains(@class, $classval)])[1]/title[contains(@class, ' topic/title ')]"
               mode="get-title-content"/>
           </xsl:when>
           <xsl:when
-            test="$target[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]">
+            test="$target[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]">
             <xsl:apply-templates
-              select="($target[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]"
+              select="($target[contains(@class, ' topic/topic ')])[1]/title[contains(@class, ' topic/title ')]"
               mode="get-title-content"/>
           </xsl:when>
           <xsl:otherwise>
@@ -660,15 +660,15 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:when test="$topicpos='firstinfile'">
         <xsl:choose>
           <xsl:when
-            test="$doc//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
+            test="$doc//topic[contains(@class, ' topic/topic ')][1]/titlealts[contains(@class, ' topic/titlealts ')]/navtitle[contains(@class, ' topic/navtitle ')]">
             <xsl:apply-templates
-              select="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
+              select="($doc//topic[contains(@class, ' topic/topic ')])[1]/titlealts[contains(@class, ' topic/titlealts ')]/navtitle[contains(@class, ' topic/navtitle ')]"
               mode="get-title-content"/>
           </xsl:when>
           <xsl:when
-            test="$doc//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]">
+            test="$doc//topic[contains(@class, ' topic/topic ')][1]/title[contains(@class, ' topic/title ')]">
             <xsl:apply-templates
-              select="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]"
+              select="($doc//topic[contains(@class, ' topic/topic ')])[1]/title[contains(@class, ' topic/title ')]"
               mode="get-title-content"/>
           </xsl:when>
           <xsl:otherwise>
@@ -742,7 +742,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <!--navtitle-->
     <xsl:variable name="navtitle" as="item()*">
       <xsl:choose>
-        <xsl:when test="(not(*/*[contains(@class,' topic/navtitle ')]) and not(@navtitle)) or not($locktitle='yes')">
+        <xsl:when test="(not(*/navtitle[contains(@class, ' topic/navtitle ')]) and not(@navtitle)) or not($locktitle='yes')">
           <xsl:apply-templates select="." mode="mappull:get-stuff_get-navtitle">
             <xsl:with-param name="type" select="$type"/>
             <xsl:with-param name="scope" select="$scope"/>
@@ -760,8 +760,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
     <!-- Process the topicmeta, or create a topicmeta container if one does not exist -->
     <xsl:choose>
-      <xsl:when test="*[contains(@class,' map/topicmeta ')]">
-        <xsl:for-each select="*[contains(@class,' map/topicmeta ')]">
+      <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]">
+        <xsl:for-each select="topicmeta[contains(@class, ' map/topicmeta ')]">
           <xsl:copy>
             <xsl:copy-of select="@class"/>
             <xsl:for-each select="parent::*">
@@ -802,8 +802,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:template match="*" mode="mappull:navtitle-fallback" as="xs:string?">
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
-      <xsl:when test="*/*[contains(@class,' map/linktext ')]">
-        <xsl:value-of select="*/*[contains(@class,' map/linktext ')]"/>
+      <xsl:when test="*/linktext[contains(@class, ' map/linktext ')]">
+        <xsl:value-of select="*/linktext[contains(@class, ' map/linktext ')]"/>
         <xsl:apply-templates select="." mode="ditamsg:using-linktext-for-navtitle"/>
       </xsl:when>
       <xsl:otherwise>
@@ -820,8 +820,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:template match="*" mode="mappull:get-navtitle-for-non-dita" as="xs:string?">
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+      <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]">
+        <xsl:copy-of select="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]/node()"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@href"/>
@@ -834,8 +834,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:template match="*" mode="mappull:get-linktext-for-non-dita">
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+      <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]">
+        <xsl:copy-of select="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]/node()"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@href"/>
@@ -856,9 +856,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="doc" as="document-node()?"/>
     <xsl:choose>
       <!-- If linktext is already specified, use that -->
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+      <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]">
         <xsl:apply-templates select="." mode="mappull:add-usertext-PI"/>
-        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/>
+        <xsl:apply-templates select="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="linktext" as="xs:string?">
@@ -886,18 +886,18 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:when test="$topicpos='otherfile'">
               <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
               <xsl:choose>
-                <xsl:when test="$target[contains(@class, $classval)]/*[contains(@class, ' topic/title ')]">
+                <xsl:when test="$target[contains(@class, $classval)]/title[contains(@class, ' topic/title ')]">
                   <xsl:variable name="grabbed-value" as="xs:string">
                     <xsl:value-of>
-                      <xsl:apply-templates select="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
+                      <xsl:apply-templates select="($target[contains(@class, $classval)])[1]/title[contains(@class, ' topic/title ')]" mode="text-only"/>
                     </xsl:value-of>
                   </xsl:variable>
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
                 </xsl:when>
-                <xsl:when test="$target[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]">
+                <xsl:when test="$target[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]">
                   <xsl:variable name="grabbed-value" as="xs:string">
                     <xsl:value-of>
-                      <xsl:apply-templates select="($target[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
+                      <xsl:apply-templates select="($target[contains(@class, ' topic/topic ')])[1]/title[contains(@class, ' topic/title ')]" mode="text-only"/>
                     </xsl:value-of>
                   </xsl:variable>
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
@@ -910,10 +910,10 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <!--grabbing text from the first topic in another file-->
             <xsl:when test="$topicpos='firstinfile'">
               <xsl:choose>
-                <xsl:when test="$doc//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]">
+                <xsl:when test="$doc//topic[contains(@class, ' topic/topic ')][1]/title[contains(@class, ' topic/title ')]">
                   <xsl:variable name="grabbed-value" as="xs:string">
                     <xsl:value-of>
-                     <xsl:apply-templates select="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
+                     <xsl:apply-templates select="($doc//topic[contains(@class, ' topic/topic ')])[1]/title[contains(@class, ' topic/title ')]" mode="text-only"/>
                     </xsl:value-of>
                   </xsl:variable>
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
@@ -941,8 +941,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:template match="*" mode="mappull:get-linktext_external-and-non-dita">
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+      <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]">
+        <xsl:copy-of select="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]/node()"/>
       </xsl:when>
       <xsl:otherwise><xsl:value-of select="@href"/></xsl:otherwise>
     </xsl:choose>
@@ -950,8 +950,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:template match="*" mode="mappull:get-linktext_external-dita">
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+      <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]">
+        <xsl:copy-of select="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]/node()"/>
       </xsl:when>
       <xsl:otherwise>#none#</xsl:otherwise>
     </xsl:choose>
@@ -959,8 +959,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:template match="*" mode="mappull:get-linktext_peer-dita">
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+      <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]">
+        <xsl:copy-of select="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]/node()"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>#none#</xsl:text>
@@ -980,10 +980,10 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="classval" as="xs:string"/>
     <xsl:param name="doc" as="document-node()?"/>
     <xsl:choose>
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]">
+      <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/shortdesc[contains(@class, ' map/shortdesc ')]">
         <xsl:apply-templates select="." mode="mappull:add-usershortdesc-PI"/>
         <xsl:apply-templates
-          select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
+          select="topicmeta[contains(@class, ' map/topicmeta ')]/shortdesc[contains(@class, ' map/shortdesc ')]"/>
       </xsl:when>
       <xsl:when
         test="$scope='external' or $scope='peer' or not($format='#none#' or $format='dita')">
@@ -993,25 +993,25 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:when test="$topicpos='otherfile'">
         <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
         <xsl:if
-            test="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/shortdesc ')]|
-                  ($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
+            test="($target[contains(@class, $classval)])[1]/shortdesc[contains(@class, ' topic/shortdesc ')]|
+                  ($target[contains(@class, $classval)])[1]/abstract[contains(@class, ' topic/abstract ')]/shortdesc[contains(@class, ' topic/shortdesc ')]">
           <xsl:apply-templates select="." mode="mappull:add-genshortdesc-PI"/>
           <shortdesc class="- map/shortdesc ">
-            <xsl:apply-templates select="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/shortdesc ')] |
-                                         ($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
+            <xsl:apply-templates select="($target[contains(@class, $classval)])[1]/shortdesc[contains(@class, ' topic/shortdesc ')] |
+                                         ($target[contains(@class, $classval)])[1]/abstract[contains(@class, ' topic/abstract ')]/shortdesc[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
           </shortdesc>
         </xsl:if>
       </xsl:when>
       <!--try retrieving from the first topic in another file-->
       <xsl:when test="$topicpos='firstinfile'">
         <xsl:if
-            test="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/shortdesc ')]|
-                  ($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
+            test="($doc//topic[contains(@class, ' topic/topic ')])[1]/shortdesc[contains(@class, ' topic/shortdesc ')]|
+                  ($doc//topic[contains(@class, ' topic/topic ')])[1]/abstract[contains(@class, ' topic/abstract ')]/shortdesc[contains(@class, ' topic/shortdesc ')]">
           <xsl:apply-templates select="." mode="mappull:add-genshortdesc-PI"/>
           <shortdesc class="- map/shortdesc ">
             <xsl:apply-templates
-              select="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/shortdesc ')]|
-                      ($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]"
+              select="($doc//topic[contains(@class, ' topic/topic ')])[1]/shortdesc[contains(@class, ' topic/shortdesc ')]|
+                      ($doc//topic[contains(@class, ' topic/topic ')])[1]/abstract[contains(@class, ' topic/abstract ')]/shortdesc[contains(@class, ' topic/shortdesc ')]"
               mode="copy-shortdesc"/>
           </shortdesc>
         </xsl:if>
@@ -1043,7 +1043,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates
-          select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"
+          select="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]"
         />
       </xsl:otherwise>
     </xsl:choose>
@@ -1071,8 +1071,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:apply-templates>
     <!--metadata to be written - if we add logic at some point to pull metadata from topics into the map-->
     <xsl:apply-templates
-      select="*[contains(@class, ' map/topicmeta ')]/*[not(contains(@class, ' map/linktext '))][not(contains(@class, ' map/shortdesc '))][not(contains(@class, ' topic/navtitle '))]|
-      *[contains(@class, ' map/topicmeta ')]/processing-instruction()"
+      select="topicmeta[contains(@class, ' map/topicmeta ')]/*[not(contains(@class, ' map/linktext '))][not(contains(@class, ' map/shortdesc '))][not(contains(@class, ' topic/navtitle '))]|
+      topicmeta[contains(@class, ' map/topicmeta ')]/processing-instruction()"
     />
   </xsl:template>
 
@@ -1083,8 +1083,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <xsl:value-of select="@navtitle"/>
         <xsl:apply-templates select="." mode="ditamsg:no-linktext-using-fallback"/>
       </xsl:when>
-      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+      <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]">
+        <xsl:copy-of select="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]/node()"/>
         <xsl:apply-templates select="." mode="ditamsg:no-linktext-using-fallback"/>
       </xsl:when>
       <xsl:otherwise>
@@ -1113,7 +1113,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
  
   
   <!--following template is here to make sure topicmeta gets copied in cases where the topicref has no href (and therefore the getstuff template isn't called-->
-  <xsl:template match="*[contains(@class, ' map/topicref ')]/*[contains(@class, ' map/topicmeta ')]">
+  <xsl:template match="topicref[contains(@class, ' map/topicref ')]/topicmeta[contains(@class, ' map/topicmeta ')]">
     <!--<xsl:variable name="format">
       <xsl:for-each select="parent::*">
         <xsl:call-template name="inherit"><xsl:with-param name="attrib">format</xsl:with-param></xsl:call-template>
@@ -1133,13 +1133,13 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:copy><xsl:apply-templates select="@*|*|comment()|processing-instruction()"/></xsl:copy>
     </xsl:if>
   </xsl:template>
-  <xsl:template match="*[contains(@class,' map/map ')]">
+  <xsl:template match="map[contains(@class, ' map/map ')]">
     <xsl:copy>
       <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()"/>
     </xsl:copy>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' topic/xref ')]"
+  <xsl:template match="xref[contains(@class, ' topic/xref ')]"
     mode="copy-shortdesc">
     <xsl:choose>
       <xsl:when
@@ -1178,9 +1178,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
   </xsl:template>
 
 
-  <xsl:template match="*[contains(@class,' topic/shortdesc ')]"
+  <xsl:template match="shortdesc[contains(@class, ' topic/shortdesc ')]"
     mode="copy-shortdesc">
-    <xsl:if test="preceding-sibling::*[contains(@class,' topic/shortdesc ')]">
+    <xsl:if test="preceding-sibling::shortdesc[contains(@class, ' topic/shortdesc ')]">
       <!-- In an abstract, and this is not the first -->
       <xsl:text> </xsl:text>
     </xsl:if>
@@ -1189,7 +1189,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
   
   <xsl:template match="@id" mode="copy-shortdesc" />
   
-  <xsl:template match="*[contains(@class,' topic/indexterm ')]"
+  <xsl:template match="indexterm[contains(@class, ' topic/indexterm ')]"
     mode="copy-shortdesc" />
   
   <xsl:template match="*|@*|comment()|processing-instruction()" mode="copy-shortdesc">
@@ -1299,7 +1299,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/draft-comment ')]" mode="copy-shortdesc"/>
+  <xsl:template match="draft-comment[contains(@class, ' topic/draft-comment ')]" mode="copy-shortdesc"/>
 
   <!-- Added for RFE 1367897 -->
   <xsl:template match="*" mode="mappull:add-gentext-PI" as="processing-instruction()">
@@ -1317,12 +1317,12 @@ Other modes can be found within the code, and may or may not prove useful for ov
   </xsl:template>
  
   <!-- Added on 20110125 for bug:Navtitle Construction Does not Preserve Markup - ID: 3157890  start -->
-  <xsl:template match="*[contains(@class,' topic/title ')]|*[contains(@class, ' topic/navtitle ')]" mode="get-title-content">    
+  <xsl:template match="title[contains(@class, ' topic/title ')]|navtitle[contains(@class, ' topic/navtitle ')]" mode="get-title-content">    
     <xsl:apply-templates select="*|comment()|processing-instruction()|text()" />  
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' topic/title ')]//text() |
-                       *[contains(@class,' topic/navtitle ')]//text()" >
+  <xsl:template match="title[contains(@class, ' topic/title ')]//text() |
+                       navtitle[contains(@class, ' topic/navtitle ')]//text()" >
     <xsl:if test="not(normalize-space(substring(., 1, 1)))">
       <xsl:text> </xsl:text>
     </xsl:if>

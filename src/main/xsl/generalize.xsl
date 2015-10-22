@@ -55,7 +55,7 @@
           </xsl:element>
      </xsl:template>
      
-     <xsl:template match="*[contains(@class,' topic/object ')]|@*|text()|comment()|processing-instruction()" mode="generalize-foreign-unknown">
+     <xsl:template match="object[contains(@class, ' topic/object ')]|@*|text()|comment()|processing-instruction()" mode="generalize-foreign-unknown">
           <xsl:copy>
                <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()"/>
           </xsl:copy>
@@ -68,7 +68,7 @@
           <!-- find out the subsidiary result file name that need to be generated. -->
           <xsl:variable name="filename">
                <xsl:text>dita-generalized-</xsl:text>
-               <xsl:value-of select="ancestor::*[contains(@class,' topic/topic ')][1]/@id"/>
+               <xsl:value-of select="ancestor::topic[contains(@class, ' topic/topic ')][1]/@id"/>
                <xsl:text>-</xsl:text>
                <xsl:value-of select="concat($spec-type,generate-id(.))"/>
                <xsl:text>.xml</xsl:text>

@@ -21,13 +21,13 @@
     doctype-system="http://java.sun.com/products/javahelp/helpset_1_0.dtd"
     indent="yes"/>
 
-  <xsl:template match="*[contains(@class, ' map/map ')]">
+  <xsl:template match="map[contains(@class, ' map/map ')]">
 
     <helpset version="2.0">
       <title>
         <xsl:choose>
-          <xsl:when test="*[contains(@class,' topic/title ')]">
-            <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
+          <xsl:when test="title[contains(@class, ' topic/title ')]">
+            <xsl:value-of select="title[contains(@class, ' topic/title ')]"/>
           </xsl:when>
           <xsl:when test="@title">
             <xsl:value-of select="@title"/>

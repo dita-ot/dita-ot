@@ -36,9 +36,9 @@
   <xsl:output indent="yes"/>
   <xsl:strip-space elements="*"/>
   
-  <xsl:key name="link" match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]" use="concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,normalize-space(child::*[1]))"/>
-  <xsl:key name="linkdup" match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])][not(@role='child' or @role='parent' or @role='previous' or @role='next' or @role='ancestor' or @role='descendant')]" use="concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href)"/>
-  <xsl:key name="hideduplicates" match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])][not(@role) or @role='cousin' or @role='external' or @role='friend' or @role='other' or @role='sample' or @role='sibling']" use="concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ',@href,@scope,@audience,@platform,@product,@otherprops,@rev,@type,normalize-space(child::*[1]))"/>
+  <xsl:key name="link" match="link[contains(@class, ' topic/link ')][not(ancestor::linklist[contains(@class, ' topic/linklist ')])]" use="concat(ancestor::related-links[contains(@class, ' topic/related-links ')]/parent::topic[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,normalize-space(child::*[1]))"/>
+  <xsl:key name="linkdup" match="link[contains(@class, ' topic/link ')][not(ancestor::linklist[contains(@class, ' topic/linklist ')])][not(@role='child' or @role='parent' or @role='previous' or @role='next' or @role='ancestor' or @role='descendant')]" use="concat(ancestor::related-links[contains(@class, ' topic/related-links ')]/parent::topic[contains(@class, ' topic/topic ')]/@id, ' ', @href)"/>
+  <xsl:key name="hideduplicates" match="link[contains(@class, ' topic/link ')][not(ancestor::linklist[contains(@class, ' topic/linklist ')])][not(@role) or @role='cousin' or @role='external' or @role='friend' or @role='other' or @role='sample' or @role='sibling']" use="concat(ancestor::related-links[contains(@class, ' topic/related-links ')]/parent::topic[contains(@class, ' topic/topic ')]/@id, ' ',@href,@scope,@audience,@platform,@product,@otherprops,@rev,@type,normalize-space(child::*[1]))"/>
   
   <!-- ========== Hooks for common user customizations ============== -->
   <!-- The following two templates are available for anybody who needs
@@ -60,7 +60,7 @@
   <xsl:template match="*" mode="related-links:unordered.child.prefix"/>
   
   <!-- xref tag -->
-  <xsl:template match="*[contains(@class,' topic/xref ')]">
+  <xsl:template match="xref[contains(@class, ' topic/xref ')]">
     <xsl:variable name="samefile" as="xs:boolean">
       <xsl:call-template name="check_file_location"/>
     </xsl:variable>
@@ -75,9 +75,9 @@
         <!-- element id -->
         <xsl:variable name="elementId" select="substring-after(@href, '/')"/>
         <!-- get footnote text -->
-        <xsl:variable name="fntext" select="//*[contains(@class, ' topic/topic ')]
+        <xsl:variable name="fntext" select="//topic[contains(@class, ' topic/topic ')]
                                                [@id = $topicId]
-                                               //*[contains(@class, ' topic/fn ')]
+                                               //fn[contains(@class, ' topic/fn ')]
                                                   [@id = $elementId]/text()"/>
         <xsl:variable name="fnNumber">
           <xsl:choose>
@@ -123,7 +123,7 @@
               </xsl:choose>
               <xsl:call-template name="gen-linktxt"/>
               <xsl:if test="contains(@class,' topic/link ')">
-                <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
+                <xsl:apply-templates select="desc[contains(@class, ' topic/desc ')]"/>
                 <text:line-break/>
               </xsl:if>
             </text:a>
@@ -140,10 +140,10 @@
   </xsl:template>
   
   <!-- ignore desc tag under xref or link -->
-  <xsl:template match="*[contains(@class,' topic/xref ') or contains(@class, ' topic/link ')]/*[contains(@class,' topic/desc ')]" priority="1"/>
+  <xsl:template match="*[contains(@class,' topic/xref ') or contains(@class, ' topic/link ')]/desc[contains(@class, ' topic/desc ')]" priority="1"/>
   
   <!--create breadcrumbs for each grouping of ancestor links; include previous, next, and ancestor links, sorted by linkpool/related-links parent. If there is more than one linkpool that contains ancestors, multiple breadcrumb trails will be generated-->
-  <xsl:template match="*[contains(@class,' topic/related-links ')]" mode="breadcrumb">
+  <xsl:template match="related-links[contains(@class, ' topic/related-links ')]" mode="breadcrumb">
     <xsl:for-each select="descendant-or-self::*[contains(@class,' topic/related-links ') or contains(@class,' topic/linkpool ')][child::*[@role='ancestor']]">
       <text:p>
         <xsl:choose>
@@ -182,9 +182,9 @@
   <!-- Omit prereq links from unordered related-links (handled by mode="prereqs" template). -->
   <xsl:key name="omit-from-unordered-links" match="*[@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin')]" use="1"/>
   
-  <xsl:template match="*[contains(@class,' topic/related-links ')]" mode="prereqs">
+  <xsl:template match="related-links[contains(@class, ' topic/related-links ')]" mode="prereqs">
     <!--if there are any prereqs create a list with dups-->
-    <xsl:if test="descendant::*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])][@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='previous' or @role='cousin')]">
+    <xsl:if test="descendant::link[contains(@class, ' topic/link ')][not(ancestor::linklist[contains(@class, ' topic/linklist ')])][@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='previous' or @role='cousin')]">
       <text:p>
         <text:span text:style-name="default_text_style">
           <xsl:call-template name="getVariable">
@@ -193,11 +193,11 @@
         </text:span>
       </text:p>
       <!--only create link if there is an href, its importance is required, and the role is compatible (don't want a prereq showing up for a "next" or "parent" link, for example) - remove dups-->
-      <xsl:apply-templates mode="prereqs" select="descendant::*[generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]         [@href]         [@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='previous' or @role='cousin')]         [not(ancestor::*[contains(@class, ' topic/linklist ')])]"/>
+      <xsl:apply-templates mode="prereqs" select="descendant::*[generate-id(.)=generate-id(key('link',concat(ancestor::related-links[contains(@class, ' topic/related-links ')]/parent::topic[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]         [@href]         [@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='previous' or @role='cousin')]         [not(ancestor::linklist[contains(@class, ' topic/linklist ')])]"/>
     </xsl:if>
   </xsl:template>
   
-  <xsl:template mode="prereqs" match="*[contains(@class, ' topic/link ')]" priority="2">
+  <xsl:template mode="prereqs" match="link[contains(@class, ' topic/link ')]" priority="2">
     <!-- Allow for unknown metadata (future-proofing) -->
     <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
     <xsl:variable name="samefile" as="xs:boolean">
@@ -214,7 +214,7 @@
     </text:p>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' topic/linkinfo ')]" name="topic.linkinfo">
+  <xsl:template match="linkinfo[contains(@class, ' topic/linkinfo ')]" name="topic.linkinfo">
     <!-- 
     <xsl:element name="text:line-break"/>
     <xsl:element name="text:span">
@@ -228,13 +228,13 @@
     </text:list-item>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' topic/linklist ')]">
+  <xsl:template match="linklist[contains(@class, ' topic/linklist ')]">
     <text:list>
       <xsl:apply-templates/>
     </text:list>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' topic/linklist ')]/*[contains(@class, ' topic/title ')]" name="topic.linklist_title">
+  <xsl:template match="linklist[contains(@class, ' topic/linklist ')]/title[contains(@class, ' topic/title ')]" name="topic.linklist_title">
     <text:list-item>
       <text:p>
         <xsl:apply-templates/>
@@ -242,7 +242,7 @@
     </text:list-item>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' topic/linklist ')]/*[contains(@class, ' topic/desc ')]" name="topic.linklist_desc" priority="2">
+  <xsl:template match="linklist[contains(@class, ' topic/linklist ')]/desc[contains(@class, ' topic/desc ')]" name="topic.linklist_desc" priority="2">
     <text:list-item>
       <text:p>
         <xsl:apply-templates/>
@@ -252,7 +252,7 @@
 
   <!-- related-links -->
   <!--main template for setting up all links after the body - applied to the related-links container-->
-  <xsl:template match="*[contains(@class,' topic/related-links ')]" name="topic.related-links">
+  <xsl:template match="related-links[contains(@class, ' topic/related-links ')]" name="topic.related-links">
     <xsl:if test="normalize-space($includeRelatedLinkRoles)">
       <text:list text:style-name="list_style_without_bullet">
         <text:list-item>
@@ -271,12 +271,12 @@
           transform types, and is located in ../common/related-links.xsl. Actual code for
           creating group titles and formatting links is located in XSL files specific to each type. -->
         <xsl:apply-templates select="." mode="related-links:group-unordered-links">
-          <xsl:with-param name="nodes" select="descendant::*[contains(@class, ' topic/link ')]
+          <xsl:with-param name="nodes" select="descendant::link[contains(@class, ' topic/link ')]
             [count(. | key('omit-from-unordered-links', 1)) != count(key('omit-from-unordered-links', 1))]
-            [generate-id(.)=generate-id((key('hideduplicates', concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ',@href,@scope,@audience,@platform,@product,@otherprops,@rev,@type,normalize-space(child::*[1]))))[1])]"/>
+            [generate-id(.)=generate-id((key('hideduplicates', concat(ancestor::related-links[contains(@class, ' topic/related-links ')]/parent::topic[contains(@class, ' topic/topic ')]/@id, ' ',@href,@scope,@audience,@platform,@product,@otherprops,@rev,@type,normalize-space(child::*[1]))))[1])]"/>
         </xsl:apply-templates>  
           <!--linklists - last but not least, create all the linklists and their links, with no sorting or re-ordering-->
-        <xsl:apply-templates select="*[contains(@class,' topic/linklist ')]"/>
+        <xsl:apply-templates select="linklist[contains(@class, ' topic/linklist ')]"/>
         </text:list-item>
       </text:list>
     </xsl:if>
@@ -285,15 +285,15 @@
   <!--children links - handle all child or descendant links except those in linklists or ordered collection-types.
     Each child is indented, the linktext is bold, and the shortdesc appears in normal text directly below the link, to create a summary-like appearance.-->
   <xsl:template name="ul-child-links">
-    <xsl:if test="descendant::*[contains(@class, ' topic/link ')][@role='child' or @role='descendant'][not(parent::*/@collection-type='sequence')][not(ancestor::*[contains(@class, ' topic/linklist ')])]">
+    <xsl:if test="descendant::link[contains(@class, ' topic/link ')][@role='child' or @role='descendant'][not(parent::*/@collection-type='sequence')][not(ancestor::linklist[contains(@class, ' topic/linklist ')])]">
       <text:line-break/>
         <!--once you've tested that at least one child/descendant exists, apply templates to only the unique ones-->
         <xsl:apply-templates select="descendant::*
-          [generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
+          [generate-id(.)=generate-id(key('link',concat(ancestor::related-links[contains(@class, ' topic/related-links ')]/parent::topic[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
           [contains(@class, ' topic/link ')]
           [@role='child' or @role='descendant']
           [not(parent::*/@collection-type='sequence')]
-          [not(ancestor::*[contains(@class, ' topic/linklist ')])]"/>
+          [not(ancestor::linklist[contains(@class, ' topic/linklist ')])]"/>
     </xsl:if>
   </xsl:template>
   
@@ -301,15 +301,15 @@
     Children are displayed in a numbered list, with the target title as the cmd and the shortdesc as info, like a task.
   -->
   <xsl:template name="ol-child-links">
-    <xsl:if test="descendant::*[contains(@class, ' topic/link ')][@role='child' or @role='descendant'][parent::*/@collection-type='sequence'][not(ancestor::*[contains(@class, ' topic/linklist ')])]">
+    <xsl:if test="descendant::link[contains(@class, ' topic/link ')][@role='child' or @role='descendant'][parent::*/@collection-type='sequence'][not(ancestor::linklist[contains(@class, ' topic/linklist ')])]">
       <text:list text:style-name="ordered_list_style">
         <!--once you've tested that at least one child/descendant exists, apply templates to only the unique ones-->
         <xsl:apply-templates select="descendant::*
-          [generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
+          [generate-id(.)=generate-id(key('link',concat(ancestor::related-links[contains(@class, ' topic/related-links ')]/parent::topic[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
           [contains(@class, ' topic/link ')]
           [@role='child' or @role='descendant']
           [parent::*/@collection-type='sequence']
-          [not(ancestor-or-self::*[contains(@class, ' topic/linklist ')])]"/>
+          [not(ancestor-or-self::linklist[contains(@class, ' topic/linklist ')])]"/>
       </text:list>
     </xsl:if>
   </xsl:template>
@@ -332,8 +332,8 @@
       </xsl:when>
       <xsl:when test="contains(@class,' topic/link ')">
         <xsl:choose>
-          <xsl:when test="*[contains(@class,' topic/linktext ')]">
-            <xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
+          <xsl:when test="linktext[contains(@class, ' topic/linktext ')]">
+            <xsl:value-of select="linktext[contains(@class, ' topic/linktext ')]"/>
           </xsl:when>
           <xsl:when test="text()">
             <xsl:value-of select="text()"/>
@@ -347,7 +347,7 @@
   </xsl:template>
   
   <!--Get Related Information for topic type-->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='topic']" priority="1">
+  <xsl:template match="link[contains(@class, ' topic/link ')][@type='topic']" priority="1">
     <xsl:param name="links"/>
     <xsl:variable name="samefile" as="xs:boolean">
       <xsl:call-template name="check_file_location"/>
@@ -371,7 +371,7 @@
   </xsl:template>
   
   <!--Get Related Information for topic type-->
-  <xsl:template match="*[contains(@class, ' topic/link ')]" priority="0">
+  <xsl:template match="link[contains(@class, ' topic/link ')]" priority="0">
     <xsl:param name="links"/>
     <xsl:variable name="samefile" as="xs:boolean">
       <xsl:call-template name="check_file_location"/>
@@ -380,7 +380,7 @@
       <xsl:call-template name="format_href_value"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/linklist ')]">
+      <xsl:when test="parent::linklist[contains(@class, ' topic/linklist ')]">
         <text:list-item>
           <text:p>
             <xsl:call-template name="create_related_links">
@@ -450,7 +450,7 @@
           </xsl:choose>
           <xsl:call-template name="gen-linktxt"/>
           <xsl:if test="contains(@class,' topic/link ')">
-            <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
+            <xsl:apply-templates select="desc[contains(@class, ' topic/desc ')]"/>
             <text:line-break/>
           </xsl:if>
         </text:a>

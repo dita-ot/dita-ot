@@ -20,7 +20,7 @@
     </fo:root>
   </xsl:template>
   
-  <xsl:template match="document-node()[*[contains(@class, ' topic/topic ')]]">
+  <xsl:template match="document-node()[topic[contains(@class, ' topic/topic ')]]">
     <fo:root xsl:use-attribute-sets="__fo__root">
       <xsl:call-template name="createLayoutMasters"/>
       <xsl:call-template name="createMetadata"/>

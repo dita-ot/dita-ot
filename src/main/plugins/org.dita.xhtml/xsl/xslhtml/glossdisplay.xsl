@@ -4,17 +4,17 @@
     exclude-result-prefixes="related-links">
 
     <!-- Glossary entries belong in the group with concepts. -->
-    <xsl:template match="*[contains(@class, ' topic/link ')][@type='glossentry']" mode="related-links:get-group" name="related-links:group.glossentry">
+    <xsl:template match="link[contains(@class, ' topic/link ')][@type='glossentry']" mode="related-links:get-group" name="related-links:group.glossentry">
         <xsl:call-template name="related-links:group.concept"/>
     </xsl:template>
     
     <!-- Priority of glossary group is same as concept group. -->
-    <xsl:template match="*[contains(@class, ' topic/link ')][@type='glossentry']" mode="related-links:get-group-priority" name="related-links:group-priority.glossentry">
+    <xsl:template match="link[contains(@class, ' topic/link ')][@type='glossentry']" mode="related-links:get-group-priority" name="related-links:group-priority.glossentry">
         <xsl:call-template name="related-links:group-priority.concept"/>
     </xsl:template>
     
     <!-- Wrapper for glossentry (concept) group: "Related concepts" in a <div>. -->
-    <xsl:template match="*[contains(@class, ' topic/link ')][@type='glossentry']" mode="related-links:result-group" name="related-links:result.glossentry">
+    <xsl:template match="link[contains(@class, ' topic/link ')][@type='glossentry']" mode="related-links:result-group" name="related-links:result.glossentry">
         <xsl:param name="links"/>
         <xsl:call-template name="related-links:result.concept">
           <xsl:with-param name="links" select="$links"/>

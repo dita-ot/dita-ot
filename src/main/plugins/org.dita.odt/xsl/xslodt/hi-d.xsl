@@ -35,21 +35,21 @@
 
   <xsl:template match="*[contains(@class,' hi-d/b ')]">
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
         <text:p>
           <xsl:apply-templates/>
         </text:p>
       </xsl:when>
       <!-- nested by entry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- alignment styles -->
-        <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+        <xsl:if test="parent::entry[contains(@class, ' topic/entry ')]/@align">
           <xsl:call-template name="set_align_value"/>
         </xsl:if>
         <xsl:apply-templates/>
       </xsl:when>
       <!-- nested by stentry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <text:p>
           <xsl:apply-templates/>
         </text:p>
@@ -72,23 +72,23 @@
   <xsl:template match="*[contains(@class,' hi-d/i ')]">
 
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
         <text:p>
           <xsl:apply-templates/>
         </text:p>
       </xsl:when>
       <!-- nested by entry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
         <text:p>
           <!-- alignment styles -->
-          <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+          <xsl:if test="parent::entry[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-                              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+            <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]
+                              /parent::row[contains(@class, ' topic/row ')]/parent::thead[contains(@class, ' topic/thead ')]">
               <text:span text:style-name="bold">
 
                 <xsl:apply-templates/>
@@ -101,12 +101,12 @@
         </text:p>
       </xsl:when>
       <!-- nested by stentry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
-                              parent::*[contains(@class, ' topic/sthead ')]">
+            <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]/
+                              parent::sthead[contains(@class, ' topic/sthead ')]">
               <text:span text:style-name="bold">
 
                 <xsl:apply-templates/>
@@ -133,23 +133,23 @@
 
   <xsl:template match="*[contains(@class,' hi-d/u ')]">
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
         <text:p>
           <xsl:apply-templates/>
         </text:p>
       </xsl:when>
       <!-- nested by entry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
         <text:p>
           <!-- alignment styles -->
-          <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+          <xsl:if test="parent::entry[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-                              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+            <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]
+                              /parent::row[contains(@class, ' topic/row ')]/parent::thead[contains(@class, ' topic/thead ')]">
               <text:span text:style-name="bold">
                 <xsl:apply-templates/>
               </text:span>
@@ -161,12 +161,12 @@
         </text:p>
       </xsl:when>
       <!-- nested by stentry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
-                              parent::*[contains(@class, ' topic/sthead ')]">
+            <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]/
+                              parent::sthead[contains(@class, ' topic/sthead ')]">
               <text:span text:style-name="bold">
                 <xsl:apply-templates/>
               </text:span>
@@ -193,7 +193,7 @@
 
   <xsl:template match="*[contains(@class,' hi-d/tt ')]">
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
         <text:p>
           <text:span text:style-name="Courier">
             <xsl:apply-templates/>
@@ -201,11 +201,11 @@
         </text:p>
       </xsl:when>
       <!-- nested by entry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
         <text:p>
           <!-- alignment styles -->
-          <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+          <xsl:if test="parent::entry[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <text:span text:style-name="Courier">
@@ -214,7 +214,7 @@
         </text:p>
       </xsl:when>
       <!-- nested by stentry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <text:p>
           <text:span text:style-name="Courier">
             <xsl:apply-templates/>
@@ -232,22 +232,22 @@
 
   <xsl:template match="*[contains(@class,' hi-d/sup ')]">
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
         <text:p>
           <xsl:apply-templates/>
         </text:p>
       </xsl:when>
       <!-- nested by entry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
         <text:p>
           <!-- alignment styles -->
-          <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+          <xsl:if test="parent::entry[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]                               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+            <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]                               /parent::row[contains(@class, ' topic/row ')]/parent::thead[contains(@class, ' topic/thead ')]">
               <text:span text:style-name="bold">
                 <xsl:apply-templates/>
               </text:span>
@@ -259,11 +259,11 @@
         </text:p>
       </xsl:when>
       <!-- nested by stentry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/                               parent::*[contains(@class, ' topic/sthead ')]">
+            <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]/                               parent::sthead[contains(@class, ' topic/sthead ')]">
               <text:span text:style-name="bold">
                 <xsl:apply-templates/>
               </text:span>
@@ -289,22 +289,22 @@
 
   <xsl:template match="*[contains(@class,' hi-d/sub ')]">
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
         <text:p>
           <xsl:apply-templates/>
         </text:p>
       </xsl:when>
       <!-- nested by entry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
         <text:p>
           <!-- alignment styles -->
-          <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+          <xsl:if test="parent::entry[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]                               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+            <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]                               /parent::row[contains(@class, ' topic/row ')]/parent::thead[contains(@class, ' topic/thead ')]">
               <text:span text:style-name="bold">
                 <xsl:apply-templates/>
               </text:span>
@@ -316,11 +316,11 @@
         </text:p>
       </xsl:when>
       <!-- nested by stentry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/                               parent::*[contains(@class, ' topic/sthead ')]">
+            <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]/                               parent::sthead[contains(@class, ' topic/sthead ')]">
               <text:span text:style-name="bold">
                 <xsl:apply-templates/>
               </text:span>
@@ -344,7 +344,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="text()|*[contains(@class, ' topic/state ')]" mode="create_hi_style">
+  <xsl:template match="text()|state[contains(@class, ' topic/state ')]" mode="create_hi_style">
     <!-- generating style name based on the styles used on the text. -->
     <xsl:variable name="style_name">
       <xsl:call-template name="get_style_name"/>
@@ -517,7 +517,7 @@
   </xsl:template>
 
   <xsl:template name="get_style_name">
-    <xsl:if test="ancestor::*[contains(@class, ' hi-d/i ')] | ancestor::*[contains(@class, ' topic/term ')] |            ancestor::*[contains(@class, ' topic/cite ')]">
+    <xsl:if test="ancestor::*[contains(@class, ' hi-d/i ')] | ancestor::term[contains(@class, ' topic/term ')] |            ancestor::cite[contains(@class, ' topic/cite ')]">
       <xsl:value-of select="'italic'"/>
     </xsl:if>
     <xsl:if test="ancestor::*[contains(@class, ' hi-d/u ')]">

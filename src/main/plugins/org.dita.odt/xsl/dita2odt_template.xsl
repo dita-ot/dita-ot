@@ -164,10 +164,10 @@
     <!--xsl:call-template name="gen-list-table"/-->
     <office:scripts/>
     <office:automatic-styles>
-      <xsl:if test="//*[contains(@class, ' topic/table ')]|//*[contains(@class, ' topic/simpletable ')]">
+      <xsl:if test="//table[contains(@class, ' topic/table ')]|//simpletable[contains(@class, ' topic/simpletable ')]">
         <xsl:call-template name="create_table_cell_styles"/>
       </xsl:if>
-      <xsl:apply-templates select="//text()|//*[contains(@class, ' topic/state ')]" mode="create_hi_style"/>
+      <xsl:apply-templates select="//text()|//state[contains(@class, ' topic/state ')]" mode="create_hi_style"/>
       <xsl:call-template name="create_flagging_styles"/>
     </office:automatic-styles>
     <office:body>

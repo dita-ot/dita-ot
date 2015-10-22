@@ -67,16 +67,16 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:text> </xsl:text>
   </xsl:variable>
 
-    <xsl:template match="*[contains(@class,' topic/topic ')]" mode="index-entries">
-        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
+    <xsl:template match="topic[contains(@class, ' topic/topic ')]" mode="index-entries">
+        <xsl:variable name="id" select="ancestor-or-self::topic[contains(@class, ' topic/topic ')][1]/@id"/>
         <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]"/>
         <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
             <xsl:apply-templates mode="index-entries"/>
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/topic ')]" mode="index-postprocess">
-        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
+    <xsl:template match="topic[contains(@class, ' topic/topic ')]" mode="index-postprocess">
+        <xsl:variable name="id" select="ancestor-or-self::topic[contains(@class, ' topic/topic ')][1]/@id"/>
         <xsl:variable name="mapTopicref" select="key('map-id', $id)[1]"/>
         <xsl:if test="not(contains($mapTopicref/@otherprops, 'noindex'))">
             <xsl:apply-templates mode="index-entries"/>
@@ -100,7 +100,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates mode="index-entries"/>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' topic/indexterm ')]">
+    <xsl:template match="indexterm[contains(@class, ' topic/indexterm ')]">
     <xsl:apply-templates/>
   </xsl:template>
 
@@ -121,7 +121,7 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:variable name="followingMarker" select="$followingMarkers[@end-range='true'][1]"/>
           <xsl:variable name="followingStartMarker" select="$followingMarkers[@start-range='true'][1]"/>
           <xsl:choose>
-              <xsl:when test="not($followingMarker)and empty(ancestor-or-self::*[contains(@class, ' topic/prolog ')])">
+              <xsl:when test="not($followingMarker)and empty(ancestor-or-self::prolog[contains(@class, ' topic/prolog ')])">
                 <xsl:call-template name="output-message">
                   <xsl:with-param name="msgnum">001</xsl:with-param>
                   <xsl:with-param name="msgsev">W</xsl:with-param>
@@ -512,7 +512,7 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')]">
                         <xsl:apply-templates select="/" mode="index-postprocess"/>
                     </xsl:when>
-                    <xsl:when test="/*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                    <xsl:when test="/map[contains(@class, ' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                         <xsl:apply-templates select="/" mode="index-postprocess"/>
                     </xsl:when>
                 </xsl:choose>

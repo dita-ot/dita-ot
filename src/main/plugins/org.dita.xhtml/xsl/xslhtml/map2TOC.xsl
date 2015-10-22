@@ -12,18 +12,18 @@
 <!-- stylesheet imports -->
 <xsl:import href="mapwalker.xsl"/>
 
-<xsl:template match="*[contains(@class,' map/map ')]">
+<xsl:template match="map[contains(@class, ' map/map ')]">
   <xsl:apply-templates select="." mode="toctop"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' map/topicref ')]" mode="process">
+<xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="process">
   <xsl:param name="infile"/>
   <xsl:param name="outroot"/>
   <xsl:param name="outfile"/>
   <xsl:param name="nodeID"/>
   <xsl:param name="isFirst"/>
   <xsl:variable name="subtopicNodes"
-      select="*[contains(@class,' map/topicref ')]"/>
+      select="topicref[contains(@class, ' map/topicref ')]"/>
   <xsl:variable name="title">
     <xsl:apply-templates select="." mode="title">
       <xsl:with-param name="isFirst" select="$isFirst"/>
@@ -44,13 +44,13 @@
 </xsl:template>
 
 <!-- required overrides -->
-<xsl:template match="*[contains(@class,' map/map ')]" mode="toctop">
+<xsl:template match="map[contains(@class, ' map/map ')]" mode="toctop">
   <xsl:message terminate="yes">
     <xsl:text>no toctop rule for map</xsl:text>
   </xsl:message>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' map/topicref ')]" mode="tocentry">
+<xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="tocentry">
   <xsl:param name="infile"/>
   <xsl:param name="outroot"/>
   <xsl:param name="outfile"/>
@@ -64,7 +64,7 @@
 </xsl:template>
 
 <!-- topic title -->
-<xsl:template match="*[contains(@class,' map/topicref ')]" mode="title">
+<xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="title">
   <xsl:param name="isFirst"/>
   <xsl:param name="infile"/>
   <xsl:param name="nodeID"/>

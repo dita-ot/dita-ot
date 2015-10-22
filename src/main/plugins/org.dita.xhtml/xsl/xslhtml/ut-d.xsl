@@ -23,7 +23,7 @@
       <!-- Border attribute defaults to 0 -->
       <xsl:apply-templates select="." mode="imagemap-border-attribute"/>
       <!-- Process the 'normal' image attributes, using this special mode -->
-      <xsl:apply-templates select="*[contains(@class,' topic/image ')]" mode="imagemap-image"/>
+      <xsl:apply-templates select="image[contains(@class, ' topic/image ')]" mode="imagemap-image"/>
     </img>
     <xsl:value-of select="$newline"/>
 
@@ -35,9 +35,9 @@
 
           <!-- if no xref/@href - error -->
           <xsl:choose>
-            <xsl:when test="*[contains(@class,' topic/xref ')]/@href">
+            <xsl:when test="xref[contains(@class, ' topic/xref ')]/@href">
               <!-- special call to have the XREF/@HREF processor do the work -->
-              <xsl:apply-templates select="*[contains(@class, ' topic/xref ')]" mode="imagemap-xref"/>
+              <xsl:apply-templates select="xref[contains(@class, ' topic/xref ')]" mode="imagemap-xref"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="." mode="ditamsg:area-element-without-href-target"/>
@@ -47,8 +47,8 @@
           <!-- create ALT text from XREF content-->
           <!-- if no XREF content, use @HREF, & put out a warning -->
           <xsl:choose>
-            <xsl:when test="*[contains(@class, ' topic/xref ')]">
-              <xsl:variable name="alttext"><xsl:apply-templates select="*[contains(@class, ' topic/xref ')]/node()[not(contains(@class, ' topic/desc '))]" mode="text-only"/></xsl:variable>
+            <xsl:when test="xref[contains(@class, ' topic/xref ')]">
+              <xsl:variable name="alttext"><xsl:apply-templates select="xref[contains(@class, ' topic/xref ')]/node()[not(contains(@class, ' topic/desc '))]" mode="text-only"/></xsl:variable>
               <xsl:attribute name="alt"><xsl:value-of select="normalize-space($alttext)"/></xsl:attribute>
               <xsl:attribute name="title"><xsl:value-of select="normalize-space($alttext)"/></xsl:attribute>
             </xsl:when>
@@ -100,21 +100,21 @@
 </xsl:template>
 
 <!-- In the context of IMAGE - call these attribute processors -->
-<xsl:template match="*[contains(@class, ' topic/image ')]" mode="imagemap-image">
+<xsl:template match="image[contains(@class, ' topic/image ')]" mode="imagemap-image">
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setid"/>
   <xsl:apply-templates select="@href|@height|@width"/>
   <xsl:choose>
-    <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
-      <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
+    <xsl:when test="longdescref[contains(@class, ' topic/longdescref ')]">
+      <xsl:apply-templates select="longdescref[contains(@class, ' topic/longdescref ')]"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="@longdescref"/>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:choose>
-    <xsl:when test="*[contains(@class,' topic/alt ')]">
-      <xsl:attribute name="alt"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:attribute>
+    <xsl:when test="alt[contains(@class, ' topic/alt ')]">
+      <xsl:attribute name="alt"><xsl:apply-templates select="alt[contains(@class, ' topic/alt ')]" mode="text-only"/></xsl:attribute>
     </xsl:when>
     <xsl:when test="@alt">
       <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
@@ -123,7 +123,7 @@
 </xsl:template>
 
 <!-- In the context of XREF - call it's HREF processor -->
-<xsl:template match="*[contains(@class, ' topic/xref ')]" mode="imagemap-xref">
+<xsl:template match="xref[contains(@class, ' topic/xref ')]" mode="imagemap-xref">
  <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute>
  <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
   <xsl:attribute name="target">_blank</xsl:attribute>

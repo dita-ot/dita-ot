@@ -6,9 +6,9 @@
                 version="2.0"
                 exclude-result-prefixes="xs">
   
-  <xsl:template match="*[contains(@class, ' topic/table ')]" name="topic.table">
-    <xsl:variable name="colsep" select="(*[contains(@class, ' topic/tgroup ')]/@colsep, @colsep)[1]"/>
-    <xsl:variable name="rowsep" select="(*[contains(@class, ' topic/tgroup ')]/@rowsep, @rowsep)[1]"/>
+  <xsl:template match="table[contains(@class, ' topic/table ')]" name="topic.table">
+    <xsl:variable name="colsep" select="(tgroup[contains(@class, ' topic/tgroup ')]/@colsep, @colsep)[1]"/>
+    <xsl:variable name="rowsep" select="(tgroup[contains(@class, ' topic/tgroup ')]/@rowsep, @rowsep)[1]"/>
     <xsl:choose>
       <xsl:when test="@frame = 'all'">
         <div class="table-frame">
@@ -55,14 +55,14 @@
       <xsl:call-template name="setscale"/>
       <xsl:call-template name="place-tbl-lbl"/>
       <!-- title and desc are processed elsewhere -->
-      <xsl:apply-templates select="*[contains(@class, ' topic/tgroup ')]"/>
+      <xsl:apply-templates select="tgroup[contains(@class, ' topic/tgroup ')]"/>
     </table>
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' topic/table ')]" mode="get-output-class">
-    <xsl:variable name="colsep" select="(*[contains(@class, ' topic/tgroup ')]/@colsep, @colsep)[1]" as="xs:string?"/>
-    <xsl:variable name="rowsep" select="(*[contains(@class, ' topic/tgroup ')]/@rowsep, @rowsep)[1]" as="xs:string?"/>
+  <xsl:template match="table[contains(@class, ' topic/table ')]" mode="get-output-class">
+    <xsl:variable name="colsep" select="(tgroup[contains(@class, ' topic/tgroup ')]/@colsep, @colsep)[1]" as="xs:string?"/>
+    <xsl:variable name="rowsep" select="(tgroup[contains(@class, ' topic/tgroup ')]/@rowsep, @rowsep)[1]" as="xs:string?"/>
     <xsl:variable name="classes" as="xs:string*">
       <xsl:choose>
         <xsl:when test="@expanse = 'page' or @pgwide = '1'">expanse-page</xsl:when>

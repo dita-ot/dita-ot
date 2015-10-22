@@ -12,14 +12,14 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - TOPIC ORGANIZATION
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/topic ')]">
+<xsl:template match="topic[contains(@class, ' topic/topic ')]">
   <xsl:param name="childrefs"/>
   <xsl:param name="element" select="'section'"/>
   <xsl:element name="{$element}">
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'tpc'"/>
     </xsl:call-template>
-    <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]">
+    <xsl:apply-templates select="prolog[contains(@class, ' topic/prolog ')]">
       <xsl:with-param name="contextType" select="$element"/>
     </xsl:apply-templates>
     <xsl:apply-templates select="*[not(contains(@class,' topic/prolog '))]"/>
@@ -29,7 +29,7 @@
   </xsl:element>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/title ')]">
+<xsl:template match="title[contains(@class, ' topic/title ')]">
   <xsl:param name="element"  select="'title'"/>
   <xsl:param name="IDPrefix" select="'ttl'"/>
   <xsl:element name="{$element}">
@@ -40,12 +40,12 @@
   </xsl:element>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/titlealts ')]">
-  <xsl:apply-templates select="*[contains(@class,' topic/searchtitle ')]"/>
-  <xsl:apply-templates select="*[contains(@class,' topic/navtitle ')]"/>
+<xsl:template match="titlealts[contains(@class, ' topic/titlealts ')]">
+  <xsl:apply-templates select="searchtitle[contains(@class, ' topic/searchtitle ')]"/>
+  <xsl:apply-templates select="navtitle[contains(@class, ' topic/navtitle ')]"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/navtitle ')]">
+<xsl:template match="navtitle[contains(@class, ' topic/navtitle ')]">
   <xsl:param name="element"  select="'titleabbrev'"/>
   <xsl:param name="IDPrefix" select="'ttlabbrv'"/>
   <xsl:element name="{$element}">
@@ -56,7 +56,7 @@
   </xsl:element>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/searchtitle ')]">
+<xsl:template match="searchtitle[contains(@class, ' topic/searchtitle ')]">
   <xsl:param name="element"  select="'subtitle'"/>
   <xsl:param name="IDPrefix" select="'sbttl'"/>
   <xsl:element name="{$element}">
@@ -68,7 +68,7 @@
 </xsl:template>
 
 <!-- Added for DITA 1.1 "Shortdesc proposal" -->
-<xsl:template match="*[contains(@class,' topic/abstract ')]" mode="abstract">
+<xsl:template match="abstract[contains(@class, ' topic/abstract ')]" mode="abstract">
   <abstract>
     <xsl:call-template name="makePara">
       <xsl:with-param name="IDPrefix" select="'shrtdsc'"/>
@@ -77,13 +77,13 @@
 </xsl:template>
 
 <!-- Added for DITA 1.1 "Shortdesc proposal" -->
-<xsl:template match="*[contains(@class,' topic/abstract ')]">
+<xsl:template match="abstract[contains(@class, ' topic/abstract ')]">
   <xsl:call-template name="makePara">
     <xsl:with-param name="IDPrefix" select="'para'"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="abstract">
+<xsl:template match="shortdesc[contains(@class, ' topic/shortdesc ')]" mode="abstract">
   <abstract>
     <xsl:call-template name="makePara">
       <xsl:with-param name="IDPrefix" select="'shrtdsc'"/>
@@ -91,13 +91,13 @@
   </abstract>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+<xsl:template match="shortdesc[contains(@class, ' topic/shortdesc ')]">
   <xsl:call-template name="makePara">
     <xsl:with-param name="IDPrefix" select="'para'"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/body ')]">
+<xsl:template match="body[contains(@class, ' topic/body ')]">
   <xsl:apply-templates select="." mode="deflate">
     <xsl:with-param name="descendentsOkay" select="true()"/>
   </xsl:apply-templates>
@@ -107,7 +107,7 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - META INFORMATION
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/prolog ')]">
+<xsl:template match="prolog[contains(@class, ' topic/prolog ')]">
   <xsl:param name="contextType" select="'section'"/>
   <xsl:variable name="shortDescNode"
       select="../*[contains(@class,' topic/shortdesc ') or contains(@class, ' topic/abstract ')]"/>
@@ -141,7 +141,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/author ')]">
+<xsl:template match="author[contains(@class, ' topic/author ')]">
   <author>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'athr'"/>
@@ -153,9 +153,9 @@
 </xsl:template>
 
 <!-- to do -->
-<xsl:template match="*[contains(@class,' topic/source ')]"/>
+<xsl:template match="source[contains(@class, ' topic/source ')]"/>
 
-<xsl:template match="*[contains(@class,' topic/publisher ')]">
+<xsl:template match="publisher[contains(@class, ' topic/publisher ')]">
   <publisher>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'pblshr'"/>
@@ -167,7 +167,7 @@
   </publisher>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/copyright ')]">
+<xsl:template match="copyright[contains(@class, ' topic/copyright ')]">
   <copyright>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'cprght'"/>
@@ -176,7 +176,7 @@
   </copyright>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/copyrdate ')]">
+<xsl:template match="copyrdate[contains(@class, ' topic/copyrdate ')]">
   <year>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'cprdt'"/>
@@ -185,7 +185,7 @@
   </year>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/copyrholder ')]">
+<xsl:template match="copyrholder[contains(@class, ' topic/copyrholder ')]">
   <holder>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'cprhldr'"/>
@@ -195,7 +195,7 @@
 </xsl:template>
 
 <!-- dhjohnso: template added for missing year element -->
-<xsl:template match="*[contains(@class,' topic/copyryear ')]">
+<xsl:template match="copyryear[contains(@class, ' topic/copyryear ')]">
   <year>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'cpryear'"/>
@@ -204,7 +204,7 @@
   </year>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/critdates ')]">
+<xsl:template match="critdates[contains(@class, ' topic/critdates ')]">
   <revhistory>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'crtdts'"/>
@@ -213,20 +213,20 @@
   </revhistory>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/created ')]">
+<xsl:template match="created[contains(@class, ' topic/created ')]">
   <xsl:apply-templates select="@date|@expiry|@golive"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/revised ')]">
+<xsl:template match="revised[contains(@class, ' topic/revised ')]">
   <xsl:apply-templates select="@expiry|@golive|@modified"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/created ')]/@date |
-      *[contains(@class,' topic/created ')]/@expiry |
-      *[contains(@class,' topic/created ')]/@golive |
-      *[contains(@class,' topic/revised ')]/@expiry |
-      *[contains(@class,' topic/revised ')]/@golive |
-      *[contains(@class,' topic/revised ')]/@modified">
+<xsl:template match="created[contains(@class, ' topic/created ')]/@date |
+      created[contains(@class, ' topic/created ')]/@expiry |
+      created[contains(@class, ' topic/created ')]/@golive |
+      revised[contains(@class, ' topic/revised ')]/@expiry |
+      revised[contains(@class, ' topic/revised ')]/@golive |
+      revised[contains(@class, ' topic/revised ')]/@modified">
   <revision>
     <revnumber/>
     <date>
@@ -234,7 +234,7 @@
     </date>
     <revremark>
       <xsl:choose>
-      <xsl:when test="parent::*[contains(@class,' topic/created ')] and
+      <xsl:when test="parent::created[contains(@class, ' topic/created ')] and
           local-name(.)='date'">
         <xsl:text>created</xsl:text>
       </xsl:when>
@@ -247,11 +247,11 @@
 </xsl:template>
 
 <!-- to do -->
-<xsl:template match="*[contains(@class,' topic/permissions ')]"/>
+<xsl:template match="permissions[contains(@class, ' topic/permissions ')]"/>
 
-<xsl:template match="*[contains(@class,' topic/metadata ')]">
+<xsl:template match="metadata[contains(@class, ' topic/metadata ')]">
   <xsl:variable name="categoryNodes"
-      select="*[contains(@class,' topic/category ')]"/>
+      select="category[contains(@class, ' topic/category ')]"/>
   <xsl:if test="$categoryNodes">
     <subjectset>
       <xsl:apply-templates select="$categoryNodes" mode="metadata"/>
@@ -263,11 +263,11 @@
 </xsl:template>
 
 <!-- to do -->
-<xsl:template match="*[contains(@class,' topic/audience ')]"/>
+<xsl:template match="audience[contains(@class, ' topic/audience ')]"/>
 
-<xsl:template match="*[contains(@class,' topic/category ')]"/>
+<xsl:template match="category[contains(@class, ' topic/category ')]"/>
 
-<xsl:template match="*[contains(@class,' topic/category ')]" mode="metadata">
+<xsl:template match="category[contains(@class, ' topic/category ')]" mode="metadata">
   <subject>
     <subjectterm>
       <xsl:call-template name="setStandardAttr">
@@ -278,11 +278,11 @@
   </subject>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/keywords ')]">
+<xsl:template match="keywords[contains(@class, ' topic/keywords ')]">
   <xsl:variable name="keywordNodes"
-      select="*[contains(@class,' topic/keyword ')]"/>
+      select="keyword[contains(@class, ' topic/keyword ')]"/>
   <xsl:variable name="indextermNodes"
-      select="*[contains(@class,' topic/indexterm ')]"/>
+      select="indexterm[contains(@class, ' topic/indexterm ')]"/>
   <xsl:if test="$keywordNodes">
     <keywordset>
       <xsl:apply-templates select="$keywordNodes" mode="metadata"/>
@@ -295,7 +295,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/keyword ')]" mode="metadata">
+<xsl:template match="keyword[contains(@class, ' topic/keyword ')]" mode="metadata">
   <keyword>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'kywrd'"/>
@@ -304,13 +304,13 @@
   </keyword>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/prodinfo ')]">
+<xsl:template match="prodinfo[contains(@class, ' topic/prodinfo ')]">
   <xsl:apply-templates select="." mode="deflate">
     <xsl:with-param name="descendentsOkay" select="true()"/>
   </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/prodname ')]">
+<xsl:template match="prodname[contains(@class, ' topic/prodname ')]">
   <productname>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'prdnm'"/>
@@ -319,13 +319,13 @@
   </productname>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/vrmlist ')]">
+<xsl:template match="vrmlist[contains(@class, ' topic/vrmlist ')]">
   <xsl:apply-templates select="." mode="deflate">
     <xsl:with-param name="descendentsOkay" select="true()"/>
   </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/vrm ')]">
+<xsl:template match="vrm[contains(@class, ' topic/vrm ')]">
   <productnumber>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'vrm'"/>
@@ -343,47 +343,47 @@
 </xsl:template>
 
 <!-- to do -->
-<xsl:template match="*[contains(@class,' topic/brand ')]"/>
-<xsl:template match="*[contains(@class,' topic/series ')]"/>
-<xsl:template match="*[contains(@class,' topic/platform ')]"/>
-<xsl:template match="*[contains(@class,' topic/prognum ')]"/>
-<xsl:template match="*[contains(@class,' topic/featnum ')]"/>
-<xsl:template match="*[contains(@class,' topic/component ')]"/>
+<xsl:template match="brand[contains(@class, ' topic/brand ')]"/>
+<xsl:template match="series[contains(@class, ' topic/series ')]"/>
+<xsl:template match="platform[contains(@class, ' topic/platform ')]"/>
+<xsl:template match="prognum[contains(@class, ' topic/prognum ')]"/>
+<xsl:template match="featnum[contains(@class, ' topic/featnum ')]"/>
+<xsl:template match="component[contains(@class, ' topic/component ')]"/>
 
 <!-- to do -->
-<xsl:template match="*[contains(@class,' topic/othermeta ')]"/>
+<xsl:template match="othermeta[contains(@class, ' topic/othermeta ')]"/>
 
 <!-- to do -->
-<xsl:template match="*[contains(@class,' topic/resourceid ')]"/>
+<xsl:template match="resourceid[contains(@class, ' topic/resourceid ')]"/>
 
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - RELATIONSHIPS
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/related-links ')]">
+<xsl:template match="related-links[contains(@class, ' topic/related-links ')]">
   <itemizedlist>
     <title>Related links</title>
     <xsl:apply-templates/>
   </itemizedlist>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/linkpool ')]">
+<xsl:template match="linkpool[contains(@class, ' topic/linkpool ')]">
   <xsl:apply-templates/>
 </xsl:template>
 
 <!-- ??? should handle title and linkinfo and desc -->
-<xsl:template match="*[contains(@class,' topic/linklist ')]">
-  <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
+<xsl:template match="linklist[contains(@class, ' topic/linklist ')]">
+  <xsl:apply-templates select="desc[contains(@class, ' topic/desc ')]"/>
   <listitem>
     <itemizedlist>
       <xsl:apply-templates select="*[contains(@class,' topic/linklist ') or 
 	      contains(@class,' topic/link ')]"/>
     </itemizedlist>
-    <xsl:apply-templates select="*[contains(@class,' topic/linkinfo ')]"/>
+    <xsl:apply-templates select="linkinfo[contains(@class, ' topic/linkinfo ')]"/>
   </listitem>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/link ')]">
+<xsl:template match="link[contains(@class, ' topic/link ')]">
   <listitem>
     <para>
       <xsl:choose>
@@ -410,13 +410,13 @@
         </xsl:otherwise>
       </xsl:choose>
     </para>
-    <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
+    <xsl:apply-templates select="desc[contains(@class, ' topic/desc ')]"/>
   </listitem>
 </xsl:template>
 
 <xsl:template match="*" mode="make-ulink-from-link">
   <ulink url="{@href}">
-    <xsl:apply-templates select="*[contains(@class,' topic/linktext ')]"/>
+    <xsl:apply-templates select="linktext[contains(@class, ' topic/linktext ')]"/>
   </ulink>
 </xsl:template>
 
@@ -446,7 +446,7 @@
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of
-        select="document($href, /)/*[contains(@class,' topic/topic ')]/@id"/>
+        select="document($href, /)/topic[contains(@class, ' topic/topic ')]/@id"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -454,13 +454,13 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - SECTIONS
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/section ')]">
+<xsl:template match="section[contains(@class, ' topic/section ')]">
   <xsl:call-template name="makeBlockCont">
     <xsl:with-param name="IDPrefix" select="'sctn'"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/example ')]">
+<xsl:template match="example[contains(@class, ' topic/example ')]">
   <xsl:choose>
   <xsl:when test="title">
     <example>
@@ -485,7 +485,7 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - LISTS
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/ul ')]">
+<xsl:template match="ul[contains(@class, ' topic/ul ')]">
   <itemizedlist>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'ul'"/>
@@ -495,7 +495,7 @@
   </itemizedlist>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/ol ')]">
+<xsl:template match="ol[contains(@class, ' topic/ol ')]">
   <orderedlist>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'ol'"/>
@@ -505,7 +505,7 @@
   </orderedlist>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/li ')]">
+<xsl:template match="li[contains(@class, ' topic/li ')]">
   <listitem>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'li'"/>
@@ -514,7 +514,7 @@
   </listitem>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/itemgroup ')]">
+<xsl:template match="itemgroup[contains(@class, ' topic/itemgroup ')]">
   <xsl:variable name="element" select="local-name(.)" />
   <xsl:variable name="id" select="concat('elem', generate-id())" />
   <xsl:call-template name="deflateElementStart">
@@ -529,7 +529,7 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/dl ')]">
+<xsl:template match="dl[contains(@class, ' topic/dl ')]">
   <variablelist>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'dl'"/>
@@ -544,13 +544,13 @@
   </variablelist>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/dlhead ')]">
+<xsl:template match="dlhead[contains(@class, ' topic/dlhead ')]">
   <varlistentry>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'dlhd'"/>
     </xsl:call-template>
-    <xsl:variable name="dtheads" select="*[contains(@class,' topic/dthd ')]"/>
-    <xsl:variable name="ddheads" select="*[contains(@class,' topic/ddhd ')]"/>
+    <xsl:variable name="dtheads" select="dthd[contains(@class, ' topic/dthd ')]"/>
+    <xsl:variable name="ddheads" select="ddhd[contains(@class, ' topic/ddhd ')]"/>
     <xsl:choose>
     <xsl:when test="$dtheads">
       <xsl:apply-templates select="$dtheads"/>
@@ -570,7 +570,7 @@
   </varlistentry>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/dthd ')]">
+<xsl:template match="dthd[contains(@class, ' topic/dthd ')]">
   <term>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'dthd'"/>
@@ -579,7 +579,7 @@
   </term>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/ddhd ')]">
+<xsl:template match="ddhd[contains(@class, ' topic/ddhd ')]">
   <listitem>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'ddhd'"/>
@@ -588,16 +588,16 @@
   </listitem>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/dlentry ')]">
+<xsl:template match="dlentry[contains(@class, ' topic/dlentry ')]">
   <varlistentry>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'dle'"/>
     </xsl:call-template>
     <xsl:choose>
-      <xsl:when test="*[contains(@class,' topic/dd ')][2]">
-        <xsl:apply-templates select="*[contains(@class,' topic/dt ')]"/>
+      <xsl:when test="dd[contains(@class, ' topic/dd ')][2]">
+        <xsl:apply-templates select="dt[contains(@class, ' topic/dt ')]"/>
         <listitem>
-          <xsl:for-each select="*[contains(@class,' topic/dd ')]">
+          <xsl:for-each select="dd[contains(@class, ' topic/dd ')]">
            <orderedlist>
              <listitem>
                <xsl:call-template name="setStandardAttr">
@@ -616,7 +616,7 @@
   </varlistentry>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/dt ')]">
+<xsl:template match="dt[contains(@class, ' topic/dt ')]">
   <term>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'dt'"/>
@@ -625,7 +625,7 @@
   </term>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/dd ')]">
+<xsl:template match="dd[contains(@class, ' topic/dd ')]">
   <listitem>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'dd'"/>
@@ -634,7 +634,7 @@
   </listitem>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/sl ')]">
+<xsl:template match="sl[contains(@class, ' topic/sl ')]">
   <simplelist columns="1" type="vert">
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'sl'"/>
@@ -644,7 +644,7 @@
   </simplelist>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/sli ')]">
+<xsl:template match="sli[contains(@class, ' topic/sli ')]">
   <member>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'sli'"/>
@@ -657,7 +657,7 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - VERBATIM BLOCKS
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/pre ')]">
+<xsl:template match="pre[contains(@class, ' topic/pre ')]">
   <xsl:call-template name="wrapTitle">
     <xsl:with-param name="wrapElem" select="'example'"/>
     <xsl:with-param name="coreElem" select="'programlisting'"/>
@@ -665,7 +665,7 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/lines ')]">
+<xsl:template match="lines[contains(@class, ' topic/lines ')]">
   <xsl:call-template name="wrapLiteralTitle">
     <xsl:with-param name="classAttr"  select="'normal'"/>
     <xsl:with-param name="IDPrefix"  select="'lns'"/>
@@ -676,13 +676,13 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - FORMATTING BLOCKS
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/p ')]">
+<xsl:template match="p[contains(@class, ' topic/p ')]">
   <xsl:call-template name="makePara">
     <xsl:with-param name="IDPrefix" select="'para'"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/lq ')]">
+<xsl:template match="lq[contains(@class, ' topic/lq ')]">
   <blockquote>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'lq'"/>
@@ -752,7 +752,7 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - SEMANTIC PHRASES
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/ph ')]" name="phrase">
+<xsl:template match="ph[contains(@class, ' topic/ph ')]" name="phrase">
   <xsl:param name="IDPrefix" select="'phrs'"/>
   <xsl:param name="role" select="''"/>
   <phrase>
@@ -768,13 +768,13 @@
   </phrase>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/keyword ')]">
+<xsl:template match="keyword[contains(@class, ' topic/keyword ')]">
   <xsl:call-template name="phrase">
     <xsl:with-param name="IDPrefix" select="'kywrd'"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/q ')]">
+<xsl:template match="q[contains(@class, ' topic/q ')]">
   <quote>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'quote'"/>
@@ -783,7 +783,7 @@
   </quote>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/term ')]">
+<xsl:template match="term[contains(@class, ' topic/term ')]">
   <glossterm>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'quote'"/>
@@ -797,14 +797,14 @@
 DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 -->
 
-<xsl:template match="*[contains(@class,' topic/boolean ')]"/>
-<xsl:template match="*[contains(@class,' topic/state ')]"/>
+<xsl:template match="boolean[contains(@class, ' topic/boolean ')]"/>
+<xsl:template match="state[contains(@class, ' topic/state ')]"/>
 
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - LINKING PHRASES
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/xref ')]">
+<xsl:template match="xref[contains(@class, ' topic/xref ')]">
   <xsl:choose>
     <xsl:when test="(not(@format) or @format='dita') and
 	                (not(@scope)  or @scope='local') and
@@ -863,7 +863,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </xref>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/fn ')]" name="footnote">
+<xsl:template match="fn[contains(@class, ' topic/fn ')]" name="footnote">
   <xsl:param name="IDPrefix" select="'fn'"/>
   <footnote>
     <xsl:call-template name="setStandardAttr">
@@ -873,7 +873,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </footnote>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/cite ')]">
+<xsl:template match="cite[contains(@class, ' topic/cite ')]">
   <xsl:choose>
   <xsl:when test="@ref">
     <xref role="cite" linkend="{@ref}">
@@ -893,7 +893,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/indexterm ')]">
+<xsl:template match="indexterm[contains(@class, ' topic/indexterm ')]">
   <indexterm>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'indxtrm'"/>
@@ -905,7 +905,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </indexterm>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/indexterm ')]" mode="secondary">
+<xsl:template match="indexterm[contains(@class, ' topic/indexterm ')]" mode="secondary">
   <secondary>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'indxtrm'"/>
@@ -915,7 +915,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   <xsl:apply-templates select="*" mode="tertiary"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/indexterm ')]" mode="tertiary">
+<xsl:template match="indexterm[contains(@class, ' topic/indexterm ')]" mode="tertiary">
   <tertiary>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'indxtrm'"/>
@@ -929,10 +929,10 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - TABLES
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/table ')]">
+<xsl:template match="table[contains(@class, ' topic/table ')]">
   <xsl:param name="titleSpec" select="' topic/title '"/>
   <xsl:param name="titleNode" select="*[contains(@class,$titleSpec)]"/>
-  <xsl:variable name="descNode" select="*[contains(@class,' topic/desc ')]"/>
+  <xsl:variable name="descNode" select="desc[contains(@class, ' topic/desc ')]"/>
   <xsl:variable name="element">
     <xsl:choose>
     <xsl:when test="$titleNode">
@@ -963,55 +963,55 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
     <xsl:if test="$descNode">
       <xsl:apply-templates select="$descNode"/>
     </xsl:if>
-    <xsl:apply-templates select="*[contains(@class,' topic/tgroup ')]"/>
+    <xsl:apply-templates select="tgroup[contains(@class, ' topic/tgroup ')]"/>
   </xsl:element>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/tgroup ')]">
+<xsl:template match="tgroup[contains(@class, ' topic/tgroup ')]">
   <xsl:call-template name="copyAs">
     <xsl:with-param name="elementName" select="'tgroup'"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/colspec ')]">
+<xsl:template match="colspec[contains(@class, ' topic/colspec ')]">
   <xsl:call-template name="copyAs">
     <xsl:with-param name="elementName" select="'colspec'"/>
     <xsl:with-param name="hasRemap"    select="false()"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/spanspec ')]">
+<xsl:template match="spanspec[contains(@class, ' topic/spanspec ')]">
   <xsl:call-template name="copyAs">
     <xsl:with-param name="elementName" select="'spanspec'"/>
     <xsl:with-param name="hasRemap"    select="false()"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/thead ')]">
+<xsl:template match="thead[contains(@class, ' topic/thead ')]">
   <xsl:call-template name="copyAs">
     <xsl:with-param name="elementName" select="'thead'"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/tfoot ')]">
+<xsl:template match="tfoot[contains(@class, ' topic/tfoot ')]">
   <xsl:call-template name="copyAs">
     <xsl:with-param name="elementName" select="'tfoot'"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/tbody ')]">
+<xsl:template match="tbody[contains(@class, ' topic/tbody ')]">
   <xsl:call-template name="copyAs">
     <xsl:with-param name="elementName" select="'tbody'"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/row ')]">
+<xsl:template match="row[contains(@class, ' topic/row ')]">
   <xsl:call-template name="copyAs">
     <xsl:with-param name="elementName" select="'row'"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/entry ')]">
+<xsl:template match="entry[contains(@class, ' topic/entry ')]">
   <xsl:call-template name="copyAs">
     <xsl:with-param name="elementName" select="'entry'"/>
   </xsl:call-template>
@@ -1019,11 +1019,11 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 
 <!-- segmentedlist is a closer match with simpletable 
      but the content model of set is too restrictive -->
-<xsl:template match="*[contains(@class,' topic/simpletable ')]">
+<xsl:template match="simpletable[contains(@class, ' topic/simpletable ')]">
   <xsl:variable name="colcount">
     <xsl:call-template name="maxsemcol">
       <xsl:with-param name="rows"
-          select="*[contains(@class,' topic/strow ')]"/>
+          select="strow[contains(@class, ' topic/strow ')]"/>
     </xsl:call-template>
   </xsl:variable>
   <xsl:variable name="element">
@@ -1046,15 +1046,15 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
       </title>
     </xsl:if>
     <tgroup cols="{$colcount}">
-      <xsl:apply-templates select="*[contains(@class,' topic/sthead ')]"/>
+      <xsl:apply-templates select="sthead[contains(@class, ' topic/sthead ')]"/>
       <tbody>
-        <xsl:apply-templates select="*[contains(@class,' topic/strow ')]"/>
+        <xsl:apply-templates select="strow[contains(@class, ' topic/strow ')]"/>
       </tbody>
     </tgroup>
   </xsl:element>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/sthead ')]">
+<xsl:template match="sthead[contains(@class, ' topic/sthead ')]">
   <thead>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'sthd'"/>
@@ -1065,7 +1065,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </thead>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/strow ')]">
+<xsl:template match="strow[contains(@class, ' topic/strow ')]">
   <row>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'strw'"/>
@@ -1074,7 +1074,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </row>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/stentry ')]">
+<xsl:template match="stentry[contains(@class, ' topic/stentry ')]">
   <entry>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'stent'"/>
@@ -1092,10 +1092,10 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - FIGURES AND MEDIA OBJECTS
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/fig ')]">
+<xsl:template match="fig[contains(@class, ' topic/fig ')]">
   <xsl:param name="titleSpec" select="' topic/title '"/>
   <xsl:param name="titleNode" select="*[contains(@class,$titleSpec)]"/>
-  <xsl:variable name="descNode" select="*[contains(@class,' topic/desc ')]"/>
+  <xsl:variable name="descNode" select="desc[contains(@class, ' topic/desc ')]"/>
   <xsl:variable name="contentNode" select="*[not(contains(@class,$titleSpec)
       or contains(@class,' topic/desc '))]"/>
   <xsl:variable name="element">
@@ -1159,14 +1159,14 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </xsl:element>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/figgroup ')]">
+<xsl:template match="figgroup[contains(@class, ' topic/figgroup ')]">
   <xsl:apply-templates select="." mode="deflate">
     <xsl:with-param name="descendentsOkay" select="true()"/>
   </xsl:apply-templates>
 </xsl:template>
 
 <!-- to do -->
-<xsl:template match="*[contains(@class,' topic/object ')]">
+<xsl:template match="object[contains(@class, ' topic/object ')]">
   <mediaobject>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'obj'"/>
@@ -1175,7 +1175,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </mediaobject>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/textalt ')]">
+<xsl:template match="textalt[contains(@class, ' topic/textalt ')]">
   <textobject>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'txtlt'"/>
@@ -1185,7 +1185,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 </xsl:template>
 
 <!-- to do -->
-<xsl:template match="*[contains(@class,' topic/image ')]">
+<xsl:template match="image[contains(@class, ' topic/image ')]">
   <mediaobject>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'img'"/>
@@ -1240,7 +1240,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - MISCELLANEOUS AND DEFAULT
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/draft-comment ')]">
+<xsl:template match="draft-comment[contains(@class, ' topic/draft-comment ')]">
   <remark>
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'sp'"/>
@@ -1256,7 +1256,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </xsl:message>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/no-topic-nesting ')]"/>
+<xsl:template match="no-topic-nesting[contains(@class, ' topic/no-topic-nesting ')]"/>
 
 <xsl:template match="*[@conref]">
   <!-- a well-known Docbook hack -->
@@ -1525,7 +1525,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
     <xsl:when test="$isContReq or $titleNode">
      <xsl:choose>
       <xsl:when test="count(*[not(contains(@class,$titleSpec))]) =
-          count(*[contains(@class,' topic/qalist ')])">
+          count(qalist[contains(@class, ' topic/qalist ')])">
         <qandaset>
           <xsl:call-template name="setStandardAttr">
             <xsl:with-param name="IDPrefix" select="$IDPrefix"/>
@@ -1533,7 +1533,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
           <xsl:if test="$titleNode">
             <xsl:apply-templates select="$titleNode"/>
           </xsl:if>
-          <xsl:apply-templates select="*[contains(@class,' topic/qalist ')]">
+          <xsl:apply-templates select="qalist[contains(@class, ' topic/qalist ')]">
             <xsl:with-param name="element" select="'qandadiv'"/>
           </xsl:apply-templates>
         </qandaset>
@@ -1804,7 +1804,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 </xsl:template>
 
 <!-- Add for "New <data> element (#9)" in DITA 1.1 -->
-<xsl:template match="*[contains(@class,' topic/data ')]"/>
+<xsl:template match="data[contains(@class, ' topic/data ')]"/>
 
 <!-- Add for "Support foreign content vocabularies such as 
      MathML and SVG with <unknown> (#35) " in DITA 1.1 -->

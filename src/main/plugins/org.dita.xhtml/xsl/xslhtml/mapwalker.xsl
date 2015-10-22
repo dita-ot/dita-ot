@@ -13,18 +13,18 @@
 <!-- stylesheet imports -->
 
 <xsl:key name="topicref"
-         match="*[contains(@class, ' map/topicref ')]"
+         match="topicref[contains(@class, ' map/topicref ')]"
          use="@href"/>
 
 <xsl:template match="/">
-  <xsl:apply-templates select="*[contains(@class,' map/map ')]"/>
+  <xsl:apply-templates select="map[contains(@class, ' map/map ')]"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' map/map ')]">
-  <xsl:apply-templates select="*[contains(@class,' map/topicref ')]"/>
+<xsl:template match="map[contains(@class, ' map/map ')]">
+  <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' map/topicref ')]">
+<xsl:template match="topicref[contains(@class, ' map/topicref ')]">
   <xsl:param name="infile" select="@href"/>
   <xsl:param name="outroot">
     <xsl:choose>
@@ -72,7 +72,7 @@
 </xsl:template>
 
 <!-- required overrides -->
-<xsl:template match="*[contains(@class,' map/topicref ')]" mode="process">
+<xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="process">
   <xsl:param name="infile"/>
   <xsl:param name="outroot"/>
   <xsl:param name="outfile"/>

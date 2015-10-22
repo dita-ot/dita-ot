@@ -283,13 +283,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' pr-d/fragment ')]">
         <fo:block xsl:use-attribute-sets="fragment">
             <xsl:call-template name="commonattributes"/>
-            <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
+            <xsl:value-of select="title[contains(@class, ' topic/title ')]"/>
             <xsl:text> </xsl:text>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
+    <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/title[contains(@class, ' topic/title ')]">
         <fo:block xsl:use-attribute-sets="syntaxdiagram.title">
             <xsl:call-template name="commonattributes"/>
             <xsl:value-of select="."/>
@@ -324,7 +324,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' topic/title ')]">
+    <xsl:template match="*[contains(@class,' pr-d/fragment ')]/title[contains(@class, ' topic/title ')]">
         <fo:block xsl:use-attribute-sets="fragment.title">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>

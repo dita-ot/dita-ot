@@ -34,7 +34,7 @@
 
     <xsl:choose>
       <!-- nested by body, li -->
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')] or                    parent::*[contains(@class, ' topic/body ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')] or                    parent::body[contains(@class, ' topic/body ')]">
         <!-- start add flagging images -->
         <xsl:apply-templates select="." mode="start-add-odt-imgrevflags"/>
         <text:p text:style-name="Code_Style_Paragraph">
@@ -49,18 +49,18 @@
         <xsl:apply-templates select="." mode="end-add-odt-imgrevflags"/>
       </xsl:when>
       <!-- nested by entry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- start add flagging images -->
         <xsl:apply-templates select="." mode="start-add-odt-imgrevflags"/>
         <!-- create p tag -->
         <text:p>
           <!-- alignment styles -->
-          <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+          <xsl:if test="parent::entry[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]       /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+            <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]       /parent::row[contains(@class, ' topic/row ')]/parent::thead[contains(@class, ' topic/thead ')]">
               <text:span text:style-name="bold">
 
                 <text:span text:style-name="Code_Text">
@@ -86,13 +86,13 @@
         <xsl:apply-templates select="." mode="end-add-odt-imgrevflags"/>
       </xsl:when>
       <!-- nested by stentry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <!-- start add flagging images -->
         <xsl:apply-templates select="." mode="start-add-odt-imgrevflags"/>
         <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/       parent::*[contains(@class, ' topic/sthead ')]">
+            <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]/       parent::sthead[contains(@class, ' topic/sthead ')]">
               <text:span text:style-name="Code_Text">
 
                 <text:span>
@@ -115,7 +115,7 @@
         <xsl:apply-templates select="." mode="end-add-odt-imgrevflags"/>
       </xsl:when>
 
-      <xsl:when test="parent::*[contains(@class, ' topic/linkinfo ')]">
+      <xsl:when test="parent::linkinfo[contains(@class, ' topic/linkinfo ')]">
         <text:span>
           <text:span>
             <!-- start add flagging styles -->
@@ -149,7 +149,7 @@
 
   <xsl:template match="*[contains(@class,' ui-d/menucascade ')]">
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
         <text:p>
           <text:span>
             <!-- start add rev flagging styles -->
@@ -161,16 +161,16 @@
         </text:p>
       </xsl:when>
       <!-- nested by entry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
         <text:p>
           <!-- alignment styles -->
-          <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+          <xsl:if test="parent::entry[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]        /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+            <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]        /parent::row[contains(@class, ' topic/row ')]/parent::thead[contains(@class, ' topic/thead ')]">
               <text:span text:style-name="bold">
 
                 <text:span>
@@ -195,11 +195,11 @@
         </text:p>
       </xsl:when>
       <!-- nested by stentry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/        parent::*[contains(@class, ' topic/sthead ')]">
+            <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]/        parent::sthead[contains(@class, ' topic/sthead ')]">
               <text:span text:style-name="bold">
 
                 <text:span>
@@ -241,7 +241,7 @@
 
     <xsl:choose>
       <!-- nested by li -->
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
         <text:p>
           <!-- insert an arrow with leading/trailing spaces before all but the first uicontrol in a menucascade -->
           <xsl:if test="ancestor::*[contains(@class,' ui-d/menucascade ')]">
@@ -265,16 +265,16 @@
         </text:p>
       </xsl:when>
       <!-- nested by entry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
         <text:p>
           <!-- alignment styles -->
-          <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+          <xsl:if test="parent::entry[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]           /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+            <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]           /parent::row[contains(@class, ' topic/row ')]/parent::thead[contains(@class, ' topic/thead ')]">
               <text:span text:style-name="bold">
 
                 <!-- insert an arrow with leading/trailing spaces before all but the first uicontrol in a menucascade -->
@@ -323,11 +323,11 @@
         </text:p>
       </xsl:when>
       <!-- nested by stentry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/           parent::*[contains(@class, ' topic/sthead ')]">
+            <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]/           parent::sthead[contains(@class, ' topic/sthead ')]">
               <text:span text:style-name="bold">
 
                 <!-- insert an arrow with leading/trailing spaces before all but the first uicontrol in a menucascade -->

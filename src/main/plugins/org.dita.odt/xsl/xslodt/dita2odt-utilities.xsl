@@ -40,37 +40,37 @@
   <xsl:template name="calculate_span_depth_for_tag">
     <xsl:param name="tag_class" select="' topic/fn '"/>
     
-    <xsl:variable name="fig_count" select="(count(ancestor::*[contains(@class, ' topic/fig ')]) -
-        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/fig ')])) * 2"/>
+    <xsl:variable name="fig_count" select="(count(ancestor::fig[contains(@class, ' topic/fig ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::fig[contains(@class, ' topic/fig ')])) * 2"/>
     
-    <xsl:variable name="lq_count" select="(count(ancestor::*[contains(@class, ' topic/lq ')]) -
-        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/lq ')])) * 2"/>
+    <xsl:variable name="lq_count" select="(count(ancestor::lq[contains(@class, ' topic/lq ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::lq[contains(@class, ' topic/lq ')])) * 2"/>
     
-    <xsl:variable name="note_count" select="(count(ancestor::*[contains(@class, ' topic/note ')]) -
-        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/note ')])) * 3"/>
+    <xsl:variable name="note_count" select="(count(ancestor::note[contains(@class, ' topic/note ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::note[contains(@class, ' topic/note ')])) * 3"/>
     
-    <xsl:variable name="itemgroup_count" select="(count(ancestor::*[contains(@class, ' topic/itemgroup ')]) -
-        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/itemgroup ')])) * 2"/>
+    <xsl:variable name="itemgroup_count" select="(count(ancestor::itemgroup[contains(@class, ' topic/itemgroup ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::itemgroup[contains(@class, ' topic/itemgroup ')])) * 2"/>
     
-    <xsl:variable name="p_count" select="(count(ancestor::*[contains(@class, ' topic/p ')]) -
-        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/p ')])) * 2"/>
+    <xsl:variable name="p_count" select="(count(ancestor::p[contains(@class, ' topic/p ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::p[contains(@class, ' topic/p ')])) * 2"/>
     
-    <xsl:variable name="draft-comment_count" select="(count(ancestor::*[contains(@class, ' topic/draft-comment ')]) -
-        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/draft-comment ')])) * 2"/>
+    <xsl:variable name="draft-comment_count" select="(count(ancestor::draft-comment[contains(@class, ' topic/draft-comment ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::draft-comment[contains(@class, ' topic/draft-comment ')])) * 2"/>
     
-    <xsl:variable name="required-cleanup_count" select="(count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) -
-        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/required-cleanup ')])) * 2"/>
+    <xsl:variable name="required-cleanup_count" select="(count(ancestor::required-cleanup[contains(@class, ' topic/required-cleanup ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::required-cleanup[contains(@class, ' topic/required-cleanup ')])) * 2"/>
     
-    <xsl:variable name="dd_count" select="(count(ancestor::*[contains(@class, ' topic/dd ')]) -
-        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::*[contains(@class, ' topic/dd ')])) * 2"/>
+    <xsl:variable name="dd_count" select="(count(ancestor::dd[contains(@class, ' topic/dd ')]) -
+        count(ancestor::*[contains(@class, $tag_class)][1]/ancestor::dd[contains(@class, ' topic/dd ')])) * 2"/>
     
     <!-- sthead/thead count important! -->
     <xsl:variable name="thead_count">
       <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/sthead ')]">
+        <xsl:when test="ancestor::sthead[contains(@class, ' topic/sthead ')]">
           <xsl:value-of select="1"/>
         </xsl:when>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/thead ')]">
+        <xsl:when test="ancestor::thead[contains(@class, ' topic/thead ')]">
           <xsl:value-of select="1"/>
         </xsl:when>
         <xsl:otherwise>0</xsl:otherwise>
@@ -94,47 +94,47 @@
   </xsl:template>
   
   <xsl:template name="calculate_span_depth">
-    <xsl:variable name="desc_count" select="count(ancestor::*[contains(@class, ' topic/desc ')])"/>
+    <xsl:variable name="desc_count" select="count(ancestor::desc[contains(@class, ' topic/desc ')])"/>
     
-    <xsl:variable name="fig_count" select="count(ancestor::*[contains(@class, ' topic/fig ')]) * 2"/>
+    <xsl:variable name="fig_count" select="count(ancestor::fig[contains(@class, ' topic/fig ')]) * 2"/>
     
-    <xsl:variable name="figgroup_count" select="count(ancestor::*[contains(@class, ' topic/figgroup ')]) * 2"/>
+    <xsl:variable name="figgroup_count" select="count(ancestor::figgroup[contains(@class, ' topic/figgroup ')]) * 2"/>
     
-    <xsl:variable name="lq_count" select="count(ancestor::*[contains(@class, ' topic/lq ')]) * 2"/>
+    <xsl:variable name="lq_count" select="count(ancestor::lq[contains(@class, ' topic/lq ')]) * 2"/>
     
-    <xsl:variable name="lines_count" select="count(ancestor::*[contains(@class, ' topic/lines ')]) * 2"/>
+    <xsl:variable name="lines_count" select="count(ancestor::lines[contains(@class, ' topic/lines ')]) * 2"/>
 
     <!-- Add 1 for flagging sytles -->
-    <xsl:variable name="note_count" select="count(ancestor::*[contains(@class, ' topic/note ')]) * 3"/>
+    <xsl:variable name="note_count" select="count(ancestor::note[contains(@class, ' topic/note ')]) * 3"/>
     
-    <xsl:variable name="p_count" select="count(ancestor::*[contains(@class, ' topic/p ')]) * 2"/>
+    <xsl:variable name="p_count" select="count(ancestor::p[contains(@class, ' topic/p ')]) * 2"/>
     
-    <xsl:variable name="ph_count" select="count(ancestor::*[contains(@class, ' topic/ph ')]) * 2"/>
+    <xsl:variable name="ph_count" select="count(ancestor::ph[contains(@class, ' topic/ph ')]) * 2"/>
     
-    <xsl:variable name="pre_count" select="count(ancestor::*[contains(@class, ' topic/pre ')]) * 2"/>
+    <xsl:variable name="pre_count" select="count(ancestor::pre[contains(@class, ' topic/pre ')]) * 2"/>
     
-    <xsl:variable name="draft-comment_count" select="count(ancestor::*[contains(@class, ' topic/draft-comment ')]) * 2"/>
+    <xsl:variable name="draft-comment_count" select="count(ancestor::draft-comment[contains(@class, ' topic/draft-comment ')]) * 2"/>
     
-    <xsl:variable name="required-cleanup_count" select="count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) * 2"/>
+    <xsl:variable name="required-cleanup_count" select="count(ancestor::required-cleanup[contains(@class, ' topic/required-cleanup ')]) * 2"/>
     
-    <xsl:variable name="itemgroup_count" select="count(ancestor::*[contains(@class, ' topic/itemgroup ')]) * 2"/>
+    <xsl:variable name="itemgroup_count" select="count(ancestor::itemgroup[contains(@class, ' topic/itemgroup ')]) * 2"/>
     
-    <xsl:variable name="dd_count" select="count(ancestor::*[contains(@class, ' topic/dd ')]) * 2"/>
+    <xsl:variable name="dd_count" select="count(ancestor::dd[contains(@class, ' topic/dd ')]) * 2"/>
     
-    <xsl:variable name="fn_count" select="count(ancestor::*[contains(@class, ' topic/fn ')]) * 2"/>
+    <xsl:variable name="fn_count" select="count(ancestor::fn[contains(@class, ' topic/fn ')]) * 2"/>
     
-    <xsl:variable name="abstract_count" select="count(ancestor::*[contains(@class, ' topic/abstract ')])"/>
+    <xsl:variable name="abstract_count" select="count(ancestor::abstract[contains(@class, ' topic/abstract ')])"/>
     
-    <xsl:variable name="bodydiv_count" select="count(ancestor::*[contains(@class, ' topic/bodydiv ')])"/>
+    <xsl:variable name="bodydiv_count" select="count(ancestor::bodydiv[contains(@class, ' topic/bodydiv ')])"/>
     
-    <xsl:variable name="section_count" select="count(ancestor::*[contains(@class, ' topic/section ')]) * 2"/>
+    <xsl:variable name="section_count" select="count(ancestor::section[contains(@class, ' topic/section ')]) * 2"/>
     
-    <xsl:variable name="sectiondiv_count" select="count(ancestor::*[contains(@class, ' topic/sectiondiv ')])"/>
+    <xsl:variable name="sectiondiv_count" select="count(ancestor::sectiondiv[contains(@class, ' topic/sectiondiv ')])"/>
     
     <xsl:variable name="example_count">
       <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/example ')]">
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/example ')]) * 2"/>
+        <xsl:when test="ancestor::example[contains(@class, ' topic/example ')]">
+          <xsl:value-of select="count(ancestor::example[contains(@class, ' topic/example ')]) * 2"/>
         </xsl:when>
         <xsl:otherwise>0</xsl:otherwise>
       </xsl:choose>
@@ -142,9 +142,9 @@
     
     <xsl:variable name="linkinfo_count" select="0"/>
     
-    <xsl:variable name="related-links_count" select="count(ancestor::*[contains(@class, ' topic/related-links ')])"/>
+    <xsl:variable name="related-links_count" select="count(ancestor::related-links[contains(@class, ' topic/related-links ')])"/>
     
-    <xsl:variable name="pd_count" select="count(ancestor::*[contains(@class, ' topic/pd ')])"/>
+    <xsl:variable name="pd_count" select="count(ancestor::pd[contains(@class, ' topic/pd ')])"/>
     
     <xsl:variable name="total_count" select="$desc_count + $fig_count + $figgroup_count
       + $lq_count + $lines_count + $note_count + $p_count + $ph_count + $pre_count + $draft-comment_count + $required-cleanup_count
@@ -193,7 +193,7 @@
     <xsl:if test="$depth &gt; 0 and $order &gt; 0">
       <!-- for ol, we should keep the item number correctly. -->
       <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/ol ')]">
+        <xsl:when test="ancestor::ol[contains(@class, ' topic/ol ')]">
           <xsl:text disable-output-escaping="yes">&lt;text:list text:continue-numbering="true" text:style-name="ordered_list_style"&gt;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -213,16 +213,16 @@
   
   <xsl:template name="set_align_value">
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]/@align = 'left'">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]/@align = 'left'">
         <xsl:attribute name="text:style-name">left</xsl:attribute>
       </xsl:when>
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]/@align = 'right'">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]/@align = 'right'">
         <xsl:attribute name="text:style-name">right</xsl:attribute>
       </xsl:when>
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]/@align = 'center'">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]/@align = 'center'">
         <xsl:attribute name="text:style-name">center</xsl:attribute>
       </xsl:when>
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]/@align = 'justify'">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]/@align = 'justify'">
         <xsl:attribute name="text:style-name">justify</xsl:attribute>
       </xsl:when>
       <xsl:otherwise>
@@ -232,30 +232,30 @@
   </xsl:template>
   
   <xsl:template name="render_simpletable">
-    <xsl:variable name="dlentry_count_for_list" select="count(ancestor::*[contains(@class, ' topic/dlentry ')]) -
-      count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*[contains(@class, ' topic/dlentry ')])"/>
+    <xsl:variable name="dlentry_count_for_list" select="count(ancestor::dlentry[contains(@class, ' topic/dlentry ')]) -
+      count(ancestor::li[contains(@class, ' topic/li ')][1]/ancestor::dlentry[contains(@class, ' topic/dlentry ')])"/>
     
-    <xsl:variable name="fn_depth" select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
+    <xsl:variable name="fn_depth" select="count(ancestor::fn[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="list_depth" select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
+    <xsl:variable name="list_depth" select="count(ancestor::li[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="dlist_depth" select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
+    <xsl:variable name="dlist_depth" select="count(ancestor::dlentry[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
+    <xsl:variable name="table_depth" select="count(ancestor::entry[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
+    <xsl:variable name="stable_depth" select="count(ancestor::stentry[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
     
     <xsl:variable name="max_depth" select="max(($fn_depth, $list_depth, $dlist_depth, $table_depth, $stable_depth))"/>
     
     <!-- if the table is under p(direct child) -->
     <xsl:choose>
       <!-- parent tag is body -->
-      <xsl:when test="parent::*[contains(@class, ' topic/body ')]">
+      <xsl:when test="parent::body[contains(@class, ' topic/body ')]">
         <!-- start render table -->
         <xsl:call-template name="create_simpletable"/>
       </xsl:when>
       <!-- nested by list -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/li ')] and $dlentry_count_for_list = 0">
+      <xsl:when test="ancestor::li[contains(@class, ' topic/li ')] and $dlentry_count_for_list = 0">
         
         <xsl:choose>
           <!-- nearest tag is list -->
@@ -375,7 +375,7 @@
         </xsl:choose>
       </xsl:when>
       <!-- nested by dlist -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/dlentry ')]">
+      <xsl:when test="ancestor::dlentry[contains(@class, ' topic/dlentry ')]">
         
         <xsl:choose>
           <!-- nearest tag is dlist -->
@@ -497,7 +497,7 @@
         </xsl:choose>
       </xsl:when>
       <!-- nested by simpletable -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/simpletable ')]">
+      <xsl:when test="ancestor::simpletable[contains(@class, ' topic/simpletable ')]">
         <xsl:variable name="span_depth">
           <xsl:call-template name="calculate_span_depth_for_tag">
             <xsl:with-param name="tag_class" select="' topic/stentry '"/>
@@ -521,7 +521,7 @@
         </xsl:call-template>
       </xsl:when>
       <!-- nested by table -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/table ')]">
+      <xsl:when test="ancestor::table[contains(@class, ' topic/table ')]">
         <xsl:variable name="span_depth">
           <xsl:call-template name="calculate_span_depth_for_tag">
             <xsl:with-param name="tag_class" select="' topic/entry '"/>
@@ -573,17 +573,17 @@
   
   
   <xsl:template name="render_table">
-    <xsl:variable name="dlentry_count_for_list" select="count(ancestor::*[contains(@class, ' topic/dlentry ')]) -        count(ancestor::*[contains(@class, ' topic/li ')][1]       /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
+    <xsl:variable name="dlentry_count_for_list" select="count(ancestor::dlentry[contains(@class, ' topic/dlentry ')]) -        count(ancestor::li[contains(@class, ' topic/li ')][1]       /ancestor::dlentry[contains(@class, ' topic/dlentry ')])"/>
     
-    <xsl:variable name="fn_depth" select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
+    <xsl:variable name="fn_depth" select="count(ancestor::fn[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="list_depth" select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
+    <xsl:variable name="list_depth" select="count(ancestor::li[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="dlist_depth" select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
+    <xsl:variable name="dlist_depth" select="count(ancestor::dlentry[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
+    <xsl:variable name="table_depth" select="count(ancestor::entry[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
     
-    <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
+    <xsl:variable name="stable_depth" select="count(ancestor::stentry[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
     
     <xsl:variable name="max_depth" select="max(($fn_depth, $list_depth, $dlist_depth, $table_depth, $stable_depth))"/>
     
@@ -591,12 +591,12 @@
     <!-- if the table is under p(direct child) -->
     <xsl:choose>
       <!-- parent tag is body -->
-      <xsl:when test="parent::*[contains(@class, ' topic/body ')]">
+      <xsl:when test="parent::body[contains(@class, ' topic/body ')]">
         <!-- start render table -->
         <xsl:apply-templates/>
       </xsl:when>
       <!-- nested by list -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/li ')] and $dlentry_count_for_list = 0">
+      <xsl:when test="ancestor::li[contains(@class, ' topic/li ')] and $dlentry_count_for_list = 0">
         <!-- nearest tag is list -->
         <xsl:choose>
           <xsl:when test="$max_depth = $list_depth">
@@ -716,7 +716,7 @@
       </xsl:when>
       
       <!-- nested by dlist -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/dlentry ')]">
+      <xsl:when test="ancestor::dlentry[contains(@class, ' topic/dlentry ')]">
         
         <!-- nearest tag is dlist -->
         <xsl:choose>
@@ -840,7 +840,7 @@
         
       </xsl:when>
       <!-- nested by simpletable -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/simpletable ')]">
+      <xsl:when test="ancestor::simpletable[contains(@class, ' topic/simpletable ')]">
         <xsl:variable name="span_depth">
           <xsl:call-template name="calculate_span_depth_for_tag">
             <xsl:with-param name="tag_class" select="' topic/stentry '"/>
@@ -864,7 +864,7 @@
         </xsl:call-template>
       </xsl:when>
       <!-- nested by table -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/table ')]">
+      <xsl:when test="ancestor::table[contains(@class, ' topic/table ')]">
         <xsl:variable name="span_depth">
           <xsl:call-template name="calculate_span_depth_for_tag">
             <xsl:with-param name="tag_class" select="' topic/entry '"/>
@@ -917,30 +917,30 @@
   <xsl:template name="render_list">
     <xsl:param name="list_style"/>
 
-    <xsl:variable name="li_count_for_table" select="count(ancestor::*[contains(@class, ' topic/li ')]) - 
-      count(ancestor::*[contains(@class, ' topic/entry ')][1]
-      /ancestor::*[contains(@class, ' topic/li ')])"/>
+    <xsl:variable name="li_count_for_table" select="count(ancestor::li[contains(@class, ' topic/li ')]) - 
+      count(ancestor::entry[contains(@class, ' topic/entry ')][1]
+      /ancestor::li[contains(@class, ' topic/li ')])"/>
     
-    <xsl:variable name="li_count_for_simpletable" select="count(ancestor::*[contains(@class, ' topic/li ')]) - 
-      count(ancestor::*[contains(@class, ' topic/stentry ')][1]
-      /ancestor::*[contains(@class, ' topic/li ')])"/>
+    <xsl:variable name="li_count_for_simpletable" select="count(ancestor::li[contains(@class, ' topic/li ')]) - 
+      count(ancestor::stentry[contains(@class, ' topic/stentry ')][1]
+      /ancestor::li[contains(@class, ' topic/li ')])"/>
     
-    <xsl:variable name="dlentry_count_for_table" select="count(ancestor::*[contains(@class, ' topic/dlentry ')]) - 
-      count(ancestor::*[contains(@class, ' topic/entry ')][1]
-      /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
+    <xsl:variable name="dlentry_count_for_table" select="count(ancestor::dlentry[contains(@class, ' topic/dlentry ')]) - 
+      count(ancestor::entry[contains(@class, ' topic/entry ')][1]
+      /ancestor::dlentry[contains(@class, ' topic/dlentry ')])"/>
     
-    <xsl:variable name="dlentry_count_for_simpletable" select="count(ancestor::*[contains(@class, ' topic/dlentry ')]) - 
-      count(ancestor::*[contains(@class, ' topic/stentry ')][1]
-      /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
+    <xsl:variable name="dlentry_count_for_simpletable" select="count(ancestor::dlentry[contains(@class, ' topic/dlentry ')]) - 
+      count(ancestor::stentry[contains(@class, ' topic/stentry ')][1]
+      /ancestor::dlentry[contains(@class, ' topic/dlentry ')])"/>
     
-    <xsl:variable name="dlentry_count_for_list" select="count(ancestor::*[contains(@class, ' topic/dlentry ')]) - 
-      count(ancestor::*[contains(@class, ' topic/li ')][1]
-      /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
+    <xsl:variable name="dlentry_count_for_list" select="count(ancestor::dlentry[contains(@class, ' topic/dlentry ')]) - 
+      count(ancestor::li[contains(@class, ' topic/li ')][1]
+      /ancestor::dlentry[contains(@class, ' topic/dlentry ')])"/>
     
     
     <xsl:choose>
       <!-- parent tag is body -->
-      <xsl:when test="parent::*[contains(@class, ' topic/body ')]">
+      <xsl:when test="parent::body[contains(@class, ' topic/body ')]">
         <!-- start flagging -->
         <xsl:apply-templates select="." mode="start-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -955,7 +955,7 @@
         </xsl:apply-templates>
       </xsl:when>
       <!-- parent by list -->
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
         <!-- start flagging -->
         <xsl:apply-templates select="." mode="start-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -970,7 +970,7 @@
         </xsl:apply-templates>
       </xsl:when>
       <!-- parent by  entry-->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- start flagging -->
         <xsl:apply-templates select="." mode="start-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -985,7 +985,7 @@
         </xsl:apply-templates>
       </xsl:when>
       <!-- parent by  stentry-->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <!-- start flagging -->
         <xsl:apply-templates select="." mode="start-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>
@@ -1000,7 +1000,7 @@
         </xsl:apply-templates>
       </xsl:when>
       <!-- parent tag is fn -->
-      <xsl:when test="parent::*[contains(@class, ' topic/fn ')]">
+      <xsl:when test="parent::fn[contains(@class, ' topic/fn ')]">
         <!-- break span tag(for flagging)-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="1"/>
@@ -1030,7 +1030,7 @@
       </xsl:when>
       
       <!-- nearest ancestor tag is table -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/entry ')] and $li_count_for_table = 0 and $dlentry_count_for_table = 0">
+      <xsl:when test="ancestor::entry[contains(@class, ' topic/entry ')] and $li_count_for_table = 0 and $dlentry_count_for_table = 0">
         <xsl:variable name="span_depth">
           <xsl:call-template name="calculate_span_depth_for_tag">
             <xsl:with-param name="tag_class" select="' topic/entry '"/>
@@ -1066,7 +1066,7 @@
       </xsl:when>
       
       <!-- nearest ancestor tag is simpletable -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/stentry ')] and $li_count_for_simpletable = 0 
+      <xsl:when test="ancestor::stentry[contains(@class, ' topic/stentry ')] and $li_count_for_simpletable = 0 
                       and $dlentry_count_for_simpletable = 0">
         <xsl:variable name="span_depth">
           <xsl:call-template name="calculate_span_depth_for_tag">
@@ -1103,7 +1103,7 @@
       </xsl:when>
       
       <!-- nearest ancestor tag is li -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/li ')] and $dlentry_count_for_list = 0">
+      <xsl:when test="ancestor::li[contains(@class, ' topic/li ')] and $dlentry_count_for_list = 0">
         <xsl:variable name="span_depth">
           <xsl:call-template name="calculate_span_depth_for_tag">
             <xsl:with-param name="tag_class" select="' topic/li '"/>
@@ -1138,7 +1138,7 @@
       </xsl:when>
       
       <!-- nearest ancestor tag is dlentry -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/dlentry ')]">
+      <xsl:when test="ancestor::dlentry[contains(@class, ' topic/dlentry ')]">
         <xsl:variable name="span_depth">
           <xsl:call-template name="calculate_span_depth_for_tag">
             <xsl:with-param name="tag_class" select="' topic/dlentry '"/>
@@ -1172,7 +1172,7 @@
         </xsl:call-template>
       </xsl:when>
       <!-- nearest ancestor tag is fn -->
-      <xsl:when test="ancestor::*[contains(@class, ' topic/fn ')]">
+      <xsl:when test="ancestor::fn[contains(@class, ' topic/fn ')]">
         <xsl:variable name="span_depth">
           <xsl:call-template name="calculate_span_depth_for_tag"/>
         </xsl:variable>
@@ -1296,7 +1296,7 @@
           </xsl:choose>
           <xsl:call-template name="gen-linktxt"/>
           <xsl:if test="contains(@class,' topic/link ')">
-            <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
+            <xsl:apply-templates select="desc[contains(@class, ' topic/desc ')]"/>
             <text:line-break/>
           </xsl:if>
         </text:a>
@@ -1324,8 +1324,8 @@
       </xsl:when>
       <xsl:when test="contains(@class,' topic/link ')">
         <xsl:choose>
-          <xsl:when test="*[contains(@class,' topic/linktext ')]">
-            <xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
+          <xsl:when test="linktext[contains(@class, ' topic/linktext ')]">
+            <xsl:value-of select="linktext[contains(@class, ' topic/linktext ')]"/>
           </xsl:when>
           <xsl:when test="text()">
             <xsl:value-of select="text()"/>

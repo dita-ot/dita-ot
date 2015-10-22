@@ -43,32 +43,32 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Process with "outofline" in tables.xsl -->
   </xsl:template>
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ') or contains(@class,' ditaot-d/ditaval-endprop ')]
-                        [parent::*[contains(@class,' topic/image ')]]" priority="10">
+                        [parent::image[contains(@class, ' topic/image ')]]" priority="10">
     <!-- Process with "outofline" in commons.xsl -->
   </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/stentry ')]" mode="ancestor-start-flag">
+  <xsl:template match="stentry[contains(@class, ' topic/stentry ')]" mode="ancestor-start-flag">
     <!-- If first stentry in a row, pick up start flag from the row -->
-    <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/stentry ')])">
+    <xsl:if test="not(preceding-sibling::stentry[contains(@class, ' topic/stentry ')])">
       <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
     </xsl:if>
   </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/stentry ')]" mode="ancestor-end-flag">
+  <xsl:template match="stentry[contains(@class, ' topic/stentry ')]" mode="ancestor-end-flag">
     <!-- If last stentry in a row, pick up end flag from the row -->
-    <xsl:if test="not(following-sibling::*[contains(@class,' topic/stentry ')])">
+    <xsl:if test="not(following-sibling::stentry[contains(@class, ' topic/stentry ')])">
       <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:if>
   </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/entry ')]" mode="ancestor-start-flag">
-    <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/entry ')])">
+  <xsl:template match="entry[contains(@class, ' topic/entry ')]" mode="ancestor-start-flag">
+    <xsl:if test="not(preceding-sibling::entry[contains(@class, ' topic/entry ')])">
       <!-- check tgroup, tbody or thead, row -->
       <xsl:apply-templates select="../../../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
       <xsl:apply-templates select="../../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
       <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
     </xsl:if>
   </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/entry ')]" mode="ancestor-end-flag">
-    <xsl:if test="not(following-sibling::*[contains(@class,' topic/entry ')])">
+  <xsl:template match="entry[contains(@class, ' topic/entry ')]" mode="ancestor-end-flag">
+    <xsl:if test="not(following-sibling::entry[contains(@class, ' topic/entry ')])">
       <!-- check row, tbody or thead, tgroup -->
       <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
       <xsl:apply-templates select="../../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>

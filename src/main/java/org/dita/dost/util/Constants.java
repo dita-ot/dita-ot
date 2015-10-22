@@ -794,6 +794,7 @@ public final class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE="gramcache";
     public static final String ANT_INVOKER_EXT_PARAN_SETSYSTEMID="setsystemid";
     public static final String ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE = "force-unique";
+    public static final String ANT_INVOKER_EXT_PARAN_GENERALISE_ELEMENT_NAME = "generalise-element-name";
     public static final String ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR = "generate-debug-attributes";
     public static final String ANT_INVOKER_EXT_PARAM_PROCESSING_MODE = "processing-mode";
     /**Constants for line separator.*/

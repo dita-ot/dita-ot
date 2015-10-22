@@ -56,7 +56,7 @@
   </xsl:template>
 
   <!-- Start by creating the collection element for the map being processed. -->
-  <xsl:template match="/*[contains(@class, ' map/map ')]">    
+  <xsl:template match="/map[contains(@class, ' map/map ')]">    
     <mapcollection>
       <xsl:apply-templates/>
     </mapcollection>
@@ -169,20 +169,20 @@
   </xsl:template>
   
   <!-- Generate both unordered <linkpool> and ordered <linklist> links. -->
-  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generate-all-links">
+  <xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="generate-all-links">
     <xsl:apply-templates select="." mode="generate-ordered-links"/>
     <xsl:apply-templates select="." mode="generate-unordered-links"/>
   </xsl:template>
 
   <!-- Generated ordered links to friends (with linklist) -->
-  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generate-ordered-links">
+  <xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="generate-ordered-links">
     <xsl:apply-templates select="." mode="link-to-friends">
       <xsl:with-param name="linklist" select="true()" as="xs:boolean"/>
     </xsl:apply-templates>
   </xsl:template>
 
   <!-- Generate unordered links (with linkpool) -->
-  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generate-unordered-links">
+  <xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="generate-unordered-links">
     <linkpool class="- topic/linkpool ">
       <xsl:copy-of select="@xtrf | @xtrc"/>
       <xsl:if test="/*[@id]">
@@ -193,7 +193,7 @@
   </xsl:template>
 
   <!-- To do: When XSLT 2.0 is a minimum requirement, do this again with hearty use of xsl:next-match. -->
-  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="link-from">
+  <xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="link-from">
     <xsl:if test="$include.roles = 'parent'">
       <xsl:apply-templates select="." mode="link-to-parent"/>
     </xsl:if>
@@ -219,9 +219,9 @@
 
   <!--parent-->
   <xsl:template match="*" mode="link-to-parent"/>
-  <xsl:template match="*[contains(@class, ' map/topicref ')][not(ancestor::*[contains(concat(' ', @chunk, ' '), ' to-content ')])]"
+  <xsl:template match="topicref[contains(@class, ' map/topicref ')][not(ancestor::*[contains(concat(' ', @chunk, ' '), ' to-content ')])]"
                 mode="link-to-parent" name="link-to-parent">
-    <xsl:apply-templates select="ancestor::*[contains(@class, ' map/topicref ')]
+    <xsl:apply-templates select="ancestor::topicref[contains(@class, ' map/topicref ')]
                                             [@href and not(@href = '')]
                                             [not(@linking = ('none', 'sourceonly'))]
                                             [not(@processing-role = 'resource-only')][1]"
@@ -232,10 +232,10 @@
   
   <!--prereqs - preceding with importance=required and in a sequence, but leaving the immediately previous one alone to avoid duplication with prev/next generation-->
   <xsl:template match="*" mode="link-to-prereqs"/>
-  <xsl:template match="*[@collection-type = 'sequence']/*[contains(@class, ' map/topicref ')]
+  <xsl:template match="*[@collection-type = 'sequence']/topicref[contains(@class, ' map/topicref ')]
                                                          [not(ancestor::*[contains(concat(' ', @chunk, ' '), ' to-content ')])]"
                 mode="link-to-prereqs" name="link-to-prereqs">
-    <xsl:apply-templates select="preceding-sibling::*[contains(@class, ' map/topicref ')]
+    <xsl:apply-templates select="preceding-sibling::topicref[contains(@class, ' map/topicref ')]
                                                      [@href and not(@href = '')]
                                                      [not(@linking = ('none', 'sourceonly'))]
                                                      [not(@processing-role = 'resource-only')]
@@ -245,17 +245,17 @@
   
   <!--family-->
   <xsl:template match="*" mode="link-to-siblings"/>
-  <xsl:template match="*[@collection-type = 'family']/*[contains(@class, ' map/topicref ')]
+  <xsl:template match="*[@collection-type = 'family']/topicref[contains(@class, ' map/topicref ')]
                                                        [not(ancestor::*[contains(concat(' ', @chunk, ' '), ' to-content ')])]"
                 mode="link-to-siblings" name="link-to-siblings">
-    <xsl:apply-templates select="preceding-sibling::*[contains(@class, ' map/topicref ')]
+    <xsl:apply-templates select="preceding-sibling::topicref[contains(@class, ' map/topicref ')]
                                                      [@href and not(@href = '')]
                                                      [not(@linking = ('none', 'sourceonly'))]
                                                      [not(@processing-role = 'resource-only')]"
                          mode="link">
       <xsl:with-param name="role">sibling</xsl:with-param>
     </xsl:apply-templates>
-    <xsl:apply-templates select="following-sibling::*[contains(@class, ' map/topicref ')]
+    <xsl:apply-templates select="following-sibling::topicref[contains(@class, ' map/topicref ')]
                                                      [@href and not(@href = '')]
                                                      [not(@linking = ('none', 'sourceonly'))]
                                                      [not(@processing-role = 'resource-only')]"
@@ -266,11 +266,11 @@
   
   <!--next/prev-->
   <xsl:template match="*" mode="link-to-next-prev"/>
-  <xsl:template match="*[@collection-type = 'sequence']/*[contains(@class, ' map/topicref ')]
+  <xsl:template match="*[@collection-type = 'sequence']/topicref[contains(@class, ' map/topicref ')]
                                                          [not(ancestor::*[contains(concat(' ', @chunk, ' '), ' to-content ')])]"
                 mode="link-to-next-prev" name="link-to-next-prev">
     <xsl:if test="$include.roles = 'previous'">
-      <xsl:apply-templates select="preceding-sibling::*[contains(@class, ' map/topicref ')]
+      <xsl:apply-templates select="preceding-sibling::topicref[contains(@class, ' map/topicref ')]
                                                        [@href and not(@href = '')]
                                                        [not(@linking = ('none', 'sourceonly'))]
                                                        [not(@processing-role = 'resource-only')][1]"
@@ -279,7 +279,7 @@
       </xsl:apply-templates>
     </xsl:if>
     <xsl:if test="$include.roles = 'next'">
-      <xsl:apply-templates select="following-sibling::*[contains(@class, ' map/topicref ')]
+      <xsl:apply-templates select="following-sibling::topicref[contains(@class, ' map/topicref ')]
                                                        [@href and not(@href = '')]
                                                        [not(@linking = ('none', 'sourceonly'))]
                                                        [not(@processing-role = 'resource-only')][1]"
@@ -291,18 +291,18 @@
   
   <!--children-->
   <xsl:template match="*" mode="link-to-children"/>
-  <xsl:template match="*[contains(@class, ' map/topicref ')]
+  <xsl:template match="topicref[contains(@class, ' map/topicref ')]
                         [not(ancestor-or-self::*[contains(concat(' ', @chunk, ' '), ' to-content ')])]"
                 mode="link-to-children" name="link-to-children">
     <!--???TO DO: should be linking to appropriate descendants, not just children - ie grandchildren of eg topicgroup (non-href/non-title topicrefs) children-->
     <xsl:if test="not(@processing-role = 'resource-only') and
-                  descendant::*[contains(@class, ' map/topicref ')]
+                  descendant::topicref[contains(@class, ' map/topicref ')]
                                [@href and not(@href = '')]
                                [not(@linking = ('none', 'sourceonly'))]
                                [not(@processing-role = 'resource-only')]">
       <linkpool class="- topic/linkpool ">
         <xsl:copy-of select="@xtrf | @xtrc | @collection-type"/>
-        <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="recusive"/>
+        <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]" mode="recusive"/>
       </linkpool>
     </xsl:if>
   </xsl:template>
@@ -326,7 +326,7 @@
     </xsl:apply-templates>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]" mode="recusive">
-    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="recusive"/>
+    <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]" mode="recusive"/>
   </xsl:template>
   <xsl:template match="*" mode="recusive" priority="-10">
     <xsl:apply-templates select="self::*[@href and not(@href = '')]
@@ -339,52 +339,52 @@
   
   <!--friends-->
   <xsl:template match="*" mode="link-to-friends"/>
-  <xsl:template match="*[contains(@class, ' map/relcell ')]//*[contains(@class, ' map/topicref ')]"
+  <xsl:template match="relcell[contains(@class, ' map/relcell ')]//topicref[contains(@class, ' map/topicref ')]"
                 mode="link-to-friends" name="link-to-friends">
     <xsl:param name="linklist" select="false()" as="xs:boolean"/>
     
     <xsl:variable name="position" as="xs:integer">
-      <xsl:apply-templates mode="get-position" select="ancestor::*[contains(@class, ' map/relcell ')]"/>
+      <xsl:apply-templates mode="get-position" select="ancestor::relcell[contains(@class, ' map/relcell ')]"/>
     </xsl:variable>
     <xsl:variable name="group-title">
-      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]" mode="grab-group-title"/>
+      <xsl:apply-templates select="ancestor::reltable[contains(@class, ' map/reltable ')]/relheader[contains(@class, ' map/relheader ')]/relcolspec[contains(@class, ' map/relcolspec ')][position()=$position]" mode="grab-group-title"/>
     </xsl:variable>
     
     <xsl:if test="$linklist and exists($group-title) and not($group-title = '')">
-      <xsl:if test="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]">
+      <xsl:if test="ancestor::relcell[contains(@class, ' map/relcell ')]/preceding-sibling::relcell[contains(@class, ' map/relcell ')]/descendant::topicref[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
+        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::relcell[contains(@class, ' map/relcell ')]/preceding-sibling::relcell[contains(@class, ' map/relcell ')]">
           <xsl:with-param name="role">friend</xsl:with-param>
         </xsl:apply-templates>
       </xsl:if>
-      <xsl:if test="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
-        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]">
+      <xsl:if test="ancestor::relcell[contains(@class, ' map/relcell ')]/following-sibling::relcell[contains(@class, ' map/relcell ')]/descendant::topicref[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
+        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::relcell[contains(@class, ' map/relcell ')]/following-sibling::relcell[contains(@class, ' map/relcell ')]">
           <xsl:with-param name="role">friend</xsl:with-param>
         </xsl:apply-templates>
       </xsl:if>
-      <xsl:if test="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">  
-        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]">
+      <xsl:if test="ancestor::reltable[contains(@class, ' map/reltable ')]/relheader[contains(@class, ' map/relheader ')]/relcolspec[contains(@class, ' map/relcolspec ')][position()=$position]/topicref[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">  
+        <xsl:apply-templates mode="generate-ordered-links-2" select="ancestor::reltable[contains(@class, ' map/reltable ')]/relheader[contains(@class, ' map/relheader ')]/relcolspec[contains(@class, ' map/relcolspec ')][position()=$position]">
           <xsl:with-param name="role">friend</xsl:with-param>
         </xsl:apply-templates>
       </xsl:if>  
     </xsl:if>
     <xsl:if test="not($linklist) and (empty($group-title) or $group-title = '')">
-      <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/relcell ')]/preceding-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
+      <xsl:apply-templates mode="link" select="ancestor::relcell[contains(@class, ' map/relcell ')]/preceding-sibling::relcell[contains(@class, ' map/relcell ')]/descendant::topicref[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
         <xsl:with-param name="role">friend</xsl:with-param>
       </xsl:apply-templates>
-      <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/relcell ')]/following-sibling::*[contains(@class, ' map/relcell ')]/descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
+      <xsl:apply-templates mode="link" select="ancestor::relcell[contains(@class, ' map/relcell ')]/following-sibling::relcell[contains(@class, ' map/relcell ')]/descendant::topicref[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
         <xsl:with-param name="role">friend</xsl:with-param>
       </xsl:apply-templates>
-      <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
+      <xsl:apply-templates mode="link" select="ancestor::reltable[contains(@class, ' map/reltable ')]/relheader[contains(@class, ' map/relheader ')]/relcolspec[contains(@class, ' map/relcolspec ')][position()=$position]/topicref[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
         <xsl:with-param name="role">friend</xsl:with-param>
       </xsl:apply-templates>
     </xsl:if>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' map/topicref ')]"
+  <xsl:template match="relcolspec[contains(@class, ' map/relcolspec ')]/topicref[contains(@class, ' map/topicref ')]"
                 mode="link-to-friends" name="link-to-subfriends">
     <xsl:param name="linklist" select="false()" as="xs:boolean"/>
     <xsl:variable name="position" as="xs:integer">
-      <xsl:apply-templates mode="get-position" select="ancestor::*[contains(@class, ' map/relcolspec ')]"/>
+      <xsl:apply-templates mode="get-position" select="ancestor::relcolspec[contains(@class, ' map/relcolspec ')]"/>
     </xsl:variable>
     <xsl:variable name="group-title">
       <xsl:apply-templates mode="grab-group-title" select="."/>
@@ -398,13 +398,13 @@
         <title class="- topic/title ">
           <xsl:value-of select="$group-title"/>
         </title>
-        <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position() = $position]//*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]" mode="link">
+        <xsl:apply-templates select="ancestor::reltable[contains(@class, ' map/reltable ')]/relrow[contains(@class, ' map/relrow ')]/relcell[contains(@class, ' map/relcell ')][position() = $position]//topicref[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]" mode="link">
           <xsl:with-param name="role">friend</xsl:with-param>
         </xsl:apply-templates>
       </linklist>
     </xsl:if>
     <xsl:if test="not($linklist) and (empty($group-title) or $group-title = '')">
-      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')][position() = $position]//*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]" mode="link">
+      <xsl:apply-templates select="ancestor::reltable[contains(@class, ' map/reltable ')]/relrow[contains(@class, ' map/relrow ')]/relcell[contains(@class, ' map/relcell ')][position() = $position]//topicref[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]" mode="link">
         <xsl:with-param name="role">friend</xsl:with-param>
       </xsl:apply-templates>
     </xsl:if>
@@ -416,18 +416,18 @@
   </xsl:template>
   
   <!-- Grab the group title from the matching header of reltable. -->
-  <xsl:template match="*[contains(@class, ' map/relcolspec ')]" mode="grab-group-title"> 
+  <xsl:template match="relcolspec[contains(@class, ' map/relcolspec ')]" mode="grab-group-title"> 
     <xsl:choose>
-      <xsl:when test="*[contains(@class, ' topic/title ')][not(title = '')]">
-        <xsl:value-of select="*[contains(@class, ' topic/title ')]"/>
+      <xsl:when test="title[contains(@class, ' topic/title ')][not(title = '')]">
+        <xsl:value-of select="title[contains(@class, ' topic/title ')]"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates mode="grab-group-title" select="*[contains(@class, ' map/topicref ')][1]"/>
+        <xsl:apply-templates mode="grab-group-title" select="topicref[contains(@class, ' map/topicref ')][1]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>  
   
-  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="grab-group-title" as="xs:string?">
+  <xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="grab-group-title" as="xs:string?">
     <xsl:variable name="file-origin">
       <xsl:call-template name="get-file-uri">
         <xsl:with-param name="href" select="@href"/>
@@ -442,17 +442,17 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')][not(title = '')]">
-        <xsl:value-of select="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')]"/>
+      <xsl:when test="parent::relcolspec[contains(@class, ' map/relcolspec ')]/title[contains(@class, ' topic/title ')][not(title = '')]">
+        <xsl:value-of select="parent::relcolspec[contains(@class, ' map/relcolspec ')]/title[contains(@class, ' topic/title ')]"/>
       </xsl:when>
-      <xsl:when test="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:value-of select="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
+      <xsl:when test="descendant::topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]">
+        <xsl:value-of select="descendant::topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]"/>
       </xsl:when>
       <xsl:when test="@navtitle and not(@navtitle = '')">
         <xsl:value-of select="@navtitle"/>
       </xsl:when>
-      <xsl:when test="document($file,/)//*[contains(@class, ' topic/title ')]">
-        <xsl:value-of select="document($file,/)//*[contains(@class, ' topic/title ')][1]"/>
+      <xsl:when test="document($file,/)//title[contains(@class, ' topic/title ')]">
+        <xsl:value-of select="document($file,/)//title[contains(@class, ' topic/title ')][1]"/>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
@@ -460,12 +460,12 @@
   <!-- Override this moded template to add your own kinds of links. -->
   <xsl:template match="*" mode="link-to-other"/>
   
-  <xsl:template mode="generate-ordered-links-2" match="*[contains(@class, ' map/relcell ')]">
+  <xsl:template mode="generate-ordered-links-2" match="relcell[contains(@class, ' map/relcell ')]">
     <xsl:variable name="position" as="xs:integer">
       <xsl:apply-templates mode="get-position" select="."/>
     </xsl:variable>
     <xsl:variable name="group-title">
-      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position() = $position]" mode="grab-group-title"/>
+      <xsl:apply-templates select="ancestor::reltable[contains(@class, ' map/reltable ')]/relheader[contains(@class, ' map/relheader ')]/relcolspec[contains(@class, ' map/relcolspec ')][position() = $position]" mode="grab-group-title"/>
     </xsl:variable>
     <linklist class="- topic/linklist ">
       <xsl:copy-of select="@xtrf | @xtrc"/>
@@ -476,7 +476,7 @@
         <title class="- topic/title ">
           <xsl:value-of select="$group-title"/>
         </title>
-        <xsl:apply-templates select="descendant::*[contains(@class, ' map/topicref ')]
+        <xsl:apply-templates select="descendant::topicref[contains(@class, ' map/topicref ')]
                                                   [@href and not(@href = '')]
                                                   [not(@linking = ('none', 'sourceonly'))]"
                              mode="link">
@@ -486,12 +486,12 @@
     </linklist>
   </xsl:template>
   
-  <xsl:template mode="generate-ordered-links-2" match="*[contains(@class, ' map/relcolspec ')]">
+  <xsl:template mode="generate-ordered-links-2" match="relcolspec[contains(@class, ' map/relcolspec ')]">
     <xsl:variable name="position" as="xs:integer">
       <xsl:apply-templates mode="get-position" select="."/>
     </xsl:variable>
     <xsl:variable name="group-title">
-      <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position() = $position]" mode="grab-group-title"/>
+      <xsl:apply-templates select="ancestor::reltable[contains(@class, ' map/reltable ')]/relheader[contains(@class, ' map/relheader ')]/relcolspec[contains(@class, ' map/relcolspec ')][position() = $position]" mode="grab-group-title"/>
     </xsl:variable>
     <linklist class="- topic/linklist ">
       <xsl:copy-of select="@xtrf | @xtrc"/>
@@ -503,7 +503,7 @@
           <xsl:value-of select="$group-title"/>
         </title>
         <xsl:apply-templates mode="link" 
-          select="descendant::*[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
+          select="descendant::topicref[contains(@class, ' map/topicref ')][@href and not(@href = '')][not(@linking = ('none', 'sourceonly'))]">
           <xsl:with-param name="role">friend</xsl:with-param>
         </xsl:apply-templates> 
       </xsl:if>
@@ -576,27 +576,27 @@
           <xsl:attribute name="otherrole" select="$otherrole"/>
         </xsl:if>
         <!--figure out the linktext and desc-->
-        <xsl:if test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+        <xsl:if test="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]">
           <!--Do not output linktext when The final output type is PDF or IDD
             The target of the HREF is a local DITA file
             The user has not specified locktitle to override the title -->
           <xsl:if test="not(($FINALOUTPUTTYPE = 'PDF' or $FINALOUTPUTTYPE = 'IDD') and (not(@scope) or @scope = 'local') and (not(@format) or @format = 'dita') and (not(@locktitle) or @locktitle = 'no'))">
             <linktext class="- topic/linktext ">
-              <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']"/>
-              <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]/node()"/>
+              <xsl:copy-of select="topicmeta[contains(@class, ' map/topicmeta ')]/processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']"/>
+              <xsl:copy-of select="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]/node()"/>
             </linktext>
           </xsl:if>
         </xsl:if>
-        <xsl:if test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]">
+        <xsl:if test="topicmeta[contains(@class, ' map/topicmeta ')]/shortdesc[contains(@class, ' map/shortdesc ')]">
           <!-- add desc node and text -->
-          <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
+          <xsl:apply-templates select="topicmeta[contains(@class, ' map/topicmeta ')]/shortdesc[contains(@class, ' map/shortdesc ')]"/>
         </xsl:if>
       </link>
     </xsl:if>
   </xsl:template>
   
   <!-- create a template to get child nodes and text -->
-  <xsl:template match="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]" name="node">
+  <xsl:template match="topicmeta[contains(@class, ' map/topicmeta ')]/shortdesc[contains(@class, ' map/shortdesc ')]" name="node">
     <xsl:copy-of select="../processing-instruction()[name() = 'ditaot'][. = 'usershortdesc' or . = 'genshortdesc']"/>
     <desc class="- topic/desc ">
       <!-- get child node and text -->
@@ -612,10 +612,10 @@
     </xsl:apply-templates>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' map/topicmeta ')]">
+  <xsl:template match="topicmeta[contains(@class, ' map/topicmeta ')]">
     <!--ignore topicmeta content when walking topicref/reltable tree - otherwise linktext content gets literally output-->
   </xsl:template>
-  <xsl:template match="*[contains(@class, ' map/topicmeta ')]" mode="link">
+  <xsl:template match="topicmeta[contains(@class, ' map/topicmeta ')]" mode="link">
     <!--ignore topicmeta content when walking topicref/reltable tree - otherwise linktext content gets literally output-->
   </xsl:template>
   
@@ -895,7 +895,7 @@
   </xsl:template>
   
   <!-- Do nothing when meet the title -->
-  <xsl:template match="*[contains(@class, ' topic/title ')]"/>
+  <xsl:template match="title[contains(@class, ' topic/title ')]"/>
   
   <xsl:template name="get-file-uri">
     <xsl:param name="href"/>

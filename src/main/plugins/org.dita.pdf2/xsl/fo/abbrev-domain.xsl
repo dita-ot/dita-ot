@@ -14,7 +14,7 @@
   
   <xsl:key name="abbreviated-form-keyref"
            match="*[contains(@class, ' abbrev-d/abbreviated-form ')]
-                   [empty(ancestor::opentopic:map) and empty(ancestor::*[contains(@class, ' topic/title ')])]
+                   [empty(ancestor::opentopic:map) and empty(ancestor::title[contains(@class, ' topic/title ')])]
                    [@keyref]"
            use="@keyref"/>
   
@@ -54,10 +54,10 @@
     </xsl:variable>
     <xsl:sequence select="not(generate-id(.) = generate-id(key('abbreviated-form-keyref', @keyref, $first-use-scope-root)[1]))"/>
   </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/copyright ')]//*" mode="use-abbreviated-form" as="xs:boolean">
+  <xsl:template match="copyright[contains(@class, ' topic/copyright ')]//*" mode="use-abbreviated-form" as="xs:boolean">
     <xsl:sequence select="false()"/>
   </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/title ')]//*" mode="use-abbreviated-form" as="xs:boolean">
+  <xsl:template match="title[contains(@class, ' topic/title ')]//*" mode="use-abbreviated-form" as="xs:boolean">
     <xsl:sequence select="true()"/>
   </xsl:template>  
 
@@ -65,10 +65,10 @@
   <xsl:template name="get-first-use-scope-root" as="element()">
     <xsl:choose>
       <xsl:when test="$first-use-scope = 'topic'">
-        <xsl:sequence select="ancestor::*[contains(@class, ' topic/topic ')][1]"/>
+        <xsl:sequence select="ancestor::topic[contains(@class, ' topic/topic ')][1]"/>
       </xsl:when>
       <xsl:when test="$first-use-scope = 'chapter'">
-        <xsl:sequence select="ancestor::*[contains(@class, ' topic/topic ')][position() = last()]"/>
+        <xsl:sequence select="ancestor::topic[contains(@class, ' topic/topic ')][position() = last()]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:sequence select="/*"/>

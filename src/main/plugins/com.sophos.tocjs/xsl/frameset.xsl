@@ -31,7 +31,7 @@
   <xsl:param name="OUTEXT" select="'.html'"/>
 
   <xsl:variable name="firsttopic">
-    <xsl:variable name="f" select="/*/*[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href][not(@processing-role='resource-only')]"/>
+    <xsl:variable name="f" select="/*/topicref[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href][not(@processing-role='resource-only')]"/>
     <xsl:choose>
       <xsl:when test="$f">
         <xsl:choose>
@@ -70,8 +70,8 @@
       <head>
         <title>
           <xsl:choose>
-            <xsl:when test="/*/*[contains(@class,' topic/title ')]">
-              <xsl:value-of select="normalize-space(/*/*[contains(@class,' topic/title ')])"/>
+            <xsl:when test="/*/title[contains(@class, ' topic/title ')]">
+              <xsl:value-of select="normalize-space(/*/title[contains(@class, ' topic/title ')])"/>
             </xsl:when>
             <xsl:when test="/*/@title">
               <xsl:value-of select="normalize-space(/*/@title)"/>

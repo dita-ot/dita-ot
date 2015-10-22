@@ -28,7 +28,7 @@
 
   <xsl:template match="*[contains(@class,' markup-d/markupname ')]">
     <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
         <text:p>
           <text:span text:style-name="Courier_New">
             
@@ -43,16 +43,16 @@
         </text:p>
       </xsl:when>
       <!-- nested by entry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+      <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
         <!-- create p tag -->
         <text:p>
           <!-- alignment styles -->
-          <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+          <xsl:if test="parent::entry[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
           <!-- cell belongs to thead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+            <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]               /parent::row[contains(@class, ' topic/row ')]/parent::thead[contains(@class, ' topic/thead ')]">
               <text:span text:style-name="bold">
                 
                 <text:span text:style-name="Courier_New">
@@ -83,11 +83,11 @@
         </text:p>
       </xsl:when>
       <!-- nested by stentry -->
-      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+      <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
         <text:p>
           <!-- cell belongs to sthead -->
           <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/               parent::*[contains(@class, ' topic/sthead ')]">
+            <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]/               parent::sthead[contains(@class, ' topic/sthead ')]">
               <text:span text:style-name="bold">
                 
                 <text:span text:style-name="Courier_New">

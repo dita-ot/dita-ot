@@ -5,21 +5,21 @@
     exclude-result-prefixes="related-links xs">
 
     <!-- Concepts have their own group. -->
-    <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group"
+    <xsl:template match="link[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group"
                   name="related-links:group.concept"
                   as="xs:string">
         <xsl:text>concept</xsl:text>
     </xsl:template>
     
     <!-- Priority of concept group. -->
-    <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group-priority"
+    <xsl:template match="link[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group-priority"
                   name="related-links:group-priority.concept"
                   as="xs:integer">
         <xsl:sequence select="3"/>
     </xsl:template>
     
     <!-- Wrapper for concept group: "Related concepts" in a <div>. -->
-    <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group"
+    <xsl:template match="link[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group"
                   name="related-links:result.concept" as="element(linklist)">
         <xsl:param name="links" as="node()*"/>
         <xsl:if test="normalize-space(string-join($links, ''))">

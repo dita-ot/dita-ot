@@ -61,11 +61,11 @@
 <xsl:template name="setup-options">
 <xsl:param name="target-language">
   <xsl:choose>
-    <xsl:when test="/*[contains(@class, ' map/map ')]/@xml:lang">
-      <xsl:value-of select="lower-case(/*[contains(@class, ' map/map ')]/@xml:lang)"/>
+    <xsl:when test="/map[contains(@class, ' map/map ')]/@xml:lang">
+      <xsl:value-of select="lower-case(/map[contains(@class, ' map/map ')]/@xml:lang)"/>
     </xsl:when>
-    <xsl:when test="document((//*[contains(@class, ' map/topicref ')][@href and @href != '' and not(contains(@href,'://'))][not(@format) or @format='dita'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang">
-      <xsl:value-of select="lower-case(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang)"/>
+    <xsl:when test="document((//topicref[contains(@class, ' map/topicref ')][@href and @href != '' and not(contains(@href,'://'))][not(@format) or @format='dita'][not(@scope) or @scope='local'])[1]/@href, /)//topic[contains(@class, ' topic/topic ')][1]/@xml:lang">
+      <xsl:value-of select="lower-case(document((//topicref[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita'][not(@scope) or @scope='local'])[1]/@href, /)//topic[contains(@class, ' topic/topic ')][1]/@xml:lang)"/>
     </xsl:when>
     <xsl:otherwise>en-us</xsl:otherwise>
   </xsl:choose>
@@ -74,7 +74,7 @@
 <xsl:text>[OPTIONS]
 Compiled file=</xsl:text><xsl:value-of select="substring-before($HHCNAME,'.hhc')"/><xsl:text>.chm
 </xsl:text>
-<xsl:if test="/*[contains(@class, ' map/map ')]">   <!-- Only reference HHC if there is valid navigation -->
+<xsl:if test="/map[contains(@class, ' map/map ')]">   <!-- Only reference HHC if there is valid navigation -->
   <xsl:text>Contents file=</xsl:text><xsl:value-of select="$HHCNAME"/><xsl:text>
 </xsl:text>
 </xsl:if>
@@ -152,7 +152,7 @@ Binary Index=No
 Default topic=</xsl:text>
 <!-- in a single map, get the first valid topic -->
 <xsl:text/>
-<xsl:apply-templates select="descendant::*[contains(@class, ' map/topicref ')][not(@processing-role='resource-only')][@href][(@href and (not(@format) or @format = 'dita')) or contains(@href,'.htm')][not(contains(@toc,'no'))][not(@processing-role='resource-only')][1]" mode="defaulttopic"/>
+<xsl:apply-templates select="descendant::topicref[contains(@class, ' map/topicref ')][not(@processing-role='resource-only')][@href][(@href and (not(@format) or @format = 'dita')) or contains(@href,'.htm')][not(contains(@toc,'no'))][not(@processing-role='resource-only')][1]" mode="defaulttopic"/>
 <xsl:text/>
 
 <!-- Get the title, if possible -->
@@ -161,11 +161,11 @@ Default topic=</xsl:text>
   <xsl:when test="/*[contains(@class, ' bookmap/bookmap ')]/*[contains(@class, ' bookmap/booktitle ')]/*[contains(@class,' bookmap/mainbooktitle ')]">
     <xsl:text>Title=</xsl:text><xsl:value-of select="/*[contains(@class, ' bookmap/bookmap ')]/*[contains(@class, ' bookmap/booktitle ')]/*[contains(@class,' bookmap/mainbooktitle ')]"/>
   </xsl:when>
-  <xsl:when test="/*[contains(@class, ' map/map ')]/*[contains(@class, ' topic/title ')]">
-    <xsl:text>Title=</xsl:text><xsl:value-of select="/*[contains(@class, ' map/map ')]/*[contains(@class, ' topic/title ')]"/>
+  <xsl:when test="/map[contains(@class, ' map/map ')]/title[contains(@class, ' topic/title ')]">
+    <xsl:text>Title=</xsl:text><xsl:value-of select="/map[contains(@class, ' map/map ')]/title[contains(@class, ' topic/title ')]"/>
   </xsl:when>
-  <xsl:when test="/*[contains(@class, ' map/map ')]/@title">
-    <xsl:text>Title=</xsl:text><xsl:value-of select="/*[contains(@class, ' map/map ')]/@title"/>
+  <xsl:when test="/map[contains(@class, ' map/map ')]/@title">
+    <xsl:text>Title=</xsl:text><xsl:value-of select="/map[contains(@class, ' map/map ')]/@title"/>
   </xsl:when>
 </xsl:choose>
 </xsl:template>
@@ -236,7 +236,7 @@ Default topic=</xsl:text>
      wrapper around the contents. When the contents are processed, they will generate
      a list of all XHTML files referenced by this map.
      ********************************************************************************* -->
-<xsl:template match="/*[contains(@class, ' map/map ')]">
+<xsl:template match="/map[contains(@class, ' map/map ')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:apply-templates>
     <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
@@ -248,7 +248,7 @@ Default topic=</xsl:text>
      and process the children; otherwise, skip the topicref. Topics are considered
      invalid when @scope=external, or when the href does not point to a DITA or HTML file.
      ********************************************************************************* -->
-<xsl:template match="*[contains(@class, ' map/topicref ')]">
+<xsl:template match="topicref[contains(@class, ' map/topicref ')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:variable name="thisFilename">
     <xsl:if test="@href and not ((ancestor-or-self::*/@type)[last()]='external') and not((ancestor-or-self::*/@scope)[last()]='external')
@@ -286,7 +286,7 @@ Default topic=</xsl:text>
       </xsl:attribute>
     </file>
   </xsl:if>
-  <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
+  <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]">
     <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
   </xsl:apply-templates>
 </xsl:template>
@@ -295,7 +295,7 @@ Default topic=</xsl:text>
      Process the default topic for this HHP file to get the filename. Same as above,
      except that we know @href is specified, and we do not process children.
      ********************************************************************************* -->
-<xsl:template match="*[contains(@class, ' map/topicref ')]" mode="defaulttopic">
+<xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="defaulttopic">
   <xsl:param name="pathFromMaplist"/>
   <xsl:choose>
     <!-- If copy-to is specified, that copy should be used in place of the original -->
@@ -328,9 +328,9 @@ Default topic=</xsl:text>
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="*[contains(@class, ' map/reltable ')]">
+<xsl:template match="reltable[contains(@class, ' map/reltable ')]">
   <xsl:param name="pathFromMaplist"/>
-  <xsl:apply-templates select="*[contains(@class, ' map/relrow ')]/*[contains(@class, ' map/relcell ')]/*[contains(@class, ' map/topicref ')]">
+  <xsl:apply-templates select="relrow[contains(@class, ' map/relrow ')]/relcell[contains(@class, ' map/relcell ')]/topicref[contains(@class, ' map/topicref ')]">
     <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
   </xsl:apply-templates>
 </xsl:template>
@@ -345,9 +345,9 @@ Default topic=</xsl:text>
 </xsl:template>
 
 <!-- These are here just to prevent accidental fallthrough -->
-<xsl:template match="*[contains(@class, ' map/navref ')]"/>
-<xsl:template match="*[contains(@class, ' map/anchor ')]"/>
-<xsl:template match="*[contains(@class, ' map/topicmeta ')]"/>
+<xsl:template match="navref[contains(@class, ' map/navref ')]"/>
+<xsl:template match="anchor[contains(@class, ' map/anchor ')]"/>
+<xsl:template match="topicmeta[contains(@class, ' map/topicmeta ')]"/>
 <xsl:template match="text()"/>
 
 <xsl:template match="*">

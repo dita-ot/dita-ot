@@ -300,8 +300,8 @@
   
   <xsl:variable name="localkeycol" as="xs:integer">
     <xsl:choose>
-      <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol">
-        <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')][1]/@keycol"/>
+      <xsl:when test="ancestor::simpletable[contains(@class, ' topic/simpletable ')][1]/@keycol">
+        <xsl:value-of select="ancestor::simpletable[contains(@class, ' topic/simpletable ')][1]/@keycol"/>
       </xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
@@ -351,21 +351,21 @@
 </xsl:template>
 
   <!-- References have their own group. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group"
+  <xsl:template match="link[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group"
                 name="related-links:group.reference"
                 as="xs:string">
     <xsl:text>reference</xsl:text>
   </xsl:template>
   
   <!-- Priority of reference group. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group-priority"
+  <xsl:template match="link[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group-priority"
                 name="related-links:group-priority.reference"
                 as="xs:integer">
     <xsl:sequence select="1"/>
   </xsl:template>
   
   <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
-  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group"
+  <xsl:template match="link[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group"
                 name="related-links:result.reference" as="element(linklist)">
     <xsl:param name="links"/>
     <xsl:if test="normalize-space(string-join($links, ''))">

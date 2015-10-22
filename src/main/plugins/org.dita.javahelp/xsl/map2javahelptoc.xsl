@@ -25,13 +25,13 @@
     indent="yes"
 />
 
-<xsl:template match="*[contains(@class,' map/map ')]" mode="toctop">
+<xsl:template match="map[contains(@class, ' map/map ')]" mode="toctop">
   <toc version="2.0">
-    <xsl:apply-templates select="*[contains(@class,' map/topicref ')]"/>
+    <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]"/>
   </toc>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' map/topicref ')]" mode="tocentry">
+<xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="tocentry">
   <xsl:param name="infile"/>
   <xsl:param name="outroot"/>
   <xsl:param name="outfile"/>
@@ -45,7 +45,7 @@
     <!-- <xsl:variable name="results">  -->
     <!-- Process children nodes. -->
 <!--     <xsl:apply-templates select="$subtopicNodes"/> -->
-    <xsl:apply-templates select="./*[contains(@class, ' map/topicref ')]"/>
+    <xsl:apply-templates select="./topicref[contains(@class, ' map/topicref ')]"/>
     <!-- </xsl:variable>  -->
     <!-- <xsl:text/>  -->
   </xsl:when>
@@ -78,6 +78,6 @@
 </xsl:template>
 
 <!-- do nothing when meeting with reltable -->
-<xsl:template match="*[contains(@class,' map/reltable ')]"/>
+<xsl:template match="reltable[contains(@class, ' map/reltable ')]"/>
 
 </xsl:stylesheet>

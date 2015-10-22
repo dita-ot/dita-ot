@@ -113,10 +113,10 @@
   <xsl:template match="*[contains(@class,' eclipsemap/providerName ')]" mode="plugin">
     <xsl:attribute name="provider-name"><xsl:value-of select="."/></xsl:attribute>
   </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/vrmlist ')]" mode="plugin">
-    <xsl:apply-templates select="*[contains(@class,' topic/vrm ')][last()]" mode="plugin"/>
+  <xsl:template match="vrmlist[contains(@class, ' topic/vrmlist ')]" mode="plugin">
+    <xsl:apply-templates select="vrm[contains(@class, ' topic/vrm ')][last()]" mode="plugin"/>
   </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/vrm ')]" mode="plugin">
+  <xsl:template match="vrm[contains(@class, ' topic/vrm ')]" mode="plugin">
     <xsl:attribute name="version"><xsl:value-of select="@version"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/><xsl:apply-templates select="../../*[contains(@class,' eclipsemap/pluginQualifier ')]"/></xsl:attribute>
   </xsl:template>
 
@@ -393,7 +393,7 @@
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/*[contains(@class,' topic/vrmlist ')]" mode="eclipse.manifest"/>
+        <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/vrmlist[contains(@class, ' topic/vrmlist ')]" mode="eclipse.manifest"/>
         <xsl:apply-templates select="*[contains(@class,' eclipsemap/osgiManifest ')]/*[contains(@class,' eclipsemap/manifestMeta ')]" mode="eclipse.manifest"/>
       </xsl:when>
       <xsl:otherwise>
@@ -461,7 +461,7 @@
   
   
   <xsl:template match="*[contains(@class,' eclipsemap/fragmentInfo ')]" mode="eclipse.manifest" priority="2">
-    <xsl:apply-templates select="*[contains(@class,' eclipsemap/fragmentVersionInfo ')]/*[contains(@class,' topic/vrm ')][position()=1]" mode="eclipse.manifest"/>
+    <xsl:apply-templates select="*[contains(@class,' eclipsemap/fragmentVersionInfo ')]/vrm[contains(@class, ' topic/vrm ')][position()=1]" mode="eclipse.manifest"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' eclipsemap/fragmentVersionInfo ')]" mode="eclipse.manifest" priority="2">
@@ -473,11 +473,11 @@
     <xsl:text>"</xsl:text>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' topic/vrmlist ')]" mode="eclipse.manifest">
-    <xsl:apply-templates select="*[contains(@class,' topic/vrm ')][position()=1]" mode="eclipse.manifest"/>
+  <xsl:template match="vrmlist[contains(@class, ' topic/vrmlist ')]" mode="eclipse.manifest">
+    <xsl:apply-templates select="vrm[contains(@class, ' topic/vrm ')][position()=1]" mode="eclipse.manifest"/>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' topic/vrm ')]" mode="eclipse.manifest">
+  <xsl:template match="vrm[contains(@class, ' topic/vrm ')]" mode="eclipse.manifest">
      <xsl:text>Bundle-Version: </xsl:text><xsl:apply-templates select="@version" mode="eclipse.manifest"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/><xsl:apply-templates select="../../*[contains(@class,' eclipsemap/qualifier ')]" mode="eclipse.manifest"/><xsl:value-of select="$newline"/>
   </xsl:template>
   

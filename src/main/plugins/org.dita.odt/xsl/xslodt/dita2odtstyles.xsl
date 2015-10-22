@@ -577,26 +577,26 @@
     </office:master-styles>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/topic ')]">
+  <xsl:template match="topic[contains(@class, ' topic/topic ')]">
     <xsl:apply-templates/>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' topic/body ')]">
+  <xsl:template match="body[contains(@class, ' topic/body ')]">
     <xsl:apply-templates/>  
   </xsl:template>
   
   <!-- create header style -->
-  <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
+  <xsl:template match="topic[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]">
     <!--xsl:call-template name="gen-id"/-->
-    <xsl:variable name="depth" select="count(ancestor::*[contains(@class,' topic/topic ')])" as="xs:integer"/>
+    <xsl:variable name="depth" select="count(ancestor::topic[contains(@class, ' topic/topic ')])" as="xs:integer"/>
     <xsl:call-template name="create-header-styles">
       <xsl:with-param name="depth" select="$depth"/>
     </xsl:call-template>
   </xsl:template>
   
   <!-- create header style for section -->
-  <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
-    <xsl:variable name="depth" select="count(ancestor::*[contains(@class,' topic/topic ')]) + 1" as="xs:integer"/>
+  <xsl:template match="section[contains(@class, ' topic/section ')]/title[contains(@class, ' topic/title ')]">
+    <xsl:variable name="depth" select="count(ancestor::topic[contains(@class, ' topic/topic ')]) + 1" as="xs:integer"/>
     <xsl:call-template name="create-header-styles">
       <xsl:with-param name="depth" select="$depth"/>
     </xsl:call-template>
@@ -875,7 +875,7 @@
   </xsl:template>
   
   <!-- fig style -->
-  <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]">
+  <xsl:template match="fig[contains(@class, ' topic/fig ')]/title[contains(@class, ' topic/title ')]">
     <xsl:comment>fig style</xsl:comment>
     <xsl:value-of select="$newline"/>
     <style:style style:name="center" style:family="paragraph">
@@ -916,7 +916,7 @@
   </xsl:template>
   
   <!-- Add for "New <data> element (#9)" in DITA 1.1 -->
-  <xsl:template match="*[contains(@class,' topic/data ')]"/>
+  <xsl:template match="data[contains(@class, ' topic/data ')]"/>
 
   <!-- Add for "Support foreign content vocabularies such as 
     MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
