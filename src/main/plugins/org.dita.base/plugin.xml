@@ -147,7 +147,7 @@
       <val desc="When an error is encountered, the DITA-OT attempts to recover from it" default="true">lax</val>
       <val desc="When an error is encountered, the DITA continues processing but does not attempt error recovery">skip</val>
     </param>
-    <param desc="Generalise element names during preprocessing" name="generalize-element-name" type="enum">
+    <param desc="Generalise element names during preprocessing" name="generalise-element-name" type="enum">
       <val>true</val>
       <val default="true">false</val>
     </param>
