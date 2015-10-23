@@ -1340,8 +1340,7 @@
       
       <xsl:variable name="entry-file-contents" as="document-node()?">
         <xsl:if test="empty(@scope) or @scope = 'local'">
-          <xsl:variable name="entry-file-uri" select="concat($WORKDIR, @href)"/>
-          <xsl:sequence select="document($entry-file-uri, /)"/>
+          <xsl:sequence select="dita-ot:retrieve-href-target(@href, $WORKDIR)"/>
         </xsl:if>
       </xsl:variable>
       <!-- Glossary id defined in <glossentry> -->

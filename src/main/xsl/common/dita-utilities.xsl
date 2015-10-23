@@ -381,6 +381,11 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:function name="dita-ot:get-href-path" as="xs:string">
+    <xsl:param name="href"/>
+    <xsl:sequence select="tokenize($href, '#')[1]"/>
+  </xsl:function>
+
   <xsl:function name="dita-ot:get-topic-id" as="xs:string?">
     <xsl:param name="href"/>
     <xsl:variable name="fragment" select="substring-after($href, '#')" as="xs:string"/>
@@ -419,6 +424,19 @@
     <xsl:call-template name="dita-ot:normalize-uri">
       <xsl:with-param name="src" select="tokenize($uri, '/')"/>
     </xsl:call-template>
+  </xsl:function>
+
+  <xsl:function name="dita-ot:retrieve-href-target" as="node()">
+    <xsl:param name="href" as="attribute(href)"/>
+    <xsl:param name="base" as="xs:anyURI"/>
+
+    <xsl:variable name="doc" as="document-node()"
+      select="doc(resolve-uri(dita-ot:get-href-path($href), $base))"/>
+
+    <xsl:sequence
+      select="if (dita-ot:has-element-id($href))
+            then key('id', dita-ot:get-element-id($href), $doc)
+            else $doc"/>
   </xsl:function>
   
   <xsl:template name="dita-ot:normalize-uri" as="xs:string">
