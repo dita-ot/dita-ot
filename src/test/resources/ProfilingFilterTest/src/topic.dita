@@ -13,4 +13,12 @@
       <p class="- topic/p " platform="windows">Foreign Windows</p>
     </foreign>
   </body>
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)" id="topic_zzt_wwn_l4" ditaarch:DITAArchVersion="1.2"
+         platform="windows">
+    <title class="- topic/title ">Windows</title>
+  </topic>
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)" id="topic_zzt_wwn_l5" ditaarch:DITAArchVersion="1.2"
+         platform="osx">
+    <title class="- topic/title ">OS X</title>
+  </topic>
 </topic>
