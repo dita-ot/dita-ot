@@ -94,6 +94,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private FilterUtils baseFilterUtils;
     private ForceUniqueFilter forceUniqueFilter;
     private DitaWriterFilter ditaWriterFilter;
+    private TopicFragmentFilter topicFragmentFilter;
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -295,6 +296,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         ditaWriterFilter.setLogger(logger);
         ditaWriterFilter.setJob(job);
         ditaWriterFilter.setEntityResolver(reader.getEntityResolver());
+
+        topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
     }
 
     /**
@@ -335,6 +338,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             forceUniqueFilter.setCurrentFile(currentFile);
             pipe.add(forceUniqueFilter);
         }
+
+        pipe.add(topicFragmentFilter);
 
         ditaWriterFilter.setDefaultValueMap(defaultValueMap);
         ditaWriterFilter.setCurrentFile(currentFile);

@@ -611,6 +611,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_ALIGN = "align";
     /**conref attribute.*/
     public static final String ATTRIBUTE_NAME_CONREF = "conref";
+    public static final String ATTRIBUTE_NAME_CONREFEND = "conrefend";
     /**href attribute.*/
     public static final String ATTRIBUTE_NAME_HREF = "href";
     /**mapref attribute.*/

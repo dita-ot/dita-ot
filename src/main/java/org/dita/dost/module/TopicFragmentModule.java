@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_PROCESSING_MODE;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 
 final class TopicFragmentModule extends AbstractPipelineModuleImpl {
@@ -67,7 +68,7 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
 
         final List<XMLFilter> pipe = new ArrayList<>();
 
-        final TopicFragmentFilter filter = new TopicFragmentFilter();
+        final TopicFragmentFilter filter = new TopicFragmentFilter(ATTRIBUTE_NAME_HREF);
         pipe.add(filter);
 
         final NormalizeTableFilter normalizeFilter = new NormalizeTableFilter();
