@@ -115,8 +115,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
     private boolean isLocalDita(final Attributes atts) {
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
         if (classValue == null
-                // FIXME doesn't handle e.g. data, data-about, author, or source elements correctly
-                || (!TOPIC_XREF.matches(classValue) && !TOPIC_LINK.matches(classValue) && !MAP_TOPICREF.matches(classValue))) {
+                || (TOPIC_IMAGE.matches(classValue))) {
             return false;
         }
 
