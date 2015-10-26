@@ -42,7 +42,7 @@
       <tgroup class="- topic/tgroup " cols="5">
         <colspec class="- topic/colspec " colname="c1" colwidth=" 1*  "></colspec>
         <colspec class="- topic/colspec " colname="c2" colwidth="*"></colspec>
-        <colspec class="- topic/colspec " colname="c3"></colspec>
+        <colspec class="- topic/colspec " colname="c3" colwidth=""></colspec>
         <colspec class="- topic/colspec " colname="c4" colwidth="35%"></colspec>
         <colspec class="- topic/colspec " colname="c5" colwidth="100pt"></colspec>
         <thead class="- topic/thead ">

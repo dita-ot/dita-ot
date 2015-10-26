@@ -223,7 +223,12 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
         // total columns count
         totalColumns = columnNumberEnd;
         final String colWidth = res.getValue(ATTRIBUTE_NAME_COLWIDTH);
-        if (colWidth == null || colWidth.isEmpty() || colWidth.equals("*")) {
+        // OASIS Table Model defaults to 1*, but that will disables automatic column layout
+        if (colWidth == null) {
+            //XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLWIDTH, "1*");
+        } else if (colWidth.isEmpty()) {
+            XMLUtils.removeAttribute(res, ATTRIBUTE_NAME_COLWIDTH);
+        } else if (colWidth.equals("*")) {
             XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_COLWIDTH, "1*");
         }
     }
