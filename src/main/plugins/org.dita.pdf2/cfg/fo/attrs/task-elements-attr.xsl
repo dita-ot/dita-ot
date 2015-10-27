@@ -137,7 +137,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="stepsection__body" use-attribute-sets="ul.li__body">
-        <xsl:attribute name="start-indent">9mm</xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$side-col-width"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="stepsection__content" use-attribute-sets="ul.li__content">
