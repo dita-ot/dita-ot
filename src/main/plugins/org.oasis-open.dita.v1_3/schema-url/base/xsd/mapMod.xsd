@@ -227,9 +227,6 @@
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="cascade" type="xs:string"/>
       <xs:attribute name="processing-role">
-         <xs:annotation>
-            <xs:documentation>Default set to resource-only since DITA 1.3</xs:documentation>
-         </xs:annotation>
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="normal"/>
