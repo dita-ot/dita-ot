@@ -6,7 +6,7 @@
                 version="2.0">
 
   <xsl:template match="ot-placeholder:glossarylist" name="createGlossary">
-    <fo:page-sequence master-reference="glossary-sequence" xsl:use-attribute-sets="__force__page__count">
+    <fo:page-sequence master-reference="glossary-sequence" xsl:use-attribute-sets="page-sequence.glossary">
       <xsl:call-template name="insertGlossaryStaticContents"/>
       <fo:flow flow-name="xsl-region-body">
         <fo:marker marker-class-name="current-header">

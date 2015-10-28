@@ -191,7 +191,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="page-sequence-reference" select="if ($mapType = 'bookmap') then 'body-sequence' else 'ditamap-body-sequence'"/>
     <xsl:choose>
       <xsl:when test="empty(ancestor::*[contains(@class,' topic/topic ')]) and empty(ancestor::ot-placeholder:glossarylist)">
-        <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="page-sequence.body">
           <xsl:call-template name="startPageNumbering"/>
           <xsl:call-template name="insertBodyStaticContents"/>
           <fo:flow flow-name="xsl-region-body">
@@ -207,7 +207,7 @@ See the accompanying license.txt file for applicable licenses.
   
     <!--  Bookmap Chapter processing  -->
     <xsl:template name="processTopicChapter">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.body">
             <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
@@ -263,7 +263,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--  Bookmap Appendix processing  -->
     <xsl:template name="processTopicAppendix">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.appendix">
             <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
@@ -319,7 +319,7 @@ See the accompanying license.txt file for applicable licenses.
 
   <!--  Bookmap appendices processing  -->
   <xsl:template name="processTopicAppendices">
-    <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+    <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.appendix">
       <xsl:call-template name="startPageNumbering"/>
       <xsl:call-template name="insertBodyStaticContents"/>
       <fo:flow flow-name="xsl-region-body">
@@ -387,7 +387,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--  Bookmap Part processing  -->
     <xsl:template name="processTopicPart">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.part">
             <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
@@ -453,7 +453,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="processTopicNotices">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.notice">
             <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertPrefaceStaticContents"/>
             <fo:flow flow-name="xsl-region-body">

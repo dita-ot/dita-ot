@@ -43,7 +43,7 @@
   <xsl:template match="ot-placeholder:tablelist" name="createTableList">
     <xsl:if test="//*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
       <!--exists tables with titles-->
-      <fo:page-sequence master-reference="toc-sequence" format="1" xsl:use-attribute-sets="__force__page__count">
+      <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.lot">
         <xsl:call-template name="insertTocStaticContents"/>
         <fo:flow flow-name="xsl-region-body">
           <fo:block start-indent="0in">
@@ -118,7 +118,7 @@
   <xsl:template match="ot-placeholder:figurelist" name="createFigureList">
       <xsl:if test="//*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
         <!--exists figures with titles-->
-        <fo:page-sequence master-reference="toc-sequence" format="1" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.lof">
 
           <xsl:call-template name="insertTocStaticContents"/>
           <fo:flow flow-name="xsl-region-body">

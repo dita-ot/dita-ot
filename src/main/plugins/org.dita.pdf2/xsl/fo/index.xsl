@@ -518,7 +518,7 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:choose>
             </xsl:variable>
             <xsl:if test="count($index/*) > 0">
-                <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="__force__page__count">
+                <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="page-sequence.index">
 
                     <xsl:call-template name="insertIndexStaticContents"/>
 
@@ -541,7 +541,7 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
 
     <xsl:template name="processIndexList">
-        <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="page-sequence.index">
 
             <xsl:call-template name="insertIndexStaticContents"/>
 

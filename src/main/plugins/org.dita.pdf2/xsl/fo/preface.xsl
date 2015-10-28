@@ -38,7 +38,7 @@ See the accompanying license.txt file for applicable licenses.
     version="2.0">
 
      <xsl:template name="processTopicPreface">
-         <fo:page-sequence master-reference="body-sequence" format="i" xsl:use-attribute-sets="__force__page__count">
+         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.preface">
              <xsl:call-template name="insertPrefaceStaticContents"/>
              <fo:flow flow-name="xsl-region-body">
                  <fo:block xsl:use-attribute-sets="topic">
