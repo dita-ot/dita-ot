@@ -145,7 +145,7 @@
       <xs:attribute name="query" type="xs:string"/>
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="cascade" type="xs:string"/>
-      <xs:attribute name="processing-role">
+      <xs:attribute name="processing-role" default="resource-only">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="normal"/>
@@ -165,7 +165,7 @@
          </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="format" type="xs:string"/>
-      <xs:attribute name="toc">
+      <xs:attribute name="toc" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="no"/>
@@ -225,7 +225,7 @@
       </xs:attribute>
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="cascade" type="xs:string"/>
-      <xs:attribute name="processing-role">
+      <xs:attribute name="processing-role" default="resource-only">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="normal"/>
@@ -256,7 +256,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="toc">
+      <xs:attribute name="toc" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="no"/>
@@ -312,7 +312,7 @@
       </xs:attribute>
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="cascade" type="xs:string"/>
-      <xs:attribute name="processing-role">
+      <xs:attribute name="processing-role" default="resource-only">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="normal"/>
@@ -343,7 +343,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="toc">
+      <xs:attribute name="toc" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="no"/>

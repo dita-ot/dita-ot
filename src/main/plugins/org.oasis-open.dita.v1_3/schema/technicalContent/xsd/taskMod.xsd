@@ -750,7 +750,7 @@
    </xs:group>
    <xs:attributeGroup name="choicetable.attributes">
       <xs:attribute name="relcolwidth" type="xs:string"/>
-      <xs:attribute name="keycol" type="xs:NMTOKEN"/>
+      <xs:attribute name="keycol" type="xs:NMTOKEN" default="1"/>
       <xs:attribute name="refcols" type="xs:string"/>
       <xs:attribute name="spectitle" type="xs:string"/>
       <xs:attributeGroup ref="display-atts"/>

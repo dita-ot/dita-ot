@@ -1724,7 +1724,7 @@
    <xs:attributeGroup name="pre.attributes">
       <xs:attributeGroup ref="display-atts"/>
       <xs:attribute name="spectitle" type="xs:string"/>
-      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:space" default="preserve"/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="outputclass" type="xs:string"/>
       <xs:attributeGroup ref="global-atts"/>
@@ -1756,7 +1756,7 @@
    <xs:attributeGroup name="lines.attributes">
       <xs:attributeGroup ref="display-atts"/>
       <xs:attribute name="spectitle" type="xs:string"/>
-      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:space" default="preserve"/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="outputclass" type="xs:string"/>
       <xs:attributeGroup ref="global-atts"/>
@@ -2090,7 +2090,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="placement">
+      <xs:attribute name="placement" default="inline">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="break"/>

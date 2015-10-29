@@ -227,8 +227,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomStructure.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomStructure"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="value" use="required">
          <xs:simpleType>
@@ -273,10 +273,10 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomCoverage.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomCoverage"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
-      <xs:attribute name="value" type="xs:string"/>
+      <xs:attribute name="value" type="xs:string" default=""/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="lomAggregationLevel">
@@ -305,8 +305,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomAggregationLevel.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomAggregationLevel"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="outputclass" type="xs:string"/>
       <xs:attribute name="value" use="required">
@@ -348,8 +348,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomTechRequirement.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomTechRequirement"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="outputclass" type="xs:string"/>
       <xs:attribute name="value" use="required">
@@ -399,10 +399,10 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomInstallationRemarks.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomInstallationRemarks"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
-      <xs:attribute name="value" type="xs:string"/>
+      <xs:attribute name="value" type="xs:string" default=""/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="lomOtherPlatformRequirements">
@@ -432,10 +432,10 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomOtherPlatformRequirements.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomOtherPlatformRequirements"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
-      <xs:attribute name="value" type="xs:string"/>
+      <xs:attribute name="value" type="xs:string" default=""/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="lomInteractivityType">
@@ -464,8 +464,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomInteractivityType.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomInteractivityType"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="value" use="required">
          <xs:simpleType>
@@ -506,8 +506,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomLearningResourceType.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomLearningResourceType"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="value" use="required">
          <xs:simpleType>
@@ -560,8 +560,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomInteractivityLevel.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomInteractivityLevel"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="value" use="required">
          <xs:simpleType>
@@ -603,8 +603,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomSemanticDensity.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomSemanticDensity"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="value" use="required">
          <xs:simpleType>
@@ -646,8 +646,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomIntendedUserRole.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomIntendedUserRole"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="value" use="required">
          <xs:simpleType>
@@ -688,8 +688,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomContext.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomContext"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="value" use="required">
          <xs:simpleType>
@@ -730,8 +730,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomTypicalAgeRange.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomTypicalAgeRange"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="value" use="required" type="xs:string"/>
       <xs:attributeGroup ref="global-atts"/>
@@ -762,8 +762,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomDifficulty.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomDifficulty"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="value" use="required">
          <xs:simpleType>
@@ -806,10 +806,10 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lomTypicalLearningTime.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lomTypicalLearningTime"/>
+      <xs:attribute name="datatype" type="xs:string" default=""/>
       <xs:attributeGroup ref="univ-atts"/>
-      <xs:attribute name="value" type="xs:string"/>
+      <xs:attribute name="value" type="xs:string" default=""/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
 </xs:schema>
