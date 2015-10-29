@@ -123,8 +123,9 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
                 }
                 Node c = maplink.getFirstChild();
                 while (c != null) {
+                    final Node nextSibling = c.getNextSibling();
                     stub.appendChild(maplink.removeChild(c));
-                    c = c.getNextSibling();
+                    c = nextSibling;
                 }
             }
         }
