@@ -170,5 +170,17 @@
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$target"/>;%2=<xsl:value-of select="$fallback"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+  
+  <!-- Normalize map -->
+  
+  <xsl:template match="/ | @* | node()" mode="normalize-map">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()" mode="normalize-map"/>
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]" mode="normalize-map">
+    <xsl:apply-templates select="* except *[contains(@class, ' map/topicmeta ')]" mode="normalize-map"/>
+  </xsl:template>
 
 </xsl:stylesheet>
