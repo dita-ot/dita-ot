@@ -117,26 +117,26 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private File inputFile;
 
     /**
-     * It is stack used to store the place of current element
-     * relative to the key reference element. Because keyref can be nested.
+     * Stack used to store the place of current element
+     * relative to the key reference element.
      */
-    private final Stack<Integer> keyrefLevalStack;
+    private final Deque<Integer> keyrefLevalStack;
 
     /**
-     * It is used to store the place of current element
+     * Used to store the place of current element
      * relative to the key reference element. If it is out of range of key
      * reference element it is zero, otherwise it is positive number.
      * It is also used to indicate whether current element is descendant of the
      * key reference element.
      */
-    private int keyrefLeval;
+    private int keyrefLevel;
 
 
     /**
-     * It is used to indicate whether the keyref is valid.
+     * Indicates whether the keyref is valid.
      * The descendant element should know whether keyref is valid because keyrefs can be nested.
      */
-    private final Stack<Boolean> validKeyref;
+    private final Deque<Boolean> validKeyref;
 
     /**
      * Flag indicating whether the key reference element is empty,
@@ -145,7 +145,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private boolean empty;
 
     /** Stack of element names of the element containing keyref attribute. */
-    private final Stack<String> elemName;
+    private final Deque<String> elemName;
 
     /** Current element keyref info, {@code null} if not keyref type element. */
     private KeyrefInfo currentElement;
@@ -153,7 +153,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     private boolean hasChecked;
 
     /** Flag stack to indicate whether key reference element has sub-elements. */
-    private final Stack<Boolean> hasSubElem;
+    private final Deque<Boolean> hasSubElem;
 
     /** Current key definition. */
     private KeyDef keyDef;
@@ -165,12 +165,12 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * Constructor.
      */
     public KeyrefPaser() {
-        keyrefLeval = 0;
-        keyrefLevalStack = new Stack<>();
-        validKeyref = new Stack<>();
+        keyrefLevel = 0;
+        keyrefLevalStack = new ArrayDeque<>();
+        validKeyref = new ArrayDeque<>();
         empty = true;
-        elemName = new Stack<>();
-        hasSubElem = new Stack<>();
+        elemName = new ArrayDeque<>();
+        hasSubElem = new ArrayDeque<>();
     }
     
     public void setKeyDefinition(final KeyScope definitionMap) {
@@ -212,7 +212,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
-        if (keyrefLeval != 0 && (length == 0 || new String(ch,start,length).trim().length() == 0)) {
+        if (keyrefLevel != 0 && (length == 0 || new String(ch,start,length).trim().isEmpty())) {
             if (!hasChecked) {
                 empty = true;
             }
@@ -225,7 +225,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
 
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
-        if (keyrefLeval != 0 && empty && !elemName.peek().equals(MAP_TOPICREF.localName)) {
+        if (keyrefLevel != 0 && empty && !elemName.peek().equals(MAP_TOPICREF.localName)) {
             // If current element is in the scope of key reference element
             // and the element is empty
             if (!validKeyref.isEmpty() && validKeyref.peek()) {
@@ -313,14 +313,14 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 }
             }
         }
-        if (keyrefLeval != 0) {
-            keyrefLeval--;
+        if (keyrefLevel != 0) {
+            keyrefLevel--;
             empty = false;
         }
 
-        if (keyrefLeval == 0 && !keyrefLevalStack.empty()) {
+        if (keyrefLevel == 0 && !keyrefLevalStack.isEmpty()) {
             // To the end of key reference, pop the stacks.
-            keyrefLeval = keyrefLevalStack.pop();
+            keyrefLevel = keyrefLevalStack.pop();
             validKeyref.pop();
             elemName.pop();
             hasSubElem.pop();
@@ -342,22 +342,21 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         hasChecked = false;
         empty = true;
         if (!hasKeyref(atts)) {
-            // If the keyrefLeval doesn't equal 0, it means that current element is under the key reference element
-            if (keyrefLeval != 0) {
-                keyrefLeval++;
+            // If the keyrefLevel doesn't equal 0, it means that current element is under the key reference element
+            if (keyrefLevel != 0) {
+                keyrefLevel++;
                 hasSubElem.pop();
                 hasSubElem.push(true);
             }
         } else {
             elemName.push(name);
-            if (keyrefLeval != 0) {
-                keyrefLevalStack.push(keyrefLeval);
+            if (keyrefLevel != 0) {
+                keyrefLevalStack.push(keyrefLevel);
                 hasSubElem.pop();
                 hasSubElem.push(true);
             }
             hasSubElem.push(false);
-            keyrefLeval = 0;
-            keyrefLeval++;
+            keyrefLevel = 1;
 
             resAtts = processElement(atts);
         }
@@ -389,57 +388,46 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             if (keyDef != null) {
                 if (currentElement != null) {
                     final NamedNodeMap attrs = elem.getAttributes();
-                    // first resolve the keyref attribute
-                    if (refAttr != null) {
-                        final URI target = keyDef != null ? keyDef.href : null;
-                        if (target != null && target.toString().length() != 0) {
-                            URI target_output = target;
-                            // if the scope equals local, the target should be verified that
-                            // it exists.
-                            if (TOPIC_IMAGE.matches(currentElement.type)) {
-                                valid = true;
-                                target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId);
-                                XMLUtils.addOrSetAttribute(resAtts, refAttr, target_output.toString());
-                            } else if (isLocalDita(elem)) {
-                                final File topicFile = toFile(job.tempDir.toURI().resolve(stripFragment(target)));
-                                if (topicFile.exists()) {
-                                    valid = true;
-                                    final String topicId = getFirstTopicId(topicFile);
-                                    target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId, topicId);
-                                    XMLUtils.addOrSetAttribute(resAtts, refAttr, target_output.toString());
-                                    if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
-                                        final URI f = toURI(inputFile).resolve(target_output);
-                                        normalProcessingRoleTargets.add(f);
-                                    }
-                                }
-                            } else {
-                                valid = true;
-                                target_output = normalizeHrefValue(target_output, elementId);
-                                XMLUtils.addOrSetAttribute(resAtts, refAttr, target_output.toString());
-                            }
-
-                        } else if (target == null || target.toString().length() == 0) {
-                            // Key definition does not carry an href or href equals "".
+                    final URI target = keyDef != null ? keyDef.href : null;
+                    if (target != null && target.toString().length() != 0) {
+                        URI target_output = target;
+                        // if the scope equals local, the target should be verified that
+                        // it exists.
+                        if (TOPIC_IMAGE.matches(currentElement.type)) {
                             valid = true;
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
+                            target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId);
+                            XMLUtils.addOrSetAttribute(resAtts, refAttr, target_output.toString());
+                        } else if (isLocalDita(elem)) {
+                            final File topicFile = toFile(job.tempDir.toURI().resolve(stripFragment(target)));
+                            if (topicFile.exists()) {
+                                valid = true;
+                                final String topicId = getFirstTopicId(topicFile);
+                                target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId, topicId);
+                                XMLUtils.addOrSetAttribute(resAtts, refAttr, target_output.toString());
+                                if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
+                                    final URI f = toURI(inputFile).resolve(target_output);
+                                    normalProcessingRoleTargets.add(f);
+                                }
+                            }
                         } else {
-                            // key does not exist.
-                            final MessageBean m = definitionMap.name == null
-                                    ? MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
-                                    : MessageUtils.getInstance().getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
-                            logger.info(m.setLocation(atts).toString());
+                            valid = true;
+                            target_output = normalizeHrefValue(target_output, elementId);
+                            XMLUtils.addOrSetAttribute(resAtts, refAttr, target_output.toString());
                         }
 
-                    } else if (!currentElement.hasNestedElements) {
-                        // XXX: Does this ever occur, as every keyref element may contain a href
+                    } else if (target == null || target.toString().isEmpty()) {
+                        // Key definition does not carry an href or href equals "".
                         valid = true;
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
                         XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
+                    } else {
+                        // key does not exist.
+                        final MessageBean m = definitionMap.name == null
+                                ? MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
+                                : MessageUtils.getInstance().getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                        logger.info(m.setLocation(atts).toString());
                     }
 
                     if (valid) {
