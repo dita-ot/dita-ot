@@ -101,6 +101,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
         objectAttrs.put(ATTRIBUTE_NAME_CODEBASEKEYREF, ATTRIBUTE_NAME_CODEBASE);
         objectAttrs.put(ATTRIBUTE_NAME_DATAKEYREF, ATTRIBUTE_NAME_DATA);
         ki.add(new KeyrefInfo(TOPIC_OBJECT, objectAttrs, true, false));
+        final Map<String, String> paramAttrs = new HashMap<>();
+        paramAttrs.put(ATTRIBUTE_NAME_KEYREF, ATTRIBUTE_NAME_VALUE);
+        ki.add(new KeyrefInfo(TOPIC_PARAM, paramAttrs, true, false));
         keyrefInfos = Collections.unmodifiableList(ki);
     }
 
@@ -467,6 +470,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
 
     private boolean hasKeyref(final Attributes atts) {
+        if (TOPIC_PARAM.matches(atts) && (atts.getValue(ATTRIBUTE_NAME_VALUETYPE) != null
+                && !atts.getValue(ATTRIBUTE_NAME_VALUETYPE).equals(ATTRIBUTE_VALUETYPE_VALUE_REF))) {
+            return false;
+        }
         for (final String attr: KEYREF_ATTRIBUTES) {
             if (atts.getIndex(attr) != -1) {
                 return true;
