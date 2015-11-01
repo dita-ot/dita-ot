@@ -67,6 +67,8 @@
         <param class="- topic/param " keyref="param"/>
         <param class="- topic/param " keyref="param" valuetype="ref"/>
         <param class="- topic/param " keyref="param" valuetype="data"/>
+        <param class="- topic/param " keyref="param" value="foo"/>
+        <param class="- topic/param " keyref="missing" value="foo"/>
       </object>
     </body>
     <related-links class="- topic/related-links ">
@@ -140,6 +142,8 @@
         <param class="- topic/param " keyref="param_link" value="a.xml"/>
         <param class="- topic/param " keyref="param_link" valuetype="ref" value="a.xml"/>
         <param class="- topic/param " keyref="param_link" valuetype="data"/>
+        <param class="- topic/param " keyref="param_link" value="a.xml"/>
+        <param class="- topic/param " keyref="missing" value="foo"/>
       </object>
     </body>
     <related-links class="- topic/related-links ">
