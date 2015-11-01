@@ -376,93 +376,90 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             final String refAttr = attrPair.getValue();
 
             final String keyrefValue = atts.getValue(keyrefAttr);
-            final int slashIndex = keyrefValue.indexOf(SLASH);
-            String keyName = keyrefValue;
-            String elementId = "";
-            if (slashIndex != -1) {
-                keyName = keyrefValue.substring(0, slashIndex);
-                elementId = keyrefValue.substring(slashIndex);
-            }
+            if (keyrefValue != null) {
+                final int slashIndex = keyrefValue.indexOf(SLASH);
+                String keyName = keyrefValue;
+                String elementId = "";
+                if (slashIndex != -1) {
+                    keyName = keyrefValue.substring(0, slashIndex);
+                    elementId = keyrefValue.substring(slashIndex);
+                }
 
-            keyDef = definitionMap.get(keyName);
-            final Element elem = keyDef != null ? keyDef.element : null;
+                keyDef = definitionMap.get(keyName);
+                final Element elem = keyDef != null ? keyDef.element : null;
 
-            // If definition is not null
-            if (keyDef != null) {
-                if (currentElement != null) {
-                    final NamedNodeMap attrs = elem.getAttributes();
-                    final URI target = keyDef != null ? keyDef.href : null;
-                    if (target != null && target.toString().length() != 0) {
-                        URI target_output = target;
-                        // if the scope equals local, the target should be verified that
-                        // it exists.
-                        if (TOPIC_IMAGE.matches(currentElement.type)) {
-                            valid = true;
-                            target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId);
-                            XMLUtils.addOrSetAttribute(resAtts, refAttr, target_output.toString());
-                        } else if (isLocalDita(elem)) {
-                            final File topicFile = toFile(job.tempDir.toURI().resolve(stripFragment(target)));
-                            if (topicFile.exists()) {
+                // If definition is not null
+                if (keyDef != null) {
+                    if (currentElement != null) {
+                        final NamedNodeMap attrs = elem.getAttributes();
+                        final URI target = keyDef != null ? keyDef.href : null;
+                        if (target != null && !target.toString().isEmpty()) {
+                            if (TOPIC_IMAGE.matches(currentElement.type)) {
+                                valid = true;
+                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId);
+                                XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
+                            } else if (isLocalDita(elem)) {
+                                final File topicFile = toFile(job.tempDir.toURI().resolve(stripFragment(target)));
                                 valid = true;
                                 final String topicId = getFirstTopicId(topicFile);
-                                target_output = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId, topicId);
-                                XMLUtils.addOrSetAttribute(resAtts, refAttr, target_output.toString());
+                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId, topicId);
+                                XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
+                                // TODO: This should be a separate SAX filter
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
-                                    final URI f = toURI(inputFile).resolve(target_output);
+                                    final URI f = toURI(inputFile).resolve(targetOutput);
                                     normalProcessingRoleTargets.add(f);
                                 }
+                            } else {
+                                valid = true;
+                                final URI targetOutput = normalizeHrefValue(target, elementId);
+                                XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
                             }
-                        } else {
+                        } else if (target == null || target.toString().isEmpty()) {
+                            // Key definition does not carry an href or href equals "".
                             valid = true;
-                            target_output = normalizeHrefValue(target_output, elementId);
-                            XMLUtils.addOrSetAttribute(resAtts, refAttr, target_output.toString());
-                        }
-
-                    } else if (target == null || target.toString().isEmpty()) {
-                        // Key definition does not carry an href or href equals "".
-                        valid = true;
-                        XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
-                        XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
-                        XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
-                        XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
-                    } else {
-                        // key does not exist.
-                        final MessageBean m = definitionMap.name == null
-                                ? MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
-                                : MessageUtils.getInstance().getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
-                        logger.info(m.setLocation(atts).toString());
-                    }
-
-                    if (valid) {
-                        if (MAP_TOPICREF.matches(currentElement.type)) {
-                            for (int index = 0; index < attrs.getLength(); index++) {
-                                final Attr attr = (Attr) attrs.item(index);
-                                if (!no_copy.contains(attr.getNodeName())) {
-                                    XMLUtils.removeAttribute(resAtts, attr.getNodeName());
-                                    XMLUtils.addOrSetAttribute(resAtts, attr);
-                                }
-                            }
+                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
+                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_HREF);
+                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_TYPE);
+                            XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
                         } else {
-                            for (int index = 0; index < attrs.getLength(); index++) {
-                                final Attr attr = (Attr) attrs.item(index);
-                                if (!no_copy_topic.contains(attr.getNodeName())
-                                        && (attr.getNodeName().equals(refAttr) || resAtts.getIndex(attr.getNodeName()) == -1)) {
-                                    XMLUtils.removeAttribute(resAtts, attr.getNodeName());
-                                    XMLUtils.addOrSetAttribute(resAtts, attr);
+                            // key does not exist.
+                            final MessageBean m = definitionMap.name == null
+                                    ? MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
+                                    : MessageUtils.getInstance().getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                            logger.info(m.setLocation(atts).toString());
+                        }
+
+                        if (valid) {
+                            if (MAP_TOPICREF.matches(currentElement.type)) {
+                                for (int index = 0; index < attrs.getLength(); index++) {
+                                    final Attr attr = (Attr) attrs.item(index);
+                                    if (!no_copy.contains(attr.getNodeName())) {
+                                        XMLUtils.removeAttribute(resAtts, attr.getNodeName());
+                                        XMLUtils.addOrSetAttribute(resAtts, attr);
+                                    }
+                                }
+                            } else {
+                                for (int index = 0; index < attrs.getLength(); index++) {
+                                    final Attr attr = (Attr) attrs.item(index);
+                                    if (!no_copy_topic.contains(attr.getNodeName())
+                                            && (attr.getNodeName().equals(refAttr) || resAtts.getIndex(attr.getNodeName()) == -1)) {
+                                        XMLUtils.removeAttribute(resAtts, attr.getNodeName());
+                                        XMLUtils.addOrSetAttribute(resAtts, attr);
+                                    }
                                 }
                             }
                         }
                     }
+                } else {
+                    // key does not exist
+                    final MessageBean m = definitionMap.name == null
+                            ? MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
+                            : MessageUtils.getInstance().getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
+                    logger.info(m.setLocation(atts).toString());
                 }
-            } else {
-                // key does not exist
-                final MessageBean m = definitionMap.name == null
-                        ? MessageUtils.getInstance().getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
-                        : MessageUtils.getInstance().getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMap.name);
-                logger.info(m.setLocation(atts).toString());
-            }
 
-            validKeyref.push(valid);
+                validKeyref.push(valid);
+            }
         }
 
 
