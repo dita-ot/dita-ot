@@ -19,7 +19,7 @@
 
   <xsl:template match="*" mode="gen-user-sidetoc">
     <xsl:if test="$nav-toc = ('partial', 'full')">
-      <nav>
+      <nav role="toc">
         <ul>
           <xsl:choose>
             <xsl:when test="$nav-toc = 'partial'">
