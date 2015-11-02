@@ -5,8 +5,8 @@
     <table class="- topic/table " id="tab_foo1">
       <title class="- topic/title ">foo</title>
       <tgroup class="- topic/tgroup " cols="2">
-        <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth="1*"/>
-        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="1*"/>
+        <colspec class="- topic/colspec " colname="col1" colnum="1"/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2"/>
         <thead class="- topic/thead ">
           <row class="- topic/row ">
             <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">foo1</entry>
@@ -24,9 +24,9 @@
     <table class="- topic/table " id="tab_foo3">
       <title class="- topic/title ">foo</title>
       <tgroup class="- topic/tgroup " cols="3">
-        <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth="1*"/>
-        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="1*"/>
-        <colspec class="- topic/colspec " colname="col3" colnum="3" colwidth="1*"/>
+        <colspec class="- topic/colspec " colname="col1" colnum="1"/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2"/>
+        <colspec class="- topic/colspec " colname="col3" colnum="3"/>
         <thead class="- topic/thead ">
           <row class="- topic/row ">
             <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">s1</entry>
@@ -47,7 +47,7 @@
       <tgroup class="- topic/tgroup " cols="5">
         <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth=" 1*  "/>
         <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="1*"/>
-        <colspec class="- topic/colspec " colname="col3" colnum="3" colwidth="1*"/>
+        <colspec class="- topic/colspec " colname="col3" colnum="3"/>
         <colspec class="- topic/colspec " colname="col4" colnum="4" colwidth="35%"/>
         <colspec class="- topic/colspec " colname="col5" colnum="5" colwidth="100pt"/>
         <thead class="- topic/thead ">

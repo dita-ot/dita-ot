@@ -115,7 +115,7 @@
          </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="format" type="xs:string"/>
-      <xs:attribute name="linking">
+      <xs:attribute name="linking" default="none">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="none"/>
@@ -126,7 +126,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="toc">
+      <xs:attribute name="toc" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="no"/>
@@ -135,7 +135,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="print">
+      <xs:attribute name="print" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="no"/>
@@ -145,7 +145,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="search">
+      <xs:attribute name="search" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="no"/>

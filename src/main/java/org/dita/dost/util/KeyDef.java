@@ -56,8 +56,8 @@ public class KeyDef {
     public KeyDef(final String keys, final URI href, final String scope, final URI source, final Element element) {
         //assert href.isAbsolute();
         this.keys = keys;
-        this.href = href;
-        this.scope = scope;
+        this.href = href == null || href.toString().isEmpty() ? null : href;
+        this.scope = scope == null ? ATTR_SCOPE_VALUE_LOCAL : scope;
         this.source = source;
         this.element = element;
     }

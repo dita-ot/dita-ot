@@ -216,7 +216,7 @@
    </xs:attributeGroup>
    <xs:attributeGroup name="learningObjectComponent-topicref-atts">
       <xs:attributeGroup ref="learningDomain-topicref-atts-no-chunk"/>
-      <xs:attribute name="chunk" type="xs:string"/>
+      <xs:attribute name="chunk" type="xs:string" default="to-content"/>
    </xs:attributeGroup>
    <xs:element name="learningGroup">
       <xs:annotation>
@@ -440,7 +440,7 @@
       <xs:attributeGroup ref="learningDomain-topicref-atts-no-chunk"/>
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="format" type="xs:string"/>
-      <xs:attribute name="chunk" type="xs:string"/>
+      <xs:attribute name="chunk" type="xs:string" default="to-content"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="learningContentComponentRef">

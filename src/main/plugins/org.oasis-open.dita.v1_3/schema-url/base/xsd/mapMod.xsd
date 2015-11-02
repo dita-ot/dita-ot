@@ -138,7 +138,7 @@
       </xs:attribute>
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="cascade" type="xs:string"/>
-      <xs:attribute name="processing-role">
+      <xs:attribute name="processing-role" default="resource-only">
          <xs:annotation>
             <xs:documentation>Default set to resource-only since DITA 1.3</xs:documentation>
          </xs:annotation>
@@ -227,9 +227,6 @@
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="cascade" type="xs:string"/>
       <xs:attribute name="processing-role">
-         <xs:annotation>
-            <xs:documentation>Default set to resource-only since DITA 1.3</xs:documentation>
-         </xs:annotation>
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="normal"/>
@@ -856,7 +853,7 @@
       <xs:attribute name="left" type="xs:string"/>
       <xs:attribute name="height" type="xs:string"/>
       <xs:attribute name="width" type="xs:string"/>
-      <xs:attribute name="on-top">
+      <xs:attribute name="on-top" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="yes"/>
@@ -866,7 +863,7 @@
          </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="features" type="xs:string"/>
-      <xs:attribute name="relative">
+      <xs:attribute name="relative" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="yes"/>
@@ -875,7 +872,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="full-screen">
+      <xs:attribute name="full-screen" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="yes"/>

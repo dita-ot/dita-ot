@@ -247,6 +247,24 @@
         </keywords>
       </topicmeta>
     </keydef>
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="object" processing-role="resource-only">
+      <topicmeta class="- map/topicmeta ">
+        <linktext class="- map/linktext ">object linktext</linktext>
+        <shortdesc class="- map/shortdesc ">object shortdesc</shortdesc>
+        <keywords class="- topic/keywords ">
+          <keyword class="- topic/keyword ">object keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef class="+ map/topicref mapgroup-d/keydef " keys="param" processing-role="resource-only">
+      <topicmeta class="- map/topicmeta ">
+        <linktext class="- map/linktext ">param linktext</linktext>
+        <shortdesc class="- map/shortdesc ">param shortdesc</shortdesc>
+        <keywords class="- topic/keywords ">
+          <keyword class="- topic/keyword ">param keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
   </topicgroup>
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
     <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="author_link" processing-role="resource-only">
@@ -426,6 +444,24 @@
         <shortdesc class="- map/shortdesc ">indextermref shortdesc</shortdesc>
         <keywords class="- topic/keywords ">
           <keyword class="- topic/keyword ">indextermref keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="object_link" processing-role="resource-only">
+      <topicmeta class="- map/topicmeta ">
+        <linktext class="- map/linktext ">object linktext</linktext>
+        <shortdesc class="- map/shortdesc ">object shortdesc</shortdesc>
+        <keywords class="- topic/keywords ">
+          <keyword class="- topic/keyword ">object keyword</keyword>
+        </keywords>
+      </topicmeta>
+    </keydef>
+    <keydef class="+ map/topicref mapgroup-d/keydef " href="a.xml" keys="param_link" processing-role="resource-only">
+      <topicmeta class="- map/topicmeta ">
+        <linktext class="- map/linktext ">param linktext</linktext>
+        <shortdesc class="- map/shortdesc ">param shortdesc</shortdesc>
+        <keywords class="- topic/keywords ">
+          <keyword class="- topic/keyword ">param keyword</keyword>
         </keywords>
       </topicmeta>
     </keydef>

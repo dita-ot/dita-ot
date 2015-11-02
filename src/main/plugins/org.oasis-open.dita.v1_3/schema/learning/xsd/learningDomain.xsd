@@ -1243,8 +1243,8 @@
       <xs:sequence/>
    </xs:group>
    <xs:attributeGroup name="lcCorrectResponse.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="value" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lcCorrectResponse"/>
+      <xs:attribute name="value" type="xs:string" default="lcCorrectResponse"/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="outputclass" type="xs:string"/>
       <xs:attributeGroup ref="global-atts"/>
@@ -1272,7 +1272,7 @@
       <xs:sequence/>
    </xs:group>
    <xs:attributeGroup name="lcSequence.attributes">
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lcSequence"/>
       <xs:attribute name="value" use="required" type="xs:string"/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="outputclass" type="xs:string"/>

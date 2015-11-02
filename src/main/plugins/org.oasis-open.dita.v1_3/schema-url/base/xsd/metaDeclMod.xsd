@@ -879,7 +879,7 @@
       <xs:attribute name="appname" type="xs:string"/>
       <xs:attribute name="appid" type="xs:string"/>
       <xs:attribute name="ux-context-string" type="xs:string"/>
-      <xs:attribute name="ux-source-priority">
+      <xs:attribute name="ux-source-priority" default="topic-and-map">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="topic-and-map"/>

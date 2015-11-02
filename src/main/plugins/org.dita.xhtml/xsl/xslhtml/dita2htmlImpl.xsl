@@ -1952,8 +1952,9 @@
 
 <xsl:template match="colspec[contains(@class, ' topic/colspec ')]">
   <xsl:param name="totalwidth" as="xs:double"/>
-  <xsl:variable name="width" as="xs:string">
+  <xsl:variable name="width" as="xs:string?">
     <xsl:choose>
+      <xsl:when test="empty(@colwidth)"/>
       <xsl:when test="contains(@colwidth, '*')">
         <xsl:value-of select="concat((xs:double(translate(@colwidth, '*', '')) div $totalwidth) * 100, '%')"/>
       </xsl:when>
@@ -1962,7 +1963,11 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <col style="width:{$width}"/>
+  <col>
+    <xsl:if test="exists($width)">
+      <xsl:attribute name="style" select="concat('width:', $width)"/>
+    </xsl:if>
+  </col>
 </xsl:template>
 
 <xsl:template match="thead[contains(@class, ' topic/thead ')]" name="topic.thead">

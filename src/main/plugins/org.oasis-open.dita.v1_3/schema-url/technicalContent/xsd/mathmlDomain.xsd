@@ -106,7 +106,7 @@ elements
       <xs:attribute name="href" type="xs:string"/>
       <xs:attribute name="keyref" type="xs:string"/>
       <xs:attribute name="type" type="xs:string"/>
-      <xs:attribute name="format" type="xs:string"/>
+      <xs:attribute name="format" type="xs:string" default="mml"/>
       <xs:attribute name="scope">
          <xs:simpleType>
             <xs:restriction base="xs:string">

@@ -96,6 +96,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private ForceUniqueFilter forceUniqueFilter;
     private DitaWriterFilter ditaWriterFilter;
     private NameGeneralizationFilter generalizationFilter;
+    private TopicFragmentFilter topicFragmentFilter;
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -300,6 +301,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
         generalizationFilter = new NameGeneralizationFilter();
         generalizationFilter.setLogger(logger);
+
+        topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
     }
 
     /**
@@ -344,6 +347,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         if (generaliseElementName) {
             pipe.add(generalizationFilter);
         }
+
+        pipe.add(topicFragmentFilter);
 
         ditaWriterFilter.setDefaultValueMap(defaultValueMap);
         ditaWriterFilter.setCurrentFile(currentFile);

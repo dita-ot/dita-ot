@@ -170,7 +170,7 @@
    </xs:group>
    <xs:attributeGroup name="change-item.attributes">
       <xs:attributeGroup ref="changehistory.data.atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="change-item"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="change-person">
@@ -200,7 +200,7 @@
    </xs:group>
    <xs:attributeGroup name="change-person.attributes">
       <xs:attributeGroup ref="changehistory.data.atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="change-person"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="change-organization">
@@ -231,7 +231,7 @@
    </xs:group>
    <xs:attributeGroup name="change-organization.attributes">
       <xs:attributeGroup ref="changehistory.data.atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="change-organization"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="change-revisionid">
@@ -260,7 +260,7 @@
    </xs:group>
    <xs:attributeGroup name="change-revisionid.attributes">
       <xs:attributeGroup ref="changehistory.data.atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="change-revisionid"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="change-request-reference">
@@ -291,7 +291,7 @@
    </xs:group>
    <xs:attributeGroup name="change-request-reference.attributes">
       <xs:attributeGroup ref="changehistory.data.atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="change-request-reference"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="change-request-system">
@@ -322,7 +322,7 @@
    </xs:group>
    <xs:attributeGroup name="change-request-system.attributes">
       <xs:attributeGroup ref="changehistory.data.atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="change-request-system"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="change-request-id">
@@ -352,7 +352,7 @@
    </xs:group>
    <xs:attributeGroup name="change-request-id.attributes">
       <xs:attributeGroup ref="changehistory.data.atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="change-request-id"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="change-started">
@@ -383,7 +383,7 @@
    </xs:group>
    <xs:attributeGroup name="change-started.attributes">
       <xs:attributeGroup ref="changehistory.data.atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="change-started"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="change-completed">
@@ -414,7 +414,7 @@
    </xs:group>
    <xs:attributeGroup name="change-completed.attributes">
       <xs:attributeGroup ref="changehistory.data.atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="change-completed"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    <xs:element name="change-summary">
@@ -443,7 +443,7 @@
    </xs:group>
    <xs:attributeGroup name="change-summary.attributes">
       <xs:attributeGroup ref="changehistory.data.atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="change-summary"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
 </xs:schema>

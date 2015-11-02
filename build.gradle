@@ -60,7 +60,7 @@ if (System.getProperty("log_level") != null) {
 
 task integrationTest(type: Test, dependsOn: 'buildLocal') {
     minHeapSize = "128m"
-    maxHeapSize = "512m"
+    maxHeapSize = "1024m"
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
     systemProperties = integrationTestSystemProperties

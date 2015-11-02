@@ -256,7 +256,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
                           (normal |
                            resource-only |
                            -dita-use-conref-target)
-                                    'resource-only'
+                                    #IMPLIED
                scope
                           (external |
                            local |

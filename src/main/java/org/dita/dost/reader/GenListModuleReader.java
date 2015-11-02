@@ -737,14 +737,24 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         final String conkeyref = atts.getValue(ATTRIBUTE_NAME_CONKEYREF);
         if (conkeyref != null) {
             hasConRef = true;
-            hasKeyRef = true;
         }
     }
 
+    private final static String[] KEYREF_ATTRS = new String[] {
+            ATTRIBUTE_NAME_KEYREF,
+            ATTRIBUTE_NAME_CONKEYREF,
+            ATTRIBUTE_NAME_ARCHIVEKEYREFS,
+            ATTRIBUTE_NAME_CLASSIDKEYREF,
+            ATTRIBUTE_NAME_CODEBASEKEYREF,
+            ATTRIBUTE_NAME_DATAKEYREF
+    };
+
     private void parseKeyrefAttr(final Attributes atts) {
-        final String keyref = atts.getValue(ATTRIBUTE_NAME_KEYREF);
-        if (keyref != null) {
-            hasKeyRef = true;
+        for (final String attr: KEYREF_ATTRS) {
+            if (atts.getValue(attr) != null) {
+                hasKeyRef = true;
+                break;
+            }
         }
     }
 

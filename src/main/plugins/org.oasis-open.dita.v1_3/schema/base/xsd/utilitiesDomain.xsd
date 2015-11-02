@@ -249,7 +249,7 @@
    </xs:group>
    <xs:attributeGroup name="sort-as.attributes">
       <xs:attributeGroup ref="univ-atts"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="sort-as"/>
       <xs:attribute name="value" type="xs:string"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>

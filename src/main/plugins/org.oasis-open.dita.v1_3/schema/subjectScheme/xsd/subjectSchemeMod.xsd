@@ -61,7 +61,7 @@
       </xs:attribute>
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="cascade" type="xs:string"/>
-      <xs:attribute name="processing-role">
+      <xs:attribute name="processing-role" default="resource-only">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="normal"/>
@@ -101,7 +101,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="toc">
+      <xs:attribute name="toc" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="no"/>
@@ -227,9 +227,9 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="type" type="xs:string"/>
+      <xs:attribute name="type" type="xs:string" default="scheme"/>
       <xs:attribute name="cascade" type="xs:string"/>
-      <xs:attribute name="format" type="xs:string"/>
+      <xs:attribute name="format" type="xs:string" default="ditamap"/>
       <xs:attribute name="scope">
          <xs:simpleType>
             <xs:restriction base="xs:string">
@@ -716,7 +716,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="linking">
+      <xs:attribute name="linking" default="normal">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="normal"/>
@@ -857,7 +857,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="translate">
+      <xs:attribute name="translate" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="no"/>
@@ -908,7 +908,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="translate">
+      <xs:attribute name="translate" default="no">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="no"/>
@@ -1041,7 +1041,7 @@
       <xs:attribute name="keyref" type="xs:string"/>
       <xs:attribute name="keys" type="xs:string"/>
       <xs:attribute name="query" type="xs:string"/>
-      <xs:attribute name="collection-type">
+      <xs:attribute name="collection-type" default="family">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="choice"/>
@@ -1074,7 +1074,7 @@
          </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="format" type="xs:string"/>
-      <xs:attribute name="linking">
+      <xs:attribute name="linking" default="normal">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="none"/>

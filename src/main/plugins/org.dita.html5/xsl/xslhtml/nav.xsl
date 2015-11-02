@@ -19,7 +19,7 @@
 
   <xsl:template match="*" mode="gen-user-sidetoc">
     <xsl:if test="$nav-toc = ('partial', 'full')">
-      <nav>
+      <nav role="toc">
         <ul>
           <xsl:choose>
             <xsl:when test="$nav-toc = 'partial'">
@@ -250,18 +250,6 @@
         <xsl:value-of select="$path"/>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
-
-  <!-- Normalize map -->
-  
-  <xsl:template match="/ | @* | node()" mode="normalize-map">
-    <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="normalize-map"/>
-    </xsl:copy>
-  </xsl:template>
-  
-  <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]" mode="normalize-map">
-    <xsl:apply-templates select="* except topicmeta[contains(@class, ' map/topicmeta ')]" mode="normalize-map"/>
   </xsl:template>
 
 </xsl:stylesheet>

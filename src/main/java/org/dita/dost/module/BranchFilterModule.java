@@ -183,7 +183,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                     final List<Attr> attrs = attrsMap.getValue();
                     for (final Attr attr: attrs) {
                         final String gen = addSuffix(attr.getValue(), suffix);
-                        logger.warn(MessageUtils.getInstance().getMessage("DOTJ065W", attr.getValue(), gen)
+                        logger.info(MessageUtils.getInstance().getMessage("DOTJ065I", attr.getValue(), gen)
                                 .setLocation((Element) attr.getOwnerElement()).toString());
                         if (attr.getName().equals(BRANCH_COPY_TO)) {
                             attr.setValue(gen);

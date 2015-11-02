@@ -139,8 +139,8 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="format" type="xs:string"/>
-      <xs:attribute name="processing-role" type="xs:string"/>
+      <xs:attribute name="format" type="xs:string" default="ditaval"/>
+      <xs:attribute name="processing-role" type="xs:string" default="resource-only"/>
       <xs:attributeGroup ref="ditavalref-univ-atts"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
@@ -214,7 +214,7 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="dvrResourcePrefix.attributes">
-      <xs:attribute name="name">
+      <xs:attribute name="name" default="dvrResourcePrefix">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="dvrResourcePrefix"/>
@@ -250,7 +250,7 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="dvrResourceSuffix.attributes">
-      <xs:attribute name="name">
+      <xs:attribute name="name" default="dvrResourceSuffix">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="dvrResourceSuffix"/>
@@ -286,7 +286,7 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="dvrKeyscopePrefix.attributes">
-      <xs:attribute name="name">
+      <xs:attribute name="name" default="dvrKeyscopePrefix">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="dvrKeyscopePrefix"/>
@@ -322,7 +322,7 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="dvrKeyscopeSuffix.attributes">
-      <xs:attribute name="name">
+      <xs:attribute name="name" default="dvrKeyscopeSuffix">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="dvrKeyscopeSuffix"/>

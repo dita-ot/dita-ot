@@ -90,7 +90,7 @@
    <xs:attributeGroup name="svgref.attributes">
       <xs:attribute name="href" type="xs:string"/>
       <xs:attribute name="keyref" type="xs:string"/>
-      <xs:attribute name="format" type="xs:string"/>
+      <xs:attribute name="format" type="xs:string" default="svg"/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="outputclass" type="xs:string"/>
       <xs:attributeGroup ref="global-atts"/>

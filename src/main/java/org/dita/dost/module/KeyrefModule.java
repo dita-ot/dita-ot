@@ -19,6 +19,7 @@ import java.net.URI;
 import java.util.*;
 
 import org.dita.dost.util.*;
+import org.dita.dost.writer.TopicFragmentFilter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -47,6 +48,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     private String transtype;
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
+    private TopicFragmentFilter topicFragmentFilter;
 
     /**
      * Entry point of KeyrefModule.
@@ -65,6 +67,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         }));
         if (!fis.isEmpty()) {
+            initFilters();
+
             final Document doc = readMap();
 
             final KeyrefReader reader = new KeyrefReader();
@@ -106,6 +110,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         }
         return null;
+    }
+
+    private void initFilters() {
+        topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
     }
 
     /** Collect topics for key reference processing and modify map to reflect new file names. */
@@ -203,6 +211,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         conkeyrefFilter.setCurrentFile(r.in.file);
         conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
         filters.add(conkeyrefFilter);
+
+        filters.add(topicFragmentFilter);
 
         final KeyrefPaser parser = new KeyrefPaser();
         parser.setLogger(logger);

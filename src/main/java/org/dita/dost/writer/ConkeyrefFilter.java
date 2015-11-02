@@ -68,7 +68,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
                 resAtts = new AttributesImpl(atts);
                 XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_CONKEYREF);
                 final KeyDef k = keys.get(key);
-                if (k.href != null && (k.scope == null || k.scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
+                if (k.href != null && (k.scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
                     URI target = getRelativePath(k.href);
                     final String keyFragment = k.href.getFragment();
                     if (id != null && keyFragment != null) {

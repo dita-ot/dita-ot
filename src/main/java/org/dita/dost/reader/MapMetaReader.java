@@ -175,12 +175,12 @@ public final class MapMetaReader extends AbstractDomFilter {
         }
         final NodeList children = parent.getChildNodes();
         Element child;
-        for (int i = 0; i < children.getLength(); i++) {
+        for (int i = children.getLength() - 1; i >= 0; i--) {
             if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 child = (Element) children.item(i);
-                final boolean isIndexTerm = TOPIC_INDEXTERM.matches(child.getAttribute(ATTRIBUTE_NAME_CLASS));
-                final boolean hasStart = !StringUtils.isEmptyString(child.getAttribute(ATTRIBUTE_NAME_START));
-                final boolean hasEnd = !StringUtils.isEmptyString(child.getAttribute(ATTRIBUTE_NAME_END));
+                final boolean isIndexTerm = TOPIC_INDEXTERM.matches(child);
+                final boolean hasStart = !child.getAttribute(ATTRIBUTE_NAME_START).isEmpty();
+                final boolean hasEnd = !child.getAttribute(ATTRIBUTE_NAME_END).isEmpty();
                 if (isIndexTerm && (hasStart || hasEnd)) {
                     parent.removeChild(child);
                 } else {

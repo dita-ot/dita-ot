@@ -261,7 +261,7 @@
    <xs:attributeGroup name="screen.attributes">
       <xs:attributeGroup ref="display-atts"/>
       <xs:attribute name="spectitle" type="xs:string"/>
-      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:space" default="preserve"/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="outputclass" type="xs:string"/>
       <xs:attributeGroup ref="global-atts"/>

@@ -381,8 +381,8 @@
       </xs:sequence>
    </xs:group>
    <xs:attributeGroup name="lcTime.attributes">
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="datatype" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string" default="lcTime"/>
+      <xs:attribute name="datatype" type="xs:string" default="TimeValue"/>
       <xs:attribute name="value" use="required" type="xs:string"/>
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="outputclass" type="xs:string"/>

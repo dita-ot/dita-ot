@@ -248,7 +248,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:choose>
         </xsl:variable>
         <xsl:if test="count($toc/*) > 0">
-            <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="__force__page__count">
+            <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.toc">
                 <xsl:call-template name="insertTocStaticContents"/>
                 <fo:flow flow-name="xsl-region-body">
                     <xsl:call-template name="createTocHeader"/>
@@ -267,7 +267,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="processTocList">
-        <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.toc">
             <xsl:call-template name="insertTocStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <xsl:call-template name="createTocHeader"/>

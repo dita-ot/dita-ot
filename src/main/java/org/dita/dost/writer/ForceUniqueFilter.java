@@ -11,15 +11,15 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import java.io.File;
 import java.net.URI;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
-import static org.dita.dost.util.URLUtils.setFragment;
-import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.FileUtils.getExtension;
+import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.URLUtils.*;
 
 /**
@@ -29,8 +29,8 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
 
     /** Absolute path to current source file. */
     private URI currentFile;
-    private Job job;
     private final Map<URI, Integer> topicrefCount = new HashMap<>();
+    private final Deque<Boolean> ignoreStack = new ArrayDeque<>();
     /** Generated copy-to mappings, key is target topic and value is source topic. */
     public final Map<URI, URI> copyToMap = new HashMap<>();
 
@@ -38,17 +38,15 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
         this.currentFile = currentFile;
     }
 
-    public void setJob(final Job job) {
-        this.job = job;
-    }
-
     // ContentHandler methods
 
     @Override
     public void startElement(final String uri, final String localName, final String qName,
                              final Attributes atts) throws SAXException {
+        ignoreStack.push(MAP_RELTABLE.matches(atts) ? false : ignoreStack.isEmpty() || ignoreStack.peek());
+
         Attributes res = atts;
-        if (MAP_TOPICREF.matches(res)) {
+        if (ignoreStack.peek() && MAP_TOPICREF.matches(res)) {
             final URI href = toURI(res.getValue(ATTRIBUTE_NAME_HREF));
             final String scope = res.getValue(ATTRIBUTE_NAME_SCOPE);
             final String format = res.getValue(ATTRIBUTE_NAME_FORMAT);
@@ -82,6 +80,13 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
         }
 
         getContentHandler().startElement(uri, localName, qName, res);
+    }
+
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+        getContentHandler().endElement(uri, localName, qName);
+
+        ignoreStack.pop();
     }
 
     private URI generateCopyToTarget(final URI src, final int count) {

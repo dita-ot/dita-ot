@@ -61,6 +61,15 @@
         <xref class="- topic/xref " format="dead" href="dead" keyref="missing" scope="external" type="dead">missing</xref>
         <keyword class="- topic/keyword " keyref="missing">missing</keyword>
       </p>
+      <object class="- topic/object "
+              archivekeyrefs="object" classidkeyref="object" codebasekeyref="object" datakeyref="object"/>
+      <object class="- topic/object ">
+        <param class="- topic/param " keyref="param"/>
+        <param class="- topic/param " keyref="param" valuetype="ref"/>
+        <param class="- topic/param " keyref="param" valuetype="data"/>
+        <param class="- topic/param " keyref="param" value="foo"/>
+        <param class="- topic/param " keyref="missing" value="foo"/>
+      </object>
     </body>
     <related-links class="- topic/related-links ">
       <link class="- topic/link " keyref="link">
@@ -126,6 +135,16 @@
         <xref class="- topic/xref " format="dead" href="a.xml" keyref="missing" scope="external" type="dead">missing</xref>
         <keyword class="- topic/keyword " keyref="missing">missing</keyword>
       </p>
+      <object class="- topic/object "
+              archivekeyrefs="object_link" classidkeyref="object_link" codebasekeyref="object_link" datakeyref="object_link"
+              archive="a.xml" classid="a.xml" codebase="a.xml" data="a.xml"/>
+      <object class="- topic/object ">
+        <param class="- topic/param " keyref="param_link" value="a.xml"/>
+        <param class="- topic/param " keyref="param_link" valuetype="ref" value="a.xml"/>
+        <param class="- topic/param " keyref="param_link" valuetype="data"/>
+        <param class="- topic/param " keyref="param_link" value="a.xml"/>
+        <param class="- topic/param " keyref="missing" value="foo"/>
+      </object>
     </body>
     <related-links class="- topic/related-links ">
       <link class="- topic/link " format="dead" href="a.xml" keyref="link_link" scope="external" type="dead">
