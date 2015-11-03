@@ -16,9 +16,9 @@
 <xsl:template match="*[contains(@class,' abbrev-d/abbreviated-form ')]" name="topic.abbreviated-form">
   <xsl:if test="@keyref and @href">
     <xsl:variable name="entry-file-contents" as="node()*"
-      select="dita-ot:retrieve-href-target(@href, $WORKDIR)"/>
+      select="dita-ot:retrieve-href-target(@href)"/>
     <xsl:choose>
-      <xsl:when test="$entry-file-contents//*[contains(@class,' glossentry/glossentry ')]">
+      <xsl:when test="$entry-file-contents/descendant-or-self::*[contains(@class,' glossentry/glossentry ')]">
         <!-- Fall back to process with normal term rules -->
         <xsl:call-template name="topic.term"/>
       </xsl:when>
