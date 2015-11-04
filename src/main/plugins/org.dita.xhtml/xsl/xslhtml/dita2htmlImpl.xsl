@@ -1212,9 +1212,9 @@
 <!-- Templates for internal usage in terms/abbreviation resolving -->
 <xsl:template name="getMatchingTarget" as="element()?">
   <xsl:param name="m_glossid" select="''" as="xs:string"/>
-  <xsl:param name="m_entry-file-contents" as="document-node()?"/>
+  <xsl:param name="m_entry-file-contents" as="node()?"/>
   <xsl:param name="m_reflang" select="'en-US'" as="xs:string"/>
-  <xsl:variable name="glossentries" select="$m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')]" as="element()*"/>
+  <xsl:variable name="glossentries" select="$m_entry-file-contents/descendant-or-self::*[contains(@class, ' glossentry/glossentry ')]" as="element()*"/>
   <xsl:choose>
     <xsl:when test="$m_glossid = '' and $glossentries[lang($m_reflang)]">
       <xsl:sequence select="$glossentries[lang($m_reflang)]"/>
@@ -1338,10 +1338,9 @@
         <xsl:apply-templates select="." mode="find-keyref-target"/>
       </xsl:variable>
       
-      <xsl:variable name="entry-file-contents" as="document-node()?">
+      <xsl:variable name="entry-file-contents" as="node()?">
         <xsl:if test="empty(@scope) or @scope = 'local'">
-          <xsl:variable name="entry-file-uri" select="concat($WORKDIR, @href)"/>
-          <xsl:sequence select="document($entry-file-uri, /)"/>
+          <xsl:sequence select="dita-ot:retrieve-href-target(@href)"/>
         </xsl:if>
       </xsl:variable>
       <!-- Glossary id defined in <glossentry> -->
