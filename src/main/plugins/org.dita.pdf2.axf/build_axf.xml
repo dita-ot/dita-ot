@@ -20,7 +20,7 @@
     <taskdef name="log-processor" classname="org.dita.dost.pdf2.AhfLogProcessorTask"
              classpathref="axf.class.path"/>
     
-    <condition property="temp.transformation.file" value="${dita.plugin.org.dita.pdf2.axf.dir}/xsl/fo/topic2fo_shell_axf.xsl">
+    <condition property="temp.transformation.file" value="${dita.plugin.org.dita.pdf2.axf.dir}/xsl/fo/topic2fo_shell_axf${xsl.prefix}.xsl">
       <and>
         <not><isset property="args.xsl.pdf"/></not>
         <isset property="use.ah.pdf.formatter"/>

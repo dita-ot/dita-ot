@@ -150,6 +150,10 @@
   <property environment="env" />
   <!-- property values end -->
 
+  <condition property="xsl.prefix" value=".optimized" else="">
+    <istrue value="${generalise-element-name}"/>
+  </condition>
+
   <target name="build-init"
           depends="check-arg,
                    log-arg" />
@@ -223,10 +227,6 @@
         <contains string="${args.outext}" substring="." />
       </and>
     </condition>
-  	
-  	<condition property="xsl.prefix" value=".optimized" else="">
-  	  <istrue value="${generalise-element-name}"/>
-  	</condition>
   	
   	<condition property="args.grammar.cache"
   	      value="yes">

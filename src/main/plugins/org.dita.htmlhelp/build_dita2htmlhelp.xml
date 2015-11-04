@@ -62,7 +62,7 @@
           destdir="${htmlhelp.hhp.output.dir}"
           includesfile="${dita.temp.dir}/${user.input.file.listfile}"
           classpathref="dost.class.path"
-          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
+          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp${xsl.prefix}.xsl">
       <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
@@ -80,7 +80,7 @@
           destdir="${output.dir}"
           includesfile="${dita.temp.dir}/${user.input.file.listfile}"
           classpathref="dost.class.path"
-          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
+          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp${xsl.prefix}.xsl">
       <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
@@ -100,7 +100,7 @@
           destdir="${htmlhelp.hhc.output.dir}"
           includesfile="${dita.temp.dir}/${user.input.file.listfile}"
           classpathref="dost.class.path"
-          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
+          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc${xsl.prefix}.xsl">
       <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <xmlcatalog refid="dita.catalog"/>
@@ -116,7 +116,7 @@
           destdir="${output.dir}"
           includesfile="${dita.temp.dir}/${user.input.file.listfile}"
           classpathref="dost.class.path"
-          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
+          style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc${xsl.prefix}.xsl">
       <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <mapper type="glob" from="${user.input.file}" to="${dita.map.filename.root}.hhc"/>

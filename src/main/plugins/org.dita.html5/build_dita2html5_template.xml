@@ -13,12 +13,12 @@
 
   <target name="html5.init">
     <property name="html-version" value="html5"/>
-    <condition property="args.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/dita2html5.xsl">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/dita2html5${xsl.prefix}.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
     </condition>
-    <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/map2html5-cover.xsl">
+    <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/map2html5-cover${xsl.prefix}.xsl">
       <not>
         <isset property="args.xhtml.toc.xsl" />
       </not>

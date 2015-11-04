@@ -6,11 +6,11 @@
 <project name="dita2troff">
 
   <target name="dita2troff-ast.init">
-    <property name="troff-ast.xsl" location="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-ast-shell.xsl"/>
+    <property name="troff-ast.xsl" location="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-ast-shell${xsl.prefix}.xsl"/>
   </target>
   <target name="dita2troff.init">
     <property name="out.ext" value=".cli"/>
-    <property name="troff.step2.xsl" location="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell.xsl"/>
+    <property name="troff.step2.xsl" location="${dita.plugin.org.dita.troff.dir}/xsl/dita2troff-step2-shell${xsl.prefix}.xsl"/>
   </target>
 
   <target name="dita2troff"

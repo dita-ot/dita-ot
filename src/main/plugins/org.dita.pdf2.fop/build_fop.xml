@@ -24,7 +24,7 @@
       </not>
     </condition>
     
-    <condition property="temp.transformation.file" value="${dita.plugin.org.dita.pdf2.fop.dir}/xsl/fo/topic2fo_shell_fop.xsl">
+    <condition property="temp.transformation.file" value="${dita.plugin.org.dita.pdf2.fop.dir}/xsl/fo/topic2fo_shell_fop${xsl.prefix}.xsl">
       <and>
         <not><isset property="args.xsl.pdf"/></not>
         <isset property="use.fop.pdf.formatter"/>

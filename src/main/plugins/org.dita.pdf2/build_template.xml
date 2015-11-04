@@ -142,7 +142,7 @@ with those set forth herein.
               tempdir="${dita.temp.dir.fullpath}">
       <module class="org.dita.dost.module.TopicMergeModule">
         <param name="output" location="${dita.temp.dir.fullpath}${file.separator}${dita.map.filename.root}_MERGED.xml"/>
-        <param name="style" location="${dita.plugin.org.dita.pdf2.dir}/xsl/common/topicmerge.xsl"/>
+        <param name="style" location="${dita.plugin.org.dita.pdf2.dir}/xsl/common/topicmerge${xsl.prefix}.xsl"/>
       </module>
     </pipeline>
     <antcall target="publish.map.pdf"/>
@@ -385,7 +385,7 @@ with those set forth herein.
     <i18n-preprocess input="${dita.temp.dir}/stage2.fo" output="${dita.temp.dir}/stage3.fo"
                      config="${i18n.config.file}" catalogs="${xml.catalog.files}"/> 
 
-    <xslt in="${dita.temp.dir}/stage3.fo" out="${pdf2.temp.dir}/topic.fo" style="${xsl.fo.dir}/i18n-postprocess.xsl">
+    <xslt in="${dita.temp.dir}/stage3.fo" out="${pdf2.temp.dir}/topic.fo" style="${xsl.fo.dir}/i18n-postprocess${xsl.prefix}.xsl">
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
