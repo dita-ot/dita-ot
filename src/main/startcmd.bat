@@ -16,6 +16,7 @@ set PATH=%DITA_DIR%\bin;%PATH%
 set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%
 set CLASSPATH=%DITA_DIR%lib\dost.jar;%CLASSPATH%
 set CLASSPATH=%DITA_DIR%lib\commons-codec-1.9.jar;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib\commons-io-2.4.jar;%CLASSPATH%
 set CLASSPATH=%DITA_DIR%lib\xml-resolver-1.2.jar;%CLASSPATH%
 set CLASSPATH=%DITA_DIR%lib\icu4j-54.1.jar;%CLASSPATH%
 set CLASSPATH=%DITA_DIR%lib\xercesImpl-2.11.0.jar;%CLASSPATH%
