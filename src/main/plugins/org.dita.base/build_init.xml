@@ -224,6 +224,10 @@
       </and>
     </condition>
   	
+  	<condition property="xsl.prefix" value=".optimized" else="">
+  	  <istrue value="${generalise-element-name}"/>
+  	</condition>
+  	
   	<condition property="args.grammar.cache"
   	      value="yes">
   		      <not>

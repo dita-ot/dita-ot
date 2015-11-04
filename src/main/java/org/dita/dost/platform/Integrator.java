@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
@@ -18,10 +19,9 @@ import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
+import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,6 +35,7 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
@@ -319,6 +320,29 @@ public final class Integrator {
         final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS) ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS))) : Collections.EMPTY_SET;
         writeEnvShell(jars);
         writeEnvBatch(jars);
+
+        generateOptimizedStylesheets(ditaDir);
+    }
+
+    private void generateOptimizedStylesheets(final File dir) {
+        for (final File child: dir.listFiles()) {
+            if (child.isDirectory()) {
+                generateOptimizedStylesheets(child);
+            } else if (child.getName().endsWith(".xsl") && !child.getName().endsWith(".optimized.xsl")) {
+                generateOptimizedStylesheet(child);
+            }
+        }
+    }
+
+    private void generateOptimizedStylesheet(final File input) {
+        final File output = new File(FileUtils.replaceExtension(input.getAbsolutePath(), ".optimized.xsl"));
+        logger.debug("Optimize " + output.getAbsolutePath());
+        try {
+            final XMLFilter f = new StylesheetOptimizerFilter();
+            XMLUtils.transform(input, output, Collections.singletonList(f));
+        } catch (final DITAOTException e) {
+            e.printStackTrace();
+        }
     }
 
     private Iterable<String> orderPlugins(final Set<String> ids) {
@@ -684,4 +708,38 @@ public final class Integrator {
         }
     }
 
+    private class StylesheetOptimizerFilter extends XMLFilterImpl {
+
+        final Pattern pattern = Pattern.compile("\\*\\[contains\\(\\@class, *' (map|topic)/(\\w+) '\\)\\]");
+
+        @Override
+        public void startElement(final String uri, final String localName, final String name,
+                                 final Attributes atts) throws SAXException {
+            Attributes resAtts = atts;
+            if (uri.equals("http://www.w3.org/1999/XSL/Transform")) {
+                final AttributesImpl res = new AttributesImpl(atts);
+                if (localName.equals("include") || localName.equals("import")) {
+                    XMLUtils.addOrSetAttribute(res, "href", rewriteImport(res.getValue("href")));
+                } else {
+                    for (int i = 0; i < res.getLength(); i++) {
+                        res.setValue(i, optimizeAttributeValue(res.getValue(i)));
+                    }
+                }
+                resAtts = res;
+            }
+            getContentHandler().startElement(uri, localName, name, resAtts);
+        }
+
+        private String rewriteImport(final String href) {
+            if (href.endsWith(".xsl")) {
+                return href.substring(0, href.length() - 4) + ".optimized.xsl";
+            }
+        }
+
+        private String optimizeAttributeValue(final String value) {
+            final Matcher m = pattern.matcher(value);
+            return m.replaceAll("$2");
+        }
+
+    }
 }
