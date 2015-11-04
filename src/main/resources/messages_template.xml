@@ -535,7 +535,7 @@
   </message>
   
   <message id="DOTX041W" type="WARN">
-    <reason>Found more than one title element in a section. Using the first one for the section's title.</reason>
+    <reason>Found more than one title element in a %1 element. Using the first one for the %1's title.</reason>
     <response></response>
   </message>
   
