@@ -12,12 +12,15 @@
   <lang filename="fi.xml" xml:lang="fi"/>
   <lang filename="fr.xml" xml:lang="fr"/>
   <lang filename="he.xml" xml:lang="he"/>
+  <lang filename="hr.xml" xml:lang="hr"/>
   <lang filename="hu.xml" xml:lang="hu"/>
   <lang filename="is.xml" xml:lang="is"/>
   <lang filename="it.xml" xml:lang="it"/>
   <lang filename="ja.xml" xml:lang="ja"/>
+  <lang filename="lv.xml" xml:lang="lv"/>
   <lang filename="nl.xml" xml:lang="nl"/>
   <lang filename="no.xml" xml:lang="no"/>
+  <lang filename="pl.xml" xml:lang="pl"/>
   <lang filename="pt.xml" xml:lang="pt"/>
   <lang filename="pt_BR.xml" xml:lang="pt-BR"/>
   <lang filename="ro.xml" xml:lang="ro"/>
@@ -25,5 +28,6 @@
   <lang filename="sk.xml" xml:lang="sk"/>
   <lang filename="sl.xml" xml:lang="sl"/>
   <lang filename="sv.xml" xml:lang="sv"/>
+  <lang filename="tr.xml" xml:lang="tr"/>
   <lang filename="zh_CN.xml" xml:lang="zh-CN"/>
 </langlist>
