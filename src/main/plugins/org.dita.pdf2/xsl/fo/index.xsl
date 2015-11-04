@@ -376,6 +376,7 @@ See the accompanying license.txt file for applicable licenses.
                         </xsl:variable>
                         <xsl:if test="contains($isNormalChilds,'true ')">
                           <xsl:apply-templates select="." mode="make-index-ref">
+                            <xsl:with-param name="idxs" select="opentopic-index:refID"/>
                             <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                             <xsl:with-param name="no-page" select="$isNoPage"/>
                           </xsl:apply-templates>
