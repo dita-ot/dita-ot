@@ -71,7 +71,7 @@
 
   
   
-  <xsl:template match="map[contains(@class, ' map/map ')]">
+  <xsl:template match="*[contains(@class, ' map/map ')]">
     <xsl:param name="contentwin"/>
     <!--<xsl:message>########## in map/map, $contentwin param is <xsl:value-of select="$contentwin"/></xsl:message>-->
     <xsl:variable name="parent" select="'root'"/>
@@ -81,24 +81,24 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="topicmeta[contains(@class, ' map/topicmeta ')]">
+  <xsl:template match="*[contains(@class, ' map/topicmeta ')]">
     <!-- do nothing for now -->
   </xsl:template>
 
 
-  <xsl:template match="title[contains(@class, ' topic/title ')]">
+  <xsl:template match="*[contains(@class, ' topic/title ')]">
     <!-- do nothing for now -->
   </xsl:template>
 
-  <xsl:template match="navref[contains(@class, ' map/navref ')]">
+  <xsl:template match="*[contains(@class, ' map/navref ')]">
     <xsl:message> WARNING! navref not supported. </xsl:message>
   </xsl:template>
 
-  <xsl:template match="anchor[contains(@class, ' map/anchor ')]">
+  <xsl:template match="*[contains(@class, ' map/anchor ')]">
     <xsl:message> WARNING! anchor not supported. </xsl:message>
   </xsl:template>
 
-  <xsl:template match="reltable[contains(@class, ' map/reltable ')]">
+  <xsl:template match="*[contains(@class, ' map/reltable ')]">
     <!-- do nothing now -->
   </xsl:template>
 

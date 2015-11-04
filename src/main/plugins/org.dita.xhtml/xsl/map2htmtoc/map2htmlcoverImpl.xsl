@@ -7,11 +7,11 @@
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot">
 
-  <xsl:template match="map[contains(@class, ' map/map ')]">
+  <xsl:template match="*[contains(@class, ' map/map ')]">
     <xsl:apply-templates select="." mode="root_element"/>
   </xsl:template>
 
-  <xsl:template match="map[contains(@class, ' map/map ')]" mode="chapterBody">
+  <xsl:template match="*[contains(@class, ' map/map ')]" mode="chapterBody">
     <body>
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
       <xsl:if test="@outputclass">
@@ -24,12 +24,12 @@
       <xsl:call-template name="gen-user-header"/>
       <xsl:call-template name="processHDR"/>
       <xsl:if test="$INDEXSHOW = 'yes'">
-        <xsl:apply-templates select="/*/topicmeta[contains(@class, ' map/topicmeta ')]/keywords[contains(@class, ' topic/keywords ')]/indexterm[contains(@class, ' topic/indexterm ')]"/>
+        <xsl:apply-templates select="/*/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')]"/>
       </xsl:if>
       <xsl:call-template name="gen-user-sidetoc"/>
       <xsl:choose>
-        <xsl:when test="title[contains(@class, ' topic/title ')]">
-          <xsl:apply-templates select="title[contains(@class, ' topic/title ')]"/>
+        <xsl:when test="*[contains(@class, ' topic/title ')]">
+          <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates select="@title"/>
@@ -46,14 +46,14 @@
     </body>
   </xsl:template>
 
-  <xsl:template match="map[contains(@class, ' map/map ')]/title[contains(@class, ' topic/title ')]">
+  <xsl:template match="*[contains(@class, ' map/map ')]/*[contains(@class, ' topic/title ')]">
     <h1 class="title topictitle1">
       <xsl:call-template name="gen-user-panel-title-pfx"/>
       <xsl:apply-templates/>
     </h1>
   </xsl:template>
 
-  <xsl:template match="map[contains(@class, ' map/map ')]/@title">
+  <xsl:template match="*[contains(@class, ' map/map ')]/@title">
     <h1 class="title topictitle1">
       <xsl:call-template name="gen-user-panel-title-pfx"/>
       <xsl:value-of select="."/>
@@ -74,13 +74,13 @@
           <xsl:call-template name="gen-user-panel-title-pfx"/>
           <xsl:value-of select="/*[contains(@class,' bookmap/bookmap ')]/*[contains(@class,' bookmap/booktitle ')]/*[contains(@class, ' bookmap/mainbooktitle ')]"/>
         </xsl:when>
-        <xsl:when test="/map[contains(@class, ' map/map ')]/title[contains(@class, ' topic/title ')]">
+        <xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
           <xsl:call-template name="gen-user-panel-title-pfx"/>
-          <xsl:value-of select="/map[contains(@class, ' map/map ')]/title[contains(@class, ' topic/title ')]"/>
+          <xsl:value-of select="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]"/>
         </xsl:when>
-        <xsl:when test="/map[contains(@class, ' map/map ')]/@title">
+        <xsl:when test="/*[contains(@class,' map/map ')]/@title">
           <xsl:call-template name="gen-user-panel-title-pfx"/>
-          <xsl:value-of select="/map[contains(@class, ' map/map ')]/@title"/>
+          <xsl:value-of select="/*[contains(@class,' map/map ')]/@title"/>
         </xsl:when>
       </xsl:choose>
     </title>

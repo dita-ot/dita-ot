@@ -13,22 +13,22 @@
     <meta charset="UTF-8"/>
   </xsl:template>  
   
-  <xsl:template match="copyright[contains(@class, ' topic/copyright ')]" mode="gen-metadata">
+  <xsl:template match="*[contains(@class,' topic/copyright ')]" mode="gen-metadata">
     <meta name="rights">
       <xsl:attribute name="content">
         <xsl:text>&#xA9; </xsl:text>
-        <xsl:apply-templates select="copyryear[contains(@class, ' topic/copyryear ')][1]" mode="gen-metadata"/>
+        <xsl:apply-templates select="*[contains(@class,' topic/copyryear ')][1]" mode="gen-metadata"/>
         <xsl:text> </xsl:text>
-        <xsl:if test="copyrholder[contains(@class, ' topic/copyrholder ')]">
-          <xsl:value-of select="copyrholder[contains(@class, ' topic/copyrholder ')]"/>
+        <xsl:if test="*[contains(@class,' topic/copyrholder ')]">
+          <xsl:value-of select="*[contains(@class,' topic/copyrholder ')]"/>
         </xsl:if>                
       </xsl:attribute>
     </meta>
   </xsl:template>
-  <xsl:template match="copyryear[contains(@class, ' topic/copyryear ')]" mode="gen-metadata">
+  <xsl:template match="*[contains(@class,' topic/copyryear ')]" mode="gen-metadata">
     <xsl:param name="previous" select="/.."/>
     <xsl:param name="open-sequence" select="false()"/>
-    <xsl:variable name="next" select="following-sibling::copyryear[contains(@class, ' topic/copyryear ')][1]"/>
+    <xsl:variable name="next" select="following-sibling::*[contains(@class,' topic/copyryear ')][1]"/>
     <xsl:variable name="begin-sequence" select="@year + 1 = number($next/@year)"/>
     <xsl:choose>
       <xsl:when test="$begin-sequence">
@@ -51,8 +51,8 @@
     </xsl:apply-templates>
   </xsl:template>
   
-  <xsl:template match="title[contains(@class, ' topic/title ')]" mode="gen-metadata"/>
-  <xsl:template match="shortdesc[contains(@class, ' topic/shortdesc ')]" mode="gen-metadata">
+  <xsl:template match="*[contains(@class,' topic/title ')]" mode="gen-metadata"/>
+  <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="gen-metadata">
     <xsl:variable name="shortmeta">
       <xsl:apply-templates select="*|text()" mode="text-only"/>
     </xsl:variable>

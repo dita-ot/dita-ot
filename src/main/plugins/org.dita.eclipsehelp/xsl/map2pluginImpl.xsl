@@ -62,12 +62,12 @@
   </xsl:template>
   
   <!-- Depracated Template: Use the template with mode="eclipse.plugin" instead -->
-  <xsl:template match="map[contains(@class, ' map/map ')]">
+  <xsl:template match="*[contains(@class, ' map/map ')]">
     <xsl:element name="plugin">
       <xsl:attribute name="name">
         <xsl:choose>
-          <xsl:when test="title[contains(@class, ' topic/title ')]">
-            <xsl:apply-templates select="title[contains(@class, ' topic/title ')]" mode="text-only"/>
+          <xsl:when test="*[contains(@class, ' topic/title ')]">
+            <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="text-only"/>
       </xsl:when>
           <xsl:when test="@title">
             <xsl:value-of select="@title"/>
@@ -125,7 +125,7 @@
   </xsl:template>
   
   <!--  The elipse.plugin mode teamplate is used to create a plugin.xml file. -->  
-  <xsl:template match="map[contains(@class, ' map/map ')]" mode="eclipse.plugin">
+  <xsl:template match="*[contains(@class, ' map/map ')]" mode="eclipse.plugin">
     <xsl:element name="plugin">
      <!-- <xsl:attribute name="name">
         <xsl:choose>
@@ -187,13 +187,13 @@
     </xsl:element>
   </xsl:template>
   
-  <xsl:template match="map[contains(@class, ' map/map ')]" mode="eclipse.fragment">
+  <xsl:template match="*[contains(@class, ' map/map ')]" mode="eclipse.fragment">
     <xsl:element name="fragment">
       <xsl:choose>
         <xsl:when test="@title"><xsl:attribute name="name">%name</xsl:attribute>
         </xsl:when>
-        <xsl:when test="title[contains(@class, ' topic/title ')]">
-            <xsl:apply-templates select="title[contains(@class, ' topic/title ')]" mode="text-only"/>
+        <xsl:when test="*[contains(@class, ' topic/title ')]">
+            <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="text-only"/>
         </xsl:when>
         <xsl:otherwise><xsl:attribute name="name">Sample Title</xsl:attribute>
         </xsl:otherwise>
@@ -252,7 +252,7 @@
   </xsl:template>
   
   
-  <xsl:template match="map[contains(@class, ' map/map ')]" mode="eclipse.properties">
+  <xsl:template match="*[contains(@class, ' map/map ')]" mode="eclipse.properties">
     
     <xsl:text># NLS_MESSAGEFORMAT_NONE</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text># NLS_ENCODING=UTF-8</xsl:text><xsl:value-of select="$newline"/>
@@ -261,8 +261,8 @@
       <xsl:when test="@title">
         <xsl:text>name=</xsl:text><xsl:value-of select="@title"/>
       </xsl:when>
-      <xsl:when test="title[contains(@class, ' topic/title ')]">
-        <xsl:text>name=</xsl:text><xsl:apply-templates select="title[contains(@class, ' topic/title ')]" mode="text-only"/>
+      <xsl:when test="*[contains(@class, ' topic/title ')]">
+        <xsl:text>name=</xsl:text><xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>name=Sample Title</xsl:text>
@@ -272,7 +272,7 @@
     <xsl:text>providerName=</xsl:text><xsl:value-of select="$provider"/>
   </xsl:template>
   
-  <xsl:template match="map[contains(@class, ' map/map ')]" mode="eclipse.manifest">
+  <xsl:template match="*[contains(@class, ' map/map ')]" mode="eclipse.manifest">
     
     <xsl:text>Bundle-Version: </xsl:text><xsl:value-of select="$version"/><xsl:value-of select="$newline"/>
     <xsl:text>Manifest-Version: 1.0</xsl:text><xsl:value-of select="$newline"/>

@@ -39,13 +39,13 @@
 
 <!-- titles for logical containers -->
 
-<xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/title[contains(@class, ' topic/title ')]">
+<xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
 	<text style="font-size: 16; font-family: Arial; font-weight: bold; stroke:none; fill:blue;">
 	<xsl:value-of select="."/>
 	</text>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' pr-d/fragment ')]/title[contains(@class, ' topic/title ')]" priority="2">
+<xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' topic/title ')]" priority="2">
 	<text style="font-size: 12; font-family: Arial; font-weight: bold; stroke:none; fill:blue;">
 	<xsl:value-of select="."/>
 	</text>

@@ -42,16 +42,16 @@
   </xsl:choose>  
 </xsl:variable>
 
-<xsl:template match="map[contains(@class, ' map/map ')]">
+<xsl:template match="*[contains(@class, ' map/map ')]">
   <!-- add NLS processing instruction -->
   <xsl:text>
 </xsl:text><xsl:processing-instruction name="NLS"> TYPE="org.eclipse.help.toc"</xsl:processing-instruction><xsl:text>
 </xsl:text>
   <toc>
     <xsl:choose>
-      <xsl:when test="title[contains(@class, ' topic/title ')]">
+      <xsl:when test="*[contains(@class,' topic/title ')]">
         <xsl:attribute name="label">
-          <xsl:value-of select="normalize-space(title[contains(@class, ' topic/title ')])"/>
+          <xsl:value-of select="normalize-space(*[contains(@class,' topic/title ')])"/>
         </xsl:attribute>
       </xsl:when>
       <xsl:when test="@title">
@@ -66,9 +66,9 @@
     </xsl:choose>
     <xsl:apply-templates select="@anchorref"/>
     <!-- Add @topic to map, using the first @href in the map -->
-    <xsl:if test="topicref[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href]">
+    <xsl:if test="*[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href]">
       <xsl:attribute name="topic">
-        <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href][1]" mode="format-href"/>
+        <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href][1]" mode="format-href"/>
       </xsl:attribute>
     </xsl:if>
     <xsl:apply-templates/>
@@ -132,7 +132,7 @@
 </xsl:template>
 
 <!-- Make the same changes for navref/@mapref that were made for @anchorref. -->
-<xsl:template match="navref[contains(@class, ' map/navref ')]/@mapref">
+<xsl:template match="*[contains(@class, ' map/navref ')]/@mapref">
   <xsl:variable name="fix-mapref">
     <xsl:value-of select="translate(.,
                            '\/=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -156,7 +156,7 @@
   </xsl:attribute>
 </xsl:template>
 
-<xsl:template match="navref[contains(@class, ' map/navref ')]">
+<xsl:template match="*[contains(@class, ' map/navref ')]">
   <xsl:choose>
     <xsl:when test="@mapref">
       <link><xsl:apply-templates select="@mapref"/></link>
@@ -170,19 +170,19 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="anchor[contains(@class, ' map/anchor ')]">
+<xsl:template match="*[contains(@class, ' map/anchor ')]">
 	<anchor id="{@id}"/>
 </xsl:template>
 
 <!-- If the topicref is a "topicgroup", or some other topicref that does not point
      to a file or have link text, then just move on to children. -->
-<xsl:template match="topicref[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
+<xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
   <xsl:choose>
     <xsl:when test="contains(@class, ' mapgroup/topicgroup ')">
       <xsl:apply-templates/>
     </xsl:when>
-    <xsl:when test="not(@href) and not(@navtitle) and not(topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]) and
-                    not(topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')])">
+    <xsl:when test="not(@href) and not(@navtitle) and not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]) and
+                    not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])">
       <xsl:apply-templates/>
     </xsl:when>
     <xsl:otherwise>
@@ -195,8 +195,8 @@
             <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle">
               <xsl:value-of select="@navtitle"/>
             </xsl:when>			  
-            <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]">
-              <xsl:apply-templates select="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
+            <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+              <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:choose>
@@ -273,6 +273,6 @@
 <xsl:template match="text()"/>
 
 <!-- do nothing when meeting with reltable -->
-<xsl:template match="reltable[contains(@class, ' map/reltable ')]"/>
+<xsl:template match="*[contains(@class,' map/reltable ')]"/>
 
 </xsl:stylesheet>

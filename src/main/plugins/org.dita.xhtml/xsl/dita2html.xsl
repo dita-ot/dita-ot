@@ -28,8 +28,8 @@
     <xsl:param name="idvalue"/>
     <a>
       <xsl:attribute name="name">
-        <xsl:if test="ancestor::body[contains(@class, ' topic/body ')]">
-          <xsl:value-of select="ancestor::body[contains(@class, ' topic/body ')]/parent::*/@id"/><xsl:text>__</xsl:text>
+        <xsl:if test="ancestor::*[contains(@class,' topic/body ')]">
+          <xsl:value-of select="ancestor::*[contains(@class,' topic/body ')]/parent::*/@id"/><xsl:text>__</xsl:text>
         </xsl:if>
         <xsl:value-of select="$idvalue"/>
       </xsl:attribute>

@@ -244,7 +244,7 @@
 <xsl:variable name="HTML_ID_SEPARATOR" select="'__'"/>
 
 <!-- these elements are never processed in a conventional presentation. can be overridden. -->
-<xsl:template match="no-topic-nesting[contains(@class, ' topic/no-topic-nesting ')]"/>
+<xsl:template match="*[contains(@class, ' topic/no-topic-nesting ')]"/>
 
 
 <!-- =========== ROOT RULE (just fall through; no side effects for new delivery contexts =========== -->
@@ -260,7 +260,7 @@
      In an override stylesheet, the same call to "chapter-setup" must be issued to
      maintain the consistency of overall look'n'feel of the output HTML.
      Match on the first DITA element -or- the first root 'topic' element. -->
-<xsl:template match="/dita | topic[contains(@class, ' topic/topic ')]">
+<xsl:template match="/dita | *[contains(@class, ' topic/topic ')]">
   <xsl:choose>
     <xsl:when test="not(parent::*)">
       <xsl:apply-templates select="." mode="root_element"/>
@@ -277,17 +277,17 @@
 </xsl:template>
 
 <!-- child topics get a div wrapper and fall through -->
-<xsl:template match="topic[contains(@class, ' topic/topic ')]" mode="child.topic" name="child.topic">
+<xsl:template match="*[contains(@class, ' topic/topic ')]" mode="child.topic" name="child.topic">
   <xsl:param name="nestlevel" as="xs:integer">
       <xsl:choose>
           <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
-          <xsl:when test="count(ancestor::topic[contains(@class, ' topic/topic ')]) > 9">9</xsl:when>
-          <xsl:otherwise><xsl:sequence select="count(ancestor::topic[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
+          <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 9">9</xsl:when>
+          <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
       </xsl:choose>
   </xsl:param>
   <article class="nested{$nestlevel}">
     <xsl:attribute name="aria-labelledby">
-      <xsl:apply-templates select="title[contains(@class, ' topic/title ')]" mode="return-aria-label-id"/>
+      <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="return-aria-label-id"/>
     </xsl:attribute>
     <xsl:call-template name="gen-topic">
       <xsl:with-param name="nestlevel" select="$nestlevel"/>
@@ -300,8 +300,8 @@
   <xsl:param name="nestlevel" as="xs:integer">
       <xsl:choose>
           <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
-          <xsl:when test="count(ancestor::topic[contains(@class, ' topic/topic ')]) > 9">9</xsl:when>
-          <xsl:otherwise><xsl:sequence select="count(ancestor::topic[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
+          <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 9">9</xsl:when>
+          <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
       </xsl:choose>
   </xsl:param>
  <xsl:choose>
@@ -327,11 +327,11 @@
 <!-- 1st level - topic/title -->
 <!-- Condensed topic title into single template without priorities; use $headinglevel to set heading.
      If desired, somebody could pass in the value to manually set the heading level -->
-<xsl:template match="topic[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]">
+<xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]">
   <xsl:param name="headinglevel" as="xs:integer">
       <xsl:choose>
-          <xsl:when test="count(ancestor::topic[contains(@class, ' topic/topic ')]) > 6">6</xsl:when>
-          <xsl:otherwise><xsl:sequence select="count(ancestor::topic[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
+          <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 6">6</xsl:when>
+          <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
       </xsl:choose>
   </xsl:param>
   <xsl:element name="h{$headinglevel}">
@@ -345,25 +345,25 @@
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
-<xsl:template match="topic[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]" mode="return-aria-label-id">
+<xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]" mode="return-aria-label-id">
   <xsl:choose>
     <xsl:when test="@id">
       <xsl:sequence select="dita-ot:generate-id(parent::*/@id, @id)"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:text>ariaid-title</xsl:text>
-      <xsl:number count="title[contains(@class, ' topic/title ')][parent::topic[contains(@class, ' topic/topic ')]]" level="any"/>
+      <xsl:number count="*[contains(@class, ' topic/title ')][parent::*[contains(@class,' topic/topic ')]]" level="any"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
 <!-- Hide titlealts - they need to get pulled into the proper places -->
-<xsl:template match="titlealts[contains(@class, ' topic/titlealts ')]"/>
+<xsl:template match="*[contains(@class, ' topic/titlealts ')]"/>
 
 
 <!-- =========== BODY/SECTION (not sensitive to nesting depth) =========== -->
 
-<xsl:template match="body[contains(@class, ' topic/body ')]" name="topic.body">
+<xsl:template match="*[contains(@class, ' topic/body ')]" name="topic.body">
 <div>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
@@ -379,13 +379,13 @@
 
   <!-- Added for DITA 1.1 "Shortdesc proposal" -->
   <!-- get the abstract para -->
-  <xsl:apply-templates select="preceding-sibling::abstract[contains(@class, ' topic/abstract ')]" mode="outofline"/>
+  <xsl:apply-templates select="preceding-sibling::*[contains(@class, ' topic/abstract ')]" mode="outofline"/>
   
   <!-- get the shortdesc para -->
-  <xsl:apply-templates select="preceding-sibling::shortdesc[contains(@class, ' topic/shortdesc ')]" mode="outofline"/>
+  <xsl:apply-templates select="preceding-sibling::*[contains(@class, ' topic/shortdesc ')]" mode="outofline"/>
   
   <!-- Insert pre-req links - after shortdesc - unless there is a prereq section about -->
-  <xsl:apply-templates select="following-sibling::related-links[contains(@class, ' topic/related-links ')]" mode="prereqs"/>
+  <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/related-links ')]" mode="prereqs"/>
 
   <xsl:apply-templates/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
@@ -393,16 +393,16 @@
 </xsl:template>
 
 <!-- Added for DITA 1.1 "Shortdesc proposal" -->
-<xsl:template match="abstract[contains(@class, ' topic/abstract ')]">
-  <xsl:if test="not(following-sibling::body[contains(@class, ' topic/body ')])">
+<xsl:template match="*[contains(@class, ' topic/abstract ')]">
+  <xsl:if test="not(following-sibling::*[contains(@class, ' topic/body ')])">
     <xsl:apply-templates select="." mode="outofline"/>
-    <xsl:apply-templates select="following-sibling::related-links[contains(@class, ' topic/related-links ')]" mode="prereqs"/>
+    <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/related-links ')]" mode="prereqs"/>
   </xsl:if>
 </xsl:template>
 
 <!-- Added for DITA 1.1 "Shortdesc proposal" -->
 <!-- called abstract processing - para at start of topic -->
-<xsl:template match="abstract[contains(@class, ' topic/abstract ')]" mode="outofline">
+<xsl:template match="*[contains(@class, ' topic/abstract ')]" mode="outofline">
   <div>
     <xsl:call-template name="commonattributes"/>
     <xsl:apply-templates/>
@@ -411,21 +411,21 @@
 
 <!-- Updated for DITA 1.1 "Shortdesc proposal" -->
 <!-- Added for SF 1363055: Shortdesc disappears when optional body is removed -->
-<xsl:template match="shortdesc[contains(@class, ' topic/shortdesc ')]">
+<xsl:template match="*[contains(@class, ' topic/shortdesc ')]">
   <xsl:choose>
-    <xsl:when test="parent::abstract[contains(@class, ' topic/abstract ')]">
+    <xsl:when test="parent::*[contains(@class, ' topic/abstract ')]">
       <xsl:apply-templates select="." mode="outofline.abstract"/>
     </xsl:when>
-    <xsl:when test="not(following-sibling::body[contains(@class, ' topic/body ')])">    
+    <xsl:when test="not(following-sibling::*[contains(@class, ' topic/body ')])">    
       <xsl:apply-templates select="." mode="outofline"/>
-      <xsl:apply-templates select="following-sibling::related-links[contains(@class, ' topic/related-links ')]" mode="prereqs"/>
+      <xsl:apply-templates select="following-sibling::*[contains(@class, ' topic/related-links ')]" mode="prereqs"/>
     </xsl:when>
     <xsl:otherwise></xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
 <!-- called shortdesc processing when it is in abstract -->
-<xsl:template match="shortdesc[contains(@class, ' topic/shortdesc ')]" mode="outofline.abstract">
+<xsl:template match="*[contains(@class, ' topic/shortdesc ')]" mode="outofline.abstract">
   <xsl:choose>
     <xsl:when test="preceding-sibling::*[contains(@class, ' topic/p ') or contains(@class, ' topic/dl ') or
                                          contains(@class, ' topic/fig ') or contains(@class, ' topic/lines ') or
@@ -463,7 +463,7 @@
 </xsl:template>
 
 <!-- called shortdesc processing - para at start of topic -->
-<xsl:template match="shortdesc[contains(@class, ' topic/shortdesc ')]" mode="outofline">
+<xsl:template match="*[contains(@class, ' topic/shortdesc ')]" mode="outofline">
   <p>
     <xsl:call-template name="commonattributes"/>
     <xsl:apply-templates/>
@@ -471,7 +471,7 @@
 </xsl:template>
 
 <!-- section processor - div with no generated title -->
-<xsl:template match="section[contains(@class, ' topic/section ')]" name="topic.section">
+<xsl:template match="*[contains(@class, ' topic/section ')]" name="topic.section">
   <section class="section">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-toc-id"/>
@@ -484,7 +484,7 @@
 </xsl:template>
 
 <!-- example processor - div with no generated title -->
-<xsl:template match="example[contains(@class, ' topic/example ')]" name="topic.example">
+<xsl:template match="*[contains(@class, ' topic/example ')]" name="topic.example">
   <div class="example">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-toc-id"/>
@@ -500,7 +500,7 @@
 
 <!-- =========== BASIC BODY ELEMENTS =========== -->
 
-<xsl:template match="div[contains(@class, ' topic/div ')]">
+<xsl:template match="*[contains(@class, ' topic/div ')]">
   <div>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setid"/>
@@ -509,21 +509,21 @@
 </xsl:template>
 
 <!-- paragraphs -->
-<xsl:template match="p[contains(@class, ' topic/p ')]" name="topic.p">
+<xsl:template match="*[contains(@class, ' topic/p ')]" name="topic.p">
  <!-- To ensure XHTML validity, need to determine whether the DITA kids are block elements.
       If so, use div_class="p" instead of p -->
  <xsl:choose>
-  <xsl:when test="descendant::pre[contains(@class, ' topic/pre ')] or
-       descendant::ul[contains(@class, ' topic/ul ')] or
-       descendant::sl[contains(@class, ' topic/sl ')] or
-       descendant::ol[contains(@class, ' topic/ol ')] or
-       descendant::lq[contains(@class, ' topic/lq ')] or
-       descendant::dl[contains(@class, ' topic/dl ')] or
-       descendant::note[contains(@class, ' topic/note ')] or
-       descendant::lines[contains(@class, ' topic/lines ')] or
-       descendant::fig[contains(@class, ' topic/fig ')] or
-       descendant::table[contains(@class, ' topic/table ')] or
-       descendant::simpletable[contains(@class, ' topic/simpletable ')]">
+  <xsl:when test="descendant::*[contains(@class, ' topic/pre ')] or
+       descendant::*[contains(@class, ' topic/ul ')] or
+       descendant::*[contains(@class, ' topic/sl ')] or
+       descendant::*[contains(@class, ' topic/ol ')] or
+       descendant::*[contains(@class, ' topic/lq ')] or
+       descendant::*[contains(@class, ' topic/dl ')] or
+       descendant::*[contains(@class, ' topic/note ')] or
+       descendant::*[contains(@class, ' topic/lines ')] or
+       descendant::*[contains(@class, ' topic/fig ')] or
+       descendant::*[contains(@class, ' topic/table ')] or
+       descendant::*[contains(@class, ' topic/simpletable ')]">
      <div class="p">
        <xsl:call-template name="commonattributes"/>
        <xsl:call-template name="setid"/>
@@ -550,7 +550,7 @@
      To override all notes, match the note element's class attribute directly, as in this rule.
      To override a single note type, match the class with mode="process.note.(selected-type)"
      To override all notes except danger and caution, match the class with mode="process.note.common-processing" -->
-<xsl:template match="note[contains(@class, ' topic/note ')]" name="topic.note">
+<xsl:template match="*[contains(@class, ' topic/note ')]" name="topic.note">
   <xsl:call-template name="spec-title"/>
   <xsl:choose>
     <xsl:when test="@type = 'note'">
@@ -733,7 +733,7 @@
 <!-- long quote (bibliographic association).
      @reftitle contains the citation for the excerpt.
      With a link if @href is used.  -->
-<xsl:template match="lq[contains(@class, ' topic/lq ')]" name="topic.lq">
+<xsl:template match="*[contains(@class, ' topic/lq ')]" name="topic.lq">
   <blockquote>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
@@ -770,7 +770,7 @@
 
 <!-- Unordered List -->
 <!-- handle all levels thru browser processing -->
-<xsl:template match="ul[contains(@class, ' topic/ul ')]" name="topic.ul">
+<xsl:template match="*[contains(@class, ' topic/ul ')]" name="topic.ul">
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="setaname"/>
   <ul>
@@ -785,7 +785,7 @@
 
 <!-- Simple List -->
 <!-- handle all levels thru browser processing -->
-<xsl:template match="sl[contains(@class, ' topic/sl ')]" name="topic.sl">
+<xsl:template match="*[contains(@class, ' topic/sl ')]" name="topic.sl">
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="setaname"/>
   <ul class="simple">
@@ -802,8 +802,8 @@
 
 <!-- Ordered List - 1st level - Handle levels 1 to 9 thru OL-TYPE attribution -->
 <!-- Updated to use a single template, use count and mod to set the list type -->
-<xsl:template match="ol[contains(@class, ' topic/ol ')]" name="topic.ol">
-  <xsl:variable name="olcount" select="count(ancestor-or-self::ol[contains(@class, ' topic/ol ')])"/>
+<xsl:template match="*[contains(@class, ' topic/ol ')]" name="topic.ol">
+  <xsl:variable name="olcount" select="count(ancestor-or-self::*[contains(@class, ' topic/ol ')])"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="setaname"/>
   <ol>
@@ -822,7 +822,7 @@
 </xsl:template>
 
 <!-- list item -->
-<xsl:template match="li[contains(@class, ' topic/li ')]" name="topic.li">
+<xsl:template match="*[contains(@class, ' topic/li ')]" name="topic.li">
 <li>
   <xsl:choose>
     <xsl:when test="parent::*/@compact = 'no'">
@@ -841,7 +841,7 @@
 </li><xsl:value-of select="$newline"/>
 </xsl:template>
 <!-- simple list item -->
-<xsl:template match="sli[contains(@class, ' topic/sli ')]" name="topic.sli">
+<xsl:template match="*[contains(@class, ' topic/sli ')]" name="topic.sli">
   <li>
     <xsl:choose>
       <xsl:when test="parent::*/@compact = 'no'">
@@ -862,15 +862,15 @@
 </xsl:template>
 
 <!-- special case of getting the number of a list item referenced by xref -->
-<xsl:template match="li[contains(@class, ' topic/li ')]" mode="xref">
+<xsl:template match="*[contains(@class, ' topic/li ')]" mode="xref">
   <xsl:number/>
 </xsl:template>
 
 
 <!-- list item section is like li/lq but without presentation (indent) -->
-<xsl:template match="itemgroup[contains(@class, ' topic/itemgroup ')]" name="topic.itemgroup">
+<xsl:template match="*[contains(@class, ' topic/itemgroup ')]" name="topic.itemgroup">
   <!-- insert a space before all but the first itemgroups in a LI -->
-  <xsl:variable name="itemgroupcount"><xsl:number count="itemgroup[contains(@class, ' topic/itemgroup ')]"/></xsl:variable>
+  <xsl:variable name="itemgroupcount"><xsl:number count="*[contains(@class, ' topic/itemgroup ')]"/></xsl:variable>
   <xsl:if test="$itemgroupcount > 1">
     <xsl:text> </xsl:text>
   </xsl:if>
@@ -894,7 +894,7 @@
 <!-- =========== DEFINITION LIST =========== -->
 
 <!-- DL -->
-<xsl:template match="dl[contains(@class, ' topic/dl ')]" name="topic.dl">
+<xsl:template match="*[contains(@class, ' topic/dl ')]" name="topic.dl">
   <xsl:call-template name="setaname"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <dl>
@@ -912,14 +912,14 @@
 </xsl:template>
 
 <!-- DL entry -->
-<xsl:template match="dlentry[contains(@class, ' topic/dlentry ')]" name="topic.dlentry">
+<xsl:template match="*[contains(@class, ' topic/dlentry ')]" name="topic.dlentry">
   <xsl:apply-templates/>
 </xsl:template>
 
 <!-- SF Patch 2185423: condensed code so that dt processing is not repeated for keyref or when $dtcount!=1
      Code could be reduced further by compressing the flagging templates. -->
-<xsl:template match="dt[contains(@class, ' topic/dt ')]" mode="output-dt">
-  <xsl:variable name="is-first-dt" select="empty(preceding-sibling::dt[contains(@class, ' topic/dt ')])"/>
+<xsl:template match="*[contains(@class, ' topic/dt ')]" mode="output-dt">
+  <xsl:variable name="is-first-dt" select="empty(preceding-sibling::*[contains(@class, ' topic/dt ')])"/>
   <xsl:variable name="dt-class">
     <xsl:choose>
       <!-- handle non-compact list items -->
@@ -960,7 +960,7 @@
 </xsl:template>
 
 <!-- DL term -->
-<xsl:template match="dt[contains(@class, ' topic/dt ')]" name="topic.dt">
+<xsl:template match="*[contains(@class, ' topic/dt ')]" name="topic.dt">
   <xsl:choose>
     <xsl:when test="@keyref and @href">
       <a>
@@ -976,8 +976,8 @@
 </xsl:template>
 
 <!-- DL description -->
-<xsl:template match="dd[contains(@class, ' topic/dd ')]" name="topic.dd">
-  <xsl:variable name="is-first-dd" select="empty(preceding-sibling::dd[contains(@class, ' topic/dd ')])"/>
+<xsl:template match="*[contains(@class, ' topic/dd ')]" name="topic.dd">
+  <xsl:variable name="is-first-dd" select="empty(preceding-sibling::*[contains(@class, ' topic/dd ')])"/>
   <dd>
     <xsl:for-each select="..">
       <xsl:call-template name="commonattributes"/>
@@ -998,12 +998,12 @@
 </xsl:template>
 
 <!-- DL heading -->
-<xsl:template match="dlhead[contains(@class, ' topic/dlhead ')]" name="topic.dlhead">
+<xsl:template match="*[contains(@class, ' topic/dlhead ')]" name="topic.dlhead">
  <xsl:apply-templates/>
 </xsl:template>
 
 <!-- DL heading, term -->
-<xsl:template match="dthd[contains(@class, ' topic/dthd ')]" name="topic.dthd">
+<xsl:template match="*[contains(@class, ' topic/dthd ')]" name="topic.dthd">
   <dt>
     <!-- Get ditaval style and xml:lang from DLHEAD, then override with local -->
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
@@ -1019,7 +1019,7 @@
 </xsl:template>
 
 <!-- DL heading, description -->
-<xsl:template match="ddhd[contains(@class, ' topic/ddhd ')]" name="topic.ddhd">
+<xsl:template match="*[contains(@class, ' topic/ddhd ')]" name="topic.ddhd">
   <dd>
     <!-- Get ditaval style and xml:lang from DLHEAD, then override with local -->
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
@@ -1040,7 +1040,7 @@
 <!-- phrase presentational style - have to use a low priority otherwise topic/ph always wins -->
 <!-- should not need priority, default is low enough -->
 
-<xsl:template match="ph[contains(@class, ' topic/ph ')]" name="topic.ph">
+<xsl:template match="*[contains(@class, ' topic/ph ')]" name="topic.ph">
   <xsl:choose>
     <xsl:when test="@keyref and @href">
       <xsl:apply-templates select="." mode="turning-to-link">
@@ -1060,7 +1060,7 @@
 <!-- keyword presentational style - have to use priority else topic/keyword always wins -->
 <!-- should not need priority, default is low enough -->
 
-<xsl:template match="keyword[contains(@class, ' topic/keyword ')]" name="topic.keyword">
+<xsl:template match="*[contains(@class, ' topic/keyword ')]" name="topic.keyword">
   <xsl:choose>
     <xsl:when test="@keyref and @href">
       <xsl:apply-templates select="." mode="turning-to-link">
@@ -1079,11 +1079,11 @@
 
 <!-- trademarks  -->
 <!-- prepare a key for each trademark tag -->
-<xsl:key name="tm"  match="tm[contains(@class, ' topic/tm ')]" use="."/>
+<xsl:key name="tm"  match="*[contains(@class, ' topic/tm ')]" use="."/>
 
 <!-- process the TM tag -->
 <!-- removed priority 1 : should not be needed -->
-<xsl:template match="tm[contains(@class, ' topic/tm ')]" name="topic.tm">
+<xsl:template match="*[contains(@class, ' topic/tm ')]" name="topic.tm">
 
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/> <!-- output the TM content -->
@@ -1099,12 +1099,12 @@
 
       <!-- Determine if this is in a title, and should be marked -->
       <xsl:variable name="usetitle">
-        <xsl:if test="ancestor::title[contains(@class, ' topic/title ')]/parent::topic[contains(@class, ' topic/topic ')]">
+        <xsl:if test="ancestor::*[contains(@class, ' topic/title ')]/parent::*[contains(@class, ' topic/topic ')]">
           <xsl:choose>
             <!-- Not the first one in a title -->
             <xsl:when test="generate-id(.) != generate-id(key('tm', .)[1])">skip</xsl:when>
             <!-- First one in the topic, BUT it appears in a shortdesc or body -->
-            <xsl:when test="//*[contains(@class, ' topic/shortdesc ') or contains(@class, ' topic/body ')]//tm[contains(@class, ' topic/tm ')][@trademark = $tmvalue]">skip</xsl:when>
+            <xsl:when test="//*[contains(@class, ' topic/shortdesc ') or contains(@class, ' topic/body ')]//*[contains(@class, ' topic/tm ')][@trademark = $tmvalue]">skip</xsl:when>
             <xsl:otherwise>use</xsl:otherwise>
           </xsl:choose>
         </xsl:if>
@@ -1114,11 +1114,11 @@
       <xsl:variable name="usebody">
         <xsl:choose>
           <!-- If in a title or prolog, skip -->
-          <xsl:when test="ancestor::*[contains(@class, ' topic/title ') or contains(@class, ' topic/prolog ')]/parent::topic[contains(@class, ' topic/topic ')]">skip</xsl:when>
+          <xsl:when test="ancestor::*[contains(@class, ' topic/title ') or contains(@class, ' topic/prolog ')]/parent::*[contains(@class, ' topic/topic ')]">skip</xsl:when>
           <!-- If first in the document, use it -->
           <xsl:when test="generate-id(.) = generate-id(key('tm', .)[1])">use</xsl:when>
           <!-- If there is another before this that is in the body or shortdesc, skip -->
-          <xsl:when test="preceding::tm[contains(@class, ' topic/tm ')][@trademark = $tmvalue][ancestor::*[contains(@class, ' topic/body ') or contains(@class, ' topic/shortdesc ')]]">skip</xsl:when>
+          <xsl:when test="preceding::*[contains(@class, ' topic/tm ')][@trademark = $tmvalue][ancestor::*[contains(@class, ' topic/body ') or contains(@class, ' topic/shortdesc ')]]">skip</xsl:when>
           <!-- Otherwise, any before this must be in a title or ignored section -->
           <xsl:otherwise>use</xsl:otherwise>
         </xsl:choose>
@@ -1160,7 +1160,7 @@
 
 <!-- phrase "semantic" classes -->
 <!-- citations -->
-<xsl:template match="cite[contains(@class, ' topic/cite ')]" name="topic.cite">
+<xsl:template match="*[contains(@class, ' topic/cite ')]" name="topic.cite">
   <xsl:choose>
     <xsl:when test="@keyref and @href">
       <xsl:apply-templates select="." mode="turning-to-link">
@@ -1178,7 +1178,7 @@
 </xsl:template>
 
 <!-- quotes - only do 1 level, no flip-flopping -->
-<xsl:template match="q[contains(@class, ' topic/q ')]" name="topic.q">
+<xsl:template match="*[contains(@class, ' topic/q ')]" name="topic.q">
   <span class="q">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="getVariable">
@@ -1191,7 +1191,7 @@
   </span>
 </xsl:template>
 
-<xsl:template match="term[contains(@class, ' topic/term ')]" mode="output-term">
+<xsl:template match="*[contains(@class, ' topic/term ')]" mode="output-term">
   <!-- Deprecated since 2.1 -->
   <xsl:param name="displaytext"/>
   
@@ -1212,9 +1212,9 @@
 <!-- Templates for internal usage in terms/abbreviation resolving -->
 <xsl:template name="getMatchingTarget" as="element()?">
   <xsl:param name="m_glossid" select="''" as="xs:string"/>
-  <xsl:param name="m_entry-file-contents" as="document-node()?"/>
+  <xsl:param name="m_entry-file-contents" as="node()?"/>
   <xsl:param name="m_reflang" select="'en-US'" as="xs:string"/>
-  <xsl:variable name="glossentries" select="$m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')]" as="element()*"/>
+  <xsl:variable name="glossentries" select="$m_entry-file-contents/descendant-or-self::*[contains(@class, ' glossentry/glossentry ')]" as="element()*"/>
   <xsl:choose>
     <xsl:when test="$m_glossid = '' and $glossentries[lang($m_reflang)]">
       <xsl:sequence select="$glossentries[lang($m_reflang)]"/>
@@ -1284,10 +1284,10 @@
       </xsl:choose>
     </xsl:when>
     <xsl:when test="normalize-space(.) = '' and
-                    (boolean(ancestor::copyright[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref', @keyref)[1]))">
+                    (boolean(ancestor::*[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref', @keyref)[1]))">
       <!-- Already generating a message when looking for the term, do not generate a "missing glossentry" message here too -->
     </xsl:when>
-    <xsl:when test="boolean(ancestor::copyright[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref', @keyref)[1])">
+    <xsl:when test="boolean(ancestor::*[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref', @keyref)[1])">
       <!-- Didn't look up term because it was specified, but this is the first occurrence
            and the glossentry was not found, so generate "missing glossentry" message -->
       <xsl:apply-templates select="." mode="ditamsg:no-glossentry-for-key">
@@ -1328,9 +1328,9 @@
 </xsl:template>
 
 <!-- Note: processing for the term specialization abbreviated-form is located in abbrev-d.xsl. -->
-<xsl:key name="keyref" match="term[contains(@class, ' topic/term ')]" use="@keyref"/>
+<xsl:key name="keyref" match="*[contains(@class, ' topic/term ')]" use="@keyref"/>
 <!-- terms and abbreviated-forms -->
-<xsl:template match="term[contains(@class, ' topic/term ')]" name="topic.term">
+<xsl:template match="*[contains(@class, ' topic/term ')]" name="topic.term">
   <xsl:variable name="keys" select="@keyref" as="attribute()?"/>
   <xsl:choose>
     <xsl:when test="@keyref and @href">
@@ -1338,10 +1338,9 @@
         <xsl:apply-templates select="." mode="find-keyref-target"/>
       </xsl:variable>
       
-      <xsl:variable name="entry-file-contents" as="document-node()?">
+      <xsl:variable name="entry-file-contents" as="node()?">
         <xsl:if test="empty(@scope) or @scope = 'local'">
-          <xsl:variable name="entry-file-uri" select="concat($WORKDIR, @href)"/>
-          <xsl:sequence select="document($entry-file-uri, /)"/>
+          <xsl:sequence select="dita-ot:retrieve-href-target(@href)"/>
         </xsl:if>
       </xsl:variable>
       <!-- Glossary id defined in <glossentry> -->
@@ -1368,7 +1367,7 @@
           <xsl:when test="normalize-space(.) != '' and empty(processing-instruction('ditaot')[. = 'gentext'])">
             <xsl:apply-templates mode="dita-ot:text-only"/>
           </xsl:when>
-          <xsl:when test="exists(ancestor::copyright[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref', @keyref)[1])">
+          <xsl:when test="exists(ancestor::*[contains(@class, ' topic/copyright ')]) or generate-id(.) = generate-id(key('keyref', @keyref)[1])">
             <xsl:apply-templates select="." mode="getMatchingSurfaceForm">
               <xsl:with-param name="m_matched-target" select="$matched-target"/>
               <xsl:with-param name="m_keys" select="$keys"/>
@@ -1417,7 +1416,7 @@
 <!-- =========== BOOLEAN-STATE DATA TYPES =========== -->
 <!-- Use color to indicate these types for now -->
 <!-- output the tag & it's state -->
-<xsl:template match="boolean[contains(@class, ' topic/boolean ')]" name="topic.boolean">
+<xsl:template match="*[contains(@class, ' topic/boolean ')]" name="topic.boolean">
  <span style="color:green">
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
@@ -1426,7 +1425,7 @@
 </xsl:template>
 
 <!-- output the tag, it's name & value -->
-<xsl:template match="state[contains(@class, ' topic/state ')]" name="topic.state">
+<xsl:template match="*[contains(@class, ' topic/state ')]" name="topic.state">
 <span style="color:red">
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
@@ -1437,7 +1436,7 @@
 
 <!-- =========== RECORD END RESPECTING DATA =========== -->
 <!-- PRE -->
-<xsl:template match="pre[contains(@class, ' topic/pre ')]" name="topic.pre">
+<xsl:template match="*[contains(@class, ' topic/pre ')]" name="topic.pre">
   <xsl:if test="contains(@frame, 'top')"><hr /></xsl:if>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="spec-title-nospace"/>
@@ -1453,7 +1452,7 @@
 </xsl:template>
 
 <!-- lines - body font -->
-<xsl:template match="lines[contains(@class, ' topic/lines ')]" name="topic.lines">
+<xsl:template match="*[contains(@class, ' topic/lines ')]" name="topic.lines">
   <xsl:if test="contains(@frame, 'top')"><hr /></xsl:if>
   <xsl:call-template name="spec-title-nospace"/>
   <p>
@@ -1465,7 +1464,7 @@
   <xsl:if test="contains(@frame, 'bot')"><hr /></xsl:if><xsl:value-of select="$newline"/>
 </xsl:template>
 
-<xsl:template match="lines[contains(@class, ' topic/lines ')]//text()">
+<xsl:template match="*[contains(@class, ' topic/lines ')]//text()">
  <xsl:variable name="linetext" select="."/>
  <xsl:variable name="linetext2">
   <xsl:call-template name="sp-replace"><xsl:with-param name="sptext" select="$linetext"/></xsl:call-template>
@@ -1477,7 +1476,7 @@
 
 
 <!-- =========== FIGURE =========== -->
-<xsl:template match="fig[contains(@class, ' topic/fig ')]" name="topic.fig">
+<xsl:template match="*[contains(@class, ' topic/fig ')]" name="topic.fig">
   <xsl:variable name="default-fig-class">
     <xsl:apply-templates select="." mode="dita2html:get-default-fig-class"/>
   </xsl:variable>
@@ -1511,7 +1510,7 @@
 </xsl:template>
 
 <!-- should not need priority, default is low enough; was set to 1 -->
-<xsl:template match="figgroup[contains(@class, ' topic/figgroup ')]" name="topic.figgroup">
+<xsl:template match="*[contains(@class, ' topic/figgroup ')]" name="topic.figgroup">
   <!-- Figgroup can contain blocks, maybe this should be a div? -->
   <span>
     <xsl:call-template name="commonattributes"/>
@@ -1524,10 +1523,10 @@
 
 <!-- =========== IMAGE/OBJECT =========== -->
 
-<xsl:template match="image[contains(@class, ' topic/image ')]" name="topic.image">
+<xsl:template match="*[contains(@class, ' topic/image ')]" name="topic.image">
   <!-- build any pre break indicated by style -->
   <xsl:choose>
-    <xsl:when test="parent::fig[contains(@class, ' topic/fig ')][contains(@frame, 'top ')]">
+    <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame, 'top ')]">
       <!-- NOP if there is already a break implied by a parent property -->
     </xsl:when>
     <xsl:when test="@placement = 'break'">
@@ -1584,8 +1583,8 @@
     </xsl:call-template>
     <xsl:call-template name="setid"/>
     <xsl:choose>
-      <xsl:when test="longdescref[contains(@class, ' topic/longdescref ')]">
-        <xsl:apply-templates select="longdescref[contains(@class, ' topic/longdescref ')]"/>
+      <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
+        <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="@longdescref"/>
@@ -1594,8 +1593,8 @@
     <xsl:apply-templates select="@href|@height|@width"/>
     <xsl:apply-templates select="@scale"/>
     <xsl:choose>
-      <xsl:when test="alt[contains(@class, ' topic/alt ')]">
-        <xsl:variable name="alt-content"><xsl:apply-templates select="alt[contains(@class, ' topic/alt ')]" mode="text-only"/></xsl:variable>
+      <xsl:when test="*[contains(@class, ' topic/alt ')]">
+        <xsl:variable name="alt-content"><xsl:apply-templates select="*[contains(@class, ' topic/alt ')]" mode="text-only"/></xsl:variable>
         <xsl:attribute name="alt" select="normalize-space($alt-content)"/>
       </xsl:when>
       <xsl:when test="@alt">
@@ -1606,18 +1605,18 @@
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
-<xsl:template match="alt[contains(@class, ' topic/alt ')]">
+<xsl:template match="*[contains(@class, ' topic/alt ')]">
   <xsl:apply-templates select="." mode="text-only"/>
 </xsl:template>
 
 <!-- Process image attributes. Using priority, in case default @href is added at some point. -->
 <!-- 20090303: Removed priority; does not appear to be needed. -->
-<xsl:template match="image[contains(@class, ' topic/image ')]/@href">
+<xsl:template match="*[contains(@class, ' topic/image ')]/@href">
   <xsl:attribute name="src" select="."/>
 </xsl:template>
 
 <!-- AM: handling for scale attribute -->
-<xsl:template match="image[contains(@class, ' topic/image ')]/@scale">
+<xsl:template match="*[contains(@class, ' topic/image ')]/@scale">
     <xsl:variable name="width" select="../@dita-ot:image-width"/>
     <xsl:variable name="height" select="../@dita-ot:image-height"/>
     <xsl:if test="not(../@width) and not(../@height)">
@@ -1626,7 +1625,7 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="image[contains(@class, ' topic/image ')]/@height">
+<xsl:template match="*[contains(@class, ' topic/image ')]/@height">
   <xsl:variable name="height-in-pixel">
     <xsl:call-template name="length-to-pixels">
       <xsl:with-param name="dimen" select="."/>
@@ -1646,7 +1645,7 @@
   </xsl:if>  
 </xsl:template>
 
-<xsl:template match="image[contains(@class, ' topic/image ')]/@width">
+<xsl:template match="*[contains(@class, ' topic/image ')]/@width">
   <xsl:variable name="width-in-pixel">
     <xsl:call-template name="length-to-pixels">
       <xsl:with-param name="dimen" select="."/>
@@ -1666,7 +1665,7 @@
   </xsl:if>  
 </xsl:template>
 
-<xsl:template match="image[contains(@class, ' topic/image ')]/@longdescref">
+<xsl:template match="*[contains(@class, ' topic/image ')]/@longdescref">
   <xsl:attribute name="longdesc">
     <xsl:choose>
       <!-- Guess whether link target is a DITA topic or something else -->
@@ -1683,7 +1682,7 @@
   </xsl:attribute>
 </xsl:template>
 
-  <xsl:template match="image[contains(@class, ' topic/image ')]/longdescref[contains(@class, ' topic/longdescref ')]">
+  <xsl:template match="*[contains(@class, ' topic/image ')]/*[contains(@class, ' topic/longdescref ')]">
   <xsl:if test="@href and not (@href = '')">
     <xsl:attribute name="longdesc">
       <xsl:choose>
@@ -1703,10 +1702,10 @@
 
 
 <!-- object, desc, & param -->
-<xsl:template match="object[contains(@class, ' topic/object ')]" name="topic.object">
+<xsl:template match="*[contains(@class, ' topic/object ')]" name="topic.object">
  <object>
   <xsl:copy-of select="@id | @declare | @codebase | @type | @archive | @height | @usemap | @tabindex | @classid | @data | @codetype | @standby | @width | @name"/>
-  <xsl:if test="@longdescref or longdescref[contains(@class, ' topic/longdescref ')]">
+  <xsl:if test="@longdescref or *[contains(@class, ' topic/longdescref ')]">
     <xsl:apply-templates select="." mode="ditamsg:longdescref-on-object"/>
   </xsl:if>
   <xsl:apply-templates/>
@@ -1717,28 +1716,28 @@
    <xsl:copy-of select="@height | @width"/>
    <xsl:attribute name="type"><xsl:text>application/x-shockwave-flash</xsl:text></xsl:attribute>
    <xsl:attribute name="pluginspage"><xsl:text>http://www.macromedia.com/go/getflashplayer</xsl:text></xsl:attribute>
-   <xsl:if test="param[contains(@class, ' topic/param ')]/@name = 'movie'">
-    <xsl:attribute name="src" select="param[contains(@class, ' topic/param ')][@name = 'movie']/@value"/>
+   <xsl:if test="*[contains(@class, ' topic/param ')]/@name = 'movie'">
+    <xsl:attribute name="src" select="*[contains(@class, ' topic/param ')][@name = 'movie']/@value"/>
    </xsl:if>
-   <xsl:if test="param[contains(@class, ' topic/param ')]/@name = 'quality'">
-    <xsl:attribute name="quality" select="param[contains(@class, ' topic/param ')][@name = 'quality']/@value"/>
+   <xsl:if test="*[contains(@class, ' topic/param ')]/@name = 'quality'">
+    <xsl:attribute name="quality" select="*[contains(@class, ' topic/param ')][@name = 'quality']/@value"/>
    </xsl:if>
-   <xsl:if test="param[contains(@class, ' topic/param ')]/@name = 'bgcolor'">
-    <xsl:attribute name="bgcolor" select="param[contains(@class, ' topic/param ')][@name = 'bgcolor']/@value"/>
+   <xsl:if test="*[contains(@class, ' topic/param ')]/@name = 'bgcolor'">
+    <xsl:attribute name="bgcolor" select="*[contains(@class, ' topic/param ')][@name = 'bgcolor']/@value"/>
    </xsl:if>
   </embed>
  </xsl:if>
  </object>
 </xsl:template>
 
-<xsl:template match="param[contains(@class, ' topic/param ')]" name="topic.param">
+<xsl:template match="*[contains(@class, ' topic/param ')]" name="topic.param">
  <param>
   <xsl:copy-of select="@name | @id | @value"/>
  </param>
 </xsl:template>
 
 <!-- need to add test for object/desc to avoid conflicts -->
-<xsl:template match="object[contains(@class, ' topic/object ')]/desc[contains(@class, ' topic/desc ')]" name="topic.object_desc">
+<xsl:template match="*[contains(@class, ' topic/object ')]/*[contains(@class, ' topic/desc ')]" name="topic.object_desc">
  <span>
   <xsl:copy-of select="@name | @id | value"/>
   <xsl:apply-templates/>
@@ -1758,18 +1757,18 @@
 <!-- XML Exchange Table Model Document Type Definition default is 1 -->
 <xsl:variable name="table.colsep-default" select="'0'"/>
 
-<xsl:template match="table[contains(@class, ' topic/table ')]" mode="generate-table-summary-attribute">
+<xsl:template match="*[contains(@class, ' topic/table ')]" mode="generate-table-summary-attribute">
   <!-- Override this to use a local convention for setting table's @summary attribute,
        until OASIS provides a standard mechanism for setting. -->
 </xsl:template>
 
-<xsl:template match="table[contains(@class, ' topic/table ')]" name="topic.table">
+<xsl:template match="*[contains(@class, ' topic/table ')]" name="topic.table">
   <xsl:value-of select="$newline"/>
   <!-- special case for IE & NS for frame & no rules - needs to be a double table -->
   <xsl:variable name="colsep">
     <xsl:choose>
-      <xsl:when test="tgroup[contains(@class, ' topic/tgroup ')]/@colsep">
-        <xsl:value-of select="tgroup[contains(@class, ' topic/tgroup ')]/@colsep"/>
+      <xsl:when test="*[contains(@class, ' topic/tgroup ')]/@colsep">
+        <xsl:value-of select="*[contains(@class, ' topic/tgroup ')]/@colsep"/>
       </xsl:when>
       <xsl:when test="@colsep">
         <xsl:value-of select="@colsep"/>
@@ -1778,8 +1777,8 @@
   </xsl:variable>
   <xsl:variable name="rowsep">
     <xsl:choose>
-      <xsl:when test="tgroup[contains(@class, ' topic/tgroup ')]/@rowsep">
-        <xsl:value-of select="tgroup[contains(@class, ' topic/tgroup ')]/@rowsep"/>
+      <xsl:when test="*[contains(@class, ' topic/tgroup ')]/@rowsep">
+        <xsl:value-of select="*[contains(@class, ' topic/tgroup ')]/@rowsep"/>
       </xsl:when>
       <xsl:when test="@rowsep">
         <xsl:value-of select="@rowsep"/>
@@ -1839,13 +1838,13 @@
   <table cellpadding="4" cellspacing="0" summary="">
     <xsl:variable name="colsep">
       <xsl:choose>
-        <xsl:when test="tgroup[contains(@class, ' topic/tgroup ')]/@colsep"><xsl:value-of select="tgroup[contains(@class, ' topic/tgroup ')]/@colsep"/></xsl:when>
+        <xsl:when test="*[contains(@class, ' topic/tgroup ')]/@colsep"><xsl:value-of select="*[contains(@class, ' topic/tgroup ')]/@colsep"/></xsl:when>
         <xsl:when test="@colsep"><xsl:value-of select="@colsep"/></xsl:when>
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="rowsep">
       <xsl:choose>
-        <xsl:when test="tgroup[contains(@class, ' topic/tgroup ')]/@rowsep"><xsl:value-of select="tgroup[contains(@class, ' topic/tgroup ')]/@rowsep"/></xsl:when>
+        <xsl:when test="*[contains(@class, ' topic/tgroup ')]/@rowsep"><xsl:value-of select="*[contains(@class, ' topic/tgroup ')]/@rowsep"/></xsl:when>
         <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
       </xsl:choose>
     </xsl:variable>
@@ -1856,10 +1855,10 @@
     <!-- When a table's width is set to page or column, force it's width to 100%. If it's in a list, use 90%.
          Otherwise, the table flows to the content -->
     <xsl:choose>
-      <xsl:when test="(@expanse = 'page' or @pgwide = '1')and (ancestor::li[contains(@class, ' topic/li ')] or ancestor::dd[contains(@class, ' topic/dd ')] )">
+      <xsl:when test="(@expanse = 'page' or @pgwide = '1')and (ancestor::*[contains(@class, ' topic/li ')] or ancestor::*[contains(@class, ' topic/dd ')] )">
         <xsl:attribute name="width">90%</xsl:attribute>
       </xsl:when>
-      <xsl:when test="(@expanse = 'column' or @pgwide = '0') and (ancestor::li[contains(@class, ' topic/li ')] or ancestor::dd[contains(@class, ' topic/dd ')] )">
+      <xsl:when test="(@expanse = 'column' or @pgwide = '0') and (ancestor::*[contains(@class, ' topic/li ')] or ancestor::*[contains(@class, ' topic/dd ')] )">
         <xsl:attribute name="width">90%</xsl:attribute>
       </xsl:when>
       <xsl:when test="(@expanse = 'page' or @pgwide = '1')">
@@ -1924,33 +1923,33 @@
     </xsl:choose>
     <xsl:call-template name="place-tbl-lbl"/>
     <!-- title and desc are processed elsewhere -->
-    <xsl:apply-templates select="tgroup[contains(@class, ' topic/tgroup ')]"/>
+    <xsl:apply-templates select="*[contains(@class, ' topic/tgroup ')]"/>
     </table><xsl:value-of select="$newline"/>
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
-<xsl:template match="tgroup[contains(@class, ' topic/tgroup ')]" name="topic.tgroup">
+<xsl:template match="*[contains(@class, ' topic/tgroup ')]" name="topic.tgroup">
   <xsl:variable name="totalwidth" as="xs:double">
     <xsl:variable name="relative-widths" as="xs:double*">
-      <xsl:for-each select="colspec[contains(@class, ' topic/colspec ')][contains(@colwidth, '*')]">
+      <xsl:for-each select="*[contains(@class, ' topic/colspec ')][contains(@colwidth, '*')]">
         <xsl:sequence select="xs:double(translate(@colwidth, '*', ''))"/>
       </xsl:for-each>
     </xsl:variable>
     <xsl:sequence select="sum($relative-widths)"/>
   </xsl:variable>
-  <xsl:if test="exists(colspec[contains(@class, ' topic/colspec ')])">
+  <xsl:if test="exists(*[contains(@class, ' topic/colspec ')])">
     <colgroup>
-      <xsl:apply-templates select="colspec[contains(@class, ' topic/colspec ')]">
+      <xsl:apply-templates select="*[contains(@class, ' topic/colspec ')]">
         <xsl:with-param name="totalwidth" select="$totalwidth"/>
       </xsl:apply-templates>
     </colgroup>
   </xsl:if>
-  <xsl:apply-templates select="* except colspec[contains(@class, ' topic/colspec ')]">
+  <xsl:apply-templates select="* except *[contains(@class, ' topic/colspec ')]">
     <xsl:with-param name="totalwidth" select="$totalwidth"/>
   </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="colspec[contains(@class, ' topic/colspec ')]">
+<xsl:template match="*[contains(@class, ' topic/colspec ')]">
   <xsl:param name="totalwidth" as="xs:double"/>
   <xsl:variable name="width" as="xs:string?">
     <xsl:choose>
@@ -1970,7 +1969,7 @@
   </col>
 </xsl:template>
 
-<xsl:template match="thead[contains(@class, ' topic/thead ')]" name="topic.thead">
+<xsl:template match="*[contains(@class, ' topic/thead ')]" name="topic.thead">
   <thead>
     <!-- Get style from parent tgroup, then override with thead if specified locally -->
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
@@ -2006,7 +2005,7 @@
   </thead><xsl:value-of select="$newline"/>
 </xsl:template>
 
-<xsl:template match="tbody[contains(@class, ' topic/tbody ')]" name="topic.tbody">
+<xsl:template match="*[contains(@class, ' topic/tbody ')]" name="topic.tbody">
   <tbody>
     <!-- Get style from parent tgroup, then override with thead if specified locally -->
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
@@ -2035,7 +2034,7 @@
   </tbody><xsl:value-of select="$newline"/>
 </xsl:template>
 
-<xsl:template match="row[contains(@class, ' topic/row ')]" name="topic.row">
+<xsl:template match="*[contains(@class, ' topic/row ')]" name="topic.row">
   <tr>
     <xsl:call-template name="setid"/>
     <xsl:call-template name="commonattributes"/>
@@ -2063,9 +2062,9 @@
   </tr><xsl:value-of select="$newline"/>
 </xsl:template>
 
-<xsl:template match="entry[contains(@class, ' topic/entry ')]" name="topic.entry">
+<xsl:template match="*[contains(@class, ' topic/entry ')]" name="topic.entry">
   <xsl:choose>
-      <xsl:when test="parent::*/parent::thead[contains(@class, ' topic/thead ')]">
+      <xsl:when test="parent::*/parent::*[contains(@class, ' topic/thead ')]">
           <xsl:call-template name="topic.thead_entry"/>
       </xsl:when>
       <xsl:otherwise>
@@ -2101,7 +2100,7 @@
   <xsl:variable name="row" select=".." as="element()"/>
   <xsl:variable name="body" select="../.." as="element()"/>
   <xsl:variable name="group" select="../../.." as="element()"/>
-  <xsl:variable name="colspec" select="../../../colspec[contains(@class, ' topic/colspec ')][@colname and @colname = $this-colname]" as="element()"/>
+  <xsl:variable name="colspec" select="../../../*[contains(@class, ' topic/colspec ')][@colname and @colname = $this-colname]" as="element()"/>
   <xsl:variable name="table" select="../../../.." as="element()"/>
   
   <xsl:variable name="framevalue">
@@ -2115,7 +2114,7 @@
     </xsl:choose>
   </xsl:variable>  
   <xsl:variable name="rowsep" as="xs:integer">
-    <xsl:variable name="last-row" select="(../../../*/row[contains(@class, ' topic/row ')])[last()]" as="element()"/>
+    <xsl:variable name="last-row" select="(../../../*/*[contains(@class, ' topic/row ')])[last()]" as="element()"/>
     <xsl:choose>
       <!-- If there are more rows, keep rows on -->      
       <xsl:when test="not(. &lt;&lt; $last-row)">
@@ -2255,7 +2254,7 @@
 
   <xsl:choose>
     <!-- When entry is in a thead, output the ID -->
-    <xsl:when test="$body/self::thead[contains(@class, ' topic/thead ')]">
+    <xsl:when test="$body/self::*[contains(@class, ' topic/thead ')]">
       <xsl:attribute name="id" select="dita-ot:generate-html-id(.)"/>
     </xsl:when>
     <!-- otherwise, add @headers if needed -->
@@ -2288,7 +2287,7 @@
   <xsl:param name="startposition" select="0"/>
   <xsl:choose>
     <xsl:when test="@nameend">
-      <xsl:value-of select="number(count(../../../colspec[contains(@class, ' topic/colspec ')][@colname = current()/@nameend]/preceding-sibling::colspec[contains(@class, ' topic/colspec ')])+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class, ' topic/colspec ')][@colname = current()/@nameend]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="$startposition"/>
@@ -2297,7 +2296,7 @@
 </xsl:template>
 
 <!-- Check <thead> entries, and return IDs for those which match the desired column -->
-<xsl:template match="thead[contains(@class, ' topic/thead ')]/row[contains(@class, ' topic/row ')]/entry[contains(@class, ' topic/entry ')]" mode="findmatch">
+<xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]" mode="findmatch">
   <xsl:param name="startmatch" select="1"/>  <!-- start column of the tbody cell -->
   <xsl:param name="endmatch" select="1"/>    <!-- end column of the tbody cell -->
   <xsl:variable name="entrystartpos" select="@dita-ot:x"/>         <!-- start column of this thead cell -->
@@ -2330,7 +2329,7 @@
      Any entries that line up need to have the header saved. This template is first
      called with the first entry of the first row in <tbody>. It is called from here
      on the next cell in column one.            -->
-<xsl:template match="entry[contains(@class, ' topic/entry ')]" mode="check-first-column">
+<xsl:template match="*[contains(@class, ' topic/entry ')]" mode="check-first-column">
   <xsl:param name="startMatchRow" select="1"/>   <!-- First row of the tbody cell we are matching -->
   <xsl:param name="endMatchRow" select="1"/>     <!-- Last row of the tbody cell we are matching -->
   <xsl:param name="startCurrentRow" select="1"/> <!-- First row of the column-1 cell we are testing -->
@@ -2345,8 +2344,8 @@
     <!-- When the current column-1 cell ends before the tbody cell we are matching -->
     <xsl:when test="number($endCurrentRow) &lt; number($startMatchRow)">
       <!-- Call this template again with the next entry in column one -->
-      <xsl:if test="parent::*/parent::*/row[contains(@class, ' topic/row ')][number($endCurrentRow)+1]">
-        <xsl:apply-templates select="parent::*/parent::*/row[contains(@class, ' topic/row ')][number($endCurrentRow)+1]/entry[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
+      <xsl:if test="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]">
+        <xsl:apply-templates select="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]/*[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
           <xsl:with-param name="startMatchRow" select="$startMatchRow"/>
           <xsl:with-param name="endMatchRow" select="$endMatchRow"/>
           <xsl:with-param name="startCurrentRow" select="number($endCurrentRow)+1"/>
@@ -2360,8 +2359,8 @@
       <xsl:value-of select="generate-id(.)"/><xsl:text> </xsl:text>
       <!-- If we are not at the end of the tbody cell, and more rows exist, continue testing column 1 -->
       <xsl:if test="number($endCurrentRow) &lt; number($endMatchRow) and
-                    parent::*/parent::*/row[contains(@class, ' topic/row ')][number($endCurrentRow)+1]">
-        <xsl:apply-templates select="parent::*/parent::*/row[contains(@class, ' topic/row ')][number($endCurrentRow)+1]/entry[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
+                    parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]">
+        <xsl:apply-templates select="parent::*/parent::*/*[contains(@class, ' topic/row ')][number($endCurrentRow)+1]/*[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
           <xsl:with-param name="startMatchRow" select="$startMatchRow"/>
           <xsl:with-param name="endMatchRow" select="$endMatchRow"/>
           <xsl:with-param name="startCurrentRow" select="number($endCurrentRow)+1"/>
@@ -2385,9 +2384,9 @@
   <!-- Find the IDs of headers that are aligned above this cell. This is done by applying
        templates on all headers, using mode=findmatch; matching IDs are returned. -->
   <xsl:variable name="hdrattr">
-    <xsl:apply-templates select="../../../thead[contains(@class, ' topic/thead ')]/
-                                          row[contains(@class, ' topic/row ')]/
-                                          entry[contains(@class, ' topic/entry ')]" mode="findmatch">
+    <xsl:apply-templates select="../../../*[contains(@class, ' topic/thead ')]/
+                                          *[contains(@class, ' topic/row ')]/
+                                          *[contains(@class, ' topic/entry ')]" mode="findmatch">
       <xsl:with-param name="startmatch" select="$entrystartpos"/>
       <xsl:with-param name="endmatch" select="$entryendpos"/>
     </xsl:apply-templates>
@@ -2396,10 +2395,10 @@
   <xsl:variable name="rowheader">
     <!-- If this entry is not in the first column or in thead, and @rowheader=firstcol on table -->
     <xsl:if test="not(number($entrystartpos) = 1) and
-                  not(parent::*/parent::thead[contains(@class, ' topic/thead ')]) and
+                  not(parent::*/parent::*[contains(@class, ' topic/thead ')]) and
                   ../../../../@rowheader = 'firstcol'">
       <!-- Find the start row for this entry -->
-      <xsl:variable name="startrow" select="number(count(parent::*/preceding-sibling::row[contains(@class, ' topic/row ')])+1)"/>
+      <xsl:variable name="startrow" select="number(count(parent::*/preceding-sibling::*[contains(@class, ' topic/row ')])+1)"/>
       <!-- Find the end row for this entry -->
       <xsl:variable name="endrow">
         <xsl:if test="@morerows"><xsl:value-of select="number($startrow) + number(@morerows)"/></xsl:if>
@@ -2407,7 +2406,7 @@
       </xsl:variable>
       <!-- Scan first-column entries for ones that align with this cell, starting with
            the first entry in the first row -->
-      <xsl:apply-templates select="../../row[contains(@class, ' topic/row ')][1]/entry[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
+      <xsl:apply-templates select="../../*[contains(@class, ' topic/row ')][1]/*[contains(@class, ' topic/entry ')][1]" mode="check-first-column">
         <xsl:with-param name="startMatchRow" select="$startrow"/>
         <xsl:with-param name="endMatchRow" select="$endrow"/>
       </xsl:apply-templates>
@@ -2425,12 +2424,12 @@
 
 <!-- =========== SimpleTable - SEMANTIC TABLE =========== -->
 
-<xsl:template match="simpletable[contains(@class, ' topic/simpletable ')]" mode="generate-table-summary-attribute">
+<xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="generate-table-summary-attribute">
   <!-- Override this to use a local convention for setting table's @summary attribute,
        until OASIS provides a standard mechanism for setting. -->
 </xsl:template>
 
-<xsl:template match="simpletable[contains(@class, ' topic/simpletable ')]" name="topic.simpletable">
+<xsl:template match="*[contains(@class, ' topic/simpletable ')]" name="topic.simpletable">
   <xsl:call-template name="spec-title"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:call-template name="setaname"/>
@@ -2452,7 +2451,7 @@
     <xsl:call-template name="dita2html:simpletable-cols"/>
     <xsl:apply-templates select="." mode="dita2html:simpletable-heading"/>
     <tbody>    
-      <xsl:apply-templates select="strow[contains(@class, ' topic/strow ')]|processing-instruction()"/>
+      <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]|processing-instruction()"/>
     </tbody>
   </table>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
@@ -2478,23 +2477,23 @@
     </xsl:for-each>    
   </xsl:template>
   
-  <xsl:template match="simpletable[contains(@class, ' topic/simpletable ')]" mode="dita2html:get-max-entry-count" as="xs:integer">
+  <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="dita2html:get-max-entry-count" as="xs:integer">
     <xsl:variable name="counts" as="xs:integer*">
-      <xsl:for-each select="sthead[contains(@class, ' topic/sthead ')] |
-                            strow[contains(@class, ' topic/strow ')]">
-        <xsl:sequence select="count(stentry[contains(@class, ' topic/stentry ')])"/>
+      <xsl:for-each select="*[contains(@class, ' topic/sthead ')] |
+                            *[contains(@class, ' topic/strow ')]">
+        <xsl:sequence select="count(*[contains(@class, ' topic/stentry ')])"/>
       </xsl:for-each>
     </xsl:variable>
     <xsl:sequence select="max($counts)"/>
   </xsl:template>
 
-<xsl:template match="strow[contains(@class, ' topic/strow ')]" name="topic.strow">
+<xsl:template match="*[contains(@class, ' topic/strow ')]" name="topic.strow">
   <tr>
    <xsl:call-template name="setid"/>
     <xsl:call-template name="commonattributes"/>
     <xsl:choose>
       <!-- If there are any rows or headers before this, the width values have already been set. -->
-      <xsl:when test="preceding-sibling::strow[contains(@class, ' topic/strow ')]">
+      <xsl:when test="preceding-sibling::*[contains(@class, ' topic/strow ')]">
         <xsl:apply-templates/>
       </xsl:when>
       <!-- Otherwise, this is the first row. Pass the percentage to all entries in this row. -->
@@ -2509,11 +2508,11 @@
      headings. By default, process the sthead if available. -->
 <xsl:template match="*" mode="dita2html:simpletable-heading">
   <thead>
-    <xsl:apply-templates select="sthead[contains(@class, ' topic/sthead ')]"/>
+    <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]"/>
   </thead>
 </xsl:template>
 
-<xsl:template match="sthead[contains(@class, ' topic/sthead ')]" name="topic.sthead">
+<xsl:template match="*[contains(@class, ' topic/sthead ')]" name="topic.sthead">
   <tr>
     <xsl:call-template name="commonattributes"/>
     <!-- There is only one sthead, so use the entries in the header to set relative widths. -->
@@ -2529,13 +2528,13 @@
      with nested simpletables. -->
 <xsl:template name="output-stentry-id">
   <!-- Find the position in this row -->
-  <xsl:variable name="thiscolnum"><xsl:number level="single" count="stentry[contains(@class, ' topic/stentry ')]"/></xsl:variable>
+  <xsl:variable name="thiscolnum"><xsl:number level="single" count="*[contains(@class, ' topic/stentry ')]"/></xsl:variable>
   <xsl:choose>
     <xsl:when test="@id">    <!-- If ID is specified, always use it -->
       <xsl:attribute name="id" select="dita-ot:generate-html-id(.)"/>
     </xsl:when>
     <!-- If no ID is specified, and this is a header cell, generate an ID -->
-    <xsl:when test="parent::sthead[contains(@class, ' topic/sthead ')] or
+    <xsl:when test="parent::*[contains(@class, ' topic/sthead ')] or
                     (parent::*/parent::*/@keycol and number(parent::*/parent::*/@keycol) = number($thiscolnum))">
       <xsl:attribute name="id" select="generate-id(.)"/>
     </xsl:when>
@@ -2551,8 +2550,8 @@
      with nested simpletables. -->
 <xsl:template name="set.stentry.headers">
   <xsl:variable name="keycol" select="parent::*/parent::*/@keycol"/>
-  <xsl:if test="$keycol | parent::*/parent::*/sthead[contains(@class, ' topic/sthead ')]">
-      <xsl:variable name="thiscolnum"><xsl:number level="single" count="stentry[contains(@class, ' topic/stentry ')]"/></xsl:variable>
+  <xsl:if test="$keycol | parent::*/parent::*/*[contains(@class, ' topic/sthead ')]">
+      <xsl:variable name="thiscolnum"><xsl:number level="single" count="*[contains(@class, ' topic/stentry ')]"/></xsl:variable>
 
       <!-- If there is a keycol, and this is not the key column, get the ID for the keycol -->
       <xsl:variable name="keycolhead">
@@ -2572,8 +2571,8 @@
       <!-- If there is a header, get the ID from the head cell in this column.
            Go up to simpletable, into the row, to the entry at column $thiscolnum -->
       <xsl:variable name="header">
-          <xsl:if test="parent::*/parent::*/sthead[contains(@class, ' topic/sthead ')]">
-            <xsl:value-of select="dita-ot:generate-html-id(parent::*/parent::*/sthead[contains(@class, ' topic/sthead ')]/stentry[contains(@class, ' topic/stentry ')][number($thiscolnum)])"/>
+          <xsl:if test="parent::*/parent::*/*[contains(@class, ' topic/sthead ')]">
+            <xsl:value-of select="dita-ot:generate-html-id(parent::*/parent::*/*[contains(@class, ' topic/sthead ')]/*[contains(@class, ' topic/stentry ')][number($thiscolnum)])"/>
           </xsl:if>
       </xsl:variable>
 
@@ -2588,9 +2587,9 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="stentry[contains(@class, ' topic/stentry ')]" name="topic.stentry">
+<xsl:template match="*[contains(@class, ' topic/stentry ')]" name="topic.stentry">
     <xsl:choose>
-        <xsl:when test="parent::sthead[contains(@class, ' topic/sthead ')]">
+        <xsl:when test="parent::*[contains(@class, ' topic/sthead ')]">
             <xsl:call-template name="topic.sthead_stentry"/>
         </xsl:when>
         <xsl:otherwise>
@@ -2646,14 +2645,14 @@
 <xsl:template name="topic.strow_stentry">
   <xsl:variable name="localkeycol">
     <xsl:choose>
-      <xsl:when test="ancestor::simpletable[contains(@class, ' topic/simpletable ')]/@keycol">
-        <xsl:value-of select="ancestor::simpletable[contains(@class, ' topic/simpletable ')]/@keycol"/>
+      <xsl:when test="ancestor::*[contains(@class, ' topic/simpletable ')]/@keycol">
+        <xsl:value-of select="ancestor::*[contains(@class, ' topic/simpletable ')]/@keycol"/>
       </xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
   <!-- Determine which column this entry is in. -->
-  <xsl:variable name="thiscolnum" select="number(count(preceding-sibling::stentry[contains(@class, ' topic/stentry ')])+1)"/>
+  <xsl:variable name="thiscolnum" select="number(count(preceding-sibling::*[contains(@class, ' topic/stentry ')])+1)"/>
   <xsl:variable name="element-name">
     <xsl:choose>
       <xsl:when test="$thiscolnum = $localkeycol">th</xsl:when>
@@ -2691,7 +2690,7 @@
 </xsl:template>
 
 <!-- =========== FOOTNOTE =========== -->
-<xsl:template match="fn[contains(@class, ' topic/fn ')]" name="topic.fn">
+<xsl:template match="*[contains(@class, ' topic/fn ')]" name="topic.fn">
   <xsl:param name="xref"/>
   <!-- when FN has an ID, it can only be referenced, otherwise, output an a-name & a counter -->
   <xsl:if test="not(@id) or $xref = 'yes'">
@@ -2709,19 +2708,19 @@
 
 <!-- =========== REQUIRED CLEANUP and REVIEW COMMENT =========== -->
 
-<xsl:template match="required-cleanup[contains(@class, ' topic/required-cleanup ')]" mode="default-required-cleanup-style">
+<xsl:template match="*[contains(@class, ' topic/required-cleanup ')]" mode="default-required-cleanup-style">
   <xsl:call-template name="style">
     <xsl:with-param name="contents">background-color: #FFFF99; color:#CC3333; border: 1pt black solid;</xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="draft-comment[contains(@class, ' topic/draft-comment ')]" mode="default-draft-comment-style">
+<xsl:template match="*[contains(@class, ' topic/draft-comment ')]" mode="default-draft-comment-style">
   <xsl:call-template name="style">
     <xsl:with-param name="contents">background-color: #99FF99; border: 1pt black solid;</xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="required-cleanup[contains(@class, ' topic/required-cleanup ')]" name="topic.required-cleanup">
+<xsl:template match="*[contains(@class, ' topic/required-cleanup ')]" name="topic.required-cleanup">
   <xsl:if test="$DRAFT = 'yes'">
     <xsl:apply-templates select="." mode="ditamsg:required-cleanup-in-content"/>
     <div>
@@ -2740,7 +2739,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="draft-comment[contains(@class, ' topic/draft-comment ')]" name="topic.draft-comment">
+<xsl:template match="*[contains(@class, ' topic/draft-comment ')]" name="topic.draft-comment">
  <xsl:if test="$DRAFT = 'yes'">
    <xsl:apply-templates select="." mode="ditamsg:draft-comment-in-content"/>
    <div>
@@ -2771,7 +2770,7 @@
 
 <!-- TBD: this needs practical implementation.  currently the support merely
      echoes the content back, indicating any nesting.  Useful view for authoring!-->
-<xsl:template match="indexterm[contains(@class, ' topic/indexterm ')]" name="topic.indexterm">
+<xsl:template match="*[contains(@class, ' topic/indexterm ')]" name="topic.indexterm">
  <xsl:if test="$INDEXSHOW = 'yes'">
    <xsl:choose>
      <xsl:when test="@keyref and @href">
@@ -2793,14 +2792,14 @@
  </xsl:if>
 </xsl:template>
 
-<xsl:template match="indextermref[contains(@class, ' topic/indextermref ')]"/>
+<xsl:template match="*[contains(@class, ' topic/indextermref ')]"/>
 
 
 <!-- ===================================================================== -->
 
 <!-- =========== PROLOG =========== -->
 <!-- all handled in get-meta.xsl -->
-<xsl:template match="prolog[contains(@class, ' topic/prolog ')]"/>
+<xsl:template match="*[contains(@class, ' topic/prolog ')]"/>
 
 
 <!-- ===================================================================== -->
@@ -2818,7 +2817,7 @@
   <xsl:param name="element" as="element()"/>
   <xsl:param name="id" as="xs:string"/>
 
-  <xsl:sequence select="dita-ot:generate-id($element/ancestor::body[contains(@class, ' topic/body ')][1]/parent::*/@id, $id)"/>
+  <xsl:sequence select="dita-ot:generate-id($element/ancestor::*[contains(@class, ' topic/body ')][1]/parent::*/@id, $id)"/>
 </xsl:function>
 
 <xsl:function name="dita-ot:generate-html-id" as="xs:string">
@@ -3150,9 +3149,9 @@
   <xsl:param name="defaulttitle"/> <!-- get param by reference -->
   <xsl:variable name="heading">
      <xsl:choose>
-      <xsl:when test="title[contains(@class, ' topic/title ')]">
-        <xsl:apply-templates select="title[contains(@class, ' topic/title ')][1]" mode="text-only"/>
-        <xsl:if test="title[contains(@class, ' topic/title ')][2]">
+      <xsl:when test="*[contains(@class, ' topic/title ')]">
+        <xsl:apply-templates select="*[contains(@class, ' topic/title ')][1]" mode="text-only"/>
+        <xsl:if test="*[contains(@class, ' topic/title ')][2]">
           <xsl:apply-templates select="." mode="ditamsg:section-with-multiple-titles"/>
         </xsl:if>
       </xsl:when>
@@ -3163,7 +3162,7 @@
      </xsl:choose>
   </xsl:variable>
 
-  <xsl:variable name="headCount" select="count(ancestor::topic[contains(@class, ' topic/topic ')]) + 1"/>
+  <xsl:variable name="headCount" select="count(ancestor::*[contains(@class, ' topic/topic ')]) + 1"/>
   <xsl:variable name="headLevel">
     <xsl:choose>
       <xsl:when test="$headCount > 6">h6</xsl:when>
@@ -3178,10 +3177,10 @@
         <!-- hack: a title with whitespace ALWAYS overrides as null -->
         <xsl:comment>no heading</xsl:comment>
       </xsl:if>
-      <xsl:apply-templates select="title[contains(@class, ' topic/title ')][1]">
+      <xsl:apply-templates select="*[contains(@class, ' topic/title ')][1]">
         <xsl:with-param name="headLevel" select="$headLevel"/>
       </xsl:apply-templates>
-      <xsl:if test="@spectitle and not(title[contains(@class, ' topic/title ')])">
+      <xsl:if test="@spectitle and not(*[contains(@class, ' topic/title ')])">
         <xsl:element name="{$headLevel}">
           <xsl:attribute name="class">sectiontitle</xsl:attribute>
           <xsl:value-of select="@spectitle"/>
@@ -3198,10 +3197,10 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="section[contains(@class, ' topic/section ')]/title[contains(@class, ' topic/title ')] | 
-	example[contains(@class, ' topic/example ')]/title[contains(@class, ' topic/title ')]" name="topic.section_title">
+<xsl:template match="*[contains(@class, ' topic/section ')]/*[contains(@class, ' topic/title ')] | 
+	*[contains(@class, ' topic/example ')]/*[contains(@class, ' topic/title ')]" name="topic.section_title">
   <xsl:param name="headLevel">
-    <xsl:variable name="headCount" select="count(ancestor::topic[contains(@class, ' topic/topic ')])+1"/>
+    <xsl:variable name="headCount" select="count(ancestor::*[contains(@class, ' topic/topic ')])+1"/>
     <xsl:choose>
       <xsl:when test="$headCount > 6">h6</xsl:when>
       <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
@@ -3253,12 +3252,12 @@
 <!-- render any contained footnotes as endnotes.  Links back to reference point -->
 <xsl:template name="gen-endnotes">
   <!-- Skip any footnotes that are in draft elements when draft = no -->
-  <xsl:apply-templates select="//fn[contains(@class, ' topic/fn ')][not( (ancestor::draft-comment[contains(@class, ' topic/draft-comment ')] or ancestor::required-cleanup[contains(@class, ' topic/required-cleanup ')]) and $DRAFT = 'no')]" mode="genEndnote"/>
+  <xsl:apply-templates select="//*[contains(@class, ' topic/fn ')][not( (ancestor::*[contains(@class, ' topic/draft-comment ')] or ancestor::*[contains(@class, ' topic/required-cleanup ')]) and $DRAFT = 'no')]" mode="genEndnote"/>
 
 </xsl:template>
 
 <!-- Catch footnotes that should appear at the end of the topic, and output them. -->
-<xsl:template match="fn[contains(@class, ' topic/fn ')]" mode="genEndnote">
+<xsl:template match="*[contains(@class, ' topic/fn ')]" mode="genEndnote">
   <div class="p">
     <xsl:variable name="fnid"><xsl:number from="/" level="any"/></xsl:variable>
     <xsl:variable name="callout" select="@callout"/>
@@ -3267,7 +3266,7 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:choose>
       <xsl:when test="@id and not(@id = '')">
-        <xsl:variable name="topicid" select="ancestor::topic[contains(@class, ' topic/topic ')][1]/@id"/>
+        <xsl:variable name="topicid" select="ancestor::*[contains(@class, ' topic/topic ')][1]/@id"/>
         <xsl:variable name="refid" select="concat($topicid, '/', @id)"/>
         <xsl:choose>
           <xsl:when test="key('xref', $refid)">
@@ -3331,12 +3330,12 @@
 <xsl:variable name="trace">no</xsl:variable> <!--set string to 'yes' to turn on trace -->
 
 <!-- set up keys based on xref's "type" attribute: %info-types;|hd|fig|table|li|fn -->
-<xsl:key name="topic" match="topic[contains(@class, ' topic/topic ')]" use="@id"/> <!-- uses "title" -->
-<xsl:key name="fig"   match="fig[contains(@class, ' topic/fig ')]"   use="@id"/> <!-- uses "title" -->
-<xsl:key name="table" match="table[contains(@class, ' topic/table ')]" use="@id"/> <!-- uses "title" -->
-<xsl:key name="li"    match="li[contains(@class, ' topic/li ')]"    use="@id"/> <!-- uses "?" -->
-<xsl:key name="fn"    match="fn[contains(@class, ' topic/fn ')]"    use="@id"/> <!-- uses "callout?" -->
-<xsl:key name="xref"  match="xref[contains(@class, ' topic/xref ')]"  use="substring-after(@href, '#')"/> <!-- find xref which refers to footnote. -->
+<xsl:key name="topic" match="*[contains(@class, ' topic/topic ')]" use="@id"/> <!-- uses "title" -->
+<xsl:key name="fig"   match="*[contains(@class, ' topic/fig ')]"   use="@id"/> <!-- uses "title" -->
+<xsl:key name="table" match="*[contains(@class, ' topic/table ')]" use="@id"/> <!-- uses "title" -->
+<xsl:key name="li"    match="*[contains(@class, ' topic/li ')]"    use="@id"/> <!-- uses "?" -->
+<xsl:key name="fn"    match="*[contains(@class, ' topic/fn ')]"    use="@id"/> <!-- uses "callout?" -->
+<xsl:key name="xref"  match="*[contains(@class, ' topic/xref ')]"  use="substring-after(@href, '#')"/> <!-- find xref which refers to footnote. -->
 
 <!-- ========== FORMATTER DECLARATIONS AND GLOBALS ========== -->
 
@@ -3362,7 +3361,7 @@
 <xsl:template name="place-tbl-lbl">
 <xsl:param name="stringName"/>
   <!-- Number of table/title's before this one -->
-  <xsl:variable name="tbl-count-actual" select="count(preceding::table[contains(@class, ' topic/table ')]/title[contains(@class, ' topic/title ')])+1"/>
+  <xsl:variable name="tbl-count-actual" select="count(preceding::*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')])+1"/>
 
   <!-- normally: "Table 1. " -->
   <xsl:variable name="ancestorlang">
@@ -3371,7 +3370,7 @@
   
   <xsl:choose>
     <!-- title -or- title & desc -->
-    <xsl:when test="title[contains(@class, ' topic/title ')]">
+    <xsl:when test="*[contains(@class, ' topic/title ')]">
       <caption>
         <span class="tablecap">
          <xsl:choose>     <!-- Hungarian: "1. Table " -->
@@ -3392,12 +3391,12 @@
             <xsl:text>. </xsl:text>
           </xsl:otherwise>
          </xsl:choose>
-         <xsl:apply-templates select="title[contains(@class, ' topic/title ')]" mode="tabletitle"/>
-         <xsl:if test="desc[contains(@class, ' topic/desc ')]">
+         <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="tabletitle"/>
+         <xsl:if test="*[contains(@class, ' topic/desc ')]">
            <xsl:text>. </xsl:text>
          </xsl:if>
        </span>
-       <xsl:for-each select="desc[contains(@class, ' topic/desc ')]">
+       <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
           <span class="tabledesc">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="tabledesc"/>
@@ -3406,8 +3405,8 @@
       </caption>
     </xsl:when>
     <!-- desc -->
-    <xsl:when test="desc[contains(@class, ' topic/desc ')]">
-      <xsl:for-each select="desc[contains(@class, ' topic/desc ')]">
+    <xsl:when test="*[contains(@class, ' topic/desc ')]">
+      <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
         <span class="tabledesc">
           <xsl:call-template name="commonattributes"/>
           <xsl:apply-templates select="." mode="tabledesc"/>
@@ -3417,20 +3416,20 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="table[contains(@class, ' topic/table ')]/title[contains(@class, ' topic/title ')]" mode="tabletitle">
+<xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" mode="tabletitle">
   <xsl:apply-templates/>
 </xsl:template>
-<xsl:template match="table[contains(@class, ' topic/table ')]/desc[contains(@class, ' topic/desc ')]" mode="tabledesc">
+<xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/desc ')]" mode="tabledesc">
   <xsl:apply-templates/>
 </xsl:template>
-<xsl:template match="table[contains(@class, ' topic/table ')]/desc[contains(@class, ' topic/desc ')]" mode="get-output-class">tabledesc</xsl:template>
+<xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/desc ')]" mode="get-output-class">tabledesc</xsl:template>
 
 <!-- These 2 rules are not actually used, but could be picked up by an override -->
-<xsl:template match="table[contains(@class, ' topic/table ')]/title[contains(@class, ' topic/title ')]" name="topic.table_title">
+<xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" name="topic.table_title">
   <span><xsl:apply-templates/></span>
 </xsl:template>
 <!-- These rules are not actually used, but could be picked up by an override -->
-<xsl:template match="table[contains(@class, ' topic/table ')]/desc[contains(@class, ' topic/desc ')]" name="topic.table_desc">
+<xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/desc ')]" name="topic.table_desc">
   <span><xsl:apply-templates/></span>
 </xsl:template>
 
@@ -3438,13 +3437,13 @@
 <xsl:template name="place-fig-lbl">
 <xsl:param name="stringName"/>
   <!-- Number of fig/title's including this one -->
-  <xsl:variable name="fig-count-actual" select="count(preceding::fig[contains(@class, ' topic/fig ')]/title[contains(@class, ' topic/title ')])+1"/>
+  <xsl:variable name="fig-count-actual" select="count(preceding::*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ')])+1"/>
   <xsl:variable name="ancestorlang">
     <xsl:call-template name="getLowerCaseLang"/>
   </xsl:variable>
   <xsl:choose>
     <!-- title -or- title & desc -->
-    <xsl:when test="title[contains(@class, ' topic/title ')]">
+    <xsl:when test="*[contains(@class, ' topic/title ')]">
       <span class="figcap">
        <xsl:choose>      <!-- Hungarian: "1. Figure " -->
         <xsl:when test="$ancestorlang = ('hu', 'hu-hu')">
@@ -3464,12 +3463,12 @@
          <xsl:text>. </xsl:text>
         </xsl:otherwise>
        </xsl:choose>
-       <xsl:apply-templates select="title[contains(@class, ' topic/title ')]" mode="figtitle"/>
-       <xsl:if test="desc[contains(@class, ' topic/desc ')]">
+       <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="figtitle"/>
+       <xsl:if test="*[contains(@class, ' topic/desc ')]">
          <xsl:text>. </xsl:text>
        </xsl:if>
       </span>
-      <xsl:for-each select="desc[contains(@class, ' topic/desc ')]">
+      <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
        <span class="figdesc">
          <xsl:call-template name="commonattributes"/>
          <xsl:apply-templates select="." mode="figdesc"/>
@@ -3477,8 +3476,8 @@
       </xsl:for-each>
     </xsl:when>
     <!-- desc -->
-    <xsl:when test="desc[contains(@class, ' topic/desc ')]">
-      <xsl:for-each select="desc[contains(@class, ' topic/desc ')]">
+    <xsl:when test="*[contains(@class, ' topic/desc ')]">
+      <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
        <span class="figdesc">
          <xsl:call-template name="commonattributes"/>
          <xsl:apply-templates select="." mode="figdesc"/>
@@ -3488,24 +3487,24 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="fig[contains(@class, ' topic/fig ')]/title[contains(@class, ' topic/title ')]" mode="figtitle">
+<xsl:template match="*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ')]" mode="figtitle">
  <xsl:apply-templates/>
 </xsl:template>
-<xsl:template match="fig[contains(@class, ' topic/fig ')]/desc[contains(@class, ' topic/desc ')]" mode="figdesc">
+<xsl:template match="*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/desc ')]" mode="figdesc">
  <xsl:apply-templates/>
 </xsl:template>
-<xsl:template match="fig[contains(@class, ' topic/fig ')]/desc[contains(@class, ' topic/desc ')]" mode="get-output-class">figdesc</xsl:template>
+<xsl:template match="*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/desc ')]" mode="get-output-class">figdesc</xsl:template>
 
 <!-- These 2 rules are not actually used, but could be picked up by an override -->
-<xsl:template match="fig[contains(@class, ' topic/fig ')]/title[contains(@class, ' topic/title ')]" name="topic.fig_title">
+<xsl:template match="*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ')]" name="topic.fig_title">
   <span><xsl:apply-templates/></span>
 </xsl:template>
 <!-- These rules are not actually used, but could be picked up by an override -->
-<xsl:template match="fig[contains(@class, ' topic/fig ')]/desc[contains(@class, ' topic/desc ')]" name="topic.fig_desc">
+<xsl:template match="*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/desc ')]" name="topic.fig_desc">
   <span><xsl:apply-templates/></span>
 </xsl:template>
 
-<xsl:template match="figgroup[contains(@class, ' topic/figgroup ')]/title[contains(@class, ' topic/title ')]" name="topic.figgroup_title">
+<xsl:template match="*[contains(@class, ' topic/figgroup ')]/*[contains(@class, ' topic/title ')]" name="topic.figgroup_title">
  <xsl:apply-templates/>
 </xsl:template>
 
@@ -3635,7 +3634,7 @@
   
   <!-- If there is no copyright in the document, make the standard one -->
   <xsl:template name="generateDefaultCopyright">
-    <xsl:if test="not(//copyright[contains(@class, ' topic/copyright ')])">
+    <xsl:if test="not(//*[contains(@class, ' topic/copyright ')])">
       <meta name="copyright">
         <xsl:attribute name="content">
           <xsl:text>(C) </xsl:text>
@@ -3723,8 +3722,8 @@
     <!-- Title processing - special handling for short descriptions -->
     <title>
       <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
-      <xsl:variable name="maintitle"><xsl:apply-templates select="/topic[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]" mode="text-only"/></xsl:variable>
-      <xsl:variable name="ditamaintitle"><xsl:apply-templates select="/dita/topic[contains(@class, ' topic/topic ')][1]/title[contains(@class, ' topic/title ')]" mode="text-only"/></xsl:variable>
+      <xsl:variable name="maintitle"><xsl:apply-templates select="/*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]" mode="text-only"/></xsl:variable>
+      <xsl:variable name="ditamaintitle"><xsl:apply-templates select="/dita/*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:choose>
         <xsl:when test="string-length($maintitle) > 0"><xsl:value-of select="normalize-space($maintitle)"/></xsl:when>
         <xsl:when test="string-length($ditamaintitle) > 0"><xsl:value-of select="normalize-space($ditamaintitle)"/></xsl:when>
@@ -3770,8 +3769,8 @@
       <xsl:attribute name="class" select="@outputclass"/>
     </xsl:if>
     <xsl:if test="self::dita">
-      <xsl:if test="topic[contains(@class, ' topic/topic ')][1]/@outputclass">
-        <xsl:attribute name="class" select="topic[contains(@class, ' topic/topic ')][1]/@outputclass"/>
+      <xsl:if test="*[contains(@class, ' topic/topic ')][1]/@outputclass">
+        <xsl:attribute name="class" select="*[contains(@class, ' topic/topic ')][1]/@outputclass"/>
       </xsl:if>
     </xsl:if>
     <xsl:call-template name="setid"/>
@@ -3791,8 +3790,8 @@
       <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
       <xsl:call-template name="processHDR"/>
       <xsl:if test="$INDEXSHOW = 'yes'">
-        <xsl:apply-templates select="/*/prolog[contains(@class, ' topic/prolog ')]/metadata[contains(@class, ' topic/metadata ')]/keywords[contains(@class, ' topic/keywords ')]/indexterm[contains(@class, ' topic/indexterm ')] |
-                                     /dita/*[1]/prolog[contains(@class, ' topic/prolog ')]/metadata[contains(@class, ' topic/metadata ')]/keywords[contains(@class, ' topic/keywords ')]/indexterm[contains(@class, ' topic/indexterm ')]"/>
+        <xsl:apply-templates select="/*/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')] |
+                                     /dita/*[1]/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')]"/>
       </xsl:if>
     </xsl:variable>
 
@@ -3807,8 +3806,8 @@
     <main role="main">
       <article role="article">
         <xsl:attribute name="aria-labelledby">
-          <xsl:apply-templates select="title[contains(@class, ' topic/title ')] |
-                                       self::dita/*[1]/title[contains(@class, ' topic/title ')]" mode="return-aria-label-id"/>
+          <xsl:apply-templates select="*[contains(@class,' topic/title ')] |
+                                       self::dita/*[1]/*[contains(@class,' topic/title ')]" mode="return-aria-label-id"/>
         </xsl:attribute>
         <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
         <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
@@ -3837,7 +3836,7 @@
   
   <xsl:template name="generateBreadcrumbs">
     <!-- Insert previous/next/ancestor breadcrumbs links at the top of the xhtml. -->
-    <xsl:apply-templates select="related-links[contains(@class, ' topic/related-links ')]" mode="breadcrumb"/>
+    <xsl:apply-templates select="*[contains(@class, ' topic/related-links ')]" mode="breadcrumb"/>
   </xsl:template>
   
   <xsl:template name="processHDR">
@@ -3874,8 +3873,8 @@
   </xsl:template>
 
   <!-- Add for "New <data> element (#9)" in DITA 1.1 -->
-  <xsl:template match="data[contains(@class, ' topic/data ')] |
-                       data-about[contains(@class, ' topic/data-about ')]" />
+  <xsl:template match="*[contains(@class, ' topic/data ')] |
+                       *[contains(@class, ' topic/data-about ')]" />
 
   <!-- Add for "Support foreign content vocabularies such as 
     MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
@@ -3883,15 +3882,15 @@
 
   <!-- Add for index-base element. This template is used to prevent
     any processing applied on index-base element -->
-  <xsl:template match="index-base[contains(@class, ' topic/index-base ')]"/>
+  <xsl:template match="*[contains(@class, ' topic/index-base ')]"/>
 
   <!-- Add for text element.  -->
-  <xsl:template match="text[contains(@class, ' topic/text ')]">
+  <xsl:template match="*[contains(@class, ' topic/text ')]">
     <xsl:apply-templates/>
   </xsl:template>
   
   <!-- By default, ignore desc and force pull-processing -->
-  <xsl:template match="desc[contains(@class, ' topic/desc ')]" name="topic.desc" priority="-10"/>
+  <xsl:template match="*[contains(@class, ' topic/desc ')]" name="topic.desc" priority="-10"/>
   
   <!-- Add for bodydiv  and sectiondiv-->
   <xsl:template match="*[contains(@class, ' topic/bodydiv ') or contains(@class, ' topic/sectiondiv ')]">
@@ -3957,7 +3956,7 @@
           </xsl:if>
         </xsl:variable>
         <xsl:if test="not($target = '' or contains($target, '://'))">
-          <xsl:value-of select="(document(concat($WORKDIR, $PATH2PROJ, $target))//title[contains(@class, ' topic/title ')][normalize-space(.) != ''])[1]"/>
+          <xsl:value-of select="(document(concat($WORKDIR, $PATH2PROJ, $target))//*[contains(@class, ' topic/title ')][normalize-space(.) != ''])[1]"/>
         </xsl:if>
       </xsl:when>
       <xsl:when test="normalize-space(.) = ''">

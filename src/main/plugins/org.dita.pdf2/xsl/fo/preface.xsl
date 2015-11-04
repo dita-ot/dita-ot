@@ -43,23 +43,23 @@ See the accompanying license.txt file for applicable licenses.
              <fo:flow flow-name="xsl-region-body">
                  <fo:block xsl:use-attribute-sets="topic">
                      <xsl:call-template name="commonattributes"/>
-                     <xsl:if test="not(ancestor::topic[contains(@class, ' topic/topic ')])">
+                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                          <fo:marker marker-class-name="current-topic-number">
                              <xsl:number format="1"/>
                          </fo:marker>
                          <fo:marker marker-class-name="current-header">
-                             <xsl:for-each select="child::title[contains(@class, ' topic/title ')]">
+                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                                  <xsl:apply-templates select="." mode="getTitle"/>
                              </xsl:for-each>
                          </fo:marker>
                      </xsl:if>
-                     <xsl:apply-templates select="prolog[contains(@class, ' topic/prolog ')]"/>
+                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
                      <xsl:call-template name="insertChapterFirstpageStaticContent">
                          <xsl:with-param name="type" select="'preface'"/>
                      </xsl:call-template>
                      <fo:block xsl:use-attribute-sets="topic.title">
                          <xsl:call-template name="pullPrologIndexTerms"/>
-                         <xsl:for-each select="child::title[contains(@class, ' topic/title ')]">
+                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                              <xsl:apply-templates select="." mode="getTitle"/>
                          </xsl:for-each>
                      </fo:block>

@@ -5,10 +5,10 @@
     exclude-result-prefixes="related-links xs">
 
   <xsl:key name="link"
-           match="link[contains(@class, ' topic/link ')][not(ancestor::linklist[contains(@class, ' topic/linklist ')])]"
+           match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]"
            use="related-links:link(.)"/>
   <xsl:key name="hideduplicates"
-           match="link[contains(@class, ' topic/link ')][not(ancestor::linklist[contains(@class, ' topic/linklist ')])]
+           match="*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])]
                    [empty(@role) or @role = ('cousin', 'external', 'friend', 'other', 'sample', 'sibling')]"
            use="related-links:hideduplicates(.)"/>
 
@@ -16,12 +16,12 @@
     <xsl:param name="node" as="element()"/>
     <xsl:sequence select="$node/@role = ('child', 'descendant', 'next', 'previous', 'parent') or
                           $node[@importance = 'required' and (empty(@role) or @role = ('sibling', 'friend', 'cousin'))] or
-                          $node/ancestor::linklist[contains(@class, ' topic/linklist ')]"/>
+                          $node/ancestor::*[contains(@class, ' topic/linklist ')]"/>
   </xsl:function>
   
   <xsl:function name="related-links:hideduplicates" as="xs:string">
     <xsl:param name="link" as="element()"/>
-    <xsl:value-of select="concat($link/ancestor::related-links[contains(@class, ' topic/related-links ')]/parent::topic[contains(@class, ' topic/topic ')]/@id,
+    <xsl:value-of select="concat($link/ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id,
                                  ' ',
                                  $link/@href,
                                  $link/@scope,
@@ -36,7 +36,7 @@
   
   <xsl:function name="related-links:link" as="xs:string">
     <xsl:param name="link" as="element()"/>
-    <xsl:value-of select="concat($link/ancestor::related-links[contains(@class, ' topic/related-links ')]/parent::topic[contains(@class, ' topic/topic ')]/@id,
+    <xsl:value-of select="concat($link/ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id,
                                  ' ',
                                  $link/@href,
                                  $link/@type,
@@ -58,18 +58,18 @@
   </xsl:function>
 
     <!-- Ungrouped links have a priority of zero.  (Can be overridden.) -->
-    <xsl:template match="link[contains(@class, ' topic/link ')]" mode="related-links:get-group-priority"
+    <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:get-group-priority"
         name="related-links:group-priority." as="xs:integer">
         <xsl:sequence select="0"/>
     </xsl:template>
 
     <!-- Ungrouped links belong to the no-name group.  (Can be overridden.)  -->
-    <xsl:template match="link[contains(@class, ' topic/link ')]" mode="related-links:get-group" name="related-links:group." as="xs:string">
+    <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:get-group" name="related-links:group." as="xs:string">
         <xsl:text/>
     </xsl:template>
 
     <!-- Without a group, links are emitted as-is.  (Can be overridden.) -->
-    <xsl:template match="link[contains(@class, ' topic/link ')]" mode="related-links:result-group"
+    <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group"
                   name="related-links:group-result." as="element(linklist)">
         <xsl:param name="links" as="node()*"/>
         <xsl:if test="normalize-space(string-join($links, ''))">
@@ -80,13 +80,13 @@
     </xsl:template>
 
     <!-- Ungrouped links have the default-mode template applied to them. (Can be overridden.) -->
-    <xsl:template match="link[contains(@class, ' topic/link ')]" mode="related-links:link" name="related-links:link."
+    <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:link" name="related-links:link."
                   as="element(link)">
       <xsl:sequence select="."/>
     </xsl:template>
 
     <!-- Main entry point. -->
-    <xsl:template match="related-links[contains(@class, ' topic/related-links ')]" mode="related-links:group-unordered-links"
+    <xsl:template match="*[contains(@class, ' topic/related-links ')]" mode="related-links:group-unordered-links"
                   as="element(linklist)*">
         <!-- Node set.  The set of nodes to group. -->
         <xsl:param name="nodes" as="element()*"/>

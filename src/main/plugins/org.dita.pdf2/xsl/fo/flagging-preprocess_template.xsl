@@ -133,7 +133,7 @@
    </xsl:template>
    
    <!-- Don't flag topics, just like in the HTML output -->
-   <xsl:template match="topic[contains(@class, ' topic/topic ')]"
+   <xsl:template match="*[contains(@class, ' topic/topic ')]"
               priority="50">
       <xsl:copy>
          <xsl:apply-templates select="@*"/>

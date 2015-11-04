@@ -158,12 +158,12 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <!-- If example has a title, process it first; otherwise, create default title (if needed) -->
-    <xsl:template match="*[contains(@class, ' task/taskbody ')]/example[contains(@class, ' topic/example ')]">
+    <xsl:template match="*[contains(@class, ' task/taskbody ')]/*[contains(@class, ' topic/example ')]">
         <fo:block xsl:use-attribute-sets="task.example">
             <xsl:call-template name="commonattributes"/>
             <xsl:choose>
-              <xsl:when test="title[contains(@class, ' topic/title ')]">
-                <xsl:apply-templates select="title[contains(@class, ' topic/title ')]"/>
+              <xsl:when test="*[contains(@class, ' topic/title ')]">
+                <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
@@ -517,7 +517,7 @@ See the accompanying license.txt file for applicable licenses.
 
   <!-- Example -->
 
-  <xsl:template match="example[contains(@class, ' topic/example ')]" mode="dita2xslfo:task-heading">
+  <xsl:template match="*[contains(@class, ' topic/example ')]" mode="dita2xslfo:task-heading">
     <xsl:param name="use-label"/>
     <xsl:if test="$GENERATE-TASK-LABELS='YES'">
       <fo:block xsl:use-attribute-sets="example.title">

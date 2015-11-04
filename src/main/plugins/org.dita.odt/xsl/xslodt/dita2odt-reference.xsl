@@ -416,8 +416,8 @@
       -->
       <xsl:variable name="localkeycol">
         <xsl:choose>
-          <xsl:when test="ancestor::simpletable[contains(@class, ' topic/simpletable ')]/@keycol">
-            <xsl:value-of select="ancestor::simpletable[contains(@class, ' topic/simpletable ')]/@keycol"/>
+          <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
+            <xsl:value-of select="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol"/>
           </xsl:when>
           <xsl:otherwise>0</xsl:otherwise>
         </xsl:choose>
@@ -485,7 +485,7 @@
     <xsl:variable name="rowpos" as="xs:integer">
       <xsl:choose>
         <!-- row belongs to thead -->
-        <xsl:when test="parent::sthead[contains(@class, ' topic/sthead ')]">
+        <xsl:when test="parent::*[contains(@class, ' topic/sthead ')]">
           <xsl:sequence select="1"/>
         </xsl:when>
         <!-- there's no thead -->
@@ -535,17 +535,17 @@
   
   <!--Get Related Information Reference-->
   <!-- References have their own group. -->
-  <xsl:template match="link[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group" name="related-links:group.reference">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group" name="related-links:group.reference">
     <xsl:text>reference</xsl:text>
   </xsl:template>
   
   <!-- Priority of reference group. -->
-  <xsl:template match="link[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group-priority" name="related-links:group-priority.reference">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:get-group-priority" name="related-links:group-priority.reference">
     <xsl:value-of select="1"/>
   </xsl:template>
   
   <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
-  <xsl:template match="link[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group" name="related-links:result.reference">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group" name="related-links:result.reference">
     <xsl:param name="links"/>
     <xsl:variable name="samefile">
       <xsl:call-template name="check_file_location"/>

@@ -7,17 +7,18 @@
 <xsl:stylesheet version="2.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
      xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-     exclude-result-prefixes="ditamsg">
+     xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+     exclude-result-prefixes="ditamsg dita-ot">
 
 <!-- KEYREF-FILE is defined in dita2htmlImpl.xsl: -->
 <!--<xsl:param name="KEYREF-FILE" select="concat($WORKDIR,$PATH2PROJ,'keydef.xml')"/>-->
 
 <xsl:template match="*[contains(@class,' abbrev-d/abbreviated-form ')]" name="topic.abbreviated-form">
   <xsl:if test="@keyref and @href">
-    <xsl:variable name="entry-file" select="concat($WORKDIR, @href)"/>
-    <xsl:variable name="entry-file-contents" select="document($entry-file, /)"/>
+    <xsl:variable name="entry-file-contents" as="node()*"
+      select="dita-ot:retrieve-href-target(@href)"/>
     <xsl:choose>
-      <xsl:when test="$entry-file-contents//*[contains(@class,' glossentry/glossentry ')]">
+      <xsl:when test="$entry-file-contents/descendant-or-self::*[contains(@class,' glossentry/glossentry ')]">
         <!-- Fall back to process with normal term rules -->
         <xsl:call-template name="topic.term"/>
       </xsl:when>

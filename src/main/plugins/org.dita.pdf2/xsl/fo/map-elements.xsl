@@ -7,9 +7,9 @@ See the accompanying license.txt file for applicable licenses.
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   version="2.0">
 
-  <xsl:template match="topicmeta[contains(@class, ' map/topicmeta ')]/searchtitle[contains(@class, ' map/searchtitle ')]"/>
+  <xsl:template match="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' map/searchtitle ')]"/>
 
-  <xsl:template match="topicmeta[contains(@class, ' map/topicmeta ')]">
+  <xsl:template match="*[contains(@class, ' map/topicmeta ')]">
     <!--
     <fo:block xsl:use-attribute-sets="topicmeta">
       <xsl:apply-templates/>
@@ -17,7 +17,7 @@ See the accompanying license.txt file for applicable licenses.
     -->
   </xsl:template>
 
-  <xsl:template match="map[contains(@class, ' map/map ')]/reltable[contains(@class, ' map/reltable ')]">
+  <xsl:template match="*[contains(@class, ' map/map ')]/*[contains(@class, ' map/reltable ')]">
     <fo:table-and-caption>
       <fo:table-caption>
         <fo:block xsl:use-attribute-sets="reltable__title">
@@ -37,27 +37,27 @@ See the accompanying license.txt file for applicable licenses.
     </fo:table-and-caption>
   </xsl:template>
 
-  <xsl:template match="relheader[contains(@class, ' map/relheader ')]">
+  <xsl:template match="*[contains(@class, ' map/relheader ')]">
     <fo:table-header xsl:use-attribute-sets="relheader">
       <xsl:call-template name="globalAtts"/>
       <xsl:apply-templates/>
     </fo:table-header>
   </xsl:template>
 
-  <xsl:template match="relcolspec[contains(@class, ' map/relcolspec ')]">
+  <xsl:template match="*[contains(@class, ' map/relcolspec ')]">
     <fo:table-cell xsl:use-attribute-sets="relcolspec">
       <xsl:apply-templates/>
     </fo:table-cell>
   </xsl:template>
 
-  <xsl:template match="relrow[contains(@class, ' map/relrow ')]">
+  <xsl:template match="*[contains(@class, ' map/relrow ')]">
     <fo:table-row xsl:use-attribute-sets="relrow">
       <xsl:call-template name="globalAtts"/>
       <xsl:apply-templates/>
     </fo:table-row>
   </xsl:template>
 
-  <xsl:template match="relcell[contains(@class, ' map/relcell ')]">
+  <xsl:template match="*[contains(@class, ' map/relcell ')]">
     <fo:table-cell xsl:use-attribute-sets="relcell">
       <xsl:call-template name="globalAtts"/>
       <xsl:call-template name="topicrefAtts"/>

@@ -27,41 +27,41 @@
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
   version="2.0">
 
-   <xsl:template match="ul[contains(@class, ' topic/ul ')]">
+   <xsl:template match="*[contains(@class,' topic/ul ')]">
      <!-- render list -->
      <xsl:call-template name="render_list">
        <xsl:with-param name="list_style" select="'list_style'"/>
      </xsl:call-template>
   </xsl:template>
   
-  <xsl:template match="ol[contains(@class, ' topic/ol ')]">
+  <xsl:template match="*[contains(@class,' topic/ol ')]">
      <!-- render list -->
      <xsl:call-template name="render_list">
        <xsl:with-param name="list_style" select="'ordered_list_style'"/>
      </xsl:call-template>     
    </xsl:template>
      
-   <xsl:template match="sl[contains(@class, ' topic/sl ')]">
+   <xsl:template match="*[contains(@class,' topic/sl ')]">
      <!-- render list -->
      <xsl:call-template name="render_list">
        <xsl:with-param name="list_style" select="'list_style'"/>
      </xsl:call-template>
    </xsl:template>
    
-   <xsl:template match="li[contains(@class, ' topic/li ')]">
+   <xsl:template match="*[contains(@class,' topic/li ')]">
      <text:list-item>
        <xsl:apply-templates/>
      </text:list-item>
    </xsl:template>
    
-   <xsl:template match="sli[contains(@class, ' topic/sli ')]">
+   <xsl:template match="*[contains(@class,' topic/sli ')]">
      <xsl:call-template name="block-sli"/>
    </xsl:template>
    
    <xsl:template name="block-li">
-     <xsl:variable name="depth" select="count(ancestor::li[contains(@class, ' topic/li ')])"/>
+     <xsl:variable name="depth" select="count(ancestor::*[contains(@class,' topic/li ')])"/>
      <xsl:variable name="li-num" select="420 + ($depth * 420)"/>
-     <xsl:variable name="listnum" select="count(preceding::*[contains(@class,' topic/ol ')    or contains(@class,' topic/ul ')][not(ancestor::li[contains(@class, ' topic/li ')])]) + 1"/>
+     <xsl:variable name="listnum" select="count(preceding::*[contains(@class,' topic/ol ')    or contains(@class,' topic/ul ')][not(ancestor::*[contains(@class,' topic/li ')])]) + 1"/>
      
      <text:list-item>
        <xsl:apply-templates mode="create_list_item"/>
@@ -79,7 +79,7 @@
    </xsl:template>
    
    <!-- definition list -->
-   <xsl:template match="dl[contains(@class, ' topic/dl ')]">
+   <xsl:template match="*[contains(@class,' topic/dl ')]">
      <!-- render list -->
      <xsl:call-template name="render_list">
        <xsl:with-param name="list_style" select="'list_style'"/>
@@ -91,7 +91,7 @@
    <xsl:template name="block-lq">
      <xsl:choose>
        <!-- nested by p -->
-       <xsl:when test="parent::p[contains(@class, ' topic/p ')]">
+       <xsl:when test="parent::*[contains(@class, ' topic/p ')]">
          <!-- break p tag -->
          <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
          <!-- start render dl -->
@@ -102,7 +102,7 @@
          <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
        </xsl:when>
        <!-- nested by note -->
-       <xsl:when test="parent::note[contains(@class, ' topic/note ')]">
+       <xsl:when test="parent::*[contains(@class, ' topic/note ')]">
          <!-- break p tag -->
          <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
          <!-- start render dl -->
@@ -113,11 +113,11 @@
          <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
        </xsl:when>
        <!-- nested by lq -->
-       <xsl:when test="parent::lq[contains(@class, ' topic/lq ')]">
+       <xsl:when test="parent::*[contains(@class, ' topic/lq ')]">
          <xsl:apply-templates/>
        </xsl:when>
        <!-- nested by itemgroup -->
-       <xsl:when test="parent::itemgroup[contains(@class, ' topic/itemgroup ')]">
+       <xsl:when test="parent::*[contains(@class, ' topic/itemgroup ')]">
          <xsl:apply-templates/>
        </xsl:when>
        <xsl:otherwise>
@@ -129,14 +129,14 @@
    </xsl:template>
      
    <!-- dlhead tag-->
-   <xsl:template match="dlhead[contains(@class, ' topic/dlhead ')]" name="topic.dlhead">
+   <xsl:template match="*[contains(@class, ' topic/dlhead ')]" name="topic.dlhead">
      <text:list-item>
        <xsl:apply-templates/>
      </text:list-item>
    </xsl:template>
    
    <!-- DL heading, term -->
-   <xsl:template match="dthd[contains(@class, ' topic/dthd ')]" name="topic.dthd">
+   <xsl:template match="*[contains(@class,' topic/dthd ')]" name="topic.dthd">
      <text:p text:style-name="bold_paragraph">
        <text:span>
          <!-- start add flagging styles -->
@@ -149,7 +149,7 @@
    </xsl:template>
      
    <!-- DL heading, description -->
-   <xsl:template match="ddhd[contains(@class, ' topic/ddhd ')]" name="topic.ddhd">
+   <xsl:template match="*[contains(@class,' topic/ddhd ')]" name="topic.ddhd">
      <text:p text:style-name="bold_paragraph">
        <text:span>
          <!-- start add flagging styles -->
@@ -163,14 +163,14 @@
    </xsl:template>
    
    <!-- dlentry tag-->
-   <xsl:template match="dlentry[contains(@class, ' topic/dlentry ')]" name="topic.dlentry">
+   <xsl:template match="*[contains(@class,' topic/dlentry ')]" name="topic.dlentry">
      <text:list-item>
        <xsl:apply-templates/>
      </text:list-item>
    </xsl:template>
    
    <!-- for dt tag -->
-   <xsl:template match="dt[contains(@class, ' topic/dt ')]">
+   <xsl:template match="*[contains(@class, ' topic/dt ')]">
      <text:p text:style-name="bold_paragraph">
        <text:span>
          <!-- start add flagging styles -->
@@ -183,7 +183,7 @@
    </xsl:template>
    
    <!-- for dd tag -->
-   <xsl:template match="dd[contains(@class, ' topic/dd ')]">
+   <xsl:template match="*[contains(@class, ' topic/dd ')]">
      <text:p>
        <text:span>
          <!-- start add flagging styles -->
@@ -218,8 +218,8 @@
    <xsl:template name="gen-list-table"/>
    
    	
-   <xsl:template match="ol[contains(@class, ' topic/ol ')]" mode="gen-list-table"/>
+   <xsl:template match="*[contains(@class,' topic/ol ')]" mode="gen-list-table"/>
    	
-   <xsl:template match="ul[contains(@class, ' topic/ul ')]" mode="gen-list-table"/>
+   <xsl:template match="*[contains(@class,' topic/ul ')]" mode="gen-list-table"/>
 	
 </xsl:stylesheet>

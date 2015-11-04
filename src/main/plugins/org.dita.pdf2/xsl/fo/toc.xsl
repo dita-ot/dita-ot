@@ -57,7 +57,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="topic[contains(@class, ' topic/topic ')]" mode="toc">
+    <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="toc">
         <xsl:param name="include"/>
         <xsl:variable name="topicLevel" as="xs:integer">
           <xsl:apply-templates select="." mode="get-topic-level"/>
@@ -118,7 +118,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' bookmap/chapter ')] |
-                         *[contains(@class, ' bookmap/bookmap ')]/opentopic:map/topicref[contains(@class, ' map/topicref ')]" mode="tocPrefix" priority="-1">
+                         *[contains(@class, ' bookmap/bookmap ')]/opentopic:map/*[contains(@class, ' map/topicref ')]" mode="tocPrefix" priority="-1">
         <xsl:call-template name="getVariable">
             <xsl:with-param name="id" select="'Table of Contents Chapter'"/>
             <xsl:with-param name="params">
@@ -166,7 +166,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="node()" mode="tocPrefix" priority="-10"/>
   
     <xsl:template match="*[contains(@class, ' bookmap/chapter ')] |
-                         opentopic:map/topicref[contains(@class, ' map/topicref ')]" mode="tocText" priority="-1">
+                         opentopic:map/*[contains(@class, ' map/topicref ')]" mode="tocText" priority="-1">
         <xsl:param name="tocItemContent"/>
         <xsl:param name="currentNode"/>
         <xsl:for-each select="$currentNode">
@@ -241,7 +241,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="$map//*[contains(@class,' bookmap/toc ')]">
                     <xsl:apply-templates select="/" mode="toc"/>
                 </xsl:when>
-                <xsl:when test="/map[contains(@class, ' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                <xsl:when test="/*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                     <xsl:apply-templates select="/" mode="toc"/>
                     <xsl:call-template name="toc.index"/>
                 </xsl:when>
@@ -321,7 +321,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     
     <xsl:template match="ot-placeholder:tablelist" mode="toc">
-        <xsl:if test="//table[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
+        <xsl:if test="//*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
             <fo:block xsl:use-attribute-sets="__toc__indent__lot">
                 <fo:block xsl:use-attribute-sets="__toc__topic__content__lot">
                     <fo:basic-link internal-destination="{$id.lot}" xsl:use-attribute-sets="__toc__link">
@@ -341,7 +341,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     
     <xsl:template match="ot-placeholder:figurelist" mode="toc">
-        <xsl:if test="//fig[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
+        <xsl:if test="//*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
             <fo:block xsl:use-attribute-sets="__toc__indent__lof">
                 <fo:block xsl:use-attribute-sets="__toc__topic__content__lof">
                     <fo:basic-link internal-destination="{$id.lof}" xsl:use-attribute-sets="__toc__link">

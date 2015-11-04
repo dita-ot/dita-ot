@@ -63,12 +63,12 @@
      If processing only a single map, setup the HTML wrapper and output the contents.
      Otherwise, just process the contents.
      ********************************************************************************* -->
-<xsl:template match="/map[contains(@class, ' map/map ')]">
+<xsl:template match="/*[contains(@class, ' map/map ')]">
   <xsl:param name="pathFromMaplist"/>
-  <xsl:if test=".//topicref[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
+  <xsl:if test=".//*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
     <xsl:value-of select="$newline"/>
     <UL>
-      <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]">
+      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:apply-templates>
     </UL>
@@ -91,20 +91,20 @@
      Move the real work to the named template, to easily check @format for
      files that cannot be included.
      ********************************************************************************* -->
-<xsl:template match="topicref[contains(@class, ' map/topicref ')]">
+<xsl:template match="*[contains(@class, ' map/topicref ')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:choose>
     <!-- If TOC is no, go ahead and process children; if TOC is turned back on,
          those topics will rise to this level -->
     <xsl:when test="@toc='no' or @processing-role='resource-only'">
-      <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]">
+      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:apply-templates>
     </xsl:when>
     <!-- If this this a container (no href or href='', no title), just process children -->
-    <xsl:when test="(not(@href) or @href='') and not(@navtitle) and not(topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]) and
-                    not(topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')])">
-      <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))][not(@processing-role='resource-only')]">
+    <xsl:when test="(not(@href) or @href='') and not(@navtitle) and not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]) and
+                    not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])">
+      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))][not(@processing-role='resource-only')]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:apply-templates>
     </xsl:when>
@@ -196,8 +196,8 @@
              <xsl:choose>
                <xsl:when test="not($TargetFile)">   <!-- DITA file does not exist -->
                  <xsl:choose>
-                   <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]">  <!-- attempt to recover by using linktext -->
-                     <xsl:apply-templates select="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
+                   <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">  <!-- attempt to recover by using linktext -->
+                     <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
                    </xsl:when>
                    <xsl:otherwise>
                      <xsl:call-template name="output-message">
@@ -209,24 +209,24 @@
                  </xsl:choose>
                </xsl:when>
                <!-- First choice for navtitle: topic/titlealts/navtitle -->
-               <xsl:when test="$TargetFile/topic[contains(@class, ' topic/topic ')]/titlealts[contains(@class, ' topic/titlealts ')]/navtitle[contains(@class, ' topic/navtitle ')]">
-                 <xsl:apply-templates select="$TargetFile/topic[contains(@class, ' topic/topic ')]/titlealts[contains(@class, ' topic/titlealts ')]/navtitle[contains(@class, ' topic/navtitle ')]" mode="dita-ot:text-only"/>
+               <xsl:when test="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]">
+                 <xsl:apply-templates select="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]" mode="dita-ot:text-only"/>
                </xsl:when>
                <!-- Second choice for navtitle: topic/title -->
-               <xsl:when test="$TargetFile/topic[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]">
-                 <xsl:apply-templates select="$TargetFile/topic[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]" mode="dita-ot:text-only"/>
+               <xsl:when test="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
+                 <xsl:apply-templates select="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" mode="dita-ot:text-only"/>
                </xsl:when>
                <!-- This might be a combo article; modify the same queries: dita/topic/titlealts/navtitle -->
-               <xsl:when test="$TargetFile/dita/topic[contains(@class, ' topic/topic ')]/titlealts[contains(@class, ' topic/titlealts ')]/navtitle[contains(@class, ' topic/navtitle ')]">
-                 <xsl:apply-templates select="$TargetFile/dita/topic[contains(@class, ' topic/topic ')]/titlealts[contains(@class, ' topic/titlealts ')]/navtitle[contains(@class, ' topic/navtitle ')]" mode="dita-ot:text-only"/>
+               <xsl:when test="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]">
+                 <xsl:apply-templates select="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]" mode="dita-ot:text-only"/>
                </xsl:when>
                <!-- Second choice: dita/topic/title -->
-               <xsl:when test="$TargetFile/dita/topic[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]">
-                 <xsl:apply-templates select="$TargetFile/dita/topic[contains(@class, ' topic/topic ')]/title[contains(@class, ' topic/title ')]" mode="dita-ot:text-only"/>
+               <xsl:when test="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
+                 <xsl:apply-templates select="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" mode="dita-ot:text-only"/>
                </xsl:when>
                <!-- Last choice: use the linktext specified within the topicref -->
-               <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]">
-                 <xsl:apply-templates select="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
+               <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+                 <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
                </xsl:when>
                <xsl:otherwise>
                  <xsl:call-template name="output-message">
@@ -240,8 +240,8 @@
            </xsl:when>
 
            <!-- If there is no title and none can be retrieved, check for <linktext> -->
-           <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]">
-             <xsl:apply-templates select="topicmeta[contains(@class, ' map/topicmeta ')]/linktext[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
+           <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+             <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
            </xsl:when>
 
            <!-- No local title, and not targeting a DITA file. Could be just a container setting
@@ -308,9 +308,9 @@
        </OBJECT>
 
        <!-- If there are any children that should be in the TOC, process them -->
-       <xsl:if test="descendant::topicref[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))][not(@processing-role='resource-only')]">
+       <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))][not(@processing-role='resource-only')]">
          <UL>
-           <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]">
+           <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
              <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
            </xsl:apply-templates>
          </UL>
@@ -321,10 +321,10 @@
 </xsl:template>
 
 <!-- These are here just to prevent accidental fallthrough -->
-<xsl:template match="navref[contains(@class, ' map/navref ')]"/>
-<xsl:template match="anchor[contains(@class, ' map/anchor ')]"/>
-<xsl:template match="reltable[contains(@class, ' map/reltable ')]"/>
-<xsl:template match="topicmeta[contains(@class, ' map/topicmeta ')]"/>
+<xsl:template match="*[contains(@class, ' map/navref ')]"/>
+<xsl:template match="*[contains(@class, ' map/anchor ')]"/>
+<xsl:template match="*[contains(@class, ' map/reltable ')]"/>
+<xsl:template match="*[contains(@class, ' map/topicmeta ')]"/>
 
 <xsl:template match="*">
   <xsl:apply-templates/>

@@ -31,8 +31,8 @@
     version="2.0">
     
     <xsl:template name="determineTopicType">
-        <xsl:variable name="id" select="ancestor-or-self::topic[contains(@class, ' topic/topic ')][1]/@id"/>
-        <xsl:variable name="gid" select="generate-id(ancestor-or-self::topic[contains(@class, ' topic/topic ')][1])"/>
+        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
+        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
         <xsl:variable name="topicNumber" select="count($topicNumbers/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
         <xsl:variable name="mapTopic">
             <xsl:copy-of select="$map//*[@id = $id]"/>

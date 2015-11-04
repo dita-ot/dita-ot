@@ -18,7 +18,7 @@
 
   <xsl:template match="*[contains(@class,' task/substep ')]" mode="topicpull:li-linktext">
     <xsl:number level="multiple"
-      count="ol[contains(@class, ' topic/ol ')]/li[contains(@class, ' topic/li ')][not(contains(@class,' task/stepsection '))]" format="1.a.i.1.a.i.1.a.i"/>
+      count="*[contains(@class,' topic/ol ')]/*[contains(@class,' topic/li ')][not(contains(@class,' task/stepsection '))]" format="1.a.i.1.a.i.1.a.i"/>
   </xsl:template>
 
 </xsl:stylesheet>

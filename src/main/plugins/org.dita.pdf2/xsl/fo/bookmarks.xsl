@@ -42,7 +42,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:variable name="map" select="//opentopic:map"/>
 
-    <xsl:template match="topic[contains(@class, ' topic/topic ')]" mode="bookmark">
+    <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="bookmark">
         <xsl:variable name="mapTopicref" select="key('map-id', @id)[1]"/>
         <xsl:variable name="topicTitle">
             <xsl:call-template name="getNavTitle"/>
@@ -83,7 +83,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates select="/" mode="bookmark"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:for-each select="/*/topic[contains(@class, ' topic/topic ')]">
+            <xsl:for-each select="/*/*[contains(@class, ' topic/topic ')]">
               <xsl:variable name="topicType">
                 <xsl:call-template name="determineTopicType"/>
               </xsl:variable>
@@ -94,7 +94,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:choose>
                 <xsl:when test="$map//*[contains(@class,' bookmap/toc ')][@href]"/>
                 <xsl:when test="$map//*[contains(@class,' bookmap/toc ')]
-                              | /map[contains(@class, ' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                              | /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                     <fo:bookmark internal-destination="{$id.toc}">
                         <fo:bookmark-title>
                             <xsl:call-template name="getVariable">
@@ -104,7 +104,7 @@ See the accompanying license.txt file for applicable licenses.
                     </fo:bookmark>
                 </xsl:when>
             </xsl:choose>
-            <xsl:for-each select="/*/topic[contains(@class, ' topic/topic ')] |
+            <xsl:for-each select="/*/*[contains(@class, ' topic/topic ')] |
                                   /*/ot-placeholder:glossarylist |
                                   /*/ot-placeholder:tablelist |
                                   /*/ot-placeholder:figurelist">
@@ -119,7 +119,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:choose>
                     <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
                     <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')]
-                                  | /map[contains(@class, ' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                                  | /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
                         <fo:bookmark internal-destination="{$id.index}">
                             <fo:bookmark-title>
                                 <xsl:call-template name="getVariable">
@@ -182,7 +182,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     
     <xsl:template match="ot-placeholder:tablelist" mode="bookmark">
-        <xsl:if test="//table[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
+        <xsl:if test="//*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
             <fo:bookmark internal-destination="{$id.lot}">
                 <xsl:if test="$bookmarkStyle!='EXPANDED'">
                     <xsl:attribute name="starting-state">hide</xsl:attribute>
@@ -199,7 +199,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     
     <xsl:template match="ot-placeholder:figurelist" mode="bookmark">
-        <xsl:if test="//fig[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
+        <xsl:if test="//*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
             <fo:bookmark internal-destination="{$id.lof}">
                 <xsl:if test="$bookmarkStyle!='EXPANDED'">
                     <xsl:attribute name="starting-state">hide</xsl:attribute>

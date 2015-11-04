@@ -42,7 +42,7 @@
       <xsl:when test="/*[contains(@class, ' map/map ') and contains(@class, ' bookmap/bookmap ')]">
         <xsl:value-of select="'bookmap'"/>
       </xsl:when>
-      <xsl:when test="/map[contains(@class, ' map/map ')]">
+      <xsl:when test="/*[contains(@class, ' map/map ')]">
         <xsl:value-of select="'ditamap'"/>
       </xsl:when>
       <xsl:otherwise>
@@ -59,7 +59,7 @@
     </xsl:for-each>
   </xsl:variable>
   
-  <xsl:variable name="relatedTopicrefs" select="//reltable[contains(@class, ' map/reltable ')]//topicref[contains(@class, ' map/topicref ')]"/>
+  <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]"/>
   
   
   <xsl:template name="create_toc">
@@ -164,10 +164,10 @@
         </text:index-title>
         <xsl:choose>
           <xsl:when test="$map and not($map = '')">
-            <xsl:apply-templates select="$map/child::topicref[contains(@class, ' map/topicref ')]" mode="toc"/>
+            <xsl:apply-templates select="$map/child::*[contains(@class, ' map/topicref ')]" mode="toc"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="child::topic[contains(@class, ' topic/topic ')]" mode="toc"/>
+            <xsl:apply-templates select="child::*[contains(@class, ' topic/topic ')]" mode="toc"/>
           </xsl:otherwise>
         </xsl:choose>
       </text:index-body>
@@ -181,16 +181,16 @@
   <xsl:template match="opentopic:map"/>
 
 
-  <xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="toc">
+  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="toc">
     <xsl:if test="@href">
       <!-- topicref depth -->
-      <xsl:variable name="depth" select="count(ancestor-or-self::topicref[contains(@class, ' map/topicref ')])"/>
+      <xsl:variable name="depth" select="count(ancestor-or-self::*[contains(@class, ' map/topicref ')])"/>
       <!-- navtitle value -->
       <xsl:variable name="navtitle">
         <!-- 
         <xsl:value-of select="child::*[contains(@class, ' map/topicmeta ')]/child::*[contains(@class, ' topic/navtitle ')]"/>
         -->
-        <xsl:apply-templates select="child::topicmeta[contains(@class, ' map/topicmeta ')]/child::navtitle[contains(@class, ' topic/navtitle ')]" mode="dita-ot:text-only"/>
+        <xsl:apply-templates select="child::*[contains(@class, ' map/topicmeta ')]/child::*[contains(@class, ' topic/navtitle ')]" mode="dita-ot:text-only"/>
       </xsl:variable>
       <!-- href value -->
       <xsl:variable name="href" select="@href"/>
@@ -213,20 +213,20 @@
         </text:a>
       </text:p>
     </xsl:if>
-    <xsl:apply-templates select="child::topicref[contains(@class, ' map/topicref ')]" mode="toc"/>
+    <xsl:apply-templates select="child::*[contains(@class, ' map/topicref ')]" mode="toc"/>
   </xsl:template>
   
   
-  <xsl:template match="topic[contains(@class, ' topic/topic ')]" mode="toc">
-    <xsl:if test="title[contains(@class, ' topic/title ')]">
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="toc">
+    <xsl:if test="*[contains(@class, ' topic/title ')]">
       <!-- topic depth -->
-      <xsl:variable name="depth" select="count(ancestor-or-self::topic[contains(@class, ' topic/topic ')])"/>
+      <xsl:variable name="depth" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
       <!-- title value -->
       <xsl:variable name="title">
         <!-- 
         <xsl:value-of select="child::*[contains(@class, ' topic/title ')]"/>
         -->
-        <xsl:apply-templates select="child::title[contains(@class, ' topic/title ')]" mode="dita-ot:text-only"/>
+        <xsl:apply-templates select="child::*[contains(@class, ' topic/title ')]" mode="dita-ot:text-only"/>
       </xsl:variable>
       <!-- href value -->
       <xsl:variable name="href" select="concat('#', @id)"/>
@@ -249,26 +249,26 @@
         </text:a>
       </text:p>
     </xsl:if>
-    <xsl:apply-templates select="child::topic[contains(@class, ' topic/topic ')]" mode="toc"/>
+    <xsl:apply-templates select="child::*[contains(@class, ' topic/topic ')]" mode="toc"/>
   </xsl:template>
   
   <!-- create map title -->
   <xsl:template name="create_map_title">
     <xsl:apply-templates
-      select="($map/title[contains(@class, ' topic/title ')],
+      select="($map/*[contains(@class, ' topic/title ')],
                /*/@title,
-               //opentopic:map/topicref[contains(@class, ' map/topicref ')][1]
-                              /topicmeta[contains(@class, ' map/topicmeta ')]
-                              /navtitle[contains(@class, ' topic/navtitle ')])[1]"
+               //opentopic:map/*[contains(@class, ' map/topicref ')][1]
+                              /*[contains(@class, ' map/topicmeta ')]
+                              /*[contains(@class, ' topic/navtitle ')])[1]"
       mode="create_title"/>
   </xsl:template>
   
   <!-- create topic title -->
   <xsl:template name="create_topic_title">
-    <xsl:apply-templates select="/topic[contains(@class, ' topic/topic ')][1]/title[contains(@class, ' topic/title ')]" mode="create_title"/>
+    <xsl:apply-templates select="/*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]" mode="create_title"/>
   </xsl:template>
   
-  <xsl:template match="title[contains(@class, ' topic/title ')] | @title | navtitle[contains(@class, ' topic/navtitle ')]" mode="create_title">
+  <xsl:template match="*[contains(@class, ' topic/title ')] | @title | *[contains(@class, ' topic/navtitle ')]" mode="create_title">
     <text:p text:style-name="Title">
       <xsl:apply-templates select="." mode="dita-ot:text-only"/>
     </text:p>
@@ -295,10 +295,10 @@
   
   <xsl:template name="create_book_abstract">
     <xsl:apply-templates select="*[contains(@class, ' bookmap/bookmap ')]
-      /topic[contains(@class, ' topic/topic ')]" mode="create_book_abstract"/>
+      /*[contains(@class, ' topic/topic ')]" mode="create_book_abstract"/>
   </xsl:template>
   
-  <xsl:template match="topic[contains(@class, ' topic/topic ')]" mode="create_book_abstract">
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="create_book_abstract">
     <xsl:variable name="topicType">
       <xsl:call-template name="determineTopicType"/>
     </xsl:variable>
@@ -309,10 +309,10 @@
   
   <xsl:template name="create_book_notices">
     <xsl:apply-templates select="*[contains(@class, ' bookmap/bookmap ')]
-      /topic[contains(@class, ' topic/topic ')]" mode="create_book_notices"/>
+      /*[contains(@class, ' topic/topic ')]" mode="create_book_notices"/>
   </xsl:template>
   
-  <xsl:template match="topic[contains(@class, ' topic/topic ')]" mode="create_book_notices">
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="create_book_notices">
     <xsl:variable name="topicType">
       <xsl:call-template name="determineTopicType"/>
     </xsl:variable>

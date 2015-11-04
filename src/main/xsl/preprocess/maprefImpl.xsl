@@ -23,8 +23,8 @@
   <xsl:variable name="special-atts" select="('href', 'copy-to', 'class', 'linking', 'toc', 'print', 'audience', 'product', 'platform', 'otherprops', 'props')" as="xs:string*"/>
 
   <!-- the xsl:key to get all maprefs in the document in order to get reltable -->
-  <xsl:key name="reltable" match="//topicref[contains(@class, ' map/topicref ')]" use="@format"/>
-  <xsl:key name="reltable" match="//topicref[contains(@class, ' map/topicref ')]" use="@dita-ot:orig-format"/>
+  <xsl:key name="reltable" match="//*[contains(@class, ' map/topicref ')]" use="@format"/>
+  <xsl:key name="reltable" match="//*[contains(@class, ' map/topicref ')]" use="@dita-ot:orig-format"/>
 
   <xsl:template match="@* | node()">
     <xsl:copy>
@@ -32,7 +32,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="topicref[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']
+  <xsl:template match="*[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']
                         [empty(@href(: | @dita-ot:orig-href:)) or
                          (:@processing-role = 'resource-only' or:)
                          @scope = ('peer', 'external')]" priority="15">
@@ -41,7 +41,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="topicref[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']" priority="10">
+  <xsl:template match="*[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']" priority="10">
     <xsl:param name="refclass" select="(@dita-ot:orig-class, @class)[1]" as="xs:string"/>
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
@@ -129,24 +129,24 @@
             </xsl:variable>
             <xsl:variable name="contents" as="node()*">
               <xsl:choose>
-                <xsl:when test="not(contains($href,'://') or empty($element-id) or $file/map[contains(@class, ' map/map ')][@id = $element-id])">
-                  <xsl:sequence select="$file//topicref[contains(@class, ' map/topicref ')][@id = $element-id]"/>
+                <xsl:when test="not(contains($href,'://') or empty($element-id) or $file/*[contains(@class,' map/map ')][@id = $element-id])">
+                  <xsl:sequence select="$file//*[contains(@class,' map/topicref ')][@id = $element-id]"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:sequence select="$file/*/topicref[contains(@class, ' map/topicref ')] |
+                  <xsl:sequence select="$file/*/*[contains(@class,' map/topicref ')] |
                                         $file/*/processing-instruction()"/>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
             <!-- retain key definition as a separate element -->
             <xsl:if test="@keys">
-              <keydef class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef " processing-role="resource-only">
+              <topicref class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef " processing-role="resource-only">
                 <xsl:apply-templates select="@* except (@class | @processing-role)"/>
-                <xsl:apply-templates select="topicmeta[contains(@class, ' map/topicmeta ')]"/>
-              </keydef>
+                <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]"/>
+              </topicref>
             </xsl:if>
             <!-- href and format need to be retained for keyref processing but must be put to an internal namespace to prevent other modules to interact with this element -->
-            <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+            <topicref class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
                     dita-ot:orig-href="{$href}"
                     dita-ot:orig-format="{(@format, @dita-ot:orig-format)[1]}"
                     dita-ot:orig-class="{(@class, @dita-ot:orig-class)[1]}">
@@ -188,10 +188,10 @@
                 </xsl:with-param>
                 <xsl:with-param name="referTypeFlag" select="'element'"/>
               </xsl:apply-templates>
-            </submap>
+            </topicref>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:if test="$child-topicref-warning = 'true' and topicref[contains(@class, ' map/topicref ')]
+        <xsl:if test="$child-topicref-warning = 'true' and *[contains(@class, ' map/topicref ')]
                                                             [not(contains(@class, ' ditavalref-d/ditavalref '))]">
           <xsl:call-template name="output-message">
             <xsl:with-param name="msgnum">068</xsl:with-param>
@@ -202,7 +202,7 @@
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template match="topicref[contains(@class, ' map/topicref ')]" priority="5">
+  <xsl:template match="*[contains(@class, ' map/topicref ')]" priority="5">
     <xsl:param name="refclass" select="@class"/>
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
@@ -312,7 +312,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="map[contains(@class, ' map/map ')]">
+  <xsl:template match="*[contains(@class,' map/map ')]">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()"/>
       <xsl:call-template name="gen-reltable"/>
@@ -328,7 +328,7 @@
     </xsl:apply-templates>
   </xsl:template>
   
-  <xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="mapref">
+  <xsl:template match="*[contains(@class,' map/topicref ')]" mode="mapref">
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
     <xsl:variable name="linking" as="xs:string?">
@@ -354,7 +354,7 @@
       <xsl:when test="not($linking='none') and @href and not(contains(@href,'#'))">
         <xsl:variable name="update-id-path" select="($mapref-id-path, generate-id(.))"/>
         <xsl:variable name="href" select="@href" as="xs:string?"/>
-        <xsl:apply-templates select="document($href, /)/map[contains(@class, ' map/map ')]" mode="mapref">
+        <xsl:apply-templates select="document($href, /)/*[contains(@class,' map/map ')]" mode="mapref">
           <xsl:with-param name="relative-path">
             <xsl:choose>
               <xsl:when test="not($relative-path = '#none#' or $relative-path='')">
@@ -376,10 +376,10 @@
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template match="map[contains(@class, ' map/map ')]" mode="mapref">
+  <xsl:template match="*[contains(@class,' map/map ')]" mode="mapref">
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
-    <xsl:apply-templates select="reltable[contains(@class, ' map/reltable ')]" mode="reltable-copy">
+    <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
       <xsl:with-param name="relative-path" select="$relative-path" tunnel="yes"/>
     </xsl:apply-templates>
     <!--xsl:copy-of select="*[contains(@class,' map/reltable ')]"/-->
@@ -517,7 +517,7 @@
           </xsl:apply-templates>
         </xsl:variable>
         <xsl:variable name="colspec">
-          <xsl:apply-templates select="ancestor::reltable[contains(@class, ' map/reltable ')]/relheader[contains(@class, ' map/relheader ')]/relcolspec[contains(@class, ' map/relcolspec ')][position()=$position ]"
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position ]"
                                mode="mappull:inherit-one-level">
             <xsl:with-param name="attrib" select="$attrib"/>
           </xsl:apply-templates>
@@ -530,7 +530,7 @@
             <xsl:value-of select="$colspec"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="ancestor::reltable[contains(@class, ' map/reltable ')]" mode="mappull:inherit-attribute">
+            <xsl:apply-templates select="ancestor::*[contains(@class, ' map/reltable ')]" mode="mappull:inherit-attribute">
               <xsl:with-param name="attrib" select="$attrib"/>
             </xsl:apply-templates>
           </xsl:otherwise>

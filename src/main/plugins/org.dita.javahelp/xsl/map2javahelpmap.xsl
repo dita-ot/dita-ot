@@ -23,13 +23,13 @@
     indent="yes"
 />
 
-<xsl:template match="map[contains(@class, ' map/map ')]" mode="toctop">
+<xsl:template match="*[contains(@class,' map/map ')]" mode="toctop">
   <map version="2.0">
-    <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' map/topicref ')]"/>
   </map>
 </xsl:template>
 
-<xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="tocentry">
+<xsl:template match="*[contains(@class,' map/topicref ')]" mode="tocentry">
   <xsl:param name="infile"/>
   <xsl:param name="outroot"/>
   <xsl:param name="outfile"/>
@@ -67,7 +67,7 @@
 </xsl:template>
 
 <!-- suppress default processing because title not used in JavaHelp map -->
-<xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="title">
+<xsl:template match="*[contains(@class,' map/topicref ')]" mode="title">
   <xsl:param name="isFirst"/>
   <xsl:param name="infile"/>
   <xsl:param name="nodeID"/>

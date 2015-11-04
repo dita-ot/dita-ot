@@ -20,7 +20,7 @@
   <xsl:variable name="lessthan">&lt;</xsl:variable>
   <xsl:variable name="lessthanstring">&amp;lt;</xsl:variable>
 
-  <xsl:template match="topicref[contains(@class, ' map/topicref ')]">
+  <xsl:template match="*[contains(@class, ' map/topicref ')]">
     <xsl:param name="parent"/>
     <xsl:param name="contentwin"/>
 
@@ -50,11 +50,11 @@
         <xsl:text> = { label: "</xsl:text>
 
         <xsl:choose>
-          <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]">
+          <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
             <!--<xsl:message> - testing navtitle - <xsl:value-of select="topicmeta/navtitle"/></xsl:message>-->
             <xsl:call-template name="fix-title">
               <xsl:with-param name="text">
-                <xsl:value-of select="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]"/>
+                <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
@@ -99,12 +99,12 @@
           <xsl:with-param name="contentwin" select="$contentwin"/>
         </xsl:apply-templates>
       </xsl:when>
-      <xsl:when test="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]">
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
         <!-- No href, has a navtitle element. Used in DITA-OT 1.5 and later. -->
         <xsl:text>var </xsl:text>
         <xsl:value-of select="$self"/>
         <xsl:text> = new YAHOO.widget.TextNode("</xsl:text>
-        <xsl:value-of select="topicmeta[contains(@class, ' map/topicmeta ')]/navtitle[contains(@class, ' topic/navtitle ')]"/>
+        <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"/>
         <xsl:text>", </xsl:text>
         <xsl:value-of select="$parent"/>
         <xsl:text>, false);</xsl:text>

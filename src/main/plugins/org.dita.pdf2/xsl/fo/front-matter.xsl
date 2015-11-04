@@ -37,37 +37,37 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic"
     version="2.0">
 
-    <xsl:template match="topicmeta[contains(@class, ' map/topicmeta ')]">
+    <xsl:template match="*[contains(@class, ' map/topicmeta ')]">
         <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
             <xsl:apply-templates/>
         </fo:block-container>
     </xsl:template>
 
-    <xsl:template match="author[contains(@class, ' topic/author ')]">
+    <xsl:template match="*[contains(@class, ' topic/author ')]">
         <fo:block xsl:use-attribute-sets="author" >
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="publisher[contains(@class, ' topic/publisher ')]">
+    <xsl:template match="*[contains(@class, ' topic/publisher ')]">
         <fo:block xsl:use-attribute-sets="publisher" >
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="copyright[contains(@class, ' topic/copyright ')]">
+    <xsl:template match="*[contains(@class, ' topic/copyright ')]">
         <fo:block xsl:use-attribute-sets="copyright" >
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="copyryear[contains(@class, ' topic/copyryear ')]">
+    <xsl:template match="*[contains(@class, ' topic/copyryear ')]">
         <fo:inline xsl:use-attribute-sets="copyryear" >
             <xsl:value-of select="@year"/><xsl:text> </xsl:text>
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="copyrholder[contains(@class, ' topic/copyrholder ')]">
+    <xsl:template match="*[contains(@class, ' topic/copyrholder ')]">
         <fo:inline xsl:use-attribute-sets="copyrholder" >
             <xsl:apply-templates/>
         </fo:inline>
@@ -92,17 +92,17 @@ See the accompanying license.txt file for applicable licenses.
     <!-- set the title -->
     <fo:block xsl:use-attribute-sets="__frontmatter__title">
       <xsl:choose>
-        <xsl:when test="$map/title[contains(@class, ' topic/title ')][1]">
-          <xsl:apply-templates select="$map/title[contains(@class, ' topic/title ')][1]"/>
+        <xsl:when test="$map/*[contains(@class,' topic/title ')][1]">
+          <xsl:apply-templates select="$map/*[contains(@class,' topic/title ')][1]"/>
         </xsl:when>
         <xsl:when test="$map//*[contains(@class,' bookmap/mainbooktitle ')][1]">
           <xsl:apply-templates select="$map//*[contains(@class,' bookmap/mainbooktitle ')][1]"/>
         </xsl:when>
-        <xsl:when test="//map[contains(@class, ' map/map ')]/@title">
-          <xsl:value-of select="//map[contains(@class, ' map/map ')]/@title"/>
+        <xsl:when test="//*[contains(@class, ' map/map ')]/@title">
+          <xsl:value-of select="//*[contains(@class, ' map/map ')]/@title"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="/descendant::topic[contains(@class, ' topic/topic ')][1]/title[contains(@class, ' topic/title ')]"/>
+          <xsl:value-of select="/descendant::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]"/>
         </xsl:otherwise>
       </xsl:choose>
     </fo:block>

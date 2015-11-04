@@ -26,7 +26,7 @@
               <xsl:apply-templates select="$current-topicrefs[1]" mode="toc-pull">
                 <xsl:with-param name="pathFromMaplist" select="$PATH2PROJ" as="xs:string"/>
                 <xsl:with-param name="children" as="element()*">
-                  <xsl:apply-templates select="$current-topicrefs[1]/topicref[contains(@class, ' map/topicref ')]" mode="toc">
+                  <xsl:apply-templates select="$current-topicrefs[1]/*[contains(@class, ' map/topicref ')]" mode="toc">
                     <xsl:with-param name="pathFromMaplist" select="$PATH2PROJ" as="xs:string"/>
                   </xsl:apply-templates>
                 </xsl:with-param>
@@ -44,10 +44,10 @@
   </xsl:template>
   
   <xsl:variable name="current-file" select="translate(if ($FILEDIR = '.') then $FILENAME else concat($FILEDIR, '/', $FILENAME), '\', '/')"/>
-  <xsl:variable name="current-topicrefs" select="$input.map//topicref[contains(@class, ' map/topicref ')][dita-ot:get-path($PATH2PROJ, .) = $current-file]"/>
+  <xsl:variable name="current-topicrefs" select="$input.map//*[contains(@class, ' map/topicref ')][dita-ot:get-path($PATH2PROJ, .) = $current-file]"/>
   <xsl:variable name="current-topicref" select="$current-topicrefs[1]"/>
   
-  <xsl:template match="map[contains(@class, ' map/map ')]" mode="toc-pull">
+  <xsl:template match="*[contains(@class, ' map/map ')]" mode="toc-pull">
     <xsl:param name="pathFromMaplist" select="$PATH2PROJ" as="xs:string"/>
     <xsl:param name="children" select="()" as="element()*"/>
     <xsl:param name="parent" select="parent::*" as="element()?"/>
@@ -64,7 +64,7 @@
     </xsl:apply-templates>
   </xsl:template>
   
-  <xsl:template match="topicref[contains(@class, ' map/topicref ')]
+  <xsl:template match="*[contains(@class, ' map/topicref ')]
                         [not(@toc = 'no')]
                         [not(@processing-role = 'resource-only')]"
                 mode="toc-pull" priority="10">
@@ -77,7 +77,7 @@
     <xsl:apply-templates select="$parent" mode="toc-pull">
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       <xsl:with-param name="children" as="element()*">
-        <xsl:apply-templates select="preceding-sibling::topicref[contains(@class, ' map/topicref ')]" mode="toc">
+        <xsl:apply-templates select="preceding-sibling::*[contains(@class, ' map/topicref ')]" mode="toc">
           <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
         </xsl:apply-templates>
         <xsl:choose>
@@ -130,12 +130,12 @@
             </li>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]" mode="toc">
+            <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
               <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
             </xsl:apply-templates>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:apply-templates select="following-sibling::topicref[contains(@class, ' map/topicref ')]" mode="toc">
+        <xsl:apply-templates select="following-sibling::*[contains(@class, ' map/topicref ')]" mode="toc">
           <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
         </xsl:apply-templates>
       </xsl:with-param>
@@ -147,17 +147,17 @@
   
   <xsl:template match="*" mode="toc" priority="-10">
     <xsl:param name="pathFromMaplist" as="xs:string"/>
-    <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]" mode="toc">
+    <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]" mode="toc">
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
     </xsl:apply-templates>
   </xsl:template>
   
-  <xsl:template match="topicref[contains(@class, ' map/topicref ')]
+  <xsl:template match="*[contains(@class, ' map/topicref ')]
                         [not(@toc = 'no')]
                         [not(@processing-role = 'resource-only')]"
                 mode="toc" priority="10">
     <xsl:param name="pathFromMaplist" as="xs:string"/>
-    <xsl:param name="children" select="if ($nav-toc = 'full') then topicref[contains(@class, ' map/topicref ')] else ()" as="element()*"/>
+    <xsl:param name="children" select="if ($nav-toc = 'full') then *[contains(@class, ' map/topicref ')] else ()" as="element()*"/>
     <xsl:variable name="title">
       <xsl:apply-templates select="." mode="get-navtitle"/>
     </xsl:variable>

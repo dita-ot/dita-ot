@@ -25,13 +25,13 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="map[contains(@class, ' map/map ')]">
+<xsl:template match="*[contains(@class,' map/map ')]">
   <article>
     <xsl:copy-of select="@id"/>
     <xsl:choose>
-      <xsl:when test="title[contains(@class, ' topic/title ')]">
+      <xsl:when test="*[contains(@class,' topic/title ')]">
         <title>
-          <xsl:value-of select="title[contains(@class, ' topic/title ')]"/>
+          <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
         </title>
       </xsl:when>
       <xsl:when test="@title">
@@ -40,11 +40,11 @@
     </xsl:choose>
     <para/>
     <!-- doesn't handle reltables or topicgroups -->
-    <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' map/topicref ')]"/>
   </article>
 </xsl:template>
 
-<xsl:template match="topicref[contains(@class, ' map/topicref ')]" name="topicref">
+<xsl:template match="*[contains(@class,' map/topicref ')]" name="topicref">
   <xsl:param name="element" select="'section'"/>
   <xsl:variable name="hrefValue">
     <xsl:choose>
@@ -61,7 +61,7 @@
     <xsl:apply-templates select="document($hrefValue, /)/*">
       <xsl:with-param name="element" select="$element"/>
       <xsl:with-param name="childrefs"
-          select="topicref[contains(@class, ' map/topicref ')]"/>
+          select="*[contains(@class,' map/topicref ')]"/>
     </xsl:apply-templates>
   </xsl:when>
   <xsl:when test="@navtitle">
@@ -69,11 +69,11 @@
       <title>
         <xsl:value-of select="@navtitle"/>
       </title>
-      <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]"/>
+      <xsl:apply-templates select="*[contains(@class,' map/topicref ')]"/>
     </xsl:element>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:apply-templates select="topicref[contains(@class, ' map/topicref ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' map/topicref ')]"/>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

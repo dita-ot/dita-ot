@@ -41,7 +41,7 @@
   <!--   LOT   -->
   
   <xsl:template match="ot-placeholder:tablelist" name="createTableList">
-    <xsl:if test="//table[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
+    <xsl:if test="//*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
       <!--exists tables with titles-->
       <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.lot">
         <xsl:call-template name="insertTocStaticContents"/>
@@ -93,7 +93,7 @@
                   <xsl:value-of select="$tableNumber"/>
                 </number>
                 <title>
-                  <xsl:apply-templates select="./title[contains(@class, ' topic/title ')]" mode="insert-text"/>
+                  <xsl:apply-templates select="./*[contains(@class, ' topic/title ')]" mode="insert-text"/>
                 </title>
               </xsl:with-param>
             </xsl:call-template>
@@ -116,7 +116,7 @@
   <!--   LOF   -->
   
   <xsl:template match="ot-placeholder:figurelist" name="createFigureList">
-      <xsl:if test="//fig[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
+      <xsl:if test="//*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
         <!--exists figures with titles-->
         <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.lof">
 
@@ -169,7 +169,7 @@
                   <xsl:value-of select="$figureNumber"/>
                 </number>
                 <title>
-                  <xsl:apply-templates select="./title[contains(@class, ' topic/title ')]" mode="insert-text"/>
+                  <xsl:apply-templates select="./*[contains(@class, ' topic/title ')]" mode="insert-text"/>
                 </title>
               </xsl:with-param>
             </xsl:call-template>

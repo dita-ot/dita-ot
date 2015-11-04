@@ -26,20 +26,20 @@
    </xsl:element>
 </xsl:template>
 
-<xsl:template match="/*/topicmeta[contains(@class, ' map/topicmeta ')]" priority="1">
+<xsl:template match="/*/*[contains(@class,' map/topicmeta ')]" priority="1">
   <xsl:apply-templates select="." mode="copy-element"/>
 </xsl:template>
 
-<xsl:template match="/map[contains(@class, ' map/map ')]/title[contains(@class, ' topic/title ')]">
+<xsl:template match="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
   <xsl:apply-templates select="." mode="copy-element"/>
 </xsl:template>
 
-<xsl:template match="topicmeta[contains(@class, ' map/topicmeta ')]"/>
-<xsl:template match="navref[contains(@class, ' map/navref ')]"/>
-<xsl:template match="reltable[contains(@class, ' map/reltable ')]"/>
-<xsl:template match="anchor[contains(@class, ' map/anchor ')]"/>
+<xsl:template match="*[contains(@class,' map/topicmeta ')]"/>
+<xsl:template match="*[contains(@class,' map/navref ')]"/>
+<xsl:template match="*[contains(@class,' map/reltable ')]"/>
+<xsl:template match="*[contains(@class,' map/anchor ')]"/>
 
-<xsl:template match="topicref[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@print='no')]">
+<xsl:template match="*[contains(@class,' map/topicref ')][@href][not(@href='')][not(@print='no')]">
   <xsl:variable name="topicrefClass"><xsl:value-of select="@class"/></xsl:variable>
   <xsl:comment>Start of imbed for <xsl:value-of select="@href"/></xsl:comment>
   <xsl:choose>
@@ -66,7 +66,7 @@
       </xsl:if>
     </xsl:when>
     <!-- If the target is a topic, as opposed to a ditabase mixed file -->
-    <xsl:when test="document(@href,/)/topic[contains(@class, ' topic/topic ')]">
+    <xsl:when test="document(@href,/)/*[contains(@class,' topic/topic ')]">
       <xsl:variable name="targetName"><xsl:value-of select="name(document(@href,/)/*)"/></xsl:variable>
       <xsl:if test="$targetName and not($targetName='')">
       <xsl:element name="{$targetName}">
@@ -101,7 +101,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="topicref[contains(@class, ' map/topicref ')][not(@href)]">
+<xsl:template match="*[contains(@class,' map/topicref ')][not(@href)]">
   <xsl:element name="{name()}">
     <xsl:apply-templates select="@*" mode="copy-element"/>
     <xsl:apply-templates/>
@@ -145,7 +145,7 @@
     <xsl:when test="contains(.,'://') or ../@scope='external' or ../@scope='peer'">
       <xsl:copy/>
     </xsl:when>
-    <xsl:when test="(parent::xref[contains(@class, ' topic/xref ')] or parent::link[contains(@class, ' topic/link ')]) and (not(../@format) or ../@format='dita')">
+    <xsl:when test="(parent::*[contains(@class,' topic/xref ')] or parent::*[contains(@class,' topic/link ')]) and (not(../@format) or ../@format='dita')">
       <xsl:choose>
         <xsl:when test="starts-with(.,'#')">
           <xsl:variable name="refer-path" select="substring-after(.,'#')"/>
@@ -154,7 +154,7 @@
               <xsl:variable name="topic-id" select="substring-before($refer-path,'/')"/>
               <xsl:variable name="target-id" select="substring-after($refer-path,'/')"/>
               <xsl:variable name="href-value">
-                <xsl:value-of select="generate-id(//topic[contains(@class, ' topic/topic ')][@id=$topic-id]//*[@id=$target-id]/@id)"/>
+                <xsl:value-of select="generate-id(//*[contains(@class,' topic/topic ')][@id=$topic-id]//*[@id=$target-id]/@id)"/>
               </xsl:variable>
               <xsl:if test="not($href-value='')">
                 <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="$href-value"/></xsl:attribute>
@@ -162,7 +162,7 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:variable name="href-value">
-                <xsl:value-of select="generate-id(//topic[contains(@class, ' topic/topic ')][@id=$refer-path]/@id)"/>
+                <xsl:value-of select="generate-id(//*[contains(@class,' topic/topic ')][@id=$refer-path]/@id)"/>
               </xsl:variable>
               <xsl:if test="not($href-value='')">
                 <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="$href-value"/></xsl:attribute>
@@ -180,7 +180,7 @@
               <xsl:variable name="topic-id" select="substring-before($refer-path,'/')"/>
               <xsl:variable name="target-id" select="substring-after($refer-path,'/')"/>
               <xsl:variable name="href-value">
-                <xsl:value-of select="generate-id($file-name-doc//topic[contains(@class, ' topic/topic ')][@id=$topic-id]//*[@id=$target-id]/@id)"/>
+                <xsl:value-of select="generate-id($file-name-doc//*[contains(@class,' topic/topic ')][@id=$topic-id]//*[@id=$target-id]/@id)"/>
               </xsl:variable>
               <xsl:if test="not($href-value='')">
                 <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="$href-value"/></xsl:attribute>
@@ -188,7 +188,7 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:variable name="href-value">
-                <xsl:value-of select="generate-id($file-name-doc//topic[contains(@class, ' topic/topic ')][@id=$refer-path]/@id)"/>
+                <xsl:value-of select="generate-id($file-name-doc//*[contains(@class,' topic/topic ')][@id=$refer-path]/@id)"/>
               </xsl:variable>
               <xsl:if test="not($href-value='')">
                 <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="$href-value"/></xsl:attribute>
@@ -201,10 +201,10 @@
           <xsl:variable name="current-doc" select="document(.,/)"/>
           <xsl:if test="$current-doc and not($current-doc='')">
           <xsl:choose>
-            <xsl:when test="$current-doc//topic[contains(@class, ' topic/topic ')]/@id">
-              <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="generate-id(($current-doc//topic[contains(@class, ' topic/topic ')])[1]/@id)"/></xsl:attribute>
+            <xsl:when test="$current-doc//*[contains(@class,' topic/topic ')]/@id">
+              <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="generate-id(($current-doc//*[contains(@class,' topic/topic ')])[1]/@id)"/></xsl:attribute>
             </xsl:when>
-            <xsl:otherwise><xsl:text>#</xsl:text><xsl:value-of select="generate-id(($current-doc//topic[contains(@class, ' topic/topic ')])[1])"/></xsl:otherwise>
+            <xsl:otherwise><xsl:text>#</xsl:text><xsl:value-of select="generate-id(($current-doc//*[contains(@class,' topic/topic ')])[1])"/></xsl:otherwise>
           </xsl:choose>
           </xsl:if>
         </xsl:otherwise>

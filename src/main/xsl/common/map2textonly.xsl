@@ -9,7 +9,7 @@
   exclude-result-prefixes="dita-ot"
   >
   
-  <xsl:template match="fn[contains(@class, ' topic/fn ')][ancestor::map[contains(@class, ' map/map ')]]"
+  <xsl:template match="*[contains(@class,' topic/fn ')][ancestor::*[contains(@class,' map/map ')]]"
                 mode="dita-ot:text-only"/>
  
 </xsl:stylesheet>

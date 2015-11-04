@@ -38,14 +38,14 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="2.0">
 
-    <xsl:template match="linklist[contains(@class, ' topic/linklist ')]/title[contains(@class, ' topic/title ')]">
+    <xsl:template match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
       <fo:block xsl:use-attribute-sets="linklist.title">
         <xsl:apply-templates/>
       </fo:block>
     </xsl:template>
 
     <!--Lists-->
-    <xsl:template match="ul[contains(@class, ' topic/ul ')]">
+    <xsl:template match="*[contains(@class, ' topic/ul ')]">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:list-block xsl:use-attribute-sets="ul">
             <xsl:call-template name="commonattributes"/>
@@ -54,9 +54,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
   
-    <xsl:template match="ul[contains(@class, ' topic/ul ')][empty(li[contains(@class, ' topic/li ')])]" priority="10"/>
+    <xsl:template match="*[contains(@class, ' topic/ul ')][empty(*[contains(@class, ' topic/li ')])]" priority="10"/>
 
-    <xsl:template match="ol[contains(@class, ' topic/ol ')]">
+    <xsl:template match="*[contains(@class, ' topic/ol ')]">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:list-block xsl:use-attribute-sets="ol">
             <xsl:call-template name="commonattributes"/>
@@ -65,9 +65,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
   
-    <xsl:template match="ol[contains(@class, ' topic/ol ')][empty(li[contains(@class, ' topic/li ')])]" priority="10"/>
+    <xsl:template match="*[contains(@class, ' topic/ol ')][empty(*[contains(@class, ' topic/li ')])]" priority="10"/>
 
-    <xsl:template match="ul[contains(@class, ' topic/ul ')]/li[contains(@class, ' topic/li ')]">
+    <xsl:template match="*[contains(@class, ' topic/ul ')]/*[contains(@class, ' topic/li ')]">
         <fo:list-item xsl:use-attribute-sets="ul.li">
             <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
             <fo:list-item-label xsl:use-attribute-sets="ul.li__label">
@@ -88,7 +88,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:list-item>
     </xsl:template>
 
-    <xsl:template match="ol[contains(@class, ' topic/ol ')]/li[contains(@class, ' topic/li ')]">
+    <xsl:template match="*[contains(@class, ' topic/ol ')]/*[contains(@class, ' topic/li ')]">
         <fo:list-item xsl:use-attribute-sets="ol.li">
           <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
             <fo:list-item-label xsl:use-attribute-sets="ol.li__label">
@@ -101,7 +101,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:with-param name="params">
                             <number>
                                 <xsl:choose>
-                                    <xsl:when test="parent::ol[contains(@class, ' topic/ol ')]/parent::li[contains(@class, ' topic/li ')]/parent::ol[contains(@class, ' topic/ol ')]">
+                                    <xsl:when test="parent::*[contains(@class, ' topic/ol ')]/parent::*[contains(@class, ' topic/li ')]/parent::*[contains(@class, ' topic/ol ')]">
                                         <xsl:number format="a"/>
                                     </xsl:when>
                                     <xsl:otherwise>
@@ -121,14 +121,14 @@ See the accompanying license.txt file for applicable licenses.
         </fo:list-item>
     </xsl:template>
 
-    <xsl:template match="li[contains(@class, ' topic/li ')]/itemgroup[contains(@class, ' topic/itemgroup ')]">
+    <xsl:template match="*[contains(@class, ' topic/li ')]/*[contains(@class, ' topic/itemgroup ')]">
         <fo:block xsl:use-attribute-sets="li.itemgroup">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="sl[contains(@class, ' topic/sl ')]">
+    <xsl:template match="*[contains(@class, ' topic/sl ')]">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:list-block xsl:use-attribute-sets="sl">
             <xsl:call-template name="commonattributes"/>
@@ -137,9 +137,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
   
-    <xsl:template match="sl[contains(@class, ' topic/sl ')][empty(sli[contains(@class, ' topic/sli ')])]" priority="10"/>
+    <xsl:template match="*[contains(@class, ' topic/sl ')][empty(*[contains(@class, ' topic/sli ')])]" priority="10"/>
 
-    <xsl:template match="sl[contains(@class, ' topic/sl ')]/sli[contains(@class, ' topic/sli ')]">
+    <xsl:template match="*[contains(@class, ' topic/sl ')]/*[contains(@class, ' topic/sli ')]">
         <fo:list-item xsl:use-attribute-sets="sl.sli">
           <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
             <fo:list-item-label xsl:use-attribute-sets="sl.sli__label">

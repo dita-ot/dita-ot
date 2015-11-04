@@ -61,14 +61,14 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="text-align">start</xsl:attribute>
         <xsl:attribute name="text-align-last">justify</xsl:attribute>
         <xsl:attribute name="font-size">
-            <xsl:variable name="level" select="count(ancestor-or-self::topic[contains(@class, ' topic/topic ')])"/>
+            <xsl:variable name="level" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
             <xsl:choose>
                 <xsl:when test="$level = 1">12pt</xsl:when>
                 <xsl:otherwise><xsl:value-of select="$default-font-size"/></xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
         <xsl:attribute name="font-weight">
-            <xsl:variable name="level" select="count(ancestor-or-self::topic[contains(@class, ' topic/topic ')])"/>
+            <xsl:variable name="level" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
             <xsl:choose>
                 <xsl:when test="$level = 1">bold</xsl:when>
                 <xsl:otherwise>normal</xsl:otherwise>
@@ -125,7 +125,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="__toc__indent">
         <xsl:attribute name="start-indent">
-            <xsl:variable name="level" select="count(ancestor-or-self::topic[contains(@class, ' topic/topic ')])"/>
+            <xsl:variable name="level" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
             <xsl:value-of select="concat($side-col-width, ' + (', string($level - 1), ' * ', $toc.toc-indent, ') + ', $toc.text-indent)"/>
         </xsl:attribute>
     </xsl:attribute-set>

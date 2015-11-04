@@ -70,7 +70,7 @@
  -->
 
 <xsl:template name="getrules">
-  <xsl:variable name="domains" select="normalize-space(ancestor-or-self::topic[contains(@class, ' topic/topic ')][1]/@domains)"/>
+  <xsl:variable name="domains" select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   <xsl:variable name="tmp_props">
     <xsl:call-template name="getExtProps">
       <xsl:with-param name="domains" select="$domains"/>
@@ -242,7 +242,7 @@
 <!-- No flagging attrs allowed to process in phrases - output a message when in debug mode. -->
 <xsl:template name="flagcheck">
   
-  <xsl:variable name="domains" select="normalize-space(ancestor-or-self::topic[contains(@class, ' topic/topic ')][1]/@domains)"/>
+  <xsl:variable name="domains" select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, 'a(props')">
       <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
@@ -323,7 +323,7 @@
   </xsl:template>
 
 <xsl:template name="getrules-parent">
-  <xsl:variable name="domains" select="normalize-space(ancestor::topic[contains(@class, ' topic/topic ')][1]/@domains)"/>
+  <xsl:variable name="domains" select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, 'a(props')">
       <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>

@@ -76,9 +76,9 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')] /
-      title[contains(@class, ' topic/title ')] |
+      *[contains(@class,' topic/title ')] |
       *[contains(@class,' pr-d/synblk ')] /
-      title[contains(@class, ' topic/title ')]">
+      *[contains(@class,' topic/title ')]">
   <emphasis role="bold">
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'synttl'"/>

@@ -73,7 +73,7 @@
     </xsl:choose>
   </xsl:function>
   
-  <xsl:template match="image[contains(@class, ' topic/image ')]">
+  <xsl:template match="*[contains(@class,' topic/image ')]">
   <xsl:if test="@href and not(@href='')">
     <!-- image meta data -->
       <xsl:variable name="scale" as="xs:double">
@@ -110,12 +110,12 @@
       </xsl:variable>
       <xsl:choose>
         <!-- nested by body or list -->
-        <xsl:when test="parent::body[contains(@class, ' topic/body ')] or        parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
+        <xsl:when test="parent::*[contains(@class, ' topic/body ')] or        parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
           <text:p>
             <text:span>
               <xsl:choose>
                 <!-- FIXME: this will never match due to parent xsl:when -->
-                <xsl:when test="parent::fig[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
+                <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
                   <!-- NOP if there is already a break implied by a parent property -->
                 </xsl:when>
                 <xsl:otherwise>
@@ -140,13 +140,13 @@
           </text:p>
         </xsl:when>
         <!-- nested by entry -->
-        <xsl:when test="parent::entry[contains(@class, ' topic/entry ')]">
+        <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
           <!-- create p tag -->
           <text:p>
             <text:span>
               <xsl:choose>
                 <!-- FIXME: this will never match due to parent xsl:when -->
-                <xsl:when test="parent::fig[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
+                <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
                   <!-- NOP if there is already a break implied by a parent property -->
                 </xsl:when>
                 <xsl:otherwise>
@@ -171,12 +171,12 @@
           </text:p>
         </xsl:when>
         <!-- nested by stentry -->
-        <xsl:when test="parent::stentry[contains(@class, ' topic/stentry ')]">
+        <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
           <text:p>
             <text:span>
               <xsl:choose>
                 <!-- FIXME: this will never match due to parent xsl:when -->
-                <xsl:when test="parent::fig[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
+                <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
                   <!-- NOP if there is already a break implied by a parent property -->
                 </xsl:when>
                 <xsl:otherwise>
@@ -204,7 +204,7 @@
         <xsl:otherwise>
           <text:span>
             <xsl:choose>
-              <xsl:when test="parent::fig[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
+              <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame,'top ')]">
                 <!-- NOP if there is already a break implied by a parent property -->
               </xsl:when>
               <xsl:otherwise>
@@ -303,8 +303,8 @@
           <xsl:with-param name="id" select="$alttext"/>
         </xsl:call-template>
       </xsl:when>
-     <xsl:when test="alt[contains(@class, ' topic/alt ')]">
-       <xsl:value-of select="alt[contains(@class, ' topic/alt ')]"/>
+     <xsl:when test="*[contains(@class,' topic/alt ')]">
+       <xsl:value-of select="*[contains(@class,' topic/alt ')]"/>
      </xsl:when>
      <xsl:when test="startflag/alt-text">
        <xsl:value-of select="startflag/alt-text"/>

@@ -44,16 +44,16 @@
   <xsl:template match="*[contains(@class,' task/taskbody ')]" name="topic.task.taskbody">
     <!-- Added for DITA 1.1 "Shortdesc proposal" -->
     <!-- get the abstract para -->
-    <xsl:apply-templates select="preceding-sibling::abstract[contains(@class, ' topic/abstract ')]"
+    <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/abstract ')]"
       mode="outofline"/>
 
     <!-- get the short descr para -->
-    <xsl:apply-templates select="preceding-sibling::shortdesc[contains(@class, ' topic/shortdesc ')]"
+    <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/shortdesc ')]"
       mode="outofline"/>
 
     <!-- Insert pre-req links here, after shortdesc - unless there is a prereq section about -->
     <xsl:if test="not(*[contains(@class,' task/prereq ')])">
-      <xsl:apply-templates select="following-sibling::related-links[contains(@class, ' topic/related-links ')]"
+      <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]"
         mode="prereqs"/>
     </xsl:if>
     <xsl:apply-templates/>
@@ -83,7 +83,7 @@
       </text:span>
     </text:p>
     <!-- Insert pre-req links - after prereq section -->
-    <xsl:apply-templates select="../following-sibling::related-links[contains(@class, ' topic/related-links ')]"
+    <xsl:apply-templates select="../following-sibling::*[contains(@class,' topic/related-links ')]"
     mode="prereqs"/>
     
   </xsl:template>
@@ -596,7 +596,7 @@
 
     <xsl:choose>
       <!-- if the table is under p(direct child) -->
-      <xsl:when test="parent::p[contains(@class, ' topic/p ')]">
+      <xsl:when test="parent::*[contains(@class, ' topic/p ')]">
         <!-- break p tag -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
         
@@ -605,7 +605,7 @@
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
       </xsl:when>
       <!-- nested by list -->
-      <xsl:when test="parent::li[contains(@class, ' topic/li ')] or parent::sli[contains(@class, ' topic/sli ')]">
+      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
         
         <!-- caculate list depth -->
         <xsl:variable name="depth">
@@ -903,7 +903,7 @@
     
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' task/taskbody ')]/example[contains(@class, ' topic/example ')][not(title[contains(@class, ' topic/title ')])]">
+  <xsl:template match="*[contains(@class,' task/taskbody ')]/*[contains(@class,' topic/example ')][not(*[contains(@class,' topic/title ')])]">
     <xsl:apply-templates select="." mode="generate-task-label">
       <xsl:with-param name="use-label">
         <xsl:call-template name="getVariable">
@@ -921,7 +921,7 @@
   <xsl:template match="*" mode="generate-task-label">
     <xsl:param name="use-label"/>
     <xsl:if test="$GENERATE-TASK-LABELS='YES'">
-      <xsl:variable name="headLevel" select="count(ancestor::topic[contains(@class, ' topic/topic ')])+1"/>
+      <xsl:variable name="headLevel" select="count(ancestor::*[contains(@class,' topic/topic ')])+1"/>
       <text:p text:style-name="{concat('Heading_20_', $headLevel)}">
         
         <xsl:value-of select="$use-label"/>
@@ -939,16 +939,16 @@
   
   <!-- Related links -->
   <!-- Tasks have their own group. -->
-  <xsl:template match="link[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group" name="related-links:group.task">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group" name="related-links:group.task">
     <xsl:text>task</xsl:text>
   </xsl:template>
 
   <!-- Priority of task group. -->
-  <xsl:template match="link[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group-priority" name="related-links:group-priority.task">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group-priority" name="related-links:group-priority.task">
     <xsl:value-of select="2"/>
   </xsl:template>
 
-  <xsl:template match="link[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group" name="related-links:result.task">
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group" name="related-links:result.task">
     <xsl:param name="links"/>
 
     <xsl:variable name="samefile">

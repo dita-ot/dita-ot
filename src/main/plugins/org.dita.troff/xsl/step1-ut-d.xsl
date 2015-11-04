@@ -11,11 +11,11 @@
   <!-- Only use the image -->
   <block><xsl:call-template name="commonatts"/>
     <xsl:choose>
-      <xsl:when test="*[contains(@class, ' ut-d/imagemap ')]/image[contains(@class, ' topic/image ')]/alt[contains(@class, ' topic/alt ')]">
-        <xsl:apply-templates select="*[contains(@class, ' ut-d/imagemap ')]/image[contains(@class, ' topic/image ')]/alt[contains(@class, ' topic/alt ')]"/>
+      <xsl:when test="*[contains(@class, ' ut-d/imagemap ')]/*[contains(@class,' topic/image ')]/*[contains(@class,' topic/alt ')]">
+        <xsl:apply-templates select="*[contains(@class, ' ut-d/imagemap ')]/*[contains(@class,' topic/image ')]/*[contains(@class,' topic/alt ')]"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="*[contains(@class, ' ut-d/imagemap ')]/image[contains(@class, ' topic/image ')]/@alt"/>
+        <xsl:apply-templates select="*[contains(@class, ' ut-d/imagemap ')]/*[contains(@class,' topic/image ')]/@alt"/>
       </xsl:otherwise>
     </xsl:choose>
   </block>

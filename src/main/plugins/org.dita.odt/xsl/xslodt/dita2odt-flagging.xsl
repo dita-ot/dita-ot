@@ -219,7 +219,7 @@
   
   <!-- get flagging style name -->
   <xsl:template name="getFlagStyleName">
-    <xsl:variable name="domains" select="normalize-space(ancestor-or-self::topic[contains(@class, ' topic/topic ')][1]/@domains)"/>
+    <xsl:variable name="domains" select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
     <xsl:variable name="tmp_props">
       <xsl:call-template name="getExtProps">
         <xsl:with-param name="domains" select="$domains"/>
@@ -826,54 +826,54 @@
   </xsl:template>
   
   <xsl:template name="start_flagging_text_of_table_or_list">
-    <xsl:variable name="ul_depth" select="count(ancestor::ul[contains(@class, ' topic/ul ')][1]/ancestor::*)"/>
-    <xsl:variable name="ol_depth" select="count(ancestor::ol[contains(@class, ' topic/ol ')][1]/ancestor::*)"/>
-    <xsl:variable name="sl_depth" select="count(ancestor::sl[contains(@class, ' topic/sl ')][1]/ancestor::*)"/>
-    <xsl:variable name="dl_depth" select="count(ancestor::dl[contains(@class, ' topic/dl ')][1]/ancestor::*)"/>
-    <xsl:variable name="table_depth" select="count(ancestor::table[contains(@class, ' topic/table ')][1]/ancestor::*)"/>
-    <xsl:variable name="stable_depth" select="count(ancestor::simpletable[contains(@class, ' topic/simpletable ')][1]/ancestor::*)"/>
+    <xsl:variable name="ul_depth" select="count(ancestor::*[contains(@class, ' topic/ul ')][1]/ancestor::*)"/>
+    <xsl:variable name="ol_depth" select="count(ancestor::*[contains(@class, ' topic/ol ')][1]/ancestor::*)"/>
+    <xsl:variable name="sl_depth" select="count(ancestor::*[contains(@class, ' topic/sl ')][1]/ancestor::*)"/>
+    <xsl:variable name="dl_depth" select="count(ancestor::*[contains(@class, ' topic/dl ')][1]/ancestor::*)"/>
+    <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/table ')][1]/ancestor::*)"/>
+    <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/simpletable ')][1]/ancestor::*)"/>
     <!-- get closest tag -->
     <xsl:variable name="max_depth" select="max(($ul_depth, $ol_depth, $sl_depth, $dl_depth, $table_depth, $stable_depth))"/>
     <xsl:if test="$max_depth != 0 ">
       <xsl:choose>
         <!-- closest tag is ul -->
         <xsl:when test="$max_depth = $ul_depth">
-          <xsl:apply-templates select="ancestor::ul[contains(@class, ' topic/ul ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/ul ')][1]" 
             mode="start-add-odt-flags">
             <xsl:with-param name="type" select="'list'"/>
           </xsl:apply-templates>
         </xsl:when>
         <!-- closest tag is ol -->
         <xsl:when test="$max_depth = $ol_depth">
-          <xsl:apply-templates select="ancestor::ol[contains(@class, ' topic/ol ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/ol ')][1]" 
             mode="start-add-odt-flags">
             <xsl:with-param name="type" select="'list'"/>
           </xsl:apply-templates>
         </xsl:when>
         <!-- closest tag is sl -->
         <xsl:when test="$max_depth = $sl_depth">
-          <xsl:apply-templates select="ancestor::sl[contains(@class, ' topic/sl ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/sl ')][1]" 
             mode="start-add-odt-flags">
             <xsl:with-param name="type" select="'list'"/>
           </xsl:apply-templates>
         </xsl:when>
         <!-- closest tag is dl -->
         <xsl:when test="$max_depth = $dl_depth">
-          <xsl:apply-templates select="ancestor::dl[contains(@class, ' topic/dl ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/dl ')][1]" 
             mode="start-add-odt-flags">
             <xsl:with-param name="type" select="'list'"/>
           </xsl:apply-templates>
         </xsl:when>
         <!-- closest tag is table -->
         <xsl:when test="$max_depth = $table_depth">
-          <xsl:apply-templates select="ancestor::table[contains(@class, ' topic/table ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/table ')][1]" 
             mode="start-add-odt-flags">
             <xsl:with-param name="type" select="'table'"/>
           </xsl:apply-templates>
         </xsl:when>
         <!-- closest tag is stable -->
         <xsl:when test="$max_depth = $stable_depth">
-          <xsl:apply-templates select="ancestor::simpletable[contains(@class, ' topic/simpletable ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/simpletable ')][1]" 
             mode="start-add-odt-flags">
             <xsl:with-param name="type" select="'stable'"/>
           </xsl:apply-templates>
@@ -889,54 +889,54 @@
   </ul>
   -->
   <xsl:template name="end_flagging_text_of_table_or_list">
-    <xsl:variable name="ul_depth" select="count(ancestor::ul[contains(@class, ' topic/ul ')][1]/ancestor::*)"/>
-    <xsl:variable name="ol_depth" select="count(ancestor::ol[contains(@class, ' topic/ol ')][1]/ancestor::*)"/>
-    <xsl:variable name="sl_depth" select="count(ancestor::sl[contains(@class, ' topic/sl ')][1]/ancestor::*)"/>
-    <xsl:variable name="dl_depth" select="count(ancestor::dl[contains(@class, ' topic/dl ')][1]/ancestor::*)"/>
-    <xsl:variable name="table_depth" select="count(ancestor::table[contains(@class, ' topic/table ')][1]/ancestor::*)"/>
-    <xsl:variable name="stable_depth" select="count(ancestor::simpletable[contains(@class, ' topic/simpletable ')][1]/ancestor::*)"/>
+    <xsl:variable name="ul_depth" select="count(ancestor::*[contains(@class, ' topic/ul ')][1]/ancestor::*)"/>
+    <xsl:variable name="ol_depth" select="count(ancestor::*[contains(@class, ' topic/ol ')][1]/ancestor::*)"/>
+    <xsl:variable name="sl_depth" select="count(ancestor::*[contains(@class, ' topic/sl ')][1]/ancestor::*)"/>
+    <xsl:variable name="dl_depth" select="count(ancestor::*[contains(@class, ' topic/dl ')][1]/ancestor::*)"/>
+    <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/table ')][1]/ancestor::*)"/>
+    <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/simpletable ')][1]/ancestor::*)"/>
     <!-- get closest tag -->
     <xsl:variable name="max_depth" select="max(($ul_depth, $ol_depth, $sl_depth, $dl_depth, $table_depth, $stable_depth))"/>
     <xsl:if test="$max_depth != 0 ">
       <xsl:choose>
         <!-- closest tag is ul -->
         <xsl:when test="$max_depth = $ul_depth">
-          <xsl:apply-templates select="ancestor::ul[contains(@class, ' topic/ul ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/ul ')][1]" 
             mode="end-add-odt-flags">
             <xsl:with-param name="type" select="'list'"/>
           </xsl:apply-templates>
         </xsl:when>
         <!-- closest tag is ol -->
         <xsl:when test="$max_depth = $ol_depth">
-          <xsl:apply-templates select="ancestor::ol[contains(@class, ' topic/ol ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/ol ')][1]" 
             mode="end-add-odt-flags">
             <xsl:with-param name="type" select="'list'"/>
           </xsl:apply-templates>
         </xsl:when>
         <!-- closest tag is sl -->
         <xsl:when test="$max_depth = $sl_depth">
-          <xsl:apply-templates select="ancestor::sl[contains(@class, ' topic/sl ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/sl ')][1]" 
             mode="end-add-odt-flags">
             <xsl:with-param name="type" select="'list'"/>
           </xsl:apply-templates>
         </xsl:when>
         <!-- closest tag is dl -->
         <xsl:when test="$max_depth = $dl_depth">
-          <xsl:apply-templates select="ancestor::dl[contains(@class, ' topic/dl ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/dl ')][1]" 
             mode="end-add-odt-flags">
             <xsl:with-param name="type" select="'list'"/>
           </xsl:apply-templates>
         </xsl:when>
         <!-- closest tag is table -->
         <xsl:when test="$max_depth = $table_depth">
-          <xsl:apply-templates select="ancestor::table[contains(@class, ' topic/table ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/table ')][1]" 
             mode="end-add-odt-flags">
             <xsl:with-param name="type" select="'table'"/>
           </xsl:apply-templates>
         </xsl:when>
         <!-- closest tag is stable -->
         <xsl:when test="$max_depth = $stable_depth">
-          <xsl:apply-templates select="ancestor::simpletable[contains(@class, ' topic/simpletable ')][1]" 
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/simpletable ')][1]" 
             mode="end-add-odt-flags">
             <xsl:with-param name="type" select="'stable'"/>
           </xsl:apply-templates>

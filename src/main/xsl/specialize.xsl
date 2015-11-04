@@ -42,7 +42,7 @@
        </xsl:copy>
      </xsl:template>
      
-     <xsl:template match="object[contains(@class, ' topic/object ')][@data and not(@data='')][@type='DITA-foreign']" priority="10">
+     <xsl:template match="*[contains(@class,' topic/object ')][@data and not(@data='')][@type='DITA-foreign']" priority="10">
           <xsl:apply-templates select="document(@data,/)/*/*" mode="specialize-foreign-unknown"/> 
      </xsl:template>
      

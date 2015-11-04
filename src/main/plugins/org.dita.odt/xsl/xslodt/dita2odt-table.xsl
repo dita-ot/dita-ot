@@ -33,7 +33,7 @@
 <xsl:strip-space elements="*"/>
 
 <!-- =========== CALS (OASIS) TABLE =========== -->
-<xsl:template match="table[contains(@class, ' topic/table ')]" name="topic.table">
+<xsl:template match="*[contains(@class,' topic/table ')]" name="topic.table">
   
   <!-- render table -->
   <xsl:call-template name="render_table"/>
@@ -55,7 +55,7 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="tgroup[contains(@class, ' topic/tgroup ')]" name="topic.tgroup">
+<xsl:template match="*[contains(@class,' topic/tgroup ')]" name="topic.tgroup">
   <xsl:variable name="tablenameId" select="generate-id(.)"/>
   
   <xsl:variable name="columnNum">
@@ -63,14 +63,14 @@
   </xsl:variable>
   
   <!-- start flagging -->
-  <xsl:apply-templates select="parent::table[contains(@class, ' topic/table ')]" mode="start-add-odt-flags">
+  <xsl:apply-templates select="parent::*[contains(@class, ' topic/table ')]" mode="start-add-odt-flags">
     <xsl:with-param name="family" select="'_table'"/>
   </xsl:apply-templates>
   
   <table:table table:name="{concat('Table', $tablenameId)}">
     
     <!-- table background flagging -->
-    <xsl:apply-templates select="parent::table[contains(@class, ' topic/table ')]" mode="start-add-odt-flags">
+    <xsl:apply-templates select="parent::*[contains(@class, ' topic/table ')]" mode="start-add-odt-flags">
       <xsl:with-param name="family" select="'_table_attr'"/>
     </xsl:apply-templates>
     <xsl:call-template name="create_columns_for_table">
@@ -79,7 +79,7 @@
     <xsl:call-template name="dotable"/> 
   </table:table>
   <!-- end flagging -->
-  <xsl:apply-templates select="parent::table[contains(@class, ' topic/table ')]" mode="end-add-odt-flags">
+  <xsl:apply-templates select="parent::*[contains(@class, ' topic/table ')]" mode="end-add-odt-flags">
     <xsl:with-param name="family" select="'_table'"/>
   </xsl:apply-templates>
 
@@ -91,30 +91,30 @@
       <xsl:when test="@cols">
         <xsl:value-of select="@cols"/>
       </xsl:when>
-      <xsl:when test="not(child::colspec[contains(@class, ' topic/colspec ')])">
+      <xsl:when test="not(child::*[contains(@class, ' topic/colspec ')])">
         <xsl:choose>
-          <xsl:when test="child::thead[contains(@class, ' topic/thead ')]">
-            <xsl:value-of select="count(child::thead[contains(@class, ' topic/thead ')][1]
-              /child::row[contains(@class, ' topic/row ')][1]
-              /child::entry[contains(@class, ' topic/entry ')])"/>
+          <xsl:when test="child::*[contains(@class, ' topic/thead ')]">
+            <xsl:value-of select="count(child::*[contains(@class, ' topic/thead ')][1]
+              /child::*[contains(@class, ' topic/row ')][1]
+              /child::*[contains(@class, ' topic/entry ')])"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="count(descendant::row[contains(@class, ' topic/row ')][1]
-              /child::entry[contains(@class, ' topic/entry ')])"/>
+            <xsl:value-of select="count(descendant::*[contains(@class, ' topic/row ')][1]
+              /child::*[contains(@class, ' topic/entry ')])"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="count(child::colspec[contains(@class, ' topic/colspec ')])"/>
+        <xsl:value-of select="count(child::*[contains(@class, ' topic/colspec ')])"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
-<xsl:template match="table[contains(@class, ' topic/table ')]/title[contains(@class, ' topic/title ')]">
+<xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]">
 <xsl:variable name="ancestorlang">
 <xsl:call-template name="getLowerCaseLang"/>
 </xsl:variable>
-  <xsl:variable name="tbl-count-actual" select="count(preceding::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]/title[contains(@class, ' topic/title ')])+1"/>
+  <xsl:variable name="tbl-count-actual" select="count(preceding::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]/*[contains(@class,' topic/title ')])+1"/>
 
   
   <text:p text:style-name="center">
@@ -146,48 +146,48 @@
   </text:p>
 </xsl:template>
 
-<xsl:template match="table[contains(@class, ' topic/table ')]/desc[contains(@class, ' topic/desc ')]">
+<xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/desc ')]">
   <text:p text:style-name="center">
       <xsl:apply-templates/>
     </text:p>
 </xsl:template>
 
-<xsl:template match="colspec[contains(@class, ' topic/colspec ')]"/>
+<xsl:template match="*[contains(@class,' topic/colspec ')]"/>
 
 
-<xsl:template match="spanspec[contains(@class, ' topic/spanspec ')]"/>
+<xsl:template match="*[contains(@class,' topic/spanspec ')]"/>
 
-<xsl:template match="thead[contains(@class, ' topic/thead ')]" name="topic.thead">
+<xsl:template match="*[contains(@class,' topic/thead ')]" name="topic.thead">
   <xsl:apply-templates/>
 </xsl:template>
 
 
-<xsl:template match="tfoot[contains(@class, ' topic/tfoot ')]"/>
+<xsl:template match="*[contains(@class,' topic/tfoot ')]"/>
 
-<xsl:template match="tbody[contains(@class, ' topic/tbody ')]" name="topic.tbody">
+<xsl:template match="*[contains(@class,' topic/tbody ')]" name="topic.tbody">
   <xsl:apply-templates/>
     <!-- process table footer -->
-    <xsl:apply-templates select="../tfoot[contains(@class, ' topic/tfoot ')]" mode="gen-tfoot"/>
+    <xsl:apply-templates select="../*[contains(@class,' topic/tfoot ')]" mode="gen-tfoot"/>
 </xsl:template>
 
 <!-- special mode for table footers -->
-<xsl:template match="tfoot[contains(@class, ' topic/tfoot ')]" mode="gen-tfoot">
+<xsl:template match="*[contains(@class,' topic/tfoot ')]" mode="gen-tfoot">
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="row[contains(@class, ' topic/row ')]" name="topic.row">
+<xsl:template match="*[contains(@class,' topic/row ')]" name="topic.row">
   
   <xsl:choose>
-    <xsl:when test="parent::thead[contains(@class, ' topic/thead ')]">
+    <xsl:when test="parent::*[contains(@class,' topic/thead ')]">
       <table:table-header-rows>
         <table:table-row>
-          <xsl:apply-templates select="entry[contains(@class, ' topic/entry ')][1]"/>
+          <xsl:apply-templates select="*[contains(@class,' topic/entry ')][1]"/>
         </table:table-row>
       </table:table-header-rows>
     </xsl:when>
     <xsl:otherwise>
       <table:table-row>
-        <xsl:apply-templates select="entry[contains(@class, ' topic/entry ')][1]"/>
+        <xsl:apply-templates select="*[contains(@class,' topic/entry ')][1]"/>
       </table:table-row>
     </xsl:otherwise>
   </xsl:choose>
@@ -195,16 +195,16 @@
 
 <xsl:template name="count-colmax">
   <xsl:choose>
-    <xsl:when test="../../../colspec[contains(@class, ' topic/colspec ')]">
-      <xsl:value-of select="number(count(../../../colspec[contains(@class, ' topic/colspec ')]))"/>
+    <xsl:when test="../../../*[contains(@class,' topic/colspec ')]">
+      <xsl:value-of select="number(count(../../../*[contains(@class,' topic/colspec ')]))"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:value-of select="number(count(../../row[contains(@class, ' topic/row ')][1]/entry[contains(@class, ' topic/entry ')]))"/>
+      <xsl:value-of select="number(count(../../*[contains(@class,' topic/row ')][1]/*[contains(@class,' topic/entry ')]))"/>
     </xsl:otherwise>
   </xsl:choose>  
 </xsl:template>
 
-<xsl:template match="entry[contains(@class, ' topic/entry ')]" name="topic.entry">
+<xsl:template match="*[contains(@class,' topic/entry ')]" name="topic.entry">
   <xsl:param name="currentpos" select="1"/>
     <xsl:variable name="rowspan">
       <xsl:call-template name="get-rows-span"/>
@@ -266,12 +266,12 @@
       <xsl:with-param name="span" select="$colspan"/>
     </xsl:call-template>
     -->
-    <xsl:if test="following-sibling::entry[contains(@class, ' topic/entry ')]">
-      <xsl:apply-templates select="following-sibling::entry[contains(@class, ' topic/entry ')][1]">
+    <xsl:if test="following-sibling::*[contains(@class,' topic/entry ')]">
+      <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/entry ')][1]">
         <xsl:with-param name="currentpos" select="$endpos + 1"/>
       </xsl:apply-templates>
     </xsl:if>
-    <xsl:if test="not(following-sibling::entry[contains(@class, ' topic/entry ')]) and not(($endpos + 1) &gt; $col-max-num)">
+    <xsl:if test="not(following-sibling::*[contains(@class,' topic/entry ')]) and not(($endpos + 1) &gt; $col-max-num)">
         <!-- if this is the last entry in current row and next position is not greater than the number of columns in a row-->
         <xsl:call-template name="emit-empty-cell">
           <xsl:with-param name="startpos" select="$col-max-num + 1"/> <!-- make sure the remaining columns will be generated -->
@@ -290,21 +290,21 @@
   <xsl:variable name="rowpos">
     <xsl:choose>
       <!-- row belongs to thead -->
-      <xsl:when test="parent::row[contains(@class, ' topic/row ')]
-        /parent::thead[contains(@class, ' topic/thead ')]">
+      <xsl:when test="parent::*[contains(@class, ' topic/row ')]
+        /parent::*[contains(@class, ' topic/thead ')]">
         <xsl:value-of select="1"/>
       </xsl:when>
       <!-- there's no thead -->
-      <xsl:when test="not(parent::row[contains(@class, ' topic/row ')]
-        /parent::tbody[contains(@class, ' topic/tbody ')]
-        /preceding-sibling::thead[contains(@class, ' topic/thead ')])">
-        <xsl:value-of select="count(parent::row[contains(@class, ' topic/row ')]/
-          preceding-sibling::row[contains(@class, ' topic/row ')]) + 1"/>
+      <xsl:when test="not(parent::*[contains(@class, ' topic/row ')]
+        /parent::*[contains(@class, ' topic/tbody ')]
+        /preceding-sibling::*[contains(@class, ' topic/thead ')])">
+        <xsl:value-of select="count(parent::*[contains(@class, ' topic/row ')]/
+          preceding-sibling::*[contains(@class, ' topic/row ')]) + 1"/>
       </xsl:when>
       <!-- there is thead and row belongs to tbody -->
-      <xsl:when test="parent::row[contains(@class, ' topic/row ')]
-        /parent::tbody[contains(@class, ' topic/tbody ')]
-        /preceding-sibling::thead[contains(@class, ' topic/thead ')]">
+      <xsl:when test="parent::*[contains(@class, ' topic/row ')]
+        /parent::*[contains(@class, ' topic/tbody ')]
+        /preceding-sibling::*[contains(@class, ' topic/thead ')]">
         <xsl:value-of select="2"/>
       </xsl:when>
     </xsl:choose>
@@ -351,7 +351,7 @@
   </xsl:call-template-->
 </xsl:template>
 
-<xsl:template match="colspec[contains(@class, ' topic/colspec ')]" mode="count-rowwidth">
+<xsl:template match="*[contains(@class,' topic/colspec ')]" mode="count-rowwidth">
   <xsl:param name="totalwidth">0</xsl:param> <!-- Total counted width so far -->
   <xsl:variable name="thiswidth">            <!-- Width of this column -->
     <xsl:choose>
@@ -361,8 +361,8 @@
   </xsl:variable>
   <!-- If there are more colspecs, continue, otherwise return the current count -->
   <xsl:choose>
-    <xsl:when test="following-sibling::colspec[contains(@class, ' topic/colspec ')]">
-      <xsl:apply-templates select="following-sibling::colspec[contains(@class, ' topic/colspec ')][1]" mode="count-rowwidth">
+    <xsl:when test="following-sibling::*[contains(@class,' topic/colspec ')]">
+      <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/colspec ')][1]" mode="count-rowwidth">
         <xsl:with-param name="totalwidth" select="$totalwidth + $thiswidth"/>
       </xsl:apply-templates>
     </xsl:when>
@@ -379,7 +379,7 @@
       <xsl:value-of select="@colnum"/>
     </xsl:when>
 
-    <xsl:when test="not(../../../colspec[contains(@class, ' topic/colspec ')])">
+    <xsl:when test="not(../../../*[contains(@class,' topic/colspec ')])">
       <xsl:variable name="prev-sib" select="count(preceding-sibling::*)"/>
       <xsl:value-of select="$prev-sib+1"/>
     </xsl:when>
@@ -387,20 +387,20 @@
     <!-- If there is a defined column name, check the colspans to determine position -->
     <xsl:when test="@colname">
       <!-- count the number of colspans before the one this entry references, plus one -->
-      <xsl:value-of select="number(count(../../../colspec[contains(@class, ' topic/colspec ')][@colname=current()/@colname]/preceding-sibling::colspec[contains(@class, ' topic/colspec ')])+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=current()/@colname]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
 
     <!-- If the starting column is defined, check colspans to determine position -->
     <xsl:when test="@namest">
-      <xsl:value-of select="number(count(../../../colspec[contains(@class, ' topic/colspec ')][@colname=current()/@namest]/preceding-sibling::colspec[contains(@class, ' topic/colspec ')])+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=current()/@namest]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
 
     <!-- Need a test for spanspec -->
     <xsl:when test="@spanname">
       <xsl:variable name="startspan">  <!-- starting column for this span -->
-        <xsl:value-of select="../../../spanspec[contains(@class, ' topic/spanspec ')][@spanname=current()/@spanname]/@namest"/>
+        <xsl:value-of select="../../../*[contains(@class,' topic/spanspec ')][@spanname=current()/@spanname]/@namest"/>
       </xsl:variable>
-      <xsl:value-of select="number(count(../../../colspec[contains(@class, ' topic/colspec ')][@colname=$startspan]/preceding-sibling::colspec[contains(@class, ' topic/colspec ')])+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=$startspan]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
 
     <!-- Otherwise, just use the count of cells in this row -->
@@ -417,17 +417,17 @@
 <xsl:template name="find-entry-end-position">
   <xsl:param name="startposition" select="0"/>
   <xsl:choose>
-    <xsl:when test="not(../../../colspec[contains(@class, ' topic/colspec ')])">
+    <xsl:when test="not(../../../*[contains(@class,' topic/colspec ')])">
       <xsl:value-of select="$startposition"/>
     </xsl:when>
     <xsl:when test="@nameend">
-      <xsl:value-of select="number(count(../../../colspec[contains(@class, ' topic/colspec ')][@colname=current()/@nameend]/preceding-sibling::colspec[contains(@class, ' topic/colspec ')])+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=current()/@nameend]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
     <xsl:when test="@spanname">
       <xsl:variable name="endspan">  <!-- starting column for this span -->
-        <xsl:value-of select="../../../spanspec[contains(@class, ' topic/spanspec ')][@spanname=current()/@spanname]/@nameend"/>
+        <xsl:value-of select="../../../*[contains(@class,' topic/spanspec ')][@spanname=current()/@spanname]/@nameend"/>
       </xsl:variable>
-      <xsl:value-of select="number(count(../../../colspec[contains(@class, ' topic/colspec ')][@colname=$endspan]/preceding-sibling::colspec[contains(@class, ' topic/colspec ')])+1)"/>
+      <xsl:value-of select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=$endspan]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="$startposition"/>
@@ -450,10 +450,10 @@
 
 <xsl:template name="find-spanspec-colspan">
   <xsl:variable name="spanname" select="@spanname"/>
-  <xsl:variable name="startcolname" select="../../../spanspec[contains(@class, ' topic/spanspec ')][@spanname=$spanname][1]/@namest"/>
-  <xsl:variable name="endcolname" select="../../../spanspec[contains(@class, ' topic/spanspec ')][@spanname=$spanname][1]/@nameend"/>
-  <xsl:variable name="startpos" select="number(count(../../../colspec[contains(@class, ' topic/colspec ')][@colname=$startcolname]/preceding-sibling::colspec[contains(@class, ' topic/colspec ')])+1)"/>
-  <xsl:variable name="endpos" select="number(count(../../../colspec[contains(@class, ' topic/colspec ')][@colname=$endcolname]/preceding-sibling::colspec[contains(@class, ' topic/colspec ')])+1)"/>
+  <xsl:variable name="startcolname" select="../../../*[contains(@class,' topic/spanspec ')][@spanname=$spanname][1]/@namest"/>
+  <xsl:variable name="endcolname" select="../../../*[contains(@class,' topic/spanspec ')][@spanname=$spanname][1]/@nameend"/>
+  <xsl:variable name="startpos" select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=$startcolname]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
+  <xsl:variable name="endpos" select="number(count(../../../*[contains(@class,' topic/colspec ')][@colname=$endcolname]/preceding-sibling::*[contains(@class, ' topic/colspec ')])+1)"/>
   <xsl:value-of select="$endpos - $startpos + 1"/>
 </xsl:template>
 
@@ -462,7 +462,7 @@
     <xsl:param name="startpos" select="1"/>
     <xsl:if test="$startpos &gt; $currentpos">
       <xsl:variable name="colspan">
-        <xsl:apply-templates select="../preceding-sibling::*[entry[contains(@class, ' topic/entry ')][@morerows][@colnum=$currentpos or @colname=concat('col',$currentpos) or @namest=concat('col',$currentpos)]][1]/entry[contains(@class, ' topic/entry ')][@morerows][@colnum=$currentpos or @colname=concat('col',$currentpos) or @namest=concat('col',$currentpos)]" mode="find-colspan"/>
+        <xsl:apply-templates select="../preceding-sibling::*[*[contains(@class,' topic/entry ')][@morerows][@colnum=$currentpos or @colname=concat('col',$currentpos) or @namest=concat('col',$currentpos)]][1]/*[contains(@class,' topic/entry ')][@morerows][@colnum=$currentpos or @colname=concat('col',$currentpos) or @namest=concat('col',$currentpos)]" mode="find-colspan"/>
       </xsl:variable>
       <table:covered-table-cell/>
       <xsl:if test="not($colspan='') and ($startpos &gt; ($currentpos + $colspan))">
@@ -496,11 +496,11 @@
     
   </xsl:template>
   
-  <xsl:template match="entry[contains(@class, ' topic/entry ')]" mode="find-colspan">
+  <xsl:template match="*[contains(@class,' topic/entry ')]" mode="find-colspan">
     <xsl:call-template name="find-colspan"/>
   </xsl:template>
   
-  <xsl:template match="colspec[contains(@class, ' topic/colspec ')]" mode="count-colwidth">
+  <xsl:template match="*[contains(@class,' topic/colspec ')]" mode="count-colwidth">
     <xsl:param name="colnum" select="1"/>
     <xsl:param name="span-width" select="0"/>
     <xsl:variable name="width">
@@ -545,7 +545,7 @@
   </xsl:template-->
 
 <!-- Simple Table -->
-<xsl:template match="simpletable[contains(@class, ' topic/simpletable ')]" name="topic.simpletable">
+<xsl:template match="*[contains(@class,' topic/simpletable ')]" name="topic.simpletable">
   
   <!-- render stable -->
   <xsl:call-template name="render_simpletable"/>
@@ -583,13 +583,13 @@
 
 <xsl:template name="count_columns_for_simpletable">
   <xsl:choose>
-    <xsl:when test="child::sthead[contains(@class, ' topic/sthead ')]">
-      <xsl:value-of select="count(child::sthead[contains(@class, ' topic/sthead ')][1]
-        /child::stentry[contains(@class, ' topic/stentry ')])"/>
+    <xsl:when test="child::*[contains(@class, ' topic/sthead ')]">
+      <xsl:value-of select="count(child::*[contains(@class, ' topic/sthead ')][1]
+        /child::*[contains(@class, ' topic/stentry ')])"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:value-of select="count(child::strow[contains(@class, ' topic/strow ')][1]
-        /child::stentry[contains(@class, ' topic/stentry ')])"/>
+      <xsl:value-of select="count(child::*[contains(@class, ' topic/strow ')][1]
+        /child::*[contains(@class, ' topic/stentry ')])"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -604,12 +604,12 @@
   </xsl:if>  
 </xsl:template>
 
-<xsl:template match="simpletable[contains(@class, ' topic/simpletable ')]/title[contains(@class, ' topic/title ')]">
+<xsl:template match="*[contains(@class,' topic/simpletable ')]/*[contains(@class,' topic/title ')]">
   <xsl:variable name="ancestorlang">
     <xsl:call-template name="getLowerCaseLang"/>
   </xsl:variable>
   <xsl:variable name="tbl-count-actual" select="count(preceding::*[contains(@class,' topic/table ')
-    or contains(@class,' topic/simpletable ')]/title[contains(@class, ' topic/title ')])+1"/>
+    or contains(@class,' topic/simpletable ')]/*[contains(@class,' topic/title ')])+1"/>
 
   <text:p text:style-name="bold">
   <xsl:choose>
@@ -634,7 +634,7 @@
  </text:p>
 </xsl:template>
 
-<xsl:template match="sthead[contains(@class, ' topic/sthead ')]">
+<xsl:template match="*[contains(@class,' topic/sthead ')]">
 
   <table:table-header-rows>
     <table:table-row>
@@ -643,16 +643,16 @@
   </table:table-header-rows>
 </xsl:template>
   
-<xsl:template match="strow[contains(@class, ' topic/strow ')]">
+<xsl:template match="*[contains(@class,' topic/strow ')]">
 
   <table:table-row>
     <xsl:apply-templates mode="emit-cell-style"/>
   </table:table-row>
 </xsl:template>
 
-<xsl:template match="stentry[contains(@class, ' topic/stentry ')]" mode="emit-cell-style">
+<xsl:template match="*[contains(@class,' topic/stentry ')]" mode="emit-cell-style">
 
-  <xsl:variable name="totalcols" select="count(../stentry[contains(@class, ' topic/stentry ')])">
+  <xsl:variable name="totalcols" select="count(../*[contains(@class,' topic/stentry ')])">
     <!--xsl:apply-templates select="../*[contains(@class,' topic/stentry ')][1]" mode="count-rowwidth"/-->
   </xsl:variable>
    <!--  
@@ -687,18 +687,18 @@
   <xsl:variable name="rowpos">
     <xsl:choose>
       <!-- row belongs to thead -->
-      <xsl:when test="parent::sthead[contains(@class, ' topic/sthead ')]">
+      <xsl:when test="parent::*[contains(@class, ' topic/sthead ')]">
         <xsl:value-of select="1"/>
       </xsl:when>
       <!-- there's no thead -->
-      <xsl:when test="not(parent::strow[contains(@class, ' topic/strow ')]
-        /preceding-sibling::sthead[contains(@class, ' topic/sthead ')])">
-        <xsl:value-of select="count(parent::strow[contains(@class, ' topic/strow ')]/
-          preceding-sibling::strow[contains(@class, ' topic/strow ')]) + 1"/>
+      <xsl:when test="not(parent::*[contains(@class, ' topic/strow ')]
+        /preceding-sibling::*[contains(@class, ' topic/sthead ')])">
+        <xsl:value-of select="count(parent::*[contains(@class, ' topic/strow ')]/
+          preceding-sibling::*[contains(@class, ' topic/strow ')]) + 1"/>
       </xsl:when>
       <!-- there is thead and row belongs to tbody -->
-      <xsl:when test="parent::strow[contains(@class, ' topic/strow ')]
-        /preceding-sibling::sthead[contains(@class, ' topic/sthead ')]">
+      <xsl:when test="parent::*[contains(@class, ' topic/strow ')]
+        /preceding-sibling::*[contains(@class, ' topic/sthead ')]">
         <xsl:value-of select="2"/>
       </xsl:when>
     </xsl:choose>
@@ -725,11 +725,11 @@
 </xsl:template>
 
 
-<xsl:template match="stentry[contains(@class, ' topic/stentry ')]" mode="count-rowwidth">
+<xsl:template match="*[contains(@class,' topic/stentry ')]" mode="count-rowwidth">
   <xsl:param name="totalcols">0</xsl:param> <!-- Total counted columns so far -->
   <xsl:choose>
-    <xsl:when test="following-sibling::stentry[contains(@class, ' topic/stentry ')]">
-      <xsl:apply-templates select="following-sibling::stentry[contains(@class, ' topic/stentry ')][1]" mode="count-rowwidth">
+    <xsl:when test="following-sibling::*[contains(@class,' topic/stentry ')]">
+      <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/stentry ')][1]" mode="count-rowwidth">
         <xsl:with-param name="totalwidth" select="$totalcols + 1"/>
       </xsl:apply-templates>
     </xsl:when>
@@ -745,7 +745,7 @@
       <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
     </xsl:when>
     <!-- If no ID is specified, and this is a header cell, generate an ID -->
-    <xsl:when test="parent::sthead[contains(@class, ' topic/sthead ')] or
+    <xsl:when test="parent::*[contains(@class,' topic/sthead ')] or
       (parent::*/parent::*/@keycol and number(parent::*/parent::*/@keycol)=number($thiscolnum))">
       <xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
     </xsl:when>

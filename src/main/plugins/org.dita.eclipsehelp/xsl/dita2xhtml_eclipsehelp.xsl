@@ -950,7 +950,7 @@
                     <!-- get first topic id in the conref target file -->
                     <xsl:variable name="file" select="concat($WORKDIR, $PATH2PROJ, @conref)"/>
                     <xsl:variable name="element" select="local-name(.)"/>
-                    <xsl:value-of select="document($file,/)//topic[contains(@class, ' topic/topic ')][1][local-name()=$element]/@id"/>
+                    <xsl:value-of select="document($file,/)//*[contains(@class, ' topic/topic ')][1][local-name()=$element]/@id"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>

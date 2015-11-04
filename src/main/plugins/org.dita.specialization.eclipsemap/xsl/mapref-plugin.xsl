@@ -22,7 +22,7 @@
                          ../@otherprops|../@importance|../@scope|../@toc|../@print|../@type"/>
   </xsl:template>
 
-  <xsl:template match="topicref[contains(@class, ' map/topicref ')]" mode="createPlugin">
+  <xsl:template match="*[contains(@class,' map/topicref ')]" mode="createPlugin">
     <xsl:copy>
       <xsl:call-template name="inheritMapAttributesForEclipse"/>
       <xsl:copy-of select="@*"/>

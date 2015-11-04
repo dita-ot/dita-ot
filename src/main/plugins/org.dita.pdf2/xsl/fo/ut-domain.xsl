@@ -11,7 +11,7 @@ See the accompanying license.txt file for applicable licenses.
         <fo:inline>
             <xsl:call-template name="commonattributes"/>
         </fo:inline>
-        <xsl:apply-templates select="image[contains(@class, ' topic/image ')]"/>
+        <xsl:apply-templates select="*[contains(@class,' topic/image ')]"/>
         <fo:list-block xsl:use-attribute-sets="ol">
             <xsl:apply-templates select="*[contains(@class,' ut-d/area ')]"/>
         </fo:list-block>

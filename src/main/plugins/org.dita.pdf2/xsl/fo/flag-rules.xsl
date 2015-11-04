@@ -15,7 +15,7 @@
 
 <xsl:template match="*" mode="getrules">  
   <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::topic[contains(@class, ' topic/topic ')][1]/@domains)"/>
+    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   </xsl:variable>
   <xsl:variable name="tmp_props">
     <xsl:call-template name="getExtProps">
@@ -235,7 +235,7 @@
 
 <xsl:template name="getrules-parent">
   <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor::topic[contains(@class, ' topic/topic ')][1]/@domains)"/>
+    <xsl:value-of select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   </xsl:variable>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, 'a(props')">

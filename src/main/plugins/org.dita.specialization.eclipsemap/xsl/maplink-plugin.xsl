@@ -12,7 +12,7 @@
     <mapcollection>
       <xsl:for-each select="*[contains(@class,' eclipsemap/primarytocref ') or contains(@class,' eclipsemap/tocref ')]">
         <xsl:if test="@format='ditamap' and not(@linking='none')">
-          <xsl:apply-templates select="document(@href,/)/map[contains(@class, ' map/map ')]/*">
+          <xsl:apply-templates select="document(@href,/)/*[contains(@class, ' map/map ')]/*">
             <xsl:with-param name="pathFromMaplist">
               <xsl:call-template name="getRelativePath"><xsl:with-param name="filename" select="@href"/></xsl:call-template>
             </xsl:with-param>

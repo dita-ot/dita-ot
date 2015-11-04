@@ -86,11 +86,11 @@
   <!-- The value -dita-ues-conref-target replaces the need for the following templates, which
      ensured that known required attributes did not override the conref target. They are left
      here for completeness. -->
-  <xsl:template match="image[contains(@class, ' topic/image ')]/@href" mode="get-source-attribute" priority="10"/>
-  <xsl:template match="tgroup[contains(@class, ' topic/tgroup ')]/@cols" mode="get-source-attribute" priority="10"/>
-  <xsl:template match="boolean[contains(@class, ' topic/boolean ')]/@state" mode="get-source-attribute" priority="10"/>
-  <xsl:template match="state[contains(@class, ' topic/state ')]/@name" mode="get-source-attribute" priority="10"/>
-  <xsl:template match="state[contains(@class, ' topic/state ')]/@value" mode="get-source-attribute" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/image ')]/@href" mode="get-source-attribute" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/tgroup ')]/@cols" mode="get-source-attribute" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/boolean ')]/@state" mode="get-source-attribute" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/state ')]/@name" mode="get-source-attribute" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/state ')]/@value" mode="get-source-attribute" priority="10"/>
   <xsl:template match="*[contains(@class, ' mapgroup-d/topichead ')]/@navtitle" mode="get-source-attribute" priority="10"/>
 
   <xsl:template match="@*" mode="conaction-target">
@@ -196,7 +196,7 @@
           <xsl:value-of select="$conref-source-topicid"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="ancestor-or-self::topic[contains(@class, ' topic/topic ')][1]/@id"/>
+          <xsl:value-of select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -281,7 +281,7 @@
           <xsl:when test="dita-ot:has-element-id(@conref)">
             <xsl:choose>
               <xsl:when test="$topicpos = 'samefile'">
-                <xsl:variable name="target" select="key('id', $elemid)[local-name() = $element][ancestor::topic[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
+                <xsl:variable name="target" select="key('id', $elemid)[local-name() = $element][ancestor::*[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
                 <xsl:choose>
                   <xsl:when test="$target">
                     <xsl:apply-templates select="$target[1]" mode="conref-target">
@@ -316,7 +316,7 @@
                 <xsl:choose>
                   <xsl:when test="conref:isValid($domains)">
                     <xsl:for-each select="document($file, /)">
-                      <xsl:variable name="target" select="key('id', $elemid)[local-name() = $element][ancestor::topic[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
+                      <xsl:variable name="target" select="key('id', $elemid)[local-name() = $element][ancestor::*[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
                       <xsl:choose>
                         <xsl:when test="$target">
                           <xsl:apply-templates select="$target[1]" mode="conref-target">
@@ -444,7 +444,7 @@
                 <xsl:choose>
                   <xsl:when test="conref:isValid($domains)">
                     <xsl:for-each select="document($file, /)">
-                      <xsl:variable name="target" select="//topic[contains(@class, ' topic/topic ')][1][local-name() = $element]"/>
+                      <xsl:variable name="target" select="//*[contains(@class, ' topic/topic ')][1][local-name() = $element]"/>
                       <xsl:choose>
                         <xsl:when test="$target">
                           <xsl:variable name="firstTopicId" select="$target/@id"/>
@@ -751,7 +751,7 @@
           <xsl:value-of select="@id"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="ancestor::topic[contains(@class, ' topic/topic ')][1]/@id"/>
+          <xsl:value-of select="ancestor::*[contains(@class, ' topic/topic ')][1]/@id"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -895,11 +895,11 @@
   <xsl:template match="@conrefend" mode="original-attributes" priority="10"/>
   <xsl:template match="@xtrc | @xtrf" mode="original-attributes" priority="10"/>
   <xsl:template match="@conref" mode="original-attributes" priority="10"/>
-  <xsl:template match="image[contains(@class, ' topic/image ')]/@href" mode="original-attributes" priority="10"/>
-  <xsl:template match="tgroup[contains(@class, ' topic/tgroup ')]/@cols" mode="original-attributes" priority="10"/>
-  <xsl:template match="boolean[contains(@class, ' topic/boolean ')]/@state" mode="original-attributes" priority="10"/>
-  <xsl:template match="state[contains(@class, ' topic/state ')]/@name" mode="original-attributes" priority="10"/>
-  <xsl:template match="state[contains(@class, ' topic/state ')]/@value" mode="original-attributes" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/image ')]/@href" mode="original-attributes" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/tgroup ')]/@cols" mode="original-attributes" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/boolean ')]/@state" mode="original-attributes" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/state ')]/@name" mode="original-attributes" priority="10"/>
+  <xsl:template match="*[contains(@class, ' topic/state ')]/@value" mode="original-attributes" priority="10"/>
   <!-- topichead is specialized from topicref, and requires @navtitle -->
   <xsl:template match="*[contains(@class, ' mapgroup-d/topichead ')]/@navtitle" mode="original-attributes" priority="10"/>
 
@@ -973,7 +973,7 @@
     <xsl:variable name="conref-topicid" as="xs:string">
       <xsl:choose>
         <xsl:when test="empty($topicid)">
-          <xsl:value-of select="//topic[contains(@class, ' topic/topic ')][1]/@id"/>
+          <xsl:value-of select="//*[contains(@class, ' topic/topic ')][1]/@id"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$topicid"/>
@@ -994,7 +994,7 @@
     </xsl:variable>
     <xsl:variable name="href-gen-id" as="xs:string">
       <xsl:variable name="topic" select="key('id', $href-topicid)"/>
-      <xsl:value-of select="generate-id($topic[contains(@class, ' topic/topic ')]//*[@id = $href-elemid][generate-id(ancestor::topic[contains(@class, ' topic/topic ')][1]) = generate-id($topic)])"/>
+      <xsl:value-of select="generate-id($topic[contains(@class, ' topic/topic ')]//*[@id = $href-elemid][generate-id(ancestor::*[contains(@class, ' topic/topic ')][1]) = generate-id($topic)])"/>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="($conref-gen-id = '') or (not($conref-gen-id = $href-gen-id))">

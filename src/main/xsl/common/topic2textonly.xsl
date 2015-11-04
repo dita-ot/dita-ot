@@ -19,7 +19,7 @@
   </xsl:template>
   
   <!-- add "'" for q -->
-  <xsl:template match="q[contains(@class, ' topic/q ')]" mode="dita-ot:text-only">
+  <xsl:template match="*[contains(@class,' topic/q ')]" mode="dita-ot:text-only">
     <xsl:call-template name="getVariable">
       <xsl:with-param name="id" select="'OpenQuote'"/>
     </xsl:call-template>
@@ -33,24 +33,24 @@
   <xsl:template match="processing-instruction()" mode="dita-ot:text-only"/>
 
   <!-- ELEMENTS THAT SHOULD BE DROPPED FROM DEFAULT TEXT-ONLY RENDITIONS -->
-  <xsl:template match="indexterm[contains(@class, ' topic/indexterm ')]" mode="dita-ot:text-only"/>
-  <xsl:template match="draft-comment[contains(@class, ' topic/draft-comment ')]" mode="dita-ot:text-only"/>
-  <xsl:template match="required-cleanup[contains(@class, ' topic/required-cleanup ')]" mode="dita-ot:text-only"/>
-  <xsl:template match="data[contains(@class, ' topic/data ')]" mode="dita-ot:text-only"/>
-  <xsl:template match="data-about[contains(@class, ' topic/data-about ')]" mode="dita-ot:text-only"/>
-  <xsl:template match="unknown[contains(@class, ' topic/unknown ')]" mode="dita-ot:text-only"/>
-  <xsl:template match="foreign[contains(@class, ' topic/foreign ')]" mode="dita-ot:text-only"/>
+  <xsl:template match="*[contains(@class,' topic/indexterm ')]" mode="dita-ot:text-only"/>
+  <xsl:template match="*[contains(@class,' topic/draft-comment ')]" mode="dita-ot:text-only"/>
+  <xsl:template match="*[contains(@class,' topic/required-cleanup ')]" mode="dita-ot:text-only"/>
+  <xsl:template match="*[contains(@class,' topic/data ')]" mode="dita-ot:text-only"/>
+  <xsl:template match="*[contains(@class,' topic/data-about ')]" mode="dita-ot:text-only"/>
+  <xsl:template match="*[contains(@class,' topic/unknown ')]" mode="dita-ot:text-only"/>
+  <xsl:template match="*[contains(@class,' topic/foreign ')]" mode="dita-ot:text-only"/>
 
   <!-- EXCEPTIONS -->
-  <xsl:template match="image[contains(@class, ' topic/image ')]" mode="dita-ot:text-only">
+  <xsl:template match="*[contains(@class,' topic/image ')]" mode="dita-ot:text-only">
     <xsl:choose>
-      <xsl:when test="alt[contains(@class, ' topic/alt ')]"><xsl:apply-templates mode="dita-ot:text-only"/></xsl:when>
+      <xsl:when test="*[contains(@class,' topic/alt ')]"><xsl:apply-templates mode="dita-ot:text-only"/></xsl:when>
       <xsl:when test="@alt"><xsl:value-of select="@alt"/></xsl:when>
     </xsl:choose>
   </xsl:template>
 
   <!-- Footnote as text-only: should just create the number in parens -->
-  <xsl:template match="fn[contains(@class, ' topic/fn ')]" mode="dita-ot:text-only">
+  <xsl:template match="*[contains(@class,' topic/fn ')]" mode="dita-ot:text-only">
     <xsl:variable name="fnid"><xsl:number from="/" level="any"/></xsl:variable>
     <xsl:choose>
       <xsl:when test="@callout">(<xsl:value-of select="@callout"/>)</xsl:when>
@@ -58,15 +58,15 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="xref[contains(@class, ' topic/xref ')]" mode="dita-ot:text-only">
+  <xsl:template match="*[contains(@class,' topic/xref ')]" mode="dita-ot:text-only">
     <xsl:apply-templates select="node()[not(contains(@class,' topic/desc '))]" mode="dita-ot:text-only"/>
   </xsl:template>
 
 
-  <xsl:template match="boolean[contains(@class, ' topic/boolean ')]" mode="dita-ot:text-only">
+  <xsl:template match="*[contains(@class,' topic/boolean ')]" mode="dita-ot:text-only">
     <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@state"/>
   </xsl:template>
-  <xsl:template match="state[contains(@class, ' topic/state ')]" mode="dita-ot:text-only">
+  <xsl:template match="*[contains(@class,' topic/state ')]" mode="dita-ot:text-only">
     <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@name"/><xsl:text>=</xsl:text><xsl:value-of select="@value"/>
   </xsl:template>
   
