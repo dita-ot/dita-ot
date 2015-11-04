@@ -120,7 +120,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Unordered List bullet">•</variable>
 
     <!-- The heading string to put at the top of the Table of Contents -->
-    <variable id="Table of Contents">Sommaire</variable>
+    <variable id="Table of Contents">Table des matières</variable>
 
     <variable id="Index Continued String">a continué</variable>
     <variable id="Index See String">, Voir </variable>
@@ -155,8 +155,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Text to use for table titles. Renders as part of <table>/<title> 
          elements. -->
-    <variable id="Table.title">Table <param ref-name="number"/> : <param ref-name="title"/></variable>
-    <variable id="Table Number">Table <param ref-name="number"/></variable>
+    <variable id="Table.title">Tableau <param ref-name="number"/> : <param ref-name="title"/></variable>
+    <variable id="Table Number">Tableau <param ref-name="number"/></variable>
 
     <!-- Text to use for related links label.
          Renders as part of <related-links> element. -->
