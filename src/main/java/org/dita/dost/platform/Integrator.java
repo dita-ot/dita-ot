@@ -328,18 +328,19 @@ public final class Integrator {
         for (final File child: dir.listFiles()) {
             if (child.isDirectory()) {
                 generateOptimizedStylesheets(child);
-            } else if (child.getName().endsWith(".xsl") && !child.getName().endsWith(".optimized.xsl")) {
+            } else if (child.getName().endsWith(".xsl") && !child.getName().endsWith(StylesheetOptimizerFilter.OPTIMIZED_XSL_EXTENSION)) {
                 generateOptimizedStylesheet(child);
             }
         }
     }
 
     private void generateOptimizedStylesheet(final File input) {
-        final File output = new File(FileUtils.replaceExtension(input.getAbsolutePath(), ".optimized.xsl"));
+        final File output = new File(FileUtils.replaceExtension(input.getAbsolutePath(), StylesheetOptimizerFilter.OPTIMIZED_XSL_EXTENSION));
         logger.debug("Optimize " + output.getAbsolutePath());
         try {
-            final XMLFilter f = new StylesheetOptimizerFilter();
-            XMLUtils.transform(input, output, Collections.singletonList(f));
+            final StylesheetOptimizerFilter f = new StylesheetOptimizerFilter();
+            f.setLogger(logger);
+            XMLUtils.transform(input, output, Collections.singletonList((XMLFilter) f));
         } catch (final DITAOTException e) {
             e.printStackTrace();
         }
@@ -708,38 +709,4 @@ public final class Integrator {
         }
     }
 
-    private class StylesheetOptimizerFilter extends XMLFilterImpl {
-
-        final Pattern pattern = Pattern.compile("\\*\\[contains\\(\\@class, *' (map|topic)/(\\w+) '\\)\\]");
-
-        @Override
-        public void startElement(final String uri, final String localName, final String name,
-                                 final Attributes atts) throws SAXException {
-            Attributes resAtts = atts;
-            if (uri.equals("http://www.w3.org/1999/XSL/Transform")) {
-                final AttributesImpl res = new AttributesImpl(atts);
-                if (localName.equals("include") || localName.equals("import")) {
-                    XMLUtils.addOrSetAttribute(res, "href", rewriteImport(res.getValue("href")));
-                } else {
-                    for (int i = 0; i < res.getLength(); i++) {
-                        res.setValue(i, optimizeAttributeValue(res.getValue(i)));
-                    }
-                }
-                resAtts = res;
-            }
-            getContentHandler().startElement(uri, localName, name, resAtts);
-        }
-
-        private String rewriteImport(final String href) {
-            if (href.endsWith(".xsl")) {
-                return href.substring(0, href.length() - 4) + ".optimized.xsl";
-            }
-        }
-
-        private String optimizeAttributeValue(final String value) {
-            final Matcher m = pattern.matcher(value);
-            return m.replaceAll("$2");
-        }
-
-    }
 }
