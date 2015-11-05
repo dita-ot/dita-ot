@@ -127,6 +127,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="createBackCoverContents">
+      <fo:block></fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' bookmap/bookmeta ')]" priority="1">
