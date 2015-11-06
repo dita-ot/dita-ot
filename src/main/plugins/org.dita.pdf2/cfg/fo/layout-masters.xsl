@@ -81,21 +81,21 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:if test="$mirror-page-margins">
         <fo:simple-page-master master-name="back-cover-even" xsl:use-attribute-sets="simple-page-master">
           <fo:region-body xsl:use-attribute-sets="region-body__backcover.even"/>
-          <fo:region-before region-name="even-backcover-header" xsl:use-attribute-sets="region-before"/>
-          <fo:region-after region-name="even-backcover-footer" xsl:use-attribute-sets="region-after"/>
+          <fo:region-before region-name="even-back-cover-header" xsl:use-attribute-sets="region-before"/>
+          <fo:region-after region-name="even-back-cover-footer" xsl:use-attribute-sets="region-after"/>
         </fo:simple-page-master>
       </xsl:if>
       
       <fo:simple-page-master master-name="back-cover-odd" xsl:use-attribute-sets="simple-page-master">
         <fo:region-body xsl:use-attribute-sets="region-body__backcover.odd"/>
-        <fo:region-before region-name="odd-backcover-header" xsl:use-attribute-sets="region-before"/>
-        <fo:region-after region-name="odd-backcover-footer" xsl:use-attribute-sets="region-after"/>
+        <fo:region-before region-name="odd-back-cover-header" xsl:use-attribute-sets="region-before"/>
+        <fo:region-after region-name="odd-back-cover-footer" xsl:use-attribute-sets="region-after"/>
       </fo:simple-page-master>
       
       <fo:simple-page-master master-name="back-cover-last" xsl:use-attribute-sets="simple-page-master">
         <fo:region-body xsl:use-attribute-sets="region-body__backcover.even"/>
-        <fo:region-before region-name="last-backcover-header" xsl:use-attribute-sets="region-before"/>
-        <fo:region-after region-name="last-backcover-footer" xsl:use-attribute-sets="region-after"/>
+        <fo:region-before region-name="last-back-cover-header" xsl:use-attribute-sets="region-before"/>
+        <fo:region-after region-name="last-back-cover-footer" xsl:use-attribute-sets="region-after"/>
       </fo:simple-page-master>
     </xsl:if>
     

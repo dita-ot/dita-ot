@@ -95,7 +95,8 @@ task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", 
 
 // Distribution
 
-def distTempDir = file("${buildDir}/tmp/dist")
+def distBaseDir = file("${buildDir}/tmp/dist")
+def distTempDir = file("${distBaseDir}/dita-ot-${project.version}")
 
 task cleanDistTemp(type: Delete) << {
     delete distTempDir
@@ -173,43 +174,43 @@ task generateDocs(dependsOn: integrateDistTemp) << {
 }
 
 task distZip(type: Zip, dependsOn: [jar, generateDocs]) {
-    from (distTempDir) {
-        exclude "bin/dita"
-        exclude "bin/dita.bat"
+    from (distBaseDir) {
+        exclude "*/bin/dita"
+        exclude "*/bin/dita.bat"
         // legacy build scripts
-        exclude "startcmd.*"
-        exclude "bin/ant"
-        exclude "bin/ant.*"
+        exclude "*/startcmd.*"
+        exclude "*/bin/ant"
+        exclude "*/bin/ant.*"
     }
-    from (distTempDir) {
+    from (distBaseDir) {
         fileMode = 0755
-        include "bin/dita"
-        include "bin/dita.bat"
+        include "*/bin/dita"
+        include "*/bin/dita.bat"
         // legacy build scripts
-        include "startcmd.*"
-        include "bin/ant"
-        include "bin/ant.*"
+        include "*/startcmd.*"
+        include "*/bin/ant"
+        include "*/bin/ant.*"
     }
     archiveName "dita-ot-${project.version}.zip"
 }
 task distTarGz(type: Tar, dependsOn: [jar, generateDocs]) {
     compression = Compression.GZIP
-    from (distTempDir) {
-        exclude "bin/dita"
-        exclude "bin/dita.bat"
+    from (distBaseDir ) {
+        exclude "*/bin/dita"
+        exclude "*/bin/dita.bat"
         // legacy build scripts
-        exclude "startcmd.*"
-        exclude "bin/ant"
-        exclude "bin/ant.*"
+        exclude "*/startcmd.*"
+        exclude "*/bin/ant"
+        exclude "*/bin/ant.*"
     }
-    from (distTempDir) {
+    from (distBaseDir) {
         fileMode = 0755
-        include "bin/dita"
-        include "bin/dita.bat"
+        include "*/bin/dita"
+        include "*/bin/dita.bat"
         // legacy build scripts
-        include "startcmd.*"
-        include "bin/ant"
-        include "bin/ant.*"
+        include "*/startcmd.*"
+        include "*/bin/ant"
+        include "*/bin/ant.*"
     }
     archiveName "dita-ot-${project.version}.tar.gz"
 }

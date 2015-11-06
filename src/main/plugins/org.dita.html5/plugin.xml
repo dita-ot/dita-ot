@@ -13,9 +13,9 @@
   <extension-point id="dita.xsl.html5.cover" name="HTML/XHTML Cover XSLT import"/>
   <!-- extensions -->
   <transtype name="html5" extends="common-html" desc="HTML5">
-    <param name="nav-toc" type="enum" desc="Generate navigation TOC into topic pages">
+    <param name="nav-toc" type="enum" desc="Specifies whether to generate a navigation TOC in topic pages.">
       <val default="true" desc="No TOC">none</val>
-      <val desc="Partial TOC that show current topic">partial</val>
+      <val desc="Partial TOC that shows the current topic">partial</val>
       <val desc="Full TOC">full</val>
     </param>
   </transtype>

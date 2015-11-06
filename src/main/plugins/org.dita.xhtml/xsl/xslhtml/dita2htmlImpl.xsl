@@ -4048,9 +4048,11 @@
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:section-with-multiple-titles">
+    <xsl:param name="actual-element" select="name(.)"/>
     <xsl:call-template name="output-message">
       <xsl:with-param name="msgnum">041</xsl:with-param>
       <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$actual-element"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 

@@ -127,8 +127,8 @@
             <xsl:value-of
             select="$tbl-count-actual"/><xsl:text>. </xsl:text>
             <xsl:call-template
-            name="getString">
-              <xsl:with-param name="stringName" select="'Table'"/>
+            name="getVariable">
+              <xsl:with-param name="id" select="'Table'"/>
             </xsl:call-template>
             <xsl:text>
       </xsl:text>

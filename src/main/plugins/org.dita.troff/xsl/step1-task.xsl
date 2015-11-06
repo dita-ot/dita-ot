@@ -23,12 +23,12 @@
   <xsl:if test=".='optional' or .='required'">
     <text style="bold"><xsl:call-template name="commonatts"/>
       <xsl:if test=".='optional'">
-        <xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Optional'"/></xsl:call-template>
+        <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Optional'"/></xsl:call-template>
       </xsl:if>
       <xsl:if test=".='required'">
-        <xsl:call-template name="getString"><xsl:with-param name="stringName" select="'Required'"/></xsl:call-template>
+        <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Required'"/></xsl:call-template>
       </xsl:if>
-      <xsl:call-template name="getString"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template>
+      <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'ColonSymbol'"/></xsl:call-template>
     </text>
     <xsl:text> </xsl:text>
   </xsl:if>
@@ -79,14 +79,14 @@
     <row><xsl:call-template name="commonatts"/>
       <xsl:value-of select="$newline"/>
       <entry><xsl:call-template name="commonatts"/>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Option'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Option'"/>
         </xsl:call-template>
       </entry>
       <xsl:value-of select="$newline"/>
       <entry><xsl:call-template name="commonatts"/>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Description'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Description'"/>
         </xsl:call-template>
       </entry>
     </row>
