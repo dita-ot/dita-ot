@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.platform.Integrator;
 
@@ -130,38 +132,38 @@ public final class Configuration {
     /** Map of plug-in resource directories. */
     public static final Map<String, File> pluginResourceDirs;
     static {
-        final Map<String, File> ps = new HashMap<>();
+        final ImmutableMap.Builder<String, File> ps = new ImmutableMap.Builder<>();
         for (final Map.Entry<String, String> e: configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith("plugin.") && key.endsWith(".dir")) {
                 ps.put(key.substring(7, key.length() - 4), new File(e.getValue()));
             }
         }
-        pluginResourceDirs = Collections.unmodifiableMap(ps);
+        pluginResourceDirs = ps.build();
     }
     
     public static final Map<String, String> parserMap;
     static {
-        final Map<String, String> m = new HashMap<>();
+        final ImmutableMap.Builder<String, String> m = new ImmutableMap.Builder<>();
         for (final Map.Entry<String, String> e: configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith("parser.")) {
                 m.put(key.substring(7), e.getValue());
             }
         }
-        parserMap = Collections.unmodifiableMap(m);
+        parserMap = m.build();
     }
 
     public static final Set<String> ditaFormat;
     static {
-        final Set<String> s = new HashSet<>();
+        final ImmutableSet.Builder<String> s = new ImmutableSet.Builder<>();
         for (final Map.Entry<String, String> e: configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith("parser.")) {
                 s.add(key.substring(7));
             }
         }
-        ditaFormat = Collections.unmodifiableSet(s);
+        ditaFormat = s.build();
     }
 
 }
