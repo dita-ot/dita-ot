@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.platform.Integrator;
 
@@ -132,38 +130,38 @@ public final class Configuration {
     /** Map of plug-in resource directories. */
     public static final Map<String, File> pluginResourceDirs;
     static {
-        final ImmutableMap.Builder<String, File> ps = new ImmutableMap.Builder<>();
+        final Map<String, File> ps = new HashMap<>();
         for (final Map.Entry<String, String> e: configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith("plugin.") && key.endsWith(".dir")) {
                 ps.put(key.substring(7, key.length() - 4), new File(e.getValue()));
             }
         }
-        pluginResourceDirs = ps.build();
+        pluginResourceDirs = Collections.unmodifiableMap(ps);
     }
     
     public static final Map<String, String> parserMap;
     static {
-        final ImmutableMap.Builder<String, String> m = new ImmutableMap.Builder<>();
+        final Map<String, String> m = new HashMap<>();
         for (final Map.Entry<String, String> e: configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith("parser.")) {
                 m.put(key.substring(7), e.getValue());
             }
         }
-        parserMap = m.build();
+        parserMap = Collections.unmodifiableMap(m);
     }
 
     public static final Set<String> ditaFormat;
     static {
-        final ImmutableSet.Builder<String> s = new ImmutableSet.Builder<>();
+        final Set<String> s = new HashSet<>();
         for (final Map.Entry<String, String> e: configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith("parser.")) {
                 s.add(key.substring(7));
             }
         }
-        ditaFormat = s.build();
+        ditaFormat = Collections.unmodifiableSet(s);
     }
 
 }

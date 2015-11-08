@@ -29,7 +29,6 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.google.common.collect.ImmutableMap;
 import org.dita.dost.util.Job.FileInfo.Filter;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -98,30 +97,28 @@ public final class Job {
     public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
     /** Map of serialization attributes to file info boolean fields. */
-    private static final Map<String, Field> attrToFieldMap;
+    private static final Map<String, Field> attrToFieldMap= new HashMap<>();
     static {
-        final ImmutableMap.Builder<String, Field> b = new ImmutableMap.Builder<String, Field>();
         try {
-            b.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));
-            b.put(ATTRIBUTE_HAS_LINK, FileInfo.class.getField("hasLink"));
-            b.put(ATTRIBUTE_HAS_CONREF, FileInfo.class.getField("hasConref"));
-            b.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getField("hasKeyref"));
-            b.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getField("hasCoderef"));
-            b.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.class.getField("isResourceOnly"));
-            b.put(ATTRIBUTE_TARGET, FileInfo.class.getField("isTarget"));
-            b.put(ATTRIBUTE_CONREF_TARGET, FileInfo.class.getField("isConrefTarget"));
-            b.put(ATTRIBUTE_NON_CONREF_TARGET, FileInfo.class.getField("isNonConrefTarget"));
-            b.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getField("isConrefPush"));
-            b.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getField("isSubjectScheme"));
-            b.put(ATTRIBUTE_COPYTO_SOURCE_LIST, FileInfo.class.getField("isCopyToSource"));
-            b.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getField("isOutDita"));
-            b.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
-            b.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getField("isSubtarget"));
-            b.put(ATTRIBUTE_CHUNK_TOPIC_LIST, FileInfo.class.getField("isSkipChunk"));
+            attrToFieldMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));
+            attrToFieldMap.put(ATTRIBUTE_HAS_LINK, FileInfo.class.getField("hasLink"));    
+            attrToFieldMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.class.getField("hasConref"));    
+            attrToFieldMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getField("hasKeyref"));    
+            attrToFieldMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getField("hasCoderef"));    
+            attrToFieldMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.class.getField("isResourceOnly"));    
+            attrToFieldMap.put(ATTRIBUTE_TARGET, FileInfo.class.getField("isTarget"));    
+            attrToFieldMap.put(ATTRIBUTE_CONREF_TARGET, FileInfo.class.getField("isConrefTarget"));    
+            attrToFieldMap.put(ATTRIBUTE_NON_CONREF_TARGET, FileInfo.class.getField("isNonConrefTarget"));    
+            attrToFieldMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getField("isConrefPush"));    
+            attrToFieldMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getField("isSubjectScheme"));
+            attrToFieldMap.put(ATTRIBUTE_COPYTO_SOURCE_LIST, FileInfo.class.getField("isCopyToSource"));
+            attrToFieldMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getField("isOutDita"));
+            attrToFieldMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
+            attrToFieldMap.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getField("isSubtarget"));
+            attrToFieldMap.put(ATTRIBUTE_CHUNK_TOPIC_LIST, FileInfo.class.getField("isSkipChunk"));
         } catch (final NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
-        attrToFieldMap = b.build();
     }
     
     private final Map<String, Object> prop;
