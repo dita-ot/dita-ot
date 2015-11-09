@@ -5,9 +5,9 @@
 <!--DATE:      June 2013                                         -->
 <!--=============================================================-->
 <!--Refer to the latest version of this file by the following URI:-->
-<!--urn:dita-ng:dita:rng:subjectScheme.mod.rng                   -->
+<!--urn:oasis:names:tc:dita:spec:learning:xsd:learningGroupMapGrp.xsd -->
 <!--To refer to this specific version, you may use this value:   -->
-<!--urn:dita-ng:dita:rng:subjectScheme.mod.rng:1.2               -->
+<!--urn:oasis:names:tc:dita:spec:learning:xsd:learningGroupMapGrp.xsd:1.3 -->
 <!--============================================================= -->
 <!--SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--PURPOSE:    Provides a map type for representing a single learning group.-->

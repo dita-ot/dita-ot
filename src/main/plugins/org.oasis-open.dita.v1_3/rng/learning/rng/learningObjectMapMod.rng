@@ -12,9 +12,9 @@ VERSION:   1.3
 DATE:      June 2013                                       
 =============================================================
 Refer to the latest version of this file by the following URI:
-urn:dita-ng:dita:rng:subjectScheme.mod.rng
+urn:dita-ng:dita:rng:learningObjectMapMod.rng
 To refer to this specific version, you may use this value:
-urn:dita-ng:dita:rng:subjectScheme.mod.rng:1.2
+urn:dita-ng:dita:rng:learningObjectMapMod.rng:1.3
 ============================================================= 
 SYSTEM:     Darwin Information Typing Architecture (DITA)     
 PURPOSE:    Provides a map type for representing a single learning group.
@@ -48,10 +48,6 @@ All Rights Reserved.
   </div>
   <div>
     <a:documentation>COMMON ATTRIBUTE GROUPS</a:documentation>
-    <a:documentation>
-    This differs from topicref-atts-no-toc only by providing a
-    default for @processing-role
-    </a:documentation>
     <define name="topicref-atts-for-learningObjectMap">
       <optional>
         <attribute name="collection-type">
@@ -68,7 +64,7 @@ All Rights Reserved.
         <attribute name="type"/>
       </optional>
       <optional>
-        <attribute name="processing-role" a:defaultValue="resource-only">
+        <attribute name="processing-role">
           <choice>
             <value>normal</value>
             <value>resource-only</value>
@@ -110,7 +106,7 @@ All Rights Reserved.
         </attribute>
       </optional>
       <optional>
-        <attribute name="toc" a:defaultValue="no">
+        <attribute name="toc">
           <choice>
             <value>no</value>
             <value>yes</value>

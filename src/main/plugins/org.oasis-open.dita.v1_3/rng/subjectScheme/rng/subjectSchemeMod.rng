@@ -48,10 +48,10 @@ ORIGINAL CREATION DATE:
       <modulePublicIds>
         <dtdMod>-//OASIS//ELEMENTS DITA<var presep=" " name="ditaver"/> Subject Scheme Map//EN</dtdMod>
         <dtdEnt>-//OASIS//ENTITIES DITA<var presep=" " name="ditaver"/> Subject Scheme Map//EN</dtdEnt>
-        <rncMod>urn:oasis:names:tc:dita:rnc:subjectSchemeMod.rnc<var presep=":" name="ditaver"/></rncMod>
-        <rngMod>urn:oasis:names:tc:dita:rng:subjectSchemeMod.rng<var presep=":" name="ditaver"/></rngMod>
-        <xsdGrp>urn:oasis:names:tc:dita:xsd:subjectSchemeGrp.xsd<var presep=":" name="ditaver"/></xsdGrp>
-        <xsdMod>urn:oasis:names:tc:dita:xsd:subjectSchemeMod.xsd<var presep=":" name="ditaver"/></xsdMod>
+        <rncMod>urn:oasis:names:tc:dita:spec:classification:rnc:subjectSchemeMod.rnc<var presep=":" name="ditaver"/></rncMod>
+        <rngMod>urn:oasis:names:tc:dita:spec:classification:rng:subjectSchemeMod.rng<var presep=":" name="ditaver"/></rngMod>
+        <xsdGrp>urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeGrp.xsd<var presep=":" name="ditaver"/></xsdGrp>
+        <xsdMod>urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeMod.xsd<var presep=":" name="ditaver"/></xsdMod>
       </modulePublicIds>
       <domainsContribution>(map subjectScheme)</domainsContribution>
     </moduleMetadata>

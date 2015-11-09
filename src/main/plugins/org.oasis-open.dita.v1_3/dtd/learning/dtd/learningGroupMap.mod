@@ -4,12 +4,12 @@
 <!-- VERSION:   1.3                                                 -->
 <!-- DATE:      June 2013                                          -->
 <!-- ============================================================= -->
-<!-- Refer to the latest version of this file by the following URI: -->
-<!-- urn:dita-ng:dita:rng:subjectScheme.mod.rng                    -->
+<!-- Refer to the latest version of this file by the following public ID: -->
+<!-- -//OASIS//ELEMENTS DITA Learning Group Map//EN                -->
 <!-- To refer to this specific version, you may use this value:    -->
-<!-- urn:dita-ng:dita:rng:subjectScheme.mod.rng:1.2                -->
-<!-- =============================================================  -->
-<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)      -->
+<!-- -//OASIS//ELEMENTS DITA 1.3 Learning Group Map//EN            -->
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!-- PURPOSE:    Provides a map type for representing a single learning group. -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!-- June 2013                                                     -->
@@ -44,7 +44,7 @@
                           (normal |
                            resource-only |
                            -dita-use-conref-target)
-                                    'resource-only'
+                                    #IMPLIED
                scope
                           (external |
                            local |
@@ -70,7 +70,7 @@
                           (no |
                            yes |
                            -dita-use-conref-target)
-                                    'no'
+                                    #IMPLIED
                print
                           (no |
                            printonly |

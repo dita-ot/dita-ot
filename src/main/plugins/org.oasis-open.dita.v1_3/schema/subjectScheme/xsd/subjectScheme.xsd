@@ -37,7 +37,7 @@
    <!-- ================ GROUP DEFINITIONS ===================== -->
    <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.3"/>
    <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.3"/>
-   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:subjectSchemeGrp.xsd:1.3"/>
+   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeGrp.xsd:1.3"/>
 
    <!-- =================  MODULE INCLUDE DEFINITION  ================== -->
    <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.3"/>
@@ -88,7 +88,7 @@
    </xs:redefine>
 
    <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapMod.xsd:1.3"/>
-   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:subjectSchemeMod.xsd:1.3"/>
+   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeMod.xsd:1.3"/>
 
    <xs:attributeGroup name="domains-att">
       <xs:attribute name="domains"
