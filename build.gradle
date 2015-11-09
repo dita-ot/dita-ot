@@ -95,10 +95,9 @@ task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", 
 
 // Distribution
 
-def distBaseDir = file("${buildDir}/tmp/dist")
-def distTempDir = file("${distBaseDir}/dita-ot-${project.version}")
+def distTempDir = file("${buildDir}/tmp/dist")
 
-task cleanDistTemp(type: Delete) << {
+task cleanDistTemp(type: Delete) {
     delete distTempDir
 }
 
@@ -115,6 +114,9 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         rename "ant-launcher(-.+?)\\.jar", "ant-launcher.jar"
     }
     from ("src/main") {
+        exclude "**/.gradle"
+        exclude "**/build.gradle"
+        exclude "**/settings.gradle"
         exclude ".*"
         exclude "local.properties"
         exclude "build.log"
@@ -125,17 +127,25 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "bin/dita.bat"
         exclude "demo/**"
         exclude "docsrc/*.md"
-        exclude "docsrc/site.xml"
+        exclude "docsrc/*.xpr"
+        exclude "docsrc/site.*"
+        exclude "docsrc/temp"
         include "docsrc/**"
         include "dtd/**"
         //include "lib/**/*.properties"
         include "lib/configuration.properties"
         exclude "plugins/org.dita-ot.html/**"
+        exclude "plugins/org.dita.html5/.sass-cache"
         exclude "plugins/org.dita.html5/build"
         exclude "plugins/org.dita.specialization.dita132/**"
         exclude "plugins/org.dita.pdf2/src/**"
+        exclude "plugins/org.dita.pdf2/build"
         exclude "plugins/org.dita.pdf2/bin/**"
+        exclude "plugins/org.dita.pdf2.axf/build"
+        exclude "plugins/org.dita.pdf2.fop/build"
+        exclude "plugins/org.dita.pdf2.xep/build"
         exclude "plugins/org.dita.pdf2.xep/lib/xep/**"
+        exclude "temp"
         include "plugins/**"
         include "resources/**"
         include "samples/**"
@@ -174,43 +184,47 @@ task generateDocs(dependsOn: integrateDistTemp) << {
 }
 
 task distZip(type: Zip, dependsOn: [jar, generateDocs]) {
-    from (distBaseDir) {
-        exclude "*/bin/dita"
-        exclude "*/bin/dita.bat"
-        // legacy build scripts
-        exclude "*/startcmd.*"
-        exclude "*/bin/ant"
-        exclude "*/bin/ant.*"
-    }
-    from (distBaseDir) {
-        fileMode = 0755
-        include "*/bin/dita"
-        include "*/bin/dita.bat"
-        // legacy build scripts
-        include "*/startcmd.*"
-        include "*/bin/ant"
-        include "*/bin/ant.*"
+    into("dita-ot-${project.version}") {
+        from (distTempDir) {
+            exclude "bin/dita"
+            exclude "bin/dita.bat"
+            // legacy build scripts
+            exclude "startcmd.*"
+            exclude "bin/ant"
+            exclude "bin/ant.*"
+        }
+        from (distTempDir) {
+            fileMode = 0755
+            include "bin/dita"
+            include "bin/dita.bat"
+            // legacy build scripts
+            include "startcmd.*"
+            include "bin/ant"
+            include "bin/ant.*"
+        }
     }
     archiveName "dita-ot-${project.version}.zip"
 }
 task distTarGz(type: Tar, dependsOn: [jar, generateDocs]) {
     compression = Compression.GZIP
-    from (distBaseDir ) {
-        exclude "*/bin/dita"
-        exclude "*/bin/dita.bat"
-        // legacy build scripts
-        exclude "*/startcmd.*"
-        exclude "*/bin/ant"
-        exclude "*/bin/ant.*"
-    }
-    from (distBaseDir) {
-        fileMode = 0755
-        include "*/bin/dita"
-        include "*/bin/dita.bat"
-        // legacy build scripts
-        include "*/startcmd.*"
-        include "*/bin/ant"
-        include "*/bin/ant.*"
+    into("dita-ot-${project.version}") {
+        from (distTempDir ) {
+            exclude "bin/dita"
+            exclude "bin/dita.bat"
+            // legacy build scripts
+            exclude "startcmd.*"
+            exclude "bin/ant"
+            exclude "bin/ant.*"
+        }
+        from (distTempDir) {
+            fileMode = 0755
+            include "bin/dita"
+            include "bin/dita.bat"
+            // legacy build scripts
+            include "startcmd.*"
+            include "bin/ant"
+            include "bin/ant.*"
+        }
     }
     archiveName "dita-ot-${project.version}.tar.gz"
 }
