@@ -61,11 +61,11 @@ ORIGINAL CREATION DATE:
          <moduleShortName>subjectScheme</moduleShortName>
          <shellPublicIds>
             <dtdShell>-//OASIS//DTD DITA<var presep=" " name="ditaver"/> Subject Scheme Map//EN</dtdShell>
-            <rncShell>urn:oasis:names:tc:dita:rnc:subjectScheme.rnc<var presep=":" name="ditaver"/>
+            <rncShell>urn:oasis:names:tc:dita:spec:classification:rnc:subjectScheme.rnc<var presep=":" name="ditaver"/>
             </rncShell>
-            <rngShell>urn:oasis:names:tc:dita:rng:subjectScheme.rng<var presep=":" name="ditaver"/>
+            <rngShell>urn:oasis:names:tc:dita:spec:classification:rng:subjectScheme.rng<var presep=":" name="ditaver"/>
             </rngShell>
-            <xsdShell>urn:oasis:names:tc:dita:xsd:subjectScheme.xsd<var presep=":" name="ditaver"/>
+            <xsdShell>urn:oasis:names:tc:dita:spec:classification:xsd:subjectScheme.xsd<var presep=":" name="ditaver"/>
             </xsdShell>
          </shellPublicIds>
       </moduleMetadata>

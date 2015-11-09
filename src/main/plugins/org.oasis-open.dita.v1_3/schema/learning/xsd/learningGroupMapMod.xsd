@@ -5,9 +5,9 @@
 <!--DATE:      June 2013                                         -->
 <!--=============================================================-->
 <!--Refer to the latest version of this file by the following URI:-->
-<!--urn:dita-ng:dita:rng:subjectScheme.mod.rng                   -->
+<!--urn:oasis:names:tc:dita:spec:learning:xsd:learningGroupMapMod.xsd -->
 <!--To refer to this specific version, you may use this value:   -->
-<!--urn:dita-ng:dita:rng:subjectScheme.mod.rng:1.2               -->
+<!--urn:oasis:names:tc:dita:spec:learning:xsd:learningGroupMapMod.xsd:1.3 -->
 <!--============================================================= -->
 <!--SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--PURPOSE:    Provides a map type for representing a single learning group.-->
@@ -42,7 +42,7 @@
          </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="type" type="xs:string"/>
-      <xs:attribute name="processing-role" default="resource-only">
+      <xs:attribute name="processing-role">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="normal"/>
@@ -82,7 +82,7 @@
             </xs:restriction>
          </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="toc" default="no">
+      <xs:attribute name="toc">
          <xs:simpleType>
             <xs:restriction base="xs:string">
                <xs:enumeration value="no"/>
