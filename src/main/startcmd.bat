@@ -13,7 +13,14 @@ set ANT_OPTS=-Xmx512m %ANT_OPTS%
 set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl
 set ANT_HOME=%DITA_DIR%
 set PATH=%DITA_DIR%\bin;%PATH%
-set CLASSPATH=%DITA_DIR%lib;%DITA_DIR%lib\dost.jar;%DITA_DIR%lib\commons-codec.jar;%DITA_DIR%lib\xml-resolver.jar;%DITA_DIR%lib\icu4j.jar;%CLASSPATH%
-set CLASSPATH=%DITA_DIR%lib\xercesImpl.jar;%DITA_DIR%lib\xml-apis.jar;%CLASSPATH%
-set CLASSPATH=%DITA_DIR%lib\saxon.jar;%DITA_DIR%lib\saxon-dom.jar;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib\dost.jar;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib\commons-codec-1.9.jar;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib\commons-io-2.4.jar;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib\xml-resolver-1.2.jar;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib\icu4j-54.1.jar;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib\xercesImpl-2.11.0.jar;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib\xml-apis-1.4.01.jar;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib\saxon-9.1.0.8.jar;%CLASSPATH%
+set CLASSPATH=%DITA_DIR%lib\saxon-9.1.0.8-dom.jar;%CLASSPATH%
 start "DITA-OT" cmd.exe

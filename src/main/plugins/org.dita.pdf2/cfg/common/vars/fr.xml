@@ -120,7 +120,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Unordered List bullet">•</variable>
 
     <!-- The heading string to put at the top of the Table of Contents -->
-    <variable id="Table of Contents">Sommaire</variable>
+    <variable id="Table of Contents">Table des matières</variable>
 
     <variable id="Index Continued String">a continué</variable>
     <variable id="Index See String">, Voir </variable>
@@ -155,8 +155,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Text to use for table titles. Renders as part of <table>/<title> 
          elements. -->
-    <variable id="Table.title">Table <param ref-name="number"/> : <param ref-name="title"/></variable>
-    <variable id="Table Number">Table <param ref-name="number"/></variable>
+    <variable id="Table.title">Tableau <param ref-name="number"/> : <param ref-name="title"/></variable>
+    <variable id="Table Number">Tableau <param ref-name="number"/></variable>
 
     <!-- Text to use for related links label.
          Renders as part of <related-links> element. -->
@@ -218,9 +218,9 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="This link">ce lien</variable>
 
     <!-- Image path to use for a note of "note" type. -->
-    <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="note Note Image Path"></variable>
     <!-- Image path to use for a note of "notice" type. -->
-    <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="notice Note Image Path"></variable>
     <!-- Image path to use for a note of "attention" type. -->
     <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
 
@@ -232,22 +232,22 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Image path to use for a note of "warning" type. -->
     <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
     <!-- Image path to use for a note of "fastpath" type. -->
-    <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="fastpath Note Image Path"></variable>
 
     <!-- Image path to use for a note of "important" type. -->
-    <variable id="important Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="important Note Image Path"></variable>
 
     <!-- Image path to use for a note of "remember" type. -->
-    <variable id="remember Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="remember Note Image Path"></variable>
 
     <!-- Image path to use for a note of "restriction" type. -->
-    <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="restriction Note Image Path"></variable>
 
     <!-- Image path to use for a note of "tip" type. -->
-    <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="tip Note Image Path"></variable>
 
     <!-- Image path to use for a note of "other" type. -->
-    <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="other Note Image Path"></variable>
 
     <!--
        Strings used in the online-help publishing.
@@ -294,15 +294,16 @@ See the accompanying license.txt file for applicable licenses.
     
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">Facultatif :</variable>
+    <variable id="Required Step">Obligatoire :</variable>
 
-    <!--Labels for task sections-->
-    <variable id="Task Prereq">Avant de commencer</variable>
-    <variable id="Task Context">Pourquoi et quand exécuter cette tâche</variable>
-    <variable id="Task Steps">Procédure</variable>
-  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
-    <variable id="Task Result">Résultats</variable>
-    <variable id="Task Example">Exemple</variable>
-    <variable id="Task Postreq">Que faire ensuite</variable>
+    <!--Labels for task sections, now reused from common-->
+    <variable id="Task Prereq"></variable>
+    <variable id="Task Context"></variable>
+    <variable id="Task Steps"></variable>
+    <variable id="#steps-unordered-label"></variable>
+    <variable id="Task Result"></variable>
+    <variable id="Task Example"></variable>
+    <variable id="Task Postreq"></variable>
     <variable id="Glossary odd footer"/>
     <variable id="Glossary even footer"/>
     <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>

@@ -6,6 +6,9 @@
   <property name="user.input.file">
     <string>maps/root-map-01.ditamap</string>
   </property>
+  <property name="user.input.file.uri">
+    <string>maps/root-map-01.ditamap</string>
+  </property>
   <property name="codereffile">
     <string>coderef.list</string>
   </property>
@@ -29,9 +32,6 @@
   </property>
   <property name="conreftargetsfile">
     <string>conreftargets.list</string>
-  </property>
-  <property name="imagefile">
-    <string>image.list</string>
   </property>
   <property name="hreftargetsfile">
     <string>hreftargets.list</string>
@@ -63,14 +63,8 @@
   <property name="outditafilesfile">
     <string>outditafiles.list</string>
   </property>
-  <property name="htmlfile">
-    <string>html.list</string>
-  </property>
   <property name="canditopicsfile">
     <string>canditopics.list</string>
-  </property>
-  <property name="user.input.dir">
-    <string>/Users/jelovirt/Work/github/dita-ot/src/test/resources/DebugAndFilterModuleTest/input</string>
   </property>
   <property name="relflagimagefile">
     <string>relflagimage.list</string>

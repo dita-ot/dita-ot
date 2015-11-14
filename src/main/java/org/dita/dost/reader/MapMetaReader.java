@@ -34,18 +34,18 @@ import org.w3c.dom.NodeList;
 public final class MapMetaReader extends AbstractDomFilter {
 
     /**
-     * Cascaded metadata. Contents <topic absolute URI, <class matcher, cascading metadata elements>>.
+     * Cascaded metadata. Contents <topic relative URI, <class matcher, cascading metadata elements>>.
      */
-    private final Map<URI, Map<String, Element>> resultTable = new HashMap<URI, Map<String, Element>>(16);
+    private final Map<URI, Map<String, Element>> resultTable = new HashMap<>(16);
 
-    private static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<String>(asList(
+    private static final Set<String> uniqueSet = Collections.unmodifiableSet(new HashSet<>(asList(
             TOPIC_CRITDATES.matcher,
             TOPIC_PERMISSIONS.matcher,
             TOPIC_PUBLISHER.matcher,
             TOPIC_SOURCE.matcher,
             MAP_SEARCHTITLE.matcher
-            )));
-    private static final Set<String> cascadeSet = Collections.unmodifiableSet(new HashSet<String>(asList(
+    )));
+    private static final Set<String> cascadeSet = Collections.unmodifiableSet(new HashSet<>(asList(
             TOPIC_AUDIENCE.matcher,
             TOPIC_AUTHOR.matcher,
             TOPIC_SOURCE.matcher,
@@ -56,8 +56,8 @@ public final class MapMetaReader extends AbstractDomFilter {
             TOPIC_PRODINFO.matcher,
             TOPIC_OTHERMETA.matcher,
             TOPIC_PUBLISHER.matcher
-            )));
-    private static final Set<String> metaSet = Collections.unmodifiableSet(new HashSet<String>(asList(
+    )));
+    private static final Set<String> metaSet = Collections.unmodifiableSet(new HashSet<>(asList(
             MAP_SEARCHTITLE.matcher,
             TOPIC_AUTHOR.matcher,
             TOPIC_SOURCE.matcher,
@@ -75,7 +75,7 @@ public final class MapMetaReader extends AbstractDomFilter {
             TOPIC_DATA_ABOUT.matcher,
             TOPIC_FOREIGN.matcher,
             TOPIC_UNKNOWN.matcher
-            )));
+    )));
     private static final List<String> metaPos = Collections.unmodifiableList(asList(
             MAP_SEARCHTITLE.matcher,
             TOPIC_AUTHOR.matcher,
@@ -114,7 +114,7 @@ public final class MapMetaReader extends AbstractDomFilter {
      */
     public MapMetaReader() {
         super();
-        globalMeta = new HashMap<String, Element>(16);
+        globalMeta = new HashMap<>(16);
         resultDoc = XMLUtils.getDocumentBuilder().newDocument();
         resultTable.clear();
     }
@@ -175,12 +175,12 @@ public final class MapMetaReader extends AbstractDomFilter {
         }
         final NodeList children = parent.getChildNodes();
         Element child;
-        for (int i = 0; i < children.getLength(); i++) {
+        for (int i = children.getLength() - 1; i >= 0; i--) {
             if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 child = (Element) children.item(i);
-                final boolean isIndexTerm = TOPIC_INDEXTERM.matches(child.getAttribute(ATTRIBUTE_NAME_CLASS));
-                final boolean hasStart = !StringUtils.isEmptyString(child.getAttribute(ATTRIBUTE_NAME_START));
-                final boolean hasEnd = !StringUtils.isEmptyString(child.getAttribute(ATTRIBUTE_NAME_END));
+                final boolean isIndexTerm = TOPIC_INDEXTERM.matches(child);
+                final boolean hasStart = !child.getAttribute(ATTRIBUTE_NAME_START).isEmpty();
+                final boolean hasEnd = !child.getAttribute(ATTRIBUTE_NAME_END).isEmpty();
                 if (isIndexTerm && (hasStart || hasEnd)) {
                     parent.removeChild(child);
                 } else {
@@ -223,10 +223,10 @@ public final class MapMetaReader extends AbstractDomFilter {
                 URI topicPath;
                 if (copytoAttr != null) {
                     final URI copyToUri = stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
-                    topicPath = filePath.toURI().resolve(copyToUri);
+                    topicPath = job.tempDir.toURI().relativize(filePath.toURI().resolve(copyToUri));
                 } else {
                     final URI hrefUri = stripFragment(URLUtils.toURI(hrefAttr.getNodeValue()));
-                    topicPath = filePath.toURI().resolve(hrefUri);
+                    topicPath = job.tempDir.toURI().relativize(filePath.toURI().resolve(hrefUri));
                 }
                 if (resultTable.containsKey(topicPath)) {
                     //if the result table already contains some result
@@ -275,7 +275,7 @@ public final class MapMetaReader extends AbstractDomFilter {
      * @return a clone of the original map
      */
     private Map<String, Element> cloneElementMap(final Map<String, Element> current) {
-        final Map<String, Element> topicMetaTable = new HashMap<String, Element>(16);
+        final Map<String, Element> topicMetaTable = new HashMap<>(16);
         for (final Entry<String, Element> topicMetaItem: current.entrySet()) {
             topicMetaTable.put(topicMetaItem.getKey(), (Element) resultDoc.importNode(topicMetaItem.getValue(), true));
         }
@@ -284,7 +284,7 @@ public final class MapMetaReader extends AbstractDomFilter {
 
 
     private Map<String, Element> handleMeta(final Element meta, final Map<String, Element> inheritance) {
-        final Map<String, Element> topicMetaTable = new HashMap<String, Element>(16);
+        final Map<String, Element> topicMetaTable = new HashMap<>(16);
         getMeta(meta, topicMetaTable);
         return mergeMeta(topicMetaTable, inheritance, cascadeSet);
     }
@@ -323,7 +323,7 @@ public final class MapMetaReader extends AbstractDomFilter {
         // Otherwise enableSet should be metaSet in order to merge all
         // metadata.
         if (topicMetaTable == null) {
-            topicMetaTable = new HashMap<String, Element>(16);
+            topicMetaTable = new HashMap<>(16);
         }
         for (String key : enableSet) {
             if (inheritance.containsKey(key)) {

@@ -59,6 +59,7 @@
 <str name="task_postreq">Келесі әрекет</str>
 <str name="task_prereq">Бастаудан бұрын</str>
 <str name="task_procedure">Процедура</str>
+<str name="task_procedure_unordered">Процедура</str>
 <str name="task_results">Нәтижелер</str>
 
 <str name="Copyright">авторлық құқықтары</str>

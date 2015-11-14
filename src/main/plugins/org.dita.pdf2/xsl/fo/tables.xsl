@@ -20,6 +20,7 @@
 
     <!--Definition list-->
     <xsl:template match="*[contains(@class, ' topic/dl ')]">
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:table xsl:use-attribute-sets="dl">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="*[contains(@class, ' topic/dlhead ')]"/>
@@ -36,6 +37,7 @@
                 </xsl:choose>
             </fo:table-body>
         </fo:table>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/dl ')]/*[contains(@class, ' topic/dlhead ')]">
@@ -51,6 +53,7 @@
         <fo:table-cell xsl:use-attribute-sets="dlhead.dthd__cell">
             <xsl:call-template name="commonattributes"/>
             <fo:block xsl:use-attribute-sets="dlhead.dthd__content">
+                <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
                 <xsl:apply-templates/>
             </fo:block>
         </fo:table-cell>
@@ -61,6 +64,7 @@
             <xsl:call-template name="commonattributes"/>
             <fo:block xsl:use-attribute-sets="dlhead.ddhd__content">
                 <xsl:apply-templates/>
+                <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
             </fo:block>
         </fo:table-cell>
     </xsl:template>
@@ -80,6 +84,9 @@
     <xsl:template match="*[contains(@class, ' topic/dt ')]">
         <fo:block xsl:use-attribute-sets="dlentry.dt__content">
             <xsl:call-template name="commonattributes"/>
+            <xsl:if test="not(preceding-sibling::*[contains(@class,' topic/dt ')])">
+              <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
+            </xsl:if>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -88,6 +95,9 @@
         <fo:block xsl:use-attribute-sets="dlentry.dd__content">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
+            <xsl:if test="not(following-sibling::*[contains(@class,' topic/dd ')])">
+              <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
+            </xsl:if>
         </fo:block>
     </xsl:template>
 
@@ -249,16 +259,18 @@
             <xsl:if test="exists($scale)">
                 <xsl:attribute name="font-size" select="concat($scale, '%')"/>
             </xsl:if>
+            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
             <xsl:apply-templates/>
+            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]">
         <fo:block xsl:use-attribute-sets="table.title">
             <xsl:call-template name="commonattributes"/>
-            <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'Table.title'"/>
-                <xsl:with-param name="theParameters">
+            <xsl:call-template name="getVariable">
+                <xsl:with-param name="id" select="'Table.title'"/>
+                <xsl:with-param name="params">
                     <number>
                         <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
                     </number>
@@ -375,7 +387,9 @@
             <xsl:call-template name="applyAlignAttrs"/>
             <xsl:call-template name="generateTableEntryBorder"/>
             <fo:block xsl:use-attribute-sets="thead.row.entry__content">
+                <xsl:apply-templates select="." mode="ancestor-start-flag"/>
                 <xsl:call-template name="processEntryContent"/>
+                <xsl:apply-templates select="." mode="ancestor-end-flag"/>
             </fo:block>
         </fo:table-cell>
     </xsl:template>
@@ -402,7 +416,9 @@
         <xsl:call-template name="applyAlignAttrs"/>
         <xsl:call-template name="generateTableEntryBorder"/>
         <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+            <xsl:apply-templates select="." mode="ancestor-start-flag"/>
             <xsl:call-template name="processEntryContent"/>
+            <xsl:apply-templates select="." mode="ancestor-end-flag"/>
         </fo:block>
     </xsl:template>
 
@@ -793,6 +809,7 @@
             <!-- Contains the number of cells in the widest row -->
             <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
         </xsl:variable>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:table xsl:use-attribute-sets="simpletable">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="globalAtts"/>
@@ -824,6 +841,7 @@
             </fo:table-body>
 
         </fo:table>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
   
     <xsl:template match="*[contains(@class, ' topic/simpletable ')][empty(*)]" priority="10"/>
@@ -969,12 +987,16 @@
             <xsl:choose>
                 <xsl:when test="number(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@keycol) = $entryCol">
                     <fo:block xsl:use-attribute-sets="sthead.stentry__keycol-content">
+                        <xsl:apply-templates select="." mode="ancestor-start-flag"/>
                         <xsl:apply-templates/>
+                        <xsl:apply-templates select="." mode="ancestor-end-flag"/>
                     </fo:block>
                 </xsl:when>
                 <xsl:otherwise>
                     <fo:block xsl:use-attribute-sets="sthead.stentry__content">
+                        <xsl:apply-templates select="." mode="ancestor-start-flag"/>
                         <xsl:apply-templates/>
+                        <xsl:apply-templates select="." mode="ancestor-end-flag"/>
                     </fo:block>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1011,12 +1033,16 @@
             <xsl:choose>
                 <xsl:when test="number(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@keycol) = $entryCol">
                     <fo:block xsl:use-attribute-sets="strow.stentry__keycol-content">
+                        <xsl:apply-templates select="." mode="ancestor-start-flag"/>
                         <xsl:apply-templates/>
+                        <xsl:apply-templates select="." mode="ancestor-end-flag"/>
                     </fo:block>
                 </xsl:when>
                 <xsl:otherwise>
                     <fo:block xsl:use-attribute-sets="strow.stentry__content">
+                        <xsl:apply-templates select="." mode="ancestor-start-flag"/>
                         <xsl:apply-templates/>
+                        <xsl:apply-templates select="." mode="ancestor-end-flag"/>
                     </fo:block>
                 </xsl:otherwise>
             </xsl:choose>

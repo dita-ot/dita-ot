@@ -1,0 +1,21 @@
+/*
+ | This file is part of the DITA Open Toolkit project.
+ | See the accompanying license.txt file for applicable licenses.
+*/
+/*
+ | (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+ */
+.unresolved {
+  background-color: skyblue;
+}
+.noTemplate {
+  background-color: yellow;
+}
+.base {
+  background-color: #ffffff;
+}
+@import 'topic';
+@import 'task';
+@import 'ui-d';
+@import 'sw-d';
+@import 'pr-d';

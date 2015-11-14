@@ -6,17 +6,17 @@
                 version="2.0">
 
   <xsl:template match="ot-placeholder:glossarylist" name="createGlossary">
-    <fo:page-sequence master-reference="glossary-sequence" xsl:use-attribute-sets="__force__page__count">
+    <fo:page-sequence master-reference="glossary-sequence" xsl:use-attribute-sets="page-sequence.glossary">
       <xsl:call-template name="insertGlossaryStaticContents"/>
       <fo:flow flow-name="xsl-region-body">
         <fo:marker marker-class-name="current-header">
-          <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Glossary'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Glossary'"/>
           </xsl:call-template>
         </fo:marker>
         <fo:block xsl:use-attribute-sets="__glossary__label" id="{$id.glossary}">
-          <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Glossary'"/>
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Glossary'"/>
           </xsl:call-template>
         </fo:block>
         <xsl:apply-templates/>

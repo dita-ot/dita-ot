@@ -18,6 +18,8 @@
                   preprocess.init,
                   gen-list,
                   debug-filter,
+                  mapref,
+                  branch-filter,
                   copy-files,
                   keyref,
                   conrefpush,
@@ -25,9 +27,7 @@
                   profile,
                   topic-fragment,
                   coderef,
-                  mapref,
                   move-meta-entries,
-                  mappull,
                   chunk,
                   maplink,
                   topicpull,
@@ -38,45 +38,9 @@
     description="Preprocessing ended" />
   
   <target name="preprocess.init">
-    <dita-ot-fail id="DOTA069F">
-      <condition>
-        <and>
-          <isset property="args.input"/>
-          <not>
-            <isset property="args.input.dir"/>
-          </not>
-          <not>
-            <available file="${args.input}" type="file"/>
-          </not>
-        </and>
-      </condition>
-      <param name="1" location="${args.input}"/>
-    </dita-ot-fail>
-    <dita-ot-fail id="DOTA069F">
-      <condition>
-        <and>
-          <isset property="args.input"/>
-          <isset property="args.input.dir"/>
-          <not>
-            <or>
-              <available file="${args.input}" type="file"/>
-              <available file="${args.input.dir}/${args.input}" type="file"/>
-            </or>
-          </not>
-        </and>
-      </condition>
-      <param name="1" location="${args.input}"/>
-    </dita-ot-fail>
     <dita-ot-fail id="DOTA002F">
       <condition>
-        <and>
-          <not>
-            <isset property="args.input"/>
-          </not>
-          <not>
-            <isset property="args.input.uri"/>
-          </not>
-        </and>
+        <not><isset property="args.input"/></not>
       </condition>
     </dita-ot-fail>
     
@@ -123,6 +87,7 @@
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
         <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
+        <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
       </module>
     </pipeline>
   </target>
@@ -246,6 +211,12 @@
     </condition>
   </target>
   
+  <target name="branch-filter">
+    <pipeline tempdir="${dita.temp.dir}" taskname="branch-filter" message="Filter branches">
+      <module class="org.dita.dost.module.BranchFilterModule"/>
+    </pipeline>
+  </target>
+  
   <!-- conref push
       Push information to the specified target -->
   <target name="conrefpush"
@@ -261,7 +232,8 @@
   </target>
   
   <!-- move-meta-entries
-      Push information from <topicmeta> in the map into the corresponding topics. -->
+      Push information from <topicmeta> in the map into the corresponding topics and
+      pull metadata (such as navtitle) into the map from the referenced topics. -->
   <target name="move-meta-entries" 
     dita:depends="{depend.preprocess.move-meta-entries.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
@@ -270,7 +242,11 @@
     <pipeline message="Move metadata entries." taskname="move-meta"
       inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}">
-      <module class="org.dita.dost.module.MoveMetaModule"/>
+      <module class="org.dita.dost.module.MoveMetaModule">
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl"/>
+        <param name="conserve-memory" expression="${conserve-memory}" if="conserve-memory"/>
+        <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
+      </module>
     </pipeline>
   </target>
   
@@ -305,9 +281,11 @@
   </target>
   
   <target name="topic-fragment"
-          description="Resolve same topic fragment identifiers">
+          description="Normalize same topic fragment identifiers and table column names">
     <pipeline message="Resolve topic fragment." taskname="topic-fragment">
-      <module class="org.dita.dost.module.TopicFragmentModule"/>
+      <module class="org.dita.dost.module.TopicFragmentModule">
+        <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
+      </module>
     </pipeline>
   </target>
   
@@ -342,7 +320,6 @@
           reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
         style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
         <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
-        <param name="TRANSTYPE" expression="${transtype}" />
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
@@ -368,32 +345,33 @@
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
-  </target>
-  
-  <!-- mappull
-      Pull metadata (such as navtitle) into the map from the referenced topics. -->
-  <target name="mappull"
-    dita:depends="{depend.preprocess.mappull.pre},mappull-check"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    unless="preprocess.mappull.skip"
-    description="Pull the navtitle and topicmeta from topics to ditamap">
-    <dirname property="mappull.workdir" file="${dita.temp.dir}/${user.input.file}" />
-    <condition property="dita.preprocess.reloadstylesheet.mappull" value="${dita.preprocess.reloadstylesheet}">
-      <not><isset property="dita.preprocess.reloadstylesheet.mappull"/></not>
-    </condition>
-    <pipeline message="Pull the navtitle and topicmeta from topics to ditamap" taskname="mappull">
+    <pipeline message="Resolve mapref in ditamap" taskname="mapref">
       <xslt basedir="${dita.temp.dir}"
-          reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl">
+            reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
+            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
+            filenameparameter="file-being-processed">
         <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
         <param name="TRANSTYPE" expression="${transtype}" />
-        <param name="conserve-memory" expression="${conserve-memory}" if="conserve-memory"/>
-        <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
+        <param name="child-topicref-warning" expression="false"/>
+        <param name="keep-submap-href" expression="false"/>
+        <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
   </target>
   
+  <!-- mappull
+      Pull metadata (such as navtitle) into the map from the referenced topics. -->
+  <!-- Deprecated in 2.2 -->
+  <target name="mappull"
+    dita:depends="{depend.preprocess.mappull.pre},mappull-check"
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+    unless="preprocess.mappull.skip"
+    description="Pull the navtitle and topicmeta from topics to ditamap">
+    <echo level="warn">WARN: Mappull target has been merged with move-meta-entries and is deprecated.</echo>
+  </target>
+  
+  <!-- Deprecated in 2.2 -->
   <target name="mappull-check">
     <condition property="preprocess.mappull.skip">
       <isset property="noMap"/>
@@ -563,43 +541,25 @@
      
   <target name="copy-image"
     unless="preprocess.copy-image.skip"
-    dita:depends="{depend.preprocess.copy-image.pre},copy-image-check"
+    dita:depends="{depend.preprocess.copy-image.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
     description="Copy image files">
     <condition property="copy-image.todir" value="${output.dir}/${uplevels}" else="${output.dir}">
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
-    <copy todir="${copy-image.todir}">
-      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${imagefile}" />
+    <copy todir="${copy-image.todir}" failonerror="false">
+      <dita-fileset format="image" />
     </copy>
   </target>
   
-  <target name="copy-image-check">
-    <condition property="preprocess.copy-image.skip">
-      <or>
-        <isset property="preprocess.copy-files.skip"/>
-        <isset property="noImagelist"/>
-      </or>
-    </condition>
-  </target>
-
   <target name="copy-html"
-    dita:depends="{depend.preprocess.copy-html.pre},copy-html-check"
+    dita:depends="{depend.preprocess.copy-html.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-html.skip"
     description="Copy html files">
-    <copy todir="${output.dir}">
-      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}/${htmlfile}"/>
+    <copy todir="${output.dir}" failonerror="false">
+      <dita-fileset format="html" />
     </copy>
-  </target>
-
-  <target name="copy-html-check">
-    <condition property="preprocess.copy-html.skip">
-      <or>
-        <isset property="preprocess.copy-files.skip"/>
-        <length file="${dita.temp.dir}/${htmlfile}" length="0"/>
-      </or>
-    </condition>
   </target>
   
   <target name="copy-flag"

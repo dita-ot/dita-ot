@@ -84,8 +84,11 @@ public final class Job {
     private static final String PROPERTY_ONLY_TOPIC_IN_MAP = ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP;
     private static final String PROPERTY_GENERATE_COPY_OUTER = ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER;
     private static final String PROPERTY_OUTPUT_DIR = ANT_INVOKER_EXT_PARAM_OUTPUTDIR;
+    /** Deprecated since 2.2 */
+    @Deprecated
     private static final String PROPERTY_INPUT_MAP = "InputMapDir";
-    
+    private static final String PROPERTY_INPUT_MAP_URI = "InputMapDir.uri";
+
     /** File name for key definition file */
     public static final String KEYDEF_LIST_FILE = "keydef.xml";
     /** File name for key definition file */
@@ -94,7 +97,7 @@ public final class Job {
     public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
     /** Map of serialization attributes to file info boolean fields. */
-    private static final Map<String, Field> attrToFieldMap= new HashMap<String, Field>();
+    private static final Map<String, Field> attrToFieldMap= new HashMap<>();
     static {
         try {
             attrToFieldMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));
@@ -121,7 +124,7 @@ public final class Job {
     private final Map<String, Object> prop;
     public final File tempDir;
     private final File jobFile;
-    private final ConcurrentMap<URI, FileInfo> files = new ConcurrentHashMap<URI, FileInfo>();
+    private final ConcurrentMap<URI, FileInfo> files = new ConcurrentHashMap<>();
     private long lastModified;
     
     /**
@@ -137,7 +140,7 @@ public final class Job {
         }
         this.tempDir = tempDir;
         jobFile = new File(tempDir, JOB_FILE);
-        prop = new HashMap<String, Object>();
+        prop = new HashMap<>();
         read();
     }
 
@@ -213,60 +216,73 @@ public final class Job {
         @Override
         public void startElement(final String ns, final String localName, final String qName, final Attributes atts) throws SAXException {
             final String n = localName != null ? localName : qName;
-            if (n.equals(ELEMENT_PROPERTY)) {
-                name = atts.getValue(ATTRIBUTE_NAME);
-            } else if (n.equals(ELEMENT_STRING)) {
-                buf = new StringBuilder();
-            } else if (n.equals(ELEMENT_SET)) {
-                set = new HashSet<String>();
-            } else if (n.equals(ELEMENT_MAP)) {
-                map = new HashMap<String, String>();
-            } else if (n.equals(ELEMENT_ENTRY)) {
-                key = atts.getValue(ATTRIBUTE_KEY);
-            } else if (n.equals(ELEMENT_FILE)) {
-                final URI src = toURI(atts.getValue(ATTRIBUTE_SRC));
-                final URI uri = toURI(atts.getValue(ATTRIBUTE_URI));
-                final File path = toFile(atts.getValue(ATTRIBUTE_PATH));
-                FileInfo i;
-                if (uri != null) {
-                    i = new FileInfo(src, uri, toFile(uri));
-                } else {
-                    i = new FileInfo(src, toURI(path), path);
-                }
-                i.format = atts.getValue(ATTRIBUTE_FORMAT);
-                try {
-                    for (Map.Entry<String, Field> e: attrToFieldMap.entrySet()) {
-                        e.getValue().setBoolean(i, Boolean.parseBoolean(atts.getValue(e.getKey())));
+            switch (n) {
+                case ELEMENT_PROPERTY:
+                    name = atts.getValue(ATTRIBUTE_NAME);
+                    break;
+                case ELEMENT_STRING:
+                    buf = new StringBuilder();
+                    break;
+                case ELEMENT_SET:
+                    set = new HashSet<>();
+                    break;
+                case ELEMENT_MAP:
+                    map = new HashMap<>();
+                    break;
+                case ELEMENT_ENTRY:
+                    key = atts.getValue(ATTRIBUTE_KEY);
+                    break;
+                case ELEMENT_FILE:
+                    final URI src = toURI(atts.getValue(ATTRIBUTE_SRC));
+                    final URI uri = toURI(atts.getValue(ATTRIBUTE_URI));
+                    final File path = toFile(atts.getValue(ATTRIBUTE_PATH));
+                    FileInfo i;
+                    if (uri != null) {
+                        i = new FileInfo(src, uri, toFile(uri));
+                    } else {
+                        i = new FileInfo(src, toURI(path), path);
                     }
-                } catch (final IllegalAccessException ex) {
-                    throw new RuntimeException(ex);
-                }
-                files.put(i.uri, i);
+                    i.format = atts.getValue(ATTRIBUTE_FORMAT);
+                    try {
+                        for (Map.Entry<String, Field> e : attrToFieldMap.entrySet()) {
+                            e.getValue().setBoolean(i, Boolean.parseBoolean(atts.getValue(e.getKey())));
+                        }
+                    } catch (final IllegalAccessException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    files.put(i.uri, i);
+                    break;
             }
         }
         
         @Override
         public void endElement(final String uri, final String localName, final String qName) throws SAXException {
             final String n = localName != null ? localName : qName;
-            if (n.equals(ELEMENT_PROPERTY)) {
-                name = null;
-            } else if (n.equals(ELEMENT_STRING)) {
-                if (set != null) {
-                    set.add(buf.toString());
-                } else if (map != null) {
-                    map.put(key, buf.toString());
-                } else {
-                    prop.put(name, buf.toString());
-                }
-                buf = null;
-            } else if (n.equals(ELEMENT_SET)) {
-                prop.put(name, set);
-                set = null;
-            } else if (n.equals(ELEMENT_MAP)) {
-                prop.put(name, map);
-                map = null;
-            } else if (n.equals(ELEMENT_ENTRY)) {
-                key = null;
+            switch (n) {
+                case ELEMENT_PROPERTY:
+                    name = null;
+                    break;
+                case ELEMENT_STRING:
+                    if (set != null) {
+                        set.add(buf.toString());
+                    } else if (map != null) {
+                        map.put(key, buf.toString());
+                    } else {
+                        prop.put(name, buf.toString());
+                    }
+                    buf = null;
+                    break;
+                case ELEMENT_SET:
+                    prop.put(name, set);
+                    set = null;
+                    break;
+                case ELEMENT_MAP:
+                    prop.put(name, map);
+                    map = null;
+                    break;
+                case ELEMENT_ENTRY:
+                    key = null;
+                    break;
             }
         }
         
@@ -401,7 +417,7 @@ public final class Job {
      * @return map of properties, may be an empty map
      */
     public Map<String, String> getProperties() {
-        final Map<String, String> res = new HashMap<String, String>();
+        final Map<String, String> res = new HashMap<>();
         for (final Map.Entry<String, Object> e: prop.entrySet()) {
             if (e.getValue() instanceof String) {
                 res.put(e.getKey(), (String) e.getValue());
@@ -422,7 +438,7 @@ public final class Job {
     }
     
     /**
-     * Return the copy-to map.
+     * Return the copy-to map from target to source.
      *
      * @return copy-to map, empty map if no mapping is defined
      */
@@ -431,7 +447,7 @@ public final class Job {
         if (value == null) {
             return Collections.emptyMap();
         } else {
-            final Map<URI, URI> res = new HashMap<URI, URI>();
+            final Map<URI, URI> res = new HashMap<>();
             for (final Map.Entry<String, String> e: value.entrySet()) {
                 res.put(toURI(e.getKey()), toURI(e.getValue()));
             }
@@ -440,10 +456,10 @@ public final class Job {
     }
     
     /**
-     * Set copy-to map.
+     * Set copy-to map from target to source.
      */
     public void setCopytoMap(final Map<URI, URI> value) {
-        final Map<String, String> res = new HashMap<String, String>();
+        final Map<String, String> res = new HashMap<>();
         for (final Map.Entry<URI, URI> e: value.entrySet()) {
             res.put(e.getKey().toString(), e.getValue().toString());
         }
@@ -455,8 +471,8 @@ public final class Job {
      *
      * @return input file path relative to input directory
      */
-    public File getInputMap() {
-       return new File(getProperty(INPUT_DITAMAP));
+    public URI getInputMap() {
+       return toURI(getProperty(INPUT_DITAMAP_URI));
     }
 
     /**
@@ -464,8 +480,8 @@ public final class Job {
      * 
      * @return absolute input directory path 
      */
-    public File getInputDir() {
-        return new File(getProperty(INPUT_DIR));
+    public URI getInputDir() {
+        return toURI(getProperty(INPUT_DIR_URI));
     }
 
     /**
@@ -474,7 +490,7 @@ public final class Job {
      * @return map of file info objects, where the key is the {@link FileInfo#file} value. May be empty
      */
     public Map<File, FileInfo> getFileInfoMap() {
-        final Map<File, FileInfo> ret = new HashMap<File, FileInfo>();
+        final Map<File, FileInfo> ret = new HashMap<>();
         for (final Map.Entry<URI, FileInfo> e: files.entrySet()) {
             ret.put(e.getValue().file, e.getValue());
         }
@@ -487,7 +503,7 @@ public final class Job {
      * @return collection of file info objects, may be empty
      */
     public Collection<FileInfo> getFileInfo() {
-        return Collections.unmodifiableCollection(new ArrayList<FileInfo>(files.values()));
+        return Collections.unmodifiableCollection(new ArrayList<>(files.values()));
     }
     
     /**
@@ -497,7 +513,7 @@ public final class Job {
      * @return collection of file info objects that pass the filter, may be empty
      */
     public Collection<FileInfo> getFileInfo(final Filter filter) {
-        final Collection<FileInfo> ret = new ArrayList<FileInfo>();
+        final Collection<FileInfo> ret = new ArrayList<>();
         for (final FileInfo f: files.values()) {
             if (filter.accept(f)) {
                 ret.add(f);
@@ -845,7 +861,15 @@ public final class Job {
      * @param flag generatecopyouter flag
      */
     public void setGeneratecopyouter(final String flag){
-        prop.put(PROPERTY_GENERATE_COPY_OUTER, Generate.get(Integer.parseInt(flag)).toString());
+        setGeneratecopyouter(Generate.get(Integer.parseInt(flag)));
+    }
+
+    /**
+     * Set the generatecopyouter.
+     * @param flag generatecopyouter flag
+     */
+    public void setGeneratecopyouter(final Generate flag){
+        prop.put(PROPERTY_GENERATE_COPY_OUTER, flag.toString());
     }
  
     /**
@@ -868,16 +892,21 @@ public final class Job {
      * Get input file path.
      * @return absolute input file path
      */
-    public File getInputFile(){
-        return new File(prop.get(PROPERTY_INPUT_MAP).toString());
+    public URI getInputFile() {
+        return toURI(prop.get(PROPERTY_INPUT_MAP_URI).toString());
     }
 
     /**
      * Set input map path.
      * @param inputFile absolute input map path
      */
-    public void setInputFile(final File inputFile){
-        prop.put(PROPERTY_INPUT_MAP, inputFile.getAbsolutePath());
+    public void setInputFile(final URI inputFile) {
+        assert inputFile.isAbsolute();
+        prop.put(PROPERTY_INPUT_MAP_URI, inputFile.toString());
+        // Deprecated since 2.1
+        if (inputFile.getScheme().equals("file")) {
+            prop.put(PROPERTY_INPUT_MAP, new File(inputFile).getAbsolutePath());
+        }
     }
 
     

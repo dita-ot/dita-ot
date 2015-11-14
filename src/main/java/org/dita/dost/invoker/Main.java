@@ -100,11 +100,27 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
+    private static class FileOrUriArgument extends Argument {
+        FileOrUriArgument(final String property) {
+            super(property);
+        }
+
+        @Override
+        String getValue(final String value) {
+            final File f = new File(value);
+            if (f.exists()) {
+                return f.getAbsolutePath();
+            } else {
+                return value;
+            }
+        }
+    }
+
     /**
      * A Set of args are are handled by the launcher and should not be seen by
      * Main.
      */
-    private static final Set<String> LAUNCH_COMMANDS = new HashSet<String>();
+    private static final Set<String> LAUNCH_COMMANDS = new HashSet<>();
     static {
         LAUNCH_COMMANDS.add("-lib");
         LAUNCH_COMMANDS.add("-cp");
@@ -114,26 +130,27 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         LAUNCH_COMMANDS.add("-main");
     }
 
-    private static final Map<String, Argument> ARGUMENTS = new HashMap<String, Argument>();
+    private static final Map<String, Argument> ARGUMENTS = new HashMap<>();
     static {
         ARGUMENTS.put("-f", new StringArgument("transtype"));
         ARGUMENTS.put("-format", new StringArgument("transtype"));
         ARGUMENTS.put("-transtype", new StringArgument("transtype"));
-        ARGUMENTS.put("-i", new FileArgument("args.input"));
-        ARGUMENTS.put("-input", new FileArgument("args.input"));
+        ARGUMENTS.put("-i", new FileOrUriArgument("args.input"));
+        ARGUMENTS.put("-input", new FileOrUriArgument("args.input"));
         ARGUMENTS.put("-o", new FileArgument("output.dir"));
         ARGUMENTS.put("-output", new FileArgument("output.dir"));
         ARGUMENTS.put("-filter", new FileArgument("args.filter"));
+        ARGUMENTS.put("-t", new FileArgument("dita.temp.dir"));
         ARGUMENTS.put("-temp", new FileArgument("dita.temp.dir"));
     }
-    private static final Map<String, String> RESERVED_PROPERTIES = new HashMap<String, String>();
+    private static final Map<String, String> RESERVED_PROPERTIES = new HashMap<>();
     static {
         for (final Map.Entry<String, Argument> a: ARGUMENTS.entrySet()) {
             RESERVED_PROPERTIES.put(a.getValue().property, a.getKey());
         }
     }
 
-    private static final Map<String, Argument> LEGACY_ARGUMENTS = new HashMap<String, Argument>();
+    private static final Map<String, Argument> LEGACY_ARGUMENTS = new HashMap<>();
     static {
         // LEGACY_ARGUMENTS.put("/basedir", new StringArgument("basedir"));
         // LEGACY_ARGUMENTS.put("/ditadir", new StringArgument("dita.dir"));
@@ -193,7 +210,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     /** File that we are using for configuration. */
     private File buildFile; /* null */
-    
+    /** Run integrator */
+    private boolean install;
     /** Plug-in installation file. May be either a system path or a URL. */
     private String installFile;
     
@@ -207,16 +225,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static PrintStream err = System.err;
 
     /** The build targets. */
-    private final Vector<String> targets = new Vector<String>();
+    private final Vector<String> targets = new Vector<>();
 
     /** Set of properties that can be used by tasks. */
-    private final Map<String, Object> definedProps = new HashMap<String, Object>();
+    private final Map<String, Object> definedProps = new HashMap<>();
 
     /** Names of classes to add as listeners to project. */
-    private final Vector<String> listeners = new Vector<String>(1);
+    private final Vector<String> listeners = new Vector<>(1);
 
     /** File names of property files to load on startup. */
-    private final Vector<String> propertyFiles = new Vector<String>(1);
+    private final Vector<String> propertyFiles = new Vector<>(1);
 
     /** Indicates whether this build is to support interactive input */
     private boolean allowInput = true;
@@ -516,7 +534,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 Diagnostics.doReport(System.out, msgOutputLevel);
             }
             return;
-        } else if (installFile != null || uninstallId != null) {
+        } else if (install) {
             buildFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
             targets.clear();
             if (installFile != null) {
@@ -527,9 +545,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 } else {
                     definedProps.put("plugin.file", installFile);
                 }
-            } else {
+            } else if (uninstallId != null) {
                 targets.add("uninstall");
                 definedProps.put("plugin.id", uninstallId);
+            } else {
+                targets.add("integrate");
             }
         } else {
             if (!definedProps.containsKey("transtype")) {
@@ -632,10 +652,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     /** Handle the -install argument */
     private int handleArgInstall(final String[] args, int pos) {
-        try {
+        install = true;
+        if (pos + 1 < args.length && !args[pos + 1].startsWith("-")) {
             installFile = args[++pos];
-        } catch (final ArrayIndexOutOfBoundsException aioobe) {
-            throw new BuildException("You must specify a installation package when using the -install argument");
         }
         return pos;
     }
@@ -643,6 +662,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     /** Handle the -uninstall argument */
     private int handleArgUninstall(final String[] args, int pos) {
         try {
+            install = true;
             uninstallId = args[++pos];
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
             throw new BuildException("You must specify a installation package when using the -uninstall argument");
@@ -956,7 +976,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
                 // resolve properties
                 final PropertyHelper propertyHelper = PropertyHelper.getPropertyHelper(project);
-                final HashMap<String, Object> props = new HashMap<String, Object>(definedProps);
+                final HashMap<String, Object> props = new HashMap<>(definedProps);
                 new ResolvePropertyMap(project, propertyHelper, propertyHelper.getExpanders()).resolveAllProperties(
                         props, null, false);
 
@@ -1004,12 +1024,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 System.setErr(savedErr);
                 System.setIn(savedIn);
             }
-        } catch (final RuntimeException exc) {
+        } catch (final RuntimeException | Error exc) {
             error = exc;
             throw exc;
-        } catch (final Error e) {
-            error = e;
-            throw e;
         } finally {
             if (!projectHelp) {
                 try {
@@ -1112,15 +1129,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      */
     private static void printUsage() {
         final StringBuilder msg = new StringBuilder();
-        msg.append("Usage: dita -f <name> -i <file> [options]\n");
-        msg.append("   or: dita -install <file>\n");
+        msg.append("Usage: dita -i <file> -f <name> [options]\n");
+        msg.append("   or: dita -install [<file>]\n");
         msg.append("   or: dita -uninstall <id>\n");
         msg.append("   or: dita -help\n");
         msg.append("   or: dita -version\n");
         msg.append("Arguments: \n");
-        msg.append("  -f, -format <name>     transformation type\n");
         msg.append("  -i, -input <file>      input file\n");
-        msg.append("  -install <file>        install plug-in from a ZIP file\n");
+        msg.append("  -f, -format <name>     output format (transformation type)\n");
+        msg.append("  -install [<file>]      install plug-in from a ZIP file or reload plugins\n");
         msg.append("  -uninstall <id>        uninstall plug-in with the ID\n");
         msg.append("  -h, -help              print this message\n");
         msg.append("  -version               print version information and exit\n");
@@ -1133,7 +1150,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
         msg.append("  -filter <file>         filter and flagging file\n");
-        msg.append("  -temp <dir>            temporary directory\n");
+        msg.append("  -t, -temp <dir>        temporary directory\n");
         msg.append("  -v, -verbose           verbose logging\n");
         msg.append("  -d, -debug             print debugging information\n");
         // msg.append("  -emacs, -e             produce logging information without adornments"
@@ -1210,7 +1227,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * @return the filtered targets.
      */
     private static Map<String, Target> removeDuplicateTargets(final Map<String, Target> targets) {
-        final Map<Location, Target> locationMap = new HashMap<Location, Target>();
+        final Map<Location, Target> locationMap = new HashMap<>();
         for (final Map.Entry<String, Target> entry : targets.entrySet()) {
             final String name = entry.getKey();
             final Target target = entry.getValue();
@@ -1224,7 +1241,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 // wins
             }
         }
-        final Map<String, Target> ret = new HashMap<String, Target>();
+        final Map<String, Target> ret = new HashMap<>();
         for (final Target target : locationMap.values()) {
             ret.put(target.getName(), target);
         }
@@ -1249,11 +1266,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         Target currentTarget;
         // split the targets in top-level and sub-targets depending
         // on the presence of a description
-        final Vector<String> topNames = new Vector<String>();
-        final Vector<String> topDescriptions = new Vector<String>();
-        final Vector<Enumeration<String>> topDependencies = new Vector<Enumeration<String>>();
-        final Vector<String> subNames = new Vector<String>();
-        final Vector<Enumeration<String>> subDependencies = new Vector<Enumeration<String>>();
+        final Vector<String> topNames = new Vector<>();
+        final Vector<String> topDescriptions = new Vector<>();
+        final Vector<Enumeration<String>> topDependencies = new Vector<>();
+        final Vector<String> subNames = new Vector<>();
+        final Vector<Enumeration<String>> subDependencies = new Vector<>();
 
         for (Target target : ptargets.values()) {
             currentTarget = target;

@@ -218,9 +218,9 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="This link">this link</variable>
 
     <!-- Image path to use for a note of "note" type. -->
-    <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="note Note Image Path"></variable>
     <!-- Image path to use for a note of "notice" type. -->
-    <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="notice Note Image Path"></variable>
     <!-- Image path to use for a note of "attention" type. -->
     <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
 
@@ -232,22 +232,22 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Image path to use for a note of "warning" type. -->
     <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
     <!-- Image path to use for a note of "fastpath" type. -->
-    <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="fastpath Note Image Path"></variable>
 
     <!-- Image path to use for a note of "important" type. -->
-    <variable id="important Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="important Note Image Path"></variable>
 
     <!-- Image path to use for a note of "remember" type. -->
-    <variable id="remember Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="remember Note Image Path"></variable>
 
     <!-- Image path to use for a note of "restriction" type. -->
-    <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="restriction Note Image Path"></variable>
 
     <!-- Image path to use for a note of "tip" type. -->
-    <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="tip Note Image Path"></variable>
 
     <!-- Image path to use for a note of "other" type. -->
-    <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+    <variable id="other Note Image Path"></variable>
 
     <!--
        Strings used in the online-help publishing.
@@ -294,15 +294,17 @@ See the accompanying license.txt file for applicable licenses.
     
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">可选：</variable>
+    <variable id="Required Step">必需：</variable>
 
-    <!--Labels for task sections-->
-    <variable id="Task Prereq">开始之前</variable>
-    <variable id="Task Context">关于此任务</variable>
-    <variable id="Task Steps">过程</variable>
-  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
-    <variable id="Task Result">结果</variable>
-    <variable id="Task Example">示例</variable>
-    <variable id="Task Postreq">下一步做什么</variable>
+    <!--Labels for task sections, now reused from common-->
+    <variable id="Task Prereq"></variable>
+    <variable id="Task Context"></variable>
+    <variable id="Task Steps"></variable>
+    <variable id="#steps-unordered-label"></variable>
+    <variable id="Task Result"></variable>
+    <variable id="Task Example"></variable>
+    <variable id="Task Postreq"></variable>
+
     <variable id="Glossary odd footer"/>
     <variable id="Glossary even footer"/>
     <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>

@@ -130,6 +130,7 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:attribute-set name="tbody.row">
     <!--Table body row-->
+    <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="thead.row.entry">

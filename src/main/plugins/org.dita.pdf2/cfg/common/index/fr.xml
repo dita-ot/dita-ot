@@ -33,10 +33,11 @@ See the accompanying license.txt file for applicable licenses.
 
 <index.configuration.set>
 <index.configuration>
+<language>fr</language>
 <index.groups>
 <index.group>
-<group.key/>
-<group.label/>
+<group.key>Specials</group.key>
+<group.label>Caractères spéciaux</group.label>
 <group.members>
 <char.set>\</char.set>
 <char.set>`</char.set>
@@ -72,8 +73,8 @@ See the accompanying license.txt file for applicable licenses.
 </group.members>
 </index.group>
 <index.group>
-<group.key/>
-<group.label/>
+<group.key>Numbers</group.key>
+<group.label>Nombres</group.label>
 <group.members>
 <char.set>0</char.set>
 <char.set>０</char.set>

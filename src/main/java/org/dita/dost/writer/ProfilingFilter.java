@@ -12,6 +12,9 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Profiling filter strips out the content that is not necessary in the output.
  */
@@ -29,6 +32,10 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	private FilterUtils filterUtils;
 	/** Flag that an element has been written */
 	private boolean elementOutput;
+    /** Namespace prefixes for current element. */
+    private Map<String, String> prefixes = new HashMap<>();
+    /** Flag that last element was excluded. */
+    private boolean lastElementExcluded = false;
 
 	/**
 	 * Create new profiling filter.
@@ -87,6 +94,10 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 				level = 0;
 			} else {
 			    elementOutput = true;
+                for (final Map.Entry<String, String> prefix: prefixes.entrySet()) {
+                    getContentHandler().startPrefixMapping(prefix.getKey(), prefix.getValue());
+                }
+                prefixes.clear();
 				getContentHandler().startElement(uri, localName, qName, atts);
 			}
 		}
@@ -98,6 +109,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 		if (foreignLevel > 0) {
 			foreignLevel--;
 		}
+        lastElementExcluded = exclude;
 		if (exclude) {
 			if (level > 0) {
 				// If it is the end of a child of an excluded tag, level
@@ -125,6 +137,13 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 		if (!exclude) {
         	getContentHandler().endDocument();
         }
+	}
+
+	@Override
+	public void endPrefixMapping(final String prefix) throws SAXException {
+		if (!lastElementExcluded) {
+			getContentHandler().endPrefixMapping(prefix);
+		}
 	}
 
 	@Override
@@ -158,5 +177,10 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 		props = null;
         getContentHandler().startDocument();
     }
+
+	@Override
+	public void startPrefixMapping(final String prefix, final String uri) throws SAXException {
+        prefixes.put(prefix, uri);
+	}
 	
 }

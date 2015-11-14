@@ -23,7 +23,7 @@ import org.w3c.dom.Document;
 public abstract class AbstractDomFilter implements AbstractReader {
 
     protected DITAOTLogger logger;
-    private Job job;
+    protected Job job;
 
     @Override
     public void read(final File filename) {
@@ -33,6 +33,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
         try {
             final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));
+            logger.debug("Reading " + filename.toURI());
             doc = builder.parse(filename);
         } catch (final RuntimeException e) {
             throw e;
@@ -50,6 +51,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
                 final StreamResult res = new StreamResult(file);
                 final DOMSource ds = new DOMSource(resDoc);
                 final Transformer tf = TransformerFactory.newInstance().newTransformer();
+                logger.debug("Writing " + filename.toURI());
                 tf.transform(ds, res);
             } catch (final RuntimeException e) {
                 throw e;

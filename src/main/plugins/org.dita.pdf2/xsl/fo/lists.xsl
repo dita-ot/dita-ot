@@ -46,32 +46,37 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--Lists-->
     <xsl:template match="*[contains(@class, ' topic/ul ')]">
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:list-block xsl:use-attribute-sets="ul">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
   
     <xsl:template match="*[contains(@class, ' topic/ul ')][empty(*[contains(@class, ' topic/li ')])]" priority="10"/>
 
     <xsl:template match="*[contains(@class, ' topic/ol ')]">
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:list-block xsl:use-attribute-sets="ol">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
   
     <xsl:template match="*[contains(@class, ' topic/ol ')][empty(*[contains(@class, ' topic/li ')])]" priority="10"/>
 
     <xsl:template match="*[contains(@class, ' topic/ul ')]/*[contains(@class, ' topic/li ')]">
         <fo:list-item xsl:use-attribute-sets="ul.li">
+            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
             <fo:list-item-label xsl:use-attribute-sets="ul.li__label">
                 <fo:block xsl:use-attribute-sets="ul.li__label__content">
                     <fo:inline>
                         <xsl:call-template name="commonattributes"/>
                     </fo:inline>
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Unordered List bullet'"/>
+                    <xsl:call-template name="getVariable">
+                        <xsl:with-param name="id" select="'Unordered List bullet'"/>
                     </xsl:call-template>
                 </fo:block>
             </fo:list-item-label>
@@ -85,14 +90,15 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' topic/ol ')]/*[contains(@class, ' topic/li ')]">
         <fo:list-item xsl:use-attribute-sets="ol.li">
+          <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
             <fo:list-item-label xsl:use-attribute-sets="ol.li__label">
                 <fo:block xsl:use-attribute-sets="ol.li__label__content">
                     <fo:inline>
                         <xsl:call-template name="commonattributes"/>
                     </fo:inline>
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
-                        <xsl:with-param name="theParameters">
+                    <xsl:call-template name="getVariable">
+                        <xsl:with-param name="id" select="'Ordered List Number'"/>
+                        <xsl:with-param name="params">
                             <number>
                                 <xsl:choose>
                                     <xsl:when test="parent::*[contains(@class, ' topic/ol ')]/parent::*[contains(@class, ' topic/li ')]/parent::*[contains(@class, ' topic/ol ')]">
@@ -123,16 +129,19 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/sl ')]">
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:list-block xsl:use-attribute-sets="sl">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
     </xsl:template>
   
     <xsl:template match="*[contains(@class, ' topic/sl ')][empty(*[contains(@class, ' topic/sli ')])]" priority="10"/>
 
     <xsl:template match="*[contains(@class, ' topic/sl ')]/*[contains(@class, ' topic/sli ')]">
         <fo:list-item xsl:use-attribute-sets="sl.sli">
+          <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
             <fo:list-item-label xsl:use-attribute-sets="sl.sli__label">
                 <fo:block xsl:use-attribute-sets="sl.sli__label__content">
                     <fo:inline>

@@ -28,6 +28,8 @@ import javax.xml.transform.sax.TransformerHandler;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyDef;
+import org.dita.dost.util.KeyScope;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -48,8 +50,7 @@ public class KeyrefPaserTest {
     private static final File expDir = new File(resourceDir, "exp");
     private static CatalogResolver resolver;
 
-    private static Map<String, Element> keyDefinition;
-    private final static Map<String, URI> keymap = new HashMap<String, URI>();
+    private static KeyScope keyDefinition;
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -76,7 +77,6 @@ public class KeyrefPaserTest {
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File("a.xml"));
-        parser.setKeyMap(keymap);
         parser.write(new File("a.xml"));
 
         assertXMLEqual(new InputSource(new File(expDir, "a.xml").toURI().toString()),
@@ -90,7 +90,6 @@ public class KeyrefPaserTest {
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
         parser.setCurrentFile(new File("b.ditamap"));
-        parser.setKeyMap(keymap);
         parser.write(new File("b.ditamap"));
 
         assertXMLEqual(new InputSource(new File(expDir, "b.ditamap").toURI().toString()),
@@ -149,14 +148,16 @@ public class KeyrefPaserTest {
 
         final Map<String, Element> keys = new HashMap<String, Element>();
         final NodeList keydefs = document.getElementsByTagName("keydef");
+        final Map<String, KeyDef> keymap = new HashMap<>();
         for (int i = 0; i < keydefs.getLength(); i++) {
-            final Element keydef = (Element) keydefs.item(i);
-            keymap.put(keydef.getAttribute("keys"), new URI(keydef.getAttribute("href")));
+            final Element elem = (Element) keydefs.item(i);
             final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-            doc.appendChild(doc.importNode(keydef, true));
-            keys.put(keydef.getAttribute("keys"), keydef);
+            doc.appendChild(doc.importNode(elem, true));
+            keys.put(elem.getAttribute("keys"), elem);
+            final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")), null, null, elem);
+            keymap.put(keyDef.keys, keyDef);
         }
-        keyDefinition = Collections.unmodifiableMap(keys);
+        keyDefinition = new KeyScope(keymap);
     }
     
 }

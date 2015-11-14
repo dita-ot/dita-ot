@@ -37,7 +37,7 @@ public final class IndexTermCollection {
     /** The collection of index terms. */
     private static IndexTermCollection collection = null;
     /** The list of all index term. */
-    private final List<IndexTerm> termList = new ArrayList<IndexTerm>(16);
+    private final List<IndexTerm> termList = new ArrayList<>(16);
 
     /** The type of index term. */
     private String indexType = null;
@@ -205,14 +205,9 @@ public final class IndexTermCollection {
                 buff = new StringBuilder(indexWriter.getIndexFileName(outputFileRoot));
 
 
-            } catch (final ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (final IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (final InstantiationException e) {
+            } catch (final ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-
 
 
         }

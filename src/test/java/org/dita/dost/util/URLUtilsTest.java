@@ -63,7 +63,7 @@ public class URLUtilsTest {
         assertEquals("f%C3%B6%C3%A5.dita", URLUtils.clean("f\u00f6\u00e5.dita"));
         
         assertEquals("foo/bar.dita", URLUtils.clean("foo/bar.dita"));
-        assertEquals("foo%5Cbar.dita", URLUtils.clean("foo\\bar.dita"));
+        assertEquals("foo/bar.dita", URLUtils.clean("foo\\bar.dita"));
         
         assertEquals("foo?bar=baz&qux=quxx", URLUtils.clean("foo?bar=baz&qux=quxx"));
     }
@@ -167,6 +167,13 @@ public class URLUtilsTest {
         assertEquals(new URI("foo"), URLUtils.stripFragment(new URI("foo#bar")));
         assertEquals(new URI("foo"), URLUtils.stripFragment(new URI("foo#")));
         assertEquals(new URI("foo"), URLUtils.stripFragment(new URI("foo")));
+    }
+
+    @Test
+    public void testAddSuffix() throws URISyntaxException {
+        assertEquals(new URI("foo-1.bar"), URLUtils.addSuffix(new URI("foo.bar"), "-1"));
+        assertEquals(new URI("baz/foo-1.bar"), URLUtils.addSuffix(new URI("baz/foo.bar"), "-1"));
+        assertEquals(new URI("baz.qux/foo-1.bar"), URLUtils.addSuffix(new URI("baz.qux/foo.bar"), "-1"));
     }
 
 }

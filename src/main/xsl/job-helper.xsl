@@ -48,9 +48,11 @@
       <xsl:when test="$property = 'hreftargetslist'">
         <xsl:apply-templates select="job/files/file[@target = 'true']"/>
       </xsl:when>
+      <!-- Deprecated since 2.2 -->
       <xsl:when test="$property = 'htmllist'">
         <xsl:apply-templates select="job/files/file[@format = 'html']"/>
       </xsl:when>
+      <!-- Deprecated since 2.2 -->
       <xsl:when test="$property = 'imagelist'">
         <xsl:apply-templates select="job/files/file[@format = 'image']"/>
       </xsl:when>

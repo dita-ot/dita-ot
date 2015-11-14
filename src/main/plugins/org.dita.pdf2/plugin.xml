@@ -2,7 +2,10 @@
 <plugin id="org.dita.pdf2">
   <!-- extension points -->
   <extension-point id="dita.xsl.xslfo" name="PDF XSLT import"/>
+  <extension-point id="dita.xsl.xslfo.flagging-preprocess" name="PDF flagging preprocess import"/>
+  <extension-point id="dita.xsl.xslfo.i18n-postprocess" name="PDF I18N postprocess import"/>
   <extension-point id="org.dita.pdf2.xsl.topicmerge" name="PDF2 topic merge XSLT import"/>
+  <extension-point id="depend.org.dita.pdf2.init.pre" name="Initialization pre-target"/>
   <extension-point id="depend.org.dita.pdf2.format.pre" name="Formatting pre-target"/>
   <extension-point id="depend.org.dita.pdf2.format" name="Formatting target"/>
   <extension-point id="depend.org.dita.pdf2.format.post" name="Formatting post-target"/>
@@ -11,13 +14,16 @@
   <extension-point id="dita.conductor.pdf2.formatter.check" name="Formatter check"/>
   <!-- extensions -->
   <feature extension="dita.conductor.lib.import" file="lib/fo.jar"/>
-  <transtype name="pdf pdf2" desc="PDF">
+  <transtype name="pdf" desc="PDF">
+    <param name="args.artlbl" desc="Specifies whether to generate a label for each image; the label will contain the image file name." type="enum">
+      <val>yes</val>
+      <val default="true">no</val>
+    </param>
     <param name="args.bookmap-order" desc="Specifies if the frontmatter and backmatter content order is retained in bookmap." type="enum">
       <val>retain</val>
       <val default="true">discard</val>
     </param>
     <param name="args.bookmark.style" desc="Specifies whether PDF bookmarks are by default expanded or collapsed." type="enum">
-      <val>COLLAPSED</val>
       <val>EXPANDED</val>
       <val>COLLAPSE</val>
     </param>
@@ -26,13 +32,8 @@
       <val>BASIC</val>
     </param>
     <param name="args.xsl.pdf" desc="Specifies an XSL file that is used to override the default XSL transformation." type="file"/>
-    <param name="custom.xep.config" desc="Specifies the user configuration file for RenderX." type="file"/>
     <param name="customization.dir" desc="Specifies the customization directory." type="dir"/>
-    <param name="pdf.formatter" desc="Specifies the XSL processor." type="enum">
-      <val desc="Antenna House Formatter">ah</val>
-      <val desc="Apache FOP" default="true">fop</val>
-      <val desc="RenderX XEP Engine">xep</val>
-    </param>
+    <param name="pdf.formatter" desc="Specifies the XSL processor." type="enum"/>
     <param name="publish.required.cleanup" desc="Specifies whether draft-comment and required-cleanup elements are included in the output." type="enum">
       <val>yes</val>
       <val>no</val>
@@ -41,25 +42,22 @@
       <val>yes</val>
       <val default="true">no</val>
     </param>
-    <param name="args.fo.userconfig" desc="Specifies the user configuration file for FOP." type="file"/>
     <param name="org.dita.pdf2.i18n.enabled" desc="Enables I18N font processing." type="enum">
       <val desc="Enables I18N processing" default="true">true</val>
       <val desc="Disables I18N processing">false</val>
     </param>
   </transtype>
+  <transtype name="pdf2" extends="pdf" desc="PDF2"/>
   <feature extension="dita.transtype.print" value="pdf"/>
   <feature extension="dita.transtype.print" value="pdf2"/>
   <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
   <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
-  <feature extension="dita.conductor.pdf2.formatter.check" value="fop"/>
-  <feature extension="dita.conductor.pdf2.formatter.check" value="xep"/>
   <feature extension="dita.conductor.pdf2.formatter.check" value="ah"/>
   <feature extension="dita.xsl.strings" file="cfg/common/vars/strings.xml"/>
   <template file="build_template.xml"/>
   <template file="cfg/catalog_template.xml"/>
+  <template file="xsl/fo/flagging-preprocess_template.xsl"/>
+  <template file="xsl/fo/i18n-postprocess_template.xsl"/>
   <template file="xsl/fo/topic2fo_shell_template.xsl"/>
-  <template file="xsl/fo/topic2fo_shell_axf_template.xsl"/>
-  <template file="xsl/fo/topic2fo_shell_fop_template.xsl"/>
-  <template file="xsl/fo/topic2fo_shell_xep_template.xsl"/>
   <template file="xsl/common/topicmerge_template.xsl"/>
 </plugin>

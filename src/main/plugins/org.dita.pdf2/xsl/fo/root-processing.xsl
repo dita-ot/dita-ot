@@ -68,8 +68,8 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:value-of select="$mapProdname"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Product Name'"/>
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Product Name'"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
@@ -206,7 +206,7 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:variable name="map-based-page-sequence-generation" select="true()" as="xs:boolean"/>
   
   <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="generatePageSequences">
-    <fo:page-sequence master-reference="ditamap-body-sequence" xsl:use-attribute-sets="__force__page__count">
+    <fo:page-sequence master-reference="ditamap-body-sequence" xsl:use-attribute-sets="page-sequence.body">
       <xsl:call-template name="startPageNumbering"/>
       <xsl:call-template name="insertBodyStaticContents"/>
       <fo:flow flow-name="xsl-region-body">
@@ -220,7 +220,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:call-template name="createToc"/>
     <xsl:choose>
       <xsl:when test="$map-based-page-sequence-generation">
-        <fo:page-sequence master-reference="ditamap-body-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="ditamap-body-sequence" xsl:use-attribute-sets="page-sequence.body">
           <xsl:call-template name="startPageNumbering"/>
           <xsl:call-template name="insertBodyStaticContents"/>
           <fo:flow flow-name="xsl-region-body">

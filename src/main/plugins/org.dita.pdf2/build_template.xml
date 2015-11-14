@@ -28,10 +28,6 @@ with those set forth herein.
 -->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="dita.build" basedir=".">
   
-  <import file="${dita.plugin.org.dita.pdf2.dir}/build_fop.xml"/>
-  <import file="${dita.plugin.org.dita.pdf2.dir}/build_axf.xml"/>
-  <import file="${dita.plugin.org.dita.pdf2.dir}/build_xep.xml"/>
-
   <target name="dita2pdf2.init">
     <dita-ot-fail id="PDFX012F">
       <condition>
@@ -170,7 +166,9 @@ with those set forth herein.
                    transform.topic2fo.main,
                    transform.topic2fo.i18n"/>
     
-  <target name="transform.topic2fo.init">
+  <target name="transform.topic2fo.init"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          dita:depends="{depend.org.dita.pdf2.init.pre}">
     <taskdef name="detect-lang" classname="com.suite.sol.ditaot.DetectLang"
              classpathref="project.class.path"/>
     <taskdef name="gen-variable" classname="org.dita.dost.pdf2.VariableFileTask"
@@ -203,28 +201,6 @@ with those set forth herein.
       <not><isset property="document.language"/></not>
     </condition>
     <echo level="info">Using document.locale=${document.locale}</echo>
-
-    <condition property="formatter.specific.ext" value="_axf">
-      <and>
-        <not><isset property="formatter.specific.ext"/></not>
-        <equals arg1="ah" arg2="${pdf.formatter}"/>
-      </and>
-    </condition>
-    <condition property="formatter.specific.ext" value="_fop">
-      <and>
-        <not><isset property="formatter.specific.ext"/></not>
-        <equals arg1="fop" arg2="${pdf.formatter}"/>
-      </and>
-    </condition>
-    <condition property="formatter.specific.ext" value="_xep">
-      <and>
-        <not><isset property="formatter.specific.ext"/></not>
-        <equals arg1="xep" arg2="${pdf.formatter}"/>
-      </and>
-    </condition>
-    <condition property="formatter.specific.ext" value="">
-      <not><isset property="formatter.specific.ext"/></not>
-    </condition>
 
     <condition property="args.bookmark.style" value="">
       <not><isset property="args.bookmark.style"/></not>
@@ -272,8 +248,6 @@ with those set forth herein.
     <condition property="args.tablelink.style" value="NUMTITLE">
         <not><isset property="args.tablelink.style"/></not>
     </condition>
-
-    <property name="temp.transformation.file" location="${xsl.fo.dir}/topic2fo_shell${formatter.specific.ext}.xsl"/>
   </target>
 
   <target name="transform.topic2fo.index">
@@ -324,12 +298,13 @@ with those set forth herein.
       <not><isset property="_org.dita.pdf2.valfile"/></not>
     </condition>
     <makeurl property="_org.dita.pdf2.valfile.url" file="${_org.dita.pdf2.valfile}" validate="no"/>
-    <xslt in="${dita.temp.dir}/stage1.xml" out="${dita.temp.dir}/stage1a.xml" style="${xsl.fo.dir}/flagging-preprocess.xsl">
+    <copy file="${dita.temp.dir}/stage1.xml" tofile="${dita.temp.dir}/stage1a.xml"/>
+    <!--<xslt in="${dita.temp.dir}/stage1.xml" out="${dita.temp.dir}/stage1a.xml" style="${xsl.fo.dir}/flagging-preprocess.xsl">
       <param name="filterFile" expression="${_org.dita.pdf2.valfile.url}"/>
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
-    </xslt>
+    </xslt>-->
   </target>
   <target name="transform.topic2fo.flagging.no-filter" unless="dita.input.valfile">
     <copy file="${dita.temp.dir}/stage1.xml" tofile="${dita.temp.dir}/stage1a.xml"/>
@@ -355,6 +330,7 @@ with those set forth herein.
       <param name="work.dir.url" expression="${work.dir.url}"/>
       <param name="artworkPrefix" expression="${artworkPrefixUrl}"/>
       <param name="publishRequiredCleanup" expression="${publish.required.cleanup}"/>
+      <param name="artLabel" expression="${args.artlbl}" if="args.artlbl"/>
       <param name="antArgsBookmarkStyle" expression="${args.bookmark.style}"/>
       <param name="antArgsChapterLayout" expression="${args.chapter.layout}"/>
       <param name="include.rellinks" expression="${include.rellinks}"/>
@@ -430,10 +406,7 @@ with those set forth herein.
 
   <target name="transform.fo2pdf"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-          dita:depends="transform.fo2pdf.xep,
-                        transform.fo2pdf.ah,
-                        transform.fo2pdf.fop,
-                        {depend.org.dita.pdf2.format}"/>
+          dita:depends="{depend.org.dita.pdf2.format}"/>
 
   <target name="copyCoreArtwork">
     <copy todir="${artwork.dir}/Configuration/OpenTopic" failonerror="false">

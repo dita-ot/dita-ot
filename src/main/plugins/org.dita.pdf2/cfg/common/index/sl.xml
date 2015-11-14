@@ -5,11 +5,11 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <index.configuration.set>
   <index.configuration>
-    <language>en</language>
+    <language>sl</language>
     <index.groups>
       <index.group>
         <group.key>Specials</group.key>
-        <group.label/>
+        <group.label>Posebni znaki</group.label>
         <group.members>
           <char.set>\</char.set>
           <char.set>`</char.set>
@@ -47,18 +47,28 @@ See the accompanying license.txt file for applicable licenses.
       </index.group>
       <index.group>
         <group.key>Numbers</group.key>
-        <group.label/>
+        <group.label>Številke</group.label>
         <group.members>
           <char.set>0</char.set>
+          <char.set>０</char.set>
           <char.set>1</char.set>
+          <char.set>１</char.set>
           <char.set>2</char.set>
+          <char.set>２</char.set>
           <char.set>3</char.set>
+          <char.set>３</char.set>
           <char.set>4</char.set>
+          <char.set>４</char.set>
           <char.set>5</char.set>
+          <char.set>５</char.set>
           <char.set>6</char.set>
+          <char.set>６</char.set>
           <char.set>7</char.set>
+          <char.set>７</char.set>
           <char.set>8</char.set>
+          <char.set>８</char.set>
           <char.set>9</char.set>
+          <char.set>９</char.set>
         </group.members>
       </index.group>
       <index.group>
@@ -67,6 +77,10 @@ See the accompanying license.txt file for applicable licenses.
         <group.members>
           <char.set>A</char.set>
           <char.set>a</char.set>
+          <char.set>á</char.set>
+          <char.set>Á</char.set>
+          <char.set>à</char.set>
+          <char.set>À</char.set>
         </group.members>
       </index.group>
       <index.group>
@@ -91,12 +105,6 @@ See the accompanying license.txt file for applicable licenses.
         <group.members>
           <char.set>Č</char.set>
           <char.set>č</char.set>
-        </group.members>
-      </index.group>
-      <index.group>
-        <group.key>Ć</group.key>
-        <group.label>Ć</group.label>
-        <group.members>
           <char.set>Ć</char.set>
           <char.set>ć</char.set>
         </group.members>
@@ -107,22 +115,30 @@ See the accompanying license.txt file for applicable licenses.
         <group.members>
           <char.set>D</char.set>
           <char.set>d</char.set>
+          <char.set>Đ</char.set>
+          <char.set>đ</char.set>
         </group.members>
       </index.group>
-      <index.group>
+      <!--<index.group>
         <group.key>Đ</group.key>
         <group.label>Đ</group.label>
         <group.members>
           <char.set>Đ</char.set>
           <char.set>đ</char.set>
         </group.members>
-      </index.group>
+      </index.group>-->
       <index.group>
         <group.key>E</group.key>
         <group.label>E</group.label>
         <group.members>
           <char.set>E</char.set>
           <char.set>e</char.set>
+          <char.set>é</char.set>
+          <char.set>É</char.set>
+          <char.set>è</char.set>
+          <char.set>È</char.set>
+          <char.set>ê</char.set>
+          <char.set>Ê</char.set>
         </group.members>
       </index.group>
       <index.group>
@@ -155,6 +171,10 @@ See the accompanying license.txt file for applicable licenses.
         <group.members>
           <char.set>I</char.set>
           <char.set>i</char.set>
+          <char.set>í</char.set>
+          <char.set>Í</char.set>
+          <char.set>ì</char.set>
+          <char.set>Ì</char.set>
         </group.members>
       </index.group>
       <index.group>
@@ -203,6 +223,12 @@ See the accompanying license.txt file for applicable licenses.
         <group.members>
           <char.set>O</char.set>
           <char.set>o</char.set>
+          <char.set>ó</char.set>
+          <char.set>Ó</char.set>
+          <char.set>ò</char.set>
+          <char.set>Ò</char.set>
+          <char.set>ô</char.set>
+          <char.set>Ô</char.set>
         </group.members>
       </index.group>
       <index.group>
@@ -259,6 +285,10 @@ See the accompanying license.txt file for applicable licenses.
         <group.members>
           <char.set>U</char.set>
           <char.set>u</char.set>
+          <char.set>ú</char.set>
+          <char.set>Ú</char.set>
+          <char.set>ù</char.set>
+          <char.set>Ù</char.set>
         </group.members>
       </index.group>
       <index.group>

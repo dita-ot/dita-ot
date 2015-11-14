@@ -1,16 +1,14 @@
+sudo: false
 language: java
 jdk:
-- oraclejdk7
+  - oraclejdk7
 before_script:
-- git submodule update --init --recursive
-- ant init-ivy
-- ant jar
-- ant -f src/main/integrator.xml strict
-script: ant test integration-test
-env: CLASSPATH=src/test/lib:src/test/resources:src/main/lib/dost.jar:src/main/lib/dost-configuration.jar:src/main:src/main/lib:src/main/resources:src/main/lib/commons-io.jar:src/main/lib/commons-codec.jar:src/main/lib/xml-resolver.jar:src/main/lib/icu4j.jar:src/main/lib/xercesImpl.jar:src/main/lib/xml-apis.jar:src/main/lib/saxon.jar:src/main/lib/saxon-dom.jar
+  - git submodule update --init --recursive
+script:
+  - ./gradlew check integrationTest --info --stacktrace
 branches:
   only:
-  - /^(develop|hotfix\/.*)$/
+  - /^(develop|hotfix\/.*|feature\/.*|release\/.*)$/
 notifications:
   slack:
     secure: IAA4d9O2Dw1hkpY9cwxJz++VMjkgbV3EuaS09DGFujvHl2eQtpKTloE0/CDF+NZA4tcbH1dNqsGw3ETLmrqA581CLpmiiq3LG02cDMoSXZeOKB/9vo6tvLFg0UMawzo+FomJS/hvCmS5KirrFqZQKE5g6SCC05UBM5nwI5d0vOw=

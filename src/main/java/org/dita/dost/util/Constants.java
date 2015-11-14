@@ -590,6 +590,14 @@ public final class Constants {
     public static final DitaClass XNAL_D_THOROUGHFARE = new DitaClass("+ topic/ph xnal-d/thoroughfare ");
     public static final DitaClass XNAL_D_URL = new DitaClass("+ topic/data xnal-d/url ");
     public static final DitaClass XNAL_D_URLS = new DitaClass("+ topic/data xnal-d/urls ");
+    public static final DitaClass DITAVAREF_D_DITAVALREF = new DitaClass("+ map/topicref ditavalref-d/ditavalref ");
+    public static final DitaClass DITAVAREF_D_DITAVALMETA = new DitaClass("+ map/topicmeta ditavalref-d/ditavalmeta ");
+    public static final DitaClass DITAVAREF_D_DVR_RESOURCEPREFIX = new DitaClass("+ topic/data ditavalref-d/dvrResourcePrefix ");
+    public static final DitaClass DITAVAREF_D_DVR_RESOURCESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrResourceSuffix ");
+    public static final DitaClass DITAVAREF_D_DVR_KEYSCOPEPREFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopePrefix ");
+    public static final DitaClass DITAVAREF_D_DVR_KEYSCOPESUFFIX = new DitaClass("+ topic/data ditavalref-d/dvrKeyscopeSuffix ");
+    
+    public static final DitaClass SUBMAP = new DitaClass("+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ");
 
     /**maplinks element.*/
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
@@ -603,6 +611,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_ALIGN = "align";
     /**conref attribute.*/
     public static final String ATTRIBUTE_NAME_CONREF = "conref";
+    public static final String ATTRIBUTE_NAME_CONREFEND = "conrefend";
     /**href attribute.*/
     public static final String ATTRIBUTE_NAME_HREF = "href";
     /**mapref attribute.*/
@@ -657,6 +666,8 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_DATA = "data";
     /**codebase attribute.*/
     public static final String ATTRIBUTE_NAME_CODEBASE = "codebase";
+    public static final String ATTRIBUTE_NAME_ARCHIVE = "archive";
+    public static final String ATTRIBUTE_NAME_CLASSID = "classid";
     /**imageref attribute.*/
     public static final String ATTRIBUTE_NAME_IMAGEREF = "imageref";
     /**start attribute.*/
@@ -669,6 +680,10 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_KEYREF = "keyref";
     /**conkeyref attribute.*/
     public static final String ATTRIBUTE_NAME_CONKEYREF ="conkeyref";
+    public static final String ATTRIBUTE_NAME_ARCHIVEKEYREFS = "archivekeyrefs";
+    public static final String ATTRIBUTE_NAME_CLASSIDKEYREF = "classidkeyref";
+    public static final String ATTRIBUTE_NAME_CODEBASEKEYREF = "codebasekeyref";
+    public static final String ATTRIBUTE_NAME_DATAKEYREF = "datakeyref";
     /**keys attribute.*/
     public static final String ATTRIBUTE_NAME_KEYS = "keys";
     /**keys attribute.*/
@@ -687,6 +702,10 @@ public final class Constants {
     /**cascade attribute.*/
     public static final String ATTRIBUTE_NAME_CASCADE = "cascade";
     public static final String ATTRIBUTE_NAME_COLS = "cols";
+    public static final String ATTRIBUTE_NAME_VALUE = "value";
+    public static final String ATTRIBUTE_NAME_VALUETYPE = "valuetype";
+
+    public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 
     public static final String ATTRIBUTE_CASCADE_VALUE_MERGE = "merge";
     public static final String ATTRIBUTE_CASCADE_VALUE_NOMERGE = "nomerge";
@@ -724,12 +743,16 @@ public final class Constants {
     /** Constant for generated property file name(subrelation.xml).*/
     public static final String FILE_NAME_SUBJECT_RELATION = "subrelation.xml";
 
-    /** Property name for input file system path */
+    /** Property name for input file system path. Deprecated since 2.2 */
+    @Deprecated
     public static final String INPUT_DITAMAP = "user.input.file";
+    public static final String INPUT_DITAMAP_URI = "user.input.file.uri";
     /** Property name for input file list file list file, i.e. file which points to a file which points to the input file */
     public static final String INPUT_DITAMAP_LIST_FILE_LIST = "user.input.file.listfile";
-    /** Property name for input directory system path */
+    /** Property name for input directory system path. Deprecated since 2.2 */
+    @Deprecated
     public static final String INPUT_DIR = "user.input.dir";
+    public static final String INPUT_DIR_URI = "user.input.dir.uri";
     /** Property name for copy-to target2sourcemap list file */
     public static final String COPYTO_TARGET_TO_SOURCE_MAP_LIST = "copytotarget2sourcemaplist";
     /** Property name for relflag image list file */
@@ -869,6 +892,7 @@ public final class Constants {
     public static final String ATTR_FORMAT_VALUE_DITA = "dita";
     /**ATTR_FORMAT_VALUE_DITAMAP.*/
     public static final String ATTR_FORMAT_VALUE_DITAMAP = "ditamap";
+    public static final String ATTR_FORMAT_VALUE_DITAVAL = "ditaval";
     public static final String ATTR_FORMAT_VALUE_IMAGE = "image";
     public static final String ATTR_FORMAT_VALUE_HTML = "html";
     /**ATTRIBUTE_NAME_DITAARCHVERSION.*/

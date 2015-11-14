@@ -1,6 +1,7 @@
 package org.dita.dost.writer;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -47,7 +48,7 @@ public class TopicFragmentFilterTest {
 
     @Test
     public void test() throws Exception {
-        final TopicFragmentFilter f = new TopicFragmentFilter();
+        final TopicFragmentFilter f = new TopicFragmentFilter(ATTRIBUTE_NAME_HREF);
         f.setParent(SAXParserFactory.newInstance().newSAXParser().getXMLReader());
                 
         final DOMResult dst = new DOMResult();

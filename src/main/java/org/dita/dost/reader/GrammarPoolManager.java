@@ -18,7 +18,7 @@ import org.dita.dost.util.XMLGrammarPoolImplUtils;
  */
 public final class GrammarPoolManager {
 
-    private static final ThreadLocal<XMLGrammarPool> grammarPool = new ThreadLocal<XMLGrammarPool>();
+    private static final ThreadLocal<XMLGrammarPool> grammarPool = new ThreadLocal<>();
 
     /**
      * Get grammar pool

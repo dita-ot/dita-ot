@@ -11,11 +11,7 @@ import static org.dita.dost.util.URLUtils.toURI;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.*;
@@ -31,20 +27,20 @@ import org.xml.sax.helpers.LocatorImpl;
 public final class ValidationFilter extends AbstractXMLFilter {
 
     private final MessageUtils messageUtils = MessageUtils.getInstance();
-	private final Set<String> topicIds = new HashSet<String>();
+	private final Set<String> topicIds = new HashSet<>();
 	private Map<String, Map<String, Set<String>>> validateMap = null;
 	private Locator locator;
     /** Deque of domains attibute values */
-	private final Deque<String[][]> domains = new LinkedList<String[][]>();
+	private final Deque<String[][]> domains = new LinkedList<>();
     /** Absolute URI to current file */
     private URI currentFile;
     private Job job;
-    /** Number of cols in tgroup */
-    private int cols;
-    /** Number or colspecs encountered */
-    private int columnNumber;
-    /** Location of cols attribute */
-    private Locator colsLocator;
+//    /** Number of cols in tgroup */
+//    private int cols;
+//    /** Number or colspecs encountered */
+//    private int columnNumber;
+//    /** Location of cols attribute */
+//    private Locator colsLocator;
     private Mode processingMode;
 
     /**
@@ -99,14 +95,14 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	    } 
 		AttributesImpl modified = null;
 		modified = validateLang(atts, null);
-		validateId(atts);
+		modified = validateId(localName, atts, modified);
 		modified = validateHref(atts, modified);
         modified = processFormatDitamap(atts, modified);
 		validateKeys(atts);
 		validateKeyscope(atts);
 		validateAttributeValues(qName, atts);
 		validateAttributeGeneralization(atts);
-        validateCols(atts);
+//        validateCols(atts);
 
 		getContentHandler().startElement(uri, localName, qName, modified != null ? modified : atts);
 	}
@@ -119,38 +115,38 @@ public final class ValidationFilter extends AbstractXMLFilter {
 
     // Validation methods
 
-    /**
-     * Validate table {@code cols} attribute.
-     *
-     * @param atts attributes
-     */
-    private void validateCols(final Attributes atts) throws SAXException  {
-        if (TOPIC_TGROUP.matches(atts)) {
-            colsLocator = locator != null ? new LocatorImpl(locator) : null;
-            final String c = atts.getValue(ATTRIBUTE_NAME_COLS);
-            try {
-                cols = Integer.parseInt(c.trim());
-            } catch (final NumberFormatException e) {
-                if (processingMode == Mode.STRICT) {
-                    throw new SAXException(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
-                } else {
-                    logger.error(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
-                }
-                cols = -1;
-            }
-        } else if (TOPIC_COLSPEC.matches(atts)) {
-            columnNumber++;
-        } else if (TOPIC_THEAD.matches(atts) || TOPIC_TBODY.matches(atts)) {
-            if (cols != -1 && columnNumber > cols) {
-                if (processingMode == Mode.STRICT) {
-                    throw new SAXException(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
-                } else {
-                    logger.error(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
-                }
-            }
-            columnNumber = 0;
-        }
-    }
+//    /**
+//     * Validate table {@code cols} attribute.
+//     *
+//     * @param atts attributes
+//     */
+//    private void validateCols(final Attributes atts) throws SAXException  {
+//        if (TOPIC_TGROUP.matches(atts)) {
+//            colsLocator = locator != null ? new LocatorImpl(locator) : null;
+//            final String c = atts.getValue(ATTRIBUTE_NAME_COLS);
+//            try {
+//                cols = Integer.parseInt(c.trim());
+//            } catch (final NumberFormatException e) {
+//                if (processingMode == Mode.STRICT) {
+//                    throw new SAXException(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
+//                } else {
+//                    logger.error(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
+//                }
+//                cols = -1;
+//            }
+//        } else if (TOPIC_COLSPEC.matches(atts)) {
+//            columnNumber++;
+//        } else if (TOPIC_THEAD.matches(atts) || TOPIC_TBODY.matches(atts)) {
+//            if (cols != -1 && columnNumber > cols) {
+//                if (processingMode == Mode.STRICT) {
+//                    throw new SAXException(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
+//                } else {
+//                    logger.error(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
+//                }
+//            }
+//            columnNumber = 0;
+//        }
+//    }
 
     /**
 	 * Validate and fix {@code xml:lang} attribute.
@@ -181,10 +177,31 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	/**
 	 * Validate {@code id} attribute for uniqueness.
 	 */
-    private void validateId(final Attributes atts) throws SAXException {
+    private AttributesImpl validateId(final String localName, final Attributes atts, final AttributesImpl modified) throws SAXException {
+        AttributesImpl res = modified;
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
-        if (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls)) {
-			topicIds.clear();
+        if (MAP_MAP.matches(cls)) {
+            topicIds.clear();
+        } else if (TOPIC_TOPIC.matches(cls)) {
+            final String id = atts.getValue(ATTRIBUTE_NAME_ID);
+            if (id == null) {
+                switch (processingMode) {
+                case STRICT:
+                    throw new SAXException(messageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
+                case LAX:
+                    if (res == null) {
+                        res = new AttributesImpl(atts);
+                    }
+                    final String gen = "gen_" + UUID.randomUUID().toString();
+                    XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_ID, gen);
+                    logger.error(messageUtils.getMessage("DOTJ066E", localName, gen).setLocation(locator).toString());
+                    break;
+                case SKIP:
+                    logger.error(messageUtils.getMessage("DOTJ067E", localName).setLocation(locator).toString());
+                    break;
+                }
+            }
+            topicIds.clear();
         } else if (TOPIC_RESOURCEID.matches(cls) || DELAY_D_ANCHORID.matches(cls)) {
             // not considered a normal element ID
         } else {
@@ -200,6 +217,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 				topicIds.add(id);
 			}
 		}
+        return res;
     }
 
 	/**
@@ -222,7 +240,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     break;
                 case LAX:
                     try {
-                        final String u = new URI(URLUtils.clean(FileUtils.separatorsToUnix(href))).toASCIIString();
+                        final String u = new URI(URLUtils.clean(href)).toASCIIString();
                         if (res == null) {
 							res = new AttributesImpl(atts);
 						}
@@ -289,7 +307,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     private void validateKeyscope(final Attributes atts) {
         final String keys = atts.getValue(ATTRIBUTE_NAME_KEYSCOPE);
         if (keys != null) {
-            for (final String key : keys.split(" ")) {
+            for (final String key : keys.trim().split("\\s+")) {
                 if (!isValidKeyName(key)) {
                     logger.error(messageUtils.getMessage("DOTJ059E", key).toString());
                 }

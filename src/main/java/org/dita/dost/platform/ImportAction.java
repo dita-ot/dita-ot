@@ -37,8 +37,8 @@ abstract class ImportAction implements IAction {
      * Default Constructor.
      */
     ImportAction() {
-        valueSet = new LinkedHashSet<String>(16);
-        paramTable = new Hashtable<String,String>();
+        valueSet = new LinkedHashSet<>(16);
+        paramTable = new Hashtable<>();
     }
 
     @Override

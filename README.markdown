@@ -1,7 +1,7 @@
 DITA Open Toolkit [![Build Status](https://secure.travis-ci.org/dita-ot/dita-ot.png?branch=develop)](http://travis-ci.org/dita-ot/dita-ot)
 =================
 
-The DITA Open Toolkit, or DITA-OT for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.org](http://www.dita-ot.org/) for documentation, information about releases, and download packages.
+The _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source tool that provides processing for OASIS DITA content. See [dita-ot.org](http://www.dita-ot.org/) for documentation, information about releases, and download packages.
 
 Prerequisites
 -------------
@@ -9,10 +9,6 @@ Prerequisites
 To build and use DITA-OT, you’ll need:
 
 * Java Development Kit 7 or newer
-* Apache Ant 1.9.4 or newer
-* Apache Ivy 2.3.0 or newer
-
-If Ant throws an error like `unknown protocol: plugin` or `unknown protocol: cfg`, your Ant installation may be outdated. Try installing [a newer version of Ant](http://ant.apache.org/).
 
 Building
 --------
@@ -21,13 +17,17 @@ Building
 
         git clone git://github.com/dita-ot/dita-ot.git
 
-2. Fetch the submodules:
+2. Move to the DITA-OT directory:
+
+        cd dita-ot
+
+3. Fetch the submodules:
 
         git submodule update --init --recursive
 
-3. In the root directory, run `ant` to compile the Java code and install plugins:
+4. In the root directory, run Gradle to compile the Java code and install plugins:
 
-        ant
+        ./gradlew
  
 Usage
 -----
@@ -36,35 +36,22 @@ Usage
 
         src/main/bin/dita [options]
         
-   See the [documentation](http://www.dita-ot.org/2.0/) for arguments and [options](http://www.dita-ot.org/2.0/readme/using-dita-command.html).
+   See the [documentation](http://www.dita-ot.org/2.1/) for arguments and [options](http://www.dita-ot.org/2.1/getting-started/using-dita-command.html).
 
 Distribution
 ------------
 
-1. In the root directory, run `ant` to compile the Java code and install plugins:
+1. In the root directory, set up build environment:
 
-        ant
-     
-2. Add these files and directories to the `CLASSPATH` environment variable:
-   * `src/main/`
-   * `src/main/lib/dost.jar`
-   * `src/main/lib/dost-configuration.jar`
-   * `src/main/lib/xercesImpl.jar`
-   * `src/main/lib/xml-apis.jar`
-   * `src/main/lib/commons-codec.jar`
-   * `src/main/lib/commons-io.jar`
-   * `src/main/lib/saxon-dom.jar`
-   * `src/main/lib/saxon.jar`
-   * `src/main/lib/xml-resolver.jar`
-   * `src/main/lib/icu4j.jar`
+        ./gradlew
 
-3. Build distribution packages:
+2. Build distribution packages:
 
-        ant dist
+        ./gradlew dist
    
-   Distribution packages are built in the `target` directory.
+   Distribution packages are built in the `build/distributions` directory.
 
-   If Ant throws an error like `java.lang.OutOfMemoryError: Java heap space`, you probably need to increase the maximum Java heap size. One way to do this is to set the `ANT_OPTS` environment variable to a value like `-Xmx1024m`.
+   If Gradle throws an error like `java.lang.OutOfMemoryError: Java heap space`, you probably need to increase the maximum Java heap size. One way to do this is to set the `GRADLE_OPTS` environment variable to a value like `-Xmx1024m`.
 
    For more information on the `-Xmx` option, see [Java SE Documentation](http://docs.oracle.com/javase/6/docs/technotes/tools/windows/java.html#nonstandard).
 

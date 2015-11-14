@@ -83,7 +83,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void setJob(final Job job) {
         this.job = job;
-        fileInfoMap = new HashMap<URI, FileInfo>();
+        fileInfoMap = new HashMap<>();
         for (final FileInfo f: job.getFileInfo()) {
             fileInfoMap.put(f.src, f);
         }
@@ -102,9 +102,9 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
 
     @Override
     public void startDocument() throws SAXException {
-        final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(new File(job.getInputDir(), "dummy"), toFile(currentFile)),
+        final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(toFile(job.getInputDir().resolve("dummy")), toFile(currentFile)),
                 toFile(currentFile),
-                job.getInputFile(),
+                toFile(job.getInputFile()),
                 job);
         getContentHandler().startDocument();
         if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {

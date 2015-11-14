@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<params>
+  <param name="TRANSTYPE" expression="${transtype}" />
+</params>

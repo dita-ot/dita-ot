@@ -63,6 +63,7 @@
 <str name="task_postreq">آکے کیا کرنا ہے</str>
 <str name="task_prereq">قبل اس کے کہ آپ شروع کریں</str>
 <str name="task_procedure">طریق عمل</str>
+<str name="task_procedure_unordered">طریق عمل</str>
 <str name="task_results">نتائج</str>
 
 <str name="Copyright">حقوق</str>

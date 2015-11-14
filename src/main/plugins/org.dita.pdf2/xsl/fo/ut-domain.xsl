@@ -22,9 +22,9 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="ol.li__label">
                 <fo:block xsl:use-attribute-sets="ol.li__label__content">
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
-                        <xsl:with-param name="theParameters">
+                    <xsl:call-template name="getVariable">
+                        <xsl:with-param name="id" select="'Ordered List Number'"/>
+                        <xsl:with-param name="params">
                             <number>
                                 <xsl:number/>
                             </number>

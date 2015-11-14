@@ -58,7 +58,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
      */
     public DitaIndexWriter() {
         super();
-        topicIdList = new ArrayList<String>(16);
+        topicIdList = new ArrayList<>(16);
         hasMetadataTillNow = false;
         hasPrologTillNow = false;
         indexEntries = null;
@@ -207,7 +207,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     
     private void setMatch(final String match) {
         int index = 0;
-        matchList = new ArrayList<String>(16);
+        matchList = new ArrayList<>(16);
 
         while (index != -1) {
             final int end = match.indexOf(SLASH, index);

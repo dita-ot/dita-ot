@@ -46,14 +46,23 @@ public final class TopicRefWriter extends AbstractXMLFilter {
      * @param conflictTable conflictTable
      */
     public void setup(final Map<String, String> conflictTable) {
+        for (final Map.Entry<String, String> e: changeTable.entrySet()) {
+            assert new File(e.getKey()).isAbsolute();
+            assert new File(e.getValue()).isAbsolute();
+        }
         this.conflictTable = conflictTable;
     }
 
     public void setChangeTable(final Map<String, String> changeTable) {
+        for (final Map.Entry<String, String> e: changeTable.entrySet()) {
+            assert new File(e.getKey()).isAbsolute();
+            assert new File(e.getValue()).isAbsolute();
+        }
         this.changeTable = changeTable;
     }
 
     public void setFixpath(final String fixpath) {
+        assert fixpath != null ? new File(fixpath).isAbsolute() : true;
         this.fixpath = fixpath;
     }
 
@@ -106,8 +115,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
     private boolean isLocalDita(final Attributes atts) {
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
         if (classValue == null
-                // FIXME doesn't handle e.g. data, data-about, author, or source elements correctly
-                || (!TOPIC_XREF.matches(classValue) && !TOPIC_LINK.matches(classValue) && !MAP_TOPICREF.matches(classValue))) {
+                || (TOPIC_IMAGE.matches(classValue))) {
             return false;
         }
 

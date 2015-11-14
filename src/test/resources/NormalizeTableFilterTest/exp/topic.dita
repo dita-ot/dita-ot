@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " id="topic1" xml:lang="en-us">
+  <title class="- topic/title ">Topic 1</title>
+  <body class="- topic/body ">
+    <table class="- topic/table " id="tab_foo1">
+      <title class="- topic/title ">foo</title>
+      <tgroup class="- topic/tgroup " cols="2">
+        <colspec class="- topic/colspec " colname="col1" colnum="1"/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2"/>
+        <thead class="- topic/thead ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">foo1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="1">foo2</entry>
+          </row>
+        </thead>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="2">e1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="2">e2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table class="- topic/table " id="tab_foo3">
+      <title class="- topic/title ">foo</title>
+      <tgroup class="- topic/tgroup " cols="3">
+        <colspec class="- topic/colspec " colname="col1" colnum="1"/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2"/>
+        <colspec class="- topic/colspec " colname="col3" colnum="3"/>
+        <thead class="- topic/thead ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">s1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="1">s2</entry>
+            <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="1">s3</entry>
+          </row>
+        </thead>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="2">e1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="2">e2</entry>
+            <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="2">e3</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table class="- topic/table " colsep="1" frame="all" rowsep="1">
+      <tgroup class="- topic/tgroup " cols="5">
+        <colspec class="- topic/colspec " colname="col1" colnum="1" colwidth=" 1*  "/>
+        <colspec class="- topic/colspec " colname="col2" colnum="2" colwidth="1*"/>
+        <colspec class="- topic/colspec " colname="col3" colnum="3"/>
+        <colspec class="- topic/colspec " colname="col4" colnum="4" colwidth="35%"/>
+        <colspec class="- topic/colspec " colname="col5" colnum="5" colwidth="100pt"/>
+        <thead class="- topic/thead ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="1">0 1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="1">0 2</entry>
+            <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="1">0 3</entry>
+            <entry class="- topic/entry " colname="col4" dita-ot:x="4" dita-ot:y="1">0 4</entry>
+            <entry class="- topic/entry " colname="col5" dita-ot:x="5" dita-ot:y="1">0 5</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="2">1 1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="2">1 2</entry>
+            <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="2">1 3</entry>
+            <entry class="- topic/entry " colname="col4" dita-ot:x="4" dita-ot:y="2">1 4</entry>
+            <entry class="- topic/entry " colname="col5" dita-ot:x="5" dita-ot:y="2">1 5</entry>
+          </row>
+        </thead>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:morecols="1" dita-ot:x="1" dita-ot:y="3" nameend="col2" namest="col1">2 1</entry>
+            <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="3">2 3</entry>
+            <entry class="- topic/entry " colname="col4" dita-ot:morecols="1" dita-ot:x="4" dita-ot:y="3" nameend="col5" namest="col4">2 4</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="4">3 1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="4">3 2</entry>
+            <entry class="- topic/entry " colname="col3" dita-ot:morecols="1" dita-ot:x="3" dita-ot:y="4" morerows="1" nameend="col4" namest="col3">3 3</entry>
+            <entry class="- topic/entry " colname="col5" dita-ot:x="5" dita-ot:y="4">3 5</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="5">4 1</entry>
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="5" morerows="1">4 2</entry>
+            <entry class="- topic/entry " colname="col5" dita-ot:x="5" dita-ot:y="5" morerows="2">4 5</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="6" morerows="1">5 1</entry>
+            <entry class="- topic/entry " colname="col3" dita-ot:morecols="1" dita-ot:x="3" dita-ot:y="6" nameend="col4" namest="col3">5 3</entry>
+          </row>
+          <row class="- topic/row ">
+            <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="7">6 2</entry>
+            <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="7">6 3</entry>
+            <entry class="- topic/entry " colname="col4" dita-ot:x="4" dita-ot:y="7">6 4</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </body>
+</topic>

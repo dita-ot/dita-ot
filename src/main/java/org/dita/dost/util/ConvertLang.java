@@ -64,11 +64,11 @@ public final class ConvertLang extends Task {
 
     private String langcode;
     //charset map(e.g html = iso-8859-1)
-    private final Map<String, String>charsetMap = new HashMap<String, String>();
+    private final Map<String, String>charsetMap = new HashMap<>();
     //lang map(e.g ar- = 0x0c01 Arabic (EGYPT))
-    private final Map<String, String>langMap = new HashMap<String, String>();
+    private final Map<String, String>langMap = new HashMap<>();
     //entity map(e.g 38 = &amp;)
-    private final Map<String, String>entityMap = new HashMap<String, String>();
+    private final Map<String, String>entityMap = new HashMap<>();
 
 
     private DITAOTLogger logger;
@@ -452,8 +452,6 @@ public final class ConvertLang extends Task {
                 charCode = reader.read();
             }
         } catch (final FileNotFoundException e) {
-            logger.error(e.getMessage(), e) ;
-        } catch (final UnsupportedEncodingException e) {
             logger.error(e.getMessage(), e) ;
         } catch (final IOException e) {
             logger.error(e.getMessage(), e) ;

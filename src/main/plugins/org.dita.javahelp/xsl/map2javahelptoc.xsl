@@ -9,9 +9,12 @@
 
 <!-- stylesheet imports -->
 <xsl:import href="plugin:org.dita.xhtml:xsl/xslhtml/map2TOC.xsl"/>
-
+<xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+<xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+  
 <!-- default "output extension" processing parameter ('.html')-->
 <xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
+<xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <xsl:output
     method="xml"
@@ -53,6 +56,18 @@
           <xsl:value-of select="translate($outroot, '\/.', '___')"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@copy-to">
+        <xsl:variable name="copyToWithoutExtension">
+          <xsl:call-template name="replace-extension">
+           <xsl:with-param name="filename" select="@copy-to"/>
+           <xsl:with-param name="extension" select="''"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:attribute name="target">
+          <xsl:value-of select="translate($copyToWithoutExtension, '\/.', '___')"/>     
+        </xsl:attribute>
+      </xsl:if>
+
       <xsl:apply-templates select="$subtopicNodes"/>
     </tocitem>
   </xsl:when>

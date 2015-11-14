@@ -126,14 +126,14 @@
       <val>true</val>
       <val default="true">false</val>
     </param>
-    <param name="outer.control" desc="Specifies how the DITA OT handles content files that are located in or below the directory containing the master DITA map." type="enum">
+    <param name="outer.control" desc="Specifies how the DITA-OT handles content files that are not located in or below the directory containing the master DITA map." type="enum">
       <val desc="Fail quickly if files are going to be generated or copied outside of the directory.">fail</val>
       <val desc="Complete the operation if files will be generated or copied outside of the directory, but log a warning." default="true">warn</val>
-      <val desc="Quietly finish with only those files; do not generate warnings or errors.">quiet</val>
+      <val desc="Quietly finish without generating warnings or errors.">quiet</val>
     </param>
     <param name="output.dir" desc="Specifies the name and location of the output directory." type="dir"/>
     <param name="root-chunk-override" desc="Override for map chunk attribute value." type="string"/>
-    <param name="transtype" desc="Specifies the output format." type="file" required="true"/>
+    <param name="transtype" desc="Specifies the output format (transformation type)." type="file" required="true"/>
     <param name="validate" desc="Specifies whether the DITA-OT validates the content." type="enum">
       <val default="true">true</val>
       <val>false</val>
@@ -146,6 +146,10 @@
       <val desc="When an error is encountered, the DITA-OT stops processing">strict</val>
       <val desc="When an error is encountered, the DITA-OT attempts to recover from it" default="true">lax</val>
       <val desc="When an error is encountered, the DITA continues processing but does not attempt error recovery">skip</val>
+    </param>
+    <param name="conserve-memory" desc="Conserve memory at the expense of processing speed" type="enum">
+      <val>true</val>
+      <val default="true">false</val>
     </param>
   </transtype>
   <feature extension="dita.image.extensions" value=".gif"/>

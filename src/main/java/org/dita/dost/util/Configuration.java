@@ -37,7 +37,7 @@ public final class Configuration {
      */
     public final static Map<String, String> configuration;
     static {
-        final Map<String, String> c = new HashMap<String, String>();
+        final Map<String, String> c = new HashMap<>();
         
         final Properties pluginProperties = new Properties();
         InputStream plugingConfigurationInputStream = null;
@@ -112,7 +112,7 @@ public final class Configuration {
     /** List of print-oriented transtypes. */
     public static final List<String> printTranstype;
     static {
-        final List<String> types = new ArrayList<String>();
+        final List<String> types = new ArrayList<>();
         final String printTranstypes = Configuration.configuration.get(CONF_PRINT_TRANSTYPES);
         if (printTranstypes != null) {
             if (printTranstypes.trim().length() > 0) {
@@ -130,7 +130,7 @@ public final class Configuration {
     /** Map of plug-in resource directories. */
     public static final Map<String, File> pluginResourceDirs;
     static {
-        final Map<String, File> ps = new HashMap<String, File>();
+        final Map<String, File> ps = new HashMap<>();
         for (final Map.Entry<String, String> e: configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith("plugin.") && key.endsWith(".dir")) {
@@ -142,7 +142,7 @@ public final class Configuration {
     
     public static final Map<String, String> parserMap;
     static {
-        final Map<String, String> m = new HashMap<String, String>();
+        final Map<String, String> m = new HashMap<>();
         for (final Map.Entry<String, String> e: configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith("parser.")) {
@@ -154,7 +154,7 @@ public final class Configuration {
 
     public static final Set<String> ditaFormat;
     static {
-        final Set<String> s = new HashSet<String>();
+        final Set<String> s = new HashSet<>();
         for (final Map.Entry<String, String> e: configuration.entrySet()) {
             final String key = e.getKey();
             if (key.startsWith("parser.")) {

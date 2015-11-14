@@ -4,12 +4,11 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR;
-import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
+import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.Job.Generate.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,15 +61,16 @@ public class DebugAndFilterModuleTest {
         final File outDir = new File(tempDir, "out");
         tmpDir = new File(tempDir, "temp");
         TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
-        final Job props = new Job(tmpDir);
-        for (final Job.FileInfo fi: props.getFileInfo()) {
-            props.add(new Job.FileInfo.Builder(fi).src(inputDir.toURI().resolve(fi.uri)).build());
+        final Job job = new Job(tmpDir);
+        for (final Job.FileInfo fi: job.getFileInfo()) {
+            job.add(new Job.FileInfo.Builder(fi).src(inputDir.toURI().resolve(fi.uri)).build());
         }
-        props.setInputFile(inputMap.getAbsoluteFile());
-        props.setGeneratecopyouter("1");
-        props.setOutputDir(outDir);
-        props.setProperty("user.input.dir", inputDir.getAbsolutePath());
-        props.write();
+        job.setInputFile(inputMap.getAbsoluteFile().toURI());
+        job.setGeneratecopyouter(NOT_GENERATEOUTTER);
+        job.setOutputDir(outDir);
+        job.setProperty(INPUT_DIR, inputDir.getAbsolutePath());
+        job.setProperty(INPUT_DIR_URI, inputDir.getAbsoluteFile().toURI().toString());
+        job.write();
 
         final PipelineHashIO pipelineInput = new PipelineHashIO();
         pipelineInput.setAttribute("inputmap", inputMap.getPath());
@@ -82,10 +82,10 @@ public class DebugAndFilterModuleTest {
         pipelineInput.setAttribute("indextype", "xhtml");
         pipelineInput.setAttribute("encoding", "en-US");
         pipelineInput.setAttribute("targetext", ".html");
-        pipelineInput.setAttribute("validate", "false");
-        pipelineInput.setAttribute("generatecopyouter", "1");
+        pipelineInput.setAttribute("validate", Boolean.FALSE.toString());
+        pipelineInput.setAttribute("generatecopyouter", Integer.toString(NOT_GENERATEOUTTER.type));
         pipelineInput.setAttribute("outercontrol", "warn");
-        pipelineInput.setAttribute("onlytopicinmap", "false");
+        pipelineInput.setAttribute("onlytopicinmap", Boolean.FALSE.toString());
         pipelineInput.setAttribute("ditalist", new File(tmpDir, "dita.list").getPath());
         pipelineInput.setAttribute("maplinks", new File(tmpDir, "maplinks.unordered").getPath());
         pipelineInput.setAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID, "yes");
@@ -94,7 +94,7 @@ public class DebugAndFilterModuleTest {
 
         final AbstractFacade facade = new PipelineFacade();
         facade.setLogger(new TestUtils.TestLogger());
-        facade.setJob(new Job(tmpDir));
+        facade.setJob(job);
         facade.execute("DebugAndFilter", pipelineInput);
     }
 

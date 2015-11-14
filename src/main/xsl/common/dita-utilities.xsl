@@ -14,6 +14,8 @@
   <xsl:param name="variableFiles.url" select="'plugin:org.dita.base:xsl/common/strings.xml'"/>
   
   <xsl:variable name="pixels-per-inch" select="number(96)"/>
+
+  <xsl:key name="id" match="*[@id]" use="@id"/>
   
   <!-- Function to determine the current language, and return it in lower case -->
   <xsl:template name="getLowerCaseLang">
@@ -73,7 +75,7 @@
   
   <xsl:template name="getVariable">
     <xsl:param name="id" as="xs:string"/>
-    <xsl:param name="params" as="element()*"/>
+    <xsl:param name="params" as="node()*"/>
         
     <xsl:variable name="ancestorlang" as="xs:string*">
       <xsl:variable name="l" as="xs:string*">
@@ -100,10 +102,10 @@
   
   <xsl:template name="findString">
     <xsl:param name="id" as="xs:string"/>
-    <xsl:param name="params" as="element()*"/>
+    <xsl:param name="params" as="node()*"/>
     <xsl:param name="ancestorlang" as="xs:string*"/>
     <xsl:param name="defaultlang" as="xs:string*"/>
-        
+
     <xsl:variable name="l" select="($ancestorlang, $defaultlang)[1]" as="xs:string?"/>
     <xsl:choose>
       <xsl:when test="exists($l)">
@@ -381,6 +383,17 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:function name="dita-ot:resolve-href-path" as="xs:anyURI">
+    <xsl:param name="href" as="attribute(href)"/>
+
+    <xsl:variable name="source" as="xs:anyURI" select="base-uri($href)"/>
+
+    <xsl:sequence
+      select="if (starts-with($href, '#'))
+            then $source
+            else resolve-uri(tokenize($href, '#')[1], $source)"/>
+  </xsl:function>
+
   <xsl:function name="dita-ot:get-topic-id" as="xs:string?">
     <xsl:param name="href"/>
     <xsl:variable name="fragment" select="substring-after($href, '#')" as="xs:string"/>
@@ -420,7 +433,29 @@
       <xsl:with-param name="src" select="tokenize($uri, '/')"/>
     </xsl:call-template>
   </xsl:function>
-  
+
+  <xsl:function name="dita-ot:get-closest-topic" as="element()">
+    <xsl:param name="n" as="node()"/>
+
+    <xsl:sequence
+      select="$n/ancestor-or-self::*[contains(@class, ' topic/topic ')][1]"/>
+  </xsl:function>
+
+  <xsl:function name="dita-ot:retrieve-href-target" as="node()?">
+    <xsl:param name="href" as="attribute(href)"/>
+
+    <xsl:variable name="doc" as="document-node()"
+      select="doc(dita-ot:resolve-href-path($href))"/>
+
+    <xsl:sequence
+      select="if (dita-ot:has-element-id($href))
+            then key('id', dita-ot:get-element-id($href), $doc)
+                 [dita-ot:get-closest-topic(.)/@id eq dita-ot:get-topic-id($href)]
+            else if (dita-ot:has-topic-id($href) and not(dita-ot:has-element-id($href)))
+               then key('id', dita-ot:get-topic-id($href), $doc)
+            else $doc"/>
+  </xsl:function>
+
   <xsl:template name="dita-ot:normalize-uri" as="xs:string">
     <xsl:param name="src" as="xs:string*"/>
     <xsl:param name="res" select="()" as="xs:string*"/>

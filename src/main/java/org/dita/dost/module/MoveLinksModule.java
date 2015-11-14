@@ -99,7 +99,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
     }
 
     private Map<File, Map<String, Element>> getMapping(Document doc) {
-        final Map<File, Map<String, Element>> map = new HashMap<File, Map<String, Element>>();
+        final Map<File, Map<String, Element>> map = new HashMap<>();
         final NodeList maplinks = doc.getDocumentElement().getChildNodes();
         for (int i = 0; i < maplinks.getLength(); i++) {
             final Node n = maplinks.item(i);
@@ -113,7 +113,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
                 }
                 Map<String, Element> m = map.get(path);
                 if (m == null) {
-                    m = new HashMap<String, Element>();
+                    m = new HashMap<>();
                     map.put(path, m);
                 }
                 Element stub = m.get(fragment);
@@ -123,8 +123,9 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
                 }
                 Node c = maplink.getFirstChild();
                 while (c != null) {
+                    final Node nextSibling = c.getNextSibling();
                     stub.appendChild(maplink.removeChild(c));
-                    c = c.getNextSibling();
+                    c = nextSibling;
                 }
             }
         }

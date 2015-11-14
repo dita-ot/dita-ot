@@ -62,18 +62,18 @@
   <variable id="On the page"> op pagina <param ref-name="pagenum"/></variable>
   <variable id="Page"> pagina <param ref-name="pagenum"/></variable>
   <variable id="This link">deze verwijzing</variable>
-  <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="note Note Image Path"></variable>
+  <variable id="notice Note Image Path"></variable>
   <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="important Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="remember Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="fastpath Note Image Path"></variable>
+  <variable id="important Note Image Path"></variable>
+  <variable id="remember Note Image Path"></variable>
+  <variable id="restriction Note Image Path"></variable>
+  <variable id="tip Note Image Path"></variable>
+  <variable id="other Note Image Path"></variable>
 
   <variable id="Child topics">Onderliggende onderwerpen</variable>
 
@@ -105,13 +105,15 @@
   <variable id="Search Search in Progress Message">De zoekactie loopt...</variable>
   <variable id="Search Search Give No Results Message">Geen treffers gevonden.</variable>
   <variable id="Optional Step">Optioneel:</variable>
-  <variable id="Task Prereq">Voordat u begint</variable>
-  <variable id="Task Context">Over deze taak</variable>
-  <variable id="Task Steps">Procedure</variable>
-  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
-  <variable id="Task Result">Resultaten</variable>
-  <variable id="Task Example">Voorbeeld</variable>
-  <variable id="Task Postreq">Volgende stappen</variable>
+  <variable id="Required Step">Vereist:</variable>
+  <!-- Task strings now reused from common -->
+  <variable id="Task Prereq"></variable>
+  <variable id="Task Context"></variable>
+  <variable id="Task Steps"></variable>
+  <variable id="#steps-unordered-label"></variable>
+  <variable id="Task Result"></variable>
+  <variable id="Task Example"></variable>
+  <variable id="Task Postreq"></variable>
 
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>

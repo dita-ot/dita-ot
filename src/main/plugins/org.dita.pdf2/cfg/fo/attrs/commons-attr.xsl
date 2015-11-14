@@ -655,6 +655,11 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="image">
     </xsl:attribute-set>
 
+    <xsl:attribute-set name="image.artlabel">
+      <xsl:attribute name="font-weight">bold</xsl:attribute>
+      <xsl:attribute name="font-style">italic</xsl:attribute>
+    </xsl:attribute-set>
+
     <xsl:attribute-set name="flag.image" use-attribute-sets="image">
     </xsl:attribute-set>
 
@@ -681,5 +686,41 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:choose>
         </xsl:attribute>
     </xsl:attribute-set>
+
+  <xsl:attribute-set name="page-sequence.cover" use-attribute-sets="__force__page__count">
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="page-sequence.notice" use-attribute-sets="__force__page__count">
+    <xsl:attribute name="format">i</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="page-sequence.preface" use-attribute-sets="__force__page__count">
+    <xsl:attribute name="format">i</xsl:attribute>  
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="page-sequence.toc" use-attribute-sets="__force__page__count">
+    <xsl:attribute name="format">i</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="page-sequence.lot" use-attribute-sets="page-sequence.toc">
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="page-sequence.lof" use-attribute-sets="page-sequence.toc">
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="page-sequence.body" use-attribute-sets="__force__page__count">
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="page-sequence.part" use-attribute-sets="__force__page__count">
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="page-sequence.appendix" use-attribute-sets="__force__page__count">
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="page-sequence.glossary" use-attribute-sets="__force__page__count">
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="page-sequence.index" use-attribute-sets="__force__page__count">
+  </xsl:attribute-set>
 
 </xsl:stylesheet>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This file is part of the DITA Open Toolkit project.
+  See the accompanying license.txt file for applicable licenses.
+-->
+<plugin id="org.dita.html5">
+  <require plugin="org.dita.xhtml"/>
+  <!-- extension points -->
+  <extension-point id="dita.xsl.html5" name="HTML/XHTML XSLT import"/>
+  <extension-point id="dita.conductor.html5.param" name="XHTML XSLT parameters"/>
+  <extension-point id="dita.conductor.html5.toc.param" name="HTML/XSLT XSLT parameter"/>
+  <extension-point id="dita.xsl.html5.toc" name="HTML/XHTML TOC XSLT import"/>
+  <extension-point id="dita.xsl.html5.cover" name="HTML/XHTML Cover XSLT import"/>
+  <!-- extensions -->
+  <transtype name="html5" extends="common-html" desc="HTML5">
+    <param name="nav-toc" type="enum" desc="Specifies whether to generate a navigation TOC in topic pages.">
+      <val default="true" desc="No TOC">none</val>
+      <val desc="Partial TOC that shows the current topic">partial</val>
+      <val desc="Full TOC">full</val>
+    </param>
+  </transtype>
+  <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
+  <feature extension="dita.conductor.xhtml.param" file="params.xml"/>
+  <template file="build_dita2html5_template.xml"/>
+</plugin>

@@ -191,7 +191,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="page-sequence-reference" select="if ($mapType = 'bookmap') then 'body-sequence' else 'ditamap-body-sequence'"/>
     <xsl:choose>
       <xsl:when test="empty(ancestor::*[contains(@class,' topic/topic ')]) and empty(ancestor::ot-placeholder:glossarylist)">
-        <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="page-sequence.body">
           <xsl:call-template name="startPageNumbering"/>
           <xsl:call-template name="insertBodyStaticContents"/>
           <fo:flow flow-name="xsl-region-body">
@@ -207,7 +207,7 @@ See the accompanying license.txt file for applicable licenses.
   
     <!--  Bookmap Chapter processing  -->
     <xsl:template name="processTopicChapter">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.body">
             <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
@@ -263,7 +263,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--  Bookmap Appendix processing  -->
     <xsl:template name="processTopicAppendix">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.appendix">
             <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
@@ -319,7 +319,7 @@ See the accompanying license.txt file for applicable licenses.
 
   <!--  Bookmap appendices processing  -->
   <xsl:template name="processTopicAppendices">
-    <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+    <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.appendix">
       <xsl:call-template name="startPageNumbering"/>
       <xsl:call-template name="insertBodyStaticContents"/>
       <fo:flow flow-name="xsl-region-body">
@@ -387,7 +387,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--  Bookmap Part processing  -->
     <xsl:template name="processTopicPart">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.part">
             <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
@@ -453,7 +453,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="processTopicNotices">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.notice">
             <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertPrefaceStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
@@ -514,9 +514,9 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:choose>
                 <xsl:when test="$type = 'chapter'">
                     <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
-                        <xsl:call-template name="insertVariable">
-                            <xsl:with-param name="theVariableID" select="'Chapter with number'"/>
-                            <xsl:with-param name="theParameters">
+                        <xsl:call-template name="getVariable">
+                            <xsl:with-param name="id" select="'Chapter with number'"/>
+                            <xsl:with-param name="params">
                                 <number>
                                     <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
                                         <xsl:apply-templates select="key('map-id', @id)[1]" mode="topicTitleNumber"/>
@@ -528,9 +528,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:when>
                 <xsl:when test="$type = 'appendix'">
                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Appendix with number'"/>
-                                <xsl:with-param name="theParameters">
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Appendix with number'"/>
+                                <xsl:with-param name="params">
                                     <number>
                                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
                                             <xsl:apply-templates select="key('map-id', @id)[1]" mode="topicTitleNumber"/>
@@ -542,9 +542,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:when>
               <xsl:when test="$type = 'appendices'">
                 <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
-                  <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Appendix with number'"/>
-                    <xsl:with-param name="theParameters">
+                  <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Appendix with number'"/>
+                    <xsl:with-param name="params">
                       <number>
                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
                           <xsl:text>&#xA0;</xsl:text>
@@ -556,9 +556,9 @@ See the accompanying license.txt file for applicable licenses.
               </xsl:when>
                 <xsl:when test="$type = 'part'">
                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Part with number'"/>
-                                <xsl:with-param name="theParameters">
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Part with number'"/>
+                                <xsl:with-param name="params">
                                     <number>
                                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__number__container">
                                             <xsl:apply-templates select="key('map-id', @id)[1]" mode="topicTitleNumber"/>
@@ -570,15 +570,15 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:when>
                 <xsl:when test="$type = 'preface'">
                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Preface title'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Preface title'"/>
                             </xsl:call-template>
                         </fo:block>
                 </xsl:when>
                 <xsl:when test="$type = 'notices'">
                         <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Notices title'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Notices title'"/>
                             </xsl:call-template>
                         </fo:block>
                 </xsl:when>
@@ -622,8 +622,8 @@ See the accompanying license.txt file for applicable licenses.
                         <fo:block xsl:use-attribute-sets="__toc__mini">
                             <xsl:if test="*[contains(@class, ' topic/topic ')]">
                                 <fo:block xsl:use-attribute-sets="__toc__mini__header">
-                                    <xsl:call-template name="insertVariable">
-                                        <xsl:with-param name="theVariableID" select="'Mini Toc'"/>
+                                    <xsl:call-template name="getVariable">
+                                        <xsl:with-param name="id" select="'Mini Toc'"/>
                                     </xsl:call-template>
                                 </fo:block>
                                 <fo:list-block xsl:use-attribute-sets="__toc__mini__list">
@@ -663,8 +663,8 @@ See the accompanying license.txt file for applicable licenses.
         <fo:list-item xsl:use-attribute-sets="ul.li">
             <fo:list-item-label xsl:use-attribute-sets="ul.li__label">
                 <fo:block xsl:use-attribute-sets="ul.li__label__content">
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Unordered List bullet'"/>
+                    <xsl:call-template name="getVariable">
+                        <xsl:with-param name="id" select="'Unordered List bullet'"/>
                     </xsl:call-template>
                 </fo:block>
             </fo:list-item-label>
@@ -788,9 +788,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="fig.title">
             <xsl:call-template name="commonattributes"/>
-            <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'Figure.title'"/>
-                <xsl:with-param name="theParameters">
+            <xsl:call-template name="getVariable">
+                <xsl:with-param name="id" select="'Figure.title'"/>
+                <xsl:with-param name="params">
                     <number>
                         <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()])"/>
                     </number>
@@ -1137,8 +1137,8 @@ See the accompanying license.txt file for applicable licenses.
         <fo:block xsl:use-attribute-sets="navtitle">
             <xsl:call-template name="commonattributes"/>
             <fo:inline xsl:use-attribute-sets="navtitle__label">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Navigation title'"/>
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Navigation title'"/>
                 </xsl:call-template>
                 <xsl:text>: </xsl:text>
             </fo:inline>
@@ -1153,8 +1153,8 @@ See the accompanying license.txt file for applicable licenses.
         <fo:block xsl:use-attribute-sets="searchtitle">
             <xsl:call-template name="commonattributes"/>
             <fo:inline xsl:use-attribute-sets="searchtitle__label">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Search title'"/>
+                <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Search title'"/>
                 </xsl:call-template>
                 <xsl:text>: </xsl:text>
             </fo:inline>
@@ -1318,8 +1318,8 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:call-template name="commonattributes"/>
       <xsl:variable name="spectitleValue" as="xs:string" select="string(@spectitle)"/>
       <xsl:variable name="resolvedVariable">
-        <xsl:call-template name="insertVariable">
-          <xsl:with-param name="theVariableID" select="$spectitleValue"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="$spectitleValue"/>
         </xsl:call-template>
       </xsl:variable>
       <xsl:sequence select="if (not(normalize-space($resolvedVariable)))
@@ -1430,85 +1430,85 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:choose>
                     <xsl:when test="@type='note' or not(@type)">
                         <fo:inline xsl:use-attribute-sets="note__label__note">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Note'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Note'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='notice'">
                         <fo:inline xsl:use-attribute-sets="note__label__notice">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Notice'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Notice'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='tip'">
                         <fo:inline xsl:use-attribute-sets="note__label__tip">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Tip'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Tip'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='fastpath'">
                         <fo:inline xsl:use-attribute-sets="note__label__fastpath">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Fastpath'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Fastpath'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='restriction'">
                         <fo:inline xsl:use-attribute-sets="note__label__restriction">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Restriction'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Restriction'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='important'">
                         <fo:inline xsl:use-attribute-sets="note__label__important">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Important'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Important'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='remember'">
                         <fo:inline xsl:use-attribute-sets="note__label__remember">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Remember'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Remember'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='attention'">
                         <fo:inline xsl:use-attribute-sets="note__label__attention">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Attention'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Attention'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='caution'">
                         <fo:inline xsl:use-attribute-sets="note__label__caution">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Caution'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Caution'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='danger'">
                         <fo:inline xsl:use-attribute-sets="note__label__danger">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Danger'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Danger'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='warning'">
                         <fo:inline xsl:use-attribute-sets="note__label__danger">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'Warning'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'Warning'"/>
                             </xsl:call-template>
                         </fo:inline>
                     </xsl:when>
                     <xsl:when test="@type='trouble'">
                       <fo:inline xsl:use-attribute-sets="note__label__trouble">
-                        <xsl:call-template name="insertVariable">
-                          <xsl:with-param name="theVariableID" select="'Trouble'"/>
+                        <xsl:call-template name="getVariable">
+                          <xsl:with-param name="id" select="'Trouble'"/>
                         </xsl:call-template>
                       </fo:inline>
                     </xsl:when>                  
@@ -1527,8 +1527,8 @@ See the accompanying license.txt file for applicable licenses.
                         </fo:inline>
                     </xsl:when>
                 </xsl:choose>
-                <xsl:call-template name="insertVariable">
-                  <xsl:with-param name="theVariableID" select="'#note-separator'"/>
+                <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'#note-separator'"/>
                 </xsl:call-template>
             </fo:inline>
             <xsl:text>  </xsl:text>
@@ -1547,8 +1547,8 @@ See the accompanying license.txt file for applicable licenses.
               </xsl:otherwise>
           </xsl:choose>
       </xsl:variable>
-      <xsl:call-template name="insertVariable">
-          <xsl:with-param name="theVariableID" select="concat($noteType, ' Note Image Path')"/>
+      <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="concat($noteType, ' Note Image Path')"/>
       </xsl:call-template>
     </xsl:template>
 
@@ -1638,12 +1638,12 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/q ')]">
         <fo:inline xsl:use-attribute-sets="q">
             <xsl:call-template name="commonattributes"/>
-            <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'#quote-start'"/>
+            <xsl:call-template name="getVariable">
+                <xsl:with-param name="id" select="'#quote-start'"/>
             </xsl:call-template>
             <xsl:apply-templates/>
-            <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'#quote-end'"/>
+            <xsl:call-template name="getVariable">
+                <xsl:with-param name="id" select="'#quote-end'"/>
             </xsl:call-template>
         </fo:inline>
     </xsl:template>
@@ -1798,6 +1798,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/image ')]">
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <xsl:choose>
             <xsl:when test="empty(@href)"/>
             <xsl:when test="@placement = 'break'">
@@ -1810,6 +1811,11 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:with-param name="width" select="@width"/>
                         </xsl:apply-templates>
                     </fo:block>
+                    <xsl:if test="$artLabel='yes'">
+                      <fo:block>
+                        <xsl:apply-templates select="." mode="image.artlabel"/>
+                      </fo:block>
+                    </xsl:if>
             </xsl:when>
             <xsl:otherwise>
                 <fo:inline xsl:use-attribute-sets="image__inline">
@@ -1821,8 +1827,20 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:with-param name="width" select="@width"/>
                     </xsl:apply-templates>
                 </fo:inline>
+                <xsl:if test="$artLabel='yes'">
+                  <xsl:apply-templates select="." mode="image.artlabel"/>
+                </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
+    </xsl:template>
+
+    <xsl:template match="*" mode="image.artlabel">
+      <fo:inline xsl:use-attribute-sets="image.artlabel">
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="@href"/>
+        <xsl:text> </xsl:text>
+      </fo:inline>
     </xsl:template>
   
   <!-- Test whether URI is absolute -->
@@ -1939,8 +1957,8 @@ See the accompanying license.txt file for applicable licenses.
             <fo:inline xsl:use-attribute-sets="required-cleanup">
                 <xsl:call-template name="commonattributes"/>
                 <fo:inline xsl:use-attribute-sets="required-cleanup__label">
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Required-Cleanup'"/>
+                    <xsl:call-template name="getVariable">
+                        <xsl:with-param name="id" select="'Required-Cleanup'"/>
                     </xsl:call-template>
                     <xsl:if test="string(@remap)">
                         <xsl:text>(</xsl:text>
@@ -2041,6 +2059,8 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Process common attributes -->
     <xsl:template name="commonattributes">
       <xsl:apply-templates select="@id"/>
+      <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')] |
+                                   *[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="flag-attributes"/>
     </xsl:template>
 
     <!-- Get ID for an element, generate ID if not explicitly set. -->

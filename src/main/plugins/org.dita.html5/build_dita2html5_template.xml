@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project.
+     See the accompanying license.txt file for applicable licenses.-->
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2html5">
+  
+  <target name="dita2html5"
+          depends="html5.init,
+                   build-init,
+                   preprocess,
+                   html5.topic,
+                   html5.map,
+                   html5.css"/>
+
+  <target name="html5.init">
+    <property name="html-version" value="html5"/>
+    <condition property="args.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/dita2html5.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+    <condition property="args.xhtml.toc.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/map2html5-cover.xsl">
+      <not>
+        <isset property="args.xhtml.toc.xsl" />
+      </not>
+    </condition>
+    <condition property="html5.nav-toc" value="${nav-toc}" else="none">
+      <isset property="nav-toc"/>
+    </condition>
+  </target>
+  
+  <target name="html5.topic.init" unless="noMap">
+    <loadfile property="html5.map" srcfile="${dita.temp.dir}/${user.input.file.listfile}">
+      <filterchain>
+        <headfilter lines="1"/>
+      </filterchain>
+    </loadfile>
+    <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}"/>
+  </target>
+  
+  <target name="html5.topic" depends="html5.topic.init, xhtml.topics"/>
+  
+  <target name="html5.map" depends="dita.map.xhtml"/>
+  
+  <target name="html5.css" unless="user.csspath.url" description="Copy CSS files">
+    <condition property="user.copycss.yes">
+      <and>
+        <equals arg1="${args.copycss}" arg2="yes"/>
+        <isset property="args.css.present"/>
+      </and>
+    </condition>
+    <property name="user.csspath.real" location="${output.dir}/${user.csspath}"/>
+    <mkdir dir="${user.csspath.real}"/>
+    <!-- Always copy system default css files -->
+    <copy todir="${user.csspath.real}">
+      <fileset dir="${dita.plugin.org.dita.html5.dir}/css" includes="*.css"/>
+    </copy>
+    <!-- Copy user specify css file when required -->
+    <antcall target="html5.copy-css-user"/>
+  </target>
+  
+  <target name="html5.copy-css-user" if="user.copycss.yes">
+    <copy file="${args.css.real}" todir="${user.csspath.real}"/>
+  </target>
+  
+</project>

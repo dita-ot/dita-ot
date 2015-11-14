@@ -64,6 +64,7 @@
 <str name="task_prereq">시작하기 전에</str>
 <str name="task_postreq">다음에 수행할 작업</str>
 <str name="task_procedure">프로시저</str>
+<str name="task_procedure_unordered">프로시저</str>
 <str name="task_results">결과</str>
 
 <str name="Copyright">Copyright</str>

@@ -126,8 +126,8 @@
   <xsl:if test="descendant::*[contains(@class, ' topic/link ')][not(ancestor::*[contains(@class, ' topic/linklist ')])][@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='previous' or @role='cousin')]">
      <xsl:value-of select="$newline"/><dl class="prereqlinks"><xsl:value-of select="$newline"/>
      <dt class="prereq">
-             <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Prerequisites'"/>
+             <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'Prerequisites'"/>
                </xsl:call-template>
      </dt><xsl:value-of select="$newline"/>
      <!--only create link if there is an href, its importance is required, and the role is compatible (don't want a prereq showing up for a "next" or "parent" link, for example) - remove dups-->
@@ -271,8 +271,8 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           [@type='concept']">
           <div class="relconcepts">
           <strong>
-             <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Related concepts'"/>
+             <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'Related concepts'"/>
                </xsl:call-template>
           </strong><br/><xsl:value-of select="$newline"/>
      <!--once the related concepts section is set up, sort links by role within the section, using a shared sorting routine so that it's consistent across sections-->
@@ -291,8 +291,8 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           [@type='task']">
           <div class="reltasks">
           <strong>
-             <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Related tasks'"/>
+             <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'Related tasks'"/>
                </xsl:call-template>
           </strong><br/><xsl:value-of select="$newline"/>
      <!--once the related tasks section is set up, sort links by role within the section, using a shared sorting routine so that it's consistent across sections-->
@@ -313,8 +313,8 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           [@type='reference']">
           <div class="relref">
           <strong>
-             <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Related reference'"/>
+             <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'Related reference'"/>
                </xsl:call-template>
           </strong><br/><xsl:value-of select="$newline"/>
      <!--once the related reference section is set up, sort links by role within the section, using a shared sorting routine so that it's consistent across sections-->
@@ -335,8 +335,8 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           [not(@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin'))]">
           <div class="relinfo">
           <strong>
-             <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Related information'"/>
+             <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'Related information'"/>
                </xsl:call-template>
           </strong><br/><xsl:value-of select="$newline"/>
        <!--once section is created, create the links, using the same rules as bove plus a uniqueness check-->
@@ -409,8 +409,8 @@ Children are displayed in a numbered list, with the target title as the cmd and 
     <xsl:param name="links"/>
     <div class="relinfo">
       <strong>
-        <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Related information'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Related information'"/>
         </xsl:call-template>
       </strong><br/><xsl:value-of select="$newline"/>
       <xsl:copy-of select="$links"/>
@@ -496,13 +496,13 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           <!--use string as output link text for now, use image eventually-->
           <xsl:choose>
           <xsl:when test="@role='next'">
-               <xsl:call-template name="getString">
-                    <xsl:with-param name="stringName" select="'Next topic'"/>
+               <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Next topic'"/>
                     </xsl:call-template>
           </xsl:when>
           <xsl:when test="@role='previous'">
-               <xsl:call-template name="getString">
-                    <xsl:with-param name="stringName" select="'Previous topic'"/>
+               <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'Previous topic'"/>
                     </xsl:call-template>
           </xsl:when>
           <xsl:otherwise><!--both role values tested - no otherwise--></xsl:otherwise>
@@ -528,11 +528,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           <strong>
             <!-- Allow for unknown metadata (future-proofing) -->
             <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
-          <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Next topic'"/>
+          <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'Next topic'"/>
                </xsl:call-template>
-          <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+          <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'ColonSymbol'"/>
                </xsl:call-template>
           </strong><xsl:text> </xsl:text>
           <xsl:call-template name="makelink"/>
@@ -542,11 +542,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           <strong>
             <!-- Allow for unknown metadata (future-proofing) -->
             <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
-          <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Previous topic'"/>
+          <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'Previous topic'"/>
                </xsl:call-template>
-          <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+          <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'ColonSymbol'"/>
                </xsl:call-template>
           </strong><xsl:text> </xsl:text>
           <xsl:call-template name="makelink"/>
@@ -556,11 +556,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           <strong>
             <!-- Allow for unknown metadata (future-proofing) -->
             <xsl:apply-templates select="*[contains(@class,' topic/data ') or contains(@class,' topic/foreign ')]"/>
-          <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'Parent topic'"/>
+          <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'Parent topic'"/>
                </xsl:call-template>
-          <xsl:call-template name="getString">
-                  <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+          <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'ColonSymbol'"/>
                </xsl:call-template>
           </strong><xsl:text> </xsl:text>
           <xsl:call-template name="makelink"/>

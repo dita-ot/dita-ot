@@ -12,6 +12,7 @@
   <xsl:param name="artworkPrefix"/>
   <xsl:param name="publishRequiredCleanup"/>
   <xsl:param name="DRAFT"/>
+  <xsl:param name="artLabel" select="'no'"/>
   <xsl:param name="output.dir.url"/>
   <xsl:param name="work.dir.url"/>
   <xsl:param name="input.dir.url"/>

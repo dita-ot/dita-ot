@@ -5,17 +5,6 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2xhtml">
 
-  <target name="dita2html5.init">
-    <property name="html-version" value="html5"/>
-  </target>
-  <target name="dita2html5"
-          depends="dita2html5.init,
-                   build-init,
-                   preprocess, 
-                   xhtml.topics,
-                   dita.map.xhtml,
-                   copy-css"/>
-
   <target name="dita2xhtml.init">
     <property name="html-version" value="xhtml"/>
   </target>

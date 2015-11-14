@@ -1,0 +1,13 @@
+rootProject.name = 'dost'
+
+include 'src/main/plugins/org.dita.pdf2'
+project(":src/main/plugins/org.dita.pdf2").name = 'fo'
+
+include 'src/main/plugins/org.dita.pdf2.axf'
+project(":src/main/plugins/org.dita.pdf2.axf").name = 'axf'
+
+include 'src/main/plugins/org.dita.pdf2.xep'
+project(":src/main/plugins/org.dita.pdf2.xep").name = 'xep'
+
+include 'src/main/plugins/org.dita.html5'
+project(":src/main/plugins/org.dita.html5").name = 'html5'

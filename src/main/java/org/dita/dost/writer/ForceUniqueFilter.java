@@ -11,15 +11,15 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import java.io.File;
 import java.net.URI;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
-import static org.dita.dost.util.URLUtils.setFragment;
-import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.FileUtils.getExtension;
+import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.URLUtils.*;
 
 /**
@@ -29,17 +29,13 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
 
     /** Absolute path to current source file. */
     private URI currentFile;
-    private Job job;
-    private final Map<URI, Integer> topicrefCount = new HashMap<URI, Integer>();
+    private final Map<URI, Integer> topicrefCount = new HashMap<>();
+    private final Deque<Boolean> ignoreStack = new ArrayDeque<>();
     /** Generated copy-to mappings, key is target topic and value is source topic. */
-    public final Map<URI, URI> copyToMap = new HashMap<URI, URI>();
+    public final Map<URI, URI> copyToMap = new HashMap<>();
 
     public void setCurrentFile(final URI currentFile) {
         this.currentFile = currentFile;
-    }
-
-    public void setJob(final Job job) {
-        this.job = job;
     }
 
     // ContentHandler methods
@@ -47,8 +43,10 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
                              final Attributes atts) throws SAXException {
+        ignoreStack.push(MAP_RELTABLE.matches(atts) ? false : ignoreStack.isEmpty() || ignoreStack.peek());
+
         Attributes res = atts;
-        if (MAP_TOPICREF.matches(res)) {
+        if (ignoreStack.peek() && MAP_TOPICREF.matches(res)) {
             final URI href = toURI(res.getValue(ATTRIBUTE_NAME_HREF));
             final String scope = res.getValue(ATTRIBUTE_NAME_SCOPE);
             final String format = res.getValue(ATTRIBUTE_NAME_FORMAT);
@@ -69,8 +67,8 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
 
                         final URI source = currentFile.resolve(file);
                         final URI target = currentFile.resolve(stripFragment(generatedCopyTo));
-                        final URI relSource = getRelativePath(job.getInputDir().toURI(), source);
-                        final URI relTarget = getRelativePath(job.getInputDir().toURI(), target);
+                        final URI relSource = getRelativePath(job.getInputDir(), source);
+                        final URI relTarget = getRelativePath(job.getInputDir(), target);
                         copyToMap.put(relTarget, relSource);
 
                         final AttributesImpl buf = new AttributesImpl(atts);
@@ -82,6 +80,13 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
         }
 
         getContentHandler().startElement(uri, localName, qName, res);
+    }
+
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+        getContentHandler().endElement(uri, localName, qName);
+
+        ignoreStack.pop();
     }
 
     private URI generateCopyToTarget(final URI src, final int count) {
@@ -98,7 +103,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
             ext.append('.');
             ext.append(getExtension(path.toString()));
             final URI dst = toURI(replaceExtension(path.toString(), ext.toString()));
-            final URI target = URLUtils.getRelativePath(new File(job.getInputDir(), "dummy").toURI(), currentFile.resolve(dst));
+            final URI target = URLUtils.getRelativePath(job.getInputDir().resolve("dummy"), currentFile.resolve(dst));
             if (job.getFileInfo(target) == null) {
                 return setFragment(dst, fragment);
             }

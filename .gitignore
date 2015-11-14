@@ -1,0 +1,128 @@
+# Gradle task artifacts & build results
+.gradle/*
+/build/
+target/
+*.iml
+
+# JAR files retrieved during the build process
+src/main/lib/*.jar
+
+# Generated resources
+src/main/build.xml
+src/main/catalog-dita.xml
+src/main/doc
+src/main/lib/org.dita.dost.platform/plugin.properties
+src/main/plugins/org.dita.base/build.xml
+src/main/plugins/org.dita.base/build_preprocess.xml
+src/main/plugins/org.dita.base/catalog-dita.xml
+src/main/plugins/org.dita.docbook/xsl/dita2docbook.xsl
+src/main/plugins/org.dita.eclipsecontent/xsl/dita2dynamicdita.xsl
+src/main/plugins/org.dita.eclipsehelp/build_dita2eclipsehelp.xml
+src/main/plugins/org.dita.eclipsehelp/xsl/map2eclipse.xsl
+src/main/plugins/org.dita.eclipsehelp/xsl/map2plugin.xsl
+src/main/plugins/org.dita.html5/.sass-cache
+src/main/plugins/org.dita.html5/build_dita2html5.xml
+src/main/plugins/org.dita.html5/css/commonltr.css
+src/main/plugins/org.dita.html5/css/commonrtl.css
+src/main/plugins/org.dita.htmlhelp/xsl/map2hhc.xsl
+src/main/plugins/org.dita.htmlhelp/xsl/map2hhp.xsl
+src/main/plugins/org.dita.odt/xsl/dita2odt.xsl
+src/main/plugins/org.dita.pdf2.axf/build/
+src/main/plugins/org.dita.pdf2.axf/lib/axf.jar
+src/main/plugins/org.dita.pdf2.axf/xsl/fo/topic2fo_shell_axf.xsl
+src/main/plugins/org.dita.pdf2.fop/.gradle/
+src/main/plugins/org.dita.pdf2.fop/xsl/fo/topic2fo_shell_fop.xsl
+src/main/plugins/org.dita.pdf2.xep/build/
+src/main/plugins/org.dita.pdf2.xep/lib/
+src/main/plugins/org.dita.pdf2.xep/lib/
+src/main/plugins/org.dita.pdf2.xep/xsl/fo/topic2fo_shell_xep.xsl
+src/main/plugins/org.dita.pdf2/**/*.class
+src/main/plugins/org.dita.pdf2/.gradle/
+src/main/plugins/org.dita.pdf2/build.xml
+src/main/plugins/org.dita.pdf2/build/
+src/main/plugins/org.dita.pdf2/cfg/catalog.xml
+src/main/plugins/org.dita.pdf2/lib/fo.jar
+src/main/plugins/org.dita.pdf2/xsl/common/topicmerge.xsl
+src/main/plugins/org.dita.pdf2/xsl/fo/flagging-preprocess.xsl
+src/main/plugins/org.dita.pdf2/xsl/fo/i18n-postprocess.xsl
+src/main/plugins/org.dita.pdf2/xsl/fo/topic2fo_shell.xsl
+src/main/plugins/org.dita.pdf2/xsl/fo/topic2fo_shell_axf.xsl
+src/main/plugins/org.dita.pdf2/xsl/fo/topic2fo_shell_fop.xsl
+src/main/plugins/org.dita.pdf2/xsl/fo/topic2fo_shell_xep.xsl
+src/main/plugins/org.dita.troff/xsl/dita2troff-ast-shell.xsl
+src/main/plugins/org.dita.troff/xsl/dita2troff-step2-shell.xsl
+src/main/plugins/org.dita.wordrtf/xsl/dita2rtf.xsl
+src/main/plugins/org.dita.xhtml/build_dita2xhtml.xml
+src/main/plugins/org.dita.xhtml/build_general.xml
+src/main/plugins/org.dita.xhtml/xsl/dita2html-base.xsl
+src/main/plugins/org.dita.xhtml/xsl/map2html-coverImpl.xsl
+src/main/plugins/org.dita.xhtml/xsl/map2htmltoc.xsl
+src/main/resources/env.bat
+src/main/resources/env.sh
+src/main/resources/messages.xml
+src/main/resources/plugins.xml
+src/main/xsl/common/allstrings.xml
+src/main/xsl/common/strings.xml
+src/main/xsl/preprocess/conref.xsl
+src/main/xsl/preprocess/flag.xsl
+src/main/xsl/preprocess/maplink.xsl
+src/main/xsl/preprocess/mappull.xsl
+src/main/xsl/preprocess/mapref.xsl
+src/main/xsl/preprocess/topicpull.xsl
+
+
+# OS-specific entries below
+
+### Linux ###
+*~
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+
+### Windows ###
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows shortcuts
+*.lnk
+
+

@@ -64,6 +64,7 @@
 <str name="task_postreq">Sonraki adım</str>
 <str name="task_prereq">Başlamadan önce</str>
 <str name="task_procedure">Yordam</str>
+<str name="task_procedure_unordered">Yordam</str>
 <str name="task_results">Sonuçlar</str>
 
 <str name="Copyright">Copyright</str>

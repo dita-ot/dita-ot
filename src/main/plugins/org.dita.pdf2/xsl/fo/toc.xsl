@@ -45,8 +45,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template name="createTocHeader">
         <fo:block xsl:use-attribute-sets="__toc__header" id="{$id.toc}">
-            <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
+            <xsl:call-template name="getVariable">
+                <xsl:with-param name="id" select="'Table of Contents'"/>
             </xsl:call-template>
         </fo:block>
     </xsl:template>
@@ -119,9 +119,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' bookmap/chapter ')] |
                          *[contains(@class, ' bookmap/bookmap ')]/opentopic:map/*[contains(@class, ' map/topicref ')]" mode="tocPrefix" priority="-1">
-        <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Table of Contents Chapter'"/>
-            <xsl:with-param name="theParameters">
+        <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Table of Contents Chapter'"/>
+            <xsl:with-param name="params">
                 <number>
                     <xsl:apply-templates select="." mode="topicTitleNumber"/>
                 </number>
@@ -130,9 +130,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     
     <xsl:template match="*[contains(@class, ' bookmap/appendix ')]" mode="tocPrefix">
-        <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Table of Contents Appendix'"/>
-            <xsl:with-param name="theParameters">
+        <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Table of Contents Appendix'"/>
+            <xsl:with-param name="params">
                 <number>
                     <xsl:apply-templates select="." mode="topicTitleNumber"/>
                 </number>
@@ -141,9 +141,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     
     <xsl:template match="*[contains(@class, ' bookmap/part ')]" mode="tocPrefix">
-        <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Table of Contents Part'"/>
-            <xsl:with-param name="theParameters">
+        <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Table of Contents Part'"/>
+            <xsl:with-param name="params">
                 <number>
                     <xsl:apply-templates select="." mode="topicTitleNumber"/>
                 </number>
@@ -152,14 +152,14 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     
     <xsl:template match="*[contains(@class, ' bookmap/preface ')]" mode="tocPrefix">
-        <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Table of Contents Preface'"/>
+        <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Table of Contents Preface'"/>
         </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="*[contains(@class, ' bookmap/notices ')]" mode="tocPrefix">
-        <xsl:call-template name="insertVariable">
-            <xsl:with-param name="theVariableID" select="'Table of Contents Notices'"/>
+        <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Table of Contents Notices'"/>
         </xsl:call-template>
     </xsl:template>
     
@@ -248,14 +248,14 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:choose>
         </xsl:variable>
         <xsl:if test="count($toc/*) > 0">
-            <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="__force__page__count">
+            <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.toc">
                 <xsl:call-template name="insertTocStaticContents"/>
                 <fo:flow flow-name="xsl-region-body">
                     <xsl:call-template name="createTocHeader"/>
                     <fo:block>
                         <fo:marker marker-class-name="current-header">
-                          <xsl:call-template name="insertVariable">
-                            <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
+                          <xsl:call-template name="getVariable">
+                            <xsl:with-param name="id" select="'Table of Contents'"/>
                           </xsl:call-template>
                         </fo:marker>
                         <xsl:copy-of select="$toc"/>
@@ -267,7 +267,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="processTocList">
-        <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.toc">
             <xsl:call-template name="insertTocStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <xsl:call-template name="createTocHeader"/>
@@ -288,8 +288,8 @@ See the accompanying license.txt file for applicable licenses.
         <fo:block xsl:use-attribute-sets="__toc__topic__content__booklist">
           <fo:basic-link internal-destination="{$id.index}" xsl:use-attribute-sets="__toc__link">
             <fo:inline xsl:use-attribute-sets="__toc__title">
-              <xsl:call-template name="insertVariable">
-                <xsl:with-param name="theVariableID" select="'Index'"/>
+              <xsl:call-template name="getVariable">
+                <xsl:with-param name="id" select="'Index'"/>
               </xsl:call-template>
             </fo:inline>
             <fo:inline xsl:use-attribute-sets="__toc__page-number">
@@ -307,8 +307,8 @@ See the accompanying license.txt file for applicable licenses.
             <fo:block xsl:use-attribute-sets="__toc__topic__content__glossary">
                 <fo:basic-link internal-destination="{$id.glossary}" xsl:use-attribute-sets="__toc__link">
                     <fo:inline xsl:use-attribute-sets="__toc__title">
-                        <xsl:call-template name="insertVariable">
-                            <xsl:with-param name="theVariableID" select="'Glossary'"/>
+                        <xsl:call-template name="getVariable">
+                            <xsl:with-param name="id" select="'Glossary'"/>
                         </xsl:call-template>
                     </fo:inline>
                     <fo:inline xsl:use-attribute-sets="__toc__page-number">
@@ -326,8 +326,8 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:block xsl:use-attribute-sets="__toc__topic__content__lot">
                     <fo:basic-link internal-destination="{$id.lot}" xsl:use-attribute-sets="__toc__link">
                         <fo:inline xsl:use-attribute-sets="__toc__title">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'List of Tables'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'List of Tables'"/>
                             </xsl:call-template>
                         </fo:inline>
                         <fo:inline xsl:use-attribute-sets="__toc__page-number">
@@ -346,8 +346,8 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:block xsl:use-attribute-sets="__toc__topic__content__lof">
                     <fo:basic-link internal-destination="{$id.lof}" xsl:use-attribute-sets="__toc__link">
                         <fo:inline xsl:use-attribute-sets="__toc__title">
-                            <xsl:call-template name="insertVariable">
-                                <xsl:with-param name="theVariableID" select="'List of Figures'"/>
+                            <xsl:call-template name="getVariable">
+                                <xsl:with-param name="id" select="'List of Figures'"/>
                             </xsl:call-template>
                         </fo:inline>
                         <fo:inline xsl:use-attribute-sets="__toc__page-number">

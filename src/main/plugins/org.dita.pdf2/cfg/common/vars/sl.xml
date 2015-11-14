@@ -63,18 +63,18 @@ See the accompanying license.txt file for applicable licenses.
   <variable id="On the page"> na strani <param ref-name="pagenum"/></variable>
   <variable id="Page"> stran <param ref-name="pagenum"/></variable>
   <variable id="This link">ta povezava</variable>
-  <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="note Note Image Path"></variable>
+  <variable id="notice Note Image Path"></variable>
   <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="important Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="remember Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
-  <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
+  <variable id="fastpath Note Image Path"></variable>
+  <variable id="important Note Image Path"></variable>
+  <variable id="remember Note Image Path"></variable>
+  <variable id="restriction Note Image Path"></variable>
+  <variable id="tip Note Image Path"></variable>
+  <variable id="other Note Image Path"></variable>
 
   <variable id="Child topics">Podrejen</variable>
 
@@ -106,13 +106,18 @@ See the accompanying license.txt file for applicable licenses.
   <variable id="Search Search in Progress Message">Iskanje v teku...</variable>
   <variable id="Search Search Give No Results Message">Ni ujemanj.</variable>
   <variable id="Optional Step">Izbiren:</variable>
-  <variable id="Task Prereq">Predzahteva</variable>
-  <variable id="Task Context">O tem opravilu</variable>
-  <variable id="Task Steps">Postopek</variable>
-  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
-  <variable id="Task Result">Rezultati</variable>
-  <variable id="Task Example">Primer</variable>
-  <variable id="Task Postreq">Kaj storiti zatem</variable>
+  <variable id="Required Step">Zahtevano:</variable>
+  <!-- Prereq was "Predzahteva", changing to common string, currently "Preden začnete" -->
+  <variable id="Task Prereq"></variable>
+  <!-- Context was "O tem opravilu", changing to common string, currently "O tej nalogi" -->
+  <variable id="Task Context"></variable>
+  <variable id="Task Steps"></variable>
+  <variable id="#steps-unordered-label"></variable>
+  <variable id="Task Result"></variable>
+  <!-- Example was "Primer", changing to common string, currently "Zgled" -->
+  <variable id="Task Example"></variable>
+  <!-- Postreq was "Kaj storiti zatem", changing to common string, currently "Kako naprej?" -->
+  <variable id="Task Postreq"></variable>
   <variable id="Glossary odd footer"/>
   <variable id="Glossary even footer"/>
   <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>

@@ -1,132 +1,155 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "topic.dtd">
-<topic id="a">
-  <title>Keyref</title>
-  <related-links>
-    <link keyref="empty"/>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  id="a" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Keyref</title>
+  <related-links class="- topic/related-links ">
+    <link class="- topic/link " keyref="empty"/>
   </related-links>
-  <topic id="nolink">
-    <title>Without href</title>
-    <prolog>
-      <author keyref="author">
-        <keyword>author keyword</keyword>
+  <topic class="- topic/topic "
+    domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+    id="nolink" ditaarch:DITAArchVersion="1.2">
+    <title class="- topic/title ">Without href</title>
+    <prolog class="- topic/prolog ">
+      <author class="- topic/author " keyref="author">
+        <keyword class="- topic/keyword ">author keyword</keyword>
       </author>
-      <source keyref="source">
-        <keyword>source keyword</keyword>
+      <source class="- topic/source " keyref="source">
+        <keyword class="- topic/keyword ">source keyword</keyword>
       </source>
-      <publisher keyref="publisher">
-        <keyword>publisher keyword</keyword>
+      <publisher class="- topic/publisher " keyref="publisher">
+        <keyword class="- topic/keyword ">publisher keyword</keyword>
       </publisher>
-      <data keyref="data">
-        <keyword>data keyword</keyword>
+      <data class="- topic/data " keyref="data">
+        <keyword class="- topic/keyword ">data keyword</keyword>
       </data>
-      <data-about keyref="data-about">
-        <data>data-about data-about</data>
+      <data-about class="- topic/data-about " keyref="data-about">
+        <data class="- topic/data ">data-about data-about</data>
       </data-about>
     </prolog>
-    <body>
-      <image keyref="image" placement="inline"/>
-      <p>
-        <xref keyref="xref">
-          <keyword>xref keyword</keyword>
+    <body class="- topic/body ">
+      <image class="- topic/image " keyref="image" placement="inline"/>
+      <p class="- topic/p ">
+        <xref class="- topic/xref " keyref="xref">
+          <keyword class="- topic/keyword ">xref keyword</keyword>
         </xref>
-        <cite keyref="cite">cite keyword</cite>
-        <keyword keyref="keyword">keyword keyword</keyword>
-        <ph keyref="ph">ph keyword</ph>
-        <term keyref="term">term keyword</term>
-        <indexterm keyref="indexterm">indexterm keyword</indexterm>
-        <indexterm>
-          <index-base keyref="index-base">index-base keyword</index-base>
+        <cite class="- topic/cite " keyref="cite">cite keyword</cite>
+        <keyword class="- topic/keyword " keyref="keyword">keyword keyword</keyword>
+        <ph class="- topic/ph " keyref="ph">ph keyword</ph>
+        <term class="- topic/term " keyref="term">term keyword</term>
+        <indexterm class="- topic/indexterm " keyref="indexterm">indexterm keyword</indexterm>
+        <indexterm class="- topic/indexterm ">
+          <index-base class="- topic/index-base " keyref="index-base">index-base keyword</index-base>
         </indexterm>
-        <indextermref keyref="indextermref">indextermref keyword</indextermref>
+        <indextermref class="- topic/indextermref " keyref="indextermref">indextermref keyword</indextermref>
       </p>
-      <dl>
-        <dlentry>
-          <dt keyref="dt">dt keyword</dt>
-          <dd/>
+      <dl class="- topic/dl ">
+        <dlentry class="- topic/dlentry ">
+          <dt class="- topic/dt " keyref="dt">dt keyword</dt>
+          <dd class="- topic/dd "/>
         </dlentry>
       </dl>
-      <lq keyref="lq">
-        <keyword>lq keyword</keyword>
+      <lq class="- topic/lq " keyref="lq">
+        <keyword class="- topic/keyword ">lq keyword</keyword>
       </lq>
-      <p>
-        <keyword keyref="keyword">original</keyword>
-        <keyword keyref="keyword"><text>original</text></keyword>
-        <keyword keyref="keyword">keyword keyword</keyword>
-        <keyword keyref="keyword"><?original?>keyword keyword</keyword>
+      <p class="- topic/p ">
+        <keyword class="- topic/keyword " keyref="keyword">original</keyword>
+        <keyword class="- topic/keyword " keyref="keyword"><text class="- topic/text ">original</text></keyword>
+        <keyword class="- topic/keyword " keyref="keyword">keyword keyword</keyword>
+        <keyword class="- topic/keyword " keyref="keyword"><?original?>keyword keyword</keyword>
       </p>
-      <p>
-        <xref keyref="missing" scope="external" href="dead" type="dead" format="dead">missing</xref>
-        <keyword keyref="missing">missing</keyword>
+      <p class="- topic/p ">
+        <xref class="- topic/xref " format="dead" href="dead" keyref="missing" scope="external" type="dead">missing</xref>
+        <keyword class="- topic/keyword " keyref="missing">missing</keyword>
       </p>
+      <object class="- topic/object "
+              archivekeyrefs="object" classidkeyref="object" codebasekeyref="object" datakeyref="object"/>
+      <object class="- topic/object ">
+        <param class="- topic/param " keyref="param"/>
+        <param class="- topic/param " keyref="param" valuetype="ref"/>
+        <param class="- topic/param " keyref="param" valuetype="data"/>
+        <param class="- topic/param " keyref="param" value="foo"/>
+        <param class="- topic/param " keyref="missing" value="foo"/>
+      </object>
     </body>
-    <related-links>
-      <link keyref="link">
-        <linktext>
-          <keyword>link keyword</keyword>
+    <related-links class="- topic/related-links ">
+      <link class="- topic/link " keyref="link">
+        <linktext class="- topic/linktext ">
+          <keyword class="- topic/keyword ">link keyword</keyword>
         </linktext>
       </link>
     </related-links>
   </topic>
-  <topic id="link">
-    <title>With href</title>
-    <prolog>
-      <author keyref="author_link" scope="external" href="a.xml" type="dead" format="dead">
-        <keyword>author keyword</keyword>
+  <topic class="- topic/topic "
+    domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+    id="link" ditaarch:DITAArchVersion="1.2">
+    <title class="- topic/title ">With href</title>
+    <prolog class="- topic/prolog ">
+      <author class="- topic/author " format="dead" href="a.xml" keyref="author_link" scope="external" type="dead">
+        <keyword class="- topic/keyword ">author keyword</keyword>
       </author>
-      <source keyref="source_link" scope="external" href="a.xml" type="dead" format="dead">
-        <keyword>source keyword</keyword>
+      <source class="- topic/source " format="dead" href="a.xml" keyref="source_link" scope="external" type="dead">
+        <keyword class="- topic/keyword ">source keyword</keyword>
       </source>
-      <publisher keyref="publisher_link" scope="external" href="a.xml" type="dead" format="dead">
-        <keyword>publisher keyword</keyword>
+      <publisher class="- topic/publisher " format="dead" href="a.xml" keyref="publisher_link" scope="external" type="dead">
+        <keyword class="- topic/keyword ">publisher keyword</keyword>
       </publisher>
-      <data keyref="data_link" scope="external" href="a.xml" type="dead" format="dead">
-        <keyword>data keyword</keyword>
+      <data class="- topic/data " format="dead" href="a.xml" keyref="data_link" scope="external" type="dead">
+        <keyword class="- topic/keyword ">data keyword</keyword>
       </data>
-      <data-about keyref="data-about_link" scope="external" href="a.xml" type="dead" format="dead">
-        <data>data-about data-about</data>
+      <data-about class="- topic/data-about " format="dead" href="a.xml" keyref="data-about_link" scope="external" type="dead">
+        <data class="- topic/data ">data-about data-about</data>
       </data-about>
     </prolog>
-    <body>
-      <image keyref="image_link" placement="inline" scope="external" href="b.gif"/>
-      <p>
-        <xref keyref="xref_link" scope="external" href="a.xml" type="dead" format="dead">
-          <keyword>xref keyword</keyword>
+    <body class="- topic/body ">
+      <image class="- topic/image " href="b.gif" keyref="image_link" placement="inline" scope="external"/>
+      <p class="- topic/p ">
+        <xref class="- topic/xref " format="dead" href="a.xml" keyref="xref_link" scope="external" type="dead">
+          <keyword class="- topic/keyword ">xref keyword</keyword>
         </xref>
-        <cite keyref="cite_link" href="a.xml">cite keyword</cite>
-        <keyword keyref="keyword_link" href="a.xml">keyword keyword</keyword>
-        <ph keyref="ph_link" href="a.xml">ph keyword</ph>
-        <term keyref="term_link" href="a.xml">term keyword</term>
-        <indexterm keyref="indexterm_link" href="a.xml">indexterm keyword</indexterm>
-        <indexterm>
-          <index-base keyref="index-base_link" href="a.xml">index-base keyword</index-base>
+        <cite class="- topic/cite " href="a.xml" keyref="cite_link">cite keyword</cite>
+        <keyword class="- topic/keyword " href="a.xml" keyref="keyword_link">keyword keyword</keyword>
+        <ph class="- topic/ph " href="a.xml" keyref="ph_link">ph keyword</ph>
+        <term class="- topic/term " href="a.xml" keyref="term_link">term keyword</term>
+        <indexterm class="- topic/indexterm " href="a.xml" keyref="indexterm_link">indexterm keyword</indexterm>
+        <indexterm class="- topic/indexterm ">
+          <index-base class="- topic/index-base " href="a.xml" keyref="index-base_link">index-base keyword</index-base>
         </indexterm>
-        <indextermref keyref="indextermref_link" href="a.xml">indextermref keyword</indextermref>
+        <indextermref class="- topic/indextermref " href="a.xml" keyref="indextermref_link">indextermref keyword</indextermref>
       </p>
-      <dl>
-        <dlentry>
-          <dt keyref="dt_link" href="a.xml">dt keyword</dt>
-          <dd/>
+      <dl class="- topic/dl ">
+        <dlentry class="- topic/dlentry ">
+          <dt class="- topic/dt " href="a.xml" keyref="dt_link">dt keyword</dt>
+          <dd class="- topic/dd "/>
         </dlentry>
       </dl>
-      <lq keyref="lq_link" scope="external" href="a.xml" type="dead" format="dead">
-        <keyword>lq keyword</keyword>
+      <lq class="- topic/lq " format="dead" href="a.xml" keyref="lq_link" scope="external" type="dead">
+        <keyword class="- topic/keyword ">lq keyword</keyword>
       </lq>
-      <p>
-        <keyword keyref="keyword_link" href="a.xml">original</keyword>
-        <keyword keyref="keyword_link" href="a.xml"><text>original</text></keyword>
-        <keyword keyref="keyword_link" href="a.xml">keyword keyword</keyword>
-        <keyword keyref="keyword_link" href="a.xml"><?original?>keyword keyword</keyword>
+      <p class="- topic/p ">
+        <keyword class="- topic/keyword " href="a.xml" keyref="keyword_link">original</keyword>
+        <keyword class="- topic/keyword " href="a.xml" keyref="keyword_link"><text class="- topic/text ">original</text></keyword>
+        <keyword class="- topic/keyword " href="a.xml" keyref="keyword_link">keyword keyword</keyword>
+        <keyword class="- topic/keyword " href="a.xml" keyref="keyword_link"><?original?>keyword keyword</keyword>
       </p>
-      <p>
-        <xref href="a.xml" keyref="missing" scope="external" type="dead" format="dead">missing</xref>
-        <keyword keyref="missing">missing</keyword>
+      <p class="- topic/p ">
+        <xref class="- topic/xref " format="dead" href="a.xml" keyref="missing" scope="external" type="dead">missing</xref>
+        <keyword class="- topic/keyword " keyref="missing">missing</keyword>
       </p>
+      <object class="- topic/object "
+              archivekeyrefs="object_link" classidkeyref="object_link" codebasekeyref="object_link" datakeyref="object_link"
+              archive="a.xml" classid="a.xml" codebase="a.xml" data="a.xml"/>
+      <object class="- topic/object ">
+        <param class="- topic/param " keyref="param_link" value="a.xml"/>
+        <param class="- topic/param " keyref="param_link" valuetype="ref" value="a.xml"/>
+        <param class="- topic/param " keyref="param_link" valuetype="data"/>
+        <param class="- topic/param " keyref="param_link" value="a.xml"/>
+        <param class="- topic/param " keyref="missing" value="foo"/>
+      </object>
     </body>
-    <related-links>
-      <link keyref="link_link" scope="external" href="a.xml" type="dead" format="dead">
-        <linktext>
-          <keyword>link keyword</keyword>
+    <related-links class="- topic/related-links ">
+      <link class="- topic/link " format="dead" href="a.xml" keyref="link_link" scope="external" type="dead">
+        <linktext class="- topic/linktext ">
+          <keyword class="- topic/keyword ">link keyword</keyword>
         </linktext>
       </link>
     </related-links>

@@ -64,6 +64,7 @@
 <str name="task_postreq">Það sem gera þarf næst</str>
 <str name="task_prereq">Áður en þú byrjar</str>
 <str name="task_procedure">Aðferð</str>
+<str name="task_procedure_unordered">Aðferð</str>
 <str name="task_results">Niðurstöður</str>
 
 <str name="Copyright">Copyright</str>

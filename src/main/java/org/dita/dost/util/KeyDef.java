@@ -20,6 +20,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.dita.dost.exception.DITAOTException;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -30,17 +31,19 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class KeyDef {
     
-    private static final String ELEMENT_STUB = "stub";
-    private static final String ATTRIUBTE_SOURCE = "source";
+    public static final String ELEMENT_STUB = "stub";
+    private static final String ATTRIBUTE_SOURCE = "source";
     private static final String ATTRIBUTE_HREF = "href";
     private static final String ATTRIBUTE_SCOPE = "scope";
     private static final String ATTRIBUTE_KEYS = "keys";
     private static final String ELEMENT_KEYDEF = "keydef";
     
+    /** Space delimited list of key names */
     public final String keys;
     public final URI href;
     public final String scope;
     public final URI source;
+    public final Element element;
     
     /**
      * Construct new key definition.
@@ -50,13 +53,15 @@ public class KeyDef {
      * @param scope link scope, may be {@code null}
      * @param source key definition source, may be {@code null}
      */
-    public KeyDef(final String keys, final URI href, final String scope, final URI source) {
+    public KeyDef(final String keys, final URI href, final String scope, final URI source, final Element element) {
+        //assert href.isAbsolute();
         this.keys = keys;
-        this.href = href;
-        this.scope = scope;
+        this.href = href == null || href.toString().isEmpty() ? null : href;
+        this.scope = scope == null ? ATTR_SCOPE_VALUE_LOCAL : scope;
         this.source = source;
+        this.element = element;
     }
-    
+
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder().append(keys).append(EQUAL);
@@ -70,36 +75,6 @@ public class KeyDef {
             buf.append(LEFT_BRACKET).append(source.toString()).append(RIGHT_BRACKET);
         }
         return buf.toString();
-    }
-    
-    /**
-     * Read key definition XML configuration file
-     * 
-     * @param keydefFile key definition file
-     * @return list of key definitions
-     * @throws DITAOTException if reading configuration file failed
-     */
-    public static Collection<KeyDef> readKeydef(final File keydefFile) throws DITAOTException {
-        final Collection<KeyDef> res = new ArrayList<KeyDef>();
-        try {
-            final XMLReader parser = XMLUtils.getXMLReader();
-            parser.setContentHandler(new DefaultHandler() {
-                @Override
-                public void startElement(final String uri, final String localName, final String qName, final Attributes atts) throws SAXException {
-                    final String n = localName != null ? localName : qName;
-                    if (n.equals(ELEMENT_KEYDEF)) {
-                        res.add(new KeyDef(atts.getValue(ATTRIBUTE_KEYS),
-                                           toURI(atts.getValue(ATTRIBUTE_HREF)),
-                                           atts.getValue(ATTRIBUTE_SCOPE),
-                                           toURI(atts.getValue(ATTRIUBTE_SOURCE))));
-                    }
-                }
-            });
-            parser.parse(keydefFile.toURI().toString());
-        } catch (final Exception e) {
-            throw new DITAOTException("Failed to read key definition file " + keydefFile + ": " + e.getMessage(), e);
-        }
-        return res;
     }
 
     /**
@@ -127,14 +102,12 @@ public class KeyDef {
                     keydef.writeAttribute(ATTRIBUTE_SCOPE, k.scope);
                 }
                 if (k.source != null) {
-                    keydef.writeAttribute(ATTRIUBTE_SOURCE, k.source.toString());
+                    keydef.writeAttribute(ATTRIBUTE_SOURCE, k.source.toString());
                 }
                 keydef.writeEndElement();
             }        
             keydef.writeEndDocument();
-        } catch (final XMLStreamException e) {
-            throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
-        } catch (final IOException e) {
+        } catch (final XMLStreamException | IOException e) {
             throw new DITAOTException("Failed to write key definition file " + keydefFile + ": " + e.getMessage(), e);
         } finally {
             if (keydef != null) {

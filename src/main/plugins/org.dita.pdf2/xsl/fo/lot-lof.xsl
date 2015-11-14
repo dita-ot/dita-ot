@@ -43,7 +43,7 @@
   <xsl:template match="ot-placeholder:tablelist" name="createTableList">
     <xsl:if test="//*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ' )]">
       <!--exists tables with titles-->
-      <fo:page-sequence master-reference="toc-sequence" format="1" xsl:use-attribute-sets="__force__page__count">
+      <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.lot">
         <xsl:call-template name="insertTocStaticContents"/>
         <fo:flow flow-name="xsl-region-body">
           <fo:block start-indent="0in">
@@ -60,12 +60,12 @@
   <xsl:template name="createLOTHeader">
     <fo:block xsl:use-attribute-sets="__lotf__heading" id="{$id.lot}">
       <fo:marker marker-class-name="current-header">
-        <xsl:call-template name="insertVariable">
-          <xsl:with-param name="theVariableID" select="'List of Tables'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'List of Tables'"/>
         </xsl:call-template>
       </fo:marker>
-      <xsl:call-template name="insertVariable">
-        <xsl:with-param name="theVariableID" select="'List of Tables'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'List of Tables'"/>
       </xsl:call-template>
     </fo:block>
   </xsl:template>
@@ -80,9 +80,9 @@
           </xsl:attribute>
           
           <fo:inline xsl:use-attribute-sets="__lotf__title">
-            <xsl:call-template name="insertVariable">
-              <xsl:with-param name="theVariableID" select="'Table'"/>
-              <xsl:with-param name="theParameters">
+            <xsl:call-template name="getVariable">
+              <xsl:with-param name="id" select="'Table.title'"/>
+              <xsl:with-param name="params">
                 <number>
                   <xsl:variable name="id">
                     <xsl:call-template name="get-id"/>
@@ -118,7 +118,7 @@
   <xsl:template match="ot-placeholder:figurelist" name="createFigureList">
       <xsl:if test="//*[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ' )]">
         <!--exists figures with titles-->
-        <fo:page-sequence master-reference="toc-sequence" format="1" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.lof">
 
           <xsl:call-template name="insertTocStaticContents"/>
           <fo:flow flow-name="xsl-region-body">
@@ -136,12 +136,12 @@
   <xsl:template name="createLOFHeader">
     <fo:block xsl:use-attribute-sets="__lotf__heading" id="{$id.lof}">
       <fo:marker marker-class-name="current-header">
-        <xsl:call-template name="insertVariable">
-          <xsl:with-param name="theVariableID" select="'List of Figures'"/>
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'List of Figures'"/>
         </xsl:call-template>
       </fo:marker>
-      <xsl:call-template name="insertVariable">
-        <xsl:with-param name="theVariableID" select="'List of Figures'"/>
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'List of Figures'"/>
       </xsl:call-template>
     </fo:block>
   </xsl:template>
@@ -156,9 +156,9 @@
           </xsl:attribute>
           
           <fo:inline xsl:use-attribute-sets="__lotf__title">
-            <xsl:call-template name="insertVariable">
-              <xsl:with-param name="theVariableID" select="'Figure'"/>
-              <xsl:with-param name="theParameters">
+            <xsl:call-template name="getVariable">
+              <xsl:with-param name="id" select="'Figure.title'"/>
+              <xsl:with-param name="params">
                 <number>
                   <xsl:variable name="id">
                     <xsl:call-template name="get-id"/>

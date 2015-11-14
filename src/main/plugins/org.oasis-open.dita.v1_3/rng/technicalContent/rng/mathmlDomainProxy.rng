@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar
+   xmlns="http://relaxng.org/ns/structure/1.0"
+   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+   datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+   <include href="mathml/mathml3/mathml3.rng">
+     <define name="anyElement">
+       <element>
+         <anyName>
+           <except>
+             <choice>
+               <!-- NOTE: Need to list all the topic types in all 
+                    the shells that integrated the MathML domain.
+                 -->
+               <name>topic</name>
+               <name>concept</name>
+               <name>glossentry</name>
+               <name>glossgroup</name>
+               <name>reference</name>
+               <name>task</name>
+               <name>troubleshooting</name>
+               <nsName ns="http://www.w3.org/1998/Math/MathML"/>
+               <nsName ns="http://www.w3.org/2000/svg"/>
+             </choice>
+           </except>
+         </anyName>
+         <zeroOrMore>
+           <choice>
+             <attribute>
+               <anyName/>
+             </attribute>
+             <text/>
+             <ref name="anyElement"/>
+           </choice>
+         </zeroOrMore>
+       </element>
+     </define>
+
+   </include>
+
+</grammar>

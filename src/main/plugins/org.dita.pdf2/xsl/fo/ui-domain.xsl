@@ -40,8 +40,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="ancestor::*[contains(@class,' ui-d/menucascade ')]">
             <xsl:variable name="uicontrolcount" select="count(preceding-sibling::*[contains(@class,' ui-d/uicontrol ')])"/>
             <xsl:if test="$uicontrolcount &gt; 0">
-                <xsl:call-template name="insertVariable">
-                  <xsl:with-param name="theVariableID" select="'#menucascade-separator'"/>
+                <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'#menucascade-separator'"/>
                 </xsl:call-template>
             </xsl:if>
         </xsl:if>

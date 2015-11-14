@@ -12,7 +12,7 @@
   <extension-point id="dita.xsl.htmltoc" name="HTML/XHTML TOC XSLT import"/>
   <extension-point id="dita.xsl.html.cover" name="HTML/XHTML Cover XSLT import"/>
   <!-- extensions -->
-  <transtype name="base-html" abstract="true" desc="Common HTML-based transformations">
+  <transtype name="base-html" abstract="true" desc="HTML-based output">
     <param name="args.artlbl" desc="Specifies whether to generate a label for each image; the label will contain the image file name." type="enum">
       <val>yes</val>
       <val default="true">no</val>
@@ -54,7 +54,7 @@
     </param>
     <param name="args.xsl" desc="Specifies a custom XSL file to be used instead of the default XSL transformation." type="file"/>
   </transtype>
-  <transtype name="html5 xhtml" extends="base-html" desc="HTML">
+  <transtype name="common-html" extends="base-html" desc="HTML5 and XHTML">
     <param name="args.xhtml.contenttarget" desc="Specifies the value of the @target attribute on the &lt;base&gt; element in the TOC file." type="string">
       <val default="true">contentwin</val>
     </param>
@@ -62,7 +62,9 @@
       <val default="true">index</val>
     </param>
     <param name="args.xhtml.toc.class" desc="Specifies the value of the @class attribute on the &lt;body&gt; element in the TOC file." type="string"/>
+    <param name="args.xhtml.toc.xsl" desc="Specifies a custom XSL file to be used for TOC generation." type="file"/>
   </transtype>
+  <transtype name="xhtml" extends="common-html" desc="XHTML"/>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
   <template file="build_general_template.xml"/>

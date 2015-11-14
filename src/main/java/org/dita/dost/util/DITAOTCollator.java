@@ -20,7 +20,7 @@ import java.util.Locale;
  * @author Wu, Zhi Qiang
  */
 public final class DITAOTCollator implements Comparator {
-    private static final HashMap<Locale, DITAOTCollator> cache = new HashMap<Locale, DITAOTCollator>();
+    private static final HashMap<Locale, DITAOTCollator> cache = new HashMap<>();
 
     /**
      * Return the DITAOTCollator instance, Locale.US is default.

@@ -77,7 +77,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template name="createFrontMatter">
       <xsl:if test="$generate-front-cover">
-        <fo:page-sequence master-reference="front-matter" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="front-matter" xsl:use-attribute-sets="page-sequence.cover">
             <xsl:call-template name="insertFrontMatterStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
               <fo:block-container xsl:use-attribute-sets="__frontmatter">
@@ -127,6 +127,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="createBackCoverContents">
+      <fo:block></fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' bookmap/bookmeta ')]" priority="1">

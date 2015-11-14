@@ -64,6 +64,7 @@
 <str name="task_postreq">Seuraavat toimet</str>
 <str name="task_prereq">Ennen aloitusta</str>
 <str name="task_procedure">Toimintosarja</str>
+<str name="task_procedure_unordered">Toimintosarja</str>
 <str name="task_results">Tulokset</str>
 
 <str name="Copyright">Copyright</str>

@@ -64,6 +64,7 @@
 <str name="task_postreq">Næste trin</str>
 <str name="task_prereq">Inden du begynder</str>
 <str name="task_procedure">Fremgangsmåde</str>
+<str name="task_procedure_unordered">Fremgangsmåde</str>
 <str name="task_results">Resultater</str>
 
 <str name="Copyright">Copyright</str>

@@ -63,6 +63,7 @@
 <str name="task_postreq">Šta uraditi sledeće</str>
 <str name="task_prereq">Pre nego što počnete</str>
 <str name="task_procedure">Postupak</str>
+<str name="task_procedure_unordered">Postupak</str>
 <str name="task_results">Rezultat</str>
 
 <str name="Copyright">Copyright</str>

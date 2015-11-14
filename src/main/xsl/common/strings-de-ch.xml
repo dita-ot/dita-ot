@@ -64,6 +64,7 @@
 <str name="task_prereq">Vorbereitungen</str>
 <str name="task_postreq">Nächste Maßnahme</str>
 <str name="task_procedure">Prozedur</str>
+<str name="task_procedure_unordered">Prozedur</str>
 <str name="task_results">Ergebnisse</str>
 
 <str name="Copyright">Copyright</str>

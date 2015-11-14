@@ -62,32 +62,34 @@
   <variable id="On the page">בעמוד <param ref-name="pagenum"/></variable>
   <variable id="Page">עמוד <param ref-name="pagenum"/></variable>
   <variable id="This link"><!--TODO:this link--></variable>
-  <variable id="note Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
-  <variable id="notice Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="note Note Image Path"></variable>
+  <variable id="notice Note Image Path"></variable>
   <variable id="attention Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="caution Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="danger Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
   <variable id="warning Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
-  <variable id="fastpath Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
-  <variable id="important Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
-  <variable id="remember Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
-  <variable id="restriction Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
-  <variable id="tip Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
-  <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand_rtl.gif</variable>
+  <variable id="fastpath Note Image Path"></variable>
+  <variable id="important Note Image Path"></variable>
+  <variable id="remember Note Image Path"></variable>
+  <variable id="restriction Note Image Path"></variable>
+  <variable id="tip Note Image Path"></variable>
+  <variable id="other Note Image Path"></variable>
 
   <variable id="Child topics"><!--TODO:Child Topics--></variable>
 
   <variable id="Related references">תיעוד קשור</variable>
   
   <variable id="Index multiple entries separator">, </variable>
-  <variable id="Optional Step"><!--TODO:Optional:--></variable>
-  <variable id="Task Prereq">לפני שתתחילו</variable>
-  <variable id="Task Context">אודות משימה זו</variable>
-  <variable id="Task Steps">נוהל</variable>
-  <variable id="#steps-unordered-label"><variable id="Task Steps"/></variable>
-  <variable id="Task Result">תוצאות</variable>
-  <variable id="Task Example">דוגמה</variable>
-  <variable id="Task Postreq">איך להמשיך</variable>
+  <variable id="Optional Step">אופציונלי:</variable>
+  <variable id="Required Step">דרוש:</variable>
+  <!--Labels for task sections, now reused from common-->
+  <variable id="Task Prereq"></variable>
+  <variable id="Task Context"></variable>
+  <variable id="Task Steps"></variable>
+  <variable id="#steps-unordered-label"></variable>
+  <variable id="Task Result"></variable>
+  <variable id="Task Example"></variable>
+  <variable id="Task Postreq"></variable>
   <variable id="Glossary odd footer"/>
   <variable id="Glossary even footer"/>
   <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>

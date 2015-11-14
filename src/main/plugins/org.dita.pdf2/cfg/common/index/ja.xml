@@ -33,9 +33,10 @@ See the accompanying license.txt file for applicable licenses.
 
 <index.configuration.set>
 <index.configuration>
+<language>ja</language>
 <index.groups>
 <index.group>
-<group.key>記号</group.key>
+<group.key>Specials</group.key>
 <group.label>記号</group.label>
 <group.members>
 <char.set>\</char.set>

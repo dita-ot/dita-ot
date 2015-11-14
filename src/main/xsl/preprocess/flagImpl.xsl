@@ -378,11 +378,23 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       </xsl:call-template>
     </xsl:if>
     <!-- default flags -->
+    <xsl:if test="$current/@audience">
+      <xsl:copy-of select="$FILTERDOC/val/prop[@att='audience' and empty(@val) and @action = 'flag']"/>
+    </xsl:if>
+    <xsl:if test="$current/@platform">
+      <xsl:copy-of select="$FILTERDOC/val/prop[@att='platform' and empty(@val) and @action = 'flag']"/>
+    </xsl:if>
+    <xsl:if test="$current/@product">
+      <xsl:copy-of select="$FILTERDOC/val/prop[@att='product' and empty(@val) and @action = 'flag']"/>
+    </xsl:if>
+    <xsl:if test="$current/@otherprops">
+      <xsl:copy-of select="$FILTERDOC/val/prop[@att='otherprops' and empty(@val) and @action = 'flag']"/>
+    </xsl:if>
     <xsl:if test="$current/@audience | $current/@platform | $current/@product | $current/@otherprops">
-      <xsl:copy-of select="$FILTERDOC/val/prop[empty(@att) and @action = 'flag']"/>
+      <xsl:copy-of select="$FILTERDOC/val/prop[empty(@att) and empty(@val) and @action = 'flag']"/>
     </xsl:if>
     <xsl:if test="$current/@rev">
-      <xsl:copy-of select="$FILTERDOC/val/revprop[empty(@att) and @action = 'flag']"/>
+      <xsl:copy-of select="$FILTERDOC/val/revprop[empty(@val) and @action = 'flag']"/>
     </xsl:if>
   </xsl:if>
   </val>
