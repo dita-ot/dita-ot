@@ -12,7 +12,7 @@
   <extension-point id="dita.xsl.htmltoc" name="HTML/XHTML TOC XSLT import"/>
   <extension-point id="dita.xsl.html.cover" name="HTML/XHTML Cover XSLT import"/>
   <!-- extensions -->
-  <transtype name="base-html" abstract="true" desc="HTML-based output formats">
+  <transtype name="base-html" abstract="true" desc="HTML-based output">
     <param name="args.artlbl" desc="Specifies whether to generate a label for each image; the label will contain the image file name." type="enum">
       <val>yes</val>
       <val default="true">no</val>
