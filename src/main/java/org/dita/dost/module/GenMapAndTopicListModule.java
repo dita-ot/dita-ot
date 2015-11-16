@@ -416,7 +416,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             pipe.add(exportAnchorsFilter);
         }
 
-        keydefFilter.setCurrentDir(toFile(fileToParse).getParentFile().toURI());
+        keydefFilter.setCurrentDir(fileToParse.resolve("."));
         keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
         pipe.add(keydefFilter);
 
