@@ -145,6 +145,10 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/sl.xml" uri="common/index/sl.xml"/>
     <uri name="cfg:common/index/sv_SE.xml" uri="common/index/sv.xml"/>
     <uri name="cfg:common/index/sv.xml" uri="common/index/sv.xml"/>
+    <uri name="cfg:common/index/sr_CS.xml" uri="common/index/sr.xml"/>
+    <uri name="cfg:common/index/sr_RS.xml" uri="common/index/sr.xml"/>
+    <uri name="cfg:common/index/sr_SP.xml" uri="common/index/sr.xml"/>
+    <uri name="cfg:common/index/sr.xml" uri="common/index/sr.xml"/>
     <uri name="cfg:common/index/tr_TR.xml" uri="common/index/tr.xml"/>
     <uri name="cfg:common/index/tr.xml" uri="common/index/tr.xml"/>
     <uri name="cfg:common/index/zh_CN.xml" uri="common/index/zh_CN.xml"/>
