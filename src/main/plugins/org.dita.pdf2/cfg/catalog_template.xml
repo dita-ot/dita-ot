@@ -71,6 +71,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/it.xml" uri="fo/i18n/it.xml"/>
     <uri name="cfg:fo/i18n/ja_JP.xml" uri="fo/i18n/ja.xml"/>
     <uri name="cfg:fo/i18n/ja.xml" uri="fo/i18n/ja.xml"/>
+    <uri name="cfg:fo/i18n/lt_LT.xml" uri="fo/i18n/lt.xml"/>
+    <uri name="cfg:fo/i18n/lt.xml" uri="fo/i18n/lt.xml"/>
     <uri name="cfg:fo/i18n/lv_LV.xml" uri="fo/i18n/lv.xml"/>
     <uri name="cfg:fo/i18n/lv.xml" uri="fo/i18n/lv.xml"/>
     <uri name="cfg:fo/i18n/mk_MK.xml" uri="fo/i18n/mk.xml"/>
@@ -134,6 +136,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/it.xml" uri="common/index/it.xml"/>
     <uri name="cfg:common/index/ja_JP.xml" uri="common/index/ja.xml"/>
     <uri name="cfg:common/index/ja.xml" uri="common/index/ja.xml"/>
+    <uri name="cfg:common/index/lt_LT.xml" uri="common/index/lt.xml"/>
+    <uri name="cfg:common/index/lt.xml" uri="common/index/lt.xml"/>
     <uri name="cfg:common/index/lv_LV.xml" uri="common/index/lv.xml"/>
     <uri name="cfg:common/index/lv.xml" uri="common/index/lv.xml"/>
     <uri name="cfg:common/index/mk_MK.xml" uri="common/index/mk.xml"/>
