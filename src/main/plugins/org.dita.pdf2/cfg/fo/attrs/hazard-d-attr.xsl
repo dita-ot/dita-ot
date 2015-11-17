@@ -23,7 +23,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute name="padding">3pt</xsl:attribute>
   </xsl:attribute-set>
 
-  <xsl:attribute-set name="hazardstatement.title" use-attribute-sets="hazardstatement.cell">
+  <xsl:attribute-set name="hazardstatement.title" use-attribute-sets="hazardstatement.cell common.title">
     <xsl:attribute name="number-columns-spanned">2</xsl:attribute>
     <xsl:attribute name="background-color">orange</xsl:attribute>
     <xsl:attribute name="text-transform">uppercase</xsl:attribute>

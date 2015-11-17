@@ -30,6 +30,12 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template name="getLowerCaseLang">
     <xsl:value-of select="dita-ot:get-current-language(.)"/>
   </xsl:template>
+  
+  <xsl:function name="dita-ot:capitalize">
+    <xsl:param name="text" as="xs:string"/>
+    <xsl:value-of select="concat(upper-case(substring($text, 1, 1)),
+                                 lower-case(substring($text, 2)))"/>
+  </xsl:function>
 
   <xsl:template match="*" mode="get-first-topic-lang">
     <xsl:sequence select="dita-ot:get-first-topic-language(.)"/>
