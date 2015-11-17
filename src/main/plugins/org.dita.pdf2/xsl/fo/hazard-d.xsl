@@ -40,9 +40,22 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:variable>
             <xsl:sequence select="$atts/@*"/>
             <fo:block>
-              <xsl:call-template name="getVariable">
-                <xsl:with-param name="id" select="if (exists(@type)) then dita-ot:capitalize(@type) else 'Caution'"/>
-              </xsl:call-template>
+              <xsl:if test="@type = ('danger', 'warning', 'caution')">
+                <xsl:variable name="image" as="xs:string">
+                  <xsl:call-template name="getVariable">
+                    <xsl:with-param name="id" select="'hazard.image.default'"/>
+                  </xsl:call-template>
+                </xsl:variable>
+                <fo:external-graphic src="url('{concat($artworkPrefix, $image)}')"
+                                     content-height="1em" padding-right="3pt"
+                                     vertical-align="middle"
+                                     baseline-shift="baseline"/>
+              </xsl:if>
+              <fo:inline>
+                <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="if (exists(@type)) then dita-ot:capitalize(@type) else 'Caution'"/>
+                </xsl:call-template>
+              </fo:inline>
             </fo:block>
           </fo:table-cell>
         </fo:table-row>

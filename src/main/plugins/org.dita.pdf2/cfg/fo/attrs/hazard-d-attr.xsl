@@ -34,21 +34,21 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:attribute-set name="hazardstatement.title.danger">
     <xsl:attribute name="color">white</xsl:attribute>
-    <xsl:attribute name="background-color">red</xsl:attribute>
+    <xsl:attribute name="background-color">#d63231</xsl:attribute>
     <xsl:attribute name="font-style">normal</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="hazardstatement.title.warning">
-    <xsl:attribute name="background-color">orange</xsl:attribute>
+    <xsl:attribute name="background-color">#ed9c3d</xsl:attribute>
     <xsl:attribute name="font-style">normal</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="hazardstatement.title.caution">
-    <xsl:attribute name="background-color">yellow</xsl:attribute>
+    <xsl:attribute name="background-color">#eae639</xsl:attribute>
     <xsl:attribute name="font-style">normal</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="hazardstatement.title.notice">
     <xsl:attribute name="color">white</xsl:attribute>
     <xsl:attribute name="font-style">italic</xsl:attribute>
-    <xsl:attribute name="background-color">blue</xsl:attribute>
+    <xsl:attribute name="background-color">#2469a5</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="hazardstatement.image" use-attribute-sets="hazardstatement.cell">
