@@ -21,21 +21,38 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute name="border-color">black</xsl:attribute>
     <xsl:attribute name="border-width">2pt</xsl:attribute>
     <xsl:attribute name="padding">3pt</xsl:attribute>
+    <xsl:attribute name="keep-together">always</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="hazardstatement.title" use-attribute-sets="hazardstatement.cell common.title">
     <xsl:attribute name="number-columns-spanned">2</xsl:attribute>
-    <xsl:attribute name="background-color">orange</xsl:attribute>
     <xsl:attribute name="text-transform">uppercase</xsl:attribute>
     <xsl:attribute name="font-weight">bold</xsl:attribute>
     <xsl:attribute name="font-size">1.5em</xsl:attribute>
     <xsl:attribute name="text-align">center</xsl:attribute>
-
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="hazardstatement.title.danger">
+    <xsl:attribute name="color">white</xsl:attribute>
+    <xsl:attribute name="background-color">red</xsl:attribute>
+    <xsl:attribute name="font-style">normal</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="hazardstatement.title.warning">
+    <xsl:attribute name="background-color">orange</xsl:attribute>
+    <xsl:attribute name="font-style">normal</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="hazardstatement.title.caution">
+    <xsl:attribute name="background-color">yellow</xsl:attribute>
+    <xsl:attribute name="font-style">normal</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="hazardstatement.title.notice">
+    <xsl:attribute name="color">white</xsl:attribute>
+    <xsl:attribute name="font-style">italic</xsl:attribute>
+    <xsl:attribute name="background-color">blue</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="hazardstatement.image" use-attribute-sets="hazardstatement.cell">
     <xsl:attribute name="text-align">center</xsl:attribute>
-    <xsl:attribute name="keep-with-next">always</xsl:attribute>
   </xsl:attribute-set>
   
   <xsl:attribute-set name="hazardstatement.image.column">

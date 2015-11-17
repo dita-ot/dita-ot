@@ -20,8 +20,25 @@ See the accompanying license.txt file for applicable licenses.
       <fo:table-column xsl:use-attribute-sets="hazardstatement.image.column"/>
       <fo:table-column xsl:use-attribute-sets="hazardstatement.content.column"/>
       <fo:table-body>
-        <fo:table-row>
+        <fo:table-row keep-with-next="always">
           <fo:table-cell xsl:use-attribute-sets="hazardstatement.title">
+            <xsl:variable name="atts" as="element()">
+              <xsl:choose>
+                <xsl:when test="@type = 'danger'">
+                  <w xsl:use-attribute-sets="hazardstatement.title.danger"/>
+                </xsl:when>
+                <xsl:when test="@type = 'warning'">
+                  <w xsl:use-attribute-sets="hazardstatement.title.warning"/>
+                </xsl:when>
+                <xsl:when test="@type = 'caution'">
+                  <w xsl:use-attribute-sets="hazardstatement.title.caution"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <w xsl:use-attribute-sets="hazardstatement.title.notice"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:sequence select="$atts/@*"/>
             <fo:block>
               <xsl:call-template name="getVariable">
                 <xsl:with-param name="id" select="if (exists(@type)) then dita-ot:capitalize(@type) else 'Caution'"/>
@@ -31,12 +48,12 @@ See the accompanying license.txt file for applicable licenses.
         </fo:table-row>
         <fo:table-row>
           <fo:table-cell xsl:use-attribute-sets="hazardstatement.image">
-            <fo:block>
               <xsl:choose>
-                <xsl:when test="exists(*[contains(@class, ' hazard-d/hazardsymbol ')])">
-                  <xsl:apply-templates select="*[contains(@class, ' hazard-d/hazardsymbol ')]"/>
-                </xsl:when>
-                <xsl:otherwise>
+              <xsl:when test="exists(*[contains(@class, ' hazard-d/hazardsymbol ')])">
+                <xsl:apply-templates select="*[contains(@class, ' hazard-d/hazardsymbol ')]"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <fo:block>
                   <xsl:variable name="image" as="xs:string">
                     <xsl:call-template name="getVariable">
                       <xsl:with-param name="id" select="'hazard.image.default'"/>
@@ -44,9 +61,9 @@ See the accompanying license.txt file for applicable licenses.
                   </xsl:variable>
                   <fo:external-graphic src="url('{concat($artworkPrefix, $image)}')"
                     xsl:use-attribute-sets="hazardsymbol"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </fo:block>
+                </fo:block>
+              </xsl:otherwise>
+            </xsl:choose>
           </fo:table-cell>
           <fo:table-cell  xsl:use-attribute-sets="hazardstatement.content">
             <xsl:apply-templates select="*[contains(@class, ' hazard-d/messagepanel ')]/*"/>
@@ -71,6 +88,12 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:template match="*[contains(@class, ' hazard-d/howtoavoid ')]">
     <xsl:call-template name="p"/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' hazard-d/hazardsymbol ')]">
+    <fo:block>
+      <xsl:next-match/>
+    </fo:block>
   </xsl:template>
     
 </xsl:stylesheet>
