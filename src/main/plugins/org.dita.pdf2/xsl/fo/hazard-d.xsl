@@ -37,7 +37,11 @@ See the accompanying license.txt file for applicable licenses.
                   <xsl:apply-templates select="*[contains(@class, ' hazard-d/hazardsymbol ')]"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:variable name="image" as="xs:string">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</xsl:variable>
+                  <xsl:variable name="image" as="xs:string">
+                    <xsl:call-template name="getVariable">
+                      <xsl:with-param name="id" select="'hazard.image.default'"/>
+                    </xsl:call-template>
+                  </xsl:variable>
                   <fo:external-graphic src="url('{concat($artworkPrefix, $image)}')"
                     xsl:use-attribute-sets="hazardsymbol"/>
                 </xsl:otherwise>

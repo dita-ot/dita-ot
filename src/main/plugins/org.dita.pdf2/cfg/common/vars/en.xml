@@ -172,4 +172,6 @@ See the accompanying LICENSE file for applicable license.
   <!-- Heading for a generated List of Figures -->
   <variable id="List of Figures">List of Figures</variable>
      
+  <!-- Hazard statement domain -->
+  <variable id="hazard.image.default">Configuration/OpenTopic/cfg/common/artwork/ISO_7010_W001.svg</variable>
 </vars>
