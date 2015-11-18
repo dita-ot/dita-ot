@@ -13,6 +13,7 @@ import static org.apache.commons.io.FilenameUtils.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.join;
 import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.close;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getElementNode;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getText;
 import static java.util.Arrays.*;
@@ -251,21 +252,19 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
     }
 
-    private void outputMapFile(final File file, final Document doc) {  
-        OutputStream output = null;
+    private void outputMapFile(final File file, final Document doc) {
+        StreamResult result = null;
         try {
-            output = new FileOutputStream(file);
             final Transformer t = TransformerFactory.newInstance().newTransformer();
-            t.transform(new DOMSource(doc), new StreamResult(output));
+            result = new StreamResult(new FileOutputStream(file));
+            t.transform(new DOMSource(doc), result);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
             try {
-                if (output != null) {
-                    output.close();
-                }
+                close(result);
             } catch (final Exception e) {
                 logger.error(e.getMessage(), e);
             }
