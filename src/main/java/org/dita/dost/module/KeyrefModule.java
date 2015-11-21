@@ -208,7 +208,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         conkeyrefFilter.setLogger(logger);
         conkeyrefFilter.setJob(job);
         conkeyrefFilter.setKeyDefinitions(r.scope);
-        conkeyrefFilter.setCurrentFile(r.in.file);
+        conkeyrefFilter.setCurrentFile(r.in.uri);
         conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
         filters.add(conkeyrefFilter);
 

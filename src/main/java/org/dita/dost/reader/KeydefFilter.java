@@ -38,9 +38,6 @@ import org.xml.sax.SAXException;
  */
 public final class KeydefFilter extends AbstractXMLFilter {
     
-    /** Output utilities */
-    private Job job;
-    private URI inputFile = null;
     /** Basedir of the current parsing file */
     private URI currentDir = null;
     /** Map of key definitions */
@@ -56,25 +53,6 @@ public final class KeydefFilter extends AbstractXMLFilter {
         keysRefMap = new HashMap<>();
     }
 
-    /**
-     * Set output utilities.
-     * 
-     * @param job output utils
-     */
-    public void setJob(final Job job) {
-        this.job = job;
-    }
-
-    
-    /**
-     * Set processing input file absolute path.
-     * 
-     * @param inputFile absolute path to root file
-     */
-    public void setInputFile(final URI inputFile) {
-        this.inputFile = inputFile;
-    }
-    
     /**
      * Get the Key definitions.
      * 

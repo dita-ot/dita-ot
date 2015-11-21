@@ -268,7 +268,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
-        keydefFilter.setInputFile(rootFile);
+        keydefFilter.setCurrentFile(rootFile);
         keydefFilter.setJob(job);
         
         nullHandler = new DefaultHandler();

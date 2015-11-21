@@ -311,7 +311,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         if (genDebugInfo) {
             final DebugFilter debugFilter = new DebugFilter();
             debugFilter.setLogger(logger);
-            debugFilter.setInputFile(currentFile);
+            debugFilter.setCurrentFile(currentFile);
             pipe.add(debugFilter);
         }
 

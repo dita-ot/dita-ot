@@ -54,7 +54,6 @@ public final class CoderefResolver extends AbstractXMLFilter {
 
     // Variables ---------------------------------------------------------------
 
-    private URI currentFile = null;
     private int ignoreDepth = 0;
 
     // Constructors ------------------------------------------------------------
@@ -65,21 +64,12 @@ public final class CoderefResolver extends AbstractXMLFilter {
     public CoderefResolver() {
     }
 
-    /**
-     * Set processing input file absolute path.
-     *
-     * @param currentFile absolute path to root file
-     */
-    public void setCurrentFile(final URI currentFile) {
-        this.currentFile = currentFile;
-    }
-
     // AbstractWriter methods --------------------------------------------------
 
     @Override
     public void write(final File filename) throws DITAOTException {
         assert filename.isAbsolute();
-        currentFile = filename.toURI();
+        setCurrentFile(filename.toURI());
         super.write(filename);
     }
 

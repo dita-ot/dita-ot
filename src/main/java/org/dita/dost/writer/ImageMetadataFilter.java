@@ -47,7 +47,6 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     private final File outputDir;
     private final File tempDir;
     private final String uplevels;
-    private File currentFile = null;
     private int depth = 0;
     private final Map<URI, Attributes> cache = new HashMap<>();
     private final Job job;
@@ -72,7 +71,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         if (filename == null || !filename.exists()) {
             return;
         }
-        currentFile = filename;
+        currentFile = filename.toURI();
         logger.info("Processing " + filename.getAbsolutePath());
         super.write(filename);
     } 
@@ -189,7 +188,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     }
 
     private URI getImageFile(final URI href) {
-        URI fileDir = tempDir.toURI().relativize(currentFile.getParentFile().toURI());
+        URI fileDir = tempDir.toURI().relativize(currentFile.resolve("."));
         if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
             fileDir = fileDir.resolve(uplevels.replace(File.separator, URI_SEPARATOR));
         }
