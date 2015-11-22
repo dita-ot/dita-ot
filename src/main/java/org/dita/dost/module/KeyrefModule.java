@@ -208,7 +208,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         conkeyrefFilter.setLogger(logger);
         conkeyrefFilter.setJob(job);
         conkeyrefFilter.setKeyDefinitions(r.scope);
-        conkeyrefFilter.setCurrentFile(r.in.uri);
+        conkeyrefFilter.setCurrentFile(job.tempDir.toURI().resolve(r.in.uri));
         conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
         filters.add(conkeyrefFilter);
 
@@ -218,7 +218,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         parser.setLogger(logger);
         parser.setJob(job);
         parser.setKeyDefinition(r.scope);
-        parser.setCurrentFile(r.in.file);
+        parser.setCurrentFile(job.tempDir.toURI().resolve(r.in.uri));
         filters.add(parser);
 
         try {

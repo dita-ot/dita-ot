@@ -116,8 +116,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     ));
         
     private KeyScope definitionMap;
-    /** File name with relative path to the temporary directory of input file. */
-    private File inputFile;
 
     /**
      * Stack used to store the place of current element
@@ -179,13 +177,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     public void setKeyDefinition(final KeyScope definitionMap) {
         this.definitionMap = definitionMap;
     }
-
-    /**
-     * Set current file.
-     */
-    public void setCurrentFile(final File inputFile) {
-        this.inputFile = inputFile;
-    }
     
     /**
      * Get set of link targets which have normal processing role. Paths are relative to current file.
@@ -202,7 +193,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      */
     @Override
     public void write(final File filename) throws DITAOTException {
-        super.write(new File(job.tempDir, inputFile.getPath()).getAbsoluteFile());
+        assert filename.isAbsolute();
+        super.write(new File(currentFile));
     }
         
     // XML filter methods ------------------------------------------------------
@@ -396,17 +388,17 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         if (target != null && !target.toString().isEmpty()) {
                             if (TOPIC_IMAGE.matches(currentElement.type)) {
                                 valid = true;
-                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId);
+                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(currentFile, job.tempDir.toURI().resolve(target)), elementId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
                             } else if (isLocalDita(elem)) {
                                 final File topicFile = toFile(job.tempDir.toURI().resolve(stripFragment(target)));
                                 valid = true;
                                 final String topicId = getFirstTopicId(topicFile);
-                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(job.tempDir.toURI().resolve(toURI(inputFile)), job.tempDir.toURI().resolve(target)), elementId, topicId);
+                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(currentFile, job.tempDir.toURI().resolve(target)), elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
                                 // TODO: This should be a separate SAX filter
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
-                                    final URI f = toURI(inputFile).resolve(targetOutput);
+                                    final URI f = currentFile.resolve(targetOutput);
                                     normalProcessingRoleTargets.add(f);
                                 }
                             } else {
