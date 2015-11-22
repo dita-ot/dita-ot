@@ -102,6 +102,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/sr.xml" uri="fo/i18n/sr.xml"/>
     <uri name="cfg:fo/i18n/sv_SE.xml" uri="fo/i18n/sv.xml"/>
     <uri name="cfg:fo/i18n/sv.xml" uri="fo/i18n/sv.xml"/>
+    <uri name="cfg:fo/i18n/th_TH.xml" uri="fo/i18n/th.xml"/>
+    <uri name="cfg:fo/i18n/th.xml" uri="fo/i18n/th.xml"/>
     <uri name="cfg:fo/i18n/tr_TR.xml" uri="fo/i18n/tr.xml"/>
     <uri name="cfg:fo/i18n/tr.xml" uri="fo/i18n/tr.xml"/>
     <uri name="cfg:fo/i18n/zh_CN.xml" uri="fo/i18n/zh_CN.xml"/>
@@ -169,6 +171,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/sr_RS.xml" uri="common/index/sr.xml"/>
     <uri name="cfg:common/index/sr_SP.xml" uri="common/index/sr.xml"/>
     <uri name="cfg:common/index/sr.xml" uri="common/index/sr.xml"/>
+    <uri name="cfg:common/index/th_TH.xml" uri="common/index/th.xml"/>
+    <uri name="cfg:common/index/th.xml" uri="common/index/th.xml"/>
     <uri name="cfg:common/index/tr_TR.xml" uri="common/index/tr.xml"/>
     <uri name="cfg:common/index/tr.xml" uri="common/index/tr.xml"/>
     <uri name="cfg:common/index/zh_CN.xml" uri="common/index/zh_CN.xml"/>
