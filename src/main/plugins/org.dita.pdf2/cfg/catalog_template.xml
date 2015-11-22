@@ -106,6 +106,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/th.xml" uri="fo/i18n/th.xml"/>
     <uri name="cfg:fo/i18n/tr_TR.xml" uri="fo/i18n/tr.xml"/>
     <uri name="cfg:fo/i18n/tr.xml" uri="fo/i18n/tr.xml"/>
+    <uri name="cfg:fo/i18n/uk_UA.xml" uri="fo/i18n/uk.xml"/>
+    <uri name="cfg:fo/i18n/uk.xml" uri="fo/i18n/uk.xml"/>
     <uri name="cfg:fo/i18n/zh_CN.xml" uri="fo/i18n/zh_CN.xml"/>
 
     <uri name="cfg:common/index/ar_EG.xml" uri="common/index/ar.xml"/>
@@ -175,6 +177,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/th.xml" uri="common/index/th.xml"/>
     <uri name="cfg:common/index/tr_TR.xml" uri="common/index/tr.xml"/>
     <uri name="cfg:common/index/tr.xml" uri="common/index/tr.xml"/>
+    <uri name="cfg:common/index/uk_UA.xml" uri="common/index/uk.xml"/>
+    <uri name="cfg:common/index/uk.xml" uri="common/index/uk.xml"/>
     <uri name="cfg:common/index/zh_CN.xml" uri="common/index/zh_CN.xml"/>
 
   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
