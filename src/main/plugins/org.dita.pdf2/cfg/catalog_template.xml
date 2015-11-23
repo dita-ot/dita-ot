@@ -41,6 +41,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <uri name="cfg:fo/i18n/ar_EG.xml" uri="fo/i18n/ar.xml"/>
     <uri name="cfg:fo/i18n/ar.xml" uri="fo/i18n/ar.xml"/>
+    <uri name="cfg:fo/i18n/be_BY.xml" uri="fo/i18n/be.xml"/>
+    <uri name="cfg:fo/i18n/be.xml" uri="fo/i18n/be.xml"/>
     <uri name="cfg:fo/i18n/bg_BG.xml" uri="fo/i18n/bg.xml"/>
     <uri name="cfg:fo/i18n/bg.xml" uri="fo/i18n/bg.xml"/>
     <uri name="cfg:fo/i18n/ca_ES.xml" uri="fo/i18n/ca.xml"/>
@@ -112,6 +114,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <uri name="cfg:common/index/ar_EG.xml" uri="common/index/ar.xml"/>
     <uri name="cfg:common/index/ar.xml" uri="common/index/ar.xml"/>
+    <uri name="cfg:common/index/be_BY.xml" uri="common/index/be.xml"/>
+    <uri name="cfg:common/index/be.xml" uri="common/index/be.xml"/>
     <uri name="cfg:common/index/bg_BG.xml" uri="common/index/bg.xml"/>
     <uri name="cfg:common/index/bg.xml" uri="common/index/bg.xml"/>
     <uri name="cfg:common/index/ca_ES.xml" uri="common/index/ca.xml"/>
