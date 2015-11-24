@@ -71,6 +71,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/hr.xml" uri="fo/i18n/hr.xml"/>
     <uri name="cfg:fo/i18n/hu_HU.xml" uri="fo/i18n/hu.xml"/>
     <uri name="cfg:fo/i18n/hu.xml" uri="fo/i18n/hu.xml"/>
+    <uri name="cfg:fo/i18n/id_ID.xml" uri="fo/i18n/id.xml"/>
+    <uri name="cfg:fo/i18n/id.xml" uri="fo/i18n/id.xml"/>
     <uri name="cfg:fo/i18n/is_IS.xml" uri="fo/i18n/is.xml"/>
     <uri name="cfg:fo/i18n/is.xml" uri="fo/i18n/is.xml"/>
     <uri name="cfg:fo/i18n/it_IT.xml" uri="fo/i18n/it.xml"/>
@@ -148,6 +150,8 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/hr.xml" uri="common/index/hr.xml"/>
     <uri name="cfg:common/index/hu_HU.xml" uri="common/index/hu.xml"/>
     <uri name="cfg:common/index/hu.xml" uri="common/index/hu.xml"/>
+    <uri name="cfg:common/index/id_ID.xml" uri="common/index/id.xml"/>
+    <uri name="cfg:common/index/id.xml" uri="common/index/id.xml"/>
     <uri name="cfg:common/index/is_IS.xml" uri="common/index/is.xml"/>
     <uri name="cfg:common/index/is.xml" uri="common/index/is.xml"/>
     <uri name="cfg:common/index/it_IT.xml" uri="common/index/it.xml"/>
