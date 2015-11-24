@@ -54,8 +54,6 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
 
     /** Default value map. */
     private Map<String, Map<String, String>> defaultValueMap;
-    /** Absolute path to current source file. */
-    private URI currentFile;
     /** Absolute path to current destination file. */
     private File outputFile;
     /** Foreign/unknown nesting level. */
@@ -72,17 +70,13 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         defaultValueMap  = defaultMap;
     }
 
-    public void setCurrentFile(final URI currentFile) {
-        this.currentFile = currentFile;
-    }
-
     public void setOutputFile(final File outputFile) {
         this.outputFile = outputFile;
     }
 
     @Override
     public void setJob(final Job job) {
-        this.job = job;
+        super.setJob(job);
         fileInfoMap = new HashMap<>();
         for (final FileInfo f: job.getFileInfo()) {
             fileInfoMap.put(f.src, f);

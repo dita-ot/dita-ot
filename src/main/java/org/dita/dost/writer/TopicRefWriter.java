@@ -10,6 +10,7 @@ package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
@@ -29,13 +30,12 @@ public final class TopicRefWriter extends AbstractXMLFilter {
     private Map<String, String> changeTable = null;
     private Map<String, String> conflictTable = null;
     private File currentFileDir = null;
-    private File currentFilePath = null;
     /** Using for rectify relative path of xml */
     private String fixpath = null;
 
     @Override
     public void write(final File outputFilename) throws DITAOTException {
-        currentFilePath = outputFilename.getAbsoluteFile();
+        setCurrentFile(outputFilename.toURI());
         currentFileDir = outputFilename.getParentFile();
         super.write(outputFilename);
     }
@@ -155,7 +155,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
 
         if (isLocalDita(atts)) {
             // replace the href value if it's referenced topic is extracted.
-            final File rootPathName = currentFilePath;
+            final File rootPathName = toFile(currentFile);
             String changeTargetkey = resolve(currentFileDir, hrefValue).getPath();
             String changeTarget = changeTable.get(changeTargetkey);
 

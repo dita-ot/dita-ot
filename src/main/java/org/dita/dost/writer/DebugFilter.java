@@ -30,29 +30,10 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public final class DebugFilter extends AbstractXMLFilter {
 
-    private String inputFile;
 	private Locator locator;
 	private final Map<String, Integer> counterMap = new HashMap<>();
 	private int foreignLevel;
-	
-	/**
-	 * Set input file.
-	 * 
-	 * @param inputFile absolute path to input file
-	 */
-	public void setInputFile(final File inputFile) {
-	    this.inputFile = inputFile.getAbsoluteFile().toURI().toString();
-	}
 
-	/**
-     * Set input file.
-     * 
-     * @param inputFile absolute URI to input file
-     */
-    public void setInputFile(final URI inputFile) {
-        this.inputFile = inputFile.toString();
-    }
-	
 	// Locator methods
     
 	@Override
@@ -77,7 +58,7 @@ public final class DebugFilter extends AbstractXMLFilter {
 	    
 		final AttributesImpl res = new AttributesImpl(atts);
 		if (foreignLevel <= 1){
-    		XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRF, inputFile);
+    		XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRF, currentFile.toString());
     		
             Integer nextValue;
             if (counterMap.containsKey(qName)) {

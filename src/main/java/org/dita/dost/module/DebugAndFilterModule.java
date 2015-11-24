@@ -311,7 +311,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         if (genDebugInfo) {
             final DebugFilter debugFilter = new DebugFilter();
             debugFilter.setLogger(logger);
-            debugFilter.setInputFile(currentFile);
+            debugFilter.setCurrentFile(currentFile);
             pipe.add(debugFilter);
         }
 
@@ -553,10 +553,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         if (!p.exists() && !p.mkdirs()) {
             throw new DITAOTException("Failed to make directory " + p.getAbsolutePath());
         }
-        FileOutputStream out = null;
+        Result res = null;
         try {
-            out = new FileOutputStream(filename);
-            final StreamResult res = new StreamResult(out);
+            res = new StreamResult(new FileOutputStream(filename));
             final DOMSource ds = new DOMSource(root);
             final TransformerFactory tff = TransformerFactory.newInstance();
             final Transformer tf = tff.newTransformer();
@@ -565,12 +564,10 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);
         } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    throw new DITAOTException(e);
-                }
+            try {
+                close(res);
+            } catch (IOException e) {
+                throw new DITAOTException(e);
             }
         }
     }

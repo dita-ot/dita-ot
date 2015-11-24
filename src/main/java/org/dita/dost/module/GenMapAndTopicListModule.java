@@ -268,7 +268,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
-        keydefFilter.setInputFile(rootFile);
+        keydefFilter.setCurrentFile(rootFile);
         keydefFilter.setJob(job);
         
         nullHandler = new DefaultHandler();
@@ -416,7 +416,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             pipe.add(exportAnchorsFilter);
         }
 
-        keydefFilter.setCurrentDir(toFile(fileToParse).getParentFile().toURI());
+        keydefFilter.setCurrentDir(fileToParse.resolve("."));
         keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
         pipe.add(keydefFilter);
 

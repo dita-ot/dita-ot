@@ -92,8 +92,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Set<URI> outDitaFilesSet = new HashSet<>(64);
     /** Absolute system path to input file parent directory */
     private URI rootDir = null;
-    /** Absolute system path to file being processed */
-    private URI currentFile = null;
     /** Stack for @processing-role value */
     private final Stack<String> processRoleStack = new Stack<>();
     /** Topics with processing role of "resource-only" */
@@ -354,8 +352,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     public void setCurrentFile(final URI currentFile) {
         assert currentFile.isAbsolute();
-        this.currentFile = currentFile;
-        this.currentDir = currentFile.resolve(".");
+        super.setCurrentFile(currentFile);
+        currentDir = currentFile.resolve(".");
     }
 
     /**
