@@ -9,6 +9,8 @@
   <lang xml:lang="be-by" filename="strings-be-by.xml"/>
   <lang xml:lang="bg"    filename="strings-bg-bg.xml"/>
   <lang xml:lang="bg-bg" filename="strings-bg-bg.xml"/>
+  <lang xml:lang="bs"    filename="strings-bs-ba.xml"/>
+  <lang xml:lang="bs-ba" filename="strings-bs-ba.xml"/>
   <lang xml:lang="ca"    filename="strings-ca-es.xml"/>
   <lang xml:lang="ca-es" filename="strings-ca-es.xml"/>
   <lang xml:lang="cs"    filename="strings-cs-cz.xml"/>
@@ -87,6 +89,7 @@
   <lang xml:lang="sr-rs" filename="strings-sr-sp.xml"/>
   <lang xml:lang="sr-sp" filename="strings-sr-sp.xml"/>
   <lang xml:lang="sr-latn-rs" filename="strings-sr-latn-rs.xml"/>
+  <lang xml:lang="sr-latn-me" filename="strings-sr-latn-me.xml"/>
   <lang xml:lang="sv"    filename="strings-sv-se.xml"/>
   <lang xml:lang="sv-se" filename="strings-sv-se.xml"/>
   <lang xml:lang="th"    filename="strings-th-th.xml"/>
