@@ -91,7 +91,7 @@
         <isset property="html-version"/>
       </not>
     </condition>
-    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2${html-version}.xsl">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.xhtml.dir}/xsl/dita2${html-version}${xsl.prefix}.xsl">
       <not>
         <isset property="args.xsl" />
       </not>

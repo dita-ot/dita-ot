@@ -47,7 +47,7 @@
 
   <target name="dita.map.tocjs" description="generate merged for tocjs">
     <xslt in="${input}" out="${output.file}"
-      style="${dita.plugin.com.sophos.tocjs.dir}/xsl/tocjs.xsl">
+      style="${dita.plugin.com.sophos.tocjs.dir}/xsl/tocjs${xsl.prefix}.xsl">
       <param name="contentwin" expression="${content.frame}" if="content.frame"/>
       <param name="htmlext" expression="${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>
@@ -79,7 +79,7 @@
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
         extension="${out.ext}"
-		style="${dita.plugin.com.sophos.tocjs.dir}${file.separator}xsl${file.separator}frameset.xsl">
+		style="${dita.plugin.com.sophos.tocjs.dir}${file.separator}xsl${file.separator}frameset${xsl.prefix}.xsl">
   	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="CSSPATH" expression="${CSSPATH}" if="csspath"/>

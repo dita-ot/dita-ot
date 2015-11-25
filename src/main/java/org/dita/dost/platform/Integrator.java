@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
@@ -18,10 +19,9 @@ import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
+import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,6 +35,7 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
@@ -319,6 +320,30 @@ public final class Integrator {
         final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS) ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS))) : Collections.EMPTY_SET;
         writeEnvShell(jars);
         writeEnvBatch(jars);
+
+        generateOptimizedStylesheets(ditaDir);
+    }
+
+    private void generateOptimizedStylesheets(final File dir) {
+        for (final File child: dir.listFiles()) {
+            if (child.isDirectory()) {
+                generateOptimizedStylesheets(child);
+            } else if (child.getName().endsWith(".xsl") && !child.getName().endsWith(StylesheetOptimizerFilter.OPTIMIZED_XSL_EXTENSION)) {
+                generateOptimizedStylesheet(child);
+            }
+        }
+    }
+
+    private void generateOptimizedStylesheet(final File input) {
+        final File output = new File(FileUtils.replaceExtension(input.getAbsolutePath(), StylesheetOptimizerFilter.OPTIMIZED_XSL_EXTENSION));
+        logger.debug("Optimize " + output.getAbsolutePath());
+        try {
+            final StylesheetOptimizerFilter f = new StylesheetOptimizerFilter();
+            f.setLogger(logger);
+            XMLUtils.transform(input, output, Collections.singletonList((XMLFilter) f));
+        } catch (final DITAOTException e) {
+            e.printStackTrace();
+        }
     }
 
     private Iterable<String> orderPlugins(final Set<String> ids) {

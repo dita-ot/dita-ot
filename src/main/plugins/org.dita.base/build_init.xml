@@ -150,6 +150,10 @@
   <property environment="env" />
   <!-- property values end -->
 
+  <condition property="xsl.prefix" value=".optimized" else="">
+    <istrue value="${generalise-element-name}"/>
+  </condition>
+
   <target name="build-init"
           depends="check-arg,
                    log-arg" />

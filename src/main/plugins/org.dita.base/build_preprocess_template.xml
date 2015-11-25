@@ -111,6 +111,7 @@
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
         <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
         <param name="force-unique" value="${force-unique}" if="force-unique"/>
+        <param name="generalise-element-name" value="${generalise-element-name}" if="generalise-element-name"/>
         <param name="generate-debug-attributes" value="${generate-debug-attributes}" if="generate-debug-attributes"/>
         <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
       </module>
@@ -242,7 +243,7 @@
       inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.MoveMetaModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl"/>
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull${xsl.prefix}.xsl"/>
         <param name="conserve-memory" expression="${conserve-memory}" if="conserve-memory"/>
         <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
@@ -263,7 +264,7 @@
     <pipeline message="Resolve conref in input files" taskname="conref">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl" filenameparameter="file-being-processed">
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref${xsl.prefix}.xsl" filenameparameter="file-being-processed">
         <includesfile name="${dita.temp.dir}/${conreffile}"/>
         <param name="EXPORTFILE" expression="${exportfile.url}"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
@@ -314,7 +315,7 @@
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
       <xslt basedir="${dita.temp.dir}"
           reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" filenameparameter="file-being-processed">
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref${xsl.prefix}.xsl" filenameparameter="file-being-processed">
         <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
         <xmlcatalog refid="dita.catalog"/>
@@ -344,7 +345,7 @@
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
-            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"
+            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref${xsl.prefix}.xsl"
             filenameparameter="file-being-processed">
         <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
         <param name="TRANSTYPE" expression="${transtype}" />
@@ -421,7 +422,7 @@
     <pipeline message="Move related links" taskname="maplink"
               inputmap="${user.input.file}" tempdir="${dita.temp.dir}">
       <module class="org.dita.dost.module.MoveLinksModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl"/>
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink${xsl.prefix}.xsl"/>
         <param name="include.rellinks" expression="${include.rellinks}" if="include.rellinks"/>
         <!--dita:extension id="dita.preprocess.maplink.param" behavior="org.dita.dost.platform.InsertAction"/-->
       </module>
@@ -447,7 +448,7 @@
     <pipeline message="Pull metadata for link and xref element" taskname="topicpull">
       <xslt basedir="${dita.temp.dir}"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
-        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull.xsl">
+        style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/topicpull${xsl.prefix}.xsl">
         <includesfile name="${dita.temp.dir}/${fullditatopicfile}"/>
         <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
         <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
@@ -476,7 +477,7 @@
     <pipeline message="Add flagging information to topics" taskname="preprocess_flag">
       <xslt basedir="${dita.temp.dir}" 
           reloadstylesheet="${dita.preprocess.reloadstylesheet.flag-module}" 
-          style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/flag.xsl"
+          style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/flag${xsl.prefix}.xsl"
           filenameparameter="FILENAME" 
           filedirparameter="FILEDIR">
         <includesfile name="${dita.temp.dir}/${fullditatopicfile}"/>
@@ -515,7 +516,7 @@
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
-            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
+            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map${xsl.prefix}.xsl">
         <includesfile name="${dita.temp.dir}/${fullditamapfile}"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>

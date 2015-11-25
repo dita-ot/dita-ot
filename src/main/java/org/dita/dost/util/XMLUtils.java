@@ -4,7 +4,7 @@
  */
 package org.dita.dost.util;
 
-import static javax.xml.XMLConstants.NULL_NS_URI;
+import static javax.xml.XMLConstants.*;
 import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
 
@@ -13,6 +13,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,6 +39,14 @@ public final class XMLUtils {
 
     /** Private constructor to make class uninstantiable. */
     private XMLUtils() {}
+
+    /**
+     * Get prefix from QName.
+     */
+    public static String getPrefix(final String qname) {
+        final int sep = qname.indexOf(':');
+        return sep != -1 ? qname.substring(0, sep) : DEFAULT_NS_PREFIX;
+    }
 
     /**
      * List descendant elements by DITA class.

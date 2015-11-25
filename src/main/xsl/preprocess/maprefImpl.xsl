@@ -140,13 +140,13 @@
             </xsl:variable>
             <!-- retain key definition as a separate element -->
             <xsl:if test="@keys">
-              <keydef class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef " processing-role="resource-only">
+              <topicref class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef " processing-role="resource-only">
                 <xsl:apply-templates select="@* except (@class | @processing-role)"/>
                 <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]"/>
-              </keydef>
+              </topicref>
             </xsl:if>
             <!-- href and format need to be retained for keyref processing but must be put to an internal namespace to prevent other modules to interact with this element -->
-            <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+            <topicref class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
                     dita-ot:orig-href="{$href}"
                     dita-ot:orig-format="{(@format, @dita-ot:orig-format)[1]}"
                     dita-ot:orig-class="{(@class, @dita-ot:orig-class)[1]}">
@@ -188,7 +188,7 @@
                 </xsl:with-param>
                 <xsl:with-param name="referTypeFlag" select="'element'"/>
               </xsl:apply-templates>
-            </submap>
+            </topicref>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="$child-topicref-warning = 'true' and *[contains(@class, ' map/topicref ')]

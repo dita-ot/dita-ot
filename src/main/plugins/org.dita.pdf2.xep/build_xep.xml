@@ -16,7 +16,7 @@
       <equals arg1="${pdf.formatter}" arg2="xep"/>
     </condition>
     
-    <condition property="temp.transformation.file" value="${dita.plugin.org.dita.pdf2.xep.dir}/xsl/fo/topic2fo_shell_xep.xsl">
+    <condition property="temp.transformation.file" value="${dita.plugin.org.dita.pdf2.xep.dir}/xsl/fo/topic2fo_shell_xep${xsl.prefix}.xsl">
       <and>
         <not><isset property="args.xsl.pdf"/></not>
         <isset property="use.xep.pdf.formatter"/>

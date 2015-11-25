@@ -46,7 +46,7 @@
   <!-- Build RTF from DITA -->
   <target name="dita.topic.rtf">
     <condition property="args.xsl"
-      value="${dita.plugin.org.dita.wordrtf.dir}/xsl/dita2rtf.xsl">
+      value="${dita.plugin.org.dita.wordrtf.dir}/xsl/dita2rtf${xsl.prefix}.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
@@ -63,7 +63,7 @@
 
   <target name="dita.map.rtf">
     <condition property="args.xsl"
-      value="${dita.plugin.org.dita.wordrtf.dir}/xsl/dita2rtf.xsl">
+      value="${dita.plugin.org.dita.wordrtf.dir}/xsl/dita2rtf${xsl.prefix}.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
@@ -72,7 +72,7 @@
     <xslt in="${input}"
       out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       classpathref="dost.class.path"
-      style="${dita.plugin.org.dita.wordrtf.dir}/xsl/topicmerge.xsl">
+      style="${dita.plugin.org.dita.wordrtf.dir}/xsl/topicmerge${xsl.prefix}.xsl">
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
     <xslt
