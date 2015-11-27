@@ -89,11 +89,22 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
         depth = 0;
     }
 
+    /** @deprecated since 2.3 */
+    @Deprecated
     public void setProcessingMode(final Configuration.Mode processingMode) {
         this.processingMode = processingMode;
     }
 
     // SAX methods
+
+    @Override
+    public void startDocument() throws SAXException {
+        final String mode = params.get(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
+        processingMode = mode != null ? Configuration.Mode.valueOf(mode.toUpperCase()) : Configuration.Mode.LAX;
+
+        getContentHandler().startDocument();
+    }
+
 
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)

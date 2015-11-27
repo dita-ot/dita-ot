@@ -282,12 +282,17 @@
   <target name="topic-fragment"
           dita:depends="{depend.preprocess.coderef.pre}"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-          description="Normalize same topic fragment identifiers and table column names">
+          description="Normalize same topic fragment identifiers and table column names, and resolve coderef">
     <pipeline message="Resolve topic fragment." taskname="topic-fragment">
-      <module class="org.dita.dost.module.TopicFragmentModule">
-        <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
-        <param name="preprocess.coderef.skip" value="true" if="preprocess.coderef.skip"/>
-      </module>
+      <sax format="dita">
+        <filter class="org.dita.dost.writer.TopicFragmentFilter">
+          <param name="attributes" value="href"/>
+        </filter>
+        <filter class="org.dita.dost.writer.NormalizeTableFilter">
+          <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
+        </filter>
+        <filter class="org.dita.dost.writer.CoderefResolver" unless="preprocess.coderef.skip"/>
+      </sax>
     </pipeline>
   </target>
   

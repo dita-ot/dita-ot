@@ -19,7 +19,9 @@ import org.dita.dost.writer.CoderefResolver;
 /**
  * Coderef Module class.
  *
+ * @deprecated since 2.3
  */
+@Deprecated
 final class CoderefModule extends AbstractPipelineModuleImpl {
 
     /**

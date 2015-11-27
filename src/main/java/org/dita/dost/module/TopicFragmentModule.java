@@ -25,6 +25,8 @@ import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_PROCESSING_MODE
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 
+/** @deprecated since 2.3 */
+@Deprecated
 final class TopicFragmentModule extends AbstractPipelineModuleImpl {
 
     public static final String SKIP_CODEREF = "preprocess.coderef.skip";
