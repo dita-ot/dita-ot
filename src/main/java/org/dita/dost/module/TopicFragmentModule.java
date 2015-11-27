@@ -45,7 +45,7 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
         processingMode = mode != null ? Configuration.Mode.valueOf(mode.toUpperCase()) : Configuration.Mode.LAX;
         resolveCoderef = !Boolean.parseBoolean(input.getAttribute(SKIP_CODEREF));
 
-        final Collection<FileInfo> fis = job.getFileInfo(new Filter() {
+        final Collection<FileInfo> fis = job.getFileInfo(new Filter<FileInfo>() {
             @Override
             public boolean accept(final FileInfo f) {
                 return ATTR_FORMAT_VALUE_DITA.equals(f.format);

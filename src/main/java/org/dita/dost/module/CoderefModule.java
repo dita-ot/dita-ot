@@ -38,7 +38,7 @@ final class CoderefModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
-        final Collection<FileInfo> fis = job.getFileInfo(new Filter() {
+        final Collection<FileInfo> fis = job.getFileInfo(new Filter<FileInfo>() {
             @Override
             public boolean accept(final FileInfo f) {
                 return f.hasCoderef;

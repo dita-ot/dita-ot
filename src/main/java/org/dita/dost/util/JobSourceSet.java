@@ -38,7 +38,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
                 throw new IllegalStateException();
             }
             res = new ArrayList<>();
-            for (final Job.FileInfo f : job.getFileInfo(new Job.FileInfo.Filter() {
+            for (final Job.FileInfo f : job.getFileInfo(new Job.FileInfo.Filter<Job.FileInfo>() {
                 @Override
                 public boolean accept(final Job.FileInfo f) {
                     return f.format != null && f.format.equals(format);

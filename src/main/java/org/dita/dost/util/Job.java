@@ -658,9 +658,9 @@ public final class Job {
                     '}';
         }
 
-        public interface Filter {
+        public interface Filter<T> {
             
-            boolean accept(FileInfo f);
+            boolean accept(T f);
             
         }
         
