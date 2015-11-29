@@ -316,7 +316,7 @@ list just like regular named attribute sets.
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="document('cfg:fo/attrs/custom.xsl')//xsl:attribute-set[@name = $attrSet]">
+            <xsl:when test="doc-available('cfg:fo/attrs/custom.xsl') and document('cfg:fo/attrs/custom.xsl')//xsl:attribute-set[@name = $attrSet]">
                 <xsl:apply-templates select="document('cfg:fo/attrs/custom.xsl')//xsl:attribute-set[@name = $attrSet]"/>
             </xsl:when>
             <xsl:otherwise>
