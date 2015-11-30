@@ -16,12 +16,19 @@ import org.xml.sax.helpers.XMLFilterImpl;
 /**
  * Resolves same topic fragment identifies in topics.
  */
-public final class TopicFragmentFilter extends XMLFilterImpl {
+public final class TopicFragmentFilter extends AbstractXMLFilter {
+
+    public static final String PARAM_ATTRIBUTES = "attributes";
 
     private final Deque<DitaClass> classes = new LinkedList<>();
     private final Deque<String> topics = new ArrayDeque<>();
     
-    final List<String> attrNames;
+    List<String> attrNames;
+
+    public TopicFragmentFilter() {
+        super();
+        this.attrNames = Arrays.asList(ATTRIBUTE_NAME_HREF);
+    }
 
     public TopicFragmentFilter(final String... attrNames) {
         super();
@@ -30,8 +37,12 @@ public final class TopicFragmentFilter extends XMLFilterImpl {
 
     @Override
     public void startDocument() throws SAXException {
+        if (attrNames == null) {
+            attrNames = Arrays.asList(params.get(PARAM_ATTRIBUTES).split(","));
+        }
         classes.clear();
         topics.clear();
+
         super.startDocument();
     }
 

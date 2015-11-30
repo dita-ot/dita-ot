@@ -9,6 +9,8 @@ import static java.util.Arrays.asList;
 import java.io.File;
 import java.net.URI;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
@@ -29,6 +31,7 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
     Job job;
     /** Absolute system path to file being processed */
     protected URI currentFile;
+    protected Map<String, String> params = new HashMap<>();
 
     @Override
     public void write(final File filename) throws DITAOTException {
@@ -51,5 +54,7 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
         this.currentFile = currentFile;
     }
 
-
+    public void setParam(final String name, final String value) {
+        params.put(name, value);
+    }
 }

@@ -60,7 +60,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
-        final Collection<FileInfo> fis = new HashSet(job.getFileInfo(new Filter() {
+        final Collection<FileInfo> fis = new HashSet(job.getFileInfo(new Filter<FileInfo>() {
             @Override
             public boolean accept(final FileInfo f) {
                 return f.hasKeyref;

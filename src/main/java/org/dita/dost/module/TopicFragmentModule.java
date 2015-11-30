@@ -25,6 +25,8 @@ import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_PROCESSING_MODE
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 
+/** @deprecated since 2.3 */
+@Deprecated
 final class TopicFragmentModule extends AbstractPipelineModuleImpl {
 
     public static final String SKIP_CODEREF = "preprocess.coderef.skip";
@@ -45,7 +47,7 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
         processingMode = mode != null ? Configuration.Mode.valueOf(mode.toUpperCase()) : Configuration.Mode.LAX;
         resolveCoderef = !Boolean.parseBoolean(input.getAttribute(SKIP_CODEREF));
 
-        final Collection<FileInfo> fis = job.getFileInfo(new Filter() {
+        final Collection<FileInfo> fis = job.getFileInfo(new Filter<FileInfo>() {
             @Override
             public boolean accept(final FileInfo f) {
                 return ATTR_FORMAT_VALUE_DITA.equals(f.format);

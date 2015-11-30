@@ -32,13 +32,20 @@ See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:opentopic="http://www.idiominc.com/opentopic"
                 xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
                 xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
                 xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-                exclude-result-prefixes="opentopic-index opentopic opentopic-func ot-placeholder"
+                exclude-result-prefixes="xs opentopic-index opentopic opentopic-func ot-placeholder"
                 version="2.0">
+
+    <!-- Determines whether letter headings in an index generate bookmarks.
+         0 = no bookmarks.
+         Any other number = if total # of terms exceeds $bookmarks.index-group-size, generate headers.
+         To always generate headers, set to 1. -->
+    <xsl:param name="bookmarks.index-group-size" as="xs:integer">100</xsl:param>
 
     <xsl:variable name="map" select="//opentopic:map"/>
 
@@ -115,21 +122,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:apply-templates select="." mode="bookmark"/>
               </xsl:if>
             </xsl:for-each>
-            <xsl:if test="//opentopic-index:index.groups//opentopic-index:index.entry">
-                <xsl:choose>
-                    <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
-                    <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')]
-                                  | /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
-                        <fo:bookmark internal-destination="{$id.index}">
-                            <fo:bookmark-title>
-                                <xsl:call-template name="getVariable">
-                                    <xsl:with-param name="id" select="'Index'"/>
-                                </xsl:call-template>
-                            </fo:bookmark-title>
-                        </fo:bookmark>
-                    </xsl:when>
-                </xsl:choose>
-            </xsl:if>
+            <xsl:apply-templates select="/*" mode="bookmark-index"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
@@ -139,7 +132,7 @@ See the accompanying license.txt file for applicable licenses.
         </fo:bookmark-tree>
       </xsl:if>
     </xsl:template>
-    
+
     <xsl:template match="ot-placeholder:toc[$retain-bookmap-order]" mode="bookmark">
         <fo:bookmark internal-destination="{$id.toc}">
             <xsl:if test="$bookmarkStyle!='EXPANDED'">
@@ -213,6 +206,43 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:apply-templates mode="bookmark"/>
             </fo:bookmark>
         </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="*" mode="bookmark-index">
+      <xsl:if test="//opentopic-index:index.groups//opentopic-index:index.entry">
+          <xsl:choose>
+              <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
+              <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')]
+                            | /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                  <fo:bookmark internal-destination="{$id.index}" starting-state="hide">
+                      <fo:bookmark-title>
+                          <xsl:call-template name="getVariable">
+                              <xsl:with-param name="id" select="'Index'"/>
+                          </xsl:call-template>
+                      </fo:bookmark-title>
+                      <xsl:if test="$bookmarks.index-group-size !=0 and 
+                                    count(//opentopic-index:index.groups//opentopic-index:index.entry) &gt; $bookmarks.index-group-size">
+                        <xsl:apply-templates select="//opentopic-index:index.groups" mode="bookmark-index"/>
+                      </xsl:if>
+                  </fo:bookmark>
+              </xsl:when>
+          </xsl:choose>
+      </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="opentopic-index:index.groups" mode="bookmark-index">
+      <xsl:apply-templates select="opentopic-index:index.group" mode="bookmark-index"/>
+    </xsl:template>
+    <xsl:template match="opentopic-index:index.group" mode="bookmark-index">
+      <xsl:apply-templates select="opentopic-index:label" mode="bookmark-index"/>
+    </xsl:template>
+    <xsl:template match="opentopic-index:label" mode="bookmark-index">
+      <!-- Letter headings in index are always collapsed, regardless of bookmarkStyle. -->
+      <fo:bookmark internal-destination="{generate-id(.)}" starting-state="hide">
+          <fo:bookmark-title>
+            <xsl:value-of select="."/>
+          </fo:bookmark-title>
+      </fo:bookmark>
     </xsl:template>
 
 </xsl:stylesheet>
