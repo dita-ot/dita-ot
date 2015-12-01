@@ -204,7 +204,23 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
+  <xsl:template match="*" mode="insertTopicHeaderMarker">
+    <xsl:param name="marker-class-name" as="xs:string">current-header</xsl:param>
+
+    <fo:marker marker-class-name="{$marker-class-name}">
+      <xsl:apply-templates select="." mode="insertTopicHeaderMarkerContents"/>
+    </fo:marker>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="insertTopicHeaderMarkerContents">
+    <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="getTitle"/>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/title ')]" mode="insertTopicHeaderMarkerContents">
+    <xsl:apply-templates select="." mode="getTitle"/>
+  </xsl:template>
+
     <!--  Bookmap Chapter processing  -->
     <xsl:template name="processTopicChapter">
         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.body">
@@ -223,11 +239,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:apply-templates select="." mode="topicTitleNumber"/>
                           </xsl:for-each>
                         </fo:marker>
-                        <fo:marker marker-class-name="current-header">
-                            <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                                <xsl:apply-templates select="." mode="getTitle"/>
-                            </xsl:for-each>
-                        </fo:marker>
+                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                     </xsl:if>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
@@ -279,11 +291,7 @@ See the accompanying license.txt file for applicable licenses.
                               <xsl:apply-templates select="." mode="topicTitleNumber"/>
                             </xsl:for-each>
                         </fo:marker>
-                        <fo:marker marker-class-name="current-header">
-                            <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                                <xsl:apply-templates select="." mode="getTitle"/>
-                            </xsl:for-each>
-                        </fo:marker>
+                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                     </xsl:if>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
@@ -332,11 +340,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:apply-templates select="." mode="topicTitleNumber"/>
               </xsl:for-each>
             </fo:marker>
-            <fo:marker marker-class-name="current-header">
-              <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                <xsl:apply-templates select="." mode="getTitle"/>
-              </xsl:for-each>
-            </fo:marker>
+            <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
           </xsl:if>
           
           <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
@@ -400,11 +404,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:apply-templates select="." mode="topicTitleNumber"/>
                           </xsl:for-each>
                         </fo:marker>
-                        <fo:marker marker-class-name="current-header">
-                            <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                                <xsl:apply-templates select="." mode="getTitle"/>
-                            </xsl:for-each>
-                        </fo:marker>
+                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                     </xsl:if>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
@@ -466,11 +466,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:apply-templates select="." mode="topicTitleNumber"/>
                           </xsl:for-each>
                         </fo:marker>
-                        <fo:marker marker-class-name="current-header">
-                            <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                                <xsl:apply-templates select="." mode="getTitle"/>
-                            </xsl:for-each>
-                        </fo:marker>
+                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                     </xsl:if>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
@@ -717,14 +713,12 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
                 </xsl:call-template>
                 <xsl:if test="$level = 1">
-                    <fo:marker marker-class-name="current-header">
-                        <xsl:apply-templates select="." mode="getTitle"/>
-                    </fo:marker>
+                    <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                 </xsl:if>
                 <xsl:if test="$level = 2">
-                    <fo:marker marker-class-name="current-h2">
-                        <xsl:apply-templates select="." mode="getTitle"/>
-                    </fo:marker>
+                    <xsl:apply-templates select="." mode="insertTopicHeaderMarker">
+                      <xsl:with-param name="marker-class-name" as="xs:string">current-h2</xsl:with-param>
+                    </xsl:apply-templates>
                 </xsl:if>
                 <fo:inline id="{parent::node()/@id}"/>
                 <fo:inline>

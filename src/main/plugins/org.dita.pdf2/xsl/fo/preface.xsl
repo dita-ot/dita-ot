@@ -47,11 +47,7 @@ See the accompanying license.txt file for applicable licenses.
                          <fo:marker marker-class-name="current-topic-number">
                              <xsl:number format="1"/>
                          </fo:marker>
-                         <fo:marker marker-class-name="current-header">
-                             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                                 <xsl:apply-templates select="." mode="getTitle"/>
-                             </xsl:for-each>
-                         </fo:marker>
+                         <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                      </xsl:if>
                      <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
                      <xsl:call-template name="insertChapterFirstpageStaticContent">
