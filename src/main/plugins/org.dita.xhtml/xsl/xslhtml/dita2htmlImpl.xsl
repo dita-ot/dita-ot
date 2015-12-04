@@ -1098,6 +1098,7 @@
       <xsl:variable name="tmvalue" select="@trademark"/>
 
       <!-- Determine if this is in a title, and should be marked -->
+      <!-- TODO: should return boolean -->
       <xsl:variable name="usetitle">
         <xsl:if test="ancestor::*[contains(@class, ' topic/title ')]/parent::*[contains(@class, ' topic/topic ')]">
           <xsl:choose>
@@ -1111,6 +1112,7 @@
       </xsl:variable>
 
       <!-- Determine if this is in a body, and should be marked -->
+      <!-- TODO: should return boolean -->
       <xsl:variable name="usebody">
         <xsl:choose>
           <!-- If in a title or prolog, skip -->
@@ -1128,7 +1130,8 @@
       <xsl:if test="$usetitle = 'use' or $usebody = 'use'">
         <xsl:choose>  <!-- ignore @tmtype=service or anything else -->
           <xsl:when test="@tmtype = 'tm'">&#x2122;</xsl:when>
-          <xsl:when test="@tmtype = 'reg'"><sup>&#xAE;</sup></xsl:when>
+          <xsl:when test="@tmtype = 'reg'">&#174;</xsl:when>
+          <xsl:when test="@tmtype = 'service'">&#8480;</xsl:when>
           <xsl:otherwise/>
         </xsl:choose>
       </xsl:if>
@@ -1136,25 +1139,13 @@
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
 </xsl:template>
 
-<!-- Test for in TM area: returns "tm" when parent's @xml:lang needs a trademark language;
-     Otherwise, leave blank.
-     Use the TM for US English and the AP languages (Japanese, Korean, and both Chinese).
-     Ignore the TM for all other languages. -->
+<!-- Deprecated since 2.3 --> 
 <xsl:template name="tm-area">
   <xsl:apply-templates select="." mode="mark-tm-in-this-area"/>
 </xsl:template>
-<xsl:template match="*" mode="mark-tm-in-this-area">
- <xsl:variable name="parentlang">
-  <xsl:call-template name="getLowerCaseLang"/>
- </xsl:variable>
- <xsl:choose>
-  <xsl:when test="$parentlang = 'en-us' or $parentlang = 'en'">tm</xsl:when>
-  <xsl:when test="$parentlang = 'ja-jp' or $parentlang = 'ja'">tm</xsl:when>
-  <xsl:when test="$parentlang = 'ko-kr' or $parentlang = 'ko'">tm</xsl:when>
-  <xsl:when test="$parentlang = 'zh-cn' or $parentlang = 'zh'">tm</xsl:when>
-  <xsl:when test="$parentlang = 'zh-tw' or $parentlang = 'zh'">tm</xsl:when>
-  <xsl:otherwise/>
- </xsl:choose>
+<!-- TODO: this should return boolean, not "tm" or something else -->
+<xsl:template match="*" mode="mark-tm-in-this-area" as="xs:string">
+ <xsl:text>tm</xsl:text>
 </xsl:template>
 
 
