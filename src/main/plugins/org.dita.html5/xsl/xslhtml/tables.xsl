@@ -101,4 +101,64 @@
     <xsl:value-of select="string-join($classes, ' ')"/>
   </xsl:template>
   
+  <!-- table caption -->
+  <xsl:template name="place-tbl-lbl">
+    <xsl:param name="stringName"/>
+    <!-- Number of table/title's before this one -->
+    <xsl:variable name="tbl-count-actual" select="count(preceding::*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')])+1"/>
+    
+    <!-- normally: "Table 1. " -->
+    <xsl:variable name="ancestorlang">
+      <xsl:call-template name="getLowerCaseLang"/>
+    </xsl:variable>
+    
+    <xsl:choose>
+      <!-- title -or- title & desc -->
+      <xsl:when test="*[contains(@class, ' topic/title ')]">
+        <caption>
+          <span class="table--title-label">
+            <!-- TODO language specific processing should be done with string variables -->
+            <xsl:choose>     <!-- Hungarian: "1. Table " -->
+              <xsl:when test="$ancestorlang = ('hu', 'hu-hu')">
+                <xsl:value-of select="$tbl-count-actual"/>
+                <xsl:text>. </xsl:text>
+                <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'Table'"/>
+                </xsl:call-template>
+                <xsl:text> </xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="getVariable">
+                  <xsl:with-param name="id" select="'Table'"/>
+                </xsl:call-template>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$tbl-count-actual"/>
+                <xsl:text>. </xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
+          </span>
+          <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="tabletitle"/>
+          <xsl:if test="*[contains(@class, ' topic/desc ')]">
+            <xsl:text>. </xsl:text>
+          </xsl:if>
+          <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
+            <span class="tabledesc">
+              <xsl:call-template name="commonattributes"/>
+              <xsl:apply-templates select="." mode="tabledesc"/>
+            </span>
+          </xsl:for-each>
+        </caption>
+      </xsl:when>
+      <!-- desc -->
+      <xsl:when test="*[contains(@class, ' topic/desc ')]">
+        <xsl:for-each select="*[contains(@class, ' topic/desc ')]">
+          <caption>
+            <xsl:call-template name="commonattributes"/>
+            <xsl:apply-templates select="." mode="tabledesc"/>
+          </caption>
+        </xsl:for-each>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+  
 </xsl:stylesheet>
