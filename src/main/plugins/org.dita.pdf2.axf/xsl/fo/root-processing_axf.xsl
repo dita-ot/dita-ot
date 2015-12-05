@@ -11,7 +11,7 @@
       <xsl:apply-templates select="." mode="dita-ot:title-metadata"/>
     </xsl:variable>
     <xsl:if test="exists($title)">
-      <axf:document-info name="title" value="{$title}"/>
+      <axf:document-info name="document-title" value="{$title}"/>
     </xsl:if>
     <!--axf:document-info name="subject" value="The document subject"/-->
     <xsl:variable name="author" as="xs:string?">
