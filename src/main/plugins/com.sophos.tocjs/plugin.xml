@@ -6,6 +6,6 @@
   (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
   *-->
 <plugin id="com.sophos.tocjs">
-  <transtype name="tocjs" extends="5html" desc="TocJS"/>
+  <transtype name="tocjs" extends="html5" desc="TocJS"/>
   <feature extension="dita.conductor.target" file="integrator.xml"/>
 </plugin>
