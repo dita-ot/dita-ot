@@ -292,7 +292,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="syntaxdiagram.title">
             <xsl:call-template name="commonattributes"/>
-            <xsl:value-of select="."/>
+            <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
@@ -306,11 +306,11 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:choose>
                 <xsl:when test="@importance='default'">
                     <fo:inline xsl:use-attribute-sets="kwd__default">
-                        <xsl:value-of select="."/>
+                        <xsl:apply-templates/>
                     </fo:inline>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="."/>
+                    <xsl:apply-templates/>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="@importance='optional'">] </xsl:if>
@@ -320,7 +320,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' pr-d/fragref ')]">
         <fo:inline xsl:use-attribute-sets="fragref">     <!--TODO: fragref-->
             <xsl:call-template name="commonattributes"/>
-            &lt;<xsl:value-of select="."/>&gt;
+            <xsl:text>&lt;</xsl:text>
+            <xsl:apply-templates/>
+            <xsl:text>&gt;</xsl:text>
         </fo:inline>
     </xsl:template>
 
