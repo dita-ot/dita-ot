@@ -301,6 +301,8 @@ with those set forth herein.
     <copy file="${dita.temp.dir}/stage1.xml" tofile="${dita.temp.dir}/stage1a.xml"/>
     <!--<xslt in="${dita.temp.dir}/stage1.xml" out="${dita.temp.dir}/stage1a.xml" style="${xsl.fo.dir}/flagging-preprocess.xsl">
       <param name="filterFile" expression="${_org.dita.pdf2.valfile.url}"/>
+      <dita:extension id="dita.conductor.pdf2flagging-preprocess.param" behavior="org.dita.dost.platform.InsertAction"/>
+
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>

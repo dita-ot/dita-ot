@@ -11,7 +11,7 @@
   <extension-point id="depend.org.dita.pdf2.format.post" name="Formatting post-target"/>
   <extension-point id="org.dita.pdf2.catalog.relative" name="Configuration XML catalog"/>
   <extension-point id="dita.conductor.pdf2.param" name="PDF XSLT parameters"/>
-  <extension-point id="dita.conductor.pdf2.formatter.check" name="Formatter check"/>
+  <extension-point id="dita.conductor.pdf2flagging-preprocess.param" name="Flagging preprocess XSLT parameters"/>
   <!-- extensions -->
   <feature extension="dita.conductor.lib.import" file="lib/fo.jar"/>
   <transtype name="pdf" desc="PDF">
