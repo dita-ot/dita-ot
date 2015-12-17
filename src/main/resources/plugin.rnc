@@ -35,7 +35,7 @@ param =
   }
 param.val |=
   attribute type { "enum" },
-  val+
+  val*
 param.val |=
   attribute type { "string" },
   val*
