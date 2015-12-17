@@ -28,7 +28,7 @@
   <path id="dost.class.path">
     <pathelement location="${dita.dir}/lib/dost.jar"/>
     <pathelement location="${dita.dir}/lib/dost-configuration.jar"/>
-    <pathelement location="${dita.dir}/lib/commons-io.jar"/>
+    <pathelement location="${dita.dir}/lib/commons-io-2.4.jar"/>
   </path>
   
   <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
