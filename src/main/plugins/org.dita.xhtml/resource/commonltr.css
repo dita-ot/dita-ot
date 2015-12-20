@@ -281,6 +281,9 @@ ul.simple {
 .shortcut {
   text-decoration: underline;
 }
+.sc {
+  font-variant: small-caps;
+}
 /* Default of bold for definition list terms */
 .dlterm {
   font-weight: bold;
