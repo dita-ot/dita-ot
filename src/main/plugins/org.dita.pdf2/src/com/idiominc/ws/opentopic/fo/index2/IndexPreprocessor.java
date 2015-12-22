@@ -89,6 +89,7 @@ public final class IndexPreprocessor {
     public IndexPreprocessResult process(final Document theInput)
             throws ProcessException {
         final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setNamespaceAware(true);
         DocumentBuilder documentBuilder = null;
         try {
             documentBuilder = documentBuilderFactory.newDocumentBuilder();

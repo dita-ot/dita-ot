@@ -467,6 +467,7 @@ public final class XMLUtils {
      */
     public static DocumentBuilder getDocumentBuilder() {
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
         DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();

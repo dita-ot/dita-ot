@@ -57,7 +57,9 @@ public final class VariableFileTask extends Task {
 
         OutputStream out = null;
         try {
-            final Document d = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(strings);
+        	final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setNamespaceAware(true);
+            final Document d = documentBuilderFactory.newDocumentBuilder().parse(strings);
             final Element root = d.getDocumentElement();
 
             final NodeList nl = root.getElementsByTagName("lang");

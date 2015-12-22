@@ -65,7 +65,9 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     public BranchFilterModule() {
         try {
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+           	final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+           	factory.setNamespaceAware(true);
+            builder = factory.newDocumentBuilder();
         } catch (final ParserConfigurationException e) {
             throw new RuntimeException("Failed to build parser: " + e.getMessage(), e);
         }
