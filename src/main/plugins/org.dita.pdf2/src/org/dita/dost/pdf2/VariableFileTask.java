@@ -22,6 +22,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.FileSet;
 import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,7 +58,7 @@ public final class VariableFileTask extends Task {
 
         OutputStream out = null;
         try {
-            final Document d = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(strings);
+            final Document d = XMLUtils.getDocumentBuilder().parse(strings);
             final Element root = d.getDocumentElement();
 
             final NodeList nl = root.getElementsByTagName("lang");

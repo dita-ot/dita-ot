@@ -3,6 +3,7 @@ package com.idiominc.ws.opentopic.fo.i18n;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.xml.resolver.tools.CatalogResolver;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -65,8 +66,7 @@ public class PreprocessorTask extends Task {
                  System.setProperty("xml.catalog.files", catalogs);
              }
 
-             final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-             final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+             final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
              documentBuilder.setEntityResolver(new CatalogResolver());
 
              final Document doc = documentBuilder.parse(new File(this.input));

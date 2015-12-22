@@ -101,7 +101,7 @@ public class TestKeyrefReader {
     
     private static Document keyDefToDoc(final String key) throws Exception {
         final InputSource inputSource = new InputSource(new StringReader(key));
-        final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
         return documentBuilder.parse(inputSource);
     }
 

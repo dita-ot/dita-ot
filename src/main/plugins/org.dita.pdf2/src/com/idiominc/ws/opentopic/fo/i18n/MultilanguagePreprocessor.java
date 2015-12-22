@@ -2,6 +2,7 @@ package com.idiominc.ws.opentopic.fo.i18n;
 
 import static javax.xml.XMLConstants.*;
 
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -60,13 +61,8 @@ public class MultilanguagePreprocessor {
 
      public Document process(final Document theInput)
              throws ProcessException {
-         final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-         DocumentBuilder documentBuilder = null;
-         try {
-             documentBuilder = documentBuilderFactory.newDocumentBuilder();
-         } catch (final ParserConfigurationException e) {
-             throw new RuntimeException("Failed to create document builder: " + e.getMessage(), e);
-         }
+         final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+
          final Document doc = documentBuilder.newDocument();
 
          final Node rootElement = theInput.getDocumentElement();

@@ -1,5 +1,6 @@
 package org.dita.dost.platform;
 
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -50,11 +51,7 @@ public class PluginParser {
         super();
         assert ditaDir.isAbsolute();
         this.ditaDir = ditaDir;
-        try {
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (final ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        }
+        builder = XMLUtils.getDocumentBuilder();
     }
 
     /**

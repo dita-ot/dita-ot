@@ -15,6 +15,7 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.InputSource;
 
 import org.apache.xml.resolver.tools.ResolvingXMLReader;
@@ -61,7 +62,7 @@ public class MapMetaReaderTest {
 
     @Test
     public void testRead() throws DITAOTException, SAXException, IOException, ParserConfigurationException{
-        final DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        final DocumentBuilder db = XMLUtils.getDocumentBuilder();
         db.setEntityResolver(CatalogUtils.getCatalogResolver());
 
         XMLUnit.setNormalizeWhitespace(true);

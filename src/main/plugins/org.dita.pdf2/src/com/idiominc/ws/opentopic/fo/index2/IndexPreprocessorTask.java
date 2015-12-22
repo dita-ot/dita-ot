@@ -8,6 +8,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.Project;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -76,8 +77,7 @@ extends Task {
         }
 
         try {
-            final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
             documentBuilder.setEntityResolver(new CatalogResolver() {
                 @Override
                 public InputSource resolveEntity(final String publicId, String systemId) {

@@ -64,11 +64,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     private URI map;
 
     public BranchFilterModule() {
-        try {
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (final ParserConfigurationException e) {
-            throw new RuntimeException("Failed to build parser: " + e.getMessage(), e);
-        }
+        builder = XMLUtils.getDocumentBuilder();
         ditaValReader = new DitaValReader();
         ditaValReader.initXMLReader(true);
     }

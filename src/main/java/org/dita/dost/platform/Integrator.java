@@ -125,11 +125,7 @@ public final class Integrator {
             }
         });
         parser = new PluginParser(ditaDir);
-        try {
-            pluginsDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-        } catch (final ParserConfigurationException e) {
-            throw new RuntimeException("Failed to create compound document: " + e.getMessage(), e);
-        }
+        pluginsDoc = XMLUtils.getDocumentBuilder().newDocument();
 //        pluginsDoc.setResult(new StreamResult(new File(ditaDir, RESOURCES_DIR + File.separator + "plugins.xml")));
     }
 
