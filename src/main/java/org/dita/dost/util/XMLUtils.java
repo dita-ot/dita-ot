@@ -36,6 +36,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public final class XMLUtils {
 
+    private static final DocumentBuilderFactory factory;
+    static {
+        factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+    }
+
     /** Private constructor to make class uninstantiable. */
     private XMLUtils() {}
 
@@ -466,7 +472,6 @@ public final class XMLUtils {
      * @throws RuntimeException if instantiating DocumentBuilder failed
      */
     public static DocumentBuilder getDocumentBuilder() {
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
