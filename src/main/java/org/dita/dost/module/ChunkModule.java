@@ -276,9 +276,9 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         final URI from = new File(entry.getValue()).toURI();
                         URI relativePath = getRelativePath(xmlDitalist, from);
                         final URI relativeTargetPath = getRelativePath(xmlDitalist, target);
-                        if (relativeTargetPath.getPath().lastIndexOf(File.separator) != -1) {
+                        if (relativeTargetPath.getPath().indexOf(URI_SEPARATOR) != -1) {
                             relativePath2fix.put(relativeTargetPath.getPath(),
-                                    relativeTargetPath.getPath().substring(0, relativeTargetPath.getPath().lastIndexOf(File.separator) + 1));
+                                    relativeTargetPath.getPath().substring(0, relativeTargetPath.getPath().lastIndexOf(URI_SEPARATOR) + 1));
                         }
                         // ensure the newly chunked file to the old one
                         try {

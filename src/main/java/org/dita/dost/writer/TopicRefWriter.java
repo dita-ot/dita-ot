@@ -62,7 +62,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
     }
 
     public void setFixpath(final String fixpath) {
-        assert fixpath != null ? new File(fixpath).isAbsolute() : true;
+        assert fixpath != null ? !(toFile(fixpath).isAbsolute()) : true;
         this.fixpath = fixpath;
     }
 
