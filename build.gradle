@@ -88,7 +88,7 @@ task copyInstall(type: Copy, dependsOn: initInstall) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compassCompile"]) << {
+task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compassCompile", ":wordrtf:copyInstall"]) << {
     description "Build archives and install all plugins with dependencies"
     ant.ant([antfile: "integrator.xml", dir: file("src/main")])
 }
@@ -145,6 +145,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "plugins/org.dita.pdf2.fop/build"
         exclude "plugins/org.dita.pdf2.xep/build"
         exclude "plugins/org.dita.pdf2.xep/lib/xep/**"
+        exclude "plugins/org.dita.wordrtf/build"
         exclude "temp"
         include "plugins/**"
         include "resources/**"
@@ -159,7 +160,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task integrateDistTemp(dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":xep:copyDistTemp"]) << {
+task integrateDistTemp(dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":xep:copyDistTemp", ":wordrtf:copyDistTemp"]) << {
     def antClassLoader = org.apache.tools.ant.Project.class.classLoader
     configurations.runtime.each { File f ->
         antClassLoader.addURL(f.toURI().toURL())
@@ -172,6 +173,7 @@ task integrateDistTemp(dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyD
     antClassLoader.addURL(file("${projectDir}/src/main/plugins/org.dita.pdf2/lib/fo.jar").toURI().toURL())
     antClassLoader.addURL(file("${projectDir}/src/main/plugins/org.dita.pdf2.axf/lib/axf.jar").toURI().toURL())
     antClassLoader.addURL(file("${projectDir}/src/main/plugins/org.dita.pdf2.xep/lib/xep.jar").toURI().toURL())
+    antClassLoader.addURL(file("${projectDir}/src/main/plugins/org.dita.wordrtf/lib/wordrtf.jar").toURI().toURL())
 
     ant.ant([antfile: "${distTempDir}/integrator.xml", dir: distTempDir])
 }
