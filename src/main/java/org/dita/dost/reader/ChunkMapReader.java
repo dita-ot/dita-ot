@@ -76,17 +76,12 @@ public final class ChunkMapReader extends AbstractDomFilter {
     private ProcessingInstruction path2projUrl = null;
 
     private final ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
-    private Job job;
 
     /**
      * Constructor.
      */
     public ChunkMapReader() {
         super();
-    }
-
-    public void setJob(final Job job) {
-        this.job = job;
     }
 
     public void setRootChunkOverride(final String chunkValue) {
@@ -224,7 +219,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 if (newFileWriter != null) {
                     newFileWriter.close();
                 }
-            } catch (final Exception e) {
+            } catch (final IOException e) {
                 logger.error(e.getMessage(), e);
             }
         }
@@ -265,7 +260,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         } finally {
             try {
                 close(result);
-            } catch (final Exception e) {
+            } catch (final IOException e) {
                 logger.error(e.getMessage(), e);
             }
         }
