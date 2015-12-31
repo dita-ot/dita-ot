@@ -14,6 +14,7 @@ package org.dita.dost.pipeline;
  * @author Lian, Li
  * 
  */
+@Deprecated
 public interface AbstractPipelineOutput {
 
 }
