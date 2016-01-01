@@ -31,7 +31,7 @@ public interface AbstractFacade {
      * @param input input
      * @return AbstractPipelineOutput
      * @throws DITAOTException DITAOTException
-     * @deprecated use {@link #execute(Class, AbstractPipelineInput)} instead
+     * @deprecated use {@link #execute(Class, AbstractPipelineInput)} instead. Deprecated since 2.3
      */
     @Deprecated
     AbstractPipelineOutput execute(String pipelineModule,

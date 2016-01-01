@@ -40,7 +40,7 @@ public final class PipelineFacade implements AbstractFacade {
      * @param pipelineModuleName pipelineModuleName
      * @return AbstractPipelineOutput
      * @throws DITAOTException DITAOTException
-     * @deprecated use {@link #execute(Class, AbstractPipelineInput)} instead
+     * @deprecated use {@link #execute(Class, AbstractPipelineInput)} instead. Deprecated since 2.3
      */
     @Override
     @Deprecated

@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Pipeline flow information for module input.
  *
- * @deprecated use {@link java.util.Map} instead
+ * @deprecated use {@link java.util.Map} instead. Deprecated since 2.3
  */
 @Deprecated
 public interface AbstractPipelineInput {
