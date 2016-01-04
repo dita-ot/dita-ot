@@ -84,7 +84,8 @@ task initInstall(dependsOn: jar) << {
 task copyInstall(type: Copy, dependsOn: initInstall) {
     from (configurations.runtime.allArtifacts.files)
     from (configurations.runtime) {
-        rename "ant-launcher(-.+?)\\.jar", "ant-launcher.jar"
+        rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
+        rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
     }
     destinationDir = file("src/main/lib")
 }
@@ -111,7 +112,8 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
     }
     from (configurations.runtime) {
         into "lib"
-        rename "ant-launcher(-.+?)\\.jar", "ant-launcher.jar"
+        rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
+        rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
     }
     from ("src/main") {
         exclude "**/.gradle"
