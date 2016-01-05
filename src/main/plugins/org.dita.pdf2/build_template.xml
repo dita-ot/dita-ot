@@ -382,14 +382,13 @@ with those set forth herein.
       <not><isset property="i18n.config.file"/></not>
     </condition>
 
-    <i18n-preprocess input="${dita.temp.dir}/stage2.fo" output="${dita.temp.dir}/stage3.fo"
-                     config="${i18n.config.file}" catalogs="${xml.catalog.files}"/> 
-
-    <xslt in="${dita.temp.dir}/stage3.fo" out="${pdf2.temp.dir}/topic.fo" style="${xsl.fo.dir}/i18n-postprocess.xsl">
+    <i18n-preprocess input="${dita.temp.dir}/stage2.fo" output="${pdf2.temp.dir}/topic.fo"
+                     config="${i18n.config.file}"
+                     style="${xsl.fo.dir}/i18n-postprocess.xsl">
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>
       </xmlcatalog>
-    </xslt>
+    </i18n-preprocess>
   </target>
   <target name="transform.topic2fo.i18n.no-filter" if="pdf2.i18n.skip">
     <echo level="info">Skip I18N font processing.</echo>

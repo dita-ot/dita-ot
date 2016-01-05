@@ -4,7 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
-import org.apache.xml.resolver.tools.CatalogResolver;
+import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
@@ -14,6 +14,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -52,8 +53,8 @@ public class PreprocessorTask extends Task {
      private File config = null;
      private File input = null;
      private File output = null;
-     private String catalogs = null;
-
+     private File style = null;
+     private XMLCatalog xmlcatalog;
 
      @Override
      public void execute()
@@ -63,13 +64,8 @@ public class PreprocessorTask extends Task {
          log("Processing " + input + " to " + output, Project.MSG_INFO);
          OutputStream out = null;
          try {
-             // FIXME: Do not alter global state
-             if (catalogs != null) {
-                 System.setProperty("xml.catalog.files", catalogs);
-             }
-
              final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
-             documentBuilder.setEntityResolver(new CatalogResolver());
+             documentBuilder.setEntityResolver(xmlcatalog);
 
              final Document doc = documentBuilder.parse(input);
              final Document conf = documentBuilder.parse(config);
@@ -77,7 +73,14 @@ public class PreprocessorTask extends Task {
              final Document document = preprocessor.process(doc);
 
              final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-             final Transformer transformer = transformerFactory.newTransformer();
+             transformerFactory.setURIResolver(xmlcatalog);
+             final Transformer transformer;
+             if (style != null) {
+                 log("Loading stylesheet " + style, Project.MSG_INFO);
+                 transformer = transformerFactory.newTransformer(new StreamSource(style));
+             } else {
+                 transformer = transformerFactory.newTransformer();
+             }
              transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
              transformer.setOutputProperty(OutputKeys.INDENT, "no");
              transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
@@ -121,8 +124,18 @@ public class PreprocessorTask extends Task {
          this.output = theOutput;
      }
 
-
+     /** @deprecated since 2.3 */
+     @Deprecated
      public void setCatalogs(final String catalogs) {
-         this.catalogs = catalogs;
+         log("catalogs attribute has been deprecated, use xmlcatalog nested element", Project.MSG_WARN);
      }
+
+    public void setStyle(final File style) {
+        this.style = style;
+    }
+
+    public void addConfiguredXmlcatalog(final XMLCatalog xmlcatalog) {
+        this.xmlcatalog = xmlcatalog;
+    }
+
  }
