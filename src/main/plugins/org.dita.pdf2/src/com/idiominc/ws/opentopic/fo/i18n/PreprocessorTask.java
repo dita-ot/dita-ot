@@ -1,13 +1,14 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -15,9 +16,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileOutputStream;
-
-import com.idiominc.ws.opentopic.fo.i18n.Configuration;
-import com.idiominc.ws.opentopic.fo.i18n.MultilanguagePreprocessor;
+import java.io.OutputStream;
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -50,9 +49,9 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying license.txt file for applicable licenses.
  */
 public class PreprocessorTask extends Task {
-     private String config = null;
-     private String input = null;
-     private String output = null;
+     private File config = null;
+     private File input = null;
+     private File output = null;
      private String catalogs = null;
 
 
@@ -61,7 +60,10 @@ public class PreprocessorTask extends Task {
              throws BuildException {
          checkParameters();
 
+         log("Processing " + input + " to " + output, Project.MSG_INFO);
+         OutputStream out = null;
          try {
+             // FIXME: Do not alter global state
              if (catalogs != null) {
                  System.setProperty("xml.catalog.files", catalogs);
              }
@@ -69,8 +71,8 @@ public class PreprocessorTask extends Task {
              final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
              documentBuilder.setEntityResolver(new CatalogResolver());
 
-             final Document doc = documentBuilder.parse(new File(this.input));
-             final Document conf = documentBuilder.parse(new File(this.config));
+             final Document doc = documentBuilder.parse(input);
+             final Document conf = documentBuilder.parse(config);
              final MultilanguagePreprocessor preprocessor = new MultilanguagePreprocessor(new Configuration(conf));
              final Document document = preprocessor.process(doc);
 
@@ -84,12 +86,15 @@ public class PreprocessorTask extends Task {
                  transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, doc.getDoctype().getSystemId());
              }
 
-             final FileOutputStream out = new FileOutputStream(this.output);
+             out = new FileOutputStream(output);
              final StreamResult streamResult = new StreamResult(out);
              transformer.transform(new DOMSource(document), streamResult);
-             out.close();
+         } catch (final RuntimeException e) {
+             throw e;
          } catch (final Exception e) {
              throw new BuildException(e);
+         } finally {
+             IOUtils.closeQuietly(out);
          }
      }
 
@@ -102,17 +107,17 @@ public class PreprocessorTask extends Task {
      }
 
 
-     public void setConfig(final String theConfig) {
+     public void setConfig(final File theConfig) {
          this.config = theConfig;
      }
 
 
-     public void setInput(final String theInput) {
+     public void setInput(final File theInput) {
          this.input = theInput;
      }
 
 
-     public void setOutput(final String theOutput) {
+     public void setOutput(final File theOutput) {
          this.output = theOutput;
      }
 
