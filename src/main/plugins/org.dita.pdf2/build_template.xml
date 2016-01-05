@@ -282,7 +282,7 @@ with those set forth herein.
       <not><isset property="index.config.file"/></not>
     </condition>
 
-    <index-preprocess input="${inputFile}" output="${dita.temp.dir}/stage1.xml"
+    <index-preprocess input="${inputFile.url}" output="${dita.temp.dir}/stage1.xml"
                       indexConfig="${index.config.file}" locale="${document.locale}"
                       catalogs="${xml.catalog.files}"/> 
   </target>
