@@ -162,7 +162,6 @@ with those set forth herein.
   <target name="transform.topic2fo"
           depends="transform.topic2fo.init,
                    transform.topic2fo.index,
-                   transform.topic2fo.flagging,
                    transform.topic2fo.main,
                    transform.topic2fo.i18n"/>
     
@@ -286,30 +285,7 @@ with those set forth herein.
                       indexConfig="${index.config.file}" locale="${document.locale}"
                       catalogs="${xml.catalog.files}"/> 
   </target>
-
-  <target name="transform.topic2fo.flagging"
-          depends="transform.topic2fo.flagging.filter,
-                   transform.topic2fo.flagging.no-filter"/>
-  <target name="transform.topic2fo.flagging.filter" if="dita.input.valfile">
-    <condition property="_org.dita.pdf2.valfile" value="${dita.input.valfile}">
-      <available file="${dita.input.valfile}" type="file"/>
-    </condition>
-    <condition property="_org.dita.pdf2.valfile" value="${dita.plugin.org.dita.pdf2.dir}/${dita.input.valfile}">
-      <not><isset property="_org.dita.pdf2.valfile"/></not>
-    </condition>
-    <makeurl property="_org.dita.pdf2.valfile.url" file="${_org.dita.pdf2.valfile}" validate="no"/>
-    <copy file="${dita.temp.dir}/stage1.xml" tofile="${dita.temp.dir}/stage1a.xml"/>
-    <!--<xslt in="${dita.temp.dir}/stage1.xml" out="${dita.temp.dir}/stage1a.xml" style="${xsl.fo.dir}/flagging-preprocess.xsl">
-      <param name="filterFile" expression="${_org.dita.pdf2.valfile.url}"/>
-      <xmlcatalog>
-        <catalogpath path="${xml.catalog.files}"/>
-      </xmlcatalog>
-    </xslt>-->
-  </target>
-  <target name="transform.topic2fo.flagging.no-filter" unless="dita.input.valfile">
-    <copy file="${dita.temp.dir}/stage1.xml" tofile="${dita.temp.dir}/stage1a.xml"/>
-  </target>  
-
+  
   <target name="transform.topic2fo.main">
     <!--makeurl seems to output file:/C: style instead of file:///C:, but xep, fop, and ah all accept it.-->
     <makeurl property="artworkPrefixUrl" file="${artworkPrefix}"/>
@@ -320,7 +296,7 @@ with those set forth herein.
     <makeurl property="variable.file.url" file="${variable.file}" validate="no"/>
 
     <xslt style="${temp.transformation.file}"
-          in="${dita.temp.dir}/stage1a.xml"
+          in="${dita.temp.dir}/stage1.xml"
           out="${dita.temp.dir}/stage2.fo">
       <param name="locale" expression="${document.locale}"/>
       <param name="customizationDir.url" expression="${customization.dir.url}" if="customization.dir"/>
