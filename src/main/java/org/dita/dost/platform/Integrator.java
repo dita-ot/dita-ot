@@ -8,7 +8,6 @@
  */
 package org.dita.dost.platform;
 
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
@@ -23,8 +22,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -133,10 +130,6 @@ public final class Integrator {
      * Execute point of Integrator.
      */
     public void execute() throws Exception {
-        if (logger == null) {
-            logger = new DITAOTJavaLogger();
-        }
-
         // Read the properties file, if it exists.
         properties = new Properties();
         if (propertiesFile != null) {

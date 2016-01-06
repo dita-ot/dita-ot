@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.util.*;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.platform.Integrator;
 
 
@@ -25,7 +26,7 @@ import org.dita.dost.platform.Integrator;
  */
 public final class Configuration {
 
-    public static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    public static final DITAOTLogger logger = new DITAOTJavaLogger();
     /** Debug mode to aid in development, not intended for end users. */
     public static final boolean DEBUG = false;
 
@@ -121,7 +122,7 @@ public final class Configuration {
                 }
             }
         } else {
-            new DITAOTJavaLogger().error("Failed to read print transtypes from configuration, using defaults.");
+            logger.error("Failed to read print transtypes from configuration, using defaults.");
             types.add(TRANS_TYPE_PDF);
         }
         printTranstype = Collections.unmodifiableList(types);

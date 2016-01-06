@@ -18,6 +18,7 @@ import java.util.Locale;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.writer.AbstractExtendDitaWriter;
 import org.dita.dost.writer.AbstractWriter;
@@ -48,7 +49,7 @@ public final class IndexTermCollection {
     /** The output file name of index term without extension. */
     private String outputFileRoot = null;
     /** The logger. */
-    private final DITAOTJavaLogger javaLogger;
+    private final DITAOTLogger javaLogger;
 
     //RFE 2987769 Eclipse index-see
     /* Parameters passed in from ANT module */

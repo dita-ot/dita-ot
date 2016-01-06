@@ -12,7 +12,6 @@ import static java.util.Arrays.*;
 import java.io.File;
 import java.util.*;
 
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
@@ -75,9 +74,6 @@ final class FileGenerator extends XMLFilterImpl {
      * @param fileName filename
      */
     public void generate(final File fileName){
-        if (logger == null) {
-            logger = new DITAOTJavaLogger();
-        }
         final File outputFile = removeTemplatePrefix(fileName);
         templateFile = fileName;
 

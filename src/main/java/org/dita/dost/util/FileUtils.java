@@ -17,6 +17,7 @@ import java.net.URI;
 import java.util.*;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 
 
 /**
@@ -32,7 +33,7 @@ public final class FileUtils {
     private FileUtils(){
     }
 
-    private static final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    private static final DITAOTLogger logger = new DITAOTJavaLogger();
 
     /**
      * Supported image extensions. File extensions contain a leading dot.

@@ -21,6 +21,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 
 /**
@@ -50,7 +51,7 @@ public final class ImgUtils {
      */
     @Deprecated
     public static int getWidth (final String dirName, final String fileName){
-        final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+        final DITAOTLogger logger = new DITAOTJavaLogger();
 		final File imgInput = new File(dirName, toFile(fileName).getPath());		
         try {
             final BufferedImage img = ImageIO.read(imgInput);
@@ -73,7 +74,7 @@ public final class ImgUtils {
      */
     @Deprecated
     public static int getHeight (final String dirName, final String fileName){
-        final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+        final DITAOTLogger logger = new DITAOTJavaLogger();
         final File imgInput = new File(dirName, toFile(fileName).getPath());
         try {
             final BufferedImage img = ImageIO.read(imgInput);
@@ -95,7 +96,7 @@ public final class ImgUtils {
      * 				The Hexical binary of image data converted to String.
      */
     public static String getBinData (final String dirName, final String fileName){
-        final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+        final DITAOTLogger logger = new DITAOTJavaLogger();
         final File imgInput = new File(dirName, toFile(fileName).getPath());
         FileInputStream binInput = null;
         try{
@@ -136,7 +137,7 @@ public final class ImgUtils {
      * @return base64 encoded binary data.
      */
     public static String getBASE64(final String dirName, final String fileName) {
-        final DITAOTJavaLogger logger = new DITAOTJavaLogger();
+        final DITAOTLogger logger = new DITAOTJavaLogger();
         final URI imgInputURI = toURI(fileName);
         final File imgInput = imgInputURI.isAbsolute() ? new File(imgInputURI) : new File(dirName, toFile(imgInputURI).getPath());
         //BASE64Encoder encoder = new BASE64Encoder();
