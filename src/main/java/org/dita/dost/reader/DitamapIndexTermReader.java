@@ -65,7 +65,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 		topicrefSpecList = new ArrayList<>(16);
 		indexSeeSpecList = new ArrayList<>(16);
 		indexSeeAlsoSpecList = new ArrayList<>(16);
-		this.result = result != null ? result : IndexTermCollection.getInstantce();
+		this.result = result;
         this.indexMoved = indexMoved;
     }
 
