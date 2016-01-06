@@ -1,0 +1,34 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'org.dita-ot.odt'
+
+description = """DITA Open Toolkit ODT plug-in."""
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile rootProject
+}
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+jar.archiveName = "${project.name}.jar"
+
+task copyInstall(type: Copy) {
+    from (configurations.runtime.allArtifacts.files)
+    destinationDir = file("lib")
+}
+
+task copyDistTemp(type: Copy) {
+    from (configurations.runtime.allArtifacts.files) {
+        into "plugins/org.dita.odt/lib"
+    }
+    destinationDir = file("${rootProject.buildDir}/tmp/dist")
+}

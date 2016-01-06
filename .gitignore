@@ -26,6 +26,7 @@ src/main/plugins/org.dita.html5/css/commonltr.css
 src/main/plugins/org.dita.html5/css/commonrtl.css
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhp.xsl
+src/main/plugins/org.dita.odt/lib/
 src/main/plugins/org.dita.odt/xsl/dita2odt.xsl
 src/main/plugins/org.dita.pdf2.axf/lib/axf.jar
 src/main/plugins/org.dita.pdf2.axf/xsl/fo/topic2fo_shell_axf.xsl
