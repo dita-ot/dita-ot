@@ -20,6 +20,6 @@
     </param>
   </transtype>
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
-  <feature extension="dita.conductor.xhtml.param" file="params.xml"/>
+  <feature extension="dita.conductor.html5.param" file="params.xml"/>
   <template file="build_dita2html5_template.xml"/>
 </plugin>
