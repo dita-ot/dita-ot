@@ -37,6 +37,8 @@ In this model, change requests are tracked in feature branches that are created 
 
 To send a pull request, create a feature branch in your fork with a name like `feature/my-changes`, make your changes on that branch in your fork and issue the pull request from there. 
 
+**Note:** By default, pull requests are based on the `develop` branch of the parent `dita-ot` repository, which is appropriate for ​*feature enhancement*​ pull requests. When you create a pull request, GitHub allows you to change the base branch if you think your changes should be applied to a different branch. To fix a bug in the current release, set the base branch for your pull request to the `hotfix/` branch for the ​*latest stable version*​. 
+
 For more information, see [Contributing to Open Source on GitHub][6].
 
 
