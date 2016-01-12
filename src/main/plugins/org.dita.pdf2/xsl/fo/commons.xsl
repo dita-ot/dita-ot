@@ -1244,7 +1244,8 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:variable>
         <xsl:choose>
             <!--  Disable chapter summary processing when mini TOC is created -->
-            <xsl:when test="$topicType = ('topicChapter', 'topicAppendix')"/>
+            <xsl:when test="$topicType = ('topicChapter', 'topicAppendix') and
+                            $chapterLayout != 'BASIC'"/>
             <!--   Normal processing         -->
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
