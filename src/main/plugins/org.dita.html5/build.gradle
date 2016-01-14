@@ -10,7 +10,7 @@ plugins {
 
 compass {
   cssDir = file("css")
-  sassDir = file("css")
+  sassDir = file("sass")
   environment = "production"
   outputStyle = "expanded"
 }
