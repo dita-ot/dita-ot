@@ -1,4 +1,5 @@
-pre.screen {
+/* block */
+.screen {
   padding: 5px 5px 5px 5px;
   border: outset;
   background-color: #CCCCCC;
@@ -6,6 +7,17 @@ pre.screen {
   margin-bottom: 2px;
   white-space: pre;
 }
+
+/* inline */
+.menucascade {
+}
+
+.shortcut {
+}
+
+.uicontrol {
+}
+
 .wintitle {
   font-weight: bold;
 }

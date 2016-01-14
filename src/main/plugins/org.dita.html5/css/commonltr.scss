@@ -4,18 +4,6 @@
 /*
  | (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
-.unresolved {
-  background-color: skyblue;
-}
-.noTemplate {
-  background-color: yellow;
-}
-.base {
-  background-color: #ffffff;
-}
-@import 'pr-d';
-@import 'sw-d';
-@import 'task';
+
+@import 'domains';
 @import 'topic';
-@import 'ui-d';
-@import 'xml-d';
