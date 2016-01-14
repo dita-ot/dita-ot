@@ -1,7 +1,6 @@
-/*
- | This file is part of the DITA Open Toolkit project.
- | See the accompanying license.txt file for applicable licenses.
-*/
+/*!
+ * This file is part of the DITA Open Toolkit project. See the accompanying LICENSE.md file for applicable licenses.
+ */
 /*
  | (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
@@ -14,8 +13,9 @@
 .base {
   background-color: #ffffff;
 }
-@import 'topic';
-@import 'task';
-@import 'ui-d';
-@import 'sw-d';
 @import 'pr-d';
+@import 'sw-d';
+@import 'task';
+@import 'topic';
+@import 'ui-d';
+@import 'xml-d';
