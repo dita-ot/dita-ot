@@ -9,39 +9,23 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 exclude-result-prefixes="xs dita-ot">
-  
+
+  <xsl:include href="functions.xsl"/>
+
   <xsl:param name="DEFAULTLANG">en-us</xsl:param>
   <xsl:param name="variableFiles.url" select="'plugin:org.dita.base:xsl/common/strings.xml'"/>
   
   <xsl:variable name="pixels-per-inch" select="number(96)"/>
 
   <xsl:key name="id" match="*[@id]" use="@id"/>
-  
+
   <!-- Function to determine the current language, and return it in lower case -->
   <xsl:template name="getLowerCaseLang">
-    <xsl:variable name="ancestorlangUpper">
-      <!-- the current xml:lang value (en-us if none found) -->
-      <xsl:choose>
-        <xsl:when test="ancestor-or-self::*/@xml:lang">
-          <xsl:value-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$DEFAULTLANG"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:value-of select="lower-case($ancestorlangUpper)"/>
+    <xsl:value-of select="dita-ot:get-current-language(.)"/>
   </xsl:template>
 
   <xsl:template match="*" mode="get-first-topic-lang">
-    <xsl:variable name="first-topic-lang">
-      <xsl:choose>
-        <xsl:when test="/*[@xml:lang]"><xsl:value-of select="/*/@xml:lang"/></xsl:when>
-        <xsl:when test="/dita/*[@xml:lang]"><xsl:value-of select="/dita/*[@xml:lang][1]/@xml:lang"/></xsl:when>
-        <xsl:otherwise><xsl:value-of select="$DEFAULTLANG"/></xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:value-of select="lower-case($first-topic-lang)"/>
+    <xsl:sequence select="dita-ot:get-first-topic-language(.)"/>
   </xsl:template>
 
   <xsl:template match="*" mode="get-render-direction">
@@ -70,34 +54,13 @@
       <xsl:with-param name="id" select="string($stringName)"/>
     </xsl:call-template>
   </xsl:template>
-  
+
   <xsl:template name="getVariable">
     <xsl:param name="id" as="xs:string"/>
     <xsl:param name="params" as="node()*"/>
-        
-    <xsl:variable name="ancestorlang" as="xs:string*">
-      <xsl:variable name="l" as="xs:string*">
-        <xsl:call-template name="getLowerCaseLang"/>
-      </xsl:variable>
-      <xsl:value-of select="$l"/>
-      <xsl:if test="contains($l, '-')">
-        <xsl:value-of select="substring-before($l, '-')"/>
-      </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="defaultlang" as="xs:string*">
-      <xsl:value-of select="$DEFAULTLANG"/>
-      <xsl:if test="contains($DEFAULTLANG, '-')">
-        <xsl:value-of select="substring-before($DEFAULTLANG, '-')"/>
-      </xsl:if>
-    </xsl:variable>
-    <xsl:call-template name="findString">
-      <xsl:with-param name="id" select="$id"/>
-      <xsl:with-param name="params" select="$params"/>
-      <xsl:with-param name="ancestorlang" select="$ancestorlang"/>
-      <xsl:with-param name="defaultlang" select="$defaultlang"/>
-    </xsl:call-template>
+    <xsl:sequence select="dita-ot:get-variable(., $id, $params)"/>
   </xsl:template>
-  
+
   <xsl:template name="findString">
     <xsl:param name="id" as="xs:string"/>
     <xsl:param name="params" as="node()*"/>
@@ -142,7 +105,7 @@
           <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/></xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>
-    </xsl:choose>    
+    </xsl:choose>
   </xsl:template>
   
   <!-- Support legacy variable syntax -->
@@ -403,77 +366,11 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:function name="dita-ot:resolve-href-path" as="xs:anyURI">
-    <xsl:param name="href" as="attribute(href)"/>
-
-    <xsl:variable name="source" as="xs:anyURI" select="base-uri($href)"/>
-
-    <xsl:sequence
-      select="if (starts-with($href, '#'))
-            then $source
-            else resolve-uri(tokenize($href, '#')[1], $source)"/>
-  </xsl:function>
-
-  <xsl:function name="dita-ot:get-topic-id" as="xs:string?">
-    <xsl:param name="href"/>
-    <xsl:variable name="fragment" select="substring-after($href, '#')" as="xs:string"/>
-    <xsl:if test="string-length($fragment) gt 0">
-      <xsl:choose>
-        <xsl:when test="contains($fragment, '/')">
-          <xsl:value-of select="substring-before($fragment, '/')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$fragment"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
-  </xsl:function>
-  
-  <xsl:function name="dita-ot:has-topic-id" as="xs:boolean">
-    <xsl:param name="href"/>
-    <xsl:sequence select="contains($href, '#')"/>
-  </xsl:function>
-
-  <xsl:function name="dita-ot:get-element-id" as="xs:string?">
-    <xsl:param name="href"/>
-    <xsl:variable name="fragment" select="substring-after($href, '#')" as="xs:string"/>
-    <xsl:if test="contains($fragment, '/')">
-      <xsl:value-of select="substring-after($fragment, '/')"/>
-    </xsl:if>
-  </xsl:function>
-  
-  <xsl:function name="dita-ot:has-element-id" as="xs:boolean">
-    <xsl:param name="href"/>
-    <xsl:sequence select="contains(substring-after($href, '#'), '/')"/>
-  </xsl:function>
-
-  <xsl:function name="dita-ot:normalize-uri" as="xs:string">
-    <xsl:param name="uri" as="xs:string"/>
-    <xsl:call-template name="dita-ot:normalize-uri">
-      <xsl:with-param name="src" select="tokenize($uri, '/')"/>
-    </xsl:call-template>
-  </xsl:function>
-
   <xsl:function name="dita-ot:get-closest-topic" as="element()">
     <xsl:param name="n" as="node()"/>
 
     <xsl:sequence
       select="$n/ancestor-or-self::*[contains(@class, ' topic/topic ')][1]"/>
-  </xsl:function>
-
-  <xsl:function name="dita-ot:retrieve-href-target" as="node()?">
-    <xsl:param name="href" as="attribute(href)"/>
-
-    <xsl:variable name="doc" as="document-node()"
-      select="doc(dita-ot:resolve-href-path($href))"/>
-
-    <xsl:sequence
-      select="if (dita-ot:has-element-id($href))
-            then key('id', dita-ot:get-element-id($href), $doc)
-                 [dita-ot:get-closest-topic(.)/@id eq dita-ot:get-topic-id($href)]
-            else if (dita-ot:has-topic-id($href) and not(dita-ot:has-element-id($href)))
-               then key('id', dita-ot:get-topic-id($href), $doc)
-            else $doc"/>
   </xsl:function>
 
   <xsl:template name="dita-ot:normalize-uri" as="xs:string">
