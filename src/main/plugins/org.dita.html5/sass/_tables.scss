@@ -1,0 +1,69 @@
+// Sass partial for table styles
+
+table {
+  border-collapse: collapse;
+}
+
+/* The cell border can be turned on with
+   {border-right:solid}
+   This value creates a very thick border in Firefox (does not match other tables)
+
+   Firefox works with
+   {border-right:solid 1pt}
+   but this causes a barely visible line in IE */
+
+.cellrowborder {
+  border-bottom: solid 1px;
+  border-left: 0;
+  border-right: solid 1px;
+  border-top: 0;
+}
+
+.row-nocellborder {
+  border-bottom: solid 1px;
+  border-left: 0;
+  border-right: hidden;
+  border-top: 0;
+}
+
+.cell-norowborder {
+  border-bottom: hidden;
+  border-left: 0;
+  border-right: solid 1px;
+  border-top: 0;
+}
+
+.nocellnorowborder {
+  border: 0;
+  border-bottom: hidden;
+  border-right: hidden;
+}
+
+.table-border {
+  border-bottom: solid 1px;
+  border-left: solid 1px;
+  border-right: solid 1px;
+  border-top: solid 1px;
+}
+
+.table-rules-all {
+  border: solid 1px;
+}
+
+.table-rules-sides {
+  border-left: solid 1px;
+  border-right: solid 1px;
+}
+
+.table-rules-top {
+  border-top: solid 1px;
+}
+
+.table-rules-bottom {
+  border-bottom: solid 1px;
+}
+
+/* Used on the first column of a table, when rowheader="firstcol" is used */
+.firstcol {
+  font-weight: bold;
+}
