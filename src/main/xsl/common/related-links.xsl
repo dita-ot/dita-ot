@@ -80,8 +80,8 @@
     </xsl:template>
 
     <!-- Ungrouped links have the default-mode template applied to them. (Can be overridden.) -->
-    <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:link" name="related-links:link."
-                  as="element(link)">
+    <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:link" name="related-links:link"
+                  as="element()*">
       <xsl:sequence select="."/>
     </xsl:template>
 
