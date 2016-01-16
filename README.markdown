@@ -36,7 +36,7 @@ Usage
 
         src/main/bin/dita [options]
         
-   See the [documentation](http://www.dita-ot.org/2.1/) for arguments and [options](http://www.dita-ot.org/2.1/getting-started/using-dita-command.html).
+   See the [documentation](http://www.dita-ot.org/2.2/) for arguments and [options](http://www.dita-ot.org/2.2/getting-started/first-build-using-dita-command.html).
 
 Distribution
 ------------
@@ -53,7 +53,7 @@ Distribution
 
    If Gradle throws an error like `java.lang.OutOfMemoryError: Java heap space`, you probably need to increase the maximum Java heap size. One way to do this is to set the `GRADLE_OPTS` environment variable to a value like `-Xmx1024m`.
 
-   For more information on the `-Xmx` option, see [Java SE Documentation](http://docs.oracle.com/javase/6/docs/technotes/tools/windows/java.html#nonstandard).
+   For more information on the `-Xmx` option, see [Java SE Documentation](http://docs.oracle.com/javase/7/docs/technotes/tools/windows/java.html#nonstandard).
 
 License
 -------
