@@ -42,6 +42,8 @@ public final class XMLUtils {
         factory.setNamespaceAware(true);
     }
 
+    private static final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
     /** Private constructor to make class uninstantiable. */
     private XMLUtils() {}
 
@@ -248,7 +250,7 @@ public final class XMLUtils {
         InputStream in = null;
         OutputStream out = null;
         try {
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            final Transformer transformer = transformerFactory.newTransformer();
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
@@ -296,7 +298,7 @@ public final class XMLUtils {
         InputSource src = null;
         StreamResult result = null;
         try {
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            final Transformer transformer = transformerFactory.newTransformer();
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
