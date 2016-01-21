@@ -49,8 +49,8 @@
   </target>
   
   <dita:extension id="dita.conductor.plugin" behavior="org.dita.dost.platform.ImportPluginInfoAction"/>
+  <dita:extension id="dita.conductor.target.relative" behavior="org.dita.dost.platform.InsertAntActionRelative"/>  
   <dita:extension id="dita.conductor.target" behavior="org.dita.dost.platform.InsertAction"/>
-  <dita:extension id="dita.conductor.target.relative" behavior="org.dita.dost.platform.InsertAntActionRelative"/>
   
   <!-- Deprecated since 2.1 -->
   <target name="help">

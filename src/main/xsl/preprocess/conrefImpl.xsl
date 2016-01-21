@@ -1224,20 +1224,24 @@
   <xsl:template name="get-file-uri" as="xs:string">
     <xsl:param name="href" as="xs:string"/>
     <xsl:param name="file-prefix" as="xs:string"/>
-    <xsl:value-of>
-      <xsl:value-of select="$file-prefix"/>
-      <xsl:choose>
-        <xsl:when test="starts-with($href, '#')">
-          <xsl:value-of select="$file-being-processed"/>
-        </xsl:when>
-        <xsl:when test="contains($href, '#')">
-          <xsl:value-of select="substring-before($href, '#')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$href"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:value-of>
+    <xsl:choose>
+      <xsl:when test="starts-with($href, '#')">
+        <xsl:value-of select="base-uri()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of>
+          <xsl:value-of select="$file-prefix"/>
+          <xsl:choose>
+            <xsl:when test="contains($href, '#')">
+              <xsl:value-of select="substring-before($href, '#')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$href"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:value-of>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="get-original-element" as="xs:string">
