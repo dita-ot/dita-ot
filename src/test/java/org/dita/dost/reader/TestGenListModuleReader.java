@@ -29,13 +29,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 import static org.dita.dost.util.Constants.FEATURE_VALIDATION;
 import static org.dita.dost.util.Constants.FEATURE_VALIDATION_SCHEMA;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class TestGenListModuleReader {
 
