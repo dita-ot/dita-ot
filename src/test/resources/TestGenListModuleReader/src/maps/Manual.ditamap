@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="user_manual">
+  <title>MyDOc</title>
+  <topicmeta>
+    <publisher>Acme Inc.</publisher>
+  </topicmeta>
+  <topichead navtitle="Manual">
+    <topicref navtitle="Toolbars" href="toolbars.dita#t_toolbars" copy-to="ToolbarsChunk.dita" chunk="to-content">
+      <topicref href="toolbars.dita#t_save"/>
+    </topicref>
+  </topichead>
+</map>
