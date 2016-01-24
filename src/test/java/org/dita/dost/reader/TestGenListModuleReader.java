@@ -32,7 +32,7 @@ import java.util.HashSet;
 
 import static org.dita.dost.util.Constants.FEATURE_VALIDATION;
 import static org.dita.dost.util.Constants.FEATURE_VALIDATION_SCHEMA;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class TestGenListModuleReader {
 
@@ -60,11 +60,11 @@ public class TestGenListModuleReader {
         final File rootFile = new File(inputDir, "root-map-01.ditamap");
         run(rootFile);
 
-        assertEquals(0, reader.getConrefTargets().size());
+        assertTrue(reader.getConrefTargets().isEmpty());
 
-        assertEquals(0, reader.getChunkTopicSet().size());
+        assertTrue(reader.getChunkTopicSet().isEmpty());
 
-        assertEquals(0, reader.getCopytoMap().size());
+        assertTrue(reader.getCopytoMap().isEmpty());
 
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("topics/xreffin-topic-1.xml"),
@@ -78,7 +78,7 @@ public class TestGenListModuleReader {
                 srcDirUri.resolve("topics/target-topic-a.xml"))),
                 reader.getHrefTopicSet());
 
-        assertEquals(0, reader.getIgnoredCopytoSourceSet().size());
+        assertTrue(reader.getIgnoredCopytoSourceSet().isEmpty());
 
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("topics/xreffin-topic-1.xml"),
@@ -104,9 +104,17 @@ public class TestGenListModuleReader {
                 srcDirUri.resolve("topics/target-topic-a.xml"))),
                 reader.getOutFilesSet());
 
-        assertEquals(0, reader.getResourceOnlySet().size());
+        assertTrue(reader.getResourceOnlySet().isEmpty());
 
-        assertEquals(0, reader.getCoderefTargets().size());
+        assertTrue(reader.getCoderefTargets().isEmpty());
+
+        assertFalse(reader.isDitaTopic());
+        assertTrue(reader.isDitaMap());
+        assertFalse(reader.hasCodeRef());
+        assertFalse(reader.hasConaction());
+        assertFalse(reader.hasConRef());
+        assertTrue(reader.hasHref());
+        assertTrue(reader.hasKeyRef());
     }
 
     @Test
@@ -114,19 +122,22 @@ public class TestGenListModuleReader {
         final File rootFile = new File(inputDir, "Manual.ditamap");
         run(rootFile);
 
-        assertEquals(0, reader.getConrefTargets().size());
+        assertTrue(reader.getConrefTargets().isEmpty());
 
-        assertEquals(2, reader.getChunkTopicSet().size());
+        assertEquals(new HashSet(Arrays.asList(
+                srcDirUri.resolve("maps/toolbars.dita"),
+                srcDirUri.resolve("maps/ToolbarsChunk.dita"))),
+                reader.getChunkTopicSet());
 
-        assertEquals(0, reader.getCopytoMap().size());
+        assertTrue(reader.getCopytoMap().isEmpty());
 
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("maps/toolbars.dita"))),
                 reader.getHrefTargets());
 
-        assertEquals(0, reader.getHrefTopicSet().size());
+        assertTrue(reader.getHrefTopicSet().isEmpty());
 
-        assertEquals(0, reader.getIgnoredCopytoSourceSet().size());
+        assertTrue(reader.getIgnoredCopytoSourceSet().isEmpty());
 
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("maps/toolbars.dita"))),
@@ -136,13 +147,21 @@ public class TestGenListModuleReader {
                 new Reference(srcDirUri.resolve("maps/toolbars.dita")))),
                 reader.getNonCopytoResult());
 
-        assertEquals(0, reader.getOutDitaFilesSet().size());
+        assertTrue(reader.getOutDitaFilesSet().isEmpty());
 
-        assertEquals(0, reader.getOutFilesSet().size());
+        assertTrue(reader.getOutFilesSet().isEmpty());
 
-        assertEquals(0, reader.getResourceOnlySet().size());
+        assertTrue(reader.getResourceOnlySet().isEmpty());
 
-        assertEquals(0, reader.getCoderefTargets().size());
+        assertTrue(reader.getCoderefTargets().isEmpty());
+
+        assertFalse(reader.isDitaTopic());
+        assertTrue(reader.isDitaMap());
+        assertFalse(reader.hasCodeRef());
+        assertFalse(reader.hasConaction());
+        assertFalse(reader.hasConRef());
+        assertTrue(reader.hasHref());
+        assertFalse(reader.hasKeyRef());
     }
 
     private void run(final File rootFile) throws Exception {
