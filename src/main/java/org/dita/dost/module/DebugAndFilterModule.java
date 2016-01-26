@@ -75,7 +75,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private boolean profilingEnabled;
     private boolean validate;
     private String transtype;
-    private boolean forceUnique;
     /** Absolute DITA-OT base path. */
     private File ditaDir;
     private File ditavalFile;
@@ -91,7 +90,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private Map<URI, Set<URI>> dic;
     private SubjectSchemeReader subjectSchemeReader;
     private FilterUtils baseFilterUtils;
-    private ForceUniqueFilter forceUniqueFilter;
     private DitaWriterFilter ditaWriterFilter;
     private TopicFragmentFilter topicFragmentFilter;
 
@@ -284,11 +282,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
      * Initialize reusable filters.
      */
     private void initFilters() {
-        forceUniqueFilter = new ForceUniqueFilter();
-        forceUniqueFilter.setLogger(logger);
-        forceUniqueFilter.setJob(job);
-        forceUniqueFilter.setEntityResolver(reader.getEntityResolver());
-
         ditaWriterFilter = new DitaWriterFilter();
         ditaWriterFilter.setLogger(logger);
         ditaWriterFilter.setJob(job);
@@ -331,11 +324,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         normalizeFilter.setLogger(logger);
         pipe.add(normalizeFilter);
 
-        if (forceUnique) {
-            forceUniqueFilter.setCurrentFile(currentFile);
-            pipe.add(forceUniqueFilter);
-        }
-
         pipe.add(topicFragmentFilter);
 
         ditaWriterFilter.setDefaultValueMap(defaultValueMap);
@@ -365,7 +353,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
         validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
         setSystemId = "yes".equals(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
-        forceUnique = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAN_FORCE_UNIQUE));
         genDebugInfo = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR));
         final String mode = input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
         processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
