@@ -409,23 +409,6 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         return resAtts;
     }
 
-    void updateList() {
-        try {
-            // XXX: Why do we need to update copy-to map because all copy-to have been processed already
-            final Map<URI, URI> copytotarget2sourcemaplist = job.getCopytoMap();
-            copytotarget2source.putAll(copytotarget2sourcemaplist);
-            for (final String file : copytoSource) {
-                job.getOrCreateFileInfo(toURI(file)).isCopyToSource = true;
-            }
-            job.setCopytoMap(copytotarget2source);
-            job.write();
-        } catch (final IOException e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-
-        }
-    }
-
     /**
      * Generate file name.
      * 

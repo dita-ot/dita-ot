@@ -64,8 +64,6 @@ public class TestGenListModuleReader {
 
         assertTrue(reader.getChunkTopicSet().isEmpty());
 
-        assertTrue(reader.getCopytoMap().isEmpty());
-
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("topics/xreffin-topic-1.xml"),
                 srcDirUri.resolve("topics/target-topic-c.xml"),
@@ -77,8 +75,6 @@ public class TestGenListModuleReader {
                 srcDirUri.resolve("topics/target-topic-c.xml"),
                 srcDirUri.resolve("topics/target-topic-a.xml"))),
                 reader.getHrefTopicSet());
-
-        assertTrue(reader.getIgnoredCopytoSourceSet().isEmpty());
 
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("topics/xreffin-topic-1.xml"),
@@ -129,15 +125,11 @@ public class TestGenListModuleReader {
                 srcDirUri.resolve("maps/ToolbarsChunk.dita"))),
                 reader.getChunkTopicSet());
 
-        assertTrue(reader.getCopytoMap().isEmpty());
-
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("maps/toolbars.dita"))),
                 reader.getHrefTargets());
 
         assertTrue(reader.getHrefTopicSet().isEmpty());
-
-        assertTrue(reader.getIgnoredCopytoSourceSet().isEmpty());
 
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("maps/toolbars.dita"))),

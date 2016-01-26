@@ -63,7 +63,6 @@ import org.xml.sax.helpers.XMLFilterImpl;
  */
 public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
-    private final Map<File, File> copytoMap = new HashMap<>();
     private Mode processingMode;
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private boolean genDebugInfo;
@@ -111,8 +110,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                     processFile(f);
                 }
             }
-
-            performCopytoTask();
 
             job.write();
         } catch (final Exception e) {
@@ -379,10 +376,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             inputDir = baseDir.toURI().resolve(inputDir);
         }
         inputMap = inputDir.resolve(job.getInputMap());
-
-        for (final Map.Entry<URI, URI> e: job.getCopytoMap().entrySet()) {
-            copytoMap.put(toFile(e.getKey()), toFile(e.getValue()));
-        }
     }
 
 
@@ -571,128 +564,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             }
         }
     }
-
-
-    /**
-     * Execute copy-to task, generate copy-to targets base on sources
-     */
-    private void performCopytoTask() {
-        final Map<File, File> copyTo = new HashMap<>(copytoMap);
-        if (forceUniqueFilter != null) {
-            for (final Map.Entry<URI, URI> e: forceUniqueFilter.copyToMap.entrySet()) {
-                copyTo.put(toFile(e.getKey()), toFile(e.getValue()));
-            }
-        }
-        
-        for (final Map.Entry<File, File> entry: copyTo.entrySet()) {
-            final File copytoTarget = entry.getKey();
-            final File copytoSource = entry.getValue();
-            final File srcFile = new File(job.tempDir, copytoSource.getPath());
-            final File targetFile = new File(job.tempDir, copytoTarget.getPath());
-
-            if (targetFile.exists()) {
-                logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
-            } else {
-                final File inputMapInTemp = new File(job.tempDir, job.getInputMap().getPath()).getAbsoluteFile();
-                copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
-                // add new file info into job
-                final FileInfo src = job.getFileInfo(toURI(copytoSource));
-                final FileInfo.Builder b = src != null ? new FileInfo.Builder(src) : new FileInfo.Builder();
-                final FileInfo dst = b.uri(toURI(copytoTarget)).isCopyToSource(false).build();
-                job.add(dst);
-            }
-        }
-    }
     
-    
-    /**
-     * Copy files and replace workdir PI contents.
-     * 
-     * @param src
-     * @param target
-     * @param copytoTargetFilename
-     * @param inputMapInTemp
-     */
-    private void copyFileWithPIReplaced(final File src, final File target, final File copytoTargetFilename, final File inputMapInTemp) {
-        if (!target.getParentFile().exists() && !target.getParentFile().mkdirs()) {
-            logger.error("Failed to create copy-to target directory " + target.getParentFile().getAbsolutePath());
-            return;
-        }
-        final File path2project = DebugAndFilterModule.getPathtoProject(copytoTargetFilename, target, inputMapInTemp, job);
-        final File workdir = target.getParentFile();
-        XMLFilter filter = new CopyToFilter(workdir, path2project);
-        
-        logger.info("Processing " + src.getAbsolutePath() + " to " + target.getAbsolutePath());
-        try {
-            XMLUtils.transform(src, target, Collections.singletonList(filter));
-        } catch (final DITAOTException e) {
-            logger.error("Failed to write copy-to file: " + e.getMessage(), e);
-        }
-    }
-    
-    /**
-     * XML filter to rewrite processing instructions to reflect copy-to location. The following processing-instructions are
-     * processed: 
-     * 
-     * <ul>
-     * <li>{@link Constants#PI_WORKDIR_TARGET PI_WORKDIR_TARGET}</li>
-     * <li>{@link Constants#PI_WORKDIR_TARGET_URI PI_WORKDIR_TARGET_URI}</li>
-     * <li>{@link Constants#PI_PATH2PROJ_TARGET PI_PATH2PROJ_TARGET}</li>
-     * <li>{@link Constants#PI_PATH2PROJ_TARGET_URI PI_PATH2PROJ_TARGET_URI}</li>
-     * </ul>
-     */
-    private static final class CopyToFilter extends XMLFilterImpl {
-        
-        private final File workdir;
-        private final File path2project;
-        
-        CopyToFilter(final File workdir, final File path2project) {
-            super();
-            this.workdir = workdir;
-            this.path2project = path2project;
-        }
-                
-        @Override
-        public void processingInstruction(final String target, final String data) throws SAXException {
-            String d = data;
-            switch (target) {
-                case PI_WORKDIR_TARGET:
-                    if (workdir != null) {
-                        try {
-                            if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
-                                d = workdir.getCanonicalPath();
-                            } else {
-                                d = UNIX_SEPARATOR + workdir.getCanonicalPath();
-                            }
-                        } catch (final IOException e) {
-                            throw new RuntimeException("Failed to get canonical path for working directory: " + e.getMessage(), e);
-                        }
-                    }
-                    break;
-                case PI_WORKDIR_TARGET_URI:
-                    if (workdir != null) {
-                        d = workdir.toURI().toString();
-                    }
-                    break;
-                case PI_PATH2PROJ_TARGET:
-                    if (path2project != null) {
-                        d = path2project.getPath();
-                    }
-                    break;
-                case PI_PATH2PROJ_TARGET_URI:
-                    if (path2project != null) {
-                        d = toURI(path2project).toString();
-                        if (!d.endsWith(URI_SEPARATOR)) {
-                            d = d + URI_SEPARATOR;
-                        }
-                    }
-                    break;
-            }
-            getContentHandler().processingInstruction(target, d);
-        }
-        
-    }
-
     /**
      * Get path to base directory
      *

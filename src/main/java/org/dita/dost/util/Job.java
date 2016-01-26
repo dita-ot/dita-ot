@@ -436,35 +436,6 @@ public final class Job {
     public Object setProperty(final String key, final String value) {
         return prop.put(key, value);
     }
-    
-    /**
-     * Return the copy-to map from target to source.
-     *
-     * @return copy-to map, empty map if no mapping is defined
-     */
-    public Map<URI, URI> getCopytoMap() {
-        final Map<String, String> value = (Map<String, String>) prop.get(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
-        if (value == null) {
-            return Collections.emptyMap();
-        } else {
-            final Map<URI, URI> res = new HashMap<>();
-            for (final Map.Entry<String, String> e: value.entrySet()) {
-                res.put(toURI(e.getKey()), toURI(e.getValue()));
-            }
-            return Collections.unmodifiableMap(res);
-        }
-    }
-    
-    /**
-     * Set copy-to map from target to source.
-     */
-    public void setCopytoMap(final Map<URI, URI> value) {
-        final Map<String, String> res = new HashMap<>();
-        for (final Map.Entry<URI, URI> e: value.entrySet()) {
-            res.put(e.getKey().toString(), e.getValue().toString());
-        }
-        prop.put(COPYTO_TARGET_TO_SOURCE_MAP_LIST, res);
-    }
 
     /**
      * Get input file

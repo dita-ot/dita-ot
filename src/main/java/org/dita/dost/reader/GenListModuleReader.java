@@ -319,24 +319,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * Returns the ignoredCopytoSourceSet.
-     * 
-     * @return Returns the ignoredCopytoSourceSet.
-     */
-    public Set<URI> getIgnoredCopytoSourceSet() {
-        return ignoredCopytoSourceSet;
-    }
-
-    /**
-     * Get the copy-to map.
-     * 
-     * @return copy-to map
-     */
-    public Map<URI, URI> getCopytoMap() {
-        return copytoMap;
-    }
-
-    /**
      * Set processing input directory absolute path.
      * 
      * @param inputDir absolute path to base directory

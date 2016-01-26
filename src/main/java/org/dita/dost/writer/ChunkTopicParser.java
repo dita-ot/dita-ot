@@ -62,9 +62,6 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         try {
             output = new StringWriter();
             processChunk(rootTopicref, null);
-            if (!copyto.isEmpty()) {
-                updateList();
-            }
         } finally {
             if (output != null) {
                 try {

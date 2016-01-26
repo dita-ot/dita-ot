@@ -22,6 +22,7 @@
                   branch-filter,
                   copy-files,
                   keyref,
+                  copy-to,
                   conrefpush,
                   conref,
                   profile,
@@ -194,7 +195,6 @@
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-helper file="copytotarget2sourcemap.list" property="copytotarget2sourcemaplist"/>
     <job-property dir="${dita.temp.dir}"/>
     <condition property="noTopic">
       <length file="${dita.temp.dir}/${fullditatopicfile}" length="0"/>
@@ -360,6 +360,13 @@
       </xslt>
     </pipeline>
   </target>
+
+  <target name="copy-to">
+    <pipeline message="Resolve keyref." taskname="keyref"
+              tempdir="${dita.temp.dir}">
+      <module class="org.dita.dost.module.CopyToModule"/>
+    </pipeline>
+  </target>
   
   <!-- mappull
       Pull metadata (such as navtitle) into the map from the referenced topics. -->
@@ -400,7 +407,6 @@
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-helper file="copytotarget2sourcemap.list" property="copytotarget2sourcemaplist"/>
     <job-property dir="${dita.temp.dir}"/>
     <condition property="noTopic">
         <length file="${dita.temp.dir}/${fullditatopicfile}" length="0"/>

@@ -105,7 +105,8 @@ public class DebugAndFilterModuleTest {
                 new File("topics", "target-topic-a.xml"),
                 new File("topics", "target-topic-c.xml"),
                 new File("topics", "xreffin-topic-1.xml"),
-                new File("topics", "copy-to.xml"),
+                // TODO test me somewhere else
+//                new File("topics", "copy-to.xml"),
         };
         final Map<File, File> copyto = new HashMap<File, File>();
         copyto.put(new File("topics", "copy-to.xml"), new File("topics", "xreffin-topic-1.xml"));

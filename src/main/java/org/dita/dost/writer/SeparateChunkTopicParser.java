@@ -245,9 +245,6 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 logger.error(ex.getMessage(), ex);
             }
         }
-        if (!copyto.isEmpty()) {
-            updateList();
-        }
     }
 
     /**
