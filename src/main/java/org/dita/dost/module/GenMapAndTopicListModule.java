@@ -874,9 +874,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         for (final URI file: schemeSet) {
             getOrCreateFileInfo(fileinfos, file).isSubjectScheme = true;
         }
-        for (final URI file: conrefTargetSet) {
-            getOrCreateFileInfo(fileinfos, file).isConrefTarget = true;
-        }
         for (final URI file: coderefTargetSet) {
             final FileInfo f = getOrCreateFileInfo(fileinfos, file);
             f.isSubtarget = true;

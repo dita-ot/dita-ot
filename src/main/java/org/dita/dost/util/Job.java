@@ -106,8 +106,7 @@ public final class Job {
             attrToFieldMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getField("hasKeyref"));    
             attrToFieldMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getField("hasCoderef"));    
             attrToFieldMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.class.getField("isResourceOnly"));    
-            attrToFieldMap.put(ATTRIBUTE_TARGET, FileInfo.class.getField("isTarget"));    
-            attrToFieldMap.put(ATTRIBUTE_CONREF_TARGET, FileInfo.class.getField("isConrefTarget"));    
+            attrToFieldMap.put(ATTRIBUTE_TARGET, FileInfo.class.getField("isTarget"));
             attrToFieldMap.put(ATTRIBUTE_NON_CONREF_TARGET, FileInfo.class.getField("isNonConrefTarget"));    
             attrToFieldMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getField("isConrefPush"));    
             attrToFieldMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getField("isSubjectScheme"));
@@ -561,8 +560,6 @@ public final class Job {
         public boolean isResourceOnly;
         /** File is a link target. */
         public boolean isTarget;
-        /** File is a push conref target. */
-        public boolean isConrefTarget;
         /** File is a target in non-conref link. */
         public boolean isNonConrefTarget;
         /** File is a push conref source. */
@@ -612,7 +609,6 @@ public final class Job {
                     ", hasLink=" + hasLink +
                     ", isResourceOnly=" + isResourceOnly +
                     ", isTarget=" + isTarget +
-                    ", isConrefTarget=" + isConrefTarget +
                     ", isNonConrefTarget=" + isNonConrefTarget +
                     ", isConrefPush=" + isConrefPush +
                     ", hasKeyref=" + hasKeyref +
@@ -642,7 +638,6 @@ public final class Job {
             private boolean hasLink;
             private boolean isResourceOnly;
             private boolean isTarget;
-            private boolean isConrefTarget;
             private boolean isNonConrefTarget;
             private boolean isConrefPush;
             private boolean hasKeyref;
@@ -664,7 +659,6 @@ public final class Job {
                 hasLink = orig.hasLink;
                 isResourceOnly = orig.isResourceOnly;
                 isTarget = orig.isTarget;
-                isConrefTarget = orig.isConrefTarget;
                 isNonConrefTarget = orig.isNonConrefTarget;
                 isConrefPush = orig.isConrefPush;
                 hasKeyref = orig.hasKeyref;
@@ -689,7 +683,6 @@ public final class Job {
                 if (orig.hasLink) hasLink = orig.hasLink;
                 if (orig.isResourceOnly) isResourceOnly = orig.isResourceOnly;
                 if (orig.isTarget) isTarget = orig.isTarget;
-                if (orig.isConrefTarget) isConrefTarget = orig.isConrefTarget;
                 if (orig.isNonConrefTarget) isNonConrefTarget = orig.isNonConrefTarget;
                 if (orig.isConrefPush) isConrefPush = orig.isConrefPush;
                 if (orig.hasKeyref) hasKeyref = orig.hasKeyref;
@@ -711,7 +704,6 @@ public final class Job {
             public Builder hasLink(final boolean hasLink) { this.hasLink = hasLink; return this; }
             public Builder isResourceOnly(final boolean isResourceOnly) { this.isResourceOnly = isResourceOnly; return this; }
             public Builder isTarget(final boolean isTarget) { this.isTarget = isTarget; return this; }
-            public Builder isConrefTarget(final boolean isConrefTarget) { this.isConrefTarget = isConrefTarget; return this; }
             public Builder isNonConrefTarget(final boolean isNonConrefTarget) { this.isNonConrefTarget = isNonConrefTarget; return this; }
             public Builder isConrefPush(final boolean isConrefPush) { this.isConrefPush = isConrefPush; return this; }
             public Builder hasKeyref(final boolean hasKeyref) { this.hasKeyref = hasKeyref; return this; }
@@ -733,7 +725,6 @@ public final class Job {
                 fi.hasLink = hasLink;
                 fi.isResourceOnly = isResourceOnly;
                 fi.isTarget = isTarget;
-                fi.isConrefTarget = isConrefTarget;
                 fi.isNonConrefTarget = isNonConrefTarget;
                 fi.isConrefPush = isConrefPush;
                 fi.hasKeyref = hasKeyref;
