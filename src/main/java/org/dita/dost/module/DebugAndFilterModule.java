@@ -104,7 +104,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
             for (final FileInfo f: job.getFileInfo()) {
                 if (isFormatDita(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)
-                        || f.isConrefTarget || f.isCopyToSource) {
+                        || f.isConrefTarget) {
                     processFile(f);
                 }
             }

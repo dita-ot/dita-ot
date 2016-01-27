@@ -126,7 +126,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                 // add new file info into job
                 final FileInfo src = job.getFileInfo(copytoSource);
                 final FileInfo.Builder b = src != null ? new FileInfo.Builder(src) : new FileInfo.Builder();
-                final FileInfo dst = b.uri(copytoTarget).isCopyToSource(false).build();
+                final FileInfo dst = b.uri(copytoTarget).build();
                 job.add(dst);
             }
         }

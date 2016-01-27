@@ -111,7 +111,6 @@ public final class Job {
             attrToFieldMap.put(ATTRIBUTE_NON_CONREF_TARGET, FileInfo.class.getField("isNonConrefTarget"));    
             attrToFieldMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getField("isConrefPush"));    
             attrToFieldMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getField("isSubjectScheme"));
-            attrToFieldMap.put(ATTRIBUTE_COPYTO_SOURCE_LIST, FileInfo.class.getField("isCopyToSource"));
             attrToFieldMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getField("isOutDita"));
             attrToFieldMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
             attrToFieldMap.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getField("isSubtarget"));
@@ -582,8 +581,6 @@ public final class Job {
         public boolean isFlagImage;
         /** Source file is outside base directory. */
         public boolean isOutDita;
-        /** File is used only as a source of a copy-to. */
-        public boolean isCopyToSource;
         
         FileInfo(final URI src, final URI uri, final File file) {
             if (src == null && uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
@@ -625,7 +622,6 @@ public final class Job {
                     ", isSubtarget=" + isSubtarget +
                     ", isFlagImage=" + isFlagImage +
                     ", isOutDita=" + isOutDita +
-                    ", isCopyToSource=" + isCopyToSource +
                     '}';
         }
 
@@ -656,7 +652,6 @@ public final class Job {
             private boolean isSubtarget;
             private boolean isFlagImage;
             private boolean isOutDita;
-            private boolean isCopyToSource;
         
             public Builder() {}
             public Builder(final FileInfo orig) {
@@ -679,7 +674,6 @@ public final class Job {
                 isSubtarget = orig.isSubtarget;
                 isFlagImage = orig.isFlagImage;
                 isOutDita = orig.isOutDita;
-                isCopyToSource = orig.isCopyToSource;
             }
             
             /**
@@ -705,7 +699,6 @@ public final class Job {
                 if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
                 if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
-                if (orig.isCopyToSource) isCopyToSource = orig.isCopyToSource;
                 return this;
             }
             
@@ -728,8 +721,7 @@ public final class Job {
             public Builder isSubtarget(final boolean isSubtarget) { this.isSubtarget = isSubtarget; return this; }
             public Builder isFlagImage(final boolean isFlagImage) { this.isFlagImage = isFlagImage; return this; }
             public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
-            public Builder isCopyToSource(final boolean isCopyToSource) { this.isCopyToSource = isCopyToSource; return this; }
-            
+
             public FileInfo build() {
                 if (src == null && uri == null && file == null) {
                     throw new IllegalStateException("src, uri, and file may not be null");
@@ -751,7 +743,6 @@ public final class Job {
                 fi.isSubtarget = isSubtarget;
                 fi.isFlagImage = isFlagImage;
                 fi.isOutDita = isOutDita;
-                fi.isCopyToSource = isCopyToSource;
                 return fi;
             }
             
