@@ -235,17 +235,25 @@
     <xsl:param name="height"/>
     <xsl:param name="width"/>
     <xsl:choose>
-      <xsl:when test="not(contains(@href,'://')) and ($height &gt; 0) and ($width &gt; 0)">
-        <draw:frame text:anchor-type="as-char" svg:y="-0.1in" svg:height="{$height}in">  
-          <xsl:attribute name="svg:width">
-            <xsl:choose>
-              <xsl:when test="$width &gt; 6">6</xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="$width"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>in</xsl:text>
-          </xsl:attribute>
+      <xsl:when test="not(contains(@href,'://')) and $height and $width">
+        <draw:frame text:anchor-type="as-char" svg:y="-0.1in">  
+          <xsl:if test="string(number($height)) != 'NaN'">
+            <xsl:attribute name="svg:width">
+              <xsl:value-of select="$height"/>
+              <xsl:text>in</xsl:text>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:if test="string(number($width)) != 'NaN'">
+            <xsl:attribute name="svg:width">
+              <xsl:choose>
+                <xsl:when test="$width &gt; 6">6</xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$width"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:text>in</xsl:text>
+            </xsl:attribute>
+          </xsl:if>
           <draw:image xlink:href="{translate(@href, '\', '/')}">
           </draw:image>
         </draw:frame>
@@ -264,17 +272,25 @@
     <xsl:param name="imgsrc"/>
     <xsl:param name="alttext"/>
     <xsl:choose>
-      <xsl:when test="not(contains($imgsrc,'://')) and ($height &gt; 0) and ($width &gt; 0)">
-        <draw:frame text:anchor-type="as-char" svg:y="-0.1in" svg:height="{$height}in">  
-          <xsl:attribute name="svg:width">
-            <xsl:choose>
-              <xsl:when test="$width &gt; 6">6</xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="$width"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>in</xsl:text>
-          </xsl:attribute>
+      <xsl:when test="not(contains($imgsrc,'://')) and $height and $width">
+        <draw:frame text:anchor-type="as-char" svg:y="-0.1in">
+          <xsl:if test="string(number($height)) != 'NaN'">
+            <xsl:attribute name="svg:width">
+              <xsl:value-of select="$height"/>
+              <xsl:text>in</xsl:text>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:if test="string(number($width)) != 'NaN'">
+            <xsl:attribute name="svg:width">
+              <xsl:choose>
+                <xsl:when test="$width &gt; 6">6</xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$width"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:text>in</xsl:text>
+            </xsl:attribute>
+          </xsl:if>
           <draw:image xlink:href="{translate($imgsrc, '\', '/')}">
           </draw:image>
         </draw:frame>
