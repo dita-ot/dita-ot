@@ -672,7 +672,7 @@
     <xsl:when test="@othertype">
       <xsl:apply-templates select="." mode="process.note.common-processing">
         <xsl:with-param name="type" select="'note'"/>
-        <xsl:with-param name="title" select="@othertype"/>
+        <xsl:with-param name="title" select="string(@othertype)"/>
       </xsl:apply-templates>
     </xsl:when>
     <xsl:otherwise>
