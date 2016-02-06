@@ -57,6 +57,7 @@ public final class KeyrefReader implements AbstractReader {
     private DITAOTLogger logger;
     private final DocumentBuilder builder;
     private KeyScope rootScope;
+    private URI currentFile;
 
     /**
      * Constructor.
@@ -90,6 +91,7 @@ public final class KeyrefReader implements AbstractReader {
      * @param filename absolute URI to DITA map with key definitions
      */
     public void read(final URI filename, final Document doc) throws DITAOTException {
+        currentFile = filename;
         rootScope = null;
         // TODO: use KeyScope implementation that retains order
         KeyScope keyScope = readScopes(doc);
@@ -184,7 +186,7 @@ public final class KeyrefReader implements AbstractReader {
                     final URI href = h.isEmpty() ? null : toURI(h);
                     final String s = copy.getAttribute(ATTRIBUTE_NAME_SCOPE);
                     final String scope = s.isEmpty() ? null : s;
-                    final KeyDef keyDef = new KeyDef(key, href, scope, null, copy);
+                    final KeyDef keyDef = new KeyDef(key, href, scope, currentFile, copy);
                     keyDefs.put(key, keyDef);
                 }
             }

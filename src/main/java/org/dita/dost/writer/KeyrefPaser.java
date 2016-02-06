@@ -384,17 +384,18 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 if (keyDef != null) {
                     if (currentElement != null) {
                         final NamedNodeMap attrs = elem.getAttributes();
-                        final URI target = keyDef != null ? keyDef.href : null;
-                        if (target != null && !target.toString().isEmpty()) {
+                        final URI href = keyDef.href;
+
+                        if (href != null && !href.toString().isEmpty()) {
                             if (TOPIC_IMAGE.matches(currentElement.type)) {
                                 valid = true;
-                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(currentFile, job.tempDir.toURI().resolve(target)), elementId);
+                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(currentFile, job.tempDir.toURI().resolve(href)), elementId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
-                            } else if (isLocalDita(elem)) {
-                                final File topicFile = toFile(job.tempDir.toURI().resolve(stripFragment(target)));
+                            } else if (isLocalDita(elem) && keyDef.source != null) {
+                                final File topicFile = toFile(currentFile.resolve(stripFragment(keyDef.source.resolve(href))));
                                 valid = true;
                                 final String topicId = getFirstTopicId(topicFile);
-                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(currentFile, job.tempDir.toURI().resolve(target)), elementId, topicId);
+                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(currentFile, topicFile.toURI()), elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
                                 // TODO: This should be a separate SAX filter
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
@@ -403,10 +404,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 }
                             } else {
                                 valid = true;
-                                final URI targetOutput = normalizeHrefValue(target, elementId);
+                                final URI targetOutput = normalizeHrefValue(href, elementId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
                             }
-                        } else if (target == null || target.toString().isEmpty()) {
+                        } else if (href == null || href.toString().isEmpty()) {
                             // Key definition does not carry an href or href equals "".
                             valid = true;
                             XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
