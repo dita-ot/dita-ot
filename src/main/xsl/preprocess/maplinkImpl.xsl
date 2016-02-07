@@ -22,8 +22,8 @@
   </xsl:param>
   <xsl:param name="include.rellinks" select="'#default parent child sibling friend next previous cousin ancestor descendant sample external other'"/>
   <xsl:variable name="include.roles" select="tokenize($include.rellinks, '\s+')" as="xs:string*"/>
-  <xsl:variable name="file-prefix" select="$WORKDIR"/>
-  <xsl:variable name="PATHTOMAP">
+  <xsl:variable name="file-prefix" select="$WORKDIR" as="xs:string"/>
+  <xsl:variable name="PATHTOMAP" as="xs:string?">
     <xsl:call-template name="GetPathToMap">
       <xsl:with-param name="inputMap" select="$INPUTMAP"/>
     </xsl:call-template>
@@ -64,8 +64,8 @@
     
   <!-- Get the relative path that leads to a file. Used to find path from a maplist to a map. -->
   <xsl:template name="getRelativePath">
-    <xsl:param name="filename"/>
-    <xsl:param name="currentPath"/>
+    <xsl:param name="filename" as="xs:string"/>
+    <xsl:param name="currentPath" as="xs:string"/>
     <xsl:choose>
       <xsl:when test="contains($filename,'/')">
         <xsl:call-template name="getRelativePath">
@@ -84,7 +84,7 @@
                         [not(@linking = ('none', 'targetonly') or @scope = ('external', 'peer'))]
                         [not(@format) or @format = 'dita']">
     <!-- Href that points from this map to the topic this href references. -->
-    <xsl:param name="pathFromMaplist"/>
+    <xsl:param name="pathFromMaplist" as="xs:string?"/>
     <xsl:variable name="use-href">
       <xsl:choose>
         <xsl:when test="@copy-to and (not(@format) or @format = 'dita') and not(contains(@chunk, 'to-content'))">
@@ -600,7 +600,7 @@
   
   <!-- Make sure that pathFromMaplist parameter gets passed down -->
   <xsl:template match="*">
-    <xsl:param name="pathFromMaplist"/>
+    <xsl:param name="pathFromMaplist" as="xs:string?"/>
     <xsl:apply-templates>
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
     </xsl:apply-templates>
@@ -630,7 +630,7 @@
   
   <!-- Get the number of directories in the given path -->
   <xsl:template name="countDirectoriesInPath" as="xs:integer">
-    <xsl:param name="path"/>
+    <xsl:param name="path" as="xs:string"/>
     <xsl:param name="currentCount" as="xs:integer" select="0"/>
     <xsl:choose>
       <xsl:when test="contains($path, '/')">
@@ -649,9 +649,9 @@
      This makes the removal of duplicate links more reliable. -->
   <xsl:template name="simplifyLink" as="xs:string">
     <!-- Valid portion so far -->
-    <xsl:param name="buildLink"/>
+    <xsl:param name="buildLink" as="xs:string?"/>
     <!-- Link being evaluated -->
-    <xsl:param name="originalLink"/>
+    <xsl:param name="originalLink" as="xs:string"/>
     
     <xsl:choose>
       <xsl:when test="starts-with($originalLink,'./')">
@@ -688,11 +688,11 @@
   <!-- Compute the path back to the input ditamap directory 
        base on the given path. -->
   <xsl:template name="pathBackToMapDirectory" as="xs:string">
-    <xsl:param name="path"/>
+    <xsl:param name="path" as="xs:string"/>
     <!-- Portion of the href that still needs to be evaluated -->
-    <xsl:param name="back"/>
+    <xsl:param name="back" as="xs:string?"/>
     <!-- Relpath builds up as we go; add ../ here each time a directory is removed -->
-    <xsl:param name="pathFromMaplist" select="''"/>
+    <xsl:param name="pathFromMaplist" as="xs:string?" select="''"/>
     <xsl:choose>
       <!-- If the path starts with ../ do not add to $back -->
       <xsl:when test="starts-with($path,'../')">
@@ -730,8 +730,8 @@
   
   <!-- If an href in this map starts with ../ then find the path back to the map -->
   <xsl:template name="getPathBackToBase" as="xs:string">
-    <xsl:param name="path"/>
-    <xsl:param name="pathFromMaplist"/>
+    <xsl:param name="path" as="xs:string"/>
+    <xsl:param name="pathFromMaplist" as="xs:string?"/>
     <!-- The href value -->
     <xsl:variable name="directoriesBack" as="xs:integer">
       <!-- Number of directories above the map that $path travels -->
@@ -773,7 +773,7 @@
   
   <!-- Count the number of paths removed from the base (1 for each ../ at the start of the href) -->
   <xsl:template name="countRelpaths" as="xs:integer">
-    <xsl:param name="path"/>
+    <xsl:param name="path" as="xs:string"/>
     <xsl:param name="currentCount" as="xs:integer" select="0"/>
     <xsl:choose>
       <xsl:when test="starts-with($path,'../')">
@@ -829,8 +829,8 @@
   <xsl:template match="*[contains(@class, ' topic/title ')]"/>
   
   <xsl:template name="get-file-uri">
-    <xsl:param name="href"/>
-    <xsl:param name="file-prefix"/>
+    <xsl:param name="href" as="xs:string"/>
+    <xsl:param name="file-prefix" as="xs:string"/>
     <xsl:value-of select="$file-prefix"/>    
     <xsl:choose>
       <xsl:when test="contains($href,'#')">
