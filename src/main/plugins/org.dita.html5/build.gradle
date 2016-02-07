@@ -1,11 +1,9 @@
-buildscript {
-    dependencies {
-        classpath "com.github.jruby-gradle:jruby-gradle-plugin:0.1.12"
-    }
-}
-
 plugins {
   id "com.github.robfletcher.compass" version "2.0.6"
+}
+
+configurations.all {
+    resolutionStrategy.force 'rubygems:rb-inotify:0.9.5'
 }
 
 compass {
