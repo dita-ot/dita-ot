@@ -120,6 +120,22 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
 
     // Private methods ---------------------------------------------------------
     
+    public static class Dimensions {
+        public String height;
+        public String width;
+        public String horizontalDpi;
+        public String verticalDpi;
+
+        public Attributes getAttributes() {
+            final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder();
+            a.add(DITA_OT_NS, ATTR_IMAGE_WIDTH, DITA_OT_PREFIX + ":" + ATTR_IMAGE_WIDTH, "CDATA", width);
+            a.add(DITA_OT_NS, ATTR_IMAGE_HEIGHT, DITA_OT_PREFIX + ":" + ATTR_IMAGE_HEIGHT, "CDATA", height);
+            a.add(DITA_OT_NS, ATTR_HORIZONTAL_DPI, DITA_OT_PREFIX + ":" + ATTR_HORIZONTAL_DPI, "CDATA", horizontalDpi);
+            a.add(DITA_OT_NS, ATTR_VERTICAL_DPI, DITA_OT_PREFIX + ":" + ATTR_VERTICAL_DPI, "CDATA", verticalDpi);
+            return a.build();
+        }
+    }
+
     private Attributes readMetadata(final URI imgInput) {
         logger.info("Reading " + imgInput);
         final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder();
