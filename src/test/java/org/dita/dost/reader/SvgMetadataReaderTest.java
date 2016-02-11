@@ -4,7 +4,6 @@ import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ImageMetadataFilter;
 import org.junit.Before;
 import org.junit.Test;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -12,7 +11,8 @@ import org.xml.sax.XMLReader;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class SvgMetadataReaderTest {
 
