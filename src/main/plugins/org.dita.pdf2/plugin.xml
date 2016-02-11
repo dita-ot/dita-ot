@@ -37,10 +37,6 @@
       <val>yes</val>
       <val>no</val>
     </param>
-    <param name="retain.topic.fo" desc="Specifies whether to retain the generated FO file." type="enum" deprecated="true">
-      <val>yes</val>
-      <val default="true">no</val>
-    </param>
     <param name="org.dita.pdf2.i18n.enabled" desc="Enables I18N font processing." type="enum">
       <val desc="Enables I18N processing" default="true">true</val>
       <val desc="Disables I18N processing">false</val>
