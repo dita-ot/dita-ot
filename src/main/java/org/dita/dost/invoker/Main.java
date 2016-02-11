@@ -150,6 +150,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
+    @Deprecated
     private static final Map<String, Argument> LEGACY_ARGUMENTS = new HashMap<>();
     static {
         // LEGACY_ARGUMENTS.put("/basedir", new StringArgument("basedir"));
@@ -744,6 +745,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
     
     /** Handler legacy parameter argument */
+    @Deprecated
     private int handleLegacyParameterArg(final String[] args, int argPos) {
         final String arg = args[argPos];
         String name = arg.substring(0, arg.length());
