@@ -2,19 +2,43 @@
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
   stylesheet="../../../main/xsl/preprocess/maplinkImpl.xsl">
 
-  <x:scenario pending="Not yet implemented" label="Scenario for testing function getRelativePath">
-    <x:call template="getRelativePath">
-      <x:param name="filename" select="'no_value'"/>
-      <x:param name="currentPath" select="'no_value'"/>
-    </x:call>
-    <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
-  </x:scenario>
-
-  <x:scenario pending="Not yet implemented" label="Scenario for testing function GetPathToMap">
-    <x:call template="GetPathToMap">
-      <x:param name="inputMap" select="'no_value'"/>
-    </x:call>
-    <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+  <x:scenario label="Scenario for testing function GetPathToMap">
+    <x:scenario label="Scenario for testing function GetPathToMap">
+      <x:call template="GetPathToMap">
+        <x:param name="inputMap" select="'foo'"/>
+      </x:call>
+      <x:expect label=""/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function GetPathToMap">
+      <x:call template="GetPathToMap">
+        <x:param name="inputMap" select="'foo/'"/>
+      </x:call>
+      <x:expect label="">foo/</x:expect>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function GetPathToMap">
+      <x:call template="GetPathToMap">
+        <x:param name="inputMap" select="'foo/bar'"/>
+      </x:call>
+      <x:expect label="">foo/</x:expect>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function GetPathToMap">
+      <x:call template="GetPathToMap">
+        <x:param name="inputMap" select="'foo/bar/'"/>
+      </x:call>
+      <x:expect label="">foo/bar/</x:expect>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function GetPathToMap">
+      <x:call template="GetPathToMap">
+        <x:param name="inputMap" select="'foo/bar/baz'"/>
+      </x:call>
+      <x:expect label="">foo/bar/</x:expect>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function GetPathToMap">
+      <x:call template="GetPathToMap">
+        <x:param name="inputMap" select="'foo/bar/baz/'"/>
+      </x:call>
+      <x:expect label="">foo/bar/baz/</x:expect>
+    </x:scenario>
   </x:scenario>
 
   <x:scenario label="Scenario for testing function countDirectoriesInPath">
@@ -38,64 +62,189 @@
     </x:scenario>
   </x:scenario>
 
-  <x:scenario pending="Not yet implemented" label="Scenario for testing function simplifyLink">
-    <x:call template="simplifyLink">
-      <x:param name="buildLink" select="'no_value'"/>
-      <x:param name="originalLink" select="'no_value'"/>
-    </x:call>
-    <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+  <x:scenario label="Scenario for testing function simplifyLink">
+    <x:scenario label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'foo'"/>
+      </x:call>
+      <x:expect label="same path" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'../foo'"/>
+      </x:call>
+      <x:expect label="same path" select="'../foo'"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'foo/../bar'"/>
+      </x:call>
+      <x:expect label="remove base" select="'bar'"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'../foo/../bar'"/>
+      </x:call>
+      <x:expect label="remove base" select="'../bar'"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'../foo/../../bar'"/>
+      </x:call>
+      <x:expect label="remove base" select="'../../bar'"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'foo/../'"/>
+      </x:call>
+      <x:expect label="remove all" select="''"/>
+    </x:scenario>
+    <x:scenario pending="FIXME" label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'foo/..'"/>
+      </x:call>
+      <x:expect label="remove all" select="''"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'../'"/>
+      </x:call>
+      <x:expect label="remove all" select="'../'"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'foo/.././bar'"/>
+      </x:call>
+      <x:expect label="remove single and same" select="'bar'"/>
+    </x:scenario>
+    <x:scenario pending="FIXME" label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'foo/./bar'"/>
+      </x:call>
+      <x:expect label="remove same directory" select="'foo/bar'"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function simplifyLink">
+      <x:call template="simplifyLink">
+        <x:param name="originalLink" select="'././'"/>
+      </x:call>
+      <x:expect label="remove same directory" select="''"/>
+    </x:scenario>
   </x:scenario>
 
-  <x:scenario pending="Not yet implemented"
-    label="Scenario for testing function pathBackToMapDirectory">
-    <x:call template="pathBackToMapDirectory">
-      <x:param name="path" select="'no_value'"/>
-      <x:param name="back" select="'no_value'"/>
-      <x:param name="pathFromMaplist" select="'no_value'"/>
-    </x:call>
-    <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+  <x:scenario label="Scenario for testing function pathBackToMapDirectory">
+    <x:scenario label="plain file">
+      <x:call template="pathBackToMapDirectory">
+        <x:param name="path" select="'foo'"/>
+      </x:call>
+      <x:expect label="no path" select="''"/>
+    </x:scenario>
+    <x:scenario label="single subdirectory">
+      <x:call template="pathBackToMapDirectory">
+        <x:param name="path" select="'foo/bar'"/>
+      </x:call>
+      <x:expect label="single parent path" select="'../'"/>
+    </x:scenario>
+    <x:scenario label="two subdirectories">
+      <x:call template="pathBackToMapDirectory">
+        <x:param name="path" select="'foo/bar/baz'"/>
+      </x:call>
+      <x:expect label="Two parent paths" select="'../../'"/>
+    </x:scenario>
   </x:scenario>
 
-  <x:scenario label="Scenario for testing function getPathBackToBase" pending="Defined what this should do">
+  <x:scenario label="Scenario for testing function getPathBackToBase"
+    pending="Defined what this should do">
     <x:scenario label="Scenario for testing function getPathBackToBase">
       <x:call template="getPathBackToBase">
         <x:param name="path" select="'foo/bar/baz'"/>
         <x:param name="pathFromMaplist" select="'../../../'"/>
       </x:call>
-      <x:expect label="Not yet implemented" select="'../../'"/>
+      <x:expect label="" select="'../../'"/>
     </x:scenario>
     <x:scenario label="Scenario for testing function getPathBackToBase">
       <x:call template="getPathBackToBase">
         <x:param name="path" select="'foo/bar/baz'"/>
         <x:param name="pathFromMaplist" select="''"/>
       </x:call>
-      <x:expect label="Not yet implemented" select="'../../'"/>
+      <x:expect label="" select="'../../'"/>
     </x:scenario>
     <x:scenario label="Scenario for testing function getPathBackToBase">
       <x:call template="getPathBackToBase">
         <x:param name="path" select="'foo/bar'"/>
         <x:param name="pathFromMaplist" select="''"/>
       </x:call>
-      <x:expect label="Not yet implemented" select="'../'"/>
+      <x:expect label="" select="'../'"/>
     </x:scenario>
   </x:scenario>
 
   <x:scenario label="Scenario for testing function countRelpaths">
-    <x:scenario label="Scenario for testing function countRelpaths">
+    <x:scenario label="no related path">
       <x:call template="countRelpaths">
         <x:param name="path" select="'foo'"/>
       </x:call>
-      <x:expect label="Not yet implemented" select="0"/>
+      <x:expect label="No related paths" select="0"/>
+    </x:scenario>
+    <x:scenario label="single related path">
+      <x:call template="countRelpaths">
+        <x:param name="path" select="'../foo'"/>
+      </x:call>
+      <x:expect label="one related path" select="1"/>
+    </x:scenario>
+    <x:scenario label="two related paths">
+      <x:call template="countRelpaths">
+        <x:param name="path" select="'../../foo'"/>
+      </x:call>
+      <x:expect label="Two related paths" select="2"/>
+    </x:scenario>
+    <x:scenario label="intermediate path">
+      <x:call template="countRelpaths">
+        <x:param name="path" select="'../foo/../bar'"/>
+      </x:call>
+      <x:expect label="One related path" select="1"/>
     </x:scenario>
   </x:scenario>
 
-  <x:scenario pending="Not yet implemented" label="Scenario for testing function MoveBackToBase">
-    <x:call template="MoveBackToBase">
-      <x:param name="saveDirs" select="'no_value'"/>
-      <x:param name="dirsLeft" select="'no_value'"/>
-      <x:param name="remainingPath" select="'no_value'"/>
-    </x:call>
-    <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+  <x:scenario label="Scenario for testing function MoveBackToBase">
+    <x:scenario label="Scenario for testing function MoveBackToBase">
+      <x:call template="MoveBackToBase">
+        <x:param name="saveDirs" select="1"/>
+        <x:param name="dirsLeft" select="0"/>
+        <x:param name="remainingPath" select="''"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function MoveBackToBase">
+      <x:call template="MoveBackToBase">
+        <x:param name="saveDirs" select="1"/>
+        <x:param name="dirsLeft" select="0"/>
+        <x:param name="remainingPath" select="'foo'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function MoveBackToBase">
+      <x:call template="MoveBackToBase">
+        <x:param name="saveDirs" select="1"/>
+        <x:param name="dirsLeft" select="0"/>
+        <x:param name="remainingPath" select="'foo/bar'"/>
+      </x:call>
+      <x:expect label="" select="'foo/bar'"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function MoveBackToBase">
+      <x:call template="MoveBackToBase">
+        <x:param name="saveDirs" select="0"/>
+        <x:param name="dirsLeft" select="1"/>
+        <x:param name="remainingPath" select="'foo/bar/baz'"/>
+      </x:call>
+      <x:expect label="" select="'bar/baz'"/>
+    </x:scenario>
+    <x:scenario label="Scenario for testing function MoveBackToBase">
+      <x:call template="MoveBackToBase">
+        <x:param name="saveDirs" select="1"/>
+        <x:param name="dirsLeft" select="3"/>
+        <x:param name="remainingPath" select="'foo/bar/baz'"/>
+      </x:call>
+      <x:expect label="" select="'baz'"/>
+    </x:scenario>
   </x:scenario>
 
   <x:scenario label="Scenario for testing function removeRelPaths">
