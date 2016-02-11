@@ -720,14 +720,14 @@ See the accompanying license.txt file for applicable licenses.
                       <xsl:with-param name="marker-class-name" as="xs:string">current-h2</xsl:with-param>
                     </xsl:apply-templates>
                 </xsl:if>
-                <fo:inline id="{parent::node()/@id}"/>
-                <fo:inline>
+                <fo:wrapper id="{parent::node()/@id}"/>
+                <fo:wrapper>
                     <xsl:attribute name="id">
                         <xsl:call-template name="generate-toc-id">
                             <xsl:with-param name="element" select=".."/>
                         </xsl:call-template>
                     </xsl:attribute>
-                </fo:inline>
+                </fo:wrapper>
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <xsl:apply-templates select="." mode="getTitle"/>
             </fo:block>
