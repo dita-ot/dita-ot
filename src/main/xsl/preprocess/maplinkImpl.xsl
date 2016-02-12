@@ -24,9 +24,11 @@
   <xsl:variable name="include.roles" select="tokenize($include.rellinks, '\s+')" as="xs:string*"/>
   <xsl:variable name="file-prefix" select="$WORKDIR" as="xs:string"/>
   <xsl:variable name="PATHTOMAP" as="xs:string?">
-    <xsl:call-template name="GetPathToMap">
-      <xsl:with-param name="inputMap" select="$INPUTMAP"/>
-    </xsl:call-template>
+    <xsl:value-of>
+     <xsl:call-template name="GetPathToMap">
+       <xsl:with-param name="inputMap" select="$INPUTMAP"/>
+     </xsl:call-template>
+    </xsl:value-of>
   </xsl:variable>
   <xsl:variable name="DIRS-IN-MAP-PATH" as="xs:integer">
     <xsl:call-template name="countDirectoriesInPath">
@@ -84,7 +86,7 @@
                         [not(@linking = ('none', 'targetonly') or @scope = ('external', 'peer'))]
                         [not(@format) or @format = 'dita']">
     <!-- Href that points from this map to the topic this href references. -->
-    <xsl:param name="pathFromMaplist" as="xs:string?"/>
+    <xsl:param name="pathFromMaplist" as="xs:string?" tunnel="yes"/>
     <xsl:variable name="use-href">
       <xsl:choose>
         <xsl:when test="@copy-to and (not(@format) or @format = 'dita') and not(contains(@chunk, 'to-content'))">
@@ -596,14 +598,6 @@
       <!-- get child node and text -->
       <xsl:copy-of select="node()"/>
     </desc>	
-  </xsl:template>
-  
-  <!-- Make sure that pathFromMaplist parameter gets passed down -->
-  <xsl:template match="*">
-    <xsl:param name="pathFromMaplist" as="xs:string?"/>
-    <xsl:apply-templates>
-      <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
-    </xsl:apply-templates>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' map/topicmeta ')]">

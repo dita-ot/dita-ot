@@ -60,6 +60,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             if (input.getAttribute("include.rellinks") != null) {
                 transformer.setParameter("include.rellinks", input.getAttribute("include.rellinks"));
             }
+            transformer.setParameter("INPUTMAP", job.getInputMap());
             in = new BufferedInputStream(new FileInputStream(inputFile));
             final Source source = new StreamSource(in);
             source.setSystemId(inputFile.toURI().toString());
