@@ -14,6 +14,7 @@ import static org.dita.dost.util.URLUtils.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Element;
 import org.xml.sax.Locator;
 
@@ -197,6 +198,13 @@ public final class MessageBean {
         }
 
         return buff.toString();
+    }
+
+    /**
+     * Create exception from message data.
+     */
+    public DITAOTException toException() {
+        return new DITAOTException(toString());
     }
 
 }

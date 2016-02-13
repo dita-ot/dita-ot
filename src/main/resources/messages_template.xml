@@ -318,6 +318,11 @@
     <response></response>
   </message>
 
+  <message id="DOTJ068E" type="ERROR">
+    <reason>Circular key definition %1.</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

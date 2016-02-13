@@ -8,6 +8,7 @@
  */
 package org.dita.dost.reader;
 
+import static junit.framework.Assert.assertEquals;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.dita.dost.util.XMLUtils.close;
 import static org.junit.Assert.*;
@@ -24,6 +25,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
@@ -439,6 +441,36 @@ public class TestKeyrefReader {
 
         final KeyScope c4 = root.getChildScope("morcov");
         assertEquals(5, c4.keySet().size());
+    }
+
+    @Test
+    public void testSingleCircular() throws DITAOTException {
+        final File filename = new File(srcDir, "circularSingle.ditamap");
+
+        final KeyrefReader keyrefreader = new KeyrefReader();
+        final TestUtils.CachingLogger logger = new TestUtils.CachingLogger();
+        keyrefreader.setLogger(logger);
+
+        keyrefreader.read(filename.toURI(), readMap(filename));
+
+        assertEquals(1, logger.getMessages().size());
+        assertEquals("[DOTJ068E][ERROR] Circular key definition same -> same.", logger.getMessages().get(0).message);
+    }
+
+    @Test
+    public void testCircular() throws DITAOTException {
+        final File filename = new File(srcDir, "circular.ditamap");
+
+        final KeyrefReader keyrefreader = new KeyrefReader();
+        final TestUtils.CachingLogger logger = new TestUtils.CachingLogger();
+        keyrefreader.setLogger(logger);
+
+        keyrefreader.read(filename.toURI(), readMap(filename));
+
+        assertEquals(3, logger.getMessages().size());
+        assertEquals("[DOTJ068E][ERROR] Circular key definition first -> second -> third -> first.", logger.getMessages().get(0).message);
+        assertEquals("[DOTJ068E][ERROR] Circular key definition second -> third -> first -> second.", logger.getMessages().get(1).message);
+        assertEquals("[DOTJ068E][ERROR] Circular key definition third -> first -> second -> third.", logger.getMessages().get(2).message);
     }
 
     /** Debug logging. */
