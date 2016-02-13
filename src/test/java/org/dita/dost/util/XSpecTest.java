@@ -34,9 +34,8 @@ public class XSpecTest {
     public static Collection<Object[]> getFiles() {
         final List<File> cases = new ArrayList<>();
         findXSpec(new File("src/test").getAbsoluteFile(), cases);
-        System.err.println(cases.toString());
 
-        final List<Object[]> params = new ArrayList<Object[]>(cases.size());
+        final List<Object[]> params = new ArrayList<>(cases.size());
         for (final File f : cases) {
             final Object[] arr = new Object[]{f};
             params.add(arr);
