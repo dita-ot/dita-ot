@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+               stylesheet="dita-utilities.xsl">
+
+  <!--x:scenario label="Scenario for testing function replace-extension">
+    <x:call template="replace-extension">
+      <x:param name="filename" select="'foo.bar'"/>
+      <x:param name="extension" select="'.baz'"/>
+    </x:call>
+    <x:expect label="Not yet implemented" select="'foo.baz'"/>
+  </x:scenario>
+
+  <x:scenario pending="Not yet implemented"
+              label="Scenario for testing function substring-before-last">
+    <x:call template="substring-before-last">
+      <x:param name="text" select="'no_value'"/>
+      <x:param name="delim" select="'no_value'"/>
+    </x:call>
+    <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+  </x:scenario-->
+
+  <x:scenario label="dita-ot:normalize-uri">
+    <x:scenario label="normalize foo/bar/baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/bar/baz'"/>
+      </x:call>
+      <x:expect label="" select="'foo/bar/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize foo/./baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/./baz'"/>
+      </x:call>
+      <x:expect label="" select="'foo/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize ../foo/bar/baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'../foo/bar/baz'"/>
+      </x:call>
+      <x:expect label="" select="'../foo/bar/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize foo/../baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/../baz'"/>
+      </x:call>
+      <x:expect label="" select="'baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize foo/bar/.">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/bar/.'"/>
+      </x:call>
+      <x:expect label="" select="'foo/bar'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize foo/bar/..">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/bar/..'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize ./bar/baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'./bar/baz'"/>
+      </x:call>
+      <x:expect label="" select="'bar/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize ../../foo/bar/baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'../../foo/bar/baz'"/>
+      </x:call>
+      <x:expect label="" select="'../../foo/bar/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize foo/bar/../../baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/bar/../../baz'"/>
+      </x:call>
+      <x:expect label="" select="'baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize /foo/bar/../../baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'/foo/bar/../../baz'"/>
+      </x:call>
+      <x:expect label="" select="'/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize /../foo">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'/../foo'"/>
+      </x:call>
+      <x:expect label="" select="'/../foo'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="length-to-pixels">
+    <x:scenario label="convert 1 to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1'"/>
+      </x:call>
+      <x:expect label="">1</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1pt to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1pt'"/>
+      </x:call>
+      <x:expect label="">1</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1in to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1in'"/>
+      </x:call>
+      <x:expect label="">96</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 123 to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'123'"/>
+      </x:call>
+      <x:expect label="">123</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 123pt to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'123pt'"/>
+      </x:call>
+      <x:expect label="">164</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 123in to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'123in'"/>
+      </x:call>
+      <x:expect label="">11808</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1.23 to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1.23'"/>
+      </x:call>
+      <x:expect label="">1</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1.23pt to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1.23pt'"/>
+      </x:call>
+      <x:expect label="">2</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1.23in to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1.23in'"/>
+      </x:call>
+      <x:expect label="">118</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1.23i to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1.23i'"/>
+      </x:call>
+      <x:expect label="">100%</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert NaN to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'NaN'"/>
+      </x:call>
+      <x:expect label="">100%</x:expect>
+    </x:scenario>
+  </x:scenario>
+</x:description>
