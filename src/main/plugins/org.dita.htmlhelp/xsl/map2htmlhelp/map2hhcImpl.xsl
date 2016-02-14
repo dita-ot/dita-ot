@@ -130,8 +130,7 @@
       <xsl:if test="not(contains(@href,'://'))">
         <!-- Seems to be a local file, but marked external or peer, so we can't tell if it's available -->
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msgnum">048</xsl:with-param>
-          <xsl:with-param name="msgsev">I</xsl:with-param>
+          <xsl:with-param name="id" select="'DOTX048I'"/>
           <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
         </xsl:call-template>
       </xsl:if>
@@ -147,8 +146,7 @@
     <xsl:otherwise>
       <!-- @format is not DITA and not HTML, so the target will be ignored for HTML Help -->
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msgnum">007</xsl:with-param>
-        <xsl:with-param name="msgsev">I</xsl:with-param>
+        <xsl:with-param name="id" select="'DOTX007I'"/>
         <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
       </xsl:call-template>
     </xsl:otherwise>
@@ -201,8 +199,7 @@
                    </xsl:when>
                    <xsl:otherwise>
                      <xsl:call-template name="output-message">
-                       <xsl:with-param name="msgnum">008</xsl:with-param>
-                       <xsl:with-param name="msgsev">W</xsl:with-param>
+                       <xsl:with-param name="id" select="'DOTX008W'"/>
                        <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
                      </xsl:call-template>
                    </xsl:otherwise>
@@ -230,8 +227,7 @@
                </xsl:when>
                <xsl:otherwise>
                  <xsl:call-template name="output-message">
-                   <xsl:with-param name="msgnum">009</xsl:with-param>
-                   <xsl:with-param name="msgsev">W</xsl:with-param>
+                   <xsl:with-param name="id" select="'DOTX009W'"/>
                    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@TargetFile"/>;%2=***</xsl:with-param>
                  </xsl:call-template>
                  <xsl:text>***</xsl:text>
@@ -249,8 +245,7 @@
            <xsl:otherwise>
              <xsl:if test="@href and not(@href='')">
                  <xsl:call-template name="output-message">
-                   <xsl:with-param name="msgnum">009</xsl:with-param>
-                   <xsl:with-param name="msgsev">W</xsl:with-param>
+                   <xsl:with-param name="id" select="'DOTX009W'"/>
                    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>;%2=<xsl:value-of select="@href"/></xsl:with-param>
                  </xsl:call-template>
                  <xsl:value-of select="@href"/>

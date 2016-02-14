@@ -38,8 +38,7 @@
           <xsl:otherwise>
             <xsl:text>org.sample.help.doc</xsl:text>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">050</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX050W'"/>
              </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>

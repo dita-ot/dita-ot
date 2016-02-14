@@ -3930,8 +3930,7 @@
     <xsl:param name="keys" select="@keyref"/>
     
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">069</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX069W'"/>
       <xsl:with-param name="msgparams">%1=pull-in-title</xsl:with-param>
     </xsl:call-template>
     <xsl:choose>
@@ -3991,8 +3990,7 @@
     <xsl:param name="type"/>
     
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">069</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX069W'"/>
       <xsl:with-param name="msgparams">%1=common-processing-phrase-within-link</xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="commonattributes">
@@ -4011,41 +4009,35 @@
   <xsl:template match="*" mode="ditamsg:no-glossentry-for-key">
     <xsl:param name="matching-keys"/>
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">058</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX058W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$matching-keys"/>;%2=<xsl:value-of select="name()"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:no-title-for-topic">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">037</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX037W'"/>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:longdescref-on-object">
     <xsl:call-template name="output-message">
-     <xsl:with-param name="msgnum">038</xsl:with-param>
-     <xsl:with-param name="msgsev">I</xsl:with-param>
+     <xsl:with-param name="id" select="'DOTX038I'"/>
      <xsl:with-param name="msgparams">%1=<xsl:value-of select="name(.)"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:required-cleanup-in-content">
     <xsl:call-template name="output-message">
-     <xsl:with-param name="msgnum">039</xsl:with-param>
-     <xsl:with-param name="msgsev">W</xsl:with-param>
+     <xsl:with-param name="id" select="'DOTX039W'"/>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:draft-comment-in-content">
     <xsl:call-template name="output-message">
-     <xsl:with-param name="msgnum">040</xsl:with-param>
-     <xsl:with-param name="msgsev">I</xsl:with-param>
+     <xsl:with-param name="id" select="'DOTX040I'"/>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:section-with-multiple-titles">
     <xsl:param name="actual-element" select="name(.)"/>
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">041</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX041W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$actual-element"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>

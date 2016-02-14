@@ -59,8 +59,7 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msgnum">002</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="id" select="'DOTX002W'"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -94,8 +93,7 @@
         <!-- use the for-each so that the message scope is the map element, not the attribute -->
         <xsl:for-each select="parent::*">
           <xsl:call-template name="output-message">             
-            <xsl:with-param name="msgnum">003</xsl:with-param>
-            <xsl:with-param name="msgsev">I</xsl:with-param>
+            <xsl:with-param name="id" select="'DOTX003I'"/>
             <xsl:with-param name="msgparams">%1=<xsl:value-of select="@anchorref"/></xsl:with-param>
           </xsl:call-template>
         </xsl:for-each>
@@ -145,8 +143,7 @@
       <xsl:otherwise>
         <xsl:for-each select="parent::*">
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">003</xsl:with-param>
-            <xsl:with-param name="msgsev">I</xsl:with-param>
+            <xsl:with-param name="id" select="'DOTX003I'"/>
             <xsl:with-param name="msgparams">%1=<xsl:value-of select="@mapref"/></xsl:with-param>
           </xsl:call-template>
         </xsl:for-each>
@@ -163,8 +160,7 @@
     </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msgnum">004</xsl:with-param>
-        <xsl:with-param name="msgsev">I</xsl:with-param>
+        <xsl:with-param name="id" select="'DOTX004I'"/>
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
@@ -219,8 +215,7 @@
                 <xsl:otherwise>
                   <xsl:value-of select="@href"/>
                   <xsl:call-template name="output-message">
-                       <xsl:with-param name="msgnum">005</xsl:with-param>
-                       <xsl:with-param name="msgsev">E</xsl:with-param>
+                       <xsl:with-param name="id" select="'DOTX005E'"/>
                 		   <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
                   </xsl:call-template>
                 </xsl:otherwise>
@@ -251,8 +246,7 @@
                       <xsl:otherwise>
                         <xsl:value-of select="$work.dir"/><xsl:value-of select="@href"/>
                         <xsl:call-template name="output-message">
-                          <xsl:with-param name="msgnum">006</xsl:with-param>
-                          <xsl:with-param name="msgsev">E</xsl:with-param>
+                          <xsl:with-param name="id" select="'DOTX006E'"/>
                           <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
                         </xsl:call-template>
                        </xsl:otherwise>

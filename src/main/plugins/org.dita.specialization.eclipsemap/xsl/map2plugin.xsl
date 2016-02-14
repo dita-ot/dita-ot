@@ -388,8 +388,7 @@
           <xsl:otherwise>
             <xsl:text>Bundle-SymbolicName: org.sample.help.doc; singleton:=true</xsl:text><xsl:value-of select="$newline"/>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">050</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX050W'"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
@@ -446,8 +445,7 @@
             </xsl:choose>
             <xsl:value-of select="$newline"/>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">050</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX050W'"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>                 

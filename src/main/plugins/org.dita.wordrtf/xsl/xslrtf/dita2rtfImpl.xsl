@@ -344,8 +344,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 </xsl:when>
 <xsl:otherwise>
   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">028</xsl:with-param>
-    <xsl:with-param name="msgsev">E</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX028E'"/>
   </xsl:call-template>
 </xsl:otherwise>
 </xsl:choose>
