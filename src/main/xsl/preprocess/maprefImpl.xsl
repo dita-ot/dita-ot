@@ -52,8 +52,7 @@
       <xsl:when test="generate-id(.) = $mapref-id-path">
         <!-- it is mapref but it didn't pass the loop dependency check -->
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msgnum">053</xsl:with-param>
-          <xsl:with-param name="msgsev">E</xsl:with-param>
+          <xsl:with-param name="id" select="'DOTX053E'"/>
           <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/></xsl:with-param>
         </xsl:call-template>
       </xsl:when>
@@ -106,8 +105,7 @@
               </xsl:choose>
             </xsl:variable>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">031</xsl:with-param>
-              <xsl:with-param name="msgsev">E</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX031E'"/>
               <xsl:with-param name="msgparams">%1=<xsl:value-of select="$filename"/></xsl:with-param>
             </xsl:call-template>
           </xsl:when>
@@ -194,8 +192,7 @@
         <xsl:if test="$child-topicref-warning = 'true' and *[contains(@class, ' map/topicref ')]
                                                             [not(contains(@class, ' ditavalref-d/ditavalref '))]">
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">068</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="id" select="'DOTX068W'"/>
           </xsl:call-template>
         </xsl:if>
       </xsl:otherwise>
@@ -346,8 +343,7 @@
     <xsl:choose>
       <xsl:when test="generate-id(.) = $mapref-id-path">
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msgnum">053</xsl:with-param>
-          <xsl:with-param name="msgsev">E</xsl:with-param>
+          <xsl:with-param name="id" select="'DOTX053E'"/>
           <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
         </xsl:call-template>
       </xsl:when>

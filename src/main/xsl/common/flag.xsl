@@ -638,8 +638,7 @@
  
  <xsl:template match="*" mode="ditamsg:conflict-text-style-applied">
   <xsl:call-template name="output-message">
-   <xsl:with-param name="msgnum">054</xsl:with-param>
-   <xsl:with-param name="msgsev">W</xsl:with-param>
+   <xsl:with-param name="id" select="'DOTX054W'"/>
   </xsl:call-template>
  </xsl:template>
  

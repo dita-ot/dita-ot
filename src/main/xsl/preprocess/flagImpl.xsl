@@ -1097,15 +1097,13 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  <xsl:template match="*" mode="ditamsg:cannot-flag-inline-element">
    <xsl:param name="attr-name"/>
    <xsl:call-template name="output-message">
-     <xsl:with-param name="msgnum">042</xsl:with-param>
-     <xsl:with-param name="msgsev">I</xsl:with-param>
+     <xsl:with-param name="id" select="'DOTX042I'"/>
      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$attr-name"/></xsl:with-param>
    </xsl:call-template>
  </xsl:template>
  <xsl:template match="*" mode="ditamsg:conflict-text-style-applied">
    <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">054</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX054W'"/>
    </xsl:call-template>
  </xsl:template>
 

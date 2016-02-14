@@ -63,9 +63,7 @@
     <xsl:param name="stringName"/>
     
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-      <xsl:with-param name="msgnum">066</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX066W'"/>
       <xsl:with-param name="msgparams">%1=getString</xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="getVariable">
@@ -122,8 +120,7 @@
             </xsl:apply-templates>
             <xsl:if test="empty($ancestorlang)">
               <xsl:call-template name="output-message">
-                <xsl:with-param name="msgnum">001</xsl:with-param>
-                <xsl:with-param name="msgsev">W</xsl:with-param>
+                <xsl:with-param name="id" select="'DOTX001W'"/>
                 <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/>;%2=<xsl:call-template name="getLowerCaseLang"/>;%3=<xsl:value-of select="$DEFAULTLANG"/></xsl:with-param>
               </xsl:call-template>
             </xsl:if>
@@ -141,8 +138,7 @@
       <xsl:otherwise>
         <xsl:value-of select="$id"/>
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msgnum">052</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="id" select="'DOTX052W'"/>
           <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/></xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>
@@ -247,8 +243,7 @@
   <xsl:param name="href" select="@href"/>
   
   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">069</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX069W'"/>
     <xsl:with-param name="msgparams">%1=parseHrefUptoExtension</xsl:with-param>
   </xsl:call-template>  
   <xsl:variable name="uptoDot"><xsl:value-of select="substring-before($href,'.')"/></xsl:variable>

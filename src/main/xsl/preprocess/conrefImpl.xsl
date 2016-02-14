@@ -818,53 +818,46 @@
   <!-- If the target element does not exist, this template will be called to issue an error -->
   <xsl:template match="*" mode="ditamsg:missing-conref-target-error">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">010</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX010E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <!-- If an ID is duplicated, and there are 2 possible targets, issue a warning -->
   <xsl:template match="*" mode="ditamsg:duplicateConrefTarget">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">011</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX011W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <!-- Message is no longer used - appeared when domain mismatch prevented conref -->
   <xsl:template match="*" mode="ditamsg:domainMismatch">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">012</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX012W'"/>
     </xsl:call-template>
   </xsl:template>
   <!-- If this conref has already been followed, stop to prevent an infinite loop -->
   <xsl:template match="*" mode="ditamsg:conrefLoop">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">013</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX013E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <!-- Following msg is used on topicref and map -->
   <xsl:template match="*" mode="ditamsg:malformedConrefInMap">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">014</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX014E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:malformedConref">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">015</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX015E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:parserUnsupported">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">062</xsl:with-param>
-      <xsl:with-param name="msgsev">I</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX062I'"/>
     </xsl:call-template>
   </xsl:template>
 
