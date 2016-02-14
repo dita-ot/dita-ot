@@ -91,27 +91,15 @@
     <xsl:variable name="use-href">
       <xsl:choose>
         <xsl:when test="@copy-to and (not(@format) or @format = 'dita') and not(contains(@chunk, 'to-content'))">
-          <xsl:call-template name="simplifyLink">
-            <xsl:with-param name="originalLink">
-              <xsl:value-of select="@copy-to"/>
-            </xsl:with-param>
-          </xsl:call-template>
+          <xsl:value-of select="dita-ot:normalize-uri(@copy-to)"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:call-template name="simplifyLink">
-            <xsl:with-param name="originalLink">
-              <xsl:value-of select="@href"/>
-            </xsl:with-param>
-          </xsl:call-template>
+          <xsl:value-of select="dita-ot:normalize-uri(@href)"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="hrefFromOriginalMap">
-      <xsl:call-template name="simplifyLink">
-        <xsl:with-param name="originalLink">
-          <xsl:value-of select="concat($pathFromMaplist, $use-href)"/>
-        </xsl:with-param>
-      </xsl:call-template>
+      <xsl:value-of select="dita-ot:normalize-uri(concat($pathFromMaplist, $use-href))"/>
     </xsl:variable>
     
     <!-- Path from the topic back to the map's directory (with map): for ref/abc.dita, will be "../" -->
@@ -552,17 +540,11 @@
             </xsl:when>
             <!-- If the target has a copy-to value, link to that -->
             <xsl:when test="@copy-to and not(contains(@chunk, 'to-content'))">
-              <xsl:call-template name="simplifyLink">
-                <xsl:with-param name="originalLink">
-                  <xsl:value-of select="concat($pathBackToMapDirectory, @copy-to)"/>
-                </xsl:with-param>
-              </xsl:call-template>
+              <xsl:value-of select="dita-ot:normalize-uri(concat($pathBackToMapDirectory, @copy-to))"/>
             </xsl:when>
             <!--ref between two local paths - adjust normally-->
             <xsl:otherwise>
-              <xsl:call-template name="simplifyLink">
-                <xsl:with-param name="originalLink" select="concat($pathBackToMapDirectory, @href)"/>
-              </xsl:call-template>
+              <xsl:value-of select="dita-ot:normalize-uri(concat($pathBackToMapDirectory, @href))"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:attribute>
@@ -638,17 +620,6 @@
         <xsl:sequence select="$currentCount"/>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
-  
-  <!-- Reduce links of the form "plugin-one/../plugin-two/a.html" to "plugin-two/a.html"
-     This makes the removal of duplicate links more reliable. -->
-  <xsl:template name="simplifyLink" as="xs:string">
-    <!-- Valid portion so far -->
-    <xsl:param name="buildLink" as="xs:string?"/>
-    <!-- Link being evaluated -->
-    <xsl:param name="originalLink" as="xs:string"/>
-    
-    <xsl:value-of select="dita-ot:normalize-uri($originalLink)"/>
   </xsl:template>
     
   <!-- Compute the path back to the input ditamap directory 
