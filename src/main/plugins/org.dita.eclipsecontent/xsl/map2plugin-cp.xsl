@@ -13,6 +13,7 @@
   <xsl:param name="TOCROOT">toc</xsl:param>
   
   <!-- Define the error message prefix identifier -->
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
   <xsl:template match="*[contains(@class, ' map/map ')]">

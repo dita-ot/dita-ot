@@ -72,6 +72,7 @@ See the accompanying license.txt file for applicable licenses.
                     *[contains(@class,' topic/fn ') and empty(@callout)]"
               use="tokenize(@class, ' ')"/>
 
+    <!-- Deprecated since 2.3 -->
     <xsl:variable name="msgprefix" select="'PDFX'"/>
 
     <xsl:variable name="id.toc" select="'ID_TOC_00-0F-EA-40-0D-4D'"/>

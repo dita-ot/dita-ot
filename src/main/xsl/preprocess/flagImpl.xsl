@@ -49,6 +49,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   <xsl:param name="FILEDIR"/>
   <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', $FILENAME)"/>
 
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
   <xsl:variable name="FILTERDOC" select="document($FILTERFILEURL,/)" as="document-node()"/>

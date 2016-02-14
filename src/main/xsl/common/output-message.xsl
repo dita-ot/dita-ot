@@ -28,11 +28,20 @@
   
   <xsl:template name="output-message">
     <xsl:param name="msg" select="'***'"/>
+    <!-- Deprecated since 2.3 -->
     <xsl:param name="msgcat" select="$msgprefix"/>
+    <!-- Deprecated since 2.3 -->
     <xsl:param name="msgnum" select="'000'"/>
+    <!-- Deprecated since 2.3 -->
     <xsl:param name="msgsev" select="'I'"/>
     <xsl:param name="msgparams" select="''"/>
-    <xsl:param name="id" as="xs:string" select="concat($msgcat, $msgnum, $msgsev)"/>
+    <xsl:param name="id" as="xs:string">
+      <xsl:call-template name="output-message">
+        <xsl:with-param name="id" select="'DOTX071W'"/>
+        <xsl:with-param name="msgparams">%1=msgnum;%2=output-message;%3=id</xsl:with-param>
+      </xsl:call-template>
+      <xsl:value-of select="concat($msgcat, $msgnum, $msgsev)"/>
+    </xsl:param>
     
     <xsl:variable name="msgcontent">
       <xsl:choose>

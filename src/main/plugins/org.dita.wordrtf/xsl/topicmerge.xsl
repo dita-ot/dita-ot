@@ -13,6 +13,7 @@
 <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
 <!-- Set the prefix for error message numbers -->
+<!-- Deprecated since 2.3 -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <xsl:variable name="xml-path"></xsl:variable>

@@ -25,6 +25,7 @@
    <!-- The document tree of filterfile returned by document($FILTERFILE,/)-->
 
    <!-- Define the error message prefix identifier -->
+   <!-- Deprecated since 2.3 -->
    <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
    <xsl:variable name="FILTERFILEURL">

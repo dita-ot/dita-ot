@@ -43,6 +43,7 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix" select="'PDFX'"/>
 
     <xsl:output indent="no"/>

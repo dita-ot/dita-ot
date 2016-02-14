@@ -45,6 +45,7 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:param name="figurelink.style" select="'NUMTITLE'"/>
   <xsl:param name="tablelink.style" select="'NUMTITLE'"/>
 
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
     <xsl:key name="key_anchor" match="*[@id][not(contains(@class,' map/topicref '))]" use="@id"/>

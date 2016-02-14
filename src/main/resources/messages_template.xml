@@ -673,6 +673,11 @@
     <reason>Target "%1" is deprecated.</reason>
     <response>Remove references to this target from your custom Ant files.</response>
   </message>
+  
+  <message id="DOTX071W" type="WARN">
+    <reason>Parameter "%1" on template "%2" is deprecated.</reason>
+    <response>Use parameter "%3" instead.</response>
+  </message>
 
   <!-- End of XSL Messages --> 
       

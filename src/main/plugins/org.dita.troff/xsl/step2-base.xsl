@@ -66,6 +66,7 @@
 <xsl:param name="LINELENGTH">65</xsl:param>
 
 <xsl:param name="FILENAME"></xsl:param>
+<!-- Deprecated since 2.3 -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
 <xsl:variable name="OUTEXT">txt</xsl:variable>
 

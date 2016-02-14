@@ -17,6 +17,7 @@
 <xsl:output indent="yes"/>
 
 <!-- Define the error message prefix identifier -->
+<!-- Deprecated since 2.3 -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <xsl:param name="WORKDIR" select="''"/>

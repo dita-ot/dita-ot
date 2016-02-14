@@ -50,6 +50,7 @@ See the accompanying license.txt file for applicable licenses.
   
 
     <xsl:param name="debug-enabled" select="'false'"/>
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix" select="'PDFX'"/>
 
     <xsl:variable name="font-mappings" select="document('cfg:fo/font-mappings.xml')/font-mappings"/>

@@ -54,6 +54,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-textonly.xsl"/>
   <!-- Define the error message prefix identifier -->
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
   <xsl:param name="DBG" select="'no'"/>
