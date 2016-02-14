@@ -22,7 +22,9 @@
   - msgsev = the severity (I, W, E, or F); default=I (Informational)
 -->
 <xsl:stylesheet version="2.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                exclude-result-prefixes="xs">
   
   <xsl:template name="output-message">
     <xsl:param name="msg" select="'***'"/>
@@ -30,12 +32,8 @@
     <xsl:param name="msgnum" select="'000'"/>
     <xsl:param name="msgsev" select="'I'"/>
     <xsl:param name="msgparams" select="''"/>
-        
-    <xsl:variable name="msgid">
-      <xsl:value-of select="$msgcat"/>
-      <xsl:value-of select="$msgnum"/>
-      <xsl:value-of select="$msgsev"/>
-    </xsl:variable>
+    <xsl:param name="id" as="xs:string" select="concat($msgcat, $msgnum, $msgsev)"/>
+    
     <xsl:variable name="msgcontent">
       <xsl:choose>
         <xsl:when test="$msg != '***'">
@@ -43,7 +41,7 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="msgdoc" select="document('plugin:org.dita.base:resources/messages.xml')"/>
-          <xsl:apply-templates select="$msgdoc/messages/message[@id = $msgid]" mode="get-message-content">    
+          <xsl:apply-templates select="$msgdoc/messages/message[@id = $id]" mode="get-message-content">    
             <xsl:with-param name="params" select="$msgparams"/>    
           </xsl:apply-templates>
         </xsl:otherwise>
