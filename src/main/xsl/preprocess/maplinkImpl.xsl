@@ -6,7 +6,8 @@
 <xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                exclude-result-prefixes="xs">
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+                exclude-result-prefixes="xs dita-ot">
   
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-utilities.xsl"/>
@@ -647,36 +648,7 @@
     <!-- Link being evaluated -->
     <xsl:param name="originalLink" as="xs:string"/>
     
-    <xsl:choose>
-      <xsl:when test="starts-with($originalLink,'./')">
-        <xsl:call-template name="simplifyLink">
-          <xsl:with-param name="buildLink" select="$buildLink"/>
-          <xsl:with-param name="originalLink" select="substring-after($originalLink,'./')"/>
-        </xsl:call-template>
-      </xsl:when>      
-      <xsl:when test="not(contains($originalLink,'../'))">
-        <xsl:value-of select="concat($buildLink, $originalLink)"/>
-      </xsl:when>
-      <xsl:when test="starts-with($originalLink,'../')">
-        <xsl:call-template name="simplifyLink">
-          <xsl:with-param name="buildLink" select="concat($buildLink,'../')"/>
-          <xsl:with-param name="originalLink" select="substring-after($originalLink,'../')"/>
-        </xsl:call-template>
-      </xsl:when>
-      <!-- If it starts with a directory followed by ../ then skip both and keep going. -->
-      <xsl:when test="starts-with(substring-after($originalLink,'/'),'../')">
-        <xsl:call-template name="simplifyLink">
-          <xsl:with-param name="buildLink" select="$buildLink"/>
-          <xsl:with-param name="originalLink" select="substring-after($originalLink,'/../')"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="simplifyLink">
-          <xsl:with-param name="buildLink" select="concat($buildLink,substring-before($originalLink,'/'),'/')"/>
-          <xsl:with-param name="originalLink" select="substring-after($originalLink,'/')"/>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="dita-ot:normalize-uri($originalLink)"/>
   </xsl:template>
     
   <!-- Compute the path back to the input ditamap directory 

@@ -150,6 +150,12 @@
       </x:call>
       <x:expect label="Two parent paths" select="'../../'"/>
     </x:scenario>
+    <x:scenario label="two subdirectories">
+      <x:call template="pathBackToMapDirectory">
+        <x:param name="path" select="'foo/../bar/baz/qux'"/>
+      </x:call>
+      <x:expect label="Intermediate parent step" select="'../../'"/>
+    </x:scenario>
   </x:scenario>
 
   <x:scenario label="Scenario for testing function getPathBackToBase"
