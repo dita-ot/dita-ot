@@ -290,6 +290,11 @@
     </xsl:choose>
   </xsl:template>
   
+  <xsl:function name="dita-ot:strip-fragment" as="xs:string">
+    <xsl:param name="href" as="xs:string"/>
+    <xsl:value-of select="if (contains($href, '#')) then substring-before($href, '#') else $href"/>
+  </xsl:function>
+  
   <!-- Replace file extension in a URI -->
   <xsl:template name="replace-extension" as="xs:string">
     <xsl:param name="filename" as="xs:string"/>
@@ -322,21 +327,41 @@
     </xsl:value-of>
   </xsl:template>
   
-  <xsl:template name="substring-before-last">
+  <xsl:function name="dita-ot:substring-before-last" as="xs:string?">
     <xsl:param name="text" as="xs:string"/>
     <xsl:param name="delim" as="xs:string"/>
     
-    <xsl:if test="string($text) and string($delim)">
-      <xsl:value-of select="substring-before($text, $delim)" />
-      <xsl:variable name="tail" select="substring-after($text, $delim)" />
-      <xsl:if test="contains($tail, $delim)">
-        <xsl:value-of select="$delim" />
-        <xsl:call-template name="substring-before-last">
-          <xsl:with-param name="text" select="$tail" />
-          <xsl:with-param name="delim" select="$delim" />
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:if>
+    <xsl:call-template name="substring-before-last">
+      <xsl:with-param name="text" select="$text"/>
+      <xsl:with-param name="delim" select="$delim" />
+    </xsl:call-template>
+  </xsl:function>
+  
+  <xsl:template name="substring-before-last" as="xs:string?">
+    <xsl:param name="text" as="xs:string"/>
+    <xsl:param name="delim" as="xs:string"/>
+    <xsl:param name="acc" as="xs:string?"/>
+    
+    <xsl:choose>
+      <xsl:when test="string($text) and string($delim)">
+        <xsl:variable name="tail" select="substring-after($text, $delim)" />
+        <xsl:choose>
+          <xsl:when test="contains($tail, $delim)">
+            <xsl:call-template name="substring-before-last">
+              <xsl:with-param name="text" select="$tail" />
+              <xsl:with-param name="delim" select="$delim" />
+              <xsl:with-param name="acc" select="concat($acc, substring-before($text, $delim), $delim)"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat($acc, substring-before($text, $delim))"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="$acc"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="processing-instruction('workdir-uri')" mode="get-work-dir">

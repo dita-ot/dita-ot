@@ -3,22 +3,155 @@
                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                stylesheet="dita-utilities.xsl">
 
-  <!--x:scenario label="Scenario for testing function replace-extension">
-    <x:call template="replace-extension">
-      <x:param name="filename" select="'foo.bar'"/>
-      <x:param name="extension" select="'.baz'"/>
-    </x:call>
-    <x:expect label="Not yet implemented" select="'foo.baz'"/>
+  <x:scenario label="Scenario for testing function replace-extension">
+    <x:scenario label="no extension">
+      <x:call template="replace-extension">
+        <x:param name="filename" select="'foo'"/>
+        <x:param name="extension" select="'.baz'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="plain file">
+      <x:call template="replace-extension">
+        <x:param name="filename" select="'foo.bar'"/>
+        <x:param name="extension" select="'.baz'"/>
+      </x:call>
+      <x:expect label="" select="'foo.baz'"/>
+    </x:scenario>
+    <x:scenario label="period in file name">
+      <x:call template="replace-extension">
+        <x:param name="filename" select="'foo.bar.baz'"/>
+        <x:param name="extension" select="'.qux'"/>
+      </x:call>
+      <x:expect label="" select="'foo.bar.qux'"/>
+    </x:scenario>
+    <x:scenario label="plain file with fragment">
+      <x:call template="replace-extension">
+        <x:param name="filename" select="'foo.bar#qux'"/>
+        <x:param name="extension" select="'.baz'"/>
+      </x:call>
+      <x:expect label="" select="'foo.baz#qux'"/>
+    </x:scenario>
+    <x:scenario label="ignore fragment">
+      <x:call template="replace-extension">
+        <x:param name="filename" select="'foo.bar#qux'"/>
+        <x:param name="extension" select="'.baz'"/>
+        <x:param name="ignore-fragment" select="true()"/>
+      </x:call>
+      <x:expect label="" select="'foo.baz'"/>
+    </x:scenario>
   </x:scenario>
 
-  <x:scenario pending="Not yet implemented"
-              label="Scenario for testing function substring-before-last">
-    <x:call template="substring-before-last">
-      <x:param name="text" select="'no_value'"/>
-      <x:param name="delim" select="'no_value'"/>
-    </x:call>
-    <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
-  </x:scenario-->
+  <x:scenario label="Scenario for testing function strip-fragment">
+    <x:scenario label="no fragment">
+      <x:call function="dita-ot:strip-fragment">
+        <x:param name="href" select="'foo'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="with fragment">
+      <x:call function="dita-ot:strip-fragment">
+        <x:param name="href" select="'foo#bar'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="double fragment">
+      <x:call function="dita-ot:strip-fragment">
+        <x:param name="href" select="'foo#bar#baz'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="Scenario for testing template substring-before-last">
+    <x:scenario label="no match">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="no match">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="single match">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'foo.bar'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="double match">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'foo.bar.baz'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo.bar'"/>
+    </x:scenario>
+    <x:scenario label="first">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'.foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="last">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'foo.'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="Scenario for testing function substring-before-last">
+    <x:scenario label="no match">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="no match">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="single match">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'foo.bar'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="double match">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'foo.bar.baz'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo.bar'"/>
+    </x:scenario>
+    <x:scenario label="first">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'.foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="last">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'foo.'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+  </x:scenario>
 
   <x:scenario label="dita-ot:normalize-uri">
     <x:scenario label="normalize foo/bar/baz">
