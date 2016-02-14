@@ -3127,9 +3127,7 @@
 <xsl:template name="sect-heading">
   <xsl:param name="defaulttitle"/> <!-- get param by reference -->
   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-    <xsl:with-param name="msgnum">066</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX066W'"/>
     <xsl:with-param name="msgparams">%1=sect-heading</xsl:with-param>
   </xsl:call-template>
   <xsl:apply-templates select="." mode="dita2html:section-heading">

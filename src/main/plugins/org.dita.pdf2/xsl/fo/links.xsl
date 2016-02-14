@@ -678,8 +678,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="href"/>
     <!-- FIXME: There is no message PDFX063W -->
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">063</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX063W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>

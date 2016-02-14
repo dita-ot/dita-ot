@@ -501,8 +501,7 @@
       <xsl:choose>
          <xsl:when test="$conflictexist='true' and $flagsParams/val/style-conflict[@foreground-conflict-color or @background-conflict-color]">
             <xsl:call-template name="output-message">
-               <xsl:with-param name="msgnum">054</xsl:with-param>
-               <xsl:with-param name="msgsev">W</xsl:with-param>
+               <xsl:with-param name="id" select="'DOTX054W'"/>
             </xsl:call-template>
 
             <xsl:if test="$flagsParams/val/style-conflict[@foreground-conflict-color]">
