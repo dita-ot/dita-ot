@@ -753,6 +753,9 @@ public final class Constants {
     @Deprecated
     public static final String INPUT_DIR = "user.input.dir";
     public static final String INPUT_DIR_URI = "user.input.dir.uri";
+    /** Property name for copy-to target2sourcemap list file. Deprecated since 2.3 */
+    @Deprecated
+    public static final String COPYTO_TARGET_TO_SOURCE_MAP_LIST = "copytotarget2sourcemaplist";
     /** Property name for relflag image list file */
     public static final String REL_FLAGIMAGE_LIST="relflagimagelist";
 
