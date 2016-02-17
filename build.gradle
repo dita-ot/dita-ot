@@ -237,3 +237,10 @@ task distTarGz(type: Tar, dependsOn: [jar, generateDocs]) {
 task dist(dependsOn: [distZip, distTarGz]) << {
     // NOOP
 }
+
+test {
+    inputs.files (
+        'src/test/xsl/common/dita-utilities.xspec',
+        'src/test/xsl/preprocess/maplinkImpl.xspec'
+    )
+}
