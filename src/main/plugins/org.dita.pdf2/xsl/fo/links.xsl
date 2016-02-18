@@ -159,7 +159,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Figure Number'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="fig.title-number"/>
                 </number>
             </xsl:with-param>
           </xsl:call-template>
@@ -172,7 +172,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Figure.title'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="fig.title-number"/>
                 </number>
                 <title>
                     <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
@@ -197,7 +197,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Table Number'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="table.title-number"/>
                 </number>
             </xsl:with-param>
           </xsl:call-template>
@@ -210,7 +210,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Table.title'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="table.title-number"/>
                 </number>
                 <title>
                     <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>

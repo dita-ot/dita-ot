@@ -787,7 +787,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:with-param name="id" select="'Figure.title'"/>
                 <xsl:with-param name="params">
                     <number>
-                        <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()])"/>
+                        <xsl:apply-templates select="." mode="fig.title-number"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>
@@ -796,6 +796,10 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:call-template>
         </fo:block>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]" mode="fig.title-number">
+    <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()])"/>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tm ')]">
         <fo:inline xsl:use-attribute-sets="tm">
