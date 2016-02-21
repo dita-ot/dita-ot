@@ -9,6 +9,12 @@
 
   <xsl:variable name="newline" select="()" as="xs:string?"/>
 
+  <xsl:key name="enumerableByClass"
+           match="*[contains(@class, ' topic/fig ')][*[contains(@class, ' topic/title ')]] |
+                  *[contains(@class, ' topic/table ')][*[contains(@class, ' topic/title ')]] |
+                  *[contains(@class,' topic/fn ') and empty(@callout)]"
+            use="tokenize(@class, '\s+')"/>
+
   <xsl:template name="generateCharset">
     <meta charset="UTF-8"/>
   </xsl:template>  

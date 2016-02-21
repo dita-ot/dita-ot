@@ -4,66 +4,85 @@ table {
   border-collapse: collapse;
 }
 
-/* The cell border can be turned on with
-   {border-right:solid}
-   This value creates a very thick border in Firefox (does not match other tables)
-
-   Firefox works with
-   {border-right:solid 1pt}
-   but this causes a barely visible line in IE */
-
-.cellrowborder {
-  border-bottom: solid 1px;
-  border-left: 0;
-  border-right: solid 1px;
-  border-top: 0;
+table .desc {
+  display: block;
+  font-style: italic;
 }
 
-.row-nocellborder {
-  border-bottom: solid 1px;
-  border-left: 0;
-  border-right: hidden;
-  border-top: 0;
-}
+// @frame
 
-.cell-norowborder {
-  border-bottom: hidden;
-  border-left: 0;
-  border-right: solid 1px;
-  border-top: 0;
-}
-
-.nocellnorowborder {
-  border: 0;
-  border-bottom: hidden;
-  border-right: hidden;
-}
-
-.table-border {
-  border-bottom: solid 1px;
-  border-left: solid 1px;
-  border-right: solid 1px;
+[data-frame = top] {
   border-top: solid 1px;
 }
 
-.table-rules-all {
+[data-frame = bottom] {
+  border-bottom: solid 1px;
+}
+
+[data-frame = topbot] {
+  border-top: solid 1px;
+  border-bottom: solid 1px;
+}
+
+[data-frame = all] {
   border: solid 1px;
 }
 
-.table-rules-sides {
+[data-frame = sides] {
   border-left: solid 1px;
   border-right: solid 1px;
 }
 
-.table-rules-top {
-  border-top: solid 1px;
+[data-frame = none] {
+  border: 0;
 }
 
-.table-rules-bottom {
-  border-bottom: solid 1px;
+// @pgwide
+
+[data-pgwide = '1'] {
+  width: 100%;
 }
 
-/* Used on the first column of a table, when rowheader="firstcol" is used */
-.firstcol {
-  font-weight: bold;
+// @scale
+
+$scale: 50 60 70 80 90 100 110 120 140 160 180 200;
+
+@each $value in $scale {
+  [data-scale = '#{$value}'] {
+    font-size: unquote($value + '%');
+  }
+}
+
+// @align
+
+$align: left right center justify char;
+
+@each $value in $align {
+  [data-align = '#{$value}'] {
+    text-align: $value;
+  }
+}
+
+// @valign
+
+$valign: top bottom middle;
+
+@each $value in $valign {
+  [data-valign = '#{$value}'] {
+    td, th {
+      vertical-align: $value;
+    }
+  }
+}
+
+// @colsep
+
+[data-colsep = '1'] {
+  border-right: 1px solid;
+}
+
+// @rowsep
+
+[data-rowsep = '1'] {
+  border-bottom: 1px solid;
 }
