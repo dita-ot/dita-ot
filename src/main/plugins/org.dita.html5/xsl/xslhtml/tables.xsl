@@ -58,9 +58,42 @@
     "/>
   </xsl:function>
 
+  <xsl:function name="table:get-entry-align" as="attribute(align)?">
+    <xsl:param name="el" as="element()"/>
+
+    <xsl:sequence select="
+      ($el/@align,
+       table:get-current-tgroup($el)/@align,
+       table:get-entry-colspec($el)/@align)[1]
+    "/>
+  </xsl:function>
+
+  <xsl:function name="table:get-entry-colsep" as="attribute(colsep)?">
+    <xsl:param name="el" as="element()"/>
+
+    <xsl:sequence select="
+      ($el/@colsep,
+       table:get-entry-colspec($el)/@colsep,
+       table:get-current-table($el)/@colsep,
+       table:get-current-tgroup($el)/@colsep)[1]
+    "/>
+  </xsl:function>
+
+  <xsl:function name="table:get-entry-rowsep" as="attribute(rowsep)?">
+    <xsl:param name="el" as="element()"/>
+
+    <xsl:sequence select="
+      ($el/@rowsep,
+       table:get-entry-colspec($el)/@rowsep,
+       table:get-current-table($el)/@rowsep,
+       table:get-current-tgroup($el)/@rowsep)[1]
+    "/>
+  </xsl:function>
+
   <xsl:template match="*" mode="table:common">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setid"/>
+    <xsl:apply-templates select="." mode="css-class"/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/table ')]" name="topic.table">
@@ -68,17 +101,12 @@
 
     <table>
       <xsl:apply-templates select="." mode="table:common"/>
-      <xsl:apply-templates select="@frame, @pgwide, @scale" mode="data"/>
       <xsl:apply-templates select="." mode="table:title"/>
       <!-- title and desc are processed elsewhere -->
       <xsl:apply-templates select="*[contains(@class, ' topic/tgroup ')]"/>
     </table>
 
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-  </xsl:template>
-
-  <xsl:template match="@*" mode="data">
-    <xsl:attribute name="{concat('data-', local-name())}" select="."/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/thead ')]" name="topic.thead">
@@ -96,14 +124,12 @@
   <xsl:template match="*[contains(@class, ' topic/tgroup ')]/*" mode="table:section">
     <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
     <xsl:apply-templates select="." mode="table:common"/>
-    <xsl:apply-templates select="@valign" mode="data"/>
     <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/row ')]" name="topic.row">
     <tr>
       <xsl:apply-templates select="." mode="table:common"/>
-      <xsl:apply-templates select="@valign, @rowsep" mode="data"/>
       <xsl:apply-templates/>
     </tr>
   </xsl:template>
@@ -128,41 +154,37 @@
 
   <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="table:entry">
     <xsl:apply-templates select="." mode="table:common"/>
-    <xsl:apply-templates select="." mode="align"/>
-    <xsl:apply-templates select="." mode="colsep"/>
-    <xsl:apply-templates select="." mode="rowsep"/>
     <xsl:apply-templates select="." mode="headers"/>
     <xsl:apply-templates select="@morerows, @dita-ot:morecols"/>
-    <xsl:apply-templates select="@valign" mode="data"/>
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="align">
-    <xsl:attribute name="data-align" select="
-      (@align,
-       table:get-current-tgroup(.)/@align,
-       table:get-entry-colspec(.)/@align,
-       $table.align-default)[1]
-    "/>
+  <xsl:template match="@frame | @pgwide | @scale" mode="css-class">
+    <xsl:sequence select="dita-ot:css-class(.)"/>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="colsep">
-    <xsl:attribute name="data-colsep" select="
-      (@colsep,
-       table:get-entry-colspec(.)/@colsep,
-       table:get-current-table(.)/@colsep,
-       table:get-current-tgroup(.)/@colsep,
-       $table.colsep-default)[1]
-    "/>
+  <xsl:template match="*[contains(@class, ' topic/table ')]" mode="css-class">
+    <xsl:apply-templates select="@frame, @pgwide, @scale" mode="#current"/>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="rowsep">
-    <xsl:attribute name="data-rowsep" select="
-      (@rowsep,
-       table:get-entry-colspec(.)/@rowsep,
-       table:get-current-table(.)/@rowsep,
-       table:get-current-tgroup(.)/@rowsep,
-       $table.rowsep-default)[1]
+  <xsl:template match="@align | @valign | @colsep | @rowsep" mode="css-class">
+    <xsl:sequence select="dita-ot:css-class((), .)"/>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/tgroup ')]/*" mode="css-class">
+    <xsl:apply-templates select="@valign" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/row ')]" mode="css-class">
+    <xsl:apply-templates select="@rowsep, @valign" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="css-class">
+    <xsl:apply-templates mode="#current" select="
+      table:get-entry-align(.),
+      table:get-entry-colsep(.),
+      table:get-entry-rowsep(.),
+      @valign
     "/>
   </xsl:template>
 
@@ -219,7 +241,8 @@
   | *[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/desc ')]
   ">
     <span>
-      <xsl:apply-templates select="." mode="table:common"/>
+      <xsl:call-template name="setid"/>
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </span>
   </xsl:template>
