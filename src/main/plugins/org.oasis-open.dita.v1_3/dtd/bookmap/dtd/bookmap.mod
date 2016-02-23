@@ -1127,7 +1127,7 @@
 <!ATTLIST  tablelist %tablelist.attributes;>
 
 
-<!--                    LONG NAME: Table List                      -->
+<!--                    LONG NAME: Change List                     -->
 <!ENTITY % changelist.content
                        "EMPTY"
 >
