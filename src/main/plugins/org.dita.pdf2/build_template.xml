@@ -249,9 +249,6 @@ with those set forth herein.
       <not><isset property="args.tablelink.style"/></not>
     </condition>
 
-    <condition property="args.changelink.style" value="NUMTITLE">
-      <not><isset property="args.changelink.style"/></not>
-    </condition>
   </target>
 
   <target name="transform.topic2fo.index">
