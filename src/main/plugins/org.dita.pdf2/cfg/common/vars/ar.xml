@@ -334,9 +334,12 @@ See the accompanying license.txt file for applicable licenses.
      
      <!-- The heading string to put at the top of the List of Tables -->
      <variable id="List of Tables">الجداول</variable>
-     
+
      <!-- The heading string to put at the top of the List of Figures -->
      <variable id="List of Figures">الأشكال</variable>
+
+     <!-- The heading string to put at the top of the List of Changes -->
+     <variable id="List of Changes"></variable>
 
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>

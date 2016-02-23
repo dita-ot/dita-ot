@@ -338,6 +338,9 @@ See the accompanying license.txt file for applicable licenses.
      <!-- The heading string to put at the top of the List of Figures -->
      <variable id="List of Figures">Slike</variable>
 
+     <!-- The heading string to put at the top of the List of Changes -->
+     <variable id="List of Changes"></variable>
+
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>
   <variable id="#quote-end">”</variable>

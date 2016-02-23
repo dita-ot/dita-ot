@@ -347,6 +347,9 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="List of Tables">表の一覧</variable>
     <variable id="List of Figures">図の一覧</variable>
 
+    <!-- The heading string to put at the top of the List of Changes -->
+    <variable id="List of Changes"></variable>
+
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">「</variable>
   <variable id="#quote-end">」</variable>

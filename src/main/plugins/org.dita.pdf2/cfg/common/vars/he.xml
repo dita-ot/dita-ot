@@ -98,6 +98,9 @@
   <variable id="List of Tables">רשימת טבלאות</variable>
   <variable id="List of Figures">רשימת איורים</variable>
 
+  <!-- The heading string to put at the top of the List of Changes -->
+  <variable id="List of Changes"></variable>
+
   <variable id="#menucascade-separator"> ‫&gt;‬ </variable>
   <variable id="#quote-start">„</variable>
   <variable id="#quote-end">”</variable>
