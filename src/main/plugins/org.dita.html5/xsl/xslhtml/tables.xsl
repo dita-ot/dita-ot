@@ -180,12 +180,34 @@
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="css-class">
+    <xsl:variable name="colsep" as="attribute(colsep)?" select="table:get-entry-colsep(.)"/>
+    <xsl:variable name="rowsep" as="attribute(rowsep)?" select="table:get-entry-rowsep(.)"/>
+
+    <xsl:apply-templates select="." mode="legacy-css-class">
+      <xsl:with-param name="colsep" as="xs:integer"
+        select="xs:integer(($colsep, $table.colsep-default)[1])"/>
+      <xsl:with-param name="rowsep" as="xs:integer"
+        select="xs:integer(($rowsep, $table.rowsep-default)[1])"/>
+    </xsl:apply-templates>
+
     <xsl:apply-templates mode="#current" select="
-      table:get-entry-align(.),
-      table:get-entry-colsep(.),
-      table:get-entry-rowsep(.),
-      @valign
+      table:get-entry-align(.), $colsep, $rowsep, @valign
     "/>
+  </xsl:template>
+
+  <!-- deprecated since 2.3 -->
+  <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="legacy-css-class" as="xs:string*">
+    <xsl:param name="colsep" as="xs:integer"/>
+    <xsl:param name="rowsep" as="xs:integer"/>
+
+    <xsl:if test="table:is-row-header(.)">firstcol</xsl:if>
+
+    <xsl:choose>
+      <xsl:when test="not($rowsep) and not($colsep)">nocellnorowborder</xsl:when>
+      <xsl:when test="$rowsep = 1 and not($colsep)">row-nocellborder</xsl:when>
+      <xsl:when test="not($rowsep) and $colsep = 1">cell-norowborder</xsl:when>
+      <xsl:when test="$rowsep = 1 and $colsep = 1">cellrowborder</xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="*[table:is-thead-entry(.)]" mode="headers">
