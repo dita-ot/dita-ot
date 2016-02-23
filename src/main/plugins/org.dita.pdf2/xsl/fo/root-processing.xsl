@@ -311,6 +311,18 @@ See the accompanying LICENSE file for applicable license.
       <xsl:call-template name="processTopicPart"/>
     </xsl:for-each>
   </xsl:template>
+  <xsl:template match="*[contains(@class, ' bookmap/changelist ')]" mode="generatePageSequences">
+    <xsl:for-each select="key('topic-id', @id)">
+      <xsl:choose>
+        <xsl:when test="self::ot-placeholder:changelist">
+          <xsl:call-template name="createChangeList"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="processTopicSimple"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
   <xsl:template match="*[contains(@class, ' bookmap/figurelist ')]" mode="generatePageSequences">
     <xsl:for-each select="key('topic-id', @id)">
       <xsl:choose>
