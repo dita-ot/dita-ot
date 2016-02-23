@@ -157,9 +157,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' bookmap/changelist ')][not(@href)]" priority="2" mode="build-tree">
-        <ot-placeholder:figurelist id="{generate-id()}">
+        <ot-placeholder:changelist id="{generate-id()}">
             <xsl:apply-templates mode="build-tree"/>
-        </ot-placeholder:figurelist>
+        </ot-placeholder:changelist>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' map/topicref ') and @print='no']" priority="6"/>
