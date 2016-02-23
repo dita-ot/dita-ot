@@ -121,4 +121,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Log files
+*.log
 
+IntelliJ
+.idea/
