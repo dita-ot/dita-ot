@@ -225,9 +225,11 @@ with those set forth herein.
     <condition property="args.figurelink.style" value="NUMTITLE">
         <not><isset property="args.figurelink.style"/></not>
     </condition>
+
     <condition property="args.tablelink.style" value="NUMTITLE">
-        <not><isset property="args.tablelink.style"/></not>
+      <not><isset property="args.tablelink.style"/></not>
     </condition>
+
   </target>
 
   <target name="transform.topic2fo.index">
@@ -291,7 +293,6 @@ with those set forth herein.
       <param name="bookmap-order" expression="${args.bookmap-order}"/>
       <param name="figurelink.style" expression="${args.figurelink.style}"/>
       <param name="tablelink.style" expression="${args.tablelink.style}"/>
-      <param name="changelink.style" expression="${args.changelink.style}"/>
       <param name="variableFiles.url" expression="${variable.file.url}" if="variable.file.exists"/>
       
       <xmlcatalog>
