@@ -149,8 +149,14 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:tablelist>
     </xsl:template>
-  
+
     <xsl:template match="*[contains(@class,' bookmap/figurelist ')][not(@href)]" priority="2" mode="build-tree">
+        <ot-placeholder:figurelist id="{generate-id()}">
+            <xsl:apply-templates mode="build-tree"/>
+        </ot-placeholder:figurelist>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class,' bookmap/changelist ')][not(@href)]" priority="2" mode="build-tree">
         <ot-placeholder:figurelist id="{generate-id()}">
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:figurelist>
@@ -301,6 +307,7 @@ See the accompanying license.txt file for applicable licenses.
                        or contains($class,' bookmap/amendments ')
                        or contains($class,' bookmap/bookabstract ')
                        or contains($class,' bookmap/booklist ')
+                       or contains($class,' bookmap/changelist ')
                        or contains($class,' bookmap/colophon ')
                        or contains($class,' bookmap/dedication ')
                        or contains($class,' bookmap/tablelist ')
