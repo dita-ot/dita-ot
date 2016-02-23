@@ -156,6 +156,9 @@ See the accompanying LICENSE file for applicable license.
   <variable id="List of Tables">Seznam tabel</variable>
   <variable id="List of Figures">Seznam slik</variable>
 
+  <!-- The heading string to put at the top of the List of Changes -->
+  <variable id="List of Changes"></variable>
+
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>
   <variable id="#quote-end">”</variable>
