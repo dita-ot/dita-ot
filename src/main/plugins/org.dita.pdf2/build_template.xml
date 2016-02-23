@@ -244,8 +244,13 @@ with those set forth herein.
     <condition property="args.figurelink.style" value="NUMTITLE">
         <not><isset property="args.figurelink.style"/></not>
     </condition>
+
     <condition property="args.tablelink.style" value="NUMTITLE">
-        <not><isset property="args.tablelink.style"/></not>
+      <not><isset property="args.tablelink.style"/></not>
+    </condition>
+
+    <condition property="args.changelink.style" value="NUMTITLE">
+      <not><isset property="args.changelink.style"/></not>
     </condition>
   </target>
 
