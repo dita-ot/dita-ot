@@ -228,12 +228,13 @@ See the accompanying license.txt file for applicable licenses.
 			<xsl:when test="contains($class,' bookmap/bookabstract ')"/>
 			<xsl:when test="contains($class,' bookmap/booklist ')"/>
 			<xsl:when test="contains($class,' bookmap/booklists ')"/>
+            <xsl:when test="contains($class,' bookmap/changelist ')"/>
 			<xsl:when test="contains($class,' bookmap/colophon ')"/>
 			<xsl:when test="contains($class,' bookmap/dedication ')"/>
 			<xsl:when test="contains($class,' bookmap/figurelist ')"/>
 			<xsl:when test="contains($class,' bookmap/frontmatter ')"/>
 			<xsl:when test="contains($class,' bookmap/indexlist ')"/>
-			<xsl:when test="contains($class,' bookmap/tablelist ')"/>
+            <xsl:when test="contains($class,' bookmap/tablelist ')"/>
 			<xsl:when test="contains($class,' bookmap/toc ')"/>
 			<xsl:when test="contains($class,' bookmap/trademarklist ')"/>
 			<xsl:when test="contains($class,' bookmap/glossarylist ') and not(*)">
