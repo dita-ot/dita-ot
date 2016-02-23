@@ -31,12 +31,18 @@
         <fo:flow flow-name="xsl-region-body">
           <fo:block start-indent="0in">
 
-            <xsl:text>HELLO WORLD 2</xsl:text>
-
             <xsl:call-template name="createLOCHeader"/>
-            <xsl:variable name="fixmeTempTitle">TEMP TITLE CHANGEHISTORY</xsl:variable>
-            <!-- TODO add mode list.of.changes -->
-            <xsl:apply-templates select="$fixmeTempTitle" mode="list.of.changes"/>
+
+
+            <xsl:text>topic/title of concepts that have a change-item:</xsl:text>
+            <!-- Select topic/title of all topic that have a change-item -->
+            <xsl:apply-templates select="//*[contains (@class, ' topic/topic ')][.//*[contains (@class, ' relmgmt-d/change-item ')]]/*[contains (@class, ' topic/title ')]"/>
+
+            <xsl:text>topic/title of all change-items:</xsl:text>
+            <xsl:apply-templates select="//*[contains (@class, ' topic/topic ')]/*[contains (@class, ' topic/title ')]"/>
+
+            <xsl:text>...:</xsl:text>
+            <xsl:apply-templates select="//*[contains (@class, ' relmgmt-d/change-item ')][child::*[contains(@class, ' relmgmt-d/change-completed ' )]]" mode="list.of.changes"/>
           </fo:block>
         </fo:flow>
       </fo:page-sequence>
@@ -47,7 +53,6 @@
     <fo:block>
       <xsl:text>HELLO WORLD X</xsl:text>
     </fo:block>
-    <!--
     <fo:block xsl:use-attribute-sets="__lotf__heading" id="{$id.lot}">
       <fo:marker marker-class-name="current-header">
         <xsl:call-template name="getVariable">
@@ -58,7 +63,6 @@
         <xsl:with-param name="id" select="'List of Changes'"/>
       </xsl:call-template>
     </fo:block>
-    -->
   </xsl:template>
 
   <xsl:template match="*[contains (@class, ' bookmap/changelist ')]" mode="list.of.changes">
