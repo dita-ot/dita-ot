@@ -44,9 +44,9 @@
   </xsl:template>
 
   <xsl:template name="createLOCHeader">
-    <xsl:block>
+    <fo:block>
       <xsl:text>HELLO WORLD X</xsl:text>
-    </xsl:block>
+    </fo:block>
     <!--
     <fo:block xsl:use-attribute-sets="__lotf__heading" id="{$id.lot}">
       <fo:marker marker-class-name="current-header">
