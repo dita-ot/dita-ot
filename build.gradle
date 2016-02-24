@@ -152,7 +152,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "temp"
         include "plugins/**"
         include "resources/**"
-        include "samples/**"
         include "xsl/**"
         // legacy build scripts
         include "startcmd.*"
