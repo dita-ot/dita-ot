@@ -31,9 +31,9 @@
         <dvrKeyscopePrefix class="+ topic/data ditavalref-d/dvrKeyscopePrefix " name="dvrKeyscopePrefix">mac-</dvrKeyscopePrefix>
       </ditavalmeta>
     </ditavalref>
-    <topicref class="- map/topicref " href="perform-install-mac.dita" keyscope="mac-perform-install"/>
-    <topicref class="- map/topicref " href="installation-procedure-mac.dita" keyscope="mac-perform-install"/>
-    <topicref class="- map/topicref " href="configure-novice-mac.dita" keyscope="mac-novice-configure">
+    <topicref class="- map/topicref " href="perform-install-mac.dita" keyscope="perform-install"/>
+    <topicref class="- map/topicref " href="installation-procedure-mac.dita" keyscope="perform-install"/>
+    <topicref class="- map/topicref " href="configure-novice-mac.dita" keyscope="novice-configure">
       <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="novice.ditaval" processing-role="resource-only">
         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
           <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix " name="dvrResourceSuffix">-novice</dvrResourceSuffix>
@@ -41,7 +41,7 @@
         </ditavalmeta>
       </ditavalref>
     </topicref>
-    <topicref class="- map/topicref " href="configure-admin-mac.dita" keyscope="mac-admin-configure">
+    <topicref class="- map/topicref " href="configure-admin-mac.dita" keyscope="admin-configure">
       <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="advanced.ditaval" processing-role="resource-only">
         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
           <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix " name="dvrResourceSuffix">-admin</dvrResourceSuffix>
@@ -58,9 +58,9 @@
         <dvrKeyscopePrefix class="+ topic/data ditavalref-d/dvrKeyscopePrefix " name="dvrKeyscopePrefix">win-</dvrKeyscopePrefix>
       </ditavalmeta>
     </ditavalref>
-    <topicref class="- map/topicref " href="perform-install-win.dita" keyscope="win-perform-install"/>
-    <topicref class="- map/topicref " href="installation-procedure-win.dita" keyscope="win-perform-install"/>
-    <topicref class="- map/topicref " href="configure-novice-win.dita" keyscope="win-novice-configure">
+    <topicref class="- map/topicref " href="perform-install-win.dita" keyscope="perform-install"/>
+    <topicref class="- map/topicref " href="installation-procedure-win.dita" keyscope="perform-install"/>
+    <topicref class="- map/topicref " href="configure-novice-win.dita" keyscope="novice-configure">
       <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="novice.ditaval" processing-role="resource-only">
         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
           <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix " name="dvrResourceSuffix">-novice</dvrResourceSuffix>
@@ -68,7 +68,7 @@
         </ditavalmeta>
       </ditavalref>
     </topicref>
-    <topicref class="- map/topicref " href="configure-admin-win.dita" keyscope="win-admin-configure">
+    <topicref class="- map/topicref " href="configure-admin-win.dita" keyscope="admin-configure">
       <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="advanced.ditaval" processing-role="resource-only">
         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
           <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix " name="dvrResourceSuffix">-admin</dvrResourceSuffix>
@@ -77,6 +77,14 @@
       </ditavalref>
     </topicref>
     <topicref class="- map/topicref " href="http://example.com/install.dita" scope="external"/>
+  </topicref>
+  <topicref class="- map/topicref " href="install-linux.dita" keyscope="linux-">
+    <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="mac.ditaval" processing-role="resource-only">
+      <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+        <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix " name="dvrResourceSuffix">-linux</dvrResourceSuffix>
+        <dvrKeyscopePrefix class="+ topic/data ditavalref-d/dvrKeyscopePrefix " name="dvrKeyscopePrefix">linux-</dvrKeyscopePrefix>
+      </ditavalmeta>
+    </ditavalref>
   </topicref>
   <topicref class="- map/topicref " href="install.dita" copy-to="getting-started.dita"/>
 </map>
