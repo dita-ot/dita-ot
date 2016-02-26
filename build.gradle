@@ -70,18 +70,7 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
 
 defaultTasks 'buildLocal'
 
-task initInstall(dependsOn: jar) << {
-    def antClassLoader = org.apache.tools.ant.Project.class.classLoader
-    configurations.runtime.each { File f ->
-        antClassLoader.addURL(f.toURI().toURL())
-    }
-    configurations.runtime.allArtifacts.files.each { File f ->
-        antClassLoader.addURL(f.toURI().toURL())
-    }
-    antClassLoader.addURL(file("${projectDir}/src/main/lib").toURI().toURL())
-    antClassLoader.addURL(file("${projectDir}/src/main/resources").toURI().toURL())
-}
-task copyInstall(type: Copy, dependsOn: initInstall) {
+task copyInstall(type: Copy) {
     from (configurations.runtime.allArtifacts.files)
     from (configurations.runtime) {
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
@@ -89,9 +78,13 @@ task copyInstall(type: Copy, dependsOn: initInstall) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compassCompile", ":wordrtf:copyInstall", ":odt:copyInstall"]) << {
+task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compassCompile", ":wordrtf:copyInstall", ":odt:copyInstall"]) {
     description "Build archives and install all plugins with dependencies"
-    ant.ant([antfile: "integrator.xml", dir: file("src/main")])
+    main = "org.apache.tools.ant.launch.Launcher"
+    classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/lib", "${projectDir}/src/main/resources")
+    workingDir file("${projectDir}/src/main")
+    args "-f"
+    args file("${projectDir}/src/main/integrator.xml")
 }
 
 // Distribution
@@ -164,19 +157,20 @@ copyDistTemp.outputs.dir distTempDir
 
 task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":xep:copyDistTemp", ":wordrtf:copyDistTemp", ":odt:copyDistTemp"]) {
     main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath + files(file("${distTempDir}"), file("${distTempDir}/lib"), file("${distTempDir}/resources"))
+    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+    workingDir distTempDir
     args "-f"
-    args "${distTempDir}/integrator.xml"
+    args file("${distTempDir}/integrator.xml")
 }
 
 task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
     main = "org.apache.tools.ant.launch.Launcher"
-    classpath = sourceSets.main.runtimeClasspath + files(file("${distTempDir}"), file("${distTempDir}/lib"), file("${distTempDir}/resources"))
-    workingDir "${distTempDir}"    
+    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+    workingDir distTempDir
     args "-f"
-    args "${distTempDir}/docsrc/build.xml"
-    args "-Dbasedir=${distTempDir}/docsrc"
-    args "-Ddita.home=${distTempDir}"
+    args file("${distTempDir}/docsrc/build.xml")
+    args "-Dbasedir=" + file("${distTempDir}/docsrc")
+    args "-Ddita.home=" + distTempDir
 }
 
 task distZip(type: Zip, dependsOn: [jar, generateDocs]) {
