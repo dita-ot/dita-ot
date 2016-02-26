@@ -5,7 +5,7 @@ jdk:
 before_script:
   - git submodule update --init --recursive
 script:
-  - ./gradlew check integrationTest --info --stacktrace
+  - ./gradlew check integrationTest --info --stacktrace --no-daemon
 branches:
   only:
   - /^(master|develop|hotfix\/.*|feature\/.*|release\/.*)$/
