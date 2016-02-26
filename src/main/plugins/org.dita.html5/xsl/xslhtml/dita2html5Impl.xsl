@@ -203,6 +203,7 @@
   <!-- Don't generate CSS classes for any attribute by default. -->
   <xsl:template match="@*" mode="css-class"/>
 
+  <xsl:include href="functions.xsl"/>
   <xsl:include href="tables.xsl"/>
   <xsl:include href="nav.xsl"/>
   

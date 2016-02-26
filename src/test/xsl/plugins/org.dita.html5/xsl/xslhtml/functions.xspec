@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+               xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
+               stylesheet="../../../../../../main/plugins/org.dita.html5/xsl/xslhtml/functions.xsl">
+
+  <x:scenario label="table:is-tbody-entry">
+    <x:scenario label="entry is in tbody">
+      <x:call function="table:is-tbody-entry">
+        <x:param name="el" select="//tbody/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <thead class="- topic/thead ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "></entry>
+                </row>
+              </thead>
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="entry is in thead">
+      <x:call function="table:is-tbody-entry">
+        <x:param name="el" select="//thead/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <thead class="- topic/thead ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "></entry>
+                </row>
+              </thead>
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="table:is-thead-entry">
+    <x:scenario label="entry is in tbody">
+      <x:call function="table:is-thead-entry">
+        <x:param name="el" select="//tbody/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <thead class="- topic/thead ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "></entry>
+                </row>
+              </thead>
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+
+    <x:scenario label="entry is in thead">
+      <x:call function="table:is-thead-entry">
+        <x:param name="el" select="//thead/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <thead class="- topic/thead ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "></entry>
+                </row>
+              </thead>
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="table:is-row-header">
+    <x:scenario label="is row header">
+      <x:call function="table:is-row-header">
+        <x:param name="node" select="//tbody/row/entry[1]">
+          <table class="- topic/table " rowheader="firstcol">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry " dita-ot:x="1"></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="is NOT row header">
+      <x:call function="table:is-row-header">
+        <x:param name="node" select="//tbody/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry " dita-ot:x="1"></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+
+</x:description>
