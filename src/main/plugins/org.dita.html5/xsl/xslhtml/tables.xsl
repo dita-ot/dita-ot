@@ -77,7 +77,7 @@
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="@frame | @pgwide | @scale" mode="css-class">
+  <xsl:template match="@pgwide" mode="css-class">
     <xsl:sequence select="dita-ot:css-class(.)"/>
   </xsl:template>
 

@@ -203,6 +203,11 @@
   <!-- Don't generate CSS classes for any attribute by default. -->
   <xsl:template match="@*" mode="css-class"/>
 
+  <!-- Display attributes group -->
+  <xsl:template match="@frame | @expanse | @scale" mode="css-class">
+    <xsl:sequence select="dita-ot:css-class((), .)"/>
+  </xsl:template>
+
   <xsl:include href="functions.xsl"/>
   <xsl:include href="tables.xsl"/>
   <xsl:include href="nav.xsl"/>

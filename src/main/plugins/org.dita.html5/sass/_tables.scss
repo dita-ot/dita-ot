@@ -43,48 +43,10 @@ table .desc {
   font-weight: bold;
 }
 
-// @frame
-
-.table--frame-top {
-  border-top: solid 1px;
-}
-
-.table--frame-bottom {
-  border-bottom: solid 1px;
-}
-
-.table--frame-topbot {
-  border-top: solid 1px;
-  border-bottom: solid 1px;
-}
-
-.table--frame-all {
-  border: solid 1px;
-}
-
-.table--frame-sides {
-  border-left: solid 1px;
-  border-right: solid 1px;
-}
-
-.table--frame-none {
-  border: 0;
-}
-
 // @pgwide
 
 .table--pgwide-1 {
   width: 100%;
-}
-
-// @scale
-
-$scale: 50 60 70 80 90 100 110 120 140 160 180 200;
-
-@each $value in $scale {
-  .table--scale-#{$value} {
-    font-size: unquote($value + '%');
-  }
 }
 
 // @align
