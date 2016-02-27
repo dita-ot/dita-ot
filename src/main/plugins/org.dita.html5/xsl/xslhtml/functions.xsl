@@ -5,6 +5,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
+                xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable"
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot table">
 
@@ -87,6 +88,41 @@
        table:get-entry-colspec($el)/@rowsep,
        table:get-current-table($el)/@rowsep,
        table:get-current-tgroup($el)/@rowsep)[1]
+    "/>
+  </xsl:function>
+
+  <xsl:function name="simpletable:is-body-entry" as="xs:boolean">
+    <xsl:param name="el" as="element()"/>
+
+    <xsl:sequence select="
+      contains($el/@class, ' topic/stentry ') and contains($el/../@class, ' topic/strow ')
+    "/>
+  </xsl:function>
+
+  <xsl:function name="simpletable:is-head-entry" as="xs:boolean">
+    <xsl:param name="el" as="element()"/>
+
+    <xsl:sequence select="
+      contains($el/@class, ' topic/stentry ') and contains($el/../@class, ' topic/sthead ')
+    "/>
+  </xsl:function>
+
+  <xsl:function name="simpletable:get-current-table" as="element()">
+    <xsl:param name="node" as="node()"/>
+
+    <xsl:sequence select="
+      $node/ancestor-or-self::*[contains(@class, ' topic/simpletable ')][1]
+    "/>
+  </xsl:function>
+
+  <xsl:function name="simpletable:is-keycol-entry" as="xs:boolean">
+    <xsl:param name="entry" as="element()"/>
+
+    <xsl:variable name="table" as="element()"
+      select="simpletable:get-current-table($entry)"/>
+
+    <xsl:sequence select="
+      $table/@keycol and xs:integer($table/@keycol) eq count($entry/preceding-sibling::*) + 1
     "/>
   </xsl:function>
 

@@ -200,8 +200,8 @@
     <xsl:attribute name="class" select="string-join($class, ' ')"/>
   </xsl:template>
 
-  <!-- Don't generate CSS classes for any attribute by default. -->
-  <xsl:template match="@*" mode="css-class"/>
+  <!-- Don't generate CSS classes for any element or attribute by default. -->
+  <xsl:template match="* | @*" mode="css-class"/>
 
   <!-- Display attributes group -->
   <xsl:template match="@frame | @expanse | @scale" mode="css-class">
@@ -210,6 +210,7 @@
 
   <xsl:include href="functions.xsl"/>
   <xsl:include href="tables.xsl"/>
+  <xsl:include href="simpletable.xsl"/>
   <xsl:include href="nav.xsl"/>
   
 </xsl:stylesheet>
