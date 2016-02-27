@@ -44,7 +44,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     /** Keys and values are absolute chimera paths, i.e. systems paths with fragments */
     LinkedHashMap<String, String> changeTable = null;
     /** Keys and values are absolute chimera paths, i.e. systems paths with fragments */
-    Map<String, String> conflictTable = null;
+    Map<URI, URI> conflictTable = null;
 
     Element rootTopicref = null;
 
@@ -114,7 +114,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      * @param conflictTable conflictTable
      * @param rootTopicref chunking topicref
      */
-    public void setup(final LinkedHashMap<String, String> changeTable, final Map<String, String> conflictTable,
+    public void setup(final LinkedHashMap<String, String> changeTable, final Map<URI, URI> conflictTable,
                       final Element rootTopicref,
                       final ChunkFilenameGenerator chunkFilenameGenerator) {
         this.changeTable = changeTable;
@@ -340,7 +340,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         if (idValue == null || newFileName.exists()) {
             final File t = newFileName;
             newFileName = resolve(filePath, generateFilename());
-            conflictTable.put(newFileName.getPath(), t.getPath());
+            conflictTable.put(newFileName.toURI(), t.toURI());
         }
         return newFileName;
     }
@@ -381,7 +381,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                     // if current @href value needs to be updated
                     String relative = getRelativeUnixPath(outputFile, currentParsingFile.getPath());
                     if (conflictTable.containsKey(outputFile.getPath())) {
-                        final String realoutputfile = conflictTable.get(outputFile.getPath());
+                        final String realoutputfile = new File(conflictTable.get(outputFile.toURI())).getAbsolutePath();
                         relative = getRelativeUnixPath(realoutputfile, currentParsingFile.getPath());
                     }
                     if (attrValue.startsWith(SHARP)) {

@@ -66,7 +66,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     // ChunkTopicParser assumes keys and values are chimera paths, i.e. systems paths with fragments.
     private final LinkedHashMap<String, String> changeTable = new LinkedHashMap<>(128);
 
-    private final Map<String, String> conflictTable = new HashMap<>(128);
+    private final Map<URI, URI> conflictTable = new HashMap<>(128);
 
     private boolean supportToNavigation;
 
@@ -170,10 +170,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
         File newFile = new File(inputFile.getParentFile().getAbsolutePath(), newFilename);
         if (newFile.exists()) {
             newFilename = chunkFilenameGenerator.generateFilename("Chunk", FILE_EXTENSION_DITA);
-            final String oldpath = newFile.getAbsolutePath();
             newFile = resolve(inputFile.getParentFile().getAbsolutePath(), newFilename);
             // Mark up the possible name changing, in case that references might be updated.
-            conflictTable.put(newFile.getAbsolutePath(), normalize(oldpath));
+            conflictTable.put(newFile.toURI(), newFile.toURI().normalize());
         }
         changeTable.put(newFile.getAbsolutePath(), newFile.getAbsolutePath());
 
@@ -577,10 +576,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * 
      * @return conflict table
      */
-    public Map<String, String> getConflicTable() {
-        for (final Map.Entry<String, String> e: conflictTable.entrySet()) {
-            assert new File(e.getKey()).isAbsolute();
-            assert new File(e.getValue()).isAbsolute();
+    public Map<URI, URI> getConflicTable() {
+        for (final Map.Entry<URI, URI> e: conflictTable.entrySet()) {
+            assert e.getKey().isAbsolute();
+            assert e.getValue().isAbsolute();
         }
         return conflictTable;
     }

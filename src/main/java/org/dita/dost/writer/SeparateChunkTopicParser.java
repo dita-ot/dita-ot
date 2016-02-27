@@ -155,7 +155,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 if (outputFileName.exists()) {
                     final File t = outputFileName;
                     outputFileName = resolve(filePath, generateFilename());
-                    conflictTable.put(outputFileName.getPath(), t.getPath());
+                    conflictTable.put(outputFileName.toURI(), t.toURI());
                     dotchunk = false;
                 }
                 output = new OutputStreamWriter(new FileOutputStream(outputFileName), UTF8);

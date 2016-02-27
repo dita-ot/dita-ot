@@ -14,6 +14,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
@@ -30,7 +31,7 @@ import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
 public final class TopicRefWriter extends AbstractXMLFilter {
 
     private Map<String, String> changeTable = null;
-    private Map<String, String> conflictTable = null;
+    private Map<URI, URI> conflictTable = null;
     private File currentFileDir = null;
     /** Using for rectify relative path of xml */
     private String fixpath = null;
@@ -47,7 +48,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
      * 
      * @param conflictTable conflictTable
      */
-    public void setup(final Map<String, String> conflictTable) {
+    public void setup(final Map<URI, URI> conflictTable) {
         for (final Map.Entry<String, String> e: changeTable.entrySet()) {
             assert new File(e.getKey()).isAbsolute();
             assert new File(e.getValue()).isAbsolute();
@@ -182,7 +183,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
             if (changeTarget == null) {
                 return hrefValue;// no change
             } else {
-                final String conTarget = conflictTable.get(stripFragment(changeTarget));
+                final String conTarget = new File(conflictTable.get(stripFragment(changeTarget))).getAbsolutePath();
                 if (conTarget != null && !conTarget.isEmpty()) {
                     final String p = getRelativeUnixPath(rootPathName, conTarget);
                     if (elementID == null) {

@@ -99,8 +99,9 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
 
         final Map<String, String> changeTable = mapReader.getChangeTable();
         if (hasChanges(changeTable)) {
-            updateList(changeTable, mapReader.getConflicTable());
-            updateRefOfDita(changeTable, mapReader.getConflicTable());
+            final Map<URI, URI> conflicTable = mapReader.getConflicTable();
+            updateList(changeTable, conflicTable);
+            updateRefOfDita(changeTable, conflicTable);
         }
 
         return null;
@@ -143,7 +144,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * Update href attributes in ditamap and topic files.
      */
-    private void updateRefOfDita(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
+    private void updateRefOfDita(final Map<String, String> changeTable, final Map<URI, URI> conflictTable) {
         final TopicRefWriter topicRefWriter = new TopicRefWriter();
         topicRefWriter.setLogger(logger);
         topicRefWriter.setJob(job);
@@ -167,7 +168,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * Update Job configuration to include new generated files
      */
-    private void updateList(final Map<String, String> changeTable, final Map<String, String> conflictTable) {
+    private void updateList(final Map<String, String> changeTable, final Map<URI, URI> conflictTable) {
         final URI xmlDitalist = new File(job.tempDir, "dummy.xml").toURI();
 
         final Set<URI> hrefTopics = new HashSet<>();
@@ -268,7 +269,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             final String oldFile = entry.getKey();
             if (entry.getValue().equals(oldFile)) {
                 // original topic file
-                final String targetPath = conflictTable.get(entry.getKey());
+                // FIXME
+                final String targetPath = new File(conflictTable.get(new File(entry.getKey()).toURI())).getAbsolutePath();
                 if (targetPath != null) {
                     final URI target = new File(targetPath).toURI();
                     if (!new File(target).exists()) {

@@ -173,7 +173,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     if (outputFileName.exists() && !MAP_MAP.matches(classValue)) {
                         final File t = outputFileName;
                         outputFileName = resolve(filePath, generateFilename());
-                        conflictTable.put(outputFileName.getPath(), t.getPath());
+                        conflictTable.put(outputFileName.toURI(), t.toURI());
                     }
                     // add newly generated file to changTable
                     // the new entry in changeTable has same key and value
@@ -330,7 +330,8 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toURI().toString());
 
                 if ((conflictTable.get(outputFileName.getPath()) != null)) {
-                    final String relativePath = getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP, conflictTable.get(outputFileName.getPath()));
+                    final String relativePath = getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
+                            new File(conflictTable.get(outputFileName.toURI())).getAbsolutePath());
                     String path2project = getRelativeUnixPath(relativePath);
                     if (null == path2project) {
                         path2project = "";
