@@ -8,18 +8,20 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
-import static org.dita.dost.util.URLUtils.toFile;
-import static org.dita.dost.util.XMLUtils.*;
-
-import java.io.File;
-import java.util.Map;
-
 import org.dita.dost.exception.DITAOTException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
+
+import java.io.File;
+import java.util.Map;
+
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.FileUtils.setFragment;
+import static org.dita.dost.util.FileUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
 
 /**
  * TopicRefWriter which updates the linking elements' value according to the

@@ -176,4 +176,58 @@ public class URLUtilsTest {
         assertEquals(new URI("baz.qux/foo-1.bar"), URLUtils.addSuffix(new URI("baz.qux/foo.bar"), "-1"));
     }
 
+    @Test
+    public void testGetTopicId() {
+        assertEquals("bar", URLUtils.getTopicID("foo#bar/baz"));
+        assertEquals("bar", URLUtils.getTopicID("foo#bar"));
+        assertNull(URLUtils.getTopicID("foo#"));
+        assertNull(URLUtils.getTopicID("foo"));
+        assertEquals("bar", URLUtils.getTopicID("#bar/baz"));
+        assertEquals("bar", URLUtils.getTopicID("#bar"));
+        assertNull(URLUtils.getTopicID(""));
+        try {
+            assertNull(URLUtils.getTopicID(null));
+            fail();
+        } catch (final NullPointerException e) {}
+    }
+
+    @Test
+    public void testGetElementId() {
+        assertEquals("baz", URLUtils.getElementID("foo#bar/baz"));
+        assertNull(URLUtils.getElementID("foo#bar"));
+        assertNull(URLUtils.getElementID("foo#"));
+        assertNull(URLUtils.getElementID("foo"));
+        assertEquals("baz", URLUtils.getElementID("#bar/baz"));
+        assertNull(URLUtils.getElementID("#bar"));
+        assertNull(URLUtils.getElementID(""));
+        try {
+            assertNull(URLUtils.getElementID(null));
+            fail();
+        } catch (final NullPointerException e) {}
+    }
+
+    @Test
+    public void testSetElementId() {
+        assertEquals("foo#bar/qux", URLUtils.setElementID("foo#bar/baz", "qux"));
+        assertEquals("foo#bar/qux", URLUtils.setElementID("foo#bar", "qux"));
+        try {
+            URLUtils.setElementID("foo#", "qux");
+            fail();
+        } catch (final IllegalArgumentException e) {}
+        try {
+            URLUtils.setElementID("foo", "qux");
+            fail();
+        } catch (final IllegalArgumentException e) {}
+
+        assertEquals("foo#bar", URLUtils.setElementID("foo#bar/baz", null));
+        assertEquals("foo#bar", URLUtils.setElementID("foo#bar", null));
+        assertEquals("foo", URLUtils.setElementID("foo#", null));
+        assertEquals("foo", URLUtils.setElementID("foo", null));
+
+        try {
+            URLUtils.setElementID(null, null);
+            fail();
+        } catch (final NullPointerException e) {}
+    }
+
 }

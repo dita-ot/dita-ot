@@ -602,61 +602,6 @@ public final class FileUtils {
     }
 
     /**
-     * Retrieve the topic ID from the path
-     * 
-     * @param relativePath
-     * @return topic ID, may be {@code null}
-     */
-    @Deprecated
-    public static String getTopicID(final String relativePath) {
-        final String fragment = getFragment(relativePath);
-        if (fragment != null) {
-            final String id = fragment.lastIndexOf(SLASH) != -1
-                              ? fragment.substring(0, fragment.lastIndexOf(SLASH))
-                              : fragment;
-            return id.isEmpty() ? null : id;
-        }
-        return null;
-    }
-    
-    /**
-     * Retrieve the element ID from the path
-     * 
-     * @param relativePath
-     * @return element ID, may be {@code null}
-     */
-    @Deprecated
-    public static String getElementID(final String relativePath) {
-        final String fragment = getFragment(relativePath);
-        if (fragment != null) {
-            if (fragment.lastIndexOf(SLASH) != -1) {
-                final String id = fragment.substring(fragment.lastIndexOf(SLASH) + 1);
-                return id.isEmpty() ? null : id;
-            }
-        }
-        return null;
-    }
-    
-    /**
-     * Set the element ID from the path
-     * 
-     * @param relativePath
-     * @param id element ID
-     * @return element ID, may be {@code null}
-     */
-    @Deprecated
-    public static String setElementID(final String relativePath, final String id) {
-        String topic = getTopicID(relativePath);
-        if (topic != null) {
-            return setFragment(relativePath, topic + (id != null ? SLASH + id : ""));
-        } else if (id == null) {
-            return stripFragment(relativePath);
-        } else {
-            throw new IllegalArgumentException(relativePath);
-        }
-    }
-    
-    /**
      * Get fragment part from path or return default fragment.
      * 
      * @param path path
