@@ -161,18 +161,13 @@ public final class Job {
     private void read() throws IOException {
         lastModified = jobFile.lastModified();
         if (jobFile.exists()) {
-        	InputStream in = null;
-            try {
+            try (final InputStream in = new FileInputStream(jobFile)) {
                 final XMLReader parser = XMLUtils.getXMLReader();
                 parser.setContentHandler(new JobHandler(prop, files));
-                in = new FileInputStream(jobFile);
+
                 parser.parse(new InputSource(in));
             } catch (final SAXException e) {
                 throw new IOException("Failed to read job file: " + e.getMessage());
-            } finally {
-            	if (in != null) {
-            		in.close();
-            	}
             }
         } else {
             // defaults

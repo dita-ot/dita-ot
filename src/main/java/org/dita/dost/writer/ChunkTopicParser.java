@@ -201,7 +201,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 // TopicRefWriter's updateHref method, very important!!!
                 changeTable.put(path, newpath);
                 // update current element's @href value
-                topicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP, newpath));
+                topicref.setAttribute(ATTRIBUTE_NAME_HREF, toURI(getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP, newpath)).toString());
 
                 if (getFragment(parseFilePath) != null) {
                     targetTopicId = getFragment(parseFilePath);
