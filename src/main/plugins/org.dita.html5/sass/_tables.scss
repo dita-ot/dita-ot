@@ -88,3 +88,18 @@ $valign: top bottom middle;
 .rowsep-1 {
   border-bottom: 1px solid;
 }
+
+// simpletable
+
+.stentry {
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.stentry:last-child {
+  border-right: 0;
+}
+
+.strow:last-child .stentry {
+  border-bottom: 0;
+}
