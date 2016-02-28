@@ -58,7 +58,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     @Override
     public void write(final File fileDir) throws DITAOTException {
         // pass map's directory path
-        filePath = fileDir;
+        filePath = fileDir.toURI();
         try {
             output = new StringWriter();
             processChunk(rootTopicref, null);
@@ -73,15 +73,15 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         }
     }
 
-    private void processChunk(final Element topicref, final File outputFile) {
-        final String hrefValue = getValue(topicref, ATTRIBUTE_NAME_HREF);
+    private void processChunk(final Element topicref, final URI outputFile) {
+        final URI hrefValue = toURI(getValue(topicref, ATTRIBUTE_NAME_HREF));
         final Collection<String> chunkValue = split(getValue(topicref, ATTRIBUTE_NAME_CHUNK));
-        final String copytoValue = getValue(topicref, ATTRIBUTE_NAME_COPY_TO);
+        final URI copytoValue = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
         final String scopeValue = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
         final String classValue = getValue(topicref, ATTRIBUTE_NAME_CLASS);
         final String processRoleValue = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
 
-        File outputFileName = outputFile;
+        URI outputFileName = outputFile;
         Writer tempWriter = null;
         Set<String> tempTopicID = null;
 
@@ -92,10 +92,10 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         boolean needWriteDitaTag = true;
 
         try {
-            String parseFilePath;
+            URI parseFilePath;
             if (copytoValue != null && !chunkValue.contains(CHUNK_TO_CONTENT)) {
-                if (getFragment(hrefValue) != null) {
-                    parseFilePath = setFragment(copytoValue, getFragment(hrefValue));
+                if (hrefValue.getFragment() != null) {
+                    parseFilePath = setFragment(copytoValue, hrefValue.getFragment());
                 } else {
                     parseFilePath = copytoValue;
                 }
@@ -110,12 +110,12 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             if (copytoValue != null && chunkValue.contains(CHUNK_TO_CONTENT)
                     && hrefValue != null) {
                 copyto.add(copytoValue);
-                if (getFragment(hrefValue) != null) {
+                if (hrefValue.getFragment() != null) {
                     copytoSource.add(stripFragment(hrefValue));
-                    copytotarget2source.put(toURI(copytoValue), toURI(stripFragment(hrefValue)));
+                    copytotarget2source.put(copytoValue, stripFragment(hrefValue));
                 } else {
                     copytoSource.add(hrefValue);
-                    copytotarget2source.put(toURI(copytoValue), toURI(hrefValue));
+                    copytotarget2source.put(copytoValue, hrefValue);
                 }
             }
 
@@ -138,61 +138,61 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                         // content.
                         // No need to parse any file, just generate a stub
                         // output.
-                        outputFileName = resolve(filePath, parseFilePath);
+                        outputFileName = filePath.resolve(parseFilePath);
                         needWriteDitaTag = false;
                     } else if (copytoValue != null) {
                         // use @copy-to value as the new file name
-                        outputFileName = resolve(filePath, copytoValue);
+                        outputFileName = filePath.resolve(copytoValue);
                     } else if (hrefValue != null) {
                         // try to use href value as the new file name
                         if (chunkValue.contains(CHUNK_SELECT_TOPIC)
                                 || chunkValue.contains(CHUNK_SELECT_BRANCH)) {
-                            if (getFragment(hrefValue) != null) {
+                            if (hrefValue.getFragment() != null) {
                                 // if we have an ID here, use it.
-                                outputFileName = resolve(filePath, getFragment(hrefValue) + FILE_EXTENSION_DITA);
+                                outputFileName = filePath.resolve(hrefValue.getFragment() + FILE_EXTENSION_DITA);
                             } else {
                                 // Find the first topic id in target file if
                                 // any.
-                                final String firstTopic = getFirstTopicId(resolve(filePath, hrefValue).getPath());
+                                final String firstTopic = getFirstTopicId(filePath.resolve(hrefValue).getPath());
                                 if (firstTopic != null) {
-                                    outputFileName = resolve(filePath, firstTopic + FILE_EXTENSION_DITA);
+                                    outputFileName = filePath.resolve(firstTopic + FILE_EXTENSION_DITA);
                                 } else {
-                                    outputFileName = resolve(filePath, hrefValue);
+                                    outputFileName = filePath.resolve(hrefValue);
                                 }
                             }
                         } else {
                             // otherwise, use the href value instead
-                            outputFileName = resolve(filePath, hrefValue);
+                            outputFileName = filePath.resolve(hrefValue);
                         }
                     } else {
                         // use randomly generated file name
-                        outputFileName = resolve(filePath, generateFilename());
+                        outputFileName = filePath.resolve(generateFilename());
                     }
 
                     // Check if there is any conflict
-                    if (outputFileName.exists() && !MAP_MAP.matches(classValue)) {
-                        final File t = outputFileName;
-                        outputFileName = resolve(filePath, generateFilename());
-                        conflictTable.put(outputFileName.toURI(), t.toURI());
+                    if (new File(outputFileName).exists() && !MAP_MAP.matches(classValue)) {
+                        final URI t = outputFileName;
+                        outputFileName = filePath.resolve(generateFilename());
+                        conflictTable.put(outputFileName, t);
                     }
                     // add newly generated file to changTable
                     // the new entry in changeTable has same key and value
                     // in order to indicate it is a newly generated file
-                    changeTable.put(outputFileName.toURI(), outputFileName.toURI());
+                    changeTable.put(outputFileName, outputFileName);
                 }
                 // "by-topic" couldn't reach here
                 this.outputFile = outputFileName;
 
-                final URI path = filePath.toURI().resolve(parseFilePath);
+                final URI path = filePath.resolve(parseFilePath);
                 URI newpath;
                 if (path.getFragment() != null) {
-                    newpath = setFragment(outputFileName.toURI(), path.getFragment());
+                    newpath = setFragment(outputFileName, path.getFragment());
                 } else {
                     final String firstTopicID = getFirstTopicId(new File(path).getAbsolutePath());
                     if (firstTopicID != null) {
-                        newpath = setFragment(outputFileName.toURI(), firstTopicID);
+                        newpath = setFragment(outputFileName, firstTopicID);
                     } else {
-                        newpath = outputFileName.toURI();
+                        newpath = outputFileName;
                     }
                 }
                 // add file name changes to changeTable, this will be
@@ -200,10 +200,10 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 // TopicRefWriter's updateHref method, very important!!!
                 changeTable.put(path, newpath);
                 // update current element's @href value
-                topicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(new File(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP).toURI(), newpath).toString());
+                topicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(filePath.resolve(FILE_NAME_STUB_DITAMAP), newpath).toString());
 
-                if (getFragment(parseFilePath) != null) {
-                    targetTopicId = getFragment(parseFilePath);
+                if (parseFilePath.getFragment() != null) {
+                    targetTopicId = parseFilePath.getFragment();
                 }
 
                 final String s = getChunkByToken(chunkValue, "select-", null);
@@ -215,14 +215,14 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                         selectMethod = CHUNK_SELECT_DOCUMENT;
                     }
                 }
-                final File tempPath = currentParsingFile;
-                currentParsingFile = resolve(filePath, parseFilePath);
+                final URI tempPath = currentParsingFile;
+                currentParsingFile = filePath.resolve(parseFilePath);
 
                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                     currentParsingFileTopicIDChangeTable = new HashMap<>();
                     // TODO recursive point
-                    logger.info("Processing " + currentParsingFile.toURI());
-                    reader.parse(currentParsingFile.toURI().toString());
+                    logger.info("Processing " + currentParsingFile);
+                    reader.parse(currentParsingFile.toString());
                     if (currentParsingFileTopicIDChangeTable.size() > 0) {
                         final URI href = toURI(topicref.getAttribute(ATTRIBUTE_NAME_HREF));
                         final String pathtoElem = href.getFragment() != null
@@ -296,12 +296,12 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
      * @param parentResult XML content to insert into
      * @param tmpContent XML content to insert
      */
-    private void insertAfter(String hrefValue, StringBuffer parentResult, CharSequence tmpContent) {
+    private void insertAfter(final URI hrefValue, final StringBuffer parentResult, final CharSequence tmpContent) {
         int insertpoint = parentResult.lastIndexOf("</");
         final int end = parentResult.indexOf(">", insertpoint);
 
         if (insertpoint == -1 || end == -1) {
-            logger.error(MessageUtils.getInstance().getMessage("DOTJ033E", hrefValue).toString());
+            logger.error(MessageUtils.getInstance().getMessage("DOTJ033E", hrefValue.toString()).toString());
         } else {
             if (ELEMENT_NAME_DITA.equals(parentResult.substring(insertpoint, end).trim())) {
                 insertpoint = parentResult.lastIndexOf("</", insertpoint - 1);
@@ -311,26 +311,27 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     // flush the buffer to file after processing is finished
-    private void writeToContentChunk(final String tmpContent, final File outputFileName, final boolean needWriteDitaTag) throws IOException {
+    private void writeToContentChunk(final String tmpContent, final URI outputFileName, final boolean needWriteDitaTag) throws IOException {
+        assert outputFileName.isAbsolute();
         logger.info("Writing " + outputFileName);
         OutputStreamWriter ditaFileOutput = null;
         try {
-            ditaFileOutput = new OutputStreamWriter(new FileOutputStream(outputFileName), UTF8);
+            ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8);
             if (outputFileName.getPath().equals(changeTable.get(outputFileName.getPath()))) {
                 // if the output file is newly generated file
                 // write the xml header and workdir PI into new file
                 writeStartDocument(ditaFileOutput);
-                final File workDir = outputFileName.getParentFile().getAbsoluteFile();
+                final URI workDir = outputFileName.resolve(".");
                 if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
-                    writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, workDir.getAbsolutePath());
+                    writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, new File(workDir).getAbsolutePath());
                 } else {
-                    writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, UNIX_SEPARATOR + workDir.getAbsolutePath());
+                    writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET, UNIX_SEPARATOR + new File(workDir).getAbsolutePath());
                 }
-                writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toURI().toString());
+                writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toString());
 
                 if ((conflictTable.get(outputFileName.getPath()) != null)) {
                     final String relativePath = getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
-                            new File(conflictTable.get(outputFileName.toURI())).getAbsolutePath());
+                            new File(conflictTable.get(outputFileName)).getAbsolutePath());
                     String path2project = getRelativeUnixPath(relativePath);
                     if (null == path2project) {
                         path2project = "";

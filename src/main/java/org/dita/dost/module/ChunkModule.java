@@ -82,7 +82,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
 
         try {
             final File mapFile = new File(job.tempDir.toURI().resolve(job.getInputMap()));
-            if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile)) {
+            if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile.toURI())) {
                 for (final FileInfo f : job.getFileInfo()) {
                     if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                         mapReader.read(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
@@ -129,11 +129,11 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      * @return {@code true} if Eclipse specialization, otherwise {@code false}
      * @throws DITAOTException if reading ditamap fails
      */
-    private boolean isEclipseMap(final File mapFile) throws DITAOTException {
+    private boolean isEclipseMap(final URI mapFile) throws DITAOTException {
         final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
         Document doc;
         try {
-            doc = builder.parse(mapFile);
+            doc = builder.parse(mapFile.toString());
         } catch (final SAXException | IOException e) {
             throw new DITAOTException("Failed to parse input map: " + e.getMessage(), e);
         }
@@ -169,7 +169,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      * Update Job configuration to include new generated files
      */
     private void updateList(final Map<URI, URI> changeTable, final Map<URI, URI> conflictTable) {
-        final URI xmlDitalist = new File(job.tempDir, "dummy.xml").toURI();
+        final URI xmlDitalist = job.tempDir.toURI().resolve("dummy.xml");
 
         final Set<URI> hrefTopics = new HashSet<>();
         for (final FileInfo f : job.getFileInfo()) {
