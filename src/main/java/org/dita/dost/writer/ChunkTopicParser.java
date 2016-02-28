@@ -178,22 +178,21 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     // add newly generated file to changTable
                     // the new entry in changeTable has same key and value
                     // in order to indicate it is a newly generated file
-                    changeTable.put(outputFileName.getPath(), outputFileName.getPath());
+                    changeTable.put(outputFileName.toURI(), outputFileName.toURI());
                 }
                 // "by-topic" couldn't reach here
                 this.outputFile = outputFileName;
 
-                final String path = resolveTopic(filePath, parseFilePath);
-                // FIXME: Should be URI
-                String newpath;
-                if (getFragment(path) != null) {
-                    newpath = setFragment(outputFileName.getPath(), getFragment(path));
+                final URI path = filePath.toURI().resolve(parseFilePath);
+                URI newpath;
+                if (path.getFragment() != null) {
+                    newpath = setFragment(outputFileName.toURI(), path.getFragment());
                 } else {
-                    final String firstTopicID = getFirstTopicId(path);
+                    final String firstTopicID = getFirstTopicId(new File(path).getAbsolutePath());
                     if (firstTopicID != null) {
-                        newpath = setFragment(outputFileName.getPath(), firstTopicID);
+                        newpath = setFragment(outputFileName.toURI(), firstTopicID);
                     } else {
-                        newpath = outputFileName.getPath();
+                        newpath = outputFileName.toURI();
                     }
                 }
                 // add file name changes to changeTable, this will be
@@ -201,7 +200,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 // TopicRefWriter's updateHref method, very important!!!
                 changeTable.put(path, newpath);
                 // update current element's @href value
-                topicref.setAttribute(ATTRIBUTE_NAME_HREF, toURI(getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP, newpath)).toString());
+                topicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(new File(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP).toURI(), newpath).toString());
 
                 if (getFragment(parseFilePath) != null) {
                     targetTopicId = getFragment(parseFilePath);

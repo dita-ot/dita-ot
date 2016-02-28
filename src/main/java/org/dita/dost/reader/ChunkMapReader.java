@@ -12,6 +12,7 @@ import static org.dita.dost.util.FileUtils.*;
 import static org.apache.commons.io.FilenameUtils.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.join;
+import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.close;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getElementNode;
@@ -64,7 +65,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     /** Input file's parent directory */
     private File fileDir = null;
     // ChunkTopicParser assumes keys and values are chimera paths, i.e. systems paths with fragments.
-    private final LinkedHashMap<String, String> changeTable = new LinkedHashMap<>(128);
+    private final LinkedHashMap<URI, URI> changeTable = new LinkedHashMap<>(128);
 
     private final Map<URI, URI> conflictTable = new HashMap<>(128);
 
@@ -174,7 +175,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
             // Mark up the possible name changing, in case that references might be updated.
             conflictTable.put(newFile.toURI(), newFile.toURI().normalize());
         }
-        changeTable.put(newFile.getAbsolutePath(), newFile.getAbsolutePath());
+        changeTable.put(newFile.getAbsoluteFile().toURI(), newFile.getAbsoluteFile().toURI());
 
         // change the class attribute to "topicref"
         final String originClassValue = root.getAttribute(ATTRIBUTE_NAME_CLASS);
@@ -338,7 +339,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 }
                 final String processingRole = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
-                    changeTable.put(currentPath, currentPath);
+                    changeTable.put(toURI(currentPath), toURI(currentPath));
                 }
             }
             processChildTopicref(topicref);
@@ -362,7 +363,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         root.appendChild(topicref);
         // generate new file
         final File navmap = resolve(fileDir, newMapFile);
-        changeTable.put(navmap.getPath(), navmap.getPath());
+        changeTable.put(stripFragment(navmap.toURI()), stripFragment(navmap.toURI()));
         outputMapFile(navmap, buildOutputDocument(root));
     }
 
@@ -563,10 +564,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * 
      * @return map of changed files
      */
-    public Map<String, String> getChangeTable() {
-        for (final Map.Entry<String, String> e: changeTable.entrySet()) {
-            assert new File(e.getKey()).isAbsolute();
-            assert new File(e.getValue()).isAbsolute();
+    public Map<URI, URI> getChangeTable() {
+        for (final Map.Entry<URI, URI> e: changeTable.entrySet()) {
+            assert e.getKey().isAbsolute();
+            assert e.getValue().isAbsolute();
         }
         return Collections.unmodifiableMap(changeTable);
     }

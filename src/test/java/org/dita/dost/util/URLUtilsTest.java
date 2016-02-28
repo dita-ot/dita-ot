@@ -177,14 +177,14 @@ public class URLUtilsTest {
     }
 
     @Test
-    public void testGetTopicId() {
-        assertEquals("bar", URLUtils.getTopicID("foo#bar/baz"));
-        assertEquals("bar", URLUtils.getTopicID("foo#bar"));
-        assertNull(URLUtils.getTopicID("foo#"));
-        assertNull(URLUtils.getTopicID("foo"));
-        assertEquals("bar", URLUtils.getTopicID("#bar/baz"));
-        assertEquals("bar", URLUtils.getTopicID("#bar"));
-        assertNull(URLUtils.getTopicID(""));
+    public void testGetTopicId() throws URISyntaxException {
+        assertEquals("bar", URLUtils.getTopicID(new URI("foo#bar/baz")));
+        assertEquals("bar", URLUtils.getTopicID(new URI("foo#bar")));
+        assertNull(URLUtils.getTopicID(new URI("foo#")));
+        assertNull(URLUtils.getTopicID(new URI("foo")));
+        assertEquals("bar", URLUtils.getTopicID(new URI("#bar/baz")));
+        assertEquals("bar", URLUtils.getTopicID(new URI("#bar")));
+        assertNull(URLUtils.getTopicID(new URI("")));
         try {
             assertNull(URLUtils.getTopicID(null));
             fail();
@@ -207,22 +207,22 @@ public class URLUtilsTest {
     }
 
     @Test
-    public void testSetElementId() {
-        assertEquals("foo#bar/qux", URLUtils.setElementID("foo#bar/baz", "qux"));
-        assertEquals("foo#bar/qux", URLUtils.setElementID("foo#bar", "qux"));
+    public void testSetElementId() throws URISyntaxException {
+        assertEquals(new URI("foo#bar/qux"), URLUtils.setElementID(new URI("foo#bar/baz"), "qux"));
+        assertEquals(new URI("foo#bar/qux"), URLUtils.setElementID(new URI("foo#bar"), "qux"));
         try {
-            URLUtils.setElementID("foo#", "qux");
+            URLUtils.setElementID(new URI("foo#"), "qux");
             fail();
         } catch (final IllegalArgumentException e) {}
         try {
-            URLUtils.setElementID("foo", "qux");
+            URLUtils.setElementID(new URI("foo"), "qux");
             fail();
         } catch (final IllegalArgumentException e) {}
 
-        assertEquals("foo#bar", URLUtils.setElementID("foo#bar/baz", null));
-        assertEquals("foo#bar", URLUtils.setElementID("foo#bar", null));
-        assertEquals("foo", URLUtils.setElementID("foo#", null));
-        assertEquals("foo", URLUtils.setElementID("foo", null));
+        assertEquals(new URI("foo#bar"), URLUtils.setElementID(new URI("foo#bar/baz"), null));
+        assertEquals(new URI("foo#bar"), URLUtils.setElementID(new URI("foo#bar"), null));
+        assertEquals(new URI("foo"), URLUtils.setElementID(new URI("foo#"), null));
+        assertEquals(new URI("foo"), URLUtils.setElementID(new URI("foo"), null));
 
         try {
             URLUtils.setElementID(null, null);

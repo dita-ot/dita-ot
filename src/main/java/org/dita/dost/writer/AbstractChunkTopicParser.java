@@ -27,8 +27,8 @@ import java.util.*;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
-import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**
@@ -42,7 +42,7 @@ import static org.dita.dost.util.XMLUtils.*;
 public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     /** Keys and values are absolute chimera paths, i.e. systems paths with fragments */
-    LinkedHashMap<String, String> changeTable = null;
+    LinkedHashMap<URI, URI> changeTable = null;
     /** Keys and values are absolute chimera paths, i.e. systems paths with fragments */
     Map<URI, URI> conflictTable = null;
 
@@ -114,7 +114,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      * @param conflictTable conflictTable
      * @param rootTopicref chunking topicref
      */
-    public void setup(final LinkedHashMap<String, String> changeTable, final Map<URI, URI> conflictTable,
+    public void setup(final LinkedHashMap<URI, URI> changeTable, final Map<URI, URI> conflictTable,
                       final Element rootTopicref,
                       final ChunkFilenameGenerator chunkFilenameGenerator) {
         this.changeTable = changeTable;
@@ -262,11 +262,11 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                         writeProcessingInstruction(output, PI_WORKDIR_TARGET, UNIX_SEPARATOR + filePath);
                     }
                     writeProcessingInstruction(output, PI_WORKDIR_TARGET_URI, filePath.toURI().toString());
-                    changeTable.put(outputFile.getPath(), outputFile.getPath());
+                    changeTable.put(outputFile.toURI(), outputFile.toURI());
                     if (idValue != null) {
-                        changeTable.put(setFragment(currentParsingFile.getPath(), idValue), setFragment(outputFile.getPath(), idValue));
+                        changeTable.put(setFragment(currentParsingFile.toURI(), idValue), setFragment(outputFile.toURI(), idValue));
                     } else {
-                        changeTable.put(currentParsingFile.getPath(), outputFile.getPath());
+                        changeTable.put(currentParsingFile.toURI(), outputFile.toURI());
                     }
                     // create a new child element in separate case topicref is equals to parameter
                     // element in separateChunk(Element element)
@@ -304,9 +304,9 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                         // if file name has been changed, add an entry in changeTable
                         if (!currentParsingFile.equals(outputFile)) {
                             if (idValue != null) {
-                                changeTable.put(setFragment(currentParsingFile.getPath(), idValue), setFragment(outputFile.getPath(), idValue));
+                                changeTable.put(setFragment(currentParsingFile.toURI(), idValue), setFragment(outputFile.toURI(), idValue));
                             } else {
-                                changeTable.put(currentParsingFile.getPath(), outputFile.getPath());
+                                changeTable.put(stripFragment(currentParsingFile.toURI()), stripFragment(outputFile.toURI()));
                             }
                         }
                     }
@@ -320,7 +320,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                     skipLevel = 0;
                     startFromFirstTopic = false;
                     if (!currentParsingFile.equals(outputFile)) {
-                        changeTable.put(setFragment(currentParsingFile.getPath(), idValue), setFragment(outputFile.getPath(), idValue));
+                        changeTable.put(setFragment(currentParsingFile.toURI(), idValue), setFragment(outputFile.toURI(), idValue));
                     }
                 }
             }
@@ -361,14 +361,14 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                         attrValue = chunkFilenameGenerator.generateID();
                         topicID.add(attrValue);
 
-                        final String tmpValId = changeTable.get(setFragment(currentParsingFile.getPath(), idValue));
-                        if (tmpValId != null && tmpValId.equals(setFragment(outputFile.getPath(), idValue))) {
-                            changeTable.put(setFragment(currentParsingFile.getPath(), idValue), setFragment(outputFile.getPath(), attrValue));
+                        final URI tmpValId = changeTable.get(setFragment(currentParsingFile.toURI(), idValue));
+                        if (tmpValId != null && tmpValId.equals(setFragment(outputFile.toURI(), idValue))) {
+                            changeTable.put(setFragment(currentParsingFile.toURI(), idValue), setFragment(outputFile.toURI(), attrValue));
                         }
 
-                        final String tmpVal = changeTable.get(currentParsingFile.getPath());
-                        if (tmpVal != null && tmpVal.equals(setFragment(outputFile.getPath(), idValue))) {
-                            changeTable.put(currentParsingFile.getPath(), setFragment(outputFile.getPath(), attrValue));
+                        final URI tmpVal = changeTable.get(currentParsingFile.toURI());
+                        if (tmpVal != null && tmpVal.equals(setFragment(outputFile.toURI(), idValue))) {
+                            changeTable.put(currentParsingFile.toURI(), setFragment(outputFile.toURI(), attrValue));
                         }
                         currentParsingFileTopicIDChangeTable.put(oldAttrValue, attrValue);
                     } else {

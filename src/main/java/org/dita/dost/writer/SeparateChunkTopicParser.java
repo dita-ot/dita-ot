@@ -161,10 +161,10 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 output = new OutputStreamWriter(new FileOutputStream(outputFileName), UTF8);
                 outputFile = outputFileName;
                 if (!dotchunk) {
-                    changeTable.put(resolveTopic(filePath, parseFilePath),
-                            setFragment(outputFileName.getPath(), id));
+                    changeTable.put(filePath.toURI().resolve(parseFilePath),
+                            setFragment(outputFileName.toURI(), id));
                     // new generated file
-                    changeTable.put(outputFileName.getPath(), outputFileName.getPath());
+                    changeTable.put(outputFileName.toURI(), outputFileName.toURI());
                 }
                 // change the href value
                 if (firstTopicID == null) {

@@ -706,14 +706,14 @@ public final class URLUtils {
      * @param id element ID
      * @return element ID, may be {@code null}
      */
-    public static String setElementID(final String relativePath, final String id) {
+    public static URI setElementID(final URI relativePath, final String id) {
         String topic = getTopicID(relativePath);
         if (topic != null) {
-            return FileUtils.setFragment(relativePath, topic + (id != null ? SLASH + id : ""));
+            return setFragment(relativePath, topic + (id != null ? SLASH + id : ""));
         } else if (id == null) {
-            return FileUtils.stripFragment(relativePath);
+            return stripFragment(relativePath);
         } else {
-            throw new IllegalArgumentException(relativePath);
+            throw new IllegalArgumentException(relativePath.toString());
         }
     }
 
@@ -740,8 +740,8 @@ public final class URLUtils {
      * @param relativePath
      * @return topic ID, may be {@code null}
      */
-    public static String getTopicID(final String relativePath) {
-        final String fragment = FileUtils.getFragment(relativePath);
+    public static String getTopicID(final URI relativePath) {
+        final String fragment = relativePath.getFragment();
         if (fragment != null) {
             final String id = fragment.lastIndexOf(SLASH) != -1
                               ? fragment.substring(0, fragment.lastIndexOf(SLASH))

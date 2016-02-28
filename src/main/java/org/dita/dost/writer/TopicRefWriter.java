@@ -18,10 +18,8 @@ import java.net.URI;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.FileUtils.*;
-import static org.dita.dost.util.FileUtils.setFragment;
-import static org.dita.dost.util.FileUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
 
 /**
@@ -30,7 +28,7 @@ import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
  */
 public final class TopicRefWriter extends AbstractXMLFilter {
 
-    private Map<String, String> changeTable = null;
+    private Map<URI, URI> changeTable = null;
     private Map<URI, URI> conflictTable = null;
     private File currentFileDir = null;
     /** Using for rectify relative path of xml */
@@ -49,15 +47,15 @@ public final class TopicRefWriter extends AbstractXMLFilter {
      * @param conflictTable conflictTable
      */
     public void setup(final Map<URI, URI> conflictTable) {
-        for (final Map.Entry<String, String> e: changeTable.entrySet()) {
+        for (final Map.Entry<URI, URI> e: changeTable.entrySet()) {
             assert new File(e.getKey()).isAbsolute();
             assert new File(e.getValue()).isAbsolute();
         }
         this.conflictTable = conflictTable;
     }
 
-    public void setChangeTable(final Map<String, String> changeTable) {
-        for (final Map.Entry<String, String> e: changeTable.entrySet()) {
+    public void setChangeTable(final Map<URI, URI> changeTable) {
+        for (final Map.Entry<URI, URI> e: changeTable.entrySet()) {
             assert new File(e.getKey()).isAbsolute();
             assert new File(e.getValue()).isAbsolute();
         }
@@ -158,14 +156,14 @@ public final class TopicRefWriter extends AbstractXMLFilter {
 
         if (isLocalDita(atts)) {
             // replace the href value if it's referenced topic is extracted.
-            final File rootPathName = toFile(currentFile);
+            final URI rootPathName = currentFile;
             String changeTargetkey = resolve(currentFileDir, hrefValue).getPath();
-            String changeTarget = changeTable.get(changeTargetkey);
+            URI changeTarget = changeTable.get(changeTargetkey);
 
-            final String topicID = getTopicID(hrefValue);
+            final String topicID = getTopicID(toURI(hrefValue));
             if (topicID != null) {
                 changeTargetkey = setFragment(changeTargetkey, topicID);
-                final String changeTarget_with_elemt = changeTable.get(changeTargetkey);
+                final URI changeTarget_with_elemt = changeTable.get(changeTargetkey);
                 if (changeTarget_with_elemt != null) {
                     changeTarget = changeTarget_with_elemt;
                 }
@@ -174,8 +172,8 @@ public final class TopicRefWriter extends AbstractXMLFilter {
             final String elementID = getElementID(hrefValue);
             final String pathtoElem = getFragment(hrefValue, "");
 
-            if (changeTarget == null || changeTarget.isEmpty()) {
-                String absolutePath = resolveTopic(currentFileDir, hrefValue);
+            if (changeTarget == null || changeTarget.toString().isEmpty()) {
+                URI absolutePath = toURI(resolveTopic(currentFileDir, hrefValue));
                 absolutePath = setElementID(absolutePath, null);
                 changeTarget = changeTable.get(absolutePath);
             }
@@ -183,36 +181,36 @@ public final class TopicRefWriter extends AbstractXMLFilter {
             if (changeTarget == null) {
                 return hrefValue;// no change
             } else {
-                final String conTarget = new File(conflictTable.get(stripFragment(changeTarget))).getAbsolutePath();
-                if (conTarget != null && !conTarget.isEmpty()) {
-                    final String p = getRelativeUnixPath(rootPathName, conTarget);
+                final URI conTarget = conflictTable.get(stripFragment(changeTarget));
+                if (conTarget != null && !conTarget.toString().isEmpty()) {
+                    final URI p = getRelativePath(rootPathName, conTarget);
                     if (elementID == null) {
-                        return setFragment(p, getElementID(changeTarget));
+                        return setFragment(p, getElementID(changeTarget.toString())).toString();
                     } else {
-                        if (getFragment(conTarget) != null) {
+                        if (conTarget.getFragment() != null) {
                             if (!pathtoElem.contains(SLASH)) {
-                                return p;
+                                return p.toString();
                             } else {
-                                return setElementID(p, elementID);
+                                return setElementID(p, elementID).toString();
                             }
 
                         } else {
-                            return setFragment(p, pathtoElem);
+                            return setFragment(p, pathtoElem).toString();
                         }
                     }
                 } else {
-                    final String p = getRelativeUnixPath(rootPathName, changeTarget);
+                    final URI p = getRelativePath(rootPathName, changeTarget);
                     if (elementID == null) {
-                        return p;
+                        return p.toString();
                     } else {
-                        if (getFragment(changeTarget) != null) {
+                        if (changeTarget.getFragment() != null) {
                             if (!pathtoElem.contains(SLASH)) {
-                                return p;
+                                return p.toString();
                             } else {
-                                return setElementID(p, elementID);
+                                return setElementID(p, elementID).toString();
                             }
                         } else {
-                            return setFragment(p, pathtoElem);
+                            return setFragment(p, pathtoElem).toString();
                         }
                     }
                 }
