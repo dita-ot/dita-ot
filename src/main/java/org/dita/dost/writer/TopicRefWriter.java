@@ -159,7 +159,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
         if (isLocalDita(atts)) {
             // replace the href value if it's referenced topic is extracted.
             final URI rootPathName = currentFile;
-            URI changeTargetkey = stripFragment(currentFileDir.toURI().resolve(hrefValue));
+            URI changeTargetkey = currentFileDir.toURI().resolve(hrefValue);
             URI changeTarget = changeTable.get(changeTargetkey);
 
             final String topicID = getTopicID(toURI(hrefValue));
