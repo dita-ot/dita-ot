@@ -142,6 +142,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
     }
 
     private String updateHref(final Attributes atts) {
+        // FIXME should be URI
         String hrefValue = atts.getValue(ATTRIBUTE_NAME_HREF);
         if (hrefValue == null) {
             return null;
@@ -157,7 +158,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
         if (isLocalDita(atts)) {
             // replace the href value if it's referenced topic is extracted.
             final URI rootPathName = currentFile;
-            String changeTargetkey = resolve(currentFileDir, hrefValue).getPath();
+            URI changeTargetkey = currentFileDir.toURI().resolve(hrefValue);
             URI changeTarget = changeTable.get(changeTargetkey);
 
             final String topicID = getTopicID(toURI(hrefValue));
@@ -226,18 +227,15 @@ public final class TopicRefWriter extends AbstractXMLFilter {
      * @return String
      */
     private String getElementID(final String relativePath) {
-        String elementID = null;
-        String topicWithelement = null;
         final String fragment = getFragment(relativePath);
         if (fragment != null) {
-            topicWithelement = getFragment(relativePath);
-            if (topicWithelement.lastIndexOf(SLASH) != -1) {
-                elementID = topicWithelement.substring(topicWithelement.lastIndexOf(SLASH) + 1);
+            if (fragment.lastIndexOf(SLASH) != -1) {
+                return fragment.substring(fragment.lastIndexOf(SLASH) + 1);
             } else {
-                elementID = topicWithelement;
+                return fragment;
             }
         }
-        return elementID;
+        return null;
     }
 
 }
