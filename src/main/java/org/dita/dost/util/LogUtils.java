@@ -20,7 +20,9 @@ import static org.dita.dost.log.MessageBean.*;
  * 
  * @author wxzhang
  * @see org.dita.dost.log.DITAOTBuildLogger
+ * @deprecated since 2.3
  */
+@Deprecated
 public final class LogUtils {
     private static int numOfFatals=0;
     private static int numOfErrors=0;
