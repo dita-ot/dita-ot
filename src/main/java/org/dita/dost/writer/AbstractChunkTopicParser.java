@@ -380,7 +380,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                 if (checkHREF(resAtts)) {
                     // if current @href value needs to be updated
                     URI relative = getRelativePath(outputFile, currentParsingFile);
-                    if (conflictTable.containsKey(outputFile.getPath())) {
+                    if (conflictTable.containsKey(outputFile)) {
                         final URI realoutputfile = conflictTable.get(outputFile);
                         relative = getRelativePath(realoutputfile, currentParsingFile);
                     }

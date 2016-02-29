@@ -326,11 +326,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
             processChunk(topicref, true);
             processChildTopicref(topicref);
         } else { // chunkByToken.equals(CHUNK_BY_DOCUMENT)
-            String currentPath = null;
+            URI currentPath = null;
             if (copytoValue != null) {
-                currentPath = inputFile.resolve(copytoValue).getPath();
+                currentPath = inputFile.resolve(copytoValue);
             } else if (hrefValue != null) {
-                currentPath = inputFile.resolve(hrefValue).getPath();
+                currentPath = inputFile.resolve(hrefValue);
             }
             if (currentPath != null) {
                 if (changeTable.containsKey(currentPath)) {
@@ -338,7 +338,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 }
                 final String processingRole = getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
-                    changeTable.put(toURI(currentPath), toURI(currentPath));
+                    changeTable.put(currentPath, currentPath);
                 }
             }
             processChildTopicref(topicref);
@@ -504,7 +504,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
                     if (hrefValue.length() == 0) {
                         processTopicref(currentElem);
                     } else if (!ATTR_XTRF_VALUE_GENERATED.equals(xtrfValue)
-                            && !inputFile.resolve(hrefValue).getPath().equals(changeTable.get(inputFile.resolve(hrefValue).getPath()))) {
+                            && !inputFile.resolve(hrefValue).equals(changeTable.get(inputFile.resolve(hrefValue)))) {
                         processTopicref(currentElem);
                     }
                 }
@@ -535,7 +535,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     private void updateReltable(final Element elem) {
         final String hrefValue = elem.getAttribute(ATTRIBUTE_NAME_HREF);
         if (hrefValue.length() != 0) {
-            if (changeTable.containsKey(inputFile.resolve(hrefValue).getPath())) {
+            if (changeTable.containsKey(inputFile.resolve(hrefValue))) {
                 URI resulthrefValue = getRelativePath(inputFile.resolve(FILE_NAME_STUB_DITAMAP),
                                                       inputFile.resolve(hrefValue));
                 final String fragment = getFragment(hrefValue);

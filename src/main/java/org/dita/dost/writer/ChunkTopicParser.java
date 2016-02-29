@@ -317,7 +317,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         OutputStreamWriter ditaFileOutput = null;
         try {
             ditaFileOutput = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8);
-            if (outputFileName.getPath().equals(changeTable.get(outputFileName.getPath()))) {
+            if (outputFileName.equals(changeTable.get(outputFileName))) {
                 // if the output file is newly generated file
                 // write the xml header and workdir PI into new file
                 writeStartDocument(ditaFileOutput);
@@ -329,7 +329,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 }
                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toString());
 
-                if ((conflictTable.get(outputFileName.getPath()) != null)) {
+                if (conflictTable.get(outputFileName) != null) {
                     final String relativePath = getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
                             new File(conflictTable.get(outputFileName)).getAbsolutePath());
                     String path2project = getRelativeUnixPath(relativePath);
