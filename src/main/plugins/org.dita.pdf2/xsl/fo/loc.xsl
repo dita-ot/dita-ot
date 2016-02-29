@@ -47,6 +47,11 @@
         </fo:flow>
       </fo:page-sequence>
     </xsl:if>
+
+    <xsl:text>critdates</xsl:text>
+    <xsl:if test="//*[contains(@class, ' topic/critdates ')]">
+      <xsl:call-template name="createBookRelease"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="createLOCHeader">
@@ -64,9 +69,21 @@
       </xsl:call-template>
     </fo:block>
   </xsl:template>
+  
+  <xsl:template name="createBookRelease">
+    <xsl:for-each select="*[contains (@class, ' topic/created ')] or *[contains (@class, ' topic/revised ')]">
+      <xsl:choose>
+        <xsl:when test="*[contains (@class, ' topic/created ')]">
+          <xsl:text>created date: </xsl:text><xsl:value-of select="@date"/>
+        </xsl:when>
+        <xsl:when test="*[contains (@class, ' topic/revised ')]">
+          <xsl:text>revised modified: </xsl:text><xsl:value-of select="@modified"/>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
 
   <xsl:template match="*[contains (@class, ' bookmap/changelist ')]" mode="list.of.changes">
-
     <fo:block><xsl:text>HELLO WORLD 1</xsl:text></fo:block>
   </xsl:template>
 
