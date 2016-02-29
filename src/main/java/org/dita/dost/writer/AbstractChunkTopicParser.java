@@ -494,17 +494,14 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      * @return The first topic id from the given dita file if success, otherwise
      *         {@code null} string is returned.
      */
-    String getFirstTopicId(final String absolutePathToFile) {
-        assert new File(absolutePathToFile).isAbsolute();
-        if (absolutePathToFile == null || !isAbsolutePath(absolutePathToFile)) {
-            return null;
-        }
+    String getFirstTopicId(final URI absolutePathToFile) {
+        assert absolutePathToFile.isAbsolute();
         final StringBuilder firstTopicId = new StringBuilder();
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
         try {
             final XMLReader reader = getXMLReader();
             reader.setContentHandler(parser);
-            reader.parse(new File(absolutePathToFile).toURI().toString());
+            reader.parse(absolutePathToFile.toString());
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
