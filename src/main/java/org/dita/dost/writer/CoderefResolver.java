@@ -99,20 +99,11 @@ public final class CoderefResolver extends AbstractXMLFilter {
                     if (codeFile.exists()){
                         logger.debug("Resolve coderef " + codeFile);
                         final Charset charset = getCharset(atts.getValue(ATTRIBUTE_NAME_FORMAT));
-                        BufferedReader codeReader = null;
-                        try {
-                            codeReader = new BufferedReader(new InputStreamReader(new FileInputStream(codeFile), charset));
+                        try (BufferedReader codeReader = new BufferedReader(
+                                new InputStreamReader(new FileInputStream(codeFile), charset))) {
                             copyLines(codeReader, new Range(hrefValue));
                         } catch (final Exception e) {
                             logger.error("Failed to process code reference " + codeFile, e);
-                        } finally {
-                            if (codeReader != null) {
-                                try {
-                                    codeReader.close();
-                                } catch (final IOException e) {
-                                    logger.error(e.getMessage(), e) ;
-                                }
-                            }
                         }
                     } else {
                         logger.warn(MessageUtils.getInstance().getMessage("DOTJ051E", hrefValue.toString()).setLocation(atts).toString());

@@ -12,10 +12,8 @@ import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.net.URI;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.DITAOTLogger;
@@ -28,7 +26,7 @@ import org.xml.sax.XMLReader;
  */
 public final class MergeUtils {
 
-    private final Hashtable<URI, String> idMap;
+    private final Map<URI, String> idMap;
     private int index;
     /** Set of visited topic files. */
     private final Set<URI> visitSet;
@@ -38,7 +36,7 @@ public final class MergeUtils {
      */
     public MergeUtils() {
         super();
-        idMap = new Hashtable<>();
+        idMap = new ConcurrentHashMap<>();
         visitSet = Collections.synchronizedSet(new HashSet<URI>(256));
         index = 0;
     }

@@ -23,6 +23,7 @@ dependencies {
     compile group: 'com.ibm.icu', name: 'icu4j', version:'54.1'
     compile group: 'org.apache.ant', name: 'ant', version:'1.9.4'
     compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.9.4'
+    compile group: 'com.google.guava', name: 'guava', version: '19.0'
     runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.9.4'
     testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
     testCompile group: 'junit', name: 'junit', version:'4.11'
@@ -70,18 +71,7 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
 
 defaultTasks 'buildLocal'
 
-task initInstall(dependsOn: jar) << {
-    def antClassLoader = org.apache.tools.ant.Project.class.classLoader
-    configurations.runtime.each { File f ->
-        antClassLoader.addURL(f.toURI().toURL())
-    }
-    configurations.runtime.allArtifacts.files.each { File f ->
-        antClassLoader.addURL(f.toURI().toURL())
-    }
-    antClassLoader.addURL(file("${projectDir}/src/main/lib").toURI().toURL())
-    antClassLoader.addURL(file("${projectDir}/src/main/resources").toURI().toURL())
-}
-task copyInstall(type: Copy, dependsOn: initInstall) {
+task copyInstall(type: Copy) {
     from (configurations.runtime.allArtifacts.files)
     from (configurations.runtime) {
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
@@ -89,9 +79,13 @@ task copyInstall(type: Copy, dependsOn: initInstall) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compassCompile", ":wordrtf:copyInstall", ":odt:copyInstall"]) << {
+task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compassCompile", ":wordrtf:copyInstall", ":odt:copyInstall"]) {
     description "Build archives and install all plugins with dependencies"
-    ant.ant([antfile: "integrator.xml", dir: file("src/main")])
+    main = "org.apache.tools.ant.launch.Launcher"
+    classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/lib", "${projectDir}/src/main/resources")
+    workingDir file("${projectDir}/src/main")
+    args "-f"
+    args file("${projectDir}/src/main/integrator.xml")
 }
 
 // Distribution
@@ -152,7 +146,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "temp"
         include "plugins/**"
         include "resources/**"
-        include "samples/**"
         include "xsl/**"
         // legacy build scripts
         include "startcmd.*"
@@ -163,30 +156,22 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task integrateDistTemp(dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":xep:copyDistTemp", ":wordrtf:copyDistTemp", ":odt:copyDistTemp"]) << {
-    def antClassLoader = org.apache.tools.ant.Project.class.classLoader
-    configurations.runtime.each { File f ->
-        antClassLoader.addURL(f.toURI().toURL())
-    }
-    configurations.runtime.allArtifacts.files.each { File f ->
-        antClassLoader.addURL(f.toURI().toURL())
-    }
-    antClassLoader.addURL(file("${projectDir}/src/main/lib").toURI().toURL())
-    antClassLoader.addURL(file("${projectDir}/src/main/resources").toURI().toURL())
-    antClassLoader.addURL(file("${projectDir}/src/main/plugins/org.dita.pdf2/lib/fo.jar").toURI().toURL())
-    antClassLoader.addURL(file("${projectDir}/src/main/plugins/org.dita.pdf2.axf/lib/axf.jar").toURI().toURL())
-    antClassLoader.addURL(file("${projectDir}/src/main/plugins/org.dita.pdf2.xep/lib/xep.jar").toURI().toURL())
-    antClassLoader.addURL(file("${projectDir}/src/main/plugins/org.dita.wordrtf/lib/wordrtf.jar").toURI().toURL())
-    antClassLoader.addURL(file("${projectDir}/src/main/plugins/org.dita.odt/lib/odt.jar").toURI().toURL())
-
-    ant.ant([antfile: "${distTempDir}/integrator.xml", dir: distTempDir])
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":xep:copyDistTemp", ":wordrtf:copyDistTemp", ":odt:copyDistTemp"]) {
+    main = "org.apache.tools.ant.launch.Launcher"
+    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+    workingDir distTempDir
+    args "-f"
+    args file("${distTempDir}/integrator.xml")
 }
 
-task generateDocs(dependsOn: integrateDistTemp) << {
-    ant.ant([antfile: "${distTempDir}/docsrc/build.xml", dir: "${distTempDir}/docsrc"]) {
-        // Override system DITA_HOME default priority
-        property(name: "dita.home", location: distTempDir)
-    }
+task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
+    main = "org.apache.tools.ant.launch.Launcher"
+    classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
+    workingDir distTempDir
+    args "-f"
+    args file("${distTempDir}/docsrc/build.xml")
+    args "-Dbasedir=" + file("${distTempDir}/docsrc")
+    args "-Ddita.home=" + distTempDir
 }
 
 task distZip(type: Zip, dependsOn: [jar, generateDocs]) {
