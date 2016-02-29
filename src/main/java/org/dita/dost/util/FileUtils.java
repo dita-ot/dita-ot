@@ -278,7 +278,6 @@ public final class FileUtils {
      * @param relativePath relative path
      * @return relative path to base path, {@code null} if reference path was a single file
      */
-    @Deprecated
     public static File getRelativePath(final File relativePath) {
         final String p = getRelativePathForPath(relativePath.getPath(), File.separator);
         return p != null ? new File(p) : null;

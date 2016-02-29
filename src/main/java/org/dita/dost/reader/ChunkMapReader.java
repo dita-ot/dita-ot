@@ -250,7 +250,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         StreamResult result = null;
         try {
             final Transformer t = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(file.toString());
+            result = new StreamResult(new FileOutputStream(new File(file)));
             t.transform(new DOMSource(doc), result);
         } catch (final RuntimeException e) {
             throw e;

@@ -25,6 +25,7 @@ import java.util.Set;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
@@ -152,7 +153,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                             } else {
                                 // Find the first topic id in target file if
                                 // any.
-                                final String firstTopic = getFirstTopicId(filePath.resolve(hrefValue));
+                                final String firstTopic = getFirstTopicId(filePath.resolve(hrefValue).getPath());
                                 if (firstTopic != null) {
                                     outputFileName = filePath.resolve(firstTopic + FILE_EXTENSION_DITA);
                                 } else {
@@ -169,7 +170,6 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     }
 
                     // Check if there is any conflict
-                    // FIXME could this be replaced with Job.FileInfo existence?
                     if (new File(outputFileName).exists() && !MAP_MAP.matches(classValue)) {
                         final URI t = outputFileName;
                         outputFileName = filePath.resolve(generateFilename());
@@ -188,7 +188,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 if (path.getFragment() != null) {
                     newpath = setFragment(outputFileName, path.getFragment());
                 } else {
-                    final String firstTopicID = getFirstTopicId(path);
+                    final String firstTopicID = getFirstTopicId(new File(path).getAbsolutePath());
                     if (firstTopicID != null) {
                         newpath = setFragment(outputFileName, firstTopicID);
                     } else {
@@ -330,14 +330,14 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toString());
 
                 if (conflictTable.get(outputFileName) != null) {
-                    final URI relativePath = getRelativePath(filePath.resolve(FILE_NAME_STUB_DITAMAP),
-                            conflictTable.get(outputFileName));
-                    URI path2project = getRelativePath(relativePath);
+                    final String relativePath = getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
+                            new File(conflictTable.get(outputFileName)).getAbsolutePath());
+                    String path2project = getRelativeUnixPath(relativePath);
                     if (null == path2project) {
-                        path2project = toURI("");
+                        path2project = "";
                     }
-                    writeProcessingInstruction(ditaFileOutput, PI_PATH2PROJ_TARGET, toFile(path2project).toString());
-                    writeProcessingInstruction(ditaFileOutput, PI_PATH2PROJ_TARGET_URI, path2project.toString().isEmpty() ? "./" : path2project.toString());
+                    writeProcessingInstruction(ditaFileOutput, PI_PATH2PROJ_TARGET, path2project);
+                    writeProcessingInstruction(ditaFileOutput, PI_PATH2PROJ_TARGET_URI, path2project.isEmpty() ? "./" : toURI(path2project).toString());
                 }
             }
             if (needWriteDitaTag) {
