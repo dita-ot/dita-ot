@@ -26,14 +26,15 @@
     </xsl:for-each>
   </xsl:variable>-->
   <xsl:variable name="changeset" select="//*[contains (@class, ' relmgmt-d/change-item ')]"/>
-
+  <!--<xsl:variable name="topicWithChangeSet" select="//*[contains (@class, ' topic/topic ')][.//*[contains (@class, ' relmgmt-d/change-item ')]]/*[contains (@class, ' topic/title ')]"/>-->
+  <xsl:variable name="topicWithChangeSet" select="//*[contains (@class, ' topic/topic ')][.//*[contains (@class, ' relmgmt-d/change-item ')]]"/>
   <!--   LOC   -->
 
   <xsl:template match="ot-placeholder:changelist" name="createChangeList">
     <xsl:if test="//*[contains(@class, ' relmgmt-d/change-historylist ')]">
       <!-- TODO: This is the standard processing, without the <critdates> element. -->
       <!--exists tables with titles-->
-      <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.loc">
+      <!--<fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.loc">
         <xsl:call-template name="insertTocStaticContents"/>
         <fo:flow flow-name="xsl-region-body">
           <fo:block start-indent="0in">
@@ -42,7 +43,7 @@
 
 
             <xsl:text>topic/title of concepts that have a change-item:</xsl:text>
-            <!-- Select topic/title of all topic that have a change-item -->
+            &lt;!&ndash; Select topic/title of all topic that have a change-item &ndash;&gt;
             <xsl:apply-templates select="//*[contains (@class, ' topic/topic ')][.//*[contains (@class, ' relmgmt-d/change-item ')]]/*[contains (@class, ' topic/title ')]"/>
 
             <xsl:text>topic/title of all change-items:</xsl:text>
@@ -52,7 +53,7 @@
             <xsl:apply-templates select="//*[contains (@class, ' relmgmt-d/change-item ')][child::*[contains(@class, ' relmgmt-d/change-completed ' )]]" mode="list.of.changes"/>
           </fo:block>
         </fo:flow>
-      </fo:page-sequence>
+      </fo:page-sequence>-->
 
       <!-- TODO: This uses the <critdates> element. -->
       <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.loc">
@@ -98,33 +99,56 @@
   </xsl:template>
   
   <xsl:template match="//*[contains(@class, ' topic/critdates ')]">
-    <xsl:text>createBookRelease xx: </xsl:text>
+
+    <fo:block><xsl:text>THIS SHOULD APPEAR ONLY ONCE</xsl:text></fo:block>
 
     <!-- Create a list of all book releases -->
     <xsl:variable name="bookReleaseDates" select="*[contains (@class, ' topic/created ')]/@date,
                                                   *[contains (@class, ' topic/revised ')]/@modified"/>
 
+    <fo:block><xsl:text>   </xsl:text></fo:block>
+    <fo:block><xsl:text>bookReleaseDates2: </xsl:text><xsl:value-of select="$bookReleaseDates"/></fo:block>
+    <fo:block><xsl:text>   </xsl:text></fo:block>
 
     <xsl:for-each select="1 to (count($bookReleaseDates) - 1)">
       <xsl:variable name="i" select="position()"/>
+
+      <!-- timeRangeStart and timeRangeEnd set the date range between two book releases -->
       <xsl:variable name="timeRangeStart" select="$bookReleaseDates[$i]"/>
       <xsl:variable name="timeRangeEnd" select="$bookReleaseDates[$i + 1]"/>
+      <xsl:variable name="timeRangeStartAsDate" select="xs:date($timeRangeStart)"/>
+      <xsl:variable name="timeRangeEndAsDate" select="xs:date($timeRangeEnd)"/>
 
       <fo:block><xsl:text>Book Release: </xsl:text><xsl:value-of select="$i"/></fo:block>
-      <!--<fo:block>
-        <xsl:text>Release Range Start: </xsl:text><xsl:value-of select="$timeRangeStart"/>
-        <xsl:text>, Release Range End: </xsl:text><xsl:value-of select="$timeRangeEnd"/>
-      </fo:block>-->
 
-<!--      <xsl:for-each select="//*[contains (@class, ' relmgmt-d/change-item ')]">
-        <xsl:call-template name="getChangeListEntry">
-          <xsl:with-param name="timeRangeStart" select="$timeRangeStart"/>
-          <xsl:with-param name="timeRangeEnd" select="$timeRangeEnd"/>
-        </xsl:call-template>
-      </xsl:for-each>-->
+      <!-- TODO: Hier muss ich das Processing folgendermaßen ändern: Für jedes Release gehe über alle Topics und
+           prüfe, ob sie ein change-historylist haben, wenn ja, weiter verarbeiten. wenn ein change-historylist da ist,
+           prüfe, ob dieses ein change-item hat, das in der date-range liegt, wenn ja, weiter verarbeiten.-->
+
+    <xsl:for-each select="1 to (count($topicWithChangeSet))">
+      <xsl:variable name="k" select="position()"/>
+      <xsl:variable name="currentTopic" select="$topicWithChangeSet[$k]"/>
+      <fo:block><xsl:text>Ein Topic mit change:</xsl:text></fo:block>
+      <fo:block><xsl:value-of select="$currentTopic"/></fo:block>
+      <fo:block><xsl:text>Ein Topic mit change (nur der Title):</xsl:text></fo:block>
+      <fo:block><xsl:value-of select="$currentTopic/*[contains (@class, ' topic/title ')]"/></fo:block>
+      <!-- TODO: Ah, ich komme hier an den Titel. Jetzt ist es einfach und ich muss über die items iterieren -->
+      <fo:block><xsl:text>change items mit for each:</xsl:text></fo:block>
+      <xsl:for-each select="$currentTopic/descendant::*[contains (@class, ' relmgmt-d/change-item ')]">
+        <!-- Jetzt iteriere ich über die items -->
+        <xsl:variable name="changeCompleted" select="normalize-space(*[contains (@class, ' relmgmt-d/change-completed ')][1])"/>
+        <!-- TODO: Hier weitermachen. In date konvertieren, usw. -->
+        <fo:block><xsl:text>changeCompleted: </xsl:text><xsl:value-of select="$changeCompleted"/></fo:block>
+        <!--<xsl:if test="($timeRangeStartAsDate &lt;= $timeRangeEndAsDate)">
+          <fo:block><xsl:text>HURRA :)</xsl:text></fo:block>
+        </xsl:if>-->
+      </xsl:for-each>
+
+    </xsl:for-each>
 
 
       <fo:block>
+        <!-- Iterate over all change-items -->
         <xsl:for-each select="1 to (count($changeset))">
           <xsl:variable name="j" select="position()"/>
           <xsl:variable name="currentChangeItem" select="$changeset[$j]"/>
@@ -140,36 +164,42 @@
             <xsl:text>timeRangeEnd: </xsl:text><xsl:value-of select="$timeRangeEnd"/>
           </fo:block>-->
 
-          <xsl:choose>
-            <!-- Check if all date strings are not null empty -->
-            <xsl:when test="$timeRangeStart != ''
-                            and $currentChangeItemChangeCompleted != ''
-                            and $timeRangeEnd">
-              <!-- Convert strings to dates -->
-              <fo:block><xsl:text>----- </xsl:text></fo:block>
-              <xsl:variable name="timeRangeStartAsDate" select="xs:date($timeRangeStart)"/>
-              <xsl:variable name="currentChangeItemChangeCompletedAsDate" select="xs:date($currentChangeItemChangeCompleted)"/>
-              <xsl:variable name="timeRangeEndAsDate" select="xs:date($timeRangeEnd)"/>
-              <fo:block><xsl:text>timeRangeStartAsDate: </xsl:text><xsl:value-of select="$timeRangeStartAsDate"/></fo:block>
-              <fo:block><xsl:text>currentChangeItemChangeCompletedAsDate: </xsl:text><xsl:value-of select="$currentChangeItemChangeCompletedAsDate"/></fo:block>
-              <fo:block><xsl:text>timeRangeEndAsDate: </xsl:text><xsl:value-of select="$timeRangeEndAsDate"/></fo:block>
-              <fo:block><xsl:text>----- </xsl:text></fo:block>
+          <xsl:if test="$timeRangeStart != ''
+                        and $currentChangeItemChangeCompleted != ''
+                        and $timeRangeEnd">
+            <fo:block><xsl:text>----- </xsl:text></fo:block>
+            <xsl:variable name="currentChangeItemChangeCompletedAsDate" select="xs:date($currentChangeItemChangeCompleted)"/>
+            <fo:block><xsl:text>timeRangeStartAsDate: </xsl:text><xsl:value-of select="$timeRangeStartAsDate"/></fo:block>
+            <fo:block><xsl:text>currentChangeItemChangeCompletedAsDate: </xsl:text><xsl:value-of select="$currentChangeItemChangeCompletedAsDate"/></fo:block>
+            <fo:block><xsl:text>timeRangeEndAsDate: </xsl:text><xsl:value-of select="$timeRangeEndAsDate"/></fo:block>
+            <fo:block>
+              <xsl:value-of select="$currentChangeItem"/>
+              <!--<xsl:value-of select="$changeset[$j]"/>-->
+              <!--<xsl:value-of select="."/>-->
+            </fo:block>
+            <fo:block><xsl:text>----- </xsl:text></fo:block>
 
-              <xsl:choose>
-                <xsl:when test="($timeRangeStartAsDate &lt; $currentChangeItemChangeCompletedAsDate)
-                                and ($currentChangeItemChangeCompletedAsDate &lt; $timeRangeEndAsDate)">
-                  <fo:block>
-                    <xsl:text>Processed item:</xsl:text>
-                  </fo:block>
-                  <fo:block>
-                    <xsl:value-of select="$currentChangeItem"/>
-                    <xsl:value-of select="$changeset[$j]"/>
-                    <xsl:value-of select="."/>
-                  </fo:block>
-                </xsl:when>
-              </xsl:choose>
-            </xsl:when>
-          </xsl:choose>
+            <xsl:if test="($timeRangeStartAsDate &lt;= $currentChangeItemChangeCompletedAsDate) and ($currentChangeItemChangeCompletedAsDate &lt;= $timeRangeEndAsDate)">
+              <fo:block>
+                <xsl:text>Processed item:</xsl:text>
+              </fo:block>
+              <fo:block>
+                <xsl:text>1:</xsl:text>
+                <xsl:value-of select="$currentChangeItem"/>
+              </fo:block>
+              <!--<fo:block>
+                <xsl:text>2:</xsl:text>
+                <xsl:value-of select="$changeset[$j]"/>
+              </fo:block>
+              <fo:block>
+                <xsl:text>3:</xsl:text>
+                <xsl:value-of select="."/>
+              </fo:block>-->
+            </xsl:if>
+          </xsl:if>
+
+            <!-- Check if all date strings are not null empty -->
+              <!-- Convert strings to dates -->
           <!--
             <fo:block>
               <xsl:text>change-completed1: </xsl:text><xsl:value-of />
