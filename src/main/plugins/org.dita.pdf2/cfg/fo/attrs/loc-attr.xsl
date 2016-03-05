@@ -5,23 +5,36 @@
                 xmlns:rx="http://www.renderx.com/XSL/Extensions"
                 version="2.0">
 
-    <xsl:attribute-set name ="__loc__heading" use-attribute-sets="__toc__header">
+    <xsl:attribute-set name="releaseManagementTable">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__loc__indent" use-attribute-sets="__toc__indent__booklist">
+    <xsl:attribute-set name="releaseManagementTable.bookRelease.row">
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+        <xsl:attribute name="font-size">1.1em</xsl:attribute>
+        <xsl:attribute name="background-color">#efefef</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name ="__loc__content" use-attribute-sets="base-font __toc__topic__content__booklist">
-        <xsl:attribute name="font-weight">normal</xsl:attribute>
-        <xsl:attribute name="space-before">5pt</xsl:attribute>
-        <xsl:attribute name="space-after">5pt</xsl:attribute>
+    <xsl:attribute-set name="releaseManagementTable.bookRelease.cell">
+        <xsl:attribute name="border-style">solid</xsl:attribute>
+        <xsl:attribute name="border-width">1pt</xsl:attribute>
+        <xsl:attribute name="padding">3pt</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__loc__title" use-attribute-sets="__loc__content">
+    <xsl:attribute-set name="releaseManagementTable.bookRelease.content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__loc__page-number">
-        <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
+    <xsl:attribute-set name="releaseManagementTable.changeItem.row">
     </xsl:attribute-set>
+
+    <xsl:attribute-set name="releaseManagementTable.changeItem.cell">
+        <xsl:attribute name="border-style">solid</xsl:attribute>
+        <xsl:attribute name="border-width">1pt</xsl:attribute>
+        <xsl:attribute name="padding">3pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="releaseManagementTable.changeItem.content">
+    </xsl:attribute-set>
+
+
 
 </xsl:stylesheet>
