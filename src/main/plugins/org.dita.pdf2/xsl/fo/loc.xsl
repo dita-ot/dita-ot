@@ -60,33 +60,14 @@
         <xsl:variable name="timeRangeStartAsDate" select="xs:date($timeRangeStart)"/>
         <xsl:variable name="timeRangeEndAsDate" select="xs:date($timeRangeEnd)"/>
 
-
-        <!--
         <fo:block>
-<fo:table>
-   <fo:table-body>
-      <fo:table-row>
-         <fo:table-cell>
-            <fo:block>Erste Zelle</fo:block>
-         </fo:table-cell>
-         <fo:table-cell>
-            <fo:block>Zweite Zelle</fo:block>
-         </fo:table-cell>
-         <fo:table-cell>
-            <fo:block>Dritte Zelle</fo:block>
-         </fo:table-cell>
-      </fo:table-row>
-   </fo:table-body>
-</fo:table>
-</fo:block>
-        -->
-
-        <fo:block>
-          <fo:table>
+          <fo:table xsl:use-attribute-sets="releaseManagementTable">
+            <xsl:call-template name="selectAtts"/>
+            <xsl:call-template name="globalAtts"/>
             <fo:table-body>
-              <fo:table-row>
-                <fo:table-cell border-style="solid" border-width="1pt">
-                  <fo:block xsl:use-attribute-sets="section.title">
+              <fo:table-row xsl:use-attribute-sets="releaseManagementTable.bookRelease.row">
+                <fo:table-cell xsl:use-attribute-sets="releaseManagementTable.bookRelease.cell">
+                  <fo:block xsl:use-attribute-sets="releaseManagementTable.bookRelease.content">
                     <xsl:text>Book Release: </xsl:text><xsl:value-of select="$i"/><xsl:text> (Release Date: </xsl:text><xsl:value-of select="$timeRangeEndAsDate"/><xsl:text>)</xsl:text>
                   </fo:block>
                 </fo:table-cell>
@@ -101,11 +82,13 @@
                         and $timeRangeEnd">
                   <xsl:variable name="currentChangeItemChangeCompletedAsDate" select="xs:date($currentChangeItemChangeCompleted)"/>
                   <xsl:if test="($timeRangeStartAsDate &lt;= $currentChangeItemChangeCompletedAsDate) and ($currentChangeItemChangeCompletedAsDate &lt;= $timeRangeEndAsDate)">
-                    <fo:table-row>
-                      <fo:table-cell border-style="solid" border-width="1pt">
-                        <xsl:call-template name="change-item">
-                          <xsl:with-param name="change-item" select="$currentChangeItem"/>
-                        </xsl:call-template>
+                    <fo:table-row xsl:use-attribute-sets="releaseManagementTable.changeItem.row">
+                      <fo:table-cell xsl:use-attribute-sets="releaseManagementTable.changeItem.cell">
+                        <fo:block xsl:use-attribute-sets="releaseManagementTable.changeItem.content">
+                          <xsl:call-template name="change-item">
+                            <xsl:with-param name="change-item" select="$currentChangeItem"/>
+                          </xsl:call-template>
+                        </fo:block>
                       </fo:table-cell>
                     </fo:table-row>
                   </xsl:if>
@@ -114,35 +97,6 @@
             </fo:table-body>
           </fo:table>
         </fo:block>
-
-        <!--<fo:block>
-          <xsl:text>-&#45;&#45;&#45;&#45;</xsl:text>
-        </fo:block>
-        <fo:block>
-          <xsl:text>Book Release: </xsl:text><xsl:value-of select="$i"/>
-        </fo:block>
-        <fo:block>
-          <xsl:text>Release Date: </xsl:text><xsl:value-of select="$timeRangeEndAsDate"/>
-        </fo:block>
-
-        <fo:block>
-          &lt;!&ndash; Iterate over all change-items &ndash;&gt;
-          <xsl:for-each select="1 to (count($changeset))">
-            <xsl:variable name="j" select="position()"/>
-            <xsl:variable name="currentChangeItem" select="$changeset[$j]"/>
-            <xsl:variable name="currentChangeItemChangeCompleted" select="$changeset[$j]/*[contains (@class, ' relmgmt-d/change-completed ')]"/>
-            <xsl:if test="$timeRangeStart != ''
-                        and $currentChangeItemChangeCompleted != ''
-                        and $timeRangeEnd">
-              <xsl:variable name="currentChangeItemChangeCompletedAsDate" select="xs:date($currentChangeItemChangeCompleted)"/>
-              <xsl:if test="($timeRangeStartAsDate &lt;= $currentChangeItemChangeCompletedAsDate) and ($currentChangeItemChangeCompletedAsDate &lt;= $timeRangeEndAsDate)">
-                <xsl:call-template name="change-item">
-                  <xsl:with-param name="change-item" select="$currentChangeItem"/>
-                </xsl:call-template>
-              </xsl:if>
-            </xsl:if>
-          </xsl:for-each>
-        </fo:block>-->
       </xsl:for-each>
   </xsl:template>
 
