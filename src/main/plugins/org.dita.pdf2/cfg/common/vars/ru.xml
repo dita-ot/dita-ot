@@ -119,6 +119,12 @@
   <!-- The heading string to put in front of the Change Summary -->
   <variable id="Change Summary">Change Summary</variable>
 
+  <!-- The heading string to put in front of the Book Release -->
+  <variable id="Book Release">Book Release</variable>
+
+  <!-- The heading string to put in front of the Book Release Date -->
+  <variable id="Book Release Date">Book Release Date</variable>
+
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">«</variable>
   <variable id="#quote-end">»</variable>

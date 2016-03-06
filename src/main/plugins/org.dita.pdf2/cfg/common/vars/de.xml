@@ -336,6 +336,12 @@ See the accompanying license.txt file for applicable licenses.
     <!-- The heading string to put in front of the Change Summary -->
     <variable id="Change Summary">Zusammenfassung</variable>
 
+  <!-- The heading string to put in front of the Book Release -->
+  <variable id="Book Release">Dokumentversion</variable>
+
+  <!-- The heading string to put in front of the Book Release Date -->
+  <variable id="Book Release Date">Veröffentlichungsdatum</variable>
+
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">„</variable>
   <variable id="#quote-end">“</variable>

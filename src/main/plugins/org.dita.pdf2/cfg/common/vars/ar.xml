@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--   
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+<!--
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
 
-    <!-- 
-     
-      This file controls strings that appear in the published output.  
-      There is one version of this file per language.  To add support 
-      for a new language, simply create a copy of this file and name 
+    <!--
+
+      This file controls strings that appear in the published output.
+      There is one version of this file per language.  To add support
+      for a new language, simply create a copy of this file and name
       it using the <locale ISO code>.xml format.
-      
+
     -->
 
-    <!-- 
+    <!--
        Strings used in the headers and footers of pages.
     -->
 
@@ -58,19 +58,19 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Preface first header"/>
 
     <!-- The footer that appears on the odd-numbered table of contents
-         pages. --> 
+         pages. -->
     <variable id="Toc odd footer"/>
 
     <!-- The footer that appears on the even-numbered table of contents
-         pages. --> 
+         pages. -->
     <variable id="Toc even footer"/>
 
     <!-- The header that appears on the odd-numbered table of contents
-         pages. --> 
+         pages. -->
     <variable id="Toc odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on the odd-numbered table of contents
-         pages. --> 
+         pages. -->
     <variable id="Toc even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
 
     <!-- The footer that appears on the odd-numbered index pages. -->
@@ -85,7 +85,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- The header that appears on the even-numbered index pages. -->
     <variable id="Index even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
 
-    <!-- The formatting used to display ordered lists (e.g., "1., 2." or 
+    <!-- The formatting used to display ordered lists (e.g., "1., 2." or
          "1), 2)" -->
     <variable id="Ordered List Number"><param ref-name="number"/>. </variable>
 
@@ -126,7 +126,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Notices title">Notice</variable>
 
     <!-- TODO: The heading to put at the top of a chapter when creating a
-         chapter-level "mini-TOC". Using general "Contents", 
+         chapter-level "mini-TOC". Using general "Contents",
          may want to replace with translation of "Topics". -->
     <variable id="Mini Toc">المحتوﻳات: </variable>
 
@@ -140,7 +140,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Figure.title">الشكل <param ref-name="number"/>: <param ref-name="title"/></variable>
     <variable id="Figure Number">الشكل <param ref-name="number"/></variable>
 
-    <!-- Text to use for table titles. Renders as part of <table>/<title> 
+    <!-- Text to use for table titles. Renders as part of <table>/<title>
          elements. -->
     <variable id="Table.title">الجدول <param ref-name="number"/>: <param ref-name="title"/></variable>
     <variable id="Table Number">الجدول <param ref-name="number"/></variable>
@@ -150,26 +150,26 @@ See the accompanying license.txt file for applicable licenses.
          Renders as part of <related-links> element. -->
     <variable id="Related Links">المعلومات المتعلقة</variable>
 
-    <!-- UNUSED: Default cross-reference text prefix. Used to generate reference 
+    <!-- UNUSED: Default cross-reference text prefix. Used to generate reference
          text in case it's not specified in source. -->
     <variable id="Cross-Reference">Cross-Reference to:</variable>
 
-    <!-- UNUSED: Default content-reference text prefix. Used to generate reference 
+    <!-- UNUSED: Default content-reference text prefix. Used to generate reference
          text in case target cannot be resolved. -->
     <variable id="Content-Reference">Content-Reference to:</variable>
 
-    <!-- UNUSED: Default title text for referenced section title. Used to generate 
+    <!-- UNUSED: Default title text for referenced section title. Used to generate
          reference text in case reference has no explicit content and
          referenced section has no title. -->
     <variable id="Untitled section">Untitled section.</variable>
 
     <!-- TODO: Default title text for referenced list item. Used to generate
-         reference text in case reference has no explicit content and 
+         reference text in case reference has no explicit content and
          reference target is a list item. -->
     <variable id="List item">List item.</variable>
 
-    <!-- TODO: Default title text for referenced footnote. Used to generate 
-         reference text in case reference has no explicit content and 
+    <!-- TODO: Default title text for referenced footnote. Used to generate
+         reference text in case reference has no explicit content and
          reference target is a footnote. Referenced in code but appears to be unused. -->
     <variable id="Foot note">Footnote.</variable>
 
@@ -177,7 +177,7 @@ See the accompanying license.txt file for applicable licenses.
          as part of <navtitle> element. -->
     <variable id="Navigation title">Navigation title</variable>
 
-    <!-- TODO: Text to use for a generated label of search title. Renders 
+    <!-- TODO: Text to use for a generated label of search title. Renders
          as part of <searchtitle> element. -->
     <variable id="Search title">Search title</variable>
 
@@ -193,7 +193,7 @@ See the accompanying license.txt file for applicable licenses.
     <!-- Text to use for a label generated from <required-cleanup> element. -->
     <variable id="Required-Cleanup">[الاخلاء المطلوب]</variable>
 
-    <!-- Template for generated page number of a reference 
+    <!-- Template for generated page number of a reference
          in printed manual. -->
     <variable id="On the page"> بالصفحة <param ref-name="pagenum"/></variable>
 
@@ -315,7 +315,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Task Result"></variable>
     <variable id="Task Example"></variable>
     <variable id="Task Postreq"></variable>
-    
+
     <!--Glossary Variables-->
     <!-- The footer that appears on the odd-numbered glossary pages. -->
     <variable id="Glossary odd footer"/>
@@ -328,10 +328,10 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The header that appears on the even-numbered glossary pages. -->
     <variable id="Glossary even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
-     
+
      <!-- The heading string to put at the top of the Glossary -->
      <variable id="Glossary">قاموس المصطلحات</variable>
-     
+
      <!-- The heading string to put at the top of the List of Tables -->
      <variable id="List of Tables">الجداول</variable>
 
@@ -359,8 +359,14 @@ See the accompanying license.txt file for applicable licenses.
     <!-- The heading string to put in front of the Change Completed -->
     <variable id="Change Completed">Change Completed</variable>
 
-    <!-- The heading string to put in front of the Change Summary -->
-    <variable id="Change Summary">Change Summary</variable>
+  <!-- The heading string to put in front of the Change Summary -->
+  <variable id="Change Summary">Change Summary</variable>
+
+  <!-- The heading string to put in front of the Book Release -->
+  <variable id="Book Release">Book Release</variable>
+
+  <!-- The heading string to put in front of the Book Release Date -->
+  <variable id="Book Release Date">Book Release Date</variable>
 
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>
