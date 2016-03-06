@@ -47,8 +47,7 @@ ORIGINAL CREATION DATE:
    2008.02.12 RDA: Add @format, @scope, and @type to         
                    publisherinformation                      
    2008.02.13 RDA: Create .content and .attributes entities  
-   2008.03.17 RDA: Add appendices element
-   2016.02.23 SE:  Add changelist element
+   2008.03.17 RDA: Add appendices element                    
 =============================================================
 ]]></headerComment>
     <moduleMetadata>
@@ -231,9 +230,6 @@ ORIGINAL CREATION DATE:
     </define>
     <define name="tablelist">
       <ref name="tablelist.element"/>
-    </define>
-    <define name="changelist">
-      <ref name="changelist.element"/>
     </define>
     <define name="tested">
       <ref name="tested.element"/>
@@ -470,7 +466,7 @@ ORIGINAL CREATION DATE:
       <define name="frontmatter.element">
         <element name="frontmatter" dita:longName="Front Matter">
           <a:documentation>The &lt;frontmatter> element contains the material that precedes the main body of a document. It may include items such as an abstract, a preface, and various types of book
-            lists such as a &lt;toc>, &lt;tablelist>, &lt;changelist>, or &lt;figurelist>. Category: Bookmap elements</a:documentation>
+            lists such as a &lt;toc>, &lt;tablelist>, or &lt;figurelist>. Category: Bookmap elements</a:documentation>
           <ref name="frontmatter.attlist"/>
           <ref name="frontmatter.content"/>
         </element>
@@ -2052,7 +2048,6 @@ ORIGINAL CREATION DATE:
             <ref name="glossarylist"/>
             <ref name="indexlist"/>
             <ref name="tablelist"/>
-            <ref name="changelist"/>
             <ref name="trademarklist"/>
             <ref name="toc"/>
           </choice>
@@ -2069,7 +2064,7 @@ ORIGINAL CREATION DATE:
       </define>
       <define name="booklists.element">
         <element name="booklists" dita:longName="Book Lists">
-          <a:documentation>The &lt;booklists> element references lists of various kinds within the book. For example, it can be used within front matter to reference a &lt;toc>, &lt;tablelist>, &lt;changelist>, and
+          <a:documentation>The &lt;booklists> element references lists of various kinds within the book. For example, it can be used within front matter to reference a &lt;toc>, &lt;tablelist>, and
             &lt;figurelist>, or within back matter to reference a &lt;glossarylist>, &lt;indexlist>, and &lt;abbrevlist>. It indicates to the processing software that the author wants the lists
             generated at the &lt;booklists> location. Category: Bookmap elements</a:documentation>
           <ref name="booklists.attlist"/>
@@ -2141,27 +2136,6 @@ ORIGINAL CREATION DATE:
       </define>
       <define name="tablelist.attlist" combine="interleave">
         <ref name="tablelist.attributes"/>
-      </define>
-
-    </div>
-    <div>
-      <a:documentation>LONG NAME: Change List</a:documentation>
-      <define name="changelist.content">
-        <empty/>
-      </define>
-      <define name="changelist.attributes">
-        <ref name="chapter-atts"/>
-      </define>
-      <define name="changelist.element">
-        <element name="changelist" dita:longName="Change List">
-          <a:documentation>The &lt;changelist> element references a list of changes within the book. It indicates to the processing software that the author wants a list of changes generated at the
-            particular location. Category: Bookmap elements</a:documentation>
-          <ref name="changelist.attlist"/>
-          <ref name="changelist.content"/>
-        </element>
-      </define>
-      <define name="changelist.attlist" combine="interleave">
-        <ref name="changelist.attributes"/>
       </define>
 
     </div>
@@ -2634,12 +2608,6 @@ ORIGINAL CREATION DATE:
       <ref name="global-atts"/>
       <optional>
         <attribute name="class" a:defaultValue="- map/topicref bookmap/tablelist "/>
-      </optional>
-    </define>
-    <define name="changelist.attlist" combine="interleave">
-      <ref name="global-atts"/>
-      <optional>
-        <attribute name="class" a:defaultValue="- map/topicref bookmap/changelist "/>
       </optional>
     </define>
     <define name="tested.attlist" combine="interleave">

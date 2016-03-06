@@ -39,7 +39,6 @@
 <!--                    publisherinformation                       -->
 <!--    2008.02.13 RDA: Create .content and .attributes entities   -->
 <!--    2008.03.17 RDA: Add appendices element                     -->
-<!--    2016.02.23 SE:  Add changelist element                     -->
 <!-- ============================================================= -->
 
 <!-- ============================================================= -->
@@ -110,7 +109,6 @@
 <!ENTITY % toc         "toc"                                         >
 <!ENTITY % figurelist  "figurelist"                                  >
 <!ENTITY % tablelist   "tablelist"                                   >
-<!ENTITY % changelist  "changelist"                                  >
 <!ENTITY % abbrevlist  "abbrevlist"                                  >
 <!ENTITY % trademarklist
                        "trademarklist"                               >
@@ -1073,7 +1071,6 @@
                        "(%abbrevlist; |
                          %bibliolist; |
                          %booklist; |
-                         %changelist; |
                          %figurelist; |
                          %glossarylist; |
                          %indexlist; |
@@ -1125,17 +1122,6 @@
 >
 <!ELEMENT  tablelist %tablelist.content;>
 <!ATTLIST  tablelist %tablelist.attributes;>
-
-
-<!--                    LONG NAME: Change List                     -->
-<!ENTITY % changelist.content
-                       "EMPTY"
->
-<!ENTITY % changelist.attributes
-              "%chapter-atts;"
->
-<!ELEMENT  changelist %changelist.content;>
-<!ATTLIST  changelist %changelist.attributes;>
 
 
 <!--                    LONG NAME: Abbreviation List               -->
@@ -1234,7 +1220,6 @@
 <!ATTLIST  bookrights   %global-atts;  class CDATA "- topic/data bookmap/bookrights ">
 <!ATTLIST  booktitle    %global-atts;  class CDATA "- topic/title bookmap/booktitle ">
 <!ATTLIST  booktitlealt %global-atts;  class CDATA "- topic/ph bookmap/booktitlealt ">
-<!ATTLIST  changelist   %global-atts;  class CDATA "- map/topicref bookmap/changelist ">
 <!ATTLIST  chapter      %global-atts;  class CDATA "- map/topicref bookmap/chapter ">
 <!ATTLIST  colophon     %global-atts;  class CDATA "- map/topicref bookmap/colophon ">
 <!ATTLIST  completed    %global-atts;  class CDATA "- topic/ph bookmap/completed ">
