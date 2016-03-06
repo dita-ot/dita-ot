@@ -39,7 +39,6 @@
 <!--                   publisherinformation                      -->
 <!--   2008.02.13 RDA: Create .content and .attributes entities  -->
 <!--   2008.03.17 RDA: Add appendices element                    -->
-<!--   2016.02.23 SE:  Add changelist element                    -->
 <!--=============================================================-->
 <xs:schema xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -174,7 +173,7 @@
    <xs:element name="frontmatter">
       <xs:annotation>
          <xs:documentation>The &lt;frontmatter&gt; element contains the material that precedes the main body of a document. It may include items such as an abstract, a preface, and various types of book
-            lists such as a &lt;toc&gt;, &lt;tablelist&gt;, &lt;changelist&gt;, or &lt;figurelist&gt;. Category: Bookmap elements</xs:documentation>
+            lists such as a &lt;toc&gt;, &lt;tablelist&gt;, or &lt;figurelist&gt;. Category: Bookmap elements</xs:documentation>
       </xs:annotation>
       <xs:complexType>
          <xs:complexContent>
@@ -1788,7 +1787,7 @@
    </xs:attributeGroup>
    <xs:element name="booklists">
       <xs:annotation>
-         <xs:documentation>The &lt;booklists&gt; element references lists of various kinds within the book. For example, it can be used within front matter to reference a &lt;toc&gt;, &lt;tablelist&gt;, &lt;changelist&gt;, and
+         <xs:documentation>The &lt;booklists&gt; element references lists of various kinds within the book. For example, it can be used within front matter to reference a &lt;toc&gt;, &lt;tablelist&gt;, and
             &lt;figurelist&gt;, or within back matter to reference a &lt;glossarylist&gt;, &lt;indexlist&gt;, and &lt;abbrevlist&gt;. It indicates to the processing software that the author wants the lists
             generated at the &lt;booklists&gt; location. Category: Bookmap elements</xs:documentation>
       </xs:annotation>
@@ -1816,7 +1815,6 @@
             <xs:group ref="glossarylist"/>
             <xs:group ref="indexlist"/>
             <xs:group ref="tablelist"/>
-            <xs:group ref="changelist"/>
             <xs:group ref="trademarklist"/>
             <xs:group ref="toc"/>
          </xs:choice>
@@ -1905,32 +1903,6 @@
       <xs:sequence/>
    </xs:group>
    <xs:attributeGroup name="tablelist.attributes">
-      <xs:attributeGroup ref="chapter-atts"/>
-      <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
-   <xs:element name="changelist">
-      <xs:annotation>
-         <xs:documentation>The &lt;changelist&gt; element references a list of changes within the book. It indicates to the processing software that the author wants a list of changes generated at the
-            particular location. Category: Bookmap elements</xs:documentation>
-      </xs:annotation>
-      <xs:complexType>
-         <xs:complexContent>
-            <xs:extension base="changelist.class">
-               <xs:attribute ref="class" default="- map/topicref bookmap/changelist "/>
-            </xs:extension>
-         </xs:complexContent>
-      </xs:complexType>
-   </xs:element>
-   <xs:complexType name="changelist.class">
-      <xs:sequence>
-         <xs:group ref="changelist.content"/>
-      </xs:sequence>
-      <xs:attributeGroup ref="changelist.attributes"/>
-   </xs:complexType>
-   <xs:group name="changelist.content">
-      <xs:sequence/>
-   </xs:group>
-   <xs:attributeGroup name="changelist.attributes">
       <xs:attributeGroup ref="chapter-atts"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
