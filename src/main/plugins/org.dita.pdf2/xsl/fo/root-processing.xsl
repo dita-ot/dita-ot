@@ -300,7 +300,6 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:for-each>
   </xsl:template>
   <xsl:template match="*[contains(@class, ' bookmap/changelist ')]" mode="generatePageSequences">
-    <xsl:text>HELLO WORLD 4</xsl:text>
     <xsl:for-each select="key('topic-id', @id)">
       <xsl:choose>
         <xsl:when test="self::ot-placeholder:changelist">
