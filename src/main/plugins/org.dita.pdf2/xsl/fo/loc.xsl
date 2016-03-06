@@ -47,57 +47,88 @@
   
   <xsl:template match="//*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/critdates ')]">
 
-      <!-- Create a list of all book releases -->
-      <xsl:variable name="bookReleaseDates" select="*[contains (@class, ' topic/created ')]/@date,
+    <!-- Create a list of all book releases -->
+    <xsl:variable name="bookReleaseDates" select="*[contains (@class, ' topic/created ')]/@date,
                                                   *[contains (@class, ' topic/revised ')]/@modified"/>
+    <xsl:variable name="bookReleaseString">
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Book Release'"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="bookReleaseDateString">
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'Book Release Date'"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="colonSymbol">
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'ColonSymbol'"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="separator">
+      <xsl:call-template name="getVariable">
+        <xsl:with-param name="id" select="'figure-number-separator'"/>
+      </xsl:call-template>
+    </xsl:variable>
 
-      <xsl:for-each select="1 to (count($bookReleaseDates) - 1)">
-        <xsl:variable name="i" select="position()"/>
+    <xsl:for-each select="1 to (count($bookReleaseDates) - 1)">
+      <xsl:variable name="i" select="position()"/>
 
-        <!-- timeRangeStart and timeRangeEnd set the date range between two book releases -->
-        <xsl:variable name="timeRangeStart" select="$bookReleaseDates[$i]"/>
-        <xsl:variable name="timeRangeEnd" select="$bookReleaseDates[$i + 1]"/>
-        <xsl:variable name="timeRangeStartAsDate" select="xs:date($timeRangeStart)"/>
-        <xsl:variable name="timeRangeEndAsDate" select="xs:date($timeRangeEnd)"/>
+      <!-- timeRangeStart and timeRangeEnd set the date range between two book releases -->
+      <xsl:variable name="timeRangeStart" select="$bookReleaseDates[$i]"/>
+      <xsl:variable name="timeRangeEnd" select="$bookReleaseDates[$i + 1]"/>
+      <xsl:variable name="timeRangeStartAsDate" select="xs:date($timeRangeStart)"/>
+      <xsl:variable name="timeRangeEndAsDate" select="xs:date($timeRangeEnd)"/>
 
-        <fo:block>
-          <fo:table xsl:use-attribute-sets="releaseManagementTable">
-            <xsl:call-template name="selectAtts"/>
-            <xsl:call-template name="globalAtts"/>
-            <fo:table-body>
-              <fo:table-row xsl:use-attribute-sets="releaseManagementTable.bookRelease.row">
-                <fo:table-cell xsl:use-attribute-sets="releaseManagementTable.bookRelease.cell">
-                  <fo:block xsl:use-attribute-sets="releaseManagementTable.bookRelease.content">
-                    <xsl:text>Book Release: </xsl:text><xsl:value-of select="$i"/><xsl:text> (Release Date: </xsl:text><xsl:value-of select="$timeRangeEndAsDate"/><xsl:text>)</xsl:text>
+      <fo:block>
+        <fo:table xsl:use-attribute-sets="releaseManagementTable">
+          <xsl:call-template name="selectAtts"/>
+          <xsl:call-template name="globalAtts"/>
+          <fo:table-body>
+            <fo:table-row xsl:use-attribute-sets="releaseManagementTable.bookRelease.row">
+              <fo:table-cell xsl:use-attribute-sets="releaseManagementTable.bookRelease.cell">
+                <fo:block xsl:use-attribute-sets="releaseManagementTable.bookRelease.content">
+                  <fo:block>
+                    <xsl:value-of select="$bookReleaseString"/>
+                    <xsl:value-of select="$colonSymbol"/>
+                    <xsl:value-of select="$separator"/>
+                    <xsl:value-of select="$i"/>
                   </fo:block>
-                </fo:table-cell>
-              </fo:table-row>
-              <!-- Iterate over all change-items -->
-              <xsl:for-each select="1 to (count($changeset))">
-                <xsl:variable name="j" select="position()"/>
-                <xsl:variable name="currentChangeItem" select="$changeset[$j]"/>
-                <xsl:variable name="currentChangeItemChangeCompleted" select="$changeset[$j]/*[contains (@class, ' relmgmt-d/change-completed ')]"/>
-                <xsl:if test="$timeRangeStart != ''
-                        and $currentChangeItemChangeCompleted != ''
-                        and $timeRangeEnd">
-                  <xsl:variable name="currentChangeItemChangeCompletedAsDate" select="xs:date($currentChangeItemChangeCompleted)"/>
-                  <xsl:if test="($timeRangeStartAsDate &lt;= $currentChangeItemChangeCompletedAsDate) and ($currentChangeItemChangeCompletedAsDate &lt;= $timeRangeEndAsDate)">
-                    <fo:table-row xsl:use-attribute-sets="releaseManagementTable.changeItem.row">
-                      <fo:table-cell xsl:use-attribute-sets="releaseManagementTable.changeItem.cell">
-                        <fo:block xsl:use-attribute-sets="releaseManagementTable.changeItem.content">
-                          <xsl:call-template name="change-item">
-                            <xsl:with-param name="change-item" select="$currentChangeItem"/>
-                          </xsl:call-template>
-                        </fo:block>
-                      </fo:table-cell>
-                    </fo:table-row>
-                  </xsl:if>
+                  <fo:block>
+                    <xsl:value-of select="$bookReleaseDateString"/>
+                    <xsl:value-of select="$colonSymbol"/>
+                    <xsl:value-of select="$separator"/>
+                    <xsl:value-of select="format-date($timeRangeEndAsDate,'[MNn] [D], [Y]')"/>
+                  </fo:block>
+                </fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+            <!-- Iterate over all change-items -->
+            <xsl:for-each select="1 to (count($changeset))">
+              <xsl:variable name="j" select="position()"/>
+              <xsl:variable name="currentChangeItem" select="$changeset[$j]"/>
+              <xsl:variable name="currentChangeItemChangeCompleted" select="$changeset[$j]/*[contains (@class, ' relmgmt-d/change-completed ')]"/>
+              <xsl:if test="$timeRangeStart != ''
+                            and $currentChangeItemChangeCompleted != ''
+                            and $timeRangeEnd">
+                <xsl:variable name="currentChangeItemChangeCompletedAsDate" select="xs:date($currentChangeItemChangeCompleted)"/>
+                <xsl:if test="($timeRangeStartAsDate &lt;= $currentChangeItemChangeCompletedAsDate) and ($currentChangeItemChangeCompletedAsDate &lt;= $timeRangeEndAsDate)">
+                  <fo:table-row xsl:use-attribute-sets="releaseManagementTable.changeItem.row">
+                    <fo:table-cell xsl:use-attribute-sets="releaseManagementTable.changeItem.cell">
+                      <fo:block xsl:use-attribute-sets="releaseManagementTable.changeItem.content">
+                        <xsl:call-template name="change-item">
+                          <xsl:with-param name="change-item" select="$currentChangeItem"/>
+                        </xsl:call-template>
+                      </fo:block>
+                    </fo:table-cell>
+                  </fo:table-row>
                 </xsl:if>
-              </xsl:for-each>
-            </fo:table-body>
-          </fo:table>
-        </fo:block>
-      </xsl:for-each>
+              </xsl:if>
+            </xsl:for-each>
+          </fo:table-body>
+        </fo:table>
+      </fo:block>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' relmgmt-d/change-item ')]">
@@ -198,7 +229,7 @@
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Change Started'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'ColonSymbol'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'figure-number-separator'"/></xsl:call-template>
-      <xsl:value-of select="$change-started"/>
+      <xsl:value-of select="format-date($change-started,'[MNn] [D], [Y]')"/>
     </fo:block>
   </xsl:template>
 
@@ -208,7 +239,7 @@
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Change Completed'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'ColonSymbol'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'figure-number-separator'"/></xsl:call-template>
-      <xsl:value-of select="$change-completed"/>
+      <xsl:value-of select="format-date($change-completed,'[MNn] [D], [Y]')"/>
     </fo:block>
   </xsl:template>
 
