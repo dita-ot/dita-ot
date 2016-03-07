@@ -49,6 +49,7 @@
   <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
   <feature extension="dita.conductor.pdf2.formatter.check" value="ah"/>
   <feature extension="dita.xsl.strings" file="cfg/common/vars/strings.xml"/>
+  <feature extension="dita.specialization.catalog.relative" file="cfg/catalog.xml"/>
   <template file="build_template.xml"/>
   <template file="cfg/catalog_template.xml"/>
   <template file="xsl/fo/flagging-preprocess_template.xsl"/>
