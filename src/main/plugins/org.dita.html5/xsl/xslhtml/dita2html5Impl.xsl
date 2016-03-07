@@ -10,6 +10,7 @@
   <xsl:import href="css-class.xsl"/>
   <xsl:import href="topic.xsl"/>
   <xsl:import href="task.xsl"/>
+  <xsl:import href="reference.xsl"/>
 
   <xsl:variable name="newline" select="()" as="xs:string?"/>
 
