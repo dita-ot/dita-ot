@@ -10,6 +10,12 @@
                 version="2.0"
                 exclude-result-prefixes="xs dita2html dita-ot table simpletable">
 
+  <xsl:function name="simpletable:generate-headers" as="xs:string">
+    <xsl:param name="el" as="element()"/>
+    <xsl:param name="suffix" as="xs:string"/>
+    <xsl:sequence select="string-join((generate-id($el), $suffix), '-')"/>
+  </xsl:function>
+
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]" name="topic.simpletable">
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
 
@@ -17,12 +23,8 @@
       <xsl:apply-templates select="." mode="table:common"/>
       <xsl:call-template name="dita2html:simpletable-cols"/>
 
-      <xsl:for-each-group select="*[contains(@class, ' topic/sthead ')]"
-        group-ending-with="*[contains(@class, ' topic/strow ')]">
-        <thead>
-          <xsl:apply-templates select="current-group()"/>
-        </thead>
-      </xsl:for-each-group>
+      <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]"/>
+      <xsl:apply-templates select="." mode="generate-table-header"/>
 
       <tbody>
         <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]"/>
@@ -36,14 +38,20 @@
     <xsl:apply-templates select="@frame, @expanse, @scale" mode="#current"/>
   </xsl:template>
 
-  <xsl:template match="
-      *[contains(@class, ' topic/strow ')]
-    | *[contains(@class, ' topic/sthead ')]
-  ">
+  <xsl:template match="*[contains(@class, ' topic/strow ')]">
     <tr>
       <xsl:apply-templates select="." mode="table:common"/>
       <xsl:apply-templates/>
     </tr>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/sthead ')]">
+    <thead>
+      <tr>
+        <xsl:apply-templates select="." mode="table:common"/>
+        <xsl:apply-templates/>
+      </tr>
+    </thead>
   </xsl:template>
 
   <xsl:template match="*[simpletable:is-head-entry(.)]">

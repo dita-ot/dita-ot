@@ -7,6 +7,10 @@
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot">
 
+  <xsl:import href="css-class.xsl"/>
+  <xsl:import href="topic.xsl"/>
+  <xsl:import href="task.xsl"/>
+
   <xsl:variable name="newline" select="()" as="xs:string?"/>
 
   <xsl:key name="enumerableByClass"
@@ -166,22 +170,21 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:function name="dita-ot:css-class" as="xs:string">
-    <xsl:param name="block-name" as="xs:string?"/>
-    <xsl:param name="attr" as="attribute()"/>
+  <xsl:template mode="generate-table-header" priority="10"
+    match="*[contains(@class, ' topic/simpletable ')]">
+    <xsl:variable name="gen" as="element(gen)">
+      <!--
+      Generated header needs to be wrapped in gen element to allow correct
+      language detection.
+      -->
+      <gen>
+        <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
+        <xsl:next-match/>
+      </gen>
+    </xsl:variable>
 
-    <xsl:sequence select="
-      string-join(($block-name, concat(node-name($attr), '-', $attr)), '--')
-    "/>
-  </xsl:function>
-
-  <xsl:function name="dita-ot:css-class" as="xs:string">
-    <xsl:param name="attr" as="attribute()"/>
-
-    <xsl:sequence select="
-      dita-ot:css-class(xs:string(node-name($attr/parent::*)), $attr)
-    "/>
-  </xsl:function>
+    <xsl:apply-templates select="$gen/*"/>
+  </xsl:template>
 
   <xsl:template match="*" mode="css-class" priority="100">
     <xsl:param name="default-output-class"/>
@@ -200,17 +203,7 @@
     <xsl:attribute name="class" select="string-join($class, ' ')"/>
   </xsl:template>
 
-  <!-- Don't generate CSS classes for any element or attribute by default. -->
-  <xsl:template match="* | @*" mode="css-class"/>
-
-  <!-- Display attributes group -->
-  <xsl:template match="@frame | @expanse | @scale" mode="css-class">
-    <xsl:sequence select="dita-ot:css-class((), .)"/>
-  </xsl:template>
-
   <xsl:include href="functions.xsl"/>
-  <xsl:include href="tables.xsl"/>
-  <xsl:include href="simpletable.xsl"/>
   <xsl:include href="nav.xsl"/>
-  
+
 </xsl:stylesheet>
