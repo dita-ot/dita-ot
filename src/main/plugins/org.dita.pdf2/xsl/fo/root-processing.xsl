@@ -311,7 +311,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:call-template name="processTopicPart"/>
     </xsl:for-each>
   </xsl:template>
-  <xsl:template match="*[contains(@class, ' bookmap/changelist ')]" mode="generatePageSequences">
+  <xsl:template match="*[contains(@class,' bookmap/booklist ') and @type='change-historylist']" mode="generatePageSequences">
     <xsl:for-each select="key('topic-id', @id)">
       <xsl:choose>
         <xsl:when test="self::ot-placeholder:changelist">

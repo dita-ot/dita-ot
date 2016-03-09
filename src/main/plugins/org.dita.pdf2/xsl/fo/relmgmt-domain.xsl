@@ -10,17 +10,14 @@
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' relmgmt-d/change-person ')]">
-        <xsl:text>change-person: </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' relmgmt-d/change-organization ')]">
-        <xsl:text>change-organization: </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' relmgmt-d/change-revisionid ')]">
-        <xsl:text>change-revisionid: </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
 
@@ -29,32 +26,26 @@
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' relmgmt-d/change-revisionid ')]">
-        <xsl:text>change-revisionid: </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' relmgmt-d/change-request-system ')]">
-        <xsl:text>change-request-system: </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' relmgmt-d/change-request-id ')]">
-        <xsl:text>change-request-id: </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' relmgmt-d/change-started ')]">
-        <xsl:text>change-started: </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' relmgmt-d/change-completed ')]">
-        <xsl:text>change-completed: </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' relmgmt-d/change-summary ')]">
-        <xsl:text>change-summary: </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
 
