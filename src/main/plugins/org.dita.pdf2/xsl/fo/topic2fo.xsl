@@ -92,6 +92,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="markup-domain.xsl"/>
     <xsl:import href="../../cfg/fo/attrs/xml-domain-attr.xsl"/>
     <xsl:import href="xml-domain.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/relmgmt-domain-attr.xsl"/>
+    <xsl:import href="relmgmt-domain.xsl"/>
+
 
     <xsl:import href="../../cfg/fo/attrs/static-content-attr.xsl"/>
     <xsl:import href="static-content.xsl"/>
@@ -99,6 +102,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="glossary.xsl"/>
     <xsl:import href="../../cfg/fo/attrs/lot-lof-attr.xsl"/>
     <xsl:import href="lot-lof.xsl"/>
+    <xsl:import href="../../cfg/fo/attrs/loc-attr.xsl"/>
+    <xsl:import href="loc.xsl"/>
 
     <xsl:import href="../../cfg/fo/attrs/learning-elements-attr.xsl"/>
     <xsl:import href="learning-elements.xsl"/>
