@@ -704,8 +704,11 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:attribute-set name="page-sequence.lot" use-attribute-sets="page-sequence.toc">
   </xsl:attribute-set>
-  
+
   <xsl:attribute-set name="page-sequence.lof" use-attribute-sets="page-sequence.toc">
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="page-sequence.loc" use-attribute-sets="page-sequence.toc">
   </xsl:attribute-set>
   
   <xsl:attribute-set name="page-sequence.body" use-attribute-sets="__force__page__count">
