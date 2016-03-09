@@ -156,7 +156,7 @@ See the accompanying license.txt file for applicable licenses.
         </ot-placeholder:figurelist>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' bookmap/changelist ')][not(@href)]" priority="2" mode="build-tree">
+    <xsl:template match="*[contains(@class,' bookmap/booklist ') and @type='change-historylist'][not(@href)]" priority="2" mode="build-tree">
         <ot-placeholder:changelist id="{generate-id()}">
             <xsl:apply-templates mode="build-tree"/>
         </ot-placeholder:changelist>
