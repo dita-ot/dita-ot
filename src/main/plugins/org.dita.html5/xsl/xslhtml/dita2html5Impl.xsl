@@ -7,7 +7,18 @@
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot">
 
+  <xsl:import href="css-class.xsl"/>
+  <xsl:import href="topic.xsl"/>
+  <xsl:import href="task.xsl"/>
+  <xsl:import href="reference.xsl"/>
+
   <xsl:variable name="newline" select="()" as="xs:string?"/>
+
+  <xsl:key name="enumerableByClass"
+           match="*[contains(@class, ' topic/fig ')][*[contains(@class, ' topic/title ')]] |
+                  *[contains(@class, ' topic/table ')][*[contains(@class, ' topic/title ')]] |
+                  *[contains(@class,' topic/fn ') and empty(@callout)]"
+            use="tokenize(@class, '\s+')"/>
 
   <xsl:template name="generateCharset">
     <meta charset="UTF-8"/>
@@ -159,8 +170,41 @@
       </xsl:when>
     </xsl:choose>
   </xsl:template>
-  
-  <xsl:include href="tables.xsl"/>
+
+  <xsl:template mode="generate-table-header" priority="10"
+    match="*[contains(@class, ' topic/simpletable ')]">
+    <xsl:variable name="gen" as="element(gen)">
+      <!--
+      Generated header needs to be wrapped in gen element to allow correct
+      language detection.
+      -->
+      <gen>
+        <xsl:copy-of select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
+        <xsl:next-match/>
+      </gen>
+    </xsl:variable>
+
+    <xsl:apply-templates select="$gen/*"/>
+  </xsl:template>
+
+  <xsl:template match="*" mode="css-class" priority="100">
+    <xsl:param name="default-output-class"/>
+
+    <xsl:variable name="outputclass" as="attribute(class)">
+      <xsl:apply-templates select="." mode="set-output-class">
+        <xsl:with-param name="default" select="$default-output-class"/>
+      </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:variable name="class">
+      <xsl:sequence select="data($outputclass)"/>
+      <xsl:next-match/>
+    </xsl:variable>
+
+    <xsl:attribute name="class" select="string-join($class, ' ')"/>
+  </xsl:template>
+
+  <xsl:include href="functions.xsl"/>
   <xsl:include href="nav.xsl"/>
-  
+
 </xsl:stylesheet>

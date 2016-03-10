@@ -226,6 +226,7 @@ task dist(dependsOn: [distZip, distTarGz]) << {
 test {
     inputs.files (
         'src/test/xsl/common/dita-utilities.xspec',
-        'src/test/xsl/preprocess/maplinkImpl.xspec'
+        'src/test/xsl/preprocess/maplinkImpl.xspec',
+        'src/test/xsl/plugins/org.dita.html5/xsl/xslhtml/functions.xspec'
     )
 }

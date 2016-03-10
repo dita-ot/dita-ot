@@ -4,15 +4,15 @@ table {
   border-collapse: collapse;
 }
 
-/* The cell border can be turned on with
-   {border-right:solid}
-   This value creates a very thick border in Firefox (does not match other tables)
+table .desc {
+  display: block;
+  font-style: italic;
+}
 
-   Firefox works with
-   {border-right:solid 1pt}
-   but this causes a barely visible line in IE */
+// deprecated
 
 .cellrowborder {
+  @warn "The .cellrowborder class is deprecated since v2.3.";
   border-bottom: solid 1px;
   border-left: 0;
   border-right: solid 1px;
@@ -20,50 +20,86 @@ table {
 }
 
 .row-nocellborder {
+  @warn "The .row-nocellborder class is deprecated since v2.3.";
   border-bottom: solid 1px;
   border-left: 0;
-  border-right: hidden;
   border-top: 0;
 }
 
 .cell-norowborder {
-  border-bottom: hidden;
+  @warn "The .cell-norowborder class is deprecated since v2.3.";
   border-left: 0;
   border-right: solid 1px;
   border-top: 0;
 }
 
 .nocellnorowborder {
+  @warn "The .nocellnorowborder class is deprecated since v2.3.";
   border: 0;
-  border-bottom: hidden;
-  border-right: hidden;
 }
 
-.table-border {
-  border-bottom: solid 1px;
-  border-left: solid 1px;
-  border-right: solid 1px;
-  border-top: solid 1px;
-}
-
-.table-rules-all {
-  border: solid 1px;
-}
-
-.table-rules-sides {
-  border-left: solid 1px;
-  border-right: solid 1px;
-}
-
-.table-rules-top {
-  border-top: solid 1px;
-}
-
-.table-rules-bottom {
-  border-bottom: solid 1px;
-}
-
-/* Used on the first column of a table, when rowheader="firstcol" is used */
 .firstcol {
+  @warn "The .firstcol class is deprecated since v2.3.";
   font-weight: bold;
+}
+
+// @pgwide
+
+.table--pgwide-1 {
+  width: 100%;
+}
+
+// @align
+
+$align: left right center justify char;
+
+@each $value in $align {
+  .align-#{$value} {
+    text-align: $value;
+  }
+}
+
+// @valign
+
+$valign: top bottom middle;
+
+@each $value in $valign {
+  .valign-#{$value} {
+    vertical-align: $value;
+  }
+}
+
+// @colsep
+
+.colsep-0 {
+  border-right: 0;
+}
+
+.colsep-1 {
+  border-right: 1px solid;
+}
+
+// @rowsep
+
+.rowsep-0 {
+  border-bottom: 0;
+}
+
+.rowsep-1 {
+  border-bottom: 1px solid;
+}
+
+// simpletable
+
+.stentry {
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.stentry:last-child {
+  border-right: 0;
+}
+
+.strow:last-child .stentry {
+  border-bottom: 0;
 }
