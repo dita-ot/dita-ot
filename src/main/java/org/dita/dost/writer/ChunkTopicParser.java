@@ -329,7 +329,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toString());
 
                 if (conflictTable.get(outputFileName) != null) {
-                    final String relativePath = getRelativeUnixPath(filePath + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
+                    final String relativePath = getRelativeUnixPath(new File(filePath) + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
                             new File(conflictTable.get(outputFileName)).getAbsolutePath());
                     String path2project = getRelativeUnixPath(relativePath);
                     if (null == path2project) {
