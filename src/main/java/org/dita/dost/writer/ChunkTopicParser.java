@@ -57,7 +57,6 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
 
     @Override
     public void write(final File fileDir) throws DITAOTException {
-        // pass map's directory path
         filePath = fileDir.toURI();
         try {
             output = new StringWriter();

@@ -45,8 +45,8 @@ import org.xml.sax.SAXException;
 
 /**
  * ChunkMapReader class, read and filter ditamap file for chunking.
- * 
  */
+// TODO rename this because this is not a reader, it's a filter
 public final class ChunkMapReader extends AbstractDomFilter {
 
     public static final String FILE_NAME_STUB_DITAMAP = "stub.ditamap";
@@ -169,10 +169,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
         String newFilename = replaceExtension(new File(inputFile).getName(), FILE_EXTENSION_DITA);
         URI newFile = inputFile.resolve(newFilename);
         if (new File(newFile).exists()) {
+            final URI oldFile = newFile;
             newFilename = chunkFilenameGenerator.generateFilename("Chunk", FILE_EXTENSION_DITA);
             newFile = inputFile.resolve(newFilename);
             // Mark up the possible name changing, in case that references might be updated.
-            conflictTable.put(newFile, newFile.normalize());
+            conflictTable.put(newFile, oldFile.normalize());
         }
         changeTable.put(newFile, newFile);
 
@@ -197,9 +198,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * Create the new topic stump.
      */
     private void createTopicStump(final URI newFile) {
-        OutputStream newFileWriter = null;
-        try {
-            newFileWriter = new FileOutputStream(new File(newFile));
+        try (final OutputStream newFileWriter = new FileOutputStream(new File(newFile))) {
             final XMLStreamWriter o = XMLOutputFactory.newInstance().createXMLStreamWriter(newFileWriter, UTF8);
             o.writeStartDocument();
             o.writeProcessingInstruction(PI_WORKDIR_TARGET, UNIX_SEPARATOR + new File(newFile.resolve(".")).getAbsolutePath());
@@ -213,14 +212,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
             throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                if (newFileWriter != null) {
-                    newFileWriter.close();
-                }
-            } catch (final IOException e) {
-                logger.error(e.getMessage(), e);
-            }
         }
     }
 
@@ -285,7 +276,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     public static Collection<String> split(final String value) {
         if (value == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         final String[] tokens = value.trim().split("\\s+");
         return asList(tokens);

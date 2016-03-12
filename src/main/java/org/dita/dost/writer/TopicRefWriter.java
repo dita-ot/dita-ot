@@ -48,22 +48,23 @@ public final class TopicRefWriter extends AbstractXMLFilter {
      */
     public void setup(final Map<URI, URI> conflictTable) {
         for (final Map.Entry<URI, URI> e: changeTable.entrySet()) {
-            assert new File(e.getKey()).isAbsolute();
-            assert new File(e.getValue()).isAbsolute();
+            assert e.getKey().isAbsolute();
+            assert e.getValue().isAbsolute();
         }
         this.conflictTable = conflictTable;
     }
 
     public void setChangeTable(final Map<URI, URI> changeTable) {
+        assert changeTable != null && !changeTable.isEmpty();
         for (final Map.Entry<URI, URI> e: changeTable.entrySet()) {
-            assert new File(e.getKey()).isAbsolute();
-            assert new File(e.getValue()).isAbsolute();
+            assert e.getKey().isAbsolute();
+            assert e.getValue().isAbsolute();
         }
         this.changeTable = changeTable;
     }
 
     public void setFixpath(final String fixpath) {
-        assert fixpath != null ? !(toFile(fixpath).isAbsolute()) : true;
+        assert fixpath == null || !(toFile(fixpath).isAbsolute());
         this.fixpath = fixpath;
     }
 
@@ -158,7 +159,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
         if (isLocalDita(atts)) {
             // replace the href value if it's referenced topic is extracted.
             final URI rootPathName = currentFile;
-            URI changeTargetkey = currentFileDir.toURI().resolve(hrefValue);
+            URI changeTargetkey = stripFragment(currentFileDir.toURI().resolve(hrefValue));
             URI changeTarget = changeTable.get(changeTargetkey);
 
             final String topicID = getTopicID(toURI(hrefValue));
@@ -183,6 +184,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
                 return hrefValue;// no change
             } else {
                 final URI conTarget = conflictTable.get(stripFragment(changeTarget));
+                logger.debug("Update " + changeTarget + " to " + conTarget);
                 if (conTarget != null && !conTarget.toString().isEmpty()) {
                     final URI p = getRelativePath(rootPathName, conTarget);
                     if (elementID == null) {
