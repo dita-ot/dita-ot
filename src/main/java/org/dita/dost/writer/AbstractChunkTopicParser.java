@@ -393,7 +393,6 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                     } else if (relative.toString().contains(SLASH)) {
                         // if new file is not under the same directory with current file
                         // add path information to the @href value
-                        relative = setPath(relative, relative.getPath().substring(0, relative.getPath().lastIndexOf(SLASH)));
                         attrValue = relative.resolve(attrValue).toString();
                     }
                 }
