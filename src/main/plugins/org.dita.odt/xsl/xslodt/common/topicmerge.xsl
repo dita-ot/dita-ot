@@ -238,7 +238,7 @@ See the accompanying license.txt file for applicable licenses.
 			<xsl:when test="contains($class,' bookmap/toc ')"/>
 			<xsl:when test="contains($class,' bookmap/trademarklist ')"/>
 			<xsl:when test="contains($class,' bookmap/glossarylist ') and not(*)">
-                <!-- When glossarylist has children, don't treat it as an empty non-topic -->
+            <!-- When glossarylist has children, don't treat it as an empty non-topic -->
             </xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="'false'"/>
