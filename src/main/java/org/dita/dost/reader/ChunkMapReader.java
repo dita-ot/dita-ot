@@ -363,7 +363,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * @return generated file name
      */
     private String generateFilename() {
-        return chunkFilenameGenerator.generateFilename("XChunk", FILE_EXTENSION_DITA);
+        return chunkFilenameGenerator.generateFilename("Chunk", FILE_EXTENSION_DITA);
     }
 
     /**

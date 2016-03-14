@@ -2,6 +2,7 @@ package org.dita.dost.reader;
 
 import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.Before;
@@ -10,19 +11,21 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ChunkMapReaderTest {
 
     final File resourceDir = TestUtils.getResourceDir(ChunkMapReaderTest.class);
     final File srcDir = new File(resourceDir, "src");
 
-    ChunkMapReader mapReader = null;
     File tempDir = null;
 
     @Before
@@ -31,17 +34,95 @@ public class ChunkMapReaderTest {
         new File(tempDir, "maps").mkdirs();
         new File(tempDir, "topics").mkdirs();
         new File(tempDir, "maps" + File.separator + "topics").mkdirs();
+    }
 
+    @Test
+    public void testRead() throws IOException {
         final Job job = new Job(tempDir);
 
-        mapReader = new ChunkMapReader();
+        final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(new TestUtils.TestLogger());
         mapReader.setJob(job);
-        mapReader.supportToNavigation(false);
 
         TestUtils.copy(new File(srcDir, "gen.ditamap"), new File(tempDir, "maps" + File.separator + "gen.ditamap"));
         job.add(new Job.FileInfo.Builder().uri(toURI("maps/gen.ditamap")).build());
-        final List<String> srcFiles = Arrays.asList(
+        for (final String srcFile : getSrcFiles()) {
+            final URI dst = tempDir.toURI().resolve(srcFile);
+            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
+            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
+        }
+
+        mapReader.read(new File(tempDir, "maps" + File.separator + "gen.ditamap"));
+
+        assertEquals(getActChangeTable(), mapReader.getChangeTable());
+        assertEquals(getActConflictTable(), mapReader.getConflicTable());
+    }
+
+    @Test
+    public void testMissingSource() throws IOException, URISyntaxException {
+        final Job job = new Job(tempDir);
+
+        final ChunkMapReader mapReader = new ChunkMapReader();
+        mapReader.setLogger(new TestUtils.TestLogger());
+        mapReader.setJob(job);
+
+        TestUtils.copy(new File(srcDir, "missing.ditamap"), new File(tempDir, "missing.ditamap"));
+        job.add(new Job.FileInfo.Builder().uri(toURI("missing.ditamap")).build());
+        for (final String srcFile : Arrays.asList("2.dita")) {
+            final URI dst = tempDir.toURI().resolve(srcFile);
+            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
+            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
+        }
+
+        mapReader.read(new File(tempDir, "missing.ditamap"));
+
+        assertEquals(Collections.emptyMap(), mapReader.getChangeTable());
+        assertEquals(Collections.emptyMap(), mapReader.getConflicTable());
+
+        assertNull(job.getFileInfo(new URI("missing.dita")));
+    }
+
+    @Test
+    public void testChunkFullMap() {
+        // TODO
+    }
+
+    @Test
+    public void testExistingGeneratedFile() throws IOException, URISyntaxException {
+        final Job job = new Job(tempDir);
+
+        final ChunkMapReader mapReader = new ChunkMapReader();
+        mapReader.setLogger(new DITAOTJavaLogger());
+        mapReader.setJob(job);
+
+        TestUtils.copy(new File(srcDir, "conflict.ditamap"), new File(tempDir, "conflict.ditamap"));
+        job.add(new Job.FileInfo.Builder().uri(toURI("conflict.ditamap")).build());
+        for (final String srcFile : Arrays.asList("2.dita", "Chunk0.dita")) {
+            final URI dst = tempDir.toURI().resolve(srcFile);
+            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
+            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
+        }
+
+        mapReader.read(new File(tempDir, "conflict.ditamap"));
+
+        assertEquals(ImmutableMap.<URI, URI>builder()
+                        .put(prefixTemp("Chunk0.dita"), prefixTemp("Chunk0.dita"))
+                        .put(prefixTemp("Chunk2.dita"), prefixTemp("Chunk2.dita"))
+                        .put(prefixTemp("Chunk1.dita"), prefixTemp("Chunk2.dita#Chunk1"))
+                        .put(prefixTemp("Chunk1.dita#Chunk1"), prefixTemp("Chunk2.dita#Chunk1"))
+                        .put(prefixTemp("2.dita"), prefixTemp("Chunk2.dita#topic_qft_qwn_hv"))
+                        .put(prefixTemp("2.dita#topic_qft_qwn_hv"), prefixTemp("Chunk2.dita#topic_qft_qwn_hv"))
+                        .build(),
+                mapReader.getChangeTable());
+
+        assertEquals(ImmutableMap.<URI, URI>builder()
+                        .put(prefixTemp("Chunk2.dita"), prefixTemp("Chunk1.dita"))
+                        .build(),
+                mapReader.getConflicTable());
+    }
+
+    private List<String> getSrcFiles() {
+        return Arrays.asList(
                 "maps/0.dita",
                 "maps/2.dita",
                 "maps/3.dita",
@@ -202,19 +283,6 @@ public class ChunkMapReaderTest {
                 "topics/221.dita",
                 "topics/222.dita",
                 "topics/223.dita");
-        for (final String srcFile : srcFiles) {
-            final URI dst = tempDir.toURI().resolve(srcFile);
-            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
-            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
-        }
-    }
-
-    @Test
-    public void testRead() {
-        mapReader.read(new File(tempDir, "maps" + File.separator + "gen.ditamap"));
-
-        assertEquals(getActChangeTable(), mapReader.getChangeTable());
-        assertEquals(getActConflictTable(), mapReader.getConflicTable());
     }
 
     private Map<URI, URI> getActConflictTable() {
@@ -654,6 +722,7 @@ public class ChunkMapReaderTest {
     @After
     public void teardown() throws IOException {
         TestUtils.forceDelete(tempDir);
+//        System.err.println(tempDir);
     }
 
 }
