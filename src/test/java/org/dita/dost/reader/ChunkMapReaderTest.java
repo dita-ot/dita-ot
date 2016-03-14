@@ -76,15 +76,46 @@ public class ChunkMapReaderTest {
 
         mapReader.read(new File(tempDir, "missing.ditamap"));
 
-        assertEquals(Collections.emptyMap(), mapReader.getChangeTable());
+        assertEquals(ImmutableMap.<URI, URI>builder()
+                        .put(prefixTemp("2.dita"), prefixTemp("2.dita"))
+                        .build(),
+                mapReader.getChangeTable());
         assertEquals(Collections.emptyMap(), mapReader.getConflicTable());
 
         assertNull(job.getFileInfo(new URI("missing.dita")));
     }
 
     @Test
-    public void testChunkFullMap() {
-        // TODO
+    public void testChunkFullMap() throws IOException {
+        final Job job = new Job(tempDir);
+
+        final ChunkMapReader mapReader = new ChunkMapReader();
+        mapReader.setLogger(new DITAOTJavaLogger());
+        mapReader.setJob(job);
+
+        TestUtils.copy(new File(srcDir, "map.ditamap"), new File(tempDir, "map.ditamap"));
+        job.add(new Job.FileInfo.Builder().uri(toURI("map.ditamap")).build());
+        for (final String srcFile : Arrays.asList("1.dita", "2.dita", "3.dita")) {
+            final URI dst = tempDir.toURI().resolve(srcFile);
+            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
+            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
+        }
+
+        mapReader.read(new File(tempDir, "map.ditamap"));
+
+        assertEquals(ImmutableMap.<URI, URI>builder()
+                        .put(prefixTemp("map.dita"), prefixTemp("map.dita"))
+                        .put(prefixTemp("1.dita"), prefixTemp("map.dita#topic_qft_qwn_hv"))
+                        .put(prefixTemp("1.dita#topic_qft_qwn_hv"), prefixTemp("map.dita#topic_qft_qwn_hv"))
+                        .put(prefixTemp("2.dita"), prefixTemp("map.dita#unique_0"))
+                        .put(prefixTemp("2.dita#topic_qft_qwn_hv"), prefixTemp("map.dita#unique_0"))
+                        .put(prefixTemp("3.dita"), prefixTemp("map.dita#unique_1"))
+                        .put(prefixTemp("3.dita#topic_qft_qwn_hv"), prefixTemp("map.dita#unique_1"))
+                        .build(),
+                mapReader.getChangeTable());
+
+        assertEquals(Collections.emptyMap(),
+                mapReader.getConflicTable());
     }
 
     @Test
@@ -722,7 +753,6 @@ public class ChunkMapReaderTest {
     @After
     public void teardown() throws IOException {
         TestUtils.forceDelete(tempDir);
-//        System.err.println(tempDir);
     }
 
 }
