@@ -2,7 +2,6 @@ package org.dita.dost.reader;
 
 import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.Before;
@@ -12,10 +11,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertEquals;
 
 public class ChunkMapReaderTest {
@@ -28,17 +27,20 @@ public class ChunkMapReaderTest {
 
     @Before
     public void setUp() throws Exception {
-        mapReader = new ChunkMapReader();
-        mapReader.setLogger(new TestUtils.TestLogger());
-        mapReader.setJob(new Job(srcDir));
-        mapReader.supportToNavigation(false);
-
         tempDir = TestUtils.createTempDir(getClass());
         new File(tempDir, "maps").mkdirs();
         new File(tempDir, "topics").mkdirs();
         new File(tempDir, "maps" + File.separator + "topics").mkdirs();
 
+        final Job job = new Job(tempDir);
+
+        mapReader = new ChunkMapReader();
+        mapReader.setLogger(new TestUtils.TestLogger());
+        mapReader.setJob(job);
+        mapReader.supportToNavigation(false);
+
         TestUtils.copy(new File(srcDir, "gen.ditamap"), new File(tempDir, "maps" + File.separator + "gen.ditamap"));
+        job.add(new Job.FileInfo.Builder().uri(toURI("maps/gen.ditamap")).build());
         final List<String> srcFiles = Arrays.asList(
                 "maps/0.dita",
                 "maps/2.dita",
@@ -201,7 +203,9 @@ public class ChunkMapReaderTest {
                 "topics/222.dita",
                 "topics/223.dita");
         for (final String srcFile : srcFiles) {
-            TestUtils.copy(new File(srcDir, "topic.dita"), new File(tempDir, srcFile));
+            final URI dst = tempDir.toURI().resolve(srcFile);
+            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
+            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
         }
     }
 
