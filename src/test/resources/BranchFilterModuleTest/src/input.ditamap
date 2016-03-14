@@ -34,5 +34,13 @@
     </topicref>
     <topicref class="- map/topicref " href="http://example.com/install.dita" scope="external"/>
   </topicref>
+  <topicref class="- map/topicref " href="install.dita">
+    <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="mac.ditaval" processing-role="resource-only">
+      <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+        <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix " name="dvrResourceSuffix">-linux</dvrResourceSuffix>
+        <dvrKeyscopePrefix class="+ topic/data ditavalref-d/dvrKeyscopePrefix " name="dvrKeyscopePrefix">linux-</dvrKeyscopePrefix>
+      </ditavalmeta>
+    </ditavalref>
+  </topicref>
   <topicref class="- map/topicref " href="install.dita" copy-to="getting-started.dita"/>
 </map>

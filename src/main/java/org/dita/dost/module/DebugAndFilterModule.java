@@ -609,8 +609,12 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
         @Override
         public void startDTD(final String name, final String publicId, final String systemId) throws SAXException {
-            parser.getContentHandler().processingInstruction("doctype-public", publicId);
-            parser.getContentHandler().processingInstruction("doctype-system", systemId);
+            if (publicId != null && !publicId.isEmpty()) {
+                parser.getContentHandler().processingInstruction("doctype-public", publicId);
+            }
+            if (systemId != null && !systemId.isEmpty()) {
+                parser.getContentHandler().processingInstruction("doctype-system", systemId);
+            }
         }
 
         @Override

@@ -533,7 +533,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:apply-templates/>
+                    <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
                   </xsl:otherwise>
                 </xsl:choose>
             </fo:basic-link>
