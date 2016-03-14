@@ -457,12 +457,13 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                 branch.insertBefore(ditavalref, branch.getFirstChild());
                 final Branch currentFilter = filter.merge(ditavalref);
                 processAttributes(branch, currentFilter);
+                final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, null, null);
                 // process children of all branches
                 for (final Element child: getChildElements(branch, MAP_TOPICREF)) {
                     if (DITAVAREF_D_DITAVALREF.matches(child)) {
                         continue;
                     }
-                    splitBranches(child, currentFilter);
+                    splitBranches(child, childFilter);
                 }
             }
         } else {
@@ -561,10 +562,10 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
             }
         }
 
-        if ((filter.keyscopePrefix != null || filter.keyscopeSuffix != null)) {
+        if (filter.keyscopePrefix != null || filter.keyscopeSuffix != null) {
+            final StringBuilder buf = new StringBuilder();
             final String keyscope = elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE);
             if (!keyscope.isEmpty()) {
-                final StringBuilder buf = new StringBuilder();
                 for (final String key : keyscope.trim().split("\\s+")) {
                     if (filter.keyscopePrefix != null) {
                         buf.append(filter.keyscopePrefix);
@@ -575,8 +576,15 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                     }
                     buf.append(' ');
                 }
-                elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
+            } else {
+                if (filter.keyscopePrefix != null) {
+                    buf.append(filter.keyscopePrefix);
+                }
+                if (filter.keyscopeSuffix != null) {
+                    buf.append(filter.keyscopeSuffix);
+                }
             }
+            elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
         }
     }
     
