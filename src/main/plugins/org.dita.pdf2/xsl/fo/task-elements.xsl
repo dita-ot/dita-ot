@@ -147,7 +147,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:with-param name="use-label">
                     <xsl:apply-templates select="." mode="dita2xslfo:retrieve-task-heading">
                       <xsl:with-param name="pdf2-string">Task Result</xsl:with-param>
-                      <xsl:with-param name="common-string">task_result</xsl:with-param>
+                      <xsl:with-param name="common-string">task_results</xsl:with-param>
                     </xsl:apply-templates>
                 </xsl:with-param>
             </xsl:apply-templates>
