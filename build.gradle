@@ -172,6 +172,7 @@ task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
     args file("${distTempDir}/docsrc/build.xml")
     args "-Dbasedir=" + file("${distTempDir}/docsrc")
     args "-Ddita.home=" + distTempDir
+    args "dist"
 }
 
 task distZip(type: Zip, dependsOn: [jar, generateDocs]) {
@@ -219,7 +220,7 @@ task distTarGz(type: Tar, dependsOn: [jar, generateDocs]) {
     }
     archiveName "dita-ot-${project.version}.tar.gz"
 }
-task dist(dependsOn: [distZip, distTarGz]) << {
+task dist(dependsOn: [distZip]) << {
     // NOOP
 }
 
