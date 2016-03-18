@@ -6,7 +6,7 @@ before_script:
 - git submodule update --init --recursive
 - "./gradlew"
 script:
-#- "./gradlew check integrationTest --info --stacktrace --no-daemon"
+- "./gradlew check integrationTest --info --stacktrace --no-daemon"
 - "./gradlew dist --info --stacktrace --no-daemon"
 branches:
   only:
