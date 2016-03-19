@@ -158,7 +158,16 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":xep:copyDistTemp", ":wordrtf:copyDistTemp", ":odt:copyDistTemp"]) {
+task updateConfiguration() << {
+    if (!commit.empty) {
+        ant.propertyfile(file: "${distTempDir}/lib/configuration.properties") {
+            entry(key: "otversion", operation: "=", value: "${project.version}+${commit.substring(0, 7)}")
+        }
+    }
+}
+updateConfiguration.mustRunAfter copyDistTemp
+
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":xep:copyDistTemp", ":wordrtf:copyDistTemp", ":odt:copyDistTemp", updateConfiguration]) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
     workingDir distTempDir
