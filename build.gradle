@@ -91,8 +91,12 @@ task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":ax
 // Distribution
 
 def distTempDir = file("${buildDir}/tmp/dist")
-def distVersion = tag.empty ? "${project.version}+${commit.substring(0, 7)}" : "${project.version}"
-def distFileName = tag.empty ? "develop" : "${project.version}"
+def distVersion = project.hasProperty("commit") && (!project.hasProperty("tag") || tag.empty) ?
+                  "${project.version}+${commit.substring(0, 7)}" :
+                  "${project.version}"
+def distFileName = (project.hasProperty("tag") && tag.empty) ?
+                   "develop" :
+                   "${project.version}"
 
 task cleanDistTemp(type: Delete) {
     delete distTempDir
