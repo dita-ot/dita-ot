@@ -91,6 +91,8 @@ task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":ax
 // Distribution
 
 def distTempDir = file("${buildDir}/tmp/dist")
+def distVersion = tag.empty ? "${project.version}+${commit.substring(0, 7)}" : "${project.version}"
+def distFileName = tag.empty ? "develop" : "${project.version}"
 
 task cleanDistTemp(type: Delete) {
     delete distTempDir
@@ -176,7 +178,7 @@ task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
 }
 
 task distZip(type: Zip, dependsOn: [jar, generateDocs]) {
-    into("dita-ot-${project.version}") {
+    into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
             exclude "bin/dita.bat"
@@ -195,11 +197,11 @@ task distZip(type: Zip, dependsOn: [jar, generateDocs]) {
             include "bin/ant.*"
         }
     }
-    archiveName "dita-ot-${project.version}.zip"
+    archiveName "dita-ot-${distFileName}.zip"
 }
 task distTarGz(type: Tar, dependsOn: [jar, generateDocs]) {
     compression = Compression.GZIP
-    into("dita-ot-${project.version}") {
+    into("dita-ot-${distVersion}") {
         from (distTempDir ) {
             exclude "bin/dita"
             exclude "bin/dita.bat"
@@ -218,7 +220,7 @@ task distTarGz(type: Tar, dependsOn: [jar, generateDocs]) {
             include "bin/ant.*"
         }
     }
-    archiveName "dita-ot-${project.version}.tar.gz"
+    archiveName "dita-ot-${distFileName}.tar.gz"
 }
 task dist(dependsOn: [distZip]) << {
     // NOOP
