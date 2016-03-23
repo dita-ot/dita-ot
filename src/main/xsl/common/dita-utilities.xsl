@@ -386,12 +386,13 @@
   <xsl:function name="dita-ot:resolve-href-path" as="xs:anyURI">
     <xsl:param name="href" as="attribute(href)"/>
 
+    <xsl:variable name="hrefValue" select="replace($href, '\\', '/')"/>
     <xsl:variable name="source" as="xs:anyURI" select="base-uri($href)"/>
 
     <xsl:sequence
-      select="if (starts-with($href, '#'))
+      select="if (starts-with($hrefValue, '#'))
             then $source
-            else resolve-uri(tokenize($href, '#')[1], $source)"/>
+            else resolve-uri(tokenize($hrefValue, '#')[1], $source)"/>
   </xsl:function>
 
   <xsl:function name="dita-ot:get-topic-id" as="xs:string?">
