@@ -38,10 +38,11 @@
     <xsl:param name="element" as="element()"/>
     
     <xsl:variable name="topic" select="$element/ancestor-or-self::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
-    <xsl:variable name="topic-id" select="$topic/@id" as="xs:string"/>
-    <xsl:variable name="index" select="count($topic/descendant::*[local-name() = local-name($element)][. &lt;&lt; $element]) + 1" as="xs:integer"/>
+    <xsl:variable name="parent-element" select="$element/ancestor-or-self::*[@id][1][not(. is $topic)]" as="element()?"/>
+    <xsl:variable name="closest" select="($parent-element, $topic)[1]" as="element()"/>
+    <xsl:variable name="index" select="count($closest/descendant::*[local-name() = local-name($element)][. &lt;&lt; $element]) + 1" as="xs:integer"/>
     
-    <xsl:sequence select="dita-ot:generate-id($topic-id, string-join(($element, string($index)), $HTML_ID_SEPARATOR))"/>
+    <xsl:sequence select="dita-ot:generate-id($topic/@id, string-join(($parent-element/@id, local-name($element), string($index)), $HTML_ID_SEPARATOR))"/>
   </xsl:function>
 
   <xsl:function name="table:is-tbody-entry" as="xs:boolean">
