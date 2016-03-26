@@ -32,10 +32,25 @@
     <xsl:param name="lang">
       <xsl:apply-templates select="/*" mode="get-first-topic-lang"/>
     </xsl:param>
+    <xsl:variable name="l" select="tokenize($lang, '-')[1]" as="xs:string"/>
     <xsl:choose>
-      <xsl:when test="$lang='ar-eg' or $lang='ar'">rtl</xsl:when>
-      <xsl:when test="$lang='he-il' or $lang='he'">rtl</xsl:when>
-      <xsl:when test="$lang='ur-pk' or $lang='ur'">rtl</xsl:when>
+      <xsl:when test="$l = 'ar'">rtl</xsl:when>
+      <xsl:when test="$l = 'arc'">rtl</xsl:when>
+      <xsl:when test="$l = 'bcc'">rtl</xsl:when>
+      <xsl:when test="$l = 'bqi'">rtl</xsl:when>
+      <xsl:when test="$l = 'ckb'">rtl</xsl:when>
+      <xsl:when test="$l = 'dv'">rtl</xsl:when>
+      <xsl:when test="$l = 'fa'">rtl</xsl:when>
+      <xsl:when test="$l = 'glk'">rtl</xsl:when>
+      <xsl:when test="$l = 'he'">rtl</xsl:when>
+      <xsl:when test="$l = 'lrc'">rtl</xsl:when>
+      <xsl:when test="$l = 'mzn'">rtl</xsl:when>
+      <xsl:when test="$l = 'pnb'">rtl</xsl:when>
+      <xsl:when test="$l = 'ps'">rtl</xsl:when>
+      <xsl:when test="$l = 'sd'">rtl</xsl:when>
+      <xsl:when test="$l = 'ug'">rtl</xsl:when>
+      <xsl:when test="$l = 'ur'">rtl</xsl:when>
+      <xsl:when test="$l = 'yi'">rtl</xsl:when>
       <xsl:otherwise>ltr</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
