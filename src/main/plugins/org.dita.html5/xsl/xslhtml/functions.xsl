@@ -9,6 +9,41 @@
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot table">
 
+  <xsl:variable name="HTML_ID_SEPARATOR" select="'__'"/>
+
+  <xsl:function name="dita-ot:generate-html-id" as="xs:string">
+    <xsl:param name="element" as="element()"/>
+    
+    <xsl:sequence
+      select="if (exists($element/@id))
+              then dita-ot:get-prefixed-id($element, $element/@id)
+              else dita-ot:generate-stable-id($element)"/>
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:generate-id" as="xs:string">
+    <xsl:param name="topic" as="xs:string?"/>
+    <xsl:param name="element" as="xs:string?"/>
+    
+    <xsl:value-of select="string-join(($topic, $element), $HTML_ID_SEPARATOR)"/>
+  </xsl:function>
+
+  <xsl:function name="dita-ot:get-prefixed-id" as="xs:string">
+    <xsl:param name="element" as="element()"/>
+    <xsl:param name="id" as="xs:string"/>
+    
+    <xsl:sequence select="dita-ot:generate-id($element/ancestor::*[contains(@class, ' topic/topic ')][1]/@id, $id)"/>
+  </xsl:function>
+
+  <xsl:function name="dita-ot:generate-stable-id" as="xs:string">
+    <xsl:param name="element" as="element()"/>
+    
+    <xsl:variable name="topic" select="$element/ancestor-or-self::*[contains(@class, ' topic/topic ')][1]" as="element()"/>
+    <xsl:variable name="topic-id" select="$topic/@id" as="xs:string"/>
+    <xsl:variable name="index" select="count($topic/descendant::*[local-name() = local-name($element)][. &lt;&lt; $element]) + 1" as="xs:integer"/>
+    
+    <xsl:sequence select="dita-ot:generate-id($topic-id, string-join(($element, string($index)), $HTML_ID_SEPARATOR))"/>
+  </xsl:function>
+
   <xsl:function name="table:is-tbody-entry" as="xs:boolean">
     <xsl:param name="el" as="element()"/>
 
