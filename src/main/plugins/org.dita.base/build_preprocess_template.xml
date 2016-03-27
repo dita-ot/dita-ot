@@ -147,6 +147,7 @@
     <property name="fullditatopicfile" value="fullditatopic.list"/>
     <property name="fullditamapfile" value="fullditamap.list"/>
     <property name="hrefditatopicfile" value="hrefditatopic.list"/>
+    <!-- Deprecated since 2.3 -->
     <property name="conreffile" value="conref.list"/>
     <!-- Deprecated since 2.1 -->
     <property name="imagefile" value="image.list"/>
@@ -268,10 +269,8 @@
     </pipeline>
   </target>
   
+  <!-- Deprecated since 2.3 -->
   <target name="conref-check">
-    <condition property="preprocess.conref.skip">
-      <length file="${dita.temp.dir}/${conreffile}" length="0"/>
-    </condition>
   </target>
   
   <target name="topic-fragment"
