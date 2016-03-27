@@ -2,6 +2,7 @@ package org.dita.dost.module;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Configuration;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -67,6 +69,15 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 		}
         parser.setEntityResolver(xmlcatalog);
         
+        if (fileInfoFilter != null) {
+            final Collection<Job.FileInfo> res = job.getFileInfo(fileInfoFilter);
+            includes = new ArrayList<>(res.size());
+            for (final Job.FileInfo f : res) {
+                includes.add(f.file);
+            }
+            baseDir = job.tempDir;
+        }
+
     	Transformer t = null;
         for (final File include: includes) {
         	if (reloadstylesheet || t == null) {

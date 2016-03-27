@@ -8,7 +8,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.XMLFilter;
@@ -25,7 +24,6 @@ import java.util.List;
 public final class XmlFilterModule extends AbstractPipelineModuleImpl {
 
     private List<AbstractXMLFilter> pipe;
-    private Filter<FileInfo> fileInfoFilter;
 
     /**
      * Filter files through XML filters.
@@ -69,9 +67,5 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
             res.add(f);
         }
         return res;
-    }
-
-    public void setFileInfoFilter(final Filter<FileInfo> fileInfoFilter) {
-        this.fileInfoFilter = fileInfoFilter;
     }
 }
