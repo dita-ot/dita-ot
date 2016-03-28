@@ -481,7 +481,7 @@
           style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/flag.xsl"
           filenameparameter="FILENAME" 
           filedirparameter="FILEDIR">
-        <ditaFileset format="dita" processing-role="normal"/>
+        <ditaFileset format="dita" processingRole="normal"/>
         <param name="TRANSTYPE" expression="${transtype}"/>
         <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"/>
         <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
