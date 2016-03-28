@@ -213,7 +213,7 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
 
   <xsl:template match="opentopic-index:label" mode="index-postprocess">
-    <fo:block xsl:use-attribute-sets="__index__letter-group">
+    <fo:block xsl:use-attribute-sets="__index__letter-group" id="{generate-id(.)}">
       <xsl:value-of select="."/>
     </fo:block>
   </xsl:template>
