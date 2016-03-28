@@ -8,16 +8,6 @@
  */
 package org.dita.dost.invoker;
 
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
-import static org.dita.dost.util.Constants.*;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -30,8 +20,20 @@ import org.dita.dost.module.XmlFilterModule;
 import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.AbstractXMLFilter;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Ant task for executing pipeline modules.
@@ -114,13 +116,14 @@ public final class ExtensibleAntInvoker extends Task {
         filters.setProject(getProject());
         modules.add(filters);
     }
-    
-    /**
-     * Execution point of this invoker.
-     * @throws BuildException exception
-     */
-    @Override
-    public void execute() throws BuildException {
+
+    private void initialize() throws BuildException {
+        if (tempDir == null) {
+            tempDir = new File(this.getProject().getProperty("dita.temp.dir")).getAbsoluteFile();
+        }
+        if (tempDir == null) {
+            throw new BuildException("Temporary directory not set or available");
+        }
         if (modules.isEmpty()) {
             throw new BuildException("Module must be specified");
         }
@@ -138,7 +141,16 @@ public final class ExtensibleAntInvoker extends Task {
                 attrs.put(p.getName(), p.getValue());
             }
         }
+    }
 
+    /**
+     * Execution point of this invoker.
+     * @throws BuildException exception
+     */
+    @Override
+    public void execute() throws BuildException {
+        initialize();
+        
         long start, end;
         final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
         logger.setTask(this);
@@ -157,6 +169,9 @@ public final class ExtensibleAntInvoker extends Task {
                     if (xm.in != null) {
                         x.setSource(xm.in);
                         x.setResult(xm.out);
+                    } else if (!xm.fileInfoFilters.isEmpty()) {
+                        x.setFileInfoFilter(combine(xm.fileInfoFilters));
+                        x.setDestinationDir(xm.destDir != null ? xm.destDir : tempDir);
                     } else {
                         final Set<File> inc = readListFile(xm.includes, logger);
                         inc.removeAll(readListFile(xm.excludes, logger));
@@ -186,9 +201,9 @@ public final class ExtensibleAntInvoker extends Task {
                     final Filters fm = (Filters) m;
                     final XmlFilterModule module = new XmlFilterModule();
                     final List<String> format = fm.getFormat();
-                    module.setFileInfoFilter(new Job.FileInfo.Filter<Job.FileInfo>() {
+                    module.setFileInfoFilter(new FileInfo.Filter<FileInfo>() {
                              @Override
-                             public boolean accept(final Job.FileInfo f) {
+                             public boolean accept(final FileInfo f) {
                                  return format.contains(f.format);
                              }
                          }
@@ -223,7 +238,25 @@ public final class ExtensibleAntInvoker extends Task {
             throw new BuildException("Failed to run pipeline: " + e.getMessage(), e);
         }
     }
-    
+
+    private FileInfo.Filter<FileInfo> combine(final Collection<Xslt.FileInfoFilter> filters) {
+        final Collection<FileInfo.Filter<FileInfo>> res = new ArrayList<>(filters.size());
+        for (final Xslt.FileInfoFilter f : filters) {
+            res.add(f.toFilter());
+        }
+        return new FileInfo.Filter<FileInfo>() {
+            @Override
+            public boolean accept(FileInfo f) {
+                for (final FileInfo.Filter<FileInfo> filter : res) {
+                    if (filter.accept(f)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+    }
+
     /**
      * Get job configuration from Ant project reference or create new.
      *    
@@ -312,6 +345,7 @@ public final class ExtensibleAntInvoker extends Task {
         private File destDir;
         private File in;
         private File out;
+        private final Collection<FileInfoFilter> fileInfoFilters = new ArrayList<>();
         private final List<IncludesFile> includes = new ArrayList<>();
         private final List<IncludesFile> excludes = new ArrayList<>();
         private Mapper mapper;
@@ -384,7 +418,11 @@ public final class ExtensibleAntInvoker extends Task {
         public void addConfiguredMapper(final Mapper mapper) {
             this.mapper = mapper;
         }
-        
+
+        public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
+            fileInfoFilters.add(fileInfoFilter);
+        }
+
         public void addConfiguredIncludesFile(final IncludesFile includesFile) {
             includes.add(includesFile);
         }
@@ -403,14 +441,35 @@ public final class ExtensibleAntInvoker extends Task {
                 this.ifProperty = ifProperty;
             }
         }
-        
-        /*public static class XMLCatalog {
-            private String refid;
-            public void setRefid(final String refid) {
-                this.refid = refid;
+
+        public static class FileInfoFilter {
+            private String format;
+            private Boolean hasConref;
+            private Boolean isResourceOnly;
+
+            public void setFormat(final String format) {
+                this.format = format;
             }
-        }*/
-        
+
+            public void setConref(final boolean conref) {
+                this.hasConref = conref;
+            }
+
+            public void setProcessingRole(final String processingRole) {
+                this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+            }
+
+            public FileInfo.Filter<FileInfo> toFilter() {
+                return new FileInfo.Filter<FileInfo>() {
+                    @Override
+                    public boolean accept(FileInfo f) {
+                        return (format == null || format.equals(f.format)) &&
+                                (hasConref == null || f.hasConref == hasConref) &&
+                                (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
+                    }
+                };
+            }
+        }
     }
 
     /**
