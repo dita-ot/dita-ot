@@ -5,7 +5,7 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <index.configuration.set>
     <index.configuration>
-        <language>lv</language>
+        <language>lt</language>
         <index.groups>
             <index.group>
                 <group.key>Specials</group.key>
