@@ -1503,13 +1503,14 @@
 
 <!-- should not need priority, default is low enough; was set to 1 -->
 <xsl:template match="*[contains(@class, ' topic/figgroup ')]" name="topic.figgroup">
-  <!-- Figgroup can contain blocks, maybe this should be a div? -->
-  <span>
+  <!-- Figgroup can contain blocks, maybe this should be a div?
+       Changing to <div> with DITA-OT 2.3 -->
+  <div>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setidaname"/>
     <!-- Allow title to fallthrough -->
     <xsl:apply-templates/>
-  </span>
+  </div>
 </xsl:template>
 
 

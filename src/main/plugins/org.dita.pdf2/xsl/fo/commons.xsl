@@ -1663,10 +1663,10 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/figgroup ')]">
-        <fo:inline xsl:use-attribute-sets="figgroup">
+        <fo:block xsl:use-attribute-sets="figgroup">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
-        </fo:inline>
+        </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/pre ')]">
