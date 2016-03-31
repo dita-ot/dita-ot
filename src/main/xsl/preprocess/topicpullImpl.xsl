@@ -1274,6 +1274,19 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         </xsl:variable>
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
+      
+      <xsl:when test="$topicpos='samefile' and key('topic', $topicid)//*[@id = $elemid][1][contains(@class, ' topic/title ')]">
+        <xsl:variable name="target-text">
+          <xsl:apply-templates select="key('topic', $topicid)//*[@id = $elemid][1][contains(@class, ' topic/title ')]" mode="text-only"/>
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($target-text)"/>
+      </xsl:when>
+      <xsl:when test="$topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]//*[@id=$elemid][1][contains(@class, ' topic/title ')]">
+        <xsl:variable name="target-text">
+          <xsl:apply-templates select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid]//*[@id=$elemid][1][contains(@class, ' topic/title ')]" mode="text-only"/>
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($target-text)"/>
+      </xsl:when>
 
       <!-- No title or spectitle; check to see if the element provides generated text -->
       <xsl:when test="$topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ') or contains(@class,' topic/related-links ') ] //*[@id=$elemid][contains(@class, $classval)][1]">
