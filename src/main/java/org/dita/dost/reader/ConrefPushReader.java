@@ -187,6 +187,9 @@ public final class ConrefPushReader extends AbstractXMLReader {
 
             } else if (ATTR_CONACTION_VALUE_MARK.equals(conactValue)) {
                 target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
+                if (target == null) {
+                    logger.error(MessageUtils.getInstance().getMessage("DOTJ068E").setLocation(atts).toString());
+                }
                 if (target != null &&
                         pushcontentDocumentFragment != null && pushcontentDocumentFragment.getChildNodes().getLength() > 0 &&
                         ATTR_CONACTION_VALUE_PUSHBEFORE.equals(pushType)) {
