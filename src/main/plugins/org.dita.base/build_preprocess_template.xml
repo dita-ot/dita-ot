@@ -355,7 +355,7 @@
   </target>
 
   <target name="copy-to">
-    <pipeline message="Resolve keyref." taskname="keyref">
+    <pipeline message="Resolve copy-to." taskname="copy-to">
       <module class="org.dita.dost.module.CopyToModule"/>
     </pipeline>
   </target>
