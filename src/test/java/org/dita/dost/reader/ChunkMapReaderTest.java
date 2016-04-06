@@ -60,19 +60,11 @@ public class ChunkMapReaderTest {
 
     @Test
     public void testMissingSource() throws IOException, URISyntaxException {
-        final Job job = new Job(tempDir);
+        final Job job = createJob("missing.ditamap", "2.dita");
 
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(new TestUtils.TestLogger());
         mapReader.setJob(job);
-
-        TestUtils.copy(new File(srcDir, "missing.ditamap"), new File(tempDir, "missing.ditamap"));
-        job.add(new Job.FileInfo.Builder().uri(toURI("missing.ditamap")).build());
-        for (final String srcFile : Arrays.asList("2.dita")) {
-            final URI dst = tempDir.toURI().resolve(srcFile);
-            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
-            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
-        }
 
         mapReader.read(new File(tempDir, "missing.ditamap"));
 
@@ -87,19 +79,11 @@ public class ChunkMapReaderTest {
 
     @Test
     public void testChunkFullMap() throws IOException {
-        final Job job = new Job(tempDir);
+        final Job job = createJob("map.ditamap", "1.dita", "2.dita", "3.dita");
 
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(new DITAOTJavaLogger());
         mapReader.setJob(job);
-
-        TestUtils.copy(new File(srcDir, "map.ditamap"), new File(tempDir, "map.ditamap"));
-        job.add(new Job.FileInfo.Builder().uri(toURI("map.ditamap")).build());
-        for (final String srcFile : Arrays.asList("1.dita", "2.dita", "3.dita")) {
-            final URI dst = tempDir.toURI().resolve(srcFile);
-            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
-            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
-        }
 
         mapReader.read(new File(tempDir, "map.ditamap"));
 
@@ -120,19 +104,11 @@ public class ChunkMapReaderTest {
 
     @Test
     public void testExistingGeneratedFile() throws IOException, URISyntaxException {
-        final Job job = new Job(tempDir);
+        final Job job = createJob("conflict.ditamap", "2.dita", "Chunk0.dita");
 
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(new DITAOTJavaLogger());
         mapReader.setJob(job);
-
-        TestUtils.copy(new File(srcDir, "conflict.ditamap"), new File(tempDir, "conflict.ditamap"));
-        job.add(new Job.FileInfo.Builder().uri(toURI("conflict.ditamap")).build());
-        for (final String srcFile : Arrays.asList("2.dita", "Chunk0.dita")) {
-            final URI dst = tempDir.toURI().resolve(srcFile);
-            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
-            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
-        }
 
         mapReader.read(new File(tempDir, "conflict.ditamap"));
 
@@ -150,6 +126,20 @@ public class ChunkMapReaderTest {
                         .put(prefixTemp("Chunk2.dita"), prefixTemp("Chunk1.dita"))
                         .build(),
                 mapReader.getConflicTable());
+    }
+
+    private Job createJob(final String map, final String... topics) throws IOException {
+        final Job job = new Job(tempDir);
+
+        TestUtils.copy(new File(srcDir, map), new File(tempDir, map));
+        job.add(new Job.FileInfo.Builder().uri(toURI(map)).build());
+        for (final String srcFile : topics) {
+            final URI dst = tempDir.toURI().resolve(srcFile);
+            TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
+            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
+        }
+
+        return job;
     }
 
     private List<String> getSrcFiles() {
