@@ -58,8 +58,8 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="localclass" select="@class"/>
-    <xsl:variable name="xtrf" select="$ctx/@xtrf" as="attribute(xtrf)"/>
-    <xsl:variable name="xtrc" select="$ctx/@xtrc" as="attribute(xtrc)"/>
+    <xsl:variable name="xtrf" select="$ctx/@xtrf" as="attribute(xtrf)?"/>
+    <xsl:variable name="xtrc" select="$ctx/@xtrc" as="attribute(xtrc)?"/>
     <xsl:variable name="debugloc">
       <xsl:if test="$xtrf | $xtrc">
         <xsl:if test="$xtrf">
