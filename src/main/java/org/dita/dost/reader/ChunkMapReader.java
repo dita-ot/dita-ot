@@ -300,7 +300,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         final String chunkByToken = getChunkByToken(chunkValue, "by-", defaultChunkByToken);
 
         if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)
-                || (hrefValue != null && !new File(inputFile.resolve(hrefValue.toString())).exists())
+                || (hrefValue != null && !toFile(inputFile.resolve(hrefValue.toString())).exists())
                 || (chunkValue.isEmpty() && hrefValue == null)) {
             processChildTopicref(topicref);
         } else if (chunkValue.contains(CHUNK_TO_CONTENT)
