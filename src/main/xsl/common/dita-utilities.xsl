@@ -381,6 +381,58 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:function name="dita-ot:resolve-href-path" as="xs:anyURI">
+    <xsl:param name="href" as="attribute(href)"/>
+
+    <xsl:variable name="hrefValue" select="replace($href, '\\', '/')"/>
+    <xsl:variable name="source" as="xs:anyURI" select="base-uri($href)"/>
+
+    <xsl:sequence
+      select="if (starts-with($hrefValue, '#'))
+            then $source
+            else resolve-uri(tokenize($hrefValue, '#')[1], $source)"/>
+  </xsl:function>
+
+  <xsl:function name="dita-ot:get-topic-id" as="xs:string?">
+    <xsl:param name="href"/>
+    <xsl:variable name="fragment" select="substring-after($href, '#')" as="xs:string"/>
+    <xsl:if test="string-length($fragment) gt 0">
+      <xsl:choose>
+        <xsl:when test="contains($fragment, '/')">
+          <xsl:value-of select="substring-before($fragment, '/')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$fragment"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:has-topic-id" as="xs:boolean">
+    <xsl:param name="href"/>
+    <xsl:sequence select="contains($href, '#')"/>
+  </xsl:function>
+
+  <xsl:function name="dita-ot:get-element-id" as="xs:string?">
+    <xsl:param name="href"/>
+    <xsl:variable name="fragment" select="substring-after($href, '#')" as="xs:string"/>
+    <xsl:if test="contains($fragment, '/')">
+      <xsl:value-of select="substring-after($fragment, '/')"/>
+    </xsl:if>
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:has-element-id" as="xs:boolean">
+    <xsl:param name="href"/>
+    <xsl:sequence select="contains(substring-after($href, '#'), '/')"/>
+  </xsl:function>
+
+  <xsl:function name="dita-ot:normalize-uri" as="xs:string">
+    <xsl:param name="uri" as="xs:string"/>
+    <xsl:call-template name="dita-ot:normalize-uri">
+      <xsl:with-param name="src" select="tokenize($uri, '/')"/>
+    </xsl:call-template>
+  </xsl:function>
+
   <xsl:function name="dita-ot:get-closest-topic" as="element()">
     <xsl:param name="n" as="node()"/>
 
