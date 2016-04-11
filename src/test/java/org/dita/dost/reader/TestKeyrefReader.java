@@ -448,7 +448,7 @@ public class TestKeyrefReader {
         keyrefreader.read(filename.toURI(), readMap(filename));
 
         assertEquals(1, logger.getMessages().size());
-        assertEquals("[DOTJ068E][ERROR] Circular key definition same -> same.", logger.getMessages().get(0).message);
+        assertEquals("[DOTJ069E][ERROR] Circular key definition same -> same.", logger.getMessages().get(0).message);
     }
 
     @Test
@@ -467,9 +467,9 @@ public class TestKeyrefReader {
             act.add(msg.message);
         }
         assertEquals(new HashSet<>(Arrays.asList(
-                "[DOTJ068E][ERROR] Circular key definition first -> second -> third -> first.",
-                "[DOTJ068E][ERROR] Circular key definition second -> third -> first -> second.",
-                "[DOTJ068E][ERROR] Circular key definition third -> first -> second -> third.")),
+                "[DOTJ069E][ERROR] Circular key definition first -> second -> third -> first.",
+                "[DOTJ069E][ERROR] Circular key definition second -> third -> first -> second.",
+                "[DOTJ069E][ERROR] Circular key definition third -> first -> second -> third.")),
                 act);
     }
 
