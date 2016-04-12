@@ -9,11 +9,8 @@ See the accompanying LICENSE file for applicable license.
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
          xmlns:dita="http://dita-ot.sourceforge.net">
 
-  <!-- Java properties file DTD -->
   <dita:extension id="dita.catalog.plugin-info"
     behavior="org.dita.dost.platform.ImportPluginCatalogAction"/>
-  
-  <system systemId="http://java.sun.com/dtd/properties.dtd" uri="dtd/properties.dtd"/>
 
    <dita:extension id="dita.specialization.catalog"
                    behavior="org.dita.dost.platform.InsertAction"/>
