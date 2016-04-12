@@ -77,7 +77,9 @@ public final class DITAOTException extends Exception {
      * Retrieve the MessageBean.
      * 
      * @return MessageBean
+     * @deprecated since 2.3
      */
+    @Deprecated
     public MessageBean getMessageBean() {
         return messageBean;
     }
@@ -85,7 +87,9 @@ public final class DITAOTException extends Exception {
      * To check whether the current exception has already been captured before.
      * 
      * @return {@code true} if the exception has already solved, else {@code false}
+     * @deprecated since 2.3
      */
+    @Deprecated
     public boolean alreadyCaptured() {
         return captured;
     }
@@ -93,7 +97,9 @@ public final class DITAOTException extends Exception {
      * To set the exception's status whether it is needed to solve.
      * 
      * @param isCaptured boolean
+     * @deprecated since 2.3
      */
+    @Deprecated
     public void setCaptured(final boolean isCaptured) {
         captured = isCaptured;
     }

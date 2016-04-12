@@ -586,6 +586,7 @@ public final class Job {
             this.uri = uri;
             this.file = toFile(uri);
         }
+        @Deprecated
         FileInfo(final File file) {
             if (file == null) throw new IllegalArgumentException(new NullPointerException());
             this.src = null;
