@@ -176,9 +176,6 @@ See the accompanying LICENSE file for applicable license.
     <condition property="noMap">
       <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
     </condition>
-    <condition property="noImagelist">
-      <length file="${dita.temp.dir}/${imagefile}" length="0"/>
-    </condition>
   </target>
 
   <!-- profile -->

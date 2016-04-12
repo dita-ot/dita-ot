@@ -118,7 +118,7 @@ See the accompanying LICENSE file for applicable license.
                    dita.topics.html.common,
                    dita.inner.topics.html.common"/>  
 
-  <target name="xhtml.image-metadata" depends="xhtml.image-metadata-check"
+  <target name="xhtml.image-metadata"
           unless="xhtml.image-metadata.skip"
           description="Read image metadata">
     <pipeline message="Read image metadata." taskname="image-metadata" tempdir="${dita.temp.dir}">
@@ -126,11 +126,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="outputdir" location="${dita.output.dir}"/>
       </module>
     </pipeline>
-  </target>
-  <target name="xhtml.image-metadata-check">
-    <condition property="xhtml.image-metadata.skip">
-      <isset property="noImagelist"/>
-    </condition>
   </target>
 
   <!--requirement 3, old solution-->

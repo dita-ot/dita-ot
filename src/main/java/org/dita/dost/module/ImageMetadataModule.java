@@ -46,23 +46,26 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
         if (logger == null) {
             throw new IllegalStateException("Logger not set");
         }
-        final File outputDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
-        final ImageMetadataFilter writer = new ImageMetadataFilter(outputDir, job);
-        writer.setLogger(logger);
-        writer.setJob(job);
-        final Predicate<FileInfo> filter = fileInfoFilter != null
-                ? fileInfoFilter
-                : f -> !f.isResourceOnly && ATTR_FORMAT_VALUE_DITA.equals(f.format);
-        for (final FileInfo f: job.getFileInfo(filter)) {
-            writer.write(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
-        }
+        final Collection<FileInfo> images = job.getFileInfo(f -> ATTR_FORMAT_VALUE_IMAGE.equals(f.format) || ATTR_FORMAT_VALUE_HTML.equals(f.format));
+        if (!images.isEmpty()) {
+            final File outputDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
+            final ImageMetadataFilter writer = new ImageMetadataFilter(outputDir, job);
+            writer.setLogger(logger);
+            writer.setJob(job);
+            final Predicate<FileInfo> filter = fileInfoFilter != null
+                    ? fileInfoFilter
+                    : f -> !f.isResourceOnly && ATTR_FORMAT_VALUE_DITA.equals(f.format);
+            for (final FileInfo f : job.getFileInfo(filter)) {
+                writer.write(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
+            }
 
-        storeImageFormat(writer.getImages(), outputDir);
+            storeImageFormat(writer.getImages(), outputDir);
 
-        try {
-            job.write();
-        } catch (IOException e) {
-            throw new DITAOTException("Failed to serialize job configuration: " + e.getMessage(), e);
+            try {
+                job.write();
+            } catch (IOException e) {
+                throw new DITAOTException("Failed to serialize job configuration: " + e.getMessage(), e);
+            }
         }
 
         return null;
