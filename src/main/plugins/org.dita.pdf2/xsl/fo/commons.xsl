@@ -606,7 +606,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*" mode="topicTitleNumber" priority="-10">
-      <xsl:message>No topicTitleNumber mode template for <xsl:value-of select="name()"/></xsl:message>
+      <!--xsl:message>No topicTitleNumber mode template for <xsl:value-of select="name()"/></xsl:message-->
     </xsl:template>
 
     <xsl:template match="*" mode="createMiniToc">
