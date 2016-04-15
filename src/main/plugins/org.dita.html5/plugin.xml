@@ -22,4 +22,7 @@
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <feature extension="dita.conductor.html5.param" file="params.xml"/>
   <template file="build_dita2html5_template.xml"/>
+  <template file="xsl/dita2html5_template.xsl"/>
+  <template file="xsl/map2html5toc_template.xsl"/>
+  <template file="xsl/map2html5-cover_template.xsl"/>
 </plugin>

@@ -6,6 +6,10 @@
 
   <xsl:import href="plugin:org.dita.xhtml:xsl/map2htmltoc.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/xslhtml/dita2html5Impl.xsl"/>
+    
+  <dita:extension id="dita.xsl.html5.toc" 
+        behavior="org.dita.dost.platform.ImportXSLAction" 
+        xmlns:dita="http://dita-ot.sourceforge.net"/>
 
   <xsl:output method="html"
               encoding="UTF-8"
