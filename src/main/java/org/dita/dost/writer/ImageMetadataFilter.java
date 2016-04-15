@@ -4,6 +4,7 @@
  */
 package org.dita.dost.writer;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.codec.binary.Base64;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.reader.SvgMetadataReader;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -94,6 +96,10 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         super.write(filename);
     } 
     
+    public Collection<URI> getImages() {
+        return ImmutableList.copyOf(cache.keySet());
+    }
+
     // XMLFilter methods -------------------------------------------------------
 
     @Override
