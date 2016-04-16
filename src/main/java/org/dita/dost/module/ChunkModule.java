@@ -94,8 +94,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         final Map<URI, URI> changeTable = mapReader.getChangeTable();
         if (hasChanges(changeTable)) {
             final Map<URI, URI> conflicTable = mapReader.getConflicTable();
-            updateList(changeTable, Collections.unmodifiableMap(conflicTable));
-            updateRefOfDita(changeTable, Collections.unmodifiableMap(conflicTable));
+            updateList(changeTable, conflicTable);
+            updateRefOfDita(changeTable, conflicTable);
         }
 
         return null;
