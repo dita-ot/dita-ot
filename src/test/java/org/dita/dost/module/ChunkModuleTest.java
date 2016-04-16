@@ -119,4 +119,134 @@ public class ChunkModuleTest extends AbstractModuleTest {
         test("anchor2.ditamap");
     }
 
+    @Test
+    public void testAttributeMap1() {
+        test("Attribute_map1.ditamap");
+    }
+
+    @Test
+    public void testAttributeMap2() {
+        test("Attribute_map2.ditamap");
+    }
+
+    @Test
+    public void testAttributeMap3() {
+        test("Attribute_map3.ditamap");
+    }
+
+    @Test
+    public void testAttributeMap4() {
+        test("Attribute_map4.ditamap");
+    }
+
+    @Test
+    public void testAttributeMap5() {
+        test("Attribute_map5.ditamap");
+    }
+
+    @Test
+    public void testAttributeMap6() {
+        test("Attribute_map6.ditamap");
+    }
+
+    @Test
+    public void testAttributeMap7() {
+        test("Attribute_map7.ditamap");
+    }
+
+    @Test
+    public void testAttributeMap8() {
+        test("Attribute_map8.ditamap");
+    }
+
+    @Test
+    public void testAttributeMap9() {
+        test("Attribute_map9.ditamap");
+    }
+
+    @Test
+    public void testAttributeMap10() {
+        test("Attribute_map10.ditamap");
+    }
+
+    @Test
+    public void testAttributeMap11() {
+        test("Attribute_map11.ditamap");
+    }
+
+    @Test
+    public void testByTopicMap2() {
+        test("ByTopic_map2.ditamap");
+    }
+
+    @Test
+    public void testByTopicMap3() {
+        test("ByTopic_map3.ditamap");
+    }
+
+    @Test
+    public void testByTopicMap4() {
+        test("ByTopic_map4.ditamap");
+    }
+
+    @Test
+    public void testByTopicMap5() {
+        test("ByTopic_map5.ditamap");
+    }
+
+    @Test
+    public void testByTopicMap6() {
+        test("ByTopic_map6.ditamap");
+    }
+
+    @Test
+    public void testByTopicMap7() {
+        test("ByTopic_map7.ditamap");
+    }
+
+    @Test
+    public void testByTopicBatseparate0() {
+        test("ByTopic_batseparate0.ditamap");
+    }
+
+    @Test
+    public void testFixChunkMap1() {
+        test("FixChunk_map1.ditamap");
+    }
+
+    @Test
+    public void testFixChunkMap2() {
+        test("FixChunk_map2.ditamap");
+    }
+
+    @Test
+    public void testFixChunkMap3() {
+        test("FixChunk_map3.ditamap");
+    }
+
+    @Test
+    public void testFixChunkMap4() {
+        test("FixChunk_map4.ditamap");
+    }
+
+    @Test
+    public void testFixChunkMap5() {
+        test("FixChunk_map5.ditamap");
+    }
+
+    @Test
+    public void testFixChunkMap6() {
+        test("FixChunk_map6.ditamap");
+    }
+
+    @Test
+    public void testFixChunkMap7() {
+        test("FixChunk_map7.ditamap");
+    }
+
+    @Test
+    public void testFixChunkMap8() {
+        test("FixChunk_map8.ditamap");
+    }
+
 }

@@ -315,7 +315,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
         
         for (final URI file : topicList) {
-            final FileInfo ff = job.getOrCreateFileInfo(file);
+            // FIXME
+            final FileInfo ff = job.getOrCreateFileInfo(stripFragment(file));
             ff.format = ATTR_FORMAT_VALUE_DITA;
         }
         for (final URI file : ditamapList) {
@@ -329,7 +330,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             f.isResourceOnly = false;
         }
         for (final URI file : chunkedTopicSet) {
-            final FileInfo f = job.getOrCreateFileInfo(file);
+            // FIXME
+            final FileInfo f = job.getOrCreateFileInfo(stripFragment(file));
             f.format = ATTR_FORMAT_VALUE_DITA;
             f.isResourceOnly = false;
         }
