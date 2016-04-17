@@ -249,4 +249,34 @@ public class ChunkModuleTest extends AbstractModuleTest {
         test("FixChunk_map8.ditamap");
     }
 
+    @Test
+    public void testChunkDuplicateToContent() {
+        test("chunk_duplicate_tocontent.ditamap");
+    }
+
+    @Test
+    public void testChunkHogsMemory() {
+        test("chunk_hogs_memory.ditamap");
+    }
+
+    @Test
+    public void testChunkMapToContent() {
+        test("chunk_map_tocontent.ditamap");
+    }
+
+    @Test
+    public void testChunkRewriteToContent() {
+        test("chunk_rewrite_tocontent.ditamap");
+    }
+
+    @Test
+    public void testTopicgroupChunk() {
+        test("topicgroup_chunk.ditamap");
+    }
+
+    @Test
+    public void testCnwareChunkContent() {
+        test("unware_chunk_content.ditamap");
+    }
+
 }

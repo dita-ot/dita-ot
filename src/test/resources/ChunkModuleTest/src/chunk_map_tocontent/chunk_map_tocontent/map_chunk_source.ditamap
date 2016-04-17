@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/chunk_map_tocontent/chunk_map_tocontent?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/chunk_map_tocontent/chunk_map_tocontent/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Map//EN?><?doctype-system map.dtd?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="mapID" ditaarch:DITAArchVersion="1.3" domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " class="- map/map " xtrf="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map_chunk_source.ditamap" xtrc="map:1;3:17" cascade="merge">
+    <title class="- topic/title " xtrf="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map_chunk_source.ditamap" xtrc="title:1;4:12">hi</title>
+   
+    
+    
+    
+    <topicref href="dita1.dita" class="- map/topicref " chunk="to-content" xtrf="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map_chunk_source.ditamap" xtrc="topicref:1;9:52">
+        <topicref href="sub_dita1.dita" class="- map/topicref " xtrf="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map_chunk_source.ditamap" xtrc="topicref:2;10:42"/>
+        <topicref href="dita2.dita" class="- map/topicref " chunk="to-content" xtrf="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map_chunk_source.ditamap" xtrc="topicref:3;11:56">
+            <topicref href="sub_dita2.dita" class="- map/topicref " xtrf="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map_chunk_source.ditamap" xtrc="topicref:4;12:46"/>
+       </topicref> 
+    </topicref>
+    <topicref href="dita.xml" class="- map/topicref " xtrf="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_map_tocontent/map_chunk_source.ditamap" xtrc="topicref:5;15:31"/>
+    
+</map>
