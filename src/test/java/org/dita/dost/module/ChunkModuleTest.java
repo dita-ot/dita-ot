@@ -266,8 +266,13 @@ public class ChunkModuleTest extends AbstractModuleTest {
     }
 
     @Test
-    public void testCnwareChunkContent() {
+    public void testUnwareChunkContent() {
         test("unware_chunk_content.ditamap");
+    }
+
+    @Test
+    public void testUnwareChunkContent2() {
+        test("unware_chunk_content2.ditamap");
     }
 
 }
