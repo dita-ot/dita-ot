@@ -73,9 +73,7 @@
   </xsl:template>
 
   <xsl:template match="@*" mode="get-source-attribute" as="xs:string?">
-    <xsl:if test="not(. = '')">
-      <xsl:value-of select="name()"/>
-    </xsl:if>
+    <xsl:value-of select="name()"/>
   </xsl:template>
 
   <xsl:template match="@xtrc | @xtrf" mode="get-source-attribute" priority="10"/>
@@ -144,7 +142,7 @@
         <xsl:when test="contains(@conrefend, '/')">
           <xsl:value-of select="substring-after(@conrefend, '/')"/>
         </xsl:when>
-        <xsl:when test="not(@conrefend = '')">
+        <xsl:when test="exists(@conrefend)">
           <xsl:value-of select="@conrefend"/>
         </xsl:when>
       </xsl:choose>
@@ -192,7 +190,7 @@
 
     <xsl:variable name="conref-source-topic" as="xs:string">
       <xsl:choose>
-        <xsl:when test="exists($conref-source-topicid) and not($conref-source-topicid = '')">
+        <xsl:when test="normalize-space($conref-source-topicid)">
           <xsl:value-of select="$conref-source-topicid"/>
         </xsl:when>
         <xsl:otherwise>
@@ -877,11 +875,9 @@
   <xsl:template match="*" mode="original-attributes">
     <xsl:apply-templates select="@*" mode="original-attributes"/>
   </xsl:template>
+
   <xsl:template match="@*" mode="original-attributes">
-    <xsl:if test="not(. = '')">
-      <!-- XXX: Why ignore empty attribute value? -->
-      <xsl:copy/>
-    </xsl:if>
+    <xsl:copy/>
   </xsl:template>
 
   <!-- If an attribute is required, it must be specified on the original source element to avoid parsing errors.
