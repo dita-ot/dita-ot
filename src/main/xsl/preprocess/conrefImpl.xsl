@@ -818,53 +818,64 @@
 
     <xsl:choose>
       <xsl:when test="exists($conrefend)">
-        <xsl:for-each select="following-sibling::*[following-sibling::*[@id = $conrefend] or self::*[@id = $conrefend]]">
-          <xsl:choose>
-            <xsl:when test="@conref">
-              <xsl:apply-templates select=".">
-                <xsl:with-param name="source-attributes" select="$source-attributes"/>
-                <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                <xsl:with-param name="conref-ids" select="$conref-ids"/>
-                <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-              </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:copy>
-                <xsl:for-each select="@*">
-                  <xsl:if test="not(local-name(.) = 'id')">
-                    <xsl:choose>
-                      <xsl:when test="name() = 'href'">
-                        <!--@href need to update, not implement currently. @href may point to local part, but if @href pull into other file,
-                      then @href couldn't work correctly. This is the reason why @href need to update. We leave it as the future work.-->
-                        <xsl:apply-templates select=".">
-                          <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                          <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                          <xsl:with-param name="topicid" select="$topicid"/>
-                          <xsl:with-param name="elemid" select="$elemid"/>
-                          <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                          <xsl:with-param name="conref-ids" select="$conref-ids"/>
-                        </xsl:apply-templates>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:copy/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:if>
-                </xsl:for-each>
-                <xsl:apply-templates select="* | comment() | processing-instruction() | text()">
-                  <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                  <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                  <xsl:with-param name="topicid" select="$topicid"/>
-                  <xsl:with-param name="elemid" select="$elemid"/>
-                  <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                  <xsl:with-param name="conref-ids" select="$conref-ids"/>
-                  <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                </xsl:apply-templates>
-              </xsl:copy>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:for-each>
+        <xsl:variable name="current" as="element()" select="."/>
+        <xsl:variable name="conrefEndNode" as="element()?"
+          select="following-sibling::*[@id = ($conrefend)][1]"
+        />
+        <xsl:choose>
+          <xsl:when test="not($conrefEndNode)">
+            <xsl:message>Warning: Conref range: Cannot find range end element with ID "<xsl:value-of select="$conrefend"/>" </xsl:message>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:for-each select="following-sibling::*[. >> $current and . &lt;&lt; $conrefEndNode], $conrefEndNode">
+              <xsl:choose>
+                <xsl:when test="@conref">
+                  <xsl:apply-templates select=".">
+                    <xsl:with-param name="source-attributes" select="$source-attributes"/>
+                    <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
+                    <xsl:with-param name="conref-ids" select="$conref-ids"/>
+                    <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
+                    <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                  </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:copy>
+                    <xsl:for-each select="@*">
+                      <xsl:if test="not(local-name(.) = 'id')">
+                        <xsl:choose>
+                          <xsl:when test="name() = 'href'">
+                            <!--@href need to update, not implement currently. @href may point to local part, but if @href pull into other file,
+                          then @href couldn't work correctly. This is the reason why @href need to update. We leave it as the future work.-->
+                            <xsl:apply-templates select=".">
+                              <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
+                              <xsl:with-param name="conref-filename" select="$conref-filename"/>
+                              <xsl:with-param name="topicid" select="$topicid"/>
+                              <xsl:with-param name="elemid" select="$elemid"/>
+                              <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
+                              <xsl:with-param name="conref-ids" select="$conref-ids"/>
+                            </xsl:apply-templates>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:copy/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </xsl:for-each>
+                    <xsl:apply-templates select="* | comment() | processing-instruction() | text()">
+                      <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
+                      <xsl:with-param name="conref-filename" select="$conref-filename"/>
+                      <xsl:with-param name="topicid" select="$topicid"/>
+                      <xsl:with-param name="elemid" select="$elemid"/>
+                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
+                      <xsl:with-param name="conref-ids" select="$conref-ids"/>
+                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                    </xsl:apply-templates>
+                  </xsl:copy>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
