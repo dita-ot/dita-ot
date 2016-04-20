@@ -674,6 +674,11 @@
     <response>Remove references to this target from your custom Ant files.</response>
   </message>
 
+  <message id="DOTX071E" type="ERROR">
+    <reason>Conref range: Unable to find conref range end element with ID "%1".</reason>
+    <response/>
+  </message>
+  
   <!-- End of XSL Messages --> 
       
   <!-- Add any messages defined by plugins. -->

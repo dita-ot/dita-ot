@@ -824,7 +824,9 @@
         />
         <xsl:choose>
           <xsl:when test="not($conrefEndNode)">
-            <xsl:message>Warning: Conref range: Cannot find range end element with ID "<xsl:value-of select="$conrefend"/>" </xsl:message>
+            <xsl:apply-templates select="." mode="ditamsg:missing-conrefend-target-error">
+              <xsl:with-param name="conrefend" as="xs:string" tunnel="yes" select="$conrefend"/>
+            </xsl:apply-templates>
           </xsl:when>
           <xsl:otherwise>
             <xsl:for-each select="following-sibling::*[. >> $current and . &lt;&lt; $conrefEndNode], $conrefEndNode">
@@ -1261,6 +1263,15 @@
       <xsl:with-param name="msgnum">010</xsl:with-param>
       <xsl:with-param name="msgsev">E</xsl:with-param>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <!-- If the conrefend target element does not exist, this template will be called to issue an error -->
+  <xsl:template match="*" mode="ditamsg:missing-conrefend-target-error">
+    <xsl:param name="conrefend" as="xs:string" tunnel="yes"/>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">071</xsl:with-param>
+      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$conrefend"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <!-- If an ID is duplicated, and there are 2 possible targets, issue a warning -->
