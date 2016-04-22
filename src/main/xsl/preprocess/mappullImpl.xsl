@@ -562,6 +562,20 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
     </xsl:choose>
   </xsl:template>
+  
+  <xsl:template match="*[ancestor-or-self::*[contains(@class,' mapgroup-d/topicsetref ')]]" 
+    mode="mappull:get-stuff_get-type" as="attribute()?">
+    <!-- <topicsetref> should not return a type -->
+    <xsl:param name="type" as="xs:string"/>
+    <xsl:param name="scope" as="xs:string"/>
+    <xsl:param name="topicpos" as="xs:string"/>
+    <xsl:param name="format" as="xs:string"/>
+    <xsl:param name="file" as="xs:string"/>
+    <xsl:param name="classval" as="xs:string"/>
+    <xsl:param name="topicid" as="xs:string"/>
+    <xsl:param name="doc" as="document-node()?"/>
+    <xsl:attribute name="type">#none#</xsl:attribute>
+  </xsl:template>
 
   <!-- Get the navtitle from the target topic, if available. -->
   <xsl:template match="*" mode="mappull:get-stuff_get-navtitle" as="item()*">
