@@ -11,10 +11,6 @@
               uri="xsd/learningAggregationsTopicrefConstraintMod.xsd"/>
       <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningAggregationsTopicrefConstraintMod.xsd"
               uri="xsd/learningAggregationsTopicrefConstraintMod.xsd"/>
-      <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningAggregationsTopicrefConstraintGrp.xsd:1.3"
-              uri="xsd/learningAggregationsTopicrefConstraintGrp.xsd"/>
-      <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningAggregationsTopicrefConstraintGrp.xsd"
-              uri="xsd/learningAggregationsTopicrefConstraintGrp.xsd"/>
       <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessment.xsd:1.3"
               uri="xsd/learningAssessment.xsd"/>
       <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessment.xsd"
@@ -153,10 +149,6 @@
            uri="xsd/learningAggregationsTopicrefConstraintMod.xsd"/>
       <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningAggregationsTopicrefConstraintMod.xsd"
            uri="xsd/learningAggregationsTopicrefConstraintMod.xsd"/>
-      <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningAggregationsTopicrefConstraintGrp.xsd:1.3"
-           uri="xsd/learningAggregationsTopicrefConstraintGrp.xsd"/>
-      <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningAggregationsTopicrefConstraintGrp.xsd"
-           uri="xsd/learningAggregationsTopicrefConstraintGrp.xsd"/>
       <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessment.xsd:1.3"
            uri="xsd/learningAssessment.xsd"/>
       <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessment.xsd"
