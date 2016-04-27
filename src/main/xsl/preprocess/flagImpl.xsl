@@ -339,9 +339,10 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     <xsl:param name="current" select="." as="element()"/>
     
     <val>
-      <!-- Test for the flagging attributes. If found, call 'gen-prop' with the values to use. Otherwise return -->
       <xsl:if test="normalize-space($FILTERFILEURL)!=''">
-        <!-- First gather the set of property name/value pairs.
+        <!-- 
+         First gather the set of property name/value pairs then remove duplicates
+         and get <prop> specifications from the filter file. 
          
          For @rev the value is a sequence of zero or more revision names. @rev does not
          allow groups.
@@ -367,9 +368,9 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
             />
           </conditions>
         </xsl:variable>
-        <xsl:message> + [DEBUG] getrules: conditions:
+<!--        <xsl:message> + [DEBUG] getrules: conditions:
           <xsl:sequence select="$conditions"/></xsl:message>
-        
+-->        
         <!-- Now use the conditions to generate flagging specifications -->
         
         <!-- Because the same condition can occur multiple times, we need to
@@ -386,7 +387,17 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
           <!-- Now find any flagging actions for the name/value pair: -->
           <xsl:for-each select="$conditionValues">
             <xsl:variable name="value" select="." as="xs:string"/>
-            <xsl:sequence select="$FILTERDOC/val/prop[@action = ('flag')][@att = $conditionName][@val = $value]"/>
+            <xsl:choose>
+              <xsl:when test="$conditionName = ('rev')">
+                <xsl:apply-templates mode="gen-prop"
+                  select="($FILTERDOC/val/revprop[@action = ('flag')][@val = $value])[1]"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates mode="gen-prop"
+                  select="($FILTERDOC/val/prop[@action = ('flag')][@att = $conditionName][@val = $value])[1]"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            
           </xsl:for-each>
           
           <!-- Now get any default specification for the condition: -->
@@ -396,6 +407,11 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </val>
   </xsl:template>
   
+  <!-- Get the conditions specified in an selection attribute.
+    
+       The result contributes to the <conditions> element that
+       is then used to get the flagging <prop> elements.
+    -->
   <xsl:template mode="getconditions" match="@*">
     <!-- Handle any bare values: -->
     <xsl:variable name="bareValues" as="xs:string*">
@@ -436,22 +452,6 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     
   </xsl:template>
   
-
- <xsl:template match="@*" mode="gen-prop" as="element()*">
-   <xsl:variable name="flag-att" as="xs:string" select="name(.)"/>     <!-- attribute name -->
-   <xsl:variable name="flag-att-val" as="xs:string?" select="string(.)"/> <!-- content of attribute -->
-
-   <!-- Using this kind of double-dispatch because the gen-prop template currently applies
-        itself to additional values of the flag-att-value string, so we still need
-        the named template.
-     -->
-
-   <xsl:call-template name="gen-prop">
-     <xsl:with-param name="flag-att" as="xs:string" select="$flag-att"/>
-     <xsl:with-param name="flag-att-val" as="xs:string" select="$flag-att-val"/>
-   </xsl:call-template>
- </xsl:template>
-
   <xsl:template name="gen-prop" as="element()*">
     <xsl:param name="flag-att" as="xs:string"/>     <!-- attribute name -->
     <xsl:param name="flag-att-val" as="xs:string?"/> <!-- content of attribute -->
@@ -562,25 +562,13 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
       <!--xsl:for-each select="document($cvffilepath,/)//*[@keys=$value]/*"-->
       <xsl:for-each select="document($cvffilepath,/)//*[@keys=$value]//*[@keys=$flag][1]">
             <xsl:element name="prop">
-             <xsl:attribute name="att">
-              <xsl:value-of select="$att"/>
-             </xsl:attribute>
-             <xsl:attribute name="val">
-              <xsl:value-of select="@keys"/>
-             </xsl:attribute>
-             <xsl:attribute name="action">
-              <xsl:value-of select="'flag'"/>
-             </xsl:attribute>
-             <xsl:attribute name="backcolor">
-              <xsl:value-of select="$bgcolor"/>
-             </xsl:attribute>
-             <xsl:attribute name="color">
-              <xsl:value-of select="$fcolor"/>
-             </xsl:attribute>
-             <xsl:attribute name="style">
-              <xsl:value-of select="$style"/>
-             </xsl:attribute>
-             <xsl:copy-of select="$childnodes"/>
+             <xsl:attribute name="att" select="$att"/>
+             <xsl:attribute name="val" select="@keys"/>
+             <xsl:attribute name="action" select="'flag'"/>
+             <xsl:attribute name="backcolor" select="$bgcolor"/>
+             <xsl:attribute name="color" select="$fcolor"/>
+             <xsl:attribute name="style" select="$style"/>
+             <xsl:sequence select="$childnodes"/>
             </xsl:element>
            </xsl:for-each>
      </xsl:if>
