@@ -12,7 +12,9 @@ import org.dita.dost.util.LogUtils;
  * Logger to standard output and error.
  * 
  * @author Wu, Zhi Qiang
+ * @deprecated since 2.3
  */
+@Deprecated
 public final class DITAOTJavaLogger implements DITAOTLogger {
     private static boolean debugMode = false;
 

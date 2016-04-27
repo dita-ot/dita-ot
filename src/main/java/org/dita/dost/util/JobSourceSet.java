@@ -18,9 +18,14 @@ import java.util.Iterator;
 
 import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
 
+/**
+ * Resource collection that finds matching resources from job configuration.
+ */
 public class JobSourceSet extends AbstractFileSet implements ResourceCollection {
 
     private String format;
+    private Boolean hasConref;
+    private Boolean isResourceOnly;
     private Collection<Resource> res;
     private boolean isFilesystemOnly = true;
 
@@ -30,18 +35,17 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
     private Collection<Resource> getResults() {
         if (res == null) {
-            if (format == null) {
-                throw new IllegalStateException();
-            }
             final Job job = getProject().getReference(ANT_REFERENCE_JOB);
             if (job == null) {
                 throw new IllegalStateException();
             }
             res = new ArrayList<>();
-            for (final Job.FileInfo f : job.getFileInfo(new Job.FileInfo.Filter() {
+            for (final Job.FileInfo f : job.getFileInfo(new Job.FileInfo.Filter<Job.FileInfo>() {
                 @Override
                 public boolean accept(final Job.FileInfo f) {
-                    return f.format != null && f.format.equals(format);
+                    return (format == null || format.equals(f.format)) &&
+                            (hasConref == null || f.hasConref == hasConref) &&
+                            (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
                 }
             })) {
                 log("Scanning for " + f.file.getPath(), Project.MSG_VERBOSE);
@@ -92,6 +96,14 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
     public void setFormat(final String format) {
         this.format = format;
+    }
+
+    public void setConref(final boolean conref) {
+        this.hasConref = conref;
+    }
+
+    public void setProcessingRole(final String processingRole) {
+        this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
     }
 
     private static class JobResource extends URLResource {

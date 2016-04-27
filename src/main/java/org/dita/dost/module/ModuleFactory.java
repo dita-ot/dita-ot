@@ -49,7 +49,9 @@ public final class ModuleFactory {
      * @param moduleName moduleName
      * @return AbstractPipelineModule
      * @throws DITAOTException DITAOTException
+     * @deprecated use {@link #createModule(Class)} instead. Deprecated since 2.3
      */
+    @Deprecated
     public AbstractPipelineModule createModule(final String moduleName)
             throws DITAOTException {
         final String module = packagePrefix + moduleName + "Module";

@@ -123,8 +123,7 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:choose>
               <xsl:when test="not($followingMarker)and empty(ancestor-or-self::*[contains(@class, ' topic/prolog ')])">
                 <xsl:call-template name="output-message">
-                  <xsl:with-param name="msgnum">001</xsl:with-param>
-                  <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="id" select="'PDFX001W'"/>
                   <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
                 </xsl:call-template>
                </xsl:when>
@@ -132,8 +131,7 @@ See the accompanying license.txt file for applicable licenses.
                   <xsl:choose>
                       <xsl:when test="$followingStartMarker and $followingStartMarker[following::*[generate-id() = generate-id($followingMarker)]]">
                         <xsl:call-template name="output-message">
-                          <xsl:with-param name="msgnum">002</xsl:with-param>
-                          <xsl:with-param name="msgsev">W</xsl:with-param>
+                          <xsl:with-param name="id" select="'PDFX002W'"/>
                           <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
                         </xsl:call-template>
                       </xsl:when>
@@ -157,8 +155,7 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:choose>
               <xsl:when test="not($precMarker)">
                 <xsl:call-template name="output-message">
-                  <xsl:with-param name="msgnum">007</xsl:with-param>
-                  <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="id" select="'PDFX007W'"/>
                   <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
                 </xsl:call-template>
               </xsl:when>
@@ -166,8 +163,7 @@ See the accompanying license.txt file for applicable licenses.
                   <xsl:choose>
                       <xsl:when test="$precEndMarker and $precEndMarker[preceding::*[generate-id() = generate-id($precMarker)]]">
                         <xsl:call-template name="output-message">
-                          <xsl:with-param name="msgnum">003</xsl:with-param>
-                          <xsl:with-param name="msgsev">W</xsl:with-param>
+                          <xsl:with-param name="id" select="'PDFX003W'"/>
                           <xsl:with-param name="msgparams">%1=<xsl:value-of select="$selfID"/></xsl:with-param>
                         </xsl:call-template>
                       </xsl:when>
@@ -254,8 +250,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="output-message">
-                  <xsl:with-param name="msgnum">011</xsl:with-param>
-                  <xsl:with-param name="msgsev">E</xsl:with-param>
+                  <xsl:with-param name="id" select="'PDFX011E'"/>
                   <xsl:with-param name="msgparams">
                     <xsl:text>%1=</xsl:text><xsl:value-of select="if (following-sibling::opentopic-index:see-also-childs) then 'index-see-also' else 'indexterm'"/>
                     <xsl:text>;</xsl:text>
@@ -444,9 +439,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="inner-text" select="()"/>
     <xsl:param name="no-page"/>
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgcat">DOTX</xsl:with-param>
-      <xsl:with-param name="msgnum">066</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX066W'"/>
       <xsl:with-param name="msgparams">%1=make-index-ref</xsl:with-param>
     </xsl:call-template>
     <xsl:apply-templates select="." mode="make-index-ref">

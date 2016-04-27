@@ -8,32 +8,28 @@
  */
 package org.dita.dost.reader;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-import static org.dita.dost.util.XMLUtils.close;
-import static org.junit.Assert.*;
-import static org.dita.dost.util.URLUtils.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
+import org.custommonkey.xmlunit.XMLUnit;
+import org.dita.dost.TestUtils;
+import org.dita.dost.TestUtils.CachingLogger;
+import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
+import org.junit.Test;
 import org.w3c.dom.Document;
-
-import org.custommonkey.xmlunit.XMLUnit;
 import org.xml.sax.InputSource;
 
-import org.dita.dost.TestUtils;
-import org.junit.Test;
+import javax.xml.parsers.DocumentBuilder;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.*;
+
+import static junit.framework.Assert.assertEquals;
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.util.XMLUtils.close;
+import static org.junit.Assert.assertNull;
 
 public class TestKeyrefReader {
 
@@ -55,7 +51,7 @@ public class TestKeyrefReader {
         final KeyrefReader keyrefreader = new KeyrefReader();
 //        keyrefreader.setKeys(set);
         keyrefreader.read(filename.toURI(), readMap(filename));
-        final KeyScope act= keyrefreader.getKeyDefinition();
+        final KeyScope act = keyrefreader.getKeyDefinition();
 
         final Map<String, String> exp = new HashMap<String, String>();
         exp.put("blatfeference", "<topicref keys='blatview blatfeference blatintro' href='blatview.dita' navtitle='blatview' locktitle='yes' class='- map/topicref '/>");
@@ -65,11 +61,11 @@ public class TestKeyrefReader {
         exp.put("escape", "<topicref keys='escape' class='- map/topicref ' navtitle='&amp;&lt;&gt;&quot;&apos;'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>&amp;&lt;&gt;&quot;&apos;</keyword></keywords></topicmeta></topicref>");
         exp.put("top", "<topicref keys='top' class='- map/topicref ' navtitle='top'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>top keyword</keyword></keywords></topicmeta><topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref></topicref>");
         exp.put("nested", "<topicref keys='nested' class='- map/topicref ' navtitle='nested'><topicmeta class='- map/topicmeta '><keywords class='- topic/keywords '><keyword class='- topic/keyword '>nested keyword</keyword></keywords></topicmeta></topicref>");
-        
+
         TestUtils.resetXMLUnit();
         XMLUnit.setIgnoreWhitespace(true);
         assertEquals(exp.keySet(), act.keySet());
-        for (Map.Entry<String, String> e: exp.entrySet()) {
+        for (Map.Entry<String, String> e : exp.entrySet()) {
             final Document ev = keyDefToDoc(e.getValue());
             final Document av = act.get(e.getKey()).element.getOwnerDocument();
             assertXMLEqual(ev, av);
@@ -82,7 +78,7 @@ public class TestKeyrefReader {
 
         final KeyrefReader keyrefreader = new KeyrefReader();
         keyrefreader.read(filename.toURI(), readMap(filename));
-        final KeyScope act= keyrefreader.getKeyDefinition();
+        final KeyScope act = keyrefreader.getKeyDefinition();
 
         final Map<String, String> exp = new HashMap<String, String>();
         exp.put("toner-specs", "<keydef class=\"+ map/topicref mapgropup-d/keydef \" keys=\"toner-specs\" href=\"toner-type-a-specs.dita\"/>");
@@ -92,16 +88,16 @@ public class TestKeyrefReader {
         TestUtils.resetXMLUnit();
         XMLUnit.setIgnoreWhitespace(true);
         assertEquals(exp.keySet(), act.keySet());
-        for (Map.Entry<String, String> e: exp.entrySet()) {
+        for (Map.Entry<String, String> e : exp.entrySet()) {
             final Document ev = keyDefToDoc(e.getValue());
             final Document av = act.get(e.getKey()).element.getOwnerDocument();
             assertXMLEqual(ev, av);
         }
     }
-    
+
     private static Document keyDefToDoc(final String key) throws Exception {
         final InputSource inputSource = new InputSource(new StringReader(key));
-        final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
         return documentBuilder.parse(inputSource);
     }
 
@@ -441,13 +437,48 @@ public class TestKeyrefReader {
         assertEquals(5, c4.keySet().size());
     }
 
-    /** Debug logging. */
+    @Test
+    public void testSingleCircular() throws DITAOTException {
+        final File filename = new File(srcDir, "circularSingle.ditamap");
+
+        final KeyrefReader keyrefreader = new KeyrefReader();
+        final CachingLogger logger = new CachingLogger();
+        keyrefreader.setLogger(logger);
+
+        keyrefreader.read(filename.toURI(), readMap(filename));
+
+        assertEquals(1, logger.getMessages().size());
+        assertEquals("[DOTJ069E][ERROR] Circular key definition same -> same.", logger.getMessages().get(0).message);
+    }
+
+    @Test
+    public void testCircular() throws DITAOTException {
+        final File filename = new File(srcDir, "circular.ditamap");
+
+        final KeyrefReader keyrefreader = new KeyrefReader();
+        final CachingLogger logger = new CachingLogger();
+        keyrefreader.setLogger(logger);
+
+        keyrefreader.read(filename.toURI(), readMap(filename));
+
+        assertEquals(3, logger.getMessages().size());
+        final Set<String> act = new HashSet<>(3);
+        for (final Message msg : logger.getMessages()) {
+            act.add(msg.message);
+        }
+        assertEquals(new HashSet<>(Arrays.asList(
+                "[DOTJ069E][ERROR] Circular key definition first -> second -> third -> first.",
+                "[DOTJ069E][ERROR] Circular key definition second -> third -> first -> second.",
+                "[DOTJ069E][ERROR] Circular key definition third -> first -> second -> third.")),
+                act);
+    }
+
     private void log(final KeyScope scope, final String indent) {
         System.err.println(indent + "scope: " + scope.name);
-        for (final Map.Entry<String, KeyDef> key: scope.keyDefinition.entrySet()) {
+        for (final Map.Entry<String, KeyDef> key : scope.keyDefinition.entrySet()) {
             System.err.println(indent + " * " + key.getKey() + "=" + key.getValue().href);
         }
-        for (final KeyScope child: scope.childScopes.values()) {
+        for (final KeyScope child : scope.childScopes.values()) {
             log(child, indent + "  ");
         }
     }

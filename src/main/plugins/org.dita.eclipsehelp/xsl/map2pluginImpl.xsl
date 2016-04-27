@@ -23,6 +23,7 @@
 
   
   <!-- Define the error message prefix identifier -->
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
   <xsl:template match="/"> 
@@ -85,8 +86,7 @@
           <xsl:otherwise>
             <xsl:text>org.sample.help.doc</xsl:text>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">050</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX050W'"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
@@ -148,8 +148,7 @@
           <xsl:otherwise>
             <xsl:text>org.sample.help.doc</xsl:text>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">050</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX050W'"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
@@ -230,8 +229,7 @@
           <xsl:attribute name="plugin-id">org.sample.help.doc</xsl:attribute>
           <xsl:attribute name="id">org.sample.help.doc.sample.lang</xsl:attribute>
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">050</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="id" select="'DOTX050W'"/>
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
@@ -294,8 +292,7 @@
           <xsl:otherwise>
             <xsl:text>Bundle-SymbolicName: org.sample.help.doc; singleton:=true</xsl:text><xsl:value-of select="$newline"/>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">050</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX050W'"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose> 
@@ -341,8 +338,7 @@
             <xsl:value-of select="$newline"/>
             <xsl:text>Fragment-Host: org.sample.help.doc;</xsl:text><xsl:value-of select="$newline"/>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">050</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX050W'"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>                 

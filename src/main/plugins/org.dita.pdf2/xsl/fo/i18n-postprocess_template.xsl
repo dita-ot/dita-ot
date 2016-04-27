@@ -50,6 +50,7 @@ See the accompanying license.txt file for applicable licenses.
   
 
     <xsl:param name="debug-enabled" select="'false'"/>
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix" select="'PDFX'"/>
 
     <xsl:variable name="font-mappings" select="document('cfg:fo/font-mappings.xml')/font-mappings"/>
@@ -78,8 +79,7 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:variable name="aliasValue" select="$font-mappings/font-table/aliases/alias[@name=$currFontFam]/."/>
           <xsl:if test="not($aliasValue)">
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">008</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'PDFX008W'"/>
               <xsl:with-param name="msgparams">%1=<xsl:value-of select="$currFontFam"/></xsl:with-param>
             </xsl:call-template>
           </xsl:if>
@@ -152,8 +152,7 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:variable name="aliasValue" select="$font-mappings/font-table/aliases/alias[@name=$fontFace]/."/>
           <xsl:if test="not($aliasValue)">
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">008</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'PDFX008W'"/>
               <xsl:with-param name="msgparams">%1=<xsl:value-of select="$fontFace"/></xsl:with-param>
             </xsl:call-template>
           </xsl:if>

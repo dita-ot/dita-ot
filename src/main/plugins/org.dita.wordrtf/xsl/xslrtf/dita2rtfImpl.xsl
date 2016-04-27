@@ -27,6 +27,7 @@
 <xsl:param name="DRAFT" select="'no'"/>
 <xsl:param name="OUTPUTDIR" select="''"/>
 
+<!-- Deprecated since 2.3 -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <xsl:template match="/">
@@ -344,8 +345,7 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 </xsl:when>
 <xsl:otherwise>
   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">028</xsl:with-param>
-    <xsl:with-param name="msgsev">E</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX028E'"/>
   </xsl:call-template>
 </xsl:otherwise>
 </xsl:choose>

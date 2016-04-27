@@ -48,14 +48,6 @@ public final class JobTest {
     }
 
     @Test
-    public void testGetCopytoMap() throws URISyntaxException {
-        final Map<URI, URI> exp = new HashMap<URI, URI>();
-        exp.put(new URI("foo"), new URI("bar"));
-        exp.put(new URI("baz"), new URI("qux"));
-        assertEquals(exp, job.getCopytoMap());
-    }
-
-    @Test
     public void testGetFileInfo() throws URISyntaxException {
         final URI relative = new URI("foo/bar.dita");
         final URI absolute = tempDir.toURI().resolve(relative);

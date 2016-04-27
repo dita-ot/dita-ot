@@ -1,14 +1,30 @@
 sudo: false
 language: java
 jdk:
-  - oraclejdk7
+- oraclejdk7
 before_script:
-  - git submodule update --init --recursive
+- git submodule update --init --recursive
+- "./gradlew"
 script:
-  - ./gradlew check integrationTest --info --stacktrace
+- "./gradlew check integrationTest --info --stacktrace --no-daemon"
+- "./gradlew dist --info --stacktrace --no-daemon -Pcommit=${TRAVIS_COMMIT} -Ptag=${TRAVIS_TAG}"
 branches:
   only:
-  - /^(master|develop|hotfix\/.*|feature\/.*|release\/.*)$/
+  - "/^(master|develop|hotfix\\/.*|feature\\/.*|release\\/.*)$/"
+  - "/^\\d+(\\.\\d+)+$/"
 notifications:
   slack:
     secure: IAA4d9O2Dw1hkpY9cwxJz++VMjkgbV3EuaS09DGFujvHl2eQtpKTloE0/CDF+NZA4tcbH1dNqsGw3ETLmrqA581CLpmiiq3LG02cDMoSXZeOKB/9vo6tvLFg0UMawzo+FomJS/hvCmS5KirrFqZQKE5g6SCC05UBM5nwI5d0vOw=
+deploy:
+  - provider: s3
+    access_key_id: AKIAJUF6ATK6SJEUR4XA
+    secret_access_key:
+      secure: "H1+xHIRiO67xYudQmcvqD58w9ux79fLwKrOh0nCCi2N8fKyeT43L1/r4/F6oVSKoeT9MVgu0bj3XsmErqOw03h47wYvPKGcGDjY4KHj/Ptr9MRTkVkJ43yvVzWvnZWpsl4KlBsUHJGm5Tkb38aQOH9DbOgUiRSwcOused0GoBhQ="
+    region: eu-west-1
+    bucket: dita-ot
+    skip_cleanup: true
+    local-dir: build/distributions
+    acl: public_read
+    on:
+      repo: dita-ot/dita-ot
+      branch: develop

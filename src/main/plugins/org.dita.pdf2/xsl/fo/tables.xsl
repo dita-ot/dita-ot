@@ -272,7 +272,7 @@
                 <xsl:with-param name="id" select="'Table.title'"/>
                 <xsl:with-param name="params">
                     <number>
-                        <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
+                      <xsl:apply-templates select="." mode="table.title-number"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>
@@ -281,12 +281,15 @@
             </xsl:call-template>
         </fo:block>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" mode="table.title-number">
+    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tgroup ')]" name="tgroup">
         <xsl:if test="not(@cols)">
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">006</xsl:with-param>
-            <xsl:with-param name="msgsev">E</xsl:with-param>
+            <xsl:with-param name="id" select="'PDFX006E'"/>
           </xsl:call-template>
         </xsl:if>
 

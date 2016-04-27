@@ -1,0 +1,56 @@
+// Sass partial for link group styles
+
+/* Most link groups are created with <div>. Ensure they have space before and after. */
+
+.ullinks {
+  list-style-type: none;
+}
+
+.ulchildlink {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.olchildlink {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.linklist {
+  margin-bottom: 1em;
+}
+
+.linklistwithchild {
+  margin-bottom: 1em;
+  margin-left: 1.5em;
+}
+
+.sublinklist {
+  margin-bottom: 1em;
+  margin-left: 1.5em;
+}
+
+.relconcepts {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.reltasks {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.relref {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.relinfo {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.breadcrumb {
+  font-size: smaller;
+  margin-bottom: 1em;
+}

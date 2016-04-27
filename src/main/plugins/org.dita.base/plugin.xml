@@ -145,7 +145,7 @@
     <param name="processing-mode" desc="Specifies how the DITA-OT handles errors and error recovery." type="enum">
       <val desc="When an error is encountered, the DITA-OT stops processing">strict</val>
       <val desc="When an error is encountered, the DITA-OT attempts to recover from it" default="true">lax</val>
-      <val desc="When an error is encountered, the DITA continues processing but does not attempt error recovery">skip</val>
+      <val desc="When an error is encountered, the DITA-OT continues processing but does not attempt error recovery">skip</val>
     </param>
     <param name="conserve-memory" desc="Conserve memory at the expense of processing speed" type="enum">
       <val>true</val>

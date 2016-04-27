@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -16,6 +17,8 @@ import org.dita.dost.reader.AbstractReader;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
+
+import static org.dita.dost.util.XMLUtils.close;
 
 /**
  * Reads XML into DOM, modifies it, and serializes back into XML.
@@ -45,10 +48,9 @@ public abstract class AbstractDomFilter implements AbstractReader {
         final Document resDoc = process(doc);
 
         if (resDoc != null) {
-            FileOutputStream file = null;
+            Result res = null;
             try {
-                file = new FileOutputStream(filename);
-                final StreamResult res = new StreamResult(file);
+                res = new StreamResult(new FileOutputStream(filename));
                 final DOMSource ds = new DOMSource(resDoc);
                 final Transformer tf = TransformerFactory.newInstance().newTransformer();
                 logger.debug("Writing " + filename.toURI());
@@ -58,12 +60,10 @@ public abstract class AbstractDomFilter implements AbstractReader {
             } catch (final Exception e) {
                 logger.error("Failed to serialize " + filename.getAbsolutePath() + ": " + e.getMessage(), e);
             } finally {
-                if (file != null) {
-                    try {
-                        file.close();
-                    } catch (final IOException e) {
-                        // NOOP
-                    }
+                try {
+                    close(res);
+                } catch (final IOException e) {
+                    logger.error("Failed to close result: " + e.getMessage(), e);
                 }
             }
         }

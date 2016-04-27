@@ -1,6 +1,6 @@
 # Gradle task artifacts & build results
-.gradle/*
-/build/
+.gradle/
+build/
 target/
 *.iml
 
@@ -26,20 +26,15 @@ src/main/plugins/org.dita.html5/css/commonltr.css
 src/main/plugins/org.dita.html5/css/commonrtl.css
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhp.xsl
+src/main/plugins/org.dita.odt/lib/
 src/main/plugins/org.dita.odt/xsl/dita2odt.xsl
-src/main/plugins/org.dita.pdf2.axf/build/
 src/main/plugins/org.dita.pdf2.axf/lib/axf.jar
 src/main/plugins/org.dita.pdf2.axf/xsl/fo/topic2fo_shell_axf.xsl
-src/main/plugins/org.dita.pdf2.fop/.gradle/
 src/main/plugins/org.dita.pdf2.fop/xsl/fo/topic2fo_shell_fop.xsl
-src/main/plugins/org.dita.pdf2.xep/build/
-src/main/plugins/org.dita.pdf2.xep/lib/
 src/main/plugins/org.dita.pdf2.xep/lib/
 src/main/plugins/org.dita.pdf2.xep/xsl/fo/topic2fo_shell_xep.xsl
 src/main/plugins/org.dita.pdf2/**/*.class
-src/main/plugins/org.dita.pdf2/.gradle/
 src/main/plugins/org.dita.pdf2/build.xml
-src/main/plugins/org.dita.pdf2/build/
 src/main/plugins/org.dita.pdf2/cfg/catalog.xml
 src/main/plugins/org.dita.pdf2/lib/fo.jar
 src/main/plugins/org.dita.pdf2/xsl/common/topicmerge.xsl
@@ -51,6 +46,7 @@ src/main/plugins/org.dita.pdf2/xsl/fo/topic2fo_shell_fop.xsl
 src/main/plugins/org.dita.pdf2/xsl/fo/topic2fo_shell_xep.xsl
 src/main/plugins/org.dita.troff/xsl/dita2troff-ast-shell.xsl
 src/main/plugins/org.dita.troff/xsl/dita2troff-step2-shell.xsl
+src/main/plugins/org.dita.wordrtf/lib/
 src/main/plugins/org.dita.wordrtf/xsl/dita2rtf.xsl
 src/main/plugins/org.dita.xhtml/build_dita2xhtml.xml
 src/main/plugins/org.dita.xhtml/build_general.xml

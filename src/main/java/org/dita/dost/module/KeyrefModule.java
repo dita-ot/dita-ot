@@ -23,6 +23,7 @@ import org.dita.dost.writer.TopicFragmentFilter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLFilter;
 import org.dita.dost.exception.DITAOTException;
@@ -60,7 +61,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
-        final Collection<FileInfo> fis = new HashSet(job.getFileInfo(new Filter() {
+        final Collection<FileInfo> fis = new HashSet(job.getFileInfo(new Filter<FileInfo>() {
             @Override
             public boolean accept(final FileInfo f) {
                 return f.hasKeyref;
@@ -125,7 +126,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         // Collect topics not in map and map itself
         for (final FileInfo f: fis) {
             if (!usage.containsKey(f.uri)) {
-                res.add(processTopic(f, rootScope));
+                res.add(processTopic(f, rootScope, f.isResourceOnly));
             }
         }
         return res;
@@ -160,12 +161,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         if (hrefNode == null) {
             hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
         }
+        final boolean isResourceOnly = isResourceOnly(elem);
         for (final KeyScope s: ss) {
             if (hrefNode != null) {
                 final URI href = stripFragment(job.getInputMap().resolve(hrefNode.getValue()));
                 final FileInfo fi = job.getFileInfo(href);
                 if (fi != null && fi.hasKeyref) {
-                    res.add(processTopic(fi, s));
+                    res.add(processTopic(fi, s, isResourceOnly));
                     final Integer used = usage.get(fi.uri);
                     if (used > 1) {
                         hrefNode.setValue(addSuffix(toURI(hrefNode.getValue()), "-" + (used - 1)).toString());
@@ -178,13 +180,28 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
     }
 
+    private boolean isResourceOnly(final Element elem) {
+        Node curr = elem;
+        while (curr != null) {
+            if (curr.getNodeType() == Node.ELEMENT_NODE) {
+                final Attr processingRole = ((Element) curr).getAttributeNode(ATTRIBUTE_NAME_PROCESSING_ROLE);
+                if (processingRole != null) {
+                    return processingRole.getValue().equals(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+                }
+            }
+            curr = curr.getParentNode();
+        }
+        return false;
+    }
+
     /**
      * Determine how topic is processed for key reference processing.
      *
      * @return key reference processing
      */
-    private ResolveTask processTopic(final FileInfo f, final KeyScope scope) {
-        final Integer used = usage.containsKey(f.uri) ? usage.get(f.uri) + 1 : 1;
+    private ResolveTask processTopic(final FileInfo f, final KeyScope scope, final boolean isResourceOnly) {
+        final int increment = isResourceOnly ? 0 : 1;
+        final Integer used = usage.containsKey(f.uri) ? usage.get(f.uri) + increment : increment;
         usage.put(f.uri, used);
 
         if (used > 1) {
@@ -209,7 +226,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         conkeyrefFilter.setLogger(logger);
         conkeyrefFilter.setJob(job);
         conkeyrefFilter.setKeyDefinitions(r.scope);
-        conkeyrefFilter.setCurrentFile(r.in.file);
+        conkeyrefFilter.setCurrentFile(job.tempDir.toURI().resolve(r.in.uri));
         conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
         filters.add(conkeyrefFilter);
 
@@ -219,7 +236,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         parser.setLogger(logger);
         parser.setJob(job);
         parser.setKeyDefinition(r.scope);
-        parser.setCurrentFile(r.in.file);
+        parser.setCurrentFile(job.tempDir.toURI().resolve(r.in.uri));
         filters.add(parser);
 
         try {

@@ -74,6 +74,7 @@ public class IntegratorTest {
 
         final Integrator i = new Integrator(tempDir);
         i.setProperties(new File(tempDir, "integrator.properties"));
+        i.setLogger(new TestUtils.TestLogger());
         i.execute();
 
         final Properties expProperties = getProperties(new File(expDir, "lib" + File.separator + Integrator.class.getPackage().getName() + File.separator + Constants.GEN_CONF_PROPERTIES));

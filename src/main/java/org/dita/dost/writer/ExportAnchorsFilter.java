@@ -32,8 +32,6 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     private final Set<String> topicMetaSet = new HashSet<>(16);
     /** Flag to show whether a file has <exportanchors> tag */
     private boolean hasExport = false;
-    /** Absolute system path to file being processed */
-    private URI currentFile = null;
     private final List<ExportAnchor> exportAnchors = new ArrayList<>();
     private ExportAnchor currentExportAnchor;
     /** Refered topic id */
@@ -69,8 +67,8 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      * @param currentFile absolute path to current file
      */
     public void setCurrentFile(final URI currentFile) {
-        this.currentFile = currentFile;
-        this.currentDir = currentFile.resolve(".");
+        super.setCurrentFile(currentFile);
+        currentDir = currentFile.resolve(".");
     }
 
     /**

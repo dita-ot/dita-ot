@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+               stylesheet="dita-utilities.xsl">
+
+  <x:scenario label="Scenario for testing function replace-extension">
+    <x:scenario label="no extension">
+      <x:call template="replace-extension">
+        <x:param name="filename" select="'foo'"/>
+        <x:param name="extension" select="'.baz'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="plain file">
+      <x:call template="replace-extension">
+        <x:param name="filename" select="'foo.bar'"/>
+        <x:param name="extension" select="'.baz'"/>
+      </x:call>
+      <x:expect label="" select="'foo.baz'"/>
+    </x:scenario>
+    <x:scenario label="period in file name">
+      <x:call template="replace-extension">
+        <x:param name="filename" select="'foo.bar.baz'"/>
+        <x:param name="extension" select="'.qux'"/>
+      </x:call>
+      <x:expect label="" select="'foo.bar.qux'"/>
+    </x:scenario>
+    <x:scenario label="plain file with fragment">
+      <x:call template="replace-extension">
+        <x:param name="filename" select="'foo.bar#qux'"/>
+        <x:param name="extension" select="'.baz'"/>
+      </x:call>
+      <x:expect label="" select="'foo.baz#qux'"/>
+    </x:scenario>
+    <x:scenario label="ignore fragment">
+      <x:call template="replace-extension">
+        <x:param name="filename" select="'foo.bar#qux'"/>
+        <x:param name="extension" select="'.baz'"/>
+        <x:param name="ignore-fragment" select="true()"/>
+      </x:call>
+      <x:expect label="" select="'foo.baz'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="Scenario for testing function strip-fragment">
+    <x:scenario label="no fragment">
+      <x:call function="dita-ot:strip-fragment">
+        <x:param name="href" select="'foo'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="with fragment">
+      <x:call function="dita-ot:strip-fragment">
+        <x:param name="href" select="'foo#bar'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="double fragment">
+      <x:call function="dita-ot:strip-fragment">
+        <x:param name="href" select="'foo#bar#baz'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="Scenario for testing template substring-before-last">
+    <x:scenario label="no match">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="no match">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="single match">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'foo.bar'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="double match">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'foo.bar.baz'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo.bar'"/>
+    </x:scenario>
+    <x:scenario label="first">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'.foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="last">
+      <x:call template="substring-before-last">
+        <x:param name="text" select="'foo.'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="Scenario for testing function substring-before-last">
+    <x:scenario label="no match">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="no match">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="single match">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'foo.bar'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="double match">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'foo.bar.baz'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo.bar'"/>
+    </x:scenario>
+    <x:scenario label="first">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'.foo'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="''"/>
+    </x:scenario>
+    <x:scenario label="last">
+      <x:call function="dita-ot:substring-before-last">
+        <x:param name="text" select="'foo.'"/>
+        <x:param name="delim" select="'.'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:has-topic-id">
+    <x:scenario label="@href has topic ID and element ID">
+      <x:call function="dita-ot:has-topic-id">
+        <x:param name="href" select="'foo.dita#bar/baz'"/>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="@href has topic ID but no element ID">
+      <x:call function="dita-ot:has-topic-id">
+        <x:param name="href" select="'foo.dita#bar'"/>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="@href has no topic ID">
+      <x:call function="dita-ot:has-topic-id">
+        <x:param name="href" select="'foo.dita'"/>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+
+    <x:scenario label="@href is a fragment identifier">
+      <x:call function="dita-ot:has-topic-id">
+        <x:param name="href" select="'#foo'"/>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:has-element-id">
+    <x:scenario label="@href has a path, topic ID and element ID">
+      <x:call function="dita-ot:has-element-id">
+        <x:param name="href" select="'foo.dita#bar/baz'"/>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="@href is a fragment with topic ID and element ID">
+      <x:call function="dita-ot:has-element-id">
+        <x:param name="href" select="'#bar/baz'"/>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="@href has a topic ID but no element ID">
+      <x:call function="dita-ot:has-element-id">
+        <x:param name="href" select="'foo.dita#bar'"/>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+
+    <x:scenario label="@href has no topic ID or element ID">
+      <x:call function="dita-ot:has-element-id">
+        <x:param name="href" select="'foo.dita'"/>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+
+    <x:scenario label="@href is a fragment identifier">
+      <x:call function="dita-ot:has-element-id">
+        <x:param name="href" select="'#foo'"/>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:get-topic-id">
+    <x:scenario label="@href has topic ID and element ID">
+      <x:call function="dita-ot:get-topic-id">
+        <x:param name="href" select="'foo.dita#bar/baz'"/>
+      </x:call>
+
+      <x:expect label="return topic ID" select="'bar'"/>
+    </x:scenario>
+
+    <x:scenario label="@href has a topic ID but no element ID">
+      <x:call function="dita-ot:get-topic-id">
+        <x:param name="href" select="'foo.dita#bar'"/>
+      </x:call>
+
+      <x:expect label="return topic ID" select="'bar'"/>
+    </x:scenario>
+
+    <x:scenario label="@href has no topic ID or element ID">
+      <x:call function="dita-ot:get-topic-id">
+        <x:param name="href" select="'foo.dita'"/>
+      </x:call>
+
+      <x:expect label="return empty sequence" select="()"/>
+    </x:scenario>
+
+    <x:scenario label="@href is a fragment identifier">
+      <x:call function="dita-ot:get-topic-id">
+        <x:param name="href" select="'#foo'"/>
+      </x:call>
+
+      <x:expect label="return topic ID" select="'foo'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:get-element-id">
+    <x:scenario label="foo.dita#bar/baz">
+      <x:call function="dita-ot:get-element-id">
+        <x:param name="href" select="'foo.dita#bar/baz'"/>
+      </x:call>
+
+      <x:expect label="return element ID" select="'baz'"/>
+    </x:scenario>
+
+    <x:scenario label="#foo/bar">
+      <x:call function="dita-ot:get-element-id">
+        <x:param name="href" select="'#foo/bar'"/>
+      </x:call>
+
+      <x:expect label="return empty sequence" select="'bar'"/>
+    </x:scenario>
+
+    <x:scenario label="foo.dita#bar">
+      <x:call function="dita-ot:get-element-id">
+        <x:param name="href" select="'foo.dita#bar'"/>
+      </x:call>
+
+      <x:expect label="return empty sequence" select="()"/>
+    </x:scenario>
+
+    <x:scenario label="foo.dita">
+      <x:call function="dita-ot:get-element-id">
+        <x:param name="href" select="'foo.dita'"/>
+      </x:call>
+
+      <x:expect label="return empty sequence" select="()"/>
+    </x:scenario>
+
+    <x:scenario label="#foo">
+      <x:call function="dita-ot:get-element-id">
+        <x:param name="href" select="'#foo'"/>
+      </x:call>
+
+      <x:expect label="return empty sequence" select="()"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:get-first-topic-language">
+    <x:scenario label="@xml:lang of first child">
+      <x:call function="dita-ot:get-first-topic-language">
+        <x:param name="ctx">
+          <topic id="foo" xml:lang="en-us">
+            <title>foo</title>
+          </topic>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return @xml:lang" select="'en-us'"/>
+    </x:scenario>
+
+    <x:scenario label="@xml:lang of dita element child">
+      <x:call function="dita-ot:get-first-topic-language">
+        <x:param name="ctx">
+          <dita>
+            <topic id="foo" xml:lang="el-gr">
+              <title>foo</title>
+            </topic>
+          </dita>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return @xml:lang" select="'el-gr'"/>
+    </x:scenario>
+
+    <x:scenario label="upper-case @xml:lang">
+      <x:call function="dita-ot:get-first-topic-language">
+        <x:param name="ctx">
+          <topic id="foo" xml:lang="en-US">
+            <title>foo</title>
+          </topic>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return @xml:lang" select="'en-us'"/>
+    </x:scenario>
+
+    <x:scenario label="no @xml:lang">
+      <x:call function="dita-ot:get-first-topic-language">
+        <x:param name="ctx">
+          <topic id="foo">
+            <title>foo</title>
+          </topic>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return $DEFAULTLANG" select="'en-us'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:get-current-language">
+    <x:scenario label="given element has @xml:lang">
+      <x:call function="dita-ot:get-current-language">
+        <x:param name="ctx">
+          <topic id="foo" xml:lang="el-gr">
+            <title>foo</title>
+          </topic>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return @xml:lang" select="'el-gr'"/>
+    </x:scenario>
+
+    <x:scenario label="given element has no @xml:lang">
+      <x:call function="dita-ot:get-current-language">
+        <x:param name="ctx">
+          <topic id="foo">
+            <title>foo</title>
+          </topic>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return $DEFAULTLANG" select="'en-us'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:get-iso-language-code">
+    <x:scenario label="two-part code">
+      <x:call function="dita-ot:get-iso-language-code">
+        <x:param name="lang" select="'pt-br'"/>
+      </x:call>
+
+      <x:expect label="return ISO language code" select="'pt'"/>
+    </x:scenario>
+
+    <x:scenario label="one-part code">
+      <x:call function="dita-ot:get-iso-language-code">
+        <x:param name="lang" select="'fi'"/>
+      </x:call>
+
+      <x:expect label="return ISO language code" select="'fi'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:get-language-codes">
+    <x:scenario label="two-part code">
+      <x:call function="dita-ot:get-language-codes">
+        <x:param name="lang" select="'pt-br'"/>
+      </x:call>
+
+      <x:expect label="return language codes" select="('pt-br', 'pt')"/>
+    </x:scenario>
+
+    <x:scenario label="one-part code">
+      <x:call function="dita-ot:get-language-codes">
+        <x:param name="lang" select="'fi'"/>
+      </x:call>
+
+      <x:expect label="return language codes" select="('fi', 'fi')"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:normalize-uri">
+    <x:scenario label="normalize foo/bar/baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/bar/baz'"/>
+      </x:call>
+      <x:expect label="" select="'foo/bar/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize foo/./baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/./baz'"/>
+      </x:call>
+      <x:expect label="" select="'foo/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize ../foo/bar/baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'../foo/bar/baz'"/>
+      </x:call>
+      <x:expect label="" select="'../foo/bar/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize foo/../baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/../baz'"/>
+      </x:call>
+      <x:expect label="" select="'baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize foo/bar/.">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/bar/.'"/>
+      </x:call>
+      <x:expect label="" select="'foo/bar'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize foo/bar/..">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/bar/..'"/>
+      </x:call>
+      <x:expect label="" select="'foo'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize ./bar/baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'./bar/baz'"/>
+      </x:call>
+      <x:expect label="" select="'bar/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize ../../foo/bar/baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'../../foo/bar/baz'"/>
+      </x:call>
+      <x:expect label="" select="'../../foo/bar/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize foo/bar/../../baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'foo/bar/../../baz'"/>
+      </x:call>
+      <x:expect label="" select="'baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize /foo/bar/../../baz">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'/foo/bar/../../baz'"/>
+      </x:call>
+      <x:expect label="" select="'/baz'"/>
+    </x:scenario>
+
+    <x:scenario label="normalize /../foo">
+      <x:call function="dita-ot:normalize-uri">
+        <x:param name="uri" select="'/../foo'"/>
+      </x:call>
+      <x:expect label="" select="'/../foo'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="length-to-pixels">
+    <x:scenario label="convert 1 to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1'"/>
+      </x:call>
+      <x:expect label="">1</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1pt to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1pt'"/>
+      </x:call>
+      <x:expect label="">1</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1in to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1in'"/>
+      </x:call>
+      <x:expect label="">96</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 123 to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'123'"/>
+      </x:call>
+      <x:expect label="">123</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 123pt to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'123pt'"/>
+      </x:call>
+      <x:expect label="">164</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 123in to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'123in'"/>
+      </x:call>
+      <x:expect label="">11808</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1.23 to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1.23'"/>
+      </x:call>
+      <x:expect label="">1</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1.23pt to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1.23pt'"/>
+      </x:call>
+      <x:expect label="">2</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1.23in to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1.23in'"/>
+      </x:call>
+      <x:expect label="">118</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert 1.23i to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'1.23i'"/>
+      </x:call>
+      <x:expect label="">100%</x:expect>
+    </x:scenario>
+
+    <x:scenario label="convert NaN to px">
+      <x:call template="length-to-pixels">
+        <x:param name="dimen" select="'NaN'"/>
+      </x:call>
+      <x:expect label="">100%</x:expect>
+    </x:scenario>
+  </x:scenario>
+
+</x:description>

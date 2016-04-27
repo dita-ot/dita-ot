@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-  Sourceforge.net. See the accompanying license.txt file for 
-  applicable licenses.-->
+<!-- This file is part of the DITA Open Toolkit project. 
+  See the accompanying license.txt file for applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
@@ -28,7 +27,7 @@
 
   <xsl:template match="/">
     <xsl:apply-templates>
-      <xsl:with-param name="conref-ids" select="()"/>
+      <xsl:with-param name="conref-ids" tunnel="yes" select="()"/>
     </xsl:apply-templates>
   </xsl:template>
 
@@ -92,13 +91,9 @@
   <xsl:template match="*[contains(@class, ' mapgroup-d/topichead ')]/@navtitle" mode="get-source-attribute" priority="10"/>
 
   <xsl:template match="@*" mode="conaction-target">
-    <xsl:choose>
-      <xsl:when test="name() = 'conaction' or name() = 'conref'"/>
-      <xsl:otherwise>
-        <xsl:copy/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:copy/>
   </xsl:template>
+  <xsl:template match="@conaction | @conref" mode="conaction-target"/>
 
   <!-- When content is pushed from one topic to another, it is still rendered in the original context.
  Processors may delete empty the element that with the conaction="mark" attribute. -->
@@ -107,7 +102,7 @@
       <xsl:when test="@conaction != 'mark'">
         <xsl:copy>
           <xsl:apply-templates select="@*" mode="conaction-target"/>
-          <xsl:apply-templates select="* | comment() | processing-instruction() | text()"/>
+          <xsl:apply-templates select="node()"/>
         </xsl:copy>
       </xsl:when>
     </xsl:choose>
@@ -117,20 +112,18 @@
 
   <xsl:template match="*[@conref][@conref != ''][not(@conaction)]" priority="10">
     <!-- If we have already followed a relative path, pick it up -->
-    <xsl:param name="current-relative-path" as="xs:string" select="''"/>
-    <xsl:param name="conref-source-topicid" as="xs:string?"/>
+    <xsl:param name="current-relative-path" tunnel="yes" as="xs:string" select="''"/>
+    <xsl:param name="conref-source-topicid" tunnel="yes" as="xs:string?"/>
     <xsl:param name="source-attributes" as="xs:string*"/>
-    <xsl:param name="conref-ids" as="xs:string*"/>
-    <xsl:param name="WORKDIR" as="xs:string">
+    <xsl:param name="conref-ids" tunnel="yes" as="xs:string*"/>
+    <xsl:param name="WORKDIR" tunnel="yes" as="xs:string">
       <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
     </xsl:param>
     <xsl:param name="original-element" as="xs:string">
       <xsl:call-template name="get-original-element"/>
     </xsl:param>
-
-
     <xsl:param name="original-attributes" select="@*" as="attribute()*"/>
-
+    
     <xsl:variable name="conrefend" as="xs:string?">
       <xsl:choose>
         <xsl:when test="dita-ot:has-element-id(@conrefend)">
@@ -147,7 +140,6 @@
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
-
 
     <xsl:variable name="add-relative-path" as="xs:string">
       <xsl:call-template name="find-relative-path"/>
@@ -215,14 +207,10 @@
                   and (document($EXPORTFILE, /)//file[@name = $FILENAME]/topicid[@name = $topicid]) ">
         <!-- just copy -->
         <xsl:copy>
-          <xsl:apply-templates select="* | @* | comment() | processing-instruction() | text()">
-            <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-            <xsl:with-param name="conref-filename" select="$conref-filename"/>
-            <xsl:with-param name="topicid" select="$topicid"/>
-            <xsl:with-param name="elemid" select="$elemid"/>
-            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-            <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-            <xsl:with-param name="conref-ids" select="$conref-ids"/>
+          <xsl:apply-templates select="@* | node()">
+            <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+            <xsl:with-param name="conref-filename" tunnel="yes" select="$conref-filename"/>
+            <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
           </xsl:apply-templates>
         </xsl:copy>
       </xsl:when>
@@ -231,14 +219,10 @@
                   and document($EXPORTFILE, /)//file[@name = $FILENAME]/topicid[@name = $topicid]/id[@name = $elemid]">
         <!-- just copy -->
         <xsl:copy>
-          <xsl:apply-templates select="* | @* | comment() | processing-instruction() | text()">
-            <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-            <xsl:with-param name="conref-filename" select="$conref-filename"/>
-            <xsl:with-param name="topicid" select="$topicid"/>
-            <xsl:with-param name="elemid" select="$elemid"/>
-            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-            <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-            <xsl:with-param name="conref-ids" select="$conref-ids"/>
+          <xsl:apply-templates select="@* | node()">
+            <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+            <xsl:with-param name="conref-filename" tunnel="yes" select="$conref-filename"/>
+            <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
           </xsl:apply-templates>
         </xsl:copy>
       </xsl:when>
@@ -248,14 +232,10 @@
              or document($EXPORTFILE, /)//file[@name = $FILENAME]/topicid[@name = $topicid]/id[@name = $elemid])">
         <!-- just copy -->
         <xsl:copy>
-          <xsl:apply-templates select="* | @* | comment() | processing-instruction() | text()">
-            <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-            <xsl:with-param name="conref-filename" select="$conref-filename"/>
-            <xsl:with-param name="topicid" select="$topicid"/>
-            <xsl:with-param name="elemid" select="$elemid"/>
-            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-            <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-            <xsl:with-param name="conref-ids" select="$conref-ids"/>
+          <xsl:apply-templates select="@* | node()">
+            <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+            <xsl:with-param name="conref-filename" tunnel="yes" select="$conref-filename"/>
+            <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
           </xsl:apply-templates>
         </xsl:copy>
       </xsl:when>
@@ -269,445 +249,95 @@
             <xsl:otherwise>firstinfile</xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-
         <xsl:choose>
-          <!-- If this conref has already been followed, stop to prevent an infinite loop -->
           <xsl:when test="$conref-ids = generate-id(.)">
             <xsl:apply-templates select="." mode="ditamsg:conrefLoop"/>
           </xsl:when>
-          <!--targetting an element inside a topic-->
-          <xsl:when test="dita-ot:has-element-id(@conref)">
-            <xsl:choose>
-              <xsl:when test="$topicpos = 'samefile'">
-                <xsl:variable name="target" select="key('id', $elemid)[local-name() = $element][ancestor::*[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
-                <xsl:choose>
-                  <xsl:when test="$target">
-                    <xsl:apply-templates select="$target[1]" mode="conref-target">
-                      <xsl:with-param name="source-attributes" as="xs:string*">
-                        <xsl:choose>
-                          <xsl:when test="exists($source-attributes)">
-                            <xsl:sequence select="$source-attributes"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:call-template name="get-source-attribute"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:with-param>
-                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                      <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                      <xsl:with-param name="conrefend" select="$conrefend"/>
-                      <xsl:with-param name="original-element" select="$original-element"/>
-                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                    </xsl:apply-templates>
-                    <xsl:if test="$target[2]">
-                      <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
-                    </xsl:if>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:when test="$topicpos = 'otherfile'">
-                <xsl:choose>
-                  <xsl:when test="conref:isValid($domains)">
-                    <xsl:for-each select="document($file, /)">
-                      <xsl:variable name="target" select="key('id', $elemid)[local-name() = $element][ancestor::*[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
-                      <xsl:choose>
-                        <xsl:when test="$target">
-                          <xsl:apply-templates select="$target[1]" mode="conref-target">
-                            <xsl:with-param name="source-attributes" as="xs:string*">
-                              <xsl:choose>
-                                <xsl:when test="exists($source-attributes)">
-                                  <xsl:sequence select="$source-attributes"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <xsl:call-template name="get-source-attribute">
-                                    <xsl:with-param name="current-node" select="$current-element"/>
-                                  </xsl:call-template>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:with-param>
-                            <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                            <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                            <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                            <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                            <xsl:with-param name="conrefend" select="$conrefend"/>
-                            <xsl:with-param name="original-element" select="$original-element"/>
-                            <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                          </xsl:apply-templates>
-                          <xsl:if test="$target[2]">
-                            <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
-                          </xsl:if>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:otherwise/>
-              <!--never happens - only other value is firstinfile, but we know there's a # in the conref so it's either samefile or otherfile-->
-            </xsl:choose>
-          </xsl:when>
-
-          <!--targetting a topic-->
-          <xsl:when test="contains(@class, ' topic/topic ')">
-            <xsl:choose>
-              <xsl:when test="$topicpos = 'samefile'">
-                <xsl:variable name="target" select="key('id', $topicid)[contains(@class, ' topic/topic ')][local-name() = $element]"/>
-                <xsl:choose>
-                  <xsl:when test="$target">
-                    <xsl:apply-templates select="$target[1]" mode="conref-target">
-                      <xsl:with-param name="source-attributes" as="xs:string*">
-                        <xsl:choose>
-                          <xsl:when test="exists($source-attributes)">
-                            <xsl:sequence select="$source-attributes"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:call-template name="get-source-attribute"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:with-param>
-                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                      <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                      <xsl:with-param name="conrefend" select="$conrefend"/>
-                      <xsl:with-param name="original-element" select="$original-element"/>
-                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                    </xsl:apply-templates>
-                    <xsl:if test="$target[2]">
-                      <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
-                    </xsl:if>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:when test="$topicpos = 'otherfile'">
-                <xsl:choose>
-                  <xsl:when test="conref:isValid($domains)">
-                    <xsl:for-each select="document($file, /)">
-                      <xsl:variable name="target" select="key('id', $topicid)[contains(@class, ' topic/topic ')][local-name() = $element]"/>
-                      <xsl:choose>
-                        <xsl:when test="$target">
-                          <xsl:apply-templates select="$target[1]" mode="conref-target">
-                            <xsl:with-param name="source-attributes" as="xs:string*">
-                              <xsl:choose>
-                                <xsl:when test="exists($source-attributes)">
-                                  <xsl:sequence select="$source-attributes"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <xsl:call-template name="get-source-attribute">
-                                    <xsl:with-param name="current-node" select="$current-element"/>
-                                  </xsl:call-template>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:with-param>
-                            <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                            <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                            <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                            <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                            <xsl:with-param name="conrefend" select="$conrefend"/>
-                            <xsl:with-param name="original-element" select="$original-element"/>
-                            <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                          </xsl:apply-templates>
-                          <xsl:if test="$target[2]">
-                            <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
-                          </xsl:if>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:when test="$topicpos = 'firstinfile'">
-                <xsl:choose>
-                  <xsl:when test="conref:isValid($domains)">
-                    <xsl:for-each select="document($file, /)">
-                      <xsl:variable name="target" select="//*[contains(@class, ' topic/topic ')][1][local-name() = $element]"/>
-                      <xsl:choose>
-                        <xsl:when test="$target">
-                          <xsl:variable name="firstTopicId" select="$target/@id"/>
-                          <xsl:choose>
-                            <!-- if the first topic id is exported and transtype is eclipsehelp-->
-                            <xsl:when test="$TRANSTYPE = 'eclipsehelp' and document($EXPORTFILE, $current-element)//file[@name = $FILENAME]/topicid[@name = $firstTopicId]">
-                              <!-- just copy -->
-                              <xsl:copy>
-                                <xsl:apply-templates select="* | @* | comment() | processing-instruction() | text()">
-                                  <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                                  <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                  <xsl:with-param name="topicid" select="$topicid"/>
-                                  <xsl:with-param name="elemid" select="$elemid"/>
-                                  <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                  <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                                  <xsl:with-param name="conref-ids" select="$conref-ids"/>
-                                </xsl:apply-templates>
-                              </xsl:copy>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <!-- do the normal process -->
-                              <xsl:apply-templates select="$target[1]" mode="conref-target">
-                                <xsl:with-param name="source-attributes" as="xs:string*">
-                                  <xsl:choose>
-                                    <xsl:when test="exists($source-attributes)">
-                                      <xsl:sequence select="$source-attributes"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                      <xsl:call-template name="get-source-attribute">
-                                        <xsl:with-param name="current-node" select="$current-element"/>
-                                      </xsl:call-template>
-                                    </xsl:otherwise>
-                                  </xsl:choose>
-                                </xsl:with-param>
-                                <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                                <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                                <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                                <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                                <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                                <xsl:with-param name="conrefend" select="$conrefend"/>
-                                <xsl:with-param name="original-element" select="$original-element"/>
-                                <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                              </xsl:apply-templates>
-                              <xsl:if test="$target[2]">
-                                <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
-                              </xsl:if>
-                            </xsl:otherwise>
-                          </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:otherwise/>
-              <!--never happens - only three possible values for topicpos, all are tested-->
-            </xsl:choose>
-          </xsl:when>
-
-          <!--targetting a topicref from within a map-->
-          <xsl:when test="contains(@class, ' map/topicref ')">
-            <xsl:choose>
-              <xsl:when test="$topicpos = 'samefile'">
-                <xsl:variable name="target" select="key('id', $topicid)[contains(@class, ' map/topicref ')][local-name() = $element]"/>
-                <xsl:choose>
-                  <xsl:when test="$target">
-                    <xsl:apply-templates select="$target[1]" mode="conref-target">
-                      <xsl:with-param name="source-attributes" as="xs:string*">
-                        <xsl:choose>
-                          <xsl:when test="exists($source-attributes)">
-                            <xsl:sequence select="$source-attributes"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:call-template name="get-source-attribute"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:with-param>
-                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                      <xsl:with-param name="conrefend" select="$conrefend"/>
-                      <xsl:with-param name="original-element" select="$original-element"/>
-                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                    </xsl:apply-templates>
-                    <xsl:if test="$target[2]">
-                      <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
-                    </xsl:if>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:when test="$topicpos = 'otherfile'">
-                <xsl:choose>
-                  <xsl:when test="conref:isValid($domains)">
-                    <xsl:for-each select="document($file,  /)">
-                      <xsl:variable name="target" select="key('id', $topicid)[contains(@class, ' map/topicref ')][local-name() = $element]"/>
-                      <xsl:choose>
-                        <xsl:when test="$target">
-                          <xsl:apply-templates select="$target[1]" mode="conref-target">
-                            <xsl:with-param name="source-attributes" as="xs:string*">
-                              <xsl:choose>
-                                <xsl:when test="exists($source-attributes)">
-                                  <xsl:sequence select="$source-attributes"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <xsl:call-template name="get-source-attribute">
-                                    <xsl:with-param name="current-node" select="$current-element"/>
-                                  </xsl:call-template>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:with-param>
-                            <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                            <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                            <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                            <xsl:with-param name="conrefend" select="$conrefend"/>
-                            <xsl:with-param name="original-element" select="$original-element"/>
-                            <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                          </xsl:apply-templates>
-                          <xsl:if test="$target[2]">
-                            <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
-                          </xsl:if>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:apply-templates select="." mode="ditamsg:malformedConrefInMap"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-
-          <!--targetting anything else within a map (such as reltable)-->
-          <xsl:when test="contains(/*/@class, ' map/map ')">
-            <xsl:choose>
-              <xsl:when test="$topicpos = 'samefile'">
-                <xsl:variable name="target" select="key('id', $topicid)[local-name() = $element]"/>
-                <xsl:choose>
-                  <xsl:when test="$target">
-                    <xsl:apply-templates select="($target)[1]" mode="conref-target">
-                      <xsl:with-param name="source-attributes" as="xs:string*">
-                        <xsl:choose>
-                          <xsl:when test="exists($source-attributes)">
-                            <xsl:sequence select="$source-attributes"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:call-template name="get-source-attribute"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:with-param>
-                      <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                      <xsl:with-param name="conrefend" select="$conrefend"/>
-                      <xsl:with-param name="original-element" select="$original-element"/>
-                      <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                    </xsl:apply-templates>
-                    <xsl:if test="($target)[2]">
-                      <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
-                    </xsl:if>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:when test="$topicpos = 'otherfile'">
-                <xsl:choose>
-                  <xsl:when test="conref:isValid($domains)">
-                    <xsl:for-each select="document($file, /)">
-                      <xsl:variable name="target" select="key('id', $topicid)[local-name() = $element]"/>
-                      <xsl:choose>
-                        <xsl:when test="$target">
-                          <xsl:apply-templates select="$target[1]" mode="conref-target">
-                            <xsl:with-param name="source-attributes" as="xs:string*">
-                              <xsl:choose>
-                                <xsl:when test="exists($source-attributes)">
-                                  <xsl:sequence select="$source-attributes"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <xsl:call-template name="get-source-attribute">
-                                    <xsl:with-param name="current-node" select="$current-element"/>
-                                  </xsl:call-template>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:with-param>
-                            <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                            <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                            <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                            <xsl:with-param name="conrefend" select="$conrefend"/>
-                            <xsl:with-param name="original-element" select="$original-element"/>
-                            <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                          </xsl:apply-templates>
-                          <xsl:if test="$target[2]">
-                            <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
-                          </xsl:if>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:apply-templates select="." mode="ditamsg:malformedConrefInMap"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-
-          <!--targetting an element in a map, and the source is a element from a topic, add by wxzhang 20070605-->
-          <xsl:when test="substring-after(@conref, '#') != ''">
+          <xsl:when test="exists($elemid)
+                       or contains(@class, ' topic/topic ')
+                       or contains(@class, ' map/topicref ')
+                       or contains(/*/@class, ' map/map ')
+                       or substring-after(@conref, '#') != ''">
+            <xsl:variable name="target-doc" as="document-node()?">
+              <xsl:choose>
+                <xsl:when test="$topicpos = 'samefile'">
+                  <xsl:sequence select="root(.)"/>
+                </xsl:when>
+                <xsl:when test="$topicpos = ('otherfile', 'firstinfile')">
+                  <xsl:sequence select="document($file, /)"/>
+                </xsl:when>
+              </xsl:choose>
+            </xsl:variable>
             <xsl:choose>
               <xsl:when test="conref:isValid($domains)">
-                <xsl:for-each select="document($file, /)">
-                  <xsl:variable name="target" select="key('id', $topicid)[local-name() = $element]"/>
+                <xsl:for-each select="$target-doc">
+                  <xsl:variable name="target" as="element()*">
+                    <xsl:choose>
+                      <xsl:when test="exists($elemid)">
+                        <xsl:sequence select="key('id', $elemid)[local-name() = $element][ancestor::*[contains(@class, ' topic/topic ')][1][@id = $topicid]]"/>
+                      </xsl:when>
+                      <xsl:when test="exists($topicid) and contains($current-element/@class, ' topic/topic ')">
+                        <xsl:sequence select="key('id', $topicid)[contains(@class, ' topic/topic ')][local-name() = $element]"/>
+                      </xsl:when>
+                      <xsl:when test="exists($topicid) and contains($current-element/@class, ' map/topicref ')">
+                        <xsl:sequence select="key('id', $topicid)[contains(@class, ' map/topicref ')][local-name() = $element]"/>  
+                      </xsl:when>
+                      <xsl:when test="exists($topicid) and contains(root($current-element)/*/@class, ' map/map ')">
+                        <xsl:sequence select="key('id', $topicid)[local-name() = $element]"/>
+                      </xsl:when>
+                      <xsl:when test="exists($topicid)">
+                        <xsl:sequence select="key('id', $topicid)[local-name() = $element]"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:sequence select="//*[contains(@class, ' topic/topic ')][1][local-name() = $element]"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:variable>
                   <xsl:choose>
-                    <!-- to resolve the problem of conref from map to topic -->
                     <xsl:when test="$target">
-                      <xsl:apply-templates select="$target[1]" mode="conref-target">
-                        <xsl:with-param name="source-attributes" as="xs:string*">
-                          <xsl:choose>
-                            <xsl:when test="exists($source-attributes)">
-                              <xsl:sequence select="$source-attributes"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <xsl:call-template name="get-source-attribute">
-                                <xsl:with-param name="current-node" select="$current-element"/>
-                              </xsl:call-template>
-                            </xsl:otherwise>
-                          </xsl:choose>
-                        </xsl:with-param>
-                        <xsl:with-param name="current-relative-path" select="concat($current-relative-path, $add-relative-path)"/>
-                        <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-                        <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                        <xsl:with-param name="conref-source-topicid" select="$conref-source-topic"/>
-                        <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
-                        <xsl:with-param name="conrefend" select="$conrefend"/>
-                        <xsl:with-param name="original-element" select="$original-element"/>
-                        <xsl:with-param name="original-attributes" select="$original-attributes"/>
-                      </xsl:apply-templates>
-                      <xsl:if test="$target[2]">
-                        <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
-                      </xsl:if>
+                      <xsl:variable name="firstTopicId" select="if (exists($topicid)) then $topicid else $target/@id"/>
+                      <xsl:choose>
+                        <!-- if the first topic id is exported and transtype is eclipsehelp-->
+                        <!-- XXX it would be good if this could be move higher up -->
+                        <xsl:when test="$TRANSTYPE = 'eclipsehelp'
+                                    and empty($topicid) and empty($elemid)
+                                    and document($EXPORTFILE, $current-element)//file[@name = $FILENAME]/topicid[@name = $firstTopicId]">
+                          <xsl:copy>
+                            <xsl:apply-templates select="node()">
+                              <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+                              <xsl:with-param name="conref-filename" tunnel="yes" select="$conref-filename"/>
+                              <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
+                            </xsl:apply-templates>
+                          </xsl:copy>
+                        </xsl:when>
+                        <xsl:otherwise>
+                         <xsl:apply-templates select="$target[1]" mode="conref-target">
+                           <xsl:with-param name="source-attributes" as="xs:string*">
+                             <xsl:choose>
+                               <xsl:when test="exists($source-attributes)">
+                                 <xsl:sequence select="$source-attributes"/>
+                               </xsl:when>
+                               <xsl:otherwise>
+                                 <xsl:call-template name="get-source-attribute">
+                                   <xsl:with-param name="current-node" select="$current-element"/>
+                                 </xsl:call-template>
+                               </xsl:otherwise>
+                             </xsl:choose>
+                           </xsl:with-param>
+                           <xsl:with-param name="current-relative-path" tunnel="yes" select="concat($current-relative-path, $add-relative-path)"/>
+                           <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
+                           <xsl:with-param name="conref-filename" tunnel="yes" select="$conref-filename"/>
+                           <xsl:with-param name="conref-source-topicid" tunnel="yes" select="$conref-source-topic"/>
+                           <xsl:with-param name="conref-ids" tunnel="yes" select="$updated-conref-ids"/>
+                           <xsl:with-param name="conrefend" select="$conrefend"/>
+                           <xsl:with-param name="original-element" select="$original-element"/>
+                           <xsl:with-param name="original-attributes" select="$original-attributes"/>
+                         </xsl:apply-templates>
+                         <xsl:if test="$target[2]">
+                           <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
+                         </xsl:if>
+                        </xsl:otherwise>
+                      </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
                       <xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/>
@@ -733,13 +363,9 @@
      (passed in source-attributes). Process all attributes on that element, except @conref. They will
      replace values in the source. -->
   <xsl:template match="*" mode="conref-target">
-    <xsl:param name="WORKDIR" as="xs:string"/>
-    <xsl:param name="conref-source-topicid" as="xs:string?"/>
-    <xsl:param name="conref-ids" as="xs:string*"/>
+    <xsl:param name="WORKDIR" tunnel="yes" as="xs:string"/>
     <xsl:param name="source-attributes" as="xs:string*"/>
-    <xsl:param name="current-relative-path" as="xs:string"/>
-    <!-- File system path from original file to here -->
-    <xsl:param name="conref-filename" as="xs:string?"/>
+    <xsl:param name="current-relative-path" tunnel="yes" as="xs:string"/>
     <xsl:param name="conrefend" as="xs:string?"/>
     <xsl:param name="original-attributes" as="attribute()*"/>
     <xsl:param name="original-element"/>
@@ -768,33 +394,24 @@
         <xsl:apply-templates select=".">
           <xsl:with-param name="original-element" select="$original-element"/>
           <xsl:with-param name="source-attributes" select="$source-attributes"/>
-          <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-          <xsl:with-param name="conref-ids" select="$conref-ids"/>
-          <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-          <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+          <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+          <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
         </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
         <xsl:element name="{$original-element}">
           <xsl:apply-templates select="$original-attributes" mode="original-attributes"/>
-          <xsl:for-each select="@*">
-            <xsl:if test="not(name() = 'id') and not(name() = $source-attributes)">
+          <xsl:for-each select="@* except @id">
+            <xsl:if test="not(name() = $source-attributes)">
               <xsl:choose>
                 <xsl:when test="name() = 'href'">
                   <xsl:apply-templates select=".">
-                    <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                    <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                    <xsl:with-param name="topicid" select="$topicid"/>
-                    <xsl:with-param name="elemid" select="$elemid"/>
-                    <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                    <xsl:with-param name="conref-ids" select="$conref-ids"/>
+                    <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
                   </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:apply-templates select=".">
-                    <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                    <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                    <xsl:with-param name="conref-ids" select="$conref-ids"/>
+                    <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
                   </xsl:apply-templates>
                 </xsl:otherwise>
               </xsl:choose>
@@ -803,14 +420,9 @@
           </xsl:for-each>
 
           <!-- Continue processing this element as any other -->
-          <xsl:apply-templates select="* | comment() | processing-instruction() | text()">
-            <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-            <xsl:with-param name="conref-filename" select="$conref-filename"/>
-            <xsl:with-param name="topicid" select="$topicid"/>
-            <xsl:with-param name="elemid" select="$elemid"/>
-            <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-            <xsl:with-param name="conref-ids" select="$conref-ids"/>
-            <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+          <xsl:apply-templates select="node()">
+            <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+            <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
           </xsl:apply-templates>
         </xsl:element>
       </xsl:otherwise>
@@ -823,43 +435,29 @@
             <xsl:when test="@conref">
               <xsl:apply-templates select=".">
                 <xsl:with-param name="source-attributes" select="$source-attributes"/>
-                <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                <xsl:with-param name="conref-ids" select="$conref-ids"/>
-                <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+                <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
               </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
               <xsl:copy>
-                <xsl:for-each select="@*">
-                  <xsl:if test="not(local-name(.) = 'id')">
-                    <xsl:choose>
-                      <xsl:when test="name() = 'href'">
-                        <!--@href need to update, not implement currently. @href may point to local part, but if @href pull into other file,
-                      then @href couldn't work correctly. This is the reason why @href need to update. We leave it as the future work.-->
-                        <xsl:apply-templates select=".">
-                          <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                          <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                          <xsl:with-param name="topicid" select="$topicid"/>
-                          <xsl:with-param name="elemid" select="$elemid"/>
-                          <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                          <xsl:with-param name="conref-ids" select="$conref-ids"/>
-                        </xsl:apply-templates>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:copy/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:if>
+                <xsl:for-each select="@* except @id">
+                  <xsl:choose>
+                    <xsl:when test="name() = 'href'">
+                      <!--@href need to update, not implement currently. @href may point to local part, but if @href pull into other file,
+                    then @href couldn't work correctly. This is the reason why @href need to update. We leave it as the future work.-->
+                      <xsl:apply-templates select=".">
+                        <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+                      </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:copy/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:for-each>
-                <xsl:apply-templates select="* | comment() | processing-instruction() | text()">
-                  <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                  <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                  <xsl:with-param name="topicid" select="$topicid"/>
-                  <xsl:with-param name="elemid" select="$elemid"/>
-                  <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                  <xsl:with-param name="conref-ids" select="$conref-ids"/>
-                  <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                <xsl:apply-templates select="node()">
+                  <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+                  <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
                 </xsl:apply-templates>
               </xsl:copy>
             </xsl:otherwise>
@@ -900,12 +498,9 @@
   <xsl:template match="*[contains(@class, ' mapgroup-d/topichead ')]/@navtitle" mode="original-attributes" priority="10"/>
 
   <xsl:template match="@href">
-    <xsl:param name="current-relative-path" as="xs:string"/>
-    <xsl:param name="conref-filename" as="xs:string?"/>
-    <xsl:param name="topicid" as="xs:string?"/>
-    <xsl:param name="elemid" as="xs:string?"/>
-    <xsl:param name="conref-source-topicid" as="xs:string?"/>
-    <xsl:param name="conref-ids" as="xs:string*"/>
+    <xsl:param name="current-relative-path" tunnel="yes" as="xs:string"/>
+    <xsl:param name="conref-filename" tunnel="yes" as="xs:string?"/>
+    <xsl:param name="conref-ids" tunnel="yes" as="xs:string*"/>
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="../@scope = 'external'">
@@ -925,11 +520,7 @@
             <xsl:otherwise>
               <!--not in the local file -->
               <xsl:call-template name="generate-href">
-                <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                <xsl:with-param name="conref-filename" select="$conref-filename"/>
-                <xsl:with-param name="topicid" select="$topicid"/>
-                <xsl:with-param name="elemid" select="$elemid"/>
-                <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
+                <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
               </xsl:call-template>
               <!--experimental code -->
             </xsl:otherwise>
@@ -944,10 +535,7 @@
   </xsl:template>
 
   <xsl:template match="@id">
-    <xsl:param name="current-relative-path" as="xs:string"/>
-    <xsl:param name="conref-filename" as="xs:string?"/>
-    <xsl:param name="topicid" as="xs:string?"/>
-    <xsl:param name="elemid" as="xs:string?"/>
+    <xsl:param name="conref-filename" tunnel="yes" as="xs:string?"/>
     <xsl:attribute name="id">
       <xsl:choose>
         <xsl:when test="exists($conref-filename)">
@@ -961,11 +549,11 @@
   </xsl:template>
 
   <xsl:template name="generate-href">
-    <xsl:param name="current-relative-path" as="xs:string"/>
-    <xsl:param name="conref-filename" as="xs:string"/>
-    <xsl:param name="topicid" as="xs:string?"/>
-    <xsl:param name="elemid" as="xs:string?"/>
-    <xsl:param name="conref-source-topicid" as="xs:string?"/>
+    <xsl:param name="current-relative-path" tunnel="yes" as="xs:string"/>
+    <xsl:param name="conref-filename" tunnel="yes" as="xs:string"/>
+    <xsl:param name="topicid" tunnel="yes" as="xs:string?"/>
+    <xsl:param name="elemid" tunnel="yes" as="xs:string?"/>
+    <xsl:param name="conref-source-topicid" tunnel="yes" as="xs:string?"/>
     <xsl:variable name="conref-topicid" as="xs:string">
       <xsl:choose>
         <xsl:when test="empty($topicid)">
@@ -1061,15 +649,10 @@
      * If the domains match (as it would if all in the same topic), the element name stays the same
      * Otherwise, call generalize-domains. This ensures the element is valid in the result doc. -->
   <xsl:template match="*[starts-with(@class, '+ ')]">
-    <xsl:param name="current-relative-path" as="xs:string" select="''"/>
-    <xsl:param name="conref-filename" as="xs:string?"/>
-    <xsl:param name="topicid" as="xs:string?"/>
-    <xsl:param name="elemid" as="xs:string?"/>
-    <xsl:param name="WORKDIR" as="xs:string">
+    <xsl:param name="current-relative-path" tunnel="yes" as="xs:string" select="''"/>
+    <xsl:param name="WORKDIR" tunnel="yes" as="xs:string">
       <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
     </xsl:param>
-    <xsl:param name="conref-source-topicid" as="xs:string?"/>
-    <xsl:param name="conref-ids" as="xs:string*" select="()"/>
     <xsl:variable name="domains" select="/*/@domains | /dita/*[@domains][1]/@domains"/>
     <xsl:variable name="generalizedName" as="xs:string">
       <xsl:choose>
@@ -1082,14 +665,9 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:element name="{$generalizedName}">
-      <xsl:apply-templates select="* | @* | comment() | processing-instruction() | text()">
-        <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-        <xsl:with-param name="conref-filename" select="$conref-filename"/>
-        <xsl:with-param name="topicid" select="$topicid"/>
-        <xsl:with-param name="elemid" select="$elemid"/>
-        <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-        <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-        <xsl:with-param name="conref-ids" select="$conref-ids"/>
+      <xsl:apply-templates select="@* | node()">
+        <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+        <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
       </xsl:apply-templates>
     </xsl:element>
   </xsl:template>
@@ -1192,27 +770,16 @@
     </xsl:choose>
   </xsl:template>
 
-
   <!--copy everything else-->
-  <xsl:template match="* | @* | comment() | processing-instruction() | text()">
-    <xsl:param name="current-relative-path" as="xs:string" select="''"/>
-    <xsl:param name="conref-filename" as="xs:string?"/>
-    <xsl:param name="topicid" as="xs:string?"/>
-    <xsl:param name="elemid" as="xs:string?"/>
-    <xsl:param name="WORKDIR">
+  <xsl:template match="@* | node()">
+    <xsl:param name="current-relative-path" tunnel="yes" as="xs:string" select="''"/>
+    <xsl:param name="WORKDIR" tunnel="yes" as="xs:string">
       <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
     </xsl:param>
-    <xsl:param name="conref-source-topicid" as="xs:string?"/>
-    <xsl:param name="conref-ids" as="xs:string*" select="()"/>
     <xsl:copy>
-      <xsl:apply-templates select="* | @* | comment() | processing-instruction() | text()">
-        <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-        <xsl:with-param name="conref-filename" select="$conref-filename"/>
-        <xsl:with-param name="topicid" select="$topicid"/>
-        <xsl:with-param name="elemid" select="$elemid"/>
-        <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
-        <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-        <xsl:with-param name="conref-ids" select="$conref-ids"/>
+      <xsl:apply-templates select="@* | node()">
+        <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
+        <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
       </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
@@ -1247,53 +814,46 @@
   <!-- If the target element does not exist, this template will be called to issue an error -->
   <xsl:template match="*" mode="ditamsg:missing-conref-target-error">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">010</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX010E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <!-- If an ID is duplicated, and there are 2 possible targets, issue a warning -->
   <xsl:template match="*" mode="ditamsg:duplicateConrefTarget">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">011</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX011W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <!-- Message is no longer used - appeared when domain mismatch prevented conref -->
   <xsl:template match="*" mode="ditamsg:domainMismatch">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">012</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX012W'"/>
     </xsl:call-template>
   </xsl:template>
   <!-- If this conref has already been followed, stop to prevent an infinite loop -->
   <xsl:template match="*" mode="ditamsg:conrefLoop">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">013</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX013E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <!-- Following msg is used on topicref and map -->
   <xsl:template match="*" mode="ditamsg:malformedConrefInMap">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">014</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX014E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:malformedConref">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">015</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX015E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:parserUnsupported">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">062</xsl:with-param>
-      <xsl:with-param name="msgsev">I</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX062I'"/>
     </xsl:call-template>
   </xsl:template>
 

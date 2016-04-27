@@ -100,7 +100,7 @@ public final class IndexTermReader extends AbstractXMLReader {
 		titleMap = new HashMap<>(256);
 		processRoleStack = new Stack<>();
 		processRoleLevel = 0;
-		this.result = result != null ? result : IndexTermCollection.getInstantce();
+		this.result = result;
     }
 
     /**

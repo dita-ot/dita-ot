@@ -841,8 +841,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 <xsl:template match="*" mode="ditamsg:unknown-extension">
   <xsl:param name="href" select="@href"/>
   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">006</xsl:with-param>
-    <xsl:with-param name="msgsev">E</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX006E'"/>
     <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/></xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -856,8 +855,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
     </xsl:call-template>
   </xsl:param>
   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">043</xsl:with-param>
-    <xsl:with-param name="msgsev">I</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX043I'"/>
     <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/>;%2=<xsl:value-of select="$outfile"/></xsl:with-param>
   </xsl:call-template>
 </xsl:template>

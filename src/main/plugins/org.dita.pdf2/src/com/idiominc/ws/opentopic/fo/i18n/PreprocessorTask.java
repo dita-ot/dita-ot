@@ -1,22 +1,23 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
-import org.apache.xml.resolver.tools.CatalogResolver;
+import org.apache.tools.ant.types.XMLCatalog;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.FileOutputStream;
-
-import com.idiominc.ws.opentopic.fo.i18n.Configuration;
-import com.idiominc.ws.opentopic.fo.i18n.MultilanguagePreprocessor;
+import java.io.OutputStream;
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -49,33 +50,37 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying license.txt file for applicable licenses.
  */
 public class PreprocessorTask extends Task {
-     private String config = null;
-     private String input = null;
-     private String output = null;
-     private String catalogs = null;
-
+     private File config = null;
+     private File input = null;
+     private File output = null;
+     private File style = null;
+     private XMLCatalog xmlcatalog;
 
      @Override
      public void execute()
              throws BuildException {
          checkParameters();
 
+         log("Processing " + input + " to " + output, Project.MSG_INFO);
+         OutputStream out = null;
          try {
-             if (catalogs != null) {
-                 System.setProperty("xml.catalog.files", catalogs);
-             }
+             final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+             documentBuilder.setEntityResolver(xmlcatalog);
 
-             final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-             final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-             documentBuilder.setEntityResolver(new CatalogResolver());
-
-             final Document doc = documentBuilder.parse(new File(this.input));
-             final Document conf = documentBuilder.parse(new File(this.config));
+             final Document doc = documentBuilder.parse(input);
+             final Document conf = documentBuilder.parse(config);
              final MultilanguagePreprocessor preprocessor = new MultilanguagePreprocessor(new Configuration(conf));
              final Document document = preprocessor.process(doc);
 
              final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-             final Transformer transformer = transformerFactory.newTransformer();
+             transformerFactory.setURIResolver(xmlcatalog);
+             final Transformer transformer;
+             if (style != null) {
+                 log("Loading stylesheet " + style, Project.MSG_INFO);
+                 transformer = transformerFactory.newTransformer(new StreamSource(style));
+             } else {
+                 transformer = transformerFactory.newTransformer();
+             }
              transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
              transformer.setOutputProperty(OutputKeys.INDENT, "no");
              transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
@@ -84,12 +89,15 @@ public class PreprocessorTask extends Task {
                  transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, doc.getDoctype().getSystemId());
              }
 
-             final FileOutputStream out = new FileOutputStream(this.output);
+             out = new FileOutputStream(output);
              final StreamResult streamResult = new StreamResult(out);
              transformer.transform(new DOMSource(document), streamResult);
-             out.close();
+         } catch (final RuntimeException e) {
+             throw e;
          } catch (final Exception e) {
              throw new BuildException(e);
+         } finally {
+             IOUtils.closeQuietly(out);
          }
      }
 
@@ -102,22 +110,32 @@ public class PreprocessorTask extends Task {
      }
 
 
-     public void setConfig(final String theConfig) {
+     public void setConfig(final File theConfig) {
          this.config = theConfig;
      }
 
 
-     public void setInput(final String theInput) {
+     public void setInput(final File theInput) {
          this.input = theInput;
      }
 
 
-     public void setOutput(final String theOutput) {
+     public void setOutput(final File theOutput) {
          this.output = theOutput;
      }
 
-
+     /** @deprecated since 2.3 */
+     @Deprecated
      public void setCatalogs(final String catalogs) {
-         this.catalogs = catalogs;
+         log("catalogs attribute has been deprecated, use xmlcatalog nested element", Project.MSG_WARN);
      }
+
+    public void setStyle(final File style) {
+        this.style = style;
+    }
+
+    public void addConfiguredXmlcatalog(final XMLCatalog xmlcatalog) {
+        this.xmlcatalog = xmlcatalog;
+    }
+
  }

@@ -45,6 +45,7 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:param name="figurelink.style" select="'NUMTITLE'"/>
   <xsl:param name="tablelink.style" select="'NUMTITLE'"/>
 
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
     <xsl:key name="key_anchor" match="*[@id][not(contains(@class,' map/topicref '))]" use="@id"/>
@@ -158,7 +159,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Figure Number'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="fig.title-number"/>
                 </number>
             </xsl:with-param>
           </xsl:call-template>
@@ -171,7 +172,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Figure.title'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="fig.title-number"/>
                 </number>
                 <title>
                     <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
@@ -196,7 +197,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Table Number'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="table.title-number"/>
                 </number>
             </xsl:with-param>
           </xsl:call-template>
@@ -209,7 +210,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Table.title'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="table.title-number"/>
                 </number>
                 <title>
                     <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
@@ -678,8 +679,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="href"/>
     <!-- FIXME: There is no message PDFX063W -->
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">063</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX063W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>

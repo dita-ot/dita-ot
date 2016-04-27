@@ -26,17 +26,12 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public final class ConkeyrefFilter extends AbstractXMLFilter {
 
-    private File inputFile;
     private KeyScope keys;
     /** Delayed conref utils, may be {@code null} */
     private DelayConrefUtils delayConrefUtils;
     
     public void setKeyDefinitions(final KeyScope keys) {
         this.keys = keys;
-    }
-
-    public void setCurrentFile(final File inputFile) {
-        this.inputFile = inputFile;
     }
 
     public void setDelayConrefUtils(final DelayConrefUtils delayConrefUtils) {
@@ -96,9 +91,8 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
      * @return updated href URI
      */
     private URI getRelativePath(final URI href) {
-        final URI filePath = new File(job.tempDir, inputFile.getPath()).toURI();
         final URI keyValue = job.tempDir.toURI().resolve(stripFragment(href));
-        return URLUtils.getRelativePath(filePath, keyValue);
+        return URLUtils.getRelativePath(currentFile, keyValue);
     }
 
 }

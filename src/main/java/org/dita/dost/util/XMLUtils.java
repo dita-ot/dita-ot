@@ -36,6 +36,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public final class XMLUtils {
 
+    private static final DocumentBuilderFactory factory;
+    static {
+        factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+    }
+
+    private static final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
     /** Private constructor to make class uninstantiable. */
     private XMLUtils() {}
 
@@ -238,11 +246,10 @@ public final class XMLUtils {
         if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
             throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
         }
-        
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+
+        try (final InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
+             final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+            final Transformer transformer = transformerFactory.newTransformer();
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
@@ -251,8 +258,6 @@ public final class XMLUtils {
                 filter.setParent(reader);
                 reader = filter;
             }
-            in = new BufferedInputStream(new FileInputStream(inputFile));
-            out = new BufferedOutputStream(new FileOutputStream(outputFile));
             final Source source = new SAXSource(reader, new InputSource(in));
             source.setSystemId(inputFile.toURI().toString());
             final Result result = new StreamResult(out);
@@ -261,21 +266,6 @@ public final class XMLUtils {
             throw e;
         } catch (final Exception e) {
             throw new DITAOTException("Failed to transform " + inputFile + ": " + e.getMessage(), e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (final IOException e) {
-                    // ignore
-                }
-            }
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (final IOException e) {
-                    // ignore
-                }
-            }
         }
     }
 
@@ -290,7 +280,7 @@ public final class XMLUtils {
         InputSource src = null;
         StreamResult result = null;
         try {
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            final Transformer transformer = transformerFactory.newTransformer();
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
@@ -466,7 +456,6 @@ public final class XMLUtils {
      * @throws RuntimeException if instantiating DocumentBuilder failed
      */
     public static DocumentBuilder getDocumentBuilder() {
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();

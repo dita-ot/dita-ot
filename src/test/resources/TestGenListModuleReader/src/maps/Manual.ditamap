@@ -1,0 +1,11 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map " domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " id="user_manual" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">MyDOc</title>
+  <topicmeta class="- map/topicmeta ">
+    <publisher class="- topic/publisher ">Acme Inc.</publisher>
+  </topicmeta>
+  <topichead class="+ map/topicref mapgroup-d/topichead " navtitle="Manual">
+    <topicref chunk="to-content" class="- map/topicref " copy-to="ToolbarsChunk.dita" href="toolbars.dita#t_toolbars" navtitle="Toolbars">
+      <topicref class="- map/topicref " href="toolbars.dita#t_save"></topicref>
+    </topicref>
+  </topichead>
+</map>

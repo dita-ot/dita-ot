@@ -46,6 +46,7 @@
 
 <xsl:param name="FILENAME"></xsl:param> <!-- Needed by rel-links -->
 <xsl:param name="DRAFT">no</xsl:param>  <!-- Include draft information? 'no' or 'yes' -->
+<!-- Deprecated since 2.3 -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable> <!-- Prefix for messages -->
 <xsl:variable name="OUTEXT"></xsl:variable>  <!-- extension will go at the end of links -->
 <xsl:variable name="newline"><xsl:text>

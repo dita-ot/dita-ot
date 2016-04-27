@@ -106,23 +106,14 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /** Set of all the conref targets */
     private Set<URI> conrefTargetSet;
 
-    /** Set of all the copy-to sources */
-    private Set<URI> copytoSourceSet;
-
     /** Set of all the non-conref targets */
     private final Set<URI> nonConrefCopytoTargetSet;
-
-    /** Set of sources of those copy-to that were ignored */
-    private final Set<URI> ignoredCopytoSourceSet;
 
     /** Set of subsidiary files */
     private final Set<URI> coderefTargetSet;
 
     /** Set of absolute flag image files */
     private final Set<URI> relFlagImagesSet;
-
-    /** Map of all copy-to (target,source) */
-    private Map<URI, URI> copytoMap;
 
     /** List of files waiting for parsing. Values are absolute URI references. */
     private final Queue<Reference> waitList;
@@ -206,9 +197,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         failureList = new LinkedList<>();
         conrefTargetSet = new HashSet<>(128);
         nonConrefCopytoTargetSet = new HashSet<>(128);
-        copytoMap = new HashMap<>();
-        copytoSourceSet = new HashSet<>(128);
-        ignoredCopytoSourceSet = new HashSet<>(128);
         outDitaFilesSet = new HashSet<>(128);
         relFlagImagesSet = new LinkedHashSet<>(128);
         conrefpushSet = new HashSet<>(128);
@@ -238,7 +226,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
             updateBaseDirectory();
             handleConref();
-            handleCopyto();
             outputResult();
         } catch (final DITAOTException e) {
             throw e;
@@ -268,7 +255,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         
         keydefFilter = new KeydefFilter();
         keydefFilter.setLogger(logger);
-        keydefFilter.setInputFile(rootFile);
+        keydefFilter.setCurrentFile(rootFile);
         keydefFilter.setJob(job);
         
         nullHandler = new DefaultHandler();
@@ -416,7 +403,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             pipe.add(exportAnchorsFilter);
         }
 
-        keydefFilter.setCurrentDir(toFile(fileToParse).getParentFile().toURI());
+        keydefFilter.setCurrentDir(fileToParse.resolve("."));
         keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
         pipe.add(keydefFilter);
 
@@ -533,20 +520,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             updateUplevels(file.filename);
         }
 
-        // Update uplevels for copy-to targets, and store copy-to map.
-        // Note: same key(target) copy-to will be ignored.
-        for (final Map.Entry<URI, URI> e: listFilter.getCopytoMap().entrySet()) {
-            final URI key = e.getKey();
-            final URI value = e.getValue();
-            if (copytoMap.containsKey(key)) {
-                logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", value.getPath(), key.getPath()).toString());
-                ignoredCopytoSourceSet.add(value);
-            } else {
-                updateUplevels(key);
-                copytoMap.put(key, value);
-            }
-        }
-
         schemeSet.addAll(listFilter.getSchemeRefSet());
 
         // collect key definitions
@@ -564,7 +537,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         chunkTopicSet.addAll(listFilter.getChunkTopicSet());
         conrefTargetSet.addAll(listFilter.getConrefTargets());
         nonConrefCopytoTargetSet.addAll(listFilter.getNonConrefCopytoTargets());
-        ignoredCopytoSourceSet.addAll(listFilter.getIgnoredCopytoSourceSet());
         coderefTargetSet.addAll(listFilter.getCoderefTargets());
         outDitaFilesSet.addAll(listFilter.getOutFilesSet());
 
@@ -808,48 +780,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     }
 
     /**
-     * Handle copy-to topics.
-     */
-    private void handleCopyto() {
-        // Validate copy-to map, remove those without valid sources
-        final Map<URI, URI> tempMap = new HashMap<>();
-        for (final URI target: copytoMap.keySet()) {
-            final URI source = copytoMap.get(target);
-            assert source.isAbsolute();
-            assert target.isAbsolute();
-            // XXX: Is this check required?
-            // Check fullTopicSet first because it's faster
-            if (fullTopicSet.contains(source) || exists(source)) {
-                tempMap.put(target, source);
-                // Add the copy-to target to conreflist when its source has conref
-                if (conrefSet.contains(source)) {
-                    conrefSet.add(target);
-                }
-                if (keyrefSet.contains(source)) {
-                    keyrefSet.add(target);
-                }
-            }
-        }
-        copytoMap = tempMap;
-
-        // Get pure copy-to sources
-        final Set<URI> pureCopytoSources = new HashSet<>(128);
-        final Set<URI> totalCopytoSources = new HashSet<>(128);
-        totalCopytoSources.addAll(copytoMap.values());
-        totalCopytoSources.addAll(ignoredCopytoSourceSet);
-        for (final URI src: totalCopytoSources) {
-            if (!nonConrefCopytoTargetSet.contains(src) && !copytoMap.keySet().contains(src)) {
-                pureCopytoSources.add(src);
-            }
-        }
-        copytoSourceSet = pureCopytoSources;
-
-        // Add copy-to targets into fullTopicSet and remove pure copy-to sources
-        fullTopicSet.addAll(copytoMap.keySet());
-        fullTopicSet.removeAll(pureCopytoSources);
-    }
-
-    /**
      * Handle topic which are only conref sources from normal processing.
      */
     private void handleConref() {
@@ -944,12 +874,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         for (final URI file: schemeSet) {
             getOrCreateFileInfo(fileinfos, file).isSubjectScheme = true;
         }
-        for (final URI file: conrefTargetSet) {
-            getOrCreateFileInfo(fileinfos, file).isConrefTarget = true;
-        }
-        for (final URI file: copytoSourceSet) {
-            getOrCreateFileInfo(fileinfos, file).isCopyToSource = true;
-        }
         for (final URI file: coderefTargetSet) {
             final FileInfo f = getOrCreateFileInfo(fileinfos, file);
             f.isSubtarget = true;
@@ -977,9 +901,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
                 job.add(fs);
             }
         }
-
-        // Convert copyto map into set and output
-        job.setCopytoMap(addFilePrefix(copytoMap));
 
         try {
             logger.info("Serializing job specification");

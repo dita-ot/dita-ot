@@ -8,18 +8,6 @@
  */
 package org.dita.dost.invoker;
 
-import static org.dita.dost.util.Constants.*;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
@@ -28,10 +16,24 @@ import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.module.AbstractPipelineModule;
+import org.dita.dost.module.XmlFilterModule;
 import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.writer.AbstractXMLFilter;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
+import static org.dita.dost.util.Constants.*;
 
 /**
  * Ant task for executing pipeline modules.
@@ -109,13 +111,19 @@ public final class ExtensibleAntInvoker extends Task {
     public void addConfiguredXslt(final Xslt xslt) {
         modules.add(xslt);
     }
-    
-    /**
-     * Execution point of this invoker.
-     * @throws BuildException exception
-     */
-    @Override
-    public void execute() throws BuildException {
+
+    public void addConfiguredSax(final Filters filters) {
+        filters.setProject(getProject());
+        modules.add(filters);
+    }
+
+    private void initialize() throws BuildException {
+        if (tempDir == null) {
+            tempDir = new File(this.getProject().getProperty("dita.temp.dir")).getAbsoluteFile();
+        }
+        if (tempDir == null) {
+            throw new BuildException("Temporary directory not set or available");
+        }
         if (modules.isEmpty()) {
             throw new BuildException("Module must be specified");
         }
@@ -133,7 +141,16 @@ public final class ExtensibleAntInvoker extends Task {
                 attrs.put(p.getName(), p.getValue());
             }
         }
+    }
 
+    /**
+     * Execution point of this invoker.
+     * @throws BuildException exception
+     */
+    @Override
+    public void execute() throws BuildException {
+        initialize();
+        
         long start, end;
         final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
         logger.setTask(this);
@@ -150,32 +167,54 @@ public final class ExtensibleAntInvoker extends Task {
                     final XsltModule x = new XsltModule();
                     x.setStyle(xm.style);
                     if (xm.in != null) {
-                    	x.setSource(xm.in);
-                    	x.setResult(xm.out);
+                        x.setSource(xm.in);
+                        x.setResult(xm.out);
+                    } else if (!xm.fileInfoFilters.isEmpty()) {
+                        x.setFileInfoFilter(combine(xm.fileInfoFilters));
+                        x.setDestinationDir(xm.destDir != null ? xm.destDir : tempDir);
                     } else {
-	                    final Set<File> inc = readListFile(xm.includes, logger); 
-	                    inc.removeAll(readListFile(xm.excludes, logger));
-	                    x.setIncludes(inc);
-	                    x.setDestinationDir(xm.destDir != null ? xm.destDir : xm.baseDir);
-	                    x.setSorceDir(xm.baseDir);
+                        final Set<File> inc = readListFile(xm.includes, logger);
+                        inc.removeAll(readListFile(xm.excludes, logger));
+                        x.setIncludes(inc);
+                        x.setDestinationDir(xm.destDir != null ? xm.destDir : xm.baseDir);
+                        x.setSorceDir(xm.baseDir);
                     }
                     x.setFilenameParam(xm.filenameparameter);
                     x.setFiledirParam(xm.filedirparameter);
                     x.setReloadstylesheet(xm.reloadstylesheet);
                     x.setXMLCatalog(xm.xmlcatalog);
                     if (xm.mapper != null) {
-                    	x.setMapper(xm.mapper.getImplementation());
+                        x.setMapper(xm.mapper.getImplementation());
                     }
                     for (final Param p : m.params) {
                         if (!p.isValid()) {
                             throw new BuildException("Incomplete parameter");
                         }
-                        if (isValid(p.getIf(), p.getUnless())) {
+                        if (isValid(getProject(), p.getIf(), p.getUnless())) {
                             x.setParam(p.getName(), p.getValue());
                         }
                     }
                     start = System.currentTimeMillis();
                     pipeline.execute(x, pipelineInput);
+                    end = System.currentTimeMillis();
+                } else if (m instanceof Filters) {
+                    final Filters fm = (Filters) m;
+                    final XmlFilterModule module = new XmlFilterModule();
+                    final List<String> format = fm.getFormat();
+                    module.setFileInfoFilter(new FileInfo.Filter<FileInfo>() {
+                             @Override
+                             public boolean accept(final FileInfo f) {
+                                 return format.contains(f.format);
+                             }
+                         }
+                    );
+                    try {
+                        module.setProcessingPipe(fm.getFilters());
+                    } catch (final InstantiationException | IllegalAccessException e) {
+                        throw new BuildException(e);
+                    }
+                    start = System.currentTimeMillis();
+                    pipeline.execute(module, pipelineInput);
                     end = System.currentTimeMillis();
                 } else {
                     for (final Param p : m.params) {
@@ -199,7 +238,25 @@ public final class ExtensibleAntInvoker extends Task {
             throw new BuildException("Failed to run pipeline: " + e.getMessage(), e);
         }
     }
-    
+
+    private FileInfo.Filter<FileInfo> combine(final Collection<Xslt.FileInfoFilter> filters) {
+        final Collection<FileInfo.Filter<FileInfo>> res = new ArrayList<>(filters.size());
+        for (final Xslt.FileInfoFilter f : filters) {
+            res.add(f.toFilter());
+        }
+        return new FileInfo.Filter<FileInfo>() {
+            @Override
+            public boolean accept(FileInfo f) {
+                for (final FileInfo.Filter<FileInfo> filter : res) {
+                    if (filter.accept(f)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+    }
+
     /**
      * Get job configuration from Ant project reference or create new.
      *    
@@ -227,7 +284,7 @@ public final class ExtensibleAntInvoker extends Task {
     private Set<File> readListFile(final List<Xslt.IncludesFile> includes, final DITAOTAntLogger logger) {
     	final Set<File> inc = new HashSet<>();
     	for (final Xslt.IncludesFile i: includes) {
-            if (!isValid(i.ifProperty, null)) {
+            if (!isValid(getProject(), i.ifProperty, null)) {
                 continue;
             }
             BufferedReader r = null;
@@ -249,9 +306,9 @@ public final class ExtensibleAntInvoker extends Task {
     	return inc;
     }
     
-    private boolean isValid(final String ifProperty, final String unlessProperty) {
-        return (ifProperty == null || getProject().getProperties().containsKey(ifProperty))
-                && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty));
+    private static boolean isValid(final Project project, final String ifProperty, final String unlessProperty) {
+        return (ifProperty == null || project.getProperties().containsKey(ifProperty))
+                && (unlessProperty == null || !project.getProperties().containsKey(unlessProperty));
     }
     
     /**
@@ -275,13 +332,11 @@ public final class ExtensibleAntInvoker extends Task {
         public Class<? extends AbstractPipelineModule> getImplementation() {
             return cls;
         }
-
     }
     
     /**
      * Nested pipeline XSLT element configuration.
      * @author jelovirt
-     *
      */
     public static class Xslt extends Module {
         
@@ -290,6 +345,7 @@ public final class ExtensibleAntInvoker extends Task {
         private File destDir;
         private File in;
         private File out;
+        private final Collection<FileInfoFilter> fileInfoFilters = new ArrayList<>();
         private final List<IncludesFile> includes = new ArrayList<>();
         private final List<IncludesFile> excludes = new ArrayList<>();
         private Mapper mapper;
@@ -362,7 +418,11 @@ public final class ExtensibleAntInvoker extends Task {
         public void addConfiguredMapper(final Mapper mapper) {
             this.mapper = mapper;
         }
-        
+
+        public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
+            fileInfoFilters.add(fileInfoFilter);
+        }
+
         public void addConfiguredIncludesFile(final IncludesFile includesFile) {
             includes.add(includesFile);
         }
@@ -381,14 +441,135 @@ public final class ExtensibleAntInvoker extends Task {
                 this.ifProperty = ifProperty;
             }
         }
-        
-        /*public static class XMLCatalog {
-            private String refid;
-            public void setRefid(final String refid) {
-                this.refid = refid;
+
+        public static class FileInfoFilter {
+            private String format;
+            private Boolean hasConref;
+            private Boolean isResourceOnly;
+
+            public void setFormat(final String format) {
+                this.format = format;
             }
-        }*/
-        
+
+            public void setConref(final boolean conref) {
+                this.hasConref = conref;
+            }
+
+            public void setProcessingRole(final String processingRole) {
+                this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+            }
+
+            public FileInfo.Filter<FileInfo> toFilter() {
+                return new FileInfo.Filter<FileInfo>() {
+                    @Override
+                    public boolean accept(FileInfo f) {
+                        return (format == null || format.equals(f.format)) &&
+                                (hasConref == null || f.hasConref == hasConref) &&
+                                (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
+                    }
+                };
+            }
+        }
+    }
+
+    /**
+     * Nested pipeline SAX filter pipe element configuration.
+     * @author jelovirt
+     */
+    public static class Filters extends Module {
+
+        private List<Filter> filters = new ArrayList<>();
+        private Project project;
+        private List<String> format;
+
+        // Ant setters
+
+        public void setFormat(final String format) {
+            this.format = asList(format);
+        }
+
+        public void addConfiguredFilter(final Filter filter) {
+            filters.add(filter);
+        }
+
+        public List<AbstractXMLFilter> getFilters() throws IllegalAccessException, InstantiationException {
+            final List<AbstractXMLFilter> res = new ArrayList<>();
+            for (final Filter f: filters) {
+                final String ifProperty = f.getIf();
+                final String unlessProperty = f.getUnless();
+                if (isValid(getProject(), ifProperty, unlessProperty)) {
+                    final AbstractXMLFilter fc = f.getImplementation().newInstance();
+                    for (final Param p : f.params) {
+                        if (!p.isValid()) {
+                            throw new BuildException("Incomplete parameter");
+                        }
+                        if (isValid(getProject(), p.getIf(), p.getUnless())) {
+                            fc.setParam(p.getName(), p.getValue());
+                        }
+                    }
+                    res.add(fc);
+                }
+            }
+            return res;
+        }
+
+        public List<String> getFormat() {
+            if (format != null) {
+                return unmodifiableList(format);
+            } else {
+                return unmodifiableList(asList(ATTR_FORMAT_VALUE_DITA, ATTR_FORMAT_VALUE_DITAMAP));
+            }
+
+        }
+
+        public void setProject(final Project project) {
+            this.project = project;
+        }
+
+        public Project getProject() {
+            return project;
+        }
+    }
+
+    /** Nested pipeline SAX filter element configuration. */
+    public static class Filter {
+
+        public final List<Param> params = new ArrayList<>();
+        private Class<? extends AbstractXMLFilter> cls;
+        private String ifProperty;
+        private String unlessProperty;
+
+        public void setClass(final Class<? extends AbstractXMLFilter> cls) {
+            this.cls = cls;
+        }
+
+        public void addConfiguredParam(final Param p) {
+            params.add(p);
+        }
+
+        public Class<? extends AbstractXMLFilter> getImplementation() {
+            if (cls == null) {
+                throw new IllegalArgumentException("class not defined");
+            }
+            return cls;
+        }
+
+        public String getIf() {
+            return ifProperty;
+        }
+
+        public void setIf(final String p) {
+            ifProperty = p;
+        }
+
+        public String getUnless() {
+            return unlessProperty;
+        }
+
+        public void setUnless(final String p) {
+            unlessProperty = p;
+        }
+
     }
 
     /** Nested parameters. */

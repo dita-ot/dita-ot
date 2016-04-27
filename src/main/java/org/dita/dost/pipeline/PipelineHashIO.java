@@ -17,7 +17,9 @@ import java.util.Map;
  * 
  * @author Lian, Li
  * 
+ * @deprecated use {@link java.util.Map} instead. Deprecated since 2.3
  */
+@Deprecated
 public final class PipelineHashIO implements AbstractPipelineInput,
 AbstractPipelineOutput {
     private final Map<String, String> hash;

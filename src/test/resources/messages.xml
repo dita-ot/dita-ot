@@ -409,6 +409,21 @@
     <response>Renaming %1 to %2.</response>
   </message>
 
+  <message id="DOTJ066E" type="ERROR">
+    <reason>No id attribute on topic type element %1.</reason>
+    <response>Using generated id %2.</response>
+  </message>
+
+  <message id="DOTJ067E" type="ERROR">
+    <reason>No id attribute on topic type element %1.</reason>
+    <response></response>
+  </message>
+
+  <message id="DOTJ069E" type="ERROR">
+    <reason>Circular key definition %1.</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

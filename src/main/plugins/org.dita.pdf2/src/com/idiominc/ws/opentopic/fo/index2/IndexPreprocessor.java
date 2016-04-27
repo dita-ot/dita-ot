@@ -88,13 +88,7 @@ public final class IndexPreprocessor {
      */
     public IndexPreprocessResult process(final Document theInput)
             throws ProcessException {
-        final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = null;
-        try {
-            documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        } catch (final ParserConfigurationException e) {
-            throw new RuntimeException("Unable to create a document builder: " + e.getMessage(), e);
-        }
+        final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
         final Document doc = documentBuilder.newDocument();
 
         final Node rootElement = theInput.getDocumentElement();

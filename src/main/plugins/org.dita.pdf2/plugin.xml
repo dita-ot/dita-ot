@@ -2,7 +2,6 @@
 <plugin id="org.dita.pdf2">
   <!-- extension points -->
   <extension-point id="dita.xsl.xslfo" name="PDF XSLT import"/>
-  <extension-point id="dita.xsl.xslfo.flagging-preprocess" name="PDF flagging preprocess import"/>
   <extension-point id="dita.xsl.xslfo.i18n-postprocess" name="PDF I18N postprocess import"/>
   <extension-point id="org.dita.pdf2.xsl.topicmerge" name="PDF2 topic merge XSLT import"/>
   <extension-point id="depend.org.dita.pdf2.init.pre" name="Initialization pre-target"/>
@@ -38,10 +37,6 @@
       <val>yes</val>
       <val>no</val>
     </param>
-    <param name="retain.topic.fo" desc="Specifies whether to retain the generated FO file." type="enum" deprecated="true">
-      <val>yes</val>
-      <val default="true">no</val>
-    </param>
     <param name="org.dita.pdf2.i18n.enabled" desc="Enables I18N font processing." type="enum">
       <val desc="Enables I18N processing" default="true">true</val>
       <val desc="Disables I18N processing">false</val>
@@ -54,6 +49,7 @@
   <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
   <feature extension="dita.conductor.pdf2.formatter.check" value="ah"/>
   <feature extension="dita.xsl.strings" file="cfg/common/vars/strings.xml"/>
+  <feature extension="dita.specialization.catalog.relative" file="cfg/catalog.xml"/>
   <template file="build_template.xml"/>
   <template file="cfg/catalog_template.xml"/>
   <template file="xsl/fo/flagging-preprocess_template.xsl"/>

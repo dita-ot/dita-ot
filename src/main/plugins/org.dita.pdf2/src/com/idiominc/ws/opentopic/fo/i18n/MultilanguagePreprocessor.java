@@ -1,17 +1,13 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
-import static javax.xml.XMLConstants.*;
-
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import com.idiominc.ws.opentopic.fo.i18n.Alphabet;
-import com.idiominc.ws.opentopic.fo.i18n.Configuration;
+import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -44,10 +40,12 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying license.txt file for applicable licenses.
  */
 public class MultilanguagePreprocessor {
-     private static final String NAMESPACE_URL = "http://www.idiominc.com/opentopic/i18n";
-     private static final String PREFIX = "opentopic-i18n";
+    private static final String NAMESPACE_URL = "http://www.idiominc.com/opentopic/i18n";
+    private static final String PREFIX = "opentopic-i18n";
+    private static final String TEXT_FRAGMENT = "text-fragment";
+    private static final String CHAR_SET = "char-set";
 
-     private final Configuration configuration;
+    private final Configuration configuration;
 
 
      public MultilanguagePreprocessor(final Configuration theTheConfiguration) {
@@ -60,13 +58,8 @@ public class MultilanguagePreprocessor {
 
      public Document process(final Document theInput)
              throws ProcessException {
-         final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-         DocumentBuilder documentBuilder = null;
-         try {
-             documentBuilder = documentBuilderFactory.newDocumentBuilder();
-         } catch (final ParserConfigurationException e) {
-             throw new RuntimeException("Failed to create document builder: " + e.getMessage(), e);
-         }
+         final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+
          final Document doc = documentBuilder.newDocument();
 
          final Node rootElement = theInput.getDocumentElement();
@@ -84,7 +77,7 @@ public class MultilanguagePreprocessor {
 
      private Node[] processCurrNode(final Node theNode, final Document theTargetDocument) {
          if (theNode.getNodeType() == Node.TEXT_NODE) {
-             return processTextNode(theNode, theTargetDocument);
+             return processTextNode((Text) theNode, theTargetDocument);
          } else {
              final Node result = theTargetDocument.importNode(theNode, false);
              final NodeList childNodes = theNode.getChildNodes();
@@ -99,10 +92,10 @@ public class MultilanguagePreprocessor {
      }
 
 
-     private Node[] processTextNode(final Node theTextNode, final Document theTargetDocument) {
+     private Node[] processTextNode(final Text theTextNode, final Document theTargetDocument) {
          //        Element processedText = theTargetDocument.createElementNS(NAMESPACE_URL, "processed-text");
          //        processedText.setPrefix(PREFIX);
-         final List<Node> resultNodeList = new ArrayList<Node>();
+         final List<Node> resultNodeList = new ArrayList<>();
 
          final String nodeValue = theTextNode.getNodeValue();
          if (null != nodeValue) {
@@ -113,7 +106,7 @@ public class MultilanguagePreprocessor {
              final char[] chars = nodeValue.toCharArray();
              for (int i = 0; i < chars.length; i++) {
                  final char aChar = chars[i];
-                 final Alphabet alphabetForChar = this.configuration.getAlphabetForChar(aChar);
+                 final Alphabet alphabetForChar = configuration.getAlphabetForChar(aChar);
                  if (null != alphabetForChar && alphabetForChar.equals(currentAlphabet)) {
                      continue;
                  } else if (null == alphabetForChar && null == currentAlphabet) {
@@ -140,11 +133,11 @@ public class MultilanguagePreprocessor {
      private Node createChildNode(final Alphabet theCurrentAlphabet, final Document theTargetDocument, final String theString) {
          Node child;
          if (null != theCurrentAlphabet) {
-             final Element element = theTargetDocument.createElementNS(NAMESPACE_URL, "text-fragment");
+             final Element element = theTargetDocument.createElementNS(NAMESPACE_URL, TEXT_FRAGMENT);
              element.setPrefix(PREFIX);
 
              final String charSet = theCurrentAlphabet.getName();
-             element.setAttribute("char-set", charSet);
+             element.setAttribute(CHAR_SET, charSet);
              final Text textNode = theTargetDocument.createTextNode(theString);
              element.appendChild(textNode);
              child = element;

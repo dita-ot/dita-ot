@@ -14,18 +14,19 @@ import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageBean;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 import org.dita.dost.log.DITAOTLogger;
-import org.xml.sax.InputSource;
 
 /**
  * KeyrefReader class which reads DITA map file to collect key definitions. Instances are reusable but not thread-safe.
@@ -56,6 +57,7 @@ public final class KeyrefReader implements AbstractReader {
     private DITAOTLogger logger;
     private final DocumentBuilder builder;
     private KeyScope rootScope;
+    private URI currentFile;
 
     /**
      * Constructor.
@@ -88,7 +90,8 @@ public final class KeyrefReader implements AbstractReader {
      * 
      * @param filename absolute URI to DITA map with key definitions
      */
-    public void read(final URI filename, final Document doc) {
+    public void read(final URI filename, final Document doc) throws DITAOTException {
+        currentFile = filename;
         rootScope = null;
         // TODO: use KeyScope implementation that retains order
         KeyScope keyScope = readScopes(doc);
@@ -183,7 +186,7 @@ public final class KeyrefReader implements AbstractReader {
                     final URI href = h.isEmpty() ? null : toURI(h);
                     final String s = copy.getAttribute(ATTRIBUTE_NAME_SCOPE);
                     final String scope = s.isEmpty() ? null : s;
-                    final KeyDef keyDef = new KeyDef(key, href, scope, null, copy);
+                    final KeyDef keyDef = new KeyDef(key, href, scope, currentFile, copy);
                     keyDefs.put(key, keyDef);
                 }
             }
@@ -236,10 +239,10 @@ public final class KeyrefReader implements AbstractReader {
     }
 
     /** Resolve intermediate key references. */
-    private KeyScope resolveIntermediate(final KeyScope scope) {
+    private KeyScope resolveIntermediate(final KeyScope scope) throws DITAOTException {
         final Map<String, KeyDef> keys = new HashMap<>(scope.keyDefinition);
         for (final Map.Entry<String, KeyDef> e: scope.keyDefinition.entrySet()) {
-            final KeyDef res = resolveIntermediate(scope, e.getValue());
+            final KeyDef res = resolveIntermediate(scope, e.getValue(), Arrays.asList(e.getValue()));
             keys.put(e.getKey(), res);
         }
         final List<KeyScope> children = new ArrayList<>();
@@ -250,15 +253,23 @@ public final class KeyrefReader implements AbstractReader {
         return new KeyScope(scope.name, keys, children);
     }
 
-    private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef) {
+    private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) throws DITAOTException {
         final Element elem = keyDef.element;
         final String keyref = elem.getAttribute(ATTRIBUTE_NAME_KEYREF);
         if (!keyref.isEmpty() && scope.keyDefinition.containsKey(keyref)) {
             KeyDef keyRefDef = scope.keyDefinition.get(keyref);
+            if (circularityTracker.contains(keyRefDef)) {
+                handleCircularDefinitionException(circularityTracker);
+                return keyDef;
+            }
             Element defElem = keyRefDef.element;
             final String defElemKeyref = defElem.getAttribute(ATTRIBUTE_NAME_KEYREF);
             if (!defElemKeyref.isEmpty()) {
-                keyRefDef = resolveIntermediate(scope, keyRefDef);
+                // TODO use immutable List
+                final List<KeyDef> ct = new ArrayList<>(circularityTracker.size() + 1);
+                ct.addAll(circularityTracker);
+                ct.add(keyRefDef);
+                keyRefDef = resolveIntermediate(scope, keyRefDef, ct);
             }
             final Element res = mergeMetadata(keyRefDef.element, elem);
             res.removeAttribute(ATTRIBUTE_NAME_KEYREF);
@@ -266,6 +277,19 @@ public final class KeyrefReader implements AbstractReader {
         } else {
             return keyDef;
         }
+    }
+
+    private void handleCircularDefinitionException(final List<KeyDef> circularityTracker) {
+        final StringBuilder sb = new StringBuilder();
+        Collections.reverse(circularityTracker);
+        for (final KeyDef keyDef: circularityTracker) {
+            sb.append(keyDef.keys).append(" -> ");
+        }
+        sb.append(circularityTracker.get(0).keys);
+        final MessageBean ex = MessageUtils.getInstance()
+                .getMessage("DOTJ069E", sb.toString())
+                .setLocation(circularityTracker.get(0).element);
+        logger.error(ex.toString(), ex.toException());
     }
 
     private Element mergeMetadata(final Element defElem, final Element elem) {

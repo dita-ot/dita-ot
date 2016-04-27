@@ -13,6 +13,7 @@
   <xsl:param name="TOCROOT">toc</xsl:param>
   
   <!-- Define the error message prefix identifier -->
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
   <xsl:template match="*[contains(@class, ' map/map ')]">
@@ -38,8 +39,7 @@
           <xsl:otherwise>
             <xsl:text>org.sample.help.doc</xsl:text>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">050</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX050W'"/>
              </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>

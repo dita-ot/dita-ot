@@ -505,8 +505,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
               <xsl:when test="$topicid!='#none#' and not($target[contains(@class, ' topic/topic ')])">
                 <!-- topicid does not point to a valid topic -->
                 <xsl:call-template name="output-message">
-                  <xsl:with-param name="msgnum">061</xsl:with-param>
-                  <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="id" select="'DOTX061W'"/>
                   <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/></xsl:with-param>
                 </xsl:call-template>
               </xsl:when>
@@ -535,8 +534,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <xsl:if test="$topicid!='#none#' and not($target[contains(@class, ' topic/topic ')])">
           <!-- topicid does not point to a valid topic -->
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">061</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="id" select="'DOTX061W'"/>
             <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/></xsl:with-param>
           </xsl:call-template>
         </xsl:if>
@@ -1204,8 +1202,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <!-- Deprecated -->
   <xsl:template match="*" mode="ditamsg:unknown-extension">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">006</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX006E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -1213,23 +1210,20 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:template match="*" mode="ditamsg:incorect-inherited-format">
     <xsl:param name="format" as="xs:string"/>
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">016</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX016W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$format"/>;%2=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:empty-href">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">017</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX017E'"/>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:type-mismatch-info">
     <xsl:param name="type" as="xs:string"/>
     <xsl:param name="actual-name" as="xs:string"/>
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">018</xsl:with-param>
-      <xsl:with-param name="msgsev">I</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX018I'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$type"/>;%2=<xsl:value-of select="$actual-name"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -1237,64 +1231,55 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="type" as="xs:string"/>
     <xsl:param name="actual-name" as="xs:string"/>
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">019</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX019W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$type"/>;%2=<xsl:value-of select="$actual-name"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:missing-navtitle-peer">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">020</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX020E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:missing-navtitle-non-dita">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">021</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX021E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:using-linktext-for-navtitle">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">022</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX022W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:cannot-retrieve-navtitle">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">023</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX023W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:missing-navtitle-and-linktext-peer">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">024</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX024E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:missing-navtitle-and-linktext-non-dita">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">025</xsl:with-param>
-      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX025E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:no-linktext-using-fallback">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">026</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX026W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:no-linktext-no-fallback">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">027</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX027W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
