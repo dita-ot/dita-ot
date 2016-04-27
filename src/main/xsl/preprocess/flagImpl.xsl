@@ -349,13 +349,13 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
          For @props, @audience, @platform, @product, @otherprops, and specializations of @props, the value is zero or
          more value tokens or groups.
          
-         Because of the groups its necessary to first gather a mapping of condition names to values and then use
+         Because of the groups it's necessary to first gather a mapping of condition names to values and then use
          that to find any corresponding flag specifications in the filter file. A group can have any name, so there's
          no requirement that there be any relationship between the attribute name and the group names used in the
          attribute value.
     
          Because we're still in XSLT 2 land we can't use XPath3 maps, which would be the ideal solution for this
-         task, so generating an intermediate XML structure to represent the map.
+         task, so generating an intermediate XML structure to represent the map of condition names to values.
          
          One challenge here is we need to reduce duplicates as it's possible for the same condition/value pair to
          be specified multiple times on a single element and you don't want multiple flag indicators in that case.
@@ -376,15 +376,19 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
          group by condition and then get the distinct values for each
          condition to ensure we don't generate duplication flag items.
       -->
+        
         <xsl:for-each-group select="$conditions/condition" group-by="@name">
           <xsl:variable name="conditionName" as="xs:string" select="current-grouping-key()"/>
           <xsl:variable name="conditionValues" as="xs:string*"
             select="distinct-values(for $e in ./value return string ($e))"
           />
+          
           <!-- Now find any flagging actions for the name/value pair: -->
           <xsl:for-each select="$conditionValues">
-            <xsl:sequence select="$FILTERDOC/val/prop[@action = ('flag')][@att = $conditionName][@val = .]"/>
+            <xsl:variable name="value" select="." as="xs:string"/>
+            <xsl:sequence select="$FILTERDOC/val/prop[@action = ('flag')][@att = $conditionName][@val = $value]"/>
           </xsl:for-each>
+          
           <!-- Now get any default specification for the condition: -->
           <xsl:sequence select="$FILTERDOC/val/prop[@action = ('flag')][@att = $conditionName][not(@val)]"/>
         </xsl:for-each-group>    
@@ -397,7 +401,9 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     <xsl:variable name="bareValues" as="xs:string*">
       <xsl:analyze-string select="." regex="[\w\.-_]+\(.*?\)">
         <xsl:non-matching-substring>
-          <xsl:sequence select="tokenize(., ' ')"/>
+          <xsl:if test=" not(matches(., '^\s*$'))">
+            <xsl:sequence select="tokenize(normalize-space(.), ' ')"/>
+          </xsl:if>
         </xsl:non-matching-substring>
       </xsl:analyze-string>
     </xsl:variable>
