@@ -335,224 +335,102 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   For multiple attr values, output each flag in turn.
  -->
 
-<xsl:template name="getrules" as="element()*">
-  <xsl:param name="current" select="." as="element()"/>
-  
-  <xsl:message> + [DEBUG] getrules: <xsl:value-of select="concat(name(..), '/', name(.))"/></xsl:message>
-  <val>
- <!-- Test for the flagging attributes. If found, call 'gen-prop' with the values to use. Otherwise return -->
-  <xsl:if test="normalize-space($FILTERFILEURL)!=''">
-    <xsl:apply-templates mode="gen-prop"
-      select="@audience, 
-              @platform, 
-              @product, 
-              @otherprops, 
-              @rev, 
-              @*[name(.) = $propsExtensions]"
-    />
-    <!-- FIXME: Should be possible to unify the extension and built-in processing
-                by getting the names of props specializations and then including
-                them in the preceding apply-templates.
-      -->
-<!--    <xsl:if test="$propsExtensions != ''">
-      <xsl:call-template name="ext-getrules">
-        <xsl:with-param name="props" select="$propsExtensions"/>
-        <xsl:with-param name="current" select="$current"/>
-      </xsl:call-template>
-    </xsl:if>
--->    <!-- default flags (flag elements with an @att but no @val -->
-    <xsl:apply-templates 
-      select="@audience, 
-              @platform, 
-              @product, 
-              @otherprops, 
-              @rev, 
-              @*[name(.) = $propsExtensions]"
-      mode="default-flags"
-    />
-    <!-- Any flag element with neither @att nor @val but a flag action: -->
-    <xsl:sequence select="$FILTERDOC/val/prop[empty(@att) and empty(@val) and @action = 'flag']"/>
-  </xsl:if>
-  </val>
-</xsl:template>
-  
-  <xsl:template mode="default-flags" match="@rev" priority="10">
-    <xsl:sequence select="$FILTERDOC/val/revprop[empty(@val) and @action = 'flag']"/>
-  </xsl:template>
-
-  <xsl:template mode="default-flags" match="@*">
-    <xsl:sequence select="$FILTERDOC/val/prop[@att='name(.)' and empty(@val) and @action = 'flag']"/>
-  </xsl:template>
-
-<!--  <xsl:template name="getExtProps" as="xs:string*">
-    <xsl:param name="domains" as="xs:string"/>
-    <xsl:if test="contains($domains, 'a(props')">
-      <xsl:text>,</xsl:text>
-      <xsl:value-of select="normalize-space(concat('props',substring-before(substring-after($domains,'a(props'), ')')))"/>
-      <xsl:call-template name="getExtProps">
-        <xsl:with-param name="domains" select="substring-after(substring-after($domains,'a(props'), ')')"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
--->
-<!--  <xsl:template name="ext-getrules" as="element()*">
-    <xsl:param name="props" as="xs:string?"/>
-    <xsl:param name="current" as="element()"/>
-    <xsl:if test="normalize-space($props)">
-      <xsl:variable name="head" select="if (contains($props, ',')) then substring-before($props,',') else $props" as="xs:string"/>
-      <xsl:variable name="tail" select="if (contains($props, ',')) then substring-after($props,',') else ()" as="xs:string?"/>
-      <xsl:variable name="propsValue" as="xs:string?">
-        <xsl:call-template name="getPropsValue">
-          <xsl:with-param name="propsPath" select="$head"/>
-          <xsl:with-param name="current" select="$current"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:if test="not($propsValue='')">
-        <xsl:call-template name="ext-gen-prop">
-          <xsl:with-param name="flag-att-path" select="$head"/>
-          <xsl:with-param name="flag-att-val" select="$propsValue"/>
-        </xsl:call-template>
-      </xsl:if>
-      <xsl:call-template name="ext-getrules">
-        <xsl:with-param name="props" select="$tail"/>
-        <xsl:with-param name="current" select="$current"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
--->  
-  <xsl:template name="getPropsValue" as="xs:string?">
-    <xsl:param name="propsPath" as="xs:string"/>
-    <xsl:param name="current" as="element()"/>
-    <xsl:variable name="propName" as="xs:string">
-      <xsl:call-template name="getLastPropName">
-        <xsl:with-param name="propsPath" select="$propsPath"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$current/@*[name() = $propName]">
-        <xsl:value-of select="$current/@*[name() = $propName]"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="getGeneralValue">
-          <xsl:with-param name="propName" select="$propName"/>
-          <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propName))"/>
-          <xsl:with-param name="current" select="$current"/>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
-  <xsl:template name="getGeneralValue" as="xs:string?">
-    <xsl:param name="propsPath" as="xs:string"/>
-    <xsl:param name="propName" as="xs:string"/>
-    <xsl:param name="current" as="element()"/>
-    <xsl:variable name="propParentName" as="xs:string">
-      <xsl:call-template name="getLastPropName">
-        <xsl:with-param name="propsPath" select="$propsPath"/>
-      </xsl:call-template>
-    </xsl:variable>
+  <xsl:template name="getrules" as="element()*">
+    <xsl:param name="current" select="." as="element()"/>
     
-    <xsl:choose>
-      <xsl:when test="contains($current/@*[name() = $propParentName], concat($propName,'('))">
-        <xsl:value-of select="substring-before(substring-after($current/@*[name() = $propParentName], concat($propName,'(')),')')"/>
-      </xsl:when>
-      <xsl:when test="contains($propsPath,' ')">
-        <xsl:call-template name="getGeneralValue">
-          <xsl:with-param name="propName" select="$propName"/>
-          <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propParentName))"/>
-          <xsl:with-param name="current" select="$current"/>
-        </xsl:call-template>
-      </xsl:when>
-    </xsl:choose>
+    <val>
+      <!-- Test for the flagging attributes. If found, call 'gen-prop' with the values to use. Otherwise return -->
+      <xsl:if test="normalize-space($FILTERFILEURL)!=''">
+        <!-- First gather the set of property name/value pairs.
+         
+         For @rev the value is a sequence of zero or more revision names. @rev does not
+         allow groups.
+         
+         For @props, @audience, @platform, @product, @otherprops, and specializations of @props, the value is zero or
+         more value tokens or groups.
+         
+         Because of the groups its necessary to first gather a mapping of condition names to values and then use
+         that to find any corresponding flag specifications in the filter file. A group can have any name, so there's
+         no requirement that there be any relationship between the attribute name and the group names used in the
+         attribute value.
+    
+         Because we're still in XSLT 2 land we can't use XPath3 maps, which would be the ideal solution for this
+         task, so generating an intermediate XML structure to represent the map.
+         
+         One challenge here is we need to reduce duplicates as it's possible for the same condition/value pair to
+         be specified multiple times on a single element and you don't want multiple flag indicators in that case.
+         -->
+        <xsl:variable name="conditions" as="element()">
+          <conditions>
+            <xsl:apply-templates mode="getconditions"
+              select="@audience, @platform, @product, @otherprops, @props, @rev, @*[name(.) = $propsExtensions]"
+            />
+          </conditions>
+        </xsl:variable>
+        <xsl:message> + [DEBUG] getrules: conditions:
+          <xsl:sequence select="$conditions"/></xsl:message>
+        
+        <!-- Now use the conditions to generate flagging specifications -->
+        
+        <!-- Because the same condition can occur multiple times, we need to
+         group by condition and then get the distinct values for each
+         condition to ensure we don't generate duplication flag items.
+      -->
+        <xsl:for-each-group select="$conditions/condition" group-by="@name">
+          <xsl:variable name="conditionName" as="xs:string" select="current-grouping-key()"/>
+          <xsl:variable name="conditionValues" as="xs:string*"
+            select="distinct-values(for $e in ./value return string ($e))"
+          />
+          <!-- Now find any flagging actions for the name/value pair: -->
+          <xsl:for-each select="$conditionValues">
+            <xsl:sequence select="$FILTERDOC/val/prop[@action = ('flag')][@att = $conditionName][@val = .]"/>
+          </xsl:for-each>
+          <!-- Now get any default specification for the condition: -->
+          <xsl:sequence select="$FILTERDOC/val/prop[@action = ('flag')][@att = $conditionName][not(@val)]"/>
+        </xsl:for-each-group>    
+      </xsl:if>
+    </val>
   </xsl:template>
   
-  <xsl:template name="getLastPropName" as="xs:string">
-    <xsl:param name="propsPath" as="xs:string"/>
-    <xsl:choose>
-      <xsl:when test="contains($propsPath,' ')">
-        <xsl:call-template name="getLastPropName">
-          <xsl:with-param name="propsPath" select="substring-after($propsPath,' ')"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$propsPath"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="ext-flagcheck">
-    <xsl:param name="props"/>
-    <xsl:choose>
-      <xsl:when test="contains($props,',')">
-        <xsl:variable name="propsValue" as="xs:string?">
-          <xsl:call-template name="getPropsValue">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName" as="xs:string">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="not($propsValue='')">
-          <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
-            <xsl:with-param name="attr-name" select="$propName"/>
-          </xsl:apply-templates>
-        </xsl:if>
-        
-        <xsl:call-template name="ext-flagcheck">
-          <xsl:with-param name="props" select="substring-after($props,',')"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:variable name="propsValue" as="xs:string?">
-          <xsl:call-template name="getPropsValue">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName" as="xs:string">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="not($propsValue='')">
-          <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
-            <xsl:with-param name="attr-name" select="$propName"/>
-          </xsl:apply-templates>
-        </xsl:if>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-<!-- Use passed attr value to mark each active flag. -->
-  <xsl:template name="ext-gen-prop">
-    <xsl:param name="flag-att-path"/>
-    <xsl:param name="flag-att-val"/>
-    <xsl:variable name="propName" as="xs:string">
-      <xsl:call-template name="getLastPropName">
-        <xsl:with-param name="propsPath" select="$flag-att-path"/>
-      </xsl:call-template>
+  <xsl:template mode="getconditions" match="@*">
+    <!-- Handle any bare values: -->
+    <xsl:variable name="bareValues" as="xs:string*">
+      <xsl:analyze-string select="." regex="[\w\.-_]+\(.*?\)">
+        <xsl:non-matching-substring>
+          <xsl:sequence select="tokenize(., ' ')"/>
+        </xsl:non-matching-substring>
+      </xsl:analyze-string>
     </xsl:variable>
-    <xsl:variable name="flag-result">
-      <xsl:call-template name="gen-prop">
-        <xsl:with-param name="flag-att" select="$propName"/>
-        <xsl:with-param name="flag-att-val" select="$flag-att-val"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$flag-result/prop">
-        <xsl:copy-of select="$flag-result"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:if test="contains($flag-att-path,' ')">
-          <xsl:call-template name="ext-gen-prop">
-            <xsl:with-param name="flag-att-path" select="normalize-space(substring-before($flag-att-path, $propName))"/>
-            <xsl:with-param name="flag-att-val" select="$flag-att-val"/>
-          </xsl:call-template>
-        </xsl:if>
-      </xsl:otherwise>
-    </xsl:choose>
+<!--    <xsl:message> + [DEBUG] getconditions: @<xsl:value-of select="name(.)"/>: "<xsl:value-of select="."/>"</xsl:message>-->
+    <xsl:if test="count($bareValues) gt 0">
+      <condition name="{name(.)}">
+        <xsl:for-each select="distinct-values($bareValues)">
+          <value><xsl:sequence select="."/></value>
+        </xsl:for-each>
+      </condition>
+    </xsl:if>
+    
+    <!-- Making this check so we don't accidently support
+         groups in @rev, which is not allowed but probably
+         isn't validated by any tools, or at least we
+         can't depend on it.
+      -->
+    <xsl:if test="not(name(.) = ('rev'))">
+      <!-- Now handle any groups -->
+      <xsl:analyze-string select="." regex="([\w\.-_]+)\((.*?)\)">
+        <xsl:matching-substring>
+          <condition name="{regex-group(1)}">
+            <xsl:for-each select="distinct-values(tokenize(regex-group(2), ' '))">
+              <value><xsl:sequence select="."/></value>
+            </xsl:for-each>
+          </condition>
+        </xsl:matching-substring>
+      </xsl:analyze-string>
+    </xsl:if>
+    
   </xsl:template>
+  
+
  <xsl:template match="@*" mode="gen-prop" as="element()*">
    <xsl:variable name="flag-att" as="xs:string" select="name(.)"/>     <!-- attribute name -->
    <xsl:variable name="flag-att-val" as="xs:string?" select="string(.)"/> <!-- content of attribute -->
