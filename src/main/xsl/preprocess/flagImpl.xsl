@@ -412,8 +412,9 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
 
   <xsl:template name="ext-getrules" as="element()*">
-    <xsl:param name="props" as="xs:string?"/>
+    <xsl:param name="props" as="xs:string?"/>    
     <xsl:param name="current" as="element()"/>
+        
     <xsl:if test="normalize-space($props)">
       <xsl:variable name="head" select="if (contains($props, ',')) then substring-before($props,',') else $props" as="xs:string"/>
       <xsl:variable name="tail" select="if (contains($props, ',')) then substring-after($props,',') else ()" as="xs:string?"/>
@@ -541,23 +542,24 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   </xsl:template>
 
 <!-- Use passed attr value to mark each active flag. -->
-  <xsl:template name="ext-gen-prop">
+  <xsl:template name="ext-gen-prop" as="element()?">
     <xsl:param name="flag-att-path"/>
     <xsl:param name="flag-att-val"/>
+    
     <xsl:variable name="propName" as="xs:string">
       <xsl:call-template name="getLastPropName">
         <xsl:with-param name="propsPath" select="$flag-att-path"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="flag-result">
+    <xsl:variable name="flag-result" as="element()*">
       <xsl:call-template name="gen-prop">
         <xsl:with-param name="flag-att" select="$propName"/>
         <xsl:with-param name="flag-att-val" select="$flag-att-val"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$flag-result/prop">
-        <xsl:copy-of select="$flag-result"/>
+      <xsl:when test="$flag-result/self::prop">
+        <xsl:sequence select="$flag-result"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="contains($flag-att-path,' ')">
