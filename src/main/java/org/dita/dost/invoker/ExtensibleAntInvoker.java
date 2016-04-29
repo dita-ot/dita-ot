@@ -119,7 +119,7 @@ public final class ExtensibleAntInvoker extends Task {
 
     private void initialize() throws BuildException {
         if (tempDir == null) {
-            tempDir = new File(this.getProject().getProperty("dita.temp.dir")).getAbsoluteFile();
+            tempDir = new File(this.getProject().getProperty(ANT_TEMP_DIR)).getAbsoluteFile();
         }
         if (tempDir == null) {
             throw new BuildException("Temporary directory not set or available");

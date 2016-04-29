@@ -967,6 +967,8 @@ public final class Constants {
 
     /** Project reference name for job configuration object. */
     public static final String ANT_REFERENCE_JOB = "job";
+    /** Temporary directory Ant property name. */
+    public static final String ANT_TEMP_DIR = "dita.temp.dir";
     /** Deprecated since 2.3 */
     @Deprecated
     public static final String PI_PATH2PROJ_TARGET = "path2project";

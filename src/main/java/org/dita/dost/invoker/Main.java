@@ -61,6 +61,8 @@ import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.util.Configuration;
 
+import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
+
 /**
  * Command line entry point into DITA-OT. This class is entered via the canonical
  * `public static void main` entry point and reads the command line arguments.
@@ -140,8 +142,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ARGUMENTS.put("-o", new FileArgument("output.dir"));
         ARGUMENTS.put("-output", new FileArgument("output.dir"));
         ARGUMENTS.put("-filter", new FileArgument("args.filter"));
-        ARGUMENTS.put("-t", new FileArgument("dita.temp.dir"));
-        ARGUMENTS.put("-temp", new FileArgument("dita.temp.dir"));
+        ARGUMENTS.put("-t", new FileArgument(ANT_TEMP_DIR));
+        ARGUMENTS.put("-temp", new FileArgument(ANT_TEMP_DIR));
     }
     private static final Map<String, String> RESERVED_PROPERTIES = new HashMap<>();
     static {
@@ -174,7 +176,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         LEGACY_ARGUMENTS.put("/copycss", new StringArgument("args.copycss"));
         LEGACY_ARGUMENTS.put("/xsl", new FileArgument("args.xsl"));
         LEGACY_ARGUMENTS.put("/xslpdf", new FileArgument("args.xsl.pdf"));
-        LEGACY_ARGUMENTS.put("/tempdir", new FileArgument("dita.temp.dir"));
+        LEGACY_ARGUMENTS.put("/tempdir", new FileArgument(ANT_TEMP_DIR));
         LEGACY_ARGUMENTS.put("/cleantemp", new StringArgument("clean.temp"));
         LEGACY_ARGUMENTS.put("/foimgext", new StringArgument("args.fo.img.ext"));
         LEGACY_ARGUMENTS.put("/javahelptoc", new StringArgument("args.javahelp.toc"));
@@ -569,7 +571,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             if (!definedProps.containsKey("output.dir")) {
                 definedProps.put("output.dir", new File(new File("."), "out").getAbsolutePath());
             }
-            if (!definedProps.containsKey("base.temp.dir") && !definedProps.containsKey("dita.temp.dir")) {
+            if (!definedProps.containsKey("base.temp.dir") && !definedProps.containsKey(ANT_TEMP_DIR)) {
                 definedProps.put("base.temp.dir", new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
             }
         }
