@@ -37,10 +37,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
     private Collection<Resource> getResults() {
         if (res == null) {
-            final Job job = ExtensibleAntInvoker.getJob(new File(getProject().getUserProperty(ANT_TEMP_DIR)), getProject());
-            if (job == null) {
-                throw new IllegalStateException();
-            }
+            final Job job = getJob();
             res = new ArrayList<>();
             for (final Job.FileInfo f : job.getFileInfo(new Job.FileInfo.Filter<Job.FileInfo>() {
                 @Override
@@ -78,6 +75,21 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
             }
         }
         return res;
+    }
+
+    private Job getJob() {
+        String tempDir = getProject().getUserProperty(ANT_TEMP_DIR);
+        if (tempDir == null) {
+            tempDir = getProject().getProperty(ANT_TEMP_DIR);
+        }
+        if (tempDir == null) {
+            throw new IllegalStateException();
+        }
+        final Job job = ExtensibleAntInvoker.getJob(new File(tempDir), getProject());
+        if (job == null) {
+            throw new IllegalStateException();
+        }
+        return job;
     }
 
     @Override
