@@ -22,6 +22,7 @@ import javax.xml.parsers.DocumentBuilder;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
@@ -55,6 +56,7 @@ public final class KeyrefReader implements AbstractReader {
             ATTRIBUTE_NAME_CASCADE));
 
     private DITAOTLogger logger;
+    private Job job;
     private final DocumentBuilder builder;
     private KeyScope rootScope;
     private URI currentFile;
@@ -75,7 +77,12 @@ public final class KeyrefReader implements AbstractReader {
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-    
+
+    @Override
+    public void setJob(final Job job) {
+        this.job = job;
+    }
+
     /**
      * Get key definitions for root scope. Each key definition Element has a distinct Document.
      * 

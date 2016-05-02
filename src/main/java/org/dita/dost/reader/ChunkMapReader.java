@@ -27,6 +27,7 @@ import java.util.*;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -238,7 +239,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private void outputMapFile(final URI file, final Document doc) {
-        StreamResult result = null;
+        Result result = null;
         try {
             final Transformer t = TransformerFactory.newInstance().newTransformer();
             result = new StreamResult(new FileOutputStream(new File(file)));

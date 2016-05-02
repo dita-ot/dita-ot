@@ -102,7 +102,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             reader.parse(filename.toURI().toString());
         } catch (final RuntimeException e) {
             throw e;
-        }catch (final Exception e) {
+        } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
             e.printStackTrace();
         }

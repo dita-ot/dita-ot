@@ -88,9 +88,11 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
             logger.info("Processing " + inputFile.toURI());
             logger.debug("Processing " + inputFile.toURI() + " to " + tmp.toURI());
 
-            final Source source = new StreamSource(inputFile.toURI().toString());
-            final Result result = new StreamResult(tmp);
+            Source source = null;
+            Result result = null;
             try {
+                source = new StreamSource(inputFile.toURI().toString());
+                result = new StreamResult(tmp);
 
                 logger.info("Loading stylesheet " + styleFile);
                 final TransformerFactory tf = TransformerFactory.newInstance();

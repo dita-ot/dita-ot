@@ -15,6 +15,7 @@ import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -30,6 +31,7 @@ import org.w3c.dom.NodeList;
 public class SubjectSchemeReader {
     
     private DITAOTLogger logger;
+    private Job job;
     private final Map<String, Map<String, Set<Element>>> bindingMap;
     private final Map<String, Map<String, Set<String>>> validValuesMap;
     private final Map<String, Map<String, String>> defaultValueMap;
@@ -88,7 +90,11 @@ public class SubjectSchemeReader {
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-    
+
+    public void setJob(final Job job) {
+        this.job = job;
+    }
+
     /**
      * Read a map from XML properties file. Values are split by {@link org.dita.dost.util.Constants#COMMA COMMA} into a set.
      *
