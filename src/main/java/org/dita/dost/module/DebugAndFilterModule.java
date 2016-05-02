@@ -145,14 +145,11 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         }
 
         InputSource in = null;
-        OutputStream out = null;
+        Result out = null;
         try {
-            out = new FileOutputStream(outputFile);
-
             reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger));
 
             final TransformerFactory tf = TransformerFactory.newInstance();
-//            final Transformer serializer = tf.newTransformer();
             final SAXTransformerFactory stf = (SAXTransformerFactory) tf;
             final TransformerHandler serializer = stf.newTransformerHandler();
 
@@ -173,10 +170,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             } catch (final SAXNotRecognizedException e) {}
 
             in = new InputSource(f.src.toString());
-//            final Source source = new SAXSource(xmlSource, in);
-            final Result result = new StreamResult(out);
-//            serializer.transform(source, result);
-            serializer.setResult(result);
+            out = new StreamResult(new FileOutputStream(outputFile));
+            serializer.setResult(out);
             xmlSource.setContentHandler(serializer);
             xmlSource.parse(new InputSource(f.src.toString()));
         } catch (final RuntimeException e) {
@@ -184,12 +179,10 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                }catch (final Exception e) {
-                    logger.error(e.getMessage(), e) ;
-                }
+            try {
+                close(out);
+            } catch (final Exception e) {
+                logger.error(e.getMessage(), e) ;
             }
             try {
                 close(in);
