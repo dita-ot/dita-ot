@@ -85,7 +85,7 @@
           </xsl:if>
         </xsl:variable>
         <xsl:choose>
-          <xsl:when test="empty($file) or empty($file/*/*)">
+          <xsl:when test="empty($file)">
             <xsl:variable name="filename" as="xs:string?">
               <xsl:choose>
                 <xsl:when test="empty($href)"/>
