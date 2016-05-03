@@ -217,11 +217,13 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         outputSubjectScheme();
         subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
+        subjectSchemeReader.setJob(job);
         dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
 
         if (profilingEnabled) {
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
+            filterReader.setJob(job);
             filterReader.initXMLReader(setSystemId);
             Map<FilterKey, Action> filterMap;
             if (ditavalFile != null) {

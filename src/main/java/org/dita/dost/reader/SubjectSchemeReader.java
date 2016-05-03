@@ -255,6 +255,8 @@ public class SubjectSchemeReader {
                     }
                 }
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }
