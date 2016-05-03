@@ -105,6 +105,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             }
 
             job.write();
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
@@ -399,6 +401,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 //Output parent scheme
                 generateScheme(new File(job.tempDir.getAbsoluteFile(), parent.getPath() + SUBJECT_SCHEME_EXTENSION), parentRoot);
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);
@@ -528,6 +532,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             final TransformerFactory tff = TransformerFactory.newInstance();
             final Transformer tf = tff.newTransformer();
             tf.transform(ds, res);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);
