@@ -3,7 +3,10 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2005 All Rights Reserved. -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  exclude-result-prefixes="xs"
+  version="2.0">
 
 <xsl:output method="text"/>
 <xsl:strip-space elements="*"/>
@@ -155,10 +158,15 @@ select="$tbl-count-actual"/><xsl:text>. </xsl:text></xsl:otherwise></xsl:choose>
 <xsl:template match="*[contains(@class,' topic/colspec ')]" mode="count-rowwidth">
   <xsl:param name="totalwidth">0</xsl:param> <!-- Total counted width so far -->
   <xsl:variable name="thiswidth">            <!-- Width of this column -->
-    <xsl:choose>
-      <xsl:when test="@colwidth and contains(@colwidth,'*') and not(@colwidth='*')"><xsl:value-of select="substring-before(@colwidth,'*')"/></xsl:when>
-      <xsl:otherwise>1</xsl:otherwise>
-    </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="not(@colwidth) or @colwidth='*'">1</xsl:when>
+        <xsl:when test="contains(@colwidth,'*')"><xsl:value-of select="substring-before(@colwidth,'*')"/></xsl:when>
+        <xsl:when test="contains(@colwidth,'pt')"><xsl:value-of select="substring-before(@colwidth,'pt')"/></xsl:when>
+        <xsl:when test="contains(@colwidth,'cm')"><xsl:value-of select="substring-before(@colwidth,'cm')"/></xsl:when>
+        <xsl:when test="contains(@colwidth,'in')"><xsl:value-of select="substring-before(@colwidth,'in')"/></xsl:when>
+        <xsl:when test="contains(@colwidth,'mm')"><xsl:value-of select="substring-before(@colwidth,'mm')"/></xsl:when>
+        <xsl:otherwise>1</xsl:otherwise>
+      </xsl:choose>
   </xsl:variable>
   <!-- If there are more colspecs, continue, otherwise return the current count -->
   <xsl:choose>
@@ -491,13 +499,16 @@ select="$tbl-count-actual"/><xsl:text>. </xsl:text></xsl:otherwise></xsl:choose>
   </xsl:template-->
   
   <xsl:template match="*[contains(@class,' topic/colspec ')]" mode="count-colwidth">
-    <xsl:param name="colnum" select="1"/>
-    <xsl:param name="span-width" select="0"></xsl:param>
-    <xsl:variable name="width">
+    <xsl:param name="colnum" select="1" as="xs:double"/>
+    <xsl:param name="span-width" select="0" as="xs:double"></xsl:param>
+    <xsl:variable name="width" as="xs:double">
       <xsl:choose>
-        <xsl:when test="@colwidth and not(@colwidth='' or @colwidth='*')">
-          <xsl:value-of select="substring-before(@colwidth,'*')"/>
-        </xsl:when>
+        <xsl:when test="not(@colwidth) or @colwidth='*'">1</xsl:when>
+        <xsl:when test="contains(@colwidth,'*')"><xsl:value-of select="substring-before(@colwidth,'*')"/></xsl:when>
+        <xsl:when test="contains(@colwidth,'pt')"><xsl:value-of select="substring-before(@colwidth,'pt')"/></xsl:when>
+        <xsl:when test="contains(@colwidth,'cm')"><xsl:value-of select="substring-before(@colwidth,'cm')"/></xsl:when>
+        <xsl:when test="contains(@colwidth,'in')"><xsl:value-of select="substring-before(@colwidth,'in')"/></xsl:when>
+        <xsl:when test="contains(@colwidth,'mm')"><xsl:value-of select="substring-before(@colwidth,'mm')"/></xsl:when>
         <xsl:otherwise>1</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
