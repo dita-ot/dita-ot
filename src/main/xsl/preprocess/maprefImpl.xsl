@@ -19,7 +19,7 @@
   <xsl:param name="file-being-processed" as="xs:string"/>
   <xsl:param name="child-topicref-warning" as="xs:string" select="'true'"/>
 
-  <!-- list of attributes that can be overided. -->
+  <!-- list of attributes that can be overidden. -->
   <xsl:variable name="special-atts" select="('href', 'copy-to', 'class', 'linking', 'toc', 'print', 'audience', 'product', 'platform', 'otherprops', 'props')" as="xs:string*"/>
 
   <!-- the xsl:key to get all maprefs in the document in order to get reltable -->
@@ -166,7 +166,7 @@
                   <xsl:value-of select="normalize-space($keyscope)"/>
                 </xsl:attribute>
               </xsl:if>
-              <xsl:apply-templates select="@* except (@class, @href, @dita-ot:orig-href, @format, @dita-ot:orig-format, @keys, @keyscope)"/>
+              <xsl:apply-templates select="@* except (@class, @href, @dita-ot:orig-href, @format, @dita-ot:orig-format, @keys, @keyscope, @type)"/>
               <xsl:apply-templates select="*[contains(@class, ' ditavalref-d/ditavalref ')]"/>
               <xsl:apply-templates select="$contents">
                 <xsl:with-param name="refclass" select="$refclass"/>
