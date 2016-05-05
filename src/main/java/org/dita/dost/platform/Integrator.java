@@ -308,6 +308,9 @@ public final class Integrator {
         final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS) ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS))) : Collections.EMPTY_SET;
         writeEnvShell(jars);
         writeEnvBatch(jars);
+
+        writeStartcmdShell(jars);
+        writeStartcmdBatch(jars);
     }
 
     private Iterable<String> orderPlugins(final Set<String> ids) {
@@ -405,6 +408,130 @@ public final class Integrator {
         } catch (final Exception e) {
             if (strict) {
                 throw new RuntimeException("Failed to write environment batch: " + e.getMessage(), e);
+            } else {
+                logger.error(e.getMessage(), e) ;
+            }
+        } finally {
+            closeQuietly(out);
+        }
+    }
+
+    private void writeStartcmdShell(final Collection<File> jars) {
+        Writer out = null;
+        try {
+            final File outFile = new File(ditaDir, "startcmd.sh");
+            if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
+                throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
+            }
+            logger.debug("Generate start command shell " + outFile.getPath());
+            out = new BufferedWriter(new FileWriter(outFile));
+
+            out.write("#!/bin/sh\n" +
+                    "echo \"NOTE: The startcmd.sh has been deprecated, use the 'dita' command instead.\"\n" +
+                    "\n" +
+                    "realpath() {\n" +
+                    "  case $1 in\n" +
+                    "    /*) echo \"$1\" ;;\n" +
+                    "    *) echo \"$PWD/${1#./}\" ;;\n" +
+                    "  esac\n" +
+                    "}\n" +
+                    "\n" +
+                    "if [ \"${DITA_HOME:+1}\" = \"1\" ] && [ -e \"$DITA_HOME\" ]; then\n" +
+                    "  export DITA_DIR=\"$(realpath \"$DITA_HOME\")\"\n" +
+                    "else #elif [ \"${DITA_HOME:+1}\" != \"1\" ]; then\n" +
+                    "  export DITA_DIR=\"$(dirname \"$(realpath \"$0\")\")\"\n" +
+                    "fi\n" +
+                    "\n" +
+                    "if [ -f \"$DITA_DIR\"/bin/ant ] && [ ! -x \"$DITA_DIR\"/bin/ant ]; then\n" +
+                    "  chmod +x \"$DITA_DIR\"/bin/ant\n" +
+                    "fi\n" +
+                    "\n" +
+                    "export ANT_OPTS=\"-Xmx512m $ANT_OPTS\"\n" +
+                    "export ANT_OPTS=\"$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\"\n" +
+                    "export ANT_HOME=\"$DITA_DIR\"\n" +
+                    "export PATH=\"$DITA_DIR\"/bin:\"$PATH\"\n" +
+                    "\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib/dost.jar\"\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib:$NEW_CLASSPATH\"\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib/commons-io-2.4.jar:$NEW_CLASSPATH\"\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib/commons-codec-1.9.jar:$NEW_CLASSPATH\"\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib/xml-resolver-1.2.jar:$NEW_CLASSPATH\"\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib/icu4j-54.1.jar:$NEW_CLASSPATH\"\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib/xercesImpl-2.11.0.jar:$NEW_CLASSPATH\"\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib/xml-apis-1.4.01.jar:$NEW_CLASSPATH\"\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib/saxon-9.1.0.8.jar:$NEW_CLASSPATH\"\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib/saxon-9.1.0.8-dom.jar:$NEW_CLASSPATH\"\n");
+            for (final File relativeLib: jars) {
+                out.write("NEW_CLASSPATH=\"");
+                if (!relativeLib.isAbsolute()) {
+                    out.write("$DITA_DIR" + UNIX_SEPARATOR);
+                }
+                out.write(relativeLib.toString().replace(File.separator, UNIX_SEPARATOR));
+                out.write(":$NEW_CLASSPATH\"\n");
+            }
+            out.write("if test -n \"$CLASSPATH\"; then\n" +
+                    "  export CLASSPATH=\"$NEW_CLASSPATH\":\"$CLASSPATH\"\n" +
+                    "else\n" +
+                    "  export CLASSPATH=\"$NEW_CLASSPATH\"\n" +
+                    "fi\n" +
+                    "\n" +
+                    "cd \"$DITA_DIR\"\n" +
+                    "\"$SHELL\"\n");
+        } catch (final Exception e) {
+            if (strict) {
+                throw new RuntimeException("Failed to write start command shell: " + e.getMessage(), e);
+            } else {
+                logger.error(e.getMessage(), e) ;
+            }
+        } finally {
+            closeQuietly(out);
+        }
+    }
+
+    private void writeStartcmdBatch(final Collection<File> jars) {
+        Writer out = null;
+        try {
+            final File outFile = new File(ditaDir, "startcmd.bat");
+            if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
+                throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
+            }
+            logger.debug("Generate start command batch " + outFile.getPath());
+            out = new BufferedWriter(new FileWriter(outFile));
+
+            out.write("@echo off\r\n" +
+                    "echo \"NOTE: The startcmd.bat has been deprecated, use the dita.bat command instead.\"\r\n" +
+                    "pause\r\n" +
+                    "\r\n" +
+                    "REM Get the absolute path of DITAOT's home directory\r\n" +
+                    "set DITA_DIR=%~dp0\r\n" +
+                    "\r\n" +
+                    "REM Set environment variables\r\n" +
+                    "set ANT_OPTS=-Xmx512m %ANT_OPTS%\r\n" +
+                    "set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\r\n" +
+                    "set ANT_HOME=%DITA_DIR%\r\n" +
+                    "set PATH=%DITA_DIR%\\bin;%PATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib\\dost.jar;%CLASSPATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib\\commons-codec-1.9.jar;%CLASSPATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib\\commons-io-2.4.jar;%CLASSPATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib\\xml-resolver-1.2.jar;%CLASSPATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib\\icu4j-54.1.jar;%CLASSPATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib\\xercesImpl-2.11.0.jar;%CLASSPATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib\\xml-apis-1.4.01.jar;%CLASSPATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib\\saxon-9.1.0.8.jar;%CLASSPATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib\\saxon-9.1.0.8-dom.jar;%CLASSPATH%\r\n");
+            for (final File relativeLib: jars) {
+                out.write("set CLASSPATH=");
+                if (!relativeLib.isAbsolute()) {
+                    out.write("%DITA_DIR%" + WINDOWS_SEPARATOR);
+                }
+                out.write(relativeLib.toString().replace(File.separator, WINDOWS_SEPARATOR));
+                out.write(";%CLASSPATH%\r\n");
+            }
+            out.write("start \"DITA-OT\" cmd.exe\r\n");
+        } catch (final Exception e) {
+            if (strict) {
+                throw new RuntimeException("Failed to write start command batch: " + e.getMessage(), e);
             } else {
                 logger.error(e.getMessage(), e) ;
             }
