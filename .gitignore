@@ -57,6 +57,8 @@ src/main/resources/env.bat
 src/main/resources/env.sh
 src/main/resources/messages.xml
 src/main/resources/plugins.xml
+src/main/startcmd.bat
+src/main/startcmd.sh
 src/main/xsl/common/allstrings.xml
 src/main/xsl/common/strings.xml
 src/main/xsl/preprocess/conref.xsl
