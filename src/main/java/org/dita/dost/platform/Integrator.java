@@ -9,6 +9,7 @@
 package org.dita.dost.platform;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
@@ -31,6 +32,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -72,6 +75,12 @@ public final class Integrator {
 
     public static final String FEAT_VALUE_SEPARATOR = ",";
     private static final String PARAM_VALUE_SEPARATOR = ";";
+
+    private static Set<PosixFilePermission> PERMISSIONS = ImmutableSet.<PosixFilePermission>builder()
+            .add(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE,
+                 PosixFilePermission.GROUP_READ, PosixFilePermission.GROUP_EXECUTE,
+                 PosixFilePermission.OTHERS_READ, PosixFilePermission.OTHERS_EXECUTE)
+            .build();
 
     public static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
     public static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-]+)?)?)?");
@@ -403,7 +412,12 @@ public final class Integrator {
                 out.write(relativeLib.toString().replace(File.separator, UNIX_SEPARATOR));
                 out.write("\"\n");
             }
-        } catch (final Exception e) {
+            try {
+                Files.setPosixFilePermissions(outFile.toPath(), PERMISSIONS);
+            } catch (final UnsupportedOperationException e) {
+                // not supported
+            }
+        } catch (final IOException e) {
             if (strict) {
                 throw new RuntimeException("Failed to write environment shell: " + e.getMessage(), e);
             } else {
@@ -432,7 +446,8 @@ public final class Integrator {
                 out.write(relativeLib.toString().replace(File.separator, WINDOWS_SEPARATOR));
                 out.write("\"\r\n");
             }
-        } catch (final Exception e) {
+            outFile.setExecutable(true);
+        } catch (final IOException e) {
             if (strict) {
                 throw new RuntimeException("Failed to write environment batch: " + e.getMessage(), e);
             } else {
@@ -496,7 +511,12 @@ public final class Integrator {
                     "\n" +
                     "cd \"$DITA_DIR\"\n" +
                     "\"$SHELL\"\n");
-        } catch (final Exception e) {
+            try {
+                Files.setPosixFilePermissions(outFile.toPath(), PERMISSIONS);
+            } catch (final UnsupportedOperationException e) {
+                // not supported
+            }
+        } catch (final IOException e) {
             if (strict) {
                 throw new RuntimeException("Failed to write start command shell: " + e.getMessage(), e);
             } else {
@@ -540,7 +560,8 @@ public final class Integrator {
                 out.write(";%CLASSPATH%\r\n");
             }
             out.write("start \"DITA-OT\" cmd.exe\r\n");
-        } catch (final Exception e) {
+            outFile.setExecutable(true);
+        } catch (final IOException e) {
             if (strict) {
                 throw new RuntimeException("Failed to write start command batch: " + e.getMessage(), e);
             } else {
