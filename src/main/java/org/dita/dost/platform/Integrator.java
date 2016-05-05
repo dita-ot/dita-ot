@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import com.google.common.collect.ImmutableList;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
@@ -66,6 +67,8 @@ public final class Integrator {
     private static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
     private static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
     private static final String ELEM_PLUGINS = "plugins";
+
+    private static final String LIB_DIR = "lib";
 
     public static final String FEAT_VALUE_SEPARATOR = ",";
     private static final String PARAM_VALUE_SEPARATOR = ";";
@@ -282,7 +285,7 @@ public final class Integrator {
         
         OutputStream out = null;
         try {
-            final File outFile = new File(ditaDir, "lib" + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
+            final File outFile = new File(ditaDir, LIB_DIR + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
             if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
                 throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
             }
@@ -309,8 +312,32 @@ public final class Integrator {
         writeEnvShell(jars);
         writeEnvBatch(jars);
 
-        writeStartcmdShell(jars);
-        writeStartcmdBatch(jars);
+        final Collection<File> libJars = ImmutableList.<File>builder()
+                .addAll(getLibJars())
+                .addAll(jars)
+                .build();
+        writeStartcmdShell(libJars);
+        writeStartcmdBatch(libJars);
+    }
+
+    private Collection<File> getLibJars() {
+        final String[] libJars = new File(ditaDir, LIB_DIR).list(new FilenameFilter() {
+            @Override
+            public boolean accept(final File dir, final String name) {
+                return name.endsWith(".jar");
+            }
+        });
+        final List<File> res = new ArrayList<>(libJars.length);
+        for (String l: libJars) {
+            res.add(new File(LIB_DIR + File.separator + l));
+        }
+        Collections.sort(res, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
+            }
+        });
+        return res;
     }
 
     private Iterable<String> orderPlugins(final Set<String> ids) {
@@ -427,6 +454,7 @@ public final class Integrator {
             out = new BufferedWriter(new FileWriter(outFile));
 
             out.write("#!/bin/sh\n" +
+                    "# Generated file, do not edit manually\"\n" +
                     "echo \"NOTE: The startcmd.sh has been deprecated, use the 'dita' command instead.\"\n" +
                     "\n" +
                     "realpath() {\n" +
@@ -451,16 +479,7 @@ public final class Integrator {
                     "export ANT_HOME=\"$DITA_DIR\"\n" +
                     "export PATH=\"$DITA_DIR\"/bin:\"$PATH\"\n" +
                     "\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib/dost.jar\"\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib:$NEW_CLASSPATH\"\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib/commons-io-2.4.jar:$NEW_CLASSPATH\"\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib/commons-codec-1.9.jar:$NEW_CLASSPATH\"\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib/xml-resolver-1.2.jar:$NEW_CLASSPATH\"\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib/icu4j-54.1.jar:$NEW_CLASSPATH\"\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib/xercesImpl-2.11.0.jar:$NEW_CLASSPATH\"\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib/xml-apis-1.4.01.jar:$NEW_CLASSPATH\"\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib/saxon-9.1.0.8.jar:$NEW_CLASSPATH\"\n" +
-                    "NEW_CLASSPATH=\"$DITA_DIR/lib/saxon-9.1.0.8-dom.jar:$NEW_CLASSPATH\"\n");
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib:$NEW_CLASSPATH\"\n");
             for (final File relativeLib: jars) {
                 out.write("NEW_CLASSPATH=\"");
                 if (!relativeLib.isAbsolute()) {
@@ -499,6 +518,7 @@ public final class Integrator {
             out = new BufferedWriter(new FileWriter(outFile));
 
             out.write("@echo off\r\n" +
+                    "REM Generated file, do not edit manually\r\n" +
                     "echo \"NOTE: The startcmd.bat has been deprecated, use the dita.bat command instead.\"\r\n" +
                     "pause\r\n" +
                     "\r\n" +
@@ -510,20 +530,11 @@ public final class Integrator {
                     "set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\r\n" +
                     "set ANT_HOME=%DITA_DIR%\r\n" +
                     "set PATH=%DITA_DIR%\\bin;%PATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib\\dost.jar;%CLASSPATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib\\commons-codec-1.9.jar;%CLASSPATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib\\commons-io-2.4.jar;%CLASSPATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib\\xml-resolver-1.2.jar;%CLASSPATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib\\icu4j-54.1.jar;%CLASSPATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib\\xercesImpl-2.11.0.jar;%CLASSPATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib\\xml-apis-1.4.01.jar;%CLASSPATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib\\saxon-9.1.0.8.jar;%CLASSPATH%\r\n" +
-                    "set CLASSPATH=%DITA_DIR%lib\\saxon-9.1.0.8-dom.jar;%CLASSPATH%\r\n");
+                    "set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%\r\n");
             for (final File relativeLib: jars) {
                 out.write("set CLASSPATH=");
                 if (!relativeLib.isAbsolute()) {
-                    out.write("%DITA_DIR%" + WINDOWS_SEPARATOR);
+                    out.write("%DITA_DIR%");
                 }
                 out.write(relativeLib.toString().replace(File.separator, WINDOWS_SEPARATOR));
                 out.write(";%CLASSPATH%\r\n");
