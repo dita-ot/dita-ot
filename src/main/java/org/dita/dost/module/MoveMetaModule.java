@@ -20,9 +20,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.tools.ant.util.FileUtils;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.XMLUtils.DebugURIResolver;
 import org.w3c.dom.Element;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -96,11 +98,16 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
 
                 logger.info("Loading stylesheet " + styleFile);
                 final TransformerFactory tf = TransformerFactory.newInstance();
-                tf.setURIResolver(CatalogUtils.getCatalogResolver());
+                final CatalogResolver xmlCatalog = CatalogUtils.getCatalogResolver();
+                tf.setURIResolver(xmlCatalog);
                 final Transformer t = tf.newTransformer(new StreamSource(styleFile));
+                final URIResolver resolver;
                 if (Configuration.DEBUG) {
-                    t.setURIResolver(new XMLUtils.DebugURIResolver(tf.getURIResolver()));
+                    resolver = new DebugURIResolver(xmlCatalog);
+                } else {
+                    resolver = xmlCatalog;
                 }
+                t.setURIResolver(resolver);
                 for (Entry<String, String> e : input.getAttributes().entrySet()) {
                     logger.debug("Set parameter " + e.getKey() + " to '" + e.getValue() + "'");
                     t.setParameter(e.getKey(), e.getValue());
