@@ -109,7 +109,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder(atts);
             if (atts.getValue(ATTRIBUTE_NAME_HREF) != null) {
                 final URI imgInput = getImageFile(toURI(atts.getValue(ATTRIBUTE_NAME_HREF)));
-                if (exists(imgInput)) {
+                if (imgInput != null) {
                     Attributes m = cache.get(imgInput);
                     if (m == null) {
                         m = readMetadata(imgInput);
@@ -279,8 +279,26 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             fileDir = fileDir.resolve(uplevels.replace(File.separator, URI_SEPARATOR));
         }
         final URI fileName = fileDir.resolve(href);
-        final URI imgInputUri = outputDir.toURI().resolve(fileName);
-        return imgInputUri;
+
+        final URI outputURI = outputDir.toURI().resolve(fileName);
+        if (exists(outputURI)) {
+            logger.debug("Found " + outputURI);
+            return outputURI;
+        }
+
+        final URI tempURI = outputDir.toURI().resolve(fileName);
+        if (exists(tempURI)) {
+            logger.debug("Found " + tempURI);
+            return tempURI;
+        }
+
+        final URI srcURI = job.getInputDir().resolve(fileName);
+        if (exists(srcURI)) {
+            logger.debug("Found " + srcURI);
+            return srcURI;
+        }
+
+        return null;
     }
     
 }
