@@ -53,10 +53,10 @@ See the accompanying license.txt file for applicable licenses.
     
     <logical-font name="Sans">
       <physical-font char-set="default">
-        <font-face>Helvetica, Arial Unicode MS, Tahoma, Batang</font-face>
+        <font-face>Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Simplified Chinese">
-        <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang</font-face>
+        <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Japanese">
         <font-face>KozMinProVI-Regular, Arial Unicode MS, Batang</font-face>
@@ -79,10 +79,10 @@ See the accompanying license.txt file for applicable licenses.
 
     <logical-font name="Serif">
       <physical-font char-set="default">
-        <font-face>Times New Roman, Times, Arial Unicode MS, Tahoma, Batang</font-face>
+        <font-face>Times New Roman, Times, Arial Unicode MS, Tahoma, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Simplified Chinese">
-        <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang</font-face>
+        <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Japanese">
         <font-face>KozMinProVI-Regular, Arial Unicode MS, Batang</font-face>
@@ -105,10 +105,10 @@ See the accompanying license.txt file for applicable licenses.
 
     <logical-font name="Monospaced">
       <physical-font char-set="default">
-        <font-face>Courier New, Courier, Arial Unicode MS, Tahoma, Batang</font-face>
+        <font-face>Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Simplified Chinese">
-        <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang</font-face>
+        <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Japanese">
         <font-face>KozMinProVI-Regular, Arial Unicode MS, Batang</font-face>
