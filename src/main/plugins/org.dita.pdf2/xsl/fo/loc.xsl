@@ -11,14 +11,11 @@
                 exclude-result-prefixes="opentopic opentopic-index dita2xslfo ot-placeholder xs"
                 version="2.0">
 
-  <!-- The variable changeset contains a list of all change-item elements. -->
-  <xsl:variable name="changeset" select="//*[contains (@class, ' relmgmt-d/change-item ')]"/>
-
-  <!-- The variable topicsWithChangeItem contains a list of all topics containing change-item elements. -->
-  <xsl:variable name="topicsWithChangeItem" select="//*[contains (@class, ' topic/topic ')][.//*[contains (@class, ' relmgmt-d/change-item ')]]"/>
+  <!-- The variable change-items contains a list of all change-item elements. -->
+  <xsl:variable name="change-items" select="//*[contains (@class, ' relmgmt-d/change-item ')]"/>
 
   <!-- Keep date format in a variable -->
-  <xsl:variable name="dateFormat">[MNn] [D], [Y]</xsl:variable>
+  <xsl:variable name="dateFormat"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'#date-format'"/></xsl:call-template></xsl:variable>
 
   <!--   LOC   -->
   <xsl:template match="ot-placeholder:changelist" name="createChangeList">
@@ -48,16 +45,11 @@
     </fo:block>
   </xsl:template>
   
-  <xsl:template match="//*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/critdates ')]">
+  <xsl:template match="*[contains(@class, ' bookmap/bookmeta ')]/*[contains(@class, ' topic/critdates ')]">
 
     <!-- Create a list of all book releases -->
     <xsl:variable name="bookReleaseDates" select="*[contains (@class, ' topic/created ')]/@date |
                                                   *[contains (@class, ' topic/revised ')]/@modified"/>
-    <xsl:variable name="bookReleaseString">
-      <xsl:call-template name="getVariable">
-        <xsl:with-param name="id" select="'Book Release'"/>
-      </xsl:call-template>
-    </xsl:variable>
     <xsl:variable name="bookReleaseDateString">
       <xsl:call-template name="getVariable">
         <xsl:with-param name="id" select="'Book Release Date'"/>
@@ -74,52 +66,35 @@
       </xsl:call-template>
     </xsl:variable>
 
-    <!--<xsl:for-each select="1 to (count($bookReleaseDates) - 1)">-->
-    <xsl:for-each select="$bookReleaseDates ">
-      <xsl:variable name="i" select="position() - 1"/>
-
-      <!-- timeRangeStart and timeRangeEnd set the date range between two book releases -->
-      <xsl:variable name="timeRangeStart" select="$bookReleaseDates[$i]"/>
-      <xsl:variable name="timeRangeEnd" select="$bookReleaseDates[$i + 1]"/>
-      <xsl:variable name="timeRangeStartAsDate" select="xs:date($timeRangeStart)"/>
-      <xsl:variable name="timeRangeEndAsDate" select="xs:date($timeRangeEnd)"/>
+    <xsl:for-each select="$bookReleaseDates">
+      <xsl:variable name="previousDateIndex" select="position() - 1"/>
+      <xsl:variable name="previousDate" select="xs:date($bookReleaseDates[$previousDateIndex])"/>
+      <xsl:variable name="date" select="xs:date(.)"/>
       <fo:block>
         <fo:table xsl:use-attribute-sets="releaseManagementTable">
           <xsl:call-template name="selectAtts"/>
           <xsl:call-template name="globalAtts"/>
           <fo:table-body>
-            <fo:table-row xsl:use-attribute-sets="releaseManagementTable.bookRelease.row">
-              <fo:table-cell xsl:use-attribute-sets="releaseManagementTable.bookRelease.cell">
-                <fo:block xsl:use-attribute-sets="releaseManagementTable.bookRelease.content">
-                  <fo:block>
-                    <xsl:value-of select="$bookReleaseString"/>
-                    <xsl:value-of select="$colonSymbol"/>
-                    <xsl:value-of select="$i + 1"/>
-                  </fo:block>
-                  <fo:block>
-                    <xsl:value-of select="$bookReleaseDateString"/>
-                    <xsl:value-of select="$colonSymbol"/>
-                    <xsl:value-of select="$separator"/>
-                    <xsl:value-of select="format-date($timeRangeEndAsDate, $dateFormat)"/>
-                  </fo:block>
+            <fo:table-row xsl:use-attribute-sets="tbody.row">
+              <fo:table-cell xsl:use-attribute-sets="tbody.row.entry">
+                <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+                  <xsl:value-of select="$bookReleaseDateString"/>
+                  <xsl:value-of select="$colonSymbol"/>
+                  <xsl:value-of select="$separator"/>
+                  <xsl:value-of select="format-date(., $dateFormat)"/>
                 </fo:block>
               </fo:table-cell>
             </fo:table-row>
-            <!-- Iterate over all change-items -->
-            <xsl:for-each select="$changeset">
-              <xsl:variable name="j" select="position()"/>
-              <xsl:variable name="currentChangeItem" select="$changeset[$j]"/>
-              <xsl:variable name="currentChangeItemChangeCompleted" select="$changeset[$j]/*[contains (@class, ' relmgmt-d/change-completed ')]"/>
-              <xsl:if test="$timeRangeStart != ''
-                            and $currentChangeItemChangeCompleted != ''
-                            and $timeRangeEnd">
-                <xsl:variable name="currentChangeItemChangeCompletedAsDate" select="xs:date($currentChangeItemChangeCompleted)"/>
-                <xsl:if test="($timeRangeStartAsDate &lt;= $currentChangeItemChangeCompletedAsDate) and ($currentChangeItemChangeCompletedAsDate &lt;= $timeRangeEndAsDate)">
-                  <fo:table-row xsl:use-attribute-sets="releaseManagementTable.changeItem.row">
-                    <fo:table-cell xsl:use-attribute-sets="releaseManagementTable.changeItem.cell">
-                      <fo:block xsl:use-attribute-sets="releaseManagementTable.changeItem.content">
-                        <xsl:apply-templates mode="relmgmt-table" select="$currentChangeItem">
-                          <xsl:with-param name="change-item" select="$currentChangeItem"/>
+            <xsl:for-each select="$change-items">
+              <xsl:if test="./*[contains (@class, ' relmgmt-d/change-completed ')] != ''">
+                <xsl:variable name="change-completed" select="xs:date(./*[contains (@class, ' relmgmt-d/change-completed ')])"/>
+                <xsl:if test="($previousDate &lt;= $change-completed)
+                               and ($change-completed &lt;= $date)">
+                  <fo:table-row xsl:use-attribute-sets="tbody.row">
+                    <fo:table-cell xsl:use-attribute-sets="tbody.row.entry">
+                      <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+                        <xsl:apply-templates mode="relmgmt-table" select=".">
+                          <xsl:with-param name="change-item" select="."/>
                         </xsl:apply-templates>
                       </fo:block>
                     </fo:table-cell>
@@ -134,38 +109,10 @@
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' relmgmt-d/change-item ')]" mode="relmgmt-table">
-    <xsl:param name="change-item"/>
-    <xsl:for-each select="$change-item/*[contains (@class, ' relmgmt-d/change-organization ')][1]">
-      <xsl:apply-templates mode="relmgmt-table-change-organization"
-                           select="$change-item/*[contains (@class, ' relmgmt-d/change-organization ')][1]"/>
-    </xsl:for-each>
-    <xsl:for-each select="$change-item/*[contains (@class, ' relmgmt-d/change-person ')][1]">
-      <xsl:apply-templates mode="relmgmt-table-change-person"
-                           select="$change-item/*[contains (@class, ' relmgmt-d/change-person ')][1]"/>
-    </xsl:for-each>
-    <xsl:for-each select="$change-item/*[contains (@class, ' relmgmt-d/change-revisionid ')][1]">
-      <xsl:apply-templates mode="relmgmt-table-change-revisionid"
-                           select="$change-item/*[contains (@class, ' relmgmt-d/change-revisionid ')]"/>
-    </xsl:for-each>
-    <xsl:for-each select="$change-item/*[contains (@class, ' relmgmt-d/change-request-reference ')][1]">
-      <xsl:apply-templates mode="relmgmt-table-change-request-reference"
-                           select="$change-item/*[contains (@class, ' relmgmt-d/change-request-reference ')][1]"/>
-    </xsl:for-each>
-    <xsl:for-each select="$change-item/*[contains (@class, ' relmgmt-d/change-started ')][1]">
-      <xsl:apply-templates mode="relmgmt-table-change-started"
-                           select="$change-item/*[contains (@class, ' relmgmt-d/change-started')][1]"/>
-    </xsl:for-each>
-    <xsl:for-each select="$change-item/*[contains (@class, ' relmgmt-d/change-completed ')][1]">
-      <xsl:apply-templates mode="relmgmt-table-change-completed"
-                           select="$change-item/*[contains (@class, ' relmgmt-d/change-completed')][1]"/>
-    </xsl:for-each>
-    <xsl:for-each select="$change-item/*[contains (@class, ' relmgmt-d/change-summary ')][1]">
-      <xsl:apply-templates mode="relmgmt-table-change-summary"
-                           select="$change-item/*[contains (@class, ' relmgmt-d/change-summary')][1]"/>
-    </xsl:for-each>
+    <xsl:apply-templates mode="relmgmt-table"/>
   </xsl:template>
 
-  <xsl:template match="*[contains (@class, ' relmgmt-d/change-organization ')]" mode="relmgmt-table-change-organization">
+  <xsl:template match="*[contains (@class, ' relmgmt-d/change-organization ')]" mode="relmgmt-table">
     <fo:block>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Change Organization'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'ColonSymbol'"/></xsl:call-template>
@@ -174,7 +121,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="*[contains (@class, ' relmgmt-d/change-person ')]" mode="relmgmt-table-change-person">
+  <xsl:template match="*[contains (@class, ' relmgmt-d/change-person ')]" mode="relmgmt-table">
     <fo:block>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Change Person'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'ColonSymbol'"/></xsl:call-template>
@@ -183,7 +130,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="*[contains (@class, ' relmgmt-d/change-revisionid ')]" mode="relmgmt-table-change-revisionid">
+  <xsl:template match="*[contains (@class, ' relmgmt-d/change-revisionid ')]" mode="relmgmt-table">
     <fo:block>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Change Revision ID'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'ColonSymbol'"/></xsl:call-template>
@@ -192,7 +139,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="*[contains (@class, ' relmgmt-d/change-request-reference ')]" mode="relmgmt-table-change-request-reference">
+  <xsl:template match="*[contains (@class, ' relmgmt-d/change-request-reference ')]" mode="relmgmt-table">
     <fo:block>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Change Request'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'ColonSymbol'"/></xsl:call-template>
@@ -201,7 +148,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="*[contains (@class, ' relmgmt-d/change-started ')]" mode="relmgmt-table-change-started">
+  <xsl:template match="*[contains (@class, ' relmgmt-d/change-started ')]" mode="relmgmt-table">
     <fo:block>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Change Started'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'ColonSymbol'"/></xsl:call-template>
@@ -210,7 +157,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="*[contains (@class, ' relmgmt-d/change-completed ')]" mode="relmgmt-table-change-completed">
+  <xsl:template match="*[contains (@class, ' relmgmt-d/change-completed ')]" mode="relmgmt-table">
     <fo:block>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Change Completed'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'ColonSymbol'"/></xsl:call-template>
@@ -219,7 +166,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="*[contains (@class, ' relmgmt-d/change-summary ')]" mode="relmgmt-table-change-summary">
+  <xsl:template match="*[contains (@class, ' relmgmt-d/change-summary ')]" mode="relmgmt-table">
     <fo:block>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Change Summary'"/></xsl:call-template>
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'ColonSymbol'"/></xsl:call-template>
