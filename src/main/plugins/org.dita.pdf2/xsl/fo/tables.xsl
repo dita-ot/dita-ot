@@ -838,9 +838,20 @@
             </xsl:apply-templates>
 
             <fo:table-body xsl:use-attribute-sets="simpletable__body">
-                <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]">
-                    <xsl:with-param name="number-cells" select="$number-cells"/>
-                </xsl:apply-templates>
+                <xsl:choose>
+                  <xsl:when test="empty(*[contains(@class, ' topic/strow ')])">
+                    <fo:table-row>
+                        <fo:table-cell>
+                            <fo:block/>
+                        </fo:table-cell>
+                    </fo:table-row>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]">
+                        <xsl:with-param name="number-cells" select="$number-cells"/>
+                    </xsl:apply-templates>
+                  </xsl:otherwise>
+                </xsl:choose>
             </fo:table-body>
 
         </fo:table>
