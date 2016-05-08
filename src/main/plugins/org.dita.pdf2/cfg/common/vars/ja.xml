@@ -374,6 +374,9 @@ See the accompanying license.txt file for applicable licenses.
   <!-- The heading string to put in front of the Book Release Date -->
   <variable id="Book Release Date">Book Release Date</variable>
 
+  <!-- Date format string -->
+  <variable id="dateFormat">[Y]年[M]月[D]日</variable>
+
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">「</variable>
   <variable id="#quote-end">」</variable>

@@ -125,6 +125,9 @@
   <!-- The heading string to put in front of the Book Release Date -->
   <variable id="Book Release Date">Book Release Date</variable>
 
+  <!-- Date format string -->
+  <variable id="#date-format">[D].[M].[Y]</variable>
+
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">„</variable>
   <variable id="#quote-end">”</variable>
