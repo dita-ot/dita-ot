@@ -85,7 +85,6 @@ public final class Constants {
     public static final DitaClass BOOKMAP_BOOKRIGHTS = new DitaClass("- topic/data bookmap/bookrights ");
     public static final DitaClass BOOKMAP_BOOKTITLE = new DitaClass("- topic/title bookmap/booktitle ");
     public static final DitaClass BOOKMAP_BOOKTITLEALT = new DitaClass("- topic/ph bookmap/booktitlealt ");
-    public static final DitaClass BOOKMAP_CHANGELIST = new DitaClass("- map/topicref bookmap/changelist ");
     public static final DitaClass BOOKMAP_CHAPTER = new DitaClass("- map/topicref bookmap/chapter ");
     public static final DitaClass BOOKMAP_COLOPHON = new DitaClass("- map/topicref bookmap/colophon ");
     public static final DitaClass BOOKMAP_COMPLETED = new DitaClass("- topic/ph bookmap/completed ");
