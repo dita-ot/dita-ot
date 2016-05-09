@@ -11,8 +11,8 @@
                 exclude-result-prefixes="opentopic opentopic-index dita2xslfo ot-placeholder xs"
                 version="2.0">
 
-  <!-- The variable change-items contains a list of all change-item elements. -->
-  <xsl:variable name="change-items" select="//*[contains (@class, ' relmgmt-d/change-item ')]"/>
+  <!-- The variable change-items contains a list of all change-item elements that have a change-completed date. -->
+  <xsl:variable name="change-items" select="//*[contains (@class, ' relmgmt-d/change-item ')][*[contains (@class, ' relmgmt-d/change-completed ')] != '']"/>
 
   <!-- Keep date format in a variable -->
   <xsl:variable name="dateFormat"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'#date-format'"/></xsl:call-template></xsl:variable>
@@ -86,20 +86,16 @@
               </fo:table-cell>
             </fo:table-row>
             <xsl:for-each select="$change-items">
-              <xsl:if test="*[contains (@class, ' relmgmt-d/change-completed ')] != ''">
-                <xsl:variable name="change-completed" select="xs:date(*[contains (@class, ' relmgmt-d/change-completed ')])"/>
-                <xsl:if test="($previousDate &lt;= $change-completed)
-                               and ($change-completed &lt;= $date)">
-                  <fo:table-row xsl:use-attribute-sets="tbody.row">
-                    <fo:table-cell xsl:use-attribute-sets="tbody.row.entry">
-                      <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
-                        <xsl:apply-templates mode="relmgmt-table" select=".">
-                          <xsl:with-param name="change-item" select="."/>
-                        </xsl:apply-templates>
-                      </fo:block>
-                    </fo:table-cell>
-                  </fo:table-row>
-                </xsl:if>
+              <xsl:variable name="change-completed" select="xs:date(*[contains (@class, ' relmgmt-d/change-completed ')])"/>
+              <xsl:if test="($previousDate &lt;= $change-completed)
+                          and ($change-completed &lt;= $date)">
+                <fo:table-row xsl:use-attribute-sets="tbody.row">
+                  <fo:table-cell xsl:use-attribute-sets="tbody.row.entry">
+                    <fo:block xsl:use-attribute-sets="tbody.row.entry__content">
+                      <xsl:apply-templates mode="relmgmt-table"/>
+                    </fo:block>
+                  </fo:table-cell>
+                </fo:table-row>
               </xsl:if>
             </xsl:for-each>
           </fo:table-body>
