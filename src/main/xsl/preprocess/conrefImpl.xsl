@@ -446,8 +446,6 @@
                 <xsl:when test="@conref">
                   <xsl:apply-templates select=".">
                     <xsl:with-param name="source-attributes" select="$source-attributes"/>
-                    <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                    <xsl:with-param name="conref-ids" select="$conref-ids"/>
                     <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
                     <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
                   </xsl:apply-templates>
@@ -462,11 +460,8 @@
                           then @href couldn't work correctly. This is the reason why @href need to update. We leave it as the future work.-->
                             <xsl:apply-templates select=".">
                               <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                              <xsl:with-param name="conref-filename" select="$conref-filename"/>
                               <xsl:with-param name="topicid" select="$topicid"/>
                               <xsl:with-param name="elemid" select="$elemid"/>
-                              <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                              <xsl:with-param name="conref-ids" select="$conref-ids"/>
                             </xsl:apply-templates>
                           </xsl:when>
                           <xsl:otherwise>
@@ -477,11 +472,8 @@
                     </xsl:for-each>
                     <xsl:apply-templates select="* | comment() | processing-instruction() | text()">
                       <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
-                      <xsl:with-param name="conref-filename" select="$conref-filename"/>
                       <xsl:with-param name="topicid" select="$topicid"/>
                       <xsl:with-param name="elemid" select="$elemid"/>
-                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
-                      <xsl:with-param name="conref-ids" select="$conref-ids"/>
                       <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
                     </xsl:apply-templates>
                   </xsl:copy>
