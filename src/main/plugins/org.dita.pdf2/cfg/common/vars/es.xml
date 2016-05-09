@@ -132,11 +132,15 @@ See the accompanying license.txt file for applicable licenses.
     <!-- The string used to label an appendix within the table of contents. -->
     <variable id="Table of Contents Appendix">Apéndice <param ref-name="number"/>: </variable>
 
-    <!-- The string used to label an part within the table of contents. -->
+    <!-- The string used to label a part within the table of contents. -->
     <variable id="Table of Contents Part">Parte <param ref-name="number"/>: </variable>
 
-    <!-- The string used to label an preface within the table of contents. -->
+    <!-- The string used to label a preface within the table of contents. -->
     <variable id="Table of Contents Preface">Prefacio </variable>
+
+    <!-- The string used to label Notices within the table of contents. -->
+    <variable id="Table of Contents Notices"/>
+
     <variable id="Preface title">Prefacio</variable>
 
     <!-- The heading to put at the top of a chapter when creating a
