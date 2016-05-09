@@ -12,6 +12,7 @@
   <xsl:import href="../../cfg/fo/attrs/tables-attr_fop.xsl"/>
   <xsl:import href="../../cfg/fo/attrs/toc-attr_fop.xsl"/>
   <xsl:import href="root-processing_fop.xsl"/>
+  <xsl:import href="tables_fop.xsl"/>
   <xsl:import href="index_fop.xsl"/>
   <xsl:import href="flagging_fop.xsl"/>
 

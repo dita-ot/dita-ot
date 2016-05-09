@@ -67,8 +67,6 @@
            uri="dtd/mapGroup.ent"/>
    <public publicId="-//OASIS//ENTITIES DITA Map Group Domain//EN"
            uri="dtd/mapGroup.ent"/>
-   <public publicId="-//OASIS//ENTITIES DITA 1.3 Map//EN" uri="dtd/map.ent"/>
-   <public publicId="-//OASIS//ENTITIES DITA Map//EN" uri="dtd/map.ent"/>
    <public publicId="-//OASIS//ELEMENTS DITA 1.3 Map//EN" uri="dtd/map.mod"/>
    <public publicId="-//OASIS//ELEMENTS DITA Map//EN" uri="dtd/map.mod"/>
    <public publicId="-//OASIS//ELEMENTS DITA 1.3 Metadata//EN"
@@ -78,8 +76,8 @@
            uri="dtd/tblDecl.mod"/>
    <public publicId="-//OASIS//ELEMENTS DITA Exchange Table Model//EN"
            uri="dtd/tblDecl.mod"/>
-   <public publicId="-//OASIS//ENTITIES DITA 1.3 Topic//EN" uri="dtd/topic.ent"/>
-   <public publicId="-//OASIS//ENTITIES DITA Topic//EN" uri="dtd/topic.ent"/>
+   <public publicId="-//OASIS//ENTITIES DITA 1.3 Topic Definitions//EN" uri="dtd/topicDefn.ent"/>
+   <public publicId="-//OASIS//ENTITIES DITA Topic Definitions//EN" uri="dtd/topicDefn.ent"/>
    <public publicId="-//OASIS//ELEMENTS DITA 1.3 Topic//EN" uri="dtd/topic.mod"/>
    <public publicId="-//OASIS//ELEMENTS DITA Topic//EN" uri="dtd/topic.mod"/>
    <public publicId="-//OASIS//ELEMENTS DITA 1.3 Utilities Domain//EN"

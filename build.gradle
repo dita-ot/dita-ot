@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'org.dita-ot'
-version = '2.2.4'
+version = '2.2.5'
 
 description = """DITA Open Toolkit"""
 
