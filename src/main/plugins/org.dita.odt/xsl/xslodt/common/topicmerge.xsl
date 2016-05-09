@@ -228,7 +228,6 @@ See the accompanying license.txt file for applicable licenses.
 			<xsl:when test="contains($class,' bookmap/bookabstract ')"/>
 			<xsl:when test="contains($class,' bookmap/booklist ')"/>
 			<xsl:when test="contains($class,' bookmap/booklists ')"/>
-            <xsl:when test="contains($class,' bookmap/changelist ')"/>
 			<xsl:when test="contains($class,' bookmap/colophon ')"/>
 			<xsl:when test="contains($class,' bookmap/dedication ')"/>
 			<xsl:when test="contains($class,' bookmap/figurelist ')"/>
@@ -238,7 +237,7 @@ See the accompanying license.txt file for applicable licenses.
 			<xsl:when test="contains($class,' bookmap/toc ')"/>
 			<xsl:when test="contains($class,' bookmap/trademarklist ')"/>
 			<xsl:when test="contains($class,' bookmap/glossarylist ') and not(*)">
-            <!-- When glossarylist has children, don't treat it as an empty non-topic -->
+                <!-- When glossarylist has children, don't treat it as an empty non-topic -->
             </xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="'false'"/>
