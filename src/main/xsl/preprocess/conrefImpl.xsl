@@ -72,9 +72,7 @@
   </xsl:template>
 
   <xsl:template match="@*" mode="get-source-attribute" as="xs:string?">
-    <xsl:if test="not(. = '')">
-      <xsl:value-of select="name()"/>
-    </xsl:if>
+    <xsl:value-of select="name()"/>
   </xsl:template>
 
   <xsl:template match="@xtrc | @xtrf" mode="get-source-attribute" priority="10"/>
@@ -137,7 +135,7 @@
         <xsl:when test="contains(@conrefend, '/')">
           <xsl:value-of select="substring-after(@conrefend, '/')"/>
         </xsl:when>
-        <xsl:when test="not(@conrefend = '')">
+        <xsl:when test="exists(@conrefend)">
           <xsl:value-of select="@conrefend"/>
         </xsl:when>
       </xsl:choose>
@@ -184,7 +182,7 @@
 
     <xsl:variable name="conref-source-topic" as="xs:string">
       <xsl:choose>
-        <xsl:when test="exists($conref-source-topicid) and not($conref-source-topicid = '')">
+        <xsl:when test="normalize-space($conref-source-topicid)">
           <xsl:value-of select="$conref-source-topicid"/>
         </xsl:when>
         <xsl:otherwise>
@@ -432,39 +430,66 @@
 
     <xsl:choose>
       <xsl:when test="exists($conrefend)">
-        <xsl:for-each select="following-sibling::*[following-sibling::*[@id = $conrefend] or self::*[@id = $conrefend]]">
-          <xsl:choose>
-            <xsl:when test="@conref">
-              <xsl:apply-templates select=".">
-                <xsl:with-param name="source-attributes" select="$source-attributes"/>
-                <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
-                <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
-              </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:copy>
-                <xsl:for-each select="@* except @id">
-                  <xsl:choose>
-                    <xsl:when test="name() = 'href'">
-                      <!--@href need to update, not implement currently. @href may point to local part, but if @href pull into other file,
-                    then @href couldn't work correctly. This is the reason why @href need to update. We leave it as the future work.-->
-                      <xsl:apply-templates select=".">
-                        <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
-                      </xsl:apply-templates>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:copy/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-                <xsl:apply-templates select="node()">
-                  <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
-                  <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
-                </xsl:apply-templates>
-              </xsl:copy>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:for-each>
+        <xsl:variable name="current" as="element()" select="."/>
+        <xsl:variable name="conrefEndNode" as="element()?"
+          select="following-sibling::*[@id = ($conrefend)][1]"
+        />
+        <xsl:choose>
+          <xsl:when test="not($conrefEndNode)">
+            <xsl:apply-templates select="." mode="ditamsg:missing-conrefend-target-error">
+              <xsl:with-param name="conrefend" as="xs:string" tunnel="yes" select="$conrefend"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:for-each select="following-sibling::*[. >> $current and . &lt;&lt; $conrefEndNode], $conrefEndNode">
+              <xsl:choose>
+                <xsl:when test="@conref">
+                  <xsl:apply-templates select=".">
+                    <xsl:with-param name="source-attributes" select="$source-attributes"/>
+                    <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
+                    <xsl:with-param name="conref-ids" select="$conref-ids"/>
+                    <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
+                    <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                  </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:copy>
+                    <xsl:for-each select="@*">
+                      <xsl:if test="not(local-name(.) = 'id')">
+                        <xsl:choose>
+                          <xsl:when test="name() = 'href'">
+                            <!--@href need to update, not implement currently. @href may point to local part, but if @href pull into other file,
+                          then @href couldn't work correctly. This is the reason why @href need to update. We leave it as the future work.-->
+                            <xsl:apply-templates select=".">
+                              <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
+                              <xsl:with-param name="conref-filename" select="$conref-filename"/>
+                              <xsl:with-param name="topicid" select="$topicid"/>
+                              <xsl:with-param name="elemid" select="$elemid"/>
+                              <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
+                              <xsl:with-param name="conref-ids" select="$conref-ids"/>
+                            </xsl:apply-templates>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:copy/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </xsl:for-each>
+                    <xsl:apply-templates select="* | comment() | processing-instruction() | text()">
+                      <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
+                      <xsl:with-param name="conref-filename" select="$conref-filename"/>
+                      <xsl:with-param name="topicid" select="$topicid"/>
+                      <xsl:with-param name="elemid" select="$elemid"/>
+                      <xsl:with-param name="conref-source-topicid" select="$conref-source-topicid"/>
+                      <xsl:with-param name="conref-ids" select="$conref-ids"/>
+                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                    </xsl:apply-templates>
+                  </xsl:copy>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
@@ -475,11 +500,9 @@
   <xsl:template match="*" mode="original-attributes">
     <xsl:apply-templates select="@*" mode="original-attributes"/>
   </xsl:template>
+
   <xsl:template match="@*" mode="original-attributes">
-    <xsl:if test="not(. = '')">
-      <!-- XXX: Why ignore empty attribute value? -->
-      <xsl:copy/>
-    </xsl:if>
+    <xsl:copy/>
   </xsl:template>
 
   <!-- If an attribute is required, it must be specified on the original source element to avoid parsing errors.
@@ -820,6 +843,15 @@
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX010E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <!-- If the conrefend target element does not exist, this template will be called to issue an error -->
+  <xsl:template match="*" mode="ditamsg:missing-conrefend-target-error">
+    <xsl:param name="conrefend" as="xs:string" tunnel="yes"/>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">071</xsl:with-param>
+      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$conrefend"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <!-- If an ID is duplicated, and there are 2 possible targets, issue a warning -->

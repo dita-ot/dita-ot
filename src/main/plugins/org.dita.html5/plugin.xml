@@ -7,8 +7,6 @@
   <require plugin="org.dita.xhtml"/>
   <!-- extension points -->
   <extension-point id="dita.xsl.html5" name="HTML/XHTML XSLT import"/>
-  <extension-point id="dita.conductor.html5.param" name="XHTML XSLT parameters"/>
-  <extension-point id="dita.conductor.html5.toc.param" name="HTML/XSLT XSLT parameter"/>
   <extension-point id="dita.xsl.html5.toc" name="HTML/XHTML TOC XSLT import"/>
   <extension-point id="dita.xsl.html5.cover" name="HTML/XHTML Cover XSLT import"/>
   <!-- extensions -->
@@ -22,4 +20,7 @@
   <feature extension="dita.conductor.target.relative" file="conductor.xml"/>
   <feature extension="dita.conductor.html5.param" file="params.xml"/>
   <template file="build_dita2html5_template.xml"/>
+  <template file="xsl/dita2html5_template.xsl"/>
+  <template file="xsl/map2html5toc_template.xsl"/>
+  <template file="xsl/map2html5-cover_template.xsl"/>
 </plugin>

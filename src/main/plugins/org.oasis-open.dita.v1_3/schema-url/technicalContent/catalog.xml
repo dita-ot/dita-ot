@@ -60,9 +60,8 @@
       <system systemId="urn:oasis:names:tc:dita:xsd:glossgroup.xsd"
               uri="xsd/glossgroup.xsd"/>
       
-      <!-- DITA 1.2 versions of the URNs for glossgroup shell. -->
-      <system systemId="urn:oasis:names:tc:dita:xsd:glossarygroup.xsd" uri="glossgroup.xsd"/>
-      <system systemId="urn:oasis:names:tc:dita:xsd:glossarygroup.xsd:1.2" uri="glossgroup.xsd"/>
+      <!-- DITA 1.2 version of the URNs for glossgroup shell. -->
+      <system systemId="urn:oasis:names:tc:dita:xsd:glossarygroup.xsd" uri="xsd/glossgroup.xsd"/>
      
       <system systemId="urn:oasis:names:tc:dita:xsd:glossgroupMod.xsd:1.3"
               uri="xsd/glossgroupMod.xsd"/>
@@ -210,9 +209,8 @@
            uri="xsd/glossgroup.xsd"/>
       <uri name="urn:oasis:names:tc:dita:xsd:glossgroup.xsd"
            uri="xsd/glossgroup.xsd"/>
-      <!-- DITA 1.2 versions of the URNs for glossgroup shell. -->
-     <uri name="urn:oasis:names:tc:dita:xsd:glossarygroup.xsd" uri="glossgroup.xsd"/>
-     <uri name="urn:oasis:names:tc:dita:xsd:glossarygroup.xsd:1.2" uri="glossgroup.xsd"/>    
+      <!-- DITA 1.2 version of the URNs for glossgroup shell. -->
+     <uri name="urn:oasis:names:tc:dita:xsd:glossarygroup.xsd" uri="xsd/glossgroup.xsd"/>
      
      <uri name="urn:oasis:names:tc:dita:xsd:glossgroupMod.xsd:1.3"
            uri="xsd/glossgroupMod.xsd"/>
