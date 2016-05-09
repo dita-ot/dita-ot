@@ -86,7 +86,7 @@
               </fo:table-cell>
             </fo:table-row>
             <xsl:for-each select="$change-items">
-              <xsl:if test="./*[contains (@class, ' relmgmt-d/change-completed ')] != ''">
+              <xsl:if test="*[contains (@class, ' relmgmt-d/change-completed ')] != ''">
                 <xsl:variable name="change-completed" select="xs:date(./*[contains (@class, ' relmgmt-d/change-completed ')])"/>
                 <xsl:if test="($previousDate &lt;= $change-completed)
                                and ($change-completed &lt;= $date)">
