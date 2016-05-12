@@ -27,7 +27,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+This file is part of the DITA Open Toolkit project. 
 See the accompanying license.txt file for applicable licenses.
 -->
 
@@ -213,7 +213,7 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
 
   <xsl:template match="opentopic-index:label" mode="index-postprocess">
-    <fo:block xsl:use-attribute-sets="__index__letter-group">
+    <fo:block xsl:use-attribute-sets="__index__letter-group" id="{generate-id(.)}">
       <xsl:value-of select="."/>
     </fo:block>
   </xsl:template>
