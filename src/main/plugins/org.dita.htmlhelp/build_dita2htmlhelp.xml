@@ -29,9 +29,9 @@
 
   <target name="use-init.hhcdir" unless="env.HHCDIR">
     <condition property="hhc.dir"
-               value="C:\Program Files (x86)\HTML Help Workshop"
-               else="C:\Program Files\HTML Help Workshop">
-      <available file="C:\Program Files (x86)\HTML Help Workshop" type="dir"/>
+               value="${env.ProgramFiles(x86)}\HTML Help Workshop"
+               else="${env.ProgramFiles}\HTML Help Workshop">
+      <available file="${env.ProgramFiles(x86)}\HTML Help Workshop" type="dir"/>
     </condition>
     <available file="${hhc.dir}/hhc.exe"
                property="HTMLHelpCompiler"
