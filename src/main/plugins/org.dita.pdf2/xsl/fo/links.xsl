@@ -576,12 +576,11 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:attribute>
           </xsl:when>         
             <xsl:otherwise>
+              <!-- Appears that topicmerge updates links so that this section will never be triggered; 
+                   keeping $href as backup value in case something goes wrong. -->
               <xsl:attribute name="internal-destination">
                 <xsl:value-of select="$href"/>
               </xsl:attribute>
-              <xsl:call-template name="brokenLinks">
-                <xsl:with-param name="href" select="$href"/>
-              </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -674,14 +673,9 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
+
+<!-- Deprecated since 2.3 -->    
   <xsl:template name="brokenLinks">
-    <xsl:param name="href"/>
-    <!-- FIXME: There is no message PDFX063W -->
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="id" select="'DOTX063W'"/>
-      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/></xsl:with-param>
-    </xsl:call-template>
   </xsl:template>
   
   <!-- Links with @type="topic" belong in no-name group. -->
