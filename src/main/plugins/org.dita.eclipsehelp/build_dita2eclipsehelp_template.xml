@@ -41,11 +41,6 @@
 
     <target name="dita.map.eclipse.plugin.init"
             description="Init properties for EclipseHelp">
-        <condition property="args.eclipsehelp.toc" value="${dita.map.filename.root}">
-            <not>
-                <isset property="args.eclipsehelp.toc" />
-            </not>
-        </condition>
         <condition property="out.ext" value=".html">
             <not>
                 <isset property="out.ext" />
@@ -182,7 +177,7 @@
               out="${dita.map.output.dir}/plugin.xml"
               classpathref="dost.class.path"
               style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
-            <param name="TOCROOT" expression="${args.eclipsehelp.toc}" />
+            <param name="TOCROOT" expression="${dita.map.filename.root}" />
             <param name="version"
                    expression="${args.eclipse.version}"
                    if="args.eclipse.version" />
@@ -208,7 +203,7 @@
             out="${output.dir}/plugin.xml"
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
-            <param name="TOCROOT" expression="${args.eclipsehelp.toc}" />
+            <param name="TOCROOT" expression="${dita.map.filename.root}" />
             <param name="version"
                 expression="${args.eclipse.version}"
                 if="args.eclipse.version" />
