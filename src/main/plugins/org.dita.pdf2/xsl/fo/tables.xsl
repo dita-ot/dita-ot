@@ -752,6 +752,12 @@
           </xsl:choose>
         </xsl:variable>
 
+        <xsl:if test="$element/@expanse">
+          <xsl:for-each select="$element">
+            <xsl:call-template name="setExpanse"/>
+          </xsl:for-each>
+        </xsl:if>
+
         <xsl:choose>
             <xsl:when test="$frame = 'all'">
                 <xsl:call-template name="processAttrSetReflection">

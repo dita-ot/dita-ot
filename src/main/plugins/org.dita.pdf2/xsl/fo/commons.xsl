@@ -1652,6 +1652,7 @@ See the accompanying license.txt file for applicable licenses.
         <fo:block xsl:use-attribute-sets="fig">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
+            <xsl:call-template name="setExpanse"/>
             <xsl:if test="not(@id)">
               <xsl:attribute name="id">
                 <xsl:call-template name="get-id"/>
@@ -1675,6 +1676,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
+            <xsl:call-template name="setExpanse"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -1721,12 +1723,33 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:sequence select="$container/@*"/>
     </xsl:template>
 
+    <xsl:template name="setExpanse" as="attribute()*">
+      <xsl:variable name="container" as="element()*">
+        <xsl:choose>
+         <xsl:when test="@expanse = 'page'">
+           <element xsl:use-attribute-sets="__expanse__page"/>
+         </xsl:when>
+         <xsl:when test="@expanse = 'column'">
+           <element xsl:use-attribute-sets="__expanse__column"/>
+         </xsl:when>
+         <xsl:when test="@expanse = 'spread'">
+           <element xsl:use-attribute-sets="__expanse__spread"/>
+         </xsl:when>
+         <xsl:when test="@expanse = 'column'">
+           <element xsl:use-attribute-sets="__expanse__textline"/>
+         </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:sequence select="$container/@*"/>
+    </xsl:template>
+
     <xsl:template match="*[contains(@class,' topic/lines ')]">
         <xsl:call-template name="setSpecTitle"/>
         <fo:block xsl:use-attribute-sets="lines">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
+            <xsl:call-template name="setExpanse"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
