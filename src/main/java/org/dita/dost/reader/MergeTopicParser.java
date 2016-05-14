@@ -39,7 +39,6 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
     private File dirPath = null;
     private String filePath = null;
-    private boolean isFirstTopic = false;
     private String rootLang = null;
 
     private final XMLReader reader;
@@ -196,7 +195,6 @@ public final class MergeTopicParser extends XMLFilterImpl {
     @Override
     public void startDocument() throws SAXException {
         firstTopicId = null;
-        isFirstTopic = true;
         rootLang = null;
     }
 
@@ -211,16 +209,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         final AttributesImpl atts = new AttributesImpl(attributes);
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
-        // Add default language
         if (TOPIC_TOPIC.matches(classValue)) {
-            if (isFirstTopic) {
-                if (atts.getIndex(XML_NS_URI, "lang") == -1) {
-                    atts.addAttribute(XML_NS_URI, "lang", XML_NS_PREFIX + ":lang", "CDATA", rootLang != null ? rootLang
-                            : Configuration.configuration.get("default.language"));
-                    rootLang = null;
-                }
-                isFirstTopic = false;
-            }
             handleID(classValue, atts);
             if (firstTopicId == null) {
                 firstTopicId = atts.getValue(ATTRIBUTE_NAME_ID);
