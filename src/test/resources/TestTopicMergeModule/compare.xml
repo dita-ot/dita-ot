@@ -42,7 +42,7 @@
   <task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" oid="configA" id="unique_1"
     domains="(topic shortdescReq-c)" ditaarch:DITAArchVersion="1.2" class="- topic/topic task/task "
     xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\componentA\configA.dita"
-    xtrc="task:1" xml:lang="en">
+    xtrc="task:1">
     <title class="- topic/title "
       xtrf="C:\DITA-OT1.5\SAXONIBMJDK\testcase\12008\..\..\testdata\12008\case1_allow\componentA\configA.dita"
       xtrc="title:1">ABC</title>
