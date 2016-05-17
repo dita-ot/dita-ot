@@ -34,7 +34,7 @@
   <lang filename="no.xml" xml:lang="no"/>
   <lang filename="pl.xml" xml:lang="pl"/>
   <lang filename="pt.xml" xml:lang="pt"/>
-  <lang filename="pt_BR.xml" xml:lang="pt-BR"/>
+  <lang filename="pt_BR.xml" xml:lang="pt-br"/>
   <lang filename="ro.xml" xml:lang="ro"/>
   <lang filename="ru.xml" xml:lang="ru"/>
   <lang filename="sk.xml" xml:lang="sk"/>
@@ -47,6 +47,6 @@
   <lang filename="tr.xml" xml:lang="tr"/>
   <lang filename="uk.xml" xml:lang="uk"/>
   <lang filename="ur.xml" xml:lang="ur"/>
-  <lang filename="zh_CN.xml" xml:lang="zh-CN"/>
-  <lang filename="zh_TW.xml" xml:lang="zh-TW"/>
+  <lang filename="zh_CN.xml" xml:lang="zh-cn"/>
+  <lang filename="zh_TW.xml" xml:lang="zh-tw"/>
 </langlist>
