@@ -12,7 +12,10 @@
 
   <xsl:include href="functions.xsl"/>
 
-  <xsl:param name="DEFAULTLANG">en-us</xsl:param>
+  <xsl:param name="defaultLanguage" select="'en'" as="xs:string"/>
+
+  <xsl:param name="DEFAULTLANG" select="if (/*/@xml:lang) then /*/@xml:lang else $defaultLanguage" as="xs:string"/>
+
   <xsl:param name="variableFiles.url" select="'plugin:org.dita.base:xsl/common/strings.xml'"/>
   
   <xsl:variable name="pixels-per-inch" select="number(96)"/>

@@ -67,6 +67,7 @@
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
       <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
       <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
+      <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
       <mergemapper to="${dita.map.filename.root}.hhp"/>
     </xslt>
@@ -103,6 +104,7 @@
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
       <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
+      <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
       <mergemapper to="${dita.map.filename.root}.hhc"/>
     </xslt>
@@ -136,6 +138,7 @@
         <param name="targetext" value="${out.ext}"/>
         <param name="indextype" value="htmlhelp"/>
         <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+        <param name="defaultLanguage" expression="${default.language}"/>
       </module>
     </pipeline>
   </target>
