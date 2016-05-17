@@ -24,6 +24,8 @@
   <lang filename="is.xml" xml:lang="is"/>
   <lang filename="it.xml" xml:lang="it"/>
   <lang filename="ja.xml" xml:lang="ja"/>
+  <lang filename="kk.xml" xml:lang="kk"/>
+  <lang filename="ko.xml" xml:lang="ko"/>
   <lang filename="lt.xml" xml:lang="lt"/>
   <lang filename="lv.xml" xml:lang="lv"/>
   <lang filename="mk.xml" xml:lang="mk"/>
@@ -44,5 +46,7 @@
   <lang filename="th.xml" xml:lang="th"/>
   <lang filename="tr.xml" xml:lang="tr"/>
   <lang filename="uk.xml" xml:lang="uk"/>
+  <lang filename="ur.xml" xml:lang="ur"/>
   <lang filename="zh_CN.xml" xml:lang="zh-CN"/>
+  <lang filename="zh_TW.xml" xml:lang="zh-TW"/>
 </langlist>
