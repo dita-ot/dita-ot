@@ -49,6 +49,7 @@
                 <group.key>Numbers</group.key>
                 <group.label>أرقام</group.label>
                 <group.members>
+                    <char.set>0</char.set>
                     <char.set>０</char.set>
                     <char.set>1</char.set>
                     <char.set>１</char.set>

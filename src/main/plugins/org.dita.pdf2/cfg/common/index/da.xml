@@ -52,6 +52,7 @@ See the accompanying license.txt file for applicable licenses.
                 <group.key>Numbers</group.key>
                 <group.label>Numerisk</group.label>
                 <group.members>
+                    <char.set>0</char.set>
                     <char.set>０</char.set>
                     <char.set>1</char.set>
                     <char.set>１</char.set>
