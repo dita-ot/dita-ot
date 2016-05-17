@@ -96,10 +96,11 @@
   </xsl:function>
 
   <xsl:function name="dita-ot:get-first-topic-language" as="xs:string">
+    <!-- $ctx should contain the root element.
+         If toot element is <dita>, check first topic. Otherwise, root element. Otherwise, default. -->
     <xsl:param name="ctx" as="node()"/>
-
     <xsl:sequence select="
-      lower-case(($ctx/*/@xml:lang, $ctx/dita/*/@xml:lang, $DEFAULTLANG)[1])
+      lower-case(($ctx/self::dita/*[1]/@xml:lang, $ctx/@xml:lang, $DEFAULTLANG)[1])
     "/>
   </xsl:function>
 

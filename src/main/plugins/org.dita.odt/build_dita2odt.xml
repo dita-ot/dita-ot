@@ -99,6 +99,7 @@
       <param name="include.rellinks" expression="${include.rellinks}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
+      <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>

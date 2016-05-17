@@ -104,6 +104,7 @@
         	<excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
+            <param name="defaultLanguage" expression="${default.language}"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
@@ -120,6 +121,7 @@
         	<excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
+            <param name="defaultLanguage" expression="${default.language}"/>
             <dita:extension behavior="org.dita.dost.platform.InsertAction" id="dita.conductor.eclipse.toc.param"/>
             <mapper type="regexp"
                 from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.ditamap)$$" 
@@ -144,6 +146,7 @@
             <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
             <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
             <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+            <param name="defaultLanguage" expression="${default.language}"/>
     	    </module>
     	  </pipeline>
     </target>
@@ -164,6 +167,7 @@
             <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
             <param name="eclipse.indexsee" value="${args.eclipsehelp.indexsee}"/>
             <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
+            <param name="defaultLanguage" expression="${default.language}"/>
           </module>
         </pipeline>
     </target>

@@ -316,6 +316,7 @@ with those set forth herein.
       <param name="figurelink.style" expression="${args.figurelink.style}"/>
       <param name="tablelink.style" expression="${args.tablelink.style}"/>
       <param name="variableFiles.url" expression="${variable.file.url}" if="variable.file.exists"/>
+      <param name="defaultLanguage" expression="${default.language}"/>
       <dita:extension id="dita.conductor.pdf2.param" behavior="org.dita.dost.platform.InsertAction"/>
       <xmlcatalog>
         <catalogpath path="${xml.catalog.files}"/>

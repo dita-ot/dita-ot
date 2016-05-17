@@ -309,13 +309,13 @@
     <x:scenario label="@xml:lang of first child">
       <x:call function="dita-ot:get-first-topic-language">
         <x:param name="ctx">
-          <topic id="foo" xml:lang="en-us">
+          <topic id="foo" xml:lang="is-is">
             <title>foo</title>
           </topic>
         </x:param>
       </x:call>
 
-      <x:expect label="return @xml:lang" select="'en-us'"/>
+      <x:expect label="return @xml:lang" select="'is-is'"/>
     </x:scenario>
 
     <x:scenario label="@xml:lang of dita element child">
@@ -335,13 +335,13 @@
     <x:scenario label="upper-case @xml:lang">
       <x:call function="dita-ot:get-first-topic-language">
         <x:param name="ctx">
-          <topic id="foo" xml:lang="en-US">
+          <topic id="foo" xml:lang="pt-BR">
             <title>foo</title>
           </topic>
         </x:param>
       </x:call>
 
-      <x:expect label="return @xml:lang" select="'en-us'"/>
+      <x:expect label="return @xml:lang" select="'pt-br'"/>
     </x:scenario>
 
     <x:scenario label="no @xml:lang">
@@ -353,7 +353,7 @@
         </x:param>
       </x:call>
 
-      <x:expect label="return $DEFAULTLANG" select="'en-us'"/>
+      <x:expect label="return $DEFAULTLANG" select="'en'"/>
     </x:scenario>
   </x:scenario>
 
@@ -379,7 +379,7 @@
         </x:param>
       </x:call>
 
-      <x:expect label="return $DEFAULTLANG" select="'en-us'"/>
+      <x:expect label="return $DEFAULTLANG" select="'en'"/>
     </x:scenario>
   </x:scenario>
 

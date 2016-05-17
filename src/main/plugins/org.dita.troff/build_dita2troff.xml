@@ -25,6 +25,7 @@
       classpathref="dost.class.path"
       style="${troff-ast.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+        <param name="defaultLanguage" expression="${default.language}"/>
       <mapper type="glob" from="*" to="*.ast" />
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
@@ -42,6 +43,7 @@
       style="${troff.step2.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
+      <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>

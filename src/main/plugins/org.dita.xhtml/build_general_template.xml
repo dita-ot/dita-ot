@@ -166,6 +166,7 @@
         <param name="BASEDIR" expression="${basedir}"/>
         <param name="OUTPUTDIR" expression="${output.dir}"/>
         <param name="DBG" expression="${args.debug}" if="args.debug"/>
+        <param name="defaultLanguage" expression="${default.language}"/>
         <params/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
