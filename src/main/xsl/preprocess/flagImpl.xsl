@@ -214,23 +214,18 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     <xsl:param name="lang"/>
     <xsl:param name="biditest"/>
    <xsl:copy>
-     <xsl:copy-of select="@*"/>
+     <xsl:sequence select="@*"/>
      <xsl:choose>
        <xsl:when test="startflag">
          <startflag>
-           <xsl:copy-of select="startflag/@*"/>
+           <xsl:sequence select="startflag/@*"/>
            <xsl:apply-templates select="startflag/@imageref" mode="adjust-imageref"/>
-           <xsl:copy-of select="startflag/*"/>
+           <xsl:sequence select="startflag/*"/>
          </startflag>
        </xsl:when>
        <xsl:otherwise>
          <!-- Create default start revision reference? -->
-         <xsl:call-template name="default-rev-start">
-           <!--
-           <xsl:with-param name="lang" select="$lang"/>
-           <xsl:with-param name="biditest" select="$biditest"/>
-           -->
-         </xsl:call-template>
+         <xsl:call-template name="default-rev-start"/>         
        </xsl:otherwise>
      </xsl:choose>
    </xsl:copy>
@@ -244,13 +239,13 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     <xsl:param name="lang"/>
     <xsl:param name="biditest"/>
     <xsl:copy>
-      <xsl:copy-of select="@*"/>
+      <xsl:sequence select="@*"/>
       <xsl:choose>
         <xsl:when test="endflag">
           <endflag>
-            <xsl:copy-of select="endflag/@*"/>
+            <xsl:sequence select="endflag/@*"/>
             <xsl:apply-templates select="endflag/@imageref" mode="adjust-imageref"/>
-            <xsl:copy-of select="endflag/*"/>
+            <xsl:sequence select="endflag/*"/>
           </endflag>
         </xsl:when>
         <xsl:otherwise>
@@ -639,7 +634,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  </xsl:template>
  <!-- get child nodes -->
  <xsl:template match="*" mode="getChildNode">
-        <xsl:copy-of select="node()"/>
+        <xsl:sequence select="node()"/>
   </xsl:template>
 
 
