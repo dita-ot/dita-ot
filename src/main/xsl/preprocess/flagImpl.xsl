@@ -65,18 +65,26 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:choose>
   </xsl:variable>
 
-  <!-- Attributes that are specializations of @props -->
-  <xsl:variable name="propsExtensions" as="xs:string*">
-    <xsl:analyze-string select="$GLOBAL-DOMAINS" regex="a\(props (\w+)\)">
-      <xsl:matching-substring>
-        <xsl:sequence select="regex-group(1)"/>
-      </xsl:matching-substring>
-    </xsl:analyze-string>
+  <!-- Specialized attributes for analysis by flagging templates. Format is:
+       props attr1,props attr2,props attr3 -->
+  <xsl:variable name="propsExtensions" as="xs:string">
+    
+    <xsl:variable name="propsAttrs" as="xs:string*">
+      <xsl:analyze-string select="$GLOBAL-DOMAINS" regex="a\(props\s+(\w+)\.*?\)">
+        <xsl:matching-substring>
+          <xsl:sequence select="concat('props ',regex-group(1))"/>
+        </xsl:matching-substring>
+      </xsl:analyze-string>
+    </xsl:variable>
+    <xsl:variable name="result" select="string-join($propsAttrs, ',')"/>
+<!--    <xsl:message> + [DEBUG] propsExtensions: result="<xsl:sequence select="$result"/>"</xsl:message>-->
+    <xsl:sequence select="$result"/>
   </xsl:variable>
+  
 
   <xsl:template match="/">
     <!-- Avoid all later checks by adding test here - if no filter file, copy full tree? -->
-    <xsl:apply-templates/>
+    <xsl:apply-templates/>    
   </xsl:template>
 
   <xsl:template match="*">
@@ -85,42 +93,42 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:param>
     <xsl:choose>
       <xsl:when test="exists($flagrules/*)">
-        <xsl:variable name="conflictexist">
+        <xsl:variable name="conflictexist" as="xs:boolean">
          <xsl:call-template name="conflict-check">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
+           <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
          </xsl:call-template>
         </xsl:variable>
         <xsl:copy>
           <xsl:apply-templates select="@*"/>
           <ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop ">
             <xsl:apply-templates select="." mode="gen-style">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
               <xsl:with-param name="conflictexist" select="$conflictexist"/>
             </xsl:apply-templates>
-            <xsl:if test="$conflictexist='true' and $FILTERDOC/val/style-conflict">
-              <xsl:copy-of select="$FILTERDOC/val/style-conflict"/>
+            <xsl:if test="$conflictexist and $FILTERDOC/val/style-conflict">
+              <xsl:sequence select="$FILTERDOC/val/style-conflict"/>
             </xsl:if>
             <xsl:apply-templates select="." mode="dita-start-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="flagrules"  as="element()*" select="$flagrules"/>
             </xsl:apply-templates>
             <xsl:apply-templates select="." mode="dita-start-revflag">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="flagrules"  as="element()*" select="$flagrules"/>
             </xsl:apply-templates>
           </ditaval-startprop>
-          <xsl:apply-templates select="*|processing-instruction()|comment()|text()"/>
+          <xsl:apply-templates select="node()"/>
           <ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
             <xsl:apply-templates select="." mode="dita-end-revflag">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
             </xsl:apply-templates>
             <xsl:apply-templates select="." mode="dita-end-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
+              <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
             </xsl:apply-templates>
           </ditaval-endprop>
         </xsl:copy>
       </xsl:when>
       <xsl:otherwise>
         <xsl:copy>
-          <xsl:apply-templates select="@*|*|processing-instruction()|comment()|text()"/>
+          <xsl:apply-templates select="@*,node()"/>
         </xsl:copy>
       </xsl:otherwise>
     </xsl:choose>
@@ -128,8 +136,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <xsl:template match="@*|processing-instruction()|comment()|text()">
     <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates select="*|processing-instruction()|comment()|text()"/>
+      <xsl:apply-templates select="@*, node()"/>
     </xsl:copy>
   </xsl:template>
 
@@ -142,12 +149,12 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <xsl:template match="prop" mode="start-flagit">  
     <xsl:copy>
-      <xsl:copy-of select="@*"/>
+      <xsl:sequence select="@*"/>
       <xsl:if test="startflag">
         <startflag>
-          <xsl:copy-of select="startflag/@*"/>
+          <xsl:sequence select="startflag/@*"/>
           <xsl:apply-templates select="startflag/@imageref" mode="adjust-imageref"/>
-          <xsl:copy-of select="startflag/*"/>
+          <xsl:sequence select="startflag/*"/>
         </startflag>
       </xsl:if>
     </xsl:copy>
@@ -163,12 +170,12 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
   <xsl:template match="prop" mode="end-flagit">  
     <xsl:copy>
-      <xsl:copy-of select="@*"/>
+      <xsl:sequence select="@*"/>
       <xsl:if test="endflag">
         <endflag>
-          <xsl:copy-of select="endflag/@*"/>
+          <xsl:sequence select="endflag/@*"/>
           <xsl:apply-templates select="endflag/@imageref" mode="adjust-imageref"/>
-          <xsl:copy-of select="endflag/*"/>
+          <xsl:sequence select="endflag/*"/>
         </endflag>
       </xsl:if>
     </xsl:copy>
@@ -184,7 +191,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:if test="@rev and not($FILTERFILEURL='')">
     <xsl:call-template name="start-mark-rev">
      <xsl:with-param name="revvalue" select="@rev"/>
-     <xsl:with-param name="flagrules" select="$flagrules"/>
+      <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
     </xsl:call-template>
    </xsl:if>
   </xsl:template>
@@ -197,7 +204,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:if test="@rev and not($FILTERFILEURL='')">
     <xsl:call-template name="end-mark-rev">
      <xsl:with-param name="revvalue" select="@rev"/>
-     <xsl:with-param name="flagrules" select="$flagrules"/>
+      <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
     </xsl:call-template>
    </xsl:if>
   </xsl:template>
@@ -638,19 +645,19 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="start-mark-rev">
- <xsl:param name="flagrules" as="element()*">
-   <xsl:call-template name="getrules"/>
- </xsl:param>
- <xsl:param name="revvalue"/>
- <xsl:variable name="revtest" as="xs:integer">
-  <xsl:call-template name="find-active-rev-flag">
-   <xsl:with-param name="allrevs" select="$revvalue"/>
-  </xsl:call-template>
- </xsl:variable>
+  <xsl:param name="flagrules" as="element()*">
+    <xsl:call-template name="getrules"/>
+  </xsl:param>
+  <xsl:param name="revvalue"  as="xs:string"/>
+  <xsl:variable name="revtest" as="xs:integer">
+    <xsl:call-template name="find-active-rev-flag">
+      <xsl:with-param name="allrevs" as="xs:string" select="$revvalue"/>
+    </xsl:call-template>
+  </xsl:variable>
   <xsl:if test="$revtest=1">
-   <xsl:call-template name="start-revision-flag">
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
-   </xsl:call-template>
+    <xsl:call-template name="start-revision-flag">
+    <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/> 
+    </xsl:call-template>
   </xsl:if>
 </xsl:template>
 
@@ -667,7 +674,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
  </xsl:variable>
   <xsl:if test="$revtest=1">
    <xsl:call-template name="end-revision-flag">
-    <xsl:with-param name="flagrules" select="$flagrules"/> 
+     <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/> 
    </xsl:call-template>
   </xsl:if>
 </xsl:template>
@@ -679,7 +686,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:call-template name="getrules"/>
  </xsl:param>
   <xsl:call-template name="start-revflagit">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
+    <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -730,7 +737,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
    <xsl:call-template name="getrules"/>
  </xsl:param>
   <xsl:call-template name="end-revflagit">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
+    <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -875,7 +882,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:param>
     <xsl:param name="conflictexist" as="xs:boolean">
      <xsl:call-template name="conflict-check">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
+       <xsl:with-param name="flagrules" as="element()*" select="$flagrules"/>
       </xsl:call-template>
     </xsl:param>
 
