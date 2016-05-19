@@ -83,6 +83,10 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/it.xml" uri="fo/i18n/it.xml"/>
     <uri name="cfg:fo/i18n/ja_JP.xml" uri="fo/i18n/ja.xml"/>
     <uri name="cfg:fo/i18n/ja.xml" uri="fo/i18n/ja.xml"/>
+    <uri name="cfg:fo/i18n/kk_KZ.xml" uri="fo/i18n/kk.xml"/>
+    <uri name="cfg:fo/i18n/kk.xml" uri="fo/i18n/kk.xml"/>
+    <uri name="cfg:fo/i18n/ko_KR.xml" uri="fo/i18n/ko.xml"/>
+    <uri name="cfg:fo/i18n/ko.xml" uri="fo/i18n/ko.xml"/>
     <uri name="cfg:fo/i18n/lt_LT.xml" uri="fo/i18n/lt.xml"/>
     <uri name="cfg:fo/i18n/lt.xml" uri="fo/i18n/lt.xml"/>
     <uri name="cfg:fo/i18n/lv_LV.xml" uri="fo/i18n/lv.xml"/>
@@ -122,7 +126,12 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:fo/i18n/tr.xml" uri="fo/i18n/tr.xml"/>
     <uri name="cfg:fo/i18n/uk_UA.xml" uri="fo/i18n/uk.xml"/>
     <uri name="cfg:fo/i18n/uk.xml" uri="fo/i18n/uk.xml"/>
+    <uri name="cfg:fo/i18n/ur_PK.xml" uri="fo/i18n/ur.xml"/>
+    <uri name="cfg:fo/i18n/ur.xml" uri="fo/i18n/ur.xml"/>
+    <uri name="cfg:fo/i18n/vi_VN.xml" uri="fo/i18n/vi.xml"/>
+    <uri name="cfg:fo/i18n/vi.xml" uri="fo/i18n/vi.xml"/>
     <uri name="cfg:fo/i18n/zh_CN.xml" uri="fo/i18n/zh_CN.xml"/>
+    <uri name="cfg:fo/i18n/zh_TW.xml" uri="fo/i18n/zh_TW.xml"/>
 
     <uri name="cfg:common/index/ar_EG.xml" uri="common/index/ar.xml"/>
     <uri name="cfg:common/index/ar.xml" uri="common/index/ar.xml"/>
@@ -168,6 +177,10 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/it.xml" uri="common/index/it.xml"/>
     <uri name="cfg:common/index/ja_JP.xml" uri="common/index/ja.xml"/>
     <uri name="cfg:common/index/ja.xml" uri="common/index/ja.xml"/>
+    <uri name="cfg:common/index/kk_KZ.xml" uri="common/index/kk.xml"/>
+    <uri name="cfg:common/index/kk.xml" uri="common/index/kk.xml"/>
+    <uri name="cfg:common/index/ko_KR.xml" uri="common/index/ko.xml"/>
+    <uri name="cfg:common/index/ko.xml" uri="common/index/ko.xml"/>
     <uri name="cfg:common/index/lt_LT.xml" uri="common/index/lt.xml"/>
     <uri name="cfg:common/index/lt.xml" uri="common/index/lt.xml"/>
     <uri name="cfg:common/index/lv_LV.xml" uri="common/index/lv.xml"/>
@@ -207,7 +220,12 @@ See the accompanying license.txt file for applicable licenses.
     <uri name="cfg:common/index/tr.xml" uri="common/index/tr.xml"/>
     <uri name="cfg:common/index/uk_UA.xml" uri="common/index/uk.xml"/>
     <uri name="cfg:common/index/uk.xml" uri="common/index/uk.xml"/>
+    <uri name="cfg:common/index/ur_PK.xml" uri="common/index/ur.xml"/>
+    <uri name="cfg:common/index/ur.xml" uri="common/index/ur.xml"/>
+    <uri name="cfg:common/index/vi_VN.xml" uri="common/index/vi.xml"/>
+    <uri name="cfg:common/index/vi.xml" uri="common/index/vi.xml"/>
     <uri name="cfg:common/index/zh_CN.xml" uri="common/index/zh_CN.xml"/>
+    <uri name="cfg:common/index/zh_TW.xml" uri="common/index/zh_TW.xml"/>
 
   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
                   id="org.dita.pdf2.catalog.relative"

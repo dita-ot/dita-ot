@@ -115,7 +115,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         filterTopics(doc.getDocumentElement(), Collections.<FilterUtils>emptyList());
 
         logger.debug("Writing " + mapFile);
-        StreamResult result = null;
+        Result result = null;
         try {
             Transformer serializer = TransformerFactory.newInstance().newTransformer();
             result = new StreamResult(mapFile.toString());

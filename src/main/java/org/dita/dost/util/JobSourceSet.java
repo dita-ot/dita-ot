@@ -1,5 +1,6 @@
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.URLUtils.*;
 
 import org.apache.tools.ant.Project;
@@ -8,6 +9,7 @@ import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.URLResource;
+import org.dita.dost.invoker.ExtensibleAntInvoker;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -35,10 +37,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
 
     private Collection<Resource> getResults() {
         if (res == null) {
-            final Job job = getProject().getReference(ANT_REFERENCE_JOB);
-            if (job == null) {
-                throw new IllegalStateException();
-            }
+            final Job job = getJob();
             res = new ArrayList<>();
             for (final Job.FileInfo f : job.getFileInfo(new Job.FileInfo.Filter<Job.FileInfo>() {
                 @Override
@@ -76,6 +75,21 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
             }
         }
         return res;
+    }
+
+    private Job getJob() {
+        String tempDir = getProject().getUserProperty(ANT_TEMP_DIR);
+        if (tempDir == null) {
+            tempDir = getProject().getProperty(ANT_TEMP_DIR);
+        }
+        if (tempDir == null) {
+            throw new IllegalStateException();
+        }
+        final Job job = ExtensibleAntInvoker.getJob(new File(tempDir), getProject());
+        if (job == null) {
+            throw new IllegalStateException();
+        }
+        return job;
     }
 
     @Override

@@ -430,39 +430,58 @@
 
     <xsl:choose>
       <xsl:when test="exists($conrefend)">
-        <xsl:for-each select="following-sibling::*[following-sibling::*[@id = $conrefend] or self::*[@id = $conrefend]]">
-          <xsl:choose>
-            <xsl:when test="@conref">
-              <xsl:apply-templates select=".">
-                <xsl:with-param name="source-attributes" select="$source-attributes"/>
-                <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
-                <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
-              </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:copy>
-                <xsl:for-each select="@* except @id">
-                  <xsl:choose>
-                    <xsl:when test="name() = 'href'">
-                      <!--@href need to update, not implement currently. @href may point to local part, but if @href pull into other file,
-                    then @href couldn't work correctly. This is the reason why @href need to update. We leave it as the future work.-->
-                      <xsl:apply-templates select=".">
-                        <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
-                      </xsl:apply-templates>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:copy/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-                <xsl:apply-templates select="node()">
-                  <xsl:with-param name="current-relative-path" tunnel="yes" select="$current-relative-path"/>
-                  <xsl:with-param name="WORKDIR" tunnel="yes" select="$WORKDIR"/>
-                </xsl:apply-templates>
-              </xsl:copy>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:for-each>
+        <xsl:variable name="current" as="element()" select="."/>
+        <xsl:variable name="conrefEndNode" as="element()?"
+          select="following-sibling::*[@id = ($conrefend)][1]"
+        />
+        <xsl:choose>
+          <xsl:when test="not($conrefEndNode)">
+            <xsl:apply-templates select="." mode="ditamsg:missing-conrefend-target-error">
+              <xsl:with-param name="conrefend" as="xs:string" tunnel="yes" select="$conrefend"/>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:for-each select="following-sibling::*[. >> $current and . &lt;&lt; $conrefEndNode], $conrefEndNode">
+              <xsl:choose>
+                <xsl:when test="@conref">
+                  <xsl:apply-templates select=".">
+                    <xsl:with-param name="source-attributes" select="$source-attributes"/>
+                    <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
+                    <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                  </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:copy>
+                    <xsl:for-each select="@*">
+                      <xsl:if test="not(local-name(.) = 'id')">
+                        <xsl:choose>
+                          <xsl:when test="name() = 'href'">
+                            <!--@href need to update, not implement currently. @href may point to local part, but if @href pull into other file,
+                          then @href couldn't work correctly. This is the reason why @href need to update. We leave it as the future work.-->
+                            <xsl:apply-templates select=".">
+                              <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
+                              <xsl:with-param name="topicid" select="$topicid"/>
+                              <xsl:with-param name="elemid" select="$elemid"/>
+                            </xsl:apply-templates>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:copy/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </xsl:for-each>
+                    <xsl:apply-templates select="* | comment() | processing-instruction() | text()">
+                      <xsl:with-param name="current-relative-path" select="$current-relative-path"/>
+                      <xsl:with-param name="topicid" select="$topicid"/>
+                      <xsl:with-param name="elemid" select="$elemid"/>
+                      <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+                    </xsl:apply-templates>
+                  </xsl:copy>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
@@ -816,6 +835,15 @@
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX010E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <!-- If the conrefend target element does not exist, this template will be called to issue an error -->
+  <xsl:template match="*" mode="ditamsg:missing-conrefend-target-error">
+    <xsl:param name="conrefend" as="xs:string" tunnel="yes"/>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">071</xsl:with-param>
+      <xsl:with-param name="msgsev">E</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$conrefend"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <!-- If an ID is duplicated, and there are 2 possible targets, issue a warning -->

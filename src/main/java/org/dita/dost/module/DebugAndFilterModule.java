@@ -105,6 +105,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             }
 
             job.write();
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             e.printStackTrace();
             throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
@@ -145,14 +147,11 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         }
 
         InputSource in = null;
-        OutputStream out = null;
+        Result out = null;
         try {
-            out = new FileOutputStream(outputFile);
-
             reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger));
 
             final TransformerFactory tf = TransformerFactory.newInstance();
-//            final Transformer serializer = tf.newTransformer();
             final SAXTransformerFactory stf = (SAXTransformerFactory) tf;
             final TransformerHandler serializer = stf.newTransformerHandler();
 
@@ -173,10 +172,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             } catch (final SAXNotRecognizedException e) {}
 
             in = new InputSource(f.src.toString());
-//            final Source source = new SAXSource(xmlSource, in);
-            final Result result = new StreamResult(out);
-//            serializer.transform(source, result);
-            serializer.setResult(result);
+            out = new StreamResult(new FileOutputStream(outputFile));
+            serializer.setResult(out);
             xmlSource.setContentHandler(serializer);
             xmlSource.parse(new InputSource(f.src.toString()));
         } catch (final RuntimeException e) {
@@ -184,12 +181,10 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                }catch (final Exception e) {
-                    logger.error(e.getMessage(), e) ;
-                }
+            try {
+                close(out);
+            } catch (final Exception e) {
+                logger.error(e.getMessage(), e) ;
             }
             try {
                 close(in);
@@ -222,11 +217,13 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         outputSubjectScheme();
         subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
+        subjectSchemeReader.setJob(job);
         dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
 
         if (profilingEnabled) {
             final DitaValReader filterReader = new DitaValReader();
             filterReader.setLogger(logger);
+            filterReader.setJob(job);
             filterReader.initXMLReader(setSystemId);
             Map<FilterKey, Action> filterMap;
             if (ditavalFile != null) {
@@ -406,6 +403,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 //Output parent scheme
                 generateScheme(new File(job.tempDir.getAbsoluteFile(), parent.getPath() + SUBJECT_SCHEME_EXTENSION), parentRoot);
             }
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);
@@ -535,6 +534,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             final TransformerFactory tff = TransformerFactory.newInstance();
             final Transformer tf = tff.newTransformer();
             tf.transform(ds, res);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
             throw new DITAOTException(e);

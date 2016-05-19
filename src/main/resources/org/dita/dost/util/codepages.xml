@@ -204,6 +204,10 @@
     <cp format="html" encoding="utf-8" charset="utf-8"/>
     <cp format="windows" encoding="1256" charset="windows-1256"/>
   </language>
+  <language lang="vi-vn">
+    <cp format="html" encoding="utf-8" charset="utf-8"/>
+    <cp format="windows" encoding="1258" charset="windows-1258"/>
+  </language>
   <language lang="zh-cn">
     <cp format="html" encoding="1386" charset="gb2312"/>
     <cp format="windows" encoding="1386" charset="gb2312"/>

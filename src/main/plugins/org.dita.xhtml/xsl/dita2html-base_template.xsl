@@ -43,14 +43,13 @@
 <xsl:import href="xslhtml/abbrev-d.xsl"/>
 <xsl:import href="xslhtml/markup-d.xsl"/>
 <xsl:import href="xslhtml/xml-d.xsl"/>
-
+<!-- Integrate support for flagging with dita-ot pseudo-domain -->
+<xsl:import href="xslhtml/htmlflag.xsl"/>  
+  
 <dita:extension id="dita.xsl.xhtml" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
 <!-- the dita to xhtml converter for element reference documents - not used now -->
 <!--<xsl:import href="elementrefdisp.xsl"/>-->
-
-<!-- Integrate support for flagging with dita-ot pseudo-domain -->
-<xsl:include href="xslhtml/htmlflag.xsl"/>  
 
 <!-- root rule -->
 <xsl:template match="/">

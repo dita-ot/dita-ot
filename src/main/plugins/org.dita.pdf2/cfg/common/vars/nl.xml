@@ -115,6 +115,22 @@
   <variable id="Task Example"></variable>
   <variable id="Task Postreq"></variable>
 
+  <!--Glossary Variables-->
+  <!-- The footer that appears on the odd-numbered glossary pages. -->
+  <variable id="Glossary odd footer"/>
+  <!-- The footer that appears on the even-numbered glossary pages. -->
+  <variable id="Glossary even footer"/>
+  <!-- The header that appears on the odd-numbered glossary pages. -->
+  <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+  <!-- The header that appears on the even-numbered glossary pages. -->
+  <variable id="Glossary even header"><param ref-name="pagenum"/> | <param ref-name="heading"/> | <param ref-name="prodname"/></variable>
+  <!-- The heading string to put at the top of the Glossary -->
+  <variable id="Glossary">Verklarende woordenlijst</variable>
+  <!-- The heading string to put at the top of the List of Tables -->
+  <variable id="List of Tables">Tabellen</variable>
+  <!-- The heading string to put at the top of the List of Figures -->
+  <variable id="List of Figures">Figuren</variable>
+
   <variable id="#menucascade-separator"> &gt; </variable>
   <variable id="#quote-start">“</variable>
   <variable id="#quote-end">”</variable>

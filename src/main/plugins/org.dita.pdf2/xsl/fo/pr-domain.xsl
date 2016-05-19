@@ -55,6 +55,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
+            <xsl:call-template name="setExpanse"/>
             <xsl:variable name="codeblock.line-number" as="xs:boolean">
               <xsl:apply-templates select="." mode="codeblock.generate-line-number"/>
             </xsl:variable>

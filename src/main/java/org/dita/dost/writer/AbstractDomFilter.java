@@ -74,6 +74,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
         this.logger = logger;
     }
 
+    @Override
     public void setJob(final Job job) {
         this.job = job;
     }

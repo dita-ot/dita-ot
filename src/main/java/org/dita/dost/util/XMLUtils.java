@@ -360,7 +360,7 @@ public final class XMLUtils {
 
     /**
      * Escape XML characters.
-     * Suggested by hussein_shafie
+     *
      * @param s value needed to be escaped
      * @return escaped value
      */
@@ -371,7 +371,7 @@ public final class XMLUtils {
 
     /**
      * Escape XML characters.
-     * Suggested by hussein_shafie
+     * 
      * @param chars char arrays
      * @param offset start position
      * @param length arrays lenth

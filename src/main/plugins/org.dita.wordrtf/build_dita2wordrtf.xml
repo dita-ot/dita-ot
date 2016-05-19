@@ -81,6 +81,7 @@
       out="${output}" style="${args.xsl}">
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="OUTPUTDIR" expression="${dita.rtf.outputdir}" />
+      <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>

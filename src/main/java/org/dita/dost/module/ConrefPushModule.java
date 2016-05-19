@@ -40,6 +40,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
         if (!fis.isEmpty()) {
             final ConrefPushReader reader = new ConrefPushReader();
             reader.setLogger(logger);
+            reader.setJob(job);
             for(final FileInfo f: fis) {
                 final File file = new File(job.tempDir, f.file.getPath());
                 logger.info("Reading  " + file.getAbsolutePath());

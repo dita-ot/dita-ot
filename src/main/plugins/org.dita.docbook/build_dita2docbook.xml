@@ -41,6 +41,7 @@
       classpathref="dost.class.path"
       style="${args.xsl}">
       <param name="outputdir" expression="${outputDir}" />
+      <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>

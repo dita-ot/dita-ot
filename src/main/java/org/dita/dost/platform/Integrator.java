@@ -8,6 +8,8 @@
  */
 package org.dita.dost.platform;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
@@ -30,6 +32,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -67,8 +71,16 @@ public final class Integrator {
     private static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
     private static final String ELEM_PLUGINS = "plugins";
 
+    private static final String LIB_DIR = "lib";
+
     public static final String FEAT_VALUE_SEPARATOR = ",";
     private static final String PARAM_VALUE_SEPARATOR = ";";
+
+    private static Set<PosixFilePermission> PERMISSIONS = ImmutableSet.<PosixFilePermission>builder()
+            .add(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE,
+                 PosixFilePermission.GROUP_READ, PosixFilePermission.GROUP_EXECUTE,
+                 PosixFilePermission.OTHERS_READ, PosixFilePermission.OTHERS_EXECUTE)
+            .build();
 
     public static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
     public static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-]+)?)?)?");
@@ -282,7 +294,7 @@ public final class Integrator {
         
         OutputStream out = null;
         try {
-            final File outFile = new File(ditaDir, "lib" + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
+            final File outFile = new File(ditaDir, LIB_DIR + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES);
             if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
                 throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
             }
@@ -308,6 +320,33 @@ public final class Integrator {
         final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS) ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS))) : Collections.EMPTY_SET;
         writeEnvShell(jars);
         writeEnvBatch(jars);
+
+        final Collection<File> libJars = ImmutableList.<File>builder()
+                .addAll(getLibJars())
+                .addAll(jars)
+                .build();
+        writeStartcmdShell(libJars);
+        writeStartcmdBatch(libJars);
+    }
+
+    private Collection<File> getLibJars() {
+        final String[] libJars = new File(ditaDir, LIB_DIR).list(new FilenameFilter() {
+            @Override
+            public boolean accept(final File dir, final String name) {
+                return name.endsWith(".jar");
+            }
+        });
+        final List<File> res = new ArrayList<>(libJars.length);
+        for (String l: libJars) {
+            res.add(new File(LIB_DIR + File.separator + l));
+        }
+        Collections.sort(res, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
+            }
+        });
+        return res;
     }
 
     private Iterable<String> orderPlugins(final Set<String> ids) {
@@ -373,7 +412,12 @@ public final class Integrator {
                 out.write(relativeLib.toString().replace(File.separator, UNIX_SEPARATOR));
                 out.write("\"\n");
             }
-        } catch (final Exception e) {
+            try {
+                Files.setPosixFilePermissions(outFile.toPath(), PERMISSIONS);
+            } catch (final UnsupportedOperationException e) {
+                // not supported
+            }
+        } catch (final IOException e) {
             if (strict) {
                 throw new RuntimeException("Failed to write environment shell: " + e.getMessage(), e);
             } else {
@@ -402,9 +446,124 @@ public final class Integrator {
                 out.write(relativeLib.toString().replace(File.separator, WINDOWS_SEPARATOR));
                 out.write("\"\r\n");
             }
-        } catch (final Exception e) {
+            outFile.setExecutable(true);
+        } catch (final IOException e) {
             if (strict) {
                 throw new RuntimeException("Failed to write environment batch: " + e.getMessage(), e);
+            } else {
+                logger.error(e.getMessage(), e) ;
+            }
+        } finally {
+            closeQuietly(out);
+        }
+    }
+
+    private void writeStartcmdShell(final Collection<File> jars) {
+        Writer out = null;
+        try {
+            final File outFile = new File(ditaDir, "startcmd.sh");
+            if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
+                throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
+            }
+            logger.debug("Generate start command shell " + outFile.getPath());
+            out = new BufferedWriter(new FileWriter(outFile));
+
+            out.write("#!/bin/sh\n" +
+                    "# Generated file, do not edit manually\"\n" +
+                    "echo \"NOTE: The startcmd.sh has been deprecated, use the 'dita' command instead.\"\n" +
+                    "\n" +
+                    "realpath() {\n" +
+                    "  case $1 in\n" +
+                    "    /*) echo \"$1\" ;;\n" +
+                    "    *) echo \"$PWD/${1#./}\" ;;\n" +
+                    "  esac\n" +
+                    "}\n" +
+                    "\n" +
+                    "if [ \"${DITA_HOME:+1}\" = \"1\" ] && [ -e \"$DITA_HOME\" ]; then\n" +
+                    "  export DITA_DIR=\"$(realpath \"$DITA_HOME\")\"\n" +
+                    "else #elif [ \"${DITA_HOME:+1}\" != \"1\" ]; then\n" +
+                    "  export DITA_DIR=\"$(dirname \"$(realpath \"$0\")\")\"\n" +
+                    "fi\n" +
+                    "\n" +
+                    "if [ -f \"$DITA_DIR\"/bin/ant ] && [ ! -x \"$DITA_DIR\"/bin/ant ]; then\n" +
+                    "  chmod +x \"$DITA_DIR\"/bin/ant\n" +
+                    "fi\n" +
+                    "\n" +
+                    "export ANT_OPTS=\"-Xmx512m $ANT_OPTS\"\n" +
+                    "export ANT_OPTS=\"$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\"\n" +
+                    "export ANT_HOME=\"$DITA_DIR\"\n" +
+                    "export PATH=\"$DITA_DIR\"/bin:\"$PATH\"\n" +
+                    "\n" +
+                    "NEW_CLASSPATH=\"$DITA_DIR/lib:$NEW_CLASSPATH\"\n");
+            for (final File relativeLib: jars) {
+                out.write("NEW_CLASSPATH=\"");
+                if (!relativeLib.isAbsolute()) {
+                    out.write("$DITA_DIR" + UNIX_SEPARATOR);
+                }
+                out.write(relativeLib.toString().replace(File.separator, UNIX_SEPARATOR));
+                out.write(":$NEW_CLASSPATH\"\n");
+            }
+            out.write("if test -n \"$CLASSPATH\"; then\n" +
+                    "  export CLASSPATH=\"$NEW_CLASSPATH\":\"$CLASSPATH\"\n" +
+                    "else\n" +
+                    "  export CLASSPATH=\"$NEW_CLASSPATH\"\n" +
+                    "fi\n" +
+                    "\n" +
+                    "cd \"$DITA_DIR\"\n" +
+                    "\"$SHELL\"\n");
+            try {
+                Files.setPosixFilePermissions(outFile.toPath(), PERMISSIONS);
+            } catch (final UnsupportedOperationException e) {
+                // not supported
+            }
+        } catch (final IOException e) {
+            if (strict) {
+                throw new RuntimeException("Failed to write start command shell: " + e.getMessage(), e);
+            } else {
+                logger.error(e.getMessage(), e) ;
+            }
+        } finally {
+            closeQuietly(out);
+        }
+    }
+
+    private void writeStartcmdBatch(final Collection<File> jars) {
+        Writer out = null;
+        try {
+            final File outFile = new File(ditaDir, "startcmd.bat");
+            if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
+                throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
+            }
+            logger.debug("Generate start command batch " + outFile.getPath());
+            out = new BufferedWriter(new FileWriter(outFile));
+
+            out.write("@echo off\r\n" +
+                    "REM Generated file, do not edit manually\r\n" +
+                    "echo \"NOTE: The startcmd.bat has been deprecated, use the dita.bat command instead.\"\r\n" +
+                    "pause\r\n" +
+                    "\r\n" +
+                    "REM Get the absolute path of DITAOT's home directory\r\n" +
+                    "set DITA_DIR=%~dp0\r\n" +
+                    "\r\n" +
+                    "REM Set environment variables\r\n" +
+                    "set ANT_OPTS=-Xmx512m %ANT_OPTS%\r\n" +
+                    "set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\r\n" +
+                    "set ANT_HOME=%DITA_DIR%\r\n" +
+                    "set PATH=%DITA_DIR%\\bin;%PATH%\r\n" +
+                    "set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%\r\n");
+            for (final File relativeLib: jars) {
+                out.write("set CLASSPATH=");
+                if (!relativeLib.isAbsolute()) {
+                    out.write("%DITA_DIR%");
+                }
+                out.write(relativeLib.toString().replace(File.separator, WINDOWS_SEPARATOR));
+                out.write(";%CLASSPATH%\r\n");
+            }
+            out.write("start \"DITA-OT\" cmd.exe\r\n");
+            outFile.setExecutable(true);
+        } catch (final IOException e) {
+            if (strict) {
+                throw new RuntimeException("Failed to write start command batch: " + e.getMessage(), e);
             } else {
                 logger.error(e.getMessage(), e) ;
             }

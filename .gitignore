@@ -24,6 +24,9 @@ src/main/plugins/org.dita.html5/.sass-cache
 src/main/plugins/org.dita.html5/build_dita2html5.xml
 src/main/plugins/org.dita.html5/css/commonltr.css
 src/main/plugins/org.dita.html5/css/commonrtl.css
+src/main/plugins/org.dita.html5/xsl/dita2html5.xsl
+src/main/plugins/org.dita.html5/xsl/map2html5-cover.xsl
+src/main/plugins/org.dita.html5/xsl/map2html5toc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhp.xsl
 src/main/plugins/org.dita.odt/lib/
@@ -57,6 +60,8 @@ src/main/resources/env.bat
 src/main/resources/env.sh
 src/main/resources/messages.xml
 src/main/resources/plugins.xml
+src/main/startcmd.bat
+src/main/startcmd.sh
 src/main/xsl/common/allstrings.xml
 src/main/xsl/common/strings.xml
 src/main/xsl/preprocess/conref.xsl
