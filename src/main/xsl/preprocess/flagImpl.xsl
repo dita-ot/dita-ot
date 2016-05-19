@@ -65,20 +65,20 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
     </xsl:choose>
   </xsl:variable>
 
-  <!-- Specialized attributes for analysis by flagging templates. Format is:
-       props attr1,props attr2,props attr3 -->
-  <xsl:variable name="propsExtensions" as="xs:string">
+  <!-- Specialized attributes for analysis by flagging templates.
+       Value is a sequence of attribute names.
+  -->
+  <xsl:variable name="propsExtensions" as="xs:string*">
     
     <xsl:variable name="propsAttrs" as="xs:string*">
       <xsl:analyze-string select="$GLOBAL-DOMAINS" regex="a\(props\s+(\w+)\.*?\)">
         <xsl:matching-substring>
-          <xsl:sequence select="concat('props ',regex-group(1))"/>
+          <xsl:sequence select="regex-group(1)"/>
         </xsl:matching-substring>
       </xsl:analyze-string>
     </xsl:variable>
-    <xsl:variable name="result" select="string-join($propsAttrs, ',')"/>
-<!--    <xsl:message> + [DEBUG] propsExtensions: result="<xsl:sequence select="$result"/>"</xsl:message>-->
-    <xsl:sequence select="$result"/>
+<!--    <xsl:message> + [DEBUG] propsExtensions="<xsl:value-of select="$propsAttrs"/>"</xsl:message>-->
+    <xsl:sequence select="$propsAttrs"/>
   </xsl:variable>
   
 
@@ -309,10 +309,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   <xsl:template match="@imageref" mode="adjust-imageref">
     <xsl:if test="string-length($PATH2PROJ) > 0 and
                   not(contains(.,'://'))">
-      <xsl:attribute name="imageref">
-        <xsl:value-of select="$PATH2PROJ"/>
-        <xsl:value-of select="."/>
-      </xsl:attribute>
+      <xsl:attribute name="imageref" select="concat($PATH2PROJ,.)"/>
     </xsl:if>
   </xsl:template>
 
@@ -328,7 +325,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
        <xsl:with-param name="lang" select="$parentlang"/>
      </xsl:apply-templates>
    </xsl:variable>
-   <xsl:value-of select="if ($direction = 'rtl') then 'bidi' else ()"/>
+   <xsl:sequence select="if ($direction = 'rtl') then 'bidi' else ()"/>
   </xsl:template>
  
  <!-- Flags - based on audience, product, platform, and otherprops in the source
