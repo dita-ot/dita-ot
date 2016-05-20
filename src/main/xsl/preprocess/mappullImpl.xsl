@@ -70,6 +70,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
        there can only be at most one topic with a given ID.
        So this code does not need to check the class of the
        resolved topic against a requested class.       
+       
+       The topicid value can be "#none#", indicating that the
+       topic was referenced by resource part only. In that
+       case, the first topic in the source document is
+       returned.
   
   -->
   <xsl:function name="dita-ot:getTopicForIDRref" as="element()?">
@@ -77,9 +82,12 @@ Other modes can be found within the code, and may or may not prove useful for ov
                                             Should be map or topic making the reference -->
     <xsl:param name="doc" as="document-node()"/><!-- The document that may contain the target topic -->
     <xsl:param name="topicid" as="xs:string"/><!-- The ID to find -->
-
+    
     <xsl:variable name="topics" as="element()*"
-      select="key('topicsById', $topicid, $doc)"
+      select="if ($topicid = ('#none#')) 
+                 then ($doc/*[contains(@class, ' topic/topic ')], 
+                       $doc/dita/*[contains(@class, ' topic/topic ')])[1]
+                 else key('topicsById', $topicid, $doc)"
     />
     <xsl:choose>
       <xsl:when test="count($topics) gt 1">
@@ -95,6 +103,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         </xsl:call-template>        
       </xsl:when>
       <xsl:when test="count($topics) = 0">
+        
         <xsl:variable name="elementsWithID" as="element()*" select="key('elementsById', $topicid, $doc)"/>
         <xsl:choose>
           <xsl:when test="count($elementsWithID) gt 0">
