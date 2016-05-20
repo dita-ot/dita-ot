@@ -366,10 +366,10 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
               select="@audience, @platform, @product, @otherprops, @props, @rev, @*[name(.) = $propsExtensions]"
             />
           </conditions>
-        </xsl:variable>
-<!--        <xsl:message> + [DEBUG] getrules: conditions:
+        </xsl:variable>        
+        <xsl:message> + [DEBUG] getrules: conditions:
           <xsl:sequence select="$conditions"/></xsl:message>
--->        
+        
         <!-- Now use the conditions to generate flagging specifications -->
         
         <!-- Because the same condition can occur multiple times, we need to
