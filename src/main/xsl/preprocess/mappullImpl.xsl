@@ -1067,6 +1067,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!--try retrieving from the first topic in another file-->
       <xsl:when test="$topicpos='firstinfile'">
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref($doc, $topicid)" as="element()?"/>
+        
         <xsl:if
             test="$target/*[contains(@class, ' topic/shortdesc ')]|
                   $target/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
