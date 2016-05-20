@@ -80,56 +80,65 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:function name="dita-ot:getTopicForIDRref" as="element()?">
     <xsl:param name="ctx" as="node()"/><!-- Context node used for message reporting. 
                                             Should be map or topic making the reference -->
-    <xsl:param name="doc" as="document-node()"/><!-- The document that may contain the target topic -->
+    <xsl:param name="doc" as="document-node()?"/><!-- The document that may contain the target topic -->
     <xsl:param name="topicid" as="xs:string"/><!-- The ID to find -->
     
-    <xsl:variable name="topics" as="element()*"
-      select="if ($topicid = ('#none#')) 
-                 then ($doc/*[contains(@class, ' topic/topic ')], 
-                       $doc/dita/*[contains(@class, ' topic/topic ')])[1]
-                 else key('topicsById', $topicid, $doc)"
-    />
     <xsl:choose>
-      <xsl:when test="count($topics) gt 1">
-        <!-- This should never happen but it could if a document was not
-             validated against a grammar that enforced XML ID uniqueness.
-          -->
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
-          <xsl:with-param name="id" select="'DOTX073W'"/>
-          <xsl:with-param name="msgparams">%1=<xsl:value-of select="count($topics)"
-              />;%2=<xsl:value-of select="$topicid"
-              /></xsl:with-param>
-        </xsl:call-template>        
+      <xsl:when test="not($doc)">
+        <!-- No document, nothing to return. -->
+        <xsl:sequence select="()"/>
       </xsl:when>
-      <xsl:when test="count($topics) = 0">        
-        <xsl:variable name="elementsWithID" as="element()*" select="key('elementsById', $topicid, $doc)"/>
+      <xsl:otherwise>
+        
+        <xsl:variable name="topics" as="element()*"
+          select="if ($topicid = ('#none#')) 
+                     then ($doc/*[contains(@class, ' topic/topic ')], 
+                           $doc/dita/*[contains(@class, ' topic/topic ')])[1]
+                     else key('topicsById', $topicid, $doc)"
+        />
         <xsl:choose>
-          <xsl:when test="count($elementsWithID) gt 0">
-            <xsl:variable name="classVal" as="xs:string"
-              select="normalize-space($elementsWithID[1]/@class)"/>
+          <xsl:when test="count($topics) gt 1">
+            <!-- This should never happen but it could if a document was not
+                 validated against a grammar that enforced XML ID uniqueness.
+              -->
             <xsl:call-template name="output-message">
               <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
-              <xsl:with-param name="id" select="'DOTX061W'"/>
-              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/>;%2=<xsl:value-of
-                select="$classVal"/></xsl:with-param>
-            </xsl:call-template>
+              <xsl:with-param name="id" select="'DOTX073W'"/>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="count($topics)"
+                  />;%2=<xsl:value-of select="$topicid"
+                  /></xsl:with-param>
+            </xsl:call-template>        
           </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="output-message">
-              <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
-              <xsl:with-param name="id" select="'DOTX072W'"/>
-              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"
-                />;%2=<xsl:value-of select="$doc/*/@xtrf"/></xsl:with-param>
-            </xsl:call-template>
-          </xsl:otherwise>
+          <xsl:when test="count($topics) = 0">        
+            <xsl:variable name="elementsWithID" as="element()*" select="key('elementsById', $topicid, $doc)"/>
+            <xsl:choose>
+              <xsl:when test="count($elementsWithID) gt 0">
+                <xsl:variable name="classVal" as="xs:string"
+                  select="normalize-space($elementsWithID[1]/@class)"/>
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
+                  <xsl:with-param name="id" select="'DOTX061W'"/>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/>;%2=<xsl:value-of
+                    select="$classVal"/></xsl:with-param>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
+                  <xsl:with-param name="id" select="'DOTX072W'"/>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"
+                    />;%2=<xsl:value-of select="$doc/*/@xtrf"/></xsl:with-param>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
         </xsl:choose>
-      </xsl:when>
+        <xsl:variable name="result" as="element()?"
+          select="$topics[1]"
+        />
+        <xsl:sequence select="$result"/>    
+      </xsl:otherwise>
     </xsl:choose>
-    <xsl:variable name="result" as="element()?"
-      select="$topics[1]"
-    />
-    <xsl:sequence select="$result"/>    
   </xsl:function>
   
 
@@ -561,7 +570,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <xsl:when test="$type='#none#'">
         <xsl:choose>
-          <xsl:when test="@href=''"/>
+          <xsl:when test="@href=''"/>          
           <xsl:when test="$scope='external' or $scope='peer' or not($format='#none#' or $format='dita')">
             <!-- do nothing - type is unavailable-->
           </xsl:when>
@@ -788,11 +797,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:variable name="classval" as="xs:string">
       <xsl:apply-templates select="." mode="mappull:get-stuff_target-classval"><xsl:with-param name="type" select="$type"/></xsl:apply-templates>
     </xsl:variable>
-
+    
     <xsl:variable name="doc"
                   select="if (($format = ('dita', '#none#')) and
                               ($scope = ('local', '#none#')))
-                          then dita-ot:document($file, /)
+                          then dita-ot:document($file, .) 
                           else ()"
                   as="document-node()?"/>
 
