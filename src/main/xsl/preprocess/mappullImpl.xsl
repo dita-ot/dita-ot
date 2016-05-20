@@ -485,6 +485,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="classval" as="xs:string"/>
     <xsl:param name="topicid" as="xs:string"/>
     <xsl:param name="doc" as="document-node()?"/>
+    
+    <xsl:variable name="doDebug" as="xs:boolean"
+      select="contains(document-uri($doc), 'structovr_error_info')"
+    />
+    
     <xsl:choose>
       <xsl:when test="$type='#none#'">
         <xsl:choose>
@@ -495,18 +500,28 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
           <!--finding type based on name of the target element in a particular topic in another file-->
           <xsl:when test="$topicpos='otherfile'">
+            <xsl:if test="$doDebug">
+              <xsl:message> + [DEBUG] </xsl:message>
+            </xsl:if>
             <xsl:variable name="target" select="($doc//*[@id=$topicid])[1]" as="element()?"/>
             <xsl:choose>
+              <xsl:when test="not($target)">
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="id" select="'DOTX072W'"/>
+                  <xsl:with-param name="msgparams"
+                    >%1=<xsl:value-of select="$topicid"/>;%2=<xsl:value-of select="document-uri($doc)"/></xsl:with-param>
+                </xsl:call-template>
+              </xsl:when>
               <xsl:when test="$target[contains(@class, $classval)]">
-                <xsl:attribute name="type">
-                  <xsl:value-of select="local-name($target[contains(@class, $classval)])"/>
-                </xsl:attribute>
+                <xsl:attribute name="type"
+                  select="local-name($target[contains(@class, $classval)])"
+                />
               </xsl:when>
               <xsl:when test="$topicid!='#none#' and not($target[contains(@class, ' topic/topic ')])">
                 <!-- topicid does not point to a valid topic -->
                 <xsl:call-template name="output-message">
                   <xsl:with-param name="id" select="'DOTX061W'"/>
-                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/></xsl:with-param>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/>;%2=<xsl:value-of select="normalize-space($target/@class)</xsl:with-param>
                 </xsl:call-template>
               </xsl:when>
               <xsl:otherwise><!-- do nothing - omit attribute--></xsl:otherwise>
@@ -535,7 +550,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <!-- topicid does not point to a valid topic -->
           <xsl:call-template name="output-message">
             <xsl:with-param name="id" select="'DOTX061W'"/>
-            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/></xsl:with-param>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/>;%2=<xsl:value-of select="normalize-space($target/@class)"/></xsl:with-param>
           </xsl:call-template>
         </xsl:if>
         <xsl:choose>
