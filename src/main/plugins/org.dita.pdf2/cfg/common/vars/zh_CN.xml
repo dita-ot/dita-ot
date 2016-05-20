@@ -127,13 +127,13 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Index See Also String">参见</variable>
 
     <!-- The string used to label a chapter within the table of contents. -->
-    <variable id="Table of Contents Chapter">章节 <param ref-name="number"/>: </variable>
+    <variable id="Table of Contents Chapter">第 <param ref-name="number"/> 章 </variable>
 
     <!-- The string used to label an appendix within the table of contents. -->
     <variable id="Table of Contents Appendix">附录 <param ref-name="number"/>: </variable>
 
     <!-- The string used to label an part within the table of contents. -->
-    <variable id="Table of Contents Part">第部分 <param ref-name="number"/>: </variable>
+    <variable id="Table of Contents Part">第 <param ref-name="number"/> 部分 </variable>
 
     <!-- The string used to label an preface within the table of contents. -->
     <variable id="Table of Contents Preface">序言 </variable>
