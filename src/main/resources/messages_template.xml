@@ -631,7 +631,8 @@
   </message>
   
   <message id="DOTX061W" type="WARN">
-    <reason>ID '%1' was used in topicref tag but did not reference a topic element. The href attribute on a topicref element should only reference topic level elements.</reason>
+    <reason>ID '%1' was used in topicref element but did not resolve to a topic element (resolved element has @class "%2"). 
+      The @href attribute on a topicref element should only refer to topic elements.</reason>
     <response></response>
   </message>
   

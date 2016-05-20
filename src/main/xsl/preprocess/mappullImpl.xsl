@@ -92,18 +92,17 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <xsl:when test="count($topics) gt 1">
         <!-- This should never happen but it could if a document was not
-             validated against a grammar the enforced XML ID uniqueness.
+             validated against a grammar that enforced XML ID uniqueness.
           -->
         <xsl:call-template name="output-message">
           <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
-          <xsl:with-param name="id" select="'DOTX074W'"/>
+          <xsl:with-param name="id" select="'DOTX073W'"/>
           <xsl:with-param name="msgparams">%1=<xsl:value-of select="count($topics)"
               />;%2=<xsl:value-of select="$topicid"
-              />;%3=<xsl:value-of select="document-uri($doc)"/></xsl:with-param>
+              /></xsl:with-param>
         </xsl:call-template>        
       </xsl:when>
-      <xsl:when test="count($topics) = 0">
-        
+      <xsl:when test="count($topics) = 0">        
         <xsl:variable name="elementsWithID" as="element()*" select="key('elementsById', $topicid, $doc)"/>
         <xsl:choose>
           <xsl:when test="count($elementsWithID) gt 0">
@@ -120,8 +119,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:call-template name="output-message">
               <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
               <xsl:with-param name="id" select="'DOTX072W'"/>
-              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/>;%2=<xsl:value-of
-                select="document-uri($doc)"/></xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"
+                />;%2=<xsl:value-of select="$doc/*/@xtrf"/></xsl:with-param>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
