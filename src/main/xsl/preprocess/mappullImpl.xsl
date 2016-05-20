@@ -73,6 +73,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
   
   -->
   <xsl:function name="dita-ot:getTopicForIDRref" as="element()?">
+    <xsl:param name="ctx" as="node()"/><!-- Context node used for message reporting. 
+                                            Should be map or topic making the reference -->
     <xsl:param name="doc" as="document-node()"/><!-- The document that may contain the target topic -->
     <xsl:param name="topicid" as="xs:string"/><!-- The ID to find -->
 
@@ -85,6 +87,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
              validated against a grammar the enforced XML ID uniqueness.
           -->
         <xsl:call-template name="output-message">
+          <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
           <xsl:with-param name="id" select="'DOTX074W'"/>
           <xsl:with-param name="msgparams">%1=<xsl:value-of select="count($topics)"
               />;%2=<xsl:value-of select="$topicid"
@@ -98,6 +101,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:variable name="classVal" as="xs:string"
               select="normalize-space($elementsWithID[1]/@class)"/>
             <xsl:call-template name="output-message">
+              <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
               <xsl:with-param name="id" select="'DOTX061W'"/>
               <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/>;%2=<xsl:value-of
                 select="$classVal"/></xsl:with-param>
@@ -105,6 +109,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="output-message">
+              <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
               <xsl:with-param name="id" select="'DOTX072W'"/>
               <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/>;%2=<xsl:value-of
                 select="document-uri($doc)"/></xsl:with-param>
@@ -555,7 +560,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
           <!--finding type based on name of the target element in a particular topic in another file-->
           <xsl:when test="$topicpos='otherfile'">
-            <xsl:variable name="target" select="dita-ot:getTopicForIDRref($doc, $topicid)" as="element()?"/>
+            <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
             <xsl:choose>
               <xsl:when test="not($target)">
                 <!-- Error has already been reported. -->
@@ -571,7 +576,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
           <!--finding type based on name of the target element in the first topic in another file-->
           <xsl:when test="$topicpos='firstinfile'">
-            <xsl:variable name="target" select="dita-ot:getTopicForIDRref($doc, $topicid)" as="element()?"/>
+            <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
             <xsl:choose>
               <xsl:when test="not($target)">
                 <!-- Error has already been reported. -->
@@ -590,7 +595,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!-- Type is set locally for a dita topic; warn if it is not correct. -->
       <xsl:when test="$scope!='external' and $scope!='peer' and ($format='#none#' or $format='dita')">
-        <xsl:variable name="target" select="dita-ot:getTopicForIDRref($doc, $topicid)" as="element()?"/>
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
         <xsl:choose>
           <xsl:when test="not($target)">
             <!-- Error has already been reported -->
@@ -684,7 +689,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <!-- This function will only return a single topic or nothing if the IDref cannot
              be resolved.
           -->
-        <xsl:variable name="target" select="dita-ot:getTopicForIDRref($doc, $topicid)" as="element()?"/>
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
         <xsl:choose>
           <xsl:when test="not($target)">
             <!-- Error has already been reported -->
@@ -708,7 +713,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <!-- This function will only return a single topic or nothing if the IDref cannot
              be resolved.
           -->
-        <xsl:variable name="target" select="dita-ot:getTopicForIDRref($doc, $topicid)" as="element()?"/>
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
         
         <xsl:choose>
           <xsl:when test="not($target)">
@@ -941,7 +946,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <!--grabbing text from a particular topic in another file-->
             <xsl:when test="$topicpos='otherfile'">
               
-              <xsl:variable name="target" select="dita-ot:getTopicForIDRref($doc, $topicid)" as="element()?"/>
+              <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
               <xsl:choose>
                 <xsl:when test="not($target)">
                   <!-- Error has already been reported. -->
@@ -970,7 +975,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             </xsl:when>
             <!--grabbing text from the first topic in another file-->
             <xsl:when test="$topicpos='firstinfile'">
-              <xsl:variable name="target" select="dita-ot:getTopicForIDRref($doc, $topicid)" as="element()?"/>
+              <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
               
               <xsl:choose>
                 <xsl:when test="$target/*[contains(@class, ' topic/title ')]">
@@ -1054,7 +1059,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!--try retrieving from a particular topic in another file-->
       <xsl:when test="$topicpos='otherfile'">
-        <xsl:variable name="target" select="dita-ot:getTopicForIDRref($doc, $topicid)" as="element()?"/>
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
         <xsl:if
             test="$target/*[contains(@class, ' topic/shortdesc ')]|
                   $target/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
@@ -1067,7 +1072,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!--try retrieving from the first topic in another file-->
       <xsl:when test="$topicpos='firstinfile'">
-        <xsl:variable name="target" select="dita-ot:getTopicForIDRref($doc, $topicid)" as="element()?"/>
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
         
         <xsl:if
             test="$target/*[contains(@class, ' topic/shortdesc ')]|
