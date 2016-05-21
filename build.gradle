@@ -163,7 +163,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 copyDistTemp.outputs.dir distTempDir
 
 task updateConfiguration() << {
-    if (!commit.empty) {
+    if (project.hasProperty('commit') && !commit.empty) {
         ant.propertyfile(file: "${distTempDir}/lib/configuration.properties") {
             entry(key: "otversion", operation: "=", value: "${project.version}+${commit.substring(0, 7)}")
         }
