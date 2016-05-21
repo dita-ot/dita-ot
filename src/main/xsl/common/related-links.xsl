@@ -70,7 +70,7 @@
 
     <!-- Without a group, links are emitted as-is.  (Can be overridden.) -->
     <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group"
-                  name="related-links:group-result." as="element(linklist)">
+                  name="related-links:group-result." as="element()">
         <xsl:param name="links" as="node()*"/>
         <xsl:if test="normalize-space(string-join($links, ''))">
           <linklist class="- topic/linklist " outputclass="relinfo relref">
@@ -87,7 +87,7 @@
 
     <!-- Main entry point. -->
     <xsl:template match="*[contains(@class, ' topic/related-links ')]" mode="related-links:group-unordered-links"
-                  as="element(linklist)*">
+                  as="element()*">
         <!-- Node set.  The set of nodes to group. -->
         <xsl:param name="nodes" as="element()*"/>
         <!-- Sent back to all callback templates as a parameter.-->
@@ -282,7 +282,7 @@
     </xsl:template>
 
     <!-- Process each group in turn. -->
-  <xsl:template name="related-links:walk-groups" as="element(linklist)*">
+  <xsl:template name="related-links:walk-groups" as="element()*">
         <xsl:param name="nodes" as="element()*"/>
         <xsl:param name="tunnel"/>
         <!-- semicolon separate list -->
@@ -305,7 +305,7 @@
     </xsl:template>
 
     <!-- Process each group. -->
-    <xsl:template name="related-links:do-group" as="element(linklist)">
+    <xsl:template name="related-links:do-group" as="element()">
         <xsl:param name="nodes" as="element()*"/>
         <xsl:param name="tunnel"/>
         <!-- space separated list -->

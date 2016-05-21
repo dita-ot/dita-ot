@@ -8,10 +8,6 @@ before_script:
 script:
 - "./gradlew check integrationTest --info --stacktrace --no-daemon"
 - "./gradlew dist --info --stacktrace --no-daemon -Pcommit=${TRAVIS_COMMIT} -Ptag=${TRAVIS_TAG}"
-branches:
-  only:
-  - "/^(master|develop|hotfix\\/.*|feature\\/.*|release\\/.*)$/"
-  - "/^\\d+(\\.\\d+)+$/"
 notifications:
   slack:
     secure: IAA4d9O2Dw1hkpY9cwxJz++VMjkgbV3EuaS09DGFujvHl2eQtpKTloE0/CDF+NZA4tcbH1dNqsGw3ETLmrqA581CLpmiiq3LG02cDMoSXZeOKB/9vo6tvLFg0UMawzo+FomJS/hvCmS5KirrFqZQKE5g6SCC05UBM5nwI5d0vOw=
@@ -28,3 +24,12 @@ deploy:
     on:
       repo: dita-ot/dita-ot
       branch: develop
+  - provider: releases
+    api_key:
+      secure: d2vveLfRh+KvjkuJtahHB4buR7qpUXZ7ccrmgwALVboh7BhMgZgdX/puHiEzsiS4CX0xNcV2PpdF6VBGsbMg8TAFn5ap5he7y5MnC5Rt9iaJQtMKuoV3GQ1IoZZOUCRswgpjyLOSxuP3HDgyNn44i9eYT5I9N0wkxQzaleho8Og=
+    skip_cleanup: true
+    file_glob: true
+    file: "build/distributions/dita-ot-*.zip"
+    on:
+      tags: true
+      repo: dita-ot/dita-ot

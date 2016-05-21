@@ -697,8 +697,8 @@
   </message>
   
   <message id="DOTX073W" type="WARN">
-    <reason>Got %1 topics for topic ID "%2" in document "%3". Using the first topic in the document.</reason>
-    <response/>
+    <reason>Got %1 topics for topic ID "%2" in document "%3".</reason>
+    <response>Using the first topic in the document.</response>
   </message>
   
   

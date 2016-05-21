@@ -366,7 +366,7 @@
   
   <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group"
-                name="related-links:result.reference" as="element(linklist)">
+                name="related-links:result.reference" as="element()">
     <xsl:param name="links"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " outputclass="relinfo relref">
