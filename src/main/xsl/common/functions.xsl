@@ -30,6 +30,7 @@
     <xsl:variable name="doc" as="document-node()"
       select="doc(dita-ot:resolve-href-path($href))"/>
 
+    <!-- FIXME: $doc should be the third parameter to the key() function calls below: -->
     <xsl:sequence select="
         if (dita-ot:has-element-id($href))
       then $doc/key('id', dita-ot:get-element-id($href))
