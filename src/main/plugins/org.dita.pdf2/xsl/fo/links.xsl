@@ -332,14 +332,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' topic/fn ')]" mode="footnote-callout">
             <fo:inline xsl:use-attribute-sets="fn__callout">
               <fo:basic-link internal-destination="{dita-ot:getFootnoteInternalID(.)}">
-                <xsl:choose>
-                    <xsl:when test="@callout">
-                        <xsl:value-of select="@callout"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:apply-templates select="." mode="callout"/>
               </fo:basic-link>
             </fo:inline>
     </xsl:template>

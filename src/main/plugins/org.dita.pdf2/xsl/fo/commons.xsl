@@ -2005,19 +2005,16 @@ See the accompanying license.txt file for applicable licenses.
         <!--<fo:inline>
             <xsl:call-template name="commonattributes"/>
         </fo:inline>-->
+      <xsl:variable name="id" select="dita-ot:getFootnoteInternalID(.)" as="xs:string"/>
+      <xsl:variable name="callout" as="xs:string">
+        <xsl:apply-templates select="." mode="callout"/>
+      </xsl:variable>
         <fo:footnote>
             <xsl:choose>
               <xsl:when test="not(@id)">
                 <fo:inline xsl:use-attribute-sets="fn__callout">
-                  <fo:basic-link internal-destination="{dita-ot:getFootnoteInternalID(.)}">
-                    <xsl:choose>
-                        <xsl:when test="@callout">
-                            <xsl:value-of select="@callout"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                  <fo:basic-link internal-destination="{$id}">
+                    <xsl:copy-of select="$callout"/>
                   </fo:basic-link>
                 </fo:inline>
               </xsl:when>
@@ -2031,16 +2028,9 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:list-block xsl:use-attribute-sets="fn__body">
                     <fo:list-item>
                         <fo:list-item-label end-indent="label-end()">
-                            <fo:block text-align="right" id="{dita-ot:getFootnoteInternalID(.)}">
+                            <fo:block text-align="right" id="{$id}">
                                 <fo:inline xsl:use-attribute-sets="fn__callout">
-                                    <xsl:choose>
-                                        <xsl:when test="@callout">
-                                            <xsl:value-of select="@callout"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
+                                  <xsl:copy-of select="$callout"/>
                                 </fo:inline>
                             </fo:block>
                         </fo:list-item-label>
@@ -2054,6 +2044,17 @@ See the accompanying license.txt file for applicable licenses.
             </fo:footnote-body>
         </fo:footnote>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/fn ')]" mode="callout">
+    <xsl:choose>
+      <xsl:when test="@callout">
+        <xsl:value-of select="@callout"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/indexterm ')]">
         <fo:inline>
