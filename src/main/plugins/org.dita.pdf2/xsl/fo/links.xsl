@@ -36,8 +36,9 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-mapmerge="http://www.idiominc.com/opentopic/mapmerge"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
+    xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    exclude-result-prefixes="opentopic-mapmerge opentopic-func related-links xs"
+    exclude-result-prefixes="dita-ot opentopic-mapmerge opentopic-func related-links xs"
     version="2.0">
   
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
@@ -330,7 +331,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' topic/fn ')]" mode="footnote-callout">
             <fo:inline xsl:use-attribute-sets="fn__callout">
-
+              <fo:basic-link internal-destination="{dita-ot:getFootnoteInternalID(.)}">
                 <xsl:choose>
                     <xsl:when test="@callout">
                         <xsl:value-of select="@callout"/>
@@ -339,7 +340,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
                     </xsl:otherwise>
                 </xsl:choose>
-
+              </fo:basic-link>
             </fo:inline>
     </xsl:template>
 

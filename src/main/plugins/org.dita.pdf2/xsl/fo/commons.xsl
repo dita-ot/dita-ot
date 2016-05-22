@@ -27,7 +27,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+This file is part of the DITA Open Toolkit project.
 See the accompanying license.txt file for applicable licenses.
 -->
 
@@ -38,8 +38,9 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
+    xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    exclude-result-prefixes="ot-placeholder opentopic opentopic-index opentopic-func dita2xslfo xs"
+    exclude-result-prefixes="dita-ot ot-placeholder opentopic opentopic-index opentopic-func dita2xslfo xs"
     version="2.0">
 
     <xsl:key name="id" match="*[@id]" use="@id"/>
@@ -1995,15 +1996,20 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:if>
     </xsl:template>
 
+    <xsl:function name="dita-ot:getFootnoteInternalID" as="xs:string">
+      <xsl:param name="ctx" as="element()"/>
+      <xsl:sequence select="concat('fn',generate-id($ctx))"/>
+    </xsl:function>
+
     <xsl:template match="*[contains(@class,' topic/fn ')]">
-        <fo:inline>
+        <!--<fo:inline>
             <xsl:call-template name="commonattributes"/>
-        </fo:inline>
+        </fo:inline>-->
         <fo:footnote>
             <xsl:choose>
               <xsl:when test="not(@id)">
                 <fo:inline xsl:use-attribute-sets="fn__callout">
-
+                  <fo:basic-link internal-destination="{dita-ot:getFootnoteInternalID(.)}">
                     <xsl:choose>
                         <xsl:when test="@callout">
                             <xsl:value-of select="@callout"/>
@@ -2012,6 +2018,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
                         </xsl:otherwise>
                     </xsl:choose>
+                  </fo:basic-link>
                 </fo:inline>
               </xsl:when>
               <xsl:otherwise>
@@ -2024,7 +2031,7 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:list-block xsl:use-attribute-sets="fn__body">
                     <fo:list-item>
                         <fo:list-item-label end-indent="label-end()">
-                            <fo:block text-align="right">
+                            <fo:block text-align="right" id="{dita-ot:getFootnoteInternalID(.)}">
                                 <fo:inline xsl:use-attribute-sets="fn__callout">
                                     <xsl:choose>
                                         <xsl:when test="@callout">
