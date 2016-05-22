@@ -473,6 +473,32 @@ public class TestKeyrefReader {
                 act);
     }
 
+    @Test
+    public void testRootScope() throws DITAOTException {
+        final File filename = new File(srcDir, "rootScope.ditamap");
+
+        final KeyrefReader keyrefreader = new KeyrefReader();
+        keyrefreader.read(filename.toURI(), readMap(filename));
+        final KeyScope root = keyrefreader.getKeyDefinition();
+
+        assertEquals(2, root.keySet().size());
+        assertEquals("one.dita", root.get("root.test1").href.toString());
+        assertEquals("two.dita", root.get("root.nested.test2").href.toString());
+
+        final KeyScope r = root.getChildScope("root");
+        assertEquals(3, r.keySet().size());
+        assertEquals("one.dita", r.get("test1").href.toString());
+        assertEquals("one.dita", r.get("root.test1").href.toString());
+        assertEquals("two.dita", r.get("root.nested.test2").href.toString());
+
+        final KeyScope n = r.getChildScope("nested");
+        assertEquals(4, n.keySet().size());
+        assertEquals("two.dita", n.get("test2").href.toString());
+        assertEquals("one.dita", n.get("test1").href.toString());
+        assertEquals("one.dita", n.get("root.test1").href.toString());
+        assertEquals("two.dita", n.get("root.nested.test2").href.toString());
+    }
+
     private void log(final KeyScope scope, final String indent) {
         System.err.println(indent + "scope: " + scope.name);
         for (final Map.Entry<String, KeyDef> key : scope.keyDefinition.entrySet()) {

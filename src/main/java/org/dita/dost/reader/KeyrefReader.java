@@ -111,7 +111,7 @@ public final class KeyrefReader implements AbstractReader {
     /** Read keys scopes in map. */
     private KeyScope readScopes(final Document doc) {
         final List<KeyScope> scopes = readScopes(doc.getDocumentElement());
-        if (scopes.size() == 1) {
+        if (scopes.size() == 1 && scopes.get(0).name == null) {
             return scopes.get(0);
         } else {
             return new KeyScope(null, Collections.<String, KeyDef>emptyMap(), scopes);
