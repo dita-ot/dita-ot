@@ -8,7 +8,7 @@ $markup-color: #663399;
   font-family: $code-fonts;
 }
 
-/* inline */
+// inline 
 .numcharref {
   @include markupname;
 }
