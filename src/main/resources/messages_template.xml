@@ -631,7 +631,8 @@
   </message>
   
   <message id="DOTX061W" type="WARN">
-    <reason>ID '%1' was used in topicref tag but did not reference a topic element. The href attribute on a topicref element should only reference topic level elements.</reason>
+    <reason>ID '%1' was used in topicref element but did not resolve to a topic element (resolved element has @class "%2"). 
+      The @href attribute on a topicref element should only refer to topic elements.</reason>
     <response></response>
   </message>
   
@@ -689,6 +690,17 @@
     <reason>Conref range: Unable to find conref range end element with ID "%1".</reason>
     <response/>
   </message>
+
+  <message id="DOTX072W" type="WARN">
+    <reason>Failed to resolve topic ID "%1" to a topic in document "%2".</reason>
+    <response/>
+  </message>
+  
+  <message id="DOTX073W" type="WARN">
+    <reason>Got %1 topics for topic ID "%2" in document "%3".</reason>
+    <response>Using the first topic in the document.</response>
+  </message>
+  
   
   <!-- End of XSL Messages --> 
       

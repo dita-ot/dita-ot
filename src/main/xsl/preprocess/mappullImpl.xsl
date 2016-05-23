@@ -45,6 +45,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <xsl:param name="FINALOUTPUTTYPE" select="''" as="xs:string"/>
   <xsl:param name="conserve-memory" select="'false'" as="xs:string"/>
   
+  <xsl:key name="topicsById" match="*[contains(@class, ' topic/topic ')]" use="@id"/>
+  <xsl:key name="elementsById" match="*" use="@id"/>
+  
   <!-- Equivalent to document() but may discard documents from cache when instructed and able. -->
   <xsl:function name="dita-ot:document" as="node()*">
     <xsl:param name="url-sequence" as="item()*"/>
@@ -59,6 +62,85 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
     </xsl:choose>
   </xsl:function>
+  
+  <!-- Given an ID, find the topic that has that ID, if any. 
+  
+       Note that the class of the target topic cannot matter
+       since, except for user error in an unvalidated document,
+       there can only be at most one topic with a given ID.
+       So this code does not need to check the class of the
+       resolved topic against a requested class.       
+       
+       The topicid value can be "#none#", indicating that the
+       topic was referenced by resource part only. In that
+       case, the first topic in the source document is
+       returned.
+  
+  -->
+  <xsl:function name="dita-ot:getTopicForIDRref" as="element()?">
+    <xsl:param name="ctx" as="node()"/><!-- Context node used for message reporting. 
+                                            Should be map or topic making the reference -->
+    <xsl:param name="doc" as="document-node()?"/><!-- The document that may contain the target topic -->
+    <xsl:param name="topicid" as="xs:string"/><!-- The ID to find -->
+    
+    <xsl:choose>
+      <xsl:when test="not($doc)">
+        <!-- No document, nothing to return. -->
+        <xsl:sequence select="()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        
+        <xsl:variable name="topics" as="element()*"
+          select="if ($topicid = ('#none#')) 
+                     then ($doc/*[contains(@class, ' topic/topic ')], 
+                           $doc/dita/*[contains(@class, ' topic/topic ')])[1]
+                     else key('topicsById', $topicid, $doc)"
+        />
+        <xsl:choose>
+          <xsl:when test="count($topics) gt 1">
+            <!-- This should never happen but it could if a document was not
+                 validated against a grammar that enforced XML ID uniqueness.
+              -->
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
+              <xsl:with-param name="id" select="'DOTX073W'"/>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="count($topics)"
+                  />;%2=<xsl:value-of select="$topicid"
+                  /></xsl:with-param>
+            </xsl:call-template>        
+          </xsl:when>
+          <xsl:when test="count($topics) = 0">        
+            <xsl:variable name="elementsWithID" as="element()*" select="key('elementsById', $topicid, $doc)"/>
+            <xsl:choose>
+              <xsl:when test="count($elementsWithID) gt 0">
+                <xsl:variable name="classVal" as="xs:string"
+                  select="normalize-space($elementsWithID[1]/@class)"/>
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
+                  <xsl:with-param name="id" select="'DOTX061W'"/>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/>;%2=<xsl:value-of
+                    select="$classVal"/></xsl:with-param>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="ctx" tunnel="yes" select="$ctx"/>
+                  <xsl:with-param name="id" select="'DOTX072W'"/>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"
+                    />;%2=<xsl:value-of select="$doc/*/@xtrf"/></xsl:with-param>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+        </xsl:choose>
+        <xsl:variable name="result" as="element()?"
+          select="$topics[1]"
+        />
+        <xsl:sequence select="$result"/>    
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+  
 
   <!-- Find the relative path to another topic or map -->
   <xsl:template name="find-relative-path">
@@ -488,40 +570,40 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <xsl:when test="$type='#none#'">
         <xsl:choose>
-          <xsl:when test="@href=''"/>
+          <xsl:when test="@href=''"/>          
           <xsl:when test="$scope='external' or $scope='peer' or not($format='#none#' or $format='dita')">
             <!-- do nothing - type is unavailable-->
           </xsl:when>
 
           <!--finding type based on name of the target element in a particular topic in another file-->
           <xsl:when test="$topicpos='otherfile'">
-            <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
+            <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
             <xsl:choose>
-              <xsl:when test="$target[contains(@class, $classval)]">
-                <xsl:attribute name="type">
-                  <xsl:value-of select="local-name($target[contains(@class, $classval)])"/>
-                </xsl:attribute>
+              <xsl:when test="not($target)">
+                <!-- Error has already been reported. -->
+                <!-- do nothing - omit attribute-->
               </xsl:when>
-              <xsl:when test="$topicid!='#none#' and not($target[contains(@class, ' topic/topic ')])">
-                <!-- topicid does not point to a valid topic -->
-                <xsl:call-template name="output-message">
-                  <xsl:with-param name="id" select="'DOTX061W'"/>
-                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/></xsl:with-param>
-                </xsl:call-template>
-              </xsl:when>
-              <xsl:otherwise><!-- do nothing - omit attribute--></xsl:otherwise>
+              <xsl:otherwise>
+                <xsl:attribute name="type" 
+                  select="local-name($target[contains(@class, $classval)])"
+                />
+              </xsl:otherwise>
             </xsl:choose>
           </xsl:when>
 
           <!--finding type based on name of the target element in the first topic in another file-->
           <xsl:when test="$topicpos='firstinfile'">
+            <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
             <xsl:choose>
-              <xsl:when test="($doc//*[contains(@class, ' topic/topic ')])[1]">
-                <xsl:attribute name="type">
-                  <xsl:value-of select="local-name(($doc//*[contains(@class, $classval)])[1])"/>
-                </xsl:attribute>
+              <xsl:when test="not($target)">
+                <!-- Error has already been reported. -->
+                <!-- do nothing - omit attribute-->
               </xsl:when>
-              <xsl:otherwise><!-- do nothing - omit attribute--></xsl:otherwise>
+              <xsl:otherwise>
+                <xsl:attribute name="type"
+                  select="local-name($target)"
+                />
+              </xsl:otherwise>
             </xsl:choose>
           </xsl:when>
 
@@ -530,32 +612,30 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!-- Type is set locally for a dita topic; warn if it is not correct. -->
       <xsl:when test="$scope!='external' and $scope!='peer' and ($format='#none#' or $format='dita')">
-        <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
-        <xsl:if test="$topicid!='#none#' and not($target[contains(@class, ' topic/topic ')])">
-          <!-- topicid does not point to a valid topic -->
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="id" select="'DOTX061W'"/>
-            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/></xsl:with-param>
-          </xsl:call-template>
-        </xsl:if>
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
         <xsl:choose>
+          <xsl:when test="not($target)">
+            <!-- Error has already been reported -->
+          </xsl:when>
           <!--finding type based on name of the target elemenkt in a particular topic in another file-->
-          <xsl:when test="$topicpos='otherfile' and $target[contains(@class, ' topic/topic ')]">
+          <xsl:when test="$topicpos= ('otherfile')">
             <xsl:call-template name="verify-type-value">
               <xsl:with-param name="type" select="$type"/>
-              <xsl:with-param name="actual-class" select="$target[contains(@class, ' topic/topic ')][1]/@class"/>
-              <xsl:with-param name="actual-name" select="local-name($target[contains(@class, ' topic/topic ')][1])"/>
+              <xsl:with-param name="actual-class" select="$target/@class"/>
+              <xsl:with-param name="actual-name" select="local-name($target)"/>
             </xsl:call-template>
           </xsl:when>
-
           <!--finding type based on name of the target element in the first topic in another file-->
-          <xsl:when test="$topicpos='firstinfile' and $doc//*[contains(@class, ' topic/topic ')]">
+          <xsl:when test="$topicpos='firstinfile'">
             <xsl:call-template name="verify-type-value">
               <xsl:with-param name="type" select="$type"/>
-              <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')])[1]/@class"/>
-              <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')])[1])"/>
+              <xsl:with-param name="actual-class" select="$target/@class"/>
+              <xsl:with-param name="actual-name" select="local-name($target)"/>
             </xsl:call-template>
           </xsl:when>
+          <xsl:otherwise>
+            <!-- Should never happen unless topicpos value is changed elsewhere in the code. -->
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
     </xsl:choose>
@@ -594,11 +674,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <!--if it's external and dita, leave it undefined as fallback, so the file extension can be processed in the final output stage-->
       <xsl:when test="$scope='external'">
         <xsl:choose>
-          <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
-            <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
-          </xsl:when>
-          <xsl:when test="@navtitle">
-            <xsl:value-of select="@navtitle"/>
+          <xsl:when test="*/*[contains(@class,' topic/navtitle ')] or @navtitle">
+            <xsl:value-of select="(*/*[contains(@class,' topic/navtitle ')], @navtitle)"/>
           </xsl:when>
           <xsl:when test="*/*[contains(@class,' map/linktext ')]">
             <xsl:value-of select="*/*[contains(@class,' map/linktext ')]"/>
@@ -606,14 +683,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:otherwise>#none#</xsl:otherwise>
         </xsl:choose>
       </xsl:when>
-      <xsl:when test="$scope='peer'">
+      <xsl:when test="$scope='peer'">        
         <xsl:choose>
-          <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
-            <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
+          <xsl:when test="*/*[contains(@class,' topic/navtitle ')] or @navtitle">
+            <xsl:value-of select="(*/*[contains(@class,' topic/navtitle ')], @navtitle)[1]"/>
           </xsl:when>          
-          <xsl:when test="@navtitle">
-            <xsl:value-of select="@navtitle"/>
-          </xsl:when>
           <xsl:otherwise>
             <xsl:text>#none#</xsl:text>
             <xsl:apply-templates select="." mode="ditamsg:missing-navtitle-peer"/>
@@ -629,24 +703,21 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:when test="@href=''"/>
       <!--grabbing text from a particular topic in another file-->
       <xsl:when test="$topicpos='otherfile'">
-        <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
+        <!-- This function will only return a single topic or nothing if the IDref cannot
+             be resolved.
+          -->
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
         <xsl:choose>
-          <xsl:when
-            test="$target[contains(@class, $classval)]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
-            <xsl:apply-templates
-              select="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
-              mode="get-title-content"/>
+          <xsl:when test="not($target)">
+            <!-- Error has already been reported -->
+            <xsl:apply-templates select="." mode="mappull:navtitle-fallback"/>
           </xsl:when>
           <xsl:when
-            test="$target[contains(@class, $classval)]/*[contains(@class, ' topic/title ')]">
+            test="$target/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')] or
+                  $target/*[contains(@class, ' topic/title ')]">
             <xsl:apply-templates
-              select="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/title ')]"
-              mode="get-title-content"/>
-          </xsl:when>
-          <xsl:when
-            test="$target[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]">
-            <xsl:apply-templates
-              select="($target[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]"
+              select="($target/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')],
+                      $target/*[contains(@class, ' topic/title ')])[1]"
               mode="get-title-content"/>
           </xsl:when>
           <xsl:otherwise>
@@ -656,17 +727,26 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!--grabbing text from the first topic in another file-->
       <xsl:when test="$topicpos='firstinfile'">
+        <!-- This function will only return a single topic or nothing if the IDref cannot
+             be resolved.
+          -->
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
+        
         <xsl:choose>
+          <xsl:when test="not($target)">
+            <!-- Error has already been reported -->
+            <xsl:apply-templates select="." mode="mappull:navtitle-fallback"/>
+          </xsl:when>
           <xsl:when
-            test="$doc//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
+            test="$target/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
             <xsl:apply-templates
-              select="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
+              select="$target/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
               mode="get-title-content"/>
           </xsl:when>
           <xsl:when
-            test="$doc//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]">
+            test="$target/*[contains(@class, ' topic/title ')]">
             <xsl:apply-templates
-              select="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]"
+              select="$target/*[contains(@class, ' topic/title ')]"
               mode="get-title-content"/>
           </xsl:when>
           <xsl:otherwise>
@@ -717,11 +797,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:variable name="classval" as="xs:string">
       <xsl:apply-templates select="." mode="mappull:get-stuff_target-classval"><xsl:with-param name="type" select="$type"/></xsl:apply-templates>
     </xsl:variable>
-
+    
     <xsl:variable name="doc"
                   select="if (($format = ('dita', '#none#')) and
                               ($scope = ('local', '#none#')))
-                          then dita-ot:document($file, /)
+                          then dita-ot:document($file, .) 
                           else ()"
                   as="document-node()?"/>
 
@@ -882,20 +962,25 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
             <!--grabbing text from a particular topic in another file-->
             <xsl:when test="$topicpos='otherfile'">
-              <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
+              
+              <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
               <xsl:choose>
-                <xsl:when test="$target[contains(@class, $classval)]/*[contains(@class, ' topic/title ')]">
+                <xsl:when test="not($target)">
+                  <!-- Error has already been reported. -->
+                  <!-- do nothing - omit attribute-->
+                </xsl:when>
+                <xsl:when test="$target/*[contains(@class, ' topic/title ')]">
                   <xsl:variable name="grabbed-value" as="xs:string">
                     <xsl:value-of>
-                      <xsl:apply-templates select="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
+                      <xsl:apply-templates select="$target/*[contains(@class, ' topic/title ')]" mode="text-only"/>
                     </xsl:value-of>
                   </xsl:variable>
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
                 </xsl:when>
-                <xsl:when test="$target[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]">
+                <xsl:when test="$target/*[contains(@class, ' topic/title ')]">
                   <xsl:variable name="grabbed-value" as="xs:string">
                     <xsl:value-of>
-                      <xsl:apply-templates select="($target[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
+                      <xsl:apply-templates select="$target/*[contains(@class, ' topic/title ')]" mode="text-only"/>
                     </xsl:value-of>
                   </xsl:variable>
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
@@ -907,11 +992,13 @@ Other modes can be found within the code, and may or may not prove useful for ov
             </xsl:when>
             <!--grabbing text from the first topic in another file-->
             <xsl:when test="$topicpos='firstinfile'">
+              <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
+              
               <xsl:choose>
-                <xsl:when test="$doc//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]">
+                <xsl:when test="$target/*[contains(@class, ' topic/title ')]">
                   <xsl:variable name="grabbed-value" as="xs:string">
                     <xsl:value-of>
-                     <xsl:apply-templates select="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
+                     <xsl:apply-templates select="$target/*[contains(@class, ' topic/title ')]" mode="text-only"/>
                     </xsl:value-of>
                   </xsl:variable>
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
@@ -989,27 +1076,29 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!--try retrieving from a particular topic in another file-->
       <xsl:when test="$topicpos='otherfile'">
-        <xsl:variable name="target" select="$doc//*[@id=$topicid]" as="element()?"/>
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
         <xsl:if
-            test="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/shortdesc ')]|
-                  ($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
+            test="$target/*[contains(@class, ' topic/shortdesc ')]|
+                  $target/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
           <xsl:apply-templates select="." mode="mappull:add-genshortdesc-PI"/>
           <shortdesc class="- map/shortdesc ">
-            <xsl:apply-templates select="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/shortdesc ')] |
-                                         ($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
+            <xsl:apply-templates select="$target/*[contains(@class, ' topic/shortdesc ')] |
+                                         $target/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
           </shortdesc>
         </xsl:if>
       </xsl:when>
       <!--try retrieving from the first topic in another file-->
       <xsl:when test="$topicpos='firstinfile'">
+        <xsl:variable name="target" select="dita-ot:getTopicForIDRref(., $doc, $topicid)" as="element()?"/>
+        
         <xsl:if
-            test="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/shortdesc ')]|
-                  ($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
+            test="$target/*[contains(@class, ' topic/shortdesc ')]|
+                  $target/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
           <xsl:apply-templates select="." mode="mappull:add-genshortdesc-PI"/>
           <shortdesc class="- map/shortdesc ">
             <xsl:apply-templates
-              select="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/shortdesc ')]|
-                      ($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]"
+              select="$target/*[contains(@class, ' topic/shortdesc ')]|
+                      $target/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]"
               mode="copy-shortdesc"/>
           </shortdesc>
         </xsl:if>
