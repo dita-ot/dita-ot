@@ -231,14 +231,12 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:attribute-set>
 
   <xsl:attribute-set name="sthead.stentry__keycol-content" use-attribute-sets="common.table.body.entry common.table.head.entry">
-    <xsl:attribute name="background-color">antiquewhite</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="strow.stentry__content" use-attribute-sets="common.table.body.entry">
   </xsl:attribute-set>
 
   <xsl:attribute-set name="strow.stentry__keycol-content" use-attribute-sets="common.table.body.entry common.table.head.entry">
-    <xsl:attribute name="background-color">antiquewhite</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="strow.stentry">

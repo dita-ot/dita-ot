@@ -24,7 +24,6 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:attribute-set>
 
   <xsl:attribute-set name="property.entry__keycol-content" use-attribute-sets="common.table.body.entry common.table.head.entry">
-      <xsl:attribute name="background-color">antiquewhite</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="property.entry__content" use-attribute-sets="common.table.body.entry">
@@ -40,7 +39,6 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:attribute-set>
 
   <xsl:attribute-set name="prophead.entry__keycol-content" use-attribute-sets="common.table.body.entry common.table.head.entry">
-      <xsl:attribute name="background-color">antiquewhite</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="prophead.entry__content" use-attribute-sets="common.table.body.entry common.table.head.entry">
