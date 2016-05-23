@@ -177,14 +177,14 @@ See the accompanying license.txt file for applicable licenses.
          text in case it's not specified in source. -->
     <variable id="Cross-Reference">Cross-Reference to:</variable>
 
-    <!-- Default content-reference text prefix. Used to generate reference 
+    <!-- Prefix for unresolved content reference. Used to generate reference 
          text in case target cannot be resolved. -->
-    <variable id="Content-Reference">Content-Reference to:</variable>
+    <variable id="Content-Reference">Unresolved content reference to:</variable>
 
     <!-- Default title text for referenced section title. Used to generate 
          reference text in case reference has no explicit content and
          referenced section has no title. -->
-    <variable id="Untitled section">Untitled section.</variable>
+    <!-- Deprecated since 2.3 --><variable id="Untitled section">Untitled section.</variable>
 
     <!-- Default title text for referenced list item. Used to generate
          reference text in case reference has no explicit content and 
@@ -202,7 +202,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Text to use for a generated label of search title. Renders 
          as part of <searchtitle> element. -->
-    <variable id="Search title">Search title</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search title">Search title</variable>
 
     <!-- Text to use for chapter titles.-->
     <variable id="Chapter with number">Chapter <param ref-name="number"/></variable>
@@ -273,60 +273,60 @@ See the accompanying license.txt file for applicable licenses.
     -->
 
     <!-- The title of the "contents" button in online-help output -->
-    <variable id="Contents button title">Contents</variable>
+    <!-- Deprecated since 2.3 --><variable id="Contents button title">Contents</variable>
 
     <!-- The title of the "index" button in online-help output -->
-    <variable id="Index button title">Index</variable>
+    <!-- Deprecated since 2.3 --><variable id="Index button title">Index</variable>
 
     <!-- The separator of multiple index entries in online-help output -->
-    <variable id="Index multiple entries separator">, </variable>
+    <!-- Deprecated since 2.3 --><variable id="Index multiple entries separator">, </variable>
 
     <!-- The title of the "search" button in online-help output -->
-    <variable id="Search button title">Search</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search button title">Search</variable>
 
     <!-- The title of the "back" button in online-help output -->
-    <variable id="Back button title">Back</variable>
+    <!-- Deprecated since 2.3 --><variable id="Back button title">Back</variable>
 
     <!-- The title of the "forward" button in online-help output -->
-    <variable id="Forward button title">Forward</variable>
+    <!-- Deprecated since 2.3 --><variable id="Forward button title">Forward</variable>
 
     <!-- The title of the "main page" button in online-help output -->
-    <variable id="Main page button title">Home</variable>
+    <!-- Deprecated since 2.3 --><variable id="Main page button title">Home</variable>
 
     <!-- The title of the "previous page" button in online-help output -->
-    <variable id="Previous page button title">Previous Topic</variable>
+    <!-- Deprecated since 2.3 --><variable id="Previous page button title">Previous Topic</variable>
 
     <!-- The title of the "next page" button in online-help output -->
-    <variable id="Next page button title">Next Topic</variable>
+    <!-- Deprecated since 2.3 --><variable id="Next page button title">Next Topic</variable>
 
     <!-- The "online help" document title prefix in online-help output -->
-    <variable id="Online help prefix">Online Help</variable>
+    <!-- Deprecated since 2.3 --><variable id="Online help prefix">Online Help</variable>
 
     <!-- The search by index field title in online-help output -->
-    <variable id="Search index field title">Search for the keyword:</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search index field title">Search for the keyword:</variable>
 
     <!-- The search by index button title in online-help output -->
-    <variable id="Search index button title">View</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search index button title">View</variable>
 
     <!-- The search by text field title in online-help output -->
-    <variable id="Search text field title">Search help for:</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search text field title">Search help for:</variable>
 
     <!-- The search by text button title in online-help output -->
-    <variable id="Search text button title">Search</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search text button title">Search</variable>
 
-  <variable id="Online Help Search Method Field">Search method</variable>
-  <variable id="Online Help Search Method Or">or</variable>
-  <variable id="Online Help Search Method And">and</variable>
-  <variable id="Search Highlight Switch">Highlight text in search results</variable>
-  <variable id="Search index next button title">Show Next</variable>
-  <variable id="Search Whole Words Switch">Find whole words only</variable>
-  <variable id="Search Case Sensitive Switch">Match case</variable>
-  <variable id="Search Stopped Message">The search was stopped after 50 hits.</variable>
+  <!-- Deprecated since 2.3 --><variable id="Online Help Search Method Field">Search method</variable>
+  <!-- Deprecated since 2.3 --><variable id="Online Help Search Method Or">or</variable>
+  <!-- Deprecated since 2.3 --><variable id="Online Help Search Method And">and</variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Highlight Switch">Highlight text in search results</variable>
+  <!-- Deprecated since 2.3 --><variable id="Search index next button title">Show Next</variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Whole Words Switch">Find whole words only</variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Case Sensitive Switch">Match case</variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Stopped Message">The search was stopped after 50 hits.</variable>
   <!--This one is a java script expression. So if the order of message should be another don't forget to add '+'
   and quotes to the string expressions.-->
-  <variable id="Search Excluded Stop Words Message">"The following words were excluded from the search: "+<param ref-name="stop-words-list"/></variable>
-  <variable id="Search Search in Progress Message">Search in progress...</variable>
-  <variable id="Search Search Give No Results Message">No matches were found.</variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Excluded Stop Words Message">"The following words were excluded from the search: "+<param ref-name="stop-words-list"/></variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Search in Progress Message">Search in progress...</variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Search Give No Results Message">No matches were found.</variable>
 
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">Optional:</variable>

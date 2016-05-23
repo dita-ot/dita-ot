@@ -154,14 +154,14 @@ See the accompanying license.txt file for applicable licenses.
          text in case it's not specified in source. -->
     <variable id="Cross-Reference">Cross-Reference to:</variable>
 
-    <!-- UNUSED: Default content-reference text prefix. Used to generate reference 
+    <!-- Prefix for unresolved content reference. Used to generate reference 
          text in case target cannot be resolved. -->
-    <variable id="Content-Reference">Content-Reference to:</variable>
+    <variable id="Content-Reference">Unresolved content reference to:</variable>
 
     <!-- UNUSED: Default title text for referenced section title. Used to generate 
          reference text in case reference has no explicit content and
          referenced section has no title. -->
-    <variable id="Untitled section">Untitled section.</variable>
+    <!-- Deprecated since 2.3 --><variable id="Untitled section">Untitled section.</variable>
 
     <!-- TODO: Default title text for referenced list item. Used to generate
          reference text in case reference has no explicit content and 
@@ -179,7 +179,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- TODO: Text to use for a generated label of search title. Renders 
          as part of <searchtitle> element. -->
-    <variable id="Search title">Search title</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search title">Search title</variable>
 
     <!-- Text to use for chapter titles.-->
     <variable id="Chapter with number">Peatükk <param ref-name="number"/></variable>
@@ -248,60 +248,60 @@ See the accompanying license.txt file for applicable licenses.
     -->
 
     <!-- The title of the "contents" button in online-help output -->
-    <variable id="Contents button title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Contents button title"></variable>
 
     <!-- The title of the "index" button in online-help output -->
-    <variable id="Index button title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Index button title"></variable>
 
     <!-- The separator of multiple index entries in online-help output -->
-    <variable id="Index multiple entries separator">, </variable>
+    <!-- Deprecated since 2.3 --><variable id="Index multiple entries separator">, </variable>
 
     <!-- The title of the "search" button in online-help output -->
-    <variable id="Search button title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Search button title"></variable>
 
     <!-- The title of the "back" button in online-help output -->
-    <variable id="Back button title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Back button title"></variable>
 
     <!-- The title of the "forward" button in online-help output -->
-    <variable id="Forward button title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Forward button title"></variable>
 
     <!-- The title of the "main page" button in online-help output -->
-    <variable id="Main page button title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Main page button title"></variable>
 
     <!-- The title of the "previous page" button in online-help output -->
-    <variable id="Previous page button title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Previous page button title"></variable>
 
     <!-- The title of the "next page" button in online-help output -->
-    <variable id="Next page button title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Next page button title"></variable>
 
     <!-- The "online help" document title prefix in online-help output -->
-    <variable id="Online help prefix"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Online help prefix"></variable>
 
     <!-- The search by index field title in online-help output -->
-    <variable id="Search index field title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Search index field title"></variable>
 
     <!-- The search by index button title in online-help output -->
-    <variable id="Search index button title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Search index button title"></variable>
 
     <!-- The search by text field title in online-help output -->
-    <variable id="Search text field title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Search text field title"></variable>
 
     <!-- The search by text button title in online-help output -->
-    <variable id="Search text button title"></variable>
+    <!-- Deprecated since 2.3 --><variable id="Search text button title"></variable>
 
-  <variable id="Online Help Search Method Field"></variable>
-  <variable id="Online Help Search Method Or"></variable>
-  <variable id="Online Help Search Method And"></variable>
-  <variable id="Search Highlight Switch"></variable>
-  <variable id="Search index next button title"></variable>
-  <variable id="Search Whole Words Switch"></variable>
-  <variable id="Search Case Sensitive Switch"></variable>
-  <variable id="Search Stopped Message"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Online Help Search Method Field"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Online Help Search Method Or"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Online Help Search Method And"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Highlight Switch"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Search index next button title"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Whole Words Switch"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Case Sensitive Switch"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Stopped Message"></variable>
   <!--This one is a java script expression. So if the order of message should be another don't forget to add '+'
   and quotes to the string expressions.-->
-  <variable id="Search Excluded Stop Words Message"></variable>
-  <variable id="Search Search in Progress Message"></variable>
-  <variable id="Search Search Give No Results Message"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Excluded Stop Words Message"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Search in Progress Message"></variable>
+  <!-- Deprecated since 2.3 --><variable id="Search Search Give No Results Message"></variable>
 
     <!-- Label for a step with importance="optional"-->
     <variable id="Optional Step">Mittenõutav:</variable>

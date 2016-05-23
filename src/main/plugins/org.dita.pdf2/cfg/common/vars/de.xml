@@ -170,14 +170,14 @@ See the accompanying license.txt file for applicable licenses.
          text in case it's not specified in source. -->
     <variable id="Cross-Reference">Querverweis auf: </variable>
 
-    <!-- Default content-reference text prefix. Used to generate reference 
+    <!-- Prefix for unresolved content reference. Used to generate reference 
          text in case target cannot be resolved. -->
     <variable id="Content-Reference">Inhaltsverweis auf: </variable>
 
     <!-- Default title text for referenced section title. Used to generate 
          reference text in case reference has no explicit content and
          referenced section has no title. -->
-    <variable id="Untitled section">Unbenannter Abschnitt.</variable>
+    <!-- Deprecated since 2.3 --><variable id="Untitled section">Unbenannter Abschnitt.</variable>
 
     <!-- Default title text for referenced list item. Used to generate
          reference text in case reference has no explicit content and 
@@ -195,7 +195,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Text to use for a generated label of search title. Renders 
          as part of <searchtitle> element. -->
-    <variable id="Search title">Suchtitel</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search title">Suchtitel</variable>
 
     <!-- Text to use for chapter titles.-->
     <variable id="Chapter with number">Kapitel  <param ref-name="number"/></variable>
@@ -258,43 +258,43 @@ See the accompanying license.txt file for applicable licenses.
     -->
 
     <!-- The title of the "contents" button in online-help output -->
-    <variable id="Contents button title">Inhalt</variable>
+    <!-- Deprecated since 2.3 --><variable id="Contents button title">Inhalt</variable>
 
     <!-- The title of the "index" button in online-help output -->
-    <variable id="Index button title">Index</variable>
+    <!-- Deprecated since 2.3 --><variable id="Index button title">Index</variable>
 
     <!-- The title of the "search" button in online-help output -->
-    <variable id="Search button title">Suche</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search button title">Suche</variable>
 
     <!-- The title of the "back" button in online-help output -->
-    <variable id="Back button title">Zurück</variable>
+    <!-- Deprecated since 2.3 --><variable id="Back button title">Zurück</variable>
 
     <!-- The title of the "forward" button in online-help output -->
-    <variable id="Forward button title">Vorwärts</variable>
+    <!-- Deprecated since 2.3 --><variable id="Forward button title">Vorwärts</variable>
 
     <!-- The title of the "main page" button in online-help output -->
-    <variable id="Main page button title">Hauptseite</variable>
+    <!-- Deprecated since 2.3 --><variable id="Main page button title">Hauptseite</variable>
 
     <!-- The title of the "previous page" button in online-help output -->
-    <variable id="Previous page button title">Vorige Seite</variable>
+    <!-- Deprecated since 2.3 --><variable id="Previous page button title">Vorige Seite</variable>
 
     <!-- The title of the "next page" button in online-help output -->
-    <variable id="Next page button title">Folgende Seite</variable>
+    <!-- Deprecated since 2.3 --><variable id="Next page button title">Folgende Seite</variable>
 
     <!-- The "online help" document title prefix in online-help output -->
-    <variable id="Online help prefix">On-line-Hilfe</variable>
+    <!-- Deprecated since 2.3 --><variable id="Online help prefix">On-line-Hilfe</variable>
 
     <!-- The search by index field title in online-help output -->
-    <variable id="Search index field title">Suche nach dem Schlüsselwort:</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search index field title">Suche nach dem Schlüsselwort:</variable>
 
     <!-- The search by index button title in online-help output -->
-    <variable id="Search index button title">Sehen Sie</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search index button title">Sehen Sie</variable>
 
     <!-- The search by text field title in online-help output -->
-    <variable id="Search text field title">Suchhilfe für:</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search text field title">Suchhilfe für:</variable>
 
     <!-- The search by text button title in online-help output -->
-    <variable id="Search text button title">Suche</variable>
+    <!-- Deprecated since 2.3 --><variable id="Search text button title">Suche</variable>
 
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">Optional:</variable>
