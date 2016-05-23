@@ -12,8 +12,6 @@
 
 <!-- =========== CALS (OASIS) TABLE =========== -->
   
-<xsl:variable name="table.align-default" select="'left'" as="xs:string"/>
-
 <!-- XML Exchange Table Model Document Type Definition default is all -->
 <xsl:variable name="table.frame-default" select="'all'"/>
 <!-- XML Exchange Table Model Document Type Definition default is 1 -->
@@ -458,9 +456,6 @@
           <xsl:when test="$colspec/@align">
             <xsl:value-of select="$colspec/@align"/>
           </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$table.align-default"/>
-          </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
       <xsl:if test="exists($align)">
