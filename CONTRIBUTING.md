@@ -15,7 +15,7 @@ A good issue description contains:
 *  version of DITA-OT, and
 *  a self-contained test case.
 
-A test case is simply a set of files that can be used to reproduce the issue. [Gist][3] is an easy way to upload your test files and link them to the issue description.
+A test case is simply a set of files that can be used to reproduce the issue. [Gist][3] is an easy way to upload your test files and link them to the issue description; github also allows you to create a zip of test files and attach those to the issue.
 
 _or — even better:_
 
