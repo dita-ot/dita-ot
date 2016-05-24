@@ -51,6 +51,7 @@
   <variable id="Related Links"><!--TODO:Related Links--></variable>
   <variable id="Cross-Reference"><!--TODO:Cross-Reference to:--></variable>
   <variable id="Content-Reference"><!--TODO:Content-Reference to:--></variable>
+  <!-- Deprecated since 2.3 -->
   <variable id="Untitled section"><!--TODO:Untitled section.--></variable>
   <variable id="List item"><!--TODO:List item.--></variable>
   <variable id="Foot note"><!--TODO:Footnote.--></variable>
@@ -79,6 +80,7 @@
 
   <variable id="Related references">Ссылки, связанные с данной</variable>
   
+  <!-- Deprecated since 2.3 -->
   <variable id="Index multiple entries separator">, </variable>
   <variable id="Optional Step">Необязательно:</variable>
   <variable id="Required Step">Обязательно:</variable>
