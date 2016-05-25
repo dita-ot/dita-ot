@@ -2265,8 +2265,6 @@
   </xsl:element>
 </xsl:template>
 
-<!-- Test for in BIDI area: returns "bidi" when parent's @xml:lang is a bidi language;
-     Otherwise, leave blank -->
 <xsl:template name="bidi-area" as="xs:boolean">
  <xsl:param name="parentlang">
   <xsl:call-template name="getLowerCaseLang"/>
