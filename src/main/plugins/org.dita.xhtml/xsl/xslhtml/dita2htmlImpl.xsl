@@ -427,28 +427,12 @@
 
 <!-- called shortdesc processing when it is in abstract -->
 <xsl:template match="*[contains(@class, ' topic/shortdesc ')]" mode="outofline.abstract">
-  <xsl:choose>
-    <xsl:when test="preceding-sibling::*[contains(@class, ' topic/p ') or contains(@class, ' topic/dl ') or
-                                         contains(@class, ' topic/fig ') or contains(@class, ' topic/lines ') or
-                                         contains(@class, ' topic/lq ') or contains(@class, ' topic/note ') or
-                                         contains(@class, ' topic/ol ') or contains(@class, ' topic/pre ') or
-                                         contains(@class, ' topic/simpletable ') or contains(@class, ' topic/sl ') or
-                                         contains(@class, ' topic/table ') or contains(@class, ' topic/ul ')]">
-      <div>
+  <xsl:choose>    
+    <xsl:when test="exists(preceding-sibling::*[dita-ot:is-block(.)] | following-sibling::*[dita-ot:is-block(.)])">
+      <p>
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
-      </div>
-    </xsl:when>
-    <xsl:when test="following-sibling::*[contains(@class, ' topic/p ') or contains(@class, ' topic/dl ') or
-                                         contains(@class, ' topic/fig ') or contains(@class, ' topic/lines ') or
-                                         contains(@class, ' topic/lq ') or contains(@class, ' topic/note ') or
-                                         contains(@class, ' topic/ol ') or contains(@class, ' topic/pre ') or
-                                         contains(@class, ' topic/simpletable ') or contains(@class, ' topic/sl ') or
-                                         contains(@class, ' topic/table ') or contains(@class, ' topic/ul ')]">
-      <div>
-        <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates/>
-      </div>
+      </p>
     </xsl:when>
     <xsl:otherwise>
       <xsl:if test="preceding-sibling::* | preceding-sibling::text()">
@@ -514,17 +498,7 @@
  <!-- To ensure XHTML validity, need to determine whether the DITA kids are block elements.
       If so, use div_class="p" instead of p -->
  <xsl:choose>
-  <xsl:when test="descendant::*[contains(@class, ' topic/pre ')] or
-       descendant::*[contains(@class, ' topic/ul ')] or
-       descendant::*[contains(@class, ' topic/sl ')] or
-       descendant::*[contains(@class, ' topic/ol ')] or
-       descendant::*[contains(@class, ' topic/lq ')] or
-       descendant::*[contains(@class, ' topic/dl ')] or
-       descendant::*[contains(@class, ' topic/note ')] or
-       descendant::*[contains(@class, ' topic/lines ')] or
-       descendant::*[contains(@class, ' topic/fig ')] or
-       descendant::*[contains(@class, ' topic/table ')] or
-       descendant::*[contains(@class, ' topic/simpletable ')]">
+   <xsl:when test="descendant::*[dita-ot:is-block(.)]">
      <div class="p">
        <xsl:call-template name="commonattributes"/>
        <xsl:call-template name="setid"/>
@@ -2474,6 +2448,35 @@
 <xsl:template match="*[contains(@class, ' topic/figgroup ')]/*[contains(@class, ' topic/title ')]" name="topic.figgroup_title">
  <xsl:apply-templates/>
 </xsl:template>
+  
+  <xsl:function name="dita-ot:is-block" as="xs:boolean">
+    <xsl:param name="element" as="node()"/>
+    <xsl:variable name="class" select="string($element/@class)"/>
+    <xsl:sequence select="contains($class, ' topic/body ') or
+                          contains($class, ' topic/shortdesc ') or
+                          contains($class, ' topic/abstract ') or
+                          contains($class, ' topic/title ') or
+                          contains($class, ' topic/section ') or 
+                          contains($class, ' task/info ') or
+                          contains($class, ' topic/p ') or
+                          (contains($class, ' topic/image ') and $element/@placement = 'break') or
+                          contains($class, ' topic/pre ') or
+                          contains($class, ' topic/note ') or
+                          contains($class, ' topic/fig ') or
+                          contains($class, ' topic/dl ') or
+                          contains($class, ' topic/sl ') or
+                          contains($class, ' topic/ol ') or
+                          contains($class, ' topic/ul ') or
+                          contains($class, ' topic/li ') or
+                          contains($class, ' topic/sli ') or
+                          contains($class, ' topic/itemgroup ') or
+                          contains($class, ' topic/section ') or
+                          contains($class, ' topic/table ') or
+                          contains($class, ' topic/entry ') or
+                          contains($class, ' topic/simpletable ') or
+                          contains($class, ' topic/stentry ') or
+                          contains($class, ' topic/example ')"/>
+  </xsl:function>
 
 <!-- ===================================================================== -->
 
