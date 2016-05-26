@@ -103,7 +103,6 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         if (rootClass == null) {
             rootClass = new DitaClass(classValue);
         }
-        final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         // when meets topic tag
         if (TOPIC_TOPIC.matches(classValue)) {
             topicId = atts.getValue(ATTRIBUTE_NAME_ID);

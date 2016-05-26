@@ -39,7 +39,6 @@ final class FilePathToURI {
         gAfterEscaping2[0x7f] = 'F';
         final char[] escChs = {' ', '<', '>', '#', '%', '"', '{', '}', '?',
                 '|', '\\', '^', '~', '[', ']', '`', '\'', '&'};
-        final int len = escChs.length;
         char ch;
         for (char escCh : escChs) {
             ch = escCh;

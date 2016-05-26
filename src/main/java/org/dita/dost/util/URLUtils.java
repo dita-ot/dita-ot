@@ -315,7 +315,6 @@ public final class URLUtils {
                 '|', '\\', '^', '~', '[', ']', '`', '\'',
                 //'&'
                 };
-        final int len = escChs.length;
         char ch;
         for (char escCh : escChs) {
             ch = escCh;

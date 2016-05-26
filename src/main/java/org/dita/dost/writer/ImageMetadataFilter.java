@@ -107,8 +107,9 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             final Attributes atts) throws SAXException {
         if (TOPIC_IMAGE.matches(atts)) {
             final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder(atts);
-            if (atts.getValue(ATTRIBUTE_NAME_HREF) != null) {
-                final URI imgInput = getImageFile(toURI(atts.getValue(ATTRIBUTE_NAME_HREF)));
+            final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
+            if (href != null) {
+                final URI imgInput = getImageFile(toURI(href));
                 if (imgInput != null) {
                     Attributes m = cache.get(imgInput);
                     if (m == null) {
@@ -117,7 +118,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
                     }
                     a.addAll(m);
                 } else {
-                    logger.error("Image file " + imgInput + " not found");
+                    logger.error("Image file " + href + " not found");
                 }
             }
             depth = 1;

@@ -145,7 +145,7 @@ public final class MessageUtils {
      * @return messageBean
      */
     private MessageBean getMessage(final String id) {
-        if (hashTable == null) {
+        if (hashTable.isEmpty()) {
         	throw new IllegalStateException("Messages have not been loaded");
         }
 

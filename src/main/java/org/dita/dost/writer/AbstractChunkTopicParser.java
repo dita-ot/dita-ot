@@ -495,7 +495,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      */
     String getFirstTopicId(final String absolutePathToFile) {
         assert new File(absolutePathToFile).isAbsolute();
-        if (absolutePathToFile == null || !isAbsolutePath(absolutePathToFile)) {
+        if (!isAbsolutePath(absolutePathToFile)) {
             return null;
         }
         final StringBuilder firstTopicId = new StringBuilder();

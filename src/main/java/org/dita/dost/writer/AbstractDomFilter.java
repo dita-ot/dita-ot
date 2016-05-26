@@ -32,7 +32,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
     public void read(final File filename) {
         assert filename.isAbsolute();
         logger.info("Processing " + filename.toURI());
-        Document doc = null;
+        Document doc;
         try {
             final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));

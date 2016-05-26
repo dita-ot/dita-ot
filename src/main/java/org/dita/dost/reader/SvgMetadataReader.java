@@ -29,7 +29,7 @@ public class SvgMetadataReader extends AbstractXMLReader {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
                              final Attributes atts) throws SAXException {
-        if (SVG_NS.equals(SVG_NS) &&
+        if (SVG_NS.equals(uri) &&
                 (SVG_ELEM.equals(localName) || SVG_ELEM.equals(qName) ||
                         (qName != null && qName.startsWith(SVG_ELEM + ":")))) {
             dimensions.width = atts.getValue(WIDTH_ATTR);
