@@ -260,7 +260,7 @@ public final class KeyrefReader implements AbstractReader {
         return new KeyScope(scope.name, keys, children);
     }
 
-    private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) throws DITAOTException {
+    private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) {
         final Element elem = keyDef.element;
         final String keyref = elem.getAttribute(ATTRIBUTE_NAME_KEYREF);
         if (!keyref.isEmpty() && scope.keyDefinition.containsKey(keyref)) {

@@ -128,7 +128,7 @@ public final class CopyToReader extends AbstractXMLFilter {
      * 
      * @param atts all attributes
      */
-    private void parseAttribute(final Attributes atts) throws SAXException {
+    private void parseAttribute(final Attributes atts) {
         URI attrValue = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
         if (attrValue == null) {
             return;

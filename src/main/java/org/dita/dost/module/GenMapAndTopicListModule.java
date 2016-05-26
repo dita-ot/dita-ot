@@ -298,7 +298,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         reader.setEntityResolver(CatalogUtils.getCatalogResolver());
     }
     
-    private void parseInputParameters(final AbstractPipelineInput input) throws IOException {
+    private void parseInputParameters(final AbstractPipelineInput input) {
         ditaDir = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
         if (!ditaDir.isAbsolute()) {
             throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
