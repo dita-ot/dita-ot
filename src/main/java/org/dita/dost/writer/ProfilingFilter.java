@@ -33,7 +33,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	/** Flag that an element has been written */
 	private boolean elementOutput;
     /** Namespace prefixes for current element. */
-    private Map<String, String> prefixes = new HashMap<>();
+    private final Map<String, String> prefixes = new HashMap<>();
     /** Flag that last element was excluded. */
     private boolean lastElementExcluded = false;
 

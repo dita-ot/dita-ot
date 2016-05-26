@@ -475,7 +475,7 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public static class Filters extends Module {
 
-        private List<Filter> filters = new ArrayList<>();
+        private final List<Filter> filters = new ArrayList<>();
         private Project project;
         private List<String> format;
 

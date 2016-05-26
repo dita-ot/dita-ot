@@ -31,7 +31,7 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
     Job job;
     /** Absolute system path to file being processed */
     protected URI currentFile;
-    protected Map<String, String> params = new HashMap<>();
+    protected final Map<String, String> params = new HashMap<>();
 
     @Override
     public void write(final File filename) throws DITAOTException {
