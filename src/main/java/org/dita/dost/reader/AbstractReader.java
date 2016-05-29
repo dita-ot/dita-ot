@@ -11,6 +11,7 @@ package org.dita.dost.reader;
 import java.io.File;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.Job;
 
 /**
  * AbstractReader defines the methods that every reader class should implement.
@@ -33,5 +34,12 @@ public interface AbstractReader {
      * @param logger logger to use for log message
      */
     void setLogger(DITAOTLogger logger);
+
+    /**
+     * Set job configuration for module
+     *
+     * @param job job configuration to use for processing
+     */
+    void setJob(Job job);
 
 }

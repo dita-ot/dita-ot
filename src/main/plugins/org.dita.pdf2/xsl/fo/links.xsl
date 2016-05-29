@@ -36,8 +36,9 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-mapmerge="http://www.idiominc.com/opentopic/mapmerge"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
+    xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    exclude-result-prefixes="opentopic-mapmerge opentopic-func related-links xs"
+    exclude-result-prefixes="dita-ot opentopic-mapmerge opentopic-func related-links xs"
     version="2.0">
   
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
@@ -45,6 +46,7 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:param name="figurelink.style" select="'NUMTITLE'"/>
   <xsl:param name="tablelink.style" select="'NUMTITLE'"/>
 
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
     <xsl:key name="key_anchor" match="*[@id][not(contains(@class,' map/topicref '))]" use="@id"/>
@@ -158,7 +160,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Figure Number'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="fig.title-number"/>
                 </number>
             </xsl:with-param>
           </xsl:call-template>
@@ -171,7 +173,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Figure.title'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="fig.title-number"/>
                 </number>
                 <title>
                     <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
@@ -196,7 +198,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Table Number'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="table.title-number"/>
                 </number>
             </xsl:with-param>
           </xsl:call-template>
@@ -209,7 +211,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="id" select="'Table.title'"/>
             <xsl:with-param name="params">
                 <number>
-                    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()]) + 1"/>
+                  <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="table.title-number"/>
                 </number>
                 <title>
                     <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
@@ -329,16 +331,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' topic/fn ')]" mode="footnote-callout">
             <fo:inline xsl:use-attribute-sets="fn__callout">
-
-                <xsl:choose>
-                    <xsl:when test="@callout">
-                        <xsl:value-of select="@callout"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-
+              <fo:basic-link internal-destination="{dita-ot:getFootnoteInternalID(.)}">
+                <xsl:apply-templates select="." mode="callout"/>
+              </fo:basic-link>
             </fo:inline>
     </xsl:template>
 
@@ -384,7 +379,7 @@ See the accompanying license.txt file for applicable licenses.
           <!--xsl:if test="$includeRelatedLinkRoles = ('next', 'previous', 'parent')">
             <xsl:call-template name="next-prev-parent-links"/>
           </xsl:if-->
-          <xsl:variable name="unordered-links" as="element(linklist)*">
+          <xsl:variable name="unordered-links" as="element()*">
             <xsl:apply-templates select="." mode="related-links:group-unordered-links">
               <xsl:with-param name="nodes"
                               select="descendant::*[contains(@class, ' topic/link ')]
@@ -575,12 +570,11 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:attribute>
           </xsl:when>         
             <xsl:otherwise>
+              <!-- Appears that topicmerge updates links so that this section will never be triggered; 
+                   keeping $href as backup value in case something goes wrong. -->
               <xsl:attribute name="internal-destination">
                 <xsl:value-of select="$href"/>
               </xsl:attribute>
-              <xsl:call-template name="brokenLinks">
-                <xsl:with-param name="href" select="$href"/>
-              </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -673,15 +667,9 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
+
+<!-- Deprecated since 2.3 -->    
   <xsl:template name="brokenLinks">
-    <xsl:param name="href"/>
-    <!-- FIXME: There is no message PDFX063W -->
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">063</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
-      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/></xsl:with-param>
-    </xsl:call-template>
   </xsl:template>
   
   <!-- Links with @type="topic" belong in no-name group. -->
@@ -699,7 +687,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <linklist>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result."
-                as="element(linklist)" priority="-10">
+                as="element()" priority="-10">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="exists($links)">
       <linklist class="- topic/linklist " outputclass="relinfo">
@@ -729,7 +717,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <!-- Wrapper for concept group: "Related concepts" in a <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group"
-                name="related-links:result.concept" as="element(linklist)">
+                name="related-links:result.concept" as="element()">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " outputclass="relinfo relconcepts">
@@ -759,7 +747,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group"
-    name="related-links:result.reference" as="element(linklist)">
+    name="related-links:result.reference" as="element()">
     <xsl:param name="links"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " outputclass="relinfo relref">
@@ -789,7 +777,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <!-- Task wrapper for HTML: "Related tasks" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group"
-                name="related-links:result.task" as="element(linklist)">
+                name="related-links:result.task" as="element()">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " outputclass="relinfo reltasks">

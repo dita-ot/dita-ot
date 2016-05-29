@@ -103,8 +103,7 @@
   <xsl:template match="*" mode="ditamsg:no-glossentry-for-abbreviated-form">
     <xsl:param name="keys"/>
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">060</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX060W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>

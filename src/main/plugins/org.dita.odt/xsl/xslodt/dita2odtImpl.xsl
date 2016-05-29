@@ -33,6 +33,7 @@
   <xsl:output indent="yes"/>
   <xsl:strip-space elements="*"/>
 
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
   <!-- =========== "GLOBAL" DECLARATIONS =========== -->

@@ -26,7 +26,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+This file is part of the DITA Open Toolkit project. 
 See the accompanying license.txt file for applicable licenses.
 -->
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
@@ -127,25 +127,31 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Index See Also String">参见</variable>
 
     <!-- The string used to label a chapter within the table of contents. -->
-    <variable id="Table of Contents Chapter">章节 <param ref-name="number"/>: </variable>
+    <variable id="Table of Contents Chapter">第 <param ref-name="number"/> 章 </variable>
 
     <!-- The string used to label an appendix within the table of contents. -->
     <variable id="Table of Contents Appendix">附录 <param ref-name="number"/>: </variable>
 
     <!-- The string used to label an part within the table of contents. -->
-    <variable id="Table of Contents Part">第部分 <param ref-name="number"/>: </variable>
+    <variable id="Table of Contents Part">第 <param ref-name="number"/> 部分 </variable>
 
     <!-- The string used to label an preface within the table of contents. -->
     <variable id="Table of Contents Preface">序言 </variable>
     <variable id="Preface title">序言</variable>
 
-    <!-- The heading to put at the top of a chapter when creating a
-         chapter-level "mini-TOC" -->
-    <variable id="Mini Toc">Topics: </variable>
+    <!-- The string used to label notices within the table of contents. -->
+    <variable id="Table of Contents Notices"/>
+    <!-- TODO: The string used to label notices in body text. -->
+    <variable id="Notices title">Notice</variable>
+
+    <!-- TODO: The heading to put at the top of a chapter when creating a
+         chapter-level "mini-TOC". Using general "Contents", 
+         may want to replace with translation of "Topics". -->
+    <variable id="Mini Toc">内容: </variable>
 
     <variable id="#note-separator">: </variable>
 
-    <!-- Text to use for 'Notice' label generated from <note> element. -->
+    <!-- TODO: Text to use for 'Notice' label generated from <note> element. -->
     <variable id="Notice"><!--TODO:Notice--></variable>
 
     <!-- Text to use for figure titles. Renders as part of <fig>/<title>
@@ -159,38 +165,41 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Table Number">表 <param ref-name="number"/></variable>
 
     <!-- Text to use for related links label.
+         Currently using alternate translation of "Related information"
          Renders as part of <related-links> element. -->
-    <variable id="Related Links">Related Links</variable>
+    <variable id="Related Links">相关信息</variable>
 
-    <!-- Default cross-reference text prefix. Used to generate reference 
+    <!-- UNUSED: Default cross-reference text prefix. Used to generate reference 
          text in case it's not specified in source. -->
     <variable id="Cross-Reference">Cross-Reference to:</variable>
 
-    <!-- Default content-reference text prefix. Used to generate reference 
+    <!-- Prefix for unresolved content reference. Used to generate reference 
          text in case target cannot be resolved. -->
-    <variable id="Content-Reference">Content-Reference to:</variable>
+    <variable id="Content-Reference">Unresolved content reference to:</variable>
 
-    <!-- Default title text for referenced section title. Used to generate 
+    <!-- UNUSED: Default title text for referenced section title. Used to generate 
          reference text in case reference has no explicit content and
          referenced section has no title. -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Untitled section">Untitled section.</variable>
 
-    <!-- Default title text for referenced list item. Used to generate
+    <!-- TODO: Default title text for referenced list item. Used to generate
          reference text in case reference has no explicit content and 
          reference target is a list item. -->
     <variable id="List item">List item.</variable>
 
-    <!-- Default title text for referenced footnote. Used to generate 
+    <!-- TODO: Default title text for referenced footnote. Used to generate 
          reference text in case reference has no explicit content and 
-         reference target is a footnote. -->
+         reference target is a footnote. Referenced in code but appears to be unused. -->
     <variable id="Foot note">Footnote.</variable>
 
-    <!-- Text to use for a generated label of navigation title. Renders
+    <!-- TODO: Text to use for a generated label of navigation title. Renders
          as part of <navtitle> element. -->
     <variable id="Navigation title">Navigation title</variable>
 
-    <!-- Text to use for a generated label of search title. Renders 
+    <!-- TODO: Text to use for a generated label of search title. Renders 
          as part of <searchtitle> element. -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Search title">Search title</variable>
 
     <!-- Text to use for chapter titles.-->
@@ -213,9 +222,9 @@ See the accompanying license.txt file for applicable licenses.
          in printed manual, when referenced element has no title. -->
     <variable id="Page"> page <param ref-name="pagenum"/></variable>
 
-    <!-- Template for generated page number of a reference
+    <!-- UNUSED: Template for generated page number of a reference
          in chm/html, when referenced element has no title. -->
-    <variable id="This link">this link</variable>
+    <variable id="This link"></variable>
 
     <!-- Image path to use for a note of "note" type. -->
     <variable id="note Note Image Path"></variable>
@@ -245,7 +254,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Image path to use for a note of "tip" type. -->
     <variable id="tip Note Image Path"></variable>
-
+    <variable id="trouble Note Image Path">Configuration/OpenTopic/cfg/common/artwork/warning.gif</variable>
     <!-- Image path to use for a note of "other" type. -->
     <variable id="other Note Image Path"></variable>
 
@@ -254,42 +263,55 @@ See the accompanying license.txt file for applicable licenses.
     -->
 
     <!-- The title of the "contents" button in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Contents button title">Contents</variable>
 
     <!-- The title of the "index" button in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Index button title">索引</variable>
 
     <!-- The title of the "search" button in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Search button title">Search</variable>
 
     <!-- The title of the "back" button in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Back button title">Back</variable>
 
     <!-- The title of the "forward" button in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Forward button title">Forward</variable>
 
     <!-- The title of the "main page" button in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Main page button title">Main Page</variable>
 
     <!-- The title of the "previous page" button in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Previous page button title">Previous Page</variable>
 
     <!-- The title of the "next page" button in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Next page button title">Next Page</variable>
 
     <!-- The "online help" document title prefix in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Online help prefix">Online Help</variable>
 
     <!-- The search by index field title in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Search index field title">Search for the keyword:</variable>
 
     <!-- The search by index button title in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Search index button title">View</variable>
 
     <!-- The search by text field title in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Search text field title">Search help for:</variable>
 
     <!-- The search by text button title in online-help output -->
+    <!-- Deprecated since 2.3 -->
     <variable id="Search text button title">Search</variable>
     
     <!--Label for a step with importance="optional"-->

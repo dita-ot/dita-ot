@@ -39,7 +39,7 @@ public class KeydefFilterTest {
 
         reader = new KeydefFilter();
         reader.setLogger(new TestUtils.TestLogger());
-        reader.setInputFile(rootFile.toURI());
+        reader.setCurrentFile(rootFile.toURI());
         reader.setCurrentDir(inputDir.toURI());
         reader.setJob(new Job(tempDir));
         

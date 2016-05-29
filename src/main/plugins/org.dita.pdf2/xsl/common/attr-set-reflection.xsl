@@ -316,7 +316,7 @@ list just like regular named attribute sets.
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="document('cfg:fo/attrs/custom.xsl')//xsl:attribute-set[@name = $attrSet]">
+            <xsl:when test="doc-available('cfg:fo/attrs/custom.xsl') and document('cfg:fo/attrs/custom.xsl')//xsl:attribute-set[@name = $attrSet]">
                 <xsl:apply-templates select="document('cfg:fo/attrs/custom.xsl')//xsl:attribute-set[@name = $attrSet]"/>
             </xsl:when>
             <xsl:otherwise>
@@ -339,8 +339,7 @@ list just like regular named attribute sets.
             </xsl:attribute>
             <xsl:for-each select="xsl:*">
               <xsl:call-template name="output-message">
-                <xsl:with-param name="msgnum">009</xsl:with-param>
-                <xsl:with-param name="msgsev">E</xsl:with-param>
+                <xsl:with-param name="id" select="'PDFX009E'"/>
                 <xsl:with-param name="msgparams">%1=<xsl:value-of select="name()"/></xsl:with-param>
               </xsl:call-template>
             </xsl:for-each>

@@ -32,9 +32,6 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	private Locator locator;
     /** Deque of domains attibute values */
 	private final Deque<String[][]> domains = new LinkedList<>();
-    /** Absolute URI to current file */
-    private URI currentFile;
-    private Job job;
 //    /** Number of cols in tgroup */
 //    private int cols;
 //    /** Number or colspecs encountered */
@@ -59,15 +56,6 @@ public final class ValidationFilter extends AbstractXMLFilter {
      */
     public void setValidateMap(final Map<String, Map<String, Set<String>>> validateMap) {
         this.validateMap = validateMap;
-    }
-
-    public void setCurrentFile(final URI currentFile) {
-        assert currentFile.isAbsolute();
-        this.currentFile = currentFile;
-    }
-
-    public void setJob(final Job job) {
-        this.job = job;
     }
 
     public void setProcessingMode(final Mode processingMode) {

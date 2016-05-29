@@ -13,6 +13,7 @@
 <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
 <!-- Set the prefix for error message numbers -->
+<!-- Deprecated since 2.3 -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <xsl:variable name="xml-path"></xsl:variable>
@@ -46,8 +47,7 @@
     <xsl:when test="@format and not(@format='dita')">
        <!-- Topicref to non-dita files will be ingored in PDF transformation -->
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msgnum">049</xsl:with-param>
-        <xsl:with-param name="msgsev">I</xsl:with-param>
+        <xsl:with-param name="id" select="'DOTX049I'"/>
       </xsl:call-template>
     </xsl:when>
     <xsl:when test="contains(@href,'#')">

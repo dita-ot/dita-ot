@@ -37,9 +37,40 @@
     <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}"/>
   </target>
   
-  <target name="html5.topic" depends="html5.topic.init, xhtml.topics"/>
+  <target name="html5.topic"
+          depends="html5.topic.init,
+                   xhtml.init,
+                   xhtml.image-metadata,
+                   dita.topics.html5.common,
+                   dita.inner.topics.html5.common"/>
   
-  <target name="html5.map" depends="dita.map.xhtml"/>
+  <target name="dita.topics.html5.common" unless="noTopic" if="old.transform">
+    <topics.html>
+      <dita:extension id="dita.conductor.html5.param" behavior="org.dita.dost.platform.InsertAction"/>
+    </topics.html>
+  </target>
+    
+  <target name="dita.inner.topics.html5.common" unless="noTopic" if="inner.transform">
+    <topics.html>
+      <dita:extension id="dita.conductor.html5.param" behavior="org.dita.dost.platform.InsertAction"/>
+      <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
+      <mapper type="regexp"
+        from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(\w+))$$" 
+        to="\2${out.ext}"/>
+    </topics.html>
+  </target>
+  
+  <target name="html5.map"
+          depends="dita.map.xhtml.init,
+                   dita.map.html5.toc"/>
+  
+  <target name="dita.map.html5.toc"
+    unless="noMap"
+    description="Build HTML5 TOC file">
+    <map.html>
+      <dita:extension id="dita.conductor.html5.toc.param" behavior="org.dita.dost.platform.InsertAction"/>
+    </map.html>
+  </target>
   
   <target name="html5.css" unless="user.csspath.url" description="Copy CSS files">
     <condition property="user.copycss.yes">

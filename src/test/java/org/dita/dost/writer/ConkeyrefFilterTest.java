@@ -82,7 +82,7 @@ public class ConkeyrefFilterTest {
     @Test
     public void testRelativePaths() throws SAXException, IOException {
         final ConkeyrefFilter f = getConkeyrefFilter();
-        f.setCurrentFile(new File("product/sub folder/this.dita"));
+        f.setCurrentFile(new File("product/sub folder/this.dita").getAbsoluteFile().toURI());
         f.setKeyDefinitions(new KeyScope(toMap(new KeyDef("foo", toURI("common/library.dita"), ATTR_SCOPE_VALUE_LOCAL, toURI("main.ditamap"), null))));
         f.setContentHandler(new DefaultHandler() {
             @Override
@@ -121,7 +121,7 @@ public class ConkeyrefFilterTest {
         final ConkeyrefFilter f = new ConkeyrefFilter();
         f.setLogger(new TestUtils.TestLogger());
         f.setJob(new Job(new File(".").getAbsoluteFile()));
-        f.setCurrentFile(new File("this.dita"));
+        f.setCurrentFile(new File("this.dita").getAbsoluteFile().toURI());
         return f;
     }
     

@@ -249,20 +249,22 @@
             <xsl:call-template name="getTableScale"/>
         </xsl:variable>
 
-        <fo:block xsl:use-attribute-sets="table">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:if test="not(@id)">
-              <xsl:attribute name="id">
-                <xsl:call-template name="get-id"/>
-              </xsl:attribute>
-            </xsl:if>
-            <xsl:if test="exists($scale)">
-                <xsl:attribute name="font-size" select="concat($scale, '%')"/>
-            </xsl:if>
-            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
-            <xsl:apply-templates/>
-            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
-        </fo:block>
+        <fo:block-container xsl:use-attribute-sets="table__container">
+            <fo:block xsl:use-attribute-sets="table">
+                <xsl:call-template name="commonattributes"/>
+                <xsl:if test="not(@id)">
+                  <xsl:attribute name="id">
+                    <xsl:call-template name="get-id"/>
+                  </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="exists($scale)">
+                    <xsl:attribute name="font-size" select="concat($scale, '%')"/>
+                </xsl:if>
+                <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
+                <xsl:apply-templates/>
+                <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
+            </fo:block>
+        </fo:block-container>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]">
@@ -272,7 +274,7 @@
                 <xsl:with-param name="id" select="'Table.title'"/>
                 <xsl:with-param name="params">
                     <number>
-                        <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
+                      <xsl:apply-templates select="." mode="table.title-number"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>
@@ -281,12 +283,15 @@
             </xsl:call-template>
         </fo:block>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" mode="table.title-number">
+    <xsl:value-of select="count(key('enumerableByClass', 'topic/table')[. &lt;&lt; current()])"/>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tgroup ')]" name="tgroup">
         <xsl:if test="not(@cols)">
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">006</xsl:with-param>
-            <xsl:with-param name="msgsev">E</xsl:with-param>
+            <xsl:with-param name="id" select="'PDFX006E'"/>
           </xsl:call-template>
         </xsl:if>
 
@@ -749,6 +754,12 @@
           </xsl:choose>
         </xsl:variable>
 
+        <xsl:if test="$element/@expanse">
+          <xsl:for-each select="$element">
+            <xsl:call-template name="setExpanse"/>
+          </xsl:for-each>
+        </xsl:if>
+
         <xsl:choose>
             <xsl:when test="$frame = 'all'">
                 <xsl:call-template name="processAttrSetReflection">
@@ -835,9 +846,20 @@
             </xsl:apply-templates>
 
             <fo:table-body xsl:use-attribute-sets="simpletable__body">
-                <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]">
-                    <xsl:with-param name="number-cells" select="$number-cells"/>
-                </xsl:apply-templates>
+                <xsl:choose>
+                  <xsl:when test="empty(*[contains(@class, ' topic/strow ')])">
+                    <fo:table-row>
+                        <fo:table-cell>
+                            <fo:block/>
+                        </fo:table-cell>
+                    </fo:table-row>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]">
+                        <xsl:with-param name="number-cells" select="$number-cells"/>
+                    </xsl:apply-templates>
+                  </xsl:otherwise>
+                </xsl:choose>
             </fo:table-body>
 
         </fo:table>

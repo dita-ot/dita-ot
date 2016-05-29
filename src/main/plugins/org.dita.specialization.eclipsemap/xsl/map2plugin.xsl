@@ -13,6 +13,7 @@
   
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
   <xsl:param name="PLUGINFILE" select="'plugin.xml'"/>
@@ -388,8 +389,7 @@
           <xsl:otherwise>
             <xsl:text>Bundle-SymbolicName: org.sample.help.doc; singleton:=true</xsl:text><xsl:value-of select="$newline"/>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">050</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX050W'"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
@@ -446,8 +446,7 @@
             </xsl:choose>
             <xsl:value-of select="$newline"/>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">050</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="id" select="'DOTX050W'"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>                 

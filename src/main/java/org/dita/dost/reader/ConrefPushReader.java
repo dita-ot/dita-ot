@@ -102,7 +102,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
             reader.parse(filename.toURI().toString());
         } catch (final RuntimeException e) {
             throw e;
-        }catch (final Exception e) {
+        } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
             e.printStackTrace();
         }
@@ -159,7 +159,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                         }
                     }
                     pushcontentWriter = getXMLStreamWriter();
-                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ044W", atts.getValue(ATTRIBUTE_NAME_XTRF), atts.getValue(ATTRIBUTE_NAME_XTRC)).toString());
+                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ044W").setLocation(atts).toString());
                 }
                 start = true;
                 level = 1;
@@ -169,7 +169,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 start = true;
                 level = 1;
                 if (target == null) {
-                    logger.error(MessageUtils.getInstance().getMessage("DOTJ039E", atts.getValue(ATTRIBUTE_NAME_XTRF), atts.getValue(ATTRIBUTE_NAME_XTRC)).toString());
+                    logger.error(MessageUtils.getInstance().getMessage("DOTJ039E").setLocation(atts).toString());
                 } else {
                     putElement(name, atts, true);
                     pushType = ATTR_CONACTION_VALUE_PUSHAFTER;
@@ -179,7 +179,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
                 level = 1;
                 target = toURI(atts.getValue(ATTRIBUTE_NAME_CONREF));
                 if (target == null) {
-                    logger.error(MessageUtils.getInstance().getMessage("DOTJ040E", atts.getValue(ATTRIBUTE_NAME_XTRF), atts.getValue(ATTRIBUTE_NAME_XTRC)).toString());
+                    logger.error(MessageUtils.getInstance().getMessage("DOTJ040E").setLocation(atts).toString());
                 } else {
                     pushType = ATTR_CONACTION_VALUE_PUSHREPLACE;
                     putElement(name, atts, true);

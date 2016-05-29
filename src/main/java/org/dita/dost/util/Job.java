@@ -106,12 +106,10 @@ public final class Job {
             attrToFieldMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getField("hasKeyref"));    
             attrToFieldMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getField("hasCoderef"));    
             attrToFieldMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.class.getField("isResourceOnly"));    
-            attrToFieldMap.put(ATTRIBUTE_TARGET, FileInfo.class.getField("isTarget"));    
-            attrToFieldMap.put(ATTRIBUTE_CONREF_TARGET, FileInfo.class.getField("isConrefTarget"));    
+            attrToFieldMap.put(ATTRIBUTE_TARGET, FileInfo.class.getField("isTarget"));
             attrToFieldMap.put(ATTRIBUTE_NON_CONREF_TARGET, FileInfo.class.getField("isNonConrefTarget"));    
             attrToFieldMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getField("isConrefPush"));    
             attrToFieldMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getField("isSubjectScheme"));
-            attrToFieldMap.put(ATTRIBUTE_COPYTO_SOURCE_LIST, FileInfo.class.getField("isCopyToSource"));
             attrToFieldMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getField("isOutDita"));
             attrToFieldMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
             attrToFieldMap.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getField("isSubtarget"));
@@ -163,18 +161,13 @@ public final class Job {
     private void read() throws IOException {
         lastModified = jobFile.lastModified();
         if (jobFile.exists()) {
-        	InputStream in = null;
-            try {
+            try (final InputStream in = new FileInputStream(jobFile)) {
                 final XMLReader parser = XMLUtils.getXMLReader();
                 parser.setContentHandler(new JobHandler(prop, files));
-                in = new FileInputStream(jobFile);
+
                 parser.parse(new InputSource(in));
             } catch (final SAXException e) {
                 throw new IOException("Failed to read job file: " + e.getMessage());
-            } finally {
-            	if (in != null) {
-            		in.close();
-            	}
             }
         } else {
             // defaults
@@ -436,35 +429,6 @@ public final class Job {
     public Object setProperty(final String key, final String value) {
         return prop.put(key, value);
     }
-    
-    /**
-     * Return the copy-to map from target to source.
-     *
-     * @return copy-to map, empty map if no mapping is defined
-     */
-    public Map<URI, URI> getCopytoMap() {
-        final Map<String, String> value = (Map<String, String>) prop.get(COPYTO_TARGET_TO_SOURCE_MAP_LIST);
-        if (value == null) {
-            return Collections.emptyMap();
-        } else {
-            final Map<URI, URI> res = new HashMap<>();
-            for (final Map.Entry<String, String> e: value.entrySet()) {
-                res.put(toURI(e.getKey()), toURI(e.getValue()));
-            }
-            return Collections.unmodifiableMap(res);
-        }
-    }
-    
-    /**
-     * Set copy-to map from target to source.
-     */
-    public void setCopytoMap(final Map<URI, URI> value) {
-        final Map<String, String> res = new HashMap<>();
-        for (final Map.Entry<URI, URI> e: value.entrySet()) {
-            res.put(e.getKey().toString(), e.getValue().toString());
-        }
-        prop.put(COPYTO_TARGET_TO_SOURCE_MAP_LIST, res);
-    }
 
     /**
      * Get input file
@@ -591,8 +555,6 @@ public final class Job {
         public boolean isResourceOnly;
         /** File is a link target. */
         public boolean isTarget;
-        /** File is a push conref target. */
-        public boolean isConrefTarget;
         /** File is a target in non-conref link. */
         public boolean isNonConrefTarget;
         /** File is a push conref source. */
@@ -611,8 +573,6 @@ public final class Job {
         public boolean isFlagImage;
         /** Source file is outside base directory. */
         public boolean isOutDita;
-        /** File is used only as a source of a copy-to. */
-        public boolean isCopyToSource;
         
         FileInfo(final URI src, final URI uri, final File file) {
             if (src == null && uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
@@ -626,6 +586,7 @@ public final class Job {
             this.uri = uri;
             this.file = toFile(uri);
         }
+        @Deprecated
         FileInfo(final File file) {
             if (file == null) throw new IllegalArgumentException(new NullPointerException());
             this.src = null;
@@ -644,7 +605,6 @@ public final class Job {
                     ", hasLink=" + hasLink +
                     ", isResourceOnly=" + isResourceOnly +
                     ", isTarget=" + isTarget +
-                    ", isConrefTarget=" + isConrefTarget +
                     ", isNonConrefTarget=" + isNonConrefTarget +
                     ", isConrefPush=" + isConrefPush +
                     ", hasKeyref=" + hasKeyref +
@@ -654,13 +614,12 @@ public final class Job {
                     ", isSubtarget=" + isSubtarget +
                     ", isFlagImage=" + isFlagImage +
                     ", isOutDita=" + isOutDita +
-                    ", isCopyToSource=" + isCopyToSource +
                     '}';
         }
 
-        public interface Filter {
+        public interface Filter<T> {
             
-            boolean accept(FileInfo f);
+            boolean accept(T f);
             
         }
         
@@ -675,7 +634,6 @@ public final class Job {
             private boolean hasLink;
             private boolean isResourceOnly;
             private boolean isTarget;
-            private boolean isConrefTarget;
             private boolean isNonConrefTarget;
             private boolean isConrefPush;
             private boolean hasKeyref;
@@ -685,7 +643,6 @@ public final class Job {
             private boolean isSubtarget;
             private boolean isFlagImage;
             private boolean isOutDita;
-            private boolean isCopyToSource;
         
             public Builder() {}
             public Builder(final FileInfo orig) {
@@ -698,7 +655,6 @@ public final class Job {
                 hasLink = orig.hasLink;
                 isResourceOnly = orig.isResourceOnly;
                 isTarget = orig.isTarget;
-                isConrefTarget = orig.isConrefTarget;
                 isNonConrefTarget = orig.isNonConrefTarget;
                 isConrefPush = orig.isConrefPush;
                 hasKeyref = orig.hasKeyref;
@@ -708,7 +664,6 @@ public final class Job {
                 isSubtarget = orig.isSubtarget;
                 isFlagImage = orig.isFlagImage;
                 isOutDita = orig.isOutDita;
-                isCopyToSource = orig.isCopyToSource;
             }
             
             /**
@@ -724,7 +679,6 @@ public final class Job {
                 if (orig.hasLink) hasLink = orig.hasLink;
                 if (orig.isResourceOnly) isResourceOnly = orig.isResourceOnly;
                 if (orig.isTarget) isTarget = orig.isTarget;
-                if (orig.isConrefTarget) isConrefTarget = orig.isConrefTarget;
                 if (orig.isNonConrefTarget) isNonConrefTarget = orig.isNonConrefTarget;
                 if (orig.isConrefPush) isConrefPush = orig.isConrefPush;
                 if (orig.hasKeyref) hasKeyref = orig.hasKeyref;
@@ -734,7 +688,6 @@ public final class Job {
                 if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
                 if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
                 if (orig.isOutDita) isOutDita = orig.isOutDita;
-                if (orig.isCopyToSource) isCopyToSource = orig.isCopyToSource;
                 return this;
             }
             
@@ -747,7 +700,6 @@ public final class Job {
             public Builder hasLink(final boolean hasLink) { this.hasLink = hasLink; return this; }
             public Builder isResourceOnly(final boolean isResourceOnly) { this.isResourceOnly = isResourceOnly; return this; }
             public Builder isTarget(final boolean isTarget) { this.isTarget = isTarget; return this; }
-            public Builder isConrefTarget(final boolean isConrefTarget) { this.isConrefTarget = isConrefTarget; return this; }
             public Builder isNonConrefTarget(final boolean isNonConrefTarget) { this.isNonConrefTarget = isNonConrefTarget; return this; }
             public Builder isConrefPush(final boolean isConrefPush) { this.isConrefPush = isConrefPush; return this; }
             public Builder hasKeyref(final boolean hasKeyref) { this.hasKeyref = hasKeyref; return this; }
@@ -757,8 +709,7 @@ public final class Job {
             public Builder isSubtarget(final boolean isSubtarget) { this.isSubtarget = isSubtarget; return this; }
             public Builder isFlagImage(final boolean isFlagImage) { this.isFlagImage = isFlagImage; return this; }
             public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
-            public Builder isCopyToSource(final boolean isCopyToSource) { this.isCopyToSource = isCopyToSource; return this; }
-            
+
             public FileInfo build() {
                 if (src == null && uri == null && file == null) {
                     throw new IllegalStateException("src, uri, and file may not be null");
@@ -770,7 +721,6 @@ public final class Job {
                 fi.hasLink = hasLink;
                 fi.isResourceOnly = isResourceOnly;
                 fi.isTarget = isTarget;
-                fi.isConrefTarget = isConrefTarget;
                 fi.isNonConrefTarget = isNonConrefTarget;
                 fi.isConrefPush = isConrefPush;
                 fi.hasKeyref = hasKeyref;
@@ -780,7 +730,6 @@ public final class Job {
                 fi.isSubtarget = isSubtarget;
                 fi.isFlagImage = isFlagImage;
                 fi.isOutDita = isOutDita;
-                fi.isCopyToSource = isCopyToSource;
                 return fi;
             }
             

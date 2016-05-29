@@ -8,9 +8,13 @@ plugins {
   id "com.github.robfletcher.compass" version "2.0.6"
 }
 
+configurations.all {
+    resolutionStrategy.force 'rubygems:rb-inotify:0.9.5'
+}
+
 compass {
   cssDir = file("css")
-  sassDir = file("css")
+  sassDir = file("sass")
   environment = "production"
   outputStyle = "expanded"
 }

@@ -179,7 +179,7 @@
       <!-- NOTE: The actual grouping code for related-links:group-unordered-links is common between
              transform types, and is located in ../common/related-links.xsl. Actual code for
              creating group titles and formatting links is located in XSL files specific to each type. -->
-      <xsl:variable name="unordered-links" as="element(linklist)*">
+      <xsl:variable name="unordered-links" as="element()*">
        <xsl:apply-templates select="." mode="related-links:group-unordered-links">
          <xsl:with-param name="nodes"
                          select="descendant::*[contains(@class, ' topic/link ')]
@@ -286,7 +286,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
 
   <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <linklist>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result."
-                as="element(linklist)">
+                as="element()">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="exists($links)">
       <linklist class="- topic/linklist " outputclass="relinfo">
@@ -776,8 +776,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
       </xsl:call-template>
     </xsl:param>
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">043</xsl:with-param>
-      <xsl:with-param name="msgsev">I</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX043I'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/>;%2=<xsl:value-of select="$outfile"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>

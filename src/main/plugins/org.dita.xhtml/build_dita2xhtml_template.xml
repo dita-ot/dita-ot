@@ -39,27 +39,36 @@
     <target name="dita.map.xhtml.toc"
             unless="noMap"
             description="Build HTML TOC file">
-        <local name="xhtml.toc.output.dir"/>
-        <condition property="xhtml.toc.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
-          <isset property="inner.transform"/>
-        </condition>      
-        <xslt
-              basedir="${dita.temp.dir}"
-              destdir="${xhtml.toc.output.dir}"
-              includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
-              classpathref="dost.class.path"
-              style="${args.xhtml.toc.xsl}">
-        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
-            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
-            <param name="contenttarget" expression="${args.xhtml.contenttarget}" if="args.xhtml.contenttarget"/>
-            <param name="CSS" expression="${args.css.file}" if="args.css.file" />
-            <param name="CSSPATH" expression="${user.csspath}" if="user.csspath" />
-            <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class" />
-            <dita:extension id="dita.conductor.xhtml.toc.param" behavior="org.dita.dost.platform.InsertAction"/>
-            <mergemapper to="${args.xhtml.toc}${out.ext}"/>
-          <xmlcatalog refid="dita.catalog"/>
-        </xslt>
+      <map.html>
+        <dita:extension id="dita.conductor.xhtml.toc.param" behavior="org.dita.dost.platform.InsertAction"/>
+      </map.html>
     </target>
+  
+  <macrodef name="map.html">
+    <element name="params" optional="true" implicit="true"/>
+    <sequential>
+      <local name="xhtml.toc.output.dir"/>
+      <condition property="xhtml.toc.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
+       <isset property="inner.transform"/>
+      </condition>      
+      <xslt
+        basedir="${dita.temp.dir}"
+        destdir="${xhtml.toc.output.dir}"
+        includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
+        classpathref="dost.class.path"
+        style="${args.xhtml.toc.xsl}">
+        <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+        <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+        <param name="contenttarget" expression="${args.xhtml.contenttarget}" if="args.xhtml.contenttarget"/>
+        <param name="CSS" expression="${args.css.file}" if="args.css.file" />
+        <param name="CSSPATH" expression="${user.csspath}" if="user.csspath" />
+        <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class" />
+        <params/>
+        <mergemapper to="${args.xhtml.toc}${out.ext}"/>
+        <xmlcatalog refid="dita.catalog"/>
+      </xslt>
+    </sequential>
+  </macrodef>
     
 
     <!-- Deprecated since 2.1 -->

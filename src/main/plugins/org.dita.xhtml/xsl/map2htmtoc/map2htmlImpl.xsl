@@ -10,6 +10,7 @@
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
 
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
   <xsl:param name="OUTEXT" select="'.html'"/>
@@ -155,8 +156,7 @@
 
   <xsl:template match="*" mode="ditamsg:missing-target-file-no-navtitle">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">008</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX008W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -165,8 +165,7 @@
     <xsl:param name="target"/>
     <xsl:param name="fallback"/>
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">009</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="id" select="'DOTX009W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$target"/>;%2=<xsl:value-of select="$fallback"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>

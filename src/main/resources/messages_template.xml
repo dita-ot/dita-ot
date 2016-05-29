@@ -171,12 +171,12 @@
   </message>
   
   <message id="DOTJ039E" type="ERROR">
-    <reason>There is no target specified for conref push action "pushafter". Found in file="%1", element="%2".</reason>
+    <reason>There is no target specified for conref push action "pushafter".</reason>
     <response>Please add &lt;elementname conref="pushtarget" conaction="mark"&gt; before current element.</response>
   </message>
   
   <message id="DOTJ040E" type="ERROR">
-    <reason>An element uses the attribute conaction="replace", but a conref attribute is not found in the expected location. Found in file="%1", element="%2".</reason>
+    <reason>An element uses the attribute conaction="replace", but a conref attribute is not found in the expected location.</reason>
     <response></response>
   </message>
   
@@ -198,7 +198,7 @@
   
   <!-- 2012-06-12: Still need to reproduce and edit this message -->
   <message id="DOTJ044W" type="WARN">
-    <reason>There is a redundant conref action "pushbefore". Found in file="%1", element="%2".</reason>
+    <reason>There is a redundant conref action "pushbefore".</reason>
     <response>Please make sure that "mark" and "pushbefore" occur in pairs.</response>
   </message>
   
@@ -243,6 +243,7 @@
     <response>See the DITA-OT User guide for supported charset values on the format attribute.</response>
   </message>
 
+  <!-- Obsolete since 2.3 -->
   <message id="DOTJ053W" type="WARN">
     <reason>Input file '%1' is not valid DITA file name.</reason>
     <response>Please check '%1' to see if it is correct. The extensions ".dita" or ".xml" are supported for DITA topics.</response>
@@ -320,6 +321,11 @@
 
   <message id="DOTJ068E" type="ERROR">
     <reason>Conref action "mark" without conref target.</reason>
+    <response></response>
+  </message>
+
+  <message id="DOTJ069E" type="ERROR">
+    <reason>Circular key definition %1.</reason>
     <response></response>
   </message>
 
@@ -672,6 +678,11 @@
   <message id="DOTX070W" type="WARN">
     <reason>Target "%1" is deprecated.</reason>
     <response>Remove references to this target from your custom Ant files.</response>
+  </message>
+  
+  <message id="DOTX071W" type="WARN">
+    <reason>Parameter "%1" on template "%2" is deprecated.</reason>
+    <response>Use parameter "%3" instead.</response>
   </message>
 
   <message id="DOTX071E" type="ERROR">

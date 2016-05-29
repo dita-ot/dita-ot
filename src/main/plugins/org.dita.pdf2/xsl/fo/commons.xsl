@@ -27,7 +27,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+This file is part of the DITA Open Toolkit project.
 See the accompanying license.txt file for applicable licenses.
 -->
 
@@ -38,8 +38,9 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
+    xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-    exclude-result-prefixes="ot-placeholder opentopic opentopic-index opentopic-func dita2xslfo xs"
+    exclude-result-prefixes="dita-ot ot-placeholder opentopic opentopic-index opentopic-func dita2xslfo xs"
     version="2.0">
 
     <xsl:key name="id" match="*[@id]" use="@id"/>
@@ -72,6 +73,7 @@ See the accompanying license.txt file for applicable licenses.
                     *[contains(@class,' topic/fn ') and empty(@callout)]"
               use="tokenize(@class, ' ')"/>
 
+    <!-- Deprecated since 2.3 -->
     <xsl:variable name="msgprefix" select="'PDFX'"/>
 
     <xsl:variable name="id.toc" select="'ID_TOC_00-0F-EA-40-0D-4D'"/>
@@ -204,7 +206,23 @@ See the accompanying license.txt file for applicable licenses.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
+  <xsl:template match="*" mode="insertTopicHeaderMarker">
+    <xsl:param name="marker-class-name" as="xs:string">current-header</xsl:param>
+
+    <fo:marker marker-class-name="{$marker-class-name}">
+      <xsl:apply-templates select="." mode="insertTopicHeaderMarkerContents"/>
+    </fo:marker>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="insertTopicHeaderMarkerContents">
+    <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="getTitle"/>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class, ' topic/title ')]" mode="insertTopicHeaderMarkerContents">
+    <xsl:apply-templates select="." mode="getTitle"/>
+  </xsl:template>
+
     <!--  Bookmap Chapter processing  -->
     <xsl:template name="processTopicChapter">
         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.body">
@@ -223,11 +241,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:apply-templates select="." mode="topicTitleNumber"/>
                           </xsl:for-each>
                         </fo:marker>
-                        <fo:marker marker-class-name="current-header">
-                            <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                                <xsl:apply-templates select="." mode="getTitle"/>
-                            </xsl:for-each>
-                        </fo:marker>
+                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                     </xsl:if>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
@@ -279,11 +293,7 @@ See the accompanying license.txt file for applicable licenses.
                               <xsl:apply-templates select="." mode="topicTitleNumber"/>
                             </xsl:for-each>
                         </fo:marker>
-                        <fo:marker marker-class-name="current-header">
-                            <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                                <xsl:apply-templates select="." mode="getTitle"/>
-                            </xsl:for-each>
-                        </fo:marker>
+                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                     </xsl:if>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
@@ -332,11 +342,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:apply-templates select="." mode="topicTitleNumber"/>
               </xsl:for-each>
             </fo:marker>
-            <fo:marker marker-class-name="current-header">
-              <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                <xsl:apply-templates select="." mode="getTitle"/>
-              </xsl:for-each>
-            </fo:marker>
+            <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
           </xsl:if>
           
           <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
@@ -400,11 +406,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:apply-templates select="." mode="topicTitleNumber"/>
                           </xsl:for-each>
                         </fo:marker>
-                        <fo:marker marker-class-name="current-header">
-                            <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                                <xsl:apply-templates select="." mode="getTitle"/>
-                            </xsl:for-each>
-                        </fo:marker>
+                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                     </xsl:if>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
@@ -466,11 +468,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:apply-templates select="." mode="topicTitleNumber"/>
                           </xsl:for-each>
                         </fo:marker>
-                        <fo:marker marker-class-name="current-header">
-                            <xsl:for-each select="*[contains(@class,' topic/title ')]">
-                                <xsl:apply-templates select="." mode="getTitle"/>
-                            </xsl:for-each>
-                        </fo:marker>
+                        <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                     </xsl:if>
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
@@ -609,7 +607,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*" mode="topicTitleNumber" priority="-10">
-      <xsl:message>No topicTitleNumber mode template for <xsl:value-of select="name()"/></xsl:message>
+      <!--xsl:message>No topicTitleNumber mode template for <xsl:value-of select="name()"/></xsl:message-->
     </xsl:template>
 
     <xsl:template match="*" mode="createMiniToc">
@@ -717,23 +715,21 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
                 </xsl:call-template>
                 <xsl:if test="$level = 1">
-                    <fo:marker marker-class-name="current-header">
-                        <xsl:apply-templates select="." mode="getTitle"/>
-                    </fo:marker>
+                    <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                 </xsl:if>
                 <xsl:if test="$level = 2">
-                    <fo:marker marker-class-name="current-h2">
-                        <xsl:apply-templates select="." mode="getTitle"/>
-                    </fo:marker>
+                    <xsl:apply-templates select="." mode="insertTopicHeaderMarker">
+                      <xsl:with-param name="marker-class-name" as="xs:string">current-h2</xsl:with-param>
+                    </xsl:apply-templates>
                 </xsl:if>
-                <fo:inline id="{parent::node()/@id}"/>
-                <fo:inline>
+                <fo:wrapper id="{parent::node()/@id}"/>
+                <fo:wrapper>
                     <xsl:attribute name="id">
                         <xsl:call-template name="generate-toc-id">
                             <xsl:with-param name="element" select=".."/>
                         </xsl:call-template>
                     </xsl:attribute>
-                </fo:inline>
+                </fo:wrapper>
                 <xsl:call-template name="pullPrologIndexTerms"/>
                 <xsl:apply-templates select="." mode="getTitle"/>
             </fo:block>
@@ -792,7 +788,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:with-param name="id" select="'Figure.title'"/>
                 <xsl:with-param name="params">
                     <number>
-                        <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()])"/>
+                        <xsl:apply-templates select="." mode="fig.title-number"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>
@@ -801,6 +797,10 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:call-template>
         </fo:block>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]" mode="fig.title-number">
+    <xsl:value-of select="count(key('enumerableByClass', 'topic/fig')[. &lt;&lt; current()])"/>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tm ')]">
         <fo:inline xsl:use-attribute-sets="tm">
@@ -1653,6 +1653,7 @@ See the accompanying license.txt file for applicable licenses.
         <fo:block xsl:use-attribute-sets="fig">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
+            <xsl:call-template name="setExpanse"/>
             <xsl:if test="not(@id)">
               <xsl:attribute name="id">
                 <xsl:call-template name="get-id"/>
@@ -1664,10 +1665,10 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/figgroup ')]">
-        <fo:inline xsl:use-attribute-sets="figgroup">
+        <fo:block xsl:use-attribute-sets="figgroup">
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
-        </fo:inline>
+        </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/pre ')]">
@@ -1676,6 +1677,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
+            <xsl:call-template name="setExpanse"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -1722,12 +1724,33 @@ See the accompanying license.txt file for applicable licenses.
       <xsl:sequence select="$container/@*"/>
     </xsl:template>
 
+    <xsl:template name="setExpanse" as="attribute()*">
+      <xsl:variable name="container" as="element()*">
+        <xsl:choose>
+         <xsl:when test="@expanse = 'page'">
+           <element xsl:use-attribute-sets="__expanse__page"/>
+         </xsl:when>
+         <xsl:when test="@expanse = 'column'">
+           <element xsl:use-attribute-sets="__expanse__column"/>
+         </xsl:when>
+         <xsl:when test="@expanse = 'spread'">
+           <element xsl:use-attribute-sets="__expanse__spread"/>
+         </xsl:when>
+         <xsl:when test="@expanse = 'column'">
+           <element xsl:use-attribute-sets="__expanse__textline"/>
+         </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:sequence select="$container/@*"/>
+    </xsl:template>
+
     <xsl:template match="*[contains(@class,' topic/lines ')]">
         <xsl:call-template name="setSpecTitle"/>
         <fo:block xsl:use-attribute-sets="lines">
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
+            <xsl:call-template name="setExpanse"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -1973,23 +1996,26 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:if>
     </xsl:template>
 
+    <xsl:function name="dita-ot:getFootnoteInternalID" as="xs:string">
+      <xsl:param name="ctx" as="element()"/>
+      <xsl:sequence select="concat('fn',generate-id($ctx))"/>
+    </xsl:function>
+
     <xsl:template match="*[contains(@class,' topic/fn ')]">
-        <fo:inline>
+        <!--<fo:inline>
             <xsl:call-template name="commonattributes"/>
-        </fo:inline>
+        </fo:inline>-->
+      <xsl:variable name="id" select="dita-ot:getFootnoteInternalID(.)" as="xs:string"/>
+      <xsl:variable name="callout" as="xs:string">
+        <xsl:apply-templates select="." mode="callout"/>
+      </xsl:variable>
         <fo:footnote>
             <xsl:choose>
               <xsl:when test="not(@id)">
                 <fo:inline xsl:use-attribute-sets="fn__callout">
-
-                    <xsl:choose>
-                        <xsl:when test="@callout">
-                            <xsl:value-of select="@callout"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                  <fo:basic-link internal-destination="{$id}">
+                    <xsl:copy-of select="$callout"/>
+                  </fo:basic-link>
                 </fo:inline>
               </xsl:when>
               <xsl:otherwise>
@@ -2002,16 +2028,9 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:list-block xsl:use-attribute-sets="fn__body">
                     <fo:list-item>
                         <fo:list-item-label end-indent="label-end()">
-                            <fo:block text-align="right">
+                            <fo:block text-align="right" id="{$id}">
                                 <fo:inline xsl:use-attribute-sets="fn__callout">
-                                    <xsl:choose>
-                                        <xsl:when test="@callout">
-                                            <xsl:value-of select="@callout"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
+                                  <xsl:copy-of select="$callout"/>
                                 </fo:inline>
                             </fo:block>
                         </fo:list-item-label>
@@ -2025,6 +2044,17 @@ See the accompanying license.txt file for applicable licenses.
             </fo:footnote-body>
         </fo:footnote>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/fn ')]" mode="callout">
+    <xsl:choose>
+      <xsl:when test="@callout">
+        <xsl:value-of select="@callout"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="count(key('enumerableByClass', 'topic/fn')[. &lt;&lt; current()]) + 1"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/indexterm ')]">
         <fo:inline>

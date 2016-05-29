@@ -16,6 +16,7 @@
 
   <xsl:param name="DRAFT" select="'no'"/>
 
+  <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
   <xsl:template match="*|@*|processing-instruction()|comment()|text()">

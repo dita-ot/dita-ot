@@ -50,20 +50,20 @@ See the accompanying license.txt file for applicable licenses.
     <aliases>
       <alias name="Courier">Monospaced</alias>
     </aliases>
-
+    
     <logical-font name="Sans">
       <physical-font char-set="default">
-        <font-face>Helvetica, Arial Unicode MS</font-face>
+        <font-face>Helvetica, Arial Unicode MS, Tahoma, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Simplified Chinese">
-        <font-face>AdobeSongStd-Light</font-face>
+        <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Japanese">
-        <font-face>KozMinProVI-Regular</font-face>
+        <font-face>KozMinProVI-Regular, Arial Unicode MS, Batang</font-face>
       </physical-font>
       <physical-font char-set="Korean">
-        <font-face>AdobeMyungjoStd-Medium</font-face>
-      </physical-font>
+        <font-face>AdobeMyungjoStd-Medium, Arial Unicode MS, Batang</font-face>
+      </physical-font>      
       <physical-font char-set="Symbols">
         <font-face>ZapfDingbats</font-face>
       </physical-font>
@@ -79,16 +79,16 @@ See the accompanying license.txt file for applicable licenses.
 
     <logical-font name="Serif">
       <physical-font char-set="default">
-        <font-face>Times New Roman, Times</font-face>
+        <font-face>Times New Roman, Times, Arial Unicode MS, Tahoma, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Simplified Chinese">
-        <font-face>AdobeSongStd-Light</font-face>
+        <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Japanese">
-        <font-face>KozMinProVI-Regular</font-face>
+        <font-face>KozMinProVI-Regular, Arial Unicode MS, Batang</font-face>
       </physical-font>
       <physical-font char-set="Korean">
-        <font-face>AdobeMyungjoStd-Medium</font-face>
+        <font-face>AdobeMyungjoStd-Medium, Arial Unicode MS, Batang</font-face>
       </physical-font>
       <physical-font char-set="Symbols">
         <font-face>ZapfDingbats</font-face>
@@ -97,7 +97,7 @@ See the accompanying license.txt file for applicable licenses.
         <font-face>ZapfDingbats</font-face>
       </physical-font>
       <physical-font char-set="SymbolsSuperscript">
-        <font-face>Times New Roman, Times</font-face>
+        <font-face>Times New Roman, Times, Arial Unicode MS, Tahoma, Batang</font-face>
         <baseline-shift>20%</baseline-shift>
         <override-size>smaller</override-size>
       </physical-font>
@@ -105,26 +105,26 @@ See the accompanying license.txt file for applicable licenses.
 
     <logical-font name="Monospaced">
       <physical-font char-set="default">
-        <font-face>Courier New, Courier</font-face>
+        <font-face>Courier New, Courier, Arial Unicode MS, Tahoma, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Simplified Chinese">
-        <font-face>AdobeSongStd-Light</font-face>
+        <font-face>AdobeSongStd-Light, Arial Unicode MS, Batang, SimSun</font-face>
       </physical-font>
       <physical-font char-set="Japanese">
-        <font-face>KozMinProVI-Regular</font-face>
+        <font-face>KozMinProVI-Regular, Arial Unicode MS, Batang</font-face>
       </physical-font>
       <physical-font char-set="Korean">
-        <font-face>AdobeMyungjoStd-Medium</font-face>
+        <font-face>AdobeMyungjoStd-Medium, Arial Unicode MS, Batang</font-face>
       </physical-font>
       <physical-font char-set="Symbols">
         <font-face>ZapfDingbats</font-face>
       </physical-font>
       <physical-font char-set="SymbolsSuperscript">
-        <font-face>Courier New, Courier</font-face>
+        <font-face>Courier New, Courier, Arial Unicode MS, Tahoma, Batang</font-face>
         <baseline-shift>20%</baseline-shift>
         <override-size>smaller</override-size>
       </physical-font>
     </logical-font>
   </font-table>
-
+  
 </font-mappings>

@@ -22,20 +22,28 @@
   - msgsev = the severity (I, W, E, or F); default=I (Informational)
 -->
 <xsl:stylesheet version="2.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                exclude-result-prefixes="xs">
   
   <xsl:template name="output-message">
+    <xsl:param name="ctx" select="." tunnel="yes"/>
     <xsl:param name="msg" select="'***'"/>
+    <!-- Deprecated since 2.3 -->
     <xsl:param name="msgcat" select="$msgprefix"/>
+    <!-- Deprecated since 2.3 -->
     <xsl:param name="msgnum" select="'000'"/>
+    <!-- Deprecated since 2.3 -->
     <xsl:param name="msgsev" select="'I'"/>
     <xsl:param name="msgparams" select="''"/>
-        
-    <xsl:variable name="msgid">
-      <xsl:value-of select="$msgcat"/>
-      <xsl:value-of select="$msgnum"/>
-      <xsl:value-of select="$msgsev"/>
-    </xsl:variable>
+    <xsl:param name="id" as="xs:string">
+      <xsl:call-template name="output-message">
+        <xsl:with-param name="id" select="'DOTX071W'"/>
+        <xsl:with-param name="msgparams">%1=msgnum;%2=output-message;%3=id</xsl:with-param>
+      </xsl:call-template>
+      <xsl:value-of select="concat($msgcat, $msgnum, $msgsev)"/>
+    </xsl:param>
+    
     <xsl:variable name="msgcontent">
       <xsl:choose>
         <xsl:when test="$msg != '***'">
@@ -43,23 +51,25 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="msgdoc" select="document('plugin:org.dita.base:resources/messages.xml')"/>
-          <xsl:apply-templates select="$msgdoc/messages/message[@id = $msgid]" mode="get-message-content">    
+          <xsl:apply-templates select="$msgdoc/messages/message[@id = $id]" mode="get-message-content">    
             <xsl:with-param name="params" select="$msgparams"/>    
           </xsl:apply-templates>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="localclass" select="@class"/>
+    <xsl:variable name="xtrf" select="$ctx/@xtrf" as="attribute(xtrf)?"/>
+    <xsl:variable name="xtrc" select="$ctx/@xtrc" as="attribute(xtrc)?"/>
     <xsl:variable name="debugloc">
-      <xsl:if test="@xtrf | @xtrc">
-        <xsl:if test="@xtrf">
-          <xsl:value-of select="@xtrf"/>
+      <xsl:if test="$xtrf | $xtrc">
+        <xsl:if test="$xtrf">
+          <xsl:value-of select="$xtrf"/>
         </xsl:if>
-        <xsl:if test="@xtrf and @xtrc">
+        <xsl:if test="$xtrf and $xtrc">
           <xsl:text>:</xsl:text>
         </xsl:if>
-        <xsl:if test="@xtrc">
-          <xsl:value-of select="if (contains(@xtrc, ';')) then substring-after(@xtrc, ';') else @xtrc"/>
+        <xsl:if test="$xtrc">
+          <xsl:value-of select="if (contains($xtrc, ';')) then substring-after($xtrc, ';') else $xtrc"/>
         </xsl:if>
         <xsl:text>: </xsl:text>
       </xsl:if>

@@ -27,16 +27,10 @@ import static org.dita.dost.util.URLUtils.*;
  */
 public final class ForceUniqueFilter extends AbstractXMLFilter {
 
-    /** Absolute path to current source file. */
-    private URI currentFile;
     private final Map<URI, Integer> topicrefCount = new HashMap<>();
     private final Deque<Boolean> ignoreStack = new ArrayDeque<>();
     /** Generated copy-to mappings, key is target topic and value is source topic. */
     public final Map<URI, URI> copyToMap = new HashMap<>();
-
-    public void setCurrentFile(final URI currentFile) {
-        this.currentFile = currentFile;
-    }
 
     // ContentHandler methods
 

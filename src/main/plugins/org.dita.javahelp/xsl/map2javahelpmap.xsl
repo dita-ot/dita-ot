@@ -14,6 +14,7 @@
 
 <!-- default "output extension" processing parameter ('.html')-->
 <xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
+<!-- Deprecated since 2.3 -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <xsl:output

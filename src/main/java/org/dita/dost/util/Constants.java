@@ -753,7 +753,8 @@ public final class Constants {
     @Deprecated
     public static final String INPUT_DIR = "user.input.dir";
     public static final String INPUT_DIR_URI = "user.input.dir.uri";
-    /** Property name for copy-to target2sourcemap list file */
+    /** Property name for copy-to target2sourcemap list file. Deprecated since 2.3 */
+    @Deprecated
     public static final String COPYTO_TARGET_TO_SOURCE_MAP_LIST = "copytotarget2sourcemaplist";
     /** Property name for relflag image list file */
     public static final String REL_FLAGIMAGE_LIST="relflagimagelist";
@@ -966,9 +967,14 @@ public final class Constants {
 
     /** Project reference name for job configuration object. */
     public static final String ANT_REFERENCE_JOB = "job";
-
+    /** Temporary directory Ant property name. */
+    public static final String ANT_TEMP_DIR = "dita.temp.dir";
+    /** Deprecated since 2.3 */
+    @Deprecated
     public static final String PI_PATH2PROJ_TARGET = "path2project";
     public static final String PI_PATH2PROJ_TARGET_URI = "path2project-uri";
+    /** Deprecated since 2.3 */
+    @Deprecated
     public static final String PI_WORKDIR_TARGET = "workdir";
     public static final String PI_WORKDIR_TARGET_URI = "workdir-uri";
 

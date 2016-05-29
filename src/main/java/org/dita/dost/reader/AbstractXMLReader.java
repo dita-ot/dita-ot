@@ -32,7 +32,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
 ContentHandler, EntityResolver {
 
     DITAOTLogger logger;
-    private Job job;
+    Job job;
 
     @Override
     public void read(final File filename) {
@@ -44,6 +44,7 @@ ContentHandler, EntityResolver {
         this.logger = logger;
     }
 
+    @Override
     public final void setJob(final Job job) {
         this.job = job;
     }

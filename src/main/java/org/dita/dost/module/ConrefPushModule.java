@@ -31,7 +31,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
-        final Collection<FileInfo> fis = job.getFileInfo(new Filter() {
+        final Collection<FileInfo> fis = job.getFileInfo(new Filter<FileInfo>() {
             @Override
             public boolean accept(FileInfo f) {
                 return f.isConrefPush;
@@ -40,6 +40,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
         if (!fis.isEmpty()) {
             final ConrefPushReader reader = new ConrefPushReader();
             reader.setLogger(logger);
+            reader.setJob(job);
             for(final FileInfo f: fis) {
                 final File file = new File(job.tempDir, f.file.getPath());
                 logger.info("Reading  " + file.getAbsolutePath());

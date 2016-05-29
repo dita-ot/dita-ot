@@ -1,0 +1,20 @@
+/*!
+ * This file is part of the DITA Open Toolkit project. See the accompanying LICENSE.md file for applicable licenses.
+ */
+/*
+ | (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+ */
+
+ // Import variables first to ensure they are available to subsequent partials
+@import 'variables';
+
+@import 'domains';
+@import 'display-attr';
+@import 'figures';
+@import 'headings';
+@import 'links';
+@import 'lists';
+@import 'notes';
+@import 'phrases';
+@import 'tables';
+@import 'topic';

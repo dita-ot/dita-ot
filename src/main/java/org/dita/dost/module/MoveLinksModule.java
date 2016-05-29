@@ -12,6 +12,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DitaLinksWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -53,12 +54,13 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         Document doc;
         InputStream in = null;
         try {
-            doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            doc = XMLUtils.getDocumentBuilder().newDocument();
             final Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(styleFile));
             transformer.setURIResolver(CatalogUtils.getCatalogResolver());
             if (input.getAttribute("include.rellinks") != null) {
                 transformer.setParameter("include.rellinks", input.getAttribute("include.rellinks"));
             }
+            transformer.setParameter("INPUTMAP", job.getInputMap());
             in = new BufferedInputStream(new FileInputStream(inputFile));
             final Source source = new StreamSource(in);
             source.setSystemId(inputFile.toURI().toString());

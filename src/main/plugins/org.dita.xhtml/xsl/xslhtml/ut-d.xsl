@@ -132,28 +132,24 @@
 
 <xsl:template match="*" mode="ditamsg:area-element-without-href-target">
   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">044</xsl:with-param>
-    <xsl:with-param name="msgsev">E</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX044E'"/>
   </xsl:call-template>
 </xsl:template>
 <xsl:template match="*" mode="ditamsg:area-element-without-linktext">
   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">045</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX045W'"/>
   </xsl:call-template>
 </xsl:template>
 <xsl:template match="*" mode="ditamsg:area-element-unknown-shape">
   <xsl:param name="shapeval" select="*[contains(@class,' ut-d/shape ')]/text()"/>
   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">046</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX046W'"/>
     <xsl:with-param name="msgparams">%1=<xsl:value-of select="$shapeval"/></xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 <xsl:template match="*" mode="ditamsg:area-element-missing-coords">
   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">047</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="id" select="'DOTX047W'"/>
   </xsl:call-template>
 </xsl:template>
 

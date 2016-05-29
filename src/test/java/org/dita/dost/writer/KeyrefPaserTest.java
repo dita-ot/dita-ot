@@ -45,6 +45,7 @@ import org.dita.dost.util.CatalogUtils;
 public class KeyrefPaserTest {
 
     private static File tempDir;
+    private static File tempDirSubDir;
     private static final File resourceDir = TestUtils.getResourceDir(KeyrefPaserTest.class);
     private static final File srcDir = new File(resourceDir, "src");
     private static final File expDir = new File(resourceDir, "exp");
@@ -56,8 +57,11 @@ public class KeyrefPaserTest {
     public static void setUp() throws Exception {
         CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
         tempDir = TestUtils.createTempDir(KeyrefPaserTest.class);
+        tempDirSubDir = new File(tempDir, "subdir");
+        tempDirSubDir.mkdirs();
         TestUtils.normalize(new File(srcDir, "a.xml"), new File(tempDir, "a.xml"));
         TestUtils.normalize(new File(srcDir, "b.ditamap"), new File(tempDir, "b.ditamap"));
+        TestUtils.normalize(new File(srcDir, "subdir/c.ditamap"), new File(tempDir, "subdir/c.ditamap"));
         resolver = CatalogUtils.getCatalogResolver();
 
         TestUtils.resetXMLUnit();
@@ -67,7 +71,7 @@ public class KeyrefPaserTest {
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreComments(true);
 
-        readKeyMap();
+        keyDefinition = readKeyMap(new File(srcDir, "keys.ditamap"));
     }
 
     @Test
@@ -76,8 +80,8 @@ public class KeyrefPaserTest {
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File("a.xml"));
-        parser.write(new File("a.xml"));
+        parser.setCurrentFile(new File(tempDir, "a.xml").toURI());
+        parser.write(new File(tempDir, "a.xml"));
 
         assertXMLEqual(new InputSource(new File(expDir, "a.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "a.xml").toURI().toString()));
@@ -89,11 +93,24 @@ public class KeyrefPaserTest {
         parser.setLogger(new TestUtils.TestLogger());
         parser.setJob(new Job(tempDir));
         parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File("b.ditamap"));
-        parser.write(new File("b.ditamap"));
+        parser.setCurrentFile(new File(tempDir, "b.ditamap").toURI());
+        parser.write(new File(tempDir, "b.ditamap"));
 
         assertXMLEqual(new InputSource(new File(expDir, "b.ditamap").toURI().toString()),
                 new InputSource(new File(tempDir, "b.ditamap").toURI().toString()));
+    }
+
+    @Test
+    public void testUpLevelMapWrite() throws Exception {
+        final KeyrefPaser parser = new KeyrefPaser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir));
+        parser.setKeyDefinition(readKeyMap(new File(srcDir, "subdir/c.ditamap")));
+        parser.setCurrentFile(new File(tempDir, "subdir/c.ditamap").toURI());
+        parser.write(new File(tempDir, "subdir/c.ditamap"));
+
+        assertXMLEqual(new InputSource(new File(expDir, "subdir/c.ditamap").toURI().toString()),
+                new InputSource(new File(tempDir, "subdir/c.ditamap").toURI().toString()));
     }
 
     @Test
@@ -139,9 +156,9 @@ public class KeyrefPaserTest {
         TestUtils.forceDelete(tempDir);
     }
 
-    private static void readKeyMap() throws Exception {
+    private static KeyScope readKeyMap(File keyMapFile) throws Exception {
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        final InputSource inputSource = new InputSource(new File(srcDir, "keys.ditamap").toURI().toString());
+        final InputSource inputSource = new InputSource(keyMapFile.toURI().toString());
         final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
         documentBuilder.setEntityResolver(resolver);
         final Document document = documentBuilder.parse(inputSource);
@@ -157,7 +174,7 @@ public class KeyrefPaserTest {
             final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")), null, null, elem);
             keymap.put(keyDef.keys, keyDef);
         }
-        keyDefinition = new KeyScope(keymap);
+        return new KeyScope(keymap);
     }
     
 }

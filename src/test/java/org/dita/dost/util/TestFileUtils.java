@@ -279,60 +279,6 @@ public class TestFileUtils {
     }
     
     @Test
-    public void testGetTopicId() {
-        assertEquals("bar", FileUtils.getTopicID("foo#bar/baz"));
-        assertEquals("bar", FileUtils.getTopicID("foo#bar"));
-        assertNull(FileUtils.getTopicID("foo#"));
-        assertNull(FileUtils.getTopicID("foo"));
-        assertEquals("bar", FileUtils.getTopicID("#bar/baz"));
-        assertEquals("bar", FileUtils.getTopicID("#bar"));
-        assertNull(FileUtils.getTopicID(""));
-        try {
-            assertNull(FileUtils.getTopicID(null));
-            fail();
-        } catch (final NullPointerException e) {}
-    }
-    
-    @Test
-    public void testGetElementId() {
-        assertEquals("baz", FileUtils.getElementID("foo#bar/baz"));
-        assertNull(FileUtils.getElementID("foo#bar"));
-        assertNull(FileUtils.getElementID("foo#"));
-        assertNull(FileUtils.getElementID("foo"));
-        assertEquals("baz", FileUtils.getElementID("#bar/baz"));
-        assertNull(FileUtils.getElementID("#bar"));
-        assertNull(FileUtils.getElementID(""));
-        try {
-            assertNull(FileUtils.getElementID(null));
-            fail();
-        } catch (final NullPointerException e) {}
-    }
-    
-    @Test
-    public void testSetElementId() {
-        assertEquals("foo#bar/qux", FileUtils.setElementID("foo#bar/baz", "qux"));
-        assertEquals("foo#bar/qux", FileUtils.setElementID("foo#bar", "qux"));
-        try {
-            FileUtils.setElementID("foo#", "qux");
-            fail();
-        } catch (final IllegalArgumentException e) {}
-        try {
-            FileUtils.setElementID("foo", "qux");
-            fail();
-        } catch (final IllegalArgumentException e) {}
-        
-        assertEquals("foo#bar", FileUtils.setElementID("foo#bar/baz", null));
-        assertEquals("foo#bar", FileUtils.setElementID("foo#bar", null));
-        assertEquals("foo", FileUtils.setElementID("foo#", null));
-        assertEquals("foo", FileUtils.setElementID("foo", null));
-        
-        try {
-            FileUtils.setElementID(null, null);
-            fail();
-        } catch (final NullPointerException e) {}
-    }
-    
-    @Test
     public void testDirectoryContains() {
         assertTrue(FileUtils.directoryContains(srcDir, new File(srcDir, "test.txt")));
         assertFalse(FileUtils.directoryContains(srcDir, srcDir));
