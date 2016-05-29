@@ -144,10 +144,9 @@ public final class Job {
 
     /**
      * Test if serialized configuration file has been updated.
-     * @param tempDir job configuration directory
      * @return {@code true} if configuration file has been update after this object has been created or serialized
      */
-    public boolean isStale(final File tempDir) {
+    public boolean isStale() {
         return jobFile.lastModified() > lastModified;
     }
     
