@@ -8,7 +8,7 @@ See the accompanying LICENSE file for applicable license.
 -->
 <project name="org.dita.pdf2.fop">
 
-  <property name="fop.home" value="${dita.plugin.org.dita.pdf2.fop.dir}/fop"/>
+  <property name="fop.home" value="${dita.plugin.org.dita.pdf2.fop.dir}"/>
 
   <target name="transform.fo2pdf.fop.test-use">
     <condition property="use.fop.pdf.formatter">
@@ -21,7 +21,7 @@ See the accompanying LICENSE file for applicable license.
       <equals arg1="${pdf.formatter}" arg2="fop"/>
     </condition>
     
-    <condition property="args.fo.userconfig" value="${fop.home}/conf/fop.xconf">
+    <condition property="args.fo.userconfig" value="${fop.home}/cfg/fop.xconf">
       <not>
         <isset property="args.fo.userconfig"/>
       </not>
@@ -139,14 +139,7 @@ See the accompanying LICENSE file for applicable license.
 
   <!--Run FOP-->
   <target name="transform.fo2pdf.fop" if="use.fop.pdf.formatter">
-    <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop" classpathref="dost.class.path">
-      <classpath>
-        <fileset dir="${fop.home}">
-          <include name="lib/*.jar"/>
-          <include name="build/fop.jar"/>
-        </fileset>
-      </classpath>
-    </taskdef>
+    <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop" classpathref="dost.class.path"/>
     
     <condition property="outputFile" value="${dita.map.output.dir}/${outputFile.base}${xsl.formatter.ext}">
       <not><isset property="outputFile"/></not>
