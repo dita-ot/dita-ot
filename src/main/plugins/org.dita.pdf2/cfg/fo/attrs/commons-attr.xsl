@@ -692,7 +692,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__force__page__count">
         <xsl:attribute name="force-page-count">
             <xsl:choose>
-                <xsl:when test="/*[contains(@class, ' bookmap/bookmap ')]">
+                <xsl:when test="$mirror-page-margins">
                     <xsl:value-of select="'even'"/>
                 </xsl:when>
                 <xsl:otherwise>
