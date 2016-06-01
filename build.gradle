@@ -104,6 +104,8 @@ task cleanDistTemp(type: Delete) {
 
 task initDist(dependsOn: [jar, cleanDistTemp]) << {
     distTempDir.mkdirs()
+    println "distVersion: ${distVersion}"
+    println "distFileName: ${distFileName}"
 }
 
 task copyDistTemp(type: Copy, dependsOn: initDist) {
@@ -131,6 +133,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/*.md"
         exclude "docsrc/*.xpr"
         exclude "docsrc/site.*"
+        exclude "docsrc/build"
         exclude "docsrc/temp"
         include "docsrc/**"
         include "dtd/**"
@@ -144,11 +147,17 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "plugins/org.dita.pdf2/build"
         exclude "plugins/org.dita.pdf2/bin/**"
         exclude "plugins/org.dita.pdf2.axf/build"
+        exclude "plugins/org.dita.pdf2.axf/src"
         exclude "plugins/org.dita.pdf2.fop/build"
         exclude "plugins/org.dita.pdf2.xep/build"
         exclude "plugins/org.dita.pdf2.xep/lib/xep/**"
+        exclude "plugins/org.dita.pdf2.xep/src"
         exclude "plugins/org.dita.wordrtf/build"
+        exclude "plugins/org.dita.wordrtf/src"
         exclude "plugins/org.dita.odt/build"
+        exclude "plugins/org.dita.odt/src"
+        exclude "plugins/org.dita.odt/test"
+        exclude "plugins/org.dita.odt/resources"
         exclude "temp"
         include "plugins/**"
         include "resources/**"
@@ -165,7 +174,7 @@ copyDistTemp.outputs.dir distTempDir
 task updateConfiguration() << {
     if (project.hasProperty('commit') && !commit.empty) {
         ant.propertyfile(file: "${distTempDir}/lib/configuration.properties") {
-            entry(key: "otversion", operation: "=", value: "${project.version}+${commit.substring(0, 7)}")
+            entry(key: "otversion", operation: "=", value: "${distVersion}")
         }
     }
 }
@@ -189,8 +198,12 @@ task generateDocs(type: JavaExec, dependsOn: integrateDistTemp) {
     args "-Ddita.home=" + distTempDir
     args "dist"
 }
+task cleanGenerateDocs(type: Delete) {
+    delete "${distTempDir}/docsrc/temp"
+}
+cleanGenerateDocs.mustRunAfter generateDocs
 
-task distZip(type: Zip, dependsOn: [jar, generateDocs]) {
+task distZip(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
