@@ -96,9 +96,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="baseline-shift">20%</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="tm__content__service">
-        <xsl:attribute name="font-size">40%</xsl:attribute>
-        <xsl:attribute name="baseline-shift">50%</xsl:attribute>
+    <xsl:attribute-set name="tm__content__service" use-attribute-sets="tm__content">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="author">

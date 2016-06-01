@@ -803,11 +803,15 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tm ')]">
+      <xsl:variable name="generate-symbol" as="xs:boolean">
+        <xsl:apply-templates select="." mode="tm-scope"/>
+      </xsl:variable>
         <fo:inline xsl:use-attribute-sets="tm">
             <xsl:apply-templates/>
             <xsl:choose>
+              <xsl:when test="not($generate-symbol)"/>
                 <xsl:when test="@tmtype='service'">
-                    <fo:inline xsl:use-attribute-sets="tm__content__service">SM</fo:inline>
+                  <fo:inline xsl:use-attribute-sets="tm__content__service">&#8480;</fo:inline>
                 </xsl:when>
                 <xsl:when test="@tmtype='tm'">
                     <fo:inline xsl:use-attribute-sets="tm__content">&#8482;</fo:inline>
@@ -822,6 +826,10 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
+  <xsl:template match="node() | @*" mode="tm-scope" as="xs:boolean" priority="-10">
+    <xsl:sequence select="true()"/>
+  </xsl:template>  
+  
   <xsl:template match="*[contains(@class,' topic/term ')]" name="topic.term">
     <xsl:param name="keys" select="@keyref" as="attribute()?"/>
     <xsl:param name="contents" as="node()*">
