@@ -819,9 +819,6 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="@tmtype='reg'">
                     <fo:inline xsl:use-attribute-sets="tm__content">&#174;</fo:inline>
                 </xsl:when>
-                <xsl:otherwise>
-                    <fo:inline xsl:use-attribute-sets="tm__content"><xsl:text>Error in tm type.</xsl:text></fo:inline>
-                </xsl:otherwise>
             </xsl:choose>
         </fo:inline>
     </xsl:template>
