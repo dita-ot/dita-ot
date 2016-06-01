@@ -121,9 +121,6 @@ public final class ExtensibleAntInvoker extends Task {
         if (tempDir == null) {
             tempDir = new File(this.getProject().getProperty(ANT_TEMP_DIR)).getAbsoluteFile();
         }
-        if (tempDir == null) {
-            throw new BuildException("Temporary directory not set or available");
-        }
         if (modules.isEmpty()) {
             throw new BuildException("Module must be specified");
         }
@@ -266,7 +263,7 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public static Job getJob(final File tempDir, final Project project) {
         Job job = project.getReference(ANT_REFERENCE_JOB);
-        if (job != null && job.isStale(tempDir)) {
+        if (job != null && job.isStale()) {
             project.log("Reload stale job configuration reference", Project.MSG_VERBOSE);
             job = null;
         }
@@ -478,7 +475,7 @@ public final class ExtensibleAntInvoker extends Task {
      */
     public static class Filters extends Module {
 
-        private List<Filter> filters = new ArrayList<>();
+        private final List<Filter> filters = new ArrayList<>();
         private Project project;
         private List<String> format;
 

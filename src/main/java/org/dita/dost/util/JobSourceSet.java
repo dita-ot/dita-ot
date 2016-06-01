@@ -121,7 +121,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
     }
 
     private static class JobResource extends URLResource {
-        private String relPath;
+        private final String relPath;
         public JobResource(final URL baseURL, final String relPath) {
             super();
             setBaseURL(baseURL);

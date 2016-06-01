@@ -156,7 +156,6 @@ public final class IndexTermCollection {
      * Sort term list extracted from dita files base on Locale.
      */
     public void sort() {
-        final int termListSize = termList.size();
         if (IndexTerm.getTermLocale() == null ||
                 IndexTerm.getTermLocale().getLanguage().trim().length()==0) {
             IndexTerm.setTermLocale(new Locale(LANGUAGE_EN,

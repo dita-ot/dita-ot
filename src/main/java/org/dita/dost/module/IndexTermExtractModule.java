@@ -124,8 +124,6 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
     }
 
     private void extractIndexTerm() throws SAXException {
-        final int topicNum = topicList.size();
-        final int ditamapNum = ditamapList.size();
         FileInputStream inputStream = null;
         XMLReader xmlReader = null;
         final IndexTermReader handler = new IndexTermReader(indexTermCollection);

@@ -76,7 +76,7 @@ public final class Integrator {
     public static final String FEAT_VALUE_SEPARATOR = ",";
     private static final String PARAM_VALUE_SEPARATOR = ";";
 
-    private static Set<PosixFilePermission> PERMISSIONS = ImmutableSet.<PosixFilePermission>builder()
+    private static final Set<PosixFilePermission> PERMISSIONS = ImmutableSet.<PosixFilePermission>builder()
             .add(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE,
                  PosixFilePermission.GROUP_READ, PosixFilePermission.GROUP_EXECUTE,
                  PosixFilePermission.OTHERS_READ, PosixFilePermission.OTHERS_EXECUTE)

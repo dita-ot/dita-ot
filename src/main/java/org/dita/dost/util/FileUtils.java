@@ -556,8 +556,7 @@ public final class FileUtils {
     public static String getFullPathNoEndSeparator(final String aURLString) {
         final int pathnameStartIndex = aURLString.indexOf(UNIX_SEPARATOR);
         final int pathnameEndIndex = aURLString.lastIndexOf(UNIX_SEPARATOR);
-        String aPath = aURLString.substring(pathnameStartIndex, pathnameEndIndex);
-        aPath = aURLString.substring(0, pathnameEndIndex);
+        String aPath = aURLString.substring(0, pathnameEndIndex);
         return aPath;
     }
     

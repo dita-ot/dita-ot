@@ -118,7 +118,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     /** Collect topics for key reference processing and modify map to reflect new file names. */
-    private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) throws DITAOTException {
+    private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) {
         final List<ResolveTask> res = new ArrayList<>();
         res.add(new ResolveTask(rootScope, job.getFileInfo(job.getInputMap()), null));
         // Collect topics from map and rewrite topicrefs for duplicates

@@ -92,7 +92,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                     if (!codeFile.exists()) {
                         final URI rel = job.tempDir.toURI().relativize(codeFile.toURI());
                         final Job.FileInfo fi = job.getFileInfo(rel);
-                        if (fi != null && fi.src.getScheme().equals("file")) {
+                        if (fi != null && "file".equals(fi.src.getScheme())) {
                             codeFile = new File(fi.src);
                         }
                     }

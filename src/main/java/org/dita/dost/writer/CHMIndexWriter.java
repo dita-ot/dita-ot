@@ -56,7 +56,6 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
             serializer.writeEndElement(); // head
             serializer.writeStartElement("body");
             serializer.writeStartElement("ul");
-            final int termNum = termList.size();
             for (final IndexTerm term : termList) {
                 outputIndexTerm(term, serializer);
             }

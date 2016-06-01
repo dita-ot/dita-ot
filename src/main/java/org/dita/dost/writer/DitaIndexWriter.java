@@ -224,7 +224,6 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
             final Attributes atts) throws SAXException {
-        final int attsLen = atts.getLength();
 
         try {
             if (topicLevel != -1){

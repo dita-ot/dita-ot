@@ -507,7 +507,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         coderefTargetSet.add(filename);
     }
 
-    private void parseObject(final Attributes atts) throws SAXException {
+    private void parseObject(final Attributes atts) {
         URI attrValue = toURI(atts.getValue(ATTRIBUTE_NAME_DATA));
         if (attrValue == null) {
             return;

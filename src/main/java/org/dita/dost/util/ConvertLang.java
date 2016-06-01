@@ -451,8 +451,6 @@ public final class ConvertLang extends Task {
                 }
                 charCode = reader.read();
             }
-        } catch (final FileNotFoundException e) {
-            logger.error(e.getMessage(), e) ;
         } catch (final IOException e) {
             logger.error(e.getMessage(), e) ;
         } finally {
