@@ -160,6 +160,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "plugins/org.dita.odt/resources"
         exclude "temp"
         include "plugins/**"
+        exclude "resources/org"
         include "resources/**"
         include "xsl/**"
         // legacy build scripts
