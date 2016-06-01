@@ -4,8 +4,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="2.0">
 
-  <xsl:import href="plugin:org.dita.html5:xsl/dita2html5.xsl"/>
-  <xsl:import href="plugin:org.dita.xhtml:xsl/map2html-coverImpl.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/map2html5-coverImpl.xsl"/>
 
   <dita:extension id="dita.xsl.html5.cover" 
       behavior="org.dita.dost.platform.ImportXSLAction" 

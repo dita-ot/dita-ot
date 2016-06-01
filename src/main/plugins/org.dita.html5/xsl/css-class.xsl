@@ -32,4 +32,21 @@
     <xsl:sequence select="dita-ot:css-class((), .)"/>
   </xsl:template>
 
+  <xsl:template match="*" mode="css-class" priority="100">
+    <xsl:param name="default-output-class"/>
+    
+    <xsl:variable name="outputclass" as="attribute(class)">
+      <xsl:apply-templates select="." mode="set-output-class">
+        <xsl:with-param name="default" select="$default-output-class"/>
+      </xsl:apply-templates>
+    </xsl:variable>
+    
+    <xsl:variable name="class">
+      <xsl:sequence select="data($outputclass)"/>
+      <xsl:next-match/>
+    </xsl:variable>
+    
+    <xsl:attribute name="class" select="string-join($class, ' ')"/>
+  </xsl:template>
+
 </xsl:stylesheet>

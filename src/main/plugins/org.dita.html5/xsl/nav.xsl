@@ -6,7 +6,7 @@
                 version="2.0"
                 exclude-result-prefixes="xs dita-ot ditamsg">
   
-  <xsl:import href="plugin:org.dita.xhtml:xsl/map2htmtoc/map2htmlImpl.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/map2html5Impl.xsl"/>
   
   <xsl:param name="nav-toc" as="xs:string?"/>
   <xsl:param name="FILEDIR" as="xs:string?"/>
