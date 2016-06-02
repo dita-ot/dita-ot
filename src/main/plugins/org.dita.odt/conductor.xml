@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  This file is part of the DITA Open Toolkit project.
-  See the accompanying license.txt file for applicable licenses.
--->
-<project name="org.dita.odt.conductor">
-  <import file="build_dita2odt.xml"/>
-</project>

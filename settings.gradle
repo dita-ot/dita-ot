@@ -11,6 +11,3 @@ project(":src/main/plugins/org.dita.pdf2.xep").name = 'xep'
 
 include 'src/main/plugins/org.dita.html5'
 project(":src/main/plugins/org.dita.html5").name = 'html5'
-
-include 'src/main/plugins/org.dita.odt'
-project(":src/main/plugins/org.dita.odt").name = 'odt'
