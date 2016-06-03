@@ -26,6 +26,7 @@ import org.xml.sax.XMLReader;
  */
 public final class MergeUtils {
 
+    private static final String PREFIX = "unique_";
     private final Map<URI, String> idMap;
     private int index;
     /** Set of visited topic files. */
@@ -70,7 +71,7 @@ public final class MergeUtils {
         }
         final URI localId = id.normalize();
         index ++;
-        final String newId = "unique_" + Integer.toString(index);
+        final String newId = PREFIX + Integer.toString(index);
         idMap.put(localId, newId);
         return newId;
     }
