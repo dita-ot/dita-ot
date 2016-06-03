@@ -517,7 +517,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
 
           <!--finding type based on name of the target element in the first topic in another file-->
           <xsl:when test="$topicpos='firstinfile'">
-            <xsl:variable name="target" select="key('topicsByID', $topicid, $doc)[1]" as="element()?"/>
+            <xsl:variable name="target" 
+              select="($doc/*[contains(@class, ' topic/topic ')], 
+                       $doc/*/*[contains(@class, ' topic/topic ')])[1]" 
+              as="element()?"
+            />
             <xsl:choose>
               <xsl:when test="exists($target)">
                 <xsl:attribute name="type">
@@ -658,7 +662,10 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!--grabbing text from the first topic in another file-->
       <xsl:when test="$topicpos='firstinfile'">
-        <xsl:variable name="target" select="key('topicsByID', $topicid, $doc)[1]" as="element()?"/>        
+        <xsl:variable name="target" as="element()?"
+          select="($doc/*[contains(@class, ' topic/topic ')], 
+                   $doc/*/*[contains(@class, ' topic/topic ')])[1]"
+        />
         <xsl:choose>
           <xsl:when
             test="$target/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
