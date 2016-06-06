@@ -705,16 +705,17 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:attribute-set name="page-sequence.cover" use-attribute-sets="__force__page__count">
   </xsl:attribute-set>
 
-  <xsl:attribute-set name="page-sequence.notice" use-attribute-sets="__force__page__count">
+  <xsl:attribute-set name="page-sequence.frontmatter">
     <xsl:attribute name="format">i</xsl:attribute>
   </xsl:attribute-set>
   
-  <xsl:attribute-set name="page-sequence.preface" use-attribute-sets="__force__page__count">
-    <xsl:attribute name="format">i</xsl:attribute>  
+  <xsl:attribute-set name="page-sequence.notice" use-attribute-sets="__force__page__count page-sequence.frontmatter">
   </xsl:attribute-set>
   
-  <xsl:attribute-set name="page-sequence.toc" use-attribute-sets="__force__page__count">
-    <xsl:attribute name="format">i</xsl:attribute>
+  <xsl:attribute-set name="page-sequence.preface" use-attribute-sets="__force__page__count page-sequence.frontmatter">
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="page-sequence.toc" use-attribute-sets="__force__page__count page-sequence.frontmatter">
   </xsl:attribute-set>
 
   <xsl:attribute-set name="page-sequence.lot" use-attribute-sets="page-sequence.toc">
