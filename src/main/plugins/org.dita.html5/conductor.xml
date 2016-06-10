@@ -3,6 +3,6 @@
   This file is part of the DITA Open Toolkit project.
   See the accompanying license.txt file for applicable licenses.
 -->
-<project name="org.dita.xhtml.conductor">
+<project>
   <import file="build_dita2html5.xml"/>
 </project>
