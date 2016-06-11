@@ -147,13 +147,6 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="*" mode="ditamsg:missing-target-file-no-navtitle">
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="id" select="'DOTX008W'"/>
-      <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
   <xsl:template match="*" mode="ditamsg:could-not-retrieve-navtitle-using-fallback">
     <xsl:param name="target"/>
     <xsl:param name="fallback"/>

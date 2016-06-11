@@ -92,31 +92,6 @@
   <xsl:param name="BASEDIR"/>
     
   <xsl:param name="OUTPUTDIR"/>
-    <!-- get destination dir with BASEDIR and OUTPUTDIR-->
-    <xsl:variable name="desDir">
-      <xsl:choose>
-        <xsl:when test="not($BASEDIR)"/> <!-- If no filterfile leave empty -->
-        <xsl:when test="starts-with($BASEDIR, 'file:')">
-          <xsl:value-of select="translate(concat($BASEDIR, '/', $OUTPUTDIR, '/'), '\', '/')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="contains($OUTPUTDIR, ':\') or contains($OUTPUTDIR, ':/')">
-              <xsl:value-of select="'file:/'"/><xsl:value-of select="concat($OUTPUTDIR, '/')"/>
-            </xsl:when>
-            <xsl:when test="starts-with($OUTPUTDIR, '/')">
-              <xsl:value-of select="'file://'"/><xsl:value-of select="concat($OUTPUTDIR, '/')"/>
-            </xsl:when>
-            <xsl:when test="starts-with($BASEDIR, '/')">
-              <xsl:text>file://</xsl:text><xsl:value-of select="concat($BASEDIR, '/', $OUTPUTDIR, '/')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:text>file:/</xsl:text><xsl:value-of select="translate(concat($BASEDIR, '/', $OUTPUTDIR, '/'), '\', '/')"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
   
   <!-- =========== "GLOBAL" DECLARATIONS (see 35) =========== -->
   
@@ -209,9 +184,6 @@
   <!-- Define the error message prefix identifier -->
   <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
-  
-  <!-- Filler for A-name anchors  - was &nbsp;-->
-  <xsl:variable name="afill"></xsl:variable>
   
   <!-- these elements are never processed in a conventional presentation. can be overridden. -->
   <xsl:template match="*[contains(@class, ' topic/no-topic-nesting ')]"/>
@@ -486,7 +458,6 @@
     <xsl:apply-templates select="." mode="process.note"/>
   </xsl:template>
   
-  <!-- Fixed SF Bug 1405184 "Note template for XHTML should be easier to override" -->
   <!-- RFE 2703335 reduces duplicated code by adding common processing rules.
        To override all notes, match the note element's class attribute directly, as in this rule.
        To override a single note type, match the class with mode="process.note.(selected-type)"
@@ -719,13 +690,7 @@
       <xsl:apply-templates/>
     </li>
   </xsl:template>
-  
-  <!-- special case of getting the number of a list item referenced by xref -->
-  <xsl:template match="*[contains(@class, ' topic/li ')]" mode="xref">
-    <xsl:number/>
-  </xsl:template>
-  
-  
+    
   <!-- list item section is like li/lq but without presentation (indent) -->
   <xsl:template match="*[contains(@class, ' topic/itemgroup ')]" name="topic.itemgroup">
     <!-- insert a space before all but the first itemgroups in a LI -->
@@ -889,7 +854,6 @@
       <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
     </dd>
   </xsl:template>
-  
   
   <!-- =========== PHRASES =========== -->
   
@@ -1281,7 +1245,6 @@
   </xsl:template>
   
   
-  <!-- =========== RECORD END RESPECTING DATA =========== -->
   <!-- PRE -->
   <xsl:template match="*[contains(@class, ' topic/pre ')]" name="topic.pre">
     <xsl:if test="contains(@frame, 'top')"><hr /></xsl:if>
@@ -1939,12 +1902,7 @@
   <xsl:template name="spec-title-nospace">
    <xsl:if test="@spectitle"><div style="margin-bottom: 0;"><strong><xsl:value-of select="@spectitle"/></strong></div></xsl:if>
   </xsl:template>
-  
-  <xsl:template name="spec-title-cell">  <!-- not used - was a cell 'title' -->
-   <xsl:if test="@specentry"><xsl:value-of select="@specentry"/><xsl:text> </xsl:text></xsl:if>
-  </xsl:template>
-  
-  
+    
   <xsl:template name="copyright">
   
   </xsl:template>
@@ -1990,17 +1948,6 @@
     </xsl:choose>
   </xsl:template>
   
-  <!-- diagnostic: call this to generate a path-like view of an element's ancestry -->
-  <xsl:template name="breadcrumbs">
-  <xsl:variable name="full-path">
-    <xsl:for-each select="ancestor-or-self::*">
-      <xsl:value-of select="concat('/', name())"/>
-    </xsl:for-each>
-  </xsl:variable>
-  <p><strong><xsl:value-of select="$full-path"/></strong></p>
-  </xsl:template>
-  
-  
   <!-- the following named templates generate inline content for the delivery context -->
   
   <!-- named templates for labels and titles related to topic structures -->
@@ -2011,17 +1958,6 @@
     <xsl:apply-templates select="." mode="dita-ot:text-only"/>
   </xsl:template>
   
-  <!-- Process a section heading - H4 based on: 1) title element 2) @spectitle attr -->
-  <xsl:template name="sect-heading">
-    <xsl:param name="defaulttitle"/> <!-- get param by reference -->
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="id" select="'DOTX066W'"/>
-      <xsl:with-param name="msgparams">%1=sect-heading</xsl:with-param>
-    </xsl:call-template>
-    <xsl:apply-templates select="." mode="dita2html:section-heading">
-      <xsl:with-param name="defaulttitle" select="$defaulttitle"/>
-    </xsl:apply-templates>
-  </xsl:template>
   <xsl:template match="*" mode="dita2html:section-heading">
     <xsl:param name="defaulttitle"/> <!-- get param by reference -->
     <xsl:variable name="heading">
@@ -2070,7 +2006,6 @@
           <xsl:value-of select="$defaulttitle"/>
         </xsl:element>
       </xsl:when>
-      <xsl:otherwise></xsl:otherwise>
     </xsl:choose>
   </xsl:template>
   
@@ -2176,34 +2111,7 @@
       <xsl:apply-templates/>
     </div>
   </xsl:template>
-  
-  <!-- listing of topics from calling context only; can be expanded for nesting -->
-  <xsl:template name="gen-toc">
-    <div>
-    <h3 class="sectiontitle">
-      <xsl:call-template name="getVariable">
-        <xsl:with-param name="id" select="'Contents'"/>
-      </xsl:call-template>
-    </h3>
-     <ul>
-      <xsl:for-each select="//topic/title">
-       <li>
-  <!-- this directive provides a "depth" indicator without doing recursive nesting -->
-  <xsl:value-of select="substring('------', 1, count(ancestor::*))"/>
-       <a>
-         <xsl:attribute name="href">#<xsl:value-of select="generate-id()"/></xsl:attribute>
-         <xsl:value-of select="."/>
-       </a>
-       <!--recursive call for subtopics here"/-->
-       </li>
-      </xsl:for-each>
-     </ul>
-    </div>
-  </xsl:template>
-  
-  <!-- ========== SETTINGS ========== -->
-  <xsl:variable name="trace">no</xsl:variable> <!--set string to 'yes' to turn on trace -->
-  
+    
   <!-- set up keys based on xref's "type" attribute: %info-types;|hd|fig|table|li|fn -->
   <xsl:key name="topic" match="*[contains(@class, ' topic/topic ')]" use="@id"/> <!-- uses "title" -->
   <xsl:key name="fig"   match="*[contains(@class, ' topic/fig ')]"   use="@id"/> <!-- uses "title" -->
@@ -2326,15 +2234,6 @@
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- It will be placed before the ending HEAD tag -->
 </xsl:template>
-
-<xsl:template name="gen-user-external-link">
-  <xsl:apply-templates select="." mode="gen-user-external-link"/>
-</xsl:template>
-<xsl:template match="/|node()|@*" mode="gen-user-external-link">
-  <!-- to customize: copy this to your override transform, add the content you want. -->
-  <!-- It will be placed after an external LINK or XREF -->
-</xsl:template>
-
 
 <xsl:template name="gen-user-panel-title-pfx">
   <xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>
@@ -2682,43 +2581,6 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- Deprecated since 2.1 -->
-  <!-- This template pulls in topic/title -->
-  <!-- 20090330: Add error checking to ensre $keys is defined, that the key
-                 is defined in KEYREF-FILE, and that $target != '' -->
-  <xsl:template match="*" mode="pull-in-title">
-    <xsl:param name="type"/>
-    <xsl:param name="displaytext" select="''"/>
-    <xsl:param name="keys" select="@keyref"/>
-    
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="id" select="'DOTX069W'"/>
-      <xsl:with-param name="msgparams">%1=pull-in-title</xsl:with-param>
-    </xsl:call-template>
-    <xsl:choose>
-      <xsl:when test="$displaytext = '' and $keys != ''">
-        <xsl:variable name="target">
-          <xsl:variable name="keydef" select="$keydefs//*[@keys = $keys]"/>
-          <xsl:if test="$keydef">
-            <xsl:choose>
-              <xsl:when test="contains($keydef/@href, '#')">
-                <xsl:value-of select="substring-before($keydef/@href, '#')"/>
-              </xsl:when>
-              <xsl:when test="$keydef/@href">
-                <xsl:value-of select="$keydef/@href"/>
-              </xsl:when>
-            </xsl:choose>
-          </xsl:if>
-        </xsl:variable>
-        <xsl:if test="not($target = '' or contains($target, '://'))">
-          <xsl:value-of select="(document(concat($WORKDIR, $PATH2PROJ, $target))//*[contains(@class, ' topic/title ')][normalize-space(.) != ''])[1]"/>
-        </xsl:if>
-      </xsl:when>
-      <xsl:when test="normalize-space(.) = ''">
-        <xsl:value-of select="$displaytext"/>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
   <!-- This template converts phrase-like elements into links based on keyref. -->
   <!-- 20090331: Update to ensure cite with keyref continues to use <cite>,
                  plus move common code to single template -->
@@ -2745,25 +2607,6 @@
         <xsl:apply-templates/>
       </xsl:element>
     </a>
-  </xsl:template>
-
-  <!-- Deprecated since 2.1 -->
-  <xsl:template match="*" mode="common-processing-phrase-within-link">
-    <xsl:param name="type"/>
-    
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="id" select="'DOTX069W'"/>
-      <xsl:with-param name="msgparams">%1=common-processing-phrase-within-link</xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class">
-        <xsl:if test="normalize-space($type) != name()">
-          <xsl:value-of select="$type"/>
-        </xsl:if>
-      </xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
-    <xsl:apply-templates/>
   </xsl:template>
 
   <!-- MESSAGES: Refactoring places each message in a moded template, so that users
@@ -2806,9 +2649,6 @@
 
   <xsl:include href="tables.xsl"/>
   <xsl:include href="simpletable.xsl"/>
-
-
-  <xsl:variable name="newline" select="()" as="xs:string?"/>
   
   <xsl:key name="enumerableByClass"
     match="*[contains(@class, ' topic/fig ')][*[contains(@class, ' topic/title ')]] |

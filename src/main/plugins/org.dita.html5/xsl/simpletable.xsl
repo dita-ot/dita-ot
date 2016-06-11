@@ -46,14 +46,6 @@
     <xsl:sequence select="max($counts)"/>
   </xsl:template>
     
-  <!-- Specialized simpletables may match this rule to create default column 
-       headings. By default, process the sthead if available. -->
-  <xsl:template match="*" mode="dita2html:simpletable-heading">
-    <thead>
-      <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]"/>
-    </thead>
-  </xsl:template>
-  
   <!-- Output the ID for a simpletable entry, when it is specified. If no ID is specified,
        and this is a header row, generate an ID. The entry is considered a header entry
        when the it is inside <sthead>, or when it is in the column specified in the keycol
@@ -120,37 +112,6 @@
       </xsl:if>
     </xsl:if>
   </xsl:template>
-
-  <!-- sthead/stentry - bottom align the header text -->
-  <xsl:template name="topic.sthead_stentry">
-    <th>
-      <xsl:call-template name="style">
-        <xsl:with-param name="contents">
-          <xsl:text>vertical-align:bottom;</xsl:text>
-          <xsl:call-template name="th-align"/>
-        </xsl:with-param>
-      </xsl:call-template>
-      <xsl:call-template name="output-stentry-id"/>
-      <xsl:call-template name="commonattributes"/>
-      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-      <xsl:choose>
-        <!-- If there is text, or a PI, or non-flagging element child -->
-        <xsl:when test="*[not(contains(@class, ' ditaot-d/startprop ') or contains(@class, ' dita-ot/endprop '))] | text() | processing-instruction()">
-          <xsl:apply-templates/>
-        </xsl:when>
-        <xsl:otherwise>
-          <!-- Add flags, then either @specentry or NBSP -->
-          <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-          <xsl:choose>
-            <xsl:when test="@specentry"><xsl:value-of select="@specentry"/></xsl:when>
-            <xsl:otherwise>&#160;</xsl:otherwise>
-          </xsl:choose>
-          <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-    </th>
-  </xsl:template>
   
   <!-- For simple table headers: <TH> Set align="right" when in a BIDI area -->
   <xsl:template name="th-align">
@@ -160,41 +121,6 @@
     <xsl:text>text-align:</xsl:text>
     <xsl:value-of select="if ($biditest) then 'right' else 'left'"/>
     <xsl:text>;</xsl:text>
-  </xsl:template>
-  
-  <!-- stentry  -->
-  <!-- for specentry - if no text in cell, output specentry attr; otherwise output text -->
-  <!-- Bold the @keycol column. Get the column's number. When (Nth stentry = the @keycol value) then bold the stentry -->
-  <xsl:template name="topic.strow_stentry">
-    <xsl:variable name="localkeycol">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/simpletable ')]/@keycol">
-          <xsl:value-of select="ancestor::*[contains(@class, ' topic/simpletable ')]/@keycol"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <!-- Determine which column this entry is in. -->
-    <xsl:variable name="thiscolnum" select="number(count(preceding-sibling::*[contains(@class, ' topic/stentry ')])+1)"/>
-    <xsl:variable name="element-name">
-      <xsl:choose>
-        <xsl:when test="$thiscolnum = $localkeycol">th</xsl:when>
-        <xsl:otherwise>td</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:element name="{$element-name}">
-      <xsl:call-template name="style">
-        <xsl:with-param name="contents">
-          <xsl:text>vertical-align:top;</xsl:text>
-        </xsl:with-param>
-      </xsl:call-template>
-      <xsl:call-template name="output-stentry-id"/>
-      <xsl:call-template name="set.stentry.headers"/>
-      <xsl:call-template name="commonattributes"/>
-      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-      <xsl:call-template name="stentry-templates"/>
-      <xsl:apply-templates select="../*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-    </xsl:element>
   </xsl:template>
   
   <xsl:template name="stentry-templates">

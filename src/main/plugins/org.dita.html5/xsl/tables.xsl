@@ -21,103 +21,7 @@
     <!-- Override this to use a local convention for setting table's @summary attribute,
          until OASIS provides a standard mechanism for setting. -->
   </xsl:template>
-  
-  <xsl:template name="dotable">
-    <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-    <xsl:call-template name="setaname"/>
-    <table cellpadding="4" cellspacing="0" summary="">
-      <xsl:variable name="colsep">
-        <xsl:choose>
-          <xsl:when test="*[contains(@class, ' topic/tgroup ')]/@colsep"><xsl:value-of select="*[contains(@class, ' topic/tgroup ')]/@colsep"/></xsl:when>
-          <xsl:when test="@colsep"><xsl:value-of select="@colsep"/></xsl:when>
-        </xsl:choose>
-      </xsl:variable>
-      <xsl:variable name="rowsep">
-        <xsl:choose>
-          <xsl:when test="*[contains(@class, ' topic/tgroup ')]/@rowsep"><xsl:value-of select="*[contains(@class, ' topic/tgroup ')]/@rowsep"/></xsl:when>
-          <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
-        </xsl:choose>
-      </xsl:variable>
-      <xsl:call-template name="setid"/>
-      <xsl:call-template name="commonattributes"/>
-      <xsl:apply-templates select="." mode="generate-table-summary-attribute"/>
-      <xsl:call-template name="setscale"/>
-      <!-- When a table's width is set to page or column, force it's width to 100%. If it's in a list, use 90%.
-           Otherwise, the table flows to the content -->
-      <xsl:choose>
-        <xsl:when test="(@expanse = 'page' or @pgwide = '1')and (ancestor::*[contains(@class, ' topic/li ')] or ancestor::*[contains(@class, ' topic/dd ')] )">
-          <xsl:attribute name="width">90%</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="(@expanse = 'column' or @pgwide = '0') and (ancestor::*[contains(@class, ' topic/li ')] or ancestor::*[contains(@class, ' topic/dd ')] )">
-          <xsl:attribute name="width">90%</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="(@expanse = 'page' or @pgwide = '1')">
-          <xsl:attribute name="width">100%</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="(@expanse = 'column' or @pgwide = '0')">
-          <xsl:attribute name="width">100%</xsl:attribute>
-        </xsl:when>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="@frame = 'all' and $colsep = '0' and $rowsep = '0'">
-          <xsl:attribute name="border">0</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="not(@frame) and $colsep = '0' and $rowsep = '0'">
-          <xsl:attribute name="border">0</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@frame = 'sides'">
-          <xsl:attribute name="frame">vsides</xsl:attribute>
-          <xsl:attribute name="border">1</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@frame = 'top'">
-          <xsl:attribute name="frame">above</xsl:attribute>
-          <xsl:attribute name="border">1</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@frame = 'bottom'">
-          <xsl:attribute name="frame">below</xsl:attribute>
-          <xsl:attribute name="border">1</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@frame = 'topbot'">
-          <xsl:attribute name="frame">hsides</xsl:attribute>
-          <xsl:attribute name="border">1</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@frame = 'none'">
-          <xsl:attribute name="frame">void</xsl:attribute>
-          <xsl:attribute name="border">1</xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="frame">border</xsl:attribute>
-          <xsl:attribute name="border">1</xsl:attribute>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="@frame = 'all' and $colsep = '0' and $rowsep = '0'">
-          <xsl:attribute name="border">0</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="not(@frame) and $colsep = '0' and $rowsep = '0'">
-          <xsl:attribute name="border">0</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="$colsep = '0' and $rowsep = '0'">
-          <xsl:attribute name="rules">none</xsl:attribute>
-          <xsl:attribute name="border">0</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="$colsep = '0'">
-          <xsl:attribute name="rules">rows</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="$rowsep = '0'">
-          <xsl:attribute name="rules">cols</xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="rules">all</xsl:attribute>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:call-template name="place-tbl-lbl"/>
-      <!-- title and desc are processed elsewhere -->
-      <xsl:apply-templates select="*[contains(@class, ' topic/tgroup ')]"/>
-      </table>
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
-  </xsl:template>
-  
+
   <xsl:template match="*[contains(@class, ' topic/tgroup ')]" name="topic.tgroup">
     <xsl:variable name="totalwidth" as="xs:double">
       <xsl:variable name="relative-widths" as="xs:double*">
@@ -157,25 +61,6 @@
         <xsl:attribute name="style" select="concat('width:', $width)"/>
       </xsl:if>
     </col>
-  </xsl:template>
-  
-  <!-- do header entries -->
-  <xsl:template name="topic.thead_entry">
-   <th>
-    <xsl:call-template name="doentry"/>
-   </th>
-  </xsl:template>
-  
-  <!-- do body entries -->
-  <xsl:template name="topic.tbody_entry">
-    <xsl:choose>
-      <xsl:when test="../../../../@rowheader = 'firstcol' and @dita-ot:x = 1">
-        <th><xsl:call-template name="doentry"/></th>
-      </xsl:when>
-      <xsl:otherwise>
-        <td><xsl:call-template name="doentry"/></td>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
   
   <xsl:template name="doentry">
@@ -505,13 +390,6 @@
   | document content.  Some elements have attributes that permit local
   | control of formatting; such logic is part of the pertinent template rule.
   +-->
-  
-  <xsl:template name="place-tbl-width">
-    <xsl:variable name="twidth-fixed">100%</xsl:variable>
-    <xsl:if test="$twidth-fixed != ''">
-      <xsl:attribute name="width" select="$twidth-fixed"/>
-    </xsl:if>
-  </xsl:template>
   
   <!-- table caption -->
   <xsl:template name="place-tbl-lbl">
