@@ -566,21 +566,6 @@
     "/>
   </xsl:template>
 
-  <!-- deprecated since 2.3 -->
-  <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="legacy-css-class" as="xs:string*">
-    <xsl:param name="colsep" as="xs:integer"/>
-    <xsl:param name="rowsep" as="xs:integer"/>
-
-    <xsl:if test="table:is-row-header(.)">firstcol</xsl:if>
-
-    <xsl:choose>
-      <xsl:when test="not($rowsep) and not($colsep)">nocellnorowborder</xsl:when>
-      <xsl:when test="$rowsep = 1 and not($colsep)">row-nocellborder</xsl:when>
-      <xsl:when test="not($rowsep) and $colsep = 1">cell-norowborder</xsl:when>
-      <xsl:when test="$rowsep = 1 and $colsep = 1">cellrowborder</xsl:when>
-    </xsl:choose>
-  </xsl:template>
-
   <xsl:template match="*[table:is-thead-entry(.)]" mode="headers">
     <xsl:attribute name="id" select="dita-ot:generate-html-id(.)"/>
   </xsl:template>

@@ -82,13 +82,7 @@
   
   <!-- Switch to enable or disable the generation of default meta message in html header -->
   <xsl:param name="genDefMeta" select="'no'"/>
-  
-  <!-- Name of the keyref file that contains key definitions -->
-  <!-- Deprecated since 2.1 -->
-  <xsl:param name="KEYREF-FILE" select="concat($WORKDIR, $PATH2PROJ, 'keydef.xml')"/>
-  <!-- Deprecated since 2.1 -->
-  <xsl:variable name="keydefs" select="document($KEYREF-FILE)"/>
-    
+      
   <xsl:param name="BASEDIR"/>
     
   <xsl:param name="OUTPUTDIR"/>
@@ -910,7 +904,7 @@
   
       <!-- Test for TM area's language -->
       <xsl:variable name="tmtest">
-        <xsl:call-template name="tm-area"/>
+        <xsl:apply-templates select="." mode="mark-tm-in-this-area"/>
       </xsl:variable>
   
       <!-- If this language should get trademark markers, continue... -->
@@ -959,10 +953,6 @@
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
   </xsl:template>
   
-  <!-- Deprecated since 2.3 --> 
-  <xsl:template name="tm-area">
-    <xsl:apply-templates select="." mode="mark-tm-in-this-area"/>
-  </xsl:template>
   <!-- TODO: this should return boolean, not "tm" or something else -->
   <xsl:template match="*" mode="mark-tm-in-this-area" as="xs:string">
    <xsl:text>tm</xsl:text>
@@ -2726,8 +2716,7 @@
       <xsl:call-template name="setidaname"/>
       <!-- Normal flags go before the generated title; revision flags only go on the content. -->
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/prop" mode="ditaval-outputflag"/>
-      <!-- Deprecated since 2.2: {$type}title is for backwards compatibility -->
-      <span class="note__title {$type}title">
+      <span class="note__title">
         <xsl:copy-of select="$title"/>
         <xsl:call-template name="getVariable">
           <xsl:with-param name="id" select="'ColonSymbol'"/>
