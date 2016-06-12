@@ -1265,16 +1265,19 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/lines ')]//text()">
-    <xsl:variable name="linetext" select="." as="xs:string"/>
     <xsl:variable name="linetext2" as="xs:string">
       <xsl:value-of>
-       <xsl:call-template name="sp-replace">
-         <xsl:with-param name="sptext" select="$linetext" as="xs:string"/>
+       <xsl:call-template name="replace">
+         <xsl:with-param name="text" select="string(.)"/>
+         <xsl:with-param name="from" select="'  '"/>
+         <xsl:with-param name="to" select="'&#xA0;&#xA0;'"/>
        </xsl:call-template>
       </xsl:value-of>
     </xsl:variable>
-    <xsl:call-template name="br-replace">
-      <xsl:with-param name="brtext" select="$linetext2" as="xs:string"/>
+    <xsl:call-template name="replace">
+      <xsl:with-param name="text" select="$linetext2"/>
+      <xsl:with-param name="from" select="'&#xA;'"/>
+      <xsl:with-param name="to" as="element()"><br/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
@@ -1916,25 +1919,6 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$brtext"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
-  <!-- Space replace - used for LINES -->
-  <!-- add checks for repeating leading blanks & converts them to &nbsp;&nbsp; -->
-  <!-- this replaces newlines with the BR element. Forces breaks. -->
-  <xsl:template name="sp-replace">
-    <xsl:param name="sptext" as="xs:string"/>
-    <xsl:choose>
-      <xsl:when test="contains($sptext, '  ')">
-         <xsl:value-of select="substring-before($sptext, '  ')"/>
-         <xsl:text>&#xA0;&#xA0;</xsl:text>
-         <xsl:call-template name="sp-replace">
-           <xsl:with-param name="sptext" select="substring-after($sptext, '  ')" as="xs:string"/>
-         </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$sptext"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
