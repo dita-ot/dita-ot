@@ -12,6 +12,14 @@
                    html5.css"/>
 
   <target name="html5.init">
+    <condition property="args.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/dita2html5.xsl">
+      <not>
+        <isset property="args.xsl"/>
+      </not>
+    </condition>
+    <condition property="html5.nav-toc" value="${nav-toc}" else="none">
+      <isset property="nav-toc"/>
+    </condition>
     <dita-ot-fail id="DOTA007E">
       <condition>
         <and>
@@ -109,14 +117,6 @@
                    html5.topics.common.inner"/>
 
   <target name="html5.topic.init" unless="noMap">
-    <condition property="args.xsl" value="${dita.plugin.org.dita.html5.dir}/xsl/dita2html5.xsl">
-      <not>
-        <isset property="args.xsl"/>
-      </not>
-    </condition>
-    <condition property="html5.nav-toc" value="${nav-toc}" else="none">
-      <isset property="nav-toc"/>
-    </condition>
     <loadfile property="html5.map" srcfile="${dita.temp.dir}/${user.input.file.listfile}">
       <filterchain>
         <headfilter lines="1"/>
