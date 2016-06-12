@@ -1740,46 +1740,44 @@
     <xsl:variable name="output-class">
       <xsl:apply-templates select="." mode="get-output-class"/>
     </xsl:variable>
-    <xsl:variable name="draft-revs">
+    <xsl:variable name="draft-revs" as="xs:string*">
       <!-- If draft is on, add revisions to default class. Simplifies processing in DITA-OT 1.6 and earlier
            that created an extra div or span around revised content, just to hold @class with revs. -->
       <xsl:if test="$DRAFT = 'yes'">
-        <xsl:for-each select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop">
-          <xsl:value-of select="@val"/>
-          <xsl:text> </xsl:text>
-        </xsl:for-each>
+        <xsl:sequence select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop/@val"/>
       </xsl:if>
     </xsl:variable>
-    <xsl:variable name="using-output-class">
-      <xsl:choose>
-        <xsl:when test="string-length(normalize-space($output-class)) > 0"><xsl:value-of select="$output-class"/></xsl:when>
-        <xsl:when test="string-length(normalize-space($default)) > 0"><xsl:value-of select="$default"/></xsl:when>
-      </xsl:choose>
-      <xsl:if test="$draft-revs != ''">
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="normalize-space($draft-revs)"/>
-      </xsl:if>
+    <xsl:variable name="using-output-class" as="xs:string*">
+     <xsl:choose>
+       <xsl:when test="string-length(normalize-space($output-class)) > 0">
+         <xsl:value-of select="tokenize(normalize-space($output-class), '\s+')"/>
+       </xsl:when>
+       <xsl:when test="string-length(normalize-space($default)) > 0">
+         <xsl:value-of select="tokenize(normalize-space($default), '\s+')"/>
+       </xsl:when>
+     </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="ancestry">
+    <xsl:variable name="ancestry" as="xs:string?">
       <xsl:if test="$PRESERVE-DITA-CLASS = 'yes'">
-        <xsl:apply-templates select="." mode="get-element-ancestry"/>
+        <xsl:value-of>
+          <xsl:apply-templates select="." mode="get-element-ancestry"/>
+        </xsl:value-of>
       </xsl:if>
     </xsl:variable>
-    <xsl:variable name="outputclass-attribute">
-      <xsl:apply-templates select="@outputclass" mode="get-value-for-class"/>
+    <xsl:variable name="outputclass-attribute" as="xs:string">
+      <xsl:value-of>
+        <xsl:apply-templates select="@outputclass" mode="get-value-for-class"/>
+      </xsl:value-of>
     </xsl:variable>
     <!-- Revised design with DITA-OT 1.5: include class ancestry if requested; 
          combine user output class with element default, giving priority to the user value. -->
-    <xsl:if test="string-length(normalize-space(concat($outputclass-attribute, $using-output-class, $ancestry))) > 0">
-      <xsl:attribute name="class">
-        <xsl:value-of select="$ancestry"/>
-        <xsl:if test="string-length(normalize-space($ancestry)) > 0 and 
-                      string-length(normalize-space($using-output-class)) > 0"><xsl:text> </xsl:text></xsl:if>
-        <xsl:value-of select="normalize-space($using-output-class)"/>
-        <xsl:if test="string-length(normalize-space(concat($ancestry, $using-output-class))) > 0 and
-                      string-length(normalize-space($outputclass-attribute)) > 0"><xsl:text> </xsl:text></xsl:if>
-        <xsl:value-of select="$outputclass-attribute"/>
-      </xsl:attribute>
+    <xsl:variable name="classes" as="xs:string*"
+                  select="tokenize($ancestry, '/s+'),
+                          $using-output-class,
+                          $draft-revs, 
+                          tokenize($outputclass-attribute, '/s+')"/>
+    <xsl:if test="exists($classes)">
+      <xsl:attribute name="class" select="string-join($classes, ' ')"/>
     </xsl:if>
   </xsl:template>
     
