@@ -1265,16 +1265,19 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/lines ')]//text()">
-   <xsl:variable name="linetext" select="."/>
-   <xsl:variable name="linetext2">
-    <xsl:call-template name="sp-replace"><xsl:with-param name="sptext" select="$linetext"/></xsl:call-template>
-   </xsl:variable>
-   <xsl:call-template name="br-replace">
-    <xsl:with-param name="brtext" select="$linetext2"/>
-   </xsl:call-template>
+    <xsl:variable name="linetext" select="." as="xs:string"/>
+    <xsl:variable name="linetext2" as="xs:string">
+      <xsl:value-of>
+       <xsl:call-template name="sp-replace">
+         <xsl:with-param name="sptext" select="$linetext" as="xs:string"/>
+       </xsl:call-template>
+      </xsl:value-of>
+    </xsl:variable>
+    <xsl:call-template name="br-replace">
+      <xsl:with-param name="brtext" select="$linetext2" as="xs:string"/>
+    </xsl:call-template>
   </xsl:template>
-  
-  
+
   <!-- =========== FIGURE =========== -->
   <xsl:template match="*[contains(@class, ' topic/fig ')]" name="topic.fig">
     <xsl:variable name="default-fig-class">
@@ -1900,20 +1903,19 @@
   <!-- Break replace - used for LINES -->
   <!-- this replaces newlines with the BR element. Forces breaks. -->
   <xsl:template name="br-replace">
-    <xsl:param name="brtext"/>
-  <!-- capture an actual newline within the xsl:text element -->
-    <xsl:variable name="cr"><xsl:text>
-  </xsl:text></xsl:variable>
+    <xsl:param name="brtext" as="xs:string"/>
+    <xsl:variable name="cr" select="'&#xA;'" as="xs:string"/>
     <xsl:choose>
       <xsl:when test="contains($brtext, $cr)"> 
          <xsl:value-of select="substring-before($brtext, $cr)"/>
-  <br/><xsl:value-of select="$cr"/>
-         <xsl:call-template name="br-replace"> <!-- call again to get remaining CRs -->
+         <br/>
+        <xsl:value-of select="$cr"/>
+         <xsl:call-template name="br-replace">
            <xsl:with-param name="brtext" select="substring-after($brtext, $cr)"/>
          </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$brtext"/> <!-- No CRs, just output -->
+        <xsl:value-of select="$brtext"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -1922,18 +1924,17 @@
   <!-- add checks for repeating leading blanks & converts them to &nbsp;&nbsp; -->
   <!-- this replaces newlines with the BR element. Forces breaks. -->
   <xsl:template name="sp-replace">
-    <xsl:param name="sptext"/>
-  <!-- capture 2 spaces -->
+    <xsl:param name="sptext" as="xs:string"/>
     <xsl:choose>
       <xsl:when test="contains($sptext, '  ')">
          <xsl:value-of select="substring-before($sptext, '  ')"/>
          <xsl:text>&#xA0;&#xA0;</xsl:text>
-         <xsl:call-template name="sp-replace"> <!-- call again to get remaining spaces -->
-           <xsl:with-param name="sptext" select="substring-after($sptext, '  ')"/>
+         <xsl:call-template name="sp-replace">
+           <xsl:with-param name="sptext" select="substring-after($sptext, '  ')" as="xs:string"/>
          </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$sptext"/> <!-- No spaces, just output -->
+        <xsl:value-of select="$sptext"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
