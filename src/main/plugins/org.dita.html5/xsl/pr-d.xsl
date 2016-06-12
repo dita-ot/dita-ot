@@ -33,83 +33,104 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/kwd ')]" name="topic.pr-d.kwd">
-   <span class="kwd">
-    <xsl:if test="(@importance='default')">
-     <xsl:attribute name="class">defkwd</xsl:attribute>
-    </xsl:if>
-    <xsl:call-template name="commonattributes"/>
+   <span>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class">
+        <xsl:value-of select="'kwd',
+                              'defkwd'[current()/@importance = 'default']"
+                      separator=" "/>
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/var ')]" name="topic.pr-d.var">
-   <span class="var">
-    <xsl:call-template name="commonattributes"/>
+   <span>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'var'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/synph ')]" name="topic.pr-d.synph">
-   <span class="synph">
-    <xsl:call-template name="commonattributes"/>
+   <span>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'synph'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/oper ')]" name="topic.pr-d.oper">
-   <span class="oper">
-    <xsl:call-template name="commonattributes"/>
+   <span>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'oper'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/delim ')]" name="topic.pr-d.delim">
-   <span class="delim">
-    <xsl:call-template name="commonattributes"/>
+   <span>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'delim'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/sep ')]" name="topic.pr-d.sep">
-   <span class="sep">
-    <xsl:call-template name="commonattributes"/>
+   <span>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'sep'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/repsep ')]" name="topic.pr-d.repsep">
-   <span class="repsep">
-    <xsl:call-template name="commonattributes"/>
+   <span>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'repsep'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/option ')]" name="topic.pr-d.option">
-   <span class="option">
-    <xsl:call-template name="commonattributes"/>
+   <span>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'option'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/parmname ')]" name="topic.pr-d.parmname">
-   <span class="parmname">
-    <xsl:call-template name="commonattributes"/>
+   <span>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'parmname'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' pr-d/apiname ')]" name="topic.pr-d.apiname">
-   <span class="apiname">
-    <xsl:call-template name="commonattributes"/>
+   <span>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'apiname'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
    </span>
