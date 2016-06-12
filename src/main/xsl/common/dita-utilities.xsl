@@ -199,6 +199,26 @@
     </xsl:choose>
   </xsl:template>
   
+  <xsl:template name="replace">
+    <xsl:param name="text" as="xs:string?"/>
+    <xsl:param name="from" as="xs:string"/>
+    <xsl:param name="to"/>
+    <xsl:choose>
+      <xsl:when test="contains($text, $from)">
+        <xsl:sequence select="substring-before($text, $from)[string-length(.) gt 0]"/>
+        <xsl:copy-of select="$to"/>
+        <xsl:call-template name="replace">
+          <xsl:with-param name="text" select="substring-after($text, $from)[string-length(.) gt 0]"/>
+          <xsl:with-param name="from" select="$from"/>
+          <xsl:with-param name="to" select="$to"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   <!-- replace all the blank in file name or directory with %20 -->
   <xsl:template name="replace-blank">
     <xsl:param name="file-origin"></xsl:param>

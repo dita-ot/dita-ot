@@ -3,6 +3,49 @@
                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                stylesheet="dita-utilities.xsl">
 
+  <x:scenario label="Scenario for testing replace template">
+    <x:scenario label="no change">
+      <x:call template="replace">
+        <x:param name="text" select="'foo'"/>
+        <x:param name="from" select="'bar'"/>
+        <x:param name="to" select="'baz'"/>
+      </x:call>
+      <x:expect label="original" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="full text">
+      <x:call template="replace">
+        <x:param name="text" select="'bar'"/>
+        <x:param name="from" select="'bar'"/>
+        <x:param name="to" select="'baz'"/>
+      </x:call>
+      <x:expect label="all" select="'baz'"/>
+    </x:scenario>
+    <x:scenario label="beginning">
+      <x:call template="replace">
+        <x:param name="text" select="'bar foo'"/>
+        <x:param name="from" select="'bar'"/>
+        <x:param name="to" select="'baz'"/>
+      </x:call>
+      <x:expect label="first token changed" select="'baz', ' foo'"/>
+    </x:scenario>
+    <x:scenario label="ending">
+      <x:call template="replace">
+        <x:param name="text" select="'foo bar'"/>
+        <x:param name="from" select="'bar'"/>
+        <x:param name="to" select="'baz'"/>
+      </x:call>
+      <x:expect label="last token changed" select="'foo ', 'baz'"/>
+    </x:scenario>
+    <x:scenario label="multiple">
+      <x:call template="replace">
+        <x:param name="text" select="'foo bar foo bar foo bar'"/>
+        <x:param name="from" select="'bar'"/>
+        <x:param name="to" select="'baz'"/>
+      </x:call>
+      <x:expect label="all changed" select="'foo ', 'baz', ' foo ', 'baz', ' foo ', 'baz'"/>
+    </x:scenario>
+  </x:scenario>
+
   <x:scenario label="Scenario for testing function replace-extension">
     <x:scenario label="no extension">
       <x:call template="replace-extension">
