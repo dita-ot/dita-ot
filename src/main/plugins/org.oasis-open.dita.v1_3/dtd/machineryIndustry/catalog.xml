@@ -10,4 +10,6 @@
            uri="dtd/machineryTaskbodyConstraint.mod"/>
    <public publicId="-//OASIS//ELEMENTS DITA Taskbody Constraint//EN"
            uri="dtd/machineryTaskbodyConstraint.mod"/>
+   <public publicId="-//OASIS//ELEMENTS DITA Machinery Taskbody Constraint//EN"
+           uri="dtd/machineryTaskbodyConstraint.mod"/>
 </catalog>

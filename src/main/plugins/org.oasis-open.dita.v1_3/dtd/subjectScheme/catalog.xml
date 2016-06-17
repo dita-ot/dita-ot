@@ -6,6 +6,8 @@
            uri="dtd/classifyDomain.mod"/>
    <public publicId="-//OASIS//ELEMENTS DITA Subject Classification Domain//EN"
            uri="dtd/classifyDomain.mod"/>
+   <public publicId="-//OASIS//ELEMENTS DITA Map Subject Classification Domain//EN"
+           uri="classifyDomain.mod"/>
    <public publicId="-//OASIS//ENTITIES DITA 1.3 Subject Classification Domain//EN"
            uri="dtd/classifyDomain.ent"/>
    <public publicId="-//OASIS//ENTITIES DITA Subject Classification Domain//EN"
