@@ -246,9 +246,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
-                    <xsl:call-template name="insertChapterFirstpageStaticContent">
+                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                         <xsl:with-param name="type" select="'chapter'"/>
-                    </xsl:call-template>
+                    </xsl:apply-templates>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
                         <xsl:call-template name="pullPrologIndexTerms"/>
@@ -298,9 +298,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
-                    <xsl:call-template name="insertChapterFirstpageStaticContent">
+                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                         <xsl:with-param name="type" select="'appendix'"/>
-                    </xsl:call-template>
+                    </xsl:apply-templates>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
                         <xsl:call-template name="pullPrologIndexTerms"/>
@@ -347,9 +347,9 @@ See the accompanying license.txt file for applicable licenses.
           
           <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
           
-          <xsl:call-template name="insertChapterFirstpageStaticContent">
+          <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
             <xsl:with-param name="type" select="'appendices'"/>
-          </xsl:call-template>
+          </xsl:apply-templates>
           
           <fo:block xsl:use-attribute-sets="topic.title">
             <xsl:call-template name="pullPrologIndexTerms"/>
@@ -411,9 +411,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
-                    <xsl:call-template name="insertChapterFirstpageStaticContent">
+                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                         <xsl:with-param name="type" select="'part'"/>
-                    </xsl:call-template>
+                    </xsl:apply-templates>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
                         <xsl:call-template name="pullPrologIndexTerms"/>
@@ -473,9 +473,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
-                    <xsl:call-template name="insertChapterFirstpageStaticContent">
+                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                         <xsl:with-param name="type" select="'notices'"/>
-                    </xsl:call-template>
+                    </xsl:apply-templates>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
                         <xsl:call-template name="pullPrologIndexTerms"/>
@@ -503,7 +503,15 @@ See the accompanying license.txt file for applicable licenses.
    </xsl:template>
 
 
+    <!-- Deprecated in 3.0: use mode="insertChapterFirstpageStaticContent" -->
     <xsl:template name="insertChapterFirstpageStaticContent">
+      <xsl:param name="type" as="xs:string"/>
+      <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
+        <xsl:with-param name="type" select="$type" as="xs:string"/>
+      </xsl:apply-templates>
+    </xsl:template>
+
+   <xsl:template match="*" mode="insertChapterFirstpageStaticContent">
         <xsl:param name="type" as="xs:string"/>
         <fo:block>
             <xsl:attribute name="id">
