@@ -819,7 +819,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@href"/>
@@ -833,7 +833,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@href"/>
@@ -940,7 +940,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise><xsl:value-of select="@href"/></xsl:otherwise>
     </xsl:choose>
@@ -949,7 +949,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise>#none#</xsl:otherwise>
     </xsl:choose>
@@ -958,7 +958,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
-        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]/node()"/>
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>#none#</xsl:text>
