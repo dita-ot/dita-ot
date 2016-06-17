@@ -119,7 +119,10 @@ public final class ExtensibleAntInvoker extends Task {
 
     private void initialize() throws BuildException {
         if (tempDir == null) {
-            tempDir = new File(this.getProject().getProperty(ANT_TEMP_DIR)).getAbsoluteFile();
+            tempDir = new File(this.getProject().getProperty(ANT_TEMP_DIR));
+            if (!tempDir.isAbsolute()) {
+                tempDir = new File(this.getProject().getBaseDir(), tempDir.getPath());
+            }
         }
         if (modules.isEmpty()) {
             throw new BuildException("Module must be specified");

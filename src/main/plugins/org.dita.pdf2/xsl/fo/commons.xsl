@@ -176,6 +176,9 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="$topicType = 'topicIndexList'">
               <xsl:call-template name="processIndexList"/>
             </xsl:when>
+            <xsl:when test="$topicType = 'topicFrontMatter'">
+              <xsl:call-template name="processFrontMatterTopic"/>
+            </xsl:when>
             <xsl:when test="$topicType = 'topicSimple'">
               <xsl:call-template name="processTopicSimple"/>
             </xsl:when>
@@ -504,6 +507,36 @@ See the accompanying license.txt file for applicable licenses.
 
 
     <!-- Deprecated in 3.0: use mode="insertChapterFirstpageStaticContent" -->
+    <xsl:template name="processFrontMatterTopic">
+        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.frontmatter">
+             <!-- Ideally would use existing template "insertFrontMatterStaticContents". Using "insertBodyStaticContents"
+                  for compatibility with 2.3 and earlier; front matter version drops headers, page numbers. -->
+             <xsl:call-template name="insertBodyStaticContents"/>
+             <fo:flow flow-name="xsl-region-body">
+                 <fo:block xsl:use-attribute-sets="topic">
+                     <xsl:call-template name="commonattributes"/>
+                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+                         <fo:marker marker-class-name="current-topic-number">
+                             <xsl:number format="1"/>
+                         </fo:marker>
+                         <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
+                     </xsl:if>
+                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
+                     <fo:block xsl:use-attribute-sets="topic.title">
+                         <xsl:attribute name="id">
+                             <xsl:call-template name="generate-toc-id"/>
+                         </xsl:attribute>
+                         <xsl:call-template name="pullPrologIndexTerms"/>
+                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
+                             <xsl:apply-templates select="." mode="getTitle"/>
+                         </xsl:for-each>
+                     </fo:block>
+                     <xsl:apply-templates select="*[not(contains(@class,' topic/title '))]"/>
+                 </fo:block>
+             </fo:flow>
+         </fo:page-sequence>
+   </xsl:template>
+
     <xsl:template name="insertChapterFirstpageStaticContent">
       <xsl:param name="type" as="xs:string"/>
       <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
@@ -599,7 +632,7 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:for-each select="$map/descendant::*[contains(@class, ' bookmap/chapter ')]">
             <xsl:sequence select="."/>
           </xsl:for-each>
-        </xsl:document>>
+        </xsl:document>
       </xsl:variable>
       <xsl:for-each select="$chapters/*[current()/@id = @id]">
         <xsl:number format="1" count="*[contains(@class, ' bookmap/chapter ')]"/>
@@ -2189,6 +2222,14 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     <xsl:template match="*[contains(@class, ' bookmap/notices ')]" mode="determineTopicType">
         <xsl:text>topicNotices</xsl:text>
+    </xsl:template>
+    <xsl:template match="*[contains(@class,' bookmap/frontmatter ')]/* |
+                         *[contains(@class,' bookmap/booklists ')]/*" mode="determineTopicType" priority="10">
+      <!-- Catch topics in front matter that do not have another match.
+           Changing priorities for the default rule or (e.g) preface can break customizations;
+           the high priority + variable fallback will support old and new without breaking customizations. --> 
+      <xsl:variable name="fallback" as="xs:string"><xsl:next-match/></xsl:variable>
+      <xsl:value-of select="if ($fallback = 'topicSimple') then 'topicFrontMatter' else $fallback"/>
     </xsl:template>
   
     <xsl:template match="*[contains(@class, ' topic/data ')]"/>

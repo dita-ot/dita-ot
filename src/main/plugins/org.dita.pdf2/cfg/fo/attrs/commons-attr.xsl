@@ -96,7 +96,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="baseline-shift">20%</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="tm__content__service" use-attribute-sets="tm__content">
+    <xsl:attribute-set name="tm__content__service">
+        <xsl:attribute name="font-size">40%</xsl:attribute>
+        <xsl:attribute name="baseline-shift">50%</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="author">
@@ -703,16 +705,17 @@ See the accompanying license.txt file for applicable licenses.
   <xsl:attribute-set name="page-sequence.cover" use-attribute-sets="__force__page__count">
   </xsl:attribute-set>
 
-  <xsl:attribute-set name="page-sequence.notice" use-attribute-sets="__force__page__count">
+  <xsl:attribute-set name="page-sequence.frontmatter">
     <xsl:attribute name="format">i</xsl:attribute>
   </xsl:attribute-set>
   
-  <xsl:attribute-set name="page-sequence.preface" use-attribute-sets="__force__page__count">
-    <xsl:attribute name="format">i</xsl:attribute>  
+  <xsl:attribute-set name="page-sequence.notice" use-attribute-sets="__force__page__count page-sequence.frontmatter">
   </xsl:attribute-set>
   
-  <xsl:attribute-set name="page-sequence.toc" use-attribute-sets="__force__page__count">
-    <xsl:attribute name="format">i</xsl:attribute>
+  <xsl:attribute-set name="page-sequence.preface" use-attribute-sets="__force__page__count page-sequence.frontmatter">
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="page-sequence.toc" use-attribute-sets="__force__page__count page-sequence.frontmatter">
   </xsl:attribute-set>
 
   <xsl:attribute-set name="page-sequence.lot" use-attribute-sets="page-sequence.toc">

@@ -27,7 +27,7 @@ if "%DITA_HOME%"=="" goto setDefaultDitaHome
 
 :setDefaultDitaHome
 rem %~dp0 is expanded pathname of the current script under NT
-set DITA_HOME="%~dp0.."
+set DITA_HOME=%~dp0..
 
 rem Slurp the command line arguments. This loop allows for an unlimited number
 rem of arguments (up to the command line limit, anyway).
