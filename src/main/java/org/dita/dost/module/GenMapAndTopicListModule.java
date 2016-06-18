@@ -42,6 +42,9 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import com.google.common.base.Charsets;
+import com.google.common.hash.Hashing;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
@@ -151,7 +154,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private boolean xmlValidate = true;
     private ContentHandler nullHandler;
     private FilterUtils filterUtils;
-    private TempFileNameScheme tempFileNameScheme;
+    private final TempFileNameScheme tempFileNameScheme;
 
     /** Absolute path to input file. */
     private URI rootFile;
@@ -178,6 +181,12 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @throws SAXException never throw such exception
      */
     public GenMapAndTopicListModule() throws SAXException, ParserConfigurationException {
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         fullTopicSet = new HashSet<>(128);
         fullMapSet = new HashSet<>(128);
         hrefTopicSet = new HashSet<>(128);
@@ -750,7 +759,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if writing result files failed
      */
     private void outputResult() throws DITAOTException {
-        tempFileNameScheme = new DefaultTempFileScheme(baseInputDir);
+        tempFileNameScheme.setBaseDir(baseInputDir);
 
         // assume empty Job
         final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
@@ -1104,6 +1113,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
      */
     public interface TempFileNameScheme {
         /**
+         * Set input base directory.
+         * @param b absolute base directory
+         */
+        default void setBaseDir(final URI b) {}
+        /**
          * Generate temporary file name.
          *
          * @param src absolute source file URI
@@ -1113,15 +1127,39 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     }
 
     public static class DefaultTempFileScheme implements TempFileNameScheme {
-        final URI b;
-        public DefaultTempFileScheme(final URI b) {
+        URI b;
+        @Override
+        public void setBaseDir(final URI b) {
             this.b = b;
         }
+        @Override
         public URI generateTempFileName(final URI src) {
             assert src.isAbsolute();
             //final URI b = baseInputDir.toURI();
             final URI rel = toURI(b.relativize(src).toString());
             return rel;
+        }
+    }
+
+    public static class FullPathTempFileScheme implements TempFileNameScheme {
+        @Override
+        public URI generateTempFileName(final URI src) {
+            assert src.isAbsolute();
+            final URI rel = toURI(src.getPath().substring(1));
+            return rel;
+        }
+    }
+
+    public static class HashTempFileScheme implements TempFileNameScheme {
+        @Override
+        public URI generateTempFileName(final URI src) {
+            assert src.isAbsolute();
+            final String ext = FilenameUtils.getExtension(src.getPath());
+            final String path = stripFragment(src.normalize()).toString();
+            final String hash = Hashing.sha1()
+                    .hashString(path, Charsets.UTF_8)
+                    .toString();
+            return toURI(ext.isEmpty() ? hash : (hash + "." + ext));
         }
     }
 
