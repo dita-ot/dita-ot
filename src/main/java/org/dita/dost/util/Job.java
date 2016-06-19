@@ -500,7 +500,10 @@ public final class Job {
             final URI relative = getRelativePath(jobFile.toURI(), file);
             return files.get(relative);
         } else {
-            return null;
+            return files.values().stream()
+                    .filter(fileInfo -> file.equals(fileInfo.src))
+                    .findFirst()
+                    .orElse(null);
         }
     }
     
