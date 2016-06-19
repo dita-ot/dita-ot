@@ -4,6 +4,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.module.BranchFilterModule.*;
+import static org.dita.dost.util.URLUtils.toURI;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +46,13 @@ public class BranchFilterModuleTest {
                 .uri(new URI("input.ditamap"))
                 .format(ATTR_FORMAT_VALUE_DITAMAP)
                 .build());
+        for (final String uri: Arrays.asList("linux.ditaval", "novice.ditaval", "advanced.ditaval", "mac.ditaval", "win.ditaval")) {
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(tempDir, uri).toURI())
+                    .uri(new URI(uri))
+                    .format(ATTR_FORMAT_VALUE_DITAVAL)
+                    .build());
+        }
         for (final String uri: Arrays.asList("install.dita", "perform-install.dita", "configure.dita")) {
             job.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
@@ -65,7 +73,7 @@ public class BranchFilterModuleTest {
         m.setJob(job);
         m.setLogger(new DITAOTJavaLogger());
         
-        m.processMap(new File(tempDir, "input.ditamap").toURI());
+        m.processMap(toURI("input.ditamap"));
         assertXMLEqual(new InputSource(new File(expDir, "input.ditamap").toURI().toString()),
                 new InputSource(new File(tempDir, "input.ditamap").toURI().toString()));
     }

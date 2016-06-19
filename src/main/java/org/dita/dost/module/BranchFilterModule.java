@@ -58,8 +58,10 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     private final DocumentBuilder builder;
     private final DitaValReader ditaValReader;
     private final Map<URI, FilterUtils> filterCache = new HashMap<>();
-    /** Current map being processed. */
+    /** Current map being processed, relative to temporary directory */
     private URI map;
+    /** Absolute URI to map being processed. */
+    private URI currentFile;
 
     public BranchFilterModule() {
         builder = XMLUtils.getDocumentBuilder();
@@ -90,16 +92,17 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
      * Process map for branch replication.
      */
     protected void processMap(final URI map) {
+        assert !map.isAbsolute();
         this.map = map;
+        currentFile = job.tempDir.toURI().resolve(map);
         // parse
-        final URI mapFile = job.tempDir.toURI().resolve(map);
-        logger.info("Processing " + mapFile);
+        logger.info("Processing " + currentFile);
         final Document doc;
         try {
-            logger.debug("Reading " + mapFile);
-            doc = builder.parse(new InputSource(mapFile.toString()));
+            logger.debug("Reading " + currentFile);
+            doc = builder.parse(new InputSource(currentFile.toString()));
         } catch (final SAXException | IOException e) {
-            logger.error("Failed to parse " + mapFile, e);
+            logger.error("Failed to parse " + currentFile, e);
             return;
         }
 
@@ -114,11 +117,11 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         logger.debug("Filter existing topics");
         filterTopics(doc.getDocumentElement(), Collections.<FilterUtils>emptyList());
 
-        logger.debug("Writing " + mapFile);
+        logger.debug("Writing " + currentFile);
         Result result = null;
         try {
             Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(mapFile.toString());
+            result = new StreamResult(currentFile.toString());
             serializer.transform(new DOMSource(doc), result);
         } catch (final TransformerConfigurationException | TransformerFactoryConfigurationError e) {
             throw new RuntimeException(e);
@@ -408,7 +411,9 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
      * Read and cache filter.
      **/
     private FilterUtils getFilterUtils(final Element ditavalRef) {
-        final URI ditaval = job.getFileInfo(map).src.resolve(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
+        final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
+        final FileInfo fi = job.getFileInfo(href);
+        final URI ditaval = fi.src;
         FilterUtils f = filterCache.get(ditaval);
         if (f == null) {
             ditaValReader.filterReset();
