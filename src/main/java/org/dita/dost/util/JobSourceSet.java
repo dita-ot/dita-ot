@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
-
 /**
  * Resource collection that finds matching resources from job configuration.
  */
@@ -56,7 +54,8 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
                     final File srcFile = new File(f.src);
                     if (srcFile.exists()) {
                         log("Found source directory file " + srcFile, Project.MSG_VERBOSE);
-                        res.add(new FileResource(toFile(job.getInputDir()), f.file.toString()));
+                        final File rel = FileUtils.getRelativePath(new File(new File(job.getInputDir()), "dummy"), srcFile);
+                        res.add(new FileResource(toFile(job.getInputDir()), rel.getPath()));
                     } else {
                         log("File " + f.src + " not found", Project.MSG_ERR);
                     }
