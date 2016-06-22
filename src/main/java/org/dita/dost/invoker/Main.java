@@ -138,16 +138,26 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static final Map<String, Argument> ARGUMENTS = new HashMap<>();
     static {
         ARGUMENTS.put("-f", new StringArgument("transtype"));
-        ARGUMENTS.put("-format", new StringArgument("transtype"));
-        ARGUMENTS.put("-transtype", new StringArgument("transtype"));
+        ARGUMENTS.put("--format", new StringArgument("transtype"));
+        ARGUMENTS.put("--transtype", new StringArgument("transtype"));
         ARGUMENTS.put("-i", new FileOrUriArgument("args.input"));
-        ARGUMENTS.put("-input", new FileOrUriArgument("args.input"));
+        ARGUMENTS.put("--input", new FileOrUriArgument("args.input"));
         ARGUMENTS.put("-o", new FileArgument("output.dir"));
-        ARGUMENTS.put("-output", new FileArgument("output.dir"));
-        ARGUMENTS.put("-filter", new FileArgument("args.filter"));
+        ARGUMENTS.put("--output", new FileArgument("output.dir"));
+        ARGUMENTS.put("--filter", new FileArgument("args.filter"));
         ARGUMENTS.put("-t", new FileArgument(ANT_TEMP_DIR));
-        ARGUMENTS.put("-temp", new FileArgument(ANT_TEMP_DIR));
+        ARGUMENTS.put("--temp", new FileArgument(ANT_TEMP_DIR));
+        addSingleHyphenOptions(ARGUMENTS);
     }
+
+    private static void addSingleHyphenOptions(final Map<String, Argument> args) {
+        for (final Map.Entry<String, Argument> e : new HashMap<>(args).entrySet()) {
+            if (e.getKey().startsWith("--")) {
+                args.put(e.getKey().substring(1), e.getValue());
+            }
+        }
+    }
+
     private static final Map<String, String> RESERVED_PROPERTIES = new HashMap<>();
     static {
         for (final Map.Entry<String, Argument> a: ARGUMENTS.entrySet()) {
