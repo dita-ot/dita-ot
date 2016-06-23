@@ -179,7 +179,9 @@
                                               [generate-id(.) = generate-id(key('hideduplicates', related-links:hideduplicates(.))[1])]"/>
        </xsl:apply-templates>
       </xsl:variable>
-      <xsl:apply-templates select="$unordered-links"/>
+      <xsl:apply-templates select="$unordered-links">
+        <xsl:with-param name="root" select="root()" as="document-node()" tunnel="yes"/>
+      </xsl:apply-templates>
       <!--linklists - last but not least, create all the linklists and their links, with no sorting or re-ordering-->
       <xsl:apply-templates select="*[contains(@class, ' topic/linklist ')]"/>
     </nav>
