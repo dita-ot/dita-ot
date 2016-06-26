@@ -693,7 +693,7 @@ public final class Job {
                 return this;
             }
             
-            public Builder src(final URI src) { this.src = src; return this; }
+            public Builder src(final URI src) { assert src.isAbsolute(); this.src = src; return this; }
             public Builder uri(final URI uri) { this.uri = uri; this.file = null; return this; }
             public Builder file(final File file) { this.file = file; this.uri = null; return this; }
             public Builder format(final String format) { this.format = format; return this; }
