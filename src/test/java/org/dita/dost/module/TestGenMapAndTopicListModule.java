@@ -8,34 +8,6 @@
  */
 package org.dita.dost.module;
 
-import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
-import static org.junit.Assert.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Job.*;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractFacade;
@@ -45,10 +17,15 @@ import org.dita.dost.util.Job;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+
+import java.io.*;
+import java.net.URI;
+import java.util.*;
+
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.FileInfo;
+import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
+import static org.junit.Assert.assertEquals;
 
 public class TestGenMapAndTopicListModule {
 
@@ -177,8 +154,31 @@ public class TestGenMapAndTopicListModule {
         
         final Job job = new Job(tempDirParallel);
         assertEquals(".." + File.separator, job.getProperty("uplevels"));
+
+        assertEquals(5, job.getFileInfo().size());
+        assertPaths(job.getFileInfo(new URI("topics/xreffin-topic-1.xml")),
+                srcDir.toURI().resolve("topics/xreffin-topic-1.xml"),
+                new URI("topics/xreffin-topic-1.xml"));
+        assertPaths(job.getFileInfo(new URI("topics/target-topic%20a.xml")),
+                srcDir.toURI().resolve("topics/target-topic%20a.xml"),
+                new URI("topics/target-topic%20a.xml"));
+        assertPaths(job.getFileInfo(new URI("topics/target-topic-c.xml")),
+                srcDir.toURI().resolve("topics/target-topic-c.xml"),
+                new URI("topics/target-topic-c.xml"));
+        assertPaths(job.getFileInfo(new URI("maps/root-map-01.ditamap")),
+                srcDir.toURI().resolve("maps/root-map-01.ditamap"),
+                new URI("maps/root-map-01.ditamap"));
+        // FIXME the source URI for copy-to is incorrect
+        assertPaths(job.getFileInfo(new URI("topics/xreffin-topic-1-copy.xml")),
+                srcDir.toURI().resolve("topics/xreffin-topic-1-copy.xml"),
+                new URI("topics/xreffin-topic-1-copy.xml"));
     }
     
+    private void assertPaths(final FileInfo fi, final URI src, final URI path) {
+        assertEquals(fi.src, src);
+        assertEquals(fi.uri, path);
+    }
+
     @Test
     public void testFileContentAbove() throws Exception{
         final File e = new File(expDir, "above");
@@ -249,6 +249,24 @@ public class TestGenMapAndTopicListModule {
                 
         final Job job = new Job(tempDirAbove);
         assertEquals("", job.getProperty("uplevels"));
+
+        assertEquals(5, job.getFileInfo().size());
+        assertPaths(job.getFileInfo(new URI("topics/xreffin-topic-1.xml")),
+                srcDir.toURI().resolve("topics/xreffin-topic-1.xml"),
+                new URI("topics/xreffin-topic-1.xml"));
+        assertPaths(job.getFileInfo(new URI("topics/target-topic%20a.xml")),
+                srcDir.toURI().resolve("topics/target-topic%20a.xml"),
+                new URI("topics/target-topic%20a.xml"));
+        assertPaths(job.getFileInfo(new URI("topics/target-topic-c.xml")),
+                srcDir.toURI().resolve("topics/target-topic-c.xml"),
+                new URI("topics/target-topic-c.xml"));
+        assertPaths(job.getFileInfo(new URI("root-map-02.ditamap")),
+                srcDir.toURI().resolve("root-map-02.ditamap"),
+                new URI("root-map-02.ditamap"));
+        // FIXME the source URI for copy-to is incorrect
+        assertPaths(job.getFileInfo(new URI("topics/xreffin-topic-1-copy.xml")),
+                srcDir.toURI().resolve("topics/xreffin-topic-1-copy.xml"),
+                new URI("topics/xreffin-topic-1-copy.xml"));
     }
         
     private Properties readProperties(final File f)

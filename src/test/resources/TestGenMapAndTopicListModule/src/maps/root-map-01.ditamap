@@ -6,4 +6,5 @@
   <topicref class="- map/topicref " href="../topics/target-topic%20a.xml" keys="target_topic_1"/>
   <topicref class="- map/topicref " href="../topics/target-topic-c.xml" keys="target_topic_2 target_topic_3"/>
   <keydef class="+ map/topicref mapgroup-d/keydef " format="html" href="http://www.example.com/?foo=bar&amp;baz=qux#quxx" keys="target_topic_4" processing-role="resource-only" scope="external"/>
+  <topicref class="- map/topicref " href="../topics/xreffin-topic-1.xml" copy-to="../topics/xreffin-topic-1-copy.xml"/>
 </map>
