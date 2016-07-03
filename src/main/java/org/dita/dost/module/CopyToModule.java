@@ -125,7 +125,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
                 // add new file info into job
                 final FileInfo src = job.getFileInfo(copytoSource);
-                final FileInfo.Builder b = src != null ? new FileInfo.Builder(src) : new FileInfo.Builder();
+                assert src != null;
+                final FileInfo.Builder b = new FileInfo.Builder(src);
                 final FileInfo dst = b.uri(copytoTarget).build();
                 job.add(dst);
             }
