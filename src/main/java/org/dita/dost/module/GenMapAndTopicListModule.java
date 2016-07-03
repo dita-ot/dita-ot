@@ -166,6 +166,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private final Set<URI> schemeSet;
     /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
     private final Map<URI, Set<URI>> schemeDictionary;
+    private final Map<URI, URI> copyTo = new HashMap<>();
     private String transtype;
 
     /** use grammar pool cache */
@@ -520,6 +521,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             updateUplevels(file.filename);
         }
 
+        copyTo.putAll(listFilter.getCopytoMap());
         schemeSet.addAll(listFilter.getSchemeRefSet());
 
         // collect key definitions
@@ -898,7 +900,14 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
         for (final FileInfo fs: fileinfos.values()) {
             if (!failureList.contains(fs.src)) {
-                job.add(fs);
+                final URI src = copyTo.get(fs.src);
+                // correct copy-to
+                if (src != null) {
+                    final FileInfo corr = new FileInfo.Builder(fs).src(src).build();
+                    job.add(corr);
+                } else {
+                    job.add(fs);
+                }
             }
         }
 

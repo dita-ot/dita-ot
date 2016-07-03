@@ -170,7 +170,7 @@ public class TestGenMapAndTopicListModule {
                 new URI("maps/root-map-01.ditamap"));
         // FIXME the source URI for copy-to is incorrect
         assertPaths(job.getFileInfo(new URI("topics/xreffin-topic-1-copy.xml")),
-                srcDir.toURI().resolve("topics/xreffin-topic-1-copy.xml"),
+                srcDir.toURI().resolve("topics/xreffin-topic-1.xml"),
                 new URI("topics/xreffin-topic-1-copy.xml"));
     }
     
@@ -265,7 +265,7 @@ public class TestGenMapAndTopicListModule {
                 new URI("root-map-02.ditamap"));
         // FIXME the source URI for copy-to is incorrect
         assertPaths(job.getFileInfo(new URI("topics/xreffin-topic-1-copy.xml")),
-                srcDir.toURI().resolve("topics/xreffin-topic-1-copy.xml"),
+                srcDir.toURI().resolve("topics/xreffin-topic-1.xml"),
                 new URI("topics/xreffin-topic-1-copy.xml"));
     }
         

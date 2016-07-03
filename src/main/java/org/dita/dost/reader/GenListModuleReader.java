@@ -270,6 +270,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
+     * Get copy-to map.
+     *
+     * @return map of copy-to target to souce
+     */
+    public Map<URI, URI> getCopytoMap() {
+        return copytoMap;
+    }
+
+    /**
      * Get the href target.
      * 
      * @return Returns the hrefTargets.
