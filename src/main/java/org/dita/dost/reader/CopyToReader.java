@@ -142,25 +142,25 @@ public final class CopyToReader extends AbstractXMLFilter {
             return;
         }
 
-        final URI filename = stripFragment(attrValue.isAbsolute() ? attrValue : currentFile.resolve(attrValue));
-        assert filename.isAbsolute();
+        final URI target = stripFragment(attrValue.isAbsolute() ? attrValue : currentFile.resolve(attrValue));
+        assert target.isAbsolute();
 
         final String attrFormat = getFormat(atts);
 
         if (isFormatDita(attrFormat)) {
-            final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-            if (href != null) {
-                if (href.toString().isEmpty()) {
-                    logger.warn("Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
+            final URI source = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+            if (source != null) {
+                if (source.toString().isEmpty()) {
+                    logger.warn("Copy-to task [href=\"\" copy-to=\"" + target + "\"] was ignored.");
                 } else {
-                    final URI value = stripFragment(currentFile.resolve(href));
-                    if (copyToMap.get(filename) != null) {
-                        if (!value.equals(copyToMap.get(filename))) {
-                            logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.toString(), filename.toString()).toString());
+                    final URI value = stripFragment(currentFile.resolve(source));
+                    if (copyToMap.get(target) != null) {
+                        if (!value.equals(copyToMap.get(target))) {
+                            logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", source.toString(), target.toString()).toString());
                         }
                     } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
                             CHUNK_TO_CONTENT))) {
-                        copyToMap.put(filename, value);
+                        copyToMap.put(target, value);
                     }
                 }
             }

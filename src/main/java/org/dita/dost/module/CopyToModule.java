@@ -257,7 +257,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         final URI outputPathName = outputDir.resolve("index.html");
         final URI finalOutFilePathName = outputDir.resolve(relativePath.getPath());
         final URI finalRelativePathName = getRelativePath(finalOutFilePathName, outputPathName);
-        File parentDir = new File(finalRelativePathName).getParentFile();
+        File parentDir = toFile(finalRelativePathName).getParentFile();
         if (parentDir == null || parentDir.getPath().isEmpty()) {
             parentDir = new File(".");
         }

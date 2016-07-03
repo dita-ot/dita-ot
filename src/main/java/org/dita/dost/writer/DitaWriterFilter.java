@@ -79,7 +79,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         super.setJob(job);
         fileInfoMap = new HashMap<>();
         for (final FileInfo f: job.getFileInfo()) {
-            fileInfoMap.put(f.src, f);
+            fileInfoMap.put(f.result, f);
         }
     }
 
@@ -154,7 +154,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         final int attsLen = atts.getLength();
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
-            String attValue = getAttributeValue(qName, attQName, atts.getValue(i));
+            final String origValue = atts.getValue(i);
+            String attValue = origValue;
             if (ATTRIBUTE_NAME_CONREF.equals(attQName)) {
                 attValue = replaceHREF(ATTRIBUTE_NAME_CONREF, atts).toString();
             } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
@@ -168,6 +169,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
                 if (isFormatDita(format)) {
                     attValue = ATTR_FORMAT_VALUE_DITA;
                 }
+            } else {
+                attValue = getAttributeValue(qName, attQName, attValue);
             }
             XMLUtils.addOrSetAttribute(res, atts.getURI(i), atts.getLocalName(i), attQName, atts.getType(i), attValue);
         }
