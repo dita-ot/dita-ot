@@ -206,6 +206,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     public void setPrimaryDitamap(final URI primaryDitamap) {
         assert primaryDitamap.isAbsolute();
         this.primaryDitamap = primaryDitamap;
+        this.rootDir = primaryDitamap.resolve(".");
     }
 
     /**
@@ -325,15 +326,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             res.add(r.filename);
         }
         return res;
-    }
-
-    /**
-     * Set processing input directory absolute path.
-     * 
-     * @param inputDir absolute path to base directory
-     */
-    public void setInputDir(final URI inputDir) {
-        this.rootDir = inputDir;
     }
 
     /**
@@ -660,15 +652,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                     }
                 }
             } else if (ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
-                final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-                if (href != null) {
-                    if (href.toString().isEmpty()) {
+                final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+                if (copyTo != null) {
+                    if (copyTo.toString().isEmpty()) {
                         logger.warn("Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
                     } else {
-                        final URI value = stripFragment(currentDir.resolve(href));
+                        final URI value = stripFragment(currentDir.resolve(copyTo));
                         if (copytoMap.get(filename) != null) {
                             if (!value.equals(copytoMap.get(filename))) {
-                                logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.toString(), filename.toString()).toString());
+                                logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", copyTo.toString(), filename.toString()).toString());
                             }
                             ignoredCopytoSourceSet.add(value);
                         } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(

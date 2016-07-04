@@ -243,7 +243,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private void initFilters() {
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
-        listFilter.setInputDir(rootFile.resolve("."));
         listFilter.setPrimaryDitamap(rootFile);
         listFilter.setJob(job);
         

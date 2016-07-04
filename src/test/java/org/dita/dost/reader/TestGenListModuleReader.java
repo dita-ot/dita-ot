@@ -163,7 +163,7 @@ public class TestGenListModuleReader {
         reader = new GenListModuleReader();
         reader.setLogger(new TestUtils.TestLogger());
         reader.setCurrentFile(rootFile.toURI());
-        reader.setInputDir(rootFile.getParentFile().toURI());
+        reader.setPrimaryDitamap(rootFile.toURI());
         reader.setJob(new Job(tempDir));
 
         reader.setContentHandler(new DefaultHandler());
