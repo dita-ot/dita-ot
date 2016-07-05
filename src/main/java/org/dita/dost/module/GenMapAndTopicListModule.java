@@ -23,7 +23,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -702,65 +701,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     }
 
     /**
-     * Escape regular expression special characters.
-     * 
-     * @param value input
-     * @return input with regular expression special characters escaped
-     */
-    private static String escapeRegExp(final String value) {
-        final StringBuilder buff = new StringBuilder();
-        if (value == null || value.length() == 0) {
-            return "";
-        }
-        int index = 0;
-        // $( )+.[^{\
-        while (index < value.length()) {
-            final char current = value.charAt(index);
-            switch (current) {
-            case '.':
-                buff.append("\\.");
-                break;
-                // case '/':
-                // case '|':
-            case '\\':
-                buff.append("[\\\\|/]");
-                break;
-            case '(':
-                buff.append("\\(");
-                break;
-            case ')':
-                buff.append("\\)");
-                break;
-            case '[':
-                buff.append("\\[");
-                break;
-            case ']':
-                buff.append("\\]");
-                break;
-            case '{':
-                buff.append("\\{");
-                break;
-            case '}':
-                buff.append("\\}");
-                break;
-            case '^':
-                buff.append("\\^");
-                break;
-            case '+':
-                buff.append("\\+");
-                break;
-            case '$':
-                buff.append("\\$");
-                break;
-            default:
-                buff.append(current);
-            }
-            index++;
-        }
-        return buff.toString();
-    }
-
-    /**
      * Parse filter file
      * 
      * @return configured filter utility
@@ -826,7 +766,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);
         writeListFile(inputfile, relativeRootFile.toString());
 
-        job.setProperty("tempdirToinputmapdir.relative.value", escapeRegExp(getPrefix(relativeRootFile)));
+        job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
         job.setProperty("uplevels", getLevelsPath(rootTemp));
 
         resourceOnlySet.addAll(listFilter.getResourceOnlySet());

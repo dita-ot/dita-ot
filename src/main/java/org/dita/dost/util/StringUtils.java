@@ -278,7 +278,66 @@ public final class StringUtils {
 
         return aLocale;
     }
-    
+
+    /**
+     * Escape regular expression special characters.
+     *
+     * @param value input
+     * @return input with regular expression special characters escaped
+     */
+    public static String escapeRegExp(final String value) {
+        final StringBuilder buff = new StringBuilder();
+        if (value == null || value.length() == 0) {
+            return "";
+        }
+        int index = 0;
+        // $( )+.[^{\
+        while (index < value.length()) {
+            final char current = value.charAt(index);
+            switch (current) {
+            case '.':
+                buff.append("\\.");
+                break;
+                // case '/':
+                // case '|':
+            case '\\':
+                buff.append("[\\\\|/]");
+                break;
+            case '(':
+                buff.append("\\(");
+                break;
+            case ')':
+                buff.append("\\)");
+                break;
+            case '[':
+                buff.append("\\[");
+                break;
+            case ']':
+                buff.append("\\]");
+                break;
+            case '{':
+                buff.append("\\{");
+                break;
+            case '}':
+                buff.append("\\}");
+                break;
+            case '^':
+                buff.append("\\^");
+                break;
+            case '+':
+                buff.append("\\+");
+                break;
+            case '$':
+                buff.append("\\$");
+                break;
+            default:
+                buff.append(current);
+            }
+            index++;
+        }
+        return buff.toString();
+    }
+
     /** Whitespace normalization state. */
     private enum WhiteSpaceState { WORD, SPACE }
 
