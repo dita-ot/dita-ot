@@ -155,7 +155,7 @@ public class TestGenMapAndTopicListModule {
         final Job job = new Job(tempDirParallel);
         assertEquals(".." + File.separator, job.getProperty("uplevels"));
 
-        assertEquals(5, job.getFileInfo().size());
+        assertEquals(4, job.getFileInfo().size());
         assertPaths(job.getFileInfo(new URI("topics/xreffin-topic-1.xml")),
                 srcDir.toURI().resolve("topics/xreffin-topic-1.xml"),
                 new URI("topics/xreffin-topic-1.xml"));
@@ -168,10 +168,6 @@ public class TestGenMapAndTopicListModule {
         assertPaths(job.getFileInfo(new URI("maps/root-map-01.ditamap")),
                 srcDir.toURI().resolve("maps/root-map-01.ditamap"),
                 new URI("maps/root-map-01.ditamap"));
-        // FIXME the source URI for copy-to is incorrect
-        assertPaths(job.getFileInfo(new URI("topics/xreffin-topic-1-copy.xml")),
-                srcDir.toURI().resolve("topics/xreffin-topic-1.xml"),
-                new URI("topics/xreffin-topic-1-copy.xml"));
     }
     
     private void assertPaths(final FileInfo fi, final URI src, final URI path) {
@@ -250,7 +246,7 @@ public class TestGenMapAndTopicListModule {
         final Job job = new Job(tempDirAbove);
         assertEquals("", job.getProperty("uplevels"));
 
-        assertEquals(5, job.getFileInfo().size());
+        assertEquals(4, job.getFileInfo().size());
         assertPaths(job.getFileInfo(new URI("topics/xreffin-topic-1.xml")),
                 srcDir.toURI().resolve("topics/xreffin-topic-1.xml"),
                 new URI("topics/xreffin-topic-1.xml"));
@@ -263,10 +259,6 @@ public class TestGenMapAndTopicListModule {
         assertPaths(job.getFileInfo(new URI("root-map-02.ditamap")),
                 srcDir.toURI().resolve("root-map-02.ditamap"),
                 new URI("root-map-02.ditamap"));
-        // FIXME the source URI for copy-to is incorrect
-        assertPaths(job.getFileInfo(new URI("topics/xreffin-topic-1-copy.xml")),
-                srcDir.toURI().resolve("topics/xreffin-topic-1.xml"),
-                new URI("topics/xreffin-topic-1-copy.xml"));
     }
         
     private Properties readProperties(final File f)

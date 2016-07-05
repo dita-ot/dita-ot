@@ -121,8 +121,7 @@ public class TestGenListModuleReader {
         assertTrue(reader.getConrefTargets().isEmpty());
 
         assertEquals(new HashSet(Arrays.asList(
-                srcDirUri.resolve("maps/toolbars.dita"),
-                srcDirUri.resolve("maps/ToolbarsChunk.dita"))),
+                srcDirUri.resolve("maps/toolbars.dita"))),
                 reader.getChunkTopicSet());
 
         assertEquals(new HashSet(Arrays.asList(

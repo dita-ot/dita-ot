@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
@@ -519,8 +520,13 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             categorizeReferenceFile(file);
             updateUplevels(file.filename);
         }
+        for (final Map.Entry<URI, URI> e : listFilter.getCopytoMap().entrySet()) {
+            final URI source = e.getValue();
+            final URI target = e.getKey();
+            copyTo.put(target, source);
+            updateUplevels(target);
 
-        copyTo.putAll(listFilter.getCopytoMap());
+        }
         schemeSet.addAll(listFilter.getSchemeRefSet());
 
         // collect key definitions
@@ -897,9 +903,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         
         addFlagImagesSetToProperties(job, relFlagImagesSet);
 
+        final Map<URI, URI> filteredCopyTo = filterConflictingCopyTo(copyTo, fileinfos.values());
+
         for (final FileInfo fs: fileinfos.values()) {
             if (!failureList.contains(fs.src)) {
-                final URI src = copyTo.get(fs.src);
+                final URI src = filteredCopyTo.get(fs.src);
                 // correct copy-to
                 if (src != null) {
                     final FileInfo corr = new FileInfo.Builder(fs).src(src).build();
@@ -930,6 +938,17 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         writeExportAnchors();
 
         KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), addFilePrefix(schemekeydefMap.values()));
+    }
+
+    /** Filter copy-to where target is used directly. */
+    private Map<URI, URI> filterConflictingCopyTo( final Map<URI, URI> copyTo, final Collection<FileInfo> fileInfos) {
+        final Set<URI> fileinfoTargets = fileInfos.stream()
+                .filter(fi -> fi.src.equals(fi.result))
+                .map(fi -> fi.result)
+                .collect(Collectors.toSet());
+        return copyTo.entrySet().stream()
+                .filter(e -> !fileinfoTargets.contains(e.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     /**

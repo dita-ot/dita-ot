@@ -670,12 +670,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                     }
                 }
 
-                final URI pathWithoutID = stripFragment(currentDir.resolve(attrValue));
-                if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
-                    chunkTopicSet.add(pathWithoutID);
-                } else {
-                    hrefTopicSet.add(pathWithoutID);
-                }
+//                final URI pathWithoutID = stripFragment(currentDir.resolve(attrValue));
+//                if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
+//                    chunkTopicSet.add(pathWithoutID);
+//                } else {
+//                    hrefTopicSet.add(pathWithoutID);
+//                }
             }
         }
     }
