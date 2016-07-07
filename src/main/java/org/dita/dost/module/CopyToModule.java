@@ -105,7 +105,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             final URI target = job.tempDir.toURI().relativize(e.getKey());
             final URI source = job.tempDir.toURI().relativize(e.getValue());
             // Filter copy-to where target is used directly.
-            if (job.getFileInfo(target) != null) {
+            final FileInfo fileInfo = job.getFileInfo(target);
+            if (fileInfo != null && fileInfo.src != null) {
                 continue;
             }
             copyToMap.put(target, source);
