@@ -167,10 +167,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 final URI href = stripFragment(job.getInputMap().resolve(hrefNode.getValue()));
                 final FileInfo fi = job.getFileInfo(href);
                 if (fi != null && fi.hasKeyref) {
-                    res.add(processTopic(fi, s, isResourceOnly));
+                    final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly);
+                    res.add(resolveTask);
                     final Integer used = usage.get(fi.uri);
                     if (used > 1) {
-                        hrefNode.setValue(addSuffix(toURI(hrefNode.getValue()), "-" + (used - 1)).toString());
+                        final URI value = addSuffix(toURI(hrefNode.getValue()), "-" + (used - 1));
+                        hrefNode.setValue(value.toString());
                     }
                 }
             }
@@ -205,8 +207,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         usage.put(f.uri, used);
 
         if (used > 1) {
+            final URI result = addSuffix(f.result, "-" + (used - 1));
             final URI out = addSuffix(f.uri, "-" + (used - 1));
-            final FileInfo fo = new FileInfo.Builder(f).uri(out).build();
+            final FileInfo fo = new FileInfo.Builder(f)
+                    .uri(out)
+                    .result(result)
+                    .build();
             // TODO: Should this be added when content is actually generated?
             job.add(fo);
             return new ResolveTask(scope, f, fo);
