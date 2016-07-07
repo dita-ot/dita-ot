@@ -117,7 +117,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
     private void processFile(final FileInfo f) {
         currentFile = f.src;
-        if (!exists(f.src) || !f.src.equals(f.result)) {
+        if (f.src == null || !exists(f.src) || !f.src.equals(f.result)) {
             logger.warn("Ignoring a copy-to file " + f.result);
             return;
         }

@@ -548,7 +548,7 @@ public final class Job {
     public static final class FileInfo {
         
         /** Absolute source URI. */
-        public final URI src;
+        public URI src;
         /** File URI. */
         public final URI uri;
         /** File path. */
@@ -587,7 +587,7 @@ public final class Job {
         public boolean isOutDita;
         
         FileInfo(final URI src, final URI uri, final File file) {
-            if (src == null && uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
+            if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
             this.src = src;
             this.uri = uri != null ? uri : toURI(file);
             this.file = uri != null ? toFile(uri) : file;
@@ -612,7 +612,9 @@ public final class Job {
         @Override
         public String toString() {
             return "FileInfo{" +
-                    "uri=" + uri +
+                    "src=" + src +
+                    ", result=" + result +
+                    ", uri=" + uri +
                     ", file=" + file +
                     ", format='" + format + '\'' +
                     ", hasConref=" + hasConref +
@@ -730,8 +732,8 @@ public final class Job {
             public Builder isOutDita(final boolean isOutDita) { this.isOutDita = isOutDita; return this; }
 
             public FileInfo build() {
-                if (src == null && uri == null && file == null) {
-                    throw new IllegalStateException("src, uri, and file may not be null");
+                if (uri == null && file == null) {
+                    throw new IllegalStateException("uri and file may not be null");
                 }
                 final FileInfo fi = new FileInfo(src, uri, file);
                 if (result != null) {

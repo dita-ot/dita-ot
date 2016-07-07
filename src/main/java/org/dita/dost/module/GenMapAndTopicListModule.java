@@ -857,6 +857,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
                 }
             }
         }
+        for (final URI target : filteredCopyTo.keySet()) {
+            final URI tmp = tempFileNameScheme.generateTempFileName(target);
+            final FileInfo fi = new FileInfo.Builder().result(target).uri(tmp).build();
+            job.add(fi);
+        }
 
         try {
             logger.info("Serializing job specification");
