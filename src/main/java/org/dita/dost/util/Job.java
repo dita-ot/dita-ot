@@ -712,7 +712,7 @@ public final class Job {
             public Builder src(final URI src) { assert src.isAbsolute(); this.src = src; return this; }
             public Builder uri(final URI uri) { this.uri = uri; this.file = null; return this; }
             public Builder file(final File file) { this.file = file; this.uri = null; return this; }
-            public Builder result(final URI result) { assert src.isAbsolute(); this.result = result; return this; }
+            public Builder result(final URI result) { assert result.isAbsolute(); this.result = result; return this; }
             public Builder format(final String format) { this.format = format; return this; }
             public Builder hasConref(final boolean hasConref) { this.hasConref = hasConref; return this; }
             public Builder isChunked(final boolean isChunked) { this.isChunked = isChunked; return this; }
