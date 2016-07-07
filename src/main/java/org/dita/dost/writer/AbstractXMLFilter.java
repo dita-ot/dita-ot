@@ -29,7 +29,7 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
 
     protected DITAOTLogger logger;
     Job job;
-    /** Absolute system path to file being processed */
+    /** Absolute URI to file being processed */
     protected URI currentFile;
     protected final Map<String, String> params = new HashMap<>();
 
