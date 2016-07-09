@@ -142,7 +142,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             for (final FileInfo f : job.getFileInfo()) {
                 if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
                     topicRefWriter.setFixpath(relativePath2fix.get(f.uri));
-                    topicRefWriter.write(new File(job.tempDir, f.file.getPath()));
+                    final File tmp = new File(job.tempDirURI.resolve(f.uri));
+                    topicRefWriter.write(tmp);
                 }
             }
         } catch (final DITAOTException ex) {
@@ -189,6 +190,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             }
         }
 
+        // relative temporary files
         final Set<URI> topicList = new LinkedHashSet<>(128);
         final Set<URI> oldTopicList = new HashSet<>();
         for (final FileInfo f : job.getFileInfo()) {

@@ -140,13 +140,13 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                         }
                     } else {
                         // use randomly generated file name
-                        outputFileName = currentFile.resolve(generateFilename());
+                        outputFileName = generateOutputFile(currentFile);
                     }
 
                     // Check if there is any conflict
                     if (new File(outputFileName).exists() && !MAP_MAP.matches(classValue)) {
                         final URI t = outputFileName;
-                        outputFileName = currentFile.resolve(generateFilename());
+                        outputFileName = generateOutputFile(currentFile);
                         conflictTable.put(outputFileName, t);
                     }
                     // add newly generated file to changTable
