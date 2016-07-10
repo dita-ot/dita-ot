@@ -632,9 +632,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
             hasHref = true;
             // Collect non-conref and non-copyto targets
-            if ((atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
-                        || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)))
-                    && (followLinks()
+            if ((followLinks()
                         || (TOPIC_IMAGE.matches(attrClass) || DITAVAREF_D_DITAVALREF.matches(attrClass)))) {
                 nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
             }
@@ -663,8 +661,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                                 logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", copyTo.toString(), filename.toString()).toString());
                             }
                             ignoredCopytoSourceSet.add(value);
-                        } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
-                                CHUNK_TO_CONTENT))) {
+                        } else {
                             copytoMap.put(filename, value);
                         }
                     }
