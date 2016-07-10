@@ -504,12 +504,12 @@ public final class Job {
             return null;
         } else if (files.containsKey(file)) {
             return files.get(file);
-        } else if (file.isAbsolute()) {
+        } else if (file.isAbsolute() && file.toString().startsWith(tempDir.toURI().toString())) {
             final URI relative = getRelativePath(jobFile.toURI(), file);
             return files.get(relative);
         } else {
             return files.values().stream()
-                    .filter(fileInfo -> file.equals(fileInfo.src))
+                    .filter(fileInfo -> file.equals(fileInfo.src) || file.equals(fileInfo.result))
                     .findFirst()
                     .orElse(null);
         }
@@ -522,8 +522,11 @@ public final class Job {
      */
     public FileInfo getOrCreateFileInfo(final URI file) {
         assert file.getFragment() == null;
-        final URI f = file.normalize();
-        FileInfo i = files.get(f); 
+        URI f = file.normalize();
+        if (f.isAbsolute()) {
+            f = tempDir.toURI().relativize(f);
+        }
+        FileInfo i = getFileInfo(file);
         if (i == null) {
             i = new FileInfo(f);
             files.put(i.uri, i);
