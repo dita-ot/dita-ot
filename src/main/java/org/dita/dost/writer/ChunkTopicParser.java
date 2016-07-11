@@ -30,9 +30,9 @@ import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**
- * ChunkTopicParser class, writing chunking content into relative topic files
- * and then update list. Not reusable and not thread-safe.
- * 
+ * Combine topic into a single file for {@code to-content} chunking.
+ * Not reusable and not thread-safe.
+ *
  * <p>
  * TODO: Refactor to be a SAX filter.
  * </p>
@@ -56,8 +56,8 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     @Override
-    public void write(final File fileDir) throws DITAOTException {
-        filePath = fileDir.toURI();
+    public void write(final URI fileDir) throws DITAOTException {
+        filePath = fileDir;
         try {
             output = new StringWriter();
             processChunk(rootTopicref, null);

@@ -105,7 +105,12 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         this.separate = separate;
     }
 
-    abstract public void write(final File filename) throws DITAOTException;
+    abstract public void write(final URI filename) throws DITAOTException;
+
+    @Override
+    public void write(final File fileDir) throws DITAOTException {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Set up the class.

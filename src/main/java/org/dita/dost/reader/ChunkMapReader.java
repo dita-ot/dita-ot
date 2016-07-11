@@ -312,13 +312,13 @@ public final class ChunkMapReader extends AbstractDomFilter {
             if (chunk.contains(CHUNK_BY_TOPIC)) {
                 logger.warn(MessageUtils.getInstance().getMessage("DOTJ064W").setLocation(topicref).toString());
             }
-            processChunk(topicref, false);
+            processCombineChunk(topicref);
         } else if (chunk.contains(CHUNK_TO_NAVIGATION)
                 && supportToNavigation) {
             processChildTopicref(topicref);
             processNavitation(topicref);
         } else if (chunkByToken.equals(CHUNK_BY_TOPIC)) {
-            processChunk(topicref, true);
+            processSeparateChunk(topicref);
             processChildTopicref(topicref);
         } else { // chunkByToken.equals(CHUNK_BY_DOCUMENT)
             URI currentPath = null;
@@ -510,21 +510,25 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
     }
 
-    private void processChunk(final Element topicref, final boolean separate) {
+    private void processSeparateChunk(final Element topicref) {
         try {
-            if (separate) {
-                final SeparateChunkTopicParser chunkParser = new SeparateChunkTopicParser();
-                chunkParser.setLogger(logger);
-                chunkParser.setJob(job);
-                chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
-                chunkParser.write(new File(currentFile.resolve(".")));
-            } else {
-                final ChunkTopicParser chunkParser = new ChunkTopicParser();
-                chunkParser.setLogger(logger);
-                chunkParser.setJob(job);
-                chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
-                chunkParser.write(new File(currentFile.resolve(".")));
-            }
+            final SeparateChunkTopicParser chunkParser = new SeparateChunkTopicParser();
+            chunkParser.setLogger(logger);
+            chunkParser.setJob(job);
+            chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
+            chunkParser.write(currentFile.resolve("."));
+        } catch (final DITAOTException e) {
+            logger.error("Failed to process chunk: " + e.getMessage(), e);
+        }
+    }
+
+    private void processCombineChunk(final Element topicref) {
+        try {
+            final ChunkTopicParser chunkParser = new ChunkTopicParser();
+            chunkParser.setLogger(logger);
+            chunkParser.setJob(job);
+            chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
+            chunkParser.write(currentFile.resolve("."));
         } catch (final DITAOTException e) {
             logger.error("Failed to process chunk: " + e.getMessage(), e);
         }

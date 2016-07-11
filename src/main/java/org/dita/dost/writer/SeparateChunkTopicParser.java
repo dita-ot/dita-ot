@@ -35,8 +35,8 @@ import static org.dita.dost.util.XMLUtils.getDocumentBuilder;
 import static org.dita.dost.util.XMLUtils.getXMLReader;
 
 /**
- * ChunkTopicParser class, writing chunking content into relative topic files
- * and then update list. Not reusable and not thread-safe.
+ * Split topic into multiple files for {@code by-topic} chunking.
+ * Not reusable and not thread-safe.
  * 
  * <p>
  * TODO: Refactor to be a SAX filter.
@@ -61,9 +61,9 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     @Override
-    public void write(final File fileDir) throws DITAOTException {
+    public void write(final URI fileDir) throws DITAOTException {
         // pass map's directory path
-        filePath = fileDir.toURI();
+        filePath = fileDir;
         final URI hrefValue = toURI(getValue(rootTopicref, ATTRIBUTE_NAME_HREF));
         final URI copytoValue = toURI(getValue(rootTopicref, ATTRIBUTE_NAME_COPY_TO));
         final String scopeValue = getCascadeValue(rootTopicref, ATTRIBUTE_NAME_SCOPE);
