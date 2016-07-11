@@ -33,7 +33,7 @@ import static org.dita.dost.util.XMLUtils.*;
 /**
  * Combine topic into a single file for {@code to-content} chunking.
  * Not reusable and not thread-safe.
- *
+ * <p>
  * <p>
  * TODO: Refactor to be a SAX filter.
  * </p>
@@ -267,7 +267,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                         && parseFilePath != null
                         && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                     insertAfter(hrefValue, parentResult, tmpContent);
-                // replace contents
+                    // replace contents
                 } else {
                     parentResult.append(tmpContent);
                 }
@@ -292,9 +292,9 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     /**
      * Append XML content into root element
      *
-     * @param hrefValue href of the topicref
+     * @param hrefValue    href of the topicref
      * @param parentResult XML content to insert into
-     * @param tmpContent XML content to insert
+     * @param tmpContent   XML content to insert
      */
     private void insertAfter(final URI hrefValue, final StringBuffer parentResult, final CharSequence tmpContent) {
         int insertpoint = parentResult.lastIndexOf("</");

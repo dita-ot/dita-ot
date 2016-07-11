@@ -8,24 +8,20 @@
  */
 package org.dita.dost.reader;
 
-import static org.dita.dost.util.StringUtils.split;
-import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FileUtils.*;
-import static org.apache.commons.io.FilenameUtils.*;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.StringUtils.join;
-import static org.dita.dost.util.XMLUtils.close;
-import static org.dita.dost.util.XMLUtils.getValue;
-import static org.dita.dost.writer.AbstractChunkTopicParser.getElementNode;
-import static org.dita.dost.writer.AbstractChunkTopicParser.getText;
-import static java.util.Arrays.*;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
-import java.util.*;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
+import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
+import org.dita.dost.util.DitaClass;
+import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLSerializer;
+import org.dita.dost.util.XMLUtils;
+import org.dita.dost.writer.AbstractDomFilter;
+import org.dita.dost.writer.ChunkTopicParser;
+import org.dita.dost.writer.SeparateChunkTopicParser;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
@@ -34,18 +30,24 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.util.*;
 
-import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
-import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
-import org.dita.dost.util.*;
-import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.writer.AbstractDomFilter;
-import org.dita.dost.writer.ChunkTopicParser;
-import org.dita.dost.writer.SeparateChunkTopicParser;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
+import static org.apache.commons.io.FilenameUtils.getBaseName;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.getFragment;
+import static org.dita.dost.util.FileUtils.replaceExtension;
+import static org.dita.dost.util.StringUtils.join;
+import static org.dita.dost.util.StringUtils.split;
+import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.close;
+import static org.dita.dost.util.XMLUtils.getValue;
+import static org.dita.dost.writer.AbstractChunkTopicParser.getElementNode;
+import static org.dita.dost.writer.AbstractChunkTopicParser.getText;
 
 /**
  * ChunkMapReader class, read and filter ditamap file for chunking.
@@ -94,12 +96,14 @@ public final class ChunkMapReader extends AbstractDomFilter {
         rootChunkOverride = split(chunkValue);
     }
 
-    /** Absolute URI to file being processed */
+    /**
+     * Absolute URI to file being processed
+     */
     private URI currentFile;
-    
+
     /**
      * read input file.
-     * 
+     *
      * @param inputFile filename
      */
     @Override
@@ -140,7 +144,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
                     if (MAP_RELTABLE.matches(currentElem)) {
                         updateReltable(currentElem);
                     } else if (MAPGROUP_D_TOPICGROUP.matches(currentElem)) {
-                    	processChildTopicref(currentElem);
+                        processChildTopicref(currentElem);
                     } else if (MAP_TOPICREF.matches(currentElem)) {
                         processTopicref(currentElem);
                     }
@@ -156,7 +160,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         if (chunkValue.isEmpty()) {
             return defaultToken;
         }
-        for (final String token: chunkValue) {
+        for (final String token : chunkValue) {
             if (token.startsWith(category)) {
                 return token;
             }
@@ -166,7 +170,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * Process map when "to-content" is specified on map element.
-     *
+     * <p>
      * TODO: Instead of reclassing map element to be a topicref, add a topicref
      * into the map root and move all map content into that topicref.
      */
@@ -292,7 +296,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
             generateStumpTopic(topicref);
         }
 
-        final URI href = toURI(getValue(topicref,ATTRIBUTE_NAME_HREF));
+        final URI href = toURI(getValue(topicref, ATTRIBUTE_NAME_HREF));
         final URI copyTo = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
         final String scope = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
         final String chunkByToken = getChunkByToken(chunk, "by-", defaultChunkByToken);
@@ -336,6 +340,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * Create new map and refer to it with navref.
+     *
      * @param topicref
      */
     private void processNavitation(final Element topicref) {
@@ -366,6 +371,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * Generate stump topic for to-content content.
+     *
      * @param topicref topicref without href to generate stump topic for
      */
     private void generateStumpTopic(final Element topicref) {
@@ -442,6 +448,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * get topicmeta's child(e.g navtitle, shortdesc) tag's value(text-only).
+     *
      * @param element input element
      * @return text value
      */
@@ -525,7 +532,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
         if (href.length() != 0) {
             if (changeTable.containsKey(currentFile.resolve(href))) {
                 URI res = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP),
-                                                      currentFile.resolve(href));
+                        currentFile.resolve(href));
                 final String fragment = getFragment(href);
                 if (fragment != null) {
                     res = setFragment(res, fragment);
@@ -548,11 +555,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * Get changed files table.
-     * 
+     *
      * @return map of changed files
      */
     public Map<URI, URI> getChangeTable() {
-        for (final Map.Entry<URI, URI> e: changeTable.entrySet()) {
+        for (final Map.Entry<URI, URI> e : changeTable.entrySet()) {
             assert e.getKey().isAbsolute();
             assert e.getValue().isAbsolute();
         }
@@ -561,11 +568,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * get conflict table.
-     * 
+     *
      * @return conflict table
      */
     public Map<URI, URI> getConflicTable() {
-        for (final Map.Entry<URI, URI> e: conflictTable.entrySet()) {
+        for (final Map.Entry<URI, URI> e : conflictTable.entrySet()) {
             assert e.getKey().isAbsolute();
             assert e.getValue().isAbsolute();
         }
@@ -574,7 +581,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     /**
      * Support chunk token to-navigation.
-     * 
+     *
      * @param supportToNavigation flag to enable to-navigation support
      */
     public void supportToNavigation(final boolean supportToNavigation) {

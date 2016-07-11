@@ -34,16 +34,20 @@ import static org.dita.dost.util.XMLUtils.*;
 /**
  * ChunkTopicParser class, writing chunking content into relative topic files
  * and then update list. Not reusable and not thread-safe.
- * 
+ * <p>
  * <p>
  * TODO: Refactor to be a SAX filter.
  * </p>
  */
 public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
-    /** Keys and values are absolute chimera paths, i.e. systems paths with fragments */
+    /**
+     * Keys and values are absolute chimera paths, i.e. systems paths with fragments
+     */
     LinkedHashMap<URI, URI> changeTable = null;
-    /** Keys and values are absolute chimera paths, i.e. systems paths with fragments */
+    /**
+     * Keys and values are absolute chimera paths, i.e. systems paths with fragments
+     */
     Map<URI, URI> conflictTable = null;
 
     Element rootTopicref = null;
@@ -51,7 +55,9 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     Element topicDoc = null;
 
     private final boolean separate;
-    /** Input file's parent absolute directory path. */
+    /**
+     * Input file's parent absolute directory path.
+     */
     URI filePath = null;
 
     URI currentParsingFile = null;
@@ -115,9 +121,9 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     /**
      * Set up the class.
      *
-     * @param changeTable changeTable
+     * @param changeTable   changeTable
      * @param conflictTable conflictTable
-     * @param rootTopicref chunking topicref
+     * @param rootTopicref  chunking topicref
      */
     public void setup(final LinkedHashMap<URI, URI> changeTable, final Map<URI, URI> conflictTable,
                       final Element rootTopicref,
@@ -163,7 +169,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
             if (includelevel >= 0) {
                 try {
                     writeEndElement(output, qName);
-                } catch(final IOException e) {
+                } catch (final IOException e) {
                     logger.error(e.getMessage(), e);
                 }
             }
@@ -303,7 +309,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                         include = false;
                         skipLevel = 1;
                         skip = true;
-                    } else  {
+                    } else {
                         // if select method is "select-document" or "select-branch"
                         // and current topic is the nested topic in target topic.
                         // if file name has been changed, add an entry in changeTable
@@ -415,14 +421,16 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     /**
      * Generate file name.
-     * 
+     *
      * @return generated file name
      */
     String generateFilename() {
         return chunkFilenameGenerator.generateFilename(CHUNK_PREFIX, FILE_EXTENSION_DITA);
     }
 
-    /** Check whether href needs to be updated */
+    /**
+     * Check whether href needs to be updated
+     */
     private boolean checkHREF(final Attributes atts) {
         if (atts.getValue(ATTRIBUTE_NAME_HREF) == null) {
             return false;
@@ -432,7 +440,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     /**
      * Create topicmeta node.
-     * 
+     *
      * @param topic document element of a topic file.
      * @return created and populated topicmeta
      */
@@ -491,12 +499,11 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     }
 
     /**
-     *
      * Get the first topic id from the given dita file.
      *
      * @param absolutePathToFile The absolute path to a dita file.
      * @return The first topic id from the given dita file if success, otherwise
-     *         {@code null} string is returned.
+     * {@code null} string is returned.
      */
     String getFirstTopicId(final String absolutePathToFile) {
         assert new File(absolutePathToFile).isAbsolute();
@@ -523,6 +530,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     // DOM utility methods
 
     private static final List<String> excludeList;
+
     static {
         final List<String> el = new ArrayList<>();
         el.add(TOPIC_INDEXTERM.toString());
@@ -537,9 +545,10 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     /**
      * Search for the special kind of node by specialized value.
-     * @param root place may have the node.
-     * @param searchKey keyword for search.
-     * @param attrName attribute name for search.
+     *
+     * @param root       place may have the node.
+     * @param searchKey  keyword for search.
+     * @param attrName   attribute name for search.
      * @param classValue class value for search.
      * @return element.
      */
@@ -566,13 +575,13 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
             if (value == null) {
                 continue;
             }
-            if (searchKey.equals(value.getValue())){
+            if (searchKey.equals(value.getValue())) {
                 return pe;
             }
         }
         return null;
     }
-    
+
     /**
      * Get text value of a node.
      *
@@ -589,17 +598,17 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                 for (int i = 0; i < list.getLength(); i++) {
                     final Node childNode = list.item(i);
                     if (childNode.getNodeType() == Node.ELEMENT_NODE) {
-                        final Element e = (Element)childNode;
+                        final Element e = (Element) childNode;
                         final String value = e.getAttribute(ATTRIBUTE_NAME_CLASS);
                         if (!excludeList.contains(value)) {
                             final String s = getText(e);
                             result.append(s);
                         }
-                    } else if(childNode.getNodeType() == Node.TEXT_NODE) {
+                    } else if (childNode.getNodeType() == Node.TEXT_NODE) {
                         result.append(childNode.getNodeValue());
                     }
                 }
-            } else if(root.getNodeType() == Node.TEXT_NODE) {
+            } else if (root.getNodeType() == Node.TEXT_NODE) {
                 result.append(root.getNodeValue());
             }
             return result.toString();
@@ -609,7 +618,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     /**
      * Get specific element node from child nodes.
      *
-     * @param element parent node
+     * @param element    parent node
      * @param classValue DITA class to search for
      * @return element node, {@code null} if not found
      */
@@ -670,7 +679,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     /**
      * Convenience method to write a processing instruction.
      *
-     * @param name PI name
+     * @param name  PI name
      * @param value PI value, may be {@code null}
      */
     void writeProcessingInstruction(final Writer output, final String name, final String value)
