@@ -49,13 +49,6 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     private final Map<URI, String> relativePath2fix = new HashMap<>();
 
     /**
-     * Constructor.
-     */
-    public ChunkModule() {
-        super();
-    }
-
-    /**
      * Entry point of chunk module.
      *
      * @param input Input parameters and resources.

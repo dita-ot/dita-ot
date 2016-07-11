@@ -44,10 +44,7 @@ import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.StringUtils.join;
 import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.close;
-import static org.dita.dost.util.XMLUtils.getValue;
-import static org.dita.dost.writer.AbstractChunkTopicParser.getElementNode;
-import static org.dita.dost.writer.AbstractChunkTopicParser.getText;
+import static org.dita.dost.util.XMLUtils.*;
 
 /**
  * ChunkMapReader class, read and filter ditamap file for chunking.
@@ -85,13 +82,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     private final ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
 
-    /**
-     * Constructor.
-     */
-    public ChunkMapReader() {
-        super();
-    }
-
     public void setRootChunkOverride(final String chunkValue) {
         rootChunkOverride = split(chunkValue);
     }
@@ -125,30 +115,17 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
         final Collection<String> rootChunk = split(root.getAttribute(ATTRIBUTE_NAME_CHUNK));
         defaultChunkByToken = getChunkByToken(rootChunk, "by-", CHUNK_BY_DOCUMENT);
-        // chunk value = "to-content"
-        // When @chunk="to-content" is specified on "map" element,
-        // chunk module will change its @class attribute to "topicref"
-        // and process it as if it were a normal topicref wich
-        // @chunk="to-content"
+
         if (rootChunk.contains(CHUNK_TO_CONTENT)) {
             chunkMap(root);
         } else {
-            // if to-content is not specified on map element
-            // process the map element's immediate child node(s)
-            // get the immediate child nodes
-            final NodeList list = root.getChildNodes();
-            for (int i = 0; i < list.getLength(); i++) {
-                final Node node = list.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    final Element currentElem = (Element) node;
-                    if (MAP_RELTABLE.matches(currentElem)) {
-                        updateReltable(currentElem);
-                    } else if (MAPGROUP_D_TOPICGROUP.matches(currentElem)) {
-                        processChildTopicref(currentElem);
-                    } else if (MAP_TOPICREF.matches(currentElem)) {
-                        processTopicref(currentElem);
-                    }
-
+            for (final Element currentElem : getChildElements(root)) {
+                if (MAP_RELTABLE.matches(currentElem)) {
+                    updateReltable(currentElem);
+                } else if (MAPGROUP_D_TOPICGROUP.matches(currentElem)) {
+                    processChildTopicref(currentElem);
+                } else if (MAP_TOPICREF.matches(currentElem)) {
+                    processTopicref(currentElem);
                 }
             }
         }
@@ -465,40 +442,16 @@ public final class ChunkMapReader extends AbstractDomFilter {
         return null;
     }
 
-    public static String getCascadeValue(final Element elem, final String attrName) {
-        Element current = elem;
-        while (current != null) {
-            final Attr attr = current.getAttributeNode(attrName);
-            if (attr != null) {
-                return attr.getValue();
-            }
-            final Node parent = current.getParentNode();
-            if (parent != null && parent.getNodeType() == Node.ELEMENT_NODE) {
-                current = (Element) parent;
-            } else {
-                break;
-            }
-        }
-        return null;
-    }
-
     private void processChildTopicref(final Element node) {
-        final NodeList children = node.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node current = children.item(i);
-            if (current.getNodeType() == Node.ELEMENT_NODE) {
-                final Element currentElem = (Element) current;
-                final String cls = currentElem.getAttribute(ATTRIBUTE_NAME_CLASS);
-                if (MAP_TOPICREF.matches(cls)) {
-                    final String href = currentElem.getAttribute(ATTRIBUTE_NAME_HREF);
-                    final String xtrf = currentElem.getAttribute(ATTRIBUTE_NAME_XTRF);
-                    if (href.length() == 0) {
-                        processTopicref(currentElem);
-                    } else if (!ATTR_XTRF_VALUE_GENERATED.equals(xtrf)
-                            && !currentFile.resolve(href).equals(changeTable.get(currentFile.resolve(href)))) {
-                        processTopicref(currentElem);
-                    }
-                }
+        final List<Element> children = getChildElements(node, MAP_TOPICREF);
+        for (final Element currentElem : children) {
+            final URI href = toURI(getValue(currentElem, ATTRIBUTE_NAME_HREF));
+            final String xtrf = currentElem.getAttribute(ATTRIBUTE_NAME_XTRF);
+            if (href == null) {
+                processTopicref(currentElem);
+            } else if (!ATTR_XTRF_VALUE_GENERATED.equals(xtrf)
+                    && !currentFile.resolve(href).equals(changeTable.get(currentFile.resolve(href)))) {
+                processTopicref(currentElem);
             }
         }
     }

@@ -8,14 +8,13 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.writer.ImageMetadataFilter.*;
-import static javax.xml.XMLConstants.*;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
-import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.TopicIdParser;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -25,11 +24,14 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 
+import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.FileUtils.isAbsolutePath;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.writer.ImageMetadataFilter.DITA_OT_NS;
+import static org.dita.dost.writer.ImageMetadataFilter.DITA_OT_PREFIX;
 
 /**
  * ChunkTopicParser class, writing chunking content into relative topic files
@@ -525,115 +527,6 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
             return null;
         }
         return firstTopicId.toString();
-    }
-
-    // DOM utility methods
-
-    private static final List<String> excludeList;
-
-    static {
-        final List<String> el = new ArrayList<>();
-        el.add(TOPIC_INDEXTERM.toString());
-        el.add(TOPIC_DRAFT_COMMENT.toString());
-        el.add(TOPIC_REQUIRED_CLEANUP.toString());
-        el.add(TOPIC_DATA.toString());
-        el.add(TOPIC_DATA_ABOUT.toString());
-        el.add(TOPIC_UNKNOWN.toString());
-        el.add(TOPIC_FOREIGN.toString());
-        excludeList = Collections.unmodifiableList(el);
-    }
-
-    /**
-     * Search for the special kind of node by specialized value.
-     *
-     * @param root       place may have the node.
-     * @param searchKey  keyword for search.
-     * @param attrName   attribute name for search.
-     * @param classValue class value for search.
-     * @return element.
-     */
-    private Element searchForNode(final Element root, final String searchKey, final String attrName,
-                                  final DitaClass classValue) {
-        if (root == null) {
-            return null;
-        }
-        final Queue<Element> queue = new LinkedList<>();
-        queue.offer(root);
-        while (!queue.isEmpty()) {
-            final Element pe = queue.poll();
-            final NodeList pchildrenList = pe.getChildNodes();
-            for (int i = 0; i < pchildrenList.getLength(); i++) {
-                final Node node = pchildrenList.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    queue.offer((Element) node);
-                }
-            }
-            if (pe.getAttribute(ATTRIBUTE_NAME_CLASS) == null || !classValue.matches(pe)) {
-                continue;
-            }
-            final Attr value = pe.getAttributeNode(attrName);
-            if (value == null) {
-                continue;
-            }
-            if (searchKey.equals(value.getValue())) {
-                return pe;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Get text value of a node.
-     *
-     * @param root root node
-     * @return text value
-     */
-    public static String getText(final Node root) {
-        if (root == null) {
-            return "";
-        } else {
-            final StringBuilder result = new StringBuilder(1024);
-            if (root.hasChildNodes()) {
-                final NodeList list = root.getChildNodes();
-                for (int i = 0; i < list.getLength(); i++) {
-                    final Node childNode = list.item(i);
-                    if (childNode.getNodeType() == Node.ELEMENT_NODE) {
-                        final Element e = (Element) childNode;
-                        final String value = e.getAttribute(ATTRIBUTE_NAME_CLASS);
-                        if (!excludeList.contains(value)) {
-                            final String s = getText(e);
-                            result.append(s);
-                        }
-                    } else if (childNode.getNodeType() == Node.TEXT_NODE) {
-                        result.append(childNode.getNodeValue());
-                    }
-                }
-            } else if (root.getNodeType() == Node.TEXT_NODE) {
-                result.append(root.getNodeValue());
-            }
-            return result.toString();
-        }
-    }
-
-    /**
-     * Get specific element node from child nodes.
-     *
-     * @param element    parent node
-     * @param classValue DITA class to search for
-     * @return element node, {@code null} if not found
-     */
-    public static Element getElementNode(final Element element, final DitaClass classValue) {
-        final NodeList list = element.getChildNodes();
-        for (int i = 0; i < list.getLength(); i++) {
-            final Node node = list.item(i);
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                final Element child = (Element) node;
-                if (classValue.matches(child)) {
-                    return child;
-                }
-            }
-        }
-        return null;
     }
 
     // SAX serialization methods
