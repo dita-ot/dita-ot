@@ -376,19 +376,32 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
         final String shortDesc = getChildElementValueOfTopicmeta(topicref, MAP_SHORTDESC);
 
-        OutputStream output = null;
-        try {
-            output = new FileOutputStream(new File(outputFileName));
+        writeChunk(outputFileName, name, navtitle, shortDesc);
+
+        // update current element's @href value
+        final URI relativePath = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName);
+        topicref.setAttribute(ATTRIBUTE_NAME_HREF, relativePath.toString());
+
+        final URI relativeToBase = URLUtils.getRelativePath(job.tempDir.toURI().resolve("dummy"), outputFileName);
+        final FileInfo fi = new FileInfo.Builder()
+                .uri(relativeToBase)
+                .format(ATTR_FORMAT_VALUE_DITA)
+                .build();
+        job.add(fi);
+    }
+
+    private void writeChunk(final URI outputFileName, String id, String title, String shortDesc) {
+        try (final OutputStream output = new FileOutputStream(new File(outputFileName))) {
             final XMLSerializer serializer = XMLSerializer.newInstance(output);
             serializer.writeStartDocument();
             serializer.writeStartElement(TOPIC_TOPIC.localName);
             serializer.writeAttribute(DITA_NAMESPACE, ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION, "1.2");
-            serializer.writeAttribute(ATTRIBUTE_NAME_ID, name);
+            serializer.writeAttribute(ATTRIBUTE_NAME_ID, id);
             serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString());
             serializer.writeAttribute(ATTRIBUTE_NAME_DOMAINS, "");
             serializer.writeStartElement(TOPIC_TITLE.localName);
             serializer.writeAttribute(ATTRIBUTE_NAME_CLASS, TOPIC_TITLE.toString());
-            serializer.writeCharacters(navtitle);
+            serializer.writeCharacters(title);
             serializer.writeEndElement(); // title
             if (shortDesc != null) {
                 serializer.writeStartElement(TOPIC_SHORTDESC.localName);
@@ -401,26 +414,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
             serializer.close();
         } catch (final IOException | SAXException e) {
             logger.error("Failed to write generated chunk: " + e.getMessage(), e);
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (IOException e) {
-                    logger.error("Failed to close output stream: " + e.getMessage(), e);
-                }
-            }
         }
-
-        // update current element's @href value
-        final URI relativePath = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName);
-        topicref.setAttribute(ATTRIBUTE_NAME_HREF, relativePath.toString());
-
-        final URI relativeToBase = URLUtils.getRelativePath(job.tempDir.toURI().resolve("dummy"), outputFileName);
-        final FileInfo fi = new FileInfo.Builder()
-                .uri(relativeToBase)
-                .format(ATTR_FORMAT_VALUE_DITA)
-                .build();
-        job.add(fi);
     }
 
     /**
