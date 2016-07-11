@@ -8,12 +8,14 @@
  */
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.apache.commons.io.FilenameUtils.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.join;
 import static org.dita.dost.util.XMLUtils.close;
+import static org.dita.dost.util.XMLUtils.getValue;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getElementNode;
 import static org.dita.dost.writer.AbstractChunkTopicParser.getText;
 import static java.util.Arrays.*;
@@ -276,14 +278,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
         doc.appendChild(doc.importNode(root, true));
         return doc;
-    } 
-
-    public static Collection<String> split(final String value) {
-        if (value == null) {
-            return Collections.emptyList();
-        }
-        final String[] tokens = value.trim().split("\\s+");
-        return asList(tokens);
     }
 
     private void processTopicref(final Element topicref) {
@@ -460,14 +454,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
                     return getText(elem);
                 }
             }
-        }
-        return null;
-    }
-
-    public static String getValue(final Element elem, final String attrName) {
-        final Attr attr = elem.getAttributeNode(attrName);
-        if (attr != null && !attr.getValue().isEmpty()) {
-            return attr.getValue();
         }
         return null;
     }

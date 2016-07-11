@@ -8,17 +8,10 @@
  */
 package org.dita.dost.util;
 
+import static java.util.Arrays.asList;
 import static org.dita.dost.util.Constants.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * String relevant utilities.
@@ -361,6 +354,20 @@ public final class StringUtils {
                 currentState = WhiteSpaceState.WORD;
             }
         }
+    }
+
+    /**
+     * Split string by whitespace.
+     *
+     * @param value string to split
+     * @return list of tokens
+     */
+    public static Collection<String> split(final String value) {
+        if (value == null) {
+            return Collections.emptyList();
+        }
+        final String[] tokens = value.trim().split("\\s+");
+        return asList(tokens);
     }
 
 }

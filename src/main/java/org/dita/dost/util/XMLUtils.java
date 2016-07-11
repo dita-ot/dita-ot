@@ -713,4 +713,19 @@ public final class XMLUtils {
             return b.getDOMImplementation();
         }
     }
+
+    /**
+     * Get attribute value.
+     *
+     * @param elem attribute parent element
+     * @param attrName attribute name
+     * @return attribute value, {@code null} if not set
+     */
+    public static String getValue(final Element elem, final String attrName) {
+        final Attr attr = elem.getAttributeNode(attrName);
+        if (attr != null && !attr.getValue().isEmpty()) {
+            return attr.getValue();
+        }
+        return null;
+    }
 }

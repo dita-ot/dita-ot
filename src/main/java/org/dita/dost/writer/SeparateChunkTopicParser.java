@@ -29,9 +29,11 @@ import java.util.Collection;
 import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.XMLUtils.getDocumentBuilder;
+import static org.dita.dost.util.XMLUtils.getValue;
 import static org.dita.dost.util.XMLUtils.getXMLReader;
 
 /**
