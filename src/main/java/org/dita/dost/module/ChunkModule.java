@@ -12,6 +12,7 @@ import static org.apache.commons.io.FileUtils.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.XMLUtils.getDocumentBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -117,7 +118,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if reading ditamap fails
      */
     private boolean isEclipseMap(final URI mapFile) throws DITAOTException {
-        final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
+        final DocumentBuilder builder = getDocumentBuilder();
         Document doc;
         try {
             doc = builder.parse(mapFile.toString());

@@ -244,7 +244,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private Document buildOutputDocument(final Element root) {
-        final Document doc = XMLUtils.getDocumentBuilder().newDocument();
+        final Document doc = getDocumentBuilder().newDocument();
         if (workdir != null) {
             doc.appendChild(doc.importNode(workdir, true));
         }
@@ -269,10 +269,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
         final Collection<String> chunk = split(getValue(topicref, ATTRIBUTE_NAME_CHUNK));
 
-        if (topicref.getAttributeNode(ATTRIBUTE_NAME_HREF) == null && chunk.contains(CHUNK_TO_CONTENT)) {
-            generateStumpTopic(topicref);
-        }
-
         final URI href = toURI(getValue(topicref, ATTRIBUTE_NAME_HREF));
         final URI copyTo = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
         final String scope = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
@@ -282,12 +278,16 @@ public final class ChunkMapReader extends AbstractDomFilter {
                 || (href != null && !toFile(currentFile.resolve(href.toString())).exists())
                 || (chunk.isEmpty() && href == null)) {
             processChildTopicref(topicref);
-        } else if (chunk.contains(CHUNK_TO_CONTENT)
-                && (href != null || copyTo != null || topicref.hasChildNodes())) {
-            if (chunk.contains(CHUNK_BY_TOPIC)) {
-                logger.warn(MessageUtils.getInstance().getMessage("DOTJ064W").setLocation(topicref).toString());
+        } else if (chunk.contains(CHUNK_TO_CONTENT)) {
+            if (href != null || copyTo != null || topicref.hasChildNodes()) {
+                if (chunk.contains(CHUNK_BY_TOPIC)) {
+                    logger.warn(MessageUtils.getInstance().getMessage("DOTJ064W").setLocation(topicref).toString());
+                }
+                if (href == null) {
+                    generateStumpTopic(topicref);
+                }
+                processCombineChunk(topicref);
             }
-            processCombineChunk(topicref);
         } else if (chunk.contains(CHUNK_TO_NAVIGATION)
                 && supportToNavigation) {
             processChildTopicref(topicref);
@@ -382,9 +382,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
         final URI relativePath = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName);
         topicref.setAttribute(ATTRIBUTE_NAME_HREF, relativePath.toString());
 
-        final URI relativeToBase = URLUtils.getRelativePath(job.tempDir.toURI().resolve("dummy"), outputFileName);
+        final URI relativeToBase = getRelativePath(job.tempDir.toURI().resolve("dummy"), outputFileName);
+        final URI result = job.getInputDir().resolve(relativePath);
         final FileInfo fi = new FileInfo.Builder()
                 .uri(relativeToBase)
+                .result(result)
                 .format(ATTR_FORMAT_VALUE_DITA)
                 .build();
         job.add(fi);

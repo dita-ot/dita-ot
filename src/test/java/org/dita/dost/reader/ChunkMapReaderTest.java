@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -130,6 +131,7 @@ public class ChunkMapReaderTest {
 
     private Job createJob(final String map, final String... topics) throws IOException {
         final Job job = new Job(tempDir);
+        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
 
         TestUtils.copy(new File(srcDir, map), new File(tempDir, map));
         job.add(new Job.FileInfo.Builder().uri(toURI(map)).build());
