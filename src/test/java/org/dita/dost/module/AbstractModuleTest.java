@@ -9,9 +9,14 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.Before;
-import org.xml.sax.InputSource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
@@ -23,6 +28,40 @@ public abstract class AbstractModuleTest {
     private final File resourceDir = TestUtils.getResourceDir(getClass());
     private final File expBaseDir = new File(resourceDir, "exp");
     private File tempBaseDir;
+    private final DocumentBuilder builder;
+
+    public AbstractModuleTest() {
+        try {
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Document getDocument(final File file) {
+        try {
+            final Document doc = builder.parse(file);
+            normalizeSpace(doc.getDocumentElement());
+            return doc;
+        } catch (SAXException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void normalizeSpace(final Node node) {
+        switch (node.getNodeType()) {
+            case Node.ELEMENT_NODE:
+                final NodeList ns = node.getChildNodes();
+                for (int i = 0; i < ns.getLength(); i++) {
+                    normalizeSpace(ns.item(i));
+                }
+                break;
+            case Node.TEXT_NODE:
+                final String v = node.getNodeValue().replaceAll("\\s+", " ");
+                node.setNodeValue(v);
+                break;
+        }
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -75,9 +114,10 @@ public abstract class AbstractModuleTest {
             } else if (exp.getName().equals(".job.xml")) {
                 // skip
             } else {
+                final Document expDoc = getDocument(exp);
+                final Document actDoc = getDocument(new File(actDir, exp.getName()));
                 assertXMLEqual("Comparing " + exp + " to " + new File(actDir, exp.getName()) + ":",
-                        new InputSource(exp.toURI().toString()),
-                        new InputSource(new File(actDir, exp.getName()).toURI().toString()));
+                        expDoc, actDoc);
             }
         }
     }
