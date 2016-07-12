@@ -9,6 +9,6 @@
 <shortdesc>This should create a prerequisite link in the language test</shortdesc>
 <taskbody>
 <prereq>You need to do this first.</prereq>
-</taskbody><?Pub Caret1?>
+</taskbody>
 </task>
 

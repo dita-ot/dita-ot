@@ -6,6 +6,6 @@
 </topicref>
 <topicref href="child3.dita" class="- map/topicref ">
 <topicref href="grandchild3.dita" class="- map/topicref " chunk="select-branch"/>
-</topicref><?Pub Caret?>
 </topicref>
-</map><?Pub *0000000658?>
+</topicref>
+</map>

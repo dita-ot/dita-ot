@@ -2,6 +2,6 @@
 <title class="- topic/title ">Parent topic</title>
 <shortdesc class="- topic/shortdesc ">this is the parent</shortdesc>
 <conbody class="- topic/body  concept/conbody ">
-<p class="- topic/p ">content<?Pub Caret?></p>
+<p class="- topic/p ">content</p>
 </conbody>
-</concept><?Pub *0000000344?>
+</concept>

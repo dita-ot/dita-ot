@@ -8,6 +8,6 @@
 <title>Next topic link</title>
 <shortdesc>This is the next topic in the language tests</shortdesc>
 <body>
-<p>stuff<?Pub Caret?></p>
+<p>stuff</p>
 </body>
 </topic>

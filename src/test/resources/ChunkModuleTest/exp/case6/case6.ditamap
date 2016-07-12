@@ -2,6 +2,6 @@
 <topicref chunk="select-topic" class="- map/topicref " href="one.dita#one">
 <topicref chunk="select-topic" class="- map/topicref " href="two.dita#two"/>
 <topicref chunk="select-topic" class="- map/topicref " href="four.dita#four"/>
-<topicref chunk="select-topic" class="- map/topicref " href="three.dita#three"/><?Pub Caret1?>
+<topicref chunk="select-topic" class="- map/topicref " href="three.dita#three"/>
 </topicref>
 </map>

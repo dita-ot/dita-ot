@@ -2,7 +2,7 @@
 <title class="- topic/title ">Concept1</title>
 <shortdesc class="- topic/shortdesc ">Put your short description here; used for first paragraph
 and abstract.</shortdesc>
-<conbody class="- topic/body  concept/conbody "><?Pub Caret1?>
+<conbody class="- topic/body  concept/conbody ">
 <p class="- topic/p ">Type <b class="+ topic/ph hi-d/b ">your</b> text here.</p>
 <ul class="- topic/ul ">
 <li class="- topic/li ">an interesting point</li>
@@ -13,4 +13,4 @@ concept.</p></section>
 <example class="- topic/example "><title class="- topic/title ">Example</title><p class="- topic/p ">Here's a little example section
 in a concept.</p></example>
 </conbody>
-</concept><?Pub *0000000694?>
+</concept>

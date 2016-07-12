@@ -6,9 +6,9 @@
 
 </topicref>
 <topicref href="parent2.dita" class="- map/topicref " navtitle="How to ensure database security">
-<topicref href="child2.dita" class="- map/topicref " chunk="select-branch"/><?Pub Caret?>
+<topicref href="child2.dita" class="- map/topicref " chunk="select-branch"/>
 
 </topicref>
 
 </topichead>
-</map><?Pub *0000000692?>
+</map>

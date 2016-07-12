@@ -2,7 +2,7 @@
 top topic</title>
 <topicref class="- map/topicref " href="case2.dita#one">
 <topicgroup class="+ map/topicref mapgroup-d/topicgroup " toc="yes">
-<topicref class="- map/topicref " href="case2.dita#nested"><?Pub Caret?></topicref>
+<topicref class="- map/topicref " href="case2.dita#nested"></topicref>
 </topicgroup>
 </topicref>
 </map>

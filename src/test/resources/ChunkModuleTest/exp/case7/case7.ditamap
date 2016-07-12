@@ -3,6 +3,6 @@
 <topicref class="- map/topicref " href="parent.dita#child"/>
 <topicref class="- map/topicref " href="parent.dita#child2"/>
 <topicref class="- map/topicref " format="html" href="http://www.metadita.org" scope="external">
-</topicref><?Pub Caret1?>
+</topicref>
 </topicref>
 </map>
