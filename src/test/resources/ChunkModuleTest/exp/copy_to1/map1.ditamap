@@ -23,8 +23,8 @@
   </topicref>
   <topicref chunk="to-content select-branch" class="- map/topicref " copy-to="document.dita"
     href="document.dita#X"/>
-  <topicref chunk="by-topic select-document" class="- map/topicref " copy-to="document.dita"
-    href="Chunk4.dita#X"/>
+  <topicref chunk="by-topic select-document" class="- map/topicref " copy-to="documentY.dita"
+    href="documentY.dita#X"/>
   <topicref class="- map/topicref " href="Y.dita" xtrf="generated_by_chunk">
     <topicmeta class="- map/topicmeta ">
       <navtitle class="- topic/navtitle ">Topic Y</navtitle>

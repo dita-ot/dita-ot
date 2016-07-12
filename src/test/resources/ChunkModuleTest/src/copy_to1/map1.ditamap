@@ -13,7 +13,7 @@
     chunk="by-topic select-branch"/>
   <topicref copy-to="document.dita" href="ditabase.dita#X" class="- map/topicref "
     chunk="to-content select-branch"/>
-  <topicref copy-to="document.dita" href="ditabase.dita#X" class="- map/topicref "
+  <topicref copy-to="documentY.dita" href="ditabase.dita#X" class="- map/topicref "
     chunk="by-topic select-document"/>
   <topicref copy-to="documentX.dita" href="ditabase.dita#X" class="- map/topicref "
     chunk="by-topic select-document"/>
