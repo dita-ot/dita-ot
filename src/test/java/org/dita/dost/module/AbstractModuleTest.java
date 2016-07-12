@@ -75,7 +75,8 @@ public abstract class AbstractModuleTest {
             } else if (exp.getName().equals(".job.xml")) {
                 // skip
             } else {
-                assertXMLEqual(new InputSource(exp.toURI().toString()),
+                assertXMLEqual("Comparing " + exp + " to " + new File(actDir, exp.getName()) + ":",
+                        new InputSource(exp.toURI().toString()),
                         new InputSource(new File(actDir, exp.getName()).toURI().toString()));
             }
         }
