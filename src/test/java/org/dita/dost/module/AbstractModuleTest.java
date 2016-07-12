@@ -86,17 +86,13 @@ public abstract class AbstractModuleTest {
             final AbstractPipelineModule chunkModule = getModule(tempDir);
             final Job job = new Job(tempDir);
             chunkModule.setJob(job);
-            final CachingLogger logger = new CachingLogger();
+            final CachingLogger logger = new CachingLogger(true);
             chunkModule.setLogger(logger);
 
             final AbstractPipelineInput input = getAbstractPipelineInput();
             chunkModule.execute(input);
 
             compare(tempDir, expDir);
-
-            for (Message m : logger.getMessages()) {
-                assertEquals(false, m.level == Message.Level.ERROR);
-            }
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
