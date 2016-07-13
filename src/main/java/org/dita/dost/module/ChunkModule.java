@@ -271,7 +271,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         try {
                             logger.debug("Delete " + target);
                             deleteQuietly(new File(target));
-                            logger.debug("Mpve " + from + " to " + target);
+                            logger.debug("Move " + from + " to " + target);
                             moveFile(new File(from), new File(target));
                         } catch (final IOException e) {
                             logger.error("Failed to replace chunk topic: " + e.getMessage(), e);

@@ -19,8 +19,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
 public abstract class AbstractModuleTest {
@@ -41,6 +42,7 @@ public abstract class AbstractModuleTest {
     private Document getDocument(final File file) {
         try {
             final Document doc = builder.parse(file);
+            doc.normalize();
             normalizeSpace(doc.getDocumentElement());
             return doc;
         } catch (SAXException | IOException e) {
@@ -51,16 +53,28 @@ public abstract class AbstractModuleTest {
     private void normalizeSpace(final Node node) {
         switch (node.getNodeType()) {
             case Node.ELEMENT_NODE:
-                final NodeList ns = node.getChildNodes();
-                for (int i = 0; i < ns.getLength(); i++) {
-                    normalizeSpace(ns.item(i));
+                for (final Node n : getChildren(node)) {
+                    normalizeSpace(n);
                 }
                 break;
             case Node.TEXT_NODE:
-                final String v = node.getNodeValue().replaceAll("\\s+", " ");
-                node.setNodeValue(v);
+                final String v = node.getNodeValue().replaceAll("\\s+", " ").trim();
+                if (v.isEmpty()) {
+                    node.getParentNode().removeChild(node);
+                } else {
+                    node.setNodeValue(v);
+                }
                 break;
         }
+    }
+
+    private List<Node> getChildren(final Node node) {
+        final List<Node> res = new ArrayList<>();
+        final NodeList ns = node.getChildNodes();
+        for (int i = 0; i < ns.getLength(); i++) {
+            res.add(ns.item(i));
+        }
+        return res;
     }
 
     @Before
@@ -93,6 +107,10 @@ public abstract class AbstractModuleTest {
             chunkModule.execute(input);
 
             compare(tempDir, expDir);
+
+            logger.getMessages().stream()
+                    .filter(m -> m.level == Message.Level.ERROR)
+                    .forEach(m -> System.err.println(m.level + ": " + m.message));
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
