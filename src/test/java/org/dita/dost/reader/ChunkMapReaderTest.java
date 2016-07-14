@@ -40,6 +40,7 @@ public class ChunkMapReaderTest {
     @Test
     public void testRead() throws IOException {
         final Job job = new Job(tempDir);
+        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
 
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(new TestUtils.TestLogger());

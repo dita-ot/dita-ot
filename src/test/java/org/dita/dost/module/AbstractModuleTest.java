@@ -1,5 +1,6 @@
 package org.dita.dost.module;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.io.FilenameUtils;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 
@@ -120,12 +122,14 @@ public abstract class AbstractModuleTest {
 
     abstract AbstractPipelineModule getModule(File tempDir);
 
+    private static final Set<String> IGNORE = ImmutableSet.of(".job.xml", ".DS_Store");
+
     private void compare(File actDir, File expDir) throws SAXException, IOException {
         final File[] exps = expDir.listFiles();
         for (final File exp : exps) {
             if (exp.isDirectory()) {
                 compare(new File(expDir, exp.getName()), new File(actDir, exp.getName()));
-            } else if (exp.getName().equals(".job.xml")) {
+            } else if (IGNORE.contains(exp.getName())) {
                 // skip
             } else {
                 final Document expDoc = getDocument(exp);

@@ -273,6 +273,10 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                             deleteQuietly(new File(target));
                             logger.debug("Move " + from + " to " + target);
                             moveFile(new File(from), new File(target));
+                            final FileInfo fi = job.getFileInfo(from);
+                            if (fi != null) {
+                                job.remove(fi);
+                            }
                         } catch (final IOException e) {
                             logger.error("Failed to replace chunk topic: " + e.getMessage(), e);
 
@@ -302,7 +306,10 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         // remove redundant topic information
         for (final URI file : oldTopicList) {
             if (!all.contains(file)) {
-                job.remove(job.getOrCreateFileInfo(file));
+                final FileInfo fi = job.getOrCreateFileInfo(file);
+                if (fi != null) {
+                    job.remove(fi);
+                }
             }
         }
 

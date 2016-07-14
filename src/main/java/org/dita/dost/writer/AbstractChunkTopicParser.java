@@ -10,6 +10,8 @@ package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.TopicIdParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -265,8 +267,20 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                     // chunk="by-topic" and next topic element found
                     outputStack.push(output);
                     outputFileNameStack.push(outputFile);
+
                     outputFile = generateOutputFilename(id);
                     output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), UTF8);
+
+                    final FileInfo fi = generateFileInfo(outputFile);
+                    job.add(fi);
+
+                    changeTable.put(outputFile, outputFile);
+                    if (id != null) {
+                        changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
+                    } else {
+                        changeTable.put(currentParsingFile, outputFile);
+                    }
+
                     // write xml header and workdir PI to the new generated file
                     writeStartDocument(output);
                     if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
@@ -275,12 +289,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                         writeProcessingInstruction(output, PI_WORKDIR_TARGET, UNIX_SEPARATOR + filePath);
                     }
                     writeProcessingInstruction(output, PI_WORKDIR_TARGET_URI, filePath.toString());
-                    changeTable.put(outputFile, outputFile);
-                    if (id != null) {
-                        changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
-                    } else {
-                        changeTable.put(currentParsingFile, outputFile);
-                    }
+
                     // create a new child element in separate case topicref is equals to parameter
                     // element in separateChunk(Element element)
                     final Element newTopicref = rootTopicref.getOwnerDocument().createElement(MAP_TOPICREF.localName);
@@ -346,6 +355,20 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
         } catch (final IOException e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    FileInfo generateFileInfo(final URI output) {
+        final URI temp = job.tempDir.toURI().relativize(output);
+        final URI result = job.getInputDir().resolve(temp);
+        final FileInfo.Builder b = currentParsingFile != null
+                ? new FileInfo.Builder(job.getFileInfo(stripFragment(currentParsingFile)))
+                : new FileInfo.Builder();
+        final FileInfo fi = b
+                .uri(temp)
+                .result(result)
+                .format(ATTR_FORMAT_VALUE_DITA)
+                .build();
+        return fi;
     }
 
     private URI generateOutputFilename(final String id) {

@@ -10,6 +10,8 @@ package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -179,6 +181,9 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     // the new entry in changeTable has same key and value
                     // in order to indicate it is a newly generated file
                     changeTable.put(outputFileName, outputFileName);
+
+                    final FileInfo fi = generateFileInfo(outputFileName);
+                    job.add(fi);
                 }
                 // "by-topic" couldn't reach here
                 this.outputFile = outputFileName;

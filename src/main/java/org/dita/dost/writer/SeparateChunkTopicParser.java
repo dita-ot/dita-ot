@@ -10,7 +10,7 @@ package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -26,6 +26,8 @@ import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.util.Collection;
 
+import static org.apache.commons.io.FileUtils.deleteQuietly;
+import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
@@ -163,7 +165,11 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 }
                 output = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8);
                 outputFile = outputFileName;
+
                 if (!dotchunk) {
+                    final FileInfo fi = generateFileInfo(outputFile);
+                    job.add(fi);
+
                     changeTable.put(filePath.resolve(parseFilePath),
                             setFragment(outputFileName, id));
                     // new generated file
@@ -235,13 +241,17 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 if (output != null) {
                     output.close();
                     output = null;
-                    if (dotchunk && !new File(currentParsingFile).delete()) {
-                        logger.error(MessageUtils.getInstance()
-                                .getMessage("DOTJ009E", currentParsingFile.getPath(), outputFile.getPath()).toString());
-                    }
-                    if (dotchunk && !new File(outputFile).renameTo(new File(currentParsingFile))) {
-                        logger.error(MessageUtils.getInstance()
-                                .getMessage("DOTJ009E", currentParsingFile.getPath(), outputFile.getPath()).toString());
+                    if (dotchunk) {
+                        final File dst = new File(currentParsingFile);
+                        final File src = new File(outputFile);
+                        logger.debug("Delete " + currentParsingFile);
+                        deleteQuietly(dst);
+                        logger.debug("Move " + outputFile + " to " + currentParsingFile);
+                        moveFile(src, dst);
+                        final FileInfo fi = job.getFileInfo(outputFile);
+                        if (fi != null) {
+                            job.remove(fi);
+                        }
                     }
                 }
             } catch (final Exception ex) {
