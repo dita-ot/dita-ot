@@ -456,7 +456,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
             chunkParser.setLogger(logger);
             chunkParser.setJob(job);
             chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
-            chunkParser.write(currentFile.resolve("."));
+            chunkParser.write(currentFile);
         } catch (final DITAOTException e) {
             logger.error("Failed to process chunk: " + e.getMessage(), e);
         }
@@ -468,7 +468,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
             chunkParser.setLogger(logger);
             chunkParser.setJob(job);
             chunkParser.setup(changeTable, conflictTable, topicref, chunkFilenameGenerator);
-            chunkParser.write(currentFile.resolve("."));
+            chunkParser.write(currentFile);
         } catch (final DITAOTException e) {
             logger.error("Failed to process chunk: " + e.getMessage(), e);
         }

@@ -62,9 +62,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     @Override
-    public void write(final URI fileDir) throws DITAOTException {
-        // pass map's directory path
-        filePath = fileDir;
+    public void write(final URI currentFile) throws DITAOTException {
+        this.currentFile = currentFile;
         final URI hrefValue = toURI(getValue(rootTopicref, ATTRIBUTE_NAME_HREF));
         final URI copytoValue = toURI(getValue(rootTopicref, ATTRIBUTE_NAME_COPY_TO));
         final String scopeValue = getCascadeValue(rootTopicref, ATTRIBUTE_NAME_SCOPE);
@@ -102,7 +101,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
             if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)
                     && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                 // if the path to target file make sense
-                currentParsingFile = filePath.resolve(parseFilePath);
+                currentParsingFile = currentFile.resolve(parseFilePath);
                 URI outputFileName;
                 /*
                  * FIXME: we have code flaws here, references in ditamap need to
@@ -113,17 +112,17 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 if (parseFilePath.getFragment() != null) {
                     id = parseFilePath.getFragment();
                     if (chunkValue.contains(CHUNK_SELECT_BRANCH)) {
-                        outputFileName = filePath.resolve(id + FILE_EXTENSION_DITA);
+                        outputFileName = currentFile.resolve(id + FILE_EXTENSION_DITA);
                         targetTopicId = id;
                         startFromFirstTopic = false;
                         selectMethod = CHUNK_SELECT_BRANCH;
                     } else if (chunkValue.contains(CHUNK_SELECT_DOCUMENT)) {
-                        firstTopicID = getFirstTopicId(filePath.resolve(parseFilePath).getPath());
+                        firstTopicID = getFirstTopicId(currentFile.resolve(parseFilePath).getPath());
 
-                        topicDoc = getTopicDoc(filePath.resolve(parseFilePath));
+                        topicDoc = getTopicDoc(currentFile.resolve(parseFilePath));
 
                         if (firstTopicID != null) {
-                            outputFileName = filePath.resolve(firstTopicID + FILE_EXTENSION_DITA);
+                            outputFileName = currentFile.resolve(firstTopicID + FILE_EXTENSION_DITA);
                             targetTopicId = firstTopicID;
                         } else {
                             outputFileName = setPath(currentParsingFile, currentParsingFile.getPath() + FILE_EXTENSION_CHUNK);
@@ -132,18 +131,18 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                         }
                         selectMethod = CHUNK_SELECT_DOCUMENT;
                     } else {
-                        outputFileName = filePath.resolve(id + FILE_EXTENSION_DITA);
+                        outputFileName = currentFile.resolve(id + FILE_EXTENSION_DITA);
                         targetTopicId = id;
                         startFromFirstTopic = false;
                         selectMethod = CHUNK_SELECT_TOPIC;
                     }
                 } else {
-                    firstTopicID = getFirstTopicId(filePath.resolve(parseFilePath).getPath());
+                    firstTopicID = getFirstTopicId(currentFile.resolve(parseFilePath).getPath());
 
-                    topicDoc = getTopicDoc(filePath.resolve(parseFilePath));
+                    topicDoc = getTopicDoc(currentFile.resolve(parseFilePath));
 
                     if (firstTopicID != null) {
-                        outputFileName = filePath.resolve(firstTopicID + FILE_EXTENSION_DITA);
+                        outputFileName = currentFile.resolve(firstTopicID + FILE_EXTENSION_DITA);
                         targetTopicId = firstTopicID;
                     } else {
                         outputFileName = setPath(currentParsingFile, currentParsingFile.getPath() + FILE_EXTENSION_CHUNK);
@@ -154,12 +153,12 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 }
                 if (copytoValue != null) {
                     // use @copy-to value as the new file name
-                    outputFileName = filePath.resolve(copytoValue);
+                    outputFileName = currentFile.resolve(copytoValue);
                 }
 
                 if (new File(outputFileName).exists()) {
                     final URI t = outputFileName;
-                    outputFileName = filePath.resolve(generateFilename());
+                    outputFileName = currentFile.resolve(generateFilename());
                     conflictTable.put(outputFileName, t);
                     dotchunk = false;
                 }
@@ -170,7 +169,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     final FileInfo fi = generateFileInfo(outputFile);
                     job.add(fi);
 
-                    changeTable.put(filePath.resolve(parseFilePath),
+                    changeTable.put(currentFile.resolve(parseFilePath),
                             setFragment(outputFileName, id));
                     // new generated file
                     changeTable.put(outputFileName, outputFileName);
@@ -178,10 +177,10 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 // change the href value
                 if (firstTopicID == null) {
                     rootTopicref.setAttribute(ATTRIBUTE_NAME_HREF,
-                            setFragment(getRelativePath(filePath.resolve(FILE_NAME_STUB_DITAMAP), outputFileName), id).toString());
+                            setFragment(getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName), id).toString());
                 } else {
                     rootTopicref.setAttribute(ATTRIBUTE_NAME_HREF,
-                            setFragment(getRelativePath(filePath.resolve(FILE_NAME_STUB_DITAMAP), outputFileName), firstTopicID).toString());
+                            setFragment(getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName), firstTopicID).toString());
                 }
                 include = false;
                 // just a mark?

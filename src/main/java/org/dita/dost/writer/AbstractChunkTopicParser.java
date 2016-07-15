@@ -10,7 +10,6 @@ package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
-import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.TopicIdParser;
 import org.w3c.dom.Document;
@@ -59,10 +58,8 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     Element topicDoc = null;
 
     private final boolean separate;
-    /**
-     * Input file's parent absolute directory path.
-     */
-    URI filePath = null;
+    /** Input file's parent absolute path. */
+    URI currentFile = null;
 
     URI currentParsingFile = null;
     URI outputFile = null;
@@ -284,18 +281,18 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                     // write xml header and workdir PI to the new generated file
                     writeStartDocument(output);
                     if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
-                        writeProcessingInstruction(output, PI_WORKDIR_TARGET, new File(filePath).getAbsolutePath());
+                        writeProcessingInstruction(output, PI_WORKDIR_TARGET, new File(currentFile).getParentFile().getAbsolutePath());
                     } else {
-                        writeProcessingInstruction(output, PI_WORKDIR_TARGET, UNIX_SEPARATOR + filePath);
+                        writeProcessingInstruction(output, PI_WORKDIR_TARGET, UNIX_SEPARATOR + currentFile.resolve("."));
                     }
-                    writeProcessingInstruction(output, PI_WORKDIR_TARGET_URI, filePath.toString());
+                    writeProcessingInstruction(output, PI_WORKDIR_TARGET_URI, currentFile.resolve(".").toString());
 
                     // create a new child element in separate case topicref is equals to parameter
                     // element in separateChunk(Element element)
                     final Element newTopicref = rootTopicref.getOwnerDocument().createElement(MAP_TOPICREF.localName);
                     newTopicref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
                     newTopicref.setAttribute(ATTRIBUTE_NAME_XTRF, ATTR_XTRF_VALUE_GENERATED);
-                    newTopicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(filePath.resolve(FILE_NAME_STUB_DITAMAP), outputFile).toString());
+                    newTopicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFile).toString());
 
                     final Element topicmeta = createTopicMeta(topic);
                     newTopicref.appendChild(topicmeta);
@@ -372,10 +369,10 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     }
 
     private URI generateOutputFilename(final String id) {
-        URI newFileName = filePath.resolve(id + FILE_EXTENSION_DITA);
+        URI newFileName = currentFile.resolve(id + FILE_EXTENSION_DITA);
         if (id == null || new File(newFileName).exists()) {
             final URI t = newFileName;
-            newFileName = filePath.resolve(generateFilename());
+            newFileName = currentFile.resolve(generateFilename());
             conflictTable.put(newFileName, t);
         }
         return newFileName;
