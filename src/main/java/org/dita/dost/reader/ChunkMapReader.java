@@ -350,21 +350,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * @param topicref topicref without href to generate stump topic for
      */
     private void generateStumpTopic(final Element topicref) {
-        final URI copyTo = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
-        final String id = getValue(topicref, ATTRIBUTE_NAME_ID);
+        final URI absTemp = getResultFile(topicref);
 
-        URI outputFileName;
-        if (copyTo != null) {
-            outputFileName = currentFile.resolve(copyTo);
-        } else if (id != null) {
-            outputFileName = currentFile.resolve(id + FILE_EXTENSION_DITA);
-        } else {
-            do {
-                outputFileName = currentFile.resolve(generateFilename());
-            } while (new File(outputFileName).exists());
-        }
-
-        final String name = getBaseName(new File(outputFileName).getName());
+        final String name = getBaseName(new File(absTemp).getName());
         String navtitle = getChildElementValueOfTopicmeta(topicref, TOPIC_NAVTITLE);
         if (navtitle == null) {
             navtitle = getValue(topicref, ATTRIBUTE_NAME_NAVTITLE);
@@ -374,13 +362,13 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
         final String shortDesc = getChildElementValueOfTopicmeta(topicref, MAP_SHORTDESC);
 
-        writeChunk(outputFileName, name, navtitle, shortDesc);
+        writeChunk(absTemp, name, navtitle, shortDesc);
 
         // update current element's @href value
-        final URI relativePath = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName);
+        final URI relativePath = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), absTemp);
         topicref.setAttribute(ATTRIBUTE_NAME_HREF, relativePath.toString());
 
-        final URI relativeToBase = getRelativePath(job.tempDir.toURI().resolve("dummy"), outputFileName);
+        final URI relativeToBase = getRelativePath(job.tempDir.toURI().resolve("dummy"), absTemp);
         final URI result = job.getInputDir().resolve(relativePath);
         final FileInfo fi = new FileInfo.Builder()
                 .uri(relativeToBase)
@@ -415,6 +403,23 @@ public final class ChunkMapReader extends AbstractDomFilter {
         } catch (final IOException | SAXException e) {
             logger.error("Failed to write generated chunk: " + e.getMessage(), e);
         }
+    }
+
+    private URI getResultFile(final Element topicref) {
+        final URI copyTo = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
+        final String id = getValue(topicref, ATTRIBUTE_NAME_ID);
+
+        URI outputFileName;
+        if (copyTo != null) {
+            outputFileName = currentFile.resolve(copyTo);
+        } else if (id != null) {
+            outputFileName = currentFile.resolve(id + FILE_EXTENSION_DITA);
+        } else {
+            do {
+                outputFileName = currentFile.resolve(generateFilename());
+            } while (new File(outputFileName).exists());
+        }
+        return outputFileName;
     }
 
     /**
