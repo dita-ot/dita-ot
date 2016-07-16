@@ -77,9 +77,7 @@
       </topicref>
     </topicref>
   </topicgroup>
-  <topicgroup  class="+ map/topicref mapgroup-d/topicgroup " >
-    <topicgroup class="+ map/topicref mapgroup-d/topicgroup " chunk="to-content">
-      <topicref href="dita7.dita" class="- map/topicref "/>
-    </topicgroup>
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup " chunk="to-content">
+    <topicref href="dita7.dita" class="- map/topicref "/>
   </topicgroup>
 </map>
