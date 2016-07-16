@@ -591,7 +591,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
 
         if (listFilter.isDitaTopic()) {
-            if (ref.format != null) {
+            if (ref.format != null && !ref.format.equals(ATTR_FORMAT_VALUE_DITA)) {
                 assert currentFile.getFragment() == null;
                 final URI f = currentFile.normalize();
                 if (!fileinfos.containsKey(f)) {
