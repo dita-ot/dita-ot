@@ -80,4 +80,12 @@
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup " chunk="to-content">
     <topicref href="dita7.dita" class="- map/topicref "/>
   </topicgroup>
+  <topicref class="- map/topicref " href="dita8.dita" chunk="to-content">
+    <topichead class="+ map/topicref mapgroup-d/topichead ">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Topic Head</navtitle>
+      </topicmeta>
+      <topicref href="dita9.dita" class="- map/topicref "/>
+    </topichead>
+  </topicref>
 </map>

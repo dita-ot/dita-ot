@@ -85,4 +85,12 @@
   <topicgroup chunk="to-content" class="- map/topicref " href="Chunk13.dita#Chunk13">
     <topicref class="- map/topicref " href="Chunk13.dita#topicID"/>
   </topicgroup>
+  <topicref chunk="to-content" class="- map/topicref " href="Chunk15.dita#topicID">
+    <topichead class="+ map/topicref mapgroup-d/topichead ">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Topic Head</navtitle>
+      </topicmeta>
+      <topicref class="- map/topicref " href="Chunk15.dita#unique_16"/>
+    </topichead>
+  </topicref>
 </map>
