@@ -365,6 +365,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
         // update current element's @href value
         final URI relativePath = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), absTemp);
         topicref.setAttribute(ATTRIBUTE_NAME_HREF, relativePath.toString());
+        if (MAPGROUP_D_TOPICGROUP.matches(topicref)) {
+            topicref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
+        }
 
         final URI relativeToBase = getRelativePath(job.tempDir.toURI().resolve("dummy"), absTemp);
         final URI result = job.getInputDir().resolve(relativePath);

@@ -82,7 +82,7 @@
       </topicref>
     </topicref>
   </topicgroup>
-  <topicgroup chunk="to-content" class="+ map/topicref mapgroup-d/topicgroup " href="Chunk13.dita#Chunk13">
+  <topicgroup chunk="to-content" class="- map/topicref " href="Chunk13.dita#Chunk13">
     <topicref class="- map/topicref " href="Chunk13.dita#topicID"/>
   </topicgroup>
 </map>
