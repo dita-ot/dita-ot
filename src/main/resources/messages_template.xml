@@ -690,6 +690,11 @@
     <response/>
   </message>
   
+  <message id="DOTX072I" type="INFO">
+    <reason>Ignoring navtitle within topicgroup.</reason>
+    <response/>
+  </message>
+  
   <!-- End of XSL Messages --> 
       
   <!-- Add any messages defined by plugins. -->

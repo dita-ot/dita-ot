@@ -24,4 +24,10 @@
   
   <xsl:template match="*[contains(@class, ' ditaot-d/keydef ')]"/>
   
+  <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle ')]">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="id" select="'DOTX072I'"/>
+    </xsl:call-template>
+  </xsl:template>
+  
 </xsl:stylesheet>
