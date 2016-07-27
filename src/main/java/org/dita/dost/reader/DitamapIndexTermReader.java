@@ -79,10 +79,6 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
             temp = " " + temp.substring(1);
         }
 
-        //		if (temp.length() == 0) {
-        //			return;
-        //		}
-
         //used for store the space
         final char[] chars = temp.toCharArray();
         char flag = '\n';
@@ -345,10 +341,6 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 
 
         if (elementStack.peek() instanceof TopicrefElement) {
-            //			if (!FileUtils.isHTMLFile(((TopicrefElement) elementStack.peek()).getHref())){ //Eric
-            //				return false;
-            //			}
-            //			return ((TopicrefElement) elementStack.peek()).needExtractTerm();
             // for dita files the indexterm has been moved to its <prolog>
             // therefore we don't need to collect these terms again.
             final TopicrefElement elem = (TopicrefElement) elementStack.peek();

@@ -774,12 +774,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         for (final URI file: outDitaFilesSet) {
             getOrCreateFileInfo(fileinfos, file).isOutDita = true;
         }
-//        // XXX: This loop is probably redundant
-//        for (FileInfo f: prop.getFileInfo().values()) {
-//            if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-//                f.isActive = false;
-//            }
-//        }
         for (final URI file: fullTopicSet) {
             final FileInfo ff = getOrCreateFileInfo(fileinfos, file);
             if (ff.format == null) {

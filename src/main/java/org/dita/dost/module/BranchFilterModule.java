@@ -235,26 +235,6 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         return res;
     }
 
-//    /** Get topicrefs that are part of a branch */
-//    private List<Element> getBranchTopicrefs(final Element root) {
-//        final List<Element> res = new ArrayList<>();
-//        walkBranchTopicref(root, false, res);
-//        return res;
-//    }
-//
-//    /** Walker to collect topicrefs that are part of a branch. */
-//    private void walkBranchTopicref(final Element elem, final boolean inBranch, final List<Element> res) {
-//        final boolean b = inBranch || !getChildElements(elem, DITAVAREF_D_DITAVALREF).isEmpty();
-//        if (b && MAP_TOPICREF.matches(elem)
-//                && isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT))
-//                && !elem.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
-//            res.add(elem);
-//        }
-//        for (final Element child: getChildElements(elem)) {
-//            walkBranchTopicref(child, b, res);
-//        }
-//    }
-
     private boolean isDitaFormat(final Attr formatAttr) {
         return formatAttr == null ||
                 ATTR_FORMAT_VALUE_DITA.equals(formatAttr.getNodeValue()) ||
