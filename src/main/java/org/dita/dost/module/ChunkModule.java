@@ -306,7 +306,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         // remove redundant topic information
         for (final URI file : oldTopicList) {
             if (!all.contains(file)) {
-                final FileInfo fi = job.getOrCreateFileInfo(file);
+                final FileInfo fi = job.getFileInfo(file);
                 if (fi != null) {
                     job.remove(fi);
                 }
