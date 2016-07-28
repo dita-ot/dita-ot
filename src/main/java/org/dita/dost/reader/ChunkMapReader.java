@@ -103,6 +103,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     @Override
     public Document process(final Document doc) {
+        readLinks(doc);
         readProcessingInstructions(doc);
 
         final Element root = doc.getDocumentElement();
@@ -127,6 +128,44 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
 
         return buildOutputDocument(root);
+    }
+
+    private Set<URI> chunkTopicSet = new HashSet<>();
+    private Set<URI> hrefTopicSet = new HashSet<>();
+
+    private void readLinks(final Document doc) {
+        final Element root = doc.getDocumentElement();
+        readLinks(root, false, false);
+        for (final FileInfo fi : job.getFileInfo()) {
+            final URI abs = job.tempDir.toURI().resolve(fi.uri);
+            if (chunkTopicSet.contains(abs)) {
+                fi.isSkipChunk = true;
+            }
+            if (hrefTopicSet.contains(abs)) {
+                fi.isNonConrefTarget = true;
+            }
+        }
+    }
+
+    private void readLinks(final Element elem, final boolean chunk, final boolean disabled) {
+        final boolean c = chunk || elem.getAttributeNode(ATTRIBUTE_NAME_CHUNK) != null;
+        final boolean d = disabled
+                || elem.getAttribute(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_NAVIGATION)
+                || MAPGROUP_D_TOPICGROUP.matches(elem)
+                || MAP_RELTABLE.matches(elem);
+        final Attr href = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
+        if (href != null) {
+            final URI filename = stripFragment(currentFile.resolve(href.getValue()));
+            if (c && !d) {
+                chunkTopicSet.add(filename);
+            } else {
+                hrefTopicSet.add(filename);
+            }
+        }
+
+        for (final Element topicref : getChildElements(elem, MAP_TOPICREF)) {
+            readLinks(topicref, c, d);
+        }
     }
 
     public static String getChunkByToken(final Collection<String> chunkValue, final String category, final String defaultToken) {

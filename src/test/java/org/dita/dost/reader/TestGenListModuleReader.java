@@ -62,19 +62,11 @@ public class TestGenListModuleReader {
 
         assertTrue(reader.getConrefTargets().isEmpty());
 
-        assertTrue(reader.getChunkTopicSet().isEmpty());
-
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("topics/xreffin-topic-1.xml"),
                 srcDirUri.resolve("topics/target-topic-c.xml"),
                 srcDirUri.resolve("topics/target-topic-a.xml"))),
                 reader.getHrefTargets());
-
-        assertEquals(new HashSet(Arrays.asList(
-                srcDirUri.resolve("topics/xreffin-topic-1.xml"),
-                srcDirUri.resolve("topics/target-topic-c.xml"),
-                srcDirUri.resolve("topics/target-topic-a.xml"))),
-                reader.getHrefTopicSet());
 
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("topics/xreffin-topic-1.xml"),
@@ -122,13 +114,7 @@ public class TestGenListModuleReader {
 
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("maps/toolbars.dita"))),
-                reader.getChunkTopicSet());
-
-        assertEquals(new HashSet(Arrays.asList(
-                srcDirUri.resolve("maps/toolbars.dita"))),
                 reader.getHrefTargets());
-
-        assertTrue(reader.getHrefTopicSet().isEmpty());
 
         assertEquals(new HashSet(Arrays.asList(
                 srcDirUri.resolve("maps/toolbars.dita"))),

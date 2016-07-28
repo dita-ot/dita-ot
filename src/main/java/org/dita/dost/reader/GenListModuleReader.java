@@ -62,10 +62,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Set<URI> conrefTargets = new HashSet<>(32);
     /** Set of href nonConrefCopytoTargets refered in current parsing file */
     private final Set<URI> hrefTargets = new HashSet<>(32);
-    /** Set of href targets with anchor appended */
-    private final Set<URI> hrefTopicSet = new HashSet<>(32);
-    /** Set of chunk targets */
-    private final Set<URI> chunkTopicSet = new HashSet<>(32);
     /** Set of subject schema files */
     private final Set<URI> schemeSet = new HashSet<>(32);
     /** Set of coderef or object target files */
@@ -78,14 +74,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private boolean hasconaction = false;
     /** foreign/unknown nesting level */
     private int foreignLevel = 0;
-    /** chunk nesting level */
-    private int chunkLevel = 0;
-    /** mark topics in reltables */
-    private int relTableLevel = 0;
-    /** chunk to-navigation level */
-    private int chunkToNavLevel = 0;
-    /** Topic group nesting level */
-    private int topicGroupLevel = 0;
     /** Flag used to mark if current file is still valid after filtering */
     private boolean isValidInput = false;
     /** Set of outer dita files */
@@ -124,20 +112,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     public Set<URI> getOutFilesSet() {
         return outDitaFilesSet;
-    }
-
-    /**
-     * @return the hrefTopicSet
-     */
-    public Set<URI> getHrefTopicSet() {
-        return hrefTopicSet;
-    }
-
-    /**
-     * @return the chunkTopicSet
-     */
-    public Set<URI> getChunkTopicSet() {
-        return chunkTopicSet;
     }
 
     /**
@@ -368,17 +342,11 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         hasCodeRef = false;
         currentDir = null;
         foreignLevel = 0;
-        chunkLevel = 0;
-        relTableLevel = 0;
-        chunkToNavLevel = 0;
-        topicGroupLevel = 0;
         isValidInput = false;
         hasconaction = false;
         coderefTargetSet.clear();
         nonConrefCopytoTargets.clear();
         hrefTargets.clear();
-        hrefTopicSet.clear();
-        chunkTopicSet.clear();
         conrefTargets.clear();
         copytoMap.clear();
         ignoredCopytoSourceSet.clear();
@@ -431,31 +399,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             return;
         } else if (TOPIC_FOREIGN.matches(classValue) || TOPIC_UNKNOWN.matches(classValue)) {
             foreignLevel++;
-        }
-
-        if (chunkLevel > 0) {
-            chunkLevel++;
-        } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null) {
-            chunkLevel++;
-        }
-
-        if (relTableLevel > 0) {
-            relTableLevel++;
-        } else if (MAP_RELTABLE.matches(classValue)) {
-            relTableLevel++;
-        }
-
-        if (chunkToNavLevel > 0) {
-            chunkToNavLevel++;
-        } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null
-                && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_NAVIGATION)) {
-            chunkToNavLevel++;
-        }
-
-        if (topicGroupLevel > 0) {
-            topicGroupLevel++;
-        } else if (MAPGROUP_D_TOPICGROUP.matches(classValue)) {
-            topicGroupLevel++;
         }
 
         if (classValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
@@ -572,18 +515,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             foreignLevel--;
             return;
         }
-        if (chunkLevel > 0) {
-            chunkLevel--;
-        }
-        if (relTableLevel > 0) {
-            relTableLevel--;
-        }
-        if (chunkToNavLevel > 0) {
-            chunkToNavLevel--;
-        }
-        if (topicGroupLevel > 0) {
-            topicGroupLevel--;
-        }
 
         getContentHandler().endElement(uri, localName, qName);
     }
@@ -643,11 +574,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 if (followLinks()) {
                     hrefTargets.add(filename);
                     toOutFile(filename);
-                    if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
-                        chunkTopicSet.add(filename);
-                    } else {
-                        hrefTopicSet.add(filename);
-                    }
                 }
             } else if (ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
                 final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
