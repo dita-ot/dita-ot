@@ -159,7 +159,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
 
         final Set<URI> hrefTopics = new HashSet<>();
         for (final FileInfo f : job.getFileInfo()) {
-            if (f.isNonConrefTarget) {
+            if (f.isTarget && !f.isSkipChunk) {
                 hrefTopics.add(f.uri);
             }
         }
@@ -209,7 +209,6 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 ditamapList.add(f.uri);
             }
         }
-        // XXX: Change to <File, File>
         for (final Map.Entry<URI, URI> entry : changeTable.entrySet()) {
             final URI oldFile = entry.getKey();
             if (entry.getValue().equals(oldFile)) {

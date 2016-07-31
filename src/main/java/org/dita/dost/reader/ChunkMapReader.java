@@ -131,7 +131,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private Set<URI> chunkTopicSet = new HashSet<>();
-    private Set<URI> hrefTopicSet = new HashSet<>();
 
     private void readLinks(final Document doc) {
         final Element root = doc.getDocumentElement();
@@ -140,9 +139,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
             final URI abs = job.tempDir.toURI().resolve(fi.uri);
             if (chunkTopicSet.contains(abs)) {
                 fi.isSkipChunk = true;
-            }
-            if (hrefTopicSet.contains(abs)) {
-                fi.isNonConrefTarget = true;
             }
         }
     }
@@ -158,8 +154,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
             final URI filename = stripFragment(currentFile.resolve(href.getValue()));
             if (c && !d) {
                 chunkTopicSet.add(filename);
-            } else {
-                hrefTopicSet.add(filename);
             }
         }
 
