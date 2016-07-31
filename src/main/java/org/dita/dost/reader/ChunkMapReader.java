@@ -35,6 +35,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.*;
 
+import static java.util.Collections.unmodifiableSet;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getFragment;
@@ -132,28 +133,31 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     private Set<URI> chunkTopicSet = new HashSet<>();
 
+    public Set<URI> getChunkTopicSet() {
+        return unmodifiableSet(chunkTopicSet);
+    }
+
     private void readLinks(final Document doc) {
         final Element root = doc.getDocumentElement();
         readLinks(root, false, false);
-        for (final FileInfo fi : job.getFileInfo()) {
-            final URI abs = job.tempDir.toURI().resolve(fi.uri);
-            if (chunkTopicSet.contains(abs)) {
-                fi.isSkipChunk = true;
-            }
-        }
     }
 
     private void readLinks(final Element elem, final boolean chunk, final boolean disabled) {
         final boolean c = chunk || elem.getAttributeNode(ATTRIBUTE_NAME_CHUNK) != null;
         final boolean d = disabled
                 || elem.getAttribute(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_NAVIGATION)
-                || MAPGROUP_D_TOPICGROUP.matches(elem)
+                || (MAPGROUP_D_TOPICGROUP.matches(elem) && !SUBMAP.matches(elem))
                 || MAP_RELTABLE.matches(elem);
         final Attr href = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
         if (href != null) {
             final URI filename = stripFragment(currentFile.resolve(href.getValue()));
             if (c && !d) {
                 chunkTopicSet.add(filename);
+                final Attr copyTo = elem.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+                if (copyTo != null) {
+                    final URI copyToFile = stripFragment(currentFile.resolve(copyTo.getValue()));
+                    chunkTopicSet.add(copyToFile);
+                }
             }
         }
 

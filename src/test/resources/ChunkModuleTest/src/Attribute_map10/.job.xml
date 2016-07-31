@@ -53,7 +53,7 @@
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/X.dita"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/X.dita"
-      uri="X.dita" path="X.dita" format="dita" skip-chunk="true" target="true"/>
+      uri="X.dita" path="X.dita" format="dita" target="true"/>
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/map10.ditamap"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/map10.ditamap"

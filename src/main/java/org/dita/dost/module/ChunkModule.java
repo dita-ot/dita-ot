@@ -88,7 +88,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         final Map<URI, URI> changeTable = mapReader.getChangeTable();
         if (hasChanges(changeTable)) {
             final Map<URI, URI> conflicTable = mapReader.getConflicTable();
-            updateList(changeTable, conflicTable);
+            updateList(changeTable, conflicTable, mapReader);
             updateRefOfDita(changeTable, conflicTable);
         }
 
@@ -154,17 +154,20 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
     /**
      * Update Job configuration to include new generated files
      */
-    private void updateList(final Map<URI, URI> changeTable, final Map<URI, URI> conflictTable) {
+    private void updateList(final Map<URI, URI> changeTable, final Map<URI, URI> conflictTable, final ChunkMapReader mapReader) {
         final URI xmlDitalist = job.tempDir.toURI().resolve("dummy.xml");
 
         final Set<URI> hrefTopics = new HashSet<>();
+        final Set<URI> chunkTopicSet = mapReader.getChunkTopicSet();
         for (final FileInfo f : job.getFileInfo()) {
-            if (f.isTarget && !f.isSkipChunk) {
+            final URI abs = job.tempDir.toURI().resolve(f.uri);
+            if (f.isTarget && !chunkTopicSet.contains(abs)) {
                 hrefTopics.add(f.uri);
             }
         }
         for (final FileInfo f : job.getFileInfo()) {
-            if (f.isSkipChunk) {
+            final URI abs = job.tempDir.toURI().resolve(f.uri);
+            if (chunkTopicSet.contains(abs)) {
                 final URI s = f.uri;
                 if (s.getFragment() == null) {
                     // This entry does not have an anchor, we assume that this
