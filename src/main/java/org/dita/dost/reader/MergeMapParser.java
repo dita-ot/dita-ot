@@ -246,7 +246,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                     }
                     if (!util.isVisited(toURI(element))) {
                         util.visit(toURI(element));
-                        if (!f.isResourceOnly && (f.isChunked || !f.isSkipChunk)){
+                        if (!f.isResourceOnly){
                             //ensure the file exists
                             final File file = new File(dirPath, element);
                             if (file.exists()) {
