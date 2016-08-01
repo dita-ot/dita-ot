@@ -5,6 +5,16 @@
     
   <meta type="foo" value="bar"/>
            
+  <extension-point id="InsertAction"/>
+  <extension-point id="ImportXSLAction.plugin"/>
+  <extension-point id="ImportAntLibAction"/>
+  <extension-point id="InsertDependsAction"/>
+  <extension-point id="ImportStringsAction"/>
+  <extension-point id="InsertCatalogActionRelative"/>
+  <extension-point id="ImportXSLAction"/>
+  <extension-point id="InsertAntActionRelative"/>
+  <extension-point id="CheckTranstypeAction"/>
+
   <feature extension="CheckTranstypeAction" value="foo,bar,baz" type="text"/>
   <feature extension="ImportAntLibAction" value="foo.jar,bar.jar,baz.jar" type="file"/>  
   <feature extension="ImportStringsAction" value="foo.xml" type="file"/>
