@@ -79,12 +79,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /** Set of topic files containing href */
     private final Set<URI> hrefTopicSet;
 
-    /** Set of href topic files with anchor ID */
-    private final Set<URI> hrefWithIDSet;
-
-    /** Set of chunk topic with anchor ID */
-    private final Set<URI> chunkTopicSet;
-
     /** Set of dita files containing conref */
     private final Set<URI> conrefSet;
 
@@ -184,8 +178,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         fullTopicSet = new HashSet<>(128);
         fullMapSet = new HashSet<>(128);
         hrefTopicSet = new HashSet<>(128);
-        hrefWithIDSet = new HashSet<>(128);
-        chunkTopicSet = new HashSet<>(128);
         schemeSet = new HashSet<>(128);
         conrefSet = new HashSet<>(128);
         formatSet = new HashSet<>();
@@ -539,8 +531,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
 
         hrefTargetSet.addAll(listFilter.getHrefTargets());
-        hrefWithIDSet.addAll(listFilter.getHrefTopicSet());
-        chunkTopicSet.addAll(listFilter.getChunkTopicSet());
         conrefTargetSet.addAll(listFilter.getConrefTargets());
         nonConrefCopytoTargetSet.addAll(listFilter.getNonConrefCopytoTargets());
         coderefTargetSet.addAll(listFilter.getCoderefTargets());
@@ -805,12 +795,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
         for (final URI file: hrefTargetSet) {
             getOrCreateFileInfo(fileinfos, file).isTarget = true;
-        }
-        for (final URI file: hrefWithIDSet) {
-            getOrCreateFileInfo(fileinfos, file).isNonConrefTarget = true;
-        }
-        for (final URI file: chunkTopicSet) {
-            getOrCreateFileInfo(fileinfos, file).isSkipChunk = true;
         }
         for (final URI file: schemeSet) {
             getOrCreateFileInfo(fileinfos, file).isSubjectScheme = true;

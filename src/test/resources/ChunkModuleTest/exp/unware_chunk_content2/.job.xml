@@ -51,6 +51,6 @@
       uri="maplink.ditamap" path="maplink.ditamap" format="ditamap"/>
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/unware_chunk_content/one.dita"
-      uri="one.dita" path="one.dita" format="dita" skip-chunk="true" target="true"/>
+      uri="one.dita" path="one.dita" format="dita" target="true"/>
   </files>
 </job>

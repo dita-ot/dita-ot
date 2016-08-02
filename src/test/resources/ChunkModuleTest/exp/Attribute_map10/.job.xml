@@ -50,32 +50,32 @@
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Y.dita"
       uri="Y1a.dita" path="Y1a.dita"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Y1a.dita"
-      format="dita" target="true" non-conref-target="true"/>
+      format="dita" target="true"/>
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Y.dita"
       uri="Y.dita" path="Y.dita"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Y.dita"
-      format="dita" target="true" non-conref-target="true"/>
+      format="dita" target="true"/>
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Y.dita"
       uri="Chunk1.dita" path="Chunk1.dita"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Chunk1.dita"
-      format="dita" target="true" non-conref-target="true"/>
+      format="dita" target="true"/>
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Z.dita"
       uri="Chunk2.dita" path="Chunk2.dita"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Chunk2.dita"
-      format="dita" target="true" non-conref-target="true"/>
+      format="dita" target="true"/>
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Y.dita"
       uri="Y1.dita" path="Y1.dita"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Y1.dita"
-      format="dita" target="true" non-conref-target="true"/>
+      format="dita" target="true"/>
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/X.dita"
       uri="X.dita" path="X.dita"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/X.dita"
-      format="dita" skip-chunk="true" target="true"/>
+      format="dita" target="true"/>
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/map10.ditamap"
       uri="map10.ditamap" path="map10.ditamap"
@@ -85,16 +85,16 @@
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Z.dita"
       uri="Z1.dita" path="Z1.dita"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Z1.dita"
-      format="dita" target="true" non-conref-target="true"/>
+      format="dita" target="true"/>
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Z.dita"
       uri="Z.dita" path="Z.dita"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Z.dita"
-      format="dita" target="true" non-conref-target="true"/>
+      format="dita" target="true"/>
     <file
       src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/X.dita"
       uri="Chunk0.dita" path="Chunk0.dita"
       result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/Chunk0.dita"
-      format="dita" skip-chunk="true" target="true"/>
+      format="dita" target="true"/>
   </files>
 </job>
