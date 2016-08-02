@@ -90,7 +90,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
                 if (hrefValue != null){
                     File codeFile = toFile(stripFragment(currentFile.resolve(hrefValue))).getAbsoluteFile();
                     if (!codeFile.exists()) {
-                        final URI rel = job.tempDir.toURI().relativize(codeFile.toURI());
+                        final URI rel = job.tempDirURI.relativize(codeFile.toURI());
                         final Job.FileInfo fi = job.getFileInfo(rel);
                         if (fi != null && "file".equals(fi.src.getScheme())) {
                             codeFile = new File(fi.src);

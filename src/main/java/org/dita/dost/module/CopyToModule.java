@@ -60,7 +60,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
      * Process start map to read copy-to map and write unique topic references.
      */
     private void processMap() throws DITAOTException {
-        final URI in = job.tempDir.toURI().resolve(job.getInputMap());
+        final URI in = job.tempDirURI.resolve(job.getInputMap());
 
         final List<XMLFilter> pipe = getProcessingPipe(in);
 
@@ -102,8 +102,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         }
 
         for (final Map.Entry<URI, URI> e: reader.getCopyToMap().entrySet()) {
-            final URI target = job.tempDir.toURI().relativize(e.getKey());
-            final URI source = job.tempDir.toURI().relativize(e.getValue());
+            final URI target = job.tempDirURI.relativize(e.getKey());
+            final URI source = job.tempDirURI.relativize(e.getValue());
             // Filter copy-to where target is used directly.
             final FileInfo fileInfo = job.getFileInfo(target);
             if (fileInfo != null && fileInfo.src != null) {
@@ -124,13 +124,13 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         for (final Map.Entry<URI, URI> entry: copyToMap.entrySet()) {
             final URI copytoTarget = entry.getKey();
             final URI copytoSource = entry.getValue();
-            final URI srcFile = job.tempDir.toURI().resolve(copytoSource);
-            final URI targetFile = job.tempDir.toURI().resolve(copytoTarget);
+            final URI srcFile = job.tempDirURI.resolve(copytoSource);
+            final URI targetFile = job.tempDirURI.resolve(copytoTarget);
 
             if (new File(targetFile).exists()) {
                 logger.warn(MessageUtils.getInstance().getMessage("DOTX064W", copytoTarget.getPath()).toString());
             } else {
-                final URI inputMapInTemp = job.tempDir.toURI().resolve(job.getInputMap());
+                final URI inputMapInTemp = job.tempDirURI.resolve(job.getInputMap());
                 copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
                 // add new file info into job
                 final FileInfo src = job.getFileInfo(copytoSource);

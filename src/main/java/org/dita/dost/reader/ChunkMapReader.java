@@ -406,7 +406,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
             topicref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
         }
 
-        final URI relativeToBase = getRelativePath(job.tempDir.toURI().resolve("dummy"), absTemp);
+        final URI relativeToBase = getRelativePath(job.tempDirURI.resolve("dummy"), absTemp);
         final URI result = job.getInputDir().resolve(relativePath);
         final FileInfo fi = new FileInfo.Builder()
                 .uri(relativeToBase)

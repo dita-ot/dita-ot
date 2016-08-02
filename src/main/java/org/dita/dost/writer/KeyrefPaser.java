@@ -390,7 +390,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         if (href != null && !href.toString().isEmpty()) {
                             if (TOPIC_IMAGE.matches(currentElement.type)) {
                                 valid = true;
-                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(currentFile, job.tempDir.toURI().resolve(href)), elementId);
+                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(currentFile, job.tempDirURI.resolve(href)), elementId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
                             } else if (isLocalDita(elem) && keyDef.source != null) {
                                 final File topicFile = toFile(currentFile.resolve(stripFragment(keyDef.source.resolve(href))));

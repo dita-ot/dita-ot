@@ -91,7 +91,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
      * @return updated href URI
      */
     private URI getRelativePath(final URI href) {
-        final URI keyValue = job.tempDir.toURI().resolve(stripFragment(href));
+        final URI keyValue = job.tempDirURI.resolve(stripFragment(href));
         return URLUtils.getRelativePath(currentFile, keyValue);
     }
 

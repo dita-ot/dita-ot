@@ -134,7 +134,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             logger.debug("Loading subject schemes");
             subjectSchemeReader.reset();
             for (final URI schema : schemaSet) {
-                subjectSchemeReader.loadSubjectScheme(new File(job.tempDir.toURI().resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
+                subjectSchemeReader.loadSubjectScheme(new File(job.tempDirURI.resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
             }
             validateMap = subjectSchemeReader.getValidValuesMap();
             defaultValueMap = subjectSchemeReader.getDefaultValueMap();

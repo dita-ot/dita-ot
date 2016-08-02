@@ -69,7 +69,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
 
         try {
-            final File mapFile = new File(job.tempDir.toURI().resolve(job.getInputMap()));
+            final File mapFile = new File(job.tempDirURI.resolve(job.getInputMap()));
             if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile.toURI())) {
                 for (final FileInfo f : job.getFileInfo()) {
                     if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
@@ -155,18 +155,18 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
      * Update Job configuration to include new generated files
      */
     private void updateList(final Map<URI, URI> changeTable, final Map<URI, URI> conflictTable, final ChunkMapReader mapReader) {
-        final URI xmlDitalist = job.tempDir.toURI().resolve("dummy.xml");
+        final URI xmlDitalist = job.tempDirURI.resolve("dummy.xml");
 
         final Set<URI> hrefTopics = new HashSet<>();
         final Set<URI> chunkTopicSet = mapReader.getChunkTopicSet();
         for (final FileInfo f : job.getFileInfo()) {
-            final URI abs = job.tempDir.toURI().resolve(f.uri);
+            final URI abs = job.tempDirURI.resolve(f.uri);
             if (f.isTarget && !chunkTopicSet.contains(abs)) {
                 hrefTopics.add(f.uri);
             }
         }
         for (final FileInfo f : job.getFileInfo()) {
-            final URI abs = job.tempDir.toURI().resolve(f.uri);
+            final URI abs = job.tempDirURI.resolve(f.uri);
             if (chunkTopicSet.contains(abs)) {
                 final URI s = f.uri;
                 if (s.getFragment() == null) {
@@ -176,8 +176,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     final Iterator<URI> hrefit = hrefTopics.iterator();
                     while (hrefit.hasNext()) {
                         final URI ent = hrefit.next();
-                        if (job.tempDir.toURI().resolve(ent).equals(
-                                job.tempDir.toURI().resolve(s))) {
+                        if (job.tempDirURI.resolve(ent).equals(
+                                job.tempDirURI.resolve(s))) {
                             // The entry in hrefTopics points to the same target
                             // as entry in chunkTopics, it should be removed.
                             hrefit.remove();
@@ -197,7 +197,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
             }
         }
         for (final URI hrefTopic : hrefTopics) {
-            final URI t = getRelativePath(xmlDitalist, job.tempDir.toURI().resolve(stripFragment(hrefTopic)));
+            final URI t = getRelativePath(xmlDitalist, job.tempDirURI.resolve(stripFragment(hrefTopic)));
             topicList.add(t);
             if (oldTopicList.contains(t)) {
                 oldTopicList.remove(t);
@@ -242,7 +242,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
         // removed extra topic files
         for (final URI s : oldTopicList) {
-            final File f = new File(job.tempDir.toURI().resolve(s));
+            final File f = new File(job.tempDirURI.resolve(s));
             logger.debug("Delete " + f.toURI());
             if (f.exists() && !f.delete()) {
                 logger.error("Failed to delete " + f.getAbsolutePath());

@@ -94,7 +94,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     protected void processMap(final URI map) {
         assert !map.isAbsolute();
         this.map = map;
-        currentFile = job.tempDir.toURI().resolve(map);
+        currentFile = job.tempDirURI.resolve(map);
         // parse
         logger.info("Processing " + currentFile);
         final Document doc;
@@ -303,10 +303,10 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         final String copyTo = topicref.getAttribute(BRANCH_COPY_TO);
         if (!copyTo.isEmpty()) {
             final URI dstUri = map.resolve(copyTo);
-            final URI dstAbsUri = job.tempDir.toURI().resolve(dstUri);
+            final URI dstAbsUri = job.tempDirURI.resolve(dstUri);
             final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
             final URI srcUri = map.resolve(href);
-            final URI srcAbsUri = job.tempDir.toURI().resolve(srcUri);
+            final URI srcAbsUri = job.tempDirURI.resolve(srcUri);
             final FileInfo srcFileInfo = job.getFileInfo(srcUri);
             if (srcFileInfo != null) {
                 final FileInfo fi = new FileInfo.Builder(srcFileInfo).uri(dstUri).build();
@@ -366,7 +366,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                 pipe.add(writer);
             }
 
-            final URI srcAbsUri = job.tempDir.toURI().resolve(map.resolve(href));
+            final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
             logger.info("Filtering " + srcAbsUri);
             try {
                 XMLUtils.transform(toFile(srcAbsUri),

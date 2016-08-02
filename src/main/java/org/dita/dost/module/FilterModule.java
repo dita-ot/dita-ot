@@ -75,7 +75,7 @@ final class FilterModule extends AbstractPipelineModuleImpl {
                 if (schemaSet != null && !schemaSet.isEmpty()) {
                     logger.info("Loading subject schemes");
                     for (final URI schema : schemaSet) {
-                        subjectSchemeReader.loadSubjectScheme(new File(job.tempDir.toURI().resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
+                        subjectSchemeReader.loadSubjectScheme(new File(job.tempDirURI.resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
                     }
                 }
 

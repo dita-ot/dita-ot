@@ -75,8 +75,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
             final URI mapFile = job.getInputMap();
-            logger.info("Reading " + job.tempDir.toURI().resolve(mapFile).toString());
-            reader.read(job.tempDir.toURI().resolve(mapFile), doc);
+            logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
+            reader.read(job.tempDirURI.resolve(mapFile), doc);
 
             final KeyScope rootScope = reader.getKeyDefinition();
             final List<ResolveTask> jobs = collectProcessingTopics(fis, rootScope, doc);
@@ -232,7 +232,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         conkeyrefFilter.setLogger(logger);
         conkeyrefFilter.setJob(job);
         conkeyrefFilter.setKeyDefinitions(r.scope);
-        conkeyrefFilter.setCurrentFile(job.tempDir.toURI().resolve(r.in.uri));
+        conkeyrefFilter.setCurrentFile(job.tempDirURI.resolve(r.in.uri));
         conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
         filters.add(conkeyrefFilter);
 
@@ -242,19 +242,19 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         parser.setLogger(logger);
         parser.setJob(job);
         parser.setKeyDefinition(r.scope);
-        parser.setCurrentFile(job.tempDir.toURI().resolve(r.in.uri));
+        parser.setCurrentFile(job.tempDirURI.resolve(r.in.uri));
         filters.add(parser);
 
         try {
             logger.debug("Using " + (r.scope.name != null ? r.scope.name + " scope" : "root scope"));
             if (r.out != null) {
-                logger.info("Processing " + job.tempDir.toURI().resolve(r.in.uri) +
-                        " to " + job.tempDir.toURI().resolve(r.out.uri));
+                logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
+                        " to " + job.tempDirURI.resolve(r.out.uri));
                 XMLUtils.transform(new File(job.tempDir, r.in.file.getPath()),
                                    new File(job.tempDir, r.out.file.getPath()),
                                    filters);
             } else {
-                logger.info("Processing " + job.tempDir.toURI().resolve(r.in.uri));
+                logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
                 XMLUtils.transform(new File(job.tempDir, r.in.file.getPath()), filters);
             }
             // validate resource-only list
@@ -280,7 +280,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     private Document readMap() throws DITAOTException {
         InputSource in = null;
         try {
-            in = new InputSource(job.tempDir.toURI().resolve(job.getInputMap()).toString());
+            in = new InputSource(job.tempDirURI.resolve(job.getInputMap()).toString());
             return XMLUtils.getDocumentBuilder().parse(in);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to parse map: " + e.getMessage(), e);
@@ -297,7 +297,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         Result out = null;
         try {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            out = new StreamResult(new File(job.tempDir.toURI().resolve(job.getInputMap())));
+            out = new StreamResult(new File(job.tempDirURI.resolve(job.getInputMap())));
             transformer.transform(new DOMSource(doc), out);
         } catch (final TransformerConfigurationException e) {
             throw new RuntimeException(e);

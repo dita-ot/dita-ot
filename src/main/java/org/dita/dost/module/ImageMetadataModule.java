@@ -58,7 +58,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
 
     private void storeImageFormat(final Collection<URI> images, final File outputDir) {
         final URI output = outputDir.toURI();
-        final URI temp = job.tempDir.toURI();
+        final URI temp = job.tempDirURI;
         for (final URI f : images) {
             assert f.isAbsolute();
             URI rel = output.relativize(f);

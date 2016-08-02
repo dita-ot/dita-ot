@@ -223,10 +223,10 @@ public final class MapMetaReader extends AbstractDomFilter {
                 URI topicPath;
                 if (copytoAttr != null) {
                     final URI copyToUri = stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
-                    topicPath = job.tempDir.toURI().relativize(filePath.toURI().resolve(copyToUri));
+                    topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(copyToUri));
                 } else {
                     final URI hrefUri = stripFragment(URLUtils.toURI(hrefAttr.getNodeValue()));
-                    topicPath = job.tempDir.toURI().relativize(filePath.toURI().resolve(hrefUri));
+                    topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(hrefUri));
                 }
                 if (resultTable.containsKey(topicPath)) {
                     //if the result table already contains some result

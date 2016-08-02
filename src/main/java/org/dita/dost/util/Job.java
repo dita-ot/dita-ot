@@ -118,6 +118,7 @@ public final class Job {
     
     private final Map<String, Object> prop;
     public final File tempDir;
+    public final URI tempDirURI;
     private final File jobFile;
     private final ConcurrentMap<URI, FileInfo> files = new ConcurrentHashMap<>();
     private long lastModified;
@@ -134,6 +135,7 @@ public final class Job {
             throw new IllegalArgumentException("Temporary directory " + tempDir + " must be absolute");
         }
         this.tempDir = tempDir;
+        tempDirURI = tempDir.toURI();
         jobFile = new File(tempDir, JOB_FILE);
         prop = new HashMap<>();
         read();
@@ -500,7 +502,7 @@ public final class Job {
             return null;
         } else if (files.containsKey(file)) {
             return files.get(file);
-        } else if (file.isAbsolute() && file.toString().startsWith(tempDir.toURI().toString())) {
+        } else if (file.isAbsolute() && file.toString().startsWith(tempDirURI.toString())) {
             final URI relative = getRelativePath(jobFile.toURI(), file);
             return files.get(relative);
         } else {
@@ -520,7 +522,7 @@ public final class Job {
         assert file.getFragment() == null;
         URI f = file.normalize();
         if (f.isAbsolute()) {
-            f = tempDir.toURI().relativize(f);
+            f = tempDirURI.relativize(f);
         }
         FileInfo i = getFileInfo(file);
         if (i == null) {

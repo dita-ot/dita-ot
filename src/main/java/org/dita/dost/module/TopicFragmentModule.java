@@ -54,7 +54,7 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
             }
         });
         for (final FileInfo f: fis) {
-            final URI file = job.tempDir.toURI().resolve(f.uri);
+            final URI file = job.tempDirURI.resolve(f.uri);
             logger.info("Processing " + file);
             try {
                 XMLUtils.transform(file, getProcessingPipe(file));
