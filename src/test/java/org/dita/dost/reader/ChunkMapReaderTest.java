@@ -135,11 +135,19 @@ public class ChunkMapReaderTest {
         job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
 
         TestUtils.copy(new File(srcDir, map), new File(tempDir, map));
-        job.add(new Job.FileInfo.Builder().uri(toURI(map)).build());
+        job.add(new Job.FileInfo.Builder()
+                .src(new File(srcDir, map).toURI())
+                .uri(toURI(map))
+                .result(new File(srcDir, map).toURI())
+                .build());
         for (final String srcFile : topics) {
             final URI dst = tempDir.toURI().resolve(srcFile);
             TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
-            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(srcDir, srcFile).toURI())
+                    .uri(toURI(srcFile))
+                    .result(new File(srcDir, srcFile).toURI())
+                    .build());
         }
 
         return job;
