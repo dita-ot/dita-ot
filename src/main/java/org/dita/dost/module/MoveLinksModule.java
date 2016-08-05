@@ -87,11 +87,11 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             linkInserter.setLogger(logger);
             linkInserter.setJob(job);
             for (final Map.Entry<File, Map<String, Element>> entry: mapSet.entrySet()) {
-                final File f = new File(job.tempDir, entry.getKey().getPath());
-                logger.info("Processing " + f);
+                final URI uri = inputFile.toURI().resolve(entry.getKey().getPath());
+                logger.info("Processing " + uri);
                 linkInserter.setLinks(entry.getValue());
                 try {
-                    linkInserter.write(f);
+                    linkInserter.write(new File(uri));
                 } catch (final DITAOTException e) {
                     logger.error("Failed to insert links: " + e.getMessage(), e);
                 }
