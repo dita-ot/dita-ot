@@ -160,7 +160,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 }
                 final URI targetFileName = job.tempDirURI.resolve(fi.uri);
                 assert targetFileName.isAbsolute();
-                if (fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+                if (fi.format != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
                     mapInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
                         logger.info("Processing " + targetFileName);
@@ -184,7 +184,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 }
                 final URI targetFileName = job.tempDirURI.resolve(fi.uri);
                 assert targetFileName.isAbsolute();
-                if (fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+                if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
                     topicInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
                         logger.info("Processing " + targetFileName);
