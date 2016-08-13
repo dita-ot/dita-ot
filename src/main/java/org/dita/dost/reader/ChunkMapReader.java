@@ -133,6 +133,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     private Set<URI> chunkTopicSet = new HashSet<>();
 
+    /**
+     * @return absolute temporary files
+     */
     public Set<URI> getChunkTopicSet() {
         return unmodifiableSet(chunkTopicSet);
     }
@@ -546,7 +549,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     /**
      * Get changed files table.
      *
-     * @return map of changed files
+     * @return map of changed files, absolute temporary files
      */
     public Map<URI, URI> getChangeTable() {
         for (final Map.Entry<URI, URI> e : changeTable.entrySet()) {
@@ -559,7 +562,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     /**
      * get conflict table.
      *
-     * @return conflict table
+     * @return conflict table, absolute temporary files
      */
     public Map<URI, URI> getConflicTable() {
         for (final Map.Entry<URI, URI> e : conflictTable.entrySet()) {

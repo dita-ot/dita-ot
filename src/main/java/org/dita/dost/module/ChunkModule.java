@@ -196,8 +196,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 oldTopicList.add(f.uri);
             }
         }
-        for (final URI hrefTopic : hrefTopics) {
-            final URI t = getRelativePath(xmlDitalist, job.tempDirURI.resolve(stripFragment(hrefTopic)));
+        for (final URI t : hrefTopics) {
             topicList.add(t);
             if (oldTopicList.contains(t)) {
                 oldTopicList.remove(t);
@@ -214,10 +213,10 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
         }
         for (final Map.Entry<URI, URI> entry : changeTable.entrySet()) {
             final URI oldFile = entry.getKey();
-            if (entry.getValue().equals(oldFile)) {
+            final URI newFile = entry.getValue();
+            if (newFile.equals(oldFile)) {
                 // newly chunked file
-                URI newChunkedFile = entry.getValue();
-                newChunkedFile = getRelativePath(xmlDitalist, newChunkedFile);
+                final URI newChunkedFile = getRelativePath(xmlDitalist, newFile);
                 final String extName = getExtension(newChunkedFile.getPath());
                 if (extName != null && !extName.equalsIgnoreCase(ATTR_FORMAT_VALUE_DITAMAP)) {
                     chunkedTopicSet.add(newChunkedFile);
