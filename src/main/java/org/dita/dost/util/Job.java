@@ -527,7 +527,7 @@ public final class Job {
         FileInfo i = getFileInfo(file);
         if (i == null) {
             i = new FileInfo(f);
-            files.put(i.uri, i);
+            add(i);
         }
         return i;
     }
@@ -539,7 +539,7 @@ public final class Job {
      */
     public void addAll(final Collection<FileInfo> fs) {
     	for (final FileInfo f: fs) {
-    		files.put(f.uri, f);
+    		add(f);
     	}
     }
         

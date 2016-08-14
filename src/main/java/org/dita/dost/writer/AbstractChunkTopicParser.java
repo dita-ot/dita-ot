@@ -62,6 +62,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     URI currentFile = null;
 
     URI currentParsingFile = null;
+    /** Absolute temporary output file */
     URI outputFile = null;
     private final Stack<URI> outputFileNameStack = new Stack<>();
 

@@ -112,7 +112,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 if (parseFilePath.getFragment() != null) {
                     id = parseFilePath.getFragment();
                     if (chunkValue.contains(CHUNK_SELECT_BRANCH)) {
-                        outputFileName = currentFile.resolve(id + FILE_EXTENSION_DITA);
+                        outputFileName = resolve(currentFile, id + FILE_EXTENSION_DITA);
                         targetTopicId = id;
                         startFromFirstTopic = false;
                         selectMethod = CHUNK_SELECT_BRANCH;
@@ -122,16 +122,16 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                         topicDoc = getTopicDoc(currentFile.resolve(parseFilePath));
 
                         if (firstTopicID != null) {
-                            outputFileName = currentFile.resolve(firstTopicID + FILE_EXTENSION_DITA);
+                            outputFileName = resolve(currentFile, firstTopicID + FILE_EXTENSION_DITA);
                             targetTopicId = firstTopicID;
                         } else {
-                            outputFileName = setPath(currentParsingFile, currentParsingFile.getPath() + FILE_EXTENSION_CHUNK);
+                            outputFileName = resolve(currentParsingFile, null);
                             dotchunk = true;
                             targetTopicId = null;
                         }
                         selectMethod = CHUNK_SELECT_DOCUMENT;
                     } else {
-                        outputFileName = currentFile.resolve(id + FILE_EXTENSION_DITA);
+                        outputFileName = resolve(currentFile, id + FILE_EXTENSION_DITA);
                         targetTopicId = id;
                         startFromFirstTopic = false;
                         selectMethod = CHUNK_SELECT_TOPIC;
@@ -142,10 +142,10 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     topicDoc = getTopicDoc(currentFile.resolve(parseFilePath));
 
                     if (firstTopicID != null) {
-                        outputFileName = currentFile.resolve(firstTopicID + FILE_EXTENSION_DITA);
+                        outputFileName = resolve(currentFile, firstTopicID + FILE_EXTENSION_DITA);
                         targetTopicId = firstTopicID;
                     } else {
-                        outputFileName = setPath(currentParsingFile, currentParsingFile.getPath() + FILE_EXTENSION_CHUNK);
+                        outputFileName = resolve(currentParsingFile, null);
                         dotchunk = true;
                         targetTopicId = null;
                     }
@@ -153,12 +153,12 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 }
                 if (copytoValue != null) {
                     // use @copy-to value as the new file name
-                    outputFileName = currentFile.resolve(copytoValue);
+                    outputFileName = resolve(currentFile, copytoValue.toString());
                 }
 
                 if (new File(outputFileName).exists()) {
                     final URI t = outputFileName;
-                    outputFileName = currentFile.resolve(generateFilename());
+                    outputFileName = resolve(currentFile, generateFilename());
                     conflictTable.put(outputFileName, t);
                     dotchunk = false;
                 }
@@ -274,6 +274,15 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
             logger.error("Failed to parse " + absolutePathToFile + ": " + e.getMessage(), e);
         }
         return null;
+    }
+
+    private URI resolve(final URI base, final String file) {
+        if (file != null) {
+            return base.resolve(file);
+        } else {
+            return setPath(base, base.getPath() + FILE_EXTENSION_CHUNK);
+        }
+
     }
 
 }
