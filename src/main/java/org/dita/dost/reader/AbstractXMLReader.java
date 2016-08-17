@@ -31,8 +31,8 @@ import org.xml.sax.SAXException;
 public abstract class AbstractXMLReader implements AbstractReader,
 ContentHandler, EntityResolver {
 
-    DITAOTLogger logger;
-    Job job;
+    protected DITAOTLogger logger;
+    protected Job job;
 
     @Override
     public void read(final File filename) {
