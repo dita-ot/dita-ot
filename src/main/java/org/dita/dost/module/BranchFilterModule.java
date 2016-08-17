@@ -392,7 +392,8 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
      **/
     private FilterUtils getFilterUtils(final Element ditavalRef) {
         final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
-        final FileInfo fi = job.getFileInfo(href);
+        final URI tmp = currentFile.resolve(href);
+        final FileInfo fi = job.getFileInfo(tmp);
         final URI ditaval = fi.src;
         FilterUtils f = filterCache.get(ditaval);
         if (f == null) {
