@@ -92,8 +92,8 @@
     </param>
     <param name="args.filter" desc="Specifies a filter file to be used to include, exclude, or flag content." type="file"/>
     <param name="args.grammar.cache" desc="Specifies whether the grammar-caching feature of the XML parser is used." type="enum">
-      <val>yes</val>
-      <val default="true">no</val>
+      <val default="true">yes</val>
+      <val>no</val>
     </param>
     <param name="args.input" desc="Specifies the master file for your documentation project." type="file" required="true"/>
     <param name="args.input.dir" desc="Specifies the base directory for your documentation project." type="dir"/>
