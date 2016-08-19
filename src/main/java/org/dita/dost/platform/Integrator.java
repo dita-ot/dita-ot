@@ -617,7 +617,9 @@ public final class Integrator {
                     value.addAll(currentFeature.getValue());
                     featureTable.put(currentFeature.getKey(), value);
                 } else {
-                    featureTable.put(currentFeature.getKey(), currentFeature.getValue());
+                	//Make shallow clone to avoid making modifications directly to list inside the current feature.
+                	List<String> currentFeatureValue = currentFeature.getValue();
+                    featureTable.put(currentFeature.getKey(), currentFeatureValue != null ? new ArrayList<>(currentFeatureValue) : null);
                 }
             }
 
