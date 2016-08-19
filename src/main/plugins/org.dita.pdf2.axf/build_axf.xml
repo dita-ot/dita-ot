@@ -145,11 +145,19 @@
           <fileset dir="/Applications" includes="AntennaHouse/run.sh" erroronmissingdir="false"/>
           <fileset dir="/usr" includes="AHFormatterV*/run.sh" erroronmissingdir="false"/>
           <fileset dir="/usr" includes="XSLFormatterV*/run.sh" erroronmissingdir="false"/>
+          <fileset dir="C:\Program Files\Antenna House" erroronmissingdir="false">
+            <include name="AHFormatterV*\AHFCmd.exe"/>
+            <include name="XSLFormatterV*\XSLCmd.exe"/>
+          </fileset>
           <fileset dir="C:\Program Files\AntennaHouse" erroronmissingdir="false">
             <include name="AHFormatterV*\AHFCmd.exe"/>
             <include name="XSLFormatterV*\XSLCmd.exe"/>
           </fileset>
           <fileset dir="C:\Program Files\Antenna" erroronmissingdir="false">
+            <include name="AHFormatterV*\AHFCmd.exe"/>
+            <include name="XSLFormatterV*\XSLCmd.exe"/>
+          </fileset>
+          <fileset dir="C:\Program Files (x86)\Antenna House" erroronmissingdir="false">
             <include name="AHFormatterV*\AHFCmd.exe"/>
             <include name="XSLFormatterV*\XSLCmd.exe"/>
           </fileset>

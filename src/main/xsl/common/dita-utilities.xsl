@@ -439,6 +439,33 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  
+  <xsl:function name="dita-ot:relativize" as="xs:anyURI">
+    <xsl:param name="base" as="xs:anyURI"/>
+    <xsl:param name="uri" as="xs:anyURI"/>
+    
+    <xsl:variable name="b" select="tokenize($base, '/')" as="xs:string+"/>
+    <xsl:variable name="u" select="tokenize($uri, '/')" as="xs:string+"/>
+    
+    <xsl:sequence select="dita-ot:relativize.strip-and-prefix($b, $u)"/>
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:relativize.strip-and-prefix" as="xs:anyURI">
+    <xsl:param name="a" as="xs:string+"/>
+    <xsl:param name="b" as="xs:string+"/>
+    <xsl:choose>
+      <xsl:when test="$a[1] = $b[1]">
+        <xsl:sequence select="dita-ot:relativize.strip-and-prefix($a[position() ne 1], $b[position() ne 1])"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="res" as="xs:string+">
+          <xsl:for-each select="$a[position() ne 1]">../</xsl:for-each>
+          <xsl:value-of select="$b" separator="/"/>
+        </xsl:variable>
+        <xsl:sequence select="xs:anyURI(string-join($res, ''))"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
 
 </xsl:stylesheet>
 

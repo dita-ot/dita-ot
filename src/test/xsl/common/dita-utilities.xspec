@@ -620,4 +620,56 @@
     </x:scenario>
   </x:scenario>
 
+  <x:scenario label="dita-ot:relativize">
+    <x:scenario label="same directory">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/a/b/d.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('d.dita')"/>
+    </x:scenario>
+    <x:scenario label="up one directory">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/a/b/c/d.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('c/d.dita')"/>
+    </x:scenario>
+    <x:scenario label="up two directories">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/a/b/c/d/e.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('c/d/e.dita')"/>
+    </x:scenario>
+    <x:scenario label="below one directoru">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c/d.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/a/b/c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../c.dita')"/>
+    </x:scenario>
+    <x:scenario label="below two directories">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c/d/e.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/a/b/c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../../c.dita')"/>
+    </x:scenario>
+    <x:scenario label="one parallel directory">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c/d.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/a/b/e/f.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../e/f.dita')"/>
+    </x:scenario>
+    <x:scenario label="two parallel directories">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c/d/x.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/a/b/e/f/y.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../../e/f/y.dita')"/>
+    </x:scenario>
+  </x:scenario>
+  
 </x:description>
