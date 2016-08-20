@@ -137,16 +137,14 @@
   <target name="html5.topics.common" unless="noTopic" if="old.transform">
     <html5.topics>
       <dita:extension id="dita.conductor.html5.param" behavior="org.dita.dost.platform.InsertAction"/>
+      <mapper classname="org.dita.dost.util.JobMapper" to="${out.ext}"/>
     </html5.topics>
   </target>
 
   <target name="html5.topics.common.inner" unless="noTopic" if="inner.transform">
     <html5.topics>
       <dita:extension id="dita.conductor.html5.param" behavior="org.dita.dost.platform.InsertAction"/>
-      <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
-      <mapper type="regexp"
-              from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(\w+))$$"
-              to="\2${out.ext}"/>
+      <mapper classname="org.dita.dost.util.JobMapper" to="${out.ext}"/>
     </html5.topics>
   </target>
 
