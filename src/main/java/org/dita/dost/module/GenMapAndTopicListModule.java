@@ -50,6 +50,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.*;
 import org.dita.dost.util.*;
+import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.ExportAnchorsFilter;
 import org.dita.dost.writer.ExportAnchorsFilter.ExportAnchor;
 import org.dita.dost.writer.ProfilingFilter;
@@ -67,6 +68,8 @@ import org.xml.sax.helpers.DefaultHandler;
 public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
 
     public static final String ELEMENT_STUB = "stub";
+    /** Generate {@code xtrf} and {@code xtrc} attributes */
+    private boolean genDebugInfo;
     private Mode processingMode;
     /** FileInfos keyed by src. */
     private final Map<URI, FileInfo> fileinfos = new HashMap<>();
@@ -302,6 +305,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         setSystemid = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
         final String mode = input.getAttribute(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE);
         processingMode = mode != null ? Mode.valueOf(mode.toUpperCase()) : Mode.LAX;
+        genDebugInfo = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATE_DEBUG_ATTR));
 
         // For the output control
         job.setGeneratecopyouter(input.getAttribute(ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
@@ -380,6 +384,13 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
         assert fileToParse.isAbsolute();
         final List<XMLFilter> pipe = new ArrayList<>();
+
+        if (genDebugInfo) {
+            final DebugFilter debugFilter = new DebugFilter();
+            debugFilter.setLogger(logger);
+            debugFilter.setCurrentFile(currentFile);
+            pipe.add(debugFilter);
+        }
 
         if (filterUtils != null) {
             final ProfilingFilter profilingFilter = new ProfilingFilter();

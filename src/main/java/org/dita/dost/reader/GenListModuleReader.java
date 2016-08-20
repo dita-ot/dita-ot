@@ -402,13 +402,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
 
         if (classValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
-            logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
+            logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).setLocation(atts).toString());
         }
 
         if (TOPIC_TOPIC.matches(classValue) || MAP_MAP.matches(classValue)) {
             final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains == null) {
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).setLocation(atts).toString());
             }
         }
 
@@ -573,7 +573,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
                 if (followLinks()) {
                     hrefTargets.add(filename);
-                    toOutFile(filename);
+                    toOutFile(filename, atts);
                 }
             } else if (ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
                 final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
@@ -584,7 +584,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                         final URI value = stripFragment(currentDir.resolve(copyTo));
                         if (copytoMap.get(filename) != null) {
                             if (!value.equals(copytoMap.get(filename))) {
-                                logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", copyTo.toString(), filename.toString()).toString());
+                                logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", copyTo.toString(), filename.toString())
+                                        .setLocation(atts).toString());
                             }
                             ignoredCopytoSourceSet.add(value);
                         } else {
@@ -626,7 +627,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
             // Collect only conref target topic files
             conrefTargets.add(filename);
-            toOutFile(filename);
+            toOutFile(filename, atts);
         }
     }
 
@@ -705,18 +706,17 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
     }
 
-    private void toOutFile(final URI filename) throws SAXException {
+    private void toOutFile(final URI filename, final Attributes atts) throws SAXException {
         assert filename.isAbsolute();
-        // the filename is a relative path from the dita input file
-        final String[] prop = { currentFile.toString() };
+        final String[] prop = { filename.toString(), currentFile.toString() };
         if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
             if (isOutFile(filename)) {
                 if (job.getOutterControl() == Job.OutterControl.FAIL) {
-                    final MessageBean msgBean = MessageUtils.getInstance().getMessage("DOTJ035F", prop);
+                    final MessageBean msgBean = MessageUtils.getInstance().getMessage("DOTJ035F", prop).setLocation(atts);
                     throw new SAXParseException(null, null, new DITAOTException(msgBean, null, msgBean.toString()));
                 } else if (job.getOutterControl() == Job.OutterControl.WARN) {
-                    final String message = MessageUtils.getInstance().getMessage("DOTJ036W", prop).toString();
-                    logger.warn(message);
+                    final MessageBean msgBean = MessageUtils.getInstance().getMessage("DOTJ036W", prop).setLocation(atts);
+                    logger.warn(msgBean.toString());
                 }
                 addToOutFilesSet(filename);
             }
