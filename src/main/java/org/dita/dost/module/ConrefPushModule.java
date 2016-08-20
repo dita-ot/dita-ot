@@ -55,7 +55,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
                 parser.setLogger(logger);
                 parser.setMoveTable(entry.getValue());
                 //pass the tempdir to ConrefPushParser
-                parser.setTempDir(job.tempDir.getAbsoluteFile());
+                parser.setTempDir(job.tempDir);
                 //FIXME:This writer creates and renames files, have to
                 try {
                     parser.write(entry.getKey());

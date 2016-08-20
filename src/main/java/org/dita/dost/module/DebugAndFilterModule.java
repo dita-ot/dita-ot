@@ -401,7 +401,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 }
 
                 //Output parent scheme
-                generateScheme(new File(job.tempDir.getAbsoluteFile(), parent.getPath() + SUBJECT_SCHEME_EXTENSION), parentRoot);
+                generateScheme(new File(job.tempDir, parent.getPath() + SUBJECT_SCHEME_EXTENSION), parentRoot);
             }
         } catch (final RuntimeException e) {
             throw e;
