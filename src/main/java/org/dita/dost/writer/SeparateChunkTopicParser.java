@@ -15,6 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
@@ -38,10 +39,6 @@ import static org.dita.dost.util.XMLUtils.*;
 /**
  * Split topic into multiple files for {@code by-topic} chunking.
  * Not reusable and not thread-safe.
- * <p>
- * <p>
- * TODO: Refactor to be a SAX filter.
- * </p>
  */
 public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
 
@@ -51,7 +48,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
      * Constructor.
      */
     public SeparateChunkTopicParser() {
-        super(true);
+        super();
         try {
             reader = getXMLReader();
             reader.setContentHandler(this);
@@ -262,6 +259,158 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
             return setPath(base, base.getPath() + FILE_EXTENSION_CHUNK);
         }
 
+    }
+
+    // SAX methods
+
+    @Override
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+            throws SAXException {
+        final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        final String id = atts.getValue(ATTRIBUTE_NAME_ID);
+
+        if (skip && skipLevel > 0) {
+            skipLevel++;
+        }
+
+        try {
+            if (TOPIC_TOPIC.matches(cls)) {
+                topicSpecSet.add(qName);
+//                final String id = atts.getValue(ATTRIBUTE_NAME_ID);
+                // search node by id.
+                final Element topic = searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID, TOPIC_TOPIC);
+
+                // only by-topic
+                if (include && !CHUNK_SELECT_TOPIC.equals(selectMethod)) {
+                    // chunk="by-topic" and next topic element found
+                    outputStack.push(output);
+                    outputFileNameStack.push(outputFile);
+
+                    outputFile = generateOutputFilename(id);
+                    output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), UTF8);
+
+                    final FileInfo fi = generateFileInfo(outputFile);
+                    job.add(fi);
+
+                    changeTable.put(outputFile, outputFile);
+                    if (id != null) {
+                        changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
+                    } else {
+                        changeTable.put(currentParsingFile, outputFile);
+                    }
+
+                    // write xml header and workdir PI to the new generated file
+                    writeStartDocument(output);
+                    if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
+                        writeProcessingInstruction(output, PI_WORKDIR_TARGET, new File(currentFile).getParentFile().getAbsolutePath());
+                    } else {
+                        writeProcessingInstruction(output, PI_WORKDIR_TARGET, UNIX_SEPARATOR + currentFile.resolve("."));
+                    }
+                    writeProcessingInstruction(output, PI_WORKDIR_TARGET_URI, currentFile.resolve(".").toString());
+
+                    // create a new child element in separate case topicref is equals to parameter
+                    // element in separateChunk(Element element)
+                    final Element newTopicref = rootTopicref.getOwnerDocument().createElement(MAP_TOPICREF.localName);
+                    newTopicref.setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
+                    newTopicref.setAttribute(ATTRIBUTE_NAME_XTRF, ATTR_XTRF_VALUE_GENERATED);
+                    newTopicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFile).toString());
+
+                    final Element topicmeta = createTopicMeta(topic);
+                    newTopicref.appendChild(topicmeta);
+
+                    if (stub != null) {
+                        if (includelevel == 0 && siblingStub != null) {
+                            // if it is the following sibling topic to the first topic in ditabase
+                            // The first topic will not enter the logic at here because when meeting
+                            // with first topic in ditabase, the include value is false
+                            siblingStub.getParentNode().insertBefore(newTopicref, siblingStub);
+                        } else {
+                            stub.getParentNode().insertBefore(newTopicref, stub);
+                        }
+                        stubStack.push(stub);
+                        stub = (Element) stub.cloneNode(false);
+                        newTopicref.appendChild(stub);
+                    }
+                }
+                if (include) {
+                    if (CHUNK_SELECT_TOPIC.equals(selectMethod)) {
+                        // if select method is "select-topic" and current topic is the nested topic in target topic, skip it.
+                        include = false;
+                        skipLevel = 1;
+                        skip = true;
+                    } else {
+                        // if select method is "select-document" or "select-branch"
+                        // and current topic is the nested topic in target topic.
+                        // if file name has been changed, add an entry in changeTable
+                        if (!currentParsingFile.equals(outputFile)) {
+                            if (id != null) {
+                                changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
+                            } else {
+                                changeTable.put(stripFragment(currentParsingFile), stripFragment(outputFile));
+                            }
+                        }
+                    }
+                } else if (skip) {
+                    skipLevel = 1;
+                } else if (id != null && (id.equals(targetTopicId) || startFromFirstTopic)) {
+                    // if the target topic has not been found and current topic is the target topic
+                    include = true;
+                    includelevel = 0;
+                    skip = false;
+                    skipLevel = 0;
+                    startFromFirstTopic = false;
+                    if (!currentParsingFile.equals(outputFile)) {
+                        changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
+                    }
+                }
+            }
+
+            if (include) {
+                includelevel++;
+                final Attributes resAtts = processAttributes(atts);
+                writeStartElement(output, qName, resAtts);
+            }
+        } catch (final IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+        if (skip && skipLevel > 0) {
+            skipLevel--;
+        } else if (skip) {
+            include = true;
+            skip = false;
+            skipLevel = 0;
+        }
+
+        if (include) {
+            includelevel--;
+            // prevent adding </dita> into output
+            if (includelevel >= 0) {
+                try {
+                    writeEndElement(output, qName);
+                } catch (final IOException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            if (includelevel == 0 && !CHUNK_SELECT_DOCUMENT.equals(selectMethod)) {
+                include = false;
+            }
+            if (topicSpecSet.contains(qName) && !outputStack.isEmpty()) {
+                // if it is end of topic and separate is true
+                try {
+                    output.close();
+                } catch (final IOException e) {
+                    logger.error(e.getMessage(), e);
+                }
+                output = outputStack.pop();
+                outputFile = outputFileNameStack.pop();
+                stub.getParentNode().removeChild(stub);
+                stub = stubStack.pop();
+            }
+        }
     }
 
 }
