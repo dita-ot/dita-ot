@@ -158,39 +158,15 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 // new generated file
                 changeTable.put(outputFileName, outputFileName);
             }
+
             // change the href value
-            if (firstTopicID == null) {
-                rootTopicref.setAttribute(ATTRIBUTE_NAME_HREF,
-                        setFragment(getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName), id).toString());
-            } else {
-                rootTopicref.setAttribute(ATTRIBUTE_NAME_HREF,
-                        setFragment(getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName), firstTopicID).toString());
-            }
+            final URI newHref = setFragment(getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName),
+                                            firstTopicID != null ? firstTopicID : id);
+            rootTopicref.setAttribute(ATTRIBUTE_NAME_HREF, newHref.toString());
+
             include = false;
 
-            stub = rootTopicref.getOwnerDocument().createElement(ELEMENT_STUB);
-            siblingStub = rootTopicref.getOwnerDocument().createElement(ELEMENT_STUB);
-            if (rootTopicref.hasChildNodes()) {
-                final NodeList list = rootTopicref.getElementsByTagName(MAP_TOPICMETA.localName);
-                if (list.getLength() > 0) {
-                    final Node node = list.item(0);
-                    final Node nextSibling = node.getNextSibling();
-                    // no sibling so node is the last child
-                    if (nextSibling == null) {
-                        node.getParentNode().appendChild(stub);
-                    } else {
-                        // has sibling node
-                        node.getParentNode().insertBefore(stub, nextSibling);
-                    }
-                } else {
-                    // no topicmeta tag.
-                    rootTopicref.insertBefore(stub, rootTopicref.getFirstChild());
-                }
-
-                // element.insertBefore(stub,element.getFirstChild());
-            } else {
-                rootTopicref.appendChild(stub);
-            }
+            addStubElements();
 
             // Place siblingStub
             if (rootTopicref.getNextSibling() != null) {
@@ -204,9 +180,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
             reader.parse(currentParsingFile.toString());
             output.flush();
 
-            // remove stub and siblingStub
-            stub.getParentNode().removeChild(stub);
-            siblingStub.getParentNode().removeChild(siblingStub);
+            removeStubElements();
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
@@ -233,6 +207,35 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 logger.error(ex.getMessage(), ex);
             }
         }
+    }
+
+    private void addStubElements() {
+        stub = rootTopicref.getOwnerDocument().createElement(ELEMENT_STUB);
+        siblingStub = rootTopicref.getOwnerDocument().createElement(ELEMENT_STUB);
+        if (rootTopicref.hasChildNodes()) {
+            final NodeList list = rootTopicref.getElementsByTagName(MAP_TOPICMETA.localName);
+            if (list.getLength() > 0) {
+                final Node node = list.item(0);
+                final Node nextSibling = node.getNextSibling();
+                // no sibling so node is the last child
+                if (nextSibling == null) {
+                    node.getParentNode().appendChild(stub);
+                } else {
+                    // has sibling node
+                    node.getParentNode().insertBefore(stub, nextSibling);
+                }
+            } else {
+                // no topicmeta tag.
+                rootTopicref.insertBefore(stub, rootTopicref.getFirstChild());
+            }
+        } else {
+            rootTopicref.appendChild(stub);
+        }
+    }
+
+    private void removeStubElements() {
+        stub.getParentNode().removeChild(stub);
+        siblingStub.getParentNode().removeChild(siblingStub);
     }
 
     /**
