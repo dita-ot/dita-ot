@@ -84,45 +84,23 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         }
 
         try {
-            if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)
-                    && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
-                // if the path to target file make sense
-                currentParsingFile = currentFile.resolve(parseFilePath);
-                URI outputFileName;
-                /*
-                 * FIXME: we have code flaws here, references in ditamap need to
-                 * be updated to new created file.
-                 */
-                String id = null;
-                String firstTopicID = null;
-                if (parseFilePath.getFragment() != null) {
-                    id = parseFilePath.getFragment();
-                    if (chunkValue.contains(CHUNK_SELECT_BRANCH)) {
-                        outputFileName = resolve(currentFile, id + FILE_EXTENSION_DITA);
-                        targetTopicId = id;
-                        startFromFirstTopic = false;
-                        selectMethod = CHUNK_SELECT_BRANCH;
-                    } else if (chunkValue.contains(CHUNK_SELECT_DOCUMENT)) {
-                        firstTopicID = getFirstTopicId(currentFile.resolve(parseFilePath).getPath());
-
-                        topicDoc = getTopicDoc(currentFile.resolve(parseFilePath));
-
-                        if (firstTopicID != null) {
-                            outputFileName = resolve(currentFile, firstTopicID + FILE_EXTENSION_DITA);
-                            targetTopicId = firstTopicID;
-                        } else {
-                            outputFileName = resolve(currentParsingFile, null);
-                            dotchunk = true;
-                            targetTopicId = null;
-                        }
-                        selectMethod = CHUNK_SELECT_DOCUMENT;
-                    } else {
-                        outputFileName = resolve(currentFile, id + FILE_EXTENSION_DITA);
-                        targetTopicId = id;
-                        startFromFirstTopic = false;
-                        selectMethod = CHUNK_SELECT_TOPIC;
-                    }
-                } else {
+            // if the path to target file make sense
+            currentParsingFile = currentFile.resolve(parseFilePath);
+            URI outputFileName;
+            /*
+             * FIXME: we have code flaws here, references in ditamap need to
+             * be updated to new created file.
+             */
+            String id = null;
+            String firstTopicID = null;
+            if (parseFilePath.getFragment() != null) {
+                id = parseFilePath.getFragment();
+                if (chunkValue.contains(CHUNK_SELECT_BRANCH)) {
+                    outputFileName = resolve(currentFile, id + FILE_EXTENSION_DITA);
+                    targetTopicId = id;
+                    startFromFirstTopic = false;
+                    selectMethod = CHUNK_SELECT_BRANCH;
+                } else if (chunkValue.contains(CHUNK_SELECT_DOCUMENT)) {
                     firstTopicID = getFirstTopicId(currentFile.resolve(parseFilePath).getPath());
 
                     topicDoc = getTopicDoc(currentFile.resolve(parseFilePath));
@@ -136,87 +114,99 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                         targetTopicId = null;
                     }
                     selectMethod = CHUNK_SELECT_DOCUMENT;
-                }
-                if (copytoValue != null) {
-                    // use @copy-to value as the new file name
-                    outputFileName = resolve(currentFile, copytoValue.toString());
-                }
-
-                if (new File(outputFileName).exists()) {
-                    final URI t = outputFileName;
-                    outputFileName = resolve(currentFile, generateFilename());
-                    conflictTable.put(outputFileName, t);
-                    dotchunk = false;
-                }
-                output = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8);
-                outputFile = outputFileName;
-
-                if (!dotchunk) {
-                    final FileInfo fi = generateFileInfo(outputFile);
-                    job.add(fi);
-
-                    changeTable.put(currentFile.resolve(parseFilePath),
-                            setFragment(outputFileName, id));
-                    // new generated file
-                    changeTable.put(outputFileName, outputFileName);
-                }
-                // change the href value
-                if (firstTopicID == null) {
-                    rootTopicref.setAttribute(ATTRIBUTE_NAME_HREF,
-                            setFragment(getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName), id).toString());
                 } else {
-                    rootTopicref.setAttribute(ATTRIBUTE_NAME_HREF,
-                            setFragment(getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName), firstTopicID).toString());
+                    outputFileName = resolve(currentFile, id + FILE_EXTENSION_DITA);
+                    targetTopicId = id;
+                    startFromFirstTopic = false;
+                    selectMethod = CHUNK_SELECT_TOPIC;
                 }
-                include = false;
-                // just a mark?
-                stub = rootTopicref.getOwnerDocument().createElement(ELEMENT_STUB);
-                siblingStub = rootTopicref.getOwnerDocument().createElement(ELEMENT_STUB);
-                // <element>
-                // <stub/>
-                // ...
-                // </element>
-                // <siblingstub/>
-                // ...
-                // Place stub
-                if (rootTopicref.hasChildNodes()) {
-                    final NodeList list = rootTopicref.getElementsByTagName(MAP_TOPICMETA.localName);
-                    if (list.getLength() > 0) {
-                        final Node node = list.item(0);
-                        final Node nextSibling = node.getNextSibling();
-                        // no sibling so node is the last child
-                        if (nextSibling == null) {
-                            node.getParentNode().appendChild(stub);
-                        } else {
-                            // has sibling node
-                            node.getParentNode().insertBefore(stub, nextSibling);
-                        }
-                    } else {
-                        // no topicmeta tag.
-                        rootTopicref.insertBefore(stub, rootTopicref.getFirstChild());
-                    }
+            } else {
+                firstTopicID = getFirstTopicId(currentFile.resolve(parseFilePath).getPath());
 
-                    // element.insertBefore(stub,element.getFirstChild());
+                topicDoc = getTopicDoc(currentFile.resolve(parseFilePath));
+
+                if (firstTopicID != null) {
+                    outputFileName = resolve(currentFile, firstTopicID + FILE_EXTENSION_DITA);
+                    targetTopicId = firstTopicID;
                 } else {
-                    rootTopicref.appendChild(stub);
+                    outputFileName = resolve(currentParsingFile, null);
+                    dotchunk = true;
+                    targetTopicId = null;
                 }
-
-                // Place siblingStub
-                if (rootTopicref.getNextSibling() != null) {
-                    rootTopicref.getParentNode().insertBefore(siblingStub, rootTopicref.getNextSibling());
-                } else {
-                    rootTopicref.getParentNode().appendChild(siblingStub);
-                }
-
-                reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile.getPath(), logger));
-                logger.info("Processing " + currentParsingFile);
-                reader.parse(currentParsingFile.toString());
-                output.flush();
-
-                // remove stub and siblingStub
-                stub.getParentNode().removeChild(stub);
-                siblingStub.getParentNode().removeChild(siblingStub);
+                selectMethod = CHUNK_SELECT_DOCUMENT;
             }
+            if (copytoValue != null) {
+                // use @copy-to value as the new file name
+                outputFileName = resolve(currentFile, copytoValue.toString());
+            }
+
+            if (new File(outputFileName).exists()) {
+                final URI t = outputFileName;
+                outputFileName = resolve(currentFile, generateFilename());
+                conflictTable.put(outputFileName, t);
+                dotchunk = false;
+            }
+            output = new OutputStreamWriter(new FileOutputStream(new File(outputFileName)), UTF8);
+            outputFile = outputFileName;
+
+            if (!dotchunk) {
+                final FileInfo fi = generateFileInfo(outputFile);
+                job.add(fi);
+
+                changeTable.put(currentFile.resolve(parseFilePath),
+                        setFragment(outputFileName, id));
+                // new generated file
+                changeTable.put(outputFileName, outputFileName);
+            }
+            // change the href value
+            if (firstTopicID == null) {
+                rootTopicref.setAttribute(ATTRIBUTE_NAME_HREF,
+                        setFragment(getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName), id).toString());
+            } else {
+                rootTopicref.setAttribute(ATTRIBUTE_NAME_HREF,
+                        setFragment(getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFileName), firstTopicID).toString());
+            }
+            include = false;
+
+            stub = rootTopicref.getOwnerDocument().createElement(ELEMENT_STUB);
+            siblingStub = rootTopicref.getOwnerDocument().createElement(ELEMENT_STUB);
+            if (rootTopicref.hasChildNodes()) {
+                final NodeList list = rootTopicref.getElementsByTagName(MAP_TOPICMETA.localName);
+                if (list.getLength() > 0) {
+                    final Node node = list.item(0);
+                    final Node nextSibling = node.getNextSibling();
+                    // no sibling so node is the last child
+                    if (nextSibling == null) {
+                        node.getParentNode().appendChild(stub);
+                    } else {
+                        // has sibling node
+                        node.getParentNode().insertBefore(stub, nextSibling);
+                    }
+                } else {
+                    // no topicmeta tag.
+                    rootTopicref.insertBefore(stub, rootTopicref.getFirstChild());
+                }
+
+                // element.insertBefore(stub,element.getFirstChild());
+            } else {
+                rootTopicref.appendChild(stub);
+            }
+
+            // Place siblingStub
+            if (rootTopicref.getNextSibling() != null) {
+                rootTopicref.getParentNode().insertBefore(siblingStub, rootTopicref.getNextSibling());
+            } else {
+                rootTopicref.getParentNode().appendChild(siblingStub);
+            }
+
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile.getPath(), logger));
+            logger.info("Processing " + currentParsingFile);
+            reader.parse(currentParsingFile.toString());
+            output.flush();
+
+            // remove stub and siblingStub
+            stub.getParentNode().removeChild(stub);
+            siblingStub.getParentNode().removeChild(siblingStub);
         } catch (final RuntimeException e) {
             throw e;
         } catch (final Exception e) {
