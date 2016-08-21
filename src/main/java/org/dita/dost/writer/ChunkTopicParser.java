@@ -19,10 +19,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.*;
 import java.net.URI;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
@@ -102,21 +99,6 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 }
             } else {
                 parseFilePath = hrefValue;
-            }
-
-            // if @copy-to is processed in chunk module, the list file needs to be updated.
-            // Because @copy-to should be included in fulltopiclist, and the
-            // source of coyy-to should be excluded in fulltopiclist.
-            if (copytoValue != null && chunkValue.contains(CHUNK_TO_CONTENT)
-                    && hrefValue != null) {
-                copyto.add(copytoValue);
-                if (hrefValue.getFragment() != null) {
-                    copytoSource.add(stripFragment(hrefValue));
-                    copytotarget2source.put(copytoValue, stripFragment(hrefValue));
-                } else {
-                    copytoSource.add(hrefValue);
-                    copytotarget2source.put(copytoValue, hrefValue);
-                }
             }
 
             if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)) {

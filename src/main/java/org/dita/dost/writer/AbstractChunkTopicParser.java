@@ -95,12 +95,6 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     Set<String> topicID = new HashSet<>();
 
-    final Set<URI> copyto = new HashSet<>();
-
-    final Set<URI> copytoSource = new HashSet<>();
-
-    final Map<URI, URI> copytotarget2source = new HashMap<>();
-
     Map<String, String> currentParsingFileTopicIDChangeTable;
 
     private ChunkFilenameGenerator chunkFilenameGenerator;
