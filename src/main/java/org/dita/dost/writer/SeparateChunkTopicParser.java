@@ -73,7 +73,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         final String processRoleValue = getCascadeValue(rootTopicref, ATTRIBUTE_NAME_PROCESSING_ROLE);
         boolean dotchunk = false;
 
-        if (copytoValue != null && !chunkValue.contains(CHUNK_TO_CONTENT)) {
+        if (copytoValue != null) {
             if (hrefValue != null && hrefValue.getFragment() != null) {
                 parseFilePath = setFragment(copytoValue, hrefValue.getFragment());
             } else {
@@ -83,20 +83,6 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
             parseFilePath = hrefValue;
         }
 
-        // if @copy-to is processed in chunk module, the list file needs to be
-        // updated.
-        // Because @copy-to should be included in fulltopiclist, and the source
-        // of coyy-to should be excluded in fulltopiclist.
-        if (copytoValue != null && chunkValue.contains(CHUNK_TO_CONTENT)) {
-            copyto.add(copytoValue);
-            if (hrefValue != null && hrefValue.getFragment() != null) {
-                copytoSource.add(stripFragment(hrefValue));
-                copytotarget2source.put(copytoValue, stripFragment(hrefValue));
-            } else {
-                copytoSource.add(hrefValue);
-                copytotarget2source.put(copytoValue, hrefValue);
-            }
-        }
         try {
             if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)
                     && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {

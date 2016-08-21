@@ -104,8 +104,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 parseFilePath = hrefValue;
             }
 
-            // if @copy-to is processed in chunk module, the list file needs to
-            // be updated.
+            // if @copy-to is processed in chunk module, the list file needs to be updated.
             // Because @copy-to should be included in fulltopiclist, and the
             // source of coyy-to should be excluded in fulltopiclist.
             if (copytoValue != null && chunkValue.contains(CHUNK_TO_CONTENT)
@@ -123,22 +122,17 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)) {
                 // now the path to target file make sense
                 if (chunkValue.contains(CHUNK_TO_CONTENT)) {
-                    // if current element contains "to-content" in chunk
-                    // attribute
-                    // we need to create new buffer and flush the buffer to
-                    // file
+                    // if current element contains "to-content" in chunk attribute
+                    // we need to create new buffer and flush the buffer to file
                     // after processing is finished
                     tempWriter = output;
                     tempTopicID = topicID;
                     output = new StringWriter();
                     topicID = new HashSet<>();
                     if (MAP_MAP.matches(classValue)) {
-                        // Very special case, we have a map element with
-                        // href value.
-                        // This is a map that needs to be chunked to
-                        // content.
-                        // No need to parse any file, just generate a stub
-                        // output.
+                        // Very special case, we have a map element with href value.
+                        // This is a map that needs to be chunked to content.
+                        // No need to parse any file, just generate a stub output.
                         outputFileName = currentFile.resolve(parseFilePath);
                         needWriteDitaTag = false;
                     } else if (copytoValue != null) {
@@ -152,8 +146,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                                 // if we have an ID here, use it.
                                 outputFileName = currentFile.resolve(hrefValue.getFragment() + FILE_EXTENSION_DITA);
                             } else {
-                                // Find the first topic id in target file if
-                                // any.
+                                // Find the first topic id in target file if any.
                                 final String firstTopic = getFirstTopicId(currentFile.resolve(hrefValue).getPath());
                                 if (firstTopic != null) {
                                     outputFileName = currentFile.resolve(firstTopic + FILE_EXTENSION_DITA);
@@ -199,8 +192,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                         newpath = outputFileName;
                     }
                 }
-                // add file name changes to changeTable, this will be
-                // used in
+                // add file name changes to changeTable, this will be used in
                 // TopicRefWriter's updateHref method, very important!!!
                 changeTable.put(path, newpath);
                 // update current element's @href value
@@ -249,8 +241,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             }
 
             if (topicref.hasChildNodes()) {
-                // if current element has child nodes and chunk results for
-                // this element has value
+                // if current element has child nodes and chunk results for this element has value
                 // which means current element makes sense for chunk action.
                 final StringWriter tempOutput = (StringWriter) output;
                 output = new StringWriter();
