@@ -12,6 +12,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.TopicIdParser;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -240,56 +241,48 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     Attributes processAttributes(final Attributes atts) {
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
         final AttributesImpl resAtts = new AttributesImpl(atts);
-        for (int i = 0; i < resAtts.getLength(); i++) {
-            final String attrName = resAtts.getQName(i);
-            String attrValue = resAtts.getValue(i);
 
-            if (ATTRIBUTE_NAME_ID.equals(attrName)) {
-                final String id = attrValue;
-                if (TOPIC_TOPIC.matches(cls)) {
-                    // change topic @id if there are conflicts.
-                    if (topicID.contains(attrValue)) {
-                        final String oldAttr = attrValue;
-                        attrValue = chunkFilenameGenerator.generateID();
-                        topicID.add(attrValue);
+        final String id = resAtts.getValue(ATTRIBUTE_NAME_ID);
+        if (id != null && TOPIC_TOPIC.matches(cls)) {
+            if (topicID.contains(id)) {
+                final String newId = chunkFilenameGenerator.generateID();
+                topicID.add(newId);
 
-                        final URI tmpId = changeTable.get(setFragment(currentParsingFile, id));
-                        if (tmpId != null && tmpId.equals(setFragment(outputFile, id))) {
-                            changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, attrValue));
-                        }
-
-                        final URI tmpVal = changeTable.get(currentParsingFile);
-                        if (tmpVal != null && tmpVal.equals(setFragment(outputFile, id))) {
-                            changeTable.put(currentParsingFile, setFragment(outputFile, attrValue));
-                        }
-                        currentParsingFileTopicIDChangeTable.put(oldAttr, attrValue);
-                    } else {
-                        topicID.add(attrValue);
-                    }
+                final URI tmpId = changeTable.get(setFragment(currentParsingFile, id));
+                if (tmpId != null && tmpId.equals(setFragment(outputFile, id))) {
+                    changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, newId));
                 }
-            } else if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
-                // update @href value
-                if (checkHREF(resAtts)) {
-                    // if current @href value needs to be updated
-                    URI relative = getRelativePath(outputFile, currentParsingFile);
-                    if (conflictTable.containsKey(outputFile)) {
-                        final URI realoutputfile = conflictTable.get(outputFile);
-                        relative = getRelativePath(realoutputfile, currentParsingFile);
-                    }
-                    if (attrValue.startsWith(SHARP)) {
-                        // if @href refers to a location inside current parsing file
-                        // update @href to point back to current file
-                        // if the location is moved to chunk, @href will
-                        // be update again to the new location.
-                        attrValue = relative + attrValue;
-                    } else if (relative.toString().contains(SLASH)) {
-                        // if new file is not under the same directory with current file
-                        // add path information to the @href value
-                        attrValue = relative.resolve(attrValue).toString();
-                    }
+
+                final URI tmpVal = changeTable.get(currentParsingFile);
+                if (tmpVal != null && tmpVal.equals(setFragment(outputFile, id))) {
+                    changeTable.put(currentParsingFile, setFragment(outputFile, newId));
                 }
+                currentParsingFileTopicIDChangeTable.put(id, newId);
+                XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_ID, newId);
+            } else {
+                topicID.add(id);
             }
-            resAtts.setValue(i, attrValue);
+        }
+        final String href = resAtts.getValue(ATTRIBUTE_NAME_HREF);
+        final String scope = resAtts.getValue(ATTRIBUTE_NAME_SCOPE);
+        if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
+            // if current @href value needs to be updated
+            URI relative = getRelativePath(outputFile, currentParsingFile);
+            if (conflictTable.containsKey(outputFile)) {
+                final URI realoutputfile = conflictTable.get(outputFile);
+                relative = getRelativePath(realoutputfile, currentParsingFile);
+            }
+            if (href.startsWith(SHARP)) {
+                // if @href refers to a location inside current parsing file
+                // update @href to point back to current file
+                // if the location is moved to chunk, @href will
+                // be update again to the new location.
+                XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, relative + href);
+            } else if (relative.toString().contains(SLASH)) {
+                // if new file is not under the same directory with current file
+                // add path information to the @href value
+                XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_HREF, relative.resolve(href).toString());
+            }
         }
         if (TOPIC_TOPIC.matches(cls) && resAtts.getValue(ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION) == null) {
             addOrSetAttribute(resAtts, ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, DITA_NAMESPACE);
@@ -307,16 +300,6 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      */
     String generateFilename() {
         return chunkFilenameGenerator.generateFilename(CHUNK_PREFIX, FILE_EXTENSION_DITA);
-    }
-
-    /**
-     * Check whether href needs to be updated
-     */
-    private boolean checkHREF(final Attributes atts) {
-        if (atts.getValue(ATTRIBUTE_NAME_HREF) == null) {
-            return false;
-        }
-        return !ATTR_SCOPE_VALUE_EXTERNAL.equals(atts.getValue(ATTRIBUTE_NAME_SCOPE));
     }
 
     /**
