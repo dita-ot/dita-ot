@@ -20,12 +20,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import javax.xml.parsers.DocumentBuilder;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.URI;
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
+import java.util.Stack;
 
 import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.moveFile;
@@ -43,6 +43,16 @@ import static org.dita.dost.util.XMLUtils.*;
 public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
 
     private final XMLReader reader;
+    // stub is used as the anchor to mark where to insert generated child
+    // topicref inside current topicref
+    private Element stub;
+    // siblingStub is similar to stub. The only different is it is used to
+    // insert generated topicref sibling to current topicref
+    private Element siblingStub;
+    private final Deque<URI> outputFileNameStack = new ArrayDeque<>();
+    private Element topicDoc = null;
+    final Deque<Writer> outputStack = new ArrayDeque<>();
+    final Deque<Element> stubStack = new ArrayDeque<>();
 
     /**
      * Constructor.
@@ -276,11 +286,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         try {
             if (TOPIC_TOPIC.matches(cls)) {
                 topicSpecSet.add(qName);
-//                final String id = atts.getValue(ATTRIBUTE_NAME_ID);
-                // search node by id.
-                final Element topic = searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID, TOPIC_TOPIC);
 
-                // only by-topic
                 if (include && !CHUNK_SELECT_TOPIC.equals(selectMethod)) {
                     // chunk="by-topic" and next topic element found
                     outputStack.push(output);
@@ -315,6 +321,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     newTopicref.setAttribute(ATTRIBUTE_NAME_XTRF, ATTR_XTRF_VALUE_GENERATED);
                     newTopicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), outputFile).toString());
 
+                    final Element topic = searchForNode(topicDoc, id, ATTRIBUTE_NAME_ID, TOPIC_TOPIC);
                     final Element topicmeta = createTopicMeta(topic);
                     newTopicref.appendChild(topicmeta);
 
@@ -332,37 +339,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                         newTopicref.appendChild(stub);
                     }
                 }
-                if (include) {
-                    if (CHUNK_SELECT_TOPIC.equals(selectMethod)) {
-                        // if select method is "select-topic" and current topic is the nested topic in target topic, skip it.
-                        include = false;
-                        skipLevel = 1;
-                        skip = true;
-                    } else {
-                        // if select method is "select-document" or "select-branch"
-                        // and current topic is the nested topic in target topic.
-                        // if file name has been changed, add an entry in changeTable
-                        if (!currentParsingFile.equals(outputFile)) {
-                            if (id != null) {
-                                changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
-                            } else {
-                                changeTable.put(stripFragment(currentParsingFile), stripFragment(outputFile));
-                            }
-                        }
-                    }
-                } else if (skip) {
-                    skipLevel = 1;
-                } else if (id != null && (id.equals(targetTopicId) || startFromFirstTopic)) {
-                    // if the target topic has not been found and current topic is the target topic
-                    include = true;
-                    includelevel = 0;
-                    skip = false;
-                    skipLevel = 0;
-                    startFromFirstTopic = false;
-                    if (!currentParsingFile.equals(outputFile)) {
-                        changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
-                    }
-                }
+
+                processSelect(id);
             }
 
             if (include) {

@@ -350,38 +350,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             if (TOPIC_TOPIC.matches(cls)) {
                 topicSpecSet.add(qName);
 
-                // only by-topic
-                if (include) {
-                    if (CHUNK_SELECT_TOPIC.equals(selectMethod)) {
-                        // if select method is "select-topic" and current topic is the nested topic in target topic, skip it.
-                        include = false;
-                        skipLevel = 1;
-                        skip = true;
-                    } else {
-                        // if select method is "select-document" or "select-branch"
-                        // and current topic is the nested topic in target topic.
-                        // if file name has been changed, add an entry in changeTable
-                        if (!currentParsingFile.equals(outputFile)) {
-                            if (id != null) {
-                                changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
-                            } else {
-                                changeTable.put(stripFragment(currentParsingFile), stripFragment(outputFile));
-                            }
-                        }
-                    }
-                } else if (skip) {
-                    skipLevel = 1;
-                } else if (id != null && (id.equals(targetTopicId) || startFromFirstTopic)) {
-                    // if the target topic has not been found and current topic is the target topic
-                    include = true;
-                    includelevel = 0;
-                    skip = false;
-                    skipLevel = 0;
-                    startFromFirstTopic = false;
-                    if (!currentParsingFile.equals(outputFile)) {
-                        changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
-                    }
-                }
+                processSelect(id);
             }
 
             if (include) {

@@ -51,15 +51,12 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     Element rootTopicref = null;
 
-    Element topicDoc = null;
-
     /** Input file's parent absolute path. */
     URI currentFile = null;
 
     URI currentParsingFile = null;
     /** Absolute temporary output file */
     URI outputFile = null;
-    final Stack<URI> outputFileNameStack = new Stack<>();
 
     String targetTopicId = null;
 
@@ -76,17 +73,6 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     boolean startFromFirstTopic = false;
 
     Writer output = null;
-
-    final Stack<Writer> outputStack = new Stack<>();
-    final Stack<Element> stubStack = new Stack<>();
-
-    // stub is used as the anchor to mark where to insert generated child
-    // topicref inside current topicref
-    Element stub = null;
-
-    // siblingStub is similar to stub. The only different is it is used to
-    // insert generated topicref sibling to current topicref
-    Element siblingStub = null;
 
     Set<String> topicID = new HashSet<>();
 
@@ -192,6 +178,40 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     @Override
     public abstract void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException;
+
+    void processSelect(String id) {
+        if (include) {
+            if (CHUNK_SELECT_TOPIC.equals(selectMethod)) {
+                // if select method is "select-topic" and current topic is the nested topic in target topic, skip it.
+                include = false;
+                skipLevel = 1;
+                skip = true;
+            } else {
+                // if select method is "select-document" or "select-branch"
+                // and current topic is the nested topic in target topic.
+                // if file name has been changed, add an entry in changeTable
+                if (!currentParsingFile.equals(outputFile)) {
+                    if (id != null) {
+                        changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
+                    } else {
+                        changeTable.put(stripFragment(currentParsingFile), stripFragment(outputFile));
+                    }
+                }
+            }
+        } else if (skip) {
+            skipLevel = 1;
+        } else if (id != null && (id.equals(targetTopicId) || startFromFirstTopic)) {
+            // if the target topic has not been found and current topic is the target topic
+            include = true;
+            includelevel = 0;
+            skip = false;
+            skipLevel = 0;
+            startFromFirstTopic = false;
+            if (!currentParsingFile.equals(outputFile)) {
+                changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, id));
+            }
+        }
+    }
 
     FileInfo generateFileInfo(final URI output) {
         final URI temp = job.tempDirURI.relativize(output);
