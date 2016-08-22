@@ -327,6 +327,8 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 writeEndElement(ditaFileOutput, ELEMENT_NAME_DITA);
             }
             ditaFileOutput.flush();
+        } catch (SAXException e) {
+            throw new IOException(e);
         } finally {
             if (ditaFileOutput != null) {
                 ditaFileOutput.close();
@@ -346,20 +348,16 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             skipLevel++;
         }
 
-        try {
-            if (TOPIC_TOPIC.matches(cls)) {
-                topicSpecSet.add(qName);
+        if (TOPIC_TOPIC.matches(cls)) {
+            topicSpecSet.add(qName);
 
-                processSelect(id);
-            }
+            processSelect(id);
+        }
 
-            if (include) {
-                includelevel++;
-                final Attributes resAtts = processAttributes(atts);
-                writeStartElement(output, qName, resAtts);
-            }
-        } catch (final IOException e) {
-            logger.error(e.getMessage(), e);
+        if (include) {
+            includelevel++;
+            final Attributes resAtts = processAttributes(atts);
+            writeStartElement(output, qName, resAtts);
         }
     }
 
@@ -377,11 +375,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             includelevel--;
             // prevent adding </dita> into output
             if (includelevel >= 0) {
-                try {
-                    writeEndElement(output, qName);
-                } catch (final IOException e) {
-                    logger.error(e.getMessage(), e);
-                }
+                writeEndElement(output, qName);
             }
             if (includelevel == 0 && !CHUNK_SELECT_DOCUMENT.equals(selectMethod)) {
                 include = false;

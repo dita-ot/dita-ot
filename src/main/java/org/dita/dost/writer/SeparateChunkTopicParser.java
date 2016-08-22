@@ -367,11 +367,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
             includelevel--;
             // prevent adding </dita> into output
             if (includelevel >= 0) {
-                try {
-                    writeEndElement(output, qName);
-                } catch (final IOException e) {
-                    logger.error(e.getMessage(), e);
-                }
+                writeEndElement(output, qName);
             }
             if (includelevel == 0 && !CHUNK_SELECT_DOCUMENT.equals(selectMethod)) {
                 include = false;

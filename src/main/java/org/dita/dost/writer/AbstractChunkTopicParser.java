@@ -112,7 +112,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
             try {
                 output.write(escapeXML(ch, start, length));
             } catch (final IOException e) {
-                logger.error(e.getMessage(), e);
+                throw new SAXException(e);
             }
         }
     }
@@ -132,7 +132,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
             try {
                 output.write(ch, start, length);
             } catch (final IOException e) {
-                logger.error(e.getMessage(), e);
+                throw new SAXException(e);
             }
         }
     }
@@ -144,11 +144,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                 || PI_WORKDIR_TARGET_URI.equals(target)
                 || PI_PATH2PROJ_TARGET.equals(target)
                 || PI_PATH2PROJ_TARGET_URI.equals(target)) {
-            try {
-                writeProcessingInstruction(output, target, data);
-            } catch (final IOException e) {
-                logger.error(e.getMessage(), e);
-            }
+            writeProcessingInstruction(output, target, data);
         }
     }
 
@@ -396,27 +392,12 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     /**
      * Convenience method to write document start.
      */
-    void writeStartDocument(final Writer output) throws IOException {
-        output.write(XML_HEAD);
-    }
-
-    /**
-     * Convenience method to write an end element.
-     *
-     * @param name element name
-     */
-    void writeStartElement(final Writer output, final String name, final Attributes atts) throws IOException {
-        output.write(LESS_THAN);
-        output.write(name);
-        for (int i = 0; i < atts.getLength(); i++) {
-            output.write(STRING_BLANK);
-            output.write(atts.getQName(i));
-            output.write(EQUAL);
-            output.write(QUOTATION);
-            output.write(escapeXML(atts.getValue(i)));
-            output.write(QUOTATION);
+    void writeStartDocument(final Writer output) throws SAXException {
+        try {
+            output.write(XML_HEAD);
+        } catch (IOException e) {
+            throw new SAXException(e);
         }
-        output.write(GREATER_THAN);
     }
 
     /**
@@ -424,11 +405,38 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      *
      * @param name element name
      */
-    void writeEndElement(final Writer output, final String name) throws IOException {
-        output.write(LESS_THAN);
-        output.write(SLASH);
-        output.write(name);
-        output.write(GREATER_THAN);
+    void writeStartElement(final Writer output, final String name, final Attributes atts) throws SAXException {
+        try {
+            output.write(LESS_THAN);
+            output.write(name);
+            for (int i = 0; i < atts.getLength(); i++) {
+                output.write(STRING_BLANK);
+                output.write(atts.getQName(i));
+                output.write(EQUAL);
+                output.write(QUOTATION);
+                output.write(escapeXML(atts.getValue(i)));
+                output.write(QUOTATION);
+            }
+            output.write(GREATER_THAN);
+        } catch (IOException e) {
+            throw new SAXException(e);
+        }
+    }
+
+    /**
+     * Convenience method to write an end element.
+     *
+     * @param name element name
+     */
+    void writeEndElement(final Writer output, final String name) throws SAXException {
+        try {
+            output.write(LESS_THAN);
+            output.write(SLASH);
+            output.write(name);
+            output.write(GREATER_THAN);
+        } catch (IOException e) {
+            throw new SAXException(e);
+        }
     }
 
     /**
@@ -438,16 +446,20 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      * @param value PI value, may be {@code null}
      */
     void writeProcessingInstruction(final Writer output, final String name, final String value)
-            throws IOException {
-        output.write(LESS_THAN);
-        output.write(QUESTION);
-        output.write(name);
-        if (value != null) {
-            output.write(STRING_BLANK);
-            output.write(value);
+            throws SAXException {
+        try {
+            output.write(LESS_THAN);
+            output.write(QUESTION);
+            output.write(name);
+            if (value != null) {
+                output.write(STRING_BLANK);
+                output.write(value);
+            }
+            output.write(QUESTION);
+            output.write(GREATER_THAN);
+        } catch (IOException e) {
+            throw new SAXException(e);
         }
-        output.write(QUESTION);
-        output.write(GREATER_THAN);
     }
 
 }
