@@ -123,9 +123,7 @@
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
             <param name="defaultLanguage" expression="${default.language}"/>
             <dita:extension behavior="org.dita.dost.platform.InsertAction" id="dita.conductor.eclipse.toc.param"/>
-            <mapper type="regexp"
-                from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.ditamap)$$" 
-                to="\2\.xml"/>
+            <mapper classname="org.dita.dost.util.JobMapper" to=".xml"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>

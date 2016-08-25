@@ -44,6 +44,7 @@
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
       <param name="defaultLanguage" expression="${default.language}"/>
+      <mapper classname="org.dita.dost.util.JobMapper" to="${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
@@ -59,9 +60,7 @@
       style="${troff.step2.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
-      <mapper type="regexp" 
-        from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
-        to="\2${out.ext}"/>
+      <mapper classname="org.dita.dost.util.JobMapper" to="${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>
     </xslt>
   </target>
