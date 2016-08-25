@@ -8,7 +8,7 @@ Prerequisites
 
 To build and use DITA-OT, you’ll need:
 
-* Java Development Kit 7 or newer
+* Java Development Kit 8 or newer
 
 Building
 --------
