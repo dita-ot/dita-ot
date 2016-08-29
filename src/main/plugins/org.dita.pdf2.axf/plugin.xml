@@ -14,6 +14,7 @@
       <val>no</val>
     </param>
     <param name="axf.opt" desc="Specifies the user configuration file for Antenna House Formatter." type="file"/>
+    <param name="axf.cmd" desc="Specifies the path to the Antenna House Formatter executable." type="file"/>
   </transtype>
   <feature extension="dita.conductor.target.relative" file="integrator.xml"/>
   <feature extension="dita.conductor.pdf2.formatter.check" value="ah"/>
