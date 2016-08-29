@@ -12,6 +12,81 @@
   </target>
 
   <target name="transform.fo2pdf.xep.init" depends="transform.fo2pdf.xep.test-use" if="use.xep.pdf.formatter">
+    <!-- Default maximum memory to give to forked Java processes.
+	
+	     Set this higher either in another Ant script or on the
+	     Ant command line using the -D parameter, e.g.:
+	     
+	     ant -DmaxJavaMemory=4G
+	     
+	     Memory values are integers followed by "M" for megabytes,
+	     "G" for gigabytes.
+	     
+	     On 32-bit systems, the largest memory setting will be somewhere
+	     between 1500M and 2000M depending on your system.
+	     
+	     64-bit JVMs can use essentially unlimited memory.
+	     
+	     For memory-intensive process (very large maps), 
+	     2 or 3 gigabytes should be more than sufficient. 
+	     
+	     This value is used in the @maxmemory attribute the of the Ant
+	     <java> task.
+	  -->
+    <property name="maxJavaMemory" value="500m"/>
+    <!-- Determine the Java architecture and set the JVM arguments
+	     appropriately.
+	     
+	     Note that the Java architecture is determined by how the
+	     JVM is started, so it is possible for the base Ant
+	     JVM to have been started in 32-bit mode on a 64-bit machine.
+	     
+	     The is64bit and is32bit properties are mutually exclusive.
+	     
+	  -->
+    <condition property="is64bit">
+      <!-- NOTE: The following is not a complete list but should cover
+		           most of the systems Open Toolkit users are likely
+		           to use. Add more values as they become known.
+		-->
+      <and>
+        <or>
+          <os arch="x86_64"/>
+          <os arch="amd64"/>
+          <os arch="ppc64"/>
+        </or>
+        <not>
+          <os family="windows"/>
+        </not>
+      </and>
+    </condition>
+    <condition property="is32bit">
+      <isfalse value="${is64bit}"/>
+    </condition>
+    <!-- For 64-bit machines, the value -d64 runs the
+	     the JVM in 64-bit mode. This parameter cannot
+	     be specified on 32-bit machines (that is, you cannot
+	     specify -d32 on a 32-bit machine, you get an "unrecognized
+	     option error in that case).
+	  -->
+    <condition property="jvmArchFlag"
+      value="-d64"
+      else="">
+      <istrue value="${is64bit}"/>
+    </condition>
+    <!-- Base JVM argument line to use with any forked Java processes.
+	
+	     Sets the JVM architecture.
+	     
+	     Use like so:
+	     
+	     <java ...>
+	       <jvmarg line="${baseJVMArgLine}"/>
+	       ...
+	     </java>
+	  -->
+    <property name="baseJVMArgLine" value="${jvmArchFlag} -Xmx${maxJavaMemory}"/>
+    
     <condition property="use.xep.pdf.formatter">
       <equals arg1="${pdf.formatter}" arg2="xep"/>
     </condition>
