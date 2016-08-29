@@ -92,10 +92,15 @@
     </set>
   </property>
   <files>
-    <file uri="topics/target-topic-a.xml" path="topics/target-topic-a.xml" format="dita" out-dita="true" non-conref-target="true" target="true" active="true"/>
-    <file uri="maps/root-map-01.ditamap" path="maps/root-map-01.ditamap" format="ditamap" active="true"/>
-    <file uri="topics/target-topic-c.xml" path="topics/target-topic-c.xml" format="dita" out-dita="true" non-conref-target="true" target="true" active="true"/>
-    <file uri="topics/xreffin-topic-1.xml" path="topics/xreffin-topic-1.xml" format="dita" has-link="true" has-keyref="true" out-dita="true" non-conref-target="true" target="true" active="true"/>
+    <file uri="topics/target-topic-a.xml" path="topics/target-topic-a.xml" format="dita"
+      out-dita="true" non-conref-target="true" target="true" active="true"/>
+    <file uri="maps/root-map-01.ditamap" path="maps/root-map-01.ditamap" format="ditamap"
+      active="true"/>
+    <file uri="topics/target-topic-c.xml" path="topics/target-topic-c.xml" format="dita"
+      out-dita="true" non-conref-target="true" target="true" active="true"/>
+    <file uri="topics/xreffin-topic-1.xml" path="topics/xreffin-topic-1.xml" format="dita"
+      has-link="true" has-keyref="true" out-dita="true" non-conref-target="true" target="true"
+      active="true"/>
     <file uri="topics/copy-to.xml" path="topics/copy-to.xml" format="dita" active="true"/>
   </files>
 </job>
