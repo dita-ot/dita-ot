@@ -535,8 +535,9 @@ class BranchFilterModule extends AbstractPipelineModuleImpl {
             final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
             final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
             if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
-                elem.setAttribute(BRANCH_COPY_TO,
-                        generateCopyTo(copyTo.isEmpty() ? href : copyTo, filter).toString());
+                final URI srcTemp = toURI(copyTo.isEmpty() ? href : copyTo);
+                final URI dstTemp = generateCopyTo(srcTemp, filter);
+                elem.setAttribute(BRANCH_COPY_TO, dstTemp.toString());
                 if (!copyTo.isEmpty()) {
                     elem.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
                 }
@@ -569,8 +570,8 @@ class BranchFilterModule extends AbstractPipelineModuleImpl {
         }
     }
     
-    static URI generateCopyTo(final String href, final Branch filter) {
-        final StringBuilder buf = new StringBuilder(href);
+    static URI generateCopyTo(final URI href, final Branch filter) {
+        final StringBuilder buf = new StringBuilder(href.toString());
         final Optional<String> suffix = filter.resourceSuffix;
         if (suffix.isPresent()) {
             final int sep = buf.lastIndexOf(URI_SEPARATOR);
