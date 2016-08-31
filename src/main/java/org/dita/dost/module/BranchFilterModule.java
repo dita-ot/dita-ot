@@ -50,7 +50,7 @@ import static org.dita.dost.util.XMLUtils.*;
  *
  * @since 2.2
  */
-final class BranchFilterModule extends AbstractPipelineModuleImpl {
+class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
@@ -61,7 +61,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     /** Current map being processed, relative to temporary directory */
     private URI map;
     /** Absolute URI to map being processed. */
-    private URI currentFile;
+    protected URI currentFile;
 
     public BranchFilterModule() {
         builder = XMLUtils.getDocumentBuilder();
@@ -410,7 +410,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     /**
      * Duplicate branches so that each {@code ditavalref} will in a separate branch.
      */
-    private void splitBranches(final Element elem, final Branch filter) {
+    void splitBranches(final Element elem, final Branch filter) {
         final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
         if (ditavalRefs.size() > 0) {
             // remove ditavalrefs

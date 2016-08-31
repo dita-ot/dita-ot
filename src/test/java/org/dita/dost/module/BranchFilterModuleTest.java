@@ -1,17 +1,5 @@
 package org.dita.dost.module;
 
-import static junit.framework.Assert.assertEquals;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.module.BranchFilterModule.*;
-import static org.dita.dost.util.URLUtils.toURI;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-
 import com.google.common.base.Optional;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
@@ -20,10 +8,25 @@ import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class BranchFilterModuleTest {
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+
+import static junit.framework.Assert.assertEquals;
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
+
+public class BranchFilterModuleTest extends BranchFilterModule {
 
     private final File resourceDir = TestUtils.getResourceDir(BranchFilterModuleTest.class);
     private final File expDir = new File(resourceDir, "exp");
@@ -65,6 +68,19 @@ public class BranchFilterModuleTest {
     @After
     public void tearDown() throws Exception {
         TestUtils.forceDelete(tempDir);
+    }
+
+    @Test
+    public void testSplitBranches() throws ParserConfigurationException, IOException, SAXException {
+        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+        final Document act = builder.parse(new File(tempDir, "input.ditamap"));
+        currentFile = new File(tempDir, "input.ditamap").toURI();
+        setJob(job);
+        splitBranches(act.getDocumentElement(), Branch.EMPTY);
+
+        final Document exp = builder.parse(new File(expDir, "input_splitBranches.ditamap"));
+        assertXMLEqual(exp, act);
     }
 
     @Test
