@@ -27,6 +27,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
      -->
 <!-- 20090903 RDA: added <?ditaot gentext?> and <?ditaot linktext?> PIs for RFE 1367897.
                    Allows downstream processes to identify original text vs. generated link text. -->
+<!-- WEK: Refactored to fix bugs, improve code -->
 
 <xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
