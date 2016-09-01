@@ -687,7 +687,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <linklist>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result."
-                as="element()" priority="-10">
+                as="element()?" priority="-10">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="exists($links)">
       <linklist class="- topic/linklist " outputclass="relinfo">
@@ -717,7 +717,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <!-- Wrapper for concept group: "Related concepts" in a <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group"
-                name="related-links:result.concept" as="element()">
+                name="related-links:result.concept" as="element()?">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " outputclass="relinfo relconcepts">
@@ -747,7 +747,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group"
-    name="related-links:result.reference" as="element()">
+    name="related-links:result.reference" as="element()?">
     <xsl:param name="links"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " outputclass="relinfo relref">
@@ -777,7 +777,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <!-- Task wrapper for HTML: "Related tasks" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group"
-                name="related-links:result.task" as="element()">
+                name="related-links:result.task" as="element()?">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " outputclass="relinfo reltasks">
