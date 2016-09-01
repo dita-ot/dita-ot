@@ -20,11 +20,15 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static junit.framework.Assert.assertEquals;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
+import static org.junit.Assert.assertNotNull;
 
 public class BranchFilterModuleTest extends BranchFilterModule {
 
@@ -92,6 +96,24 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         m.processMap(toURI("input.ditamap"));
         assertXMLEqual(new InputSource(new File(expDir, "input.ditamap").toURI().toString()),
                 new InputSource(new File(tempDir, "input.ditamap").toURI().toString()));
+
+        final List<String> exp = Arrays.asList(
+                //"installation-procedure.dita",
+                //"getting-started.dita",
+                //"http://example.com/install.dita",
+                "configure.dita",
+                "input.ditamap", "install.dita", "linux.ditaval", "perform-install.dita",
+                "configure-novice.dita", "novice.ditaval", "configure-admin.dita",
+                "advanced.ditaval", "install-mac.dita", "mac.ditaval",
+                "perform-install-mac.dita", "installation-procedure-mac.dita", "configure-novice-mac.dita",
+                "configure-admin-mac.dita", "install-win.dita", "win.ditaval", "perform-install-win.dita",
+                "installation-procedure-win.dita", "configure-novice-win.dita", "configure-admin-win.dita",
+                "install-linux.dita"
+        );
+        assertEquals(exp.size(), job.getFileInfo().size());
+        for (final String f : exp) {
+            assertNotNull(job.getFileInfo(URI.create(f)));
+        }
     }
 
     private static final Optional<String> ABSENT_STRING = Optional.absent();
