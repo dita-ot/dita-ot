@@ -1,6 +1,6 @@
 [submodule "src/test/testsuite"]
 	path = src/test/testsuite
-	url = git@github.com:drmacro/testsuite.git
+	url = https://github.com/drmacro/testsuite.git
 [submodule "src/main/docsrc"]
 	path = src/main/docsrc
 	url = https://github.com/dita-ot/docs.git
