@@ -49,6 +49,7 @@ configurations {
 }
 
 def integrationTestSystemProperties = [
+        temp_dir : "${buildDir}/tmp/integrationTest",
         dita_dir : "${projectDir}/src/main",
         basedir : "${projectDir}/src/test/testsuite"
 ]
