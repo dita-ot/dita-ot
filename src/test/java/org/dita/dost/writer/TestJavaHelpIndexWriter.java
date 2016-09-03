@@ -3,7 +3,7 @@
  * See the accompanying license.txt file for applicable licenses.
  */
 /*
- * (c) Copyright IBM Corp. 2010 All Rights Reserved.
+ * Copyright 2010 IBM Corporation
  */
 package org.dita.dost.writer;
 

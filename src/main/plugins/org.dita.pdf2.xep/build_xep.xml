@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!--
-  This file is part of the DITA Open Toolkit project.
+This file is part of the DITA Open Toolkit project.
 
-  Copyright 2011 Jarno Elovirta
+Copyright 2011 Jarno Elovirta
 
-  See the accompanying license.txt file for applicable licenses.
+See the accompanying license.txt file for applicable licenses.
 -->
 <project name="org.dita.pdf2.xep">
 

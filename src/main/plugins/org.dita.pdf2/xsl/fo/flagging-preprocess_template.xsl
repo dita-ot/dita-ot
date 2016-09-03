@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- Deprecated since 2.2 -->
 <!--
-  This file is part of the DITA Open Toolkit project.
+This file is part of the DITA Open Toolkit project.
 
-  Copyright 2011 Reuven Weiser
+Copyright 2011 Reuven Weiser
 
-  See the accompanying license.txt file for applicable licenses.
+See the accompanying license.txt file for applicable licenses.
 -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

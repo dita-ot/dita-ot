@@ -1,10 +1,10 @@
 <!-- 
-  This file is part of the DITA Open Toolkit project hosted on
-  Sourceforge.net. See the accompanying license.txt file for
-  applicable licenses.
-  
-  (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
-  *-->
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2007 Shawn McKenzie
+
+See the accompanying license.txt file for applicable licenses.
+-->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template name="gethref">

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file is part of the DITA Open Toolkit project.
+<!--
+This file is part of the DITA Open Toolkit project.
      See the accompanying license.txt file for 
      applicable licenses.-->
 <!--
-  This file is part of the DITA Open Toolkit project.
+This file is part of the DITA Open Toolkit project.
 
-  Copyright 2013 Jarno Elovirta
+Copyright 2013 Jarno Elovirta
 
-  See the accompanying license.txt file for applicable licenses.
+See the accompanying license.txt file for applicable licenses.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="2.0">
