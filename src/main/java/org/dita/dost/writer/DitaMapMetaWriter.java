@@ -1,5 +1,8 @@
 /*
  * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2007 imagiczhang
+ *
  * See the accompanying license.txt file for applicable licenses.
  */
 package org.dita.dost.writer;

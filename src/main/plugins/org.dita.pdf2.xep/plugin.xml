@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This file is part of the DITA Open Toolkit project.
+
+  Copyright 2015 Jarno Elovirta
+
+  See the accompanying license.txt file for applicable licenses.
+-->
 <plugin id="org.dita.pdf2.xep">
   <require plugin="org.dita.pdf2"/>
   <!-- extensions -->

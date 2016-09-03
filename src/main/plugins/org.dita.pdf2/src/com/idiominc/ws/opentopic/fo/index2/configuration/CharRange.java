@@ -1,3 +1,10 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2007 cwong15
+ *
+ * See the accompanying LICENSE.md file for applicable licenses.
+ */
 package com.idiominc.ws.opentopic.fo.index2.configuration;
 
 import com.idiominc.ws.opentopic.fo.index2.IndexCollator;
