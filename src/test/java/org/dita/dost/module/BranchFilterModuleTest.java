@@ -114,6 +114,23 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         for (final String f : exp) {
             assertNotNull(job.getFileInfo(URI.create(f)));
         }
+
+        final List<String> filesExp = Arrays.asList(
+                //"install.dita",
+                "configure.dita",
+                "perform-install.dita", "configure-novice.dita",
+                "configure-admin.dita", "install-mac.dita", "perform-install-mac.dita",
+                "installation-procedure-mac.dita", "configure-novice-mac.dita", "configure-admin-mac.dita",
+                "install-win.dita", "perform-install-win.dita", "installation-procedure-win.dita",
+                "configure-novice-win.dita", "configure-admin-win.dita", "install-linux.dita", "install.dita"
+
+        );
+        Collections.sort(filesExp);
+        final List<String> filesAct = Arrays.stream(tempDir.listFiles((dir, name) -> name.endsWith(".dita")))
+                .map(f -> f.getName())
+                .collect(Collectors.toList());
+        Collections.sort(filesAct);
+        assertEquals(filesExp, filesAct);
     }
 
     private static final Optional<String> ABSENT_STRING = Optional.absent();
