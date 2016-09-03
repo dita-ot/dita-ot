@@ -404,7 +404,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <!-- Redirected to mode template to allow overrides -->
   <xsl:template name="verify-type-value">
     <xsl:param name="type" as="xs:string"/>         <!-- Specified type on the topicref -->
-    <xsl:param name="actual-class" as="xs:string"/> <!-- Class value on the target element -->
+    <xsl:param name="actual-class" as="xs:string?"/> <!-- Class value on the target element -->
     <xsl:param name="actual-name" as="xs:string"/>  <!-- Name of the target element -->
     <xsl:param name="WORKDIR" as="xs:string">
       <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
@@ -423,7 +423,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
        this topic will incorrectly treat it as a concept. -->
   <xsl:template match="*" mode="mappull:verify-type-value">
     <xsl:param name="type" as="xs:string"/>          <!-- Specified type on the topicref -->
-    <xsl:param name="actual-class" as="xs:string"/>  <!-- Class value on the target element -->
+    <xsl:param name="actual-class" as="xs:string?"/>  <!-- Class value on the target element -->
     <xsl:param name="actual-name" as="xs:string"/>   <!-- Name of the target element -->
     <xsl:param name="WORKDIR" as="xs:string">
       <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
