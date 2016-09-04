@@ -526,6 +526,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         }
 
+        // Load the property files specified by -propertyfile
+        loadPropertyFiles();
+
         if (justPrintUsage || justPrintVersion || justPrintDiagnostics) {
             if (justPrintVersion) {
                 printVersion(msgOutputLevel);
@@ -632,9 +635,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
         // Normalize buildFile for re-import detection
         buildFile = FileUtils.getFileUtils().normalize(buildFile.getAbsolutePath());
-
-        // Load the property files specified by -propertyfile
-        loadPropertyFiles();
 
         if (msgOutputLevel >= Project.MSG_VERBOSE) {
             System.out.println("Buildfile: " + buildFile);
@@ -1134,6 +1134,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static void printUsage() {
         final StringBuilder msg = new StringBuilder();
         msg.append("Usage: dita -i <file> -f <name> [options]\n");
+        msg.append("   or: dita -propertyfile <file> [options]\n");
         msg.append("   or: dita -install [<file>]\n");
         msg.append("   or: dita -uninstall <id>\n");
         msg.append("   or: dita -help\n");
@@ -1141,6 +1142,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("Arguments: \n");
         msg.append("  -i, -input <file>      input file\n");
         msg.append("  -f, -format <name>     output format (transformation type)\n");
+        msg.append("  -propertyfile <name>   load all properties from file\n");
         msg.append("  -install [<file>]      install plug-in from a ZIP file or reload plugins\n");
         msg.append("  -uninstall <id>        uninstall plug-in with the ID\n");
         msg.append("  -h, -help              print this message\n");
@@ -1175,8 +1177,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("  -keep-going, -k        execute all targets that do not depend"
         // + lSep);
         // msg.append("                         on failed target(s)" + lSep);
-        msg.append("  -propertyfile <name>   load all properties from file with -D\n");
-        msg.append("                         properties taking precedence");
         // msg.append("  -inputhandler <class>  the class which will handle input requests"
         // + lSep);
         // msg.append("  -find <file>           (s)earch for buildfile towards the root of"
