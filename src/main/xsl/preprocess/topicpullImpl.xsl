@@ -45,6 +45,12 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
      -->
 <!-- 20090903 RDA: added <?ditaot gentext?> and <?ditaot linktext?> PIs for RFE 1367897.
                    Allows downstream processes to identify original text vs. generated link text. -->
+
+<!-- Refactor guide: Remove in final commit version:
+ 
+  - Refactor 1: Better names for xsl:key
+
+  -->
           
 <xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -80,8 +86,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
            match="*[contains(@class, ' topic/table ')][*[contains(@class, ' topic/title ')]]"
            use="'include'"/>
   
-  <xsl:key name="id" match="*[@id]" use="@id"/>
-  <xsl:key name="topic" match="*[@id][contains(@class, ' topic/topic ')]" use="@id"/>
+  <xsl:key name="elementsById" match="*[@id]" use="@id"/>
+  <xsl:key name="topicsById" match="*[contains(@class, ' topic/topic ')][@id]" use="@id"/>
   
   <!-- Process a link in the related-links section. Retrieve link text, type, and
        description if possible (and not already specified locally). -->
@@ -339,14 +345,14 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:choose>
       <xsl:when test="not($scope='external') and not($scope='peer') and $topicpos='samefile'">
         <xsl:choose>
-          <xsl:when test="$topicid='' or not(key('topic', $topicid)) or $topicid='#none#' ">
+          <xsl:when test="$topicid='' or not(key('topicsById', $topicid)) or $topicid='#none#' ">
             <xsl:call-template name="output-message">
               <xsl:with-param name="id" select="'DOTX057W'"/>
               <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
-          <xsl:when test="not($elemid='') and not($elemid='#none#') and not(key('topic', $topicid)//*[@id=$elemid])">
+          <xsl:when test="not($elemid='') and not($elemid='#none#') and not(key('topicsById', $topicid)//*[@id=$elemid])">
             <xsl:call-template name="output-message">
               <xsl:with-param name="id" select="'DOTX057W'"/>
               <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>
@@ -371,7 +377,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
-          <xsl:when test="not($elemid='') and not($elemid='#none#') and not(key('topic', $topicid)//*[@id=$elemid])">
+          <xsl:when test="not($elemid='') and not($elemid='#none#') and not(key('topicsById', $topicid)//*[@id=$elemid])">
             <xsl:call-template name="output-message">
               <xsl:with-param name="id" select="'DOTX057W'"/>
               <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>
@@ -658,8 +664,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:choose>
       <xsl:when test="$topicpos='samefile'">
         <xsl:choose>
-          <xsl:when test="key('topic', $topicid)">
-            <xsl:value-of select="local-name(key('topic', $topicid))"/>
+          <xsl:when test="key('topicsById', $topicid)">
+            <xsl:value-of select="local-name(key('topicsById', $topicid))"/>
           </xsl:when>
           <!--type could not be retrieved-->
           <xsl:otherwise>#none#</xsl:otherwise>
@@ -699,8 +705,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:choose>
       <xsl:when test="$topicpos='samefile'">
         <xsl:choose>
-          <xsl:when test="key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid]">
-            <xsl:value-of select="local-name(key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid])"/>
+          <xsl:when test="key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid]">
+            <xsl:value-of select="local-name(key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid])"/>
           </xsl:when>
           <!--type could not be retrieved-->
           <xsl:otherwise>#none#</xsl:otherwise>
@@ -740,20 +746,20 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:when test="dita-ot:is-link(.) and not(*[not(contains(@class,' topic/desc '))]|text())">
           <xsl:choose>
             <!-- targetting an element in the same file (not a topic) -->
-            <xsl:when test="$topicpos='samefile' and $elemid!='#none#' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid]">
+            <xsl:when test="$topicpos='samefile' and $elemid!='#none#' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid]">
               <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
                 <xsl:with-param name="type" select="$localtype"/>
-                <xsl:with-param name="actual-class" select="key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][1]/@class"/>
-                <xsl:with-param name="actual-name" select="local-name(key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][1])"/>
+                <xsl:with-param name="actual-class" select="key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][1]/@class"/>
+                <xsl:with-param name="actual-name" select="local-name(key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][1])"/>
                 <xsl:with-param name="targetting">element</xsl:with-param>
               </xsl:apply-templates>
             </xsl:when>
             <!-- targetting a topic in the same file -->
-            <xsl:when test="$topicpos='samefile' and $elemid='#none#' and key('topic', $topicid)">
+            <xsl:when test="$topicpos='samefile' and $elemid='#none#' and key('topicsById', $topicid)">
               <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
                 <xsl:with-param name="type" select="$localtype"/>
-                <xsl:with-param name="actual-class" select="key('topic', $topicid)[1]/@class"/>
-                <xsl:with-param name="actual-name" select="local-name(key('topic', $topicid)[1])"/>
+                <xsl:with-param name="actual-class" select="key('topicsById', $topicid)[1]/@class"/>
+                <xsl:with-param name="actual-name" select="local-name(key('topicsById', $topicid)[1])"/>
                 <xsl:with-param name="targetting">topic</xsl:with-param>
               </xsl:apply-templates>
             </xsl:when>
@@ -799,11 +805,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:otherwise>
               <xsl:choose>
                 <!-- targetting a topic in this file -->
-                <xsl:when test="$topicpos='samefile' and key('topic', $topicid)">
+                <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)">
                   <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
                     <xsl:with-param name="type" select="$localtype"/>
-                    <xsl:with-param name="actual-class" select="key('topic', $topicid)[1]/@class"/>
-                    <xsl:with-param name="actual-name" select="local-name(key('topic', $topicid)[1])"/>
+                    <xsl:with-param name="actual-class" select="key('topicsById', $topicid)[1]/@class"/>
+                    <xsl:with-param name="actual-name" select="local-name(key('topicsById', $topicid)[1])"/>
                     <xsl:with-param name="targetting">topic</xsl:with-param>
                   </xsl:apply-templates>
                 </xsl:when>
@@ -1055,17 +1061,17 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval"/>
     <xsl:param name="topicid"/>
     <xsl:choose>
-      <xsl:when test="key('id', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/title ')]">
+      <xsl:when test="key('elementsById', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/title ')]">
         <xsl:variable name="target-text">
           <xsl:apply-templates
-            select="(key('id', $topicid)[contains(@class, $classval)])[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
+            select="(key('elementsById', $topicid)[contains(@class, $classval)])[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
         </xsl:variable>
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
-      <xsl:when test="key('topic', $topicid)">
+      <xsl:when test="key('topicsById', $topicid)">
         <xsl:variable name="target-text">
           <xsl:apply-templates
-            select="key('topic', $topicid)[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
+            select="key('topicsById', $topicid)[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
         </xsl:variable>
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
@@ -1110,17 +1116,17 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:variable name="doc" select="document($file,/)"/>
     <xsl:for-each select="$doc">
     <xsl:choose>
-      <xsl:when test="key('id', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/title ')]">
+      <xsl:when test="key('elementsById', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/title ')]">
         <xsl:variable name="target-text">
           <xsl:apply-templates
-            select="(key('id', $topicid)[contains(@class, $classval)])[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
+            select="(key('elementsById', $topicid)[contains(@class, $classval)])[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
         </xsl:variable>
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
-      <xsl:when test="key('topic', $topicid)/*[contains(@class, ' topic/title ')]">
+      <xsl:when test="key('topicsById', $topicid)/*[contains(@class, ' topic/title ')]">
         <xsl:variable name="target-text">
           <xsl:apply-templates
-            select="key('topic', $topicid)[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
+            select="key('topicsById', $topicid)[1]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
         </xsl:variable>
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
@@ -1149,7 +1155,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         </xsl:when>
         <!--otherwise figure out what it's topic-level equivalent is by looking it up in the target element's class value-->
         <xsl:when test="$topicpos='samefile'">
-          <xsl:apply-templates select="key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]" mode="topicpull:determine_firstclass"/>
+          <xsl:apply-templates select="key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]" mode="topicpull:determine_firstclass"/>
         </xsl:when>
         <xsl:when test="$topicpos='otherfile'">
           <xsl:apply-templates select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]" mode="topicpull:determine_firstclass"/>
@@ -1243,10 +1249,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:variable name="doc" select="document($file,/)"/>
     <xsl:choose>
       <!--look for the target in the same file, and create the linktext if accessible-->
-      <xsl:when test="$topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')  or contains(@class,' topic/related-links ') ]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]">
+      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')  or contains(@class,' topic/related-links ') ]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]">
         <xsl:variable name="target-text">
           <xsl:apply-templates
-            select="key('topic', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')  or contains(@class,' topic/related-links ') ]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]" mode="text-only"/>
+            select="key('topicsById', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')  or contains(@class,' topic/related-links ') ]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]" mode="text-only"/>
         </xsl:variable>
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
@@ -1259,9 +1265,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
       <!--If there isn't a title ,then process with spectitle -->
-      <xsl:when test="$topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ') or contains(@class,' topic/related-links ') ] //*[@id=$elemid][contains(@class, $classval)][1][@spectitle]">
+      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ') or contains(@class,' topic/related-links ') ] //*[@id=$elemid][contains(@class, $classval)][1][@spectitle]">
         <xsl:variable name="target-text">
-          <xsl:value-of select="key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')  or contains(@class,' topic/related-links ') ]//*[@id=$elemid][contains(@class, $classval)][1]/@spectitle"/>
+          <xsl:value-of select="key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')  or contains(@class,' topic/related-links ') ]//*[@id=$elemid][contains(@class, $classval)][1]/@spectitle"/>
         </xsl:variable>
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
@@ -1273,9 +1279,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
       
-      <xsl:when test="$topicpos='samefile' and key('topic', $topicid)//*[@id = $elemid][1][contains(@class, ' topic/title ')]">
+      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)//*[@id = $elemid][1][contains(@class, ' topic/title ')]">
         <xsl:variable name="target-text">
-          <xsl:apply-templates select="key('topic', $topicid)//*[@id = $elemid][1][contains(@class, ' topic/title ')]" mode="text-only"/>
+          <xsl:apply-templates select="key('topicsById', $topicid)//*[@id = $elemid][1][contains(@class, ' topic/title ')]" mode="text-only"/>
         </xsl:variable>
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
@@ -1287,9 +1293,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:when>
 
       <!-- No title or spectitle; check to see if the element provides generated text -->
-      <xsl:when test="$topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ') or contains(@class,' topic/related-links ') ] //*[@id=$elemid][contains(@class, $classval)][1]">
+      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ') or contains(@class,' topic/related-links ') ] //*[@id=$elemid][contains(@class, $classval)][1]">
         <xsl:variable name="target-text">
-          <xsl:apply-templates select="key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')  or contains(@class,' topic/related-links ') ]//*[@id=$elemid][contains(@class, $classval)][1]" mode="topicpull:get_generated_text"/>
+          <xsl:apply-templates select="key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')  or contains(@class,' topic/related-links ') ]//*[@id=$elemid][contains(@class, $classval)][1]" mode="topicpull:get_generated_text"/>
         </xsl:variable>
         <xsl:choose>
           <xsl:when test="$target-text!='#none#'"><xsl:value-of select="normalize-space($target-text)"/></xsl:when>
@@ -1345,12 +1351,12 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <!--look for the target in the same file, and create the linktext if accessible-->
       <!-- and look for the target in another file, and create the linktext if accessible-->
       <!-- April 2007: replace manual language test with lang() function -->
-      <xsl:when test="($topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1])
+      <xsl:when test="($topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1])
                    or ($topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1])">
         <xsl:variable name="fig-count-actual">
           <xsl:choose>
             <xsl:when test="$topicpos='samefile'">
-              <xsl:apply-templates select="key('topic', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]" mode="topicpull:fignumber"/>
+              <xsl:apply-templates select="key('topicsById', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]" mode="topicpull:fignumber"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]" mode="topicpull:fignumber"/>
@@ -1362,19 +1368,19 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:with-param name="figcount" select="$fig-count-actual"/>
           <xsl:with-param name="figtitle">
             <xsl:choose>
-              <xsl:when test="$topicpos='samefile'"><xsl:copy-of select="key('topic', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]"/></xsl:when>
+              <xsl:when test="$topicpos='samefile'"><xsl:copy-of select="key('topicsById', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]"/></xsl:when>
               <xsl:otherwise><xsl:copy-of select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]"/></xsl:otherwise>
             </xsl:choose>
           </xsl:with-param>
         </xsl:apply-templates>
       </xsl:when>
       <!--If there isn't a title ,then process with spectitle -->
-      <xsl:when test="($topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle])
+      <xsl:when test="($topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle])
         or ($topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle])">
         <xsl:variable name="fig-count-actual">
           <xsl:choose>
             <xsl:when test="$topicpos='samefile'">
-              <xsl:apply-templates select="key('topic', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle]" mode="topicpull:fignumber"/>
+              <xsl:apply-templates select="key('topicsById', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle]" mode="topicpull:fignumber"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle]" mode="topicpull:fignumber"/>
@@ -1386,7 +1392,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:with-param name="figcount" select="$fig-count-actual"/>
           <xsl:with-param name="figtitle">
             <xsl:choose>
-              <xsl:when test="$topicpos='samefile'"><xsl:value-of select="key('topic', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1]/@spectitle"/></xsl:when>
+              <xsl:when test="$topicpos='samefile'"><xsl:value-of select="key('topicsById', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1]/@spectitle"/></xsl:when>
               <xsl:otherwise><xsl:value-of select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1]/@spectitle"/></xsl:otherwise>
             </xsl:choose>
           </xsl:with-param>
@@ -1474,12 +1480,12 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:choose>
       <!--look for the target in the same file, and create the linktext if accessible-->
       <!-- and look for the target in another file, and create the linktext if accessible-->
-      <xsl:when test="($topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1])                        
+      <xsl:when test="($topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1])                        
         or ($topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1])">
         <xsl:variable name="tbl-count-actual">
           <xsl:choose>
             <xsl:when test="$topicpos='samefile'">
-              <xsl:apply-templates select="key('topic', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]" mode="topicpull:tblnumber"/>
+              <xsl:apply-templates select="key('topicsById', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]" mode="topicpull:tblnumber"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]" mode="topicpull:tblnumber"/>
@@ -1491,19 +1497,19 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:with-param name="tblcount" select="$tbl-count-actual"/>
           <xsl:with-param name="tbltitle">
             <xsl:choose>
-              <xsl:when test="$topicpos='samefile'"><xsl:copy-of select="key('topic', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]"/></xsl:when>
+              <xsl:when test="$topicpos='samefile'"><xsl:copy-of select="key('topicsById', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]"/></xsl:when>
               <xsl:otherwise><xsl:copy-of select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/title ')][1]"/></xsl:otherwise>
             </xsl:choose>
           </xsl:with-param>
         </xsl:apply-templates>
       </xsl:when>
       <!--If there isn't a title ,then process with spectitle -->
-      <xsl:when test="($topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle])                        
+      <xsl:when test="($topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle])                        
         or ($topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle])">
         <xsl:variable name="tbl-count-actual">
           <xsl:choose>
             <xsl:when test="$topicpos='samefile'">
-              <xsl:apply-templates select="key('topic', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle]" mode="topicpull:tblnumber"/>
+              <xsl:apply-templates select="key('topicsById', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle]" mode="topicpull:tblnumber"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1][@spectitle]" mode="topicpull:tblnumber"/>
@@ -1515,7 +1521,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:with-param name="tblcount" select="$tbl-count-actual"/>
           <xsl:with-param name="tbltitle">
             <xsl:choose>
-              <xsl:when test="$topicpos='samefile'"><xsl:value-of select="key('topic', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1]/@spectitle"/></xsl:when>
+              <xsl:when test="$topicpos='samefile'"><xsl:value-of select="key('topicsById', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1]/@spectitle"/></xsl:when>
               <xsl:otherwise><xsl:value-of select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)][1]/@spectitle"/></xsl:otherwise>
             </xsl:choose>
           </xsl:with-param>
@@ -1601,14 +1607,14 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:variable name="doc" select="document($file,/)"/>
     <xsl:choose>
       <!-- If the list item exists, and is in an OL, process it -->
-      <xsl:when test="$topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class,' topic/ol ')]/*[@id=$elemid][contains(@class, $classval)]">
-        <xsl:apply-templates mode="topicpull:li-linktext" select="key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class,' topic/ol ')]/*[@id=$elemid][contains(@class, $classval)]"/>
+      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class,' topic/ol ')]/*[@id=$elemid][contains(@class, $classval)]">
+        <xsl:apply-templates mode="topicpull:li-linktext" select="key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class,' topic/ol ')]/*[@id=$elemid][contains(@class, $classval)]"/>
       </xsl:when>
       <xsl:when test="$topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class,' topic/ol ')]/*[@id=$elemid][contains(@class, $classval)]">
         <xsl:apply-templates mode="topicpull:li-linktext" select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class,' topic/ol ')]/*[@id=$elemid][contains(@class, $classval)]"/>
       </xsl:when>
       <!-- If the list item exists, but is in some other kind of list, issue a message -->
-      <xsl:when test="$topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]">
+      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]">
         <xsl:call-template name="topicpull:referenced-invalid-list-item"/>
       </xsl:when>
       <xsl:when test="$topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]">
@@ -1648,8 +1654,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="elemid">#none#</xsl:param>
     <xsl:variable name="doc" select="document($file,/)"/>
     <xsl:choose>
-      <xsl:when test="$topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]">
-        <xsl:apply-templates mode="topicpull:fn-linktext" select="key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]"/>
+      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]">
+        <xsl:apply-templates mode="topicpull:fn-linktext" select="key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]"/>
       </xsl:when>
       <xsl:when test="$topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]">
         <xsl:apply-templates mode="topicpull:fn-linktext" select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]"/>
@@ -1701,10 +1707,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="elemid">#none#</xsl:param>
     <xsl:variable name="doc" select="document($file,/)"/>
     <xsl:choose>
-      <xsl:when test="$topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/dt ')][1]">
+      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/dt ')][1]">
         <xsl:variable name="target-text">
           <xsl:apply-templates
-            select="key('topic', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/dt ')][1]" mode="text-only"/>
+            select="key('topicsById', $topicid)[1]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class,' topic/dt ')][1]" mode="text-only"/>
         </xsl:variable>
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
@@ -1782,8 +1788,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="elemid">#none#</xsl:param>
     <xsl:variable name="doc" select="document($file,/)"/>
     <xsl:choose>
-      <xsl:when test="$topicpos='samefile' and key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class, ' topic/desc ')]">
-          <xsl:apply-templates select="key('topic', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class, ' topic/desc ')]" mode="copy-desc-contents"/>
+      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class, ' topic/desc ')]">
+          <xsl:apply-templates select="key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class, ' topic/desc ')]" mode="copy-desc-contents"/>
       </xsl:when>
       <xsl:when test="$topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class, ' topic/desc ')]">
         <xsl:apply-templates select="$doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][contains(@class, $classval)]/*[contains(@class, ' topic/desc ')]" mode="copy-desc-contents"/>
@@ -1798,16 +1804,16 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:choose>
       <!-- Check for topic with matching class and matching ID -->
-      <xsl:when test="key('id', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/shortdesc ')] |
-                      key('id', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
-        <xsl:apply-templates select="key('id', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/shortdesc ')] |
-                                     key('id', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc" />
+      <xsl:when test="key('elementsById', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/shortdesc ')] |
+                      key('elementsById', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
+        <xsl:apply-templates select="key('elementsById', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/shortdesc ')] |
+                                     key('elementsById', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc" />
       </xsl:when>
       <!-- Check for topic with matching ID -->
-      <xsl:when test="key('topic', $topicid)/*[contains(@class, ' topic/shortdesc ')] |
-                      key('topic', $topicid)/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
-        <xsl:apply-templates select="key('topic', $topicid)/*[contains(@class, ' topic/shortdesc ')] | 
-                                     key('topic', $topicid)/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
+      <xsl:when test="key('topicsById', $topicid)/*[contains(@class, ' topic/shortdesc ')] |
+                      key('topicsById', $topicid)/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
+        <xsl:apply-templates select="key('topicsById', $topicid)/*[contains(@class, ' topic/shortdesc ')] | 
+                                     key('topicsById', $topicid)/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
       </xsl:when>
       <!-- Remove previously existing general tests. If a specific topic is the target, shortdesc should not be pulled from another. -->
       <xsl:otherwise>
@@ -1846,22 +1852,22 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:variable name="doc" select="document($file,/)"/>
     <xsl:for-each select="$doc">
     <xsl:choose>
-      <xsl:when test="key('id', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/shortdesc ')] |
-                      key('id', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
-        <xsl:apply-templates select="(key('id', $topicid)[contains(@class, $classval)])[1]/*[contains(@class, ' topic/shortdesc ')] | 
-                                     (key('id', $topicid)[contains(@class, $classval)])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
+      <xsl:when test="key('elementsById', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/shortdesc ')] |
+                      key('elementsById', $topicid)[contains(@class, $classval)]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
+        <xsl:apply-templates select="(key('elementsById', $topicid)[contains(@class, $classval)])[1]/*[contains(@class, ' topic/shortdesc ')] | 
+                                     (key('elementsById', $topicid)[contains(@class, $classval)])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
       </xsl:when>
-      <xsl:when test="key('topic', $topicid)/*[contains(@class, ' topic/shortdesc ')] |
-                      key('topic', $topicid)/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
-        <xsl:apply-templates select="key('topic', $topicid)[1]/*[contains(@class, ' topic/shortdesc ')] |
-                                     key('topic', $topicid)[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
+      <xsl:when test="key('topicsById', $topicid)/*[contains(@class, ' topic/shortdesc ')] |
+                      key('topicsById', $topicid)/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
+        <xsl:apply-templates select="key('topicsById', $topicid)[1]/*[contains(@class, ' topic/shortdesc ')] |
+                                     key('topicsById', $topicid)[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
       </xsl:when>
-      <xsl:when test="key('id', $topicid)[contains(@class, $classval)]//*[contains(@class, ' topic/shortdesc ')]">
-        <xsl:apply-templates select="(key('id', $topicid)[contains(@class, $classval)])[1]//*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc" />
+      <xsl:when test="key('elementsById', $topicid)[contains(@class, $classval)]//*[contains(@class, ' topic/shortdesc ')]">
+        <xsl:apply-templates select="(key('elementsById', $topicid)[contains(@class, $classval)])[1]//*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc" />
       </xsl:when>
       <xsl:when
-        test="key('topic', $topicid)//*[contains(@class, ' topic/shortdesc ')]">
-        <xsl:apply-templates select="key('topic', $topicid)[1]//*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc" />
+        test="key('topicsById', $topicid)//*[contains(@class, ' topic/shortdesc ')]">
+        <xsl:apply-templates select="key('topicsById', $topicid)[1]//*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc" />
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>#none#</xsl:text>
