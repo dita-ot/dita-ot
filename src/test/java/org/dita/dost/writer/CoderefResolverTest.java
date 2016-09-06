@@ -40,6 +40,7 @@ public class CoderefResolverTest {
         copyFile(new File(srcDir, "code.xml"), new File(tempDir, "code.xml"));
         copyFile(new File(srcDir, "utf-8.xml"), new File(tempDir, "utf-8.xml"));
         copyFile(new File(srcDir, "plain.txt"), new File(tempDir, "plain.txt"));
+        copyFile(new File(srcDir, "range.txt"), new File(tempDir, "range.txt"));
 
         final CoderefResolver filter = new CoderefResolver();
         filter.setLogger(new TestUtils.TestLogger());

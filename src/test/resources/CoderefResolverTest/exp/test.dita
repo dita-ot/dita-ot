@@ -30,5 +30,15 @@ fifth</codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">second
 third</codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">second</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">second
+third
+fourth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">second
+third
+fourth
+# END-A
+fifth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">fifth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"></codeblock>
   </body>
 </topic>
