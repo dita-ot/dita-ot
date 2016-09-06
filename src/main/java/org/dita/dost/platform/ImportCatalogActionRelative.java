@@ -1,5 +1,8 @@
 /*
  * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2008 IBM Corporation
+ *
  * See the accompanying license.txt file for applicable licenses.
  */
 package org.dita.dost.platform;

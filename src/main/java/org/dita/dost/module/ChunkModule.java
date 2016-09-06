@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2007 IBM Corporation
+ *
  * See the accompanying license.txt file for applicable licenses.
- */
 
-/*
- * (c) Copyright IBM Corp. 2007 All Rights Reserved.
  */
 package org.dita.dost.module;
 

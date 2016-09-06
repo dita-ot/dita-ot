@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- 
-    This file is part of the DITA Open Toolkit project hosted on
-    Sourceforge.net. See the accompanying license.txt file for
-    applicable licenses.
-    
-    (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
-    
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2007 Shawn McKenzie
+
+See the accompanying license.txt file for applicable licenses.
+-->
+<!--
     UPDATES:
     August 2011: Updated by Robert D Anderson for SF Bug 3392718
     *-->

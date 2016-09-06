@@ -1,5 +1,8 @@
 /*
  * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2013 Jarno Elovirta
+ *
  * See the accompanying license.txt file for applicable licenses.
  */
 /* Derived from Apache Ant. */

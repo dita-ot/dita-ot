@@ -1,3 +1,10 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2014 Jarno Elovirta
+ *
+ * See the accompanying LICENSE.md file for applicable licenses.
+ */
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;

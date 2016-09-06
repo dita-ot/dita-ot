@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <!-- 
-  This file is part of the DITA Open Toolkit project hosted on
-  Sourceforge.net. See the accompanying license.txt file for
-  applicable licenses.
+This file is part of the DITA Open Toolkit project.
 
-  Copyright Shawn McKenzie, 2007. All Rights Reserved.
+Copyright 2007 Shawn McKenzie
 
+See the accompanying license.txt file for applicable licenses.
+-->
+<!--
   Created by Robert Anderson August 2011, based on the sample
   frameset distributed with the original samples. Minor udpates:
   - Grab title of the map as the title

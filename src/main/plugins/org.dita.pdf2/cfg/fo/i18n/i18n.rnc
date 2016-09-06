@@ -1,3 +1,8 @@
+# This file is part of the DITA Open Toolkit project.
+#
+# Copyright 2011 Jarno Elovirta
+#
+# See the accompanying LICENSE.md file for applicable licenses.
 configuration =
   ## Character set configuration
   element configuration {
