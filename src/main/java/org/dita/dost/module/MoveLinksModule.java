@@ -55,7 +55,9 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         InputStream in = null;
         try {
             doc = XMLUtils.getDocumentBuilder().newDocument();
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(styleFile));
+            final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            transformerFactory.setURIResolver(CatalogUtils.getCatalogResolver());
+            final Transformer transformer = transformerFactory.newTransformer(new StreamSource(styleFile));
             transformer.setURIResolver(CatalogUtils.getCatalogResolver());
             if (input.getAttribute("include.rellinks") != null) {
                 transformer.setParameter("include.rellinks", input.getAttribute("include.rellinks"));
