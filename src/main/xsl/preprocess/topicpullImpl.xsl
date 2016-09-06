@@ -49,6 +49,15 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 <!-- Refactor guide: Remove in final commit version:
  
   - Refactor 1: Better names for xsl:key
+  - Refactor 2: Use functions for attribute value inheritance to make using
+                code simpler. Retains existing XSLT modes to implement the
+                actual inheritance so as not to break any overrides (if any, 
+                which there probably aren't any but you never know). This includes
+                replacing use of "#none#" values for simply checking for non-existent
+                string (return values are now "xs:string?"). 
+                
+                Collected all functions at top of module (move of dita-ot:is-link() from
+                original location).
 
   -->
           
@@ -89,12 +98,90 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:key name="elementsById" match="*[@id]" use="@id"/>
   <xsl:key name="topicsById" match="*[contains(@class, ' topic/topic ')][@id]" use="@id"/>
   
+  
+  <!-- ========================
+       Functions
+       ======================== -->
+  
+  <xsl:function name="dita-ot:get-inherited-attribute-value" as="xs:string?">
+    <xsl:param name="context" as="element()"/>
+    <xsl:param name="attributeName" as="xs:string"/>
+    <xsl:param name="defaultValue" as="xs:string?"/>
+    
+    <xsl:variable name="specifiedValue" as="xs:string?">
+      <xsl:for-each select="$context">
+        <xsl:call-template name="topicpull:inherit">
+          <xsl:with-param name="attrib" select="$attributeName" as="xs:string"/>
+        </xsl:call-template>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:sequence 
+      select="if ($specifiedValue) 
+      then $specifiedValue 
+      else $defaultValue"
+    />
+    
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:get-link-scope" as="xs:string?">
+    <xsl:param name="context" as="element()"/>
+    <xsl:sequence select="dita-ot:get-link-scope($context, ())"/>
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:get-link-scope" as="xs:string?">
+    <xsl:param name="context" as="element()"/>
+    <xsl:param name="default" as="xs:string?"/>
+    <xsl:sequence 
+      select="dita-ot:get-inherited-attribute-value($context, 'scope', $default)"
+    />
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:get-link-target-type" as="xs:string?">
+    <xsl:param name="context" as="element()"/>
+    <xsl:sequence select="dita-ot:get-link-target-type($context, ())"/>
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:get-link-target-type" as="xs:string?">
+    <xsl:param name="context" as="element()"/>
+    <xsl:param name="default" as="xs:string?"/>
+    <xsl:sequence 
+      select="dita-ot:get-inherited-attribute-value($context, 'type', $default)"
+    />
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:get-link-format" as="xs:string?">
+    <xsl:param name="context" as="element()"/>
+    <xsl:sequence 
+      select="dita-ot:get-link-format($context, ())"
+    />
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:get-link-format" as="xs:string?">
+    <xsl:param name="context" as="element()"/>
+    <xsl:param name="default" as="xs:string?"/>
+    <xsl:sequence 
+      select="dita-ot:get-inherited-attribute-value($context, 'format', $default)"
+    />
+  </xsl:function>
+  
+  <xsl:function name="dita-ot:is-link" as="xs:boolean">
+    <xsl:param name="node"/>
+    <xsl:sequence select="contains($node/@class,' topic/xref ') or
+      ($node/@href and not(contains($node/@class,' delay-d/anchorkey ')) and (some $c in $link-classes satisfies contains($node/@class, $c)))"/>
+  </xsl:function>
+  
+  
+  <!-- ========================
+       Templates
+       ======================== -->
+  
   <!-- Process a link in the related-links section. Retrieve link text, type, and
        description if possible (and not already specified locally). -->
   <xsl:template match="*[contains(@class, ' topic/link ')]">    
     <xsl:if test="@href=''">
       <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
     </xsl:if>
+    
 
     <xsl:copy>
       <!--copy existing explicit attributes-->
@@ -103,31 +190,36 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <!--@type|@format|@scope|@importance|@role-->
 
       <!--need to create type, format, scope variables regardless of whether they exist, for passing as a parameter to getstuff template-->
-      <xsl:variable name="type" as="xs:string">
-        <xsl:call-template name="topicpull:inherit"><xsl:with-param name="attrib">type</xsl:with-param></xsl:call-template>
-      </xsl:variable>
-      <xsl:variable name="format" as="xs:string">
-        <xsl:call-template name="topicpull:inherit"><xsl:with-param name="attrib">format</xsl:with-param></xsl:call-template>
-      </xsl:variable>
-      <xsl:variable name="scope" as="xs:string">
-        <xsl:call-template name="topicpull:inherit"><xsl:with-param name="attrib">scope</xsl:with-param></xsl:call-template>
-      </xsl:variable>
-
-      <xsl:if test="not(@type) and $type!='#none#'">
+      <xsl:variable name="type" as="xs:string?" select="dita-ot:get-link-target-type(.)"/>
+      
+      <xsl:variable name="format" as="xs:string?" select="dita-ot:get-link-format(.)"/>
+      <xsl:variable name="scope" as="xs:string?" select="dita-ot:get-link-scope(.)"/>
+      
+      <xsl:if test="not(@type) and $type">
         <xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
       </xsl:if>
-      <xsl:if test="not(@format) and $format!='#none#'">
+      <xsl:if test="not(@format) and $format">
         <xsl:attribute name="format"><xsl:value-of select="$format"/></xsl:attribute>
       </xsl:if>
-      <xsl:if test="not(@scope) and $scope!='#none#'">
+      <xsl:if test="not(@scope) and $scope">
         <xsl:attribute name="scope"><xsl:value-of select="$scope"/></xsl:attribute>
       </xsl:if>
 
       <xsl:if test="not(@importance)">
-        <xsl:apply-templates select="." mode="topicpull:inherit-and-set-attribute"><xsl:with-param name="attrib">importance</xsl:with-param></xsl:apply-templates>
+        <xsl:variable name="importance" as="xs:string?"
+          select="dita-ot:get-inherited-attribute-value(., 'importance', ())"
+        />
+        <xsl:if test="$importance">
+          <xsl:attribute name="importance" select="$importance"/>
+        </xsl:if>
       </xsl:if>
       <xsl:if test="not(@role)">
-        <xsl:apply-templates select="." mode="topicpull:inherit-and-set-attribute"><xsl:with-param name="attrib">role</xsl:with-param></xsl:apply-templates>
+        <xsl:variable name="role" as="xs:string?"
+          select="dita-ot:get-inherited-attribute-value(., 'role', ())"
+        />
+        <xsl:if test="$role">
+          <xsl:attribute name="role" select="$role"/>
+        </xsl:if>
       </xsl:if>
 
       <xsl:choose>
@@ -141,9 +233,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:when test="@href=''"/>
             <xsl:when test="@href">
               <xsl:apply-templates select="." mode="topicpull:get-stuff">
-                <xsl:with-param name="localtype" select="$type"/>
-                <xsl:with-param name="scope" select="$scope"/>
-                <xsl:with-param name="format" select="$format"/>
+                <xsl:with-param name="localtype" select="$type" as="xs:string?"/>
+                <xsl:with-param name="scope" select="$scope" as="xs:string?"/>
+                <xsl:with-param name="format" select="$format" as="xs:string?"/>
               </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
@@ -172,16 +264,20 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- If an attribute is specified locally, set it. Otherwise, try to inherit from ancestors. -->
   <xsl:template match="*" mode="topicpull:inherit-from-self-then-ancestor">
     <xsl:param name="attrib"/>
-    <xsl:variable name="attrib-here">
-      <xsl:if test="@*[local-name()=$attrib]"><xsl:value-of select="@*[local-name()=$attrib]"/></xsl:if>
+    <xsl:variable name="attrib-here" as="xs:string?">
+      <xsl:if test="@*[local-name()=$attrib]">
+        <xsl:value-of select="@*[local-name()=$attrib]"/>
+      </xsl:if>
     </xsl:variable>
     <xsl:choose>
       <!-- Any time the attribute is specified on this element, use it -->
-      <xsl:when test="$attrib-here!=''"><xsl:value-of select="$attrib-here"/></xsl:when>
+      <xsl:when test="$attrib-here">
+        <xsl:value-of select="$attrib-here"/>
+      </xsl:when>
       <!-- Otherwise, use normal inheritance fallback -->
       <xsl:otherwise>
         <xsl:apply-templates select="." mode="topicpull:inherit-attribute">
-          <xsl:with-param name="attrib" select="$attrib"/>
+          <xsl:with-param name="attrib" select="$attrib" as="xs:string"/>
         </xsl:apply-templates>
       </xsl:otherwise>
     </xsl:choose>
@@ -194,24 +290,28 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
          -->
   <xsl:template match="*" mode="topicpull:inherit-attribute">
     <xsl:param name="attrib"/>
-    <xsl:variable name="attrib-here">
+    <xsl:variable name="attrib-here" as="xs:string?">
       <xsl:apply-templates select="@*[local-name()=$attrib]" mode="topicpull:inherit-attribute"/>
     </xsl:variable>
     <xsl:choose>
       <!-- Any time the attribute is specified on this element, use it -->
-      <xsl:when test="$attrib-here!=''"><xsl:value-of select="$attrib-here"/></xsl:when>
-      <!-- No ancestors left to check, so the value is not available. -->
-      <xsl:when test="contains(@class,' topic/related-links ')">#none#</xsl:when>
+      <xsl:when test="$attrib-here">
+        <xsl:value-of select="$attrib-here"/>
+      </xsl:when>
+      <xsl:when test="contains(@class,' topic/related-links ')">
+        <xsl:sequence select="()"></xsl:sequence>
+      </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="parent::*" mode="topicpull:inherit-attribute">
+        <xsl:apply-templates select="parent::*" mode="#current">
           <xsl:with-param name="attrib" select="$attrib"/>
         </xsl:apply-templates>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
   
-  <!-- Similar to the template above, but saves duplicated processing by setting the
-       attribute when the inherited value != #none# -->
+  <!-- Set the specified attribute is a value is not specified
+       locally and a value is actually inherited.
+    -->
   <xsl:template match="*" mode="topicpull:inherit-and-set-attribute">
     <xsl:param name="attrib"/>
     <xsl:variable name="inherited-value">
@@ -219,8 +319,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:with-param name="attrib" select="$attrib"/>
       </xsl:apply-templates>
     </xsl:variable>
-    <xsl:if test="$inherited-value!='#none#'">
-      <xsl:attribute name="{$attrib}"><xsl:value-of select="$inherited-value"/></xsl:attribute>
+    <xsl:if test="$inherited-value">
+      <xsl:attribute name="{$attrib}" select="$inherited-value"/>
     </xsl:if>
   </xsl:template>
   
@@ -256,35 +356,41 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:copy>
           <xsl:apply-templates select="@*"/>
           <!--create variables for attributes that will be passed by parameter to the getstuff template (which is shared with link, which needs the attributes in variables to save doing inheritance checks for each one)-->
-          <xsl:variable name="type" as="xs:string">
+          <xsl:variable name="type" as="xs:string?">
             <xsl:choose>
               <xsl:when test="@type">
                 <xsl:value-of select="@type"/>
               </xsl:when>
-              <xsl:otherwise>#none#</xsl:otherwise>
+              <xsl:otherwise>
+                <xsl:sequence select="()"/>
+              </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <xsl:variable name="format" as="xs:string">
+          <xsl:variable name="format" as="xs:string?">
             <xsl:choose>
               <xsl:when test="@format">
                 <xsl:value-of select="@format"/>
               </xsl:when>
-              <xsl:otherwise>#none#</xsl:otherwise>
-            </xsl:choose>
+              <xsl:otherwise>
+                <xsl:sequence select="()"/>
+              </xsl:otherwise>
+            </xsl:choose>            
           </xsl:variable>
-          <xsl:variable name="scope" as="xs:string">
+          <xsl:variable name="scope" as="xs:string?">
             <xsl:choose>
               <xsl:when test="@scope">
                 <xsl:value-of select="@scope"/>
               </xsl:when>
-              <xsl:otherwise>#none#</xsl:otherwise>
-            </xsl:choose>
+              <xsl:otherwise>
+                <xsl:sequence select="()"/>
+              </xsl:otherwise>
+            </xsl:choose>            
           </xsl:variable>
           <!--grab type, text and metadata, as long there's an href to grab from, otherwise error-->
           <xsl:apply-templates select="." mode="topicpull:get-stuff">
-            <xsl:with-param name="localtype" select="$type"/>
-            <xsl:with-param name="scope" select="$scope"/>
-            <xsl:with-param name="format" select="$format"/>
+            <xsl:with-param name="localtype" select="$type" as="xs:string?"/>
+            <xsl:with-param name="scope" select="$scope" as="xs:string?"/>
+            <xsl:with-param name="format" select="$format" as="xs:string?"/>
           </xsl:apply-templates>
         </xsl:copy>
       </xsl:when>
@@ -302,20 +408,25 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!-- verify the href attribute, to check whether href target can be retrieved. -->
   <xsl:template name="verify-href-attribute">
-    <xsl:variable name="format" as="xs:string">
+    <xsl:variable name="format" as="xs:string?"
+      >
       <xsl:choose>
         <xsl:when test="@format">
           <xsl:value-of select="@format"/>
         </xsl:when>
-        <xsl:otherwise>#none#</xsl:otherwise>
+        <xsl:otherwise>
+          <xsl:sequence select="()"/>
+        </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="scope" as="xs:string">
+    <xsl:variable name="scope" as="xs:string?">
       <xsl:choose>
         <xsl:when test="@scope">
           <xsl:value-of select="@scope"/>
         </xsl:when>
-        <xsl:otherwise>#none#</xsl:otherwise>
+        <xsl:otherwise>
+          <xsl:sequence select="()"/>
+        </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <!--the file name of the target, if any-->
@@ -361,7 +472,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           </xsl:when>
         </xsl:choose>
       </xsl:when>
-      <xsl:when test="($format='dita' or $format='#none#') and not($scope='external') and not($scope='peer') and $topicpos='otherfile' and not(contains(@href,'://'))">
+      <xsl:when test="($format='dita' or not($format)) and not($scope='external') and not($scope='peer') and $topicpos='otherfile' and not(contains(@href,'://'))">
         <xsl:choose>
           <xsl:when test="not($doc) or not($doc/*/*)">
             <xsl:call-template name="output-message">
@@ -387,7 +498,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:if test="($format='dita' or $format='#none#') and not($scope='external') and not($scope='peer') and not($doc) and not(contains(@href,'://'))">
+        <xsl:if test="($format='dita' or not($format)) and not($scope='external') and not($scope='peer') and not($doc) and not(contains(@href,'://'))">
           <xsl:call-template name="output-message">
             <xsl:with-param name="id" select="'DOTX057W'"/>
             <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>
@@ -433,9 +544,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Get link text, type, and short description for a link or cross reference.
        If specified locally, use the local value, otherwise retrieve from target. -->
   <xsl:template match="*" mode="topicpull:get-stuff">
-    <xsl:param name="localtype" as="xs:string"/>
-    <xsl:param name="scope" as="xs:string"/>
-    <xsl:param name="format" as="xs:string"/>
+    <xsl:param name="localtype" as="xs:string?"/>
+    <xsl:param name="scope" as="xs:string?"/>
+    <xsl:param name="format" as="xs:string?"/>
+    
+    
     <!--the file name of the target, if any-->
     <xsl:variable name="file-origin" as="xs:string"><xsl:apply-templates select="." mode="topicpull:get-stuff_file"/></xsl:variable>
     <xsl:variable name="file" as="xs:string">
@@ -448,7 +561,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     
     <!--the position of the target topic relative to the current one: in the same file, referenced by id in another file, or referenced as the first topic in another file-->
     <xsl:variable name="topicpos" as="xs:string"><xsl:apply-templates select="." mode="topicpull:get-stuff_topicpos"/></xsl:variable>
-
+    
     <xsl:apply-templates select="." mode="topicpull:get-stuff_verify-target-present">
       <xsl:with-param name="topicpos" select="$topicpos"/>
       <xsl:with-param name="scope" select="$scope"/>
@@ -467,9 +580,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <!--type - grab type from target, if not defined locally -->
     <xsl:variable name="type" as="xs:string?">
       <xsl:apply-templates select="." mode="topicpull:get-stuff_get-type">
-        <xsl:with-param name="localtype" select="$localtype"/>
-        <xsl:with-param name="scope" select="$scope"/>
-        <xsl:with-param name="format" select="$format"/>
+        <xsl:with-param name="localtype" select="$localtype" as="xs:string?"/>
+        <xsl:with-param name="scope" select="$scope" as="xs:string?"/>
+        <xsl:with-param name="format" select="$format" as="xs:string?"/>
         <xsl:with-param name="topicpos" select="$topicpos"/>
         <xsl:with-param name="file" select="$file"/>
         <xsl:with-param name="topicid" select="$topicid"/>
@@ -478,15 +591,15 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:variable>
 
     <!--now, create the type attribute, if the type attribute didn't exist locally but was retrieved successfully-->
-    <xsl:if test="$localtype='#none#' and not($type='#none#')">
-      <xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
+    <xsl:if test="not($localtype) and $type">
+        <xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
     </xsl:if>
 
     <!-- Verify that the type was correct, if specified locally, and DITA target is available -->
     <xsl:apply-templates select="." mode="topicpull:get-stuff_verify-type">
-      <xsl:with-param name="localtype" select="$localtype"/>
-      <xsl:with-param name="scope" select="$scope"/>
-      <xsl:with-param name="format" select="$format"/>
+      <xsl:with-param name="localtype" select="$localtype" as="xs:string?"/>
+      <xsl:with-param name="scope" select="$scope" as="xs:string?"/>
+      <xsl:with-param name="format" select="$format" as="xs:string?"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicid" select="$topicid"/>
@@ -500,19 +613,19 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
     <!--linktext-->
     <xsl:apply-templates select="." mode="topicpull:get-stuff_get-linktext">
-      <xsl:with-param name="type" select="$type"/>
-      <xsl:with-param name="scope" select="$scope"/>
-      <xsl:with-param name="format" select="$format"/>
+      <xsl:with-param name="type" select="$type" as="xs:string?"/>
+      <xsl:with-param name="scope" select="$scope" as="xs:string?"/>
+      <xsl:with-param name="format" select="$format" as="xs:string?"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
       <xsl:with-param name="file" select="$file"/>
       <xsl:with-param name="topicid" select="$topicid"/>
       <xsl:with-param name="elemid" select="$elemid"/>
       <xsl:with-param name="classval" select="$classval"/>
     </xsl:apply-templates>
-
+    
     <!-- shortdesc -->
     <xsl:apply-templates select="." mode="topicpull:get-stuff_get-shortdesc">
-      <xsl:with-param name="type" select="$type"/>
+      <xsl:with-param name="type" select="$type" as="xs:string?"/>
       <xsl:with-param name="scope" select="$scope"/>
       <xsl:with-param name="format" select="$format"/>
       <xsl:with-param name="topicpos" select="$topicpos"/>
@@ -581,7 +694,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="file"/>
     <xsl:if test="$topicpos!='samefile' and
                  ($scope!='external' and $scope!='peer') and
-                 ($format='dita' or $format='#none#')">
+                 ($format='dita' or not($format))">
       <xsl:variable name="doc" select="document($file,/)"/>
       <xsl:if test="not($doc) or not($doc/*/*)">
         <xsl:apply-templates select="." mode="ditamsg:missing-href-target">
@@ -615,18 +728,20 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!-- Get the type from target, if not defined locally -->
   <xsl:template match="*" mode="topicpull:get-stuff_get-type" as="xs:string?">
-    <xsl:param name="localtype"/>
-    <xsl:param name="scope"/>
-    <xsl:param name="format"/>
+    <xsl:param name="localtype" as="xs:string?"/>
+    <xsl:param name="scope" as="xs:string?"/>
+    <xsl:param name="format" as="xs:string?"/>
     <xsl:param name="topicpos"/>
     <xsl:param name="file"/>
     <xsl:param name="topicid"/>
     <xsl:param name="elemid"/>
     <xsl:choose>
       <!--just use localtype if it's not "none"-->
-      <xsl:when test="not($localtype='#none#')"><xsl:value-of select="$localtype"/></xsl:when>
+      <xsl:when test="$localtype"><xsl:value-of select="$localtype"/></xsl:when>
       <!--check whether it's worth trying to retrieve-->
-      <xsl:when test="$scope='external' or $scope='peer' or not($format='#none#' or $format='dita')"><xsl:text>#none#</xsl:text><!--type is unavailable--></xsl:when>
+      <xsl:when test="$scope='external' or $scope='peer' or not(not($format) or $format='dita')">
+        <xsl:sequence select="()"/><!--type is unavailable-->
+      </xsl:when>
       <!-- If this is an empty href, ignore it; we already put out a message -->
       <xsl:when test="@href=''"/>
 
@@ -640,7 +755,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:when>
 
       <!--grab type from target element-->
-      <xsl:when test="$localtype='#none#'">
+      <xsl:when test="not($localtype)">
         <xsl:apply-templates select="." mode="topicpull:get-stuff_get-type-with-elemid">
           <xsl:with-param name="topicpos" select="$topicpos"/>
           <xsl:with-param name="file" select="$file"/>
@@ -656,7 +771,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   </xsl:template>
 
   <!-- Get the type when pointing to a topic level element -->
-  <xsl:template match="*" mode="topicpull:get-stuff_get-type-without-elemid" as="xs:string">
+  <xsl:template match="*" mode="topicpull:get-stuff_get-type-without-elemid" as="xs:string?">
     <xsl:param name="topicpos"/>
     <xsl:param name="file"/>
     <xsl:param name="topicid"/>
@@ -668,7 +783,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:value-of select="local-name(key('topicsById', $topicid))"/>
           </xsl:when>
           <!--type could not be retrieved-->
-          <xsl:otherwise>#none#</xsl:otherwise>
+          <xsl:otherwise>
+            <xsl:sequence select="()"/>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="$topicpos='otherfile'">
@@ -677,7 +794,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:value-of select="local-name($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])"/>
           </xsl:when>
           <!--type could not be retrieved-->
-          <xsl:otherwise>#none#</xsl:otherwise>
+          <xsl:otherwise>
+            <xsl:sequence select="()"/>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="$topicpos='firstinfile'">
@@ -686,7 +805,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:value-of select="local-name(($doc//*[contains(@class, ' topic/topic ')])[1])"/>
           </xsl:when>
           <!--type could not be retrieved-->
-          <xsl:otherwise>#none#</xsl:otherwise>
+          <xsl:otherwise>
+            <xsl:sequence select="()"/>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
@@ -696,7 +817,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   </xsl:template>
 
   <!-- Get the type from an element within topic -->
-  <xsl:template match="*" mode="topicpull:get-stuff_get-type-with-elemid" as="xs:string">
+  <xsl:template match="*" mode="topicpull:get-stuff_get-type-with-elemid" as="xs:string?">
     <xsl:param name="topicpos"/>
     <xsl:param name="file"/>
     <xsl:param name="topicid"/>
@@ -709,7 +830,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:value-of select="local-name(key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid])"/>
           </xsl:when>
           <!--type could not be retrieved-->
-          <xsl:otherwise>#none#</xsl:otherwise>
+          <xsl:otherwise>
+            <xsl:sequence select="()"/>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="$topicpos='otherfile'">
@@ -718,7 +841,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:value-of select="local-name($doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid])"/>
           </xsl:when>
           <!--type could not be retrieved-->
-          <xsl:otherwise>#none#</xsl:otherwise>
+          <xsl:otherwise>
+            <xsl:sequence select="()"/>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
@@ -730,14 +855,14 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Find the class attribute of the reference topic. Determine if the specified type
        exists in that class attribute. -->
   <xsl:template match="*" mode="topicpull:get-stuff_verify-type">
-    <xsl:param name="localtype"/>
-    <xsl:param name="scope"/>
-    <xsl:param name="format"/>
+    <xsl:param name="localtype" as="xs:string?"/>
+    <xsl:param name="scope" as="xs:string?"/>
+    <xsl:param name="format" as="xs:string?"/>
     <xsl:param name="topicpos"/>
     <xsl:param name="file"/>
     <xsl:param name="topicid"/>
     <xsl:param name="elemid"/>
-    <xsl:if test="$localtype!='#none#' and 
+    <xsl:if test="$localtype and 
                   not(@scope='external' or @scope='peer') and 
                   ((not(@format) or @format='dita') or starts-with(@href,'#'))">
       <xsl:variable name="doc" select="document($file,/)"/>
@@ -748,7 +873,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <!-- targetting an element in the same file (not a topic) -->
             <xsl:when test="$topicpos='samefile' and $elemid!='#none#' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid]">
               <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
-                <xsl:with-param name="type" select="$localtype"/>
+                <xsl:with-param name="type" select="$localtype" as="xs:string?"/>
                 <xsl:with-param name="actual-class" select="key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][1]/@class"/>
                 <xsl:with-param name="actual-name" select="local-name(key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid][1])"/>
                 <xsl:with-param name="targetting">element</xsl:with-param>
@@ -757,7 +882,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <!-- targetting a topic in the same file -->
             <xsl:when test="$topicpos='samefile' and $elemid='#none#' and key('topicsById', $topicid)">
               <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
-                <xsl:with-param name="type" select="$localtype"/>
+                <xsl:with-param name="type" select="$localtype" as="xs:string?"/>
                 <xsl:with-param name="actual-class" select="key('topicsById', $topicid)[1]/@class"/>
                 <xsl:with-param name="actual-name" select="local-name(key('topicsById', $topicid)[1])"/>
                 <xsl:with-param name="targetting">topic</xsl:with-param>
@@ -766,7 +891,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <!-- targetting an element in another  file (not a topic) -->
             <xsl:when test="$topicpos='otherfile' and $elemid!='#none#' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid]">
               <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
-                <xsl:with-param name="type" select="$localtype"/>
+                <xsl:with-param name="type" select="$localtype" as="xs:string?"/>
                 <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid])[1]/@class"/>
                 <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[@id=$elemid])[1])"/>
                 <xsl:with-param name="targetting">element</xsl:with-param>
@@ -775,7 +900,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <!-- targetting a topic in another file -->
             <xsl:when test="$topicpos='otherfile' and $elemid='#none#' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]">
               <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
-                <xsl:with-param name="type" select="$localtype"/>
+                <xsl:with-param name="type" select="$localtype" as="xs:string?"/>
                 <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/@class"/>
                 <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1])"/>
                 <xsl:with-param name="targetting">topic</xsl:with-param>
@@ -784,7 +909,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <!-- targetting a topic in another file -->
             <xsl:when test="$topicpos='firstinfile' and $doc//*[contains(@class, ' topic/topic ')]">
               <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
-                <xsl:with-param name="type" select="$localtype"/>
+                <xsl:with-param name="type" select="$localtype" as="xs:string?"/>
                 <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')])[1]/@class"/>
                 <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')])[1])"/>
                 <xsl:with-param name="targetting">topic</xsl:with-param>
@@ -807,7 +932,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                 <!-- targetting a topic in this file -->
                 <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)">
                   <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
-                    <xsl:with-param name="type" select="$localtype"/>
+                    <xsl:with-param name="type" select="$localtype" as="xs:string?"/>
                     <xsl:with-param name="actual-class" select="key('topicsById', $topicid)[1]/@class"/>
                     <xsl:with-param name="actual-name" select="local-name(key('topicsById', $topicid)[1])"/>
                     <xsl:with-param name="targetting">topic</xsl:with-param>
@@ -816,7 +941,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                 <!-- targetting a topic in another file -->
                 <xsl:when test="$topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]">
                   <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
-                    <xsl:with-param name="type" select="$localtype"/>
+                    <xsl:with-param name="type" select="$localtype" as="xs:string?"/>
                     <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/@class"/>
                     <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')][@id=$topicid])[1])"/>
                     <xsl:with-param name="targetting">topic</xsl:with-param>
@@ -825,7 +950,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                 <!-- targetting the first topic in another file -->
                 <xsl:when test="$topicpos='firstinfile' and $doc//*[contains(@class, ' topic/topic ')]">
                   <xsl:apply-templates select="." mode="topicpull:verify-type-attribute">
-                    <xsl:with-param name="type" select="$localtype"/>
+                    <xsl:with-param name="type" select="$localtype" as="xs:string?"/>
                     <xsl:with-param name="actual-class" select="($doc//*[contains(@class, ' topic/topic ')])[1]/@class"/>
                     <xsl:with-param name="actual-name" select="local-name(($doc//*[contains(@class, ' topic/topic ')])[1])"/>
                     <xsl:with-param name="targetting">topic</xsl:with-param>
@@ -841,10 +966,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!--template used to construct the class value used to validate link targets against source types. -->
   <xsl:template match="*" mode="topicpull:get-stuff_classval">
-    <xsl:param name="type">#none#</xsl:param>
+    <xsl:param name="type" as="xs:string?"/>
     <xsl:choose>
       <!--if type doesn't exist, assume target is a topic of some kind-->
-      <xsl:when test="$type='#none#'"><xsl:text> topic/topic </xsl:text></xsl:when>
+      <xsl:when test="not($type)"><xsl:text> topic/topic </xsl:text></xsl:when>
       <!--if there is an element id, construct a partial classvalue and just use that-->
       <xsl:when test="dita-ot:has-element-id(@href)">
         <xsl:text>/</xsl:text><xsl:value-of select="$type"/><xsl:text> </xsl:text>
@@ -875,7 +1000,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
       </xsl:when>
       <!--if the target is inaccessible, don't do anything - shortdesc is optional -->
-      <xsl:when test="$scope='external' or $scope='peer' or $type='external' or not($format='#none#' or $format='dita')"/>
+      <xsl:when test="$scope='external' or $scope='peer' or $type='external' or not(not(format) or $format='dita')"/>
       <!--otherwise try pulling shortdesc from target-->
       <xsl:otherwise>
         <xsl:variable name="shortdesc">
@@ -935,8 +1060,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                 (because scope is external), or format is explicitly something 
                 non-DITA, use the href value with no error message-->
             <xsl:when test="$type='external' or 
-                            ($scope='external' and $format='#none#') or 
-                            not($format='#none#' or $format='dita')">
+                            ($scope='external' and not($format)) or 
+                            not(not($format) or $format='dita')">
               <xsl:value-of select="@href"/>
             </xsl:when>
             <!--when scope is external or peer and format is DITA, don't use
@@ -982,12 +1107,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                          ' topic/index-base ',
                          ' topic/indextermref ')"/>
   
-  <xsl:function name="dita-ot:is-link" as="xs:boolean">
-    <xsl:param name="node"/>
-    <xsl:sequence select="contains($node/@class,' topic/xref ') or
-      ($node/@href and not(contains($node/@class,' delay-d/anchorkey ')) and (some $c in $link-classes satisfies contains($node/@class, $c)))"/>
-  </xsl:function>
-
   <!-- Called when retrieving text for a link or xref. Determine if the reference
        points to a topic, or to an element, and process accordingly. -->
   <xsl:template match="*" mode="topicpull:getlinktext">
@@ -1604,10 +1723,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
     <xsl:param name="elemid">#none#</xsl:param>
-    <xsl:variable name="doc" select="document($file,/)"/>
+    <xsl:variable name="doc" select="document($file,/)"/>    
     <xsl:choose>
       <!-- If the list item exists, and is in an OL, process it -->
-      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class,' topic/ol ')]/*[@id=$elemid][contains(@class, $classval)]">
+      <xsl:when test="$topicpos='samefile' and key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class,' topic/ol ')]/*[@id=$elemid][contains(@class, $classval)]">        
         <xsl:apply-templates mode="topicpull:li-linktext" select="key('topicsById', $topicid)/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class,' topic/ol ')]/*[@id=$elemid][contains(@class, $classval)]"/>
       </xsl:when>
       <xsl:when test="$topicpos='otherfile' and $doc//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class,' topic/body ') or contains(@class,' topic/abstract ')]//*[contains(@class,' topic/ol ')]/*[@id=$elemid][contains(@class, $classval)]">
