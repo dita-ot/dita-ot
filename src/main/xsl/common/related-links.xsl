@@ -2,7 +2,7 @@
 <!--
 This file is part of the DITA Open Toolkit project.
 
-Copyright 2010 imagiczhang
+Copyright 2010 IBM Corporation
 
 See the accompanying license.txt file for applicable licenses.
 -->

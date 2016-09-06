@@ -2,7 +2,7 @@
 <!--
 This file is part of the DITA Open Toolkit project.
 
-Copyright 2016 Robert D Anderson
+Copyright 2016 IBM Corporation
 
 See the accompanying license.txt file for applicable licenses.
 -->
