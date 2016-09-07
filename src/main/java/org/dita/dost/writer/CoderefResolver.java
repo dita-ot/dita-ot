@@ -43,9 +43,10 @@ import org.dita.dost.log.MessageUtils;
  * is omitted, range ends in last line.</p>
  * <p>Optional id range is defined using:</p>
  *
- * <pre>uri ("#id-range(" start ("," end)? ")" )?</pre>
+ * <pre>uri ("#token=" start? ("," end)? )?</pre>
  *
- * <p>Lines idenfified using start and end IDs are exclusive. If end range
+ * <p>Lines idenfified using start and end IDs are exclusive. If the start range
+ * is omitted, range starts from the first line; if end range
  * is omitted, range ends in last line.</p>
  */
 public final class CoderefResolver extends AbstractXMLFilter {
@@ -170,9 +171,11 @@ public final class CoderefResolver extends AbstractXMLFilter {
                     }
                     return new LineNumberRange(start, end).handler(this);
                 } else {
-                    final Matcher mi = Pattern.compile("^line-id\\(([^,\\s)]+)(?:,\\s*([^,\\s)]+))?\\)$").matcher(fragment);
+                    final Matcher mi = Pattern.compile("^token=([^,\\s)]*)(?:,\\s*([^,\\s)]+))?$").matcher(fragment);
                     if (mi.matches()) {
-                        startId = mi.group(1);
+                        if (mi.group(1) != null && mi.group(1).length() != 0) {
+                            startId = mi.group(1);
+                        }
                         if (mi.group(2) != null) {
                             endId = mi.group(2);
                         }
@@ -236,7 +239,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
         AnchorRange(final String start, final String end) {
             this.start = start;
             this.end = end;
-            include = -1;
+            include = start != null ? -1 : 1;
         }
 
         @Override
@@ -244,7 +247,7 @@ public final class CoderefResolver extends AbstractXMLFilter {
             boolean first = true;
             String line;
             while ((line = codeReader.readLine()) != null) {
-                if (include == -1) {
+                if (include == -1 && start != null) {
                     include = line.contains(start) ? 0 : -1;
                 } else if (include > -1 && end != null) {
                     include = line.contains(end) ? -1 : include;

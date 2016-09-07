@@ -40,5 +40,12 @@ fourth
 fifth</codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">fifth</codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"># START-B
+# END-B
+first
+# START-A
+second
+third
+fourth</codeblock>
   </body>
 </topic>
