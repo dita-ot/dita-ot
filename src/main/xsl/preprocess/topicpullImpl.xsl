@@ -69,6 +69,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                  
                  This makes the code more XSLTish and makes it easier to override
                  the link text generation.
+                 
+   - Refactor 5: Use @select on xsl:attribute wherever possible                 
 
   -->
           
@@ -384,13 +386,13 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:variable name="scope" as="xs:string?" select="dita-ot:get-link-scope(.)"/>
       
       <xsl:if test="not(@type) and $type">
-        <xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
+        <xsl:attribute name="type" select="$type"/>
       </xsl:if>
       <xsl:if test="not(@format) and $format">
-        <xsl:attribute name="format"><xsl:value-of select="$format"/></xsl:attribute>
+        <xsl:attribute name="format" select="$format"/>
       </xsl:if>
       <xsl:if test="not(@scope) and $scope">
-        <xsl:attribute name="scope"><xsl:value-of select="$scope"/></xsl:attribute>
+        <xsl:attribute name="scope" select="$scope"/>
       </xsl:if>
 
       <xsl:if test="not(@importance)">
