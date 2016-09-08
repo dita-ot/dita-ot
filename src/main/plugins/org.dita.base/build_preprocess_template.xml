@@ -493,6 +493,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
         <param name="BASEDIR" expression="${basedir}"/>
         <param name="OUTPUTDIR" expression="${output.dir}"/>
+        <!-- Deprecated since 2.4 -->
         <param name="DBG" expression="${args.debug}" if="args.debug"/>
         <param name="defaultLanguage" expression="${default.language}"/>
         <dita:extension id="dita.preprocess.flag-module.param" behavior="org.dita.dost.platform.InsertAction"/>

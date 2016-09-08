@@ -21,8 +21,9 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:param name="EXPORTFILE"/>
   <xsl:param name="TRANSTYPE"/>
+  <!-- Deprecated since 2.4 -->
   <xsl:param name="DBG" select="no"/>
-
+  <!-- Deprecated since 2.4 -->
   <xsl:param name="file-being-processed"/>
 
   <xsl:variable name="ORIGINAL-DOMAINS" select="(/*/@domains | /dita/*[@domains][1]/@domains)[1]" as="xs:string"/>

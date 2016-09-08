@@ -59,7 +59,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Define the error message prefix identifier -->
   <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
-
+  <!-- Deprecated since 2.4 -->
   <xsl:param name="DBG" select="'no'"/>
 
   <!-- Set the format for generated text for links to tables and figures.   -->
