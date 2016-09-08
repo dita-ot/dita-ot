@@ -63,7 +63,12 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                  This removes the need for the "topicpos" distinction,
                  removing redundant code that differs only by topicpos.
    
+   - Refactor 4: Use templates to get link text for target elements, replacing
+                 the choice groups that act on the class value. Replaces named
+                 templates with more-normal match templates.
                  
+                 This makes the code more XSLTish and makes it easier to override
+                 the link text generation.
 
   -->
           
@@ -869,25 +874,103 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                          ' topic/index-base ',
                          ' topic/indextermref ')"/>
   
+  <!-- Called when retrieving text for a link or xref. Determine if the reference
+       points to a topic, or to an element, and process accordingly. -->
   <xsl:template match="*" mode="topicpull:getlinktext">
     <xsl:param name="targetElement" as="element()"/>
     
-    <xsl:variable name="classval" as="xs:string" select="'#none'"/>
+    <xsl:variable name="resolvedLinkText" as="node()*">
+      <xsl:apply-templates select="$targetElement" mode="topicpull:resolvelinktext">
+        <xsl:with-param name="linkElement" as="element()" tunnel="yes" select="."/>
+      </xsl:apply-templates>
+    </xsl:variable>
+    
     <xsl:choose>
-      <xsl:when test="not(contains($targetElement/@class, ' topic/topic '))">
-        <!-- Points to an element within a topic -->
-        <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic">
-          <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
-          <xsl:with-param name="classval" select="$classval"/>
-        </xsl:apply-templates>
+      <xsl:when test="$resolvedLinkText">
+        <xsl:sequence select="$resolvedLinkText"/>
       </xsl:when>
       <xsl:otherwise>
-        <!-- Points to a topic, not an element within a topic -->
-        <xsl:apply-templates select="." mode="topicpull:getlinktext_topic">
-          <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
-        </xsl:apply-templates>
+        <xsl:choose>
+          <xsl:when test="starts-with(@href,'#')">
+            <xsl:value-of select="@href"/>
+          </xsl:when>
+          <xsl:when test="not(@format) or @format = 'dita'">
+            <xsl:sequence select="()"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@href"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates select="." mode="ditamsg:cannot-retrieve-linktext"/>
       </xsl:otherwise>
     </xsl:choose>
+    
+  </xsl:template>
+  
+  <!-- Get the link text from a specific topic. -->
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="topicpull:resolvelinktext">  
+    
+    <xsl:variable name="target-text">
+      <xsl:apply-templates
+        select="*[contains(@class, ' topic/title ')]" mode="text-only"
+      />
+    </xsl:variable>
+    <xsl:value-of select="normalize-space($target-text)"/>    
+  </xsl:template>
+  
+  <!-- Get link text for arbitrary block elements inside a topic. Assumes that the
+       target element has a title element. -->
+  <xsl:template match="*" mode="topicpull:resolvelinktext" priority="-1">
+    <xsl:variable name="target-text"> 
+      <xsl:choose>
+        <xsl:when test="*[contains(@class,' topic/title ')][1]">
+          <xsl:apply-templates
+            select="*[contains(@class,' topic/title ')][1]" mode="text-only"/>
+        </xsl:when>
+        <!--If there isn't a title ,then process with spectitle -->
+        <xsl:when test="@spectitle">
+          <xsl:value-of select="@spectitle"/>
+        </xsl:when>
+        <!-- No title or spectitle; check to see if the element provides generated text -->
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="topicpull:get_generated_text"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$target-text">
+      <xsl:value-of select="normalize-space($target-text)"/>
+    </xsl:if>    
+  </xsl:template>
+  
+  <!-- Pull link text for a figure. Uses mode="topicpull:figure-linktext" to output the text.  -->
+  <xsl:template match="*[contains(@class, ' topic/fig ')][*[contains(@class,' topic/title ')]]" mode="topicpull:resolvelinktext">
+    
+    <xsl:variable name="fig-count-actual">
+      <xsl:apply-templates select="*[contains(@class,' topic/title ')][1]" mode="topicpull:fignumber"/>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="topicpull:figure-linktext">
+      <xsl:with-param name="figtext">
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Figure'"/>
+        </xsl:call-template>
+      </xsl:with-param>
+      <xsl:with-param name="figcount" select="$fig-count-actual"/>
+      <xsl:with-param name="figtitle">
+        <xsl:sequence select="*[contains(@class,' topic/title ')][1]"/>
+      </xsl:with-param>
+    </xsl:apply-templates>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/fig ')][@spectitle]" mode="topicpull:resolvelinktext">
+    
+    <xsl:variable name="fig-count-actual">
+      <xsl:apply-templates select="." mode="topicpull:fignumber"/>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="topicpull:figure-linktext">
+      <xsl:with-param name="figtext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Figure'"/></xsl:call-template></xsl:with-param>
+      <xsl:with-param name="figcount" select="$fig-count-actual"/>
+      <xsl:with-param name="figtitle" select="@spectitle" as="xs:string"/>
+    </xsl:apply-templates>
   </xsl:template>
   
   
@@ -908,124 +991,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:choose>
   </xsl:template>
   
-  <!--get linktext for xref to any body elements. Unsure how to make this extensible,
-      if a plugin needs to add support for type=step or type=newElement. May need
-      to wait for XSLT 2.0 support, with fancier modes? -->
-  <xsl:template match="*" mode="topicpull:getlinktext_within-topic">
-    <xsl:param name="targetElement" as="element()"/>
-    <xsl:param name="classval">#none#</xsl:param>
-    <xsl:variable name="useclassval">
-      <xsl:choose>
-        <!--if it's a known type we can handle, use type as-is-->
-        <xsl:when test="      $classval='/li '    or $classval='/fn '    or $classval='/dlentry '    or $classval='/section '   or $classval='/example '   or $classval='/fig '   or $classval='/figgroup '">
-          <!--can be handled as-is-->
-          <xsl:value-of select="$classval"/>
-        </xsl:when>
-        <!--otherwise figure out what it's topic-level equivalent is by looking it up in the target element's class value-->
-        <xsl:when test="$targetElement">
-          <xsl:apply-templates select="$targetElement" mode="topicpull:determine_firstclass"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <!--don't generate error msg, since will also be attempting retrieval of linktext, and don't want to double-up on error msgs-->
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:choose>
-      <!--processing as a list item - this call only happens when the type is not defined locally or was unknown, but was retrieved from the target; when a known type is defined locally, the appropriate template is applied directly-->
-      <xsl:when test="@type='li' or $useclassval='/li '">
-        <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_li">
-          <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <!--processing as a footnote - this call only happens when the type is not defined locally or was unknown, but was retrieved from the target; when a known type is defined locally, the appropriate template is applied directly-->
-      <xsl:when test="@type='fn' or $useclassval='/fn '">
-        <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_fn">
-          <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <!--processing as a dlentry - this call only happens when the type is not defined locally or was unknown, but was retrieved from the target; when a known type is defined locally, the appropriate template is applied directly-->
-      <xsl:when test="@type='dlentry' or $useclassval='/dlentry '">
-        <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_dlentry">
-          <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <!--processing as a table - this call only happens when the type is not defined locally or was unknown, but was retrieved from the target; when a known type is defined locally, the appropriate template is applied directly-->
-      <xsl:when test="@type='table' or $useclassval='/table '">
-        <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_table">
-          <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <!--processing as a figure - this call only happens when the type is not defined locally or was unknown, but was retrieved from the target; when a known type is defined locally, the appropriate template is applied directly-->
-      <xsl:when test="@type='fig' or $useclassval='/fig '">
-        <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_fig">
-          <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <!--if it's none of the above types, then apply generic processing - for table, fig, etc. - looking for a child title element-->
-      <xsl:otherwise>
-        <xsl:apply-templates select="." mode="topicpull:getlinktext_within-topic_otherblock">
-          <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
-  
-  <!--used to retrieve a topic-level type from the target element - for example, 
-    if user specifies "step" as the type, this will look up its topic-level 
-    equivalent - /li - and use that -->
-  <xsl:template match="*" mode="topicpull:determine_firstclass">
-    <xsl:text>/</xsl:text>
-    <xsl:value-of select="substring-before(substring-after(@class,' topic/'),' ')"/>
-    <xsl:text> </xsl:text>
-  </xsl:template>
-
-  <!-- Get link text for arbitrary block elements inside a topic. Assumes that the
-       target element has a title element. -->
-  <xsl:template match="*" mode="topicpull:getlinktext_within-topic_otherblock">
-    <xsl:param name="targetElement" as="element()?"/>
-    
-    <xsl:choose>
-      <!--look for the target in the same file, and create the linktext if accessible-->
-      <xsl:when test="$targetElement/*[contains(@class,' topic/title ')]">
-        <xsl:variable name="target-text">
-          <xsl:apply-templates
-            select="$targetElement/*[contains(@class,' topic/title ')][1]" mode="text-only"/>
-        </xsl:variable>
-        <xsl:value-of select="normalize-space($target-text)"/>
-      </xsl:when>
-      <!--If there isn't a title ,then process with spectitle -->
-      <xsl:when test="$targetElement/@spectitle">
-        <xsl:variable name="target-text">
-          <xsl:value-of select="$targetElement/@spectitle"/>
-        </xsl:variable>
-        <xsl:value-of select="normalize-space($target-text)"/>
-      </xsl:when>
-      
-      <xsl:when test="$targetElement[contains(@class, ' topic/title ')]">
-        <xsl:variable name="target-text">
-          <xsl:apply-templates select="$targetElement" mode="text-only"/>
-        </xsl:variable>
-        <xsl:value-of select="normalize-space($target-text)"/>
-      </xsl:when>
-
-      <!-- No title or spectitle; check to see if the element provides generated text -->
-      <xsl:when test="$targetElement">
-        <xsl:variable name="target-text">
-          <xsl:apply-templates select="$targetElement" mode="topicpull:get_generated_text"/>
-        </xsl:variable>
-        <xsl:choose>
-          <xsl:when test="$target-text!='#none#'"><xsl:value-of select="normalize-space($target-text)"/></xsl:when>
-          <xsl:otherwise><xsl:apply-templates select="." mode="topicpull:otherblock-linktext-fallback"/></xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-
-      <xsl:otherwise>
-        <xsl:apply-templates select="." mode="topicpull:otherblock-linktext-fallback"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
   <!-- Provide a hook for specializations to give default generated text to new elements.
        By default, elements with no generated text return #none#. -->
   <xsl:template match="*" mode="topicpull:get_generated_text">
@@ -1044,43 +1009,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:otherwise>
     </xsl:choose>
     <xsl:apply-templates select="." mode="ditamsg:cannot-retrieve-linktext"/>
-  </xsl:template>
-
-  <!-- Pull link text for a figure. Uses mode="topicpull:figure-linktext" to output the text.  -->
-  <xsl:template match="*" mode="topicpull:getlinktext_within-topic_fig">
-    <xsl:param name="targetElement" as="element()?"/>
-    
-    <xsl:choose>
-      <!--look for the target in the same file, and create the linktext if accessible-->
-      <!-- and look for the target in another file, and create the linktext if accessible-->
-      <!-- April 2007: replace manual language test with lang() function -->
-      <xsl:when test="$targetElement/*[contains(@class,' topic/title ')]">
-        <xsl:variable name="fig-count-actual">
-          <xsl:apply-templates select="$targetElement/*[contains(@class,' topic/title ')][1]" mode="topicpull:fignumber"/>
-        </xsl:variable>
-        <xsl:apply-templates select="." mode="topicpull:figure-linktext">
-          <xsl:with-param name="figtext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Figure'"/></xsl:call-template></xsl:with-param>
-          <xsl:with-param name="figcount" select="$fig-count-actual"/>
-          <xsl:with-param name="figtitle" select="$targetElement/*[contains(@class,' topic/title ')][1]"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <!--If there isn't a title ,then process with spectitle -->
-      <xsl:when test="$targetElement/@spectitle">
-        <xsl:variable name="fig-count-actual">
-          <xsl:apply-templates select="$targetElement" mode="topicpull:fignumber"/>
-        </xsl:variable>
-        <xsl:apply-templates select="." mode="topicpull:figure-linktext">
-          <xsl:with-param name="figtext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Figure'"/></xsl:call-template></xsl:with-param>
-          <xsl:with-param name="figcount" select="$fig-count-actual"/>
-          <xsl:with-param name="figtitle">
-            <xsl:value-of select="$targetElement/@spectitle"/>
-          </xsl:with-param>
-        </xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="." mode="topicpull:figure-linktext-fallback"/>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <!-- Determine the text for a link to a figure. Currently uses "Figure N". A node set
@@ -1147,43 +1075,30 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
-
-  <!-- Get text for a link to a table. Actual text is generated in template with mode="topicpull:table-linktext" -->
-  <xsl:template match="*" mode="topicpull:getlinktext_within-topic_table">
-    <xsl:param name="targetElement" as="element()?"/>
+  
+  <xsl:template match="*[contains(@class, ' topic/table ')][*[contains(@class,' topic/title ')]]" mode="topicpull:resolvelinktext">
+    <xsl:variable name="tbl-count-actual">
+      <xsl:apply-templates select="*[contains(@class,' topic/title ')][1]" mode="topicpull:tblnumber"/>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="topicpull:table-linktext">
+      <xsl:with-param name="tbltext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Table'"/></xsl:call-template></xsl:with-param>
+      <xsl:with-param name="tblcount" select="$tbl-count-actual"/>
+      <xsl:with-param name="tbltitle" as="node()*">
+        <xsl:sequence select="*[contains(@class,' topic/title ')][1]"/>
+      </xsl:with-param>
+    </xsl:apply-templates>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/table ')][@spectitle]" mode="topicpull:resolvelinktext">
     
-    <xsl:choose>
-      <!--look for the target in the same file, and create the linktext if accessible-->
-      <!-- and look for the target in another file, and create the linktext if accessible-->
-      <xsl:when test="$targetElement/*[contains(@class,' topic/title ')]">
-        <xsl:variable name="tbl-count-actual">
-              <xsl:apply-templates select="$targetElement/*[contains(@class,' topic/title ')][1]" mode="topicpull:tblnumber"/>
-        </xsl:variable>
-        <xsl:apply-templates select="." mode="topicpull:table-linktext">
-          <xsl:with-param name="tbltext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Table'"/></xsl:call-template></xsl:with-param>
-          <xsl:with-param name="tblcount" select="$tbl-count-actual"/>
-          <xsl:with-param name="tbltitle" select="$targetElement/*[contains(@class,' topic/title ')][1]"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <!--If there isn't a title ,then process with spectitle -->
-      <xsl:when test="$targetElement/@spectitle">
-        <xsl:variable name="tbl-count-actual">
-         <xsl:apply-templates select="$targetElement" mode="topicpull:tblnumber"/>
-        </xsl:variable>
-        <xsl:apply-templates select="." mode="topicpull:table-linktext">
-          <xsl:with-param name="tbltext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Table'"/></xsl:call-template></xsl:with-param>
-          <xsl:with-param name="tblcount" select="$tbl-count-actual"/>
-          <xsl:with-param name="tbltitle">
-            <xsl:value-of select="$targetElement/@spectitle"/>
-          </xsl:with-param>
-        </xsl:apply-templates>
-      </xsl:when>
-      
-      <!--otherwise use the href, unless it contains .dita, in which case defer to the final output pass to decide what to do with the file extension-->
-      <xsl:otherwise>
-        <xsl:apply-templates select="." mode="topicpull:table-linktext-fallback"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="tbl-count-actual">
+      <xsl:apply-templates select="." mode="topicpull:tblnumber"/>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="topicpull:table-linktext">
+      <xsl:with-param name="tbltext"><xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Table'"/></xsl:call-template></xsl:with-param>
+      <xsl:with-param name="tblcount" select="$tbl-count-actual"/>
+      <xsl:with-param name="tbltitle" as="node()*" select="@spectitle"/>
+    </xsl:apply-templates>
   </xsl:template>
 
   <!-- Determine the text for a link to a table. Currently uses table title. -->
@@ -1248,35 +1163,24 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:call-template>
   </xsl:template>
 
-  <!-- Set link text when linking to a list item -->
-  <xsl:template match="*" mode="topicpull:getlinktext_within-topic_li">
-    <xsl:param name="targetElement" as="element()"/>
-    <xsl:param name="classval">#none#</xsl:param>
-    <xsl:choose>
-      <!-- If the list item exists, and is in an OL, process it -->
-      <xsl:when test="contains($targetElement/../@class, ' topic/ol ')">                
-        <xsl:apply-templates mode="topicpull:li-linktext" 
-          select="$targetElement"
-        />
-      </xsl:when>
-      <!-- If the list item exists, but is in some other kind of list, issue a message -->
-      <xsl:when test="$targetElement">
-        <xsl:call-template name="topicpull:referenced-invalid-list-item"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="starts-with(@href,'#')">
-            <xsl:value-of select="@href"/>
-          </xsl:when>
-          <xsl:when test="not(@format) or @format = 'dita'">#none#</xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="@href"/>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="." mode="ditamsg:cannot-retrieve-list-number"/>
-      </xsl:otherwise>
-    </xsl:choose>
+  <!-- Set link text when linking to a list item in an ordered list -->
+  <xsl:template mode="topicpull:resolvelinktext" priority="10" 
+    match="*[contains(@class, ' topic/ol ')]/*[contains(@class, ' topic/li ')]" 
+    >
+    
+    <xsl:apply-templates mode="topicpull:li-linktext" 
+      select="."
+    />
+  </xsl:template>  
+  
+  <xsl:template match="*[contains(@class, ' topic/li ')]" mode="topicpull:resolvelinktext">
+    <xsl:param name="linkElement" as="element()" tunnel="yes"/>
+    
+    <xsl:for-each select="$linkElement">
+      <xsl:call-template name="topicpull:referenced-invalid-list-item"/>
+    </xsl:for-each>
   </xsl:template>
+  
   <!-- Matching the list item, determine the count for this item -->
   <xsl:template match="*[contains(@class,' topic/ol ')]/*[contains(@class,' topic/li ')]" mode="topicpull:li-linktext">
     <xsl:number level="multiple"
@@ -1289,26 +1193,13 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   </xsl:template>
 
   <!-- Generate link text for a footnote reference -->
-  <xsl:template match="*" mode="topicpull:getlinktext_within-topic_fn">
-    <xsl:param name="targetElement" as="element()?"/>
-    <xsl:choose>
-      <xsl:when test="$targetElement">
-        <xsl:apply-templates mode="topicpull:fn-linktext" select="$targetElement"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="starts-with(@href,'#')">
-            <xsl:value-of select="@href"/>
-          </xsl:when>
-          <xsl:when test="not(@format) or @format = 'dita'">#none#</xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="@href"/>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="." mode="ditamsg:cannot-retrieve-footnote-number"/>
-      </xsl:otherwise>
-    </xsl:choose>
+  <xsl:template match="*[contains(@class,' topic/fn ')]" mode="topicpull:resolvelinktext">
+    <xsl:apply-templates mode="topicpull:fn-linktext" 
+      select="."
+    />
+    
   </xsl:template>
+  
   <xsl:template match="*[contains(@class,' topic/fn ')]" mode="topicpull:fn-linktext">
     <xsl:variable name="fnid">
       <xsl:number from="/" level="any"/>
@@ -1334,32 +1225,16 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   </xsl:template>
 
   <!-- Getting text from a dlentry target: use the contents of the term -->
-  <xsl:template match="*" mode="topicpull:getlinktext_within-topic_dlentry">
-    <xsl:param name="targetElement" as="element()?"/>
-
-    <xsl:choose>
-      <xsl:when test="$targetElement/*[contains(@class,' topic/dt ')]">
-        <xsl:variable name="target-text">
-          <xsl:apply-templates
-            select="$targetElement/*[contains(@class,' topic/dt ')][1]" mode="text-only"/>
-        </xsl:variable>
-        <xsl:value-of select="normalize-space($target-text)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="starts-with(@href,'#')">
-            <xsl:value-of select="@href"/>
-          </xsl:when>
-          <xsl:when test="not(@format) or @format = 'dita'">#none#</xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="@href"/>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="." mode="ditamsg:cannot-find-dlentry-target"/>
-      </xsl:otherwise>
-    </xsl:choose>
+  <xsl:template match="*[contains(@class, ' topic/dlentry ')][*[contains(@class,' topic/dt ')]]"
+    mode="topicpull:resolvelinktext">
+    
+    <xsl:variable name="target-text" as="node()*">
+      <xsl:apply-templates
+        select="*[contains(@class,' topic/dt ')][1]" mode="text-only"/>
+    </xsl:variable>
+    <xsl:value-of select="normalize-space($target-text)"/>
   </xsl:template>
-
+  
   <!--getting the shortdesc for a link; called from main mode template for link/xref, 
       only after conditions such as scope and format have been tested and a text pull
       has been determined to be appropriate-->
