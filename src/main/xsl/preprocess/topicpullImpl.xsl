@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-  Sourceforge.net. See the accompanying license.txt file for 
-  applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2004, 2005 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 <!--
   Fixes: add "-" to start of class attribute on generated elements (<linktext>, <desc>)
          links to elements inside abstract do not retrieve text
@@ -56,7 +59,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Define the error message prefix identifier -->
   <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
-
+  <!-- Deprecated since 2.4 -->
   <xsl:param name="DBG" select="'no'"/>
 
   <!-- Set the format for generated text for links to tables and figures.   -->

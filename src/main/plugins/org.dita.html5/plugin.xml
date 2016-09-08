@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project.
-     See the accompanying license.txt file for applicable licenses. -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2015 Jarno Elovirta
+
+See the accompanying LICENSE file for applicable license.
+-->
 <plugin id="org.dita.html5">
   <!-- extension points -->
   <extension-point id="dita.xsl.html5" name="HTML5 XSLT import"/>

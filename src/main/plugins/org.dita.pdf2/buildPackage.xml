@@ -1,4 +1,11 @@
 <?xml version="1.0"?>
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2006 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 <project name="build_FO_plugin" default="package-plugin" basedir=".">
   <description>Build jar for FO output</description>
 

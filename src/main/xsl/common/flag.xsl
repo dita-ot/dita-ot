@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
- Sourceforge.net. See the accompanying license.txt file for 
- applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2007, 2009 All Rights Reserved. -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2007, 2009 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 <!-- Updates:
      20090421 robander: Updated so that "flagrules" in all templates
               specifies a default. Can simplify calls from other XSL

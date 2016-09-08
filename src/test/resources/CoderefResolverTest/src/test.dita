@@ -12,5 +12,10 @@
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line=2,"/></codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line=1,3"/></codeblock>
     <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="plain.txt#line=1"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="range.txt#token=START-A,END-A"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="range.txt#token=START-A"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="range.txt#token=END-A,START-A"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="range.txt#token=START-B,END-B"/></codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve"><coderef class="+ topic/xref pr-d/coderef " href="range.txt#token=,END-A"/></codeblock>
   </body>
 </topic>

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- This file is part of the DITA Open Toolkit project. 
-  See the accompanying license.txt file for applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2004, 2005 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
@@ -17,8 +21,9 @@
 
   <xsl:param name="EXPORTFILE"/>
   <xsl:param name="TRANSTYPE"/>
+  <!-- Deprecated since 2.4 -->
   <xsl:param name="DBG" select="no"/>
-
+  <!-- Deprecated since 2.4 -->
   <xsl:param name="file-being-processed"/>
 
   <xsl:variable name="ORIGINAL-DOMAINS" select="(/*/@domains | /dita/*[@domains][1]/@domains)[1]" as="xs:string"/>

@@ -28,7 +28,7 @@ licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
 This file is part of the DITA Open Toolkit project. 
-See the accompanying license.txt file for applicable licenses.
+See the accompanying LICENSE file for applicable license.
 -->
 
 <!-- UPDATES: 20100524: SF Bug 2385466, disallow font-family="inherit" due to 

@@ -1,3 +1,10 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2015 Jarno Elovirta
+ *
+ * See the accompanying LICENSE.md file for applicable licenses.
+ */
 apply plugin: 'java'
 apply plugin: 'maven'
 
@@ -49,6 +56,7 @@ configurations {
 }
 
 def integrationTestSystemProperties = [
+        temp_dir : "${buildDir}/tmp/integrationTest",
         dita_dir : "${projectDir}/src/main",
         basedir : "${projectDir}/src/test/testsuite"
 ]
@@ -116,6 +124,9 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         into "lib"
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
         rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
+    }
+    from (".") {
+        include "LICENSE"
     }
     from ("src/main") {
         exclude "**/.gradle"

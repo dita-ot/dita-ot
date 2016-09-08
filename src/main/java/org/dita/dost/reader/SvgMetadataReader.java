@@ -1,3 +1,10 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2016 Jarno Elovirta
+ *
+ * See the accompanying LICENSE.md file for applicable licenses.
+ */
 package org.dita.dost.reader;
 
 import org.dita.dost.writer.ImageMetadataFilter;

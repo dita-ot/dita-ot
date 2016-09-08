@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
- Sourceforge.net. See the accompanying license.txt file for 
- applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2012 -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2012 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 <!-- PURPOSE: 
      Match DITAVAL information added by preprocessing and output pre-calculated flags.
      If a start or end flag is present, it is known to be active and should be generated.

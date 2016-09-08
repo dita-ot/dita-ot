@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2006 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 <plugin id="org.dita.pdf2">
   <!-- extension points -->
   <extension-point id="dita.xsl.xslfo" name="PDF XSLT import"/>

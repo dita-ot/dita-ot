@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- This file is part of the DITA Open Toolkit project.
-     See the accompanying license.txt file for applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2004, 2006 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 <!-- Refactoring completed March and April 2007. The code now contains 
      numerous hooks that can be overridden using modes. Specifically,
      the most important modes will be those that control what is inherited or
