@@ -4,7 +4,7 @@ This file is part of the DITA Open Toolkit project.
 
 Copyright 2004, 2006 IBM Corporation
 
-See the accompanying license.txt file for applicable licenses.
+See the accompanying LICENSE file for applicable license.
 -->
 <!-- Refactoring completed March and April 2007. The code now contains 
      numerous hooks that can be overridden using modes. Specifically,

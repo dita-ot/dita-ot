@@ -4,7 +4,7 @@ This file is part of the DITA Open Toolkit project.
 
 Copyright 2004, 2006 IBM Corporation
 
-See the accompanying license.txt file for applicable licenses.
+See the accompanying LICENSE file for applicable license.
 -->
 
 <!-- Second step in the DITA to text transform. This takes an intermediate

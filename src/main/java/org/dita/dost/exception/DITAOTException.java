@@ -3,7 +3,7 @@
  *
  * Copyright 2005 IBM Corporation
  *
- * See the accompanying license.txt file for applicable licenses.
+ * See the accompanying LICENSE file for applicable license.
 
  */
 package org.dita.dost.exception;

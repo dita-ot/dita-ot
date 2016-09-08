@@ -4,7 +4,7 @@ This file is part of the DITA Open Toolkit project.
 
 Copyright 2011 Jarno Elovirta
 
-See the accompanying license.txt file for applicable licenses.
+See the accompanying LICENSE file for applicable license.
 -->
 <plugin id="org.dita.eclipsehelp">
   <!-- extension points -->

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
+     Sourceforge.net. See the accompanying LICENSE file for
      applicable licenses.--><!-- Copyright 2005, 2006 IBM Corporation --><messages>
   <!-- Start of Ant Messages -->
   <message id="DOTA001F" type="FATAL">
@@ -814,7 +814,7 @@
     
   <!-- Add any messages defined by plugins. -->
   <!-- This file is part of the DITA Open Toolkit project hosted on 
-  Sourceforge.net. See the accompanying license.txt file for 
+  Sourceforge.net. See the accompanying LICENSE file for
   applicable licenses.-->
   <!-- Java -->
   

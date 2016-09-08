@@ -4,7 +4,7 @@ This file is part of the DITA Open Toolkit project.
 
 Copyright 2007 Shawn McKenzie
 
-See the accompanying license.txt file for applicable licenses.
+See the accompanying LICENSE file for applicable license.
 -->
 <!--
   Created by Robert Anderson August 2011, based on the sample

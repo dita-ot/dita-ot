@@ -4,7 +4,7 @@ This file is part of the DITA Open Toolkit project.
 
 Copyright 2004, 2005 IBM Corporation
 
-See the accompanying license.txt file for applicable licenses.
+See the accompanying LICENSE file for applicable license.
 -->
 
 <xsl:stylesheet version="2.0"

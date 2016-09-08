@@ -125,6 +125,9 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
         rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
     }
+    from (".") {
+        include "LICENSE"
+    }
     from ("src/main") {
         exclude "**/.gradle"
         exclude "**/build.gradle"

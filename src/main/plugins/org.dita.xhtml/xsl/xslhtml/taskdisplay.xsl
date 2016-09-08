@@ -4,7 +4,7 @@ This file is part of the DITA Open Toolkit project.
 
 Copyright 2004, 2005 IBM Corporation
 
-See the accompanying license.txt file for applicable licenses.
+See the accompanying LICENSE file for applicable license.
 -->
 <!-- 20090904 RDA: Add support for stepsection; combine duplicated logic
                    for main steps and steps-unordered templates. -->
