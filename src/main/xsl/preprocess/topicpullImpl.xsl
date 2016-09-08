@@ -45,34 +45,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
      -->
 <!-- 20090903 RDA: added <?ditaot gentext?> and <?ditaot linktext?> PIs for RFE 1367897.
                    Allows downstream processes to identify original text vs. generated link text. -->
-
-<!-- Refactor guide: Remove in final commit version:
- 
-  - Refactor 1: Better names for xsl:key
-  - Refactor 2: Use functions for attribute value inheritance to make using
-                code simpler. Retains existing XSLT modes to implement the
-                actual inheritance so as not to break any overrides (if any, 
-                which there probably aren't any but you never know). This includes
-                replacing use of "#none#" values for simply checking for non-existent
-                string (return values are now "xs:string?"). 
-                
-                Collected all functions at top of module (move of dita-ot:is-link() from
-                original location).
-   - Refactor 3: Use functions to get target doc, topic, and element.
-   
-                 This removes the need for the "topicpos" distinction,
-                 removing redundant code that differs only by topicpos.
-   
-   - Refactor 4: Use templates to get link text for target elements, replacing
-                 the choice groups that act on the class value. Replaces named
-                 templates with more-normal match templates.
-                 
-                 This makes the code more XSLTish and makes it easier to override
-                 the link text generation.
-                 
-   - Refactor 5: Use @select on xsl:attribute wherever possible                 
-
-  -->
+<!-- 20160908 WEK: Refactored to use XSLT2 approaches: Use functions for getting link target, match templates
+                   for getting link text from target elements. Use functions to get inherited attribute values. --> 
           
 <xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
