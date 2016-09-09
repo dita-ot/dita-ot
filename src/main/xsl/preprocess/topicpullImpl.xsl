@@ -689,7 +689,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <xsl:with-param name="targetElement" as="element()" select="$targetElement"/>
           </xsl:apply-templates>
         </xsl:variable>
-        <xsl:if test="not($shortdesc='#none#')">
+        <xsl:if test="exists($shortdesc) and not(normalize-space($shortdesc) = '')">
           <xsl:apply-templates select="." mode="topicpull:add-genshortdesc-PI"/>
           <desc class="- topic/desc ">
             <xsl:apply-templates select="$shortdesc"/>
@@ -868,14 +868,16 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:value-of select="normalize-space($target-text)"/>
       </xsl:when>
       <!-- if can't retrieve, don't create the linktext - defer to the final output process, which will massage the file name-->
-      <xsl:otherwise>#none#</xsl:otherwise>
+      <xsl:otherwise>
+        <xsl:sequence select="()"/>
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
   
   <!-- Provide a hook for specializations to give default generated text to new elements.
-       By default, elements with no generated text return #none#. -->
+       By default, elements with no generated text return an empty sequence. -->
   <xsl:template match="*" mode="topicpull:get_generated_text">
-    <xsl:text>#none#</xsl:text>
+    <xsl:sequence select="()"/>
   </xsl:template>
 
   <!--No link text found; use the href, unless it contains .dita, in which case defer to the final output pass to decide what to do with the file extension-->
@@ -884,7 +886,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:when test="starts-with(@href,'#')">
         <xsl:value-of select="@href"/>
       </xsl:when>
-      <xsl:when test="empty(@format) or @format = 'dita'">#none#</xsl:when>
+      <xsl:when test="empty(@format) or @format = 'dita'">
+        <xsl:sequence select="()"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@href"/>
       </xsl:otherwise>
@@ -937,7 +941,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:when test="starts-with(@href,'#')">
         <xsl:value-of select="@href"/>
       </xsl:when>
-      <xsl:when test="empty(@format) or @format = 'dita'">#none#</xsl:when>
+      <xsl:when test="empty(@format) or @format = 'dita'">
+        <xsl:sequence select="()"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@href"/>
       </xsl:otherwise>
@@ -1024,7 +1030,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:when test="starts-with(@href,'#')">
         <xsl:value-of select="@href"/>
       </xsl:when>
-      <xsl:when test="empty(@format) or @format = 'dita'">#none#</xsl:when>
+      <xsl:when test="empty(@format) or @format = 'dita'">
+        <xsl:sequence select="()"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@href"/>
       </xsl:otherwise>
@@ -1143,7 +1151,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:when test="$targetElement/*[contains(@class, ' topic/desc ')]">
         <xsl:apply-templates select="$targetElement/*[contains(@class, ' topic/desc ')]" mode="copy-desc-contents"/>
       </xsl:when>
-      <xsl:otherwise>#none#</xsl:otherwise>
+      <xsl:otherwise>
+        <xsl:sequence select="()"/>
+      </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
@@ -1157,7 +1167,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                                      $targetElement/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:text>#none#</xsl:text>
+        <xsl:sequence select="()"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
