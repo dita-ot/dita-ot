@@ -45,8 +45,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
      -->
 <!-- 20090903 RDA: added <?ditaot gentext?> and <?ditaot linktext?> PIs for RFE 1367897.
                    Allows downstream processes to identify original text vs. generated link text. -->
-<!-- 20160908 WEK: Refactored to use XSLT2 approaches: Use functions for getting link target, match templates
-                   for getting link text from target elements. Use functions to get inherited attribute values. --> 
           
 <xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
