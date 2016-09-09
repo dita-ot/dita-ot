@@ -152,22 +152,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       ($node/@href and not(contains($node/@class,' delay-d/anchorkey ')) and (some $c in $link-classes satisfies contains($node/@class, $c)))"/>
   </xsl:function>
   
-  <!-- FIXME: Move this to dita utils. -->
-  <xsl:function name="dita-ot:encodeUri" as="xs:string">
-    <xsl:param name="inUriString" as="xs:string"/>
-    <xsl:variable name="parts" select="tokenize($inUriString, '#')"/>
-    <xsl:variable name="pathTokens" as="xs:string*">
-      <xsl:for-each select="tokenize($parts[1], '/')">
-        <xsl:sequence select="encode-for-uri(.)"/>  
-      </xsl:for-each>      
-    </xsl:variable>
-    <xsl:variable name="escapedFragId" as="xs:string"
-      select="if (exists($parts[2])) then concat('#', encode-for-uri($parts[2])) else ''"/>
-    <xsl:variable name="result" as="xs:string"
-      select="concat(string-join($pathTokens, '/'), $escapedFragId)"/>
-    <xsl:sequence select="$result"/>
-  </xsl:function>
-  
   <!-- Given a link element, attempt to resolve its @href 
        to a document if scope is @local and @type is
        dita or ditamap.
@@ -211,7 +195,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:otherwise>
             
             <xsl:variable name="targetDoc" as="document-node()?"
-              select="document(dita-ot:encodeUri($resourcePart), $linkElement)"/>
+              select="document($resourcePart, $linkElement)"/>
             <xsl:choose>
               <xsl:when test="empty($targetDoc)">
                 <!-- Report the failure to resolve the URI -->
