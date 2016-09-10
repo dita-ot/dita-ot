@@ -248,27 +248,10 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
                 if (tmpId != null && tmpId.equals(setFragment(outputFile, id))) {
                     changeTable.put(setFragment(currentParsingFile, id), setFragment(outputFile, newId));
                 }
-            } else if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
-                // update @href value
-                if (checkHREF(resAtts)) {
-                    // if current @href value needs to be updated
-                    URI relative = getRelativePath(outputFile, currentParsingFile);
-                    if (conflictTable.containsKey(outputFile)) {
-                        final URI realoutputfile = conflictTable.get(outputFile);
-                        relative = getRelativePath(realoutputfile, currentParsingFile);
-                    }
-                    if (attrValue.startsWith(SHARP)) {
-                        // if @href refers to a location inside current parsing file
-                        // update @href to point back to current file
-                        // if the location is moved to chunk, @href will
-                        // be update again to the new location.
-                        attrValue = relative + attrValue;
-                    } else if (relative.toString().contains(SLASH)) {
-                        // if new file is not under the same directory with current file
-                        // add path information to the @href value
-                        relative = setPath(relative, relative.getPath().substring(0, relative.getPath().lastIndexOf(SLASH)));
-                        attrValue = relative.resolve(attrValue).toString();
-                    }
+
+                final URI tmpVal = changeTable.get(currentParsingFile);
+                if (tmpVal != null && tmpVal.equals(setFragment(outputFile, id))) {
+                    changeTable.put(currentParsingFile, setFragment(outputFile, newId));
                 }
                 currentParsingFileTopicIDChangeTable.put(id, newId);
                 XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_ID, newId);

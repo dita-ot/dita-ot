@@ -176,8 +176,8 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                     final Iterator<URI> hrefit = hrefTopics.iterator();
                     while (hrefit.hasNext()) {
                         final URI ent = hrefit.next();
-                        if (job.tempDir.toURI().resolve(ent).equals(
-                                job.tempDir.toURI().resolve(s))) {
+                        if (job.tempDirURI.resolve(ent).equals(
+                                job.tempDirURI.resolve(s))) {
                             // The entry in hrefTopics points to the same target
                             // as entry in chunkTopics, it should be removed.
                             hrefit.remove();
@@ -196,8 +196,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                 oldTopicList.add(f.uri);
             }
         }
-        for (final URI hrefTopic : hrefTopics) {
-            final URI t = getRelativePath(xmlDitalist, job.tempDir.toURI().resolve(stripFragment(hrefTopic)));
+        for (final URI t : hrefTopics) {
             topicList.add(t);
             if (oldTopicList.contains(t)) {
                 oldTopicList.remove(t);
@@ -266,7 +265,7 @@ final public class ChunkModule extends AbstractPipelineModuleImpl {
                         URI relativePath = getRelativePath(xmlDitalist, from);
                         final URI relativeTargetPath = getRelativePath(xmlDitalist, target);
                         if (relativeTargetPath.getPath().contains(URI_SEPARATOR)) {
-                            relativePath2fix.put(relativeTargetPath.getPath(),
+                            relativePath2fix.put(relativeTargetPath,
                                     relativeTargetPath.getPath().substring(0, relativeTargetPath.getPath().lastIndexOf(URI_SEPARATOR) + 1));
                         }
                         // ensure the newly chunked file to the old one

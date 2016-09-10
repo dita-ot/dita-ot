@@ -333,17 +333,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
             processChildTopicref(topicref);
         } else { // chunkByToken.equals(CHUNK_BY_DOCUMENT)
             URI currentPath = null;
-<<<<<<< 6b6d35d1129e07e1862bdb21e5f5fb843adef0bc
             if (copyTo != null) {
                 currentPath = currentFile.resolve(copyTo);
             } else if (href != null) {
                 currentPath = currentFile.resolve(href);
-=======
-            if (copytoValue != null) {
-                currentPath = inputFile.resolve(copytoValue);
-            } else if (hrefValue != null) {
-                currentPath = inputFile.resolve(hrefValue);
->>>>>>> Fix regression bugs from File to URI transition
             }
             if (currentPath != null) {
                 if (changeTable.containsKey(currentPath)) {
@@ -503,7 +496,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
     }
 
-<<<<<<< 6b6d35d1129e07e1862bdb21e5f5fb843adef0bc
     private void processSeparateChunk(final Element topicref) {
         try {
             final SeparateChunkTopicParser chunkParser = new SeparateChunkTopicParser();
@@ -513,26 +505,6 @@ public final class ChunkMapReader extends AbstractDomFilter {
             chunkParser.write(currentFile);
         } catch (final DITAOTException e) {
             logger.error("Failed to process chunk: " + e.getMessage(), e);
-=======
-    private void processChildTopicref(final Element node) {
-        final NodeList children = node.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node current = children.item(i);
-            if (current.getNodeType() == Node.ELEMENT_NODE) {
-                final Element currentElem = (Element) current;
-                final String classValue = currentElem.getAttribute(ATTRIBUTE_NAME_CLASS);
-                if (MAP_TOPICREF.matches(classValue)) {
-                    final String hrefValue = currentElem.getAttribute(ATTRIBUTE_NAME_HREF);
-                    final String xtrfValue = currentElem.getAttribute(ATTRIBUTE_NAME_XTRF);
-                    if (hrefValue.length() == 0) {
-                        processTopicref(currentElem);
-                    } else if (!ATTR_XTRF_VALUE_GENERATED.equals(xtrfValue)
-                            && !inputFile.resolve(hrefValue).equals(changeTable.get(inputFile.resolve(hrefValue)))) {
-                        processTopicref(currentElem);
-                    }
-                }
-            }
->>>>>>> Fix regression bugs from File to URI transition
         }
     }
 
@@ -549,21 +521,12 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private void updateReltable(final Element elem) {
-<<<<<<< 6b6d35d1129e07e1862bdb21e5f5fb843adef0bc
         final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
         if (href.length() != 0) {
             if (changeTable.containsKey(currentFile.resolve(href))) {
                 URI res = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP),
                         currentFile.resolve(href));
                 final String fragment = getFragment(href);
-=======
-        final String hrefValue = elem.getAttribute(ATTRIBUTE_NAME_HREF);
-        if (hrefValue.length() != 0) {
-            if (changeTable.containsKey(inputFile.resolve(hrefValue))) {
-                URI resulthrefValue = getRelativePath(inputFile.resolve(FILE_NAME_STUB_DITAMAP),
-                                                      inputFile.resolve(hrefValue));
-                final String fragment = getFragment(hrefValue);
->>>>>>> Fix regression bugs from File to URI transition
                 if (fragment != null) {
                     res = setFragment(res, fragment);
                 }
