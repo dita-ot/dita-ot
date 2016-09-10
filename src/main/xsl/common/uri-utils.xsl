@@ -55,10 +55,18 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="base" as="xs:anyURI"/>
     <xsl:param name="uri" as="xs:anyURI"/>
     
-    <xsl:variable name="b" select="tokenize($base, '/')" as="xs:string+"/>
-    <xsl:variable name="u" select="tokenize($uri, '/')" as="xs:string+"/>
-    
-    <xsl:sequence select="dita-ot:relativize.strip-and-prefix($b, $u)"/>
+    <xsl:variable name="b-scheme" select="substring-before($base, ':')" as="xs:string"/>
+    <xsl:variable name="u-scheme" select="substring-before($uri, ':')" as="xs:string"/>
+    <xsl:choose>
+      <xsl:when test="$b-scheme ne $u-scheme">
+        <xsl:sequence select="$uri"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="b" select="tokenize(substring-after($base, ':'), '/')" as="xs:string+"/>
+        <xsl:variable name="u" select="tokenize(substring-after($uri, ':'), '/')" as="xs:string+"/>   
+        <xsl:sequence select="dita-ot:relativize.strip-and-prefix($b, $u)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:function>
   
   <xsl:function name="dita-ot:relativize.strip-and-prefix" as="xs:anyURI">
