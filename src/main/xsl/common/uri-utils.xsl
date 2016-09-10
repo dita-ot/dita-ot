@@ -91,4 +91,17 @@ See the accompanying LICENSE file for applicable license.
     <xsl:value-of select="if (contains($href, '#')) then substring-before($href, '#') else $href"/>
   </xsl:function>
 
+  <xsl:function name="dita-ot:resolve" as="xs:anyURI">
+    <xsl:param name="base" as="xs:anyURI"/>
+    <xsl:param name="uri" as="xs:anyURI"/>
+    <xsl:variable name="b" select="tokenize(dita-ot:strip-fragment($base), '/')" as="xs:string+"/>
+    <xsl:variable name="u" select="tokenize($uri, '/')" as="xs:string+"/>
+    <xsl:variable name="res" as="xs:string+">
+      <xsl:call-template name="dita-ot:normalize-uri">
+        <xsl:with-param name="src" select="($b[position() ne last()], $u)"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:sequence select="xs:anyURI(string-join($res, '/'))"/>
+  </xsl:function>
+  
 </xsl:stylesheet>
