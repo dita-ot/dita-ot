@@ -16,7 +16,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="uri" as="xs:anyURI"/>
     <xsl:variable name="normalized">
       <xsl:call-template name="dita-ot:normalize-uri">
-        <xsl:with-param name="src" select="$uri"/>
+        <xsl:with-param name="src" select="tokenize($uri, '/')"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:sequence select="xs:anyURI($normalized)"/>

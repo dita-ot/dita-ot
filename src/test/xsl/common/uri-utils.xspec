@@ -70,4 +70,61 @@ See the accompanying LICENSE file for applicable license.
     </x:scenario>
   </x:scenario>
   
+  <x:scenario label="dita-ot:normalize">
+    <x:scenario label="normalized">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/b/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="single up navigation">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/../c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="double up navigation">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/../../c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="zig-zag">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/../b/../b/c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/b/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="current navigation">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/./c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/b/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="last up" pending="FIXME">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/..')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/')"/>
+    </x:scenario>
+    <x:scenario label="last current" pending="FIXME">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/.')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/b/')"/>
+    </x:scenario>
+    <x:scenario label="relative up first">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('../b/c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../b/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="relative current first">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('./b/c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('b/c.dita')"/>
+    </x:scenario>
+  </x:scenario>
+  
 </x:description>
