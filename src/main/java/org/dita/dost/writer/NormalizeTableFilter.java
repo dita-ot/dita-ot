@@ -69,6 +69,7 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
     /** Number of cols in tgroup */
     private int cols;
     private int depth;
+    private Map<String, String> ns = new HashMap<>();
 
     public NormalizeTableFilter() {
         super();
@@ -108,12 +109,23 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
         getContentHandler().startDocument();
     }
 
+    @Override
+    public void startPrefixMapping(final String prefix, final String uri) throws SAXException {
+        ns.put(prefix, uri);
+        getContentHandler().startPrefixMapping(prefix, uri);
+    }
+
+    @Override
+    public void endPrefixMapping(final String prefix) throws SAXException {
+        getContentHandler().endPrefixMapping(prefix);
+        ns.remove(prefix);
+    }
 
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
             throws SAXException {
         depth++;
-        if (depth == 1) {
+        if (depth == 1 && !ns.containsKey(DITA_OT_PREFIX)) {
             super.startPrefixMapping(DITA_OT_PREFIX, DITA_OT_NS);
         }
 
