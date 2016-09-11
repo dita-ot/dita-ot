@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd">
+<concept id="concept6" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Use two CVF(wrong use)</title>
+    <shortdesc>Incorrect usage of myfruit and platform attributes</shortdesc>
+    <conbody>
+        <p>Incorrect usage of otherprops attribute
+           <note otherprops="fruits">otherprops value is :fruits</note>
+           <note otherprops="apples">otherprops value is :apples</note>
+           <note otherprops="banan">otherprops value is :banan</note>
+           <note otherprops="pine">otherprops value is :pine</note>
+            <note otherprops="">otherprops value is: NULL</note>
+            <note otherprops=" ">otherprops value is : a space character</note>
+        </p>
+        <p otherprops="fruit">the incorrect spell of myfrui</p>
+        <p otherprops="app">app</p>
+        <p otherprops="Banana">Banana</p>
+        <p otherprops="">otherprops value is: NULL</p>
+        <p>
+            <lq otherprops="apple">otherprops attribute within lq tag( lq could not contain otherprops attribute)</lq>
+            <b otherprops="banana">otherprops attribute within b tag( b could not contain otherprops attribute)</b>
+        </p>
+        
+        <pre platform="">platform value is NULL within pre tag</pre>
+        <p platform=" ">platform value is a blank character within p tag</p>
+        <note platform="mswi">platform value is mswi within note tag</note>
+        <codeblock platform="ZOs">platform value is ZOs within codeblock tag</codeblock>
+        <p>
+            correct use of platform
+            <data platform="linux">platform value is linux within data tag</data>
+            <indexterm platform="zos">platform</indexterm>
+            <lq platform="os">platform value is os within lq tag</lq>
+            <xref platform="mswin" href="concept1.dita">platform value is mswin within xref tag</xref>
+        </p>
+    </conbody>
+</concept>
+

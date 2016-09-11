@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    
+    <!-- this is the first author -->
+    
+    <topicref keys="blatview blatexample blatfeference blatintro"  href="blatview.dita" navtitle="blatview" locktitle="yes"/>
+    <topicref href="keyRef_blatexample.dita" navtitle="keyRef_blatexample" locktitle="yes"/>
+    
+    <!-- Check the keyRef_blatexample.dita -->
+    <!-- It will link to blatview.dita file -->
+    
+</map>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright IBM Corporation-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+
+<map title="UC22_TC3">
+	<topicref href="test1.dita" copy-to="test2.dita"/>
+	<topicref href="test2.dita" copy-to="test3.dita"/>
+	<topicref href="test3.dita" copy-to="test1.dita"/>
+</map>

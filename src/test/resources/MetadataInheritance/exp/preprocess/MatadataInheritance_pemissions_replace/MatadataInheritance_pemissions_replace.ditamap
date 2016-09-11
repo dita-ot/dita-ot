@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(map mapgroup-d) (topic indexing-d)" id="Bats3" title="Bats3">
+  <topicmeta class="- map/topicmeta ">
+    <permissions class="- topic/permissions " view="entitled"/>
+  </topicmeta>
+  <?Pub Caret1?>
+  <topicref class="- map/topicref " href="bats.dita" navtitle="Bats" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Programming elements</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Programming elements</linktext>
+      <permissions class="- topic/permissions " view="internal"/>
+    </topicmeta>
+    <topicref class="- map/topicref " href="batcaring.dita" navtitle="Caring for your fruit bat" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">batcaring</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">batcaring</linktext>
+        <permissions class="- topic/permissions " view="internal"/>
+      </topicmeta>
+    </topicref>
+  </topicref>
+  <topicref class="- map/topicref " href="Permissions_replace.dita" navtitle="Feeding your bat" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">TestCritdates</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">TestCritdates</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc "> path</shortdesc>
+      <permissions class="- topic/permissions " view="entitled"/>
+    </topicmeta>
+  </topicref>
+</map>

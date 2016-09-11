@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="bats" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                          (topic ut-d) (topic indexing-d)" class="- topic/topic ">
+  <title class="- topic/title ">Programming elements</title>
+  <prolog class="- topic/prolog ">
+    <data-about class="- topic/data-about ">
+      <data class="- topic/data " name="haha">show me the money</data>
+    </data-about>
+  </prolog>
+  <body class="- topic/body ">
+    <section class="- topic/section ">
+      <p class="- topic/p ">The programming domains elements are used to define the syntax and to give
+examples of programming languages.<indexterm class="- topic/indexterm ">Domains elements<indexterm class="- topic/indexterm ">programming
+elements</indexterm>
+ </indexterm><indexterm class="- topic/indexterm ">programming elements</indexterm></p>
+    </section>
+  </body>
+  <related-links class="- topic/related-links ">
+    <linkpool class="- topic/linkpool " mapkeyref="Bats3">
+      <linkpool class="- topic/linkpool ">
+        <link format="dita" scope="local" class="- topic/link " mapclass="- map/topicref " type="topic" href="batcaring.dita" role="child">
+          <?ditaot usertext?>
+          <linktext class="- topic/linktext "><?ditaot gentext?>batcaring</linktext>
+        </link>
+      </linkpool>
+    </linkpool>
+  </related-links>
+</topic>

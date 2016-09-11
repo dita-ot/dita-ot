@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?><?path2project?><?path2project-uri ./?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="id2374525" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">Topic title</title>
+  <body class="- topic/body ">
+    <table class="- topic/table ">
+      <tgroup cols="2" class="- topic/tgroup ">
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry colname="col1" class="- topic/entry ">1</entry>
+            <entry colname="col2" class="- topic/entry ">2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table class="- topic/table ">
+      <tgroup cols="2" class="- topic/tgroup ">
+        <colspec colname="col1" colwidth="1*" class="- topic/colspec "/>
+        <colspec colname="col2" colwidth="3*" class="- topic/colspec "/>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry colname="col1" class="- topic/entry ">1</entry>
+            <entry colname="col2" class="- topic/entry ">2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table class="- topic/table ">
+      <tgroup cols="2" class="- topic/tgroup ">
+        <colspec colname="col1" colwidth="1cm" class="- topic/colspec "/>
+        <colspec colname="col2" colwidth="3cm" class="- topic/colspec "/>
+        <tbody class="- topic/tbody ">
+          <row class="- topic/row ">
+            <entry colname="col1" class="- topic/entry ">1</entry>
+            <entry colname="col2" class="- topic/entry ">2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </body>
+</topic>

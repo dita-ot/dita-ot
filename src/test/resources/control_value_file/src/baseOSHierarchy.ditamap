@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA 1.2 Subject Scheme Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/subjectScheme/dtd/subjectScheme.dtd">
+<subjectScheme xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Base Operation System (Hierarchy)</title>
+    <subjectdef keys="os" navtitle="Operating system">
+    <subjectdef keys="linux" navtitle="Linux">
+      <subjectdef keys="redhat" navtitle="RedHat Linux"/>
+      <subjectdef keys="suse"   navtitle="SuSE Linux"/>
+    </subjectdef>
+    <subjectdef keys="mswin" navtitle="Windows"/>
+    <subjectdef keys="zos"   navtitle="z/OS"/>
+    </subjectdef>
+    <enumerationdef>
+        <attributedef name="platform"/>
+        <subjectdef keyref="os"/>
+        
+    </enumerationdef>
+    
+    
+</subjectScheme>
+

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic-1">
+  <title>User of Conref With Xref</title>
+  <body>
+    <p>This topic conrefs from a topic in a different directory structure that has an xref in it.</p>
+    <p
+      conref="../common/conref-with-xref.xml#topic-1/p-with-xref"/>
+    <p
+      conref="../common/conref-with-xref.xml#topic-1/p-with-keyref"/>
+  </body>
+</topic>

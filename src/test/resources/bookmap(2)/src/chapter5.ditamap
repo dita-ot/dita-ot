@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA 1.1 BookMap//EN"
+ "..\..\dtd\bookmap.dtd">
+<bookmap id="testbook3">
+<booktitle>
+<booklibrary>Batty Things</booklibrary>
+<mainbooktitle>Caring for your fruit bat</mainbooktitle>
+<booktitlealt>How to properly love and care for your bat.</booktitlealt></booktitle>
+<bookmeta>
+<authorinformation>
+<organizationinfo><namedetails><organizationnamedetails>
+<organizationname>Batty Things R US</organizationname>
+</organizationnamedetails>
+<personname><firstname>Fred</firstname><lastname>Mertz</lastname><generationidentifier>Jr</generationidentifier>
+</personname>
+</namedetails></organizationinfo>
+</authorinformation>
+<bookchangehistory>
+<approved>
+<completed><year>2006</year></completed>
+</approved>
+</bookchangehistory>
+<bookrights><copyrfirst><year>1994</year></copyrfirst><copyrlast><year>2006</year>
+</copyrlast><bookowner></bookowner></bookrights>
+</bookmeta>
+<chapter href="chap.dita">
+<topicref href="bookmap(2)_testdata8.ditamap" format="ditamap"></topicref>
+</chapter>
+</bookmap>
+<?Pub *0000002145?>

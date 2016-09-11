@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(map mapgroup-d) (topic indexing-d)" title="Put your title here (Required for Eclipse)">
+  <topicmeta class="- map/topicmeta ">
+    <shortdesc class="- map/shortdesc ">this is shortdesc</shortdesc>
+  </topicmeta>
+  <topicref class="- map/topicref " href="batfeeding.dita" navtitle="The title of the topic article appears here when you use the Inser Topic Reference feature; or when you type a title in the navtitle attribute" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">batfeeding</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">batfeeding</linktext>
+      <?ditaot usershortdesc?>
+      <shortdesc class="- map/shortdesc ">this is shortdesc1</shortdesc>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " navtitle="Remember to delete the tags provided in the template if they are not used"/>
+</map>

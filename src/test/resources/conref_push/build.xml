@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="conref_push" default="all">
+  
+  <dirname property="test.basedir" file="${ant.file.conref_push}"/>
+  <property name="test.name" value="${ant.project.name}"/>
+  <property name="dita.dir" location="${basedir}/../.."/>
+  <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+  <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+  
+  <target name="all" depends="conref_push.preprocess"/>
+  
+  <target name="conref_push.preprocess" if="run.preprocess" unless="skip.preprocess">
+    <antcall target="_run">
+      <param name="dir" value="pushAfter/pushAfter_between_Specialization"/>
+      <param name="map" value="pushAfter.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushAfter/pushAfter_with_crossRef"/>
+      <param name="map" value="pushAfter.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushAfter/pushAfter_with_InvalidTarget"/>
+      <param name="map" value="pushAfter.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushAfter/pushAfter_without_conref"/>
+      <param name="map" value="pushAfter.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushAfter/simple_pushAfter"/>
+      <param name="map" value="pushAfter.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushBefore/pushBefore_between_Specialization"/>
+      <param name="map" value="pushBefore.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushBefore/pushBefore_with_crossRef"/>
+      <param name="map" value="pushBefore.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushBefore/pushBefore_with_InvalidTarget"/>
+      <param name="map" value="pushBefore.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushBefore/pushBefore_without_conref"/>
+      <param name="map" value="pushBefore.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushBefore/simple_pushBefore"/>
+      <param name="map" value="pushBefore.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushReplace/pushReplace_between_Specialization"/>
+      <param name="map" value="pushReplace.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushReplace/pushReplace_with_crossRef"/>
+      <param name="map" value="pushReplace.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushReplace/pushReplace_with_InvalidTarget"/>
+      <param name="map" value="pushReplace.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushReplace/pushReplace_without_conref"/>
+      <param name="map" value="pushReplace.ditamap"/>
+    </antcall>
+    <antcall target="_run">
+      <param name="dir" value="pushReplace/simple_pushReplace"/>
+      <param name="map" value="pushReplace.ditamap"/>
+    </antcall>
+    <copy todir="${result.dir}/preprocess">
+      <fileset dir="${temp.dir}/preprocess"/>
+    </copy>
+  </target>
+  <property name="exp.message-count.warn" value="4"/>
+  <property name="exp.message-count.error" value="4"/>
+  
+  <target name="_run">
+    <ant antfile="${dita.dir}/build.xml">
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="args.input" location="${test.basedir}/src/${dir}/${map}"/>
+      <property name="output.dir" location="${result.dir}/preprocess/${dir}"/>
+      <property name="dita.temp.dir" location="${temp.dir}/preprocess/${dir}"/>
+    </ant>
+  </target>
+  
+</project>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd">
+<concept id="concept6" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Test elementdef tag</title>
+    <shortdesc>Using in the tag could not include the product attribute</shortdesc>
+    <conbody>
+        <codeblock product="redhat">redhat</codeblock>
+       <p>
+           <data product="software"></data>
+           <ul>
+               <li product="mproductin">mproductin</li>
+               <li><lq product="linux">linux</lq></li>
+           </ul>
+           
+       </p>
+    </conbody>
+</concept>
+

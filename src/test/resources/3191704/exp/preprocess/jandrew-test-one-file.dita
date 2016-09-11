@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="topic" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">Push and Target in One File</title>
+  <body class="- topic/body ">
+    <p class="- topic/p " id="p1">I should appear in the output twice.</p>
+    <p class="- topic/p ">I should appear in the output twice.</p>
+  </body>
+</topic>

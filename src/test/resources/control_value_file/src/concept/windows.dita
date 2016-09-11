@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd">
+<concept id="windows" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>The Windows operating system</title>
+   <conbody>
+       <p>As a commercial operating system, Windows differs from Linux ...</p>
+   </conbody>
+</concept>
+

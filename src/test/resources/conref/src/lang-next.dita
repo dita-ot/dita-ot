@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--ArborText, Inc., 1988-2002, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "../dtd/topic.dtd">
+<?Pub Inc?>
+<topic id="langnext" xml:lang="en-us">
+<title>Next topic link</title>
+<shortdesc>This is the next topic in the language tests</shortdesc>
+<body>
+<p>stuff<?Pub Caret?></p>
+</body>
+</topic>
+<?Pub *0000000374?>

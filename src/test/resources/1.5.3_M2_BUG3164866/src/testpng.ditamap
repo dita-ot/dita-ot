@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="testpngmap">
+  <title>BUG 3164866</title>
+  <topicref href="testpng.xml"/>
+</map>

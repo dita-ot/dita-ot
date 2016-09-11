@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" audience="novice" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         ">
+  <topicgroup audience="novice" class="+ map/topicref mapgroup-d/topicgroup ">
+    <!-- direct mapref for reference -->
+    <topicref audience="novice" class="- map/topicref " href="test.dita" otherprops="other" product="osx" props="props" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">title</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">title</linktext>
+      </topicmeta>
+    </topicref>
+    <!-- indirect mapref -->
+    <topicref audience="novice" class="- map/topicref " href="test.dita" otherprops="other" props="props" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">title</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">title</linktext>
+      </topicmeta>
+    </topicref>
+    <topicref audience="novice" class="- map/topicref " href="test.dita" otherprops="other" props="props" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">title</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">title</linktext>
+      </topicmeta>
+    </topicref>
+    <!-- indirect mapref with fallback -->
+    <topicref audience="novice" class="- map/topicref " href="test.dita" otherprops="other" props="props" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">title</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">title</linktext>
+      </topicmeta>
+    </topicref>
+    <topicref audience="novice" class="- map/topicref " href="test.dita" otherprops="other" props="props" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">title</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">title</linktext>
+      </topicmeta>
+    </topicref>
+  </topicgroup>
+</map>

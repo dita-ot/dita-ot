@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.1 Concept//EN" "concept.dtd">
+<concept id="preface.dita" xml:lang="en-us">
+<title>Building DITA output with Java command line</title>
+<shortdesc>The DITA Open Toolkit release 1.0.2 or above provides a command
+     line interface as an alternative for users with little knowledge of Ant
+to      use the toolkit easily.</shortdesc>
+<conbody>
+<section>       <title>Running example</title>       
+<ol>
+ <li>Change into the DITA Open Toolkit installation directory.</li>
+ <li>On the command line, enter the following command: <p><tt>java -jar   
+        lib/dost.jar /i:samples/sequence.ditamap /outdir:out            /transtype:xhtml</tt></p></li>
+</ol>             
+<p rev="r4">Note:<ol>
+ <li>In this example, the '<i>/</i>' symbol preceded by a          space is
+the separator for each parameter.</li>
+<li>Currently, the          parameters <i>/filter</i>, <i>/ftr</i>, <i>/hdr</i>,
+and <i>/hdf</i>          require an absolute path.</li>
+</ol></p>     
+</section>
+</conbody>
+</concept>

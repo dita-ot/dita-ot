@@ -39,26 +39,16 @@ dependencies {
 
 jar.archiveName = "${project.name}.jar"
 
+test {
+    exclude '**/IntegrationTest.class'
+}
+
 // Integration test
-
-sourceSets {
-    integrationTest {
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
-        java.srcDir file('src/test/testsuite/src/main/java')
-        resources.srcDir file('src/test/testsuite/testcase')
-    }
-}
-
-configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
-}
 
 def integrationTestSystemProperties = [
         temp_dir : "${buildDir}/tmp/integrationTest",
         dita_dir : "${projectDir}/src/main",
-        basedir : "${projectDir}/src/test/testsuite"
+        basedir : "${projectDir}/src/test"
 ]
 if (System.getProperty("test") != null) {
     integrationTestSystemProperties["test"] = System.getProperty("test")
@@ -70,9 +60,8 @@ if (System.getProperty("log_level") != null) {
 task integrationTest(type: Test, dependsOn: 'buildLocal') {
     minHeapSize = "128m"
     maxHeapSize = "1024m"
-    testClassesDir = sourceSets.integrationTest.output.classesDir
-    classpath = sourceSets.integrationTest.runtimeClasspath
     systemProperties = integrationTestSystemProperties
+    include '**/IntegrationTest.class'
 }
 
 // Install

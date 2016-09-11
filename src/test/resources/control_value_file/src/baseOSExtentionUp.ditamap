@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA 1.2 Subject Scheme Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/subjectScheme/dtd/subjectScheme.dtd">
+<subjectScheme xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Merging CVF with an extension scheme upward</title>
+    <schemeref href="baseOSNavtitle.ditamap"/>
+    <subjectdef keys="sw" navtitle="Software">
+        <subjectdef keyref="os"/>
+        <subjectdef keys="app" navtitle="Applications">
+            <subjectdef keys="apacheserv" navtitle="Apache Web Server"/>
+            <subjectdef keys="mysql"      navtitle="MySQL Database"/>
+        </subjectdef>
+    </subjectdef>
+
+    
+</subjectScheme>
+

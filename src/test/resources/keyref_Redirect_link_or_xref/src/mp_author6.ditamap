@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    
+    <!-- this is the sixth author -->
+    
+    <!-- he want to resuse the dita2.dita without define a <topicref keys="dita1">, so dita0.dita was used as fallback related link-->
+    <!-- But Since there is no keys definiton,  so we should give a warning or error information -->
+    
+    <topicref href="dita2.dita" navtitle="DITA2" locktitle="yes"/>
+    
+</map>

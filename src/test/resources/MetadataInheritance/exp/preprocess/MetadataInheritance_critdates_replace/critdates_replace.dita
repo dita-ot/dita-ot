@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="critdates_replace" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                          (topic ut-d) (topic indexing-d)" class="- topic/topic ">
+  <title class="- topic/title ">TestCritdates</title>
+  <shortdesc class="- topic/shortdesc "> path</shortdesc>
+  <prolog class="- topic/prolog ">
+    <critdates class="- topic/critdates ">
+      <created class="- topic/created " date="2007-07-01"/>
+      <revised class="- topic/revised " modified="2008-08-08"/>
+    </critdates>
+  </prolog>
+  <body class="- topic/body ">
+    <p class="- topic/p ">asbsdf</p>
+  </body>
+</topic>

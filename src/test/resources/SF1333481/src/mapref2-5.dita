@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "..\dtd\task.dtd">
+<?Pub Inc?>
+<task id="mapref2-5" xml:lang="en-us">
+<title>End of the task map</title>
+<shortdesc>last item in the second task map</shortdesc>
+<taskbody></taskbody><?Pub Caret1?>
+</task>
+<?Pub *0000000364?>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="uplevels" default="all">
+  <dirname property="test.basedir" file="${ant.file.uplevels}"/>
+  <property name="test.name" value="${ant.project.name}"/>
+  <property name="dita.dir" location="${basedir}/../.."/>
+  <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+  <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+  <target name="all" depends="uplevels.xhtml"/>
+  <target name="uplevels.xhtml" if="run.xhtml" unless="skip.xhtml">
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="transtype" value="xhtml"/>
+      <property name="args.input" location="${test.basedir}/src/maps/above.ditamap"/>
+      <property name="output.dir" location="${result.dir}/xhtml/1/base"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml/1/base"/>
+      <property name="generate.copy.outer" value="1"/>
+      <property name="outer.control" value="quiet"/>
+    </ant>
+    <!--ant antfile="${dita.dir}/build.xml">
+      <property name="transtype" value="xhtml"/>
+      <property name="args.input" location="${test.basedir}/src/maps/above.ditamap"/>
+      <property name="output.dir" location="${result.dir}/xhtml/2/base"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml/2/base"/>
+      <property name="generate.copy.outer" value="2"/>
+      <property name="outer.control" value="quiet"/>
+    </ant-->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="transtype" value="xhtml"/>
+      <property name="args.input" location="${test.basedir}/src/maps/above.ditamap"/>
+      <property name="output.dir" location="${result.dir}/xhtml/3/base"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml/3/base"/>
+      <property name="generate.copy.outer" value="3"/>
+      <property name="outer.control" value="quiet"/>
+    </ant>
+  </target>
+  <property name="exp.message-count.error" value="12"/>
+</project>

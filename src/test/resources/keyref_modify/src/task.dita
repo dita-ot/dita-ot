@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA 1.2 Task//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/task.dtd">
+<task id="task" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>task</title>
+    <taskbody>
+        <context>Fruit bats need just a little tender-loving care each day.
+            Ensuring that your bat is happy and content will give you many unending
+            days and nights of wonderful rewards.<simpletable>
+                <sthead>
+                    <stentry></stentry><?Pub Caret1?>
+                    <stentry></stentry>
+                </sthead>
+                <strow>
+                    <stentry></stentry>
+                    <stentry></stentry>
+                </strow>
+            </simpletable></context>
+        <steps>
+            <step>
+                <cmd keyref="a">............</cmd>
+            </step>
+            <step>
+                <cmd keyref="abs">............</cmd>
+            </step>
+            <step>
+                <cmd keyref="keyword">............</cmd>
+            </step>
+       </steps>     
+       
+    </taskbody>
+</task>
+

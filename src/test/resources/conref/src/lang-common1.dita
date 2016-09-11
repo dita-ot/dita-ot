@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dita PUBLIC "-//OASIS//DTD DITA Composite//EN"
+ "../dtd/ditabase.dtd">
+<?Pub Inc?>
+<dita>
+<topic id="topic" conref="lang-common0.dita" xml:lang="zh-cn">
+<title>conref to first topic</title>
+<body></body>
+</topic>
+<task id="task" conref="lang-common0.dita#task" xml:lang="zh-cn">
+<title>conref to identified topic</title>
+<taskbody></taskbody>
+</task>
+<concept id="concept" xml:lang="zh-cn">
+<title>conref to lang-common0.dita#concept/p_element</title>
+<conbody>
+<p conref="lang-common0.dita#concept/p_element"> p_element </p> 
+</conbody>
+</concept>
+<reference id="reference1" conref="lang-common0.dita#reference" xml:lang="zh-cn">
+<title>conref</title>
+<refbody></refbody>
+</reference>
+<reference id="reference2" conref="#reference1" xml:lang="zh-cn">
+<title>conref to internal topic</title>
+<refbody></refbody>
+</reference>
+</dita>

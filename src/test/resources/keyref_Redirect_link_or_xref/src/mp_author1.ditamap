@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    
+    <!-- This is the first author -->
+    
+    <!-- Redirect link or xref  -->
+    
+    <topicref keys="dita1" href="dita1.dita" navtitle="DITA1" locktitle="yes"/>
+    <topicref href="dita2.dita" navtitle="DITA2" locktitle="yes"/>
+        
+</map>

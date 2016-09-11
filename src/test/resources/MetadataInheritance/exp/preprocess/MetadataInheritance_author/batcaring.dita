@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="batcaring" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                          (topic ut-d) (topic indexing-d)" class="- topic/topic ">
+  <title class="- topic/title ">batcaring</title>
+  <prolog class="- topic/prolog ">
+    <author class="- topic/author ">
+  Cindy Shao1
+ </author>
+  </prolog>
+  <body class="- topic/body ">
+    <p class="- topic/p ">The ANT tasks are refactored so that developers can easily find the targets
+they need and make their own extensions. Developers can still use Java Command
+Line as before. Ant Build Script "<codeph class="+ topic/ph pr-d/codeph ">conductor.xml</codeph>" is marked
+as deprecated, but developers can still use it as before. "<codeph class="+ topic/ph pr-d/codeph ">build.xml</codeph>"
+is the renamed version of "<codeph class="+ topic/ph pr-d/codeph ">conductor.xml</codeph>", and developers
+can use it as what they do with "<codeph class="+ topic/ph pr-d/codeph ">conductor.xml</codeph>". New users
+are suggested to use those separated build scripts like "<codeph class="+ topic/ph pr-d/codeph ">build_dita2*.xml</codeph>".
+The original demo ant script "<codeph class="+ topic/ph pr-d/codeph ">build.xml</codeph>" is renamed to "<codeph class="+ topic/ph pr-d/codeph ">build_demo.xml</codeph>".
+"<codeph class="+ topic/ph pr-d/codeph ">build_demo.xml</codeph>" should be used to verify the functions of
+the toolkit after this release.</p>
+  </body>
+  <related-links class="- topic/related-links ">
+    <linkpool class="- topic/linkpool " mapkeyref="Bats1">
+      <link format="dita" scope="local" class="- topic/link " mapclass="- map/topicref " type="topic" href="bats.dita" role="parent">
+        <?ditaot usertext?>
+        <linktext class="- topic/linktext "><?ditaot gentext?>Programming elements</linktext>
+      </link>
+    </linkpool>
+  </related-links>
+</topic>

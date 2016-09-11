@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN"
+ "file:/C:/DITA-OT1.4/dtd/topic.dtd">
+ <topic id="critdates_replace" xml:lang="en-us">
+     <title>TestCritdates</title>
+     <prolog>
+         <source href="http://www.ibm.com" format="html" scope="external">somewhere,someplace</source>
+     </prolog>
+     <body>
+         <p>asbsdf</p>
+     </body>
+     
+ </topic>
+ 

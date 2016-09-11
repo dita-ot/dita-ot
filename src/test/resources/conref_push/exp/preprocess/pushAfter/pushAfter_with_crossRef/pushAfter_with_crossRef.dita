@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?workdir /Volumes/tmp/temp/conref_push/preprocess/pushAfter/pushAfter_with_crossRef?>
+<?workdir-uri file:/Users/jelovirt/Work/github/dita-ot/src/main/temp/conref_push/preprocess/pushAfter/pushAfter_with_crossRef/?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="topicID" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">This Is a topic for pushAfter with cross reference link</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">
+      <xref id="B" href="1/dita1.dita" class="- topic/xref " type="task"><?ditaot usertext?>DITA1<?ditaot genshortdesc?><desc class="- topic/desc ">this is also a reuse function</desc></xref>
+      <xref class="- topic/xref " href="1/topic.dita" type="topic"><?ditaot usertext?>Topic</xref>
+    </p>
+  </body>
+</topic>

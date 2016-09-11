@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic-1">
+  <title>Topic title</title>
+  <body>
+      <p platform="redhat_linux">This is a redhat linux</p>
+      <p platform="untub_linux">This is a untub linux</p>
+      <p platform="zos">This is a zos os</p>
+      <p platform="undefined">This is a undefined os</p>
+  </body>
+</topic>

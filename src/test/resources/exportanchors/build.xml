@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="exportanchors" default="all">
+  <dirname property="test.basedir" file="${ant.file.exportanchors}"/>
+  <property name="test.name" value="${ant.project.name}"/>
+  <property name="dita.dir" location="${basedir}/../.."/>
+  <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+  <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+  <target name="all" depends="exportanchors.preprocess"/>
+  <target name="exportanchors.preprocess" if="run.preprocess" unless="skip.preprocess">
+    <ant antfile="${dita.dir}/build.xml">
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="transtype" value="eclipsehelp"/>
+      <property name="args.input" location="${test.basedir}/src/test.ditamap"/>
+      <property name="output.dir" location="${result.dir}/preprocess"/>
+      <property name="dita.temp.dir" location="${temp.dir}/preprocess"/>
+    </ant>
+    <copy todir="${result.dir}/preprocess">
+      <fileset dir="${temp.dir}/preprocess"/>
+    </copy>
+  </target>
+</project>

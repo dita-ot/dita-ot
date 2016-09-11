@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA 1.2 Subject Scheme Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/subjectScheme/dtd/subjectScheme.dtd">
+<subjectScheme xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Software</title>
+    <subjectdef keys="software" navtitle="Software">
+        <subjectdef keys="mswin" navtitle="Microsoft Windows">
+            <hasPart>
+                <subjectdef keys="ie" navtitle="Internet Explorer"></subjectdef>
+                <subjectdef keys="msn" navtitle="Windows Live Messager"></subjectdef>
+                <subjectdef keys="calc" navtitle="Calculator"></subjectdef>
+            </hasPart>
+        </subjectdef>
+        <subjectdef keys="linux" navtitle="Linux">
+            <hasNarrower>
+                <subjectdef keys="redhat" navtitle="RedHat"></subjectdef>
+                <subjectdef keys="suse" navtitle="SuSe Linux"></subjectdef>
+            </hasNarrower>
+        </subjectdef>
+        <subjectdef keys="db" navtitle="Database">
+            <hasInstance>
+                <subjectdef keys="mysql" navtitle="MySQL"></subjectdef>
+                <subjectdef keys="db2" navtitle="DB2"></subjectdef>
+            </hasInstance>
+        </subjectdef>
+        <subjectdef keys="toolkit" navtitle="ToolKit">
+            <hasKind>
+                <subjectdef keys="qq" navtitle="QQ"></subjectdef>
+               <subjectdef keys="st" navtitle="SameTime"></subjectdef>
+            </hasKind>
+        </subjectdef>
+    </subjectdef>
+    <enumerationdef>
+        <elementdef name="p ul note"></elementdef>
+        <attributedef name="product"></attributedef>
+        <subjectdef keyref="software"></subjectdef>
+    </enumerationdef>
+    
+</subjectScheme>
+

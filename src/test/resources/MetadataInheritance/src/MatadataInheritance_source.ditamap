@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.1 Map//EN"
+ "file:/C:/DITA-OT1.4/dtd/map.dtd">
+<?Pub Inc?>
+<map id="Bats3" title="Bats3">
+<topicmeta>
+<source>
+source
+</source>
+</topicmeta>
+<topicref href="bats.dita" navtitle="Bats">
+ <topicmeta>
+  <source>
+   source2
+  </source>
+ </topicmeta>
+<topicref href="batcaring.dita" navtitle="Caring for your fruit bat"></topicref>
+</topicref>
+<topicref href="batfeeding.dita" navtitle="Feeding your bat"></topicref>
+</map>
+<?Pub *0000000786?>

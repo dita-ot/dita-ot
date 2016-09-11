@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2004, 2005 IBM Corporation -->
+<project name="1.5.3_M3_BUG3191704" default="all" basedir=".">
+   <dirname property="test.basedir" file="${ant.file.1.5.3_M3_BUG3191704}"/>
+   <property name="test.name" value="1.5.3_M3_BUG3191704"/>
+   <property name="currentdir" location="${test.basedir}"/>
+   <target name="all">
+      <echo message="${currentdir}" level="info"/>
+      <sequential>
+         <subant inheritall="true">
+            <fileset dir="${currentdir}" includes="BUG3191704_*.xml"/>
+            <property name="test.name" value="1.5.3_M3_BUG3191704"/>
+         </subant>
+      </sequential>
+   </target>
+</project>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="test1" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">test 1</title>
+  <titlealts class="- topic/titlealts ">
+    <searchtitle class="- map/searchtitle "> test1 further linkage searchtitle </searchtitle>
+  </titlealts>
+  <body class="- topic/body ">
+    <p id="content1" class="- topic/p "> content of test1 </p>
+    <p class="- topic/p "> content of test1 </p>
+    <p class="- topic/p "> content of test1 </p>
+    <p class="- topic/p "> content of test2 </p>
+    <p class="- topic/p "> content of test3 </p>
+  </body>
+</topic>

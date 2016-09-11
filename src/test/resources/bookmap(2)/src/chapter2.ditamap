@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying LICENSE file for
+  applicable licenses.-->
+<!-- Copyright by Comtech Services, Inc -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.1 Map//EN" "..\..\dtd\map.dtd">
+<map id="chapter2" title="chapter2" toc="yes">
+<topicref id="DITAOT-installguide" href="title.xml" linking="none" 
+  navtitle="DITA Open Toolkit Installation Guide" type="concept">
+  <topicref href="colophon.xml" navtitle="About the installation guide1" 
+    type="concept">
+  </topicref>
+</topicref>
+<topicref id="DITAOT-installguide" href="p.dita" linking="none" 
+  navtitle="DITA Open Toolkit Installation Guide" type="concept">
+  <topicref href="part.dita" navtitle="About the installation guide2" 
+    type="topic">
+  </topicref>
+</topicref>
+</map>

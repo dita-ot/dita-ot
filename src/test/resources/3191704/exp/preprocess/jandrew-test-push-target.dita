@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="topic" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">Push Target</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">The next paragraph is the target of a conref pushreplace:</p>
+    <p class="- topic/p " id="p1">This is pushed.</p>
+    <p class="- topic/p ">After the push target.</p>
+  </body>
+</topic>

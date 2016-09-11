@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic-1">
+  <title>Keyref Verification Topic</title>
+  <body>
+    <p>Keyref-using link to step "first step" in the generic task topic: <xref
+      keyref="generic-task-01/step-first"
+      type="step">first step</xref>. Same address with no explicit link text: <xref
+      keyref="generic-task-01/step-first"
+      type="step"/>.</p>
+  </body>
+</topic>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="generic-task">
+<title id="title">Some Generic Task</title>
+<taskbody>
+<context id="context">
+<p>This is the generic context.</p>
+</context>
+<steps>
+<step id="step-first"><cmd>The first thing you do.</cmd>
+</step>
+<step><cmd>Middle step.</cmd>
+</step>
+<step id="step-last"><cmd>The last thing you do.</cmd>
+</step>
+</steps>
+</taskbody>
+</task>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE dita PUBLIC "-//OASIS//DTD DITA Composite//EN"
+ "../dtd/ditabase.dtd">
+<?Pub Inc?>
+<dita>
+<topic id="topic" xml:lang="en-us">
+<title>Topic elements with generated text</title>
+<prolog><metadata>
+<keywords><indexterm>a</indexterm><indexterm>b</indexterm><indexterm>c</indexterm>
+<indexterm>d</indexterm><indexterm>e</indexterm><indexterm>f</indexterm><indexterm>g</indexterm>
+<indexterm>h</indexterm><indexterm>i</indexterm><indexterm>j</indexterm><indexterm>k</indexterm>
+<indexterm>l</indexterm><indexterm>m</indexterm><indexterm>n</indexterm><indexterm>o</indexterm>
+<indexterm>p</indexterm><indexterm>q</indexterm><indexterm>r</indexterm><indexterm>s</indexterm>
+<indexterm>t</indexterm><indexterm>u</indexterm><indexterm>v</indexterm><indexterm>w</indexterm>
+<indexterm>x</indexterm><indexterm>y</indexterm><indexterm>z</indexterm><indexterm>1</indexterm>
+<indexterm>+</indexterm><indexterm>$</indexterm><indexterm>?<?Pub Caret?></indexterm>
+</keywords>
+</metadata></prolog>
+<body>
+<p>Xref to the another file: <xref href="lang-concept.dita"/>. Now do it again, <xref href="lang-concept.dita">with link text</xref>.</p>
+<p>Xref to fig in another file's topic: <xref href="lang-concept.dita#lang-concept"/>. Now do it again, <xref href="lang-concept.dita#lang-concept">with link text</xref>.</p>
+<p>Xref to fig in another file: <xref href="lang-concept.dita#lang-concept/fig"/>. Now do it again, <xref href="lang-concept.dita#lang-concept/fig">with link text</xref>.</p>
+<p>Xref to this topic: <xref href="#topic"/>. Now do it again, <xref href="#topic">with link text</xref>.</p>
+<p>Xref to the concept in this file: <xref href="#concept"/>. Now do it again, <xref href="#concept">with link text</xref>.</p>
+<p>Xref to the fig in this topic: <xref href="#topic/fig"/>. Now do it again, <xref href="#topic/fig">with link text</xref>.</p>
+<p>Xref to the table in this topic: <xref href="#topic/table"/>. Now do it again, <xref href="#topic/table">with link text</xref>.</p>
+<p>Xref to an external website: <xref href="http://www.ibm.com" format="html"/>. Now do it again, <xref href="http://www.ibm.com" format="html">with link text</xref>.</p>
+<p>Xref to an external website with an anchor: <xref href="http://www.ibm.com/index.html#anchor" format="html"/>. Now do it again, <xref href="http://www.ibm.com/index.html#anchor" format="html">with link text</xref>.</p>
+<fig id="fig"><title>figure title</title>
+<p>test <q>quote</q> in a figure</p>
+</fig>
+<table id="table"><title>table title</title>
+<tgroup cols="1"><colspec colname="col1"/>
+<tbody>
+<row>
+<entry colname="col1">test table</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<note>note</note>
+<note type="attention">attention</note>
+<note type="caution">CAUTION</note>
+<note type="danger">DANGER</note>
+<note type="fastpath">fastpath</note>
+<note type="important">important</note>
+<note type="remember">remember</note>
+<note type="restriction">restriction</note>
+<note type="tip">tip</note>
+<note><ol>
+<li>This is a list in a note</li>
+<li>This is still a list in a note</li>
+</ol></note>
+<p rev="rev1">Revised paragraph</p>
+<required-cleanup>test required cleanup<draft-comment>test draft-comment</draft-comment></required-cleanup>
+<syntaxdiagram>
+<groupchoice>
+<kwd>kwd</kwd>
+<synnote>this is a synnote</synnote>
+<synnote>this is another synnote</synnote>
+</groupchoice>
+</syntaxdiagram>
+</body>
+<related-links>
+<link href="lang-concept.dita"></link>
+<link href="lang-reference.dita"></link>
+<link href="lang-task.dita"></link>
+<link format="html" href="http://www.ibm.com" scope="external">
+</link>
+<link href="lang-next.dita" role="next"></link>
+<link href="lang-previous.dita" role="previous"></link>
+<link href="lang-parent.dita" role="parent"></link>
+<link href="lang-prerequisite.dita" importance="required" role="sibling">
+</link>
+</related-links>
+</topic>
+<concept id="concept" xml:lang="en-us">
+<title>Concept elements with generated text</title>
+<conbody>
+<p id="p_element">No concept-specific element with generated text</p>
+</conbody>
+</concept>
+<task id="task" xml:lang="en-us">
+<title>Task elements with generated text</title>
+<taskbody>
+<prereq>prerequisites</prereq>
+<context>context</context>
+<steps>
+<step><cmd>step 1</cmd></step>
+<step importance="optional"><cmd>step 2 (optional)</cmd></step>
+<step importance="required"><cmd>step 3 (required)</cmd></step>
+<step><cmd>step 4</cmd>
+<choicetable>
+<chrow><choption>option</choption><chdesc>description</chdesc></chrow>
+</choicetable>
+</step>
+<step><cmd>step 5</cmd></step>
+</steps>
+<result>result</result>
+<example>example</example>
+<postreq>postrequisite</postreq>
+</taskbody>
+</task>
+<reference id="reference" xml:lang="en-us">
+<title>Reference elements with generated text</title>
+<refbody>
+<properties>
+<property>
+<proptype>Type</proptype>
+<propvalue>Value</propvalue>
+<propdesc>Description</propdesc>
+</property>
+</properties>
+</refbody>
+</reference>
+</dita>
+<?Pub *0000003604?>

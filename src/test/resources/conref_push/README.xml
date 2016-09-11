@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//ELEMENT DITA 1.2 Topic//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/topic.dtd">
+<topic id="topicID" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>This is the abstract description of the testcase for conref push</title>
+    <body>
+        <p>pushAfter
+            <note><codeph>simple_pushAfter</codeph>: This case test the mutiple pushAfter usage</note>
+        <ul>
+          <li>Step1: Run the pushAfter.ditamap</li>
+          <li>Step2: Check dita1.dita</li>
+        </ul>
+            <note><codeph>pushAfter_with_crossRef</codeph>: This case test the pushAfter using cross reference</note>
+            <ul>
+                <li>Step1: Run the pushAfter.ditamap</li>
+                <li>Step2: Check the pushAfter_with_crossRef.dita</li>
+            </ul>
+            <note><codeph>pushAfter_without_conref</codeph>: This case test the pushAfter when we push conref to topic without using conref</note>
+            <ul>
+                <li>Step1: Run the pushAfter.ditamap</li>
+                <li>Step2: Check the pushAfter_with_crossRef.dita</li>
+            </ul>
+            <note><codeph>pushAfter_with_InvalidTarget</codeph>: This case test the pushAfter when we push some to the target, in fact this target doesn't exsit</note>
+            <ul>
+                <li>Step1: Run the pushAfter.ditamap</li>
+                <li>Step2: Check dita1.dita</li>
+            </ul>
+            <note><codeph>pushAfter_between_Specialization</codeph>: This case test the pushAfter between the specialization element, just like &lt;steps&gt; specialize from &lt;ol&gt; ,
+            &lt;step&gt; specialize from &lt;li&gt;</note>
+            <ul>
+                <li>Step1: Run the pushAfter.ditamap</li>
+                <li>Step2: Check dita1.dita</li>
+            </ul>
+            
+        </p>
+        
+        <p>pushBefore
+            <note><codeph>simple_pushBefore</codeph>: This case test the mutiple pushBefore usage</note>
+            <ul>
+                <li>Step1: Run the pushBefore.ditamap</li>
+                <li>Step2: Check dita1.dita</li>
+            </ul>
+            <note><codeph>pushBefore_with_crossRef</codeph>: This case test the pushBefore using cross reference</note>
+            <ul>
+                <li>Step1: Run the pushBefore.ditamap</li>
+                <li>Step2: Check the pushBefore_with_crossRef.dita</li>
+            </ul>
+            <note><codeph>pushBefore_without_conref</codeph>: This case test the pushBefore when we push conref to topic without using conref</note>
+            <ul>
+                <li>Step1: Run the pushBeore.ditamap</li>
+                <li>Step2: Check the pushBefore_with_crossRef.dita</li>
+            </ul>
+            <note><codeph>pushBefore_with_InvalidTarget</codeph>: This case test the pushBefore when we push some to the target, in fact this target doesn't exsit</note>
+            <ul>
+                <li>Step1: Run the pushBefore.ditamap</li>
+                <li>Step2: Check dita1.dita</li>
+            </ul>
+            <note><codeph>pushBefore_between_Specialization</codeph>: This case test the pushBefore between the specialization element, just like &lt;steps&gt; specialize from &lt;ol&gt; ,
+                &lt;step&gt; specialize from &lt;li&gt;</note>
+            <ul>
+                <li>Step1: Run the pushBefore.ditamap</li>
+                <li>Step2: Check dita1.dita</li>
+            </ul>
+            
+        </p>
+        
+        <p>pushReplace
+            <note><codeph>simple_pushReplace</codeph>: This case test the mutiple pushReplace usage</note>
+            <ul>
+                <li>Step1: Run the pushReplace.ditamap</li>
+                <li>Step2: Check dita1.dita</li>
+            </ul>
+            <note><codeph>pushReplace_with_crossRef</codeph>: This case test the pushReplace using cross reference</note>
+            <ul>
+                <li>Step1: Run the pushReplace.ditamap</li>
+                <li>Step2: Check the pushReplace_with_crossRef.dita</li>
+            </ul>
+            <note><codeph>pushReplace_without_conref</codeph>: This case test the pushReplace when we push conref to topic without using conref</note>
+            <ul>
+                <li>Step1: Run the pushReplace.ditamap</li>
+                <li>Step2: Check the pushReplace_with_crossRef.dita</li>
+            </ul>
+            <note><codeph>pushReplace_with_InvalidTarget</codeph>: This case test the pushReplace when we push some to the target, in fact this target doesn't exsit</note>
+            <ul>
+                <li>Step1: Run the pushReplace.ditamap</li>
+                <li>Step2: Check dita1.dita</li>
+            </ul>
+            <note><codeph>pushReplace_between_Specialization</codeph>: This case test the pushReplace between the specialization element, just like &lt;steps&gt; specialize from &lt;ol&gt; ,
+                &lt;step&gt; specialize from &lt;li&gt;</note>
+            <ul>
+                <li>Step1: Run the pushReplace.ditamap</li>
+                <li>Step2: Check dita1.dita</li>
+            </ul>
+            
+        </p>
+    </body>
+</topic>
+

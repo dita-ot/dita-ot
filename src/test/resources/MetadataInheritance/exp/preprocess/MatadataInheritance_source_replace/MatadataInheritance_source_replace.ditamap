@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(map mapgroup-d) (topic indexing-d)" id="Bats3" title="Bats3">
+  <topicmeta class="- map/topicmeta ">
+    <source class="- topic/source ">
+      source
+    </source>
+  </topicmeta>
+  <topicref class="- map/topicref " href="Source_replace.dita" navtitle="Bats" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">TestCritdates</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">TestCritdates</linktext>
+      <source class="- topic/source ">
+    source2
+  </source>
+    </topicmeta>
+    <topicref class="- map/topicref " href="batcaring.dita" navtitle="Caring for your fruit bat" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">batcaring</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">batcaring</linktext>
+        <source class="- topic/source ">
+    source2
+  </source>
+      </topicmeta>
+    </topicref>
+  </topicref>
+  <topicref class="- map/topicref " href="bats.dita" navtitle="Feeding your bat" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Programming elements</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Programming elements</linktext>
+      <source class="- topic/source ">
+    source
+  </source>
+    </topicmeta>
+  </topicref>
+</map>

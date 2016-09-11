@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept-1">
+  <title>Test upper case PNG</title>
+  <conbody>
+    <p>This is lower case <q>.png</q> <image href="images/lowercase.png"/></p>
+    
+    <!--Test Scenario 1: Verify that uppercase.PNG image is embedded in testpng.html file-->
+    <p>This is upper case <q>.PNG</q> <image href="images/uppercase.PNG"/> </p>
+  </conbody>
+</concept>

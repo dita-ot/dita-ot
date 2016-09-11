@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         " title="DITA Topic Map">
+  <topicref class="- map/topicref " collection-type="sequence" href="test.xml" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Topic title</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Topic title</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">testAn equation: <equation class="+ topic/fig math-d/equation "><math type="presentation"><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block"><mml:semantics><mml:mrow><mml:mrow><mml:mi mathvariant="bold">a</mml:mi><mml:mo>=</mml:mo><mml:mfrac><mml:mrow><mml:mi mathvariant="bold">F</mml:mi></mml:mrow><mml:mi>m</mml:mi></mml:mfrac><mml:mo>=</mml:mo><mml:mfrac><mml:mrow><mml:mi>q</mml:mi><mml:mo>[</mml:mo><mml:mi mathvariant="bold">E</mml:mi><mml:mo>+</mml:mo><mml:mfenced><mml:mrow><mml:mi mathvariant="bold">v</mml:mi><mml:mi>X</mml:mi><mml:mi mathvariant="bold">B</mml:mi></mml:mrow></mml:mfenced><mml:mo>]</mml:mo></mml:mrow><mml:mi>m</mml:mi></mml:mfrac></mml:mrow></mml:mrow></mml:semantics></mml:math></math></equation>  </shortdesc>
+    </topicmeta>
+    <topicref class="- map/topicref " href="test1.xml" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Topic title</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">Topic title</linktext>
+      </topicmeta>
+    </topicref>
+    <topicref class="- map/topicref " href="test2.xml" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Topic title</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">Topic title</linktext>
+      </topicmeta>
+    </topicref>
+  </topicref>
+</map>
