@@ -1,53 +1,31 @@
 package org.dita.dost;
 
-import static java.util.Collections.emptyList;
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.custommonkey.xmlunit.XMLAssert.*;
-import static org.junit.Assert.*;
-import static org.dita.dost.util.Constants.*;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
-import org.apache.tools.ant.BuildEvent;
-import org.apache.tools.ant.BuildListener;
-import org.apache.tools.ant.DemuxOutputStream;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.ProjectHelper;
+import org.apache.tools.ant.*;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.custommonkey.xmlunit.XMLAssert.assertEquals;
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.util.Constants.*;
+import static org.junit.Assert.assertArrayEquals;
 
 @RunWith(Parameterized.class)
 public final class IntegrationTest {
@@ -71,7 +49,6 @@ public final class IntegrationTest {
             ? System.getProperty(TEMP_DIR)
             : "build" + File.separator + "tmp" + File.separator + "integrationTest");
     private static final File resourceDir = new File(baseDir, "resources");
-//    private static final File resultDir = new File(baseDir, "testresult");
     private static DocumentBuilder db;
     private static HtmlDocumentBuilder htmlb;
     private static int level;
@@ -131,7 +108,7 @@ public final class IntegrationTest {
     @Test
     public void test() throws Throwable {
         final File expDir = new File(testDir, EXP_DIR);
-        final File actDir = new File(baseTempDir, testDir.getName() + File.separator + "testresult" );
+        final File actDir = new File(baseTempDir, testDir.getName() + File.separator + "testresult");
         List<TestListener.Message> log = null;
         try {
             log = run(testDir, expDir.list(), actDir);
@@ -200,8 +177,6 @@ public final class IntegrationTest {
         }
 
         final File tempDir = new File(baseTempDir, d.getName() + File.separator + "temp");
-        System.out.println(resDir.getAbsolutePath());
-        System.out.println(tempDir.getAbsolutePath());
         deleteDirectory(resDir);
         deleteDirectory(tempDir);
 
@@ -314,7 +289,7 @@ public final class IntegrationTest {
     private String[] readTextFile(final File f) throws IOException {
         final List<String> buf = new ArrayList<>();
         try (final BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"))) {
-            String l = null;
+            String l;
             while ((l = r.readLine()) != null) {
                 buf.add(l);
             }
@@ -404,7 +379,7 @@ public final class IntegrationTest {
                                 res.add(v);
                             }
                         }
-                        id.setNodeValue(join(res));
+                        id.setNodeValue(res.stream().collect(Collectors.joining(" ")));
 
                     } else {
                         final String v = id.getValue();
@@ -417,17 +392,6 @@ public final class IntegrationTest {
             }
         }
         return doc;
-    }
-
-    private String join(final List<String> vals) {
-        final StringBuilder buf = new StringBuilder();
-        for (final Iterator<String> i = vals.iterator(); i.hasNext(); ) {
-            buf.append(i.next());
-            if (i.hasNext()) {
-                buf.append(" ");
-            }
-        }
-        return buf.toString();
     }
 
     /**
