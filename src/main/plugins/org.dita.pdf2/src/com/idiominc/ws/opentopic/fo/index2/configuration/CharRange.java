@@ -3,7 +3,7 @@
  *
  * Copyright 2007 Idiom Technologies, Inc
  *
- * See the accompanying LICENSE.md file for applicable licenses.
+ * See the accompanying LICENSE file for applicable license.
  */
 package com.idiominc.ws.opentopic.fo.index2.configuration;
 

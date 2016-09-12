@@ -2,7 +2,7 @@
 #
 # Copyright 2013 Jarno Elovirta
 #
-# See the accompanying LICENSE.md file for applicable licenses.
+# See the accompanying LICENSE file for applicable license.
 datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
 
 dita = element dita {

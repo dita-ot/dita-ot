@@ -3,7 +3,7 @@
  *
  * Copyright 2012 Jarno Elovirta
  *
- * See the accompanying LICENSE.md file for applicable licenses.
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.util;
 

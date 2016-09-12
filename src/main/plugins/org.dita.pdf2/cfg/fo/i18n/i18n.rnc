@@ -2,7 +2,7 @@
 #
 # Copyright 2011 Jarno Elovirta
 #
-# See the accompanying LICENSE.md file for applicable licenses.
+# See the accompanying LICENSE file for applicable license.
 configuration =
   ## Character set configuration
   element configuration {
