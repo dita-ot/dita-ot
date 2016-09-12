@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "file:/C:/SAXONIBMJDK/demo/dtd/technicalContent/dtd/map.dtd">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Test audience attibute(wrong use)</title>
+    <topicref href="audience.ditamap" format="ditamap"  type="subjectScheme"></topicref>
+    <topicref href="concept11.dita"></topicref>
+    <topicref href="map13.ditamap" format="ditamap"></topicref>
+</map>
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "..\dtd\map.dtd">
+<?Pub Inc?>
+<map title="Second mapref -- deep down">
+<topicref href="mapref2-1.dita"></topicref>
+<topicref href="mapref2-2.dita">
+<topicref href="mapref2-3.dita">
+<topicref href="mapref2-4.dita"></topicref>
+</topicref>
+</topicref>
+<topicref href="mapref2-5.dita"></topicref>
+<reltable>
+<relrow>
+<relcell>
+<topicref href="mapref2-1.dita"></topicref>
+<topicref href="mapref2-2.dita"></topicref>
+<topicref href="mapref2-3.dita"></topicref>
+<topicref href="mapref2-4.dita"></topicref>
+<topicref href="mapref2-5.dita"></topicref>
+</relcell>
+<relcell>
+<topicref format="html" href="http://www.ibm.com" navtitle="ibm: from the nested mapref"
+scope="external"><?Pub Caret?></topicref>
+</relcell>
+</relrow>
+</reltable>
+</map>
+<?Pub *0000000959?>

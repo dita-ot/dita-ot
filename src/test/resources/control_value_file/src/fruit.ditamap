@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA 1.2 Subject Scheme Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/subjectScheme/dtd/subjectScheme.dtd">
+<subjectScheme xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Fruit</title>
+    <subjectdef keys="fruit" navtitle="Fruit">
+        <subjectdef keys="apple" navtitle="Apple"></subjectdef>
+        <subjectdef keys="banana" navtitle="Banana"></subjectdef>
+        <subjectdef keys="pineapple" navtitle="Pineapple"></subjectdef>
+    </subjectdef>
+    
+    <enumerationdef>
+        <elementdef name="p"></elementdef>
+        <attributedef name="otherprops"></attributedef>
+        <subjectdef keyref="fruit"></subjectdef>
+        
+    </enumerationdef>
+    <enumerationdef>
+        <elementdef name="note"></elementdef>
+        <attributedef name="otherprops"></attributedef>
+        <subjectdef keyref="fruit"></subjectdef>
+        
+    </enumerationdef>
+    
+</subjectScheme>
+

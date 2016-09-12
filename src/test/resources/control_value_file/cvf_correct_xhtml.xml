@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cvf_correct_xhtml" default="cvf_correctxhtml" basedir=".">
+
+  <!-- dita.dir should point to the toolkit's root directory -->
+  <property name="dita.dir" value="${basedir}/../.."/>
+  <property name="test.basedir" value="${dita.dir}/testdata"/>
+
+  <import file="${dita.dir}/integrator.xml"/>
+
+  <target name="cvf_correctxhtml" depends="integrate">
+
+    <!--  map1 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map1.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map1/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map1"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map4 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map4.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map4/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map4"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map7 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map7.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map7/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map7"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+
+    <!--  map10 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map10.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map10/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map10"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map13 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map13.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map13/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map13"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+
+    <!--  map15 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map15.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map15/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map15"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map16 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map16.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map16/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map16"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map152 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map152.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map152/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map152"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map162 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map162.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map162/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map162"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map17 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map17.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map17/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map17"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+
+    <!--  map18 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map18.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map18/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map18"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml/map18"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map22 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map22.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map22/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map22"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map23 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map23.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map23/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map23"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map25 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map25.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map25/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map25"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map27 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map27.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map27/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map27"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+    <!--  map28 -->
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" value="${test.basedir}/src/map28.ditamap"/>
+      <property name="dita.temp.dir" value="${result.dir}/xhtml/map28/temp"/>
+      <property name="output.dir" value="${result.dir}/xhtml/map28"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/>
+    </ant>
+
+  </target>
+</project>

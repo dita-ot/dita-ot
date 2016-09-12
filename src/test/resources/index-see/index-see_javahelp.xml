@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="indexsee_javahelp" default="indexsee2javahelp" basedir=".">
+   <dirname property="test.basedir" file="${ant.file.indexsee_javahelp}"/>
+   <property name="test.name" value="index-see"/>
+   <property name="dita.dir" location="${test.basedir}/../.."/>
+   <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+   <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+   <target name="indexsee2javahelp" if="run.javahelp" unless="skip.javahelp">
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/index-see_testdata1.dita"/>
+         <property name="output.dir" location="${result.dir}/javahelp"/>
+         <property name="transtype" value="javahelp"/>
+         <property name="dita.temp.dir" location="${temp.dir}/javahelp"/>
+      </ant>
+   </target>
+</project>

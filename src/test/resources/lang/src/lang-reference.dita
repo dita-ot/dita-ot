@@ -1,0 +1,10 @@
+<!--ArborText, Inc., 1988-2002, v.4002-->
+<!-- Copyright 2004, 2005 IBM Corporation
+ -->
+<reference xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic       reference/reference " domains="(topic reference)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " id="lang-reference" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
+<title class="- topic/title ">Reference link for language test</title>
+<shortdesc class="- topic/shortdesc ">Reference for the related link</shortdesc>
+<refbody class="- topic/body        reference/refbody ">
+<section class="- topic/section ">test things</section>
+</refbody>
+</reference>

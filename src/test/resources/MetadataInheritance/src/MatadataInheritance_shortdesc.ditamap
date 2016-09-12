@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.1 Map//EN"
+ "file:/C:/DITA-OT1.4/dtd/map.dtd">
+<map title="Put your title here (Required for Eclipse)">
+<topicmeta>
+<shortdesc>this is shortdesc</shortdesc>
+</topicmeta>
+ <topicref href="batfeeding.dita" navtitle="The title of the topic article appears here when you use the Inser Topic Reference feature; or when you type a title in the navtitle attribute"
+type="topic">
+  <topicmeta>
+   <shortdesc>this is shortdesc1</shortdesc>
+  </topicmeta>
+ </topicref>
+<topicref navtitle="Remember to delete the tags provided in the template if they are not used">
+</topicref>
+</map>
+

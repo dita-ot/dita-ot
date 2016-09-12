@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.2">
+  <topic class="- topic/topic " domains="(topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                             (topic task strictTaskbody-c)                             (topic math-d)" id="topic" ditaarch:DITAArchVersion="1.2">
+    <title class="- topic/title ">Topic title</title>
+    <body class="- topic/body ">
+      <p class="- topic/p ">An equation: <equation class="+ topic/fig math-d/equation ">
+          <math class="+ topic/foreign math-d/math " type="presentation">
+            <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block" overflow="scroll">
+              <mml:semantics definitionURL="" encoding="">
+                <mml:mrow>
+                  <mml:mrow>
+                    <mml:mi mathvariant="bold">a</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mfrac>
+                      <mml:mrow>
+                        <mml:mi mathvariant="bold">F</mml:mi>
+                      </mml:mrow>
+                      <mml:mi>m</mml:mi>
+                    </mml:mfrac>
+                    <mml:mo>=</mml:mo>
+                    <mml:mfrac>
+                      <mml:mrow>
+                        <mml:mi>q</mml:mi>
+                        <mml:mo>[</mml:mo>
+                        <mml:mi mathvariant="bold">E</mml:mi>
+                        <mml:mo>+</mml:mo>
+                        <mml:mfenced>
+                          <mml:mrow>
+                            <mml:mi mathvariant="bold">v</mml:mi>
+                            <mml:mi>X</mml:mi>
+                            <mml:mi mathvariant="bold">B</mml:mi>
+                          </mml:mrow>
+                        </mml:mfenced>
+                        <mml:mo>]</mml:mo>
+                      </mml:mrow>
+                      <mml:mi>m</mml:mi>
+                    </mml:mfrac>
+                  </mml:mrow>
+                </mml:mrow>
+              </mml:semantics>
+            </mml:math>
+          </math>
+        </equation>
+      </p>
+    </body>
+  </topic>
+</dita>

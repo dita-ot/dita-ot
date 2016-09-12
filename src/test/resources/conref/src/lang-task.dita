@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--ArborText, Inc., 1988-2002, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "../dtd/task.dtd">
+<?Pub Inc?>
+<task id="taskforrelatedlink" xml:lang="en-us">
+<title>Task for related link</title>
+<shortdesc>Description of the related task</shortdesc>
+<taskbody>
+<prereq>You need to do this first.</prereq>
+</taskbody><?Pub Caret1?>
+</task>
+<?Pub *0000000412?>

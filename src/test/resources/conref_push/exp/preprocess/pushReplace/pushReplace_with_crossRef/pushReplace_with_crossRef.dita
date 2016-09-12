@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?workdir /Volumes/tmp/temp/conref_push/preprocess/pushReplace/pushReplace_with_crossRef?>
+<?workdir-uri file:/Users/jelovirt/Work/github/dita-ot/src/main/temp/conref_push/preprocess/pushReplace/pushReplace_with_crossRef/?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="topicID" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">This Is a topic for pushBefore with cross reference link</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">
+      <xref class="- topic/xref " href="http://www.google.com" id="A" scope="external"><?ditaot usertext?>Google</xref>
+      <xref class="- topic/xref " href="1/11/dita22.dita" id="B" type="task"><?ditaot usertext?>1/11/DITA22<?ditaot genshortdesc?><desc class="- topic/desc ">this is also a reuse function</desc></xref>
+      <xref class="- topic/xref " href="1/dita2.dita" id="C" type="task"><?ditaot usertext?>1/DITA2<?ditaot genshortdesc?><desc class="- topic/desc ">this is also a reuse function</desc></xref>
+    </p>
+  </body>
+</topic>

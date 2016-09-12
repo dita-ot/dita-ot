@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map
+  title="DITA Topic Map">
+  <topicgroup
+    processing-role="resource-only">
+    <!--<topicref
+      href="product-specific/push-to-generic-task-01-via-conref.dita"/>-->
+    <topicref
+      href="product-specific/push-to-generic-task-01-via-conkeyref.dita"/>
+  </topicgroup>
+  <topichead>
+    <topicmeta>
+      <navtitle>Main Navigation Tree</navtitle>
+    </topicmeta>
+    <!--    <topicref
+      href="common/generic-task-01.dita"
+      keys="generic-task-unpushed"
+      copy-to="generic-task-use-01"/>
+    <topicref
+      href="common/generic-task-01.dita"
+      keys="generic-task-01-use-02"
+      copy-to="generic-task-use-02"/>
+-->
+    <topicref
+      href="common/generic-task-01.dita"
+      keys="generic-task-01"/>
+    <topicref
+      href="common/keyref-verification.dita"/>
+    <!-- copy-to="generic-task-use-03" -->
+  </topichead>
+</map>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation-->
+ <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+ 
+<topic id="test1" xml:lang="en-us">
+<title>test 1</title>
+<body>
+	<p id="content1"> content of test1 </p>
+	<p conref="test1.dita#test1/content1"/>
+	<p conref="#test1/content1"/>
+	<p conref="test2.dita#test2/content2"/>
+	<p conref="test3.dita#test3/content3"/>
+</body>
+</topic>

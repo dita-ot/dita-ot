@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?><project name="push_Reference" default="pushReference" basedir=".">
+    <property name="dita.dir" value="${basedir}${file.separator}..${file.separator}.."/>
+    
+    <target name="pushReference">
+        
+        <!--pushAfter/pushAfter_between_Specialization -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_between_Specialization${file.separator}pushAfter.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_between_Specialization${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_between_Specialization${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushAfter/pushAfter_with_crossRef -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_with_crossRef${file.separator}pushAfter.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_with_crossRef${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_with_crossRef${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushAfter/pushAfter_with_InvalidTarget -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_with_InvalidTarget${file.separator}pushAfter.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_with_InvalidTarget${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_with_InvalidTarget${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushAfter/pushAfter_without_conref -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_without_conref${file.separator}pushAfter.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_without_conref${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushAfter${file.separator}pushAfter_without_conref${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushAfter/simple_pushAfter-->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushAfter${file.separator}simple_pushAfter${file.separator}pushAfter.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushAfter${file.separator}simple_pushAfter${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushAfter${file.separator}simple_pushAfter${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushBefore/pushBefore_between_Specialization -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_between_Specialization${file.separator}pushBefore.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_between_Specialization${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_between_Specialization${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushBefore/pushBefore_with_crossRef -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_with_crossRef${file.separator}pushBefore.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_with_crossRef${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_with_crossRef${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushBefore/pushBefore_with_InvalidTarget -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_with_InvalidTarget${file.separator}pushBefore.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_with_InvalidTarget${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_with_InvalidTarget${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushBefore/pushBefore_without_conref -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_without_conref${file.separator}pushBefore.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_without_conref${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushBefore${file.separator}pushBefore_without_conref${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushBefore/simple_pushBefore-->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushBefore${file.separator}simple_pushBefore${file.separator}pushBefore.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushBefore${file.separator}simple_pushBefore${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushBefore${file.separator}simple_pushBefore${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushReplace/pushReplace_between_Specialization -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushReplace${file.separator}pushReplace_between_Specialization${file.separator}pushReplace.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushReplace${file.separator}pushReplace_between_Specialization${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushReplace${file.separator}pushReplace_between_Specialization${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushReplace/pushReplace_with_crossRef -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushReplace${file.separator}pushReplace_with_crossRef${file.separator}pushReplace.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushReplace${file.separator}pushReplace_with_crossRef${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushReplace${file.separator}pushReplace_with_crossRef${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+       
+        
+        <!--pushReplace/pushReplace_without_conref -->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushReplace${file.separator}pushReplace_without_conref${file.separator}pushReplace.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushReplace${file.separator}pushReplace_without_conref${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushReplace${file.separator}pushReplace_without_conref${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+        <!--pushReplace/simple_pushReplace-->
+        <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+            <property name="args.input" value="${dita.dir}${file.separator}testdata${file.separator}push_Reference${file.separator}pushReplace${file.separator}simple_pushReplace${file.separator}pushReplace.ditamap"/>
+            <property name="output.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushReplace${file.separator}simple_pushReplace${file.separator}xhtml"/>
+            <property name="transtype" value="xhtml"/>
+            <property name="dita.temp.dir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}pushReplace${file.separator}simple_pushReplace${file.separator}xhtml${file.separator}temp"/>
+            <property name="args.logdir" value="${dita.dir}${file.separator}testresult${file.separator}push_Reference${file.separator}log"/>
+        <property name="clean.temp" value="no"/></ant> 
+        
+    </target>
+</project>

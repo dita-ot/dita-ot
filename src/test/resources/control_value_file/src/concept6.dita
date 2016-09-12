@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd">
+<concept id="concept6" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Test elementdef tag</title>
+    <shortdesc>Only p ul note  could include the attribute sw</shortdesc>
+    <conbody>
+        <p product="software">
+            <note product="mswin">product value is : mswin</note>
+            <note product="ie">product value is : ie</note>
+            <note product="msn">product value is : msn</note>
+            <note product="calc">product value is : calc</note>
+            
+            <note product="linux">product value is : linux</note>
+            <note product="redhat">product value is : redhat</note>
+            <note product="suse">product value is : suse</note>
+            
+            <note product="db">product value is : db</note>
+            <note product="mysql">product value is : mysql</note>
+            <note product="db2">product value is : db2</note>
+            
+            <note product="toolkit">product value is : toolkit</note>
+            <note product="qq">product value is : qq</note>
+            <note product="st">product value is : st</note>
+        </p>
+        <p product="linux">linux</p>
+        <p product="mproductin">mproductin</p>
+        <p product="toolkit">toolkit</p>
+        <p product="ie">ie</p>
+        <p product="redhat">redhat</p>
+        <p product="qq">qq</p>
+        <p>
+            <ul product="linux">
+                <li>linux</li>
+            </ul>
+            <ul product="mproductin">
+                <li>mproductin</li>
+            </ul>
+            <ul product="toolkit">
+                <li>toolkit</li>
+            </ul>
+            <ul product="db">
+                <li>db</li>
+            </ul>
+            <ul product="msn">
+                <li>msn</li>
+            </ul>
+            <ul product="suse">
+                <li>suse</li>
+            </ul>
+            <ul product="st">
+                <li>st</li>
+            </ul>
+            <ul product="mysql">
+                <li>mysql</li>
+            </ul>
+        </p>
+    </conbody>
+</concept>
+

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map title="Key reference test" id="test">
+  <topicref href="a.xml"/>
+  
+  <topicref keyref="topicref"/>
+  <navref keyref="navref"/>  
+
+  <keydef keys="author" href="b.xml" scope="peer" navtitle="b">
+    <topicmeta>
+      <author>author author</author>
+      <keywords>
+        <keyword>author keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="data" href="b.xml" scope="peer" navtitle="b">
+    <topicmeta>
+      <keywords>
+        <keyword>data keyword</keyword>
+      </keywords>
+      <data>data data</data>
+    </topicmeta>
+  </keydef>
+  <keydef keys="data-about" href="b.xml" scope="peer" navtitle="b">
+    <topicmeta>
+      <keywords>
+        <keyword>data-about keyword</keyword>
+      </keywords>
+      <data-about>
+        <data>data-about data-about</data>
+      </data-about>
+    </topicmeta>
+  </keydef>
+  <keydef keys="image" href="delta.gif" format="gif" navtitle="b">
+    <topicmeta>
+      <linktext>image linktext</linktext>
+      <shortdesc>image shortdesc</shortdesc>
+      <keywords>
+        <keyword>image keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="link" href="b.xml" scope="peer" navtitle="b">
+    <topicmeta>
+      <linktext>link linktext</linktext>
+      <shortdesc>link shortdesc</shortdesc>
+      <keywords>
+        <keyword>link keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="lq" href="b.xml" scope="peer" navtitle="b">
+    <topicmeta>
+      <keywords>
+        <keyword>lq keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="navref" href="b.xml" scope="peer" navtitle="b">
+    <topicmeta>
+      <keywords>
+        <keyword>navref keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="publisher" href="b.xml" scope="peer" navtitle="b">
+    <topicmeta>
+      <publisher>publisher publisher</publisher>
+      <keywords>
+        <keyword>publisher keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="source" href="b.xml" scope="peer" navtitle="b">
+    <topicmeta>
+      <source>source source</source>
+      <keywords>
+        <keyword>source keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="topicref" href="b.xml" scope="peer" navtitle="b">
+    <topicmeta>
+      <linktext>topicref linktext</linktext>
+      <shortdesc>topicref shortdesc</shortdesc>
+      <keywords>
+        <keyword>topicref keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="xref" href="b.xml" scope="peer" navtitle="b">
+    <topicmeta>
+      <linktext>xref linktext</linktext>
+      <shortdesc>xref shortdesc</shortdesc>
+      <keywords>
+        <keyword>xref keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="cite">
+    <topicmeta>
+      <keywords>
+        <keyword>cite keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="dt">
+    <topicmeta>
+      <keywords>
+        <keyword>dt keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="keyword">
+    <topicmeta>
+      <keywords>
+        <keyword>keyword keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="term">
+    <topicmeta>
+      <keywords>
+        <keyword>term keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="ph">
+    <topicmeta>
+      <keywords>
+        <keyword>ph keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="indexterm">
+    <topicmeta>
+      <keywords>
+        <keyword>indexterm keyword</keyword>
+        <indexterm>indexterm indexterm</indexterm>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="index-base">
+    <topicmeta>
+      <keywords>
+        <keyword>index-base keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <keydef keys="indextermref">
+    <topicmeta>
+      <keywords>
+        <keyword>indextermref keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+</map>

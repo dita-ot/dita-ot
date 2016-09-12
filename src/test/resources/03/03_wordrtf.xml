@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="03_wordrtf" default="032wordrtf" basedir=".">
+   <dirname property="test.basedir" file="${ant.file.03_wordrtf}"/>
+   <property name="test.name" value="03"/>
+   <property name="dita.dir" location="${test.basedir}/../.."/>
+   <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+   <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+   <target name="032wordrtf" if="run.wordrtf" unless="skip.wordrtf">
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/03.ditamap"/>
+        <property name="dita.temp.dir" location="${temp.dir}/wordrtf"/>
+        <property name="output.dir" location="${result.dir}/wordrtf"/>
+         <property name="transtype" value="wordrtf"/>
+      </ant>
+   </target>
+</project>

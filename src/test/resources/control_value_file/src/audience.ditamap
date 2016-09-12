@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA 1.2 Subject Scheme Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/subjectScheme/dtd/subjectScheme.dtd">
+<subjectScheme xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Product</title>
+    <subjectdef keys="audiences" navtitle="Audience">
+        <subjectdef keys="programmer" navtitle="Programmer"> </subjectdef>
+        <subjectdef keys="user" navtitle="User"></subjectdef>
+        <subjectdef keys="admin" navtitle="Administrator "></subjectdef>
+        <subjectdef keys="pm" navtitle="Program Manager"></subjectdef>
+    </subjectdef>
+    
+    <enumerationdef>
+        <attributedef name="audience"></attributedef>
+        <subjectdef keyref="audiences"></subjectdef>
+        
+    </enumerationdef>
+    
+</subjectScheme>
+

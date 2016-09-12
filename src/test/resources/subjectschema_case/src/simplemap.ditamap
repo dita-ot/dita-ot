@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "map.dtd">
+<map title="DITA Topic Map">
+   <topicref href="simplescheme.ditamap" format="ditamap" type="subjectScheme">
+   </topicref>
+   <topicref href="simpletopic.dita" type="topic"/>
+</map>

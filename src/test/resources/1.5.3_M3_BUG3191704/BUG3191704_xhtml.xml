@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BUG3191704_xhtml" default="BUG3191704" basedir=".">
+   <dirname property="test.basedir" file="${ant.file.BUG3191704_xhtml}"/>
+   <property name="test.name" value="1.5.3_M3_BUG3191704"/>
+   <property name="dita.dir" location="${test.basedir}/../.."/>
+   <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+   <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+  <target name="BUG3191704" if="run.xhtml" unless="skip.xhtml">
+      <ant antfile="${dita.dir}/build.xml" target="init"> 
+         <property name="args.input" location="${test.basedir}/src/test.ditamap"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="clean.temp" value="no"/>
+      </ant>
+   </target>
+</project>

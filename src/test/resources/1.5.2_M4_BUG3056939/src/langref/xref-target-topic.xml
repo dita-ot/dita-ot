@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic-1">
+  <title>XRef Target Topic</title>
+  <body>
+    <p>This topic is a target of an xref from a conreffed element. It is in the same directory as the conreffing topic but a different directory from the conref source.</p>
+  </body>
+</topic>

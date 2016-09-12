@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+  <topicref href="componentA/configA.dita">
+    <topicmeta>
+      <exportanchors>
+        <anchorid id="step1"/>
+        <anchorid id="step2"/>
+        <anchorid id="step3"/>
+      </exportanchors>
+    </topicmeta>
+  </topicref>
+  <topicref href="componentA/this.dita">
+    <topicmeta>
+      <exportanchors>
+        <anchorid id="this"/>
+        <anchorid id="that"/>
+      </exportanchors>
+    </topicmeta>
+  </topicref>
+  <topicref keys="componentAconfig commonconfig" href="componentA/configA.dita#configA">
+    <topicmeta>
+      <exportanchors>
+        <anchorkey keyref="commonconfig"/>
+        <anchorid id="step1"/>
+        <anchorid id="step2"/>
+      </exportanchors>
+    </topicmeta>
+  </topicref>
+</map>

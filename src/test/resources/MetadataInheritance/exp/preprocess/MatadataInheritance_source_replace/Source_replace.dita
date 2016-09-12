@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="critdates_replace" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                          (topic ut-d) (topic indexing-d)" class="- topic/topic ">
+  <title class="- topic/title ">TestCritdates</title>
+  <prolog class="- topic/prolog ">
+    <source class="- topic/source ">
+   source2
+  </source>
+  </prolog>
+  <body class="- topic/body ">
+    <p class="- topic/p ">asbsdf</p>
+  </body>
+  <related-links class="- topic/related-links ">
+    <linkpool class="- topic/linkpool " mapkeyref="Bats3">
+      <linkpool class="- topic/linkpool ">
+        <link format="dita" scope="local" class="- topic/link " mapclass="- map/topicref " type="topic" href="batcaring.dita" role="child">
+          <?ditaot usertext?>
+          <linktext class="- topic/linktext "><?ditaot gentext?>batcaring</linktext>
+        </link>
+      </linkpool>
+    </linkpool>
+  </related-links>
+</topic>

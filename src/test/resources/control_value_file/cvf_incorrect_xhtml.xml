@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="cvf_incorrect_xhtml" default="cvf_incorrectxhtml" basedir=".">
+
+  <!-- dita.dir should point to the toolkit's root directory -->
+  <property name="dita.dir" value="${basedir}/../.."/>
+  <property name="testdata.dir" value="${dita.dir}/testdata"/>
+
+  <import file="${dita.dir}/integrator.xml"/>
+
+  <target name="cvf_incorrectxhtml" depends="integrate">
+
+    <!--  map2 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map2.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map2/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map2/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map2/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+    <!--  map3 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map3.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map3/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map3/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map3/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+    <!--  map5 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map5.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map5/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map5/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map5/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+
+    <!--  map6 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map6.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map6/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map6/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map6/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+    <!--  map8 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map8.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map8/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map8/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map8/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+
+    <!--  map9 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map9.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map9/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map9/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map9/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+
+
+
+
+
+    <!--  map11 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map11.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map11/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map11/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map11/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+    <!--  map12 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map12.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map12/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map12/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map12/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+
+    <!--  map14 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map14.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map14/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map14/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map14/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+
+
+
+
+
+
+
+    <!--  map161 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map161.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map161/xhtml/temp"/>
+      <property name="args.logdir"
+        value="${dita.dir}/testresult/control_value_file/map161/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map161/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+    <!--  map19 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map19.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map19/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map19/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map19/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+    <!--  map20 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map20.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map20/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map20/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map20/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+
+
+
+    <!--  map24 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map24.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map24/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map24/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map24/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+    <!--  map26 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map26.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map26/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map26/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map26/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+    <!--  map29 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map29.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map29/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map29/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map29/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+
+
+
+    <!--  map30 -->
+    <ant antfile="${dita.dir}/build.xml" target="init">
+      <property name="args.input" value="${testdata.dir}/control_value_file/map30.ditamap"/>
+      <property name="dita.temp.dir"
+        value="${dita.dir}/testresult/control_value_file/map30/xhtml/temp"/>
+      <property name="args.logdir" value="${dita.dir}/testresult/control_value_file/map30/xhtml/log"/>
+      <property name="output.dir" value="${dita.dir}/testresult/control_value_file/map30/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="clean.temp" value="no"/></ant>
+
+  </target>
+</project>

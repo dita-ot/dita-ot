@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ../../../../../testsuite/testresult/22/preprocess/TC2/?>
+<?path2project-uri ../../../../../testsuite/testresult/22/preprocess/TC2/?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="test2" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">test 2</title>
+  <body class="- topic/body ">
+    <p id="content2" class="- topic/p "> content of test2 </p>
+  </body>
+  <related-links class="- topic/related-links ">
+    <linkpool class="- topic/linkpool ">
+      <link class="- topic/link " format="dita" href="newtest2.dita" mapclass="- map/topicref " role="sibling" scope="local" type="topic">
+        <?ditaot usertext?>
+        <linktext class="- topic/linktext "><?ditaot gentext?>test 2</linktext>
+      </link>
+    </linkpool>
+    <linkpool class="- topic/linkpool ">
+      <link class="- topic/link " format="dita" href="newtest2.dita" mapclass="- map/topicref " role="sibling" scope="local" type="topic">
+        <?ditaot usertext?>
+        <linktext class="- topic/linktext "><?ditaot gentext?>test 2</linktext>
+      </link>
+    </linkpool>
+  </related-links>
+</topic>

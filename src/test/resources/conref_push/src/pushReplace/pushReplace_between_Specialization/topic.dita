@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topicID">
+    <title>This is a topic for pushReplace between specialization DTD</title>
+    
+    <body>
+        <ol>
+          <li id="A">A</li>
+          <li id="B">B</li>
+          <li id="C">C</li>
+          <li id="D">D</li>
+        </ol>
+    </body>
+</topic>
+

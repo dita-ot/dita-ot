@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?workdir /Volumes/tmp/temp/conref_push/preprocess/pushBefore/pushBefore_between_Specialization?>
+<?workdir-uri file:/Users/jelovirt/Work/github/dita-ot/src/main/temp/conref_push/preprocess/pushBefore/pushBefore_between_Specialization/?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="topicID" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">This is a topic for pushBefore between specialization DTD</title>
+  <body class="- topic/body ">
+    <ol class="- topic/ol ">
+      <li class="- topic/li task/step ">
+        <ph class="- topic/ph task/cmd ">AA</ph>
+      </li>
+      <li id="A" class="- topic/li ">A</li>
+      <li class="- topic/li task/step ">
+        <ph class="- topic/ph task/cmd ">BB</ph>
+      </li>
+      <li id="B" class="- topic/li ">B</li>
+      <li class="- topic/li task/step ">
+        <ph class="- topic/ph task/cmd ">CC</ph>
+      </li>
+      <li id="C" class="- topic/li ">C</li>
+      <li class="- topic/li task/step ">
+        <ph class="- topic/ph task/cmd ">
+          <xref class="- topic/xref " href="http://www.google.com" scope="external"><?ditaot usertext?>Google</xref>
+        </ph>
+      </li>
+      <li id="D" class="- topic/li ">D</li>
+    </ol>
+  </body>
+</topic>

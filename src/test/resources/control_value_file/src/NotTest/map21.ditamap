@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Subject Classification Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/subjectScheme/dtd/classifyMap.dtd">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Working with Linux</title>
+    <topicsubject keyref="linux"/>
+    <topicref href="webapp.dita" navtitle="Developing web applications">  
+        <topicsubject>
+            <subjectref keyref="web"/>
+            <subjectref keyref="development"/>
+        </topicsubject>
+    </topicref>
+</map>
+

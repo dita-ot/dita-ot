@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--ArborText, Inc., 1988-2002, v.4002-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "../dtd/concept.dtd">
+<?Pub Inc?>
+<concept id="lang-concept" xml:lang="en-us">
+<title>Concept for language test</title>
+<shortdesc>this is the related concept</shortdesc>
+<conbody>
+<p>stuff<?Pub Caret?></p>
+<fig id="fig"><title>figure title</title>
+<p>test <q>quote</q> in a figure</p>
+</fig>
+</conbody>
+</concept>
+<?Pub *0000000387?>

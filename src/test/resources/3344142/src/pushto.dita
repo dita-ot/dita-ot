@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<?Pub Inc?>
+<task id="pushto" xml:lang="en-us">
+<title>Push to this topic</title>
+<shortdesc>Conref push test</shortdesc>
+<taskbody>
+<steps>
+<step><cmd>First step (no ID)</cmd></step>
+<step id="step"><cmd>This step has an ID, something should be pushed
+after</cmd></step>
+<step><cmd>Step with no ID</cmd></step>
+<step><cmd id="cmd">Command with ID, for testing; step should NOT
+be able to push after</cmd></step>
+<step><cmd>Step with no ID</cmd></step>
+<step id="stepreplace"><cmd>This step should be replaced; if it appears,
+something is wrong</cmd></step>
+<step><cmd>Step with no ID</cmd></step>
+<step><cmd id="cmdreplace">This CMD has an ID for replacement, but
+the test should not allow it; this CMD should appear in the output.</cmd>
+</step>
+<step><cmd>Step with no ID</cmd></step>
+</steps><?Pub Caret -1?>
+</taskbody>
+</task>
+<?Pub *0000000998?>

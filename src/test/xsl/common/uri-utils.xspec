@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2016 Jarno Elovirta
+
+See the accompanying LICENSE file for applicable license.
+-->
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  stylesheet="../../../main/xsl/common/uri-utils.xsl">
+  
+  <x:scenario label="dita-ot:strip-fragment">
+    <x:scenario label="strip fragment from URI with fragment">
+      <x:call function="dita-ot:strip-fragment">
+        <x:param name="uri" select="xs:anyURI('foo#bar')"/>
+      </x:call>
+      <x:expect label="URI without fragment" select="xs:anyURI('foo')"/>
+    </x:scenario>
+    <x:scenario label="strip fragment from URI without fragment">
+      <x:call function="dita-ot:strip-fragment">
+        <x:param name="uri" select="xs:anyURI('foo')"/>
+      </x:call>
+      <x:expect label="URI without fragment" select="xs:anyURI('foo')"/>
+    </x:scenario>
+    <x:scenario label="strip fragment from URI with only fragment">
+      <x:call function="dita-ot:strip-fragment">
+        <x:param name="uri" select="xs:anyURI('#bar')"/>
+      </x:call>
+      <x:expect label="empty UR" select="xs:anyURI('')"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="dita-ot:relativize">
+    <x:scenario label="below base">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/c/map/map.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/c/a.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../a.dita')"/>
+    </x:scenario>
+    <x:scenario label="root relation">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/c/map.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/d/a.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../d/a.dita')"/>
+    </x:scenario>
+    <x:scenario label="no relation">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('http:/c/map.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/d/a.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/d/a.dita')"/>
+    </x:scenario>
+    <x:scenario label="same as base">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/c/map1/map2/map.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/c/map1/map2/a.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('a.dita')"/>
+    </x:scenario>
+    <x:scenario label="sibling directory">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/c/map1/map.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/c/topic/a.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../topic/a.dita')"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="dita-ot:normalize">
+    <x:scenario label="normalized">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/b/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="single up navigation">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/../c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="double up navigation">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/../../c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="zig-zag">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/../b/../b/c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/b/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="current navigation">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/./c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/b/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="last up" pending="FIXME">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/..')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/')"/>
+    </x:scenario>
+    <x:scenario label="last current" pending="FIXME">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('file:/a/b/.')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/b/')"/>
+    </x:scenario>
+    <x:scenario label="relative up first">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('../b/c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../b/c.dita')"/>
+    </x:scenario>
+    <x:scenario label="relative current first">
+      <x:call function="dita-ot:normalize">
+        <x:param name="uri" select="xs:anyURI('./b/c.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('b/c.dita')"/>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="dita-ot:resolve">
+    <x:scenario label="file">
+      <x:call function="dita-ot:resolve">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c.dita')"/>
+        <x:param name="uri" select="xs:anyURI('d.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/b/d.dita')"/>
+    </x:scenario>
+    <x:scenario label="directory">
+      <x:call function="dita-ot:resolve">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c.dita')"/>
+        <x:param name="uri" select="xs:anyURI('d/e.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/b/d/e.dita')"/>
+    </x:scenario>
+    <x:scenario label="file one directory up">
+      <x:call function="dita-ot:resolve">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c.dita')"/>
+        <x:param name="uri" select="xs:anyURI('../d.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/d.dita')"/>
+    </x:scenario>
+    <x:scenario label="directory one directory up">
+      <x:call function="dita-ot:resolve">
+        <x:param name="base" select="xs:anyURI('file:/a/b/c.dita')"/>
+        <x:param name="uri" select="xs:anyURI('../d/e.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('file:/a/d/e.dita')"/>
+    </x:scenario>
+    <x:scenario label="relative file">
+      <x:call function="dita-ot:resolve">
+        <x:param name="base" select="xs:anyURI('c.dita')"/>
+        <x:param name="uri" select="xs:anyURI('d.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('d.dita')"/>
+    </x:scenario>
+    <x:scenario label="relative directory">
+      <x:call function="dita-ot:resolve">
+        <x:param name="base" select="xs:anyURI('c.dita')"/>
+        <x:param name="uri" select="xs:anyURI('d/e.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('d/e.dita')"/>
+    </x:scenario>
+    <x:scenario label="relative file one directory up">
+      <x:call function="dita-ot:resolve">
+        <x:param name="base" select="xs:anyURI('../b/c.dita')"/>
+        <x:param name="uri" select="xs:anyURI('../d.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../d.dita')"/>
+    </x:scenario>
+    <x:scenario label="relative directory one directory up">
+      <x:call function="dita-ot:resolve">
+        <x:param name="base" select="xs:anyURI('../b/c.dita')"/>
+        <x:param name="uri" select="xs:anyURI('../d/e.dita')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('../d/e.dita')"/>
+    </x:scenario>
+  </x:scenario>
+  
+</x:description>

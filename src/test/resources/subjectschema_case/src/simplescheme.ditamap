@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA Subject Scheme Map//EN" "subjectScheme.dtd">
+
+<subjectScheme>
+    <subjectdef keys="os">
+        <subjectdef keys="linux">
+            <subjectdef keys="redhat_linux"/>
+            <subjectdef keys="untub_linux"/>
+        </subjectdef>
+        <subjectdef keys="mswin"/>
+        <subjectdef keys="zos"/>
+    </subjectdef>
+    <enumerationdef>
+        <attributedef name="platform"/>
+        <subjectdef keyref="os"/>
+    </enumerationdef>
+</subjectScheme>
+

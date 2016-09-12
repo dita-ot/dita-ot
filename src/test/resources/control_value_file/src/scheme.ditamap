@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA 1.2 Subject Scheme Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/subjectScheme/dtd/subjectScheme.dtd">
+<subjectScheme xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Bind multiple categories to a single attribute</title>
+    <subjectdef keys="app" navtitle="Applications">
+        <subjectdef keys="apacheserv" navtitle="Apache Web Server"/>
+        <subjectdef keys="mysql"      navtitle="MySQL Database"/>
+    </subjectdef>
+    <subjectdef keys="taskType" navtitle="Task type">
+        <subjectdef keys="setup"        navtitle="Setting up"/>
+        <subjectdef keys="operate"      navtitle="Operating"/>
+        <subjectdef keys="troubleshoot" navtitle="Troubleshooting"/>
+    </subjectdef>
+    <enumerationdef>
+        <attributedef name="otherprops"/>
+        <subjectdef keyref="app"/>
+        <subjectdef keyref="taskType"/>
+    </enumerationdef>
+    
+    
+</subjectScheme>
+

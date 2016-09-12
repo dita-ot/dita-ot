@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd">
+<concept id="concept5" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Specific relationships between controlled values</title>
+    <conbody>
+        <p>
+
+            
+            <note product="mswin">product value is : mswin</note>
+            <note product="ie">product value is : ie</note>
+            <note product="msn">product value is : msn</note>
+            <note product="calc">product value is : calc</note>
+            
+            <note product="linux">product value is : linux</note>
+            <note product="redhat">product value is : redhat</note>
+            <note product="suse">product value is : suse</note>
+            
+            <note product="db">product value is : db</note>
+            <note product="mysql">product value is : mysql</note>
+            <note product="db2">product value is : db2</note>
+            
+            <note product="toolkit">product value is : toolkit</note>
+            <note product="qq">product value is : qq</note>
+            <note product="st">product value is : st</note>
+        </p>
+    </conbody>
+</concept>
+

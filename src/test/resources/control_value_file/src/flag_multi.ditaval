@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><val>
+    <prop action="flag" att="platform" backcolor="blue" color="red" val="linux">
+    <startflag><alt-text>This is LINUX</alt-text></startflag>
+    </prop>
+    
+    <prop action="flag" att="audience" backcolor="red" color="blue" val="programmer">
+        <startflag><alt-text>I am a programmer</alt-text></startflag>
+    </prop>
+   </val>

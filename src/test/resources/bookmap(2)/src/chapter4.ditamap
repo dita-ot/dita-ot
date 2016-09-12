@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA 1.1 BookMap//EN"
+ "..\..\dtd\bookmap.dtd">
+<bookmap id="chaper3">
+<booktitle>
+<mainbooktitle>My little book</mainbooktitle>
+</booktitle>
+<bookmeta>
+<bookrights><copyrfirst><year>1994</year></copyrfirst><copyrlast><year>2006</year>
+</copyrlast><bookowner></bookowner></bookrights>
+</bookmeta>
+<frontmatter>
+<booklists>
+<toc/>
+<figurelist/>
+<tablelist/></booklists>
+<preface href="p.dita"></preface>
+</frontmatter>
+<chapter href="chapter5.ditamap" format="ditamap">
+<topicref href="chap.dita"></topicref>
+</chapter>
+</bookmap>

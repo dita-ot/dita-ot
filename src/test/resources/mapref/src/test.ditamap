@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map audience="novice">
+  <topicgroup>
+    <!-- direct mapref for reference -->
+    <mapref href="submap.ditamap" product="osx"/>
+    <!-- indirect mapref -->
+    <mapref keys="A" href="submap.ditamap"/>
+    <mapref keyref="A"/>
+    <!-- indirect mapref with fallback -->
+    <mapref keys="B" href="submap.ditamap"/>
+    <mapref keyref="B" href="fallback.ditamap"/>
+  </topicgroup>
+</map>

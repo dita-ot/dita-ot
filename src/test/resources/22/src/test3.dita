@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation-->
+ <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+ 
+<topic id="test3" xml:lang="en-us">
+<title>test 3</title>
+<body>
+	<p id="content3"> content of test3 </p>
+</body>
+</topic>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying LICENSE file for
+ applicable licenses.-->
+ <!--
+  | (C) Copyright 2005 IBM Corporation - 2006
+  *-->   
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.1 Topic//EN"
+ "file:/C:/DITA-OT1.4/dtd/topic.dtd">
+<topic id="batcaring" xml:lang="en-us">
+<title>batcaring</title>
+<body>
+<p>The ANT tasks are refactored so that developers can easily find the targets
+they need and make their own extensions. Developers can still use Java Command
+Line as before. Ant Build Script "<codeph>conductor.xml</codeph>" is marked
+as deprecated, but developers can still use it as before. "<codeph>build.xml</codeph>"
+is the renamed version of "<codeph>conductor.xml</codeph>", and developers
+can use it as what they do with "<codeph>conductor.xml</codeph>". New users
+are suggested to use those separated build scripts like "<codeph>build_dita2*.xml</codeph>".
+The original demo ant script "<codeph>build.xml</codeph>" is renamed to "<codeph>build_demo.xml</codeph>".
+"<codeph>build_demo.xml</codeph>" should be used to verify the functions of
+the toolkit after this release.</p>
+</body>
+</topic>

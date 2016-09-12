@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?workdir /Volumes/tmp/temp/conref_push/preprocess/pushBefore/pushBefore_without_conref?>
+<?workdir-uri file:/Users/jelovirt/Work/github/dita-ot/src/main/temp/conref_push/preprocess/pushBefore/pushBefore_without_conref/?>
+<?path2project?>
+<?path2project-uri ./?>
+<task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="X" ditaarch:DITAArchVersion="1.2" domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    " class="- topic/topic task/task ">
+  <title class="- topic/title ">this is a task</title>
+  <shortdesc class="- topic/shortdesc ">this is also a reuse function</shortdesc>
+  <taskbody class="- topic/body task/taskbody ">
+    <steps class="- topic/ol task/steps ">
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">BB</cmd>
+      </step>
+      <step id="A" class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">A</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">  </cmd>
+      </step>
+      <step id="B" class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">B</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">
+          <cite class="- topic/cite ">Mycite Conref</cite>
+        </cmd>
+      </step>
+      <step id="C" class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">C</cmd>
+      </step>
+    </steps>
+  </taskbody>
+</task>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2011, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<?Pub Inc?>
+<task id="pushfrom" xml:lang="en-us">
+<title>Push from</title>
+<shortdesc>Push from this topic into the other</shortdesc>
+<taskbody>
+<steps>
+<step conref="pushto.dita#pushto/step" conaction="mark"><cmd>markstep</cmd></step>
+<step id="stepid1" conaction="pushafter"><cmd>Content being pushed: target step. This is valid.</cmd></step>
+<step conref="pushto.dita#pushto/cmd" conaction="mark"><cmd>markcmd</cmd></step>
+<step id="stepid2" conaction="pushafter"><cmd>Content being pushed: target cmd. This is invalid.</cmd></step>
+<step conref="pushto.dita#pushto/stepreplace" conaction="pushreplace"><cmd>This step should replace one that existed</cmd></step>
+<step conref="pushto.dita#pushto/cmdreplace" conaction="pushreplace"><cmd>This cmd should NOT APPEAR, THE SYNTAX IS INVALID.</cmd><info>It is trying to replace a cmd with a step.</info></step>
+</steps>
+</taskbody><?Pub Caret -1?>
+</task>
+<?Pub *0000000439?>

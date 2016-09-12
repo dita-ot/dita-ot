@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ../?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="topic-1" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">Keyref Verification Topic</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">Keyref-using link to step "first step" in the generic task topic: <xref keyref="generic-task-01/step-first" class="- topic/xref " href="generic-task-01.dita#generic-task/step-first" type="step"><?ditaot usertext?>first step</xref>. Same address with no explicit link text: <xref keyref="generic-task-01/step-first" class="- topic/xref " href="generic-task-01.dita#generic-task/step-first" type="step"><?ditaot gentext?>2</xref>.</p>
+  </body>
+</topic>

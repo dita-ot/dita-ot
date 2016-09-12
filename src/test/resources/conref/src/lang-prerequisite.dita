@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--ArborText, Inc., 1988-2002, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "../dtd/task.dtd">
+<?Pub Inc?>
+<task id="prerequisite" xml:lang="en-us">
+<title>Prerequisite task</title>
+<shortdesc>This should create a prerequisite link in the language test</shortdesc>
+<taskbody>
+<prereq>You need to do this first.</prereq>
+</taskbody><?Pub Caret1?>
+</task>
+<?Pub *0000000430?>

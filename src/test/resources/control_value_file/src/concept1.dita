@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd">
+<concept id="concept1" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>multiple categories to a single attribute </title>
+    <conbody>
+        <p>
+            <note otherprops=" app taskType"> app taskType</note>
+            <note otherprops=" app setup"> app setup</note>
+            <note otherprops=" apacheserv taskType"> apacheserv   taskType</note>
+            <note otherprops="mysql setup">mysql setup</note>
+            <note otherprops="apacheserv troubleshoot">apacheserv troubleshoot</note>
+        </p>
+    </conbody>
+</concept>
+

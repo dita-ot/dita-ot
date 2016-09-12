@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topicID">
+    <title>This Is a topic for pushBefore with cross reference link</title>
+    <body>
+        <p>
+            <xref id="A" href="http://www.ibm.com" scope="external">IBM</xref>
+            <xref id="B" href="1/dita1.dita">1/DITA1</xref>
+            <xref id="C" href="1/11/dita11.dita">1/11/DITA11</xref>
+        </p>
+    </body>
+</topic>
+

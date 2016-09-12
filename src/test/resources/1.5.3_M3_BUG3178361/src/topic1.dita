@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+
+<task id="push-to-generic">
+  <title>Conref push task using conkeyref</title>
+  <taskbody>
+    
+    <!--Test Scenario 1: After transform verify that no the warning below is thrown out.-->
+    <!--[DOTJ043W][WARN] There is no target "#context" in "..\topic2.xml" specified for the conref push action. Please make sure that the target exists and is not filtered out.-->
+    <context  conkeyref="key1/context"  conaction="pushreplace">
+      
+     <p>This is product-specific context.</p>
+    </context>
+ 
+  </taskbody>
+</task>

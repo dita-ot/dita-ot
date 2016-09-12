@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+
+<!--This file contains NO testing-purpose content-->
+
+<task id="generic-task">
+<title id="title">Generic Task</title>
+    
+<taskbody>
+    
+<context id="context">
+      <p>This is the generic context.</p>
+</context>
+
+</taskbody>
+</task>

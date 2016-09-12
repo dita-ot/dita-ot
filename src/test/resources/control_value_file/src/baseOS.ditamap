@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA 1.2 Subject Scheme Map//EN" "file:/C:/SAXONIBMJDK/dtd/subjectScheme/dtd/subjectScheme.dtd">
+<subjectScheme xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <title>Base Operation System</title>
+  <subjectdef keys="os">
+    <subjectdef keys="linux"/>
+    <subjectdef keys="mswin"/>
+    <subjectdef keys="zos"/>
+  </subjectdef>
+  <enumerationdef>
+    <attributedef name="platform"/>
+    <subjectdef keyref="os"/>
+    <defaultSubject keyref="linux"/>
+  </enumerationdef>
+</subjectScheme>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+
+<!-- this is a case for 12015@2008-05-19 -->
+
+<task id="X">
+    <title>this is a task</title>
+    <shortdesc>this is also a reuse function</shortdesc>
+   
+    <taskbody>
+        <steps>
+         
+            <step conref="topic.dita#topicID/A" conaction="pushreplace"> <cmd>AA</cmd> </step>
+           
+           
+            <step conref="topic.dita#topicID/B" conaction="pushreplace">  <cmd>BB</cmd> </step>
+           
+          
+            <step conref="topic.dita#topicID/C" conaction="pushreplace">  <cmd>CC</cmd> </step>
+           
+            
+            <step conref="topic.dita#topicID/D" conaction="pushreplace">  
+                <cmd>
+                <xref href="http://www.google.com" scope="external">Google</xref>
+                </cmd> 
+            </step>
+            
+            
+        </steps>
+    </taskbody>
+    
+  </task>
+

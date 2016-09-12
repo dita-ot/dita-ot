@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--ArborText, Inc., 1988-2002, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "../dtd/reference.dtd">
+<?Pub Inc?>
+<reference id="lang-reference" xml:lang="en-us">
+<title>Reference link for language test</title>
+<shortdesc>Reference for the related link</shortdesc>
+<refbody>
+<section>test things</section>
+</refbody><?Pub Caret1?>
+</reference>
+<?Pub *0000000428?>

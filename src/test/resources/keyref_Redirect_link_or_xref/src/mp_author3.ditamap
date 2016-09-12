@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    
+    <!-- this is the third author  -->
+    
+    <topicref href="dita2.dita" navtitle="DITA2" locktitle="yes"/>
+    <topicref keys="dita1" href="http://www.ibm.com" scope="external" format="html" navtitle="IBM" locktitle="yes">
+        <topicmeta>
+            <linktext>this is link to external website</linktext>
+            <shortdesc>when the author build it, the &quot;dita2.dita&quot;will resolve to external URL</shortdesc>
+        </topicmeta>
+    </topicref>
+</map>
