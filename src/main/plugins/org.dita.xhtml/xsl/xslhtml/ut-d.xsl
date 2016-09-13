@@ -10,7 +10,8 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet version="2.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
      xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-     exclude-result-prefixes="ditamsg">
+     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+     exclude-result-prefixes="ditamsg xs">
 
 <!-- == User Technologies UNIQUE SUBSTRUCTURES == -->
 
@@ -65,7 +66,7 @@ See the accompanying LICENSE file for applicable license.
           <xsl:attribute name="shape">
             <xsl:value-of select="$shapeval"/>
           </xsl:attribute>
-          <xsl:variable name="shapetest"><xsl:value-of select="concat('-',$shapeval,'-')"/></xsl:variable>
+          <xsl:variable name="shapetest" select="concat('-',$shapeval,'-')" as="xs:string"/>
           <xsl:choose>
             <xsl:when test="contains('--rect-circle-poly-default-',$shapetest)"/>
             <xsl:otherwise>

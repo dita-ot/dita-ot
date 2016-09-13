@@ -102,9 +102,8 @@ See the accompanying LICENSE file for applicable license.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="hrefFromOriginalMap">
-      <xsl:value-of select="dita-ot:normalize-uri(concat($pathFromMaplist, $use-href))"/>
-    </xsl:variable>
+    <xsl:variable name="hrefFromOriginalMap" select="dita-ot:normalize-uri(concat($pathFromMaplist, $use-href))"
+      as="xs:string"/>
     
     <!-- Path from the topic back to the map's directory (with map): for ref/abc.dita, will be "../" -->
     <xsl:variable name="pathBackToMapDirectory" as="xs:string">

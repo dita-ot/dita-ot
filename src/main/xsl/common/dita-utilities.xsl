@@ -251,8 +251,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:with-param name="id" select="'DOTX069W'"/>
     <xsl:with-param name="msgparams">%1=parseHrefUptoExtension</xsl:with-param>
   </xsl:call-template>  
-  <xsl:variable name="uptoDot"><xsl:value-of select="substring-before($href,'.')"/></xsl:variable>
-  <xsl:variable name="afterDot"><xsl:value-of select="substring-after($href,'.')"/></xsl:variable>
+  <xsl:variable name="uptoDot" select="substring-before($href,'.')" as="xs:string"/>
+  <xsl:variable name="afterDot" select="substring-after($href,'.')" as="xs:string"/>
   <xsl:value-of select="$uptoDot"/>
   <xsl:choose>
     <!-- No more periods, so this is at the extension -->

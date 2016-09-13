@@ -10,7 +10,8 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet version="2.0"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                exclude-result-prefixes="dita-ot">
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                exclude-result-prefixes="dita-ot xs">
 
 <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
@@ -81,11 +82,11 @@ See the accompanying LICENSE file for applicable license.
 <!-- anchorref must use forward slash, not back slash. Allow
      anchorref to a non-ditamap, but warn if the format is still dita. -->
 <xsl:template match="@anchorref">
-  <xsl:variable name="fix-anchorref">
-    <xsl:value-of select="translate(.,
+  <xsl:variable name="fix-anchorref"
+    select="translate(.,
                            '\/=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-                           '//=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
-  </xsl:variable>
+                           '//=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')"
+    as="xs:string"/>
   <xsl:attribute name="link_to">
     <xsl:choose>
       <xsl:when test="contains($fix-anchorref,'.ditamap')">
@@ -135,11 +136,11 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- Make the same changes for navref/@mapref that were made for @anchorref. -->
 <xsl:template match="*[contains(@class, ' map/navref ')]/@mapref">
-  <xsl:variable name="fix-mapref">
-    <xsl:value-of select="translate(.,
+  <xsl:variable name="fix-mapref"
+    select="translate(.,
                            '\/=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-                           '//=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
-  </xsl:variable>
+                           '//=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')"
+    as="xs:string"/>
   <xsl:attribute name="toc">
     <xsl:choose>
       <xsl:when test="contains($fix-mapref,'.ditamap')"><xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before($fix-mapref,'.ditamap')"/>.xml</xsl:when>

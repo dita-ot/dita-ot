@@ -1073,9 +1073,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:variable name="fnid">
       <xsl:number from="/" level="any"/>
     </xsl:variable>
-    <xsl:variable name="callout">
-      <xsl:value-of select="@callout"/>
-    </xsl:variable>
+    <xsl:variable name="callout" select="@callout" as="xs:string?"/>
     <xsl:variable name="convergedcallout">
       <xsl:choose>
         <xsl:when test="string-length($callout)&gt;0">

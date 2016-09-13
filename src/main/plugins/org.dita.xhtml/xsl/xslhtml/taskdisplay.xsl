@@ -702,9 +702,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:param name="use-label"/>
   <xsl:if test="$GENERATE-TASK-LABELS='YES'">
     <xsl:variable name="headLevel">
-      <xsl:variable name="headCount">
-        <xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])+1"/>
-      </xsl:variable>
+      <xsl:variable name="headCount" select="count(ancestor::*[contains(@class,' topic/topic ')]) + 1"
+        as="xs:integer"/>
       <xsl:choose>
         <xsl:when test="$headCount > 6">h6</xsl:when>
         <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>

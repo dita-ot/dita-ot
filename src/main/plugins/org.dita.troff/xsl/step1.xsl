@@ -9,7 +9,8 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:related-links="http:// dita-ot.sourceforge.net/ns/200709/related-links"
-                exclude-result-prefixes="related-links"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                exclude-result-prefixes="related-links xs"
                 >
 
 <!--
@@ -126,9 +127,7 @@ See the accompanying LICENSE file for applicable license.
 
 <!-- These titles should come out as bold -->
 <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]">
-  <xsl:variable name="fignum">
-    <xsl:value-of select="count(preceding::*[contains(@class,' topic/fig ')])+1"/>
-  </xsl:variable>
+  <xsl:variable name="fignum" select="count(preceding::*[contains(@class,' topic/fig ')]) + 1" as="xs:integer"/>
   <block><xsl:call-template name="commonatts"/>
     <text style="bold">
       <xsl:call-template name="getVariable"><xsl:with-param name="id" select="'Figure'"/></xsl:call-template>
@@ -260,9 +259,8 @@ See the accompanying LICENSE file for applicable license.
      current list, and adds that after the number from each ancestor ordered list item. 
      The list numbering uses 1.b.iii.4.e.vi formatting (decimal, alpha, Roman, ...) -->
 <xsl:template match="*" mode="get-list-number">
-    <xsl:variable name="depth">
-        <xsl:value-of select="count(ancestor-or-self::*[contains(@class,' topic/li ')][contains(parent::*/@class,' topic/ol ')])"/>
-    </xsl:variable>
+    <xsl:variable name="depth" select="count(ancestor-or-self::*[contains(@class,' topic/li ')][contains(parent::*/@class,' topic/ol ')])"
+      as="xs:integer"/>
     <xsl:apply-templates select="ancestor::*[contains(@class,' topic/li ')][contains(parent::*/@class,' topic/ol ')][1]" mode="get-list-number"/>
     <xsl:choose>
         <xsl:when test="$depth mod 3 = 0"><xsl:number count="*" format="i"/>.<xsl:text/></xsl:when>

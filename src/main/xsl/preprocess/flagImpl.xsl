@@ -695,9 +695,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
           <xsl:variable name="submfile">
               <xsl:value-of select="$cvffilename"/><xsl:text>.subm</xsl:text>
           </xsl:variable>
-          <xsl:variable name="cvffilepath">
-               <xsl:value-of select="concat($WORKDIR,$PATH2PROJ,$submfile)"/>
-          </xsl:variable>
+          <xsl:variable name="cvffilepath" select="concat($WORKDIR,$PATH2PROJ,$submfile)" as="xs:string"/>
      <xsl:if test="document($cvffilepath,/)//*[@keys=$value]//*[@keys=$flag]">
          <!-- copy the child node for flag and just copy the first element whose keys=$flag-->
       <!--xsl:for-each select="document($cvffilepath,/)//*[@keys=$value]/*"-->
