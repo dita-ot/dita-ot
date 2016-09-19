@@ -29,7 +29,7 @@
   <variable id="Unordered List bullet">•</variable>
   <variable id="Table of Contents">Innehållsförteckning</variable>
   
-  <variable id="Index Continued String"><!--TODO:continued--></variable>
+  <variable id="Index Continued String">forts</variable>
   <variable id="Index See String">, Se </variable>
   <variable id="Index See Also String">Se Även </variable>
   <variable id="Table of Contents Chapter">Kapitel <param ref-name="number"/>. </variable>
