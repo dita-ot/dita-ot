@@ -7,6 +7,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.CopyToReader;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.ForceUniqueFilter;
+import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -149,7 +150,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             return;
         }
         final File path2project = getPathtoProject(copytoTargetFilename, target, inputMapInTemp, job);
-        XMLFilter filter = new CopyToFilter(workdir, path2project);
+        XMLFilter filter = new CopyToFilter(workdir, path2project, src, target);
 
         logger.info("Processing " + src + " to " + target);
         try {
@@ -174,11 +175,34 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
 
         private final File workdir;
         private final File path2project;
+        private final URI src;
+        private final URI dst;
 
-        CopyToFilter(final File workdir, final File path2project) {
+        CopyToFilter(final File workdir, final File path2project, final URI src, final URI dst) {
             super();
             this.workdir = workdir;
             this.path2project = path2project;
+            this.src = src;
+            this.dst = dst;
+        }
+
+        @Override
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+                throws SAXException {
+            Attributes resAtts = atts;
+            if ((TOPIC_XREF.matches(atts) || TOPIC_LINK.matches(atts) || TOPIC_IMAGE.matches(atts))
+                    && !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, atts.getValue(ATTRIBUTE_NAME_SCOPE))
+                    && atts.getValue(ATTRIBUTE_NAME_HREF) != null) {
+                resAtts = new XMLUtils.AttributesBuilder(atts)
+                        .add(ATTRIBUTE_NAME_HREF, updateHref(atts.getValue(ATTRIBUTE_NAME_HREF)))
+                        .build();
+            }
+            getContentHandler().startElement(uri, localName, qName, resAtts);
+        }
+
+        private String updateHref(final String value) {
+            final URI absSrc = src.resolve(value);
+            return URLUtils.getRelativePath(dst, absSrc).toString();
         }
 
         @Override
