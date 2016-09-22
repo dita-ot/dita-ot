@@ -532,6 +532,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 throw new BuildException(msg);
             } else if (arg.equals("-autoproxy")) {
                 proxy = true;
+            } else if (arg.startsWith("--")) {
+                i = handleArgDefine(args, i);
             } else if (arg.startsWith("-") || arg.startsWith("/")) {
                 // we don't have any more args to recognize!
                 final String msg = "Error: Unknown argument: " + arg;
