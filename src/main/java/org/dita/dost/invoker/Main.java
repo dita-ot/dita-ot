@@ -130,7 +130,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         LAUNCH_COMMANDS.add("-lib");
         LAUNCH_COMMANDS.add("-cp");
         LAUNCH_COMMANDS.add("-noclasspath");
-        LAUNCH_COMMANDS.add("--noclasspath");
+        LAUNCH_COMMANDS.add("-noclasspath");
         LAUNCH_COMMANDS.add("-nouserlib");
         LAUNCH_COMMANDS.add("-main");
     }
@@ -341,6 +341,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
         try {
             processArgs(args);
+        } catch (final RuntimeException e) {
+            handleLogfile();
+            e.printStackTrace();
+            exit(1);
+            return;
         } catch (final Throwable exc) {
             handleLogfile();
             printMessage(exc);
@@ -1354,7 +1359,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      *            <code>null</code>, in which case no descriptions are
      *            displayed. If non-<code>null</code>, this should have as many
      *            elements as <code>names</code>.
-     * @param topDependencies The list of dependencies for each target. The
+     * @param dependencies The list of dependencies for each target. The
      *            dependencies are listed as a non null enumeration of String.
      * @param heading The heading to display. Should not be <code>null</code>.
      * @param maxlen The maximum length of the names of the targets. If
