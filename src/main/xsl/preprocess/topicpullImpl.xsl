@@ -293,6 +293,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!-- verify the href attribute, to check whether href target can be retrieved. -->
   <xsl:template name="verify-href-attribute">
+    <xsl:param name="base-uri" as="xs:anyURI" tunnel="yes" select="base-uri(.)"/>
     <xsl:variable name="format" as="xs:string">
       <xsl:choose>
         <xsl:when test="@format">
@@ -310,16 +311,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:choose>
     </xsl:variable>
     <!--the file name of the target, if any-->
-    <xsl:variable name="file-origin" as="xs:string">
-      <xsl:apply-templates select="." mode="topicpull:get-stuff_file"/>
-    </xsl:variable>
-    <xsl:variable name="file" as="xs:string">
-      <xsl:call-template name="replace-blank">
-        <xsl:with-param name="file-origin">
-          <xsl:value-of select="$file-origin"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:variable>
+    <xsl:variable name="file" select="resolve-uri(dita-ot:strip-fragment(@href), $base-uri)" as="xs:anyURI"/>
     <!--the position of the target topic relative to the current one: in the same file, referenced by id in another file, or referenced as the first topic in another file-->
     <xsl:variable name="topicpos" as="xs:string">
       <xsl:apply-templates select="." mode="topicpull:get-stuff_topicpos"/>
@@ -427,15 +419,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="localtype" as="xs:string"/>
     <xsl:param name="scope" as="xs:string"/>
     <xsl:param name="format" as="xs:string"/>
+    <xsl:param name="base-uri" as="xs:anyURI" tunnel="yes" select="base-uri(.)"/>
     <!--the file name of the target, if any-->
-    <xsl:variable name="file-origin" as="xs:string"><xsl:apply-templates select="." mode="topicpull:get-stuff_file"/></xsl:variable>
-    <xsl:variable name="file" as="xs:string">
-      <xsl:call-template name="replace-blank">
-        <xsl:with-param name="file-origin">
-          <xsl:value-of select="$file-origin"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:variable>
+    <xsl:variable name="file" select="resolve-uri(dita-ot:strip-fragment(@href), $base-uri)" as="xs:anyURI"/>    
     
     <!--the position of the target topic relative to the current one: in the same file, referenced by id in another file, or referenced as the first topic in another file-->
     <xsl:variable name="topicpos" as="xs:string"><xsl:apply-templates select="." mode="topicpull:get-stuff_topicpos"/></xsl:variable>
@@ -519,41 +505,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
        If a template overrides all of get-stuff, most of these templates can still be
        used so as to avoid duplicating processing code in the override.
        ************************************************************************** -->
-
-  <!-- Get the file name for a reference that goes out of the file -->
-  <xsl:template match="*" mode="topicpull:get-stuff_file" as="xs:string">
-    <xsl:param name="WORKDIR" as="xs:string?">
-	    <xsl:choose>
-	        <xsl:when test="contains(@class, ' topic/link ')">
-	          <xsl:choose>
-	            <xsl:when test="./preceding::processing-instruction('workdir-uri')[1]">
-	              <xsl:apply-templates select="./preceding::processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
-	            </xsl:when>
-	            <xsl:otherwise>
-	              <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
-	            </xsl:otherwise>
-	          </xsl:choose>
-	        </xsl:when>
-	        <xsl:otherwise>
-	            <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>
-	        </xsl:otherwise>
-	    </xsl:choose>
-	</xsl:param>
-    <xsl:choose>
-      <xsl:when test="contains(@href,'://') and contains(@href,'#')">
-        <xsl:value-of select="substring-before(@href,'#')"/>
-      </xsl:when>
-      <xsl:when test="contains(@href,'://')">
-        <xsl:value-of select="@href"/>
-      </xsl:when>
-      <xsl:when test="contains(@href,'#')">
-        <xsl:value-of select="concat($WORKDIR, substring-before(@href,'#'))"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat($WORKDIR, @href)"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
 
   <!-- Determine where the target of a reference exists -->
   <xsl:template match="*" mode="topicpull:get-stuff_topicpos" as="xs:string">
@@ -881,7 +832,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:if test="not($shortdesc='#none#')">
           <xsl:apply-templates select="." mode="topicpull:add-genshortdesc-PI"/>
           <desc class="- topic/desc ">
-            <xsl:apply-templates select="$shortdesc"/>
+            <xsl:apply-templates select="$shortdesc">
+              <xsl:with-param name="base-uri" select="$file" as="xs:anyURI" tunnel="yes"/>
+            </xsl:apply-templates>
           </desc>
         </xsl:if>
       </xsl:otherwise>

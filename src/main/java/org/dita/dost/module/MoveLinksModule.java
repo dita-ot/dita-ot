@@ -92,6 +92,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
                 final URI uri = inputFile.toURI().resolve(entry.getKey().getPath());
                 logger.info("Processing " + uri);
                 linkInserter.setLinks(entry.getValue());
+                linkInserter.setCurrentFile(uri);
                 try {
                     linkInserter.write(new File(uri));
                 } catch (final DITAOTException e) {
