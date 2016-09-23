@@ -459,6 +459,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template name="processTopicNotices">
         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.notice">
+            <xsl:if test="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)/ancestor::*[contains(@class,' bookmap/backmatter ')]">
+              <xsl:attribute name="format">1</xsl:attribute>
+            </xsl:if>
             <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertPrefaceStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
