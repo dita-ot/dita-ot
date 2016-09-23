@@ -109,7 +109,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         String idValue = atts.getValue(ATTRIBUTE_NAME_ID);
         if (idValue != null) {
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OID, idValue);
-            final URI value = setFragment(dirPath.toURI().resolve(filePath), idValue);
+            final URI value = setFragment(dirPath.toURI().resolve(toURI(filePath)), idValue);
             if (util.findId(value)) {
                 idValue = util.getIdValue(value);
             } else {
