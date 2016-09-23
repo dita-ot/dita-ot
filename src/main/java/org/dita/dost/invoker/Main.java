@@ -351,6 +351,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
         try {
             processArgs(args);
+        } catch (final BuildException exc) {
+            handleLogfile();
+            printMessage(exc);
+            exit(1);
+            return;
         } catch (final RuntimeException e) {
             handleLogfile();
             e.printStackTrace();
@@ -458,25 +463,25 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         for (int i = 0; i < args.length; i++) {
             final String arg = args[i];
 
-            if (arg.equals("-help") || arg.equals("-h")) {
+            if (isLongForm(arg, "-help") || arg.equals("-h")) {
                 justPrintUsage = true;
-            } else if (arg.equals("-version")) {
+            } else if (isLongForm(arg, "-version")) {
                 justPrintVersion = true;
-            } else if (arg.equals("-install")) {
+            } else if (isLongForm(arg, "-install")) {
                 i = handleArgInstall(args, i);
-            } else if (arg.equals("-uninstall")) {
+            } else if (isLongForm(arg, "-uninstall")) {
                 i = handleArgUninstall(args, i);
-            } else if (arg.equals("-diagnostics")) {
+            } else if (isLongForm(arg, "-diagnostics")) {
                 justPrintDiagnostics = true;
                 // } else if (arg.equals("-quiet") || arg.equals("-q")) {
                 // msgOutputLevel = Project.MSG_WARN;
-            } else if (arg.equals("-verbose") || arg.equals("-v")) {
+            } else if (isLongForm(arg, "-verbose") || arg.equals("-v")) {
                 msgOutputLevel = Project.MSG_INFO;
-            } else if (arg.equals("-debug") || arg.equals("-d")) {
+            } else if (isLongForm(arg, "-debug") || arg.equals("-d")) {
                 msgOutputLevel = Project.MSG_VERBOSE;
-            } else if (arg.equals("-noinput")) {
+            } else if (isLongForm(arg, "-noinput")) {
                 allowInput = false;
-            } else if (arg.equals("-logfile") || arg.equals("-l")) {
+            } else if (isLongForm(arg, "-logfile") || arg.equals("-l")) {
                 try {
                     final File logFile = new File(args[i + 1]);
                     i++;
@@ -487,35 +492,35 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                             + "Make sure the path exists and you have write " + "permissions.";
                     throw new BuildException(msg);
                 } catch (final ArrayIndexOutOfBoundsException aioobe) {
-                    final String msg = "You must specify a log file when " + "using the -log argument";
+                    final String msg = "You must specify a log file when " + "using the --log argument";
                     throw new BuildException(msg);
                 }
-            } else if (arg.equals("-buildfile") || arg.equals("-file")) { //|| arg.equals("-f")
+            } else if (isLongForm(arg, "-buildfile") || isLongForm(arg, "-file")) { //|| arg.equals("-f")
                 i = handleArgBuildFile(args, i);
-            } else if (arg.equals("-listener")) {
+            } else if (isLongForm(arg, "-listener")) {
                 i = handleArgListener(args, i);
             } else if (arg.startsWith("-D")) {
                 i = handleArgDefine(args, i);
-            } else if (arg.equals("-logger")) {
+            } else if (isLongForm(arg, "-logger")) {
                 i = handleArgLogger(args, i);
-            } else if (arg.equals("-inputhandler")) {
+            } else if (isLongForm(arg, "-inputhandler")) {
                 i = handleArgInputHandler(args, i);
-            } else if (arg.equals("-emacs") || arg.equals("-e")) {
+            } else if (isLongForm(arg, "-emacs") || arg.equals("-e")) {
                 emacsMode = true;
-            } else if (arg.equals("-projecthelp") || arg.equals("-p")) {
+            } else if (isLongForm(arg, "-projecthelp") || arg.equals("-p")) {
                 // set the flag to display the targets and quit
                 projectHelp = true;
-            } else if (arg.equals("-find") || arg.equals("-s")) {
+            } else if (isLongForm(arg, "-find") || arg.equals("-s")) {
                 searchForFile = true;
                 // eat up next arg if present, default to build.xml
                 if (i < args.length - 1) {
                     searchForThis = args[++i];
                 }
-            } else if (arg.startsWith("-propertyfile")) {
+            } else if (isLongForm(arg, "-propertyfile")) {
                 i = handleArgPropertyFile(args, i);
-            } else if (arg.equals("-k") || arg.equals("-keep-going")) {
+            } else if (arg.equals("-k") || isLongForm(arg, "-keep-going")) {
                 keepGoingMode = true;
-            } else if (arg.equals("-nice")) {
+            } else if (isLongForm(arg, "-nice")) {
                 i = handleArgNice(args, i);
             } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
                 i = handleParameterArg(args, i);
@@ -530,7 +535,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                         + "\nThis can be caused by a version mismatch between "
                         + "the ant script/.bat file and Ant itself.";
                 throw new BuildException(msg);
-            } else if (arg.equals("-autoproxy")) {
+            } else if (isLongForm(arg, "-autoproxy")) {
                 proxy = true;
             } else if (arg.startsWith("--")) {
                 i = handleArgDefine(args, i);
@@ -546,7 +551,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         }
 
-        // Load the property files specified by -propertyfile
+        // Load the property files specified by --propertyfile
         loadPropertyFiles();
 
         if (justPrintUsage || justPrintVersion || justPrintDiagnostics) {
@@ -601,7 +606,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
         // if buildFile was not specified on the command line,
         if (buildFile == null) {
-            // but -find then search for it
+            // but --find then search for it
             if (searchForFile) {
                 if (searchForThis != null) {
                     buildFile = findBuildFile(System.getProperty("user.dir"), searchForThis);
@@ -669,11 +674,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         readyToRun = true;
     }
 
+    private boolean isLongForm(String arg, String property) {
+        final String name = arg.contains("=") ? arg.substring(0, arg.indexOf('=')) : arg;
+        return name.equals(property) || name.equals("-" + property);
+    }
+
     // --------------------------------------------------------
     // Methods for handling the command line arguments
     // --------------------------------------------------------
 
-    /** Handle the -install argument */
+    /** Handle the --install argument */
     private int handleArgInstall(final String[] args, int pos) {
         install = true;
         if (pos + 1 < args.length && !args[pos + 1].startsWith("-")) {
@@ -682,34 +692,34 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return pos;
     }
     
-    /** Handle the -uninstall argument */
+    /** Handle the --uninstall argument */
     private int handleArgUninstall(final String[] args, int pos) {
         try {
             install = true;
             uninstallId = args[++pos];
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
-            throw new BuildException("You must specify a installation package when using the -uninstall argument");
+            throw new BuildException("You must specify a installation package when using the --uninstall argument");
         }
         return pos;
     }
     
-    /** Handle the -buildfile, -file, -f argument */
+    /** Handle the --buildfile, --file, -f argument */
     private int handleArgBuildFile(final String[] args, int pos) {
         try {
             buildFile = new File(args[++pos].replace('/', File.separatorChar));
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
-            throw new BuildException("You must specify a buildfile when using the -buildfile argument");
+            throw new BuildException("You must specify a buildfile when using the --buildfile argument");
         }
         return pos;
     }
 
-    /** Handle -listener argument */
+    /** Handle --listener argument */
     private int handleArgListener(final String[] args, int pos) {
         try {
             listeners.addElement(args[pos + 1]);
             pos++;
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
-            final String msg = "You must specify a classname when " + "using the -listener argument";
+            final String msg = "You must specify a classname when " + "using the --listener argument";
             throw new BuildException(msg);
         }
         return pos;
@@ -751,7 +761,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final String arg = args[argPos];
         String name = arg.substring(0, arg.length());
         String value = null;
-        int posEq = name.indexOf("=");
+        final int posEq = name.indexOf("=");
         if (posEq > 0) {
             value = name.substring(posEq + 1);
             name = name.substring(0, posEq);
@@ -796,7 +806,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return arg.substring(0, pos != -1 ? pos : arg.length());
     }
 
-    /** Handle the -logger argument. */
+    /** Handle the --logger argument. */
     private int handleArgLogger(final String[] args, int pos) {
         if (loggerClassname != null) {
             throw new BuildException("Only one logger class may be specified.");
@@ -809,7 +819,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return pos;
     }
 
-    /** Handle the -inputhandler argument. */
+    /** Handle the --inputhandler argument. */
     private int handleArgInputHandler(final String[] args, int pos) {
         if (inputHandlerClassname != null) {
             throw new BuildException("Only one input handler class may " + "be specified.");
@@ -817,28 +827,40 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         try {
             inputHandlerClassname = args[++pos];
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
-            throw new BuildException("You must specify a classname when" + " using the -inputhandler" + " argument");
+            throw new BuildException("You must specify a classname when" + " using the --inputhandler" + " argument");
         }
         return pos;
     }
 
-    /** Handle the -propertyfile argument. */
+    /** Handle the --propertyfile argument. */
     private int handleArgPropertyFile(final String[] args, int pos) {
         try {
-            propertyFiles.addElement(args[++pos]);
+            final String arg = args[pos];
+            String name = arg.substring(2, arg.length());
+            String value = null;
+            final int posEq = name.indexOf("=");
+            if (posEq > 0) {
+                value = name.substring(posEq + 1);
+                name = name.substring(0, posEq);
+            } else if (pos < args.length - 1) {
+                value = args[++pos];
+            } else {
+                throw new BuildException("Missing value for propertyfile");
+            }
+            propertyFiles.addElement(value);
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
-            final String msg = "You must specify a property filename when " + "using the -propertyfile argument";
+            final String msg = "You must specify a property filename when " + "using the --propertyfile argument";
             throw new BuildException(msg);
         }
         return pos;
     }
 
-    /** Handle the -nice argument. */
+    /** Handle the --nice argument. */
     private int handleArgNice(final String[] args, int pos) {
         try {
             threadPriority = Integer.decode(args[++pos]);
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
-            throw new BuildException("You must supply a niceness value (1-10)" + " after the -nice option");
+            throw new BuildException("You must supply a niceness value (1-10)" + " after the --nice option");
         } catch (final NumberFormatException e) {
             throw new BuildException("Unrecognized niceness value: " + args[pos]);
         }
@@ -849,7 +871,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return pos;
     }
 
-    /** Load the property files specified by -propertyfile */
+    /** Load the property files specified by --propertyfile */
     private void loadPropertyFiles() {
         for (int propertyFileIndex = 0; propertyFileIndex < propertyFiles.size(); propertyFileIndex++) {
             final String filename = propertyFiles.elementAt(propertyFileIndex);
@@ -1154,36 +1176,36 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static void printUsage() {
         final StringBuilder msg = new StringBuilder();
         msg.append("Usage: dita -i <file> -f <name> [options]\n");
-        msg.append("   or: dita -propertyfile <file> [options]\n");
-        msg.append("   or: dita -install [<file>]\n");
-        msg.append("   or: dita -uninstall <id>\n");
-        msg.append("   or: dita -help\n");
-        msg.append("   or: dita -version\n");
+        msg.append("   or: dita --propertyfile <file> [options]\n");
+        msg.append("   or: dita --install [<file>]\n");
+        msg.append("   or: dita --uninstall <id>\n");
+        msg.append("   or: dita --help\n");
+        msg.append("   or: dita --version\n");
         msg.append("Arguments: \n");
-        msg.append("  -i, -input <file>      input file\n");
-        msg.append("  -f, -format <name>     output format (transformation type)\n");
-        msg.append("  -propertyfile <name>   load all properties from file\n");
-        msg.append("  -install [<file>]      install plug-in from a ZIP file or reload plugins\n");
-        msg.append("  -uninstall <id>        uninstall plug-in with the ID\n");
-        msg.append("  -h, -help              print this message\n");
-        msg.append("  -version               print version information and exit\n");
+        msg.append("  -i <file>, --input=<file>   input file\n");
+        msg.append("  -f <name>, --format=<name>  output format (transformation type)\n");
+        msg.append("  --propertyfile=<name>       load all properties from file\n");
+        msg.append("  --install=[<file>]          install plug-in from a ZIP file or reload plugins\n");
+        msg.append("  --uninstall=<id>            uninstall plug-in with the ID\n");
+        msg.append("  -h, --help                  print this message\n");
+        msg.append("  --version                   print version information and exit\n");
         msg.append("Options: \n");
-        msg.append("  -o, -output <dir>      output directory\n");
+        msg.append("  -o, --output=<dir>          output directory\n");
         // msg.append("  -projecthelp, -p       print project help information" + lSep);
         // msg.append("  -diagnostics           print information that might be helpful to"
         // + lSep);
         // msg.append("                         diagnose or report problems." +
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
-        msg.append("  -filter <file>         filter and flagging file\n");
-        msg.append("  -t, -temp <dir>        temporary directory\n");
-        msg.append("  -v, -verbose           verbose logging\n");
-        msg.append("  -d, -debug             print debugging information\n");
+        msg.append("  --filter=<file>             filter and flagging file\n");
+        msg.append("  -t, --temp=<dir>            temporary directory\n");
+        msg.append("  -v, --verbose               verbose logging\n");
+        msg.append("  -d, --debug                 print debugging information\n");
         // msg.append("  -emacs, -e             produce logging information without adornments"
         // + lSep);
         // msg.append("  -lib <path>            specifies a path to search for jars and classes"
         // + lSep);
-        msg.append("  -l, logfile <file>     use given file for log\n");
+        msg.append("  -l, --logfile=<file>        use given file for log\n");
         // msg.append("  -logger <classname>    the class which is to perform logging"
         // + lSep);
         // msg.append("  -listener <classname>  add an instance of class as a project listener"
@@ -1193,7 +1215,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("  -buildfile <file>      use given buildfile" + lSep);
         // msg.append("    -file    <file>              ''" + lSep);
         // msg.append("    -f       <file>              ''" + lSep);
-        msg.append("  -D<property>=<value>   use value for given property\n");
+        msg.append("  -D<property>=<value>,      use value for given property\n");
+        msg.append("  --<property>=<value>\n");
         // msg.append("  -keep-going, -k        execute all targets that do not depend"
         // + lSep);
         // msg.append("                         on failed target(s)" + lSep);
