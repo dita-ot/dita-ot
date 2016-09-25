@@ -112,7 +112,7 @@ public final class ExtensibleAntInvoker extends Task {
         modules.add(xslt);
     }
 
-    public void addConfiguredSax(final Filters filters) {
+    public void addConfiguredSax(final SaxPipe filters) {
         filters.setProject(getProject());
         modules.add(filters);
     }
@@ -134,10 +134,7 @@ public final class ExtensibleAntInvoker extends Task {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }
-            final String ifProperty = p.getIf();
-            final String unlessProperty = p.getUnless();
-            if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
-                    && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
+            if (isValid(getProject(), p.getIf(), p.getUnless())) {
                 attrs.put(p.getName(), p.getValue());
             }
         }
@@ -197,8 +194,8 @@ public final class ExtensibleAntInvoker extends Task {
                     start = System.currentTimeMillis();
                     pipeline.execute(x, pipelineInput);
                     end = System.currentTimeMillis();
-                } else if (m instanceof Filters) {
-                    final Filters fm = (Filters) m;
+                } else if (m instanceof SaxPipe) {
+                    final SaxPipe fm = (SaxPipe) m;
                     final XmlFilterModule module = new XmlFilterModule();
                     final List<String> format = fm.getFormat();
                     module.setFileInfoFilter(new FileInfo.Filter<FileInfo>() {
@@ -221,10 +218,7 @@ public final class ExtensibleAntInvoker extends Task {
                         if (!p.isValid()) {
                             throw new BuildException("Incomplete parameter");
                         }
-                        final String ifProperty = p.getIf();
-                        final String unlessProperty = p.getUnless();
-                        if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
-                                && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
+                        if (isValid(getProject(), p.getIf(), p.getUnless())) {
                             pipelineInput.setAttribute(p.getName(), p.getValue());
                         }
                     }
@@ -239,9 +233,9 @@ public final class ExtensibleAntInvoker extends Task {
         }
     }
 
-    private FileInfo.Filter<FileInfo> combine(final Collection<Xslt.FileInfoFilter> filters) {
+    private FileInfo.Filter<FileInfo> combine(final Collection<FileInfoFilter> filters) {
         final Collection<FileInfo.Filter<FileInfo>> res = new ArrayList<>(filters.size());
-        for (final Xslt.FileInfoFilter f : filters) {
+        for (final FileInfoFilter f : filters) {
             res.add(f.toFilter());
         }
         return new FileInfo.Filter<FileInfo>() {
@@ -281,9 +275,9 @@ public final class ExtensibleAntInvoker extends Task {
         return job;
     }
     
-    private Set<File> readListFile(final List<Xslt.IncludesFile> includes, final DITAOTAntLogger logger) {
+    private Set<File> readListFile(final List<IncludesFile> includes, final DITAOTAntLogger logger) {
     	final Set<File> inc = new HashSet<>();
-    	for (final Xslt.IncludesFile i: includes) {
+    	for (final IncludesFile i: includes) {
             if (!isValid(getProject(), i.ifProperty, null)) {
                 continue;
             }
@@ -306,7 +300,7 @@ public final class ExtensibleAntInvoker extends Task {
     	return inc;
     }
     
-    private static boolean isValid(final Project project, final String ifProperty, final String unlessProperty) {
+    public static boolean isValid(final Project project, final String ifProperty, final String unlessProperty) {
         return (ifProperty == null || project.getProperties().containsKey(ifProperty))
                 && (unlessProperty == null || !project.getProperties().containsKey(unlessProperty));
     }
@@ -430,45 +424,41 @@ public final class ExtensibleAntInvoker extends Task {
         public void addConfiguredExcludesFile(final IncludesFile excludesFile) {
             excludes.add(excludesFile);
         }
-        
-        public static class IncludesFile {
-            private File file;
-            private String ifProperty;
-            public void setName(final File file) {
-                this.file = file;
-            }
-            public void setIf(final String ifProperty) {
-                this.ifProperty = ifProperty;
-            }
+    }
+
+    public static class IncludesFile extends ConfElem {
+        private File file;
+        public void setName(final File file) {
+            this.file = file;
+        }
+    }
+
+    public static class FileInfoFilter {
+        private String format;
+        private Boolean hasConref;
+        private Boolean isResourceOnly;
+
+        public void setFormat(final String format) {
+            this.format = format;
         }
 
-        public static class FileInfoFilter {
-            private String format;
-            private Boolean hasConref;
-            private Boolean isResourceOnly;
+        public void setConref(final boolean conref) {
+            this.hasConref = conref;
+        }
 
-            public void setFormat(final String format) {
-                this.format = format;
-            }
+        public void setProcessingRole(final String processingRole) {
+            this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+        }
 
-            public void setConref(final boolean conref) {
-                this.hasConref = conref;
-            }
-
-            public void setProcessingRole(final String processingRole) {
-                this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
-            }
-
-            public FileInfo.Filter<FileInfo> toFilter() {
-                return new FileInfo.Filter<FileInfo>() {
-                    @Override
-                    public boolean accept(FileInfo f) {
-                        return (format == null || format.equals(f.format)) &&
-                                (hasConref == null || f.hasConref == hasConref) &&
-                                (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
-                    }
-                };
-            }
+        public FileInfo.Filter<FileInfo> toFilter() {
+            return new FileInfo.Filter<FileInfo>() {
+                @Override
+                public boolean accept(FileInfo f) {
+                    return (format == null || format.equals(f.format)) &&
+                            (hasConref == null || f.hasConref == hasConref) &&
+                            (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
+                }
+            };
         }
     }
 
@@ -476,9 +466,9 @@ public final class ExtensibleAntInvoker extends Task {
      * Nested pipeline SAX filter pipe element configuration.
      * @author jelovirt
      */
-    public static class Filters extends Module {
+    public static class SaxPipe extends Module {
 
-        private final List<Filter> filters = new ArrayList<>();
+        private final List<XmlFilter> filters = new ArrayList<>();
         private Project project;
         private List<String> format;
 
@@ -488,16 +478,14 @@ public final class ExtensibleAntInvoker extends Task {
             this.format = asList(format);
         }
 
-        public void addConfiguredFilter(final Filter filter) {
+        public void addConfiguredFilter(final XmlFilter filter) {
             filters.add(filter);
         }
 
         public List<AbstractXMLFilter> getFilters() throws IllegalAccessException, InstantiationException {
             final List<AbstractXMLFilter> res = new ArrayList<>();
-            for (final Filter f: filters) {
-                final String ifProperty = f.getIf();
-                final String unlessProperty = f.getUnless();
-                if (isValid(getProject(), ifProperty, unlessProperty)) {
+            for (final XmlFilter f: filters) {
+                if (isValid(getProject(), f.getIf(), f.getUnless())) {
                     final AbstractXMLFilter fc = f.getImplementation().newInstance();
                     for (final Param p : f.params) {
                         if (!p.isValid()) {
@@ -532,12 +520,10 @@ public final class ExtensibleAntInvoker extends Task {
     }
 
     /** Nested pipeline SAX filter element configuration. */
-    public static class Filter {
+    public static class XmlFilter extends ConfElem {
 
         public final List<Param> params = new ArrayList<>();
         private Class<? extends AbstractXMLFilter> cls;
-        private String ifProperty;
-        private String unlessProperty;
 
         public void setClass(final Class<? extends AbstractXMLFilter> cls) {
             this.cls = cls;
@@ -554,31 +540,13 @@ public final class ExtensibleAntInvoker extends Task {
             return cls;
         }
 
-        public String getIf() {
-            return ifProperty;
-        }
-
-        public void setIf(final String p) {
-            ifProperty = p;
-        }
-
-        public String getUnless() {
-            return unlessProperty;
-        }
-
-        public void setUnless(final String p) {
-            unlessProperty = p;
-        }
-
     }
 
     /** Nested parameters. */
-    public static class Param {
+    public static class Param extends ConfElem {
 
         private String name;
         private String value;
-        private String ifProperty;
-        private String unlessProperty;
 
         /**
          * Get parameter name.
@@ -636,34 +604,25 @@ public final class ExtensibleAntInvoker extends Task {
             value = v.getPath();
         }
 
-        /**
-         * Get if condition property name
-         * @return if condition parameter name, {@code null} if not set
-         */
+    }
+
+    public static abstract class ConfElem {
+
+        String ifProperty;
+        String unlessProperty;
+
         public String getIf() {
             return ifProperty;
         }
 
-        /**
-         * Set if condition parameter name
-         * @param p parameter name
-         */
         public void setIf(final String p) {
             ifProperty = p;
         }
 
-        /**
-         * Get unless condition property name
-         * @return unless condition parameter name, {@code null} if not set
-         */
         public String getUnless() {
             return unlessProperty;
         }
 
-        /**
-         * Set unless condition parameter name
-         * @param p parameter name
-         */
         public void setUnless(final String p) {
             unlessProperty = p;
         }
