@@ -711,6 +711,10 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:attribute-set name="page-sequence.notice" use-attribute-sets="__force__page__count page-sequence.frontmatter">
   </xsl:attribute-set>
+    
+  <xsl:attribute-set name="page-sequence.backmatter.notice" use-attribute-sets="__force__page__count">
+    <xsl:attribute name="format">1</xsl:attribute>
+  </xsl:attribute-set>
   
   <xsl:attribute-set name="page-sequence.preface" use-attribute-sets="__force__page__count page-sequence.frontmatter">
   </xsl:attribute-set>
