@@ -66,6 +66,8 @@ public class URLUtilsTest {
         assertEquals("foo/bar.dita", URLUtils.clean("foo\\bar.dita"));
         
         assertEquals("foo?bar=baz&qux=quxx", URLUtils.clean("foo?bar=baz&qux=quxx"));
+
+        assertEquals("http://www.example.com/foo/bar", URLUtils.clean("http://www.example.com/foo/bar"));
     }
     
     @Test
@@ -112,10 +114,20 @@ public class URLUtilsTest {
     }
     
     @Test
-    public void testToUri() throws URISyntaxException {
+    public void testFileToUri() throws URISyntaxException {
         assertEquals(new URI("test.txt"), URLUtils.toURI(new File("test.txt")));
         assertEquals(new URI("foo%20bar.txt"), URLUtils.toURI(new File("foo bar.txt")));
-        assertEquals(new URI("foo/bar.txt"), URLUtils.toURI(new File("foo" + File.separator + "bar.txt")));
+        assertEquals(new URI("foo/bar.txt"), URLUtils.toURI(new File("foo" + Constants.WINDOWS_SEPARATOR + "bar.txt")));
+        assertEquals(new URI("foo%20bar.txt"), URLUtils.toURI(new File(" foo bar.txt ")));
+    }
+
+    @Test
+    public void testStringToUri() throws URISyntaxException {
+        assertEquals(new URI("test.txt"), URLUtils.toURI("test.txt"));
+        assertEquals(new URI("foo%20bar.txt"), URLUtils.toURI("foo bar.txt"));
+        assertEquals(new URI("foo/bar.txt"), URLUtils.toURI("foo" + Constants.WINDOWS_SEPARATOR + "bar.txt"));
+        assertEquals(new URI("foo%20bar.txt"), URLUtils.toURI(" foo bar.txt "));
+        assertEquals(new URI("http://www.example.com/"), URLUtils.toURI(" http://www.example.com/ "));
     }
 
     @Test

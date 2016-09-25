@@ -29,13 +29,13 @@
   <variable id="Unordered List bullet">•</variable>
   <variable id="Table of Contents">Cuprins</variable>
   
-  <variable id="Index Continued String"><!--TODO:continued--></variable>
+  <variable id="Index Continued String">continuare</variable>
   <variable id="Index See String">, Vezi </variable>
   <variable id="Index See Also String">Vezi și </variable>
   <variable id="Table of Contents Chapter">Cap. <param ref-name="number"/>. </variable>
   <variable id="Table of Contents Appendix">Anexa <param ref-name="number"/>. </variable>
   <variable id="Table of Contents Part">Parte <param ref-name="number"/>. </variable>
-  <variable id="Table of Contents Preface"><!--TODO:Preface: --></variable>
+  <variable id="Table of Contents Preface">Prefață: </variable>
   <variable id="Table of Contents Notices"/>
   <variable id="Preface title">Prefață</variable>
   <variable id="Notices title"><!--TODO:Notice--></variable>

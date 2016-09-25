@@ -469,7 +469,7 @@ public final class URLUtils {
             return file.toURI();
         } else {
             try {
-                return new URI(clean(file.getPath().replace(WINDOWS_SEPARATOR, URI_SEPARATOR), false));
+                return new URI(clean(file.getPath().replace(WINDOWS_SEPARATOR, URI_SEPARATOR).trim(), false));
             } catch (final URISyntaxException e) {
                 throw new IllegalArgumentException(e.getMessage(), e);
             }
@@ -493,7 +493,7 @@ public final class URLUtils {
             return new URI(file);
         } catch (final URISyntaxException e) {
             try {
-                return new URI(clean(file.replace(WINDOWS_SEPARATOR, URI_SEPARATOR), false));
+                return new URI(clean(file.replace(WINDOWS_SEPARATOR, URI_SEPARATOR).trim(), false));
             } catch (final URISyntaxException ex) {
                 throw new IllegalArgumentException(ex.getMessage(), ex);
             }

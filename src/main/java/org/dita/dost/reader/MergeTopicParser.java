@@ -109,7 +109,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
         String idValue = atts.getValue(ATTRIBUTE_NAME_ID);
         if (idValue != null) {
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OID, idValue);
-            final URI value = setFragment(toURI(filePath), idValue);
+            final URI value = setFragment(dirPath.toURI().resolve(toURI(filePath)), idValue);
             if (util.findId(value)) {
                 idValue = util.getIdValue(value);
             } else {
@@ -140,27 +140,29 @@ public final class MergeTopicParser extends XMLFilterImpl {
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF,
                     URLUtils.clean(pathFromMap + attValue.substring(sharpIndex), false));
             final URI topicId = toURI(pathFromMap + getElementID(SHARP + getFragment(attValue)));
+            URI absolutePath = dirPath.toURI().resolve(topicId);
             final int index = attValue.indexOf(SLASH, sharpIndex);
             final String elementId = index != -1 ? attValue.substring(index) : "";
-            if (util.findId(topicId)) {// topicId found
-                retAttValue = SHARP + util.getIdValue(topicId) + elementId;
+            if (util.findId(absolutePath)) {// topicId found
+                retAttValue = SHARP + util.getIdValue(absolutePath) + elementId;
             } else {// topicId not found
-                retAttValue = SHARP + util.addId(topicId) + elementId;
+                retAttValue = SHARP + util.addId(absolutePath) + elementId;
             }
         } else { // href value refer to a topic
             pathFromMap = toURI(resolveTopic(new File(filePath).getParent(), attValue));
+            URI absolutePath = dirPath.toURI().resolve(pathFromMap);
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, pathFromMap.toString());
-            if (util.findId(pathFromMap)) {
-                retAttValue = SHARP + util.getIdValue(pathFromMap);
+            if (util.findId(absolutePath)) {
+                retAttValue = SHARP + util.getIdValue(absolutePath);
             } else {
-                final String fileId = MergeUtils.getFirstTopicId(pathFromMap, dirPath, false);
-                final URI key = setFragment(pathFromMap, fileId);
+                final String fileId = MergeUtils.getFirstTopicId(absolutePath, dirPath, false);
+                final URI key = setFragment(absolutePath, fileId);
                 if (util.findId(key)) {
-                    util.addId(pathFromMap, util.getIdValue(key));
+                    util.addId(absolutePath, util.getIdValue(key));
                     retAttValue = SHARP + util.getIdValue(key);
                 } else {
-                    retAttValue = SHARP + util.addId(pathFromMap);
-                    util.addId(key, util.getIdValue(pathFromMap));
+                    retAttValue = SHARP + util.addId(absolutePath);
+                    util.addId(key, util.getIdValue(absolutePath));
                 }
 
             }
