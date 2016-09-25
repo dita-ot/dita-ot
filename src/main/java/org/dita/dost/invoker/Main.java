@@ -1281,8 +1281,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("  -buildfile <file>      use given buildfile" + lSep);
         // msg.append("    -file    <file>              ''" + lSep);
         // msg.append("    -f       <file>              ''" + lSep);
-        msg.append("  -D<property>=<value>,      use value for given property\n");
-        msg.append("  --<property>=<value>\n");
+        msg.append("  --<property>=<value>        use value for given property\n");
         // msg.append("  -keep-going, -k        execute all targets that do not depend"
         // + lSep);
         // msg.append("                         on failed target(s)" + lSep);
