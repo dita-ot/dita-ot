@@ -458,7 +458,18 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template name="processTopicNotices">
-        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.notice">
+        <xsl:variable name="atts" as="element()">
+            <xsl:choose>
+                <xsl:when test="key('map-id', ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id)/ancestor::*[contains(@class,' bookmap/backmatter ')]">
+                    <dummy xsl:use-attribute-sets="page-sequence.backmatter.notice"/> 
+                </xsl:when>
+                <xsl:otherwise>
+                    <dummy xsl:use-attribute-sets="page-sequence.notice"/> 
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <fo:page-sequence master-reference="body-sequence">
+            <xsl:copy-of select="$atts/@*"/>
             <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertPrefaceStaticContents"/>
             <fo:flow flow-name="xsl-region-body">

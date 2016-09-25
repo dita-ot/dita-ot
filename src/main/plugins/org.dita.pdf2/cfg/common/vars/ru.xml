@@ -32,13 +32,13 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Unordered List bullet">•</variable>
   <variable id="Table of Contents">Содержание</variable>
   
-  <variable id="Index Continued String"><!--TODO:continued--></variable>
+  <variable id="Index Continued String">продолжение</variable>
   <variable id="Index See String">, См. </variable>
   <variable id="Index See Also String">См. также </variable>
   <variable id="Table of Contents Chapter">Глава <param ref-name="number"/>. </variable>
   <variable id="Table of Contents Appendix">Приложение <param ref-name="number"/>. </variable>
   <variable id="Table of Contents Part">Часть <param ref-name="number"/>. </variable>
-  <variable id="Table of Contents Preface"><!--TODO:Preface: --></variable>
+  <variable id="Table of Contents Preface">Предисловие: </variable>
   <variable id="Table of Contents Notices"/>
   <variable id="Preface title">Предисловие</variable>
   <variable id="Notices title"><!--TODO:Notice--></variable>

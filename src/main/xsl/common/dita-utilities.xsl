@@ -88,6 +88,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="params" as="node()*"/>
     <xsl:param name="ancestorlang" as="xs:string*"/>
     <xsl:param name="defaultlang" as="xs:string*"/>
+    <xsl:param name="originallang" as="xs:string*" select="$ancestorlang[1]"/>
 
     <xsl:variable name="l" select="($ancestorlang, $defaultlang)[1]" as="xs:string?"/>
     <xsl:choose>
@@ -106,7 +107,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:if test="empty($ancestorlang)">
               <xsl:call-template name="output-message">
                 <xsl:with-param name="id" select="'DOTX001W'"/>
-                <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/>;%2=<xsl:call-template name="getLowerCaseLang"/>;%3=<xsl:value-of select="$DEFAULTLANG"/></xsl:with-param>
+                <xsl:with-param name="msgparams">%1=<xsl:value-of select="$id"/>;%2=<xsl:value-of select="$originallang"/>;%3=<xsl:value-of select="$DEFAULTLANG"/></xsl:with-param>
               </xsl:call-template>
             </xsl:if>
           </xsl:when>
@@ -116,6 +117,7 @@ See the accompanying LICENSE file for applicable license.
               <xsl:with-param name="params" select="$params"/>
               <xsl:with-param name="ancestorlang" select="$ancestorlang[position() gt 1]"/>
               <xsl:with-param name="defaultlang" select="if (exists($ancestorlang)) then $defaultlang else $defaultlang[position() gt 1]"/>
+              <xsl:with-param name="originallang" select="$originallang"/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>

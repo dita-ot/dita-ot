@@ -54,22 +54,31 @@ public class MergeTopicParserTest {
     @Test
     public void testParse() throws Exception {
         final MergeTopicParser parser = new MergeTopicParser(new MergeUtils());
+        parse(parser, "test.xml");
+
+        final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", URI.class);
+        method.setAccessible(true);
+        assertEquals(new URI("images/test.jpg"), method.invoke(parser, new URI("images/test.jpg")));
+    }
+
+    @Test
+    public void testParseSubdir() throws Exception {
+        parse(new MergeTopicParser(new MergeUtils()), "subdir/test3.xml");
+    }
+
+    public void parse(MergeTopicParser parser, String file) throws Exception {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         final TransformerHandler s = stf.newTransformerHandler();
         s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION , "yes");
         s.setResult(new StreamResult(output));
         parser.setContentHandler(s);
         parser.setLogger(new TestUtils.TestLogger());
-        parser.setOutput(new File(srcDir, "test.xml"));
+        parser.setOutput(new File(srcDir, file));
         s.startDocument();
-        parser.parse("test.xml", srcDir.getAbsoluteFile());
+        parser.parse(file, srcDir.getAbsoluteFile());
         s.endDocument();
-        assertXMLEqual(new InputSource(new File(expDir, "test.xml").toURI().toString()),
+        assertXMLEqual(new InputSource(new File(expDir, file).toURI().toString()),
                 new InputSource(new ByteArrayInputStream(output.toByteArray())));
-
-        final Method method = MergeTopicParser.class.getDeclaredMethod("handleLocalHref", URI.class);
-        method.setAccessible(true);
-        assertEquals(new URI("images/test.jpg"), method.invoke(parser, new URI("images/test.jpg")));
     }
 
     @Test

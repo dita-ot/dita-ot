@@ -55,7 +55,9 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
         InputStream in = null;
         try {
             doc = XMLUtils.getDocumentBuilder().newDocument();
-            final Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(styleFile));
+            final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            transformerFactory.setURIResolver(CatalogUtils.getCatalogResolver());
+            final Transformer transformer = transformerFactory.newTransformer(new StreamSource(styleFile));
             transformer.setURIResolver(CatalogUtils.getCatalogResolver());
             if (input.getAttribute("include.rellinks") != null) {
                 transformer.setParameter("include.rellinks", input.getAttribute("include.rellinks"));
@@ -87,11 +89,12 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             linkInserter.setLogger(logger);
             linkInserter.setJob(job);
             for (final Map.Entry<File, Map<String, Element>> entry: mapSet.entrySet()) {
-                final File f = new File(job.tempDir, entry.getKey().getPath());
-                logger.info("Processing " + f);
+                final URI uri = inputFile.toURI().resolve(toURI(entry.getKey().getPath()));
+                logger.info("Processing " + uri);
                 linkInserter.setLinks(entry.getValue());
+                linkInserter.setCurrentFile(uri);
                 try {
-                    linkInserter.write(f);
+                    linkInserter.write(new File(uri));
                 } catch (final DITAOTException e) {
                     logger.error("Failed to insert links: " + e.getMessage(), e);
                 }

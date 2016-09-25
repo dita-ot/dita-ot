@@ -9,6 +9,7 @@
 package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.*;
 import org.xml.sax.Attributes;
@@ -20,11 +21,14 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 import java.io.File;
+import java.net.URI;
 import java.util.*;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.XMLUtils.AttributesBuilder;
+import static org.dita.dost.util.XMLUtils.getChildElements;
 
 /**
  * Read DITA topic file and insert map links information into it.
@@ -42,6 +46,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
     private static final Attributes relatedLinksAtts = new AttributesBuilder()
             .add(ATTRIBUTE_NAME_CLASS, TOPIC_RELATED_LINKS.toString())
             .build();
+    private URI baseURI;
 
     /**
      * Default constructor of DitaLinksWriter class.
@@ -54,6 +59,12 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
         } catch (final TransformerConfigurationException e) {
             throw new RuntimeException("Failed to configure DOM to SAX transformer: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        baseURI = job.tempDir.toURI().resolve(job.getInputMap());
     }
     
     /**
@@ -149,12 +160,30 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
             final Result result = new SAXResult(new FilterHandler(getContentHandler()));
             final NodeList children = root.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
-                final Source source = new DOMSource(children.item(i));
+                final Node links = rewriteLinks((Element) children.item(i));
+                final Source source = new DOMSource(links);
                 saxToDomTransformer.transform(source, result);
             }
         } catch (TransformerException e) {
             throw new SAXException("Failed to serialize DOM node to SAX: " + e.getMessage(), e);
         }
+    }
+
+    /** Relativize links */
+    private Element rewriteLinks(final Element src) {
+        final Element dst = (Element) src.cloneNode(true);
+        for (final Element desc: getChildElements(dst, TOPIC_DESC, true)) {
+            for (final Element elem: getChildElements(desc, true)) {
+                final Attr href = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
+                final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
+                if (href != null && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
+                    final URI abs = baseURI.resolve(href.getValue());
+                    final URI rel = getRelativePath(currentFile, abs);
+                    href.setValue(rel.toString());
+                }
+            }
+        }
+        return dst;
     }
 
     private static class FilterHandler extends XMLFilterImpl {

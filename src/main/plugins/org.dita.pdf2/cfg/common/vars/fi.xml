@@ -32,7 +32,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Unordered List bullet">•</variable>
   <variable id="Table of Contents">Sisällys</variable>
   
-  <variable id="Index Continued String"><!--TODO:continued--></variable>
+  <variable id="Index Continued String">jatkoa</variable>
   <variable id="Index See String">, Katso </variable>
   <variable id="Index See Also String">Katso myös </variable>
   <variable id="Table of Contents Chapter">Luku <param ref-name="number"/>. </variable>

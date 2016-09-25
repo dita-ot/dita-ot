@@ -77,9 +77,9 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- Without a group, links are emitted as-is.  (Can be overridden.) -->
     <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group"
-                  name="related-links:group-result." as="element()">
+                  name="related-links:group-result." as="element()?">
         <xsl:param name="links" as="node()*"/>
-        <xsl:if test="normalize-space(string-join($links, ''))">
+        <xsl:if test="exists($links)">
           <linklist class="- topic/linklist " outputclass="relinfo relref">
             <xsl:sequence select="$links"/>
           </linklist>
@@ -312,7 +312,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <!-- Process each group. -->
-    <xsl:template name="related-links:do-group" as="element()">
+    <xsl:template name="related-links:do-group" as="element()?">
         <xsl:param name="nodes" as="element()*"/>
         <xsl:param name="tunnel"/>
         <!-- space separated list -->
