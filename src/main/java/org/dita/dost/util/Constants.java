@@ -964,6 +964,8 @@ public final class Constants {
     public static final String CONF_PRINT_TRANSTYPES = "print_transtypes";
     /** Property name for template files. */
     public static final String CONF_TEMPLATES = "templates";
+    /** Plugin configuration file name. */
+    public static final String PLUGIN_CONF = "plugins.xml";
 
     /** Project reference name for job configuration object. */
     public static final String ANT_REFERENCE_JOB = "job";
