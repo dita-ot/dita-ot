@@ -387,6 +387,11 @@ public final class XMLUtils {
      * @param filters XML filters to transform file with, may be an empty list
      */
     public static void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+        final File outputFile = new File(output);
+        if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
+            throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
+        }
+
         InputSource src = null;
         StreamResult result = null;
         try {

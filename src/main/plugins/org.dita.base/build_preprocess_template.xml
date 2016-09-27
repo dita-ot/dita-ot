@@ -521,7 +521,7 @@ See the accompanying LICENSE file for applicable license.
     <condition property="dita.preprocess.reloadstylesheet.clean-map" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.clean-map"/></not>
     </condition>
-    <pipeline message="Resolve mapref in ditamap" taskname="mapref">
+    <pipeline message="Clean ditamap" taskname="clean-map">
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
