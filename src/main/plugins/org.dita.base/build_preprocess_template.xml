@@ -37,6 +37,7 @@ See the accompanying LICENSE file for applicable license.
                   topicpull,
                   flag-module,
                   clean-map,
+                  clean-preprocess,
                   {depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
@@ -529,6 +530,36 @@ See the accompanying LICENSE file for applicable license.
     <condition property="preprocess.clean-map-check.skip">
       <isset property="noMap"/>
     </condition>
+  </target>
+
+  <!-- Clean tempory files at the end of preprocess -->
+  <target name="clean-preprocess"
+          unless="preprocess.clean-preprocess.skip"
+          description="Clean preprocess">
+    <pipeline message="Clean preprocess" taskname="clean-preprocess">
+      <module class="org.dita.dost.module.CleanPreprocessModule"/>
+    </pipeline>
+    <job-helper file="canditopics.list" property="canditopicslist"/>
+    <job-helper file="conref.list" property="conreflist"/>
+    <job-helper file="conreftargets.list" property="conreftargetslist"/>
+    <job-helper file="copytosource.list" property="copytosourcelist"/>
+    <job-helper file="flagimage.list" property="flagimagelist"/>
+    <job-helper file="fullditamap.list" property="fullditamaplist"/>
+    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
+    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
+    <job-helper file="hreftargets.list" property="hreftargetslist"/>
+    <!-- Deprecated since 2.1 -->
+    <job-helper file="html.list" property="htmllist"/>
+    <!-- Deprecated since 2.1 -->
+    <job-helper file="image.list" property="imagelist"/>
+    <job-helper file="outditafiles.list" property="outditafileslist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>    
+    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
+    <job-helper file="subtargets.list" property="subtargetslist"/>
+    <job-helper file="user.input.file.list" property="user.input.file"/>
+    <job-helper file="usr.input.file.list" property="user.input.file"/>
   </target>
   
   <!-- copy-files
