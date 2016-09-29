@@ -334,7 +334,7 @@ public final class XMLUtils {
      */
     public static void transform(final File inputFile, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
-        transform(inputFile, outputFile, filters);
+        transformFile(inputFile, outputFile, filters);
         try {
             deleteQuietly(inputFile);
             moveFile(outputFile, inputFile);
@@ -353,6 +353,14 @@ public final class XMLUtils {
      * @param filters XML filters to transform file with, may be an empty list
      */
     public static void transform(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
+        if (inputFile.equals(outputFile)) {
+            transform(inputFile, filters);
+        } else {
+            transformFile(inputFile, outputFile, filters);
+        }
+    }
+
+    private static void transformFile(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
         if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
             throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
         }
@@ -387,6 +395,14 @@ public final class XMLUtils {
      * @param filters XML filters to transform file with, may be an empty list
      */
     public static void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+        if (input.equals(output)) {
+            transform(input, filters);
+        } else {
+            transformURI(input, output, filters);
+        }
+    }
+
+    private static void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(output);
         if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
             throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
