@@ -120,32 +120,26 @@ See the accompanying LICENSE file for applicable license.
       </module>
     </pipeline>
     <!-- generate list files -->
-    <job-helper file="outditafiles.list" property="outditafileslist"/>
-    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
-    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
-    <job-helper file="fullditamap.list" property="fullditamaplist"/>
-    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
-    <job-helper file="conref.list" property="conreflist"/>
-    <!-- Deprecated since 2.1 -->
-    <job-helper file="image.list" property="imagelist"/>
-    <job-helper file="flagimage.list" property="flagimagelist"/>
-    <!-- Deprecated since 2.1 -->
-    <job-helper file="html.list" property="htmllist"/>
     <job-helper file="canditopics.list" property="canditopicslist"/>
-    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
+    <job-helper file="conref.list" property="conreflist"/>
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-helper file="subtargets.list" property="subtargetslist"/>
-    <job-helper file="resourceonly.list" property="resourceonlylist"/>    
-    <job-helper file="user.input.file.list" property="user.input.file"/>
-    <job-helper file="hreftargets.list" property="hreftargetslist"/>
-    <job-helper file="conref.list" property="conreflist"/>
-    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
-    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="flagimage.list" property="flagimagelist"/>
+    <job-helper file="fullditamap.list" property="fullditamaplist"/>
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
-    <job-helper file="conreftargets.list" property="conreftargetslist"/>
-    <job-helper file="canditopics.list" property="canditopicslist"/>
+    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
+    <job-helper file="hreftargets.list" property="hreftargetslist"/>
+    <!-- Deprecated since 2.1 -->
+    <job-helper file="html.list" property="htmllist"/>
+    <!-- Deprecated since 2.1 -->
+    <job-helper file="image.list" property="imagelist"/>
+    <job-helper file="outditafiles.list" property="outditafileslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>    
+    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
+    <job-helper file="subtargets.list" property="subtargetslist"/>
+    <job-helper file="user.input.file.list" property="user.input.file"/>
     <job-property dir="${dita.temp.dir}"/>
     <property name="outditafilesfile" value="outditafiles.list"/>
     <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
