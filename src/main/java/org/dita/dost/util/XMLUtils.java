@@ -49,6 +49,15 @@ public final class XMLUtils {
     /** Private constructor to make class uninstantiable. */
     private XMLUtils() {}
 
+    /** Convert DOM NodeList to List. */
+    public static <T> List<T> toList(final NodeList nodes) {
+        final List<T> res = new ArrayList<>(nodes.getLength());
+        for (int i = 0; i < nodes.getLength(); i++) {
+            res.add((T) nodes.item(i));
+        }
+        return res;
+    }
+
     /**
      * List descendant elements by DITA class.
      *
