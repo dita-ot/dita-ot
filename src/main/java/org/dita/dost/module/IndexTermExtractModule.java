@@ -92,7 +92,7 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
         final String encoding = input.getAttribute(ANT_INVOKER_EXT_PARAM_ENCODING);
         final String indextype = input.getAttribute(ANT_INVOKER_EXT_PARAM_INDEXTYPE);
         final String indexclass = input.getAttribute(ANT_INVOKER_EXT_PARAM_INDEXCLASS);
-        inputMap = new File(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
+        inputMap = new File(job.tempDirURI.resolve(job.getInputMap()));
         targetExt = input.getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
 
         /*

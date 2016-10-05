@@ -96,7 +96,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
 
     @Override
     public void startDocument() throws SAXException {
-        final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(toFile(job.getInputDir().resolve("dummy")), toFile(currentFile)),
+        // XXX May be require fixup
+        final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
                 toFile(currentFile),
                 toFile(job.getInputFile()),
                 job);

@@ -22,7 +22,7 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
 
     protected DITAOTLogger logger;
     protected Job job;
-    protected Filter<FileInfo> fileInfoFilter;
+    Filter<FileInfo> fileInfoFilter;
 
     @Override
     public void setLogger(final DITAOTLogger logger) {

@@ -1,12 +1,13 @@
 /*
  * This file is part of the DITA Open Toolkit project.
  *
- * Copyright 2015 Jarno Elovirta
+ * Copyright 2016 Jarno Elovirta
  *
- * See the accompanying LICENSE file for applicable license.
+ *  See the accompanying LICENSE file for applicable license.
  */
-package org.dita.dost.module;
+package org.dita.dost.module.filter;
 
+import com.google.common.base.Optional;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -28,7 +29,6 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static junit.framework.Assert.assertEquals;
@@ -37,9 +37,9 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertNotNull;
 
-public class BranchFilterModuleTest extends BranchFilterModule {
+public class BranchFilterMapModuleTest extends MapBranchFilterModule {
 
-    private final File resourceDir = TestUtils.getResourceDir(BranchFilterModuleTest.class);
+    private final File resourceDir = TestUtils.getResourceDir(BranchFilterMapModuleTest.class);
     private final File expDir = new File(resourceDir, "exp");
     private File tempDir;
     private Job job;
@@ -55,17 +55,14 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         XMLUnit.setIgnoreComments(true);
 
         job = new Job(tempDir);
-        job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
         job.add(new Job.FileInfo.Builder()
                 .src(new File(tempDir, "input.ditamap").toURI())
-                .result(new File(tempDir, "input.ditamap").toURI())
                 .uri(new URI("input.ditamap"))
                 .format(ATTR_FORMAT_VALUE_DITAMAP)
                 .build());
         for (final String uri: Arrays.asList("linux.ditaval", "novice.ditaval", "advanced.ditaval", "mac.ditaval", "win.ditaval")) {
             job.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
-                    .result(new File(tempDir, uri).toURI())
                     .uri(new URI(uri))
                     .format(ATTR_FORMAT_VALUE_DITAVAL)
                     .build());
@@ -73,15 +70,8 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         for (final String uri: Arrays.asList("install.dita", "perform-install.dita", "configure.dita")) {
             job.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
-                    .result(new File(tempDir, uri).toURI())
                     .uri(new URI(uri))
                     .format(ATTR_FORMAT_VALUE_DITA)
-                    .build());
-        }
-        for (final String uri: Arrays.asList("installation-procedure.dita", "getting-started.dita")) {
-            job.add(new Job.FileInfo.Builder()
-                    .result(new File(tempDir, uri).toURI())
-                    .uri(new URI(uri))
                     .build());
         }
     }
@@ -91,22 +81,22 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         TestUtils.forceDelete(tempDir);
     }
 
-//    @Test
-//    public void testSplitBranches() throws ParserConfigurationException, IOException, SAXException {
-//        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-//
-//        final Document act = builder.parse(new File(tempDir, "input.ditamap"));
-//        currentFile = new File(tempDir, "input.ditamap").toURI();
-//        setJob(job);
-//        splitBranches(act.getDocumentElement(), Branch.EMPTY);
-//
-//        final Document exp = builder.parse(new File(expDir, "input_splitBranches.ditamap"));
-//        assertXMLEqual(exp, act);
-//    }
+    @Test
+    public void testSplitBranches() throws ParserConfigurationException, IOException, SAXException {
+        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+        final Document act = builder.parse(new File(tempDir, "input.ditamap"));
+        currentFile = new File(tempDir, "input.ditamap").toURI();
+        setJob(job);
+        splitBranches(act.getDocumentElement(), Branch.EMPTY);
+
+        final Document exp = builder.parse(new File(expDir, "input_splitBranches.ditamap"));
+        assertXMLEqual(exp, act);
+    }
 
     @Test
     public void testProcessMap() throws SAXException, IOException {
-        final BranchFilterModule m = new BranchFilterModule();
+        final MapBranchFilterModule m = new MapBranchFilterModule();
         m.setJob(job);
         m.setLogger(new DITAOTJavaLogger());
         
@@ -115,7 +105,8 @@ public class BranchFilterModuleTest extends BranchFilterModule {
                 new InputSource(new File(tempDir, "input.ditamap").toURI().toString()));
 
         final List<String> exp = Arrays.asList(
-                "installation-procedure.dita", "getting-started.dita",
+                //"installation-procedure.dita",
+                //"getting-started.dita",
                 //"http://example.com/install.dita",
                 "configure.dita",
                 "input.ditamap", "install.dita", "linux.ditaval", "perform-install.dita",
@@ -149,7 +140,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         assertEquals(filesExp, filesAct);
     }
 
-    private static final Optional<String> ABSENT_STRING = Optional.empty();
+    private static final Optional<String> ABSENT_STRING = Optional.absent();
     
     @Test
     public void testGenerateCopyTo() throws URISyntaxException {

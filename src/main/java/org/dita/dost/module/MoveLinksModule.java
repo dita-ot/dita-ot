@@ -48,7 +48,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        final File inputFile = new File(job.tempDir, input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
+        final File inputFile = new File(job.tempDirURI.resolve(job.getInputMap()));
         final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
 
         Document doc;

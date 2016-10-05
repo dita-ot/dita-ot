@@ -147,7 +147,14 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 res.add(processTopic(f, rootScope, f.isResourceOnly));
             }
         }
-        return adjustResourceRenames(res);
+
+        if (fileInfoFilter != null) {
+            return adjustResourceRenames(res.stream()
+                    .filter(rs -> fileInfoFilter.accept(rs.in))
+                    .collect(Collectors.toList()));
+        } else {
+            return adjustResourceRenames(res);
+        }
     }
 
     List<ResolveTask> adjustResourceRenames(final List<ResolveTask> renames) {

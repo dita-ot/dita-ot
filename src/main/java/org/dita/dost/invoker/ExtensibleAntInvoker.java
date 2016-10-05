@@ -202,7 +202,9 @@ public final class ExtensibleAntInvoker extends Task {
                 } else if (m instanceof SaxPipe) {
                     final SaxPipe fm = (SaxPipe) m;
                     final XmlFilterModule module = new XmlFilterModule();
-                    module.setFileInfoFilter(combine(fm.getFormat()));
+                    final List<FileInfoFilter> predicates = new ArrayList<>(fm.getFormat());
+                    predicates.addAll(m.fileInfoFilters);
+                    module.setFileInfoFilter(combine(predicates));
                     try {
                         module.setProcessingPipe(fm.getFilters());
                     } catch (final InstantiationException | IllegalAccessException e) {
@@ -316,7 +318,7 @@ public final class ExtensibleAntInvoker extends Task {
         public final List<Param> params = new ArrayList<>();
         private Class<? extends AbstractPipelineModule> cls;
         public final Collection<FileInfoFilter> fileInfoFilters = new ArrayList<>();
-        
+
         public void setClass(final Class<? extends AbstractPipelineModule> cls) {
             this.cls = cls;
         }
@@ -324,7 +326,7 @@ public final class ExtensibleAntInvoker extends Task {
         public void addConfiguredParam(final Param p) {
             params.add(p);
         }
-        
+
         public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
             fileInfoFilters.add(fileInfoFilter);
         }
