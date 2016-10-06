@@ -1,27 +1,26 @@
 /*
  * This file is part of the DITA Open Toolkit project.
  *
- * Copyright 2015 Jarno Elovirta
+ * Copyright 2016 Jarno Elovirta
  *
  * See the accompanying LICENSE file for applicable license.
  */
-buildscript {
-    dependencies {
-        classpath "com.github.jruby-gradle:jruby-gradle-plugin:0.1.12"
-    }
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile group: 'com.cathive.sass', name: 'sass-java', version: '4.0.0'
 }
 
-plugins {
-  id "com.github.robfletcher.compass" version "2.0.6"
+ant.taskdef(name: 'sass', classname: 'com.cathive.sass.SassTask', classpath: configurations.runtime.asPath)
+
+task deleteCss(type: Delete) {
+    delete file('css')
 }
 
-configurations.all {
-    resolutionStrategy.force 'rubygems:rb-inotify:0.9.5'
-}
-
-compass {
-  cssDir = file("css")
-  sassDir = file("sass")
-  environment = "production"
-  outputStyle = "expanded"
+task compileSass(dependsOn: [deleteCss] ) << {
+    ant.sass(in: file('sass/commonltr.scss'), outdir: file('css'), outputstyle: 1)
+    ant.sass(in: file('sass/commonrtl.scss'), outdir: file('css'), outputstyle: 1)
 }
