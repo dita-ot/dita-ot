@@ -5,22 +5,59 @@
  *
  * See the accompanying LICENSE file for applicable license.
  */
+buildscript {
+    dependencies {
+        classpath 'com.cathive.sass:sass-java:4.0.0'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+}
+
 apply plugin: 'java'
 
-repositories {
-    mavenCentral()
-}
-dependencies {
-    compile group: 'com.cathive.sass', name: 'sass-java', version: '4.0.0'
-}
-
-ant.taskdef(name: 'sass', classname: 'com.cathive.sass.SassTask', classpath: configurations.runtime.asPath)
+File cssDir = file('css')
+File sassDir = file('sass')
 
 task deleteCss(type: Delete) {
-    delete file('css')
+    delete cssDir
 }
 
-task compileSass(dependsOn: [deleteCss] ) << {
-    ant.sass(in: file('sass/commonltr.scss'), outdir: file('css'), outputstyle: 1)
-    ant.sass(in: file('sass/commonrtl.scss'), outdir: file('css'), outputstyle: 1)
+import com.cathive.sass.SassCompilationException
+import com.cathive.sass.SassFileContext
+import com.cathive.sass.SassOutputStyle
+
+import java.io.IOException
+import java.io.FileOutputStream
+
+def sass(FileCollection files, File outputDir) {
+    outputDir.mkdir()
+
+    files.each {
+        def ctx = SassFileContext.create(it.toPath())
+        def options = ctx.getOptions()
+        options.setOutputStyle(SassOutputStyle.EXPANDED)
+
+        try {
+            def basename = it.getName().substring(0, it.getName().lastIndexOf('.'))
+            ctx.compile(new FileOutputStream(new File(outputDir, basename + '.css')))
+        } catch (SassCompilationException e) {
+            System.err.println(e.getMessage())
+        } catch (IOException e) {
+            System.err.println(String.format("Compilation failed: %s", e.getMessage()))
+        }
+    }
+}
+
+task compileSass {
+    inputs.dir sassDir
+    outputs.dir cssDir
+
+    doLast {
+        sass(
+            fileTree(dir: 'sass', includes: ['commonltr.scss', 'commonrtl.scss']),
+            cssDir
+        )
+    }
 }
