@@ -187,7 +187,6 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
                     topicInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
-                        logger.info("Processing " + targetFileName);
                         topicInserter.read(toFile(targetFileName));
                     } else {
                         logger.error("File " + targetFileName + " does not exist");
@@ -207,7 +206,6 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         metaReader.setJob(job);
         for (final FileInfo f : fis) {
             final File mapFile = new File(job.tempDir, f.file.getPath());
-            logger.info("Processing " + mapFile.toURI());
             //FIXME: this reader gets the parent path of input file
             metaReader.read(mapFile);
         }
