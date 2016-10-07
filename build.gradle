@@ -76,7 +76,7 @@ task copyInstall(type: Copy) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compassCompile"]) {
+task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compileSass"]) {
     description "Build archives and install all plugins with dependencies"
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/lib", "${projectDir}/src/main/resources")
