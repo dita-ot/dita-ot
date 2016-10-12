@@ -35,6 +35,7 @@ import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.module.GenMapAndTopicListModule.*;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
@@ -88,6 +89,15 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private FilterUtils baseFilterUtils;
     private DitaWriterFilter ditaWriterFilter;
     private TopicFragmentFilter topicFragmentFilter;
+    private final TempFileNameScheme tempFileNameScheme;
+
+    public DebugAndFilterModule() {
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -280,6 +290,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         ditaWriterFilter.setEntityResolver(reader.getEntityResolver());
 
         topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
+
+        tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
     /**
@@ -317,6 +329,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         pipe.add(normalizeFilter);
 
         pipe.add(topicFragmentFilter);
+
+//        linkRewriteFilter.setCurrentFile(currentFile);
+//        pipe.add(linkRewriteFilter);
 
         ditaWriterFilter.setDefaultValueMap(defaultValueMap);
         ditaWriterFilter.setCurrentFile(currentFile);
@@ -387,7 +402,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 final File tmprel = new File(FileUtils.resolve(job.tempDir, parent) + SUBJECT_SCHEME_EXTENSION);
                 final Document parentRoot;
                 if (!tmprel.exists()) {
-                    final URI src = job.getInputDir().resolve(parent);
+                    final URI src = job.getFileInfo(parent).src;
                     parentRoot = builder.parse(src.toString());
                 } else {
                     parentRoot = builder.parse(tmprel);

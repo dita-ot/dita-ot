@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.URLUtils.*;
@@ -44,12 +45,21 @@ import javax.xml.transform.stream.StreamResult;
  */
 final class KeyrefModule extends AbstractPipelineModuleImpl {
 
+    private final GenMapAndTopicListModule.TempFileNameScheme tempFileNameScheme;
     /** Delayed conref utils. */
     private DelayConrefUtils delayConrefUtils;
     private String transtype;
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
     private TopicFragmentFilter topicFragmentFilter;
+
+    public KeyrefModule() {
+        try {
+            tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Entry point of KeyrefModule.
@@ -68,6 +78,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         }));
         if (!fis.isEmpty()) {
+            tempFileNameScheme.setBaseDir(job.getInputDir());
             initFilters();
 
             final Document doc = readMap();
@@ -171,7 +182,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                     res.add(resolveTask);
                     final Integer used = usage.get(fi.uri);
                     if (used > 1) {
-                        final URI value = addSuffix(toURI(hrefNode.getValue()), "-" + (used - 1));
+                        final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
                         hrefNode.setValue(value.toString());
                     }
                 }
@@ -208,7 +219,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
         if (used > 1) {
             final URI result = addSuffix(f.result, "-" + (used - 1));
-            final URI out = addSuffix(f.uri, "-" + (used - 1));
+            final URI out = tempFileNameScheme.generateTempFileName(result);
             final FileInfo fo = new FileInfo.Builder(f)
                     .uri(out)
                     .result(result)

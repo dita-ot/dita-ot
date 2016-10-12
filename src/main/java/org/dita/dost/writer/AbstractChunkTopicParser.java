@@ -10,6 +10,8 @@ package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
+import org.dita.dost.module.GenMapAndTopicListModule;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.TopicIdParser;
 import org.dita.dost.util.XMLUtils;
@@ -28,6 +30,7 @@ import java.util.*;
 
 import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 import static org.dita.dost.reader.ChunkMapReader.*;
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.isAbsolutePath;
 import static org.dita.dost.util.URLUtils.*;
@@ -55,6 +58,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     /** Input file's parent absolute path. */
     URI currentFile = null;
 
+    /** Absolute temporary file */
     URI currentParsingFile = null;
     /** Absolute temporary output file */
     URI outputFile = null;
@@ -79,7 +83,27 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     Map<String, String> currentParsingFileTopicIDChangeTable;
 
+    final GenMapAndTopicListModule.TempFileNameScheme tempFileNameScheme;
     private ChunkFilenameGenerator chunkFilenameGenerator;
+
+    /**
+     * Constructor.
+     */
+    AbstractChunkTopicParser() {
+        super();
+        try {
+            tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        tempFileNameScheme.setBaseDir(job.getInputDir());
+    }
 
     abstract public void write(final URI filename) throws DITAOTException;
 
@@ -211,8 +235,10 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     }
 
     FileInfo generateFileInfo(final URI output) {
-        final URI temp = job.tempDirURI.relativize(output);
-        final URI result = job.getInputDir().resolve(temp);
+        assert output.isAbsolute();
+        final URI t = job.tempDirURI.relativize(output);
+        final URI result = job.getInputDir().resolve(t);
+        final URI temp = tempFileNameScheme.generateTempFileName(result);
         final FileInfo.Builder b = currentParsingFile != null
                 ? new FileInfo.Builder(job.getFileInfo(stripFragment(currentParsingFile)))
                 : new FileInfo.Builder();
@@ -225,13 +251,26 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     }
 
     URI generateOutputFilename(final String id) {
-        URI newFileName = currentFile.resolve(id + FILE_EXTENSION_DITA);
-        if (id == null || new File(newFileName).exists()) {
-            final URI t = newFileName;
-            newFileName = currentFile.resolve(generateFilename());
-            conflictTable.put(newFileName, t);
+        final FileInfo cfi = job.getFileInfo(currentFile);
+        URI result = cfi.result.resolve(id + FILE_EXTENSION_DITA);
+        URI temp = tempFileNameScheme.generateTempFileName(result);
+        if (id == null || new File(currentFile.resolve(temp)).exists()) { //job.getFileInfo(result) != null
+            final URI t = temp;
+
+            result = cfi.result.resolve(generateFilename());
+            temp = tempFileNameScheme.generateTempFileName(result);
+
+            final FileInfo.Builder b = new FileInfo.Builder(cfi);
+            final FileInfo fi = b
+                    .uri(temp)
+                    .result(result)
+                    .format(ATTR_FORMAT_VALUE_DITA)
+                    .build();
+            job.add(fi);
+
+            conflictTable.put(currentFile.resolve(temp), currentFile.resolve(t));
         }
-        return newFileName;
+        return currentFile.resolve(temp);
     }
 
     Attributes processAttributes(final Attributes atts) {
@@ -296,6 +335,26 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
      */
     String generateFilename() {
         return chunkFilenameGenerator.generateFilename(CHUNK_PREFIX, FILE_EXTENSION_DITA);
+    }
+
+    /**
+     * Generate output file.
+     *
+     * @return absolute temporary file
+     */
+    URI generateOutputFile(final URI ref) {
+        final FileInfo srcFi = job.getFileInfo(ref);
+        final URI newSrc = srcFi.src.resolve(generateFilename());
+        final URI tmp = tempFileNameScheme.generateTempFileName(newSrc);
+
+        if (job.getFileInfo(tmp) == null) {
+            job.add(new FileInfo.Builder()
+                    .result(newSrc)
+                    .uri(tmp)
+                    .build());
+        }
+
+        return job.tempDirURI.resolve(tmp);
     }
 
     /**

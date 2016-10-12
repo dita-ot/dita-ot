@@ -54,11 +54,17 @@ public class ChunkMapReaderTest {
         mapReader.setJob(job);
 
         TestUtils.copy(new File(srcDir, "gen.ditamap"), new File(tempDir, "maps" + File.separator + "gen.ditamap"));
-        job.add(new Job.FileInfo.Builder().uri(toURI("maps/gen.ditamap")).build());
+        job.add(new Job.FileInfo.Builder()
+                .src(new File(srcDir, "maps" + File.separator + "gen.ditamap").toURI())
+                .uri(toURI("maps/gen.ditamap"))
+                .build());
         for (final String srcFile : getSrcFiles()) {
             final URI dst = tempDir.toURI().resolve(srcFile);
             TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
-            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(srcDir, srcFile).toURI())
+                    .uri(toURI(srcFile))
+                    .build());
         }
 
         mapReader.read(new File(tempDir, "maps" + File.separator + "gen.ditamap"));

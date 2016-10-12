@@ -12,7 +12,9 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.DitaClass;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLSerializer;
 import org.dita.dost.writer.AbstractDomFilter;
@@ -34,9 +36,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableSet;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.getFragment;
 import static org.dita.dost.util.FileUtils.replaceExtension;
@@ -64,6 +68,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     public static final String CHUNK_TO_NAVIGATION = "to-navigation";
     public static final String CHUNK_PREFIX = "Chunk";
 
+    private final TempFileNameScheme tempFileNameScheme;
     private Collection<String> rootChunkOverride;
     private String defaultChunkByToken;
 
@@ -80,6 +85,24 @@ public final class ChunkMapReader extends AbstractDomFilter {
     private ProcessingInstruction path2projUrl = null;
 
     private final ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
+
+    /**
+     * Constructor.
+     */
+    public ChunkMapReader() {
+        super();
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        tempFileNameScheme.setBaseDir(job.getInputDir());
+    }
 
     public void setRootChunkOverride(final String chunkValue) {
         rootChunkOverride = split(chunkValue);
@@ -388,9 +411,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
      * @param topicref topicref without href to generate stump topic for
      */
     private void generateStumpTopic(final Element topicref) {
-        final URI absTemp = getResultFile(topicref);
+        final URI result = getResultFile(topicref);
+        final URI temp = tempFileNameScheme.generateTempFileName(result);
+        final URI absTemp = job.tempDir.toURI().resolve(temp);
 
-        final String name = getBaseName(new File(absTemp).getName());
+        final String name = getBaseName(new File(result).getName());
         String navtitle = getChildElementValueOfTopicmeta(topicref, TOPIC_NAVTITLE);
         if (navtitle == null) {
             navtitle = getValue(topicref, ATTRIBUTE_NAME_NAVTITLE);
@@ -410,9 +435,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
         }
 
         final URI relativeToBase = getRelativePath(job.tempDirURI.resolve("dummy"), absTemp);
-        final URI result = job.getInputDir().resolve(relativePath);
         final FileInfo fi = new FileInfo.Builder()
-                .uri(relativeToBase)
+                .uri(temp)
                 .result(result)
                 .format(ATTR_FORMAT_VALUE_DITA)
                 .build();
@@ -447,18 +471,20 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     private URI getResultFile(final Element topicref) {
+        final FileInfo curr = job.getFileInfo(currentFile);
         final URI copyTo = toURI(getValue(topicref, ATTRIBUTE_NAME_COPY_TO));
         final String id = getValue(topicref, ATTRIBUTE_NAME_ID);
 
         URI outputFileName;
         if (copyTo != null) {
-            outputFileName = currentFile.resolve(copyTo);
+            outputFileName = curr.result.resolve(copyTo);
         } else if (id != null) {
-            outputFileName = currentFile.resolve(id + FILE_EXTENSION_DITA);
+            outputFileName = curr.result.resolve(id + FILE_EXTENSION_DITA);
         } else {
+            final Set<URI> results = job.getFileInfo().stream().map(fi -> fi.result).collect(Collectors.toSet());
             do {
-                outputFileName = currentFile.resolve(generateFilename());
-            } while (new File(outputFileName).exists());
+                outputFileName = curr.result.resolve(generateFilename());
+            } while (results.contains(outputFileName));
         }
         return outputFileName;
     }

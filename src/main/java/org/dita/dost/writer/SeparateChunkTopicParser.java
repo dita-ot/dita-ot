@@ -263,12 +263,27 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     private URI resolve(final URI base, final String file) {
+        assert base.isAbsolute();
+        assert base.toString().startsWith(job.tempDirURI.toString());
+
+        final FileInfo srcFi = job.getFileInfo(base);
+        final URI dst;
         if (file != null) {
-            return base.resolve(file);
+            dst = srcFi.result.resolve(file);
         } else {
-            return setPath(base, base.getPath() + FILE_EXTENSION_CHUNK);
+            dst = setPath(srcFi.result, srcFi.result.getPath() + FILE_EXTENSION_CHUNK);
+        }
+        final URI tmp = tempFileNameScheme.generateTempFileName(dst);
+
+        if (job.getFileInfo(tmp) == null) {
+            job.add(new FileInfo.Builder(srcFi)
+                    .result(dst)
+                    .uri(tmp)
+                    .build());
         }
 
+
+        return job.tempDirURI.resolve(tmp);
     }
 
     // SAX methods
@@ -295,8 +310,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     outputFile = generateOutputFilename(id);
                     output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), UTF8);
 
-                    final FileInfo fi = generateFileInfo(outputFile);
-                    job.add(fi);
+//                    final FileInfo fi = generateFileInfo(outputFile);
+//                    job.add(fi);
 
                     changeTable.put(outputFile, outputFile);
                     if (id != null) {

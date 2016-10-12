@@ -9,6 +9,7 @@ package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.CopyToReader;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.Generate;
@@ -34,9 +36,24 @@ import static org.dita.dost.util.URLUtils.*;
  */
 public final class CopyToModule extends AbstractPipelineModuleImpl {
 
+    private final TempFileNameScheme tempFileNameScheme;
     private boolean forceUnique;
     private ForceUniqueFilter forceUniqueFilter;
     private final CopyToReader reader = new CopyToReader();
+
+    public CopyToModule() {
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        tempFileNameScheme.setBaseDir(job.getInputDir());
+    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -143,10 +160,13 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                 // add new file info into job
                 final FileInfo src = job.getFileInfo(copytoSource);
                 assert src != null;
-                final URI target = job.getInputDir().resolve(copytoTarget);
-                final FileInfo.Builder b = new FileInfo.Builder(src).result(target);
-                final FileInfo dst = b.uri(copytoTarget).build();
-                job.add(dst);
+                final FileInfo dst = job.getFileInfo(copytoTarget);
+                final URI dstTemp = tempFileNameScheme.generateTempFileName(dst.result);
+                final FileInfo res = new FileInfo.Builder(src)
+                        .result(dst.result)
+                        .uri(dstTemp)
+                        .build();
+                job.add(res);
             }
         }
     }

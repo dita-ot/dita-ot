@@ -55,14 +55,17 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         XMLUnit.setIgnoreComments(true);
 
         job = new Job(tempDir);
+        job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
         job.add(new Job.FileInfo.Builder()
                 .src(new File(tempDir, "input.ditamap").toURI())
+                .result(new File(tempDir, "input.ditamap").toURI())
                 .uri(new URI("input.ditamap"))
                 .format(ATTR_FORMAT_VALUE_DITAMAP)
                 .build());
         for (final String uri: Arrays.asList("linux.ditaval", "novice.ditaval", "advanced.ditaval", "mac.ditaval", "win.ditaval")) {
             job.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
+                    .result(new File(tempDir, uri).toURI())
                     .uri(new URI(uri))
                     .format(ATTR_FORMAT_VALUE_DITAVAL)
                     .build());
@@ -70,8 +73,15 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         for (final String uri: Arrays.asList("install.dita", "perform-install.dita", "configure.dita")) {
             job.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
+                    .result(new File(tempDir, uri).toURI())
                     .uri(new URI(uri))
                     .format(ATTR_FORMAT_VALUE_DITA)
+                    .build());
+        }
+        for (final String uri: Arrays.asList("installation-procedure.dita", "getting-started.dita")) {
+            job.add(new Job.FileInfo.Builder()
+                    .result(new File(tempDir, uri).toURI())
+                    .uri(new URI(uri))
                     .build());
         }
     }
@@ -105,8 +115,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
                 new InputSource(new File(tempDir, "input.ditamap").toURI().toString()));
 
         final List<String> exp = Arrays.asList(
-                //"installation-procedure.dita",
-                //"getting-started.dita",
+                "installation-procedure.dita", "getting-started.dita",
                 //"http://example.com/install.dita",
                 "configure.dita",
                 "input.ditamap", "install.dita", "linux.ditaval", "perform-install.dita",
