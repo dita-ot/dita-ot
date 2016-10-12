@@ -13,31 +13,32 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
+import org.dita.dost.module.reader.AbstractReaderModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
-import org.dita.dost.writer.ProfilingFilter;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLFilter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
-import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.URLUtils.stripFragment;
+import static org.dita.dost.util.URLUtils.toURI;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**
@@ -62,6 +63,7 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
 
     private final DocumentBuilder builder;
     private final DitaValReader ditaValReader;
+    private final TempFileNameScheme tempFileNameScheme;
     private final Map<URI, FilterUtils> filterCache = new HashMap<>();
     /** Current map being processed, relative to temporary directory */
     private URI map;
@@ -72,12 +74,23 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
         builder = XMLUtils.getDocumentBuilder();
         ditaValReader = new DitaValReader();
         ditaValReader.initXMLReader(true);
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     @Override
     public void setLogger(final DITAOTLogger logger) {
         super.setLogger(logger);
         ditaValReader.setLogger(logger);
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
     @Override
@@ -540,12 +553,37 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
             final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
             final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
             if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
-                final URI srcTemp = toURI(copyTo.isEmpty() ? href : copyTo);
-                final URI dstTemp = generateCopyTo(srcTemp, filter);
+                final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
+
+                final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
+
+                final URI dstSource;
+                try {
+                    dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
+                } catch (NullPointerException e) {
+                    throw e;
+                }
+                final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
+                final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
+                        .result(dstSource)
+                        .uri(dstTemp);
+                if (dstBuilder.build().format == null) {
+                    dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
+                }
+                if (hrefFileInfo.src == null && href != null) {
+                    if (copyToFileInfo != null) {
+                        dstBuilder.src(copyToFileInfo.src);
+                    }
+                }
+                final FileInfo dstFileInfo = dstBuilder
+                        .build();
+
                 elem.setAttribute(BRANCH_COPY_TO, dstTemp.toString());
                 if (!copyTo.isEmpty()) {
                     elem.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
                 }
+
+                job.add(dstFileInfo);
             }
         }
 

@@ -8,6 +8,9 @@
 
 package org.dita.dost.module.reader;
 
+import com.google.common.base.Charsets;
+import com.google.common.hash.Hashing;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
@@ -153,6 +156,15 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     DitaWriterFilter ditaWriterFilter;
     TopicFragmentFilter topicFragmentFilter;
 
+    public AbstractReaderModule() {
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public abstract void readStartFile() throws DITAOTException;
 
     /**
@@ -184,6 +196,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         ditaWriterFilter.setEntityResolver(reader.getEntityResolver());
 
         topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
+
+        tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
     /**
@@ -644,7 +658,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      * @throws DITAOTException if writing result files failed
      */
     void outputResult() throws DITAOTException {
-        tempFileNameScheme = new DefaultTempFileScheme(baseInputDir);
+        tempFileNameScheme.setBaseDir(baseInputDir);
 
         // assume empty Job
         final URI rootTemp = tempFileNameScheme.generateTempFileName(rootFile);
@@ -1002,6 +1016,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      */
     public interface TempFileNameScheme {
         /**
+         * Set input base directory.
+         * @param b absolute base directory
+         */
+        default void setBaseDir(final URI b) {}
+        /**
          * Generate temporary file name.
          *
          * @param src absolute source file URI
@@ -1011,10 +1030,12 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     }
 
     public static class DefaultTempFileScheme implements TempFileNameScheme {
-        final URI b;
-        public DefaultTempFileScheme(final URI b) {
+        URI b;
+        @Override
+        public void setBaseDir(final URI b) {
             this.b = b;
         }
+        @Override
         public URI generateTempFileName(final URI src) {
             assert src.isAbsolute();
             //final URI b = baseInputDir.toURI();
@@ -1022,6 +1043,29 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             return rel;
         }
     }
+
+    public static class FullPathTempFileScheme implements TempFileNameScheme {
+        @Override
+        public URI generateTempFileName(final URI src) {
+            assert src.isAbsolute();
+            final URI rel = toURI(src.getPath().substring(1));
+            return rel;
+        }
+    }
+
+    public static class HashTempFileScheme implements TempFileNameScheme {
+        @Override
+        public URI generateTempFileName(final URI src) {
+            assert src.isAbsolute();
+            final String ext = FilenameUtils.getExtension(src.getPath());
+            final String path = stripFragment(src.normalize()).toString();
+            final String hash = Hashing.sha1()
+                    .hashString(path, Charsets.UTF_8)
+                    .toString();
+            return toURI(ext.isEmpty() ? hash : (hash + "." + ext));
+        }
+    }
+
 
 
 
@@ -1195,7 +1239,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 final File tmprel = new File(FileUtils.resolve(job.tempDir, parent) + SUBJECT_SCHEME_EXTENSION);
                 final Document parentRoot;
                 if (!tmprel.exists()) {
-                    final URI src = job.getInputDir().resolve(parent);
+                    final URI src = job.getFileInfo(parent).src;
                     parentRoot = builder.parse(src.toString());
                 } else {
                     parentRoot = builder.parse(tmprel);

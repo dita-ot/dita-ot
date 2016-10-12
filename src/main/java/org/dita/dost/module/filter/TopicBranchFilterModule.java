@@ -11,11 +11,13 @@ import com.google.common.base.Optional;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
+import org.dita.dost.module.reader.AbstractReaderModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
@@ -35,6 +37,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -62,22 +65,35 @@ public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
 
     private final DocumentBuilder builder;
     private final DitaValReader ditaValReader;
+    private final AbstractReaderModule.TempFileNameScheme tempFileNameScheme;
     private final Map<URI, FilterUtils> filterCache = new HashMap<>();
     /** Current map being processed, relative to temporary directory */
     private URI map;
     /** Absolute URI to map being processed. */
     protected URI currentFile;
 
-    public TopicBranchFilterModule() {
+    public TopicBranchFilterModule(AbstractReaderModule.TempFileNameScheme tempFileNameScheme) {
+        this.tempFileNameScheme = tempFileNameScheme;
         builder = XMLUtils.getDocumentBuilder();
         ditaValReader = new DitaValReader();
         ditaValReader.initXMLReader(true);
+        try {
+            tempFileNameScheme = (AbstractReaderModule.TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     @Override
     public void setLogger(final DITAOTLogger logger) {
         super.setLogger(logger);
         ditaValReader.setLogger(logger);
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
     @Override
@@ -309,14 +325,15 @@ public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
         if (!copyTo.isEmpty()) {
             final URI dstUri = map.resolve(copyTo);
             final URI dstAbsUri = job.tempDirURI.resolve(dstUri);
+            final FileInfo dstFileInfo = job.getFileInfo(dstAbsUri);
             final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
             final URI srcUri = map.resolve(href);
             final URI srcAbsUri = job.tempDirURI.resolve(srcUri);
             final FileInfo srcFileInfo = job.getFileInfo(srcUri);
             if (srcFileInfo != null) {
-                final FileInfo fi = new FileInfo.Builder(srcFileInfo).uri(dstUri).build();
-                // TODO: Maybe Job should be updated earlier?
-                job.add(fi);
+//                final FileInfo fi = new FileInfo.Builder(srcFileInfo).uri(dstUri).build();
+//                 TODO: Maybe Job should be updated earlier?
+//                job.add(fi);
                 logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
                 final List<XMLFilter> pipe = new ArrayList<>();
                 // TODO: replace multiple profiling filters with a merged filter utils
