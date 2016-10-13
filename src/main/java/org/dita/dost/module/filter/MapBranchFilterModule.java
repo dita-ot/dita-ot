@@ -13,11 +13,11 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
+import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
-import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -50,15 +50,12 @@ import static org.dita.dost.util.XMLUtils.*;
  *   <li>Generate copy-to attribute for each brach generated topicref</li>
  *   <li>Filter map based on branch filters</li>
  *   <li>Rewrite duplicate generated copy-to targets</li>
- *   <!--li>Copy and filter generated copy-to targets</li-->
- *   <!--li>Filter topics that were not branch generated</li-->
  * </ol>
  *
  * @since 2.4
  */
 public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
 
-    private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
     private final DocumentBuilder builder;
@@ -113,7 +110,7 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
         assert !map.isAbsolute();
         this.map = map;
         currentFile = job.tempDirURI.resolve(map);
-        // parse
+
         logger.info("Processing " + currentFile);
         final Document doc;
         try {
@@ -130,10 +127,6 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
         filterBranches(doc.getDocumentElement());
         logger.debug("Rewrite duplicate topic references");
         rewriteDuplicates(doc.getDocumentElement());
-//        logger.debug("Filter topics and generate copies");
-//        generateCopies(doc.getDocumentElement(), Collections.<FilterUtils>emptyList());
-//        logger.debug("Filter existing topics");
-//        filterTopics(doc.getDocumentElement(), Collections.<FilterUtils>emptyList());
 
         logger.debug("Writing " + currentFile);
         Result result = null;
@@ -314,97 +307,6 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
         return filterUtils.needExclude(buf.build(), props);
     }
 
-//    /** Copy and filter topics for branches. These topics have a new name and will be added to job configuration. */
-//    private void generateCopies(final Element topicref, final List<FilterUtils> filters) {
-//        final List<FilterUtils> fs = combineFilterUtils(topicref, filters);
-//
-//        final String copyTo = topicref.getAttribute(BRANCH_COPY_TO);
-//        if (!copyTo.isEmpty()) {
-//            final URI dstUri = map.resolve(copyTo);
-//            final URI dstAbsUri = job.tempDirURI.resolve(dstUri);
-//            final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
-//            final URI srcUri = map.resolve(href);
-//            final URI srcAbsUri = job.tempDirURI.resolve(srcUri);
-//            final FileInfo srcFileInfo = job.getFileInfo(srcUri);
-//            if (srcFileInfo != null) {
-//                final FileInfo fi = new FileInfo.Builder(srcFileInfo).uri(dstUri).build();
-//                // TODO: Maybe Job should be updated earlier?
-//                job.add(fi);
-//                logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
-//                final List<XMLFilter> pipe = new ArrayList<>();
-//                // TODO: replace multiple profiling filters with a merged filter utils
-//                for (final FilterUtils f : fs) {
-//                    final ProfilingFilter writer = new ProfilingFilter();
-//                    writer.setLogger(logger);
-//                    writer.setJob(job);
-//                    writer.setFilterUtils(f);
-//                    pipe.add(writer);
-//                }
-//                final File dstDirUri = new File(dstAbsUri.resolve("."));
-//                if (!dstDirUri.exists() && !dstDirUri.mkdirs()) {
-//                    logger.error("Failed to create directory " + dstDirUri);
-//                }
-//                try {
-//                    XMLUtils.transform(srcAbsUri,
-//                                       dstAbsUri,
-//                                       pipe);
-//                } catch (final DITAOTException e) {
-//                    logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
-//                }
-//                topicref.setAttribute(ATTRIBUTE_NAME_HREF, copyTo);
-//                topicref.removeAttribute(BRANCH_COPY_TO);
-//                // disable filtering again
-//                topicref.setAttribute(SKIP_FILTER, Boolean.TRUE.toString());
-//            }
-//        }
-//        for (final Element child: getChildElements(topicref, MAP_TOPICREF)) {
-//            if (DITAVAREF_D_DITAVALREF.matches(child)) {
-//                continue;
-//            }
-//            generateCopies(child, fs);
-//        }
-//    }
-
-//    /** Modify and filter topics for branches. These files use an existing file name. */
-//    private void filterTopics(final Element topicref, final List<FilterUtils> filters) {
-//        final List<FilterUtils> fs = combineFilterUtils(topicref, filters);
-//
-//        final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
-//        final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
-//        if (!fs.isEmpty() && skipFilter == null
-//                && !href.isEmpty()
-//                && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))) {
-//            final List<XMLFilter> pipe = new ArrayList<>();
-//            // TODO: replace multiple profiling filters with a merged filter utils
-//            for (final FilterUtils f : fs) {
-//                final ProfilingFilter writer = new ProfilingFilter();
-//                writer.setLogger(logger);
-//                writer.setJob(job);
-//                writer.setFilterUtils(f);
-//                pipe.add(writer);
-//            }
-//
-//            final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
-//            logger.info("Filtering " + srcAbsUri);
-//            try {
-//                XMLUtils.transform(toFile(srcAbsUri),
-//                        pipe);
-//            } catch (final DITAOTException e) {
-//                logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
-//            }
-//        }
-//        if (skipFilter != null) {
-//            topicref.removeAttributeNode(skipFilter);
-//        }
-//
-//        for (final Element child: getChildElements(topicref, MAP_TOPICREF)) {
-//            if (DITAVAREF_D_DITAVALREF.matches(child)) {
-//                continue;
-//            }
-//            filterTopics(child, fs);
-//        }
-//    }
-
     /**
      * Read and cache filter.
      **/
@@ -469,81 +371,6 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
             for (final Element child: getChildElements(elem, MAP_TOPICREF)) {
                 splitBranches(child, filter);
             }
-        }
-    }
-    
-    /** Immutable branch definition. */
-    public static class Branch {
-        /** Empty root branch */
-        static final Branch EMPTY = new Branch();
-        final Optional<String> resourcePrefix;
-        final Optional<String> resourceSuffix;
-        final Optional<String> keyscopePrefix;
-        final Optional<String> keyscopeSuffix;
-        private Branch() {
-            this.resourcePrefix = Optional.absent();
-            this.resourceSuffix = Optional.absent();
-            this.keyscopePrefix = Optional.absent();
-            this.keyscopeSuffix = Optional.absent();
-        }
-        Branch(final Optional<String> resourcePrefix, final Optional<String> resourceSuffix,
-               final Optional<String> keyscopePrefix, final Optional<String> keyscopeSuffix) {
-//            final URI prefix = toURI(resourcePrefix).normalize();
-//            if (prefix.toString().startsWith("..")) {
-//                throw new Exception("ERROR: Resource prefix may not start with ..");
-//            }
-            this.resourcePrefix = resourcePrefix;
-            this.resourceSuffix = resourceSuffix;
-            this.keyscopePrefix = keyscopePrefix;
-            this.keyscopeSuffix = keyscopeSuffix;
-        }
-        @Override
-        public String toString() {
-            return "{" + resourcePrefix + "," + resourceSuffix + ";" + keyscopePrefix + ", " + keyscopeSuffix + "}";
-        }
-        private Branch merge(final Element ditavalref) {
-            return new Branch(
-                getPrefix(ditavalref, this.resourcePrefix),
-                getSuffix(ditavalref, this.resourceSuffix),
-                getKeyscopePrefix(ditavalref, this.keyscopePrefix),
-                getKeyscopeSuffix(ditavalref, this.keyscopeSuffix)
-            );
-        }
-        private Optional<String> get(final Element ditavalref, final DitaClass cls) {
-            for (final Element ditavalmeta: getChildElements(ditavalref, DITAVAREF_D_DITAVALMETA)) {
-                for (final Element resoucePrefix: getChildElements(ditavalmeta, cls)) {
-                    return Optional.of(getStringValue(resoucePrefix));
-                }
-            }
-            return Optional.absent();
-        }
-        private Optional<String> getPrefix(final Element ditavalref, final Optional<String> oldValue) {
-            final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_RESOURCEPREFIX);
-            if (v.isPresent()) {
-                return Optional.of(oldValue.or("") + v.get());
-            }
-            return oldValue;
-        }
-        private Optional<String> getSuffix(final Element ditavalref, final Optional<String> oldValue) {
-            final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_RESOURCESUFFIX);
-            if (v.isPresent()) {
-                return Optional.of(v.get() + oldValue.or(""));
-            }
-            return oldValue;
-        }
-        private Optional<String> getKeyscopePrefix(final Element ditavalref, final Optional<String> oldValue) {
-            final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPEPREFIX);
-            if (v.isPresent()) {
-                return Optional.of(oldValue.or("") + v.get());
-            }
-            return oldValue;
-        }
-        private Optional<String> getKeyscopeSuffix(final Element ditavalref, final Optional<String> oldValue) {
-            final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPESUFFIX);
-            if (v.isPresent()) {
-                return Optional.of(v.get() + oldValue.or(""));
-            }
-            return oldValue;
         }
     }
 
