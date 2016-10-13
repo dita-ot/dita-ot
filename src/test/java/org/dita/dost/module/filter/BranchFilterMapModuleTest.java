@@ -7,10 +7,11 @@
  */
 package org.dita.dost.module.filter;
 
-import com.google.common.base.Optional;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.module.BranchFilterModule;
+import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.Before;
@@ -29,6 +30,7 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static junit.framework.Assert.assertEquals;
@@ -140,7 +142,7 @@ public class BranchFilterMapModuleTest extends MapBranchFilterModule {
         assertEquals(filesExp, filesAct);
     }
 
-    private static final Optional<String> ABSENT_STRING = Optional.absent();
+    private static final Optional<String> ABSENT_STRING = Optional.empty();
     
     @Test
     public void testGenerateCopyTo() throws URISyntaxException {

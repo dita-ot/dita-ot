@@ -8,7 +8,6 @@
 
 package org.dita.dost.module.filter;
 
-import com.google.common.base.Optional;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
@@ -84,8 +83,8 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
         super.setJob(job);
         try {
             final String cls = Optional
-                    .fromNullable(job.getProperty("temp-file-name-scheme"))
-                    .or(configuration.get("temp-file-name-scheme"));
+                    .ofNullable(job.getProperty("temp-file-name-scheme"))
+                    .orElse(configuration.get("temp-file-name-scheme"));
             tempFileNameScheme = (TempFileNameScheme) getClass().forName(cls).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -360,7 +359,7 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
                 branch.insertBefore(ditavalref, branch.getFirstChild());
                 final Branch currentFilter = filter.merge(ditavalref);
                 processAttributes(branch, currentFilter);
-                final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, Optional.<String>absent(), Optional.<String>absent());
+                final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, Optional.empty(), Optional.empty());
                 // process children of all branches
                 for (final Element child: getChildElements(branch, MAP_TOPICREF)) {
                     if (DITAVAREF_D_DITAVALREF.matches(child)) {
