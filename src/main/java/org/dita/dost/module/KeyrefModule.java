@@ -84,6 +84,14 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         }));
         if (!fis.isEmpty()) {
+            try {
+                final String cls = Optional
+                        .ofNullable(job.getProperty("temp-file-name-scheme"))
+                        .orElse(configuration.get("temp-file-name-scheme"));
+                tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) getClass().forName(cls).newInstance();
+            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             tempFileNameScheme.setBaseDir(job.getInputDir());
             initFilters();
 

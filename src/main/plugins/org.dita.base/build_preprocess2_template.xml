@@ -53,6 +53,14 @@ See the accompanying LICENSE file for applicable license.
     <echo level="info">*****************************************************************</echo>
     <echo level="info">* input = ${args.input}</echo>
     <echo level="info">*****************************************************************</echo>
+    
+    <echoxml file="${dita.temp.dir}/.job.xml">
+      <job>
+        <property name="temp-file-name-scheme">
+          <string>org.dita.dost.module.GenMapAndTopicListModule$HashTempFileScheme</string>
+        </property>
+      </job>
+    </echoxml>
   </target>
   
   <target name="map-gen-list-debug-filter"

@@ -155,12 +155,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     TopicFragmentFilter topicFragmentFilter;
 
     public AbstractReaderModule() {
-        try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     public abstract void readStartFile() throws DITAOTException;
@@ -1125,6 +1119,16 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     }
 
     void init() throws IOException, DITAOTException, SAXException {
+        try {
+            final String cls = Optional
+                    .ofNullable(job.getProperty("temp-file-name-scheme"))
+                    .orElse(configuration.get("temp-file-name-scheme"));
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(cls).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        tempFileNameScheme.setBaseDir(job.getInputDir());
+
         // Output subject schemas
         outputSubjectScheme();
         subjectSchemeReader = new SubjectSchemeReader();
