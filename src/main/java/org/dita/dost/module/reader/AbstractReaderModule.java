@@ -1064,7 +1064,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
             XMLReader parser = getXmlReader(f.format);
             XMLReader xmlSource = parser;
-            for (final XMLFilter filter: getProcessingPipeDebug(currentFile)) {
+            for (final XMLFilter filter: getProcessingPipe(currentFile)) {
                 filter.setParent(xmlSource);
                 xmlSource = filter;
             }
@@ -1154,13 +1154,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         initXMLReader(ditaDir, validate);
         initFilters();
     }
-
-    /**
-     * Get pipe line filters
-     *
-     * @param fileToParse absolute URI to current file being processed
-     */
-    abstract List<XMLFilter> getProcessingPipeDebug(final URI fileToParse);
 
     /**
      * Output subject schema file.

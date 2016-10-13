@@ -200,7 +200,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
         return stripFragment(href);
     }
 
-    List<XMLFilter> getCommonProcessingPipe(final URI fileToParse) {
+    @Override
+    List<XMLFilter> getProcessingPipe(final URI fileToParse) {
         assert fileToParse.isAbsolute();
         final List<XMLFilter> pipe = new ArrayList<>();
 
@@ -247,13 +248,4 @@ public final class TopicReaderModule extends AbstractReaderModule {
         return pipe;
     }
 
-    @Override
-    List<XMLFilter> getProcessingPipe(final URI fileToParse) {
-        return getCommonProcessingPipe(fileToParse);
-    }
-
-    @Override
-    List<XMLFilter> getProcessingPipeDebug(final URI fileToParse) {
-        return getCommonProcessingPipe(fileToParse);
-    }
 }
