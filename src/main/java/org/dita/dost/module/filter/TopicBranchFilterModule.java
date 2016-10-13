@@ -11,7 +11,7 @@ import com.google.common.base.Optional;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
-import org.dita.dost.module.reader.AbstractReaderModule;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
@@ -65,20 +65,19 @@ public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
 
     private final DocumentBuilder builder;
     private final DitaValReader ditaValReader;
-    private final AbstractReaderModule.TempFileNameScheme tempFileNameScheme;
+    private final TempFileNameScheme tempFileNameScheme;
     private final Map<URI, FilterUtils> filterCache = new HashMap<>();
     /** Current map being processed, relative to temporary directory */
     private URI map;
     /** Absolute URI to map being processed. */
     protected URI currentFile;
 
-    public TopicBranchFilterModule(AbstractReaderModule.TempFileNameScheme tempFileNameScheme) {
-        this.tempFileNameScheme = tempFileNameScheme;
+    public TopicBranchFilterModule() {
         builder = XMLUtils.getDocumentBuilder();
         ditaValReader = new DitaValReader();
         ditaValReader.initXMLReader(true);
         try {
-            tempFileNameScheme = (AbstractReaderModule.TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
