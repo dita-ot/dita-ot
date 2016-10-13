@@ -7,7 +7,6 @@
  */
 package org.dita.dost.module;
 
-import com.google.common.base.Optional;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
@@ -456,7 +455,7 @@ class BranchFilterModule extends AbstractPipelineModuleImpl {
                 branch.insertBefore(ditavalref, branch.getFirstChild());
                 final Branch currentFilter = filter.merge(ditavalref);
                 processAttributes(branch, currentFilter);
-                final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, Optional.<String>absent(), Optional.<String>absent());
+                final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, Optional.empty(), Optional.empty());
                 // process children of all branches
                 for (final Element child: getChildElements(branch, MAP_TOPICREF)) {
                     if (DITAVAREF_D_DITAVALREF.matches(child)) {
@@ -482,10 +481,10 @@ class BranchFilterModule extends AbstractPipelineModuleImpl {
         final Optional<String> keyscopePrefix;
         final Optional<String> keyscopeSuffix;
         private Branch() {
-            this.resourcePrefix = Optional.absent();
-            this.resourceSuffix = Optional.absent();
-            this.keyscopePrefix = Optional.absent();
-            this.keyscopeSuffix = Optional.absent();
+            this.resourcePrefix = Optional.empty();
+            this.resourceSuffix = Optional.empty();
+            this.keyscopePrefix = Optional.empty();
+            this.keyscopeSuffix = Optional.empty();
         }
         Branch(final Optional<String> resourcePrefix, final Optional<String> resourceSuffix,
                final Optional<String> keyscopePrefix, final Optional<String> keyscopeSuffix) {
@@ -516,33 +515,33 @@ class BranchFilterModule extends AbstractPipelineModuleImpl {
                     return Optional.of(getStringValue(resoucePrefix));
                 }
             }
-            return Optional.absent();
+            return Optional.empty();
         }
         private Optional<String> getPrefix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_RESOURCEPREFIX);
             if (v.isPresent()) {
-                return Optional.of(oldValue.or("") + v.get());
+                return Optional.of(oldValue.orElse("") + v.get());
             }
             return oldValue;
         }
         private Optional<String> getSuffix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_RESOURCESUFFIX);
             if (v.isPresent()) {
-                return Optional.of(v.get() + oldValue.or(""));
+                return Optional.of(v.get() + oldValue.orElse(""));
             }
             return oldValue;
         }
         private Optional<String> getKeyscopePrefix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPEPREFIX);
             if (v.isPresent()) {
-                return Optional.of(oldValue.or("") + v.get());
+                return Optional.of(oldValue.orElse("") + v.get());
             }
             return oldValue;
         }
         private Optional<String> getKeyscopeSuffix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPESUFFIX);
             if (v.isPresent()) {
-                return Optional.of(v.get() + oldValue.or(""));
+                return Optional.of(v.get() + oldValue.orElse(""));
             }
             return oldValue;
         }

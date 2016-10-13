@@ -7,7 +7,6 @@
  */
 package org.dita.dost.module;
 
-import com.google.common.base.Optional;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -29,6 +28,7 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static junit.framework.Assert.assertEquals;
@@ -149,7 +149,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         assertEquals(filesExp, filesAct);
     }
 
-    private static final Optional<String> ABSENT_STRING = Optional.absent();
+    private static final Optional<String> ABSENT_STRING = Optional.empty();
     
     @Test
     public void testGenerateCopyTo() throws URISyntaxException {
