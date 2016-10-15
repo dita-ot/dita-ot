@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+     class="- map/map "
+     domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+     ditaarch:DITAArchVersion="1.3">
+   <topicref class="- map/topicref " href="a.dita" keyscope="a">
+      <ditavalref class="+ map/topicref ditavalref-d/ditavalref " href="one.ditaval"/>
+      <topicref class="- map/topicref " href="b.dita" keyscope="b"/>
+   </topicref>
+   <topicref class="- map/topicref " href="a.dita" keyscope="a">
+      <ditavalref class="+ map/topicref ditavalref-d/ditavalref " href="two.ditaval"/>
+      <topicref class="- map/topicref " href="b.dita" keyscope="b"/>
+   </topicref>
+   <topicref class="- map/topicref " href="a.dita"/>
+   <topicref copy-to="ctoken.dita"
+             class="- map/topicref "
+             href="c.dita"
+             keyscope="c">
+      <ditavalref class="+ map/topicref ditavalref-d/ditavalref " href="one.ditaval">
+         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta "/>
+      </ditavalref>
+   </topicref>
+   <topicref copy-to="ctoken.dita"
+             class="- map/topicref "
+             href="c.dita"
+             keyscope="c">
+      <ditavalref class="+ map/topicref ditavalref-d/ditavalref " href="two.ditaval">
+         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta "/>
+      </ditavalref>
+   </topicref>
+</map>

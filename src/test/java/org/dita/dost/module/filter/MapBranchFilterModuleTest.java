@@ -10,7 +10,6 @@ package org.dita.dost.module.filter;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.module.BranchFilterModule;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.util.Job;
 import org.junit.After;
@@ -39,13 +38,12 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertNotNull;
 
-public class BranchFilterMapModuleTest extends MapBranchFilterModule {
+public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
-    private final File resourceDir = TestUtils.getResourceDir(BranchFilterMapModuleTest.class);
+    private final File resourceDir = TestUtils.getResourceDir(MapBranchFilterModuleTest.class);
     private final File expDir = new File(resourceDir, "exp");
     private File tempDir;
     private Job job;
-
     
     @Before
     public void setUp() throws Exception {
@@ -57,6 +55,7 @@ public class BranchFilterMapModuleTest extends MapBranchFilterModule {
         XMLUnit.setIgnoreComments(true);
 
         job = new Job(tempDir);
+        job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
         job.add(new Job.FileInfo.Builder()
                 .src(new File(tempDir, "input.ditamap").toURI())
                 .uri(new URI("input.ditamap"))
@@ -107,16 +106,30 @@ public class BranchFilterMapModuleTest extends MapBranchFilterModule {
                 new InputSource(new File(tempDir, "input.ditamap").toURI().toString()));
 
         final List<String> exp = Arrays.asList(
-                //"installation-procedure.dita",
-                //"getting-started.dita",
-                //"http://example.com/install.dita",
+//                "installation-procedure.dita",
+//                "getting-started.dita",
+//                "http://example.com/install.dita",
                 "configure.dita",
-                "input.ditamap", "install.dita", "linux.ditaval", "perform-install.dita",
-                "configure-novice.dita", "novice.ditaval", "configure-admin.dita",
-                "advanced.ditaval", "install-mac.dita", "mac.ditaval",
-                "perform-install-mac.dita", "installation-procedure-mac.dita", "configure-novice-mac.dita",
-                "configure-admin-mac.dita", "install-win.dita", "win.ditaval", "perform-install-win.dita",
-                "installation-procedure-win.dita", "configure-novice-win.dita", "configure-admin-win.dita",
+                "input.ditamap",
+                "install.dita",
+                "linux.ditaval",
+                "perform-install.dita",
+                "configure-novice.dita",
+                "novice.ditaval",
+                "configure-admin.dita",
+                "advanced.ditaval",
+                "install-mac.dita",
+                "mac.ditaval",
+                "perform-install-mac.dita",
+//                "installation-procedure-mac.dita",
+                "configure-novice-mac.dita",
+                "configure-admin-mac.dita",
+                "install-win.dita",
+                "win.ditaval",
+                "perform-install-win.dita",
+//                "installation-procedure-win.dita",
+                "configure-novice-win.dita",
+                "configure-admin-win.dita",
                 "install-linux.dita"
         );
         assertEquals(exp.size(), job.getFileInfo().size());
@@ -125,14 +138,23 @@ public class BranchFilterMapModuleTest extends MapBranchFilterModule {
         }
 
         final List<String> filesExp = Arrays.asList(
-                //"install.dita",
+//                "install.dita",
                 "configure.dita",
-                "perform-install.dita", "configure-novice.dita",
-                "configure-admin.dita", "install-mac.dita", "perform-install-mac.dita",
-                "installation-procedure-mac.dita", "configure-novice-mac.dita", "configure-admin-mac.dita",
-                "install-win.dita", "perform-install-win.dita", "installation-procedure-win.dita",
-                "configure-novice-win.dita", "configure-admin-win.dita", "install-linux.dita", "install.dita"
-
+                "perform-install.dita",
+//                "configure-novice.dita",
+//                "configure-admin.dita",
+//                "install-mac.dita",
+//                "perform-install-mac.dita",
+//                "installation-procedure-mac.dita",
+//                "configure-novice-mac.dita",
+//                "configure-admin-mac.dita",
+//                "install-win.dita",
+//                "perform-install-win.dita",
+//                "installation-procedure-win.dita",
+//                "configure-novice-win.dita",
+//                "configure-admin-win.dita",
+//                "install-linux.dita",
+                "install.dita"
         );
         Collections.sort(filesExp);
         final List<String> filesAct = Arrays.stream(tempDir.listFiles((dir, name) -> name.endsWith(".dita")))
