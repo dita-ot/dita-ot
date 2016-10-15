@@ -9,6 +9,8 @@
 package org.dita.dost.writer;
 
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.GenMapAndTopicListModule;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -60,7 +62,14 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     private int foreignLevel;
     /** File infos by src. */
     private Map<URI, FileInfo> fileInfoMap;
+    private TempFileNameScheme tempFileNameScheme;
 
+    public DitaWriterFilter() {
+    }
+
+    public void setTempFileNameScheme(TempFileNameScheme tempFileNameScheme) {
+        this.tempFileNameScheme = tempFileNameScheme;
+    }
 
     /**
      * Set default value map.
@@ -220,6 +229,11 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
                     final URI currrentFileTemp = job.tempDirURI.resolve(cfi.uri);
                     final URI targetTemp = job.tempDirURI.resolve(f.uri);
                     attValue = getRelativePath(currrentFileTemp, targetTemp);
+                } else if (tempFileNameScheme != null) {
+                    final URI currrentFileTemp = job.tempDirURI.resolve(tempFileNameScheme.generateTempFileName(currentFile));
+                    final URI targetTemp = job.tempDirURI.resolve(tempFileNameScheme.generateTempFileName(current));
+                    final URI relativePath = getRelativePath(currrentFileTemp, targetTemp);
+                    attValue = relativePath;
                 } else {
                     attValue = getRelativePath(currentFile, current);
                 }

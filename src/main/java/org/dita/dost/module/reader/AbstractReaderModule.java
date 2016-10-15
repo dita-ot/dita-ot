@@ -163,6 +163,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      * Initialize reusable filters.
      */
     void initFilters() {
+        tempFileNameScheme.setBaseDir(job.getInputDir());
+
         listFilter = new GenListModuleReader();
         listFilter.setLogger(logger);
         listFilter.setPrimaryDitamap(rootFile);
@@ -183,13 +185,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         nullHandler = new DefaultHandler();
 
         ditaWriterFilter = new DitaWriterFilter();
+        ditaWriterFilter.setTempFileNameScheme(tempFileNameScheme);
         ditaWriterFilter.setLogger(logger);
         ditaWriterFilter.setJob(job);
         ditaWriterFilter.setEntityResolver(reader.getEntityResolver());
 
         topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
 
-        tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
     /**
