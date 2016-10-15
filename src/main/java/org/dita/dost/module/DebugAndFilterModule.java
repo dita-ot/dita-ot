@@ -108,11 +108,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             readArguments(input);
             init();
 
-            for (final FileInfo f: job.getFileInfo()) {
-                if (isFormatDita(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                    processFile(f);
-                }
-            }
+            job.getFileInfo().stream()
+                    .filter(f -> isFormatDita(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format))
+                    .forEach(this::processFile);
 
             job.write();
         } catch (final RuntimeException e) {
@@ -137,7 +135,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
             return;
         }
-        logger.info("Processing " + f.src);
+        logger.info("Processing " + f.src + " to " + outputFile.toURI());
 
         final Set<URI> schemaSet = dic.get(f.uri);
         if (schemaSet != null && !schemaSet.isEmpty()) {
