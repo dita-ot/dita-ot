@@ -106,10 +106,8 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         if (rootClass == null) {
             rootClass = new DitaClass(classValue);
         }
-        // when meets topic tag
         if (TOPIC_TOPIC.matches(classValue)) {
             topicId = atts.getValue(ATTRIBUTE_NAME_ID);
-            // relpace place holder with first topic id
             final String filename = currentFile.toString() + QUESTION;
             for (final ExportAnchor e: exportAnchors) {
                 if (e.topicids.contains(filename)) {
@@ -129,45 +127,29 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
                 pluginMap.put("pluginId", set);
             }
         } else if (MAP_TOPICMETA.matches(classValue) || TOPIC_PROLOG.matches(classValue)) {
-            // merge multiple exportanchors into one
-            // Each <topicref> can only have one <topicmeta>.
-            // Each <topic> can only have one <prolog>
-            // and <metadata> can have more than one exportanchors
             topicMetaSet.add(qName);
         } else if (DELAY_D_EXPORTANCHORS.matches(classValue)) {
             hasExport = true;
-            // If current file is a ditamap file
             if (rootClass != null && rootClass.matches(MAP_MAP)) {
-                // if dita file's extension name is ".xml"
                 currentExportAnchor = new ExportAnchor(topicHref);
-                // if <exportanchors> is defined in topicmeta(topicref), there is only one topic id
                 currentExportAnchor.topicids.add(topicId);
-            // If current file is topic file
             } else if (rootClass == null || rootClass.matches(TOPIC_TOPIC)) {
                 currentExportAnchor = new ExportAnchor(currentFile);
-                // if <exportanchors> is defined in metadata(topic), there can be many topic ids
                 currentExportAnchor.topicids.add(topicId);
                 shouldAppendEndTag = true;
             }
         } else if (DELAY_D_ANCHORKEY.matches(classValue)) {
-            // create keyref element in the StringBuilder
             // TODO in topic file is no keys
             final String keyref = atts.getValue(ATTRIBUTE_NAME_KEYREF);
             currentExportAnchor.keys.add(keyref);
         } else if (DELAY_D_ANCHORID.matches(classValue)) {
-            // create keyref element in the StringBuilder
             final String id = atts.getValue(ATTRIBUTE_NAME_ID);
-            // If current file is a ditamap file
-            // The id can only be element id within a topic
             if (rootClass != null && rootClass.matches(MAP_MAP)) {
-                // id shouldn't be same as topic id in the case of duplicate insert
                 if (!topicId.equals(id)) {
                     currentExportAnchor.ids.add(id);
                 }
             } else if (rootClass == null || rootClass.matches(TOPIC_TOPIC)) {
-                // id shouldn't be same as topic id in the case of duplicate insert
                 if (!topicId.equals(id)) {
-                    // topic id found
                     currentExportAnchor.ids.add(id);
                 }
             }
@@ -187,13 +169,11 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
             return;
         }
 
-        // external resource is filtered here.
         final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        if (ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
-                || attrValue.toString().contains(COLON_DOUBLE_SLASH) || attrValue.toString().startsWith(SHARP)) {
+        if (isExternal(attrValue, attrScope)) {
             return;
         }
-        // For only format of the href is dita topic
+
         String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         if (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat)) {
             final File target = toFile(attrValue);
@@ -203,11 +183,9 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
                 topicHref = currentDir.resolve(attrValue);
             }
 
-            // attrValue has topicId
             if (attrValue.getFragment() != null) {
                 topicId = attrValue.getFragment();
             } else {
-                // get the first topicId(vaild href file)
                 if (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA) || attrFormat.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
                     topicId = topicHref + QUESTION;
                 }
@@ -218,16 +196,18 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         }
     }
 
-	@Override
+    private boolean isExternal(final URI attrValue, final String attrScope) {
+        return ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) || ATTR_SCOPE_VALUE_PEER.equals(attrScope)
+                || attrValue.toString().contains(COLON_DOUBLE_SLASH) || attrValue.toString().startsWith(SHARP);
+    }
+
+    @Override
 	public void endElement(final String uri, final String localName, final String qName)
 			throws SAXException {
-        // <exportanchors> over should write </file> tag
         if (topicMetaSet.contains(qName) && hasExport) {
-            // If current file is a ditamap file
             if (rootClass != null && rootClass.matches(MAP_MAP)) {
                 exportAnchors.add(currentExportAnchor);
                 currentExportAnchor = null;
-                // If current file is topic file
             }
             hasExport = false;
             topicMetaSet.clear();
@@ -244,7 +224,6 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         if ((rootClass == null || rootClass.matches(TOPIC_TOPIC)) && shouldAppendEndTag) {
             exportAnchors.add(currentExportAnchor);
             currentExportAnchor = null;
-            // should reset
             shouldAppendEndTag = false;
         }
         
