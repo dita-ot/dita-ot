@@ -802,21 +802,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      * @param relativeRootFile list value
      */
     private void writeListFile(final File inputfile, final String relativeRootFile) {
-        Writer bufferedWriter = null;
-        try {
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)));
+        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)))) {
             bufferedWriter.write(relativeRootFile);
             bufferedWriter.flush();
         } catch (final IOException e) {
-            logger.error(e.getMessage(), e) ;
-        } finally {
-            if (bufferedWriter != null) {
-                try {
-                    bufferedWriter.close();
-                } catch (final IOException e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-            }
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -858,10 +848,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             final File pluginIdFile = new File(job.tempDir, FILE_NAME_PLUGIN_XML);
             final DelayConrefUtils delayConrefUtils = new DelayConrefUtils();
             delayConrefUtils.writeMapToXML(exportAnchorsFilter.getPluginMap(), pluginIdFile);
-            OutputStream exportStream = null;
             XMLStreamWriter export = null;
-            try {
-                exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML));
+            try (OutputStream exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_EXPORT_XML))) {
                 export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
                 export.writeStartDocument();
                 export.writeStartElement("stub");
@@ -887,7 +875,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 }
                 export.writeEndElement();
                 export.writeEndDocument();
-            } catch (final FileNotFoundException e) {
+            } catch (final IOException e) {
                 throw new DITAOTException("Failed to write export anchor file: " + e.getMessage(), e);
             } catch (final XMLStreamException e) {
                 throw new DITAOTException("Failed to serialize export anchor file: " + e.getMessage(), e);
@@ -896,13 +884,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                     try {
                         export.close();
                     } catch (final XMLStreamException e) {
-                        logger.error("Failed to close export anchor file: " + e.getMessage(), e);
-                    }
-                }
-                if (exportStream != null) {
-                    try {
-                        exportStream.close();
-                    } catch (final IOException e) {
                         logger.error("Failed to close export anchor file: " + e.getMessage(), e);
                     }
                 }
@@ -983,9 +964,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         final String fileKey = Constants.REL_FLAGIMAGE_LIST.substring(0, Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + "file";
         prop.setProperty(fileKey, Constants.REL_FLAGIMAGE_LIST.substring(0, Constants.REL_FLAGIMAGE_LIST.lastIndexOf("list")) + ".list");
         final File list = new File(job.tempDir, prop.getProperty(fileKey));
-        Writer bufferedWriter = null;
-        try {
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
+        try (Writer bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)))) {
             final Iterator<URI> it = newSet.iterator();
             while (it.hasNext()) {
                 bufferedWriter.write(it.next().getPath());
@@ -994,17 +973,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 }
             }
             bufferedWriter.flush();
-            bufferedWriter.close();
         } catch (final IOException e) {
             logger.error(e.getMessage(), e) ;
-        } finally {
-            if (bufferedWriter != null) {
-                try {
-                    bufferedWriter.close();
-                } catch (final IOException e) {
-                    logger.error(e.getMessage(), e) ;
-                }
-            }
         }
 
         prop.setProperty(Constants.REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
