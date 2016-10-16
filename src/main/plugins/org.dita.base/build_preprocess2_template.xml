@@ -170,8 +170,8 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
   
-  <target name="map-profile" depends="topic-profile-check"
-    unless="preprocess.profile.skip"
+  <target name="map-profile" depends="map-profile-check"
+    unless="preprocess.map-profile.skip"
     description="Profile input map files">
     <pipeline message="Profile filtering." taskname="profile">
       <module class="org.dita.dost.module.FilterModule">
@@ -180,6 +180,12 @@ See the accompanying LICENSE file for applicable license.
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
+  </target>
+
+  <target name="map-profile-check">
+    <condition property="preprocess.map-profile.skip">
+      <istrue value="${filter-on-parse}"/>
+    </condition>
   </target>
   
   <target name="gen-list-debug-filter"
