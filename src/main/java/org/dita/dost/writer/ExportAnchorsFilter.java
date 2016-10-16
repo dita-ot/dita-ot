@@ -12,12 +12,7 @@ import static org.dita.dost.util.URLUtils.*;
 
 import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.StringUtils;
@@ -31,14 +26,14 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
 
     /** Basedir of the current parsing file */
     private URI currentDir = null;
-    /** Topicmeta set for merge multiple exportanchors into one. Each topicmeta/prolog can define many exportanchors */
-    private final Set<String> topicMetaSet = new HashSet<>(16);
+    private Deque<String> stack = new ArrayDeque<>();
     /** Flag to show whether a file has <exportanchors> tag */
     private boolean hasExport = false;
     private final List<ExportAnchor> exportAnchors = new ArrayList<>();
     private ExportAnchor currentExportAnchor;
     /** Refered topic id */
-    private String topicId = "";
+    private String topicId;
+    /** Absolute path to root file */
     private URI rootFilePath = null;
     /** Map to store plugin id */
     private final Map<String, Set<String>> pluginMap = new HashMap<>();
@@ -61,6 +56,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      * @param inputFile absolute path to root file
      */
     public void setInputFile(final URI inputFile) {
+        assert inputFile.isAbsolute();
         this.rootFilePath = inputFile;
     }
     
@@ -70,6 +66,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      * @param currentFile absolute path to current file
      */
     public void setCurrentFile(final URI currentFile) {
+        assert currentFile.isAbsolute();
         super.setCurrentFile(currentFile);
         currentDir = currentFile.resolve(".");
     }
@@ -103,6 +100,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
 	public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
 			throws SAXException {
 	    final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        stack.addFirst(classValue);
         if (rootClass == null) {
             rootClass = new DitaClass(classValue);
         }
@@ -126,14 +124,12 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
                 final Set<String> set = StringUtils.restoreSet(pluginId, COMMA);
                 pluginMap.put("pluginId", set);
             }
-        } else if (MAP_TOPICMETA.matches(classValue) || TOPIC_PROLOG.matches(classValue)) {
-            topicMetaSet.add(qName);
         } else if (DELAY_D_EXPORTANCHORS.matches(classValue)) {
             hasExport = true;
-            if (rootClass != null && rootClass.matches(MAP_MAP)) {
+            if (MAP_MAP.matches(rootClass)) {
                 currentExportAnchor = new ExportAnchor(topicHref);
                 currentExportAnchor.topicids.add(topicId);
-            } else if (rootClass == null || rootClass.matches(TOPIC_TOPIC)) {
+            } else if (rootClass == null || TOPIC_TOPIC.matches(rootClass)) {
                 currentExportAnchor = new ExportAnchor(currentFile);
                 currentExportAnchor.topicids.add(topicId);
                 shouldAppendEndTag = true;
@@ -144,11 +140,11 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
             currentExportAnchor.keys.add(keyref);
         } else if (DELAY_D_ANCHORID.matches(classValue)) {
             final String id = atts.getValue(ATTRIBUTE_NAME_ID);
-            if (rootClass != null && rootClass.matches(MAP_MAP)) {
+            if (MAP_MAP.matches(rootClass)) {
                 if (!topicId.equals(id)) {
                     currentExportAnchor.ids.add(id);
                 }
-            } else if (rootClass == null || rootClass.matches(TOPIC_TOPIC)) {
+            } else if (rootClass == null || TOPIC_TOPIC.matches(rootClass)) {
                 if (!topicId.equals(id)) {
                     currentExportAnchor.ids.add(id);
                 }
@@ -177,11 +173,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
         String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         if (attrFormat == null || ATTR_FORMAT_VALUE_DITA.equals(attrFormat)) {
             final File target = toFile(attrValue);
-            if (target.isAbsolute()) {
-                topicHref = attrValue;
-            } else {
-                topicHref = currentDir.resolve(attrValue);
-            }
+            topicHref = target.isAbsolute() ? attrValue : currentDir.resolve(attrValue);
 
             if (attrValue.getFragment() != null) {
                 topicId = attrValue.getFragment();
@@ -204,15 +196,16 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
     @Override
 	public void endElement(final String uri, final String localName, final String qName)
 			throws SAXException {
-        if (topicMetaSet.contains(qName) && hasExport) {
-            if (rootClass != null && rootClass.matches(MAP_MAP)) {
+        final String classValue = stack.removeFirst();
+        if ((MAP_TOPICMETA.matches(classValue) || TOPIC_PROLOG.matches(classValue))
+                && hasExport) {
+            if (MAP_MAP.matches(rootClass)) {
                 exportAnchors.add(currentExportAnchor);
                 currentExportAnchor = null;
             }
             hasExport = false;
-            topicMetaSet.clear();
         }
-	    
+
 	    getContentHandler().endElement(uri, localName, qName);
 	}
 	
@@ -221,7 +214,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
      */
     @Override
     public void endDocument() throws SAXException {
-        if ((rootClass == null || rootClass.matches(TOPIC_TOPIC)) && shouldAppendEndTag) {
+        if ((rootClass == null || TOPIC_TOPIC.matches(rootClass)) && shouldAppendEndTag) {
             exportAnchors.add(currentExportAnchor);
             currentExportAnchor = null;
             shouldAppendEndTag = false;
