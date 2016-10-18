@@ -120,7 +120,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     /** Absolute path to input file. */
     URI rootFile;
     /** Subject scheme key map. Key is key value, value is key definition. */
-    private Map<String, KeyDef> schemekeydefMap;
+    private Map<String, KeyDef> schemekeydefMap = new HashMap<>();
     /** Subject scheme absolute file paths. */
     private final Set<URI> schemeSet = new HashSet<>(128);
     /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
@@ -303,15 +303,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 ditavalFile = new File(basedir, ditavalFile.getPath()).getAbsoluteFile();
             }
         }
-
-        // create the keydef file for scheme files
-        schemekeydefMap = new HashMap<>();
-
     }
 
     void processWaitList() throws DITAOTException {
         while (!waitList.isEmpty()) {
-            processFile(waitList.remove(), null);
+            readFile(waitList.remove(), null);
         }
     }
 
@@ -329,7 +325,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      * @param parseFile file to parse, may be {@code null}
      * @throws DITAOTException if processing failed
      */
-    void processFile(final Reference ref, final URI parseFile) throws DITAOTException {
+    void readFile(final Reference ref, final URI parseFile) throws DITAOTException {
         currentFile = ref.filename;
         assert currentFile.isAbsolute();
         final URI src = parseFile != null ? parseFile : currentFile;
@@ -338,7 +334,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         // FIXME: doesn't work with uplevels without hashed temporary files
         outputFile = new File(job.tempDirURI.resolve(rel));
         validateMap = Collections.EMPTY_MAP;
-//        defaultValueMap = Collections.EMPTY_MAP;
+        defaultValueMap = Collections.EMPTY_MAP;
         logger.info("Processing " + currentFile);
         final String[] params = { currentFile.toString() };
 
@@ -782,7 +778,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
         writeExportAnchors();
 
-        KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), addFilePrefix(schemekeydefMap.values()));
+//        KeyDef.writeKeydef(new File(job.tempDir, SUBJECT_SCHEME_KEYDEF_LIST_FILE), addFilePrefix(schemekeydefMap.values()));
     }
 
     /** Filter copy-to where target is used directly. */
@@ -994,7 +990,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
 
 
-    void processFile(final FileInfo f) {
+    void writeFile(final FileInfo f) {
         currentFile = f.src;
         if (f.src == null || !exists(f.src) || !f.src.equals(f.result)) {
             logger.warn("Ignoring a copy-to file " + f.result);
@@ -1008,22 +1004,22 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
         logger.info("Processing " + f.src + " to " + outputFile.toURI());
 
-        final Set<URI> schemaSet = dic.get(f.uri);
-        if (schemaSet != null && !schemaSet.isEmpty()) {
-            logger.debug("Loading subject schemes");
-            subjectSchemeReader.reset();
-            for (final URI schema : schemaSet) {
-                subjectSchemeReader.loadSubjectScheme(new File(job.tempDirURI.resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
-            }
-            validateMap = subjectSchemeReader.getValidValuesMap();
-            defaultValueMap = subjectSchemeReader.getDefaultValueMap();
-        } else {
-            validateMap = emptyMap();
-            defaultValueMap = emptyMap();
-        }
-        if (profilingEnabled) {
-            filterUtils = baseFilterUtils.refine(subjectSchemeReader.getSubjectSchemeMap());
-        }
+//        final Set<URI> schemaSet = dic.get(f.uri);
+//        if (schemaSet != null && !schemaSet.isEmpty()) {
+//            logger.debug("Loading subject schemes");
+//            subjectSchemeReader.reset();
+//            for (final URI schema : schemaSet) {
+//                subjectSchemeReader.loadSubjectScheme(new File(job.tempDirURI.resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
+//            }
+//            validateMap = subjectSchemeReader.getValidValuesMap();
+//            defaultValueMap = subjectSchemeReader.getDefaultValueMap();
+//        } else {
+//            validateMap = emptyMap();
+//            defaultValueMap = emptyMap();
+//        }
+//        if (profilingEnabled) {
+//            filterUtils = baseFilterUtils.refine(subjectSchemeReader.getSubjectSchemeMap());
+//        }
 
         InputSource in = null;
         Result out = null;
@@ -1101,28 +1097,28 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
 
-        // Output subject schemas
-        outputSubjectScheme();
-        subjectSchemeReader = new SubjectSchemeReader();
-        subjectSchemeReader.setLogger(logger);
-        subjectSchemeReader.setJob(job);
-        dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
-
-        if (profilingEnabled) {
-            final DitaValReader filterReader = new DitaValReader();
-            filterReader.setLogger(logger);
-            filterReader.setJob(job);
-            filterReader.initXMLReader(setSystemId);
-            Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
-            if (ditavalFile != null) {
-                filterReader.read(ditavalFile.getAbsoluteFile());
-                filterMap = filterReader.getFilterMap();
-            } else {
-                filterMap = Collections.EMPTY_MAP;
-            }
-            baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
-            baseFilterUtils.setLogger(logger);
-        }
+//        // Output subject schemas
+//        outputSubjectScheme();
+//        subjectSchemeReader = new SubjectSchemeReader();
+//        subjectSchemeReader.setLogger(logger);
+//        subjectSchemeReader.setJob(job);
+//        dic = SubjectSchemeReader.readMapFromXML(new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY));
+//
+//        if (profilingEnabled) {
+//            final DitaValReader filterReader = new DitaValReader();
+//            filterReader.setLogger(logger);
+//            filterReader.setJob(job);
+//            filterReader.initXMLReader(setSystemId);
+//            Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
+//            if (ditavalFile != null) {
+//                filterReader.read(ditavalFile.getAbsoluteFile());
+//                filterMap = filterReader.getFilterMap();
+//            } else {
+//                filterMap = Collections.EMPTY_MAP;
+//            }
+//            baseFilterUtils = new FilterUtils(printTranstype.contains(transtype), filterMap);
+//            baseFilterUtils.setLogger(logger);
+//        }
         initXMLReader(ditaDir, validate);
         initFilters();
     }

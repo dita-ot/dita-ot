@@ -70,7 +70,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
             job.getFileInfo().stream()
                     .filter(fi -> isFormatDita(fi.format))
-                    .forEach(this::processFile);
+                    .forEach(this::writeFile);
 
             job.write();
         } catch (final RuntimeException | DITAOTException e) {
@@ -98,7 +98,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
      * @param parseFile file to parse, may be {@code null}
      * @throws DITAOTException if processing failed
      */
-    void processFile(final Reference ref, final URI parseFile) throws DITAOTException {
+    void readFile(final Reference ref, final URI parseFile) throws DITAOTException {
         currentFile = ref.filename;
         assert currentFile.isAbsolute();
         final URI src = parseFile != null ? parseFile : currentFile;

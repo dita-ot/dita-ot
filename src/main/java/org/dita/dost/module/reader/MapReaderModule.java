@@ -54,7 +54,7 @@ public final class MapReaderModule extends AbstractReaderModule {
 
             job.getFileInfo().stream()
                     .filter(fi -> ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format))
-                    .forEach(this::processFile);
+                    .forEach(this::writeFile);
 
             job.write();
         } catch (final RuntimeException | DITAOTException e) {
