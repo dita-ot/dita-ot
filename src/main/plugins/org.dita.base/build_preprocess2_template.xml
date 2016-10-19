@@ -12,7 +12,7 @@ See the accompanying LICENSE file for applicable license.
     dita:depends="{depend.preprocess.pre},
                   preprocess2.init,
                   
-                  map-gen-list-debug-filter,
+                  map-reader,
                   map-mapref,
                   map-branch-filter,
                   map-keyref,
@@ -20,7 +20,7 @@ See the accompanying LICENSE file for applicable license.
                   map-conref,
                   map-profile,
     
-                  gen-list-debug-filter,
+                  topic-reader,
                   topic-branch-filter,
                   topic-keyref,
                   topic-copy-to,
@@ -63,9 +63,9 @@ See the accompanying LICENSE file for applicable license.
     </echoxml>
   </target>
   
-  <target name="map-gen-list-debug-filter"
+  <target name="map-reader"
     description="Generate lists, debug, and filter input map files">
-    <pipeline message="Generate list." taskname="gen-list-debug-filter"
+    <pipeline message="Generate list." taskname="map-reader"
               inputmap="${args.input}">
       <module class="org.dita.dost.module.reader.MapReaderModule">
         <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
@@ -188,11 +188,11 @@ See the accompanying LICENSE file for applicable license.
     </condition>
   </target>
   
-  <target name="gen-list-debug-filter"
+  <target name="topic-reader"
     dita:depends="{depend.preprocess.gen-list.pre},{depend.preprocess.debug-filter.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Generate file list">
-    <pipeline message="Generate list." taskname="gen-list">
+    <pipeline message="Generate list." taskname="topic-reader">
       <module class="org.dita.dost.module.reader.TopicReaderModule">
         <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
