@@ -64,13 +64,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
             readStartFile();
             processWaitList();
 
-//            updateBaseDirectory();
             handleConref();
             outputResult();
-
-//            job.getFileInfo().stream()
-//                    .filter(fi -> isFormatDita(fi.format))
-//                    .forEach(this::writeFile);
 
             job.write();
         } catch (final RuntimeException | DITAOTException e) {
@@ -84,75 +79,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
     @Override
     public void readStartFile() throws DITAOTException {
-        final FileInfo fi = job.getFileInfo(job.getInputFile());
-        final URI tmp = job.tempDirURI.resolve(fi.uri);
-//        processFile(new Reference(rootFile), tmp);
         getStartDocuments().stream().forEach(this::addToWaitList);
     }
-
-
-//    /**
-//     * Read a file and process it for list information.
-//     *
-//     * @param ref       system path of the file to process
-//     * @param parseFile file to parse, may be {@code null}
-//     * @throws DITAOTException if processing failed
-//     */
-//    void readFile(final Reference ref, final URI parseFile) throws DITAOTException {
-//        currentFile = ref.filename;
-//        assert currentFile.isAbsolute();
-//        final URI src = parseFile != null ? parseFile : currentFile;
-//        assert src.isAbsolute();
-//        final URI rel = job.getInputDir().relativize(ref.filename);
-//        outputFile = new File(parseFile != null ? parseFile : job.tempDirURI.resolve(rel));
-//        validateMap = emptyMap();
-//        logger.info("Processing " + currentFile);
-//        final String[] params = {currentFile.toString()};
-//
-//        try {
-//            XMLReader xmlSource = getXMLReader();
-//            for (final XMLFilter f : getProcessingPipe(currentFile)) {
-//                f.setParent(xmlSource);
-//                f.setEntityResolver(CatalogUtils.getCatalogResolver());
-//                xmlSource = f;
-//            }
-//            xmlSource.setContentHandler(nullHandler);
-//
-//            xmlSource.parse(src.toString());
-//
-//            if (listFilter.isValidInput()) {
-//                processParseResult(currentFile);
-//                categorizeCurrentFile(ref);
-//            }
-//        } catch (final RuntimeException e) {
-//            throw e;
-//        } catch (final SAXParseException sax) {
-//            final Exception inner = sax.getException();
-//            if (inner != null && inner instanceof DITAOTException) {
-//                throw (DITAOTException) inner;
-//            }
-//            throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + sax.getMessage(), sax);
-//        } catch (final FileNotFoundException e) {
-//            throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTA069F", params).toString(), e);
-//        } catch (final Exception e) {
-//            throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ012F", params).toString() + ": " + e.getMessage(), e);
-//        }
-//
-////        if (!listFilter.isValidInput() && true) {
-////            if (validate) {
-////                // stop the build if all content in the input file was filtered out.
-////                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ022F", params).toString());
-////            } else {
-////                // stop the build if the content of the file is not valid.
-////                throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ034F", params).toString());
-////            }
-////        }
-//
-//        doneList.add(currentFile);
-//        listFilter.reset();
-//        keydefFilter.reset();
-//    }
-
 
     private List<Reference> getStartDocuments() throws DITAOTException {
         final List<Reference> res = new ArrayList<>();
