@@ -7,6 +7,7 @@
  */
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
@@ -142,6 +143,11 @@ public final class Job {
         jobFile = new File(tempDir, JOB_FILE);
         prop = new HashMap<>();
         read();
+        for (Map.Entry<String, String> e : configuration.entrySet()) {
+            if (!prop.containsKey(e.getKey())) {
+                prop.put(e.getKey(), e.getValue());
+            }
+        }
     }
 
     /**
