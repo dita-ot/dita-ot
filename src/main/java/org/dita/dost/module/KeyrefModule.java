@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.w3c.dom.Attr;
@@ -45,7 +46,7 @@ import javax.xml.transform.stream.StreamResult;
  */
 final class KeyrefModule extends AbstractPipelineModuleImpl {
 
-    private final GenMapAndTopicListModule.TempFileNameScheme tempFileNameScheme;
+    private TempFileNameScheme tempFileNameScheme;
     /** Delayed conref utils. */
     private DelayConrefUtils delayConrefUtils;
     private String transtype;
@@ -53,12 +54,15 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final Map<URI, Integer> usage = new HashMap<>();
     private TopicFragmentFilter topicFragmentFilter;
 
-    public KeyrefModule() {
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
         try {
-            tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+        tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
     /**

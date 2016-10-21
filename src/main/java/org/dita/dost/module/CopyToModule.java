@@ -36,22 +36,19 @@ import static org.dita.dost.util.URLUtils.*;
  */
 public final class CopyToModule extends AbstractPipelineModuleImpl {
 
-    private final TempFileNameScheme tempFileNameScheme;
+    private TempFileNameScheme tempFileNameScheme;
     private boolean forceUnique;
     private ForceUniqueFilter forceUniqueFilter;
     private final CopyToReader reader = new CopyToReader();
 
-    public CopyToModule() {
-        try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 

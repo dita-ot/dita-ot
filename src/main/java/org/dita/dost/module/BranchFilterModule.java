@@ -62,7 +62,7 @@ class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     private final DocumentBuilder builder;
     private final DitaValReader ditaValReader;
-    private final TempFileNameScheme tempFileNameScheme;
+    private TempFileNameScheme tempFileNameScheme;
     private final Map<URI, FilterUtils> filterCache = new HashMap<>();
     /** Current map being processed, relative to temporary directory */
     private URI map;
@@ -73,11 +73,6 @@ class BranchFilterModule extends AbstractPipelineModuleImpl {
         builder = XMLUtils.getDocumentBuilder();
         ditaValReader = new DitaValReader();
         ditaValReader.initXMLReader(true);
-        try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
     
     @Override
@@ -89,6 +84,11 @@ class BranchFilterModule extends AbstractPipelineModuleImpl {
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 

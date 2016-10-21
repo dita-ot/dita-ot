@@ -68,7 +68,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     public static final String CHUNK_TO_NAVIGATION = "to-navigation";
     public static final String CHUNK_PREFIX = "Chunk";
 
-    private final TempFileNameScheme tempFileNameScheme;
+    private TempFileNameScheme tempFileNameScheme;
     private Collection<String> rootChunkOverride;
     private String defaultChunkByToken;
 
@@ -86,21 +86,14 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     private final ChunkFilenameGenerator chunkFilenameGenerator = ChunkFilenameGeneratorFactory.newInstance();
 
-    /**
-     * Constructor.
-     */
-    public ChunkMapReader() {
-        super();
-        try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 

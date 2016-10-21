@@ -11,6 +11,7 @@ package org.dita.dost.writer;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.GenMapAndTopicListModule;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.TopicIdParser;
@@ -83,25 +84,17 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
     Map<String, String> currentParsingFileTopicIDChangeTable;
 
-    final GenMapAndTopicListModule.TempFileNameScheme tempFileNameScheme;
+    TempFileNameScheme tempFileNameScheme;
     private ChunkFilenameGenerator chunkFilenameGenerator;
-
-    /**
-     * Constructor.
-     */
-    AbstractChunkTopicParser() {
-        super();
-        try {
-            tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
 
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 

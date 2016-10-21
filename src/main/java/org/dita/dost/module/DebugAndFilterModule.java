@@ -89,14 +89,17 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private FilterUtils baseFilterUtils;
     private DitaWriterFilter ditaWriterFilter;
     private TopicFragmentFilter topicFragmentFilter;
-    private final TempFileNameScheme tempFileNameScheme;
+    private TempFileNameScheme tempFileNameScheme;
 
-    public DebugAndFilterModule() {
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
         try {
-            tempFileNameScheme = (TempFileNameScheme) getClass().forName(configuration.get("temp-file-name-scheme")).newInstance();
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+        tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
     @Override
