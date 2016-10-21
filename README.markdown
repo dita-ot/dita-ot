@@ -36,7 +36,7 @@ Usage
 
         src/main/bin/dita [options]
         
-   See the [documentation](http://www.dita-ot.org/dev/) for arguments and [options](http://www.dita-ot.org/dev/getting-started/first-build-using-dita-command.html).
+   See the [documentation](http://www.dita-ot.org/dev/) for arguments and [options](http://www.dita-ot.org/dev/user-guide/build-using-dita-command.html).
 
 Distribution
 ------------
