@@ -36,7 +36,7 @@ See the accompanying LICENSE file for applicable license.
                   topic-flag-module,
                   
                   map-clean-map,
-
+                  clean-preprocess,
                   copy-files,
 
                   {depend.preprocess.post}"
