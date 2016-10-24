@@ -24,10 +24,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.*;
@@ -43,16 +40,15 @@ import static org.dita.dost.util.XMLUtils.transform;
 public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     private final LinkFilter filter = new LinkFilter();
+    private final MapCleanFilter mapFilter = new MapCleanFilter();
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        final URI base = job.getInputDir();
+        init();
 
+        final URI base = job.getInputDir();
         final Collection<FileInfo> fis = job.getFileInfo().stream()
                 .collect(Collectors.toList());
-
-        filter.setJob(job);
-        filter.setLogger(logger);
         final Collection<FileInfo> res = new ArrayList<>(fis.size());
         for (final FileInfo fi : fis) {
             try {
@@ -62,8 +58,8 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                     final URI rel = base.relativize(fi.result);
                     final File destFile = new File(job.tempDirURI.resolve(rel));
                     final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
-                    if (fi.format.equals("coderef")) {
-                        // SKIP
+                    if (fi.format != null && fi.format.equals("coderef")) {
+                        logger.debug("Skip coderef");
                     } else if (!processingPipe.isEmpty()) {
                         logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
                         transform(srcFile.toURI(), destFile.toURI(), processingPipe);
@@ -72,7 +68,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                             FileUtils.deleteQuietly(srcFile);
                         }
                     } else if (!srcFile.equals(destFile)) {
-                        logger.info("Copying " + srcFile.toURI() + " to " + destFile.toURI());
+                        logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
                         FileUtils.moveFile(srcFile, destFile);
                     }
                     builder.uri(rel);
@@ -101,6 +97,14 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
+    private void init() {
+        filter.setJob(job);
+        filter.setLogger(logger);
+
+        mapFilter.setJob(job);
+        mapFilter.setLogger(logger);
+    }
+
     private List<XMLFilter> getProcessingPipe(final FileInfo fi, final File srcFile, final File destFile) {
         final List<XMLFilter> res = new ArrayList<>();
 
@@ -109,7 +113,11 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             filter.setDestFile(destFile.toURI());
             res.add(filter);
         }
-        
+
+        if (fi.format != null && fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+            res.add(mapFilter);
+        }
+
         return res;
     }
 
@@ -172,6 +180,87 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             super.setJob(job);
             base = job.getInputDir();
         }
+    }
+
+    private enum Keep {
+        RETAIN, DISCARD, DISCARD_BRANCH
+    }
+
+    private class MapCleanFilter extends AbstractXMLFilter {
+
+        private final Queue<Keep> stack = new ArrayDeque<>();
+
+        @Override
+        public void startDocument() throws SAXException {
+            stack.clear();
+            getContentHandler().startDocument();
+        }
+
+        @Override
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+                throws SAXException {
+            final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
+            if (!stack.isEmpty() && stack.element() == Keep.DISCARD_BRANCH) {
+                stack.add(Keep.DISCARD_BRANCH);
+            } else if (SUBMAP.matches(cls)) {
+                stack.add(Keep.DISCARD);
+            } else if (MAPGROUP_D_KEYDEF.matches(cls)) {
+                stack.add(Keep.DISCARD_BRANCH);
+            } else {
+                stack.add(Keep.RETAIN);
+            }
+
+            if (stack.isEmpty() || stack.element() == Keep.RETAIN) {
+                getContentHandler().startElement(uri, localName, qName, atts);
+            }
+        }
+
+        @Override
+        public void endElement(final String uri, final String localName, final String qName)
+                throws SAXException {
+            if (stack.element() == Keep.RETAIN) {
+                getContentHandler().endElement(uri, localName, qName);
+            }
+        }
+
+        @Override
+        public void characters(char ch[], int start, int length)
+                throws SAXException {
+            if (stack.element() != Keep.DISCARD_BRANCH) {
+                getContentHandler().characters(ch, start, length);
+            }
+        }
+
+        @Override
+        public void ignorableWhitespace(char ch[], int start, int length)
+                throws SAXException {
+            if (stack.element() != Keep.DISCARD_BRANCH) {
+                getContentHandler().ignorableWhitespace(ch, start, length);
+            }
+        }
+
+        @Override
+        public void processingInstruction(String target, String data)
+                throws SAXException {
+            if (stack.isEmpty() || stack.element() != Keep.DISCARD_BRANCH) {
+                getContentHandler().processingInstruction(target, data);
+            }
+        }
+
+        @Override
+        public void skippedEntity(String name)
+                throws SAXException {
+            if (stack.element() != Keep.DISCARD_BRANCH) {
+                getContentHandler().skippedEntity(name);
+            }
+        }
+
+//    <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle ')]">
+//      <xsl:call-template name="output-message">
+//        <xsl:with-param name="id" select="'DOTX072I'"/>
+//      </xsl:call-template>
+//    </xsl:template>
+
     }
 
 }

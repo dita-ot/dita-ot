@@ -37,7 +37,6 @@ See the accompanying LICENSE file for applicable license.
                   topic-topicpull,
                   topic-flag-module,
                   
-                  map-clean-map,
                   clean-preprocess,
                   copy-files,
 
