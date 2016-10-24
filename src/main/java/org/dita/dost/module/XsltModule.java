@@ -100,14 +100,14 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             final File in = new File(baseDir, include.getPath());
             File out = new File(destDir, include.getPath());
             if (mapper != null) {
-            	final String[] outs = mapper.mapFileName(out.getAbsolutePath());
+            	final String[] outs = mapper.mapFileName(include.getPath());
             	if (outs == null) {
             		continue;
             	}
             	if (outs.length > 1) {
             		throw new RuntimeException("XSLT module only support one to one output mapping");
             	}
-            	out = new File(outs[0]);
+            	out = new File(destDir, outs[0]);
             }
             final boolean same = in.getAbsolutePath().equals(out.getAbsolutePath());
             final File tmp = same ? new File(out.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis())) : out; 
