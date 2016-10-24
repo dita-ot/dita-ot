@@ -9,6 +9,8 @@ See the accompanying LICENSE file for applicable license.
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="ditaot-preprocess2">
 
   <target name="preprocess2"
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+    description="Preprocess"
     dita:depends="{depend.preprocess.pre},
                   preprocess2.init,
                   
@@ -39,9 +41,10 @@ See the accompanying LICENSE file for applicable license.
                   clean-preprocess,
                   copy-files,
 
-                  {depend.preprocess.post}"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    description="Preprocess" />
+                  {depend.preprocess.post}">
+    <!-- Deprecated since 2.4 -->
+    <property name="user.input.file.listfile" value="usr.input.file.list"/>
+  </target>
   
   <target name="preprocess2.init">
     <dita-ot-fail id="DOTA002F">

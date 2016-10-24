@@ -417,7 +417,11 @@ public final class ExtensibleAntInvoker extends Task {
         }
         
         public void addConfiguredMapper(final Mapper mapper) {
-            this.mapper = mapper;
+            if (this.mapper != null) {
+                throw new BuildException("Cannot define more than one mapper");
+            } else {
+                this.mapper = mapper;
+            }
         }
 
         public void addConfiguredIncludesFile(final IncludesFile includesFile) {
