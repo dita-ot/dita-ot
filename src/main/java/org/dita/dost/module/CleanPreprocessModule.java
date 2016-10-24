@@ -18,6 +18,7 @@ import org.dita.dost.util.URLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.dita.dost.util.Constants.*;
@@ -40,6 +42,8 @@ import static org.dita.dost.util.XMLUtils.transform;
  */
 public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
+    private final LinkFilter filter = new LinkFilter();
+
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         final URI base = job.getInputDir();
@@ -47,7 +51,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         final Collection<FileInfo> fis = job.getFileInfo().stream()
                 .collect(Collectors.toList());
 
-        final LinkFilter filter = new LinkFilter();
         filter.setJob(job);
         filter.setLogger(logger);
         final Collection<FileInfo> res = new ArrayList<>(fis.size());
@@ -58,17 +61,16 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                 if (srcFile.exists()) {
                     final URI rel = base.relativize(fi.result);
                     final File destFile = new File(job.tempDirURI.resolve(rel));
-                    if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA) || fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+                    final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
+                    if (fi.format.equals("coderef")) {
+                        // SKIP
+                    } else if (!processingPipe.isEmpty()) {
                         logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
-                        filter.setCurrentFile(srcFile.toURI());
-                        filter.setDestFile(destFile.toURI());
-                        transform(srcFile.toURI(), destFile.toURI(), Collections.singletonList(filter));
+                        transform(srcFile.toURI(), destFile.toURI(), processingPipe);
                         if (!srcFile.equals(destFile)) {
                             logger.debug("Deleting " + srcFile.toURI());
                             FileUtils.deleteQuietly(srcFile);
                         }
-                    } else if (fi.format.equals("coderef")) {
-                        // SKIP
                     } else if (!srcFile.equals(destFile)) {
                         logger.info("Copying " + srcFile.toURI() + " to " + destFile.toURI());
                         FileUtils.moveFile(srcFile, destFile);
@@ -97,6 +99,18 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         }
 
         return null;
+    }
+
+    private List<XMLFilter> getProcessingPipe(final FileInfo fi, final File srcFile, final File destFile) {
+        final List<XMLFilter> res = new ArrayList<>();
+
+        if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA) || fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+            filter.setCurrentFile(srcFile.toURI());
+            filter.setDestFile(destFile.toURI());
+            res.add(filter);
+        }
+        
+        return res;
     }
 
     private class LinkFilter extends AbstractXMLFilter {
