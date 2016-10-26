@@ -54,10 +54,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         for (final FileInfo fi : fis) {
             try {
                 final FileInfo.Builder builder = new FileInfo.Builder(fi);
-                final File srcFile = new File(job.tempDirURI.resolve(fi.uri)).getCanonicalFile();
+                final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
                 if (srcFile.exists()) {
                     final URI rel = base.relativize(fi.result);
-                    final File destFile = new File(job.tempDirURI.resolve(rel)).getCanonicalFile();
+                    final File destFile = new File(job.tempDirURI.resolve(rel));
                     if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA) || fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
                         logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
                         filter.setCurrentFile(srcFile.toURI());
