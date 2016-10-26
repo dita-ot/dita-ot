@@ -1775,12 +1775,12 @@ See the accompanying LICENSE file for applicable license.
     <!-- Revised design with DITA-OT 1.5: include class ancestry if requested; 
          combine user output class with element default, giving priority to the user value. -->
     <xsl:variable name="classes" as="xs:string*"
-                  select="tokenize($ancestry, '/s+'),
+                  select="tokenize($ancestry, '\s+'),
                           $using-output-class,
                           $draft-revs, 
-                          tokenize($outputclass-attribute, '/s+')"/>
+                          tokenize($outputclass-attribute, '\s+')"/>
     <xsl:if test="exists($classes)">
-      <xsl:attribute name="class" select="string-join($classes, ' ')"/>
+      <xsl:attribute name="class" select="string-join(distinct-values($classes), ' ')"/>
     </xsl:if>
   </xsl:template>
     
