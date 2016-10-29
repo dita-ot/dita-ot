@@ -17,12 +17,14 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.module.XmlFilterModule;
+import org.dita.dost.module.XmlFilterModule.FilterPair;
 import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.AbstractXMLFilter;
 
 import java.io.BufferedReader;
@@ -30,9 +32,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.unmodifiableList;
 import static org.dita.dost.util.Constants.*;
 
 /**
@@ -197,14 +200,7 @@ public final class ExtensibleAntInvoker extends Task {
                 } else if (m instanceof SaxPipe) {
                     final SaxPipe fm = (SaxPipe) m;
                     final XmlFilterModule module = new XmlFilterModule();
-                    final List<String> format = fm.getFormat();
-                    module.setFileInfoFilter(new FileInfo.Filter<FileInfo>() {
-                             @Override
-                             public boolean accept(final FileInfo f) {
-                                 return format.contains(f.format);
-                             }
-                         }
-                    );
+                    module.setFileInfoFilter(combine(fm.getFormat()));
                     try {
                         module.setProcessingPipe(fm.getFilters());
                     } catch (final InstantiationException | IllegalAccessException e) {
@@ -233,15 +229,14 @@ public final class ExtensibleAntInvoker extends Task {
         }
     }
 
-    private FileInfo.Filter<FileInfo> combine(final Collection<FileInfoFilter> filters) {
-        final Collection<FileInfo.Filter<FileInfo>> res = new ArrayList<>(filters.size());
-        for (final FileInfoFilter f : filters) {
-            res.add(f.toFilter());
-        }
-        return new FileInfo.Filter<FileInfo>() {
+    private static Filter<FileInfo> combine(final Collection<FileInfoFilter> filters) {
+        final List<Filter<FileInfo>> res = filters.stream()
+                .map(FileInfoFilter::toFilter)
+                .collect(Collectors.toList());
+        return new Filter<FileInfo>() {
             @Override
             public boolean accept(FileInfo f) {
-                for (final FileInfo.Filter<FileInfo> filter : res) {
+                for (final Filter<FileInfo> filter : res) {
                     if (filter.accept(f)) {
                         return true;
                     }
@@ -450,8 +445,8 @@ public final class ExtensibleAntInvoker extends Task {
             this.isResourceOnly = processingRole.equals(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
         }
 
-        public FileInfo.Filter<FileInfo> toFilter() {
-            return new FileInfo.Filter<FileInfo>() {
+        public Filter<FileInfo> toFilter() {
+            return new Filter<FileInfo>() {
                 @Override
                 public boolean accept(FileInfo f) {
                     return (format == null || format.equals(f.format)) &&
@@ -482,8 +477,8 @@ public final class ExtensibleAntInvoker extends Task {
             filters.add(filter);
         }
 
-        public List<AbstractXMLFilter> getFilters() throws IllegalAccessException, InstantiationException {
-            final List<AbstractXMLFilter> res = new ArrayList<>();
+        public List<FilterPair> getFilters() throws IllegalAccessException, InstantiationException {
+            final List<FilterPair> res = new ArrayList<>(filters.size());
             for (final XmlFilter f: filters) {
                 if (isValid(getProject(), f.getIf(), f.getUnless())) {
                     final AbstractXMLFilter fc = f.getImplementation().newInstance();
@@ -495,18 +490,24 @@ public final class ExtensibleAntInvoker extends Task {
                             fc.setParam(p.getName(), p.getValue());
                         }
                     }
-                    res.add(fc);
+                    final List<FileInfoFilter> predicates = new ArrayList<>(f.fileInfoFilters);
+                    predicates.addAll(getFormat());
+                    assert !predicates.isEmpty();
+                    Filter<FileInfo> fs = combine(predicates);
+                    res.add(new FilterPair(fc, fs));
                 }
             }
             return res;
         }
 
-        public List<String> getFormat() {
-            if (format != null) {
-                return unmodifiableList(format);
-            } else {
-                return unmodifiableList(asList(ATTR_FORMAT_VALUE_DITA, ATTR_FORMAT_VALUE_DITAMAP));
-            }
+        public List<FileInfoFilter> getFormat() {
+            return (format != null ? format : asList(ATTR_FORMAT_VALUE_DITA, ATTR_FORMAT_VALUE_DITAMAP)).stream()
+                    .map(f -> {
+                        final FileInfoFilter ff = new FileInfoFilter();
+                        ff.setFormat(f);
+                        return ff;
+                    })
+                    .collect(Collectors.toList());
 
         }
 
@@ -522,6 +523,7 @@ public final class ExtensibleAntInvoker extends Task {
     /** Nested pipeline SAX filter element configuration. */
     public static class XmlFilter extends ConfElem {
 
+        public final List<FileInfoFilter> fileInfoFilters = new ArrayList<>();
         public final List<Param> params = new ArrayList<>();
         private Class<? extends AbstractXMLFilter> cls;
 
@@ -531,6 +533,10 @@ public final class ExtensibleAntInvoker extends Task {
 
         public void addConfiguredParam(final Param p) {
             params.add(p);
+        }
+
+        public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
+            fileInfoFilters.add(fileInfoFilter);
         }
 
         public Class<? extends AbstractXMLFilter> getImplementation() {
