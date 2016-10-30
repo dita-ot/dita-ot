@@ -5,15 +5,13 @@ import org.apache.tools.ant.*;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -27,7 +25,6 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.assertArrayEquals;
 
-@RunWith(Parameterized.class)
 public final class IntegrationTest {
 
     private static final String TEMP_DIR = "temp_dir";
@@ -53,48 +50,6 @@ public final class IntegrationTest {
     private static HtmlDocumentBuilder htmlb;
     private static int level;
 
-    private final File testDir;
-
-    /**
-     * Get test cases
-     *
-     * @return test cases which have comparable expected results
-     */
-    @Parameters(name = "{1}")
-    public static Collection<Object[]> getFiles() {
-        final Set<String> testNames = System.getProperty(TEST) != null && !System.getProperty(TEST).isEmpty()
-                ? new HashSet<>(Arrays.asList(System.getProperty(TEST).split("[\\s|,]")))
-                : null;
-        final List<File> cases = Arrays.asList(resourceDir.listFiles(f -> {
-            if (testNames != null && !testNames.contains(f.getName())) {
-                return false;
-            }
-            if (!f.isDirectory() || !new File(f, "build.xml").exists()) {
-                return false;
-            }
-            final File exp = new File(f, EXP_DIR);
-            if (exp.exists()) {
-                for (final String t : exp.list()) {
-                    if (canCompare.contains(t)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }));
-        Collections.sort(cases, (arg0, arg1) -> arg0.compareTo(arg1));
-        final List<Object[]> params = new ArrayList<>(cases.size());
-        for (final File f : cases) {
-            final Object[] arr = new Object[]{f, f.getName()};
-            params.add(arr);
-        }
-        return params;
-    }
-
-    public IntegrationTest(final File testDir, final String name) {
-        this.testDir = testDir;
-    }
-
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -106,7 +61,169 @@ public final class IntegrationTest {
     }
 
     @Test
-    public void test() throws Throwable {
+    public void test03() throws Throwable {
+        test("03");
+    }
+    @Test
+    public void test1_5_2_M4_BUG3052904() throws Throwable {
+        test("1.5.2_M4_BUG3052904");
+    }
+    @Test
+    public void test1_5_2_M4_BUG3052913() throws Throwable {
+        test("1.5.2_M4_BUG3052913");
+    }
+    @Test
+    public void test1_5_2_M4_BUG3056939() throws Throwable {
+        test("1.5.2_M4_BUG3056939");
+    }
+    @Test
+    public void test1_5_2_M5_BUG3059256() throws Throwable {
+        test("1.5.2_M5_BUG3059256");
+    }
+    @Test
+    public void test1_5_3_M2_BUG3157890() throws Throwable {
+        test("1.5.3_M2_BUG3157890");
+    }
+    @Test
+    public void test1_5_3_M2_BUG3164866() throws Throwable {
+        test("1.5.3_M2_BUG3164866");
+    }
+    @Test
+    public void test1_5_3_M3_BUG3178361() throws Throwable {
+        test("1.5.3_M3_BUG3178361");
+    }
+    @Test
+    public void test1_5_3_M3_BUG3191701() throws Throwable {
+        test("1.5.3_M3_BUG3191701");
+    }
+    @Test
+    public void test1_5_3_M3_BUG3191704() throws Throwable {
+        test("1.5.3_M3_BUG3191704");
+    }
+    @Test
+    public void test22() throws Throwable {
+        test("22");
+    }
+    @Test
+    public void test2374525() throws Throwable {
+        test("2374525");
+    }
+    @Test
+    public void test3178361() throws Throwable {
+        test("3178361");
+    }
+    @Test
+    public void test3189883() throws Throwable {
+        test("3189883");
+    }
+    @Test
+    public void test3191704() throws Throwable {
+        test("3191704");
+    }
+    @Test
+    public void test3344142() throws Throwable {
+        test("3344142");
+    }
+    @Test
+    public void test3470331() throws Throwable {
+        test("3470331");
+    }
+    @Test
+    public void testMetadataInheritance() throws Throwable {
+        test("MetadataInheritance");
+    }
+    @Test
+    public void testSF1333481() throws Throwable {
+        test("SF1333481");
+    }
+    @Test
+    public void testbookmap2() throws Throwable {
+        test("bookmap(2)");
+    }
+    @Test
+    public void testcoderef_source() throws Throwable {
+        test("coderef_source");
+    }
+    @Test
+    public void testconref() throws Throwable {
+        test("conref");
+    }
+    @Test
+    public void testconref_push() throws Throwable {
+        test("conref_push");
+    }
+    @Test
+    public void testconrefbreaksxref() throws Throwable {
+        test("conrefbreaksxref");
+    }
+    @Test
+    public void testcontrol_value_file() throws Throwable {
+        test("control_value_file");
+    }
+    @Test
+    public void testexportanchors() throws Throwable {
+        test("exportanchors");
+    }
+    @Test
+    public void testimage_scale() throws Throwable {
+        test("image-scale");
+    }
+    @Test
+    public void testindex_see() throws Throwable {
+        test("index-see");
+    }
+    @Test
+    public void testkeyref() throws Throwable {
+        test("keyref");
+    }
+    @Test
+    public void testkeyref_All_tags() throws Throwable {
+        test("keyref_All_tags");
+    }
+    @Test
+    public void testkeyref_Keyword_links() throws Throwable {
+        test("keyref_Keyword_links");
+    }
+    @Test
+    public void testkeyref_Redirect_conref() throws Throwable {
+        test("keyref_Redirect_conref");
+    }
+    @Test
+    public void testkeyref_Redirect_link_or_xref() throws Throwable {
+        test("keyref_Redirect_link_or_xref");
+    }
+    @Test
+    public void testkeyref_Splitting_combining_targets() throws Throwable {
+        test("keyref_Splitting_combining_targets");
+    }
+    @Test
+    public void testkeyref_Swap_out_variable_content() throws Throwable {
+        test("keyref_Swap_out_variable_content");
+    }
+    @Test
+    public void testkeyref_modify() throws Throwable {
+        test("keyref_modify");
+    }
+    @Test
+    public void testlang() throws Throwable {
+        test("lang");
+    }
+    @Test
+    public void testmapref() throws Throwable {
+        test("mapref");
+    }
+    @Test
+    public void testsubjectschema_case() throws Throwable {
+        test("subjectschema_case");
+    }
+    @Test
+    public void testuplevels() throws Throwable {
+        test("uplevels");
+    }
+
+    private void test(final String name) throws Throwable {
+        final File testDir = Paths.get("src", "test", "resources", name).toFile();
+
         final File expDir = new File(testDir, EXP_DIR);
         final File actDir = new File(baseTempDir, testDir.getName() + File.separator + "testresult");
         List<TestListener.Message> log = null;
@@ -121,11 +238,10 @@ public final class IntegrationTest {
             }
             throw new Throwable("Case " + testDir.getName() + " failed: " + e.getMessage(), e);
         }
-
     }
 
     private void outputLog(List<TestListener.Message> log) {
-        System.err.println("Log start: " + testDir.getName());
+        System.err.println("Log start");
         for (final TestListener.Message m : log) {
             if (m.level <= level) {
                 switch (m.level) {
@@ -150,7 +266,7 @@ public final class IntegrationTest {
                 System.err.println(m.message);
             }
         }
-        System.err.println("Log end: " + testDir.getName());
+        System.err.println("Log end");
     }
 
     private int countMessages(final List<TestListener.Message> messages, final int level) {
