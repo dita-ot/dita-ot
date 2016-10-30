@@ -68,32 +68,30 @@ final class FilterModule extends AbstractPipelineModuleImpl {
             throw new DITAOTException(e);
         }
 
-        for (final FileInfo f: job.getFileInfo()) {
-            if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                final File file = new File(job.tempDir, f.file.getPath());
-                logger.info("Processing " + file.getAbsolutePath());
+        for (final FileInfo f: job.getFileInfo(fileInfoFilter)) {
+            final File file = new File(job.tempDir, f.file.getPath());
+            logger.info("Processing " + file.getAbsolutePath());
 
-                subjectSchemeReader.reset();
-                final Set<URI> schemaSet = dic.get(f.uri);
-                if (schemaSet != null && !schemaSet.isEmpty()) {
-                    logger.info("Loading subject schemes");
-                    for (final URI schema : schemaSet) {
-                        subjectSchemeReader.loadSubjectScheme(new File(job.tempDirURI.resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
-                    }
+            subjectSchemeReader.reset();
+            final Set<URI> schemaSet = dic.get(f.uri);
+            if (schemaSet != null && !schemaSet.isEmpty()) {
+                logger.info("Loading subject schemes");
+                for (final URI schema : schemaSet) {
+                    subjectSchemeReader.loadSubjectScheme(new File(job.tempDirURI.resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
                 }
+            }
 
-                writer.setFilterUtils(filterUtils.refine(subjectSchemeReader.getSubjectSchemeMap()));
+            writer.setFilterUtils(filterUtils.refine(subjectSchemeReader.getSubjectSchemeMap()));
 
-                try {
-                    writer.write(file.getAbsoluteFile());
-                    if (!writer.hasElementOutput()) {
-                        logger.info("All content in " + file.getAbsolutePath() + " was filtered out");
-                        job.remove(f);
-                        FileUtils.delete(file);
-                    }
-                } catch (final Exception e) {
-                    logger.error("Failed to profile " + file.getAbsolutePath() + ": " + e.getMessage());
+            try {
+                writer.write(file.getAbsoluteFile());
+                if (!writer.hasElementOutput()) {
+                    logger.info("All content in " + file.getAbsolutePath() + " was filtered out");
+                    job.remove(f);
+                    FileUtils.delete(file);
                 }
+            } catch (final Exception e) {
+                logger.error("Failed to profile " + file.getAbsolutePath() + ": " + e.getMessage());
             }
         }
 

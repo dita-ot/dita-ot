@@ -177,6 +177,8 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Profile filtering." taskname="profile"
               inputmap="${args.input}">
       <module class="org.dita.dost.module.FilterModule">
+        <ditaFileset format="dita"/>
+        <ditaFileset format="ditamap"/>
         <!--param name="ditadir" location="${dita.dir}"/-->
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
         <!--param name="inputdir" location="${args.input.dir}" if="args.input.dir"/-->
