@@ -188,7 +188,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     private class MapCleanFilter extends AbstractXMLFilter {
 
-        private final Queue<Keep> stack = new ArrayDeque<>();
+        private final Deque<Keep> stack = new ArrayDeque<>();
 
         @Override
         public void startDocument() throws SAXException {
@@ -197,20 +197,26 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         }
 
         @Override
+        public void endDocument() throws SAXException {
+            assert stack.isEmpty();
+            getContentHandler().endDocument();
+        }
+
+        @Override
         public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
                 throws SAXException {
             final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
             if (!stack.isEmpty() && stack.element() == Keep.DISCARD_BRANCH) {
-                stack.add(Keep.DISCARD_BRANCH);
+                stack.addFirst(Keep.DISCARD_BRANCH);
             } else if (SUBMAP.matches(cls)) {
-                stack.add(Keep.DISCARD);
+                stack.addFirst(Keep.DISCARD);
             } else if (MAPGROUP_D_KEYDEF.matches(cls)) {
-                stack.add(Keep.DISCARD_BRANCH);
+                stack.addFirst(Keep.DISCARD_BRANCH);
             } else {
-                stack.add(Keep.RETAIN);
+                stack.addFirst(Keep.RETAIN);
             }
 
-            if (stack.isEmpty() || stack.element() == Keep.RETAIN) {
+            if (stack.isEmpty() || stack.peekFirst() == Keep.RETAIN) {
                 getContentHandler().startElement(uri, localName, qName, atts);
             }
         }
@@ -218,7 +224,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         @Override
         public void endElement(final String uri, final String localName, final String qName)
                 throws SAXException {
-            if (stack.element() == Keep.RETAIN) {
+            if (stack.removeFirst() == Keep.RETAIN) {
                 getContentHandler().endElement(uri, localName, qName);
             }
         }
@@ -226,7 +232,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         @Override
         public void characters(char ch[], int start, int length)
                 throws SAXException {
-            if (stack.element() != Keep.DISCARD_BRANCH) {
+            if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
                 getContentHandler().characters(ch, start, length);
             }
         }
@@ -234,7 +240,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         @Override
         public void ignorableWhitespace(char ch[], int start, int length)
                 throws SAXException {
-            if (stack.element() != Keep.DISCARD_BRANCH) {
+            if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
                 getContentHandler().ignorableWhitespace(ch, start, length);
             }
         }
@@ -242,7 +248,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         @Override
         public void processingInstruction(String target, String data)
                 throws SAXException {
-            if (stack.isEmpty() || stack.element() != Keep.DISCARD_BRANCH) {
+            if (stack.isEmpty() || stack.peekFirst() != Keep.DISCARD_BRANCH) {
                 getContentHandler().processingInstruction(target, data);
             }
         }
@@ -250,7 +256,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         @Override
         public void skippedEntity(String name)
                 throws SAXException {
-            if (stack.element() != Keep.DISCARD_BRANCH) {
+            if (stack.peekFirst() != Keep.DISCARD_BRANCH) {
                 getContentHandler().skippedEntity(name);
             }
         }
