@@ -80,7 +80,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template name="getVariable">
     <xsl:param name="id" as="xs:string"/>
     <xsl:param name="params" as="node()*"/>
-    <xsl:sequence select="dita-ot:get-variable(., $id, $params)"/>
+    <xsl:param name="ctx" as="node()" select="."/>
+    <xsl:sequence select="dita-ot:get-variable($ctx, $id, $params)"/>
   </xsl:template>
 
   <xsl:template name="findString">
