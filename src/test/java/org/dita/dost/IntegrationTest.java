@@ -1,8 +1,10 @@
 package org.dita.dost;
 
+import com.google.common.collect.ImmutableMap;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.apache.tools.ant.*;
 import org.custommonkey.xmlunit.XMLUnit;
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.*;
@@ -11,6 +13,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,6 +22,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.custommonkey.xmlunit.XMLAssert.assertEquals;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
@@ -33,6 +37,7 @@ public final class IntegrationTest {
     private static final String LOG_LEVEL = "log_level";
     private static final String TEST = "test";
 
+    private static final String SRC_DIR = "src";
     private static final String EXP_DIR = "exp";
 
     private static final Collection<String> canCompare = Arrays.asList("html5", "xhtml", "eclipsehelp", "htmlhelp", "preprocess", "pdf");
@@ -50,6 +55,15 @@ public final class IntegrationTest {
     private static HtmlDocumentBuilder htmlb;
     private static int level;
 
+    private enum Transtype {
+        PREPROCESS, XHTML;
+
+        @Override
+        public String toString() {
+            return this.name().toLowerCase();
+        }
+    }
+
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -60,165 +74,236 @@ public final class IntegrationTest {
         level = l != null ? Integer.parseInt(l) : -2;
     }
 
+    @After
+    public void cleanUp() {
+        // remove temp & output
+    }
+
     @Test
     public void test03() throws Throwable {
         test("03");
     }
+
     @Test
     public void test1_5_2_M4_BUG3052904() throws Throwable {
         test("1.5.2_M4_BUG3052904");
     }
+
     @Test
     public void test1_5_2_M4_BUG3052913() throws Throwable {
         test("1.5.2_M4_BUG3052913");
     }
+
     @Test
     public void test1_5_2_M4_BUG3056939() throws Throwable {
         test("1.5.2_M4_BUG3056939");
     }
+
     @Test
     public void test1_5_2_M5_BUG3059256() throws Throwable {
         test("1.5.2_M5_BUG3059256");
     }
+
     @Test
     public void test1_5_3_M2_BUG3157890() throws Throwable {
         test("1.5.3_M2_BUG3157890");
     }
+
     @Test
     public void test1_5_3_M2_BUG3164866() throws Throwable {
         test("1.5.3_M2_BUG3164866");
     }
+
     @Test
     public void test1_5_3_M3_BUG3178361() throws Throwable {
         test("1.5.3_M3_BUG3178361");
     }
+
     @Test
     public void test1_5_3_M3_BUG3191701() throws Throwable {
         test("1.5.3_M3_BUG3191701");
     }
+
     @Test
     public void test1_5_3_M3_BUG3191704() throws Throwable {
         test("1.5.3_M3_BUG3191704");
     }
+
     @Test
     public void test22() throws Throwable {
         test("22");
     }
+
     @Test
     public void test2374525() throws Throwable {
         test("2374525");
     }
+
     @Test
     public void test3178361() throws Throwable {
         test("3178361");
     }
+
     @Test
     public void test3189883() throws Throwable {
         test("3189883");
     }
+
     @Test
     public void test3191704() throws Throwable {
         test("3191704");
     }
+
     @Test
     public void test3344142() throws Throwable {
         test("3344142");
     }
+
     @Test
     public void test3470331() throws Throwable {
         test("3470331");
     }
+
     @Test
     public void testMetadataInheritance() throws Throwable {
         test("MetadataInheritance");
     }
+
     @Test
     public void testSF1333481() throws Throwable {
         test("SF1333481");
     }
+
     @Test
     public void testbookmap2() throws Throwable {
         test("bookmap(2)");
     }
+
     @Test
     public void testcoderef_source() throws Throwable {
         test("coderef_source");
     }
+
     @Test
     public void testconref() throws Throwable {
-        test("conref");
+        test("conref", Transtype.PREPROCESS, Paths.get("lang-common1.dita"), emptyMap());
     }
+
     @Test
     public void testconref_push() throws Throwable {
         test("conref_push");
     }
+
     @Test
     public void testconrefbreaksxref() throws Throwable {
         test("conrefbreaksxref");
     }
+
     @Test
     public void testcontrol_value_file() throws Throwable {
         test("control_value_file");
     }
+
     @Test
     public void testexportanchors() throws Throwable {
         test("exportanchors");
     }
+
     @Test
     public void testimage_scale() throws Throwable {
         test("image-scale");
     }
+
     @Test
     public void testindex_see() throws Throwable {
         test("index-see");
     }
+
     @Test
     public void testkeyref() throws Throwable {
         test("keyref");
     }
+
     @Test
     public void testkeyref_All_tags() throws Throwable {
         test("keyref_All_tags");
     }
+
     @Test
     public void testkeyref_Keyword_links() throws Throwable {
         test("keyref_Keyword_links");
     }
+
     @Test
     public void testkeyref_Redirect_conref() throws Throwable {
         test("keyref_Redirect_conref");
     }
+
     @Test
     public void testkeyref_Redirect_link_or_xref() throws Throwable {
         test("keyref_Redirect_link_or_xref");
     }
+
     @Test
     public void testkeyref_Splitting_combining_targets() throws Throwable {
         test("keyref_Splitting_combining_targets");
     }
+
     @Test
     public void testkeyref_Swap_out_variable_content() throws Throwable {
         test("keyref_Swap_out_variable_content");
     }
+
     @Test
     public void testkeyref_modify() throws Throwable {
         test("keyref_modify");
     }
+
     @Test
     public void testlang() throws Throwable {
         test("lang");
     }
+
     @Test
     public void testmapref() throws Throwable {
         test("mapref");
     }
+
     @Test
     public void testsubjectschema_case() throws Throwable {
         test("subjectschema_case");
     }
+
     @Test
     public void testuplevels() throws Throwable {
         test("uplevels");
+    }
+
+    private void test(final String name, final Transtype transtype, final Path input, final Map<String, String> args) throws Throwable {
+        final File testDir = Paths.get("src", "test", "resources", name).toFile();
+        final File srcDir = new File(testDir, SRC_DIR);
+        final File expDir = new File(testDir, EXP_DIR);
+        final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
+        final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
+
+        final Map<String, String> params = ImmutableMap.<String, String>builder()
+                .putAll(args)
+                .put("args.input", new File(srcDir, input.toFile().toString()).getAbsolutePath())
+                .build();
+
+        List<TestListener.Message> log = null;
+        try {
+            log = runOt(testDir, transtype, tempDir, outDir, params);
+            final File actDir = transtype == Transtype.PREPROCESS ? tempDir : outDir;
+            compare(expDir, actDir);
+        } catch (final RuntimeException e) {
+            throw e;
+        } catch (final Throwable e) {
+            if (log != null && level >= 0) {
+                outputLog(log);
+            }
+            throw new Throwable("Case " + testDir.getName() + " failed: " + e.getMessage(), e);
+        }
     }
 
     private void test(final String name) throws Throwable {
@@ -327,6 +412,72 @@ public final class IntegrationTest {
             ProjectHelper.configureProject(project, buildFile);
             final Vector<String> targets = new Vector<>();
             targets.addElement(project.getDefaultTarget());
+            project.executeTargets(targets);
+
+            assertEquals("Warn message count does not match expected",
+                    getMessageCount(project, "warn"),
+                    countMessages(listener.messages, Project.MSG_WARN));
+            assertEquals("Error message count does not match expected",
+                    getMessageCount(project, "error"),
+                    countMessages(listener.messages, Project.MSG_ERR));
+        } finally {
+            System.setOut(savedOut);
+            System.setErr(savedErr);
+            return listener.messages;
+        }
+    }
+
+    /**
+     * Run test conversion
+     *
+     * @param srcDir    test source directory
+     * @param transtype transtype to test
+     * @return list of log messages
+     * @throws Exception if conversion failed
+     */
+    private List<TestListener.Message> runOt(final File srcDir, final Transtype transtype, final File tempBaseDir, final File resBaseDir,
+                                             final Map<String, String> args) throws Exception {
+        final File tempDir = new File(tempBaseDir, transtype.toString());
+        final File resDir = new File(resBaseDir, transtype.toString());
+        deleteDirectory(resDir);
+        deleteDirectory(tempDir);
+
+        final TestListener listener = new TestListener(System.out, System.err);
+        final PrintStream savedErr = System.err;
+        final PrintStream savedOut = System.out;
+        try {
+            final File buildFile = new File(ditaDir, "build.xml");
+            final Project project = new Project();
+            project.addBuildListener(listener);
+            System.setOut(new PrintStream(new DemuxOutputStream(project, false)));
+            System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
+            project.fireBuildStarted();
+            project.init();
+            project.setUserProperty("transtype", transtype.toString());
+            if (transtype.equals("pdf") || transtype.equals("pdf2")) {
+                project.setUserProperty("pdf.formatter", "fop");
+                project.setUserProperty("fop.formatter.output-format", "text/plain");
+            }
+            project.setUserProperty("generate-debug-attributes", "false");
+            project.setUserProperty("preprocess.copy-generated-files.skip", "true");
+            project.setUserProperty("ant.file", buildFile.getAbsolutePath());
+            project.setUserProperty("ant.file.type", "file");
+            project.setUserProperty("dita.dir", ditaDir.getAbsolutePath());
+            project.setUserProperty("output.dir", resDir.getAbsolutePath());
+            project.setUserProperty("dita.temp.dir", tempDir.getAbsolutePath());
+            args.entrySet().forEach(e -> project.setUserProperty(e.getKey(), e.getValue()));
+
+            project.setKeepGoingMode(false);
+            ProjectHelper.configureProject(project, buildFile);
+            final Vector<String> targets = new Vector<>();
+            switch (transtype) {
+                case PREPROCESS:
+                    targets.addElement("build-init");
+                    targets.addElement("preprocess");
+                    break;
+                default:
+                    targets.addElement(project.getDefaultTarget());
+            }
             project.executeTargets(targets);
 
             assertEquals("Warn message count does not match expected",
