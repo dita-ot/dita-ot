@@ -83,7 +83,7 @@
       <target name="preprocess"/>
       <property name="args.input" location="${test.basedir}/src/${dir}/${map}"/>
       <property name="output.dir" location="${result.dir}/preprocess/${dir}"/>
-      <property name="dita.temp.dir" location="${temp.dir}/preprocess/${dir}"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/${dir}"/>
     </ant>
   </target>
   

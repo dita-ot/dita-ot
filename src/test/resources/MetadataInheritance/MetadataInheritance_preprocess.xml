@@ -34,13 +34,12 @@
     <ant antfile="${dita.dir}/build.xml">
       <property name="args.input" location="${test.basedir}/src/${test-name}.ditamap"/>
       <property name="output.dir" location="${result.dir}/preprocess/${test-name}"/>
-      <property name="transtype" value="MatadataInheritance_xhtml"/><target name="build-init"/><target name="preprocess"/>
-      <property name="dita.temp.dir" location="${temp.dir}/preprocess/${test-name}"/>
+      <property name="transtype" value="MatadataInheritance_xhtml"/>
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/${test-name}"/>
       <property name="dita.ext" value=".dita"/>
     </ant>
-    <copy todir="${result.dir}/preprocess/${test-name}">
-      <fileset dir="${temp.dir}/preprocess/${test-name}"/>
-    </copy>
   </target>
 
 </project>

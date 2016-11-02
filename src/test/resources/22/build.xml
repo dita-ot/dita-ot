@@ -37,11 +37,8 @@
       <target name="preprocess"/>
       <property name="args.input" location="${test.basedir}/src/${map}.ditamap"/>
       <property name="output.dir" location="${result.dir}/preprocess/${map}"/>
-      <property name="dita.temp.dir" location="${temp.dir}/preprocess/${map}"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/${map}"/>
     </ant>
-    <copy todir="${result.dir}/preprocess/${map}">
-      <fileset dir="${temp.dir}/preprocess/${map}"/>
-    </copy>
   </target>
   <target name="xhtml">
     <dirname property="currentdir" file="${ant.file.22}"/>

@@ -30,10 +30,7 @@
          <target name="preprocess"/>
          <property name="args.input" location="${test.basedir}/src/test.dita"/>
          <property name="output.dir" location="${result.dir}/preprocess"/>
-         <property name="dita.temp.dir" location="${temp.dir}/preprocess"/>
+         <property name="dita.temp.dir" location="${result.dir}/preprocess"/>
       </ant>
-     <copy todir="${result.dir}/preprocess">
-       <fileset dir="${temp.dir}/preprocess"/>
-     </copy>
    </target>
 </project>

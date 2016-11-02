@@ -13,12 +13,9 @@
          <target name="preprocess"/>
          <property name="args.input" location="${test.basedir}/src/main.ditamap"/>
          <property name="output.dir" location="${result.dir}/preprocess"/>
-         <property name="dita.temp.dir" location="${temp.dir}/preprocess"/>
+         <property name="dita.temp.dir" location="${result.dir}/preprocess"/>
          <property name="validate" value="false"/>
       </ant>
-     <copy todir="${result.dir}/preprocess">
-       <fileset dir="${temp.dir}/preprocess"/>
-     </copy>
    </target>
   <property name="exp.message-count.warn" value="1"/>
 </project>
