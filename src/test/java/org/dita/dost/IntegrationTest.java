@@ -141,27 +141,44 @@ public final class IntegrationTest {
 
     @Test
     public void test3178361() throws Throwable {
-        test("3178361");
+        test("3178361", Transtype.PREPROCESS,
+                Paths.get("conref-push-test.ditamap"),
+                ImmutableMap.<String, String>builder()
+                        .put("dita.ext", ".dita")
+                        .build());
     }
 
     @Test
     public void test3189883() throws Throwable {
-        test("3189883");
+        test("3189883", Transtype.PREPROCESS,
+                Paths.get("main.ditamap"),
+                ImmutableMap.<String, String>builder()
+                        .put("validate", "false")
+                        .build());
     }
 
     @Test
     public void test3191704() throws Throwable {
-        test("3191704");
+        test("3191704", Transtype.PREPROCESS,
+                Paths.get("jandrew-test.ditamap"),
+                ImmutableMap.<String, String>builder()
+                        .put("dita.ext", ".dita")
+                        .build());
     }
 
     @Test
     public void test3344142() throws Throwable {
-        test("3344142");
+        test("3344142", Transtype.PREPROCESS,
+                Paths.get("push.ditamap"),
+                ImmutableMap.<String, String>builder()
+                        .put("dita.ext", ".dita")
+                        .build());
     }
 
     @Test
     public void test3470331() throws Throwable {
-        test("3470331");
+        test("3470331", Transtype.PREPROCESS,
+                Paths.get("bookmap.ditamap"), emptyMap());
     }
 
     @Test
@@ -181,7 +198,11 @@ public final class IntegrationTest {
 
     @Test
     public void testcoderef_source() throws Throwable {
-        test("coderef_source");
+        test("coderef_source", Transtype.PREPROCESS,
+                Paths.get("mp.ditamap"),
+                ImmutableMap.<String, String>builder()
+                        .put("transtype", "preprocess").put("dita.ext", ".dita").put("validate", "false")
+                        .build());
     }
 
     @Test
@@ -206,7 +227,11 @@ public final class IntegrationTest {
 
     @Test
     public void testexportanchors() throws Throwable {
-        test("exportanchors");
+        test("exportanchors", Transtype.PREPROCESS,
+                Paths.get("test.ditamap"),
+                ImmutableMap.<String, String>builder()
+                        .put("transtype", "eclipsehelp")
+                        .build());
     }
 
     @Test
@@ -221,7 +246,8 @@ public final class IntegrationTest {
 
     @Test
     public void testkeyref() throws Throwable {
-        test("keyref");
+        test("keyref", Transtype.PREPROCESS,
+                Paths.get("test.ditamap"), emptyMap());
     }
 
     @Test
@@ -266,7 +292,11 @@ public final class IntegrationTest {
 
     @Test
     public void testmapref() throws Throwable {
-        test("mapref");
+        test("mapref", Transtype.PREPROCESS,
+                Paths.get("test.ditamap"),
+                ImmutableMap.<String, String>builder()
+                        .put("generate-debug-attributes", "false")
+                        .build());
     }
 
     @Test
