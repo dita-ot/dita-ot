@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><?path2project?><?path2project-uri ./?><?Pub Inc?><reference xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="lang-reference" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic reference)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic       reference/reference ">
-<title class="- topic/title ">Reference link for language test</title>
-<shortdesc class="- topic/shortdesc ">Reference for the related link</shortdesc>
-<refbody class="- topic/body        reference/refbody ">
-<section class="- topic/section ">test things</section>
-</refbody><?Pub Caret1?>
-</reference><?Pub *0000000428?>

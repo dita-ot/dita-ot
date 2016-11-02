@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><?path2project?><?path2project-uri ./?><?Pub Inc?><task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="taskforrelatedlink" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    " class="- topic/topic task/task ">
-<title class="- topic/title ">Task for related link</title>
-<shortdesc class="- topic/shortdesc ">Description of the related task</shortdesc>
-<taskbody class="- topic/body task/taskbody ">
-<prereq class="- topic/section task/prereq ">You need to do this first.</prereq>
-</taskbody><?Pub Caret1?>
-</task><?Pub *0000000412?>
