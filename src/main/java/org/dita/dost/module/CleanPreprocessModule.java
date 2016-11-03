@@ -134,12 +134,19 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         }
 
         private URI getHref(final URI href) {
+            if (href.getFragment() != null && (href.getPath() == null || href.getPath().equals(""))) {
+                return href;
+            }
             final URI targetAbs = stripFragment(currentFile.resolve(href));
             final FileInfo targetFileInfo = job.getFileInfo(targetAbs);
-            final URI rel = base.relativize(targetFileInfo.result);
-            final URI targetDestFile = job.tempDirURI.resolve(rel);
-            final URI relTarget = URLUtils.getRelativePath(destFile, targetDestFile);
-            return setFragment(relTarget, href.getFragment());
+            if (targetFileInfo != null) {
+                final URI rel = base.relativize(targetFileInfo.result);
+                final URI targetDestFile = job.tempDirURI.resolve(rel);
+                final URI relTarget = URLUtils.getRelativePath(destFile, targetDestFile);
+                return setFragment(relTarget, href.getFragment());
+            } else {
+                return href;
+            }
         }
 
         public void setDestFile(final URI destFile) {

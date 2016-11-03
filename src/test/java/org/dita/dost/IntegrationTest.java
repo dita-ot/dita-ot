@@ -154,7 +154,7 @@ public final class IntegrationTest {
                 Paths.get("main.ditamap"),
                 ImmutableMap.<String, Object>builder()
                         .put("validate", "false")
-                        .build());
+                        .build(), 1, 0);
     }
 
     @Test
@@ -172,7 +172,7 @@ public final class IntegrationTest {
                 Paths.get("push.ditamap"),
                 ImmutableMap.<String, Object>builder()
                         .put("dita.ext", ".dita")
-                        .build());
+                        .build(), 2, 0);
     }
 
     @Test
@@ -205,7 +205,7 @@ public final class IntegrationTest {
                 Paths.get("mp.ditamap"),
                 ImmutableMap.<String, Object>builder()
                         .put("transtype", "preprocess").put("dita.ext", ".dita").put("validate", "false")
-                        .build());
+                        .build(), 1, 0);
     }
 
     @Test
@@ -318,6 +318,11 @@ public final class IntegrationTest {
     }
 
     private void test(final String name, final Transtype transtype, final Path input, final Map<String, Object> args) throws Throwable {
+        test(name, transtype, input, args, 0, 0);
+    }
+
+    private void test(final String name, final Transtype transtype, final Path input, final Map<String, Object> args,
+                      final int warnCount, final int errorCount) throws Throwable {
         final File testDir = Paths.get("src", "test", "resources", name).toFile();
         final File srcDir = new File(testDir, SRC_DIR);
         final File expDir = new File(testDir, EXP_DIR);
@@ -340,6 +345,12 @@ public final class IntegrationTest {
         List<TestListener.Message> log = null;
         try {
             log = runOt(testDir, transtype, tempDir, outDir, params);
+            assertEquals("Warn message count does not match expected",
+                    warnCount,
+                    countMessages(log, Project.MSG_WARN));
+            assertEquals("Error message count does not match expected",
+                    errorCount,
+                    countMessages(log, Project.MSG_ERR));
             final File actDir = transtype == Transtype.PREPROCESS ? tempDir : outDir;
             compare(expDir, actDir);
         } catch (final RuntimeException e) {
@@ -499,7 +510,7 @@ public final class IntegrationTest {
             System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
             project.fireBuildStarted();
             project.init();
-            project.setUserProperty("transtype", transtype.toString());
+            project.setUserProperty("transtype", transtype == Transtype.PREPROCESS ? Transtype.XHTML.toString() : transtype.toString());
             if (transtype.equals("pdf") || transtype.equals("pdf2")) {
                 project.setUserProperty("pdf.formatter", "fop");
                 project.setUserProperty("fop.formatter.output-format", "text/plain");
@@ -526,12 +537,6 @@ public final class IntegrationTest {
             }
             project.executeTargets(targets);
 
-            assertEquals("Warn message count does not match expected",
-                    getMessageCount(project, "warn"),
-                    countMessages(listener.messages, Project.MSG_WARN));
-            assertEquals("Error message count does not match expected",
-                    getMessageCount(project, "error"),
-                    countMessages(listener.messages, Project.MSG_ERR));
             return listener.messages;
         } finally {
             System.setOut(savedOut);
