@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: fop.xconf 1616312 2014-08-06 19:19:31Z gadams $ -->
+<!-- $Id: fop.xconf 1339442 2012-05-17 01:42:56Z gadams $ -->
 
 <!--
 
@@ -26,8 +26,9 @@ the location of this file.
   <!-- Target resolution in dpi (dots/pixels per inch) for specifying the target resolution for generated bitmaps, default: 72dpi -->
   <target-resolution>72</target-resolution>
   
-  <!-- Default page-height and page-width, in case value is specified as auto -->
-  <default-page-settings height="11.00in" width="8.50in"/>
+  <!-- Default page-height and page-width, in case
+       value is specified as auto -->
+  <default-page-settings height="11in" width="8.26in"/>
   
   <!-- Information for specific renderers -->
   <!-- Uses renderer mime type for renderers -->
@@ -47,6 +48,8 @@ the location of this file.
       </filterList>
 
       <fonts>
+        <!-- automatically detect operating system installed fonts -->
+        <auto-detect/>
         <!-- embedded fonts -->
         <!--
         This information must exactly match the font specified
@@ -80,10 +83,6 @@ the location of this file.
           <font-triplet name="ArialMT" style="normal" weight="bold"/>
         </font>
         -->
-
-        <!-- auto-detect fonts -->
-        <auto-detect/>
-
       </fonts>
 
       <!-- This option lets you specify additional options on an XML handler -->
@@ -409,11 +408,11 @@ the location of this file.
         
         example:
          <font>
-                <afp-font type="CIDKeyed" encoding="UnicodeBigUnmarked"  
-                codepage="T1120000" characterset="CZJHMNU" 
-                base-uri="fonts" />
-                <font-triplet name="J-Heisei Mincho" style="normal" weight="normal" />
-         </font>
+        	<afp-font type="CIDKeyed" encoding="UnicodeBigUnmarked"  
+        	codepage="T1120000" characterset="CZJHMNU" 
+        	base-uri="fonts" />
+         	<font-triplet name="J-Heisei Mincho" style="normal" weight="normal" />
+     	 </font>
         -->
         
         
@@ -467,3 +466,4 @@ the location of this file.
   </renderers>
 
 </fop>
+

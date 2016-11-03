@@ -6,10 +6,13 @@ group = 'org.dita-ot.pdf'
 description = """DITA Open Toolkit PDF plug-in for FOP."""
 
 repositories {
+    maven {
+        url "./maven2"
+    }
     mavenCentral()
 }
 dependencies {
-    runtime group: 'org.apache.xmlgraphics', name: 'fop', version: '2.1'
+    runtime group: 'org.apache.xmlgraphics', name: 'fop', version: '1.1'
 }
 
 task jar(overwrite: true) << {
