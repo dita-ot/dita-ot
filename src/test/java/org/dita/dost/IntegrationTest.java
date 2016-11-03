@@ -532,13 +532,10 @@ public final class IntegrationTest {
             assertEquals("Error message count does not match expected",
                     getMessageCount(project, "error"),
                     countMessages(listener.messages, Project.MSG_ERR));
-        } catch (BuildException e) {
-            e.printStackTrace();
-            throw e;
+            return listener.messages;
         } finally {
             System.setOut(savedOut);
             System.setErr(savedErr);
-            return listener.messages;
         }
     }
 
