@@ -188,7 +188,10 @@ public final class IntegrationTest {
 
     @Test
     public void testSF1333481() throws Throwable {
-        test("SF1333481");
+        test("SF1333481", Transtype.PREPROCESS,
+                Paths.get("main.ditamap"), emptyMap());
+//        test("SF1333481", Transtype.XHTML,
+//                Paths.get("subdir", "mapref1.ditamap"), emptyMap());
     }
 
     @Test
