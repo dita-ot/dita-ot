@@ -143,7 +143,7 @@ public final class IntegrationTest {
     public void test3178361() throws Throwable {
         test("3178361", Transtype.PREPROCESS,
                 Paths.get("conref-push-test.ditamap"),
-                ImmutableMap.<String, String>builder()
+                ImmutableMap.<String, Object>builder()
                         .put("dita.ext", ".dita")
                         .build());
     }
@@ -152,7 +152,7 @@ public final class IntegrationTest {
     public void test3189883() throws Throwable {
         test("3189883", Transtype.PREPROCESS,
                 Paths.get("main.ditamap"),
-                ImmutableMap.<String, String>builder()
+                ImmutableMap.<String, Object>builder()
                         .put("validate", "false")
                         .build());
     }
@@ -161,7 +161,7 @@ public final class IntegrationTest {
     public void test3191704() throws Throwable {
         test("3191704", Transtype.PREPROCESS,
                 Paths.get("jandrew-test.ditamap"),
-                ImmutableMap.<String, String>builder()
+                ImmutableMap.<String, Object>builder()
                         .put("dita.ext", ".dita")
                         .build());
     }
@@ -170,7 +170,7 @@ public final class IntegrationTest {
     public void test3344142() throws Throwable {
         test("3344142", Transtype.PREPROCESS,
                 Paths.get("push.ditamap"),
-                ImmutableMap.<String, String>builder()
+                ImmutableMap.<String, Object>builder()
                         .put("dita.ext", ".dita")
                         .build());
     }
@@ -203,7 +203,7 @@ public final class IntegrationTest {
     public void testcoderef_source() throws Throwable {
         test("coderef_source", Transtype.PREPROCESS,
                 Paths.get("mp.ditamap"),
-                ImmutableMap.<String, String>builder()
+                ImmutableMap.<String, Object>builder()
                         .put("transtype", "preprocess").put("dita.ext", ".dita").put("validate", "false")
                         .build());
     }
@@ -232,7 +232,7 @@ public final class IntegrationTest {
     public void testexportanchors() throws Throwable {
         test("exportanchors", Transtype.PREPROCESS,
                 Paths.get("test.ditamap"),
-                ImmutableMap.<String, String>builder()
+                ImmutableMap.<String, Object>builder()
                         .put("transtype", "eclipsehelp")
                         .build());
     }
@@ -297,14 +297,19 @@ public final class IntegrationTest {
     public void testmapref() throws Throwable {
         test("mapref", Transtype.PREPROCESS,
                 Paths.get("test.ditamap"),
-                ImmutableMap.<String, String>builder()
+                ImmutableMap.<String, Object>builder()
                         .put("generate-debug-attributes", "false")
                         .build());
     }
 
     @Test
     public void testsubjectschema_case() throws Throwable {
-        test("subjectschema_case");
+        test("subjectschema_case", Transtype.XHTML,
+                Paths.get("simplemap.ditamap"),
+                ImmutableMap.<String, Object>builder()
+                        .put("args.filter", Paths.get("filter.ditaval"))
+                        .put("clean.temp", "no")
+                        .build());
     }
 
     @Test
@@ -312,17 +317,25 @@ public final class IntegrationTest {
         test("uplevels");
     }
 
-    private void test(final String name, final Transtype transtype, final Path input, final Map<String, String> args) throws Throwable {
+    private void test(final String name, final Transtype transtype, final Path input, final Map<String, Object> args) throws Throwable {
         final File testDir = Paths.get("src", "test", "resources", name).toFile();
         final File srcDir = new File(testDir, SRC_DIR);
         final File expDir = new File(testDir, EXP_DIR);
         final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
         final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
 
-        final Map<String, String> params = ImmutableMap.<String, String>builder()
-                .putAll(args)
-                .put("args.input", new File(srcDir, input.toFile().toString()).getAbsolutePath())
-                .build();
+        final ImmutableMap.Builder<String, String> builder = ImmutableMap.<String, String>builder();
+        args.forEach((k, v) -> {
+            if (v instanceof Path) {
+                builder.put(k, new File(srcDir, v.toString()).getAbsolutePath());
+            } else if (v instanceof String) {
+                builder.put(k, v.toString());
+            } else {
+                throw new IllegalArgumentException();
+            }
+        });
+        builder.put("args.input", new File(srcDir, input.toFile().toString()).getAbsolutePath());
+        final Map<String, String> params = builder.build();
 
         List<TestListener.Message> log = null;
         try {
@@ -519,6 +532,9 @@ public final class IntegrationTest {
             assertEquals("Error message count does not match expected",
                     getMessageCount(project, "error"),
                     countMessages(listener.messages, Project.MSG_ERR));
+        } catch (BuildException e) {
+            e.printStackTrace();
+            throw e;
         } finally {
             System.setOut(savedOut);
             System.setErr(savedErr);
