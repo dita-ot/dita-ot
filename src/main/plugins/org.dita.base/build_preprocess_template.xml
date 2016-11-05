@@ -37,7 +37,6 @@ See the accompanying LICENSE file for applicable license.
                   topicpull,
                   flag-module,
                   clean-map,
-                  clean-preprocess,
                   {depend.preprocess.post}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
