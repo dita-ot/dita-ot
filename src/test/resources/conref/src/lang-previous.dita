@@ -1,13 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--ArborText, Inc., 1988-2002, v.4002-->
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
- "../dtd/topic.dtd">
-<?Pub Inc?>
-<topic id="previous" xml:lang="en-us">
-<title>Previous topic link</title>
-<shortdesc>This is the previous topic for language tests</shortdesc>
-<body>
-<p>previous stuff<?Pub Caret?></p>
-</body>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  id="previous" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
+  <title class="- topic/title ">Previous topic link</title>
+  <shortdesc class="- topic/shortdesc ">This is the previous topic for language tests</shortdesc>
+  <body class="- topic/body ">
+    <p class="- topic/p ">previous stuff</p>
+  </body>
 </topic>
-<?Pub *0000000388?>

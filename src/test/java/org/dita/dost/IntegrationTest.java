@@ -210,7 +210,10 @@ public final class IntegrationTest {
 
     @Test
     public void testconref() throws Throwable {
-        test("conref", Transtype.PREPROCESS, Paths.get("lang-common1.dita"), emptyMap());
+        test("conref", Transtype.PREPROCESS, Paths.get("lang-common1.dita"),
+                ImmutableMap.<String, Object>builder()
+                        .put("validate", "false")
+                        .build(), 1, 0);
     }
 
     @Test
