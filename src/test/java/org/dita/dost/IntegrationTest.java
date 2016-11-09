@@ -359,7 +359,9 @@ public final class IntegrationTest {
 
     @Test
     public void testimage_scale() throws Throwable {
-        test("image-scale");
+        test("image-scale", Transtype.XHTML,
+                Paths.get("test.dita"),
+                Collections.emptyMap());
     }
 
     @Test
