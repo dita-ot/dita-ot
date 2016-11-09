@@ -136,7 +136,9 @@ public final class IntegrationTest {
 
     @Test
     public void test2374525() throws Throwable {
-        test("2374525");
+        test("2374525", Transtype.PREPROCESS,
+                Paths.get("test.dita"),
+                Collections.emptyMap());
     }
 
     @Test
