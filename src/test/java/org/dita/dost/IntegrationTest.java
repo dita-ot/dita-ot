@@ -217,8 +217,123 @@ public final class IntegrationTest {
     }
 
     @Test
-    public void testconref_push() throws Throwable {
-        test("conref_push");
+    public void testpushAfter_between_Specialization() throws Throwable {
+        test("pushAfter_between_Specialization", Transtype.PREPROCESS, Paths.get("pushAfter.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
+    }
+
+    @Test
+    public void testpushAfter_with_crossRef() throws Throwable {
+        test("pushAfter_with_crossRef", Transtype.PREPROCESS, Paths.get("pushAfter.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
+    }
+
+    @Test
+    public void testpushAfter_with_InvalidTarget() throws Throwable {
+        test("pushAfter_with_InvalidTarget", Transtype.PREPROCESS, Paths.get("pushAfter.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 1, 0);
+    }
+
+    @Test
+    public void testpushAfter_without_conref() throws Throwable {
+        test("pushAfter_without_conref", Transtype.PREPROCESS, Paths.get("pushAfter.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
+    }
+
+    @Test
+    public void testsimple_pushAfter() throws Throwable {
+        test("simple_pushAfter", Transtype.PREPROCESS, Paths.get("pushAfter.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
+    }
+
+    @Test
+    public void testpushBefore_between_Specialization() throws Throwable {
+        test("pushBefore_between_Specialization", Transtype.PREPROCESS, Paths.get("pushBefore.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
+    }
+
+    @Test
+    public void testpushBefore_with_crossRef() throws Throwable {
+        test("pushBefore_with_crossRef", Transtype.PREPROCESS, Paths.get("pushBefore.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 1, 0);
+    }
+
+    @Test
+    public void testpushBefore_with_InvalidTarget() throws Throwable {
+        test("pushBefore_with_InvalidTarget", Transtype.PREPROCESS, Paths.get("pushBefore.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 1, 0);
+    }
+
+    @Test
+    public void testpushBefore_without_conref() throws Throwable {
+        test("pushBefore_without_conref", Transtype.PREPROCESS, Paths.get("pushBefore.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
+    }
+
+    @Test
+    public void testsimple_pushBefore() throws Throwable {
+        test("simple_pushBefore", Transtype.PREPROCESS, Paths.get("pushBefore.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
+    }
+
+    @Test
+    public void testpushReplace_between_Specialization() throws Throwable {
+        test("pushReplace_between_Specialization", Transtype.PREPROCESS, Paths.get("pushReplace.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
+    }
+
+    @Test
+    public void testpushReplace_with_crossRef() throws Throwable {
+        test("pushReplace_with_crossRef", Transtype.PREPROCESS, Paths.get("pushReplace.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
+    }
+
+    @Test
+    public void testpushReplace_with_InvalidTarget() throws Throwable {
+        test("pushReplace_with_InvalidTarget", Transtype.PREPROCESS, Paths.get("pushReplace.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 1, 4);
+    }
+
+    @Test
+    public void testpushReplace_without_conref() throws Throwable {
+        test("pushReplace_without_conref", Transtype.PREPROCESS, Paths.get("pushReplace.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
+    }
+
+    @Test
+    public void testsimple_pushReplace() throws Throwable {
+        test("simple_pushReplace", Transtype.PREPROCESS, Paths.get("pushReplace.ditamap"),
+                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+                        .build(), 0, 0);
     }
 
     @Test
