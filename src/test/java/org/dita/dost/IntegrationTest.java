@@ -375,12 +375,17 @@ public final class IntegrationTest {
 
     @Test
     public void testkeyref_All_tags() throws Throwable {
-        test("keyref_All_tags");
+        test("keyref_All_tags", Transtype.XHTML,
+                Paths.get("mp_author1.ditamap"),
+                Collections.emptyMap(),
+                1, 0);
     }
 
     @Test
     public void testkeyref_Keyword_links() throws Throwable {
-        test("keyref_Keyword_links");
+        test("keyref_Keyword_links", Transtype.XHTML,
+                Paths.get("mp_author1.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
@@ -400,12 +405,17 @@ public final class IntegrationTest {
 
     @Test
     public void testkeyref_Swap_out_variable_content() throws Throwable {
-        test("keyref_Swap_out_variable_content");
+        test("keyref_Swap_out_variable_content", Transtype.XHTML,
+                Paths.get("mp_author1.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
     public void testkeyref_modify() throws Throwable {
-        test("keyref_modify");
+        test("keyref_modify", Transtype.XHTML,
+                Paths.get("mp_author1.ditamap"),
+                Collections.emptyMap(),
+                1, 0);
     }
 
     @Test
