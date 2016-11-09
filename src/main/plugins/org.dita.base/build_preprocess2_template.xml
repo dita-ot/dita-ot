@@ -44,6 +44,30 @@ See the accompanying LICENSE file for applicable license.
     <!-- Deprecated since 2.4 -->
     <property name="user.input.file.listfile" value="usr.input.file.list"/>
   </target>
+
+  <target name="topic-preprocess"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          description="Preprocess topic"
+          dita:depends="{depend.preprocess.pre},
+                  preprocess2.init,
+
+                  topic-reader,
+                  topic-conrefpush,
+                  topic-conref,
+                  topic-profile,
+                  topic-fragment,
+
+                  topic-move-meta-entries,
+                  topic-topicpull,
+                  topic-flag-module,
+
+                  clean-preprocess,
+                  copy-files,
+
+                  {depend.preprocess.post}">
+    <!-- Deprecated since 2.4 -->
+    <property name="user.input.file.listfile" value="usr.input.file.list"/>
+  </target>
   
   <target name="preprocess2.init">
     <dita-ot-fail id="DOTA002F">
@@ -199,6 +223,8 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Generate file list">
     <pipeline message="Generate list." taskname="topic-reader">
+      <!-- TODO Add if this reader starts processing -->
+      <!-- inputmap="${args.input}" -->
       <module class="org.dita.dost.module.reader.TopicReaderModule">
         <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>

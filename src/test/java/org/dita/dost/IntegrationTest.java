@@ -281,6 +281,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Ignore // Topic start file not supported yet
     public void testconref() throws Throwable {
         builder().name("conref")
                 .transtype(PREPROCESS)

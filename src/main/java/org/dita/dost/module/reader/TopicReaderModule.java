@@ -120,7 +120,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             return null;
         }
         final String scope = in.getAttributeValue(null, ATTRIBUTE_NAME_SCOPE);
-        if (ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
+        if (!(scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL))) {
             return null;
         }
         final String format = in.getAttributeValue(null, ATTRIBUTE_NAME_FORMAT);
