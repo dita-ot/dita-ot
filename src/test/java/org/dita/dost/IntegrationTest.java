@@ -27,47 +27,67 @@ public class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void test1_5_2_M4_BUG3052904() throws Throwable {
-        test("1.5.2_M4_BUG3052904");
+        test("1.5.2_M4_BUG3052904", Transtype.XHTML,
+                Paths.get("keyref-test-01.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
     public void test1_5_2_M4_BUG3052913() throws Throwable {
-        test("1.5.2_M4_BUG3052913");
+        test("1.5.2_M4_BUG3052913", Transtype.XHTML,
+                Paths.get("keyref-test-01.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
     public void test1_5_2_M4_BUG3056939() throws Throwable {
-        test("1.5.2_M4_BUG3056939");
+        test("1.5.2_M4_BUG3056939", Transtype.XHTML,
+                Paths.get("test-conref-xref-keyref-bug.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
     public void test1_5_2_M5_BUG3059256() throws Throwable {
-        test("1.5.2_M5_BUG3059256");
+        test("1.5.2_M5_BUG3059256", Transtype.XHTML,
+                Paths.get("test.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
     public void test1_5_3_M2_BUG3157890() throws Throwable {
-        test("1.5.3_M2_BUG3157890");
+        test("1.5.3_M2_BUG3157890", Transtype.XHTML,
+                Paths.get("test.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
     public void test1_5_3_M2_BUG3164866() throws Throwable {
-        test("1.5.3_M2_BUG3164866");
+        test("1.5.3_M2_BUG3164866", Transtype.XHTML,
+                Paths.get("testpng.ditamap"),
+                ImmutableMap.<String, Object>builder()
+                        .put("onlytopic.in.map", "true")
+                        .build());
     }
 
     @Test
     public void test1_5_3_M3_BUG3178361() throws Throwable {
-        test("1.5.3_M3_BUG3178361");
+        test("1.5.3_M3_BUG3178361", Transtype.XHTML,
+                Paths.get("test.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
     public void test1_5_3_M3_BUG3191701() throws Throwable {
-        test("1.5.3_M3_BUG3191701");
+        test("1.5.3_M3_BUG3191701", Transtype.XHTML,
+                Paths.get("test.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
     public void test1_5_3_M3_BUG3191704() throws Throwable {
-        test("1.5.3_M3_BUG3191704");
+        test("1.5.3_M3_BUG3191704", Transtype.XHTML,
+                Paths.get("test.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
