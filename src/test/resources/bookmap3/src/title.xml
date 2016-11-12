@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying LICENSE file for
+  applicable licenses.-->
+<!-- Copyright by Comtech Services, Inc -->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.1 Concept//EN" "concept.dtd">
+<concept id="titlepage" xml:lang="en-us">
+  <title>DITA Open Toolkit Installation Guide</title>
+  <conbody>
+    <p>Authored by Comtech Services, Inc.</p>
+  </conbody>
+</concept>

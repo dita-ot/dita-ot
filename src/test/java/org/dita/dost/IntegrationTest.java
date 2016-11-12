@@ -197,8 +197,59 @@ public final class IntegrationTest {
     }
 
     @Test
-    public void testbookmap2() throws Throwable {
-        test("bookmap(2)");
+    public void testBookmap1() throws Throwable {
+        test("bookmap1", Transtype.XHTML,
+                Paths.get("bookmap(2)_testdata1.ditamap"),
+                emptyMap(),
+                0, 0);
+    }
+
+    @Test
+    public void testBookmap2() throws Throwable {
+        test("bookmap2", Transtype.XHTML,
+                Paths.get("bookmap(2)_testdata2.ditamap"),
+                emptyMap(),
+                0, 1);
+    }
+
+    @Test
+    public void testBookmap3() throws Throwable {
+        test("bookmap3", Transtype.XHTML,
+                Paths.get("bookmap(2)_testdata3.ditamap"),
+                emptyMap(),
+                0, 0);
+    }
+
+    @Test
+    public void testBookmap4() throws Throwable {
+        test("bookmap4", Transtype.XHTML,
+                Paths.get("bookmap(2)_testdata4.ditamap"),
+                emptyMap(),
+                0, 1);
+    }
+
+    @Test
+    public void testBookmap5() throws Throwable {
+        test("bookmap5", Transtype.XHTML,
+                Paths.get("bookmap(2)_testdata5.ditamap"),
+                emptyMap(),
+                0, 0);
+    }
+
+    @Test
+    public void testBookmap6() throws Throwable {
+        test("bookmap6", Transtype.XHTML,
+                Paths.get("bookmap(2)_testdata6.ditamap"),
+                emptyMap(),
+                0, 1);
+    }
+
+    @Test
+    public void testBookmap7() throws Throwable {
+        test("bookmap7", Transtype.XHTML,
+                Paths.get("bookmap(2)_testdata7.ditamap"),
+                emptyMap(),
+                0, 0);
     }
 
     @Test
