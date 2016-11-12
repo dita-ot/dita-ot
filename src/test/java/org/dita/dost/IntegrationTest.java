@@ -20,7 +20,9 @@ public class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void test03() throws Throwable {
-        test("03");
+        test("03", Transtype.XHTML,
+                Paths.get("03.ditamap"),
+                Collections.emptyMap());
     }
 
     @Test
