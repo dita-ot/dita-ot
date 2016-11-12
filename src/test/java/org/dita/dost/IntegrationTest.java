@@ -491,8 +491,23 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testuplevels() throws Throwable {
-        test("uplevels");
+    public void testuplevels1() throws Throwable {
+        test("uplevels1", Transtype.XHTML,
+                Paths.get("maps/above.ditamap"),
+                ImmutableMap.<String, Object>builder()
+                        .put("generate.copy.outer", "1")
+                        .put("outer.control", "quiet")
+                        .build());
+    }
+
+    @Test
+    public void testuplevels3() throws Throwable {
+        test("uplevels3", Transtype.XHTML,
+                Paths.get("maps/above.ditamap"),
+                ImmutableMap.<String, Object>builder()
+                        .put("generate.copy.outer", "3")
+                        .put("outer.control", "quiet")
+                        .build());
     }
 
 }
