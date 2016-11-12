@@ -91,8 +91,42 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void test22() throws Throwable {
-        test("22");
+    public void test22_TC1() throws Throwable {
+        test("22_TC1", Transtype.PREPROCESS,
+                Paths.get("TC1.ditamap"),
+                Collections.emptyMap(),
+                3, 0);
+    }
+
+    @Test
+    public void test22_TC2() throws Throwable {
+        test("22_TC2", Transtype.PREPROCESS,
+                Paths.get("TC2.ditamap"),
+                Collections.emptyMap(),
+                2, 0);
+    }
+
+    @Test
+    public void test22_TC3() throws Throwable {
+        test("22_TC3", Transtype.PREPROCESS,
+                Paths.get("TC3.ditamap"),
+                Collections.emptyMap(),
+                3, 0);
+    }
+
+    @Test
+    public void test22_TC4() throws Throwable {
+        test("22_TC4", Transtype.PREPROCESS,
+                Paths.get("TC4.ditamap"),
+                Collections.emptyMap());
+    }
+
+    @Test
+    public void test22_TC6() throws Throwable {
+        test("22_TC6", Transtype.PREPROCESS,
+                Paths.get("TC6.ditamap"),
+                Collections.emptyMap(),
+                4, 0);
     }
 
     @Test
