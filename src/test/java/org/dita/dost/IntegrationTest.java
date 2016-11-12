@@ -12,7 +12,6 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 
 import java.nio.file.Paths;
-import java.util.Collections;
 
 import static java.util.Collections.emptyMap;
 
@@ -22,42 +21,42 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void test03() throws Throwable {
         test("03", Transtype.XHTML,
                 Paths.get("03.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
     public void test1_5_2_M4_BUG3052904() throws Throwable {
         test("1.5.2_M4_BUG3052904", Transtype.XHTML,
                 Paths.get("keyref-test-01.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
     public void test1_5_2_M4_BUG3052913() throws Throwable {
         test("1.5.2_M4_BUG3052913", Transtype.XHTML,
                 Paths.get("keyref-test-01.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
     public void test1_5_2_M4_BUG3056939() throws Throwable {
         test("1.5.2_M4_BUG3056939", Transtype.XHTML,
                 Paths.get("test-conref-xref-keyref-bug.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
     public void test1_5_2_M5_BUG3059256() throws Throwable {
         test("1.5.2_M5_BUG3059256", Transtype.XHTML,
                 Paths.get("test.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
     public void test1_5_3_M2_BUG3157890() throws Throwable {
         test("1.5.3_M2_BUG3157890", Transtype.XHTML,
                 Paths.get("test.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
@@ -73,28 +72,28 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void test1_5_3_M3_BUG3178361() throws Throwable {
         test("1.5.3_M3_BUG3178361", Transtype.XHTML,
                 Paths.get("test.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
     public void test1_5_3_M3_BUG3191701() throws Throwable {
         test("1.5.3_M3_BUG3191701", Transtype.XHTML,
                 Paths.get("test.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
     public void test1_5_3_M3_BUG3191704() throws Throwable {
         test("1.5.3_M3_BUG3191704", Transtype.XHTML,
                 Paths.get("test.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
     public void test22_TC1() throws Throwable {
         test("22_TC1", Transtype.PREPROCESS,
                 Paths.get("TC1.ditamap"),
-                Collections.emptyMap(),
+                emptyMap(),
                 3, 0);
     }
 
@@ -102,7 +101,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void test22_TC2() throws Throwable {
         test("22_TC2", Transtype.PREPROCESS,
                 Paths.get("TC2.ditamap"),
-                Collections.emptyMap(),
+                emptyMap(),
                 2, 0);
     }
 
@@ -110,7 +109,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void test22_TC3() throws Throwable {
         test("22_TC3", Transtype.PREPROCESS,
                 Paths.get("TC3.ditamap"),
-                Collections.emptyMap(),
+                emptyMap(),
                 3, 0);
     }
 
@@ -118,14 +117,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void test22_TC4() throws Throwable {
         test("22_TC4", Transtype.PREPROCESS,
                 Paths.get("TC4.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
     public void test22_TC6() throws Throwable {
         test("22_TC6", Transtype.PREPROCESS,
                 Paths.get("TC6.ditamap"),
-                Collections.emptyMap(),
+                emptyMap(),
                 4, 0);
     }
 
@@ -133,7 +132,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void test2374525() throws Throwable {
         test("2374525", Transtype.PREPROCESS,
                 Paths.get("test.dita"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
@@ -407,7 +406,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void testimage_scale() throws Throwable {
         test("image-scale", Transtype.XHTML,
                 Paths.get("test.dita"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
@@ -425,7 +424,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void testkeyref_All_tags() throws Throwable {
         test("keyref_All_tags", Transtype.XHTML,
                 Paths.get("mp_author1.ditamap"),
-                Collections.emptyMap(),
+                emptyMap(),
                 1, 0);
     }
 
@@ -433,7 +432,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void testkeyref_Keyword_links() throws Throwable {
         test("keyref_Keyword_links", Transtype.XHTML,
                 Paths.get("mp_author1.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
@@ -455,20 +454,26 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void testkeyref_Swap_out_variable_content() throws Throwable {
         test("keyref_Swap_out_variable_content", Transtype.XHTML,
                 Paths.get("mp_author1.ditamap"),
-                Collections.emptyMap());
+                emptyMap());
     }
 
     @Test
     public void testkeyref_modify() throws Throwable {
         test("keyref_modify", Transtype.XHTML,
                 Paths.get("mp_author1.ditamap"),
-                Collections.emptyMap(),
+                emptyMap(),
                 1, 0);
     }
 
     @Test
     public void testlang() throws Throwable {
         test("lang");
+//        test("lang", Transtype.XHTML,
+//                Paths.get("lang.ditamap"),
+//                ImmutableMap.<String, Object>builder()
+//                        .put("validate", "false")
+//                        .build(),
+//                1, 0);
     }
 
     @Test
