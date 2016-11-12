@@ -1,3 +1,10 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2015 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
+ */
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
@@ -17,8 +24,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
 
 /**
  * Resource collection that finds matching resources from job configuration.
@@ -56,7 +61,8 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
                     final File srcFile = new File(f.src);
                     if (srcFile.exists()) {
                         log("Found source directory file " + srcFile, Project.MSG_VERBOSE);
-                        res.add(new FileResource(toFile(job.getInputDir()), f.file.toString()));
+                        final File rel = FileUtils.getRelativePath(new File(new File(job.getInputDir()), "dummy"), srcFile);
+                        res.add(new FileResource(toFile(job.getInputDir()), rel.getPath()));
                     } else {
                         log("File " + f.src + " not found", Project.MSG_ERR);
                     }
@@ -121,7 +127,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
     }
 
     private static class JobResource extends URLResource {
-        private String relPath;
+        private final String relPath;
         public JobResource(final URL baseURL, final String relPath) {
             super();
             setBaseURL(baseURL);

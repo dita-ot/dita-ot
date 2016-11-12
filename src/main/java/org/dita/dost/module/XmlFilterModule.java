@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2015 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.module;
 
@@ -8,6 +11,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.XMLFilter;
@@ -23,7 +27,7 @@ import java.util.List;
  */
 public final class XmlFilterModule extends AbstractPipelineModuleImpl {
 
-    private List<AbstractXMLFilter> pipe;
+    private List<FilterPair> pipe;
 
     /**
      * Filter files through XML filters.
@@ -36,10 +40,10 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
             throws DITAOTException {
         final Collection<FileInfo> fis = job.getFileInfo(fileInfoFilter);
         for (final FileInfo f: fis) {
-            final URI file = job.tempDir.toURI().resolve(f.uri);
+            final URI file = job.tempDirURI.resolve(f.uri);
             logger.info("Processing " + file);
             try {
-                XMLUtils.transform(file, getProcessingPipe(file));
+                XMLUtils.transform(file, getProcessingPipe(f));
             } catch (final DITAOTException e) {
                 logger.error("Failed to process XML filter: " + e.getMessage(), e);
             }
@@ -47,25 +51,43 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
-    public void setProcessingPipe(final List<AbstractXMLFilter> pipe) {
+    public void setProcessingPipe(final List<FilterPair> pipe) {
         this.pipe = pipe;
     }
 
     /**
      * Get pipe line filters
      *
-     * @param fileToParse absolute URI to current file being processed
+     * @param fi current file being processed
      */
-    private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
+    private List<XMLFilter> getProcessingPipe(final FileInfo fi) {
+        final URI fileToParse = job.tempDirURI.resolve(fi.uri);
         assert fileToParse.isAbsolute();
         final List<XMLFilter> res = new ArrayList<>();
-        for (final AbstractXMLFilter f: pipe) {
-            logger.debug("Configure filter " + f.getClass().getCanonicalName());
-            f.setCurrentFile(fileToParse);
-            f.setJob(job);
-            f.setLogger(logger);
-            res.add(f);
+        for (final FilterPair p: pipe) {
+            if (p.predicate.accept(fi)) {
+                final AbstractXMLFilter f = p.filter;
+                logger.debug("Configure filter " + f.getClass().getCanonicalName());
+                f.setCurrentFile(fileToParse);
+                f.setJob(job);
+                f.setLogger(logger);
+                res.add(f);
+            }
         }
         return res;
     }
+
+    /**
+     * SAX filter with file predicate.
+     */
+    public static class FilterPair {
+        public final AbstractXMLFilter filter;
+        public final Filter<FileInfo> predicate;
+
+        public FilterPair(final AbstractXMLFilter filter, final Filter<FileInfo> fileInfoFilter) {
+            this.filter = filter;
+            this.predicate = fileInfoFilter;
+        }
+    }
+
 }

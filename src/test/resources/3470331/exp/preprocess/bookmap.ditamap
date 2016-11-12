@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ?>
+<bookmap xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map bookmap/bookmap " ditaarch:DITAArchVersion="1.2" domains="(map bookmap)                          (topic delay-d)                          (map mapgroup-d)                          (topic indexing-d)                           (topic xnal-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         " id="book">
+  <topicref class="- map/topicref bookmap/chapter " id="tr1"/>
+  <topicref class="- map/topicref bookmap/chapter " id="tr2"/>
+</bookmap>

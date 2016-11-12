@@ -27,8 +27,8 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
-See the accompanying license.txt file for applicable licenses.
+This file is part of the DITA Open Toolkit project. 
+See the accompanying LICENSE file for applicable license.
 -->
 
 <!-- UPDATES: 20100524: SF Bug 2385466, disallow font-family="inherit" due to 
@@ -41,6 +41,7 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:x="adobe:ns:meta/"
                 exclude-result-prefixes="opentopic-i18n x">
 
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 
   <dita:extension id="dita.xsl.xslfo.i18n-postprocess"

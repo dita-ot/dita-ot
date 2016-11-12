@@ -1,0 +1,15 @@
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  id="topic_yvt_bmz_cj" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Topic title</title>
+  <body class="- topic/body ">
+    <image class="- topic/image " href="img.jpg" placement="inline" scale="50"/>
+    <image class="- topic/image " href="img.png" placement="inline" scale="50"/>
+    <image class="- topic/image " href="img.gif" placement="inline" scale="50"/>
+    <!-- again -->
+    <image class="- topic/image " href="img.jpg" placement="inline" scale="50"/>
+    <image class="- topic/image " href="img.png" placement="inline" scale="50"/>
+    <image class="- topic/image " href="img.gif" placement="inline" scale="50"/>
+  </body>
+</topic>

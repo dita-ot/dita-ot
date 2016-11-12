@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE topic  PUBLIC "-//OASIS//DTD DITA 1.1 Topic//EN"
+ "../../dtd/topic.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright 2001, 2004 IBM Corporation.         -->
+<!--                                          -->
+<topic id="bats" xml:lang="en-us">
+   <title>Programming elements</title>
+   <body>
+      <section>
+<p>The programming domains elements are used to define the syntax and to give
+examples of programming languages.<indexterm>Domains elements<indexterm>programming
+elements</indexterm>
+ </indexterm><indexterm>programming elements</indexterm></p>
+</section>
+   </body>
+</topic>

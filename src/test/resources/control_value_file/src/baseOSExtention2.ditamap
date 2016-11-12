@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA 1.2 Subject Scheme Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/subjectScheme/dtd/subjectScheme.dtd">
+<subjectScheme xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Merging CVF with an extension scheme</title>
+    <schemeref href="baseOSNavtitle.ditamap"></schemeref>
+    <subjectdef keys="os">
+        <subjectdef keys="macos" navtitle="Macintosh"/>
+        <subjectdef keys="mswin">
+            <subjectdef keys="winxp" navtitle="Windows XP"/>
+            <subjectdef keys="win98" navtitle="Windows Vista"/>
+        </subjectdef>
+    </subjectdef>
+    </subjectScheme>
+

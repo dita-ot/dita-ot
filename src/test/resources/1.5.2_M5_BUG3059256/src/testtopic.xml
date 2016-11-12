@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="test-topic">
+  <title>Bug 3059256</title>
+  <body>
+   <!-- Scenario 1 - local link with DITAEXT-->
+    <p>Cross-refence uses local scope with DITAEXT <xref href="topic1.dita" scope="local" >Direct to topic1.html</xref>.</p>  
+    
+<!--    Scenario 2 - local link with xml extension-->
+    <p>Cross-reference uses local scope with  xml extension  <xref href="topic2.xml" scope="local" >Direct to topic2.html</xref>.</p>  
+    
+<!--    Scenario 3 - peer link with xml extension-->
+    <p>Cross-reference uses peer scope with xml extension <xref href="topic1.xml" scope="peer" >Direct to topic1.html</xref>.</p>  
+    
+<!--    Scenario 4 - peer link with dita extension-->
+    <p>Cross-reference uses peer scope with dita extension <xref href="topic2.dita" scope="peer" >Direct to topic2.html</xref>.</p>  
+      
+      <!-- Scenario 5 - local link with DITAEXT (default scope)-->
+      <p>Cross-refence uses default scope with DITAEXT <xref href="topic1.dita" >Direct to topic1.html</xref>.</p>  
+      
+      <!--    Scenario 6 - local link with xml extension (default scope)-->
+      <p>Cross-reference uses default scope with  xml extension  <xref href="topic2.xml"  >Direct to topic2.html</xref>.</p>  
+    
+  </body>
+</topic>

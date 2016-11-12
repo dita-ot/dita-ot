@@ -28,7 +28,7 @@ licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
 This file is part of the DITA Open Toolkit project.
-See the accompanying license.txt file for applicable licenses.
+See the accompanying LICENSE file for applicable license.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -249,9 +249,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
-                    <xsl:call-template name="insertChapterFirstpageStaticContent">
+                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                         <xsl:with-param name="type" select="'chapter'"/>
-                    </xsl:call-template>
+                    </xsl:apply-templates>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
                         <xsl:call-template name="pullPrologIndexTerms"/>
@@ -301,9 +301,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
-                    <xsl:call-template name="insertChapterFirstpageStaticContent">
+                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                         <xsl:with-param name="type" select="'appendix'"/>
-                    </xsl:call-template>
+                    </xsl:apply-templates>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
                         <xsl:call-template name="pullPrologIndexTerms"/>
@@ -350,9 +350,9 @@ See the accompanying license.txt file for applicable licenses.
           
           <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
           
-          <xsl:call-template name="insertChapterFirstpageStaticContent">
+          <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
             <xsl:with-param name="type" select="'appendices'"/>
-          </xsl:call-template>
+          </xsl:apply-templates>
           
           <fo:block xsl:use-attribute-sets="topic.title">
             <xsl:call-template name="pullPrologIndexTerms"/>
@@ -414,9 +414,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
-                    <xsl:call-template name="insertChapterFirstpageStaticContent">
+                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                         <xsl:with-param name="type" select="'part'"/>
-                    </xsl:call-template>
+                    </xsl:apply-templates>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
                         <xsl:call-template name="pullPrologIndexTerms"/>
@@ -487,9 +487,9 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
 
-                    <xsl:call-template name="insertChapterFirstpageStaticContent">
+                    <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                         <xsl:with-param name="type" select="'notices'"/>
-                    </xsl:call-template>
+                    </xsl:apply-templates>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
                         <xsl:call-template name="pullPrologIndexTerms"/>
@@ -517,6 +517,7 @@ See the accompanying license.txt file for applicable licenses.
    </xsl:template>
 
 
+    <!-- Deprecated in 3.0: use mode="insertChapterFirstpageStaticContent" -->
     <xsl:template name="processFrontMatterTopic">
         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="page-sequence.frontmatter">
              <!-- Ideally would use existing template "insertFrontMatterStaticContents". Using "insertBodyStaticContents"
@@ -548,6 +549,13 @@ See the accompanying license.txt file for applicable licenses.
    </xsl:template>
 
     <xsl:template name="insertChapterFirstpageStaticContent">
+      <xsl:param name="type" as="xs:string"/>
+      <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
+        <xsl:with-param name="type" select="$type" as="xs:string"/>
+      </xsl:apply-templates>
+    </xsl:template>
+
+   <xsl:template match="*" mode="insertChapterFirstpageStaticContent">
         <xsl:param name="type" as="xs:string"/>
         <fo:block>
             <xsl:attribute name="id">
@@ -635,7 +643,7 @@ See the accompanying license.txt file for applicable licenses.
           <xsl:for-each select="$map/descendant::*[contains(@class, ' bookmap/chapter ')]">
             <xsl:sequence select="."/>
           </xsl:for-each>
-        </xsl:document>>
+        </xsl:document>
       </xsl:variable>
       <xsl:for-each select="$chapters/*[current()/@id = @id]">
         <xsl:number format="1" count="*[contains(@class, ' bookmap/chapter ')]"/>
@@ -847,11 +855,15 @@ See the accompanying license.txt file for applicable licenses.
   </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tm ')]">
+      <xsl:variable name="generate-symbol" as="xs:boolean">
+        <xsl:apply-templates select="." mode="tm-scope"/>
+      </xsl:variable>
         <fo:inline xsl:use-attribute-sets="tm">
             <xsl:apply-templates/>
             <xsl:choose>
+              <xsl:when test="not($generate-symbol)"/>
                 <xsl:when test="@tmtype='service'">
-                    <fo:inline xsl:use-attribute-sets="tm__content__service">SM</fo:inline>
+                  <fo:inline xsl:use-attribute-sets="tm__content__service">&#8480;</fo:inline>
                 </xsl:when>
                 <xsl:when test="@tmtype='tm'">
                     <fo:inline xsl:use-attribute-sets="tm__content">&#8482;</fo:inline>
@@ -859,13 +871,14 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="@tmtype='reg'">
                     <fo:inline xsl:use-attribute-sets="tm__content">&#174;</fo:inline>
                 </xsl:when>
-                <xsl:otherwise>
-                    <fo:inline xsl:use-attribute-sets="tm__content"><xsl:text>Error in tm type.</xsl:text></fo:inline>
-                </xsl:otherwise>
             </xsl:choose>
         </fo:inline>
     </xsl:template>
 
+  <xsl:template match="node() | @*" mode="tm-scope" as="xs:boolean" priority="-10">
+    <xsl:sequence select="true()"/>
+  </xsl:template>  
+  
   <xsl:template match="*[contains(@class,' topic/term ')]" name="topic.term">
     <xsl:param name="keys" select="@keyref" as="attribute()?"/>
     <xsl:param name="contents" as="node()*">

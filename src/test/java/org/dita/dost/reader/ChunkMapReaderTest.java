@@ -1,3 +1,10 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2016 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
+ */
 package org.dita.dost.reader;
 
 import com.google.common.collect.ImmutableMap;
@@ -17,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static org.dita.dost.util.Constants.INPUT_DIR_URI;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -39,17 +47,24 @@ public class ChunkMapReaderTest {
     @Test
     public void testRead() throws IOException {
         final Job job = new Job(tempDir);
+        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
 
         final ChunkMapReader mapReader = new ChunkMapReader();
         mapReader.setLogger(new TestUtils.TestLogger());
         mapReader.setJob(job);
 
         TestUtils.copy(new File(srcDir, "gen.ditamap"), new File(tempDir, "maps" + File.separator + "gen.ditamap"));
-        job.add(new Job.FileInfo.Builder().uri(toURI("maps/gen.ditamap")).build());
+        job.add(new Job.FileInfo.Builder()
+                .src(new File(srcDir, "maps" + File.separator + "gen.ditamap").toURI())
+                .uri(toURI("maps/gen.ditamap"))
+                .build());
         for (final String srcFile : getSrcFiles()) {
             final URI dst = tempDir.toURI().resolve(srcFile);
             TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
-            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(srcDir, srcFile).toURI())
+                    .uri(toURI(srcFile))
+                    .build());
         }
 
         mapReader.read(new File(tempDir, "maps" + File.separator + "gen.ditamap"));
@@ -130,13 +145,22 @@ public class ChunkMapReaderTest {
 
     private Job createJob(final String map, final String... topics) throws IOException {
         final Job job = new Job(tempDir);
+        job.setProperty(INPUT_DIR_URI, srcDir.toURI().toString());
 
         TestUtils.copy(new File(srcDir, map), new File(tempDir, map));
-        job.add(new Job.FileInfo.Builder().uri(toURI(map)).build());
+        job.add(new Job.FileInfo.Builder()
+                .src(new File(srcDir, map).toURI())
+                .uri(toURI(map))
+                .result(new File(srcDir, map).toURI())
+                .build());
         for (final String srcFile : topics) {
             final URI dst = tempDir.toURI().resolve(srcFile);
             TestUtils.copy(new File(srcDir, "topic.dita"), new File(dst));
-            job.add(new Job.FileInfo.Builder().uri(toURI(srcFile)).build());
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(srcDir, srcFile).toURI())
+                    .uri(toURI(srcFile))
+                    .result(new File(srcDir, srcFile).toURI())
+                    .build());
         }
 
         return job;

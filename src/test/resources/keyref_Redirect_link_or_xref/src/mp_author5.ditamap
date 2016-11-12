@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    
+    <!-- this is the fivethi author -->
+    
+    <!-- just turn the link into plain text -->
+    
+    <topicref href="dita5.dita"/>
+    
+    <topicref keys="dita1">
+        <topicmeta>
+            <linktext>this is a linktext.</linktext>
+        </topicmeta>
+    </topicref>
+    
+</map>

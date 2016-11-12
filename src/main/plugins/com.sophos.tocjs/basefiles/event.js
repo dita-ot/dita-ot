@@ -1,7 +1,7 @@
 /*
-This file is part of the DITA Open Toolkit project hosted on
-Sourceforge.net. See the accompanying license.txt file for
-applicable licenses.                                                                                                                
+This file is part of the DITA Open Toolkit project.
+
+See the accompanying LICENSE file for applicable license.
                                                                                                                                                       
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.                                                                                                    
 Code licensed under the BSD License:                                                                                                                    

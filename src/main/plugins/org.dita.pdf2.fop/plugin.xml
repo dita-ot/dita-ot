@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2015 Jarno Elovirta
+
+See the accompanying LICENSE file for applicable license.
+-->
 <plugin id="org.dita.pdf2.fop">
   <require plugin="org.dita.pdf2"/>
   <!-- extensions -->
   <feature extension="depend.org.dita.pdf2.init.pre" value="transform.fo2pdf.fop.init"/>
   <feature extension="depend.org.dita.pdf2.format" value="transform.fo2pdf.fop"/>
+  <feature extension="dita.conductor.lib.import" file="lib/avalon-framework-api-4.3.1.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/avalon-framework-impl-4.3.1.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-anim-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-awt-util-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-bridge-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-css-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-dom-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-ext-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-extension-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-gvt-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-parser-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-script-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-svg-dom-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-svggen-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-transcoder-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-util-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-xml-1.8.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/commons-logging-1.0.4.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/fop-2.1.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/xmlgraphics-commons-2.1.jar"/>
   <transtype name="pdf" desc="PDF">
     <param name="pdf.formatter" desc="Specifies the XSL processor." type="enum">
       <val desc="Apache FOP" default="true">fop</val>

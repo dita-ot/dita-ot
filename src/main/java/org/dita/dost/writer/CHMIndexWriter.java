@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.writer;
 
@@ -56,7 +56,6 @@ public final class CHMIndexWriter extends AbstractExtendDitaWriter {
             serializer.writeEndElement(); // head
             serializer.writeStartElement("body");
             serializer.writeStartElement("ul");
-            final int termNum = termList.size();
             for (final IndexTerm term : termList) {
                 outputIndexTerm(term, serializer);
             }

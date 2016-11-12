@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project.
-     See the accompanying license.txt file for applicable licenses. -->
-<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
-<project name="dita.integrator" default="strict">
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2006 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
+<project name="dita.integrator" default="integrate">
   
   <dirname property="ant.file.dita.integrator.dir" file="${ant.file.dita.integrator}"/>
   
@@ -36,12 +40,7 @@
   </taskdef>
   
   <target name="integrate">
-    <condition property="strict" value="false">
-      <not>
-        <isset property="strict"/>
-      </not>
-    </condition>
-    <integrate ditadir="${dita.dir}" strict="${strict}"/>
+    <integrate ditadir="${dita.dir}" />
     <!-- place property files into a JAR so Ant will find them -->
     <jar destfile="${basedir}/lib/dost-configuration.jar">
       <fileset dir="${basedir}/resources">
@@ -57,15 +56,12 @@
   </target>
   
   <target name="lax" description="Run integration in lax mode">
-    <antcall target="integrate">
-      <param name="strict" value="false"/>
-    </antcall>
+    <echo>WARN: The lax integration mode has been removed, using strict mode</echo>
+    <antcall target="integrate"/>
   </target>
 
   <target name="strict" description="Run integration in strict mode">
-    <antcall target="integrate">
-      <param name="strict" value="true"/>
-    </antcall>
+    <antcall target="integrate"/>
   </target>
 
   <target name="install" description="Install plug-in" depends="install.init, install.local, install.download">
@@ -87,9 +83,7 @@
     <move todir="${dita.dir}/plugins/${plugin.id}">
       <fileset dir="${temp.plugin.dir}"/>
     </move>
-    <antcall target="integrate">
-      <param name="strict" value="true"/>
-    </antcall>
+    <antcall target="integrate"/>
   </target>
   <target name="install.init">
     <fail unless="plugin.file"/>
@@ -119,9 +113,7 @@
   </target>
   <target name="uninstall.delete" if="plugin.exists">
     <delete dir="${dita.dir}/plugins/${plugin.id}"/>
-    <antcall target="integrate">
-      <param name="strict" value="true"/>
-    </antcall>
+    <antcall target="integrate"/>
   </target>
   
 </project>

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
- Sourceforge.net. See the accompanying license.txt file for 
- applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2007 All Rights Reserved. -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2007 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  exclude-result-prefixes="xs" version="2.0">
 
  <!-- ========== Flagging with flags & revisions ========== -->
  
@@ -14,17 +18,15 @@
  -->
 
 <xsl:template match="*" mode="getrules">  
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
+  <xsl:variable name="domains"
+    select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"
+    as="xs:string"/>
   <xsl:variable name="tmp_props">
     <xsl:call-template name="getExtProps">
       <xsl:with-param name="domains" select="$domains"/>
     </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="props">
-    <xsl:value-of select="substring-after($tmp_props, ',')"/>
-  </xsl:variable>
+  <xsl:variable name="props" select="substring-after($tmp_props, ',')" as="xs:string"/>
  
  <!-- Test for the flagging attributes. If found, call 'gen-prop' with the values to use. Otherwise return -->
   <xsl:if test="@audience and not($filterFile='')">
@@ -234,9 +236,9 @@
   </xsl:template>
 
 <xsl:template name="getrules-parent">
-  <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-  </xsl:variable>
+  <xsl:variable name="domains"
+     select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"
+     as="xs:string"/>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, 'a(props')">
       <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>

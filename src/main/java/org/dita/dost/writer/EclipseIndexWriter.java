@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2006 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2006 All Rights Reserved.
  */
 package org.dita.dost.writer;
 
@@ -87,7 +87,6 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
             serializer.writeStartElement("index");
             //Clone the list of indexterms so we can look for see references
             termCloneList = cloneIndextermList(termList);
-            final int termNum = termList.size();
             for (final IndexTerm term : termList) {
                 outputIndexTerm(term, serializer, indexsee);
             }
@@ -178,7 +177,6 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     private void outputIndexEntry(final IndexTerm term, final XMLStreamWriter serializer) throws XMLStreamException {
 
         final List<IndexTermTarget> targets = term.getTargetList();
-        final int targetNum = targets.size();
 
         boolean foundIndexTerm = false;
         boolean foundIndexsee = false;
@@ -268,7 +266,6 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
     private void outputIndexEntryEclipseIndexsee(final IndexTerm term,
             final XMLStreamWriter serializer) throws XMLStreamException {
         final List<IndexTermTarget> targets = term.getTargetList();
-        final int targetNum = targets.size();
 
         // Index-see and index-see-also terms should also generate links to its
         // target

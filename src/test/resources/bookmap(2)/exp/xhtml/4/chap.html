@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<meta name="copyright" content="(C) Copyright 2014" />
+<meta name="DC.rights.owner" content="(C) Copyright 2014" />
+<meta name="DC.Type" content="concept" />
+<meta name="DC.Title" content="Supporting two file extensions in one DITA map" />
+<meta name="DC.Relation" scheme="URI" content="part.html" />
+<meta name="DC.Creator" content="Batty Things R US Fred Mertz Jr" />
+<meta name="DC.Format" content="XHTML" />
+<meta name="DC.Identifier" content="supporting2fileextensionsinaditamap" />
+<meta name="DC.Language" content="en-us" />
+<link rel="stylesheet" type="text/css" href="commonltr.css" />
+<title>Supporting two file extensions in one DITA map</title>
+</head>
+<body id="supporting2fileextensionsinaditamap">
+
+<h1 class="title topictitle1" id="ariaid-title1">Supporting two file extensions in one DITA map</h1>
+
+<div class="body conbody">
+<p class="p">DITA Open Toolkit supports two different file extensions, ".dita" and ".xml".
+Previous releases of DITA Open Toolkit do not support the transformation of
+DITA maps containing inconsistent file types, such as one DITA map containing
+both .dita and .xml files. Though you can create either .dita or .xml files,
+you cannot include both kinds of files in one DITA map. This makes file reuse
+difficult, because you have to change the file extensions manually make them
+consistent in one DITA map. </p>
+
+<p class="p">In DITA OT 1.3, you can include both .xml and .dita as the file extensions
+in one DITA map and transform the DITA map into your desired output without
+manually changing the file extensions.</p>
+
+<p class="p"> If you include both .xml and .dita files in one DITA map, and
+specify /ditaext:.dita in Java command, the .xml files are transferred to
+.dita files and put in the temp directory together with the .dita
+files. If you specify /ditaext:.xml in Java command, all the .dita files are
+transferred to .xml files under the temp directory. The default process option
+is changing all files into .xml files.</p>
+
+<div class="note note"><span class="notetitle">Note:</span> <ul class="ul">
+<li class="li">It is not suggested that you include files with the same root
+name but different extensions in the same directory because this might cause
+unexpected problems.</li>
+
+<li class="li">Error messages and warning messages in the console might not reflect the
+real extension. For example, if there is an incorrect usage in a.dita, the
+warning message in the console might refer to a.xml, because a.dita was changed
+into a.xml in the temp directory.</li>
+
+</ul>
+</div>
+
+<p class="p">You might use other file extensions together with .dita and .xml in one
+ditamap as well, such as .dit, but they are not tested in DITA OT 1.3 and
+thus you might take the risk of transformation failure.</p>
+
+</div>
+
+<div class="related-links">
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a class="link" href="part.html" title="You install components to make them available for your solution.">part.dita</a></div>
+</div>
+</div></body>
+</html>

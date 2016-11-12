@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<?path2project ../?>
+<?Pub Inc?><topic id="subdir" xml:lang="en-us" DTDVersion="V1.1.3" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d) (topic ut-d)" class="- topic/topic ">
+<title class="- topic/title ">conrefbreaksxref: target in the subdir</title>
+<shortdesc class="- topic/shortdesc ">Pull in a section, from a topic in the subdir.</shortdesc>
+<body class="- topic/body ">
+<section id="section" class="- topic/section "><title class="- topic/title ">Topic in the subdir</title><p class="- topic/p ">Look at the figure
+in this section: <xref href="#subdir/subfig" class="- topic/xref "></xref>.</p><p class="- topic/p ">Look at the figure
+in this topic, outside the section: <xref href="#subdir/outfig" class="- topic/xref "></xref></p><p class="- topic/p ">Look
+at this topic: <xref href="#subdir" class="- topic/xref "></xref></p><p class="- topic/p ">Look at a figure in a sub-topic: <xref href="#subdirsubfig/nestfig" class="- topic/xref "></xref></p><p class="- topic/p ">Look at the subtopic: <xref href="#subdirsubfig" class="- topic/xref "><?Pub Caret?></xref></p><fig id="subfig" class="- topic/fig "><title class="- topic/title ">This iz me fig</title>
+<p class="- topic/p ">here&apos;s a figure. Go figure.</p>
+</fig></section>
+<section id="nother" class="- topic/section "><title class="- topic/title ">Another section</title><fig id="outfig" class="- topic/fig "><title class="- topic/title ">Figure
+outside of the all-important section</title>
+<p class="- topic/p ">this is a figureable object.</p>
+</fig></section>
+</body>
+<topic id="subdirsubfig" xml:lang="en-us" DTDVersion="V1.1.3" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d) (topic ut-d)" class="- topic/topic ">
+<title class="- topic/title ">Subdir Subfig</title>
+<body class="- topic/body ">
+<p class="- topic/p ">This is a nested topic in the subdirectory</p>
+<fig id="nestfig" class="- topic/fig "><title class="- topic/title ">Figure in the nested topic</title>
+<p class="- topic/p ">this is hard to figure out</p>
+</fig>
+</body>
+</topic>
+</topic><?Pub *0000001333?>

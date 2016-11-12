@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="keyref_Redirect_conref" default="all">
+  <dirname property="test.basedir" file="${ant.file.keyref_Redirect_conref}"/>
+  <property name="test.name" value="keyref_Redirect_conref"/>
+  <property name="dita.dir" location="${test.basedir}/../.."/>
+  <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+  <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+  <target name="all" depends="keyref_Redirect_conref.xhtml"/>
+  <target name="keyref_Redirect_conref.xhtml" if="run.xhtml" unless="skip.xhtml">
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="transtype" value="xhtml"/>
+      <property name="args.input" location="${test.basedir}/src/mp_author1.ditamap"/>
+      <property name="output.dir" location="${result.dir}/xhtml/1"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml/1"/>
+    </ant>
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="transtype" value="xhtml"/>
+      <property name="args.input" location="${test.basedir}/src/mp_author2.ditamap"/>
+      <property name="output.dir" location="${result.dir}/xhtml/2"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml/2"/>
+    </ant>
+  </target>
+</project>

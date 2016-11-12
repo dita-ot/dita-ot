@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?workdir /Volumes/tmp/temp/conref_push/preprocess/pushReplace/pushReplace_without_conref?>
+<?workdir-uri file:/Users/jelovirt/Work/github/dita-ot/src/main/temp/conref_push/preprocess/pushReplace/pushReplace_without_conref/?>
+<?path2project ?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         ">
+  <topicref class="- map/topicref " href="dita2.dita" type="task">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">This is a case for pushReplace</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">This is a case for pushReplace</linktext>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="dita1.dita" type="task">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">this is a task</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">this is a task</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">this is also a reuse function</shortdesc>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="dita3.dita" type="task">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">this is a task</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">this is a task</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">this is also a reuse function</shortdesc>
+    </topicmeta>
+  </topicref>
+</map>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "..\dtd\map.dtd">
+<?Pub Inc?>
+<map title="Reltable for mapref test">
+<reltable>
+<relrow>
+<relcell type="concept">
+<topicref href="main-1.dita"></topicref>
+<topicref href="main-2.dita"></topicref>
+<topicref href="main-3.dita"></topicref>
+<topicref href="main-4.dita"></topicref>
+<topicref href="main-5.dita"></topicref>
+<topicref href="main-6.dita"></topicref>
+</relcell>
+<relcell type="task">
+<topicref href="mapref2-1.dita"></topicref>
+<topicref href="mapref2-2.dita"></topicref>
+<topicref href="mapref2-3.dita"></topicref>
+<topicref href="mapref2-4.dita"></topicref>
+<topicref href="mapref2-5.dita"></topicref>
+</relcell>
+<relcell type="reference">
+<topicref href="subdir/mapref1-1.dita"></topicref>
+<topicref href="subdir/mapref1-2.dita"></topicref>
+<topicref href="subdir/mapref1-3.dita"></topicref>
+<topicref href="subdir/mapref1-4.dita"></topicref>
+<topicref href="subdir/mapref1-5.dita"></topicref>
+</relcell>
+</relrow>
+</reltable>
+</map><?Pub Caret?>
+<?Pub *0000001221?>

@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2005, 2006 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.util;
 
@@ -964,6 +964,8 @@ public final class Constants {
     public static final String CONF_PRINT_TRANSTYPES = "print_transtypes";
     /** Property name for template files. */
     public static final String CONF_TEMPLATES = "templates";
+    /** Plugin configuration file name. */
+    public static final String PLUGIN_CONF = "plugins.xml";
 
     /** Project reference name for job configuration object. */
     public static final String ANT_REFERENCE_JOB = "job";

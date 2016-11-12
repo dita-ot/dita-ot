@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2011 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost;
 
@@ -338,6 +341,16 @@ public class TestUtils {
      */
     public static final class CachingLogger implements DITAOTLogger {
 
+        final boolean strict;
+
+        public CachingLogger() {
+            this(false);
+        }
+
+        public CachingLogger(final boolean strict) {
+            this.strict = strict;
+        }
+
         private List<Message> buf = new ArrayList<Message>();
         
         public void info(final String msg) {
@@ -349,11 +362,19 @@ public class TestUtils {
         }
 
         public void error(final String msg) {
-            buf.add(new Message(Message.Level.ERROR, msg, null));
+            if (strict) {
+                throw new RuntimeException();
+            } else {
+                buf.add(new Message(Message.Level.ERROR, msg, null));
+            }
         }
         
         public void error(final String msg, final Throwable t) {
-            buf.add(new Message(Message.Level.ERROR, msg, t));
+            if (strict) {
+                throw new RuntimeException(t);
+            } else {
+                buf.add(new Message(Message.Level.ERROR, msg, null));
+            }
         }
 
         public void logFatal(final String msg) {

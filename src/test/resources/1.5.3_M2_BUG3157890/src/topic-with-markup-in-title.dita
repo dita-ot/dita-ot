@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic1">
+  <title>Title With Markup <ph>This is in <codeph>&lt;ph></codeph>. Here is a footnote: <fn>This is a footnote in a title</fn></ph></title>
+  <body>
+    <p>Test Scenario 1: Check that ph and fn two tags within the title are preserved in the generated navigation title.</p>
+  </body>
+</topic>

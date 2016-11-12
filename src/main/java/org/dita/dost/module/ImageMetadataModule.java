@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2010 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.module;
 
@@ -58,7 +61,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
 
     private void storeImageFormat(final Collection<URI> images, final File outputDir) {
         final URI output = outputDir.toURI();
-        final URI temp = job.tempDir.toURI();
+        final URI temp = job.tempDirURI;
         for (final URI f : images) {
             assert f.isAbsolute();
             URI rel = output.relativize(f);

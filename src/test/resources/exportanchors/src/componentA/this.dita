@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="this">
+  <title>This and that</title>
+  <shortdesc>Oh, you know, this and that.</shortdesc>
+  <body>
+    <fig id="that">
+      <p>more of that</p>
+    </fig>
+  </body>
+</topic>

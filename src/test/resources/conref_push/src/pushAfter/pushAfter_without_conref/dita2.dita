@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+
+<!-- this is a case for 12015@2008-05-19 -->
+
+<task id="Z">
+    <title>This is a case for pushAfter</title>
+    
+    <taskbody>
+        <steps>    
+                      
+            <!-- pushAfter case 1 -->
+            <step conref="dita1.dita#X/A" conaction="mark">  <cmd></cmd></step>
+            <step conaction="pushafter"> <cmd conref="dita3.dita#X/cmdID"></cmd> </step>   
+            <!-- pushEnd -->
+            
+            <!-- pushAfter case 2 -->
+            <step conref="dita1.dita#X/B" conaction="mark"><cmd></cmd></step>
+           <step conaction="pushafter"><cmd></cmd></step>
+            
+            <!-- pushAfter case 3 -->
+            <step conref="dita1.dita#X/C" conaction="mark"><cmd></cmd></step>
+            <step conaction="pushafter">
+            <cmd>
+                <cite conref="dita3.dita#X/citeID"></cite>
+            </cmd>
+            </step>
+            
+        </steps>
+    </taskbody>
+</task>
+

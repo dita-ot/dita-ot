@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2010 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
 package org.dita.dost.reader;
 
@@ -260,7 +260,7 @@ public final class KeyrefReader implements AbstractReader {
         return new KeyScope(scope.name, keys, children);
     }
 
-    private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) throws DITAOTException {
+    private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) {
         final Element elem = keyDef.element;
         final String keyref = elem.getAttribute(ATTRIBUTE_NAME_KEYREF);
         if (!keyref.isEmpty() && scope.keyDefinition.containsKey(keyref)) {

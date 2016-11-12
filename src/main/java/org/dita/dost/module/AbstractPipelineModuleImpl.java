@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2013 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.module;
 
@@ -10,6 +13,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Job.FileInfo.Filter;
 
 /**
  * Abstract class for modules.
@@ -18,7 +22,7 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
 
     protected DITAOTLogger logger;
     protected Job job;
-    protected FileInfo.Filter<FileInfo> fileInfoFilter;
+    protected Filter<FileInfo> fileInfoFilter;
 
     @Override
     public void setLogger(final DITAOTLogger logger) {
@@ -32,7 +36,7 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
     
     abstract public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException;
 
-    public void setFileInfoFilter(FileInfo.Filter<FileInfo> fileInfoFilter) {
+    public void setFileInfoFilter(Filter<FileInfo> fileInfoFilter) {
         this.fileInfoFilter = fileInfoFilter;
     }
 }

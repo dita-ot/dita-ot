@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project?>
+<?path2project-uri ./?>
+<?Pub Inc?>
+<task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="pushfrom" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    " class="- topic/topic task/task ">
+  <title class="- topic/title ">Push from</title>
+  <shortdesc class="- topic/shortdesc ">Push from this topic into the other</shortdesc>
+  <taskbody class="- topic/body task/taskbody ">
+    <steps class="- topic/ol task/steps ">
+      <step id="stepid1" class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">Content being pushed: target step. This is valid.</cmd>
+      </step>
+      <step id="stepid2" class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">Content being pushed: target cmd. This is invalid.</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">This step should replace one that existed</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">This cmd should NOT APPEAR, THE SYNTAX IS INVALID.</cmd>
+        <info class="- topic/itemgroup task/info ">It is trying to replace a cmd with a step.</info>
+      </step>
+    </steps>
+  </taskbody>
+  <?Pub Caret -1?>
+</task>
+<?Pub *0000000439?>

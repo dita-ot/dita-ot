@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic">
+  <title>Push and Target in One File</title>
+  <body>
+    <p id="p1">I should not appear in the output.</p>
+    <p conref="#topic/p1" conaction="pushreplace">I should appear in the output twice.</p>
+  </body>
+</topic>

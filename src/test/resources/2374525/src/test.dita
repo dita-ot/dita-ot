@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="id2374525">
+  <title>Topic title</title>
+  <body>
+    <table>
+      <tgroup cols="2">
+        <tbody>
+          <row>
+            <entry>1</entry>
+            <entry>2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table>
+      <tgroup cols="2">
+        <colspec colwidth="1*"/>
+        <colspec colwidth="3*"/>
+        <tbody>
+          <row>
+            <entry>1</entry>
+            <entry>2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table>
+      <tgroup cols="2">
+        <colspec colwidth="1cm"/>
+        <colspec colwidth="3cm"/>
+        <tbody>
+          <row>
+            <entry>1</entry>
+            <entry>2</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </body>
+</topic>

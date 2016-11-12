@@ -1,13 +1,14 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2010 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
 package org.dita.dost.module;
 
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.URLUtils.*;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.w3c.dom.Attr;
@@ -44,12 +46,24 @@ import javax.xml.transform.stream.StreamResult;
  */
 final class KeyrefModule extends AbstractPipelineModuleImpl {
 
+    private TempFileNameScheme tempFileNameScheme;
     /** Delayed conref utils. */
     private DelayConrefUtils delayConrefUtils;
     private String transtype;
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
     private TopicFragmentFilter topicFragmentFilter;
+
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        tempFileNameScheme.setBaseDir(job.getInputDir());
+    }
 
     /**
      * Entry point of KeyrefModule.
@@ -68,6 +82,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             }
         }));
         if (!fis.isEmpty()) {
+            tempFileNameScheme.setBaseDir(job.getInputDir());
             initFilters();
 
             final Document doc = readMap();
@@ -75,8 +90,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final KeyrefReader reader = new KeyrefReader();
             reader.setLogger(logger);
             final URI mapFile = job.getInputMap();
-            logger.info("Reading " + job.tempDir.toURI().resolve(mapFile).toString());
-            reader.read(job.tempDir.toURI().resolve(mapFile), doc);
+            logger.info("Reading " + job.tempDirURI.resolve(mapFile).toString());
+            reader.read(job.tempDirURI.resolve(mapFile), doc);
 
             final KeyScope rootScope = reader.getKeyDefinition();
             final List<ResolveTask> jobs = collectProcessingTopics(fis, rootScope, doc);
@@ -118,7 +133,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     /** Collect topics for key reference processing and modify map to reflect new file names. */
-    private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) throws DITAOTException {
+    private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) {
         final List<ResolveTask> res = new ArrayList<>();
         res.add(new ResolveTask(rootScope, job.getFileInfo(job.getInputMap()), null));
         // Collect topics from map and rewrite topicrefs for duplicates
@@ -167,10 +182,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 final URI href = stripFragment(job.getInputMap().resolve(hrefNode.getValue()));
                 final FileInfo fi = job.getFileInfo(href);
                 if (fi != null && fi.hasKeyref) {
-                    res.add(processTopic(fi, s, isResourceOnly));
+                    final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly);
+                    res.add(resolveTask);
                     final Integer used = usage.get(fi.uri);
                     if (used > 1) {
-                        hrefNode.setValue(addSuffix(toURI(hrefNode.getValue()), "-" + (used - 1)).toString());
+                        final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                        hrefNode.setValue(value.toString());
                     }
                 }
             }
@@ -205,8 +222,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         usage.put(f.uri, used);
 
         if (used > 1) {
-            final URI out = addSuffix(f.uri, "-" + (used - 1));
-            final FileInfo fo = new FileInfo.Builder(f).uri(out).build();
+            final URI result = addSuffix(f.result, "-" + (used - 1));
+            final URI out = tempFileNameScheme.generateTempFileName(result);
+            final FileInfo fo = new FileInfo.Builder(f)
+                    .uri(out)
+                    .result(result)
+                    .build();
             // TODO: Should this be added when content is actually generated?
             job.add(fo);
             return new ResolveTask(scope, f, fo);
@@ -226,7 +247,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         conkeyrefFilter.setLogger(logger);
         conkeyrefFilter.setJob(job);
         conkeyrefFilter.setKeyDefinitions(r.scope);
-        conkeyrefFilter.setCurrentFile(job.tempDir.toURI().resolve(r.in.uri));
+        conkeyrefFilter.setCurrentFile(job.tempDirURI.resolve(r.in.uri));
         conkeyrefFilter.setDelayConrefUtils(delayConrefUtils);
         filters.add(conkeyrefFilter);
 
@@ -236,19 +257,19 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         parser.setLogger(logger);
         parser.setJob(job);
         parser.setKeyDefinition(r.scope);
-        parser.setCurrentFile(job.tempDir.toURI().resolve(r.in.uri));
+        parser.setCurrentFile(job.tempDirURI.resolve(r.in.uri));
         filters.add(parser);
 
         try {
             logger.debug("Using " + (r.scope.name != null ? r.scope.name + " scope" : "root scope"));
             if (r.out != null) {
-                logger.info("Processing " + job.tempDir.toURI().resolve(r.in.uri) +
-                        " to " + job.tempDir.toURI().resolve(r.out.uri));
+                logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
+                        " to " + job.tempDirURI.resolve(r.out.uri));
                 XMLUtils.transform(new File(job.tempDir, r.in.file.getPath()),
                                    new File(job.tempDir, r.out.file.getPath()),
                                    filters);
             } else {
-                logger.info("Processing " + job.tempDir.toURI().resolve(r.in.uri));
+                logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
                 XMLUtils.transform(new File(job.tempDir, r.in.file.getPath()), filters);
             }
             // validate resource-only list
@@ -274,7 +295,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     private Document readMap() throws DITAOTException {
         InputSource in = null;
         try {
-            in = new InputSource(job.tempDir.toURI().resolve(job.getInputMap()).toString());
+            in = new InputSource(job.tempDirURI.resolve(job.getInputMap()).toString());
             return XMLUtils.getDocumentBuilder().parse(in);
         } catch (final Exception e) {
             throw new DITAOTException("Failed to parse map: " + e.getMessage(), e);
@@ -291,7 +312,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         Result out = null;
         try {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            out = new StreamResult(new File(job.tempDir.toURI().resolve(job.getInputMap())));
+            out = new StreamResult(new File(job.tempDirURI.resolve(job.getInputMap())));
             transformer.transform(new DOMSource(doc), out);
         } catch (final TransformerConfigurationException e) {
             throw new RuntimeException(e);

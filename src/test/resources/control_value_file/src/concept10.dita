@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd">
+<concept id="concept6" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Test product attribute</title>
+    <conbody>
+        <p product="products">product value is products within p tag</p>
+        <p>
+            <note product="book">book (within note tag)</note>
+            <b product="comic">comic (within b tag)</b>
+            <data product="novel">novel (within data tag)</data>
+            <lq product="movie">movie (within lq tag)</lq>
+            <indexterm product="cd">cd (within indexterm tag)</indexterm>
+        </p>
+        <pre product="book">product value is book within pre tag</pre>
+        <codeblock product="cd">poduct value is cd within codeblock tag</codeblock>
+    </conbody>
+</concept>
+

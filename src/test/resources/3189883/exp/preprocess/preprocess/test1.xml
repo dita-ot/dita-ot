@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><?path2project?><?path2project-uri ./?><dita>
+  <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="topic" ditaarch:DITAArchVersion="1.2" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                          (topic ut-d) (topic indexing-d)" class="- topic/topic ">
+    <title class="- topic/title ">Topic title</title>
+    <body class="- topic/body ">
+      <p class="- topic/p ">An equation: <equation>
+          <math type="presentation">
+            <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+              <mml:semantics>
+                <mml:mrow>
+                  <mml:mrow>
+                    <mml:mi mathvariant="bold">a</mml:mi>
+                    <mml:mo>=</mml:mo>
+                    <mml:mfrac>
+                      <mml:mrow>
+                        <mml:mi mathvariant="bold">F</mml:mi>
+                      </mml:mrow>
+                      <mml:mi>m</mml:mi>
+                    </mml:mfrac>
+                    <mml:mo>=</mml:mo>
+                    <mml:mfrac>
+                      <mml:mrow>
+                        <mml:mi>q</mml:mi>
+                        <mml:mo>[</mml:mo>
+                        <mml:mi mathvariant="bold">E</mml:mi>
+                        <mml:mo>+</mml:mo>
+                        <mml:mfenced>
+                          <mml:mrow>
+                            <mml:mi mathvariant="bold">v</mml:mi>
+                            <mml:mi>X</mml:mi>
+                            <mml:mi mathvariant="bold">B</mml:mi>
+                          </mml:mrow>
+                        </mml:mfenced>
+                        <mml:mo>]</mml:mo>
+                      </mml:mrow>
+                      <mml:mi>m</mml:mi>
+                    </mml:mfrac>
+                  </mml:mrow>
+                </mml:mrow>
+              </mml:semantics>
+            </mml:math>
+          </math>
+        </equation>
+      </p>
+    </body>
+  <related-links class="- topic/related-links "><linkpool class="- topic/linkpool "><link class="- topic/link " mapclass="- map/topicref " type="topic" href="test.xml" role="parent"><?ditaot usertext?><linktext class="- topic/linktext "><?ditaot gentext?>Topic title</linktext><?ditaot genshortdesc?><desc class="- topic/desc ">testAn equation: <equation class="+ topic/fig math-d/equation ">   <math type="presentation">    <mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">     <mml:semantics>      <mml:mrow>       <mml:mrow>        <mml:mi mathvariant="bold">a</mml:mi>        <mml:mo>=</mml:mo>        <mml:mfrac>         <mml:mrow>          <mml:mi mathvariant="bold">F</mml:mi>         </mml:mrow>         <mml:mi>m</mml:mi>        </mml:mfrac>        <mml:mo>=</mml:mo>        <mml:mfrac>         <mml:mrow>          <mml:mi>q</mml:mi>          <mml:mo>[</mml:mo>          <mml:mi mathvariant="bold">E</mml:mi>          <mml:mo>+</mml:mo>          <mml:mfenced>           <mml:mrow>            <mml:mi mathvariant="bold">v</mml:mi>            <mml:mi>X</mml:mi>            <mml:mi mathvariant="bold">B</mml:mi>           </mml:mrow>          </mml:mfenced>          <mml:mo>]</mml:mo>         </mml:mrow>         <mml:mi>m</mml:mi>        </mml:mfrac>       </mml:mrow>      </mml:mrow>     </mml:semantics>    </mml:math>   </math>  </equation>  </desc></link><link class="- topic/link " mapclass="- map/topicref " type="topic" href="test2.xml" role="next"><?ditaot usertext?><linktext class="- topic/linktext "><?ditaot gentext?>Topic title</linktext></link></linkpool></related-links>
+</topic>
+</dita>

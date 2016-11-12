@@ -1,41 +1,38 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2007 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2007 All Rights Reserved.
  */
 package org.dita.dost.writer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.*;
 import java.net.URI;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
+import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
 /**
- * ChunkTopicParser class, writing chunking content into relative topic files
- * and then update list. Not reusable and not thread-safe.
- * 
- * <p>
- * TODO: Refactor to be a SAX filter.
- * </p>
+ * Combine topic into a single file for {@code to-content} chunking.
+ * Not reusable and not thread-safe.
  */
 public final class ChunkTopicParser extends AbstractChunkTopicParser {
 
@@ -45,7 +42,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
      * Constructor.
      */
     public ChunkTopicParser() {
-        super(false);
+        super();
         try {
             reader = getXMLReader();
             reader.setContentHandler(this);
@@ -56,8 +53,8 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     @Override
-    public void write(final File fileDir) throws DITAOTException {
-        filePath = fileDir.toURI();
+    public void write(final URI currentFile) throws DITAOTException {
+        this.currentFile = currentFile;
         try {
             output = new StringWriter();
             processChunk(rootTopicref, null);
@@ -102,87 +99,68 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 parseFilePath = hrefValue;
             }
 
-            // if @copy-to is processed in chunk module, the list file needs to
-            // be updated.
-            // Because @copy-to should be included in fulltopiclist, and the
-            // source of coyy-to should be excluded in fulltopiclist.
-            if (copytoValue != null && chunkValue.contains(CHUNK_TO_CONTENT)
-                    && hrefValue != null) {
-                copyto.add(copytoValue);
-                if (hrefValue.getFragment() != null) {
-                    copytoSource.add(stripFragment(hrefValue));
-                    copytotarget2source.put(copytoValue, stripFragment(hrefValue));
-                } else {
-                    copytoSource.add(hrefValue);
-                    copytotarget2source.put(copytoValue, hrefValue);
-                }
-            }
-
             if (parseFilePath != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scopeValue)) {
                 // now the path to target file make sense
                 if (chunkValue.contains(CHUNK_TO_CONTENT)) {
-                    // if current element contains "to-content" in chunk
-                    // attribute
-                    // we need to create new buffer and flush the buffer to
-                    // file
+                    // if current element contains "to-content" in chunk attribute
+                    // we need to create new buffer and flush the buffer to file
                     // after processing is finished
                     tempWriter = output;
                     tempTopicID = topicID;
                     output = new StringWriter();
                     topicID = new HashSet<>();
                     if (MAP_MAP.matches(classValue)) {
-                        // Very special case, we have a map element with
-                        // href value.
-                        // This is a map that needs to be chunked to
-                        // content.
-                        // No need to parse any file, just generate a stub
-                        // output.
-                        outputFileName = filePath.resolve(parseFilePath);
+                        // Very special case, we have a map element with href value.
+                        // This is a map that needs to be chunked to content.
+                        // No need to parse any file, just generate a stub output.
+                        outputFileName = currentFile.resolve(parseFilePath);
                         needWriteDitaTag = false;
                     } else if (copytoValue != null) {
                         // use @copy-to value as the new file name
-                        outputFileName = filePath.resolve(copytoValue);
+                        outputFileName = currentFile.resolve(copytoValue);
                     } else if (hrefValue != null) {
                         // try to use href value as the new file name
                         if (chunkValue.contains(CHUNK_SELECT_TOPIC)
                                 || chunkValue.contains(CHUNK_SELECT_BRANCH)) {
                             if (hrefValue.getFragment() != null) {
                                 // if we have an ID here, use it.
-                                outputFileName = filePath.resolve(hrefValue.getFragment() + FILE_EXTENSION_DITA);
+                                outputFileName = currentFile.resolve(hrefValue.getFragment() + FILE_EXTENSION_DITA);
                             } else {
-                                // Find the first topic id in target file if
-                                // any.
-                                final String firstTopic = getFirstTopicId(filePath.resolve(hrefValue).getPath());
+                                // Find the first topic id in target file if any.
+                                final String firstTopic = getFirstTopicId(currentFile.resolve(hrefValue).getPath());
                                 if (firstTopic != null) {
-                                    outputFileName = filePath.resolve(firstTopic + FILE_EXTENSION_DITA);
+                                    outputFileName = currentFile.resolve(firstTopic + FILE_EXTENSION_DITA);
                                 } else {
-                                    outputFileName = filePath.resolve(hrefValue);
+                                    outputFileName = currentFile.resolve(hrefValue);
                                 }
                             }
                         } else {
                             // otherwise, use the href value instead
-                            outputFileName = filePath.resolve(hrefValue);
+                            outputFileName = currentFile.resolve(hrefValue);
                         }
                     } else {
                         // use randomly generated file name
-                        outputFileName = filePath.resolve(generateFilename());
+                        outputFileName = generateOutputFile(currentFile);
                     }
 
                     // Check if there is any conflict
                     if (new File(outputFileName).exists() && !MAP_MAP.matches(classValue)) {
                         final URI t = outputFileName;
-                        outputFileName = filePath.resolve(generateFilename());
+                        outputFileName = generateOutputFile(currentFile);
                         conflictTable.put(outputFileName, t);
                     }
                     // add newly generated file to changTable
                     // the new entry in changeTable has same key and value
                     // in order to indicate it is a newly generated file
                     changeTable.put(outputFileName, outputFileName);
+
+                    final FileInfo fi = generateFileInfo(outputFileName);
+                    job.add(fi);
                 }
                 // "by-topic" couldn't reach here
                 this.outputFile = outputFileName;
 
-                final URI path = filePath.resolve(parseFilePath);
+                final URI path = currentFile.resolve(parseFilePath);
                 URI newpath;
                 if (path.getFragment() != null) {
                     newpath = setFragment(outputFileName, path.getFragment());
@@ -194,12 +172,11 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                         newpath = outputFileName;
                     }
                 }
-                // add file name changes to changeTable, this will be
-                // used in
+                // add file name changes to changeTable, this will be used in
                 // TopicRefWriter's updateHref method, very important!!!
                 changeTable.put(path, newpath);
                 // update current element's @href value
-                topicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(filePath.resolve(FILE_NAME_STUB_DITAMAP), newpath).toString());
+                topicref.setAttribute(ATTRIBUTE_NAME_HREF, getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), newpath).toString());
 
                 if (parseFilePath.getFragment() != null) {
                     targetTopicId = parseFilePath.getFragment();
@@ -215,7 +192,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                     }
                 }
                 final URI tempPath = currentParsingFile;
-                currentParsingFile = filePath.resolve(parseFilePath);
+                currentParsingFile = currentFile.resolve(parseFilePath);
 
                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                     currentParsingFileTopicIDChangeTable = new HashMap<>();
@@ -244,8 +221,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
             }
 
             if (topicref.hasChildNodes()) {
-                // if current element has child nodes and chunk results for
-                // this element has value
+                // if current element has child nodes and chunk results for this element has value
                 // which means current element makes sense for chunk action.
                 final StringWriter tempOutput = (StringWriter) output;
                 output = new StringWriter();
@@ -266,7 +242,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                         && parseFilePath != null
                         && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)) {
                     insertAfter(hrefValue, parentResult, tmpContent);
-                // replace contents
+                    // replace contents
                 } else {
                     parentResult.append(tmpContent);
                 }
@@ -291,9 +267,9 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
     /**
      * Append XML content into root element
      *
-     * @param hrefValue href of the topicref
+     * @param hrefValue    href of the topicref
      * @param parentResult XML content to insert into
-     * @param tmpContent XML content to insert
+     * @param tmpContent   XML content to insert
      */
     private void insertAfter(final URI hrefValue, final StringBuffer parentResult, final CharSequence tmpContent) {
         int insertpoint = parentResult.lastIndexOf("</");
@@ -329,7 +305,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 writeProcessingInstruction(ditaFileOutput, PI_WORKDIR_TARGET_URI, workDir.toString());
 
                 if (conflictTable.get(outputFileName) != null) {
-                    final String relativePath = getRelativeUnixPath(new File(filePath) + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
+                    final String relativePath = getRelativeUnixPath(new File(currentFile.resolve(".")) + UNIX_SEPARATOR + FILE_NAME_STUB_DITAMAP,
                             new File(conflictTable.get(outputFileName)).getAbsolutePath());
                     String path2project = getRelativeUnixPath(relativePath);
                     if (null == path2project) {
@@ -351,9 +327,58 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
                 writeEndElement(ditaFileOutput, ELEMENT_NAME_DITA);
             }
             ditaFileOutput.flush();
+        } catch (SAXException e) {
+            throw new IOException(e);
         } finally {
             if (ditaFileOutput != null) {
                 ditaFileOutput.close();
+            }
+        }
+    }
+
+    // SAX methods
+
+    @Override
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+            throws SAXException {
+        final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
+        final String id = atts.getValue(ATTRIBUTE_NAME_ID);
+
+        if (skip && skipLevel > 0) {
+            skipLevel++;
+        }
+
+        if (TOPIC_TOPIC.matches(cls)) {
+            topicSpecSet.add(qName);
+
+            processSelect(id);
+        }
+
+        if (include) {
+            includelevel++;
+            final Attributes resAtts = processAttributes(atts);
+            writeStartElement(output, qName, resAtts);
+        }
+    }
+
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+        if (skip && skipLevel > 0) {
+            skipLevel--;
+        } else if (skip) {
+            include = true;
+            skip = false;
+            skipLevel = 0;
+        }
+
+        if (include) {
+            includelevel--;
+            // prevent adding </dita> into output
+            if (includelevel >= 0) {
+                writeEndElement(output, qName);
+            }
+            if (includelevel == 0 && !CHUNK_SELECT_DOCUMENT.equals(selectMethod)) {
+                include = false;
             }
         }
     }

@@ -15,8 +15,6 @@ src/main/lib/org.dita.dost.platform/plugin.properties
 src/main/plugins/org.dita.base/build.xml
 src/main/plugins/org.dita.base/build_preprocess.xml
 src/main/plugins/org.dita.base/catalog-dita.xml
-src/main/plugins/org.dita.docbook/xsl/dita2docbook.xsl
-src/main/plugins/org.dita.eclipsecontent/xsl/dita2dynamicdita.xsl
 src/main/plugins/org.dita.eclipsehelp/build_dita2eclipsehelp.xml
 src/main/plugins/org.dita.eclipsehelp/xsl/map2eclipse.xsl
 src/main/plugins/org.dita.eclipsehelp/xsl/map2plugin.xsl
@@ -24,13 +22,11 @@ src/main/plugins/org.dita.html5/.sass-cache
 src/main/plugins/org.dita.html5/build_dita2html5.xml
 src/main/plugins/org.dita.html5/css/commonltr.css
 src/main/plugins/org.dita.html5/css/commonrtl.css
-src/main/plugins/org.dita.html5/xsl/dita2html5.xsl
-src/main/plugins/org.dita.html5/xsl/map2html5-cover.xsl
+src/main/plugins/org.dita.html5/xsl/dita2html5Impl.xsl
+src/main/plugins/org.dita.html5/xsl/map2html5-coverImpl.xsl
 src/main/plugins/org.dita.html5/xsl/map2html5toc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhc.xsl
 src/main/plugins/org.dita.htmlhelp/xsl/map2hhp.xsl
-src/main/plugins/org.dita.odt/lib/
-src/main/plugins/org.dita.odt/xsl/dita2odt.xsl
 src/main/plugins/org.dita.pdf2.axf/lib/axf.jar
 src/main/plugins/org.dita.pdf2.axf/xsl/fo/topic2fo_shell_axf.xsl
 src/main/plugins/org.dita.pdf2.fop/xsl/fo/topic2fo_shell_fop.xsl
@@ -49,8 +45,6 @@ src/main/plugins/org.dita.pdf2/xsl/fo/topic2fo_shell_fop.xsl
 src/main/plugins/org.dita.pdf2/xsl/fo/topic2fo_shell_xep.xsl
 src/main/plugins/org.dita.troff/xsl/dita2troff-ast-shell.xsl
 src/main/plugins/org.dita.troff/xsl/dita2troff-step2-shell.xsl
-src/main/plugins/org.dita.wordrtf/lib/
-src/main/plugins/org.dita.wordrtf/xsl/dita2rtf.xsl
 src/main/plugins/org.dita.xhtml/build_dita2xhtml.xml
 src/main/plugins/org.dita.xhtml/build_general.xml
 src/main/plugins/org.dita.xhtml/xsl/dita2html-base.xsl
@@ -125,5 +119,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-
+src/main/plugins/org.dita.pdf2.fop/lib

@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2012 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.writer;
 
@@ -33,7 +36,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	/** Flag that an element has been written */
 	private boolean elementOutput;
     /** Namespace prefixes for current element. */
-    private Map<String, String> prefixes = new HashMap<>();
+    private final Map<String, String> prefixes = new HashMap<>();
     /** Flag that last element was excluded. */
     private boolean lastElementExcluded = false;
 

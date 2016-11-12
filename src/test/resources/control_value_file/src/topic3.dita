@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/topic.dtd">
+<topic id="topic3" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Wrong attribute name</title>
+    <body>
+        <p>
+            <note platform="linux">wrong attribute name:platforms</note>
+            <note platform="">the platform value is NULL</note>
+        </p>
+    </body>
+   
+</topic>
+

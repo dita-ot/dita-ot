@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd">
+<concept id="concept6" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Use two CVF</title>
+    <shortdesc>myfruit attribute could only  be used in note\p tag. platform attribute could be used in any tag.</shortdesc>
+    <conbody>
+       <p>
+           <note otherprops="fruit">otherprops value is :fruit</note>
+           <note otherprops="apple">otherprops value is :apple</note>
+           <note otherprops="banana">otherprops value is :banana</note>
+           <note otherprops="pineapple">otherprops value is :pineapple</note>
+       </p>
+        <p otherprops="fruit">fruit</p>
+        <p otherprops="apple">apple</p>
+        <p otherprops="banana">banana</p>
+        <p otherprops="pineapple">pineapple</p>
+        
+        <pre platform="linux">platform value is linux within pre tag</pre>
+        <p platform="os">platform value is os within p tag</p>
+        <note platform="mswin">platform value is mswin within note tag</note>
+        <codeblock platform="zos">platform value is zos within codeblock tag</codeblock>
+        <p>
+            <data platform="linux">platform value is linux within data tag</data>
+            <indexterm platform="zos">platform</indexterm>
+            <lq platform="os">platform value is os within lq tag</lq>
+            <xref platform="mswin" href="concept1.dita">platform value is mswin within xref tag</xref>
+        </p>
+    </conbody>
+</concept>
+

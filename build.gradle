@@ -1,56 +1,54 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2015 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
+ */
 apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'org.dita-ot'
-version = '2.3.3'
+version = '2.4'
 
 description = """DITA Open Toolkit"""
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
      mavenCentral()
 }
 dependencies {
-    compile group: 'commons-io', name: 'commons-io', version: '2.4'
-    compile group: 'commons-codec', name: 'commons-codec', version:'1.9'
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    compile group: 'commons-codec', name: 'commons-codec', version:'1.10'
     compile group: 'xerces', name: 'xercesImpl', version:'2.11.0'
     compile group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
     compile group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
     compile group: 'net.sourceforge.saxon', name: 'saxon', version:'9.1.0.8', classifier:'dom'
     compile group: 'net.sourceforge.saxon', name: 'saxon', version:'9.1.0.8'
-    compile group: 'com.ibm.icu', name: 'icu4j', version:'54.1'
-    compile group: 'org.apache.ant', name: 'ant', version:'1.9.4'
-    compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.9.4'
+    compile group: 'com.ibm.icu', name: 'icu4j', version:'57.1'
+    compile group: 'org.apache.ant', name: 'ant', version:'1.9.7'
+    compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.9.7'
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
-    runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.9.4'
+    runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.9.7'
     testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
-    testCompile group: 'junit', name: 'junit', version:'4.11'
+    testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'xmlunit', name: 'xmlunit', version:'1.6'
 }
 
 jar.archiveName = "${project.name}.jar"
 
+test {
+    exclude '**/IntegrationTest.class'
+}
+
 // Integration test
 
-sourceSets {
-    integrationTest {
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
-        java.srcDir file('src/test/testsuite/src/main/java')
-        resources.srcDir file('src/test/testsuite/testcase')
-    }
-}
-
-configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
-}
-
 def integrationTestSystemProperties = [
+        temp_dir : "${buildDir}/tmp/integrationTest",
         dita_dir : "${projectDir}/src/main",
-        basedir : "${projectDir}/src/test/testsuite"
+        basedir : "${projectDir}/src/test"
 ]
 if (System.getProperty("test") != null) {
     integrationTestSystemProperties["test"] = System.getProperty("test")
@@ -62,9 +60,8 @@ if (System.getProperty("log_level") != null) {
 task integrationTest(type: Test, dependsOn: 'buildLocal') {
     minHeapSize = "128m"
     maxHeapSize = "1024m"
-    testClassesDir = sourceSets.integrationTest.output.classesDir
-    classpath = sourceSets.integrationTest.runtimeClasspath
     systemProperties = integrationTestSystemProperties
+    include '**/IntegrationTest.class'
 }
 
 // Install
@@ -79,7 +76,7 @@ task copyInstall(type: Copy) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":xep:copyInstall", ":html5:compassCompile", ":wordrtf:copyInstall", ":odt:copyInstall"]) {
+task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":axf:copyInstall", ":fop:copyInstall", ":xep:copyInstall", ":html5:compileSass"]) {
     description "Build archives and install all plugins with dependencies"
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/lib", "${projectDir}/src/main/resources")
@@ -117,6 +114,9 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
         rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
     }
+    from (".") {
+        include "LICENSE"
+    }
     from ("src/main") {
         exclude "**/.gradle"
         exclude "**/build.gradle"
@@ -129,7 +129,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "*.*"
         include "bin/dita"
         include "bin/dita.bat"
-        exclude "demo/**"
         exclude "docsrc/*.md"
         exclude "docsrc/*.xpr"
         exclude "docsrc/site.*"
@@ -142,7 +141,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "plugins/org.dita-ot.html/**"
         exclude "plugins/org.dita.html5/.sass-cache"
         exclude "plugins/org.dita.html5/build"
-        exclude "plugins/org.dita.specialization.dita132/**"
         exclude "plugins/org.dita.pdf2/src/**"
         exclude "plugins/org.dita.pdf2/build"
         exclude "plugins/org.dita.pdf2/bin/**"
@@ -152,12 +150,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "plugins/org.dita.pdf2.xep/build"
         exclude "plugins/org.dita.pdf2.xep/lib/xep/**"
         exclude "plugins/org.dita.pdf2.xep/src"
-        exclude "plugins/org.dita.wordrtf/build"
-        exclude "plugins/org.dita.wordrtf/src"
-        exclude "plugins/org.dita.odt/build"
-        exclude "plugins/org.dita.odt/src"
-        exclude "plugins/org.dita.odt/test"
-        exclude "plugins/org.dita.odt/resources"
         exclude "temp"
         include "plugins/**"
         exclude "resources/org"
@@ -181,7 +173,7 @@ task updateConfiguration() << {
 }
 updateConfiguration.mustRunAfter copyDistTemp
 
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":xep:copyDistTemp", ":wordrtf:copyDistTemp", ":odt:copyDistTemp", updateConfiguration]) {
+task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":axf:copyDistTemp", ":fop:copyDistTemp", ":xep:copyDistTemp", updateConfiguration]) {
     main = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${distTempDir}/lib", "${distTempDir}/resources")
     workingDir distTempDir
@@ -256,7 +248,8 @@ task dist(dependsOn: [distZip]) << {
 test {
     inputs.files (
         'src/test/xsl/common/dita-utilities.xspec',
-        'src/test/xsl/preprocess/maplinkImpl.xspec',
-        'src/test/xsl/plugins/org.dita.html5/xsl/xslhtml/functions.xspec'
+        'src/test/xsl/common/uri-utils.xspec',
+        'src/test/xsl/plugins/org.dita.html5/xsl/functions.xspec',
+        'src/test/xsl/preprocess/maplinkImpl.xspec'
     )
 }

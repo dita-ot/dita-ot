@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright IBM Corporation-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+
+<map title="UC22_TC2">
+  <!-- same copy-to, consider as one. test2 has no further linkage -->
+  <topicgroup collection-type="family">
+    <topicref href="test2.dita" copy-to="newtest2.dita"/>
+    <topicref href="test2.dita" copy-to="newtest2.dita"/>
+  </topicgroup>
+
+  <topicgroup collection-type="family">
+    <topicref href="test3.dita" copy-to="newtest3.dita">
+      <topicmeta>
+        <linktext> newtest3_1 </linktext>
+        <shortdesc> newtest3_1 </shortdesc>
+      </topicmeta>
+    </topicref>
+    <topicref href="test3.dita" copy-to="newtest3.dita">
+      <topicmeta>
+        <linktext> newtest3_2 </linktext>
+        <shortdesc> newtest3_2 </shortdesc>
+      </topicmeta>
+    </topicref>
+    <topicref href="test3.dita" copy-to="newtest3.dita">
+      <topicmeta>
+        <linktext> newtest3_1 </linktext>
+        <shortdesc> newtest3_1 </shortdesc>
+      </topicmeta>
+    </topicref>
+  </topicgroup>
+</map>

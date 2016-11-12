@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <topicref keys="a" href="a1.dita"></topicref>
+    <topicref keys="dita1" href="dita1.dita" navtitle="DITA1" locktitle="yes"/>
+    <topicref keys="dita"></topicref>
+    <topicref keys="abs" href="abs.dita"></topicref>
+    <topicref keys="keyword"><?Pub Caret?>
+        <topicmeta>
+            <keywords><keyword>KEYWORD</keyword></keywords>
+        </topicmeta>
+    </topicref>
+    <topicref href="c.dita"></topicref>
+    <topicref href="task.dita"></topicref>
+</map>

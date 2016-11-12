@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "..\dtd\task.dtd">
+<?Pub Inc?>
+<task id="mapref2-3" xml:lang="en-us">
+<title>Nested item in the referenced taskmap</title>
+<shortdesc>This is nested in the taskmap, which is the second referenced map</shortdesc>
+<taskbody></taskbody><?Pub Caret1?>
+</task>
+<?Pub *0000000415?>

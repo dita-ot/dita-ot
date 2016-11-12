@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- This file is part of the DITA Open Toolkit project. 
-     See the accompanying license.txt file for applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2004, 2006 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 
 <xsl:stylesheet version="2.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -98,9 +102,8 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="hrefFromOriginalMap">
-      <xsl:value-of select="dita-ot:normalize-uri(concat($pathFromMaplist, $use-href))"/>
-    </xsl:variable>
+    <xsl:variable name="hrefFromOriginalMap" select="dita-ot:normalize-uri(concat($pathFromMaplist, $use-href))"
+      as="xs:string"/>
     
     <!-- Path from the topic back to the map's directory (with map): for ref/abc.dita, will be "../" -->
     <xsl:variable name="pathBackToMapDirectory" as="xs:string">

@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2011 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.util;
 
@@ -10,8 +13,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.*;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -46,6 +48,15 @@ public final class XMLUtils {
 
     /** Private constructor to make class uninstantiable. */
     private XMLUtils() {}
+
+    /** Convert DOM NodeList to List. */
+    public static <T> List<T> toList(final NodeList nodes) {
+        final List<T> res = new ArrayList<>(nodes.getLength());
+        for (int i = 0; i < nodes.getLength(); i++) {
+            res.add((T) nodes.item(i));
+        }
+        return res;
+    }
 
     /**
      * List descendant elements by DITA class.
@@ -105,6 +116,114 @@ public final class XMLUtils {
             }
         }
         return res;
+    }
+
+    /**
+     * Get specific element node from child nodes.
+     *
+     * @param element    parent node
+     * @param classValue DITA class to search for
+     * @return element node, {@code null} if not found
+     */
+    public static Element getElementNode(final Element element, final DitaClass classValue) {
+        final NodeList list = element.getChildNodes();
+        for (int i = 0; i < list.getLength(); i++) {
+            final Node node = list.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                final Element child = (Element) node;
+                if (classValue.matches(child)) {
+                    return child;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static final List<String> excludeList;
+    static {
+        final List<String> el = new ArrayList<>();
+        el.add(TOPIC_INDEXTERM.toString());
+        el.add(TOPIC_DRAFT_COMMENT.toString());
+        el.add(TOPIC_REQUIRED_CLEANUP.toString());
+        el.add(TOPIC_DATA.toString());
+        el.add(TOPIC_DATA_ABOUT.toString());
+        el.add(TOPIC_UNKNOWN.toString());
+        el.add(TOPIC_FOREIGN.toString());
+        excludeList = Collections.unmodifiableList(el);
+    }
+
+    /**
+     * Get text value of a node.
+     *
+     * @param root root node
+     * @return text value
+     */
+    public static String getText(final Node root) {
+        if (root == null) {
+            return "";
+        } else {
+            final StringBuilder result = new StringBuilder(1024);
+            if (root.hasChildNodes()) {
+                final NodeList list = root.getChildNodes();
+                for (int i = 0; i < list.getLength(); i++) {
+                    final Node childNode = list.item(i);
+                    if (childNode.getNodeType() == Node.ELEMENT_NODE) {
+                        final Element e = (Element) childNode;
+                        final String value = e.getAttribute(ATTRIBUTE_NAME_CLASS);
+                        if (!excludeList.contains(value)) {
+                            final String s = getText(e);
+                            result.append(s);
+                        }
+                    } else if (childNode.getNodeType() == Node.TEXT_NODE) {
+                        result.append(childNode.getNodeValue());
+                    }
+                }
+            } else if (root.getNodeType() == Node.TEXT_NODE) {
+                result.append(root.getNodeValue());
+            }
+            return result.toString();
+        }
+    }
+
+    /**
+     * Search for the special kind of node by specialized value. Equivalent to XPath
+     *
+     * <pre>$root//*[contains(@class, $classValue)][@*[name() = $attrName and . = $searchKey]]</pre>
+     *
+     * @param root       place may have the node.
+     * @param searchKey  keyword for search.
+     * @param attrName   attribute name for search.
+     * @param classValue class value for search.
+     * @return matching element, {@code null} if not found
+     */
+    public static Element searchForNode(final Element root, final String searchKey, final String attrName,
+                                  final DitaClass classValue) {
+        if (root == null) {
+            return null;
+        }
+        final Queue<Element> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            final Element pe = queue.poll();
+            final NodeList pchildrenList = pe.getChildNodes();
+            for (int i = 0; i < pchildrenList.getLength(); i++) {
+                final Node node = pchildrenList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    queue.offer((Element) node);
+                }
+            }
+            if (pe.getAttribute(ATTRIBUTE_NAME_CLASS) == null || !classValue.matches(pe)) {
+                continue;
+            }
+            final Attr value = pe.getAttributeNode(attrName);
+            if (value == null) {
+                continue;
+            }
+            if (searchKey.equals(value.getValue())) {
+                return pe;
+            }
+        }
+        return null;
     }
 
     /**
@@ -224,7 +343,7 @@ public final class XMLUtils {
      */
     public static void transform(final File inputFile, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
-        transform(inputFile, outputFile, filters);
+        transformFile(inputFile, outputFile, filters);
         try {
             deleteQuietly(inputFile);
             moveFile(outputFile, inputFile);
@@ -243,6 +362,14 @@ public final class XMLUtils {
      * @param filters XML filters to transform file with, may be an empty list
      */
     public static void transform(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
+        if (inputFile.equals(outputFile)) {
+            transform(inputFile, filters);
+        } else {
+            transformFile(inputFile, outputFile, filters);
+        }
+    }
+
+    private static void transformFile(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
         if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
             throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
         }
@@ -277,6 +404,19 @@ public final class XMLUtils {
      * @param filters XML filters to transform file with, may be an empty list
      */
     public static void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+        if (input.equals(output)) {
+            transform(input, filters);
+        } else {
+            transformURI(input, output, filters);
+        }
+    }
+
+    private static void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+        final File outputFile = new File(output);
+        if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
+            throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
+        }
+
         InputSource src = null;
         StreamResult result = null;
         try {
@@ -712,5 +852,44 @@ public final class XMLUtils {
         public DOMImplementation getDOMImplementation() {
             return b.getDOMImplementation();
         }
+    }
+
+    /**
+     * Get attribute value.
+     *
+     * @param elem attribute parent element
+     * @param attrName attribute name
+     * @return attribute value, {@code null} if not set
+     */
+    public static String getValue(final Element elem, final String attrName) {
+        final Attr attr = elem.getAttributeNode(attrName);
+        if (attr != null && !attr.getValue().isEmpty()) {
+            return attr.getValue();
+        }
+        return null;
+    }
+
+    /**
+     * Get cascaded attribute value.
+     *
+     * @param elem attribute parent element
+     * @param attrName attribute name
+     * @return attribute value, {@code null} if not set
+     */
+    public static String getCascadeValue(final Element elem, final String attrName) {
+        Element current = elem;
+        while (current != null) {
+            final Attr attr = current.getAttributeNode(attrName);
+            if (attr != null) {
+                return attr.getValue();
+            }
+            final Node parent = current.getParentNode();
+            if (parent != null && parent.getNodeType() == Node.ELEMENT_NODE) {
+                current = (Element) parent;
+            } else {
+                break;
+            }
+        }
+        return null;
     }
 }

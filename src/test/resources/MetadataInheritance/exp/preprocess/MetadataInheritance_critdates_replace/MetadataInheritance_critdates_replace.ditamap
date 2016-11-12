@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(map mapgroup-d) (topic indexing-d)" id="Bats3" title="Bats3">
+  <topicmeta class="- map/topicmeta ">
+    <critdates class="- topic/critdates ">
+      <created class="- topic/created " date="2007-07-01"/>
+      <revised class="- topic/revised " modified="2008-08-08"/>
+    </critdates>
+  </topicmeta>
+  <?Pub Caret1?>
+  <topicref class="- map/topicref " href="bats.dita" navtitle="Bats" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Programming elements</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Programming elements</linktext>
+      <critdates class="- topic/critdates ">
+        <created class="- topic/created " date="2770-03"/>
+      </critdates>
+    </topicmeta>
+    <topicref class="- map/topicref " href="batcaring.dita" navtitle="Caring for your fruit bat" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">batcaring</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">batcaring</linktext>
+        <critdates class="- topic/critdates ">
+          <created class="- topic/created " date="2770-03"/>
+        </critdates>
+      </topicmeta>
+    </topicref>
+  </topicref>
+  <topicref class="- map/topicref " href="critdates_replace.dita" navtitle="replace" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">TestCritdates</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">TestCritdates</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc "> path</shortdesc>
+      <critdates class="- topic/critdates ">
+        <created class="- topic/created " date="2007-07-01"/>
+        <revised class="- topic/revised " modified="2008-08-08"/>
+      </critdates>
+    </topicmeta>
+  </topicref>
+</map>

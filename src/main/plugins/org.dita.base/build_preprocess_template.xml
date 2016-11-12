@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
-<!-- This file is part of the DITA Open Toolkit project.
-     See the accompanying license.txt file for applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2006 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="ditaot-preprocess">
 
   <!-- Set to "true" if you get out-of-memory errors during preprocess
@@ -86,6 +90,7 @@
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
         <param name="profiling.enable" value="${filter-on-parse}" unless="filter-on-parse"/>
+        <param name="generate-debug-attributes" value="${generate-debug-attributes}" if="generate-debug-attributes"/>
         <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
       </module>
     </pipeline>
@@ -115,32 +120,26 @@
       </module>
     </pipeline>
     <!-- generate list files -->
-    <job-helper file="outditafiles.list" property="outditafileslist"/>
-    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
-    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
-    <job-helper file="fullditamap.list" property="fullditamaplist"/>
-    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
-    <job-helper file="conref.list" property="conreflist"/>
-    <!-- Deprecated since 2.1 -->
-    <job-helper file="image.list" property="imagelist"/>
-    <job-helper file="flagimage.list" property="flagimagelist"/>
-    <!-- Deprecated since 2.1 -->
-    <job-helper file="html.list" property="htmllist"/>
     <job-helper file="canditopics.list" property="canditopicslist"/>
-    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
+    <job-helper file="conref.list" property="conreflist"/>
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-helper file="subtargets.list" property="subtargetslist"/>
-    <job-helper file="resourceonly.list" property="resourceonlylist"/>    
-    <job-helper file="user.input.file.list" property="user.input.file"/>
-    <job-helper file="hreftargets.list" property="hreftargetslist"/>
-    <job-helper file="conref.list" property="conreflist"/>
-    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
-    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="flagimage.list" property="flagimagelist"/>
+    <job-helper file="fullditamap.list" property="fullditamaplist"/>
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
-    <job-helper file="conreftargets.list" property="conreftargetslist"/>
-    <job-helper file="canditopics.list" property="canditopicslist"/>
+    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
+    <job-helper file="hreftargets.list" property="hreftargetslist"/>
+    <!-- Deprecated since 2.1 -->
+    <job-helper file="html.list" property="htmllist"/>
+    <!-- Deprecated since 2.1 -->
+    <job-helper file="image.list" property="imagelist"/>
+    <job-helper file="outditafiles.list" property="outditafileslist"/>
     <job-helper file="resourceonly.list" property="resourceonlylist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>    
+    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
+    <job-helper file="subtargets.list" property="subtargetslist"/>
+    <job-helper file="user.input.file.list" property="user.input.file"/>
     <job-property dir="${dita.temp.dir}"/>
     <property name="outditafilesfile" value="outditafiles.list"/>
     <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
@@ -488,6 +487,7 @@
         <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
         <param name="BASEDIR" expression="${basedir}"/>
         <param name="OUTPUTDIR" expression="${output.dir}"/>
+        <!-- Deprecated since 2.4 -->
         <param name="DBG" expression="${args.debug}" if="args.debug"/>
         <param name="defaultLanguage" expression="${default.language}"/>
         <dita:extension id="dita.preprocess.flag-module.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -515,7 +515,7 @@
     <condition property="dita.preprocess.reloadstylesheet.clean-map" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.clean-map"/></not>
     </condition>
-    <pipeline message="Resolve mapref in ditamap" taskname="mapref">
+    <pipeline message="Clean ditamap" taskname="clean-map">
       <xslt basedir="${dita.temp.dir}"
             reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
             style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
@@ -529,6 +529,36 @@
     <condition property="preprocess.clean-map-check.skip">
       <isset property="noMap"/>
     </condition>
+  </target>
+
+  <!-- Clean tempory files at the end of preprocess -->
+  <target name="clean-preprocess"
+          unless="preprocess.clean-preprocess.skip"
+          description="Clean preprocess">
+    <pipeline message="Clean preprocess" taskname="clean-preprocess">
+      <module class="org.dita.dost.module.CleanPreprocessModule"/>
+    </pipeline>
+    <job-helper file="canditopics.list" property="canditopicslist"/>
+    <job-helper file="conref.list" property="conreflist"/>
+    <job-helper file="conreftargets.list" property="conreftargetslist"/>
+    <job-helper file="copytosource.list" property="copytosourcelist"/>
+    <job-helper file="flagimage.list" property="flagimagelist"/>
+    <job-helper file="fullditamap.list" property="fullditamaplist"/>
+    <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
+    <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
+    <job-helper file="hrefditatopic.list" property="hrefditatopiclist"/>
+    <job-helper file="hreftargets.list" property="hreftargetslist"/>
+    <!-- Deprecated since 2.1 -->
+    <job-helper file="html.list" property="htmllist"/>
+    <!-- Deprecated since 2.1 -->
+    <job-helper file="image.list" property="imagelist"/>
+    <job-helper file="outditafiles.list" property="outditafileslist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>
+    <job-helper file="resourceonly.list" property="resourceonlylist"/>    
+    <job-helper file="subjectscheme.list" property="subjectschemelist"/>
+    <job-helper file="subtargets.list" property="subtargetslist"/>
+    <job-helper file="user.input.file.list" property="user.input.file"/>
+    <job-helper file="usr.input.file.list" property="user.input.file"/>
   </target>
   
   <!-- copy-files

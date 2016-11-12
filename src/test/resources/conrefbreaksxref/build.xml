@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2004, 2005 IBM Corporation -->
+<project name="conrefbreaksxref" default="all" basedir=".">
+  <dirname property="test.basedir" file="${ant.file.conrefbreaksxref}"/>
+  <property name="test.name" value="conrefbreaksxref"/>
+  <property name="dita.dir" location="${basedir}/../.."/>
+  <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+  <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+  <target name="all" depends="conref.preprocess, conrefbreaksxref2xhtml, conrefbreaksxref2troff"/>
+  <target name="conref.preprocess" if="run.preprocess" unless="skip.preprocess">
+    <ant antfile="${dita.dir}/build.xml">
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="args.input" location="${test.basedir}/src/conrefbreaksxref.dita"/>
+      <property name="output.dir" location="${result.dir}/preprocess"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess"/>
+    </ant>
+  </target>
+  <target name="conrefbreaksxref2xhtml" if="run.xhtml" unless="skip.xhtml">
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" location="${test.basedir}/src/conrefbreaksxref.dita"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      <property name="output.dir" location="${result.dir}/xhtml"/>
+      <property name="transtype" value="xhtml"/>
+    </ant>
+  </target>
+  <target name="conrefbreaksxref2troff" if="run.troff" unless="skip.troff">
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" location="${test.basedir}/src/conrefbreaksxref.dita"/>
+      <property name="dita.temp.dir" location="${temp.dir}/troff"/>
+      <property name="output.dir" location="${result.dir}/troff"/>
+      <property name="transtype" value="troff"/>
+    </ant>
+  </target>
+</project>

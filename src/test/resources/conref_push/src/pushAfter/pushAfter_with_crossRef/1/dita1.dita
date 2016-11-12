@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+
+<!-- this is a case for 12015@2008-05-19 -->
+
+<task id="X">
+    <title>this is a task</title>
+    <shortdesc>this is also a reuse function</shortdesc>
+    
+    <taskbody>
+        
+        <steps>
+            <step id="A"><cmd>A</cmd></step>
+            <step id="B"> <cmd>B</cmd></step>
+            <step id="C"><cmd>C</cmd></step>   
+        </steps>
+        
+    </taskbody>
+    
+    <related-links>
+        <link href="11/dita22.dita">
+            <linktext>DITA22</linktext>
+        </link>
+    </related-links>
+    
+  </task>
+

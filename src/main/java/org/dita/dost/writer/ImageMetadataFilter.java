@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2013 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.writer;
 
@@ -9,6 +12,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.reader.SvgMetadataReader;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -107,8 +111,9 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             final Attributes atts) throws SAXException {
         if (TOPIC_IMAGE.matches(atts)) {
             final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder(atts);
-            if (atts.getValue(ATTRIBUTE_NAME_HREF) != null) {
-                final URI imgInput = getImageFile(toURI(atts.getValue(ATTRIBUTE_NAME_HREF)));
+            final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+            if (href != null) {
+                final URI imgInput = getImageFile(href);
                 if (imgInput != null) {
                     Attributes m = cache.get(imgInput);
                     if (m == null) {
@@ -117,7 +122,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
                     }
                     a.addAll(m);
                 } else {
-                    logger.error("Image file " + imgInput + " not found");
+                    logger.error("Image file " + href + " not found");
                 }
             }
             depth = 1;
@@ -273,12 +278,15 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         }
     }
 
+    // TODO create a list of files and list of directories, then check permutations for hits
     private URI getImageFile(final URI href) {
-        URI fileDir = tempDir.toURI().relativize(currentFile.resolve("."));
-        if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
-            fileDir = fileDir.resolve(uplevels.replace(File.separator, URI_SEPARATOR));
+        final URI fileName;
+        final FileInfo fi = job.getFileInfo(currentFile.resolve(href));
+        if (fi != null) {
+            fileName = job.getInputDir().relativize(fi.src);
+        } else {
+            fileName = href;
         }
-        final URI fileName = fileDir.resolve(href);
 
         final URI outputURI = outputDir.toURI().resolve(fileName);
         if (exists(outputURI)) {
@@ -286,10 +294,18 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
             return outputURI;
         }
 
-        final URI tempURI = outputDir.toURI().resolve(fileName);
+        final URI tempURI = job.tempDirURI.resolve(fileName);
         if (exists(tempURI)) {
             logger.debug("Found " + tempURI);
             return tempURI;
+        }
+
+        if (fi != null) {
+            final URI srcTempURI = job.tempDirURI.resolve(fi.uri);
+            if (exists(srcTempURI)) {
+                logger.debug("Found " + srcTempURI);
+                return srcTempURI;
+            }
         }
 
         final URI srcURI = job.getInputDir().resolve(fileName);

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- This file is part of the DITA Open Toolkit project.
-     See the accompanying license.txt file for applicable licenses.-->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2014 Jarno Elovirta
+
+See the accompanying LICENSE file for applicable license.
+-->
 <messages>
   <message id="DOTA006W" type="WARN">
     <reason>Absolute paths on the local file system are not supported for the CSSPATH parameter.</reason>

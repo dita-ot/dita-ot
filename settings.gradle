@@ -1,3 +1,10 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2015 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
+ */
 rootProject.name = 'dost'
 
 include 'src/main/plugins/org.dita.pdf2'
@@ -6,14 +13,11 @@ project(":src/main/plugins/org.dita.pdf2").name = 'fo'
 include 'src/main/plugins/org.dita.pdf2.axf'
 project(":src/main/plugins/org.dita.pdf2.axf").name = 'axf'
 
+include 'src/main/plugins/org.dita.pdf2.fop'
+project(":src/main/plugins/org.dita.pdf2.fop").name = 'fop'
+
 include 'src/main/plugins/org.dita.pdf2.xep'
 project(":src/main/plugins/org.dita.pdf2.xep").name = 'xep'
 
 include 'src/main/plugins/org.dita.html5'
 project(":src/main/plugins/org.dita.html5").name = 'html5'
-
-include 'src/main/plugins/org.dita.wordrtf'
-project(":src/main/plugins/org.dita.wordrtf").name = 'wordrtf'
-
-include 'src/main/plugins/org.dita.odt'
-project(":src/main/plugins/org.dita.odt").name = 'odt'

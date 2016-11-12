@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.util;
 
@@ -556,8 +556,7 @@ public final class FileUtils {
     public static String getFullPathNoEndSeparator(final String aURLString) {
         final int pathnameStartIndex = aURLString.indexOf(UNIX_SEPARATOR);
         final int pathnameEndIndex = aURLString.lastIndexOf(UNIX_SEPARATOR);
-        String aPath = aURLString.substring(pathnameStartIndex, pathnameEndIndex);
-        aPath = aURLString.substring(0, pathnameEndIndex);
+        String aPath = aURLString.substring(0, pathnameEndIndex);
         return aPath;
     }
     

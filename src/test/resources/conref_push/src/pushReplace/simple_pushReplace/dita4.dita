@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+
+<!-- this is a case for 12015@2008-05-19 -->
+
+<task id="Z">
+    <title>This is a case for pushReplace</title>
+    
+    <taskbody>
+       
+        <steps>
+            
+           <!-- pushReplace from here -->
+            <!-- pushReplace 1 time -->
+            
+            <!-- It can't support mutipal pushReplace -->
+            
+            <step conref="dita1.dita#X/B" conaction="pushreplace"><cmd>BB</cmd></step>
+                      
+                     
+       </steps>
+        
+    </taskbody>
+</task>
+

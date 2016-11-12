@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="push-to-generic">
+  <title>Conref push task using conkeyref</title>
+  <taskbody>
+    <context
+      conkeyref="generic-task-01/context"
+      conaction="pushreplace"
+      >
+      <p>This is product-specific context.</p>
+    </context>
+    <steps>
+      <step
+        conkeyref="generic-task-01/step-first"
+        conaction="pushbefore"
+        >
+        <cmd>Do this before you do anything else.</cmd>
+      </step>
+      <step
+        conkeyref="generic-task-01/step-first"
+        conaction="mark"><cmd/></step>
+      <step
+        conkeyref="generic-task-01/step-last"
+        conaction="mark">
+        <cmd/>
+      </step>      
+      <step
+        conkeyref="generic-task-01/step-last"
+        conaction="pushafter"
+        >
+        <cmd>Do this after you do everything else.</cmd>
+      </step>
+    </steps>
+  </taskbody>
+</task>

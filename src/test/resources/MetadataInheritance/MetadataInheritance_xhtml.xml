@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MetadataInheritance_xhtml" default="MetadataInheritance2xhtml"
+         basedir=".">
+   <dirname property="test.basedir" file="${ant.file.MetadataInheritance_xhtml}"/>
+   <property name="test.name" value="MetadataInheritance"/>
+   <property name="dita.dir" location="${test.basedir}/../.."/>
+   <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+   <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+   <target name="MetadataInheritance2xhtml" if="run.xhtml" unless="skip.xhtml">
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/MatadataInheritance_foreign.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_keywords.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_linktext.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_othermeta.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_pemissions.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_prodinfo.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_publisher.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_resourceid.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_searchtitle.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_shortdesc.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/MatadataInheritance_source.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/MatadataInheritance_unknown.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MetadataInheritance_audience.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/MetadataInheritance_author.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MetadataInheritance_category.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MetadataInheritance_copyright.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MetadataInheritance_critdates.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/MetadataInheritance_data.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MetadataInheritance_dataabout.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MetadataInheritance_critdates_replace.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_pemissions_replace.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MatadataInheritance_source_replace.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+   </target>
+</project>

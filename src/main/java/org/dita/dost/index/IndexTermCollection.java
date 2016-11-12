@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.index;
 
@@ -156,7 +156,6 @@ public final class IndexTermCollection {
      * Sort term list extracted from dita files base on Locale.
      */
     public void sort() {
-        final int termListSize = termList.size();
         if (IndexTerm.getTermLocale() == null ||
                 IndexTerm.getTermLocale().getLanguage().trim().length()==0) {
             IndexTerm.setTermLocale(new Locale(LANGUAGE_EN,
@@ -227,24 +226,19 @@ public final class IndexTermCollection {
                 abstractWriter = new EclipseIndexWriter();
                 // We need to get rid of the ditamap or topic name in the URL
                 // so we can create index.xml file for Eclipse plug-ins.
-                // int filepath = buff.lastIndexOf("\\");
                 final File indexDir = new File(buff.toString()).getParentFile();
-                // buff.delete(filepath, buff.length());
                 ((EclipseIndexWriter) abstractWriter).setFilePath(indexDir
                         .getAbsolutePath());
-                // buff.insert(filepath, "\\index.xml");
                 buff = new StringBuilder(new File(indexDir, "index.xml")
                 .getAbsolutePath());
             }
         }
 
-        //if (!getTermList().isEmpty()){
         //Even if there is no term in the list create an empty index file
         //otherwise the compiler will report error.
         abstractWriter.setLogger(javaLogger);
         ((IDitaTranstypeIndexWriter) abstractWriter).setTermList(this.getTermList());
         abstractWriter.write(new File(buff.toString()));
-        //}
     }
 
     /**

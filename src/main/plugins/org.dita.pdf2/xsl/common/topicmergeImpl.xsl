@@ -28,7 +28,7 @@ licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
 This file is part of the DITA Open Toolkit project.
-See the accompanying license.txt file for applicable licenses.
+See the accompanying LICENSE file for applicable license.
 -->
 
 <!-- An adaptation of the Toolkit topicmerge.xsl for FO plugin use. -->
@@ -45,6 +45,7 @@ See the accompanying license.txt file for applicable licenses.
 
   <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix" select="'PDFX'"/>
+  <xsl:variable name="separator" select="'_Connect_42_'"/>
 
     <xsl:output indent="no"/>
 
@@ -218,19 +219,12 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:value-of select="."/>
             </xsl:when>
             <xsl:when test="ancestor::*[contains(@class, ' topic/topic ')][1]/@id = $topic-id">
-                <xsl:text>#</xsl:text>
-                <xsl:value-of select="$newid"/>
-                <xsl:text>/</xsl:text>
-                <xsl:value-of select="$newid"/>
-                <xsl:text>_Connect_42_</xsl:text>
-                <xsl:value-of select="$element-id"/>
+              <xsl:value-of select="concat('#', $newid, '/', $newid, $separator, $element-id)"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="concat('#',$topic-id,'/',$topic-id,'_Connect_42_',$element-id)"/>
+                <xsl:value-of select="concat('#',$topic-id,'/',$topic-id,$separator,$element-id)"/>
             </xsl:otherwise>
         </xsl:choose>
-        
-            
         </xsl:attribute>
     </xsl:template>
 
@@ -284,13 +278,10 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="@id[not(parent::*[contains(@class, ' topic/topic ')])]">
         <xsl:param name="newid"/>
         <xsl:attribute name="id">
-            <xsl:value-of select="$newid"/>
-            <xsl:text>_Connect_42_</xsl:text>
-            <xsl:value-of select="."/>
+            <xsl:value-of select="concat($newid, $separator, .)"/>
             <xsl:variable name="current-id" select="concat(ancestor::*[contains(@class, ' topic/topic ')][1]/@id, '|', .)"/>
             <xsl:if test="not(generate-id(.) = generate-id(key('duplicate-id', $current-id)[1]))">
-                <xsl:text>_</xsl:text>
-                <xsl:value-of select="generate-id()"/>
+                <xsl:value-of select="concat('_', generate-id())"/>
             </xsl:if>
         </xsl:attribute>
     </xsl:template>

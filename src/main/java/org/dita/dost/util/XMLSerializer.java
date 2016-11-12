@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2011 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.util;
 
@@ -203,7 +206,7 @@ public class XMLSerializer {
      * @throws SAXException if processing the event failed
      * @throws IllegalStateException if start element is not open
      */
-    public void writeAttribute(final String qName, final String value) throws SAXException {
+    public void writeAttribute(final String qName, final String value) {
         writeAttribute(NULL_NS_URI, qName, value);
     }
 

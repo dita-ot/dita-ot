@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  This file is part of the DITA Open Toolkit project.
-  See the accompanying license.txt file for applicable licenses.
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2011 Jarno Elovirta
+
+See the accompanying LICENSE file for applicable license.
 -->
 <plugin id="org.dita.base">
   <!-- base extension points -->
@@ -63,10 +66,6 @@
   <extension-point id="dita.parser" name="Custom DITA parser"/>
   <!-- extensions -->
   <transtype name="base" abstract="true" desc="Common">
-    <param name="dita.preprocess.reloadstylesheet.topicpull" desc="Specifies whether the DITA-OT reloads the XSL style sheets that are used for the transformation." type="enum">
-      <val>true</val>
-      <val default="true">false</val>
-    </param>
     <param name="args.gen.task.lbl" desc="Specifies whether to generate headings for sections within task topics." type="enum">
       <val>YES</val>
       <val>NO</val>

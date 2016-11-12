@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/topic.dtd">
+<topic id="topic7" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>extention scheme(use wrong value of platform attribute)</title>
+    <body>
+        <p>
+            <note platform="linu">platform value is linu</note>
+            <note platform="mswi">platform value is mswi</note>
+            <note platform="zo">platform value is zo</note>
+            
+            <note platform="maco">platform value is maco</note>
+            <note platform="winx">platform value is winx</note>
+            <note platform="win9">platform value is win9</note>
+            <note platform="">platform value is NULL</note>
+        </p>
+    </body>
+   
+</topic>
+

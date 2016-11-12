@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2006 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 <plugin id="org.dita.pdf2">
   <!-- extension points -->
   <extension-point id="dita.xsl.xslfo" name="PDF XSLT import"/>
@@ -14,6 +21,7 @@
   <!-- extensions -->
   <feature extension="dita.conductor.lib.import" file="lib/fo.jar"/>
   <transtype name="pdf" desc="PDF">
+    <param name="outputFile.base" desc="Specifies the base file name of the generated PDF file."/>
     <param name="args.artlbl" desc="Specifies whether to generate a label for each image; the label will contain the image file name." type="enum">
       <val>yes</val>
       <val default="true">no</val>

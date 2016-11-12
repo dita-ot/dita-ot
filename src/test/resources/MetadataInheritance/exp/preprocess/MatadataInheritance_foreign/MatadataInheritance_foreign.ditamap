@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(map mapgroup-d) (topic indexing-d)" id="Bats3" title="Bats3">
+  <topicref class="- map/topicref " href="bats.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Programming elements</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Programming elements</linktext>
+      <foreign class="- topic/foreign ">
+foreign1
+</foreign>
+    </topicmeta>
+    <?Pub Caret1?>
+    <topicref class="- map/topicref " href="batcaring.dita" navtitle="Caring for your fruit bat" type="topic">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">batcaring</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">batcaring</linktext>
+      </topicmeta>
+    </topicref>
+  </topicref>
+  <topicref class="- map/topicref " href="batfeeding.dita" navtitle="Feeding your bat" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">batfeeding</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">batfeeding</linktext>
+    </topicmeta>
+  </topicref>
+</map>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<meta name="copyright" content="(C) Copyright 2014" />
+<meta name="DC.rights.owner" content="(C) Copyright 2014" />
+<meta name="DC.Type" content="concept" />
+<meta name="DC.Title" content="Graphic scaling improvement" />
+<meta name="DC.Relation" scheme="URI" content="u.html" />
+<meta name="DC.Creator" content="Batty Things R US Fred Mertz Jr" />
+<meta name="DC.Format" content="XHTML" />
+<meta name="DC.Identifier" content="graphicscalingimprovement" />
+<meta name="DC.Language" content="en-us" />
+<link rel="stylesheet" type="text/css" href="commonltr.css" />
+<title>Graphic scaling improvement</title>
+</head>
+<body id="graphicscalingimprovement">
+
+<h1 class="title topictitle1" id="ariaid-title1">Graphic scaling improvement</h1>
+
+<div class="body conbody">
+<div class="p">Graphic scaling improvement is an enhanced feature that DITA Open Toolkit
+1.3 provides. DITA OT 1.3 supports this feature in the transformation for
+different outputs, such as HTML, XHTML, PDF, and FO. This feature is not applicable
+in RTF output.<div class="note note"><span class="notetitle">Note:</span> <ul class="ul">
+<li class="li">Because OASIS DITA 1.1 is not yet an approved standard as of the release
+of DITA OT 1.3, the functionality described here should be considered a <em class="ph i">preview</em> capability. </li>
+
+<li class="li">The specification and the defined functions that need to be supported
+can change by the time OASIS formally approves DITA 1.1.</li>
+
+</ul>
+</div>
+</div>
+
+<div class="p">To implement this feature, you must first meet the following prerequisites:<ul class="ul">
+<li class="li">Install and configure the DITA Open Toolkit 1.3 successfully. </li>
+
+<li class="li">Ensure that the image file referred to by the <code class="ph codeph">&lt;image&gt;</code> tag
+exists.</li>
+
+</ul>
+</div>
+
+<p class="p">In DITA 1.1, there are some attributes that you can use to set the actual
+display size of the pictures in the <code class="ph codeph">&lt;image&gt;</code> tag, such
+as "width", "height", and so on. </p>
+
+<div class="p">You can set the actual display size of the image in the output by taking
+the following steps:<ol class="ol">
+<li class="li">Specify the height and width of the picture in the "height" and "width"
+attributes of the <code class="ph codeph">&lt;image&gt;</code> tag, for example, <code class="ph codeph">&lt;image
+height="80" width="60" href="a.jpg"/&gt;</code></li>
+
+<li class="li">(Optional) Specify the metric of the length in the height and
+width attributes fields, for example, <code class="ph codeph">&lt;image height="80pc" width="60pc"
+href="a.jpg"/&gt;</code>. The metrics currently supported are: px, pc, pt,
+in, cm, mm, em. The default is px.<div class="note note"><span class="notetitle">Note:</span> If you do not specify the
+metric of the length, the toolkit will use the default metric, px. </div>
+</li>
+
+<li class="li">Run the transformation to generate the outputs, such as xhtml, HTML, and
+FO, that support graphic scaling. </li>
+
+</ol>
+In the final output, you can see the image displayed in the size that
+you expected. As in this example, the picture will be displayed by 80 pt in
+height and 60 pt in width.</div>
+
+<div class="p">You can also use the scaling function in setting the actual display
+size of the image in the output by taking the following steps:<ol class="ol">
+<li class="li">Specify the height and width of the picture in the "height" and "width"
+attributes of the <code class="ph codeph">&lt;image&gt;</code> tag, and the metric of the length.</li>
+
+<li class="li">Specify the scale rate in the scale attribute after you specify the height
+and width for the image, for example, <code class="ph codeph">&lt;image height="80pc" width="60pc"
+href="a.jpg" scale="0.8"/&gt;</code>. Scale="0.8" means the picture in the
+output will be displayed at 80% of the size that you specified by height and
+width. </li>
+
+<li class="li">Run the transformation to generate the outputs that support image scaling,
+such as xhtml, HTML, and FO.</li>
+
+</ol>
+In the final output, you can see the image displayed in the size that
+you expected. As in this example, the picture will be displayed by 64 pt in
+height and 48 pt in width.</div>
+
+</div>
+
+<div class="related-links">
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a class="link" href="u.html">Bookmap Readme</a></div>
+</div>
+</div></body>
+</html>

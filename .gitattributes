@@ -13,6 +13,11 @@
 *.png    binary
 *.gif       binary
  
+*.xsl text=auto
+*.xml text=auto
+*.dita text=auto
+*.ditamap text=auto
+*.ditaval text=auto
 *.cs text=auto diff=csharp
 *.vb text=auto
 *.c text=auto

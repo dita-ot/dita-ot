@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- Deprecated since 2.2 -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2011 Reuven Weiser
+
+See the accompanying LICENSE file for applicable license.
+-->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
-    exclude-result-prefixes="xsl opentopic-func"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    exclude-result-prefixes="xsl opentopic-func xs"
     xmlns:suitesol="http://suite-sol.com/namespaces/mapcounts"
     version="2.0">
 
@@ -149,9 +157,7 @@
                contains(@class, ' topic/ul ') or contains(@class, ' topic/sl ')]" 
                priority="50">
 
-      <xsl:variable name="id">
-         <xsl:value-of select="generate-id(.)"/>
-      </xsl:variable>
+      <xsl:variable name="id" select="generate-id(.)" as="xs:string"/>
 
       <xsl:variable name="flagrules">
          <xsl:apply-templates select="." mode="getrules">
@@ -199,9 +205,7 @@
    <xsl:template match="*[contains(@class, ' topic/simpletable ') or contains(@class, ' topic/dl ') or contains(@class, ' topic/note ') or contains(@class, ' pr-d/codeblock ') or contains(@class, ' ui-d/screen ')]"
             priority="40">
 
-      <xsl:variable name="id">
-         <xsl:value-of select="generate-id(.)"/>
-      </xsl:variable>
+      <xsl:variable name="id" select="generate-id(.)" as="xs:string"/>
 
       <xsl:variable name="flagrules">
          <xsl:apply-templates select="." mode="getrules">
@@ -263,9 +267,7 @@
    <xsl:template match="*[contains(@class, ' topic/xref ') or contains(@class, ' topic/link ')]"
              priority="40">
 
-      <xsl:variable name="id">
-         <xsl:value-of select="generate-id(.)"/>
-      </xsl:variable>
+      <xsl:variable name="id" select="generate-id(.)" as="xs:string"/>
 
       <xsl:variable name="flagrules">
          <xsl:apply-templates select="." mode="getrules">
@@ -330,9 +332,7 @@
                contains(@class, ' topic/ddhd ') or contains(@class, ' topic/dthd ')]"
            priority="30">
 
-      <xsl:variable name="id">
-         <xsl:value-of select="generate-id(.)"/>
-      </xsl:variable>
+      <xsl:variable name="id" select="generate-id(.)" as="xs:string"/>
       
       <xsl:variable name="flagrules">
          <xsl:apply-templates select=". | parent::*" mode="getrules">
@@ -385,9 +385,7 @@
                contains(@class, ' topic/sthead ')]"
            priority="20">
 
-      <xsl:variable name="id">
-         <xsl:value-of select="generate-id(.)"/>
-      </xsl:variable>
+      <xsl:variable name="id" select="generate-id(.)" as="xs:string"/>
       <xsl:variable name="flagrules">
          <xsl:apply-templates select="." mode="getrules">
          </xsl:apply-templates>
@@ -424,9 +422,7 @@
       inside the element -->
    <xsl:template match="*" priority="-1">
 
-      <xsl:variable name="id">
-         <xsl:value-of select="generate-id(.)"/>
-      </xsl:variable>
+      <xsl:variable name="id" select="generate-id(.)" as="xs:string"/>
 
       <xsl:variable name="flagrules">
          <xsl:apply-templates select="." mode="getrules">

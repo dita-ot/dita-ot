@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- This file is part of the DITA Open Toolkit project.
-     See the accompanying license.txt file for applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2005, 2006 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 <messages xmlns:dita="http://dita-ot.sourceforge.net">
   
   <!-- Start of Ant Messages -->
@@ -150,12 +154,12 @@
   
   <!-- 2012-06-12: Still need to edit this message -->
   <message id="DOTJ035F" type="FATAL">
-    <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
+    <reason>The file "%1" is outside the scope of the input dita/map directory.</reason>
     <response>If you want to lower the severity level, please use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the referenced file "%1" into the input dita/map directory.</response>
   </message>
   
   <message id="DOTJ036W" type="WARN">
-    <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
+    <reason>The file "%1" is outside the scope of the input dita/map directory.</reason>
     <response></response>
   </message>
   
@@ -687,6 +691,11 @@
 
   <message id="DOTX071E" type="ERROR">
     <reason>Conref range: Unable to find conref range end element with ID "%1".</reason>
+    <response/>
+  </message>
+  
+  <message id="DOTX072I" type="INFO">
+    <reason>Ignoring navtitle within topicgroup.</reason>
     <response/>
   </message>
   

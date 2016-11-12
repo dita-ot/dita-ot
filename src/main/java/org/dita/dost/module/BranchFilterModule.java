@@ -1,18 +1,22 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2015 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.module;
 
-import com.google.common.base.Optional;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
@@ -30,6 +34,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.URLUtils.*;
@@ -50,16 +55,19 @@ import static org.dita.dost.util.XMLUtils.*;
  *
  * @since 2.2
  */
-final class BranchFilterModule extends AbstractPipelineModuleImpl {
+class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
     private final DocumentBuilder builder;
     private final DitaValReader ditaValReader;
+    private TempFileNameScheme tempFileNameScheme;
     private final Map<URI, FilterUtils> filterCache = new HashMap<>();
-    /** Current map being processed. */
+    /** Current map being processed, relative to temporary directory */
     private URI map;
+    /** Absolute URI to map being processed. */
+    protected URI currentFile;
 
     public BranchFilterModule() {
         builder = XMLUtils.getDocumentBuilder();
@@ -71,6 +79,17 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     public void setLogger(final DITAOTLogger logger) {
         super.setLogger(logger);
         ditaValReader.setLogger(logger);
+    }
+
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
     @Override
@@ -90,16 +109,17 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
      * Process map for branch replication.
      */
     protected void processMap(final URI map) {
+        assert !map.isAbsolute();
         this.map = map;
+        currentFile = job.tempDirURI.resolve(map);
         // parse
-        final URI mapFile = job.tempDir.toURI().resolve(map);
-        logger.info("Processing " + mapFile);
+        logger.info("Processing " + currentFile);
         final Document doc;
         try {
-            logger.debug("Reading " + mapFile);
-            doc = builder.parse(new InputSource(mapFile.toString()));
+            logger.debug("Reading " + currentFile);
+            doc = builder.parse(new InputSource(currentFile.toString()));
         } catch (final SAXException | IOException e) {
-            logger.error("Failed to parse " + mapFile, e);
+            logger.error("Failed to parse " + currentFile, e);
             return;
         }
 
@@ -114,11 +134,11 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         logger.debug("Filter existing topics");
         filterTopics(doc.getDocumentElement(), Collections.<FilterUtils>emptyList());
 
-        logger.debug("Writing " + mapFile);
+        logger.debug("Writing " + currentFile);
         Result result = null;
         try {
             Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            result = new StreamResult(mapFile.toString());
+            result = new StreamResult(currentFile.toString());
             serializer.transform(new DOMSource(doc), result);
         } catch (final TransformerConfigurationException | TransformerFactoryConfigurationError e) {
             throw new RuntimeException(e);
@@ -178,7 +198,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                     for (final Attr attr: attrs) {
                         final String gen = addSuffix(attr.getValue(), suffix);
                         logger.info(MessageUtils.getInstance().getMessage("DOTJ065I", attr.getValue(), gen)
-                                .setLocation((Element) attr.getOwnerElement()).toString());
+                                .setLocation(attr.getOwnerElement()).toString());
                         if (attr.getName().equals(BRANCH_COPY_TO)) {
                             attr.setValue(gen);
                         } else {
@@ -231,26 +251,6 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         }
         return res;
     }
-
-//    /** Get topicrefs that are part of a branch */
-//    private List<Element> getBranchTopicrefs(final Element root) {
-//        final List<Element> res = new ArrayList<>();
-//        walkBranchTopicref(root, false, res);
-//        return res;
-//    }
-//
-//    /** Walker to collect topicrefs that are part of a branch. */
-//    private void walkBranchTopicref(final Element elem, final boolean inBranch, final List<Element> res) {
-//        final boolean b = inBranch || !getChildElements(elem, DITAVAREF_D_DITAVALREF).isEmpty();
-//        if (b && MAP_TOPICREF.matches(elem)
-//                && isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT))
-//                && !elem.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
-//            res.add(elem);
-//        }
-//        for (final Element child: getChildElements(elem)) {
-//            walkBranchTopicref(child, b, res);
-//        }
-//    }
 
     private boolean isDitaFormat(final Attr formatAttr) {
         return formatAttr == null ||
@@ -320,15 +320,16 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         final String copyTo = topicref.getAttribute(BRANCH_COPY_TO);
         if (!copyTo.isEmpty()) {
             final URI dstUri = map.resolve(copyTo);
-            final URI dstAbsUri = job.tempDir.toURI().resolve(dstUri);
+            final URI dstAbsUri = job.tempDirURI.resolve(dstUri);
+            final FileInfo dstFileInfo = job.getFileInfo(dstAbsUri);
             final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
             final URI srcUri = map.resolve(href);
-            final URI srcAbsUri = job.tempDir.toURI().resolve(srcUri);
+            final URI srcAbsUri = job.tempDirURI.resolve(srcUri);
             final FileInfo srcFileInfo = job.getFileInfo(srcUri);
             if (srcFileInfo != null) {
-                final FileInfo fi = new FileInfo.Builder(srcFileInfo).uri(dstUri).build();
-                // TODO: Maybe Job should be updated earlier?
-                job.add(fi);
+//                final FileInfo fi = new FileInfo.Builder(srcFileInfo).uri(dstUri).build();
+//                 TODO: Maybe Job should be updated earlier?
+//                job.add(fi);
                 logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
                 final List<XMLFilter> pipe = new ArrayList<>();
                 // TODO: replace multiple profiling filters with a merged filter utils
@@ -383,7 +384,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                 pipe.add(writer);
             }
 
-            final URI srcAbsUri = job.tempDir.toURI().resolve(map.resolve(href));
+            final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
             logger.info("Filtering " + srcAbsUri);
             try {
                 XMLUtils.transform(toFile(srcAbsUri),
@@ -408,7 +409,10 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
      * Read and cache filter.
      **/
     private FilterUtils getFilterUtils(final Element ditavalRef) {
-        final URI ditaval = job.getFileInfo(map).src.resolve(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
+        final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
+        final URI tmp = currentFile.resolve(href);
+        final FileInfo fi = job.getFileInfo(tmp);
+        final URI ditaval = fi.src;
         FilterUtils f = filterCache.get(ditaval);
         if (f == null) {
             ditaValReader.filterReset();
@@ -424,7 +428,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
     /**
      * Duplicate branches so that each {@code ditavalref} will in a separate branch.
      */
-    private void splitBranches(final Element elem, final Branch filter) {
+    void splitBranches(final Element elem, final Branch filter) {
         final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
         if (ditavalRefs.size() > 0) {
             // remove ditavalrefs
@@ -451,7 +455,7 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                 branch.insertBefore(ditavalref, branch.getFirstChild());
                 final Branch currentFilter = filter.merge(ditavalref);
                 processAttributes(branch, currentFilter);
-                final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, Optional.<String>absent(), Optional.<String>absent());
+                final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, Optional.empty(), Optional.empty());
                 // process children of all branches
                 for (final Element child: getChildElements(branch, MAP_TOPICREF)) {
                     if (DITAVAREF_D_DITAVALREF.matches(child)) {
@@ -477,10 +481,10 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         final Optional<String> keyscopePrefix;
         final Optional<String> keyscopeSuffix;
         private Branch() {
-            this.resourcePrefix = Optional.absent();
-            this.resourceSuffix = Optional.absent();
-            this.keyscopePrefix = Optional.absent();
-            this.keyscopeSuffix = Optional.absent();
+            this.resourcePrefix = Optional.empty();
+            this.resourceSuffix = Optional.empty();
+            this.keyscopePrefix = Optional.empty();
+            this.keyscopeSuffix = Optional.empty();
         }
         Branch(final Optional<String> resourcePrefix, final Optional<String> resourceSuffix,
                final Optional<String> keyscopePrefix, final Optional<String> keyscopeSuffix) {
@@ -511,33 +515,33 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
                     return Optional.of(getStringValue(resoucePrefix));
                 }
             }
-            return Optional.absent();
+            return Optional.empty();
         }
         private Optional<String> getPrefix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_RESOURCEPREFIX);
             if (v.isPresent()) {
-                return Optional.of(oldValue.or("") + v.get());
+                return Optional.of(oldValue.orElse("") + v.get());
             }
             return oldValue;
         }
         private Optional<String> getSuffix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_RESOURCESUFFIX);
             if (v.isPresent()) {
-                return Optional.of(v.get() + oldValue.or(""));
+                return Optional.of(v.get() + oldValue.orElse(""));
             }
             return oldValue;
         }
         private Optional<String> getKeyscopePrefix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPEPREFIX);
             if (v.isPresent()) {
-                return Optional.of(oldValue.or("") + v.get());
+                return Optional.of(oldValue.orElse("") + v.get());
             }
             return oldValue;
         }
         private Optional<String> getKeyscopeSuffix(final Element ditavalref, final Optional<String> oldValue) {
             final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPESUFFIX);
             if (v.isPresent()) {
-                return Optional.of(v.get() + oldValue.or(""));
+                return Optional.of(v.get() + oldValue.orElse(""));
             }
             return oldValue;
         }
@@ -549,11 +553,37 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
             final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
             final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
             if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
-                elem.setAttribute(BRANCH_COPY_TO,
-                        generateCopyTo(copyTo.isEmpty() ? href : copyTo, filter).toString());
+                final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
+
+                final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
+
+                final URI dstSource;
+                try {
+                    dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
+                } catch (NullPointerException e) {
+                    throw e;
+                }
+                final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
+                final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
+                        .result(dstSource)
+                        .uri(dstTemp);
+                if (dstBuilder.build().format == null) {
+                    dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
+                }
+                if (hrefFileInfo.src == null && href != null) {
+                    if (copyToFileInfo != null) {
+                        dstBuilder.src(copyToFileInfo.src);
+                    }
+                }
+                final FileInfo dstFileInfo = dstBuilder
+                        .build();
+
+                elem.setAttribute(BRANCH_COPY_TO, dstTemp.toString());
                 if (!copyTo.isEmpty()) {
                     elem.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
                 }
+
+                job.add(dstFileInfo);
             }
         }
 
@@ -583,8 +613,8 @@ final class BranchFilterModule extends AbstractPipelineModuleImpl {
         }
     }
     
-    static URI generateCopyTo(final String href, final Branch filter) {
-        final StringBuilder buf = new StringBuilder(href);
+    static URI generateCopyTo(final URI href, final Branch filter) {
+        final StringBuilder buf = new StringBuilder(href.toString());
         final Optional<String> suffix = filter.resourceSuffix;
         if (suffix.isPresent()) {
             final int sep = buf.lastIndexOf(URI_SEPARATOR);

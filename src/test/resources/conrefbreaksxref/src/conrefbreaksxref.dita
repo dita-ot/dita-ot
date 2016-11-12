@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "../dtd/topic.dtd">
+<?Pub Inc?>
+<topic id="conrefbreaksxref" xml:lang="en-us">
+<title>conrefbreaksxref source</title>
+<shortdesc>This topic conrefs to another, which uses xref internally.</shortdesc>
+<body>
+<section conref="conrefbreaksxreftarget.dita#this-target/section"><?Pub Caret?></section>
+<section conref="subdir/conrefbreaksxrefsubdir.dita#subdir/section"></section>
+</body>
+</topic>
+<?Pub *0000000511?>

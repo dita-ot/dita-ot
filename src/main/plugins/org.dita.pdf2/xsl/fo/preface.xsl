@@ -27,8 +27,8 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
-See the accompanying license.txt file for applicable licenses.
+This file is part of the DITA Open Toolkit project. 
+See the accompanying LICENSE file for applicable license.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -50,9 +50,9 @@ See the accompanying license.txt file for applicable licenses.
                          <xsl:apply-templates select="." mode="insertTopicHeaderMarker"/>
                      </xsl:if>
                      <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
-                     <xsl:call-template name="insertChapterFirstpageStaticContent">
+                     <xsl:apply-templates select="." mode="insertChapterFirstpageStaticContent">
                          <xsl:with-param name="type" select="'preface'"/>
-                     </xsl:call-template>
+                     </xsl:apply-templates>
                      <fo:block xsl:use-attribute-sets="topic.title">
                          <xsl:call-template name="pullPrologIndexTerms"/>
                          <xsl:for-each select="child::*[contains(@class,' topic/title ')]">

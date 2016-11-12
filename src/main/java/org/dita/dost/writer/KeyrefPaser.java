@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2010 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
 package org.dita.dost.writer;
 
@@ -390,13 +390,18 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                         if (href != null && !href.toString().isEmpty()) {
                             if (TOPIC_IMAGE.matches(currentElement.type)) {
                                 valid = true;
-                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(currentFile, job.tempDir.toURI().resolve(href)), elementId);
+                                final URI relativeTarget = URLUtils.getRelativePath(currentFile, job.tempDirURI.resolve(href));
+                                final URI targetOutput = normalizeHrefValue(relativeTarget, elementId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
                             } else if (isLocalDita(elem) && keyDef.source != null) {
                                 final File topicFile = toFile(currentFile.resolve(stripFragment(keyDef.source.resolve(href))));
                                 valid = true;
-                                final String topicId = getFirstTopicId(topicFile);
-                                final URI targetOutput = normalizeHrefValue(URLUtils.getRelativePath(currentFile, topicFile.toURI()), elementId, topicId);
+                                final URI relativeTarget = URLUtils.getRelativePath(currentFile, topicFile.toURI());
+                                String topicId = null;
+                                if (relativeTarget.getFragment() == null && !"".equals(elementId)) {
+                                    topicId = getFirstTopicId(topicFile);
+                                }
+                                final URI targetOutput = normalizeHrefValue(relativeTarget, elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
                                 // TODO: This should be a separate SAX filter
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {

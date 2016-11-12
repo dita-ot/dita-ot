@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="a">
+  <title>a</title>
+  <prolog>    
+    <author keyref="author"/>
+    <source keyref="source"/>
+    <publisher keyref="publisher"/>
+    <data keyref="data"/>
+    <data-about keyref="data-about"><data/></data-about>
+  </prolog>
+  <body>
+    <image keyref="image" alt="Alt attribute."/>
+    <image keyref="image"><alt>Alt element.</alt></image>
+    <p>
+      <xref keyref="xref"/>
+      <xref keyref="xref">Default text</xref>
+      <cite keyref="cite"/>
+      <keyword keyref="keyword"/>
+      <ph keyref="ph"/>
+      <term keyref="term"/>
+      <indexterm keyref="indexterm"/>
+      <indexterm>
+        <index-base keyref="index-base"/>
+      </indexterm>
+      <indextermref keyref="indextermref"/>
+    </p>
+    <dl>
+      <dlentry>
+        <dt keyref="dt"/>
+        <dd></dd>
+      </dlentry>
+    </dl>
+    <lq keyref="lq"></lq>
+  </body>
+  <related-links>
+    <link keyref="link"/>
+  </related-links>
+</topic>

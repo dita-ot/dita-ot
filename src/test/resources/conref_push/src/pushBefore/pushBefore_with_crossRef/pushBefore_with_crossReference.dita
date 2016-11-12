@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="TopicID1">
+    <title>This is a case for pushBefore with crossreference link</title>
+    
+    <body>
+        <p>
+            
+            <!-- multiple pushBefore with A element -->  
+           
+            <xref conref="pushBefore_with_crossRef.dita#topicID/A" conaction="mark"></xref>
+            <xref conaction="pushbefore" href="http://www.google.com" scope="external">Google</xref>
+           
+           <xref conref="pushBefore_with_crossRef.dita#topicID/A" conaction="mark"></xref>
+            <xref conaction="pushbefore" href="http://www.sohu.com" scope="external">Sohu</xref>
+         
+           <xref conref="pushBefore_with_crossRef.dita#topicID/A" conaction="mark"></xref>
+            <xref conaction="pushbefore" href="http://www.sina.com" scope="external">Sina</xref>
+            
+            <xref conref="pushBefore_with_crossRef.dita#topicID/A" conaction="mark"></xref>
+            <xref conaction="pushbefore" href="http://www.baidu.com" scope="external">Baidu</xref>
+            
+            <!-- pushBefore with B element -->
+            <xref conaction="pushbefore" href="1/dita2.dita">DITA2</xref>
+            <xref conref="pushBefore_with_crossRef.dita#topicID/B" conaction="mark"></xref>
+          
+           
+            <!-- pushBefore with C element -->
+            <xref conaction="pushbefore" href="1/11/dita22.dita">DITA22</xref>
+           <xref conref="pushBefore_with_crossRef.dita#topicID/C" conaction="mark"></xref>
+          
+            
+            <!-- pushBefore with D element -->
+            <xref conaction="pushbefore" href="1/dita2.dita#X/AA">Sibling Reference</xref>
+            <xref conref="pushBefore_with_crossRef.dita#topicID/D" conaction="mark"></xref>
+        
+            
+            
+            
+        </p>
+    </body>
+</topic>
+

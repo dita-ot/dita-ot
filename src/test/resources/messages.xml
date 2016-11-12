@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!-- This file is part of the DITA Open Toolkit project hosted on 
-     Sourceforge.net. See the accompanying license.txt file for 
-     applicable licenses.--><!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. --><messages>
+     Sourceforge.net. See the accompanying LICENSE file for
+     applicable licenses.--><!-- Copyright 2005, 2006 IBM Corporation --><messages>
   <!-- Start of Ant Messages -->
   <message id="DOTA001F" type="FATAL">
     <reason>&quot;%1&quot; is not a recognized transformation type.</reason>
@@ -59,6 +59,10 @@
   <message id="DOTA012W" type="WARN">
     <reason>Argument &quot;%1&quot; is deprecated.</reason>
     <response>Please use the argument &quot;%2&quot; instead.</response>
+  </message>
+  <message id="DOTA013F" type="FATAL">
+    <reason>Cannot find the specified DITAVAL '%1'.</reason>
+    <response/>
   </message>
 
   <!-- Start of Java Messages -->
@@ -814,7 +818,7 @@
     
   <!-- Add any messages defined by plugins. -->
   <!-- This file is part of the DITA Open Toolkit project hosted on 
-  Sourceforge.net. See the accompanying license.txt file for 
+  Sourceforge.net. See the accompanying LICENSE file for
   applicable licenses.-->
   <!-- Java -->
   

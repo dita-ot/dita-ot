@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<val>
+   <!-- <prop action="exclude" att="platform" val="linux" /> -->
+    <prop action="exclude" att="platform" val="undefined" />
+    <prop action="flag" att="platform" val="linux" >
+        <startflag imageref="delta.gif">
+            <alt-text>This is a image flag:</alt-text>
+        </startflag>
+    </prop>
+    <prop action="flag" att="platform" val="zos" >
+        <startflag imageref="delta.gif">
+            <alt-text>This is a image flag:</alt-text>
+        </startflag>
+    </prop>
+</val>

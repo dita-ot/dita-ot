@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2005, 2006 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.platform;
 
@@ -22,7 +22,6 @@ import org.dita.dost.log.DITAOTAntLogger;
 public final class IntegratorTask extends Task {
 
     private File propertiesFile;
-    private boolean strict;
     private File ditaDir;
 
     @Override
@@ -32,7 +31,6 @@ public final class IntegratorTask extends Task {
         logger.setTask(this);
         final Integrator adaptee = new Integrator(ditaDir != null ? ditaDir : getProject().getBaseDir());
         adaptee.setLogger(logger);
-        adaptee.setStrict(strict);
         if (propertiesFile != null) {
             adaptee.setProperties(propertiesFile);
         }
@@ -63,14 +61,6 @@ public final class IntegratorTask extends Task {
     public void setProperties(final File propertiesFile) {
         this.propertiesFile = propertiesFile;
 
-    }
-
-    /**
-     * Setter for strict/lax mode.
-     * @param strict {@code true} for strict mode, {@code false} for lax mode
-     */
-    public void setStrict(final boolean strict) {
-        this.strict = strict;
     }
 
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         " title="Eclipse content aggregated by a map" xml:lang="en-us">
+  <topicref class="- map/topicref " href="pushto.dita" type="task">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Push to this topic</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Push to this topic</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">Conref push test</shortdesc>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="pushfrom.dita" type="task">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Push from</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Push from</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc ">Push from this topic into the other</shortdesc>
+    </topicmeta>
+  </topicref>
+  <?Pub Caret -1?>
+</map>

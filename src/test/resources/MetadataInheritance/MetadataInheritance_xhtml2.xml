@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MetadataInheritance_xhtml2" default="MetadataInheritance2xhtml2"
+         basedir=".">
+   <dirname property="test.basedir" file="${ant.file.MetadataInheritance_xhtml2}"/>
+   <property name="test.name" value="MetadataInheritance"/>
+   <property name="dita.dir" location="${test.basedir}/../.."/>
+   <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+   <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+   <target name="MetadataInheritance2xhtml2" if="run.xhtml" unless="skip.xhtml">
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input"
+                   location="${test.basedir}/src/MetadataInheritance_audience.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml"/>
+      </ant>
+   </target>
+</project>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="push-to-generic">
+  <title>Conref push task using direct URI references</title>
+  <taskbody>
+    <context
+      conref="../common/generic-task-01.dita#generic-task/context"
+      conaction="pushreplace"
+      >
+      <p>This is product-specific context.</p>
+    </context>
+    <steps>
+      <step
+        conref="../common/generic-task-01.dita#generic-task/step-first"
+        conaction="pushbefore"
+        >
+        <cmd>Do this before you do anything else.</cmd>
+      </step>
+      <step
+        conref="../common/generic-task-01.dita#generic-task/step-first"
+        conaction="mark"><cmd/></step>
+      <step
+        conref="../common/generic-task-01.dita#generic-task/step-last"
+        conaction="mark">
+        <cmd/>
+      </step>      
+      <step
+        conref="../common/generic-task-01.dita#generic-task/step-last"
+        conaction="pushafter"
+        >
+        <cmd>Do this after you do everything else.</cmd>
+      </step>
+    </steps>
+  </taskbody>
+</task>

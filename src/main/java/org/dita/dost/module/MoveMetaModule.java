@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2004, 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.module;
 
@@ -59,11 +59,6 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         final Collection<FileInfo> fis = new ArrayList<>();
-        //for (final FileInfo f: job.getFileInfo()) {
-        //    if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-        //        fis.add(f);
-        //    }
-        //}
         fis.add(job.getFileInfo(job.getInputMap()));
         if (!fis.isEmpty()) {
             final Map<URI, Map<String, Element>> mapSet = getMapMetadata(fis);
@@ -163,9 +158,9 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                     logger.error("File " + new File(job.tempDir, key.getPath()) + " was not found.");
                     continue;
                 }
-                final URI targetFileName = job.tempDir.toURI().resolve(fi.uri);
+                final URI targetFileName = job.tempDirURI.resolve(fi.uri);
                 assert targetFileName.isAbsolute();
-                if (fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+                if (fi.format != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
                     mapInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
                         logger.info("Processing " + targetFileName);
@@ -187,12 +182,11 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                     logger.error("File " + new File(job.tempDir, key.getPath()) + " was not found.");
                     continue;
                 }
-                final URI targetFileName = job.tempDir.toURI().resolve(fi.uri);
+                final URI targetFileName = job.tempDirURI.resolve(fi.uri);
                 assert targetFileName.isAbsolute();
-                if (fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+                if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
                     topicInserter.setMetaTable(entry.getValue());
                     if (toFile(targetFileName).exists()) {
-                        logger.info("Processing " + targetFileName);
                         topicInserter.read(toFile(targetFileName));
                     } else {
                         logger.error("File " + targetFileName + " does not exist");
@@ -212,7 +206,6 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
         metaReader.setJob(job);
         for (final FileInfo f : fis) {
             final File mapFile = new File(job.tempDir, f.file.getPath());
-            logger.info("Processing " + mapFile.toURI());
             //FIXME: this reader gets the parent path of input file
             metaReader.read(mapFile);
         }

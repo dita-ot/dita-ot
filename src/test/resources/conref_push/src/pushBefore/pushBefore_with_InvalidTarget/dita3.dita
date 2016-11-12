@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+
+<!-- this is a case for 12015@2008-05-19 -->
+
+<task id="Z">
+    <title>This is a case for pushBefore</title>
+    
+    <taskbody>
+        <steps>
+            
+            <!-- pushBefore start from here -->
+            
+            <!-- pushBefore 1 time -->
+            <step conaction="pushbefore"><cmd>BB</cmd></step>
+            <step conref="dita1.dita#X/D" conaction="mark"><cmd></cmd> </step>
+            
+            <!-- pushBefore 2 times -->
+            <step conaction="pushbefore"><cmd>BBB</cmd></step>
+            <step conref="dita1.dita#X/D" conaction="mark"><cmd></cmd> </step>
+            
+            <!-- pushBefore 3 times -->
+            <step conaction="pushbefore"><cmd>BBBB</cmd></step>
+            <step conref="dita1.dita#X/D" conaction="mark"><cmd></cmd> </step>
+            
+            <!-- pushBefore 4 times -->
+            <step conaction="pushbefore"><cmd>BBBBB</cmd></step>
+            <step conref="dita1.dita#X/D" conaction="mark"><cmd></cmd> </step>
+            
+            <!-- pushBefore 5 times -->
+            <step conaction="pushbefore"><cmd>BBBBBB</cmd></step>
+            
+            <step conref="dita1.dita#X/D" conaction="mark"><cmd></cmd> </step>
+           
+        </steps>
+    </taskbody>
+</task>
+

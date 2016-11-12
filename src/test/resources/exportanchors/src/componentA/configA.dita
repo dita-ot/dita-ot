@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="configA">
+  <title>ABC</title>
+  <shortdesc>...</shortdesc>
+  <taskbody>
+    <steps>
+      <step id="step1">
+        <cmd>Do this</cmd>
+      </step>
+      <step id="step2">
+        <cmd>Do the other</cmd>
+      </step>
+      <step id="step3">
+        <cmd>And then finish</cmd>
+      </step>
+    </steps>
+  </taskbody>
+</task>

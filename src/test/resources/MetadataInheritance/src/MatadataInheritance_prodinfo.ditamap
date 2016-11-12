@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.1 Map//EN"
+ "file:/C:/DITA-OT1.4/dtd/map.dtd">
+<?Pub Inc?>
+<map id="Bats3" title="Bats3">
+<topicmeta>
+<prodinfo>
+ <prodname>Transcription Assistant</prodname>
+ <vrmlist><vrm version="1" release="3" modification="1"/></vrmlist>
+ <platform>AIX</platform>
+</prodinfo>
+</topicmeta><?Pub Caret1?>
+<topicref href="bats.dita" navtitle="Bats">
+<topicmeta>
+<prodinfo>
+ <prodname>Transcription Assistant</prodname>
+ <vrmlist><vrm version="2" release="9" modification="0"/></vrmlist>
+ <platform>SUSE</platform>
+</prodinfo>
+</topicmeta>
+<topicref href="batcaring.dita" navtitle="Caring for your fruit bat"></topicref>
+</topicref>
+<topicref href="batfeeding.dita" navtitle="Feeding your bat"></topicref>
+</map>
+<?Pub *0000000786?>

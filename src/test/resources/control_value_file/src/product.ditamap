@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA 1.2 Subject Scheme Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/subjectScheme/dtd/subjectScheme.dtd">
+<subjectScheme xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Product</title>
+    <subjectdef keys="products" navtitle="Product">
+        <subjectdef keys="book" navtitle="Book">
+            <subjectdef keys="comic" navtitle="Comic book"></subjectdef>
+            <subjectdef keys="novel" navtitle="Novel"></subjectdef>
+        </subjectdef>
+        <subjectdef keys="movie" navtitle="Movie"></subjectdef>
+        <subjectdef keys="cd" navtitle="CD"></subjectdef>
+    </subjectdef>
+    
+    <enumerationdef>
+        <attributedef name="product"></attributedef>
+        <subjectdef keyref="products"></subjectdef>
+        
+    </enumerationdef>
+    
+</subjectScheme>
+

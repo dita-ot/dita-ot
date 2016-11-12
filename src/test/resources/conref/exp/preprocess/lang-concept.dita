@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/conref/testresult/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/conref/testresult/preprocess/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Concept//EN?><?doctype-system ../dtd/concept.dtd?><?Pub Inc?>
+<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="lang-concept"
+  xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+  domains="(topic concept)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  class="- topic/topic concept/concept ">
+  <title class="- topic/title ">Concept for language test</title>
+  <shortdesc class="- topic/shortdesc ">this is the related concept</shortdesc>
+  <conbody class="- topic/body  concept/conbody ">
+    <p class="- topic/p ">stuff</p>
+    <fig id="fig" class="- topic/fig ">
+      <title class="- topic/title ">figure title</title>
+      <p class="- topic/p ">test <q class="- topic/q ">quote</q> in a figure</p>
+    </fig>
+  </conbody>
+</concept>

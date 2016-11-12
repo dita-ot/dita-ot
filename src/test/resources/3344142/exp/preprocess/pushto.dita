@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project?>
+<?path2project-uri ./?>
+<?Pub Inc?>
+<task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="pushto" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    " class="- topic/topic task/task ">
+  <title class="- topic/title ">Push to this topic</title>
+  <shortdesc class="- topic/shortdesc ">Conref push test</shortdesc>
+  <taskbody class="- topic/body task/taskbody ">
+    <steps class="- topic/ol task/steps ">
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">First step (no ID)</cmd>
+      </step>
+      <step id="step" class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">This step has an ID, something should be pushed
+after</cmd>
+      </step>
+      <step class="- topic/li task/step " id="stepid1">
+        <cmd class="- topic/ph task/cmd ">Content being pushed: target step. This is valid.</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">Step with no ID</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd id="cmd" class="- topic/ph task/cmd ">Command with ID, for testing; step should NOT
+be able to push after</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">Step with no ID</cmd>
+      </step>
+      <step class="- topic/li task/step " id="stepreplace">
+        <cmd class="- topic/ph task/cmd ">This step should replace one that existed</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">Step with no ID</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd id="cmdreplace" class="- topic/ph task/cmd ">This CMD has an ID for replacement, but
+the test should not allow it; this CMD should appear in the output.</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">Step with no ID</cmd>
+      </step>
+    </steps>
+    <?Pub Caret -1?>
+  </taskbody>
+</task>
+<?Pub *0000000998?>

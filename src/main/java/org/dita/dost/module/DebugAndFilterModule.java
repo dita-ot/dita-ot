@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2004, 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.module;
 
@@ -35,6 +35,7 @@ import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.module.GenMapAndTopicListModule.*;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.DitaValReader;
@@ -88,6 +89,18 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
     private FilterUtils baseFilterUtils;
     private DitaWriterFilter ditaWriterFilter;
     private TopicFragmentFilter topicFragmentFilter;
+    private TempFileNameScheme tempFileNameScheme;
+
+    @Override
+    public void setJob(final Job job) {
+        super.setJob(job);
+        try {
+            tempFileNameScheme = (TempFileNameScheme) getClass().forName(job.getProperty("temp-file-name-scheme")).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        tempFileNameScheme.setBaseDir(job.getInputDir());
+    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -98,11 +111,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             readArguments(input);
             init();
 
-            for (final FileInfo f: job.getFileInfo()) {
-                if (isFormatDita(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-                    processFile(f);
-                }
-            }
+            job.getFileInfo().stream()
+                    .filter(f -> isFormatDita(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format))
+                    .forEach(this::processFile);
 
             job.write();
         } catch (final RuntimeException e) {
@@ -117,8 +128,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
 
     private void processFile(final FileInfo f) {
         currentFile = f.src;
-        if (!exists(f.src)) { //copytoMap.containsKey(f.file)
-            logger.debug("Ignoring a copy-to file " + f.src);
+        if (f.src == null || !exists(f.src) || !f.src.equals(f.result)) {
+            logger.warn("Ignoring a copy-to file " + f.result);
             return;
         }
         outputFile = new File(job.tempDir, f.file.getPath());
@@ -127,14 +138,14 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
             logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
             return;
         }
-        logger.info("Processing " + f.src);
+        logger.info("Processing " + f.src + " to " + outputFile.toURI());
 
         final Set<URI> schemaSet = dic.get(f.uri);
         if (schemaSet != null && !schemaSet.isEmpty()) {
             logger.debug("Loading subject schemes");
             subjectSchemeReader.reset();
             for (final URI schema : schemaSet) {
-                subjectSchemeReader.loadSubjectScheme(new File(job.tempDir.toURI().resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
+                subjectSchemeReader.loadSubjectScheme(new File(job.tempDirURI.resolve(schema.getPath() + SUBJECT_SCHEME_EXTENSION)));
             }
             validateMap = subjectSchemeReader.getValidValuesMap();
             defaultValueMap = subjectSchemeReader.getDefaultValueMap();
@@ -280,6 +291,8 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         ditaWriterFilter.setEntityResolver(reader.getEntityResolver());
 
         topicFragmentFilter = new TopicFragmentFilter(ATTRIBUTE_NAME_CONREF, ATTRIBUTE_NAME_CONREFEND);
+
+        tempFileNameScheme.setBaseDir(job.getInputDir());
     }
 
     /**
@@ -317,6 +330,9 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         pipe.add(normalizeFilter);
 
         pipe.add(topicFragmentFilter);
+
+//        linkRewriteFilter.setCurrentFile(currentFile);
+//        pipe.add(linkRewriteFilter);
 
         ditaWriterFilter.setDefaultValueMap(defaultValueMap);
         ditaWriterFilter.setCurrentFile(currentFile);
@@ -387,7 +403,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 final File tmprel = new File(FileUtils.resolve(job.tempDir, parent) + SUBJECT_SCHEME_EXTENSION);
                 final Document parentRoot;
                 if (!tmprel.exists()) {
-                    final URI src = job.getInputDir().resolve(parent);
+                    final URI src = job.getFileInfo(parent).src;
                     parentRoot = builder.parse(src.toString());
                 } else {
                     parentRoot = builder.parse(tmprel);
@@ -401,7 +417,7 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
                 }
 
                 //Output parent scheme
-                generateScheme(new File(job.tempDir.getAbsoluteFile(), parent.getPath() + SUBJECT_SCHEME_EXTENSION), parentRoot);
+                generateScheme(new File(job.tempDir, parent.getPath() + SUBJECT_SCHEME_EXTENSION), parentRoot);
             }
         } catch (final RuntimeException e) {
             throw e;

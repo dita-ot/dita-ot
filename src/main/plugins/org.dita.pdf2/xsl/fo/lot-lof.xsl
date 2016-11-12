@@ -2,6 +2,13 @@
 
 
 
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2011 Reuven Weiser
+
+See the accompanying LICENSE file for applicable license.
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"

@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2004, 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.reader;
 
@@ -246,7 +246,7 @@ public final class MergeMapParser extends XMLFilterImpl {
                     }
                     if (!util.isVisited(toURI(element))) {
                         util.visit(toURI(element));
-                        if (!f.isResourceOnly && (f.isChunked || !f.isSkipChunk)){
+                        if (!f.isResourceOnly){
                             //ensure the file exists
                             final File file = new File(dirPath, element);
                             if (file.exists()) {

@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'org.dita-ot.pdf'
+
+description = """DITA Open Toolkit PDF plug-in for FOP."""
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    runtime group: 'org.apache.xmlgraphics', name: 'fop', version: '2.1'
+}
+
+task jar(overwrite: true) << {
+    // NOOP
+}
+
+task copyInstall(type: Copy) {
+    from(sourceSets.main.runtimeClasspath) {
+        exclude 'commons-io-*.jar'
+        exclude 'xalan-*.jar'
+        exclude 'xml-apis-*.jar'
+    }
+    destinationDir = file("lib")
+}
+
+task copyDistTemp(type: Copy) {
+    from(sourceSets.main.runtimeClasspath) {
+        exclude 'commons-io-*.jar'
+        exclude 'xalan-*.jar'
+        exclude 'xml-apis-*.jar'
+        into "plugins/org.dita.pdf2.fop/lib"
+    }
+    destinationDir = file("${rootProject.buildDir}/tmp/dist")
+}

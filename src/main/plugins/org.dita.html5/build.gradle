@@ -1,20 +1,60 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2016 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
+ */
 buildscript {
     dependencies {
-        classpath "com.github.jruby-gradle:jruby-gradle-plugin:0.1.12"
+        classpath 'com.cathive.sass:sass-java:4.0.0'
+    }
+
+    repositories {
+        mavenCentral()
     }
 }
 
-plugins {
-  id "com.github.robfletcher.compass" version "2.0.6"
+apply plugin: 'java'
+
+File cssDir = file('css')
+File sassDir = file('sass')
+
+
+import com.cathive.sass.SassCompilationException
+import com.cathive.sass.SassFileContext
+import com.cathive.sass.SassOutputStyle
+
+def sass(FileCollection files, File outputDir) {
+    if (!outputDir.exists() && !outputDir.mkdir()) {
+        throw new IOException("Failed to create ${outputDir}")
+    }
+
+    files.each {
+        def ctx = SassFileContext.create(it.toPath())
+        def options = ctx.getOptions()
+        options.setOutputStyle(SassOutputStyle.EXPANDED)
+
+        try {
+            def basename = it.getName().substring(0, it.getName().lastIndexOf('.'))
+            logger.info("Compiling ${it}")
+            ctx.compile(new FileOutputStream(new File(outputDir, basename + '.css')))
+        } catch (SassCompilationException e) {
+            logger.error(e.getMessage())
+        } catch (IOException e) {
+            logger.error("Compilation failed: ${e.getMessage()}")
+        }
+    }
 }
 
-configurations.all {
-    resolutionStrategy.force 'rubygems:rb-inotify:0.9.5'
-}
+task compileSass {
+    inputs.dir sassDir
+    outputs.dir cssDir
 
-compass {
-  cssDir = file("css")
-  sassDir = file("sass")
-  environment = "production"
-  outputStyle = "expanded"
+    doLast {
+        sass(
+                fileTree(dir: 'sass', includes: ['commonltr.scss', 'commonrtl.scss']),
+                cssDir
+        )
+    }
 }

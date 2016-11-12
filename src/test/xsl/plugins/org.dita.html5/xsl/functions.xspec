@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
+  xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable" stylesheet="../../../../../main/plugins/org.dita.html5/xsl/functions.xsl">
+
+  <x:scenario label="dita-ot:get-prefixed-id">
+    <x:scenario label="p in topic">
+      <x:call function="dita-ot:get-prefixed-id">
+        <x:param name="element" select="//p">
+          <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+            domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d) "
+            id="topic" ditaarch:DITAArchVersion="1.3">
+            <title class="- topic/title ">Title</title>
+            <body class="- topic/body ">
+              <p class="- topic/p " id="p">para</p>
+            </body>
+          </topic>
+        </x:param>
+        <x:param name="id" select="'p'"/>
+      </x:call>
+
+      <x:expect label="return element id prefixed with topic id" select="'topic__p'"/>
+    </x:scenario>
+  </x:scenario>
+  <x:scenario label="dita-ot:generate-html-id">
+    <x:scenario label="element with id">
+      <x:call function="dita-ot:generate-html-id">
+        <x:param name="element" select="(//p)[1]">
+          <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+            domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d) "
+            id="topic" ditaarch:DITAArchVersion="1.3">
+            <title class="- topic/title ">Title</title>
+            <body class="- topic/body ">
+              <p class="- topic/p " id="p">para</p>
+            </body>
+          </topic>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return element id prefixed with topic id" select="'topic__p'"/>
+    </x:scenario>
+    <x:scenario label="element without id">
+      <x:call function="dita-ot:generate-html-id">
+        <x:param name="element" select="(//p)[1]">
+          <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+            domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d) "
+            id="topic" ditaarch:DITAArchVersion="1.3">
+            <title class="- topic/title ">Title</title>
+            <body class="- topic/body ">
+              <p class="- topic/p ">para</p>
+            </body>
+          </topic>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return element id prefixed with topic id" select="'topic__p__1'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:generate-stable-id">
+    <x:scenario label="first without ancestor element with id">
+      <x:call function="dita-ot:generate-stable-id">
+        <x:param name="element" select="//p[1]">
+          <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+            domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d) "
+            id="topic" ditaarch:DITAArchVersion="1.3">
+            <title class="- topic/title ">Title</title>
+            <body class="- topic/body ">
+              <p class="- topic/p ">para 1 B</p>
+              <p class="- topic/p ">para 2 B</p>
+            </body>
+          </topic>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return element id prefixed with topic id" select="'topic__p__1'"/>
+    </x:scenario>
+    <x:scenario label="second without ancestor element with id">
+      <x:call function="dita-ot:generate-stable-id">
+        <x:param name="element" select="(//p)[2]">
+          <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+            domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d) "
+            id="topic" ditaarch:DITAArchVersion="1.3">
+            <title class="- topic/title ">Title</title>
+            <body class="- topic/body ">
+              <p class="- topic/p ">para 1 A</p>
+              <p class="- topic/p ">para 2 A</p>
+            </body>
+          </topic>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return element id prefixed with topic id" select="'topic__p__2'"/>
+    </x:scenario>
+    <x:scenario label="with ancestor element with id">
+      <x:call function="dita-ot:generate-stable-id">
+        <x:param name="element" select="(//p)[2]">
+          <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+            domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d) "
+            id="topic" ditaarch:DITAArchVersion="1.3">
+            <title class="- topic/title ">Title</title>
+            <body class="- topic/body ">
+              <p class="- topic/p ">para</p>
+              <section class="- topic/section " id="section">
+                <p class="- topic/p ">para</p>
+              </section>
+            </body>
+          </topic>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return element id prefixed with topic id" select="'topic__section__p__1'"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="dita-ot:generate-id">
+    <x:scenario label="both topic and element id">
+      <x:call function="dita-ot:generate-id">
+        <x:param name="topic" select="'foo'"/>
+        <x:param name="element" select="'bar'"/>
+      </x:call>
+
+      <x:expect label="return element id prefixed with topic id" select="'foo__bar'"/>
+    </x:scenario>
+    <x:scenario label="only topic id">
+      <x:call function="dita-ot:generate-id">
+        <x:param name="topic" select="'foo'"/>
+        <x:param name="element" select="()"/>
+      </x:call>
+
+      <x:expect label="return topic id" select="'foo'"/>
+    </x:scenario>
+    <x:scenario label="only element id">
+      <x:call function="dita-ot:generate-id">
+        <x:param name="topic" select="()"/>
+        <x:param name="element" select="'bar'"/>
+      </x:call>
+
+      <x:expect label="return element id" select="'bar'"/>
+    </x:scenario>
+    <x:scenario label="both ids are empty">
+      <x:call function="dita-ot:generate-id">
+        <x:param name="topic" select="()"/>
+        <x:param name="element" select="()"/>
+      </x:call>
+
+      <x:expect label="return empty string" select="''"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="table:is-tbody-entry">
+    <x:scenario label="entry is in tbody">
+      <x:call function="table:is-tbody-entry">
+        <x:param name="el" select="//tbody/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <thead class="- topic/thead ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "/>
+                </row>
+              </thead>
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "/>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="entry is in thead">
+      <x:call function="table:is-tbody-entry">
+        <x:param name="el" select="//thead/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <thead class="- topic/thead ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "/>
+                </row>
+              </thead>
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "/>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="table:is-thead-entry">
+    <x:scenario label="entry is in tbody">
+      <x:call function="table:is-thead-entry">
+        <x:param name="el" select="//tbody/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <thead class="- topic/thead ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "/>
+                </row>
+              </thead>
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "/>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+
+    <x:scenario label="entry is in thead">
+      <x:call function="table:is-thead-entry">
+        <x:param name="el" select="//thead/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <thead class="- topic/thead ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "/>
+                </row>
+              </thead>
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry "/>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="table:is-row-header">
+    <x:scenario label="is row header">
+      <x:call function="table:is-row-header">
+        <x:param name="node" select="//tbody/row/entry[1]">
+          <table class="- topic/table " rowheader="firstcol">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry " dita-ot:x="1"/>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="is NOT row header">
+      <x:call function="table:is-row-header">
+        <x:param name="node" select="//tbody/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry " dita-ot:x="1"/>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="simpletable:is-body-entry">
+    <x:scenario label="entry is in strow">
+      <x:call function="simpletable:is-body-entry">
+        <x:param name="el" select="//strow/stentry[1]">
+          <simpletable class="- topic/simpletable ">
+            <sthead class="- topic/sthead ">
+              <stentry class="- topic/stentry "/>
+            </sthead>
+            <strow class="- topic/strow ">
+              <stentry class="- topic/stentry "/>
+            </strow>
+          </simpletable>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="entry is in sthead">
+      <x:call function="simpletable:is-body-entry">
+        <x:param name="el" select="//sthead/stentry[1]">
+          <simpletable class="- topic/simpletable ">
+            <sthead class="- topic/sthead ">
+              <stentry class="- topic/stentry "/>
+            </sthead>
+            <strow class="- topic/strow ">
+              <entry class="- topic/stentry "/>
+            </strow>
+          </simpletable>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="simpletable:is-head-entry">
+    <x:scenario label="entry is in sthead">
+      <x:call function="simpletable:is-head-entry">
+        <x:param name="el" select="//sthead/stentry[1]">
+          <simpletable class="- topic/simpletable ">
+            <sthead class="- topic/sthead ">
+              <stentry class="- topic/stentry "/>
+            </sthead>
+            <strow class="- topic/strow ">
+              <stentry class="- topic/stentry "/>
+            </strow>
+          </simpletable>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="entry is in strow">
+      <x:call function="simpletable:is-head-entry">
+        <x:param name="el" select="//strow/stentry[1]">
+          <simpletable class="- topic/simpletable ">
+            <sthead class="- topic/sthead ">
+              <stentry class="- topic/stentry "/>
+            </sthead>
+            <strow class="- topic/strow ">
+              <stentry class="- topic/stentry "/>
+            </strow>
+          </simpletable>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="simpletable:is-keycol-entry">
+    <x:scenario label="entry is keycol entry">
+      <x:call function="simpletable:is-keycol-entry">
+        <x:param name="entry" select="//strow/stentry[1]">
+          <simpletable class="- topic/simpletable " keycol="1">
+            <strow class="- topic/strow ">
+              <stentry class="- topic/stentry "/>
+              <stentry class="- topic/stentry "/>
+            </strow>
+          </simpletable>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return true()" select="true()"/>
+    </x:scenario>
+
+    <x:scenario label="entry is NOT keycol entry">
+      <x:call function="simpletable:is-keycol-entry">
+        <x:param name="entry" select="//strow/stentry[2]">
+          <simpletable class="- topic/simpletable " keycol="1">
+            <strow class="- topic/strow ">
+              <stentry class="- topic/stentry "/>
+              <stentry class="- topic/stentry "/>
+            </strow>
+          </simpletable>
+        </x:param>
+      </x:call>
+
+      <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+  </x:scenario>
+
+</x:description>

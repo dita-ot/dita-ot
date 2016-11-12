@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "../dtd/topic.dtd">
+<?Pub Inc?>
+<topic id="this-target" xml:lang="en-us">
+<title>conrefbreaksxref target</title>
+<shortdesc>This topic is referenced by another, and has some internal linking.</shortdesc>
+<body>
+<section id="section"><title>Section that is pulled to another topic.</title><p>Look
+as the figure in this section: <xref href="#this-target/fig"></xref>.</p><p>Look
+at a figure in this topic, outside of this section: <xref href="#this-target/out"></xref></p><p>Now
+look at this topic: <xref href="#this-target"><?Pub Caret?></xref></p><p>Now
+look at the topic below: <xref href="#sub"></xref>.</p><p>Now look at a figure
+in the topic below: <xref href="#sub/fig"></xref></p><fig id="fig"><title>Figure
+In My Section</title>
+<p>This is a figure here.</p>
+</fig></section>
+<fig id="out"><title>Figure outside the section</title>
+<p>this figure is outside the seciton</p>
+</fig>
+</body>
+<topic id="sub" xml:lang="en-us">
+<title>Sub-topic in the reusable file</title>
+<body>
+<fig id="fig"><title>Figure in the sub-topic</title></fig>
+</body>
+</topic>
+</topic>
+<?Pub *0000001213?>

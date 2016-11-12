@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file is part of the DITA Open Toolkit project.
-     See the accompanying license.txt file for applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2004, 2005 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 
 <!-- Common utilities that can be used by DITA transforms -->
 <xsl:stylesheet version="2.0"
@@ -76,7 +80,8 @@
   <xsl:template name="getVariable">
     <xsl:param name="id" as="xs:string"/>
     <xsl:param name="params" as="node()*"/>
-    <xsl:sequence select="dita-ot:get-variable(., $id, $params)"/>
+    <xsl:param name="ctx" as="node()" select="."/>
+    <xsl:sequence select="dita-ot:get-variable($ctx, $id, $params)"/>
   </xsl:template>
 
   <xsl:template name="findString">
@@ -201,6 +206,26 @@
     </xsl:choose>
   </xsl:template>
   
+  <xsl:template name="replace">
+    <xsl:param name="text" as="xs:string?"/>
+    <xsl:param name="from" as="xs:string"/>
+    <xsl:param name="to"/>
+    <xsl:choose>
+      <xsl:when test="contains($text, $from)">
+        <xsl:sequence select="substring-before($text, $from)[string-length(.) gt 0]"/>
+        <xsl:copy-of select="$to"/>
+        <xsl:call-template name="replace">
+          <xsl:with-param name="text" select="substring-after($text, $from)[string-length(.) gt 0]"/>
+          <xsl:with-param name="from" select="$from"/>
+          <xsl:with-param name="to" select="$to"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   <!-- replace all the blank in file name or directory with %20 -->
   <xsl:template name="replace-blank">
     <xsl:param name="file-origin"></xsl:param>
@@ -229,8 +254,8 @@
     <xsl:with-param name="id" select="'DOTX069W'"/>
     <xsl:with-param name="msgparams">%1=parseHrefUptoExtension</xsl:with-param>
   </xsl:call-template>  
-  <xsl:variable name="uptoDot"><xsl:value-of select="substring-before($href,'.')"/></xsl:variable>
-  <xsl:variable name="afterDot"><xsl:value-of select="substring-after($href,'.')"/></xsl:variable>
+  <xsl:variable name="uptoDot" select="substring-before($href,'.')" as="xs:string"/>
+  <xsl:variable name="afterDot" select="substring-after($href,'.')" as="xs:string"/>
   <xsl:value-of select="$uptoDot"/>
   <xsl:choose>
     <!-- No more periods, so this is at the extension -->
@@ -272,12 +297,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
-  <xsl:function name="dita-ot:strip-fragment" as="xs:string">
-    <xsl:param name="href" as="xs:string"/>
-    <xsl:value-of select="if (contains($href, '#')) then substring-before($href, '#') else $href"/>
-  </xsl:function>
-  
+
   <!-- Replace file extension in a URI -->
   <xsl:template name="replace-extension" as="xs:string">
     <xsl:param name="filename" as="xs:string"/>
@@ -393,61 +413,7 @@
       select="$n/ancestor-or-self::*[contains(@class, ' topic/topic ')][1]"/>
   </xsl:function>
 
-  <xsl:template name="dita-ot:normalize-uri" as="xs:string">
-    <xsl:param name="src" as="xs:string*"/>
-    <xsl:param name="res" select="()" as="xs:string*"/>
-    
-    <xsl:choose>
-      <xsl:when test="empty($src)">
-        <xsl:value-of select="$res" separator="/"/>
-      </xsl:when>
-      <xsl:when test="$src[1] = '.'">
-        <xsl:call-template name="dita-ot:normalize-uri">
-          <xsl:with-param name="src" select="$src[position() ne 1]"/>
-          <xsl:with-param name="res" select="$res"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="$src[1] = '..' and exists($res) and not($res[position() eq last()] = ('..', ''))">
-        <xsl:call-template name="dita-ot:normalize-uri">
-          <xsl:with-param name="src" select="$src[position() ne 1]"/>
-          <xsl:with-param name="res" select="$res[position() ne last()]"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="dita-ot:normalize-uri">
-          <xsl:with-param name="src" select="$src[position() ne 1]"/>
-          <xsl:with-param name="res" select="($res, $src[1])"/>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
-  <xsl:function name="dita-ot:relativize" as="xs:anyURI">
-    <xsl:param name="base" as="xs:anyURI"/>
-    <xsl:param name="uri" as="xs:anyURI"/>
-    
-    <xsl:variable name="b" select="tokenize($base, '/')" as="xs:string+"/>
-    <xsl:variable name="u" select="tokenize($uri, '/')" as="xs:string+"/>
-    
-    <xsl:sequence select="dita-ot:relativize.strip-and-prefix($b, $u)"/>
-  </xsl:function>
-  
-  <xsl:function name="dita-ot:relativize.strip-and-prefix" as="xs:anyURI">
-    <xsl:param name="a" as="xs:string+"/>
-    <xsl:param name="b" as="xs:string+"/>
-    <xsl:choose>
-      <xsl:when test="$a[1] = $b[1]">
-        <xsl:sequence select="dita-ot:relativize.strip-and-prefix($a[position() ne 1], $b[position() ne 1])"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:variable name="res" as="xs:string+">
-          <xsl:for-each select="$a[position() ne 1]">../</xsl:for-each>
-          <xsl:value-of select="$b" separator="/"/>
-        </xsl:variable>
-        <xsl:sequence select="xs:anyURI(string-join($res, ''))"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:function>
+  <xsl:include href="uri-utils.xsl"/>
 
 </xsl:stylesheet>
 

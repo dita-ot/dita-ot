@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2011 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.writer;
 
@@ -31,7 +34,7 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
     Job job;
     /** Absolute temporary directory URI to file being processed */
     protected URI currentFile;
-    protected Map<String, String> params = new HashMap<>();
+    protected final Map<String, String> params = new HashMap<>();
 
     @Override
     public void write(final File filename) throws DITAOTException {

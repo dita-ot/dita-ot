@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="control_value_file" default="all">
+  <dirname property="test.basedir" file="${ant.file.control_value_file}"/>
+  <property name="test.name" value="${ant.project.name}"/>
+  <property name="dita.dir" location="${basedir}/../.."/>
+  <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+  <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+  <target name="all" depends="control_value_file_filter.xhtml,control_value_file_filter.preprocess"/>
+  <target name="control_value_file_filter.xhtml" if="run.xhtml" unless="skip.xhtml">
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" location="${test.basedir}/src/map13.ditamap"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml/map13_flag"/>
+      <property name="output.dir" location="${result.dir}/xhtml/map13_flag"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/flag.ditaval"/>
+    </ant>
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" location="${test.basedir}/src/map13.ditamap"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml/map13_flag2"/>
+      <property name="output.dir" location="${result.dir}/xhtml/map13_flag2"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/flag2.ditaval"/>
+    </ant>
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" location="${test.basedir}/src/map33.ditamap"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml/map33_flag"/>
+      <property name="output.dir" location="${result.dir}/xhtml/map33_flag"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/flag.ditaval"/>
+    </ant>
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" location="${test.basedir}/src/map33.ditamap"/>
+      <property name="dita.temp.dir" location="${temp.dir}/xhtml/map33_flag2"/>
+      <property name="output.dir" location="${result.dir}/xhtml/map33_flag2"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/flag2.ditaval"/>
+    </ant>
+  </target>
+  <target name="control_value_file_filter.preprocess" if="run.preprocess" unless="skip.preprocess">
+    <ant antfile="${dita.dir}/build.xml">
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="args.input" location="${test.basedir}/src/map13.ditamap"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/map13_filter1"/>
+      <property name="output.dir" location="${result.dir}/preprocess/map13_filter1"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/filter1.ditaval"/>
+    </ant>
+    <ant antfile="${dita.dir}/build.xml">
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="args.input" location="${test.basedir}/src/map13.ditamap"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/map13_filter2"/>
+      <property name="output.dir" location="${result.dir}/preprocess/map13_filter2"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/filter2.ditaval"/>
+    </ant>
+    <ant antfile="${dita.dir}/build.xml">
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="args.input" location="${test.basedir}/src/map13.ditamap"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/map13_filter3"/>
+      <property name="output.dir" location="${result.dir}/preprocess/map13_filter3"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/filter3.ditaval"/>
+    </ant>
+    <ant antfile="${dita.dir}/build.xml">
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="args.input" location="${test.basedir}/src/map31.ditamap"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/map31_filter_multi"/>
+      <property name="output.dir" location="${result.dir}/preprocess/map31_filter_multi"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/filter_multi.ditaval"/>
+    </ant>
+    <ant antfile="${dita.dir}/build.xml">
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="args.input" location="${test.basedir}/src/map32.ditamap"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/map32_filter_multi"/>
+      <property name="output.dir" location="${result.dir}/preprocess/map32_filter_multi"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/filter_multi.ditaval"/>
+    </ant>
+    <ant antfile="${dita.dir}/build.xml">
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="args.input" location="${test.basedir}/src/map33.ditamap"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/map33_filter2"/>
+      <property name="output.dir" location="${result.dir}/preprocess/map33_filter2"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/filter2.ditaval"/>
+    </ant>
+    <ant antfile="${dita.dir}/build.xml">
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="args.input" location="${test.basedir}/src/map33.ditamap"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/map33_filter3"/>
+      <property name="output.dir" location="${result.dir}/preprocess/map33_filter3"/>
+      <property name="transtype" value="xhtml"/>
+      <property name="args.filter" location="${test.basedir}/src/filter3.ditaval"/>
+    </ant>
+  </target>
+  <property name="exp.message-count.warn" value="2"/>
+</project>

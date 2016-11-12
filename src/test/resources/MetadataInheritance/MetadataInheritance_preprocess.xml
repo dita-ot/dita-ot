@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MetadataInheritance_preprocess" default="MetadataInheritance2preprocess" basedir=".">
+  <dirname property="test.basedir" file="${ant.file.MetadataInheritance_preprocess}"/>
+  <property name="test.name" value="MetadataInheritance"/>
+  <property name="dita.dir" location="${test.basedir}/../.."/>
+  <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+  <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+  <target name="MetadataInheritance2preprocess" if="run.preprocess" unless="skip.preprocess">
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_foreign"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_keywords"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_linktext"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_othermeta"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_pemissions"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_pemissions_replace"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_prodinfo"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_publisher"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_resourceid"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_searchtitle"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_shortdesc"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_source"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_source_replace"/></antcall>
+    <antcall target="run"><param name="test-name" value="MatadataInheritance_unknown"/></antcall>
+    <antcall target="run"><param name="test-name" value="MetadataInheritance_audience"/></antcall>
+    <antcall target="run"><param name="test-name" value="MetadataInheritance_author"/></antcall>
+    <antcall target="run"><param name="test-name" value="MetadataInheritance_category"/></antcall>
+    <antcall target="run"><param name="test-name" value="MetadataInheritance_copyright"/></antcall>
+    <antcall target="run"><param name="test-name" value="MetadataInheritance_critdates"/></antcall>
+    <antcall target="run"><param name="test-name" value="MetadataInheritance_critdates_replace"/></antcall>
+    <antcall target="run"><param name="test-name" value="MetadataInheritance_data"/></antcall>
+    <antcall target="run"><param name="test-name" value="MetadataInheritance_dataabout"/></antcall>
+  </target>
+
+  <target name="run">
+    <ant antfile="${dita.dir}/build.xml">
+      <property name="args.input" location="${test.basedir}/src/${test-name}.ditamap"/>
+      <property name="output.dir" location="${result.dir}/preprocess/${test-name}"/>
+      <property name="transtype" value="MatadataInheritance_xhtml"/>
+      <target name="build-init"/>
+      <target name="preprocess"/>
+      <property name="dita.temp.dir" location="${result.dir}/preprocess/${test-name}"/>
+      <property name="dita.ext" value=".dita"/>
+    </ant>
+  </target>
+
+</project>

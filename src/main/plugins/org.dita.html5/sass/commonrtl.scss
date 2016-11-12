@@ -1,4 +1,15 @@
+/*!
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2015 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
+ */
+
+// Import common left-to-right rules first
 @import 'commonltr';
+
+// Overrides for right-to-left languages
 
 .linklist {
   margin-bottom: 1em;

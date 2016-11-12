@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><?path2project?><?path2project-uri ./?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="a" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">a</title>
+  <prolog class="- topic/prolog ">    
+    <author keyref="author" class="- topic/author " href="b.xml" scope="peer"><keyword class="- topic/keyword ">author keyword</keyword></author>
+    <source keyref="source" class="- topic/source " href="b.xml" scope="peer"><keyword class="- topic/keyword ">source keyword</keyword></source>
+    <publisher keyref="publisher" class="- topic/publisher " href="b.xml" scope="peer"><keyword class="- topic/keyword ">publisher keyword</keyword></publisher>
+    <data keyref="data" class="- topic/data " href="b.xml" scope="peer"><keyword class="- topic/keyword ">data keyword</keyword></data>
+    <data-about keyref="data-about" class="- topic/data-about " href="b.xml" scope="peer"><data class="- topic/data ">data-about data-about</data></data-about>
+  </prolog>
+  <body class="- topic/body ">
+    <image keyref="image" alt="Alt attribute." placement="inline" class="- topic/image " href="delta.gif" format="gif"/>
+    <image keyref="image" placement="inline" class="- topic/image " href="delta.gif" format="gif"><alt class="- topic/alt ">Alt element.</alt></image>
+    <p class="- topic/p ">
+      <xref keyref="xref" class="- topic/xref " href="b.xml" scope="peer"><?ditaot usertext?><keyword class="- topic/keyword ">xref keyword</keyword></xref>
+      <xref keyref="xref" class="- topic/xref " href="b.xml" scope="peer"><?ditaot usertext?>Default text</xref>
+      <cite keyref="cite" class="- topic/cite ">cite keyword</cite>
+      <keyword keyref="keyword" class="- topic/keyword ">keyword keyword</keyword>
+      <ph keyref="ph" class="- topic/ph ">ph keyword</ph>
+      <term keyref="term" class="- topic/term ">term keyword</term>
+      <indexterm keyref="indexterm" class="- topic/indexterm ">indexterm keyword</indexterm>
+      <indexterm class="- topic/indexterm ">
+        <index-base keyref="index-base" class="- topic/index-base ">index-base keyword</index-base>
+      </indexterm>
+      <indextermref keyref="indextermref" class="- topic/indextermref ">indextermref keyword</indextermref>
+    </p>
+    <dl class="- topic/dl ">
+      <dlentry class="- topic/dlentry ">
+        <dt keyref="dt" class="- topic/dt ">dt keyword</dt>
+        <dd class="- topic/dd "/>
+      </dlentry>
+    </dl>
+    <lq keyref="lq" class="- topic/lq " href="b.xml" scope="peer"><keyword class="- topic/keyword ">lq keyword</keyword></lq>
+  </body>
+  <related-links class="- topic/related-links ">
+    <link keyref="link" class="- topic/link " href="b.xml" scope="peer"><?ditaot usertext?><linktext class="- topic/linktext "><keyword class="- topic/keyword ">link keyword</keyword></linktext></link>
+  </related-links>
+</topic>

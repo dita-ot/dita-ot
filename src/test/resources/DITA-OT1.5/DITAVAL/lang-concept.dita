@@ -6,7 +6,7 @@
 <title>Concept for language test</title>
 <shortdesc>this is the related concept</shortdesc>
 <conbody>
-<p>stuff<?Pub Caret?></p>
+<p>stuff</p>
 <fig id="fig"><title>figure title</title>
 <p>test <q>quote</q> in a figure</p>
 </fig>

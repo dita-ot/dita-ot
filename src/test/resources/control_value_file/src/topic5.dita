@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/topic.dtd">
+<topic id="topic5" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>A hierarchy of CVF test</title>
+    <body>
+        <p>
+            <note platform="LINUX">platform value is LINUX</note>
+             <note platform="REDHAT">platform value is REDHAT</note>
+
+            <note platform="MSWIN">platform value is MSWIN</note>
+            <note platform="ZOS">platform value is ZOS</note>
+        </p>
+    </body>
+   
+</topic>
+

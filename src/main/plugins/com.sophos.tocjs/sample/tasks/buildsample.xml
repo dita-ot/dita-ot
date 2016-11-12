@@ -2,11 +2,10 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
  "../../../../dtd/task.dtd">
  <!-- 
-     This file is part of the DITA Open Toolkit project hosted on
-     Sourceforge.net. See the accompanying license.txt file for
-     applicable licenses.
+This file is part of the DITA Open Toolkit project.
+See the accompanying LICENSE file for applicable license.
      
-     (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
+     Copyright 2007 Shawn McKenzie
      *-->
      <?xml-stylesheet href="../../../xsl/ditaview_shell.xsl" type="text/xsl"?>
 <task id="tocjs_buildsample" xml:lang="en-us">

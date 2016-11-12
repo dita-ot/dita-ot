@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2013 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.writer;
 
@@ -91,7 +94,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
      * @return updated href URI
      */
     private URI getRelativePath(final URI href) {
-        final URI keyValue = job.tempDir.toURI().resolve(stripFragment(href));
+        final URI keyValue = job.tempDirURI.resolve(stripFragment(href));
         return URLUtils.getRelativePath(currentFile, keyValue);
     }
 

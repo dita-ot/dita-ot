@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?workdir /Volumes/tmp/temp/conref_push/preprocess/pushBefore/pushBefore_with_crossRef?>
+<?workdir-uri file:/Users/jelovirt/Work/github/dita-ot/src/main/temp/conref_push/preprocess/pushBefore/pushBefore_with_crossRef/?>
+<?path2project ?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         ">
+  <topicref class="- map/topicref " href="pushBefore_with_crossReference.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">This is a case for pushBefore with crossreference link</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">This is a case for pushBefore with crossreference link</linktext>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="pushBefore_with_crossRef.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">This Is a topic for pushBefore with cross reference link</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">This Is a topic for pushBefore with cross reference link</linktext>
+    </topicmeta>
+  </topicref>
+</map>

@@ -1,3 +1,10 @@
+/*
+ * This file is part of the DITA Open Toolkit project.
+ *
+ * Copyright 2013 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
+ */
 package org.dita.dost.writer;
 
 import java.io.File;
@@ -32,7 +39,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
     public void read(final File filename) {
         assert filename.isAbsolute();
         logger.info("Processing " + filename.toURI());
-        Document doc = null;
+        Document doc;
         try {
             final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
             builder.setErrorHandler(new DITAOTXMLErrorHandler(filename.getPath(), logger));

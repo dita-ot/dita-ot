@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="TopicID1">
+    <title>This is a case for pushReplace with crossreference link</title>
+    
+    <body>
+        <p>
+            
+            <!-- pushReplace with A element -->
+            <xref conref="pushReplace_with_crossRef.dita#topicID/A" conaction="pushreplace" href="http://www.google.com" scope="external">Google</xref>
+           
+            
+            <!-- pushReplace with B element -->
+            <xref conref="pushReplace_with_crossRef.dita#topicID/B" conaction="pushreplace" href="1/11/dita22.dita">1/11/DITA22</xref> 
+            
+            <!-- pushReplace with C element -->
+            <xref conref="pushReplace_with_crossRef.dita#topicID/C" conaction="pushreplace" href="1/dita2.dita">1/DITA2</xref> 
+            
+        </p>
+    </body>
+</topic>
+

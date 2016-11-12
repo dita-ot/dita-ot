@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?workdir /preprocess?>
+<?workdir-uri file:/preprocess/?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " id="topic_yvt_bmz_cj">
+  <title class="- topic/title ">Topic title</title>
+  <body class="- topic/body ">
+    <image class="- topic/image " href="img.jpg" placement="inline" scale="50" dita-ot:image-width="135" dita-ot:image-height="95" dita-ot:horizontal-dpi="100" dita-ot:vertical-dpi="100"/>
+    <image class="- topic/image " href="img.png" placement="inline" scale="50" dita-ot:image-width="135" dita-ot:image-height="95" dita-ot:horizontal-dpi="100" dita-ot:vertical-dpi="100"/>
+    <image class="- topic/image " href="img.gif" placement="inline" scale="50" dita-ot:image-width="135" dita-ot:image-height="95"/>
+    <!-- again -->
+    <image class="- topic/image " href="img.jpg" placement="inline" scale="50" dita-ot:image-width="135" dita-ot:image-height="95" dita-ot:horizontal-dpi="100" dita-ot:vertical-dpi="100"/>
+    <image class="- topic/image " href="img.png" placement="inline" scale="50" dita-ot:image-width="135" dita-ot:image-height="95" dita-ot:horizontal-dpi="100" dita-ot:vertical-dpi="100"/>
+    <image class="- topic/image " href="img.gif" placement="inline" scale="50" dita-ot:image-width="135" dita-ot:image-height="95"/>
+  </body>
+</topic>

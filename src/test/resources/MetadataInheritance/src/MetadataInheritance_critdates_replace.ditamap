@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.1 Map//EN"
+ "file:/C:/DITA-OT1.4/dtd/map.dtd">
+ <?Pub Inc?>
+ <map id="Bats3" title="Bats3">
+     <topicmeta>
+         <critdates>
+             <created date="2007-07-01"/>
+             <revised modified="2008-08-08"/>
+         </critdates>
+     </topicmeta><?Pub Caret1?>
+     <topicref href="bats.dita" navtitle="Bats">
+         <topicmeta>  
+             <critdates>
+                 <created date="2770-03"/>
+             </critdates>
+         </topicmeta>
+         <topicref href="batcaring.dita" navtitle="Caring for your fruit bat"></topicref>
+     </topicref>
+     <topicref href="critdates_replace.dita" navtitle="replace"></topicref>
+ </map>
+ <?Pub *0000000786?>
+ 

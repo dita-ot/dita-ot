@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2014 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.module;
 
@@ -54,7 +57,7 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
             }
         });
         for (final FileInfo f: fis) {
-            final URI file = job.tempDir.toURI().resolve(f.uri);
+            final URI file = job.tempDirURI.resolve(f.uri);
             logger.info("Processing " + file);
             try {
                 XMLUtils.transform(file, getProcessingPipe(file));

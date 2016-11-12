@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="bookmap(2)" default="all" basedir=".">
+   <dirname property="test.basedir" file="${ant.file.bookmap(2)}"/>
+   <property name="test.name" value="bookmap(2)"/>
+   <property environment="env"/>
+   <property name="args.logdir" value="log"/>
+   <import file="bookmap(2)_xhtml.xml"/>
+   <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+   <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+   <target name="all" depends="bookmap(2)2xhtml"/>
+  <property name="exp.message-count.error" value="3"/>
+</project>

@@ -1,0 +1,11 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic">
+  <title>Push Source</title>
+  <body>
+    <p>The next paragraph uses conaction="pushreplace":</p>
+    <p conref="jandrew-test-push-target.xml#topic/p1" 
+      conaction="pushreplace">This is pushed.</p>
+    <p>This is after the pushed paragraph.</p>
+  </body>
+</topic>

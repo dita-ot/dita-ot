@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="bookmap(2)_xhtml" default="bookmap(2)2xhtml" basedir=".">
+   <dirname property="test.basedir" file="${ant.file.bookmap(2)_xhtml}"/>
+   <property name="test.name" value="bookmap(2)"/>
+   <property name="dita.dir" location="${test.basedir}/../.."/>
+   <property name="temp.dir" location="${dita.dir}/temp/${test.name}"/>
+   <property name="result.dir" location="${dita.dir}/testresult/${test.name}"/>
+   <target name="bookmap(2)2xhtml" if="run.xhtml" unless="skip.xhtml">
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/bookmap(2)_testdata1.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml/1"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml/1"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/bookmap(2)_testdata2.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml/2"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml/2"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/bookmap(2)_testdata3.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml/3"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml/3"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/bookmap(2)_testdata4.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml/4"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml/4"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/bookmap(2)_testdata5.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml/5"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml/5"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/bookmap(2)_testdata6.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml/6"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml/6"/>
+      </ant>
+      <ant antfile="${dita.dir}/build.xml">
+         <property name="args.input" location="${test.basedir}/src/bookmap(2)_testdata7.ditamap"/>
+         <property name="output.dir" location="${result.dir}/xhtml/7"/>
+         <property name="transtype" value="xhtml"/>
+         <property name="dita.temp.dir" location="${temp.dir}/xhtml/7"/>
+      </ant>
+   </target>
+</project>

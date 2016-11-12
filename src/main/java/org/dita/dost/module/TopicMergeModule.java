@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2004, 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.module;
 
@@ -60,21 +60,22 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
             throw new IllegalStateException("Logger not set");
         }
         final File ditaInput = new File(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
-        final File style = input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE) != null ? new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE)) : null;
-        final File out = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT));
-        final MergeMapParser mapParser = new MergeMapParser();
-        mapParser.setLogger(logger);
-        mapParser.setJob(job);
-        mapParser.setOutput(out.getAbsoluteFile());
-
         if (!ditaInput.exists()){
             logger.error(MessageUtils.getInstance().getMessage("DOTJ025E").toString());
             return null;
         }
+        final File style = input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE) != null
+                ? new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE))
+                : null;
+        final File out = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUT)).getAbsoluteFile();
 
-        ByteArrayOutputStream midBuffer = null;
+        final MergeMapParser mapParser = new MergeMapParser();
+        mapParser.setLogger(logger);
+        mapParser.setJob(job);
+        mapParser.setOutput(out);
+
+        final ByteArrayOutputStream midBuffer = new ByteArrayOutputStream();
         try {
-            midBuffer = new ByteArrayOutputStream();
             midBuffer.write(XML_HEAD.getBytes(UTF8));
             midBuffer.write(("<dita-merge " + ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION + "='" + DITA_NAMESPACE + "' "
                     + XMLNS_ATTRIBUTE + ":" + DITA_OT_PREFIX + "='" + DITA_OT_NS + "'>").getBytes(UTF8));
@@ -85,29 +86,21 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
             throw new RuntimeException(e);
         } catch (final IOException e) {
             throw new DITAOTException("Failed to merge topics: " + e.getMessage(), e);
-        } finally {
-            if (midBuffer != null) {
-                try {
-                    midBuffer.close();
-                } catch (final IOException e) {
-                    logger.error("Failed to close output buffer: " + e.getMessage(), e);
-                }
-            }
         }
 
-        OutputStream output = null;
-        try {
-            final File outputDir = out.getParentFile();
-            if (!outputDir.exists() && !outputDir.mkdirs()) {
-                logger.error("Failed to create directory " + outputDir.getAbsolutePath());
-            }
-            output = new BufferedOutputStream(new FileOutputStream(out));
+        final File outputDir = out.getParentFile();
+        if (!outputDir.exists() && !outputDir.mkdirs()) {
+            logger.error("Failed to create directory " + outputDir.getAbsolutePath());
+        }
+        try (final OutputStream output = new BufferedOutputStream(new FileOutputStream(out))) {
             if (style != null) {
                 final TransformerFactory factory = TransformerFactory.newInstance();
                 factory.setURIResolver(CatalogUtils.getCatalogResolver());
-                final Transformer transformer = factory.newTransformer(new StreamSource(style.toURI().toString()));
-                transformer.transform(new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray())),
-                        new StreamResult(output));
+                final StreamSource styleSource = new StreamSource(style);
+                final Transformer transformer = factory.newTransformer(styleSource);
+                final StreamSource source = new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray()));
+                final StreamResult result = new StreamResult(output);
+                transformer.transform(source, result);
             } else {
                 output.write(midBuffer.toByteArray());
                 output.flush();
@@ -116,14 +109,6 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
             throw e;
         } catch (final Exception e) {
             throw new DITAOTException("Failed to process merged topics: " + e.getMessage(), e);
-        } finally {
-            try {
-                if (output != null) {
-                    output.close();
-                }
-            } catch (final Exception e) {
-                logger.error("Failed to close output buffer: " + e.getMessage(), e);
-            }
         }
 
         return null;

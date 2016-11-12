@@ -2,13 +2,13 @@
 <!--ArborText, Inc., 1988-2002, v.4002-->
 <!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN"
  "./dtd/technicalContent/dtd/task.dtd">
- <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+ <!-- Copyright 2004, 2005 IBM Corporation
  -->
 <task id="prerequisite" xml:lang="en-us">
 <title>Prerequisite task</title>
 <shortdesc>This should create a prerequisite link in the language test</shortdesc>
 <taskbody>
 <prereq>You need to do this first.</prereq>
-</taskbody><?Pub Caret1?>
+</taskbody>
 </task>
 

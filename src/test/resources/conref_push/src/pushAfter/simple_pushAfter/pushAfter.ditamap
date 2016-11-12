@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+
+<!-- this is a case for 12015@2008-05-19 -->
+
+<map>
+    
+    <!-- check dita1.dita when you finish the exucution of this map -->
+    <!-- pushafter -->
+    
+    <topicref href="dita2.dita"/>
+    <topicref href="dita1.dita"/>
+    
+</map>

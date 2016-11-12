@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2010 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2010 All Rights Reserved.
  */
 package org.dita.dost.module;
 
@@ -55,7 +55,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
                 parser.setLogger(logger);
                 parser.setMoveTable(entry.getValue());
                 //pass the tempdir to ConrefPushParser
-                parser.setTempDir(job.tempDir.getAbsoluteFile());
+                parser.setTempDir(job.tempDir);
                 //FIXME:This writer creates and renames files, have to
                 try {
                     parser.write(entry.getKey());

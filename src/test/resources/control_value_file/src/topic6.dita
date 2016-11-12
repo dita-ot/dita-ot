@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/topic.dtd">
+<topic id="topic6" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Extention scheme</title>
+    <body>
+        <p>
+            <note platform="linux">platform value is linux</note>
+            <note platform="mswin">platform value is mswin</note>
+            <note platform="zos">platform value is zos</note>
+            
+            <note platform="macos">platform value is macos</note>
+            <note platform="winxp">platform value is winxp</note>
+            <note platform="win98">platform value is win98</note>
+        </p>
+    </body>
+   
+</topic>
+

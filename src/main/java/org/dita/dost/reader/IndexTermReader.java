@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2005, 2006 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.reader;
 
@@ -155,7 +155,6 @@ public final class IndexTermReader extends AbstractXMLReader {
 
     @Override
     public void endDocument() throws SAXException {
-        final int size = indexTermList.size();
         updateIndexTermTargetName();
         for (final IndexTerm indexterm : indexTermList) {
             //IndexTermCollection.getInstantce().addTerm(indexterm);
@@ -461,7 +460,6 @@ public final class IndexTermReader extends AbstractXMLReader {
      *
      */
     private void updateIndexTermTargetName(){
-        final int size = indexTermList.size();
         if(defaultTitle == null){
             defaultTitle = targetFile;
         }

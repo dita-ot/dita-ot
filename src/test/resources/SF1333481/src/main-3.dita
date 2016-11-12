@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<?Pub Inc?>
+<concept id="main-3" xml:lang="en-us">
+<title>Third topic in the main map</title>
+<shortdesc>This is a child of the second map. It has children, and a mapref
+child.<?Pub Caret?></shortdesc>
+<conbody></conbody>
+</concept>
+<?Pub *0000000420?>

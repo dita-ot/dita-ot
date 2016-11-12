@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2007 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2007 All Rights Reserved.
  */
 package org.dita.dost.reader;
 
@@ -223,10 +223,10 @@ public final class MapMetaReader extends AbstractDomFilter {
                 URI topicPath;
                 if (copytoAttr != null) {
                     final URI copyToUri = stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
-                    topicPath = job.tempDir.toURI().relativize(filePath.toURI().resolve(copyToUri));
+                    topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(copyToUri));
                 } else {
                     final URI hrefUri = stripFragment(URLUtils.toURI(hrefAttr.getNodeValue()));
-                    topicPath = job.tempDir.toURI().relativize(filePath.toURI().resolve(hrefUri));
+                    topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(hrefUri));
                 }
                 if (resultTable.containsKey(topicPath)) {
                     //if the result table already contains some result

@@ -1,0 +1,11 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " id="topicID1" ditaarch:DITAArchVersion="1.2">
+    <title class="- topic/title ">coderef  hw.java</title>
+    <body class="- topic/body ">
+        <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">/* a long sample program */
+Do forever
+Say "Hello, World"
+End
+
+<coderef class="+ topic/xref pr-d/coderef " href="hw.java"></coderef></codeblock>
+    </body>
+</topic>

@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2004, 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.writer;
 
@@ -79,7 +79,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         super.setJob(job);
         fileInfoMap = new HashMap<>();
         for (final FileInfo f: job.getFileInfo()) {
-            fileInfoMap.put(f.src, f);
+            fileInfoMap.put(f.result, f);
         }
     }
 
@@ -154,7 +154,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         final int attsLen = atts.getLength();
         for (int i = 0; i < attsLen; i++) {
             final String attQName = atts.getQName(i);
-            String attValue = getAttributeValue(qName, attQName, atts.getValue(i));
+            final String origValue = atts.getValue(i);
+            String attValue = origValue;
             if (ATTRIBUTE_NAME_CONREF.equals(attQName)) {
                 attValue = replaceHREF(ATTRIBUTE_NAME_CONREF, atts).toString();
             } else if(ATTRIBUTE_NAME_HREF.equals(attQName) || ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
@@ -168,6 +169,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
                 if (isFormatDita(format)) {
                     attValue = ATTR_FORMAT_VALUE_DITA;
                 }
+            } else {
+                attValue = getAttributeValue(qName, attQName, attValue);
             }
             XMLUtils.addOrSetAttribute(res, atts.getURI(i), atts.getLocalName(i), attQName, atts.getType(i), attValue);
         }
@@ -213,8 +216,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
                 final FileInfo f = fileInfoMap.get(current);
                 if (f != null) {
                     final FileInfo cfi = fileInfoMap.get(currentFile);
-                    final URI currrentFileTemp = job.tempDir.toURI().resolve(cfi.uri);
-                    final URI targetTemp = job.tempDir.toURI().resolve(f.uri);
+                    final URI currrentFileTemp = job.tempDirURI.resolve(cfi.uri);
+                    final URI targetTemp = job.tempDirURI.resolve(f.uri);
                     attValue = getRelativePath(currrentFileTemp, targetTemp);
                 } else {
                     attValue = getRelativePath(currentFile, current);

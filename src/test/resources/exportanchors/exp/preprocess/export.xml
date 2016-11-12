@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<stub>
+  <file name="componentA/configA.dita">
+    <topicid name="configA"/>
+    <id name="step1"/>
+    <id name="step2"/>
+    <id name="step3"/>
+  </file>
+  <file name="componentA/this.dita">
+    <topicid name="this"/>
+    <id name="that"/>
+    <id name="this"/>
+  </file>
+  <file name="componentA/configA.dita">
+    <topicid name="configA"/>
+    <id name="step1"/>
+    <id name="step2"/>
+    <keyref name="commonconfig"/>
+  </file>
+</stub>

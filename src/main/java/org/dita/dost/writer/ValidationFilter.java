@@ -1,6 +1,9 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
+ *
+ * Copyright 2013 Jarno Elovirta
+ *
+ * See the accompanying LICENSE file for applicable license.
  */
 package org.dita.dost.writer;
 
@@ -19,7 +22,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-import org.xml.sax.helpers.LocatorImpl;
 
 /**
  * Validation and optional error recovery filter.
@@ -32,12 +34,6 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	private Locator locator;
     /** Deque of domains attibute values */
 	private final Deque<String[][]> domains = new LinkedList<>();
-//    /** Number of cols in tgroup */
-//    private int cols;
-//    /** Number or colspecs encountered */
-//    private int columnNumber;
-//    /** Location of cols attribute */
-//    private Locator colsLocator;
     private Mode processingMode;
 
     /**
@@ -67,7 +63,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
 	@Override
     public void setDocumentLocator(final Locator locator) {
         this.locator = locator;
-        getContentHandler().setDocumentLocator(locator);
+        super.setDocumentLocator(locator);
     }
 	
 	// SAX methods
@@ -90,51 +86,17 @@ public final class ValidationFilter extends AbstractXMLFilter {
 		validateKeyscope(atts);
 		validateAttributeValues(qName, atts);
 		validateAttributeGeneralization(atts);
-//        validateCols(atts);
 
-		getContentHandler().startElement(uri, localName, qName, modified != null ? modified : atts);
+		super.startElement(uri, localName, qName, modified != null ? modified : atts);
 	}
 
 	@Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         domains.removeFirst();
-        getContentHandler().endElement(uri, localName, qName);
+        super.endElement(uri, localName, qName);
     }
 
     // Validation methods
-
-//    /**
-//     * Validate table {@code cols} attribute.
-//     *
-//     * @param atts attributes
-//     */
-//    private void validateCols(final Attributes atts) throws SAXException  {
-//        if (TOPIC_TGROUP.matches(atts)) {
-//            colsLocator = locator != null ? new LocatorImpl(locator) : null;
-//            final String c = atts.getValue(ATTRIBUTE_NAME_COLS);
-//            try {
-//                cols = Integer.parseInt(c.trim());
-//            } catch (final NumberFormatException e) {
-//                if (processingMode == Mode.STRICT) {
-//                    throw new SAXException(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
-//                } else {
-//                    logger.error(messageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_COLS, c).setLocation(locator).toString());
-//                }
-//                cols = -1;
-//            }
-//        } else if (TOPIC_COLSPEC.matches(atts)) {
-//            columnNumber++;
-//        } else if (TOPIC_THEAD.matches(atts) || TOPIC_TBODY.matches(atts)) {
-//            if (cols != -1 && columnNumber > cols) {
-//                if (processingMode == Mode.STRICT) {
-//                    throw new SAXException(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
-//                } else {
-//                    logger.error(messageUtils.getMessage("DOTJ063E", Integer.toString(cols), Integer.toString(columnNumber)).setLocation(colsLocator).toString());
-//                }
-//            }
-//            columnNumber = 0;
-//        }
-//    }
 
     /**
 	 * Validate and fix {@code xml:lang} attribute.

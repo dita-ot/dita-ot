@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-  Sourceforge.net. See the accompanying license.txt file for 
-  applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2004, 2005 IBM Corporation
+
+See the accompanying LICENSE file for applicable license.
+-->
 
 <!--
   Standard error message template for DITA processing in XSL. This
@@ -120,10 +123,10 @@
       <xsl:when test="contains($params, ';')">
         <xsl:variable name="param" select="substring-before($params, ';')"/>
         <xsl:variable name="newString">
-          <xsl:call-template name="replaceString">
-            <xsl:with-param name="string" select="$string"/>
-            <xsl:with-param name="match" select="substring-before($param, '=')"/>
-            <xsl:with-param name="replacement" select="substring-after($param, '=')"/>            
+          <xsl:call-template name="replace">
+            <xsl:with-param name="text" select="$string"/>
+            <xsl:with-param name="from" select="substring-before($param, '=')"/>
+            <xsl:with-param name="to" select="substring-after($param, '=')"/>            
           </xsl:call-template>          
         </xsl:variable>
         <xsl:call-template name="replaceParams">
@@ -132,31 +135,11 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="contains($params, '=')">
-        <xsl:call-template name="replaceString">
-          <xsl:with-param name="string" select="$string"/>
-          <xsl:with-param name="match" select="substring-before($params, '=')"/>
-          <xsl:with-param name="replacement" select="substring-after($params, '=')"/>            
+        <xsl:call-template name="replace">
+          <xsl:with-param name="text" select="$string"/>
+          <xsl:with-param name="from" select="substring-before($params, '=')"/>
+          <xsl:with-param name="to" select="substring-after($params, '=')"/>            
         </xsl:call-template>   
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$string"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
-  <xsl:template name="replaceString">
-    <xsl:param name="string"/>
-    <xsl:param name="match"/>
-    <xsl:param name="replacement"/>
-    <xsl:choose>
-      <xsl:when test="contains($string,$match)">
-        <xsl:value-of select="substring-before($string,$match)"/>
-        <xsl:value-of select="$replacement"/>
-        <xsl:call-template name="replaceString">
-          <xsl:with-param name="string" select="substring-after($string,$match)"/>
-          <xsl:with-param name="replacement" select="$replacement"/>
-          <xsl:with-param name="match" select="$match"/>
-        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$string"/>

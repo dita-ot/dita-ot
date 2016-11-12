@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<?Pub Inc?>
+<reference id="mapref1-4" xml:lang="en-us">
+<title>Fourth in first mapref! Really deep!</title>
+<shortdesc>nested inside 3, which is inside 2, inside the first referenced
+map</shortdesc>
+<refbody></refbody><?Pub Caret1?>
+</reference>
+<?Pub *0000000439?>

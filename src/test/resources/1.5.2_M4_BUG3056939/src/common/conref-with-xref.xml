@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic-1">
+  <title>Conref With Xrefs</title>
+  <body>
+    <p>This topic contains a paragraph with an xref to a topic in a different directory tree.</p>
+    <p
+      id="p-with-xref">This is a direct xref to the target "XRef target topic": <xref
+      href="../langref/xref-target-topic.xml#topic-1"
+      format="dita"/>.</p>
+    <p
+      id="p-with-keyref">This is a keyref xref to the target "XRef target topic": <xref
+      keyref="xref-target-01">keyref xref to xref-target-topic</xref></p>
+  </body>
+</topic>

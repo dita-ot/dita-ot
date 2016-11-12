@@ -1,13 +1,14 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.log;
 
+import static org.dita.dost.invoker.ExtensibleAntInvoker.isValid;
 import static org.dita.dost.log.MessageBean.*;
 
 import java.util.ArrayList;
@@ -88,10 +89,7 @@ public final class DITAOTEchoTask extends Echo {
             if (!p.isValid()) {
                 throw new BuildException("Incomplete parameter");
             }
-            final String ifProperty = p.getIf();
-            final String unlessProperty = p.getUnless();
-            if ((ifProperty == null || getProject().getProperties().containsKey(ifProperty))
-                    && (unlessProperty == null || !getProject().getProperties().containsKey(unlessProperty))) {
+            if (isValid(getProject(), p.getIf(), p.getUnless())) {
                 final int idx = Integer.parseInt(p.getName()) - 1;
                 if (idx >= prop.size()) {
                     prop.ensureCapacity(idx + 1);

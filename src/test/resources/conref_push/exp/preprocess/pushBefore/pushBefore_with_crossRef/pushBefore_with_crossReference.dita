@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?workdir /Volumes/tmp/temp/conref_push/preprocess/pushBefore/pushBefore_with_crossRef?>
+<?workdir-uri file:/Users/jelovirt/Work/github/dita-ot/src/main/temp/conref_push/preprocess/pushBefore/pushBefore_with_crossRef/?>
+<?path2project?>
+<?path2project-uri ./?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="TopicID1" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">This is a case for pushBefore with crossreference link</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">
+      <xref href="http://www.google.com" scope="external" class="- topic/xref "><?ditaot usertext?>Google</xref>
+      <xref href="http://www.sohu.com" scope="external" class="- topic/xref "><?ditaot usertext?>Sohu</xref>
+      <xref href="http://www.sina.com" scope="external" class="- topic/xref "><?ditaot usertext?>Sina</xref>
+      <xref href="http://www.baidu.com" scope="external" class="- topic/xref "><?ditaot usertext?>Baidu</xref>
+      <xref href="1/dita2.dita" class="- topic/xref " type="task"><?ditaot usertext?>DITA2<?ditaot genshortdesc?><desc class="- topic/desc ">this is also a reuse function</desc></xref>
+      <xref href="1/11/dita22.dita" class="- topic/xref " type="task"><?ditaot usertext?>DITA22<?ditaot genshortdesc?><desc class="- topic/desc ">this is also a reuse function</desc></xref>
+      <xref href="1/dita2.dita#X/AA" class="- topic/xref " type="step"><?ditaot usertext?>Sibling Reference</xref>
+    </p>
+  </body>
+</topic>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/topic.dtd">
+<topic id="topic10" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>The incorrect values of product</title>
+    <body>
+      <p audience="programm">audience value is programm within p tag</p>
+        <p>
+            <note audience="Admin">Admin (within note tag)</note>
+            <note audience="">NULL (within note tag)</note>
+            <note audience=" "> a blank character (within notetag)</note>
+            <b audience="pms">pms (within b tag)</b>
+            <data audience="Yser">Yser (within data tag)</data>
+            <lq  audience="audience">audience (within lq tag)</lq>
+            <indexterm audience="administrator">administrator (within indexterm tag)</indexterm>
+        </p>
+    </body>
+    
+</topic>
+

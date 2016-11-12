@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?><?workdir /Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/conref/testresult/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/conref/testresult/preprocess/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Composite//EN?><?doctype-system ../dtd/ditabase.dtd?><?Pub Inc?>
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+  ditaarch:DITAArchVersion="1.3">
+  <topic id="topic" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+    class="- topic/topic ">
+    <title class="- topic/title ">Topic elements with generated text</title>
+    <prolog class="- topic/prolog ">
+      <metadata class="- topic/metadata ">
+        <keywords class="- topic/keywords ">
+          <indexterm class="- topic/indexterm ">a</indexterm>
+          <indexterm class="- topic/indexterm ">b</indexterm>
+          <indexterm class="- topic/indexterm ">c</indexterm>
+          <indexterm class="- topic/indexterm ">d</indexterm>
+          <indexterm class="- topic/indexterm ">e</indexterm>
+          <indexterm class="- topic/indexterm ">f</indexterm>
+          <indexterm class="- topic/indexterm ">g</indexterm>
+          <indexterm class="- topic/indexterm ">h</indexterm>
+          <indexterm class="- topic/indexterm ">i</indexterm>
+          <indexterm class="- topic/indexterm ">j</indexterm>
+          <indexterm class="- topic/indexterm ">k</indexterm>
+          <indexterm class="- topic/indexterm ">l</indexterm>
+          <indexterm class="- topic/indexterm ">m</indexterm>
+          <indexterm class="- topic/indexterm ">n</indexterm>
+          <indexterm class="- topic/indexterm ">o</indexterm>
+          <indexterm class="- topic/indexterm ">p</indexterm>
+          <indexterm class="- topic/indexterm ">q</indexterm>
+          <indexterm class="- topic/indexterm ">r</indexterm>
+          <indexterm class="- topic/indexterm ">s</indexterm>
+          <indexterm class="- topic/indexterm ">t</indexterm>
+          <indexterm class="- topic/indexterm ">u</indexterm>
+          <indexterm class="- topic/indexterm ">v</indexterm>
+          <indexterm class="- topic/indexterm ">w</indexterm>
+          <indexterm class="- topic/indexterm ">x</indexterm>
+          <indexterm class="- topic/indexterm ">y</indexterm>
+          <indexterm class="- topic/indexterm ">z</indexterm>
+          <indexterm class="- topic/indexterm ">1</indexterm>
+          <indexterm class="- topic/indexterm ">+</indexterm>
+          <indexterm class="- topic/indexterm ">$</indexterm>
+          <indexterm class="- topic/indexterm ">?</indexterm>
+        </keywords>
+      </metadata>
+    </prolog>
+    <body class="- topic/body ">
+      <p class="- topic/p ">Xref to the another file: <xref href="lang-concept.dita"
+          class="- topic/xref " type="concept"><?ditaot gentext?>Concept for language
+            test<?ditaot genshortdesc?><desc class="- topic/desc ">this is the related
+            concept</desc></xref>. Now do it again, <xref href="lang-concept.dita"
+          class="- topic/xref " type="concept"><?ditaot usertext?>with link
+            text<?ditaot genshortdesc?><desc class="- topic/desc ">this is the related
+            concept</desc></xref>.</p>
+      <p class="- topic/p ">Xref to fig in another file's topic: <xref
+          href="lang-concept.dita#lang-concept" class="- topic/xref " type="concept"
+          ><?ditaot gentext?>Concept for language test<?ditaot genshortdesc?><desc
+            class="- topic/desc ">this is the related concept</desc></xref>. Now do it again, <xref
+          href="lang-concept.dita#lang-concept" class="- topic/xref " type="concept"
+          ><?ditaot usertext?>with link text<?ditaot genshortdesc?><desc class="- topic/desc ">this
+            is the related concept</desc></xref>.</p>
+      <p class="- topic/p ">Xref to fig in another file: <xref
+          href="lang-concept.dita#lang-concept/fig" class="- topic/xref " type="fig"
+          ><?ditaot gentext?>Figure 1</xref>. Now do it again, <xref
+          href="lang-concept.dita#lang-concept/fig" class="- topic/xref " type="fig"
+          ><?ditaot usertext?>with link text</xref>.</p>
+      <p class="- topic/p ">Xref to this topic: <xref href="#topic" class="- topic/xref "
+          type="topic"><?ditaot gentext?>Topic elements with generated text</xref>. Now do it again,
+          <xref href="#topic" class="- topic/xref " type="topic"><?ditaot usertext?>with link
+          text</xref>.</p>
+      <p class="- topic/p ">Xref to the concept in this file: <xref href="#concept"
+          class="- topic/xref " type="concept"><?ditaot gentext?>Concept elements with generated
+          text</xref>. Now do it again, <xref href="#concept" class="- topic/xref " type="concept"
+          ><?ditaot usertext?>with link text</xref>.</p>
+      <p class="- topic/p ">Xref to the fig in this topic: <xref href="#topic/fig"
+          class="- topic/xref " type="fig"><?ditaot gentext?>Figure 1</xref>. Now do it again, <xref
+          href="#topic/fig" class="- topic/xref " type="fig"><?ditaot usertext?>with link
+          text</xref>.</p>
+      <p class="- topic/p ">Xref to the table in this topic: <xref href="#topic/table"
+          class="- topic/xref " type="table"><?ditaot gentext?>Table 1</xref>. Now do it again,
+          <xref href="#topic/table" class="- topic/xref " type="table"><?ditaot usertext?>with link
+          text</xref>.</p>
+      <p class="- topic/p ">Xref to an external website: <xref href="http://www.ibm.com"
+          format="html" class="- topic/xref "/>. Now do it again, <xref href="http://www.ibm.com"
+          format="html" class="- topic/xref "><?ditaot usertext?>with link text</xref>.</p>
+      <p class="- topic/p ">Xref to an external website with an anchor: <xref
+          href="http://www.ibm.com/index.html#anchor" format="html" class="- topic/xref "/>. Now do
+        it again, <xref href="http://www.ibm.com/index.html#anchor" format="html"
+          class="- topic/xref "><?ditaot usertext?>with link text</xref>.</p>
+      <fig id="fig" class="- topic/fig ">
+        <title class="- topic/title ">figure title</title>
+        <p class="- topic/p ">test <q class="- topic/q ">quote</q> in a figure</p>
+      </fig>
+      <table id="table" class="- topic/table ">
+        <title class="- topic/title ">table title</title>
+        <tgroup cols="1" class="- topic/tgroup ">
+          <colspec colname="col1" rowheader="headers" class="- topic/colspec " colnum="1"/>
+          <tbody class="- topic/tbody ">
+            <row class="- topic/row ">
+              <entry colname="col1" class="- topic/entry " dita-ot:x="1" dita-ot:y="1">test
+                table</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      <note class="- topic/note ">note</note>
+      <note type="attention" class="- topic/note ">attention</note>
+      <note type="caution" class="- topic/note ">CAUTION</note>
+      <note type="danger" class="- topic/note ">DANGER</note>
+      <note type="fastpath" class="- topic/note ">fastpath</note>
+      <note type="important" class="- topic/note ">important</note>
+      <note type="remember" class="- topic/note ">remember</note>
+      <note type="restriction" class="- topic/note ">restriction</note>
+      <note type="tip" class="- topic/note ">tip</note>
+      <note class="- topic/note ">
+        <ol class="- topic/ol ">
+          <li class="- topic/li ">This is a list in a note</li>
+          <li class="- topic/li ">This is still a list in a note</li>
+        </ol>
+      </note>
+      <p rev="rev1" class="- topic/p ">Revised paragraph</p>
+      <required-cleanup translate="no" class="- topic/required-cleanup ">test required
+          cleanup<draft-comment translate="no" class="- topic/draft-comment ">test
+          draft-comment</draft-comment></required-cleanup>
+      <syntaxdiagram class="+ topic/fig pr-d/syntaxdiagram ">
+        <groupchoice class="+ topic/figgroup pr-d/groupchoice ">
+          <kwd class="+ topic/keyword pr-d/kwd ">kwd</kwd>
+          <synnote class="+ topic/fn pr-d/synnote ">this is a synnote</synnote>
+          <synnote class="+ topic/fn pr-d/synnote ">this is another synnote</synnote>
+        </groupchoice>
+      </syntaxdiagram>
+    </body>
+    <related-links class="- topic/related-links ">
+      <link href="lang-concept.dita" class="- topic/link " type="concept">
+        <?ditaot gentext?>
+        <linktext class="- topic/linktext ">Concept for language test</linktext>
+        <?ditaot genshortdesc?>
+        <desc class="- topic/desc ">this is the related concept</desc>
+      </link>
+      <link href="lang-reference.dita" class="- topic/link " type="reference">
+        <?ditaot gentext?>
+        <linktext class="- topic/linktext ">Reference link for language test</linktext>
+        <?ditaot genshortdesc?>
+        <desc class="- topic/desc ">Reference for the related link</desc>
+      </link>
+      <link href="lang-task.dita" class="- topic/link " type="task">
+        <?ditaot gentext?>
+        <linktext class="- topic/linktext ">Task for related link</linktext>
+        <?ditaot genshortdesc?>
+        <desc class="- topic/desc ">Description of the related task</desc>
+      </link>
+      <link format="html" href="http://www.ibm.com" scope="external" class="- topic/link "/>
+      <link href="lang-next.dita" role="next" class="- topic/link " type="topic">
+        <?ditaot gentext?>
+        <linktext class="- topic/linktext ">Next topic link</linktext>
+        <?ditaot genshortdesc?>
+        <desc class="- topic/desc ">This is the next topic in the language tests</desc>
+      </link>
+      <link href="lang-previous.dita" role="previous" class="- topic/link " type="topic">
+        <?ditaot gentext?>
+        <linktext class="- topic/linktext ">Previous topic link</linktext>
+        <?ditaot genshortdesc?>
+        <desc class="- topic/desc ">This is the previous topic for language tests</desc>
+      </link>
+      <link href="lang-parent.dita" role="parent" class="- topic/link " type="topic">
+        <?ditaot gentext?>
+        <linktext class="- topic/linktext ">Parent topic for linking</linktext>
+        <?ditaot genshortdesc?>
+        <desc class="- topic/desc ">This is the parent topic for generated text tests</desc>
+      </link>
+      <link href="lang-prerequisite.dita" importance="required" role="sibling" class="- topic/link "
+        type="task">
+        <?ditaot gentext?>
+        <linktext class="- topic/linktext ">Prerequisite task</linktext>
+        <?ditaot genshortdesc?>
+        <desc class="- topic/desc ">This should create a prerequisite link in the language
+          test</desc>
+      </link>
+    </related-links>
+  </topic>
+  <concept id="concept" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+    class="- topic/topic concept/concept ">
+    <title class="- topic/title ">Concept elements with generated text</title>
+    <conbody class="- topic/body  concept/conbody ">
+      <p id="p_element" class="- topic/p ">No concept-specific element with generated text</p>
+    </conbody>
+  </concept>
+  <task id="task" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+    class="- topic/topic task/task ">
+    <title class="- topic/title ">Task elements with generated text</title>
+    <taskbody class="- topic/body task/taskbody ">
+      <prereq class="- topic/section task/prereq ">prerequisites</prereq>
+      <context class="- topic/section task/context ">context</context>
+      <steps class="- topic/ol task/steps ">
+        <step class="- topic/li task/step ">
+          <cmd class="- topic/ph task/cmd ">step 1</cmd>
+        </step>
+        <step importance="optional" class="- topic/li task/step ">
+          <cmd class="- topic/ph task/cmd ">step 2 (optional)</cmd>
+        </step>
+        <step importance="required" class="- topic/li task/step ">
+          <cmd class="- topic/ph task/cmd ">step 3 (required)</cmd>
+        </step>
+        <step class="- topic/li task/step ">
+          <cmd class="- topic/ph task/cmd ">step 4</cmd>
+          <choicetable keycol="1" class="- topic/simpletable task/choicetable ">
+            <chrow class="- topic/strow task/chrow ">
+              <choption class="- topic/stentry task/choption ">option</choption>
+              <chdesc class="- topic/stentry task/chdesc ">description</chdesc>
+            </chrow>
+          </choicetable>
+        </step>
+        <step class="- topic/li task/step ">
+          <cmd class="- topic/ph task/cmd ">step 5</cmd>
+        </step>
+      </steps>
+      <result class="- topic/section task/result ">result</result>
+      <example class="- topic/example ">example</example>
+      <postreq class="- topic/section task/postreq ">postrequisite</postreq>
+    </taskbody>
+  </task>
+  <reference id="reference" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+    class="- topic/topic       reference/reference ">
+    <title class="- topic/title ">Reference elements with generated text</title>
+    <refbody class="- topic/body        reference/refbody ">
+      <properties class="- topic/simpletable reference/properties ">
+        <property class="- topic/strow       reference/property ">
+          <proptype class="- topic/stentry     reference/proptype ">Type</proptype>
+          <propvalue class="- topic/stentry     reference/propvalue ">Value</propvalue>
+          <propdesc class="- topic/stentry     reference/propdesc ">Description</propdesc>
+        </property>
+      </properties>
+    </refbody>
+  </reference>
+</dita>

@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.log;
 
@@ -145,7 +145,7 @@ public final class MessageUtils {
      * @return messageBean
      */
     private MessageBean getMessage(final String id) {
-        if (hashTable == null) {
+        if (hashTable.isEmpty()) {
         	throw new IllegalStateException("Messages have not been loaded");
         }
 

@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2005, 2006 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.module;
 
@@ -124,8 +124,6 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
     }
 
     private void extractIndexTerm() throws SAXException {
-        final int topicNum = topicList.size();
-        final int ditamapNum = ditamapList.size();
         FileInputStream inputStream = null;
         XMLReader xmlReader = null;
         final IndexTermReader handler = new IndexTermReader(indexTermCollection);

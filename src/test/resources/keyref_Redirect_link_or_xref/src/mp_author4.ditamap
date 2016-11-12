@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    
+    <!-- This is the fourth author -->
+    
+    <!-- this author just want to get rid of link -->
+    
+    <topicref href="dita4.dita"/>
+    <topicref keys="dita1"/>
+    
+    
+</map>

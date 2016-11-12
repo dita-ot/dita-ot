@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic">
+  <title>Push and Target in One File</title>
+  <body>
+    <p id="p1">I should not appear in the output.</p>
+    <!-- Test Scenario 2: Use conref to push target that existing in the same one file and expect NO error message.-->
+    <!-- [pipeline] [Fatal Error] temp:1:1: Content is not allowed in prolog.
+    [pipeline] org.xml.sax.SAXParseException: Content is not allowed in prolog.-->
+    <p conref="#topic/p1" conaction="pushreplace">I should appear in the output twice.</p>
+  </body>
+</topic>

@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2005, 2006 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.platform;
 
@@ -76,7 +76,7 @@ public final class Integrator {
     public static final String FEAT_VALUE_SEPARATOR = ",";
     private static final String PARAM_VALUE_SEPARATOR = ";";
 
-    private static Set<PosixFilePermission> PERMISSIONS = ImmutableSet.<PosixFilePermission>builder()
+    private static final Set<PosixFilePermission> PERMISSIONS = ImmutableSet.<PosixFilePermission>builder()
             .add(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE,
                  PosixFilePermission.GROUP_READ, PosixFilePermission.GROUP_EXECUTE,
                  PosixFilePermission.OTHERS_READ, PosixFilePermission.OTHERS_EXECUTE)
@@ -100,7 +100,6 @@ public final class Integrator {
     @Deprecated
     private File propertiesFile;
     private final Set<String> extensionPoints;
-    private boolean strict = false;
     private final Map<String, Integer> pluginOrder = new HashMap<>();
     private Properties properties;
 
@@ -150,11 +149,7 @@ public final class Integrator {
                 propertiesStream = new FileInputStream(propertiesFile);
                 properties.load(propertiesStream);
             } catch (final Exception e) {
-                if (strict) {
-                    throw new RuntimeException(e);
-                } else {
-                    logger.error(e.getMessage(), e) ;
-                }
+                throw new RuntimeException(e);
             } finally {
                 if (propertiesStream != null) {
                     try {
@@ -302,11 +297,7 @@ public final class Integrator {
             out = new BufferedOutputStream(new FileOutputStream(outFile));
             configuration.store(out, "DITA-OT runtime configuration, do not edit manually");
         } catch (final Exception e) {
-            if (strict) {
-                throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
-            } else {
-                logger.error(e.getMessage(), e) ;
-            }
+            throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
         } finally {
             if (out != null) {
                 try {
@@ -418,11 +409,7 @@ public final class Integrator {
                 // not supported
             }
         } catch (final IOException e) {
-            if (strict) {
-                throw new RuntimeException("Failed to write environment shell: " + e.getMessage(), e);
-            } else {
-                logger.error(e.getMessage(), e) ;
-            }
+            throw new RuntimeException("Failed to write environment shell: " + e.getMessage(), e);
         } finally {
             closeQuietly(out);
         }
@@ -448,11 +435,7 @@ public final class Integrator {
             }
             outFile.setExecutable(true);
         } catch (final IOException e) {
-            if (strict) {
-                throw new RuntimeException("Failed to write environment batch: " + e.getMessage(), e);
-            } else {
-                logger.error(e.getMessage(), e) ;
-            }
+            throw new RuntimeException("Failed to write environment batch: " + e.getMessage(), e);
         } finally {
             closeQuietly(out);
         }
@@ -517,11 +500,7 @@ public final class Integrator {
                 // not supported
             }
         } catch (final IOException e) {
-            if (strict) {
-                throw new RuntimeException("Failed to write start command shell: " + e.getMessage(), e);
-            } else {
-                logger.error(e.getMessage(), e) ;
-            }
+            throw new RuntimeException("Failed to write start command shell: " + e.getMessage(), e);
         } finally {
             closeQuietly(out);
         }
@@ -562,11 +541,7 @@ public final class Integrator {
             out.write("start \"DITA-OT\" cmd.exe\r\n");
             outFile.setExecutable(true);
         } catch (final IOException e) {
-            if (strict) {
-                throw new RuntimeException("Failed to write start command batch: " + e.getMessage(), e);
-            } else {
-                logger.error(e.getMessage(), e) ;
-            }
+            throw new RuntimeException("Failed to write start command batch: " + e.getMessage(), e);
         } finally {
             closeQuietly(out);
         }
@@ -606,11 +581,7 @@ public final class Integrator {
                 if (!extensionPoints.contains(currentFeature.getKey())) {
                     final String msg = "Plug-in " + plugin + " uses an undefined extension point "
                             + currentFeature.getKey();
-                    if (strict) {
-                        throw new RuntimeException(msg);
-                    } else {
-                        logger.debug(msg);
-                    }
+                    throw new RuntimeException(msg);
                 }
                 if (featureTable.containsKey(currentFeature.getKey())) {
                     final List<String> value = featureTable.get(currentFeature.getKey());
@@ -663,12 +634,7 @@ public final class Integrator {
             if (!anyPluginFound && requirement.getRequired()) {
                 // not contain any plugin required by current plugin
                 final String msg = MessageUtils.getInstance().getMessage("DOTJ020W", requirement.toString(), currentPlugin).toString();
-                if (strict) {
-                    throw new RuntimeException(msg);
-                } else {
-                    logger.warn(msg);
-                }
-                return false;
+                throw new RuntimeException(msg);
             }
         }
         return true;
@@ -724,19 +690,10 @@ public final class Integrator {
             throw e;
         } catch (final SAXParseException e) {
             final RuntimeException ex = new RuntimeException("Failed to parse " + descFile.getAbsolutePath() + ": " + e.getMessage(), e);
-            if (strict) {
-                throw ex;
-            } else {
-                logger.error(ex.getMessage(), ex) ;
-            }
+            throw ex;
         } catch (final Exception e) {
-            if (strict) {
-                throw new RuntimeException(e);
-            } else {
-                logger.error(e.getMessage(), e) ;
-            }
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
@@ -767,21 +724,13 @@ public final class Integrator {
     private void validatePlugin(final Features f) {
         final String id = f.getPluginId();
         if (!ID_PATTERN.matcher(id).matches()) {
-            final String msg = "Plug-in ID '" + id + "' doesn't follow recommended syntax rules, support for nonconforming IDs may be removed in future releases.";
-            if (strict) {
-                throw new IllegalArgumentException(msg);
-            } else {
-                logger.warn(msg);
-            }
+            final String msg = "Plug-in ID '" + id + "' doesn't follow syntax rules.";
+            throw new IllegalArgumentException(msg);
         }
         final List<String> version = f.getFeature("package.version");
         if (version != null && !version.isEmpty() && !VERSION_PATTERN.matcher(version.get(0)).matches()) {
-            final String msg = "Plug-in version '" + version + "' doesn't follow recommended syntax rules, support for nonconforming version may be removed in future releases.";
-            if (strict) {
-                throw new IllegalArgumentException(msg);
-            } else {
-                logger.warn(msg);
-            }
+            final String msg = "Plug-in version '" + version.get(0) + "' doesn't follow syntax rules.";
+            throw new IllegalArgumentException(msg);
         }
     }
 
@@ -790,17 +739,9 @@ public final class Integrator {
      * 
      * @param propertiesfile properties file
      */
+    @Deprecated
     public void setProperties(final File propertiesfile) {
         propertiesFile = propertiesfile;
-    }
-
-    /**
-     * Setter for strict/lax mode.
-     * 
-     * @param strict {@code true} for strict mode, {@code false} for lax mode
-     */
-    public void setStrict(final boolean strict) {
-        this.strict = strict;
     }
 
     /**

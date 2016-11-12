@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="TopicID1">
+    <title>This is a case for pushAfter with crossreference link</title>
+    
+    <body>
+        
+        <p>         
+           <xref href="11/dita22.dita">DITA22</xref>
+        </p>
+
+    </body>
+</topic>
+

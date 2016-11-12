@@ -1,7 +1,7 @@
 @echo off
 
 REM This file is part of the DITA Open Toolkit project.
-REM See the accompanying license.txt file for applicable licenses.
+REM See the accompanying LICENSE file for applicable license.
 
 REM Derived from Apache Ant command line tool.
 

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/topic.dtd">
+<topic id="c" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>topic c</title>
+    <prolog>
+        <author keyref="a#a1/author"></author>
+        <source keyref="a">somewhere</source>
+        <publisher keyref="a#a1/pulisher"></publisher>
+       
+    </prolog>
+    <body>
+        <ol>
+            <li>key "abs" defines a term, surface form, and acronym.</li>
+            <li>xref reference to abs, should be full term: <xref keyref="abs"/></li>
+            <li>keyword reference to abs, should be full term: <keyword keyref="abs"/></li>
+            <li>Term reference to abs, should be surface form: <term keyref="abs"></term></li>
+            <li>First abbreviated form to abs, should be acronym: <abbreviated-form keyref="abs"/></li>
+        </ol>
+        
+        <p>
+            <ol>
+                <li>key "a" reference to a topic</li>
+                <li>xref reference to a:<xref keyref="a"></xref></li>
+                <li>keyword reference to a:<keyword keyref="a"></keyword></li>
+               <li>Term reference to a:<term keyref="a">TERM REF A</term></li>
+            </ol> 
+        </p>
+        
+       <ol>
+           <li>conkeyref</li>
+       </ol>
+        <p conkeyref="a/p1"></p>
+        <p conkeyref="a/p2"></p>
+        
+        <ol>
+            <li>Define a keyword,which content is "KEYWORD"</li>
+            <li>term pulls keyword: <term keyref="keyword"/></li>
+            <li>keyword pulls keyword: <keyword keyref="keyword"/></li>
+            <!--<li>xref pulls keyword: <xref keyref="keyword"/></li>  -->
+
+        </ol>
+        
+        <ol>
+            <li>ph tag could has the attribute "keyref"</li>
+            <li>ph reference to a:<ph keyref="a"></ph></li>
+            <li>ph reference to abs:<ph keyref="abs"></ph></li>
+            <li>ph reference to keyword:<ph keyref="keyword"></ph></li>
+        </ol>
+        
+        <ol>
+            <li>dt tag could has the attribute "keyref"</li>
+            <li>
+                <dl>
+                    <dlentry>
+                        <dt keyref="a">keyref a</dt>
+                        <dd>...........................</dd>
+                    </dlentry>
+                    <dlentry>
+                        <dt keyref="abs">keyref abs</dt>
+                        <dd>...........................</dd>
+                    </dlentry>
+                    <dlentry>
+                        <dt keyref="keyword">keyref keyword</dt>
+                        <dd>...........................</dd>
+                    </dlentry>
+                </dl>
+            </li>
+        </ol>
+        
+        <ol>
+            <li>image tag could has the attribute "keyref"</li>
+            <li><image href="image/1.gif" keyref="a"></image></li>
+            <li><image href="image/2.gif" keyref="abs"></image></li>
+            <li><image href="image/3.gif" keyref="keyword"></image></li>
+        </ol>
+        
+        <ol>
+            <li>cite tag could has the attribute "keyref"</li>
+            <li>
+                <p>The keyref a: <cite keyref="a"></cite></p>
+            </li>
+            <li>
+                <p>The keyref abs: <cite keyref="abs"></cite></p>
+            </li>
+            <li>
+                <p>The keyref keyword: <cite keyref="keyword"></cite></p>
+            </li>
+        </ol>
+        
+        <ol>
+            <li>lq  tag could has the attribute "keyref"</li>
+            <li>
+               <lq keyref="a">.....................</lq>
+            </li>
+            <li>
+                <lq keyref="abs">.....................</lq>
+            </li>
+            <li>
+                <lq keyref="keyword">.....................</lq>
+            </li>
+        </ol>
+        
+    </body>
+    <related-links>
+        <linkpool>
+
+            <link keyref="dita1" href="dita1.dita"></link>
+            <link keyref="aa" href="a1.dita"></link>
+            <link keyref="abs" href="abs.dita"></link>
+        </linkpool>
+    </related-links>
+</topic>

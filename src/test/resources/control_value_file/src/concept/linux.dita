@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd">
+<concept id="linux" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>The Linux operating system</title>
+    <conbody>
+        <p>Although Linux has historical roots in UNIX, ...</p>
+    </conbody>
+</concept>
+

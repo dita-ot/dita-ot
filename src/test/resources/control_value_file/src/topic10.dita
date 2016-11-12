@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/topic.dtd">
+<topic id="topic10" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>The incorrect values of product</title>
+    <body>
+        <p>
+            <note product="BOOK">product value is BOOK</note>
+            <note product="comicbook">product value is comicbook(within note tag)</note>
+            <data product="">product value is NULL(within data tag)</data>
+            <lq product=" ">product value is a blank character (within lq tag)</lq>
+            <b product="products">products value is products (within b tag)</b>
+        </p>
+    </body>
+    
+</topic>
+

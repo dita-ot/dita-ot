@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ../../../../../testsuite/testresult/22/preprocess/TC2/?>
+<?path2project-uri ../../../../../testsuite/testresult/22/preprocess/TC2/?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="test3" xml:lang="en-us" ditaarch:DITAArchVersion="1.2" domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    " class="- topic/topic ">
+  <title class="- topic/title ">test 3</title>
+  <body class="- topic/body ">
+    <p id="content3" class="- topic/p "> content of test3 </p>
+  </body>
+  <related-links class="- topic/related-links ">
+    <linkpool class="- topic/linkpool ">
+      <link class="- topic/link " format="dita" href="newtest3.dita" mapclass="- map/topicref " role="sibling" scope="local" type="topic">
+        <?ditaot usertext?>
+        <linktext class="- topic/linktext "><?ditaot usertext?> newtest3_1 </linktext>
+        <?ditaot usershortdesc?>
+        <desc class="- topic/desc "> newtest3_1 </desc>
+      </link>
+      <link class="- topic/link " format="dita" href="newtest3.dita" mapclass="- map/topicref " role="sibling" scope="local" type="topic">
+        <?ditaot usertext?>
+        <linktext class="- topic/linktext "><?ditaot usertext?> newtest3_1 </linktext>
+        <?ditaot usershortdesc?>
+        <desc class="- topic/desc "> newtest3_1 </desc>
+      </link>
+    </linkpool>
+    <linkpool class="- topic/linkpool ">
+      <link class="- topic/link " format="dita" href="newtest3.dita" mapclass="- map/topicref " role="sibling" scope="local" type="topic">
+        <?ditaot usertext?>
+        <linktext class="- topic/linktext "><?ditaot usertext?> newtest3_1 </linktext>
+        <?ditaot usershortdesc?>
+        <desc class="- topic/desc "> newtest3_1 </desc>
+      </link>
+      <link class="- topic/link " format="dita" href="newtest3.dita" mapclass="- map/topicref " role="sibling" scope="local" type="topic">
+        <?ditaot usertext?>
+        <linktext class="- topic/linktext "><?ditaot usertext?> newtest3_1 </linktext>
+        <?ditaot usershortdesc?>
+        <desc class="- topic/desc "> newtest3_1 </desc>
+      </link>
+    </linkpool>
+    <linkpool class="- topic/linkpool ">
+      <link class="- topic/link " format="dita" href="newtest3.dita" mapclass="- map/topicref " role="sibling" scope="local" type="topic">
+        <?ditaot usertext?>
+        <linktext class="- topic/linktext "><?ditaot usertext?> newtest3_1 </linktext>
+        <?ditaot usershortdesc?>
+        <desc class="- topic/desc "> newtest3_1 </desc>
+      </link>
+      <link class="- topic/link " format="dita" href="newtest3.dita" mapclass="- map/topicref " role="sibling" scope="local" type="topic">
+        <?ditaot usertext?>
+        <linktext class="- topic/linktext "><?ditaot usertext?> newtest3_1 </linktext>
+        <?ditaot usershortdesc?>
+        <desc class="- topic/desc "> newtest3_1 </desc>
+      </link>
+    </linkpool>
+  </related-links>
+</topic>

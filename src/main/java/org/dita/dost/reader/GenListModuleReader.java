@@ -1,10 +1,10 @@
 /*
  * This file is part of the DITA Open Toolkit project.
- * See the accompanying license.txt file for applicable licenses.
- */
+ *
+ * Copyright 2004, 2005 IBM Corporation
+ *
+ * See the accompanying LICENSE file for applicable license.
 
-/*
- * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.reader;
 
@@ -62,10 +62,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private final Set<URI> conrefTargets = new HashSet<>(32);
     /** Set of href nonConrefCopytoTargets refered in current parsing file */
     private final Set<URI> hrefTargets = new HashSet<>(32);
-    /** Set of href targets with anchor appended */
-    private final Set<URI> hrefTopicSet = new HashSet<>(32);
-    /** Set of chunk targets */
-    private final Set<URI> chunkTopicSet = new HashSet<>(32);
     /** Set of subject schema files */
     private final Set<URI> schemeSet = new HashSet<>(32);
     /** Set of coderef or object target files */
@@ -78,14 +74,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private boolean hasconaction = false;
     /** foreign/unknown nesting level */
     private int foreignLevel = 0;
-    /** chunk nesting level */
-    private int chunkLevel = 0;
-    /** mark topics in reltables */
-    private int relTableLevel = 0;
-    /** chunk to-navigation level */
-    private int chunkToNavLevel = 0;
-    /** Topic group nesting level */
-    private int topicGroupLevel = 0;
     /** Flag used to mark if current file is still valid after filtering */
     private boolean isValidInput = false;
     /** Set of outer dita files */
@@ -124,20 +112,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
      */
     public Set<URI> getOutFilesSet() {
         return outDitaFilesSet;
-    }
-
-    /**
-     * @return the hrefTopicSet
-     */
-    public Set<URI> getHrefTopicSet() {
-        return hrefTopicSet;
-    }
-
-    /**
-     * @return the chunkTopicSet
-     */
-    public Set<URI> getChunkTopicSet() {
-        return chunkTopicSet;
     }
 
     /**
@@ -206,6 +180,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     public void setPrimaryDitamap(final URI primaryDitamap) {
         assert primaryDitamap.isAbsolute();
         this.primaryDitamap = primaryDitamap;
+        this.rootDir = primaryDitamap.resolve(".");
     }
 
     /**
@@ -270,6 +245,15 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
+     * Get copy-to map.
+     *
+     * @return map of copy-to target to souce
+     */
+    public Map<URI, URI> getCopytoMap() {
+        return copytoMap;
+    }
+
+    /**
      * Get the href target.
      * 
      * @return Returns the hrefTargets.
@@ -319,15 +303,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     /**
-     * Set processing input directory absolute path.
-     * 
-     * @param inputDir absolute path to base directory
-     */
-    public void setInputDir(final URI inputDir) {
-        this.rootDir = inputDir;
-    }
-
-    /**
      * Set current file absolute path
      * 
      * @param currentFile absolute path to current file
@@ -367,17 +342,11 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         hasCodeRef = false;
         currentDir = null;
         foreignLevel = 0;
-        chunkLevel = 0;
-        relTableLevel = 0;
-        chunkToNavLevel = 0;
-        topicGroupLevel = 0;
         isValidInput = false;
         hasconaction = false;
         coderefTargetSet.clear();
         nonConrefCopytoTargets.clear();
         hrefTargets.clear();
-        hrefTopicSet.clear();
-        chunkTopicSet.clear();
         conrefTargets.clear();
         copytoMap.clear();
         ignoredCopytoSourceSet.clear();
@@ -432,39 +401,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             foreignLevel++;
         }
 
-        if (chunkLevel > 0) {
-            chunkLevel++;
-        } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null) {
-            chunkLevel++;
-        }
-
-        if (relTableLevel > 0) {
-            relTableLevel++;
-        } else if (MAP_RELTABLE.matches(classValue)) {
-            relTableLevel++;
-        }
-
-        if (chunkToNavLevel > 0) {
-            chunkToNavLevel++;
-        } else if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null
-                && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_NAVIGATION)) {
-            chunkToNavLevel++;
-        }
-
-        if (topicGroupLevel > 0) {
-            topicGroupLevel++;
-        } else if (MAPGROUP_D_TOPICGROUP.matches(classValue)) {
-            topicGroupLevel++;
-        }
-
         if (classValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
-            logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
+            logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).setLocation(atts).toString());
         }
 
         if (TOPIC_TOPIC.matches(classValue) || MAP_MAP.matches(classValue)) {
             final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
             if (domains == null) {
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).setLocation(atts).toString());
             }
         }
 
@@ -507,7 +451,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         coderefTargetSet.add(filename);
     }
 
-    private void parseObject(final Attributes atts) throws SAXException {
+    private void parseObject(final Attributes atts) {
         URI attrValue = toURI(atts.getValue(ATTRIBUTE_NAME_DATA));
         if (attrValue == null) {
             return;
@@ -571,18 +515,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             foreignLevel--;
             return;
         }
-        if (chunkLevel > 0) {
-            chunkLevel--;
-        }
-        if (relTableLevel > 0) {
-            relTableLevel--;
-        }
-        if (chunkToNavLevel > 0) {
-            chunkToNavLevel--;
-        }
-        if (topicGroupLevel > 0) {
-            topicGroupLevel--;
-        }
 
         getContentHandler().endElement(uri, localName, qName);
     }
@@ -631,9 +563,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
             hasHref = true;
             // Collect non-conref and non-copyto targets
-            if ((atts.getValue(ATTRIBUTE_NAME_COPY_TO) == null
-                        || (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)))
-                    && (followLinks()
+            if ((followLinks()
                         || (TOPIC_IMAGE.matches(attrClass) || DITAVAREF_D_DITAVALREF.matches(attrClass)))) {
                 nonConrefCopytoTargets.add(new Reference(filename, attrFormat));
             }
@@ -643,37 +573,25 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
                 if (followLinks()) {
                     hrefTargets.add(filename);
-                    toOutFile(filename);
-                    if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
-                        chunkTopicSet.add(filename);
-                    } else {
-                        hrefTopicSet.add(filename);
-                    }
+                    toOutFile(filename, atts);
                 }
             } else if (ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
-                final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-                if (href != null) {
-                    if (href.toString().isEmpty()) {
+                final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
+                if (copyTo != null) {
+                    if (copyTo.toString().isEmpty()) {
                         logger.warn("Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
                     } else {
-                        final URI value = stripFragment(currentDir.resolve(href));
+                        final URI value = stripFragment(currentDir.resolve(copyTo));
                         if (copytoMap.get(filename) != null) {
                             if (!value.equals(copytoMap.get(filename))) {
-                                logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", href.toString(), filename.toString()).toString());
+                                logger.warn(MessageUtils.getInstance().getMessage("DOTX065W", copyTo.toString(), filename.toString())
+                                        .setLocation(atts).toString());
                             }
                             ignoredCopytoSourceSet.add(value);
-                        } else if (!(atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(
-                                CHUNK_TO_CONTENT))) {
+                        } else {
                             copytoMap.put(filename, value);
                         }
                     }
-                }
-
-                final URI pathWithoutID = stripFragment(currentDir.resolve(attrValue));
-                if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
-                    chunkTopicSet.add(pathWithoutID);
-                } else {
-                    hrefTopicSet.add(pathWithoutID);
                 }
             }
         }
@@ -709,7 +627,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
             // Collect only conref target topic files
             conrefTargets.add(filename);
-            toOutFile(filename);
+            toOutFile(filename, atts);
         }
     }
 
@@ -788,18 +706,17 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         }
     }
 
-    private void toOutFile(final URI filename) throws SAXException {
+    private void toOutFile(final URI filename, final Attributes atts) throws SAXException {
         assert filename.isAbsolute();
-        // the filename is a relative path from the dita input file
-        final String[] prop = { currentFile.toString() };
+        final String[] prop = { filename.toString(), currentFile.toString() };
         if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
             if (isOutFile(filename)) {
                 if (job.getOutterControl() == Job.OutterControl.FAIL) {
-                    final MessageBean msgBean = MessageUtils.getInstance().getMessage("DOTJ035F", prop);
+                    final MessageBean msgBean = MessageUtils.getInstance().getMessage("DOTJ035F", prop).setLocation(atts);
                     throw new SAXParseException(null, null, new DITAOTException(msgBean, null, msgBean.toString()));
                 } else if (job.getOutterControl() == Job.OutterControl.WARN) {
-                    final String message = MessageUtils.getInstance().getMessage("DOTJ036W", prop).toString();
-                    logger.warn(message);
+                    final MessageBean msgBean = MessageUtils.getInstance().getMessage("DOTJ036W", prop).setLocation(atts);
+                    logger.warn(msgBean.toString());
                 }
                 addToOutFilesSet(filename);
             }
