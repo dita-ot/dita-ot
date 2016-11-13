@@ -186,8 +186,6 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void testSF1333481() throws Throwable {
         test("SF1333481", Transtype.PREPROCESS,
                 Paths.get("main.ditamap"), emptyMap());
-//        test("SF1333481", Transtype.XHTML,
-//                Paths.get("subdir", "mapref1.ditamap"), emptyMap());
     }
 
     @Test
@@ -385,7 +383,8 @@ public class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testconrefbreaksxref() throws Throwable {
-        test("conrefbreaksxref");
+        test("conrefbreaksxref", Transtype.PREPROCESS, Paths.get("conrefbreaksxref.dita"),
+                emptyMap());
     }
 
     @Test
