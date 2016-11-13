@@ -467,13 +467,12 @@ public class IntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testlang() throws Throwable {
-        test("lang");
-//        test("lang", Transtype.XHTML,
-//                Paths.get("lang.ditamap"),
-//                ImmutableMap.<String, Object>builder()
-//                        .put("validate", "false")
-//                        .build(),
-//                1, 0);
+        test("lang", Transtype.XHTML,
+                Paths.get("lang.ditamap"),
+                ImmutableMap.<String, Object>builder()
+                        .put("validate", "false")
+                        .build(),
+                1, 0);
     }
 
     @Test
