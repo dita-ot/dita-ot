@@ -35,7 +35,50 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
 import static org.junit.Assert.assertArrayEquals;
 
-public abstract class AbstractIntegrationTest {
+public class AbstractIntegrationTest {
+
+    private String name;
+    private Transtype transtype;
+    private Path input;
+    private Map<String, Object> args = new HashMap<>();
+    private int warnCount = 0;
+    private int errorCount = 0;
+
+    public static AbstractIntegrationTest builder() {
+        return new AbstractIntegrationTest();
+    }
+
+    public AbstractIntegrationTest name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public AbstractIntegrationTest transtype(Transtype transtype) {
+        this.transtype = transtype;
+        return this;
+    }
+
+    public AbstractIntegrationTest input(Path input) {
+        this.input = input;
+        return this;
+    }
+
+    public AbstractIntegrationTest put(String key, Object value) {
+        this.args.put(key, value);
+        return this;
+    }
+
+    public AbstractIntegrationTest warnCount(int warnCount) {
+        this.warnCount = warnCount;
+        return this;
+    }
+
+    public AbstractIntegrationTest errorCount(int errorCount) {
+        this.errorCount = errorCount;
+        return this;
+    }
+
+    ////////////////////////////////////////////////////
 
     enum Transtype {
         PREPROCESS, XHTML;
@@ -100,12 +143,7 @@ public abstract class AbstractIntegrationTest {
         // remove temp & output
     }
 
-    protected void test(final String name, final IntegrationTest.Transtype transtype, final Path input, final Map<String, Object> args) throws Throwable {
-        test(name, transtype, input, args, 0, 0);
-    }
-
-    protected void test(final String name, final IntegrationTest.Transtype transtype, final Path input, final Map<String, Object> args,
-                        final int warnCount, final int errorCount) throws Throwable {
+    protected void test() throws Throwable {
         final File testDir = Paths.get("src", "test", "resources", name).toFile();
         final File srcDir = new File(testDir, SRC_DIR);
         final File expDir = new File(testDir, EXP_DIR);
@@ -134,7 +172,7 @@ public abstract class AbstractIntegrationTest {
             assertEquals("Error message count does not match expected",
                     errorCount,
                     countMessages(log, Project.MSG_ERR));
-            final File actDir = transtype == IntegrationTest.Transtype.PREPROCESS ? tempDir : outDir;
+            final File actDir = transtype == Transtype.PREPROCESS ? tempDir : outDir;
             compare(expDir, actDir);
         } catch (final RuntimeException e) {
             throw e;
@@ -275,7 +313,7 @@ public abstract class AbstractIntegrationTest {
      * @return list of log messages
      * @throws Exception if conversion failed
      */
-    private List<TestListener.Message> runOt(final File srcDir, final IntegrationTest.Transtype transtype, final File tempBaseDir, final File resBaseDir,
+    private List<TestListener.Message> runOt(final File srcDir, final Transtype transtype, final File tempBaseDir, final File resBaseDir,
                                              final Map<String, String> args) throws Exception {
         final File tempDir = new File(tempBaseDir, transtype.toString());
         final File resDir = new File(resBaseDir, transtype.toString());
@@ -293,7 +331,7 @@ public abstract class AbstractIntegrationTest {
             System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
             project.fireBuildStarted();
             project.init();
-            project.setUserProperty("transtype", transtype == IntegrationTest.Transtype.PREPROCESS ? IntegrationTest.Transtype.XHTML.toString() : transtype.toString());
+            project.setUserProperty("transtype", transtype == Transtype.PREPROCESS ? Transtype.XHTML.toString() : transtype.toString());
             if (transtype.equals("pdf") || transtype.equals("pdf2")) {
                 project.setUserProperty("pdf.formatter", "fop");
                 project.setUserProperty("fop.formatter.output-format", "text/plain");
@@ -501,7 +539,7 @@ public abstract class AbstractIntegrationTest {
         private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]\\[INFO\\]");
         private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]\\[DEBUG\\]");
 
-        public final List<IntegrationTest.TestListener.Message> messages = new ArrayList<>();
+        public final List<TestListener.Message> messages = new ArrayList<>();
         final PrintStream out;
         final PrintStream err;
 
@@ -512,32 +550,32 @@ public abstract class AbstractIntegrationTest {
 
         //@Override
         public void buildStarted(BuildEvent event) {
-            messages.add(new IntegrationTest.TestListener.Message(-1, "build started: " + event.getMessage()));
+            messages.add(new TestListener.Message(-1, "build started: " + event.getMessage()));
         }
 
         //@Override
         public void buildFinished(BuildEvent event) {
-            messages.add(new IntegrationTest.TestListener.Message(-1, "build finished: " + event.getMessage()));
+            messages.add(new TestListener.Message(-1, "build finished: " + event.getMessage()));
         }
 
         //@Override
         public void targetStarted(BuildEvent event) {
-            messages.add(new IntegrationTest.TestListener.Message(-1, event.getTarget().getName() + ":"));
+            messages.add(new TestListener.Message(-1, event.getTarget().getName() + ":"));
         }
 
         //@Override
         public void targetFinished(BuildEvent event) {
-            messages.add(new IntegrationTest.TestListener.Message(-1, "target finished: " + event.getTarget().getName()));
+            messages.add(new TestListener.Message(-1, "target finished: " + event.getTarget().getName()));
         }
 
         //@Override
         public void taskStarted(BuildEvent event) {
-            messages.add(new IntegrationTest.TestListener.Message(Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
+            messages.add(new TestListener.Message(Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
         }
 
         //@Override
         public void taskFinished(BuildEvent event) {
-            messages.add(new IntegrationTest.TestListener.Message(Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
+            messages.add(new TestListener.Message(Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
         }
 
         //@Override
@@ -569,7 +607,7 @@ public abstract class AbstractIntegrationTest {
                     err.println(message);
             }
 
-            messages.add(new IntegrationTest.TestListener.Message(level, message));
+            messages.add(new TestListener.Message(level, message));
         }
 
         static class Message {
