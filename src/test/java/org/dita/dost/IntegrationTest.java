@@ -165,7 +165,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("main.ditamap"))
                 .put("validate", "false")
-                .warnCount(2)
+                .warnCount(1)
                 .test();
     }
 
@@ -276,7 +276,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .put("transtype", "preprocess")
                 .put("dita.ext", ".dita")
                 .put("validate", "false")
-                .warnCount(2)
+                .warnCount(1)
                 .test();
     }
 
