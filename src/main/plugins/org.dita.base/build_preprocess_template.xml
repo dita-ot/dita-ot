@@ -222,7 +222,10 @@ See the accompanying LICENSE file for applicable license.
     unless="preprocess.conrefpush.skip"
     description="Resolve conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
-      <module class="org.dita.dost.module.ConrefPushModule"/>
+      <module class="org.dita.dost.module.ConrefPushModule">
+        <ditaFileset format="dita"/>
+        <ditaFileset format="ditamap"/>
+      </module>
     </pipeline>
     <job-helper file="conref.list" property="conreflist"/>
   </target>
