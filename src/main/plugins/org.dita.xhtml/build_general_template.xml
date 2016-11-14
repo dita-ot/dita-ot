@@ -138,14 +138,15 @@ See the accompanying LICENSE file for applicable license.
   <macrodef name="topics.html">
     <element name="params" optional="true" implicit="true"/>
     <sequential>
+      <pipeline>
       <xslt basedir="${dita.temp.dir}"
-        destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
+        destdir="${output.dir}"
         reloadstylesheet="${dita.xhtml.reloadstylesheet}"
         classpathref="dost.class.path"
         extension="${out.ext}" style="${args.xsl}"
         filenameparameter="FILENAME"
         filedirparameter="FILEDIR">
-        <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+        <ditaFileset format="dita" processingRole="normal"/>
         <param name="TRANSTYPE" expression="${transtype}" />
         <param name="FILTERFILE" expression="${dita.input.valfile.url}"
           if="dita.input.valfile" />
@@ -172,6 +173,7 @@ See the accompanying LICENSE file for applicable license.
         <params/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
+      </pipeline>
     </sequential>
   </macrodef>
   
