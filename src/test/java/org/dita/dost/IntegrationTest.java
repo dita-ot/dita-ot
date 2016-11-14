@@ -12,8 +12,7 @@ import org.junit.Test;
 
 import java.nio.file.Paths;
 
-import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
-import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
 public class IntegrationTest extends AbstractIntegrationTest {
 
@@ -460,8 +459,19 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testindex_see() throws Throwable {
-        test("index-see");
+    public void testindex_seeEclipseHelp() throws Throwable {
+        builder().name("index-see")
+                .transtype(ECLIPSEHELP)
+                .input(Paths.get("bookmap.ditamap"))
+                .warnCount(3)
+                .test();
+    }
+    @Test
+    public void testindex_seeHtmlhelp() throws Throwable {
+        builder().name("index-see")
+                .transtype(HTMLHELP)
+                .input(Paths.get("bookmap.ditamap"))
+                .test();
     }
 
     @Test

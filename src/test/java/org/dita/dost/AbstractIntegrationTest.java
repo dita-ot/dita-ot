@@ -78,10 +78,8 @@ public class AbstractIntegrationTest {
         return this;
     }
 
-    ////////////////////////////////////////////////////
-
     enum Transtype {
-        PREPROCESS, XHTML;
+        PREPROCESS, XHTML, ECLIPSEHELP, HTMLHELP;
 
         @Override
         public String toString() {
@@ -184,6 +182,7 @@ public class AbstractIntegrationTest {
         }
     }
 
+    @Deprecated
     protected void test(final String name) throws Throwable {
         final File testDir = Paths.get("src", "test", "resources", name).toFile();
 
