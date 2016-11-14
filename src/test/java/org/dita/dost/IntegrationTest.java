@@ -505,8 +505,51 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testkeyref_Redirect_link_or_xref() throws Throwable {
-        test("keyref_Redirect_link_or_xref");
+    public void testkeyref_Redirect_link_or_xref_1() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_1")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author1.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_link_or_xref_2() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_2")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author2.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_link_or_xref_3() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_3")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author3.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_link_or_xref_4() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_4")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author4.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_link_or_xref_5() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_5")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author5.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_link_or_xref_6() throws Throwable {
+        builder().name("keyref_Redirect_link_or_xref_6")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author6.ditamap"))
+                .test();
     }
 
     @Test
