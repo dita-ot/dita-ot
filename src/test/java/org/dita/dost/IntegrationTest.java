@@ -500,8 +500,19 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testkeyref_Redirect_conref() throws Throwable {
-        test("keyref_Redirect_conref");
+    public void testkeyref_Redirect_conref_1() throws Throwable {
+        builder().name("keyref_Redirect_conref_1")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author1.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Redirect_conref_2() throws Throwable {
+        builder().name("keyref_Redirect_conref_2")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author2.ditamap"))
+                .test();
     }
 
     @Test
