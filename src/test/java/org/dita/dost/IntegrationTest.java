@@ -510,8 +510,27 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testkeyref_Splitting_combining_targets() throws Throwable {
-        test("keyref_Splitting_combining_targets");
+    public void testkeyref_Splitting_combining_targets1() throws Throwable {
+        builder().name("keyref_Splitting_combining_targets_1")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author1.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Splitting_combining_targets2() throws Throwable {
+        builder().name("keyref_Splitting_combining_targets_2")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author2.ditamap"))
+                .test();
+    }
+
+    @Test
+    public void testkeyref_Splitting_combining_targets3() throws Throwable {
+        builder().name("keyref_Splitting_combining_targets_3")
+                .transtype(XHTML)
+                .input(Paths.get("mp_author3.ditamap"))
+                .test();
     }
 
     @Test
