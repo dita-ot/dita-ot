@@ -213,8 +213,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
                 // Not Xerces, ignore exception
             }
         } else {
-            final String msg = MessageUtils.getInstance().getMessage("DOTJ037W").toString();
-            logger.warn(msg);
+            logger.warn(MessageUtils.getInstance().getMessage("DOTJ037W").toString());
         }
         if (gramcache) {
             final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
