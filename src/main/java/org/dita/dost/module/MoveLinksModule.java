@@ -12,6 +12,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DitaLinksWriter;
 import org.w3c.dom.Document;
@@ -48,7 +49,11 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
      */
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        final File inputFile = new File(job.tempDirURI.resolve(job.getInputMap()));
+        final FileInfo fi = job.getFileInfo(job.getInputMap());
+        if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+            return null;
+        }
+        final File inputFile = new File(job.tempDirURI.resolve(fi.uri));
         final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
 
         Document doc;
