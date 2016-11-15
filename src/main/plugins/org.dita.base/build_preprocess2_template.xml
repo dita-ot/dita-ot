@@ -110,8 +110,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="profiling.enable" value="${map.filter-on-parse}" unless="map.filter-on-parse"/>
         <param name="generate-debug-attributes" value="${generate-debug-attributes}" if="generate-debug-attributes"/>
         <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
-        <!-- TODO this should be ran after map merge -->
-        <param name="force-unique" value="${force-unique}" if="force-unique"/>
       </module>
     </pipeline>
   </target>
@@ -267,7 +265,9 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="topic-copy-to">
     <pipeline message="Resolve copy-to." taskname="copy-to">
-      <module class="org.dita.dost.module.CopyToModule"/>
+      <module class="org.dita.dost.module.CopyToModule">
+        <param name="force-unique" value="${force-unique}" if="force-unique"/>
+      </module>
     </pipeline>
   </target>
 
