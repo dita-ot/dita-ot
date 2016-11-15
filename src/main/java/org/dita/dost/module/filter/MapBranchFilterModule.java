@@ -94,7 +94,11 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-        processMap(job.getInputMap());
+        final FileInfo fi = job.getFileInfo(job.getInputMap());
+        if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+            return null;
+        }
+        processMap(fi);
 
         try {
             job.write();
@@ -108,9 +112,8 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
     /**
      * Process map for branch replication.
      */
-    protected void processMap(final URI map) {
-        assert !map.isAbsolute();
-        this.map = map;
+    protected void processMap(final FileInfo fi) {
+        this.map = fi.uri;
         currentFile = job.tempDirURI.resolve(map);
 
         logger.info("Processing " + currentFile);

@@ -12,6 +12,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,20 +57,20 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
         job = new Job(tempDir);
         job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
-        job.add(new Job.FileInfo.Builder()
+        job.add(new FileInfo.Builder()
                 .src(new File(tempDir, "input.ditamap").toURI())
                 .uri(new URI("input.ditamap"))
                 .format(ATTR_FORMAT_VALUE_DITAMAP)
                 .build());
         for (final String uri: Arrays.asList("linux.ditaval", "novice.ditaval", "advanced.ditaval", "mac.ditaval", "win.ditaval")) {
-            job.add(new Job.FileInfo.Builder()
+            job.add(new FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
                     .uri(new URI(uri))
                     .format(ATTR_FORMAT_VALUE_DITAVAL)
                     .build());
         }
         for (final String uri: Arrays.asList("install.dita", "perform-install.dita", "configure.dita")) {
-            job.add(new Job.FileInfo.Builder()
+            job.add(new FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
                     .uri(new URI(uri))
                     .format(ATTR_FORMAT_VALUE_DITA)
@@ -100,8 +101,11 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
         final MapBranchFilterModule m = new MapBranchFilterModule();
         m.setJob(job);
         m.setLogger(new DITAOTJavaLogger());
-        
-        m.processMap(toURI("input.ditamap"));
+
+        final FileInfo fi = new FileInfo.Builder()
+                .uri(URI.create("input.ditamap"))
+                .build();
+        m.processMap(fi);
         assertXMLEqual(new InputSource(new File(expDir, "input.ditamap").toURI().toString()),
                 new InputSource(new File(tempDir, "input.ditamap").toURI().toString()));
 
