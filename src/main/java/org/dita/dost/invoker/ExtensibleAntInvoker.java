@@ -461,7 +461,7 @@ public final class ExtensibleAntInvoker extends Task {
             return new Filter<FileInfo>() {
                 @Override
                 public boolean accept(FileInfo f) {
-                    return (format == null || format.equals(f.format)) &&
+                    return (format == null || (format.equals(f.format) || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null))) &&
                             (hasConref == null || f.hasConref == hasConref) &&
                             (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
                 }
