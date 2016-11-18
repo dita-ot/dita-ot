@@ -79,7 +79,7 @@ public class AbstractIntegrationTest {
     }
 
     enum Transtype {
-        PREPROCESS, XHTML, ECLIPSEHELP, HTMLHELP;
+        PREPROCESS, XHTML, ECLIPSEHELP, HTMLHELP, PREPROCESS2;
 
         @Override
         public String toString() {
@@ -342,6 +342,7 @@ public class AbstractIntegrationTest {
             project.setUserProperty("dita.dir", ditaDir.getAbsolutePath());
             project.setUserProperty("output.dir", resDir.getAbsolutePath());
             project.setUserProperty("dita.temp.dir", tempDir.getAbsolutePath());
+            project.setUserProperty("clean.temp", "no");
             args.entrySet().forEach(e -> project.setUserProperty(e.getKey(), e.getValue()));
 
             project.setKeepGoingMode(false);
@@ -351,6 +352,10 @@ public class AbstractIntegrationTest {
                 case PREPROCESS:
                     targets.addElement("build-init");
                     targets.addElement("preprocess");
+                    break;
+                case PREPROCESS2:
+                    targets.addElement("build-init");
+                    targets.addElement("preprocess2");
                     break;
                 default:
                     targets.addElement(project.getDefaultTarget());

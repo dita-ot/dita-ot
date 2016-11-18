@@ -106,11 +106,27 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(3)
                 .test();
     }
+    @Test
+    public void test22_TC1_preprocess2() throws Throwable {
+        builder().name("22_TC1")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("TC1.ditamap"))
+                .warnCount(0)
+                .test();
+    }
 
     @Test
     public void test22_TC2() throws Throwable {
         builder().name("22_TC2")
                 .transtype(PREPROCESS)
+                .input(Paths.get("TC2.ditamap"))
+                .warnCount(2)
+                .test();
+    }
+    @Test
+    public void test22_TC2_preprocess2() throws Throwable {
+        builder().name("22_TC2")
+                .transtype(PREPROCESS2)
                 .input(Paths.get("TC2.ditamap"))
                 .warnCount(2)
                 .test();
@@ -124,11 +140,26 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(3)
                 .test();
     }
+    @Test
+    public void test22_TC3_process2() throws Throwable {
+        builder().name("22_TC3")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("TC3.ditamap"))
+                .warnCount(3)
+                .test();
+    }
 
     @Test
     public void test22_TC4() throws Throwable {
         builder().name("22_TC4")
                 .transtype(PREPROCESS)
+                .input(Paths.get("TC4.ditamap"))
+                .test();
+    }
+    @Test
+    public void test22_TC4_preprocess() throws Throwable {
+        builder().name("22_TC4")
+                .transtype(PREPROCESS2)
                 .input(Paths.get("TC4.ditamap"))
                 .test();
     }
@@ -141,11 +172,26 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(4)
                 .test();
     }
+    @Test
+    public void test22_TC6_preprocess() throws Throwable {
+        builder().name("22_TC6")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("TC6.ditamap"))
+                .warnCount(4)
+                .test();
+    }
 
     @Test
     public void test2374525() throws Throwable {
         builder().name("2374525")
                 .transtype(PREPROCESS)
+                .input(Paths.get("test.dita"))
+                .test();
+    }
+    @Test
+    public void test2374525_preprocess() throws Throwable {
+        builder().name("2374525")
+                .transtype(PREPROCESS2)
                 .input(Paths.get("test.dita"))
                 .test();
     }
@@ -158,11 +204,28 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .put("dita.ext", ".dita")
                 .test();
     }
+    @Test
+    public void test3178361_preprocess2() throws Throwable {
+        builder().name("3178361")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("conref-push-test.ditamap"))
+                .put("dita.ext", ".dita")
+                .test();
+    }
 
     @Test
     public void test3189883() throws Throwable {
         builder().name("3189883")
                 .transtype(PREPROCESS)
+                .input(Paths.get("main.ditamap"))
+                .put("validate", "false")
+                .warnCount(1)
+                .test();
+    }
+    @Test
+    public void test3189883_preprocess2() throws Throwable {
+        builder().name("3189883")
+                .transtype(PREPROCESS2)
                 .input(Paths.get("main.ditamap"))
                 .put("validate", "false")
                 .warnCount(2)
@@ -177,11 +240,28 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .put("dita.ext", ".dita")
                 .test();
     }
+    @Test
+    public void test3191704_preprocess2() throws Throwable {
+        builder().name("3191704")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("jandrew-test.ditamap"))
+                .put("dita.ext", ".dita")
+                .test();
+    }
 
     @Test
     public void test3344142() throws Throwable {
         builder().name("3344142")
                 .transtype(PREPROCESS)
+                .input(Paths.get("push.ditamap"))
+                .put("dita.ext", ".dita")
+                .warnCount(2)
+                .test();
+    }
+    @Test
+    public void test3344142_preprocess() throws Throwable {
+        builder().name("3344142")
+                .transtype(PREPROCESS2)
                 .input(Paths.get("push.ditamap"))
                 .put("dita.ext", ".dita")
                 .warnCount(2)
@@ -195,6 +275,13 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .input(Paths.get("bookmap.ditamap"))
                 .test();
     }
+    @Test
+    public void test3470331_preprocess2() throws Throwable {
+        builder().name("3470331")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("bookmap.ditamap"))
+                .test();
+    }
 
     @Test
     public void testMetadataInheritance() throws Throwable {
@@ -205,6 +292,13 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void testSF1333481() throws Throwable {
         builder().name("SF1333481")
                 .transtype(PREPROCESS)
+                .input(Paths.get("main.ditamap"))
+                .test();
+    }
+    @Test
+    public void testSF1333481_preprocess2() throws Throwable {
+        builder().name("SF1333481")
+                .transtype(PREPROCESS2)
                 .input(Paths.get("main.ditamap"))
                 .test();
     }
@@ -276,15 +370,34 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .put("transtype", "preprocess")
                 .put("dita.ext", ".dita")
                 .put("validate", "false")
+                .warnCount(1)
+                .test();
+    }
+    @Test
+    public void testcoderef_source_preprocess2() throws Throwable {
+        builder().name("coderef_source")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("mp.ditamap"))
+                .put("transtype", "preprocess")
+                .put("dita.ext", ".dita")
+                .put("validate", "false")
                 .warnCount(2)
                 .test();
     }
 
     @Test
-    @Ignore // Topic start file not supported yet
     public void testconref() throws Throwable {
         builder().name("conref")
                 .transtype(PREPROCESS)
+                .input(Paths.get("lang-common1.dita"))
+                .put("validate", "false")
+                .warnCount(1)
+                .test();
+    }
+    @Test
+    public void testconref_preprocess2() throws Throwable {
+        builder().name("conref")
+                .transtype(PREPROCESS2)
                 .input(Paths.get("lang-common1.dita"))
                 .put("validate", "false")
                 .warnCount(2)
@@ -299,6 +412,13 @@ public class IntegrationTest extends AbstractIntegrationTest {
 //                        .put("validate", "false")
                 .test();
     }
+    @Test
+    public void testpushAfter_between_Specialization_preprocess() throws Throwable {
+        builder().name("pushAfter_between_Specialization")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushAfter.ditamap"))
+                .test();
+    }
 
     @Test
     public void testpushAfter_with_crossRef() throws Throwable {
@@ -306,6 +426,13 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("pushAfter.ditamap"))
 //                        .put("validate", "false")
+                .test();
+    }
+    @Test
+    public void testpushAfter_with_crossRef_preprocess2() throws Throwable {
+        builder().name("pushAfter_with_crossRef")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushAfter.ditamap"))
                 .test();
     }
 
@@ -318,6 +445,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(1)
                 .test();
     }
+    @Test
+    public void testpushAfter_with_InvalidTarget_preprocess2() throws Throwable {
+        builder().name("pushAfter_with_InvalidTarget")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushAfter.ditamap"))
+                .warnCount(1)
+                .test();
+    }
 
     @Test
     public void testpushAfter_without_conref() throws Throwable {
@@ -325,6 +460,13 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("pushAfter.ditamap"))
 //                        .put("validate", "false")
+                .test();
+    }
+    @Test
+    public void testpushAfter_without_conref_preprocess2() throws Throwable {
+        builder().name("pushAfter_without_conref")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushAfter.ditamap"))
                 .test();
     }
 
@@ -336,6 +478,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
 //                        .put("validate", "false")
                 .test();
     }
+    @Test
+    public void testsimple_pushAfter_preprocess2() throws Throwable {
+        builder().name("simple_pushAfter")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushAfter.ditamap"))
+                .test();
+    }
+
 
     @Test
     public void testpushBefore_between_Specialization() throws Throwable {
@@ -343,6 +493,13 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("pushBefore.ditamap"))
 //                        .put("validate", "false")
+                .test();
+    }
+    @Test
+    public void testpushBefore_between_Specialization_preprocess2() throws Throwable {
+        builder().name("pushBefore_between_Specialization")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushBefore.ditamap"))
                 .test();
     }
 
@@ -355,6 +512,15 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(1)
                 .test();
     }
+    @Test
+    public void testpushBefore_with_crossRef_preprocess2() throws Throwable {
+        builder().name("pushBefore_with_crossRef")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushBefore.ditamap"))
+                .warnCount(1)
+                .test();
+    }
+
 
     @Test
     public void testpushBefore_with_InvalidTarget() throws Throwable {
@@ -365,6 +531,15 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(1)
                 .test();
     }
+    @Test
+    public void testpushBefore_with_InvalidTarget_preprocess2() throws Throwable {
+        builder().name("pushBefore_with_InvalidTarget")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushBefore.ditamap"))
+                .warnCount(1)
+                .test();
+    }
+
 
     @Test
     public void testpushBefore_without_conref() throws Throwable {
@@ -374,6 +549,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
 //                        .put("validate", "false")
                 .test();
     }
+    @Test
+    public void testpushBefore_without_conref_preprocess() throws Throwable {
+        builder().name("pushBefore_without_conref")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushBefore.ditamap"))
+                .test();
+    }
+
 
     @Test
     public void testsimple_pushBefore() throws Throwable {
@@ -383,6 +566,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
 //                        .put("validate", "false")
                 .test();
     }
+    @Test
+    public void testsimple_pushBefore_preprocess2() throws Throwable {
+        builder().name("simple_pushBefore")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushBefore.ditamap"))
+                .test();
+    }
+
 
     @Test
     public void testpushReplace_between_Specialization() throws Throwable {
@@ -392,6 +583,13 @@ public class IntegrationTest extends AbstractIntegrationTest {
 //                        .put("validate", "false")
                 .test();
     }
+    @Test
+    public void testpushReplace_between_Specialization_preprocess() throws Throwable {
+        builder().name("pushReplace_between_Specialization")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushReplace.ditamap"))
+                .test();
+    }
 
     @Test
     public void testpushReplace_with_crossRef() throws Throwable {
@@ -399,6 +597,13 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("pushReplace.ditamap"))
 //                        .put("validate", "false")
+                .test();
+    }
+    @Test
+    public void testpushReplace_with_crossRef_preprocess2() throws Throwable {
+        builder().name("pushReplace_with_crossRef")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushReplace.ditamap"))
                 .test();
     }
 
@@ -411,6 +616,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(1).errorCount(4)
                 .test();
     }
+    @Test
+    public void testpushReplace_with_InvalidTarget_preprocess2() throws Throwable {
+        builder().name("pushReplace_with_InvalidTarget")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushReplace.ditamap"))
+                .warnCount(1).errorCount(4)
+                .test();
+    }
 
     @Test
     public void testpushReplace_without_conref() throws Throwable {
@@ -418,6 +631,13 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS)
                 .input(Paths.get("pushReplace.ditamap"))
 //                        .put("validate", "false")
+                .test();
+    }
+    @Test
+    public void testpushReplace_without_conref_preprocess() throws Throwable {
+        builder().name("pushReplace_without_conref")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushReplace.ditamap"))
                 .test();
     }
 
@@ -429,11 +649,25 @@ public class IntegrationTest extends AbstractIntegrationTest {
 //                        .put("validate", "false")
                 .test();
     }
+    @Test
+    public void testsimple_pushReplace_preprocess() throws Throwable {
+        builder().name("simple_pushReplace")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("pushReplace.ditamap"))
+                .test();
+    }
 
     @Test
     public void testconrefbreaksxref() throws Throwable {
         builder().name("conrefbreaksxref")
                 .transtype(PREPROCESS)
+                .input(Paths.get("conrefbreaksxref.dita"))
+                .test();
+    }
+    @Test
+    public void testconrefbreaksxref_preprocess() throws Throwable {
+        builder().name("conrefbreaksxref")
+                .transtype(PREPROCESS2)
                 .input(Paths.get("conrefbreaksxref.dita"))
                 .test();
     }
@@ -444,7 +678,6 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Ignore // Export anchors not supported yet
     public void testexportanchors() throws Throwable {
         builder().name("exportanchors")
                 .transtype(PREPROCESS)
@@ -452,6 +685,16 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .put("transtype", "eclipsehelp")
                 .test();
     }
+    @Test
+    @Ignore // Export anchors not supported yet
+    public void testexportanchors_preprocess() throws Throwable {
+        builder().name("exportanchors")
+                .transtype(PREPROCESS2)
+                .input(Paths.get("test.ditamap"))
+                .put("transtype", "eclipsehelp")
+                .test();
+    }
+
 
     @Test
     public void testimage_scale() throws Throwable {
@@ -481,6 +724,13 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void testkeyref() throws Throwable {
         builder().name("keyref")
                 .transtype(PREPROCESS)
+                .input(Paths.get("test.ditamap"))
+                .test();
+    }
+    @Test
+    public void testkeyref_preprocess2() throws Throwable {
+        builder().name("keyref")
+                .transtype(PREPROCESS2)
                 .input(Paths.get("test.ditamap"))
                 .test();
     }
@@ -621,6 +871,14 @@ public class IntegrationTest extends AbstractIntegrationTest {
     public void testmapref() throws Throwable {
         builder().name("mapref")
                 .transtype(PREPROCESS)
+                .input(Paths.get("test.ditamap"))
+                .put("generate-debug-attributes", "false")
+                .test();
+    }
+    @Test
+    public void testmapref_preprocess2() throws Throwable {
+        builder().name("mapref")
+                .transtype(PREPROCESS2)
                 .input(Paths.get("test.ditamap"))
                 .put("generate-debug-attributes", "false")
                 .test();
