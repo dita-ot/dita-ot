@@ -21,6 +21,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.function.Predicate;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
@@ -95,6 +96,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private URI primaryDitamap;
     private boolean isRootElement = true;
     private DitaClass rootClass = null;
+    private Predicate<String> formatFilter;
 
     /**
      * Set output utilities.
@@ -570,7 +572,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
         }
 
-        if (isFormatDita(attrFormat)) {
+        if (isFormatDita(attrFormat)) { // && formatFilter.test(attrFormat)
             if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
                 if (followLinks()) {
                     hrefTargets.add(filename);
@@ -722,6 +724,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 addToOutFilesSet(filename);
             }
         }
+    }
+
+    public void setFormatFilter(Predicate<String> formatFilter) {
+        this.formatFilter = formatFilter;
     }
 
     /**

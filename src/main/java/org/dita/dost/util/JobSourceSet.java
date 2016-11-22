@@ -48,7 +48,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
             for (final Job.FileInfo f : job.getFileInfo(new Job.FileInfo.Filter<Job.FileInfo>() {
                 @Override
                 public boolean accept(final Job.FileInfo f) {
-                    return (format == null || (format.equals(f.format) || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null))) &&
+                    return (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
                             (hasConref == null || f.hasConref == hasConref) &&
                             (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
                 }

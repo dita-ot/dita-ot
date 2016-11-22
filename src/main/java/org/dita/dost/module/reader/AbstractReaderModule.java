@@ -169,6 +169,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         listFilter.setLogger(logger);
         listFilter.setPrimaryDitamap(rootFile);
         listFilter.setJob(job);
+        listFilter.setFormatFilter(formatFilter);
 
         if (profilingEnabled) {
             filterUtils = parseFilterFile();
