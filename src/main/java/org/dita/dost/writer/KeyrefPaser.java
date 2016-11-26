@@ -424,6 +424,17 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 valid = true;
                                 final URI targetOutput = normalizeHrefValue(href, elementId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
+
+                                if (keyDef.scope != null && !keyDef.scope.equals(ATTR_SCOPE_VALUE_LOCAL)) {
+                                    XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_SCOPE, keyDef.scope);
+                                } else {
+                                    XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
+                                }
+                                if (keyDef.format != null && !keyDef.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+                                    XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_FORMAT, keyDef.format);
+                                } else {
+                                    XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
+                                }
                             }
                         } else if (href == null || href.toString().isEmpty()) {
                             // Key definition does not carry an href or href equals "".

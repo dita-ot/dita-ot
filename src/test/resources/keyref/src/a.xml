@@ -47,8 +47,8 @@
     </linklist>
     <linklist>
       <link keyref="scope-local" href="http://www.example.com/" format="html" scope="external"/>
-      <!--link keyref="scope-peer" href="a.xml" scope="local" format="dita"/-->
-      <!--link keyref="scope-external" href="a.xml" scope="local" format="dita"/-->
+      <link keyref="scope-peer" href="a.xml" scope="local" format="dita"/>
+      <link keyref="scope-external" href="a.xml" scope="local" format="dita"/>
     </linklist>
   </related-links>
 </topic>
