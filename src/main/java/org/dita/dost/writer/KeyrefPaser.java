@@ -409,6 +409,11 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 } else {
                                     XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
                                 }
+                                if (keyDef.format != null && !keyDef.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+                                    XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_FORMAT, keyDef.format);
+                                } else {
+                                    XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_FORMAT);
+                                }
 
                                 // TODO: This should be a separate SAX filter
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {

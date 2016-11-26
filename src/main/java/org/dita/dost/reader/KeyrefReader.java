@@ -193,7 +193,9 @@ public final class KeyrefReader implements AbstractReader {
                     final URI href = h.isEmpty() ? null : toURI(h);
                     final String s = copy.getAttribute(ATTRIBUTE_NAME_SCOPE);
                     final String scope = s.isEmpty() ? null : s;
-                    final KeyDef keyDef = new KeyDef(key, href, scope, currentFile, copy);
+                    final String f = copy.getAttribute(ATTRIBUTE_NAME_FORMAT);
+                    final String format = f.isEmpty() ? null : f;
+                    final KeyDef keyDef = new KeyDef(key, href, scope, format, currentFile, copy);
                     keyDefs.put(key, keyDef);
                 }
             }
@@ -214,7 +216,7 @@ public final class KeyrefReader implements AbstractReader {
         final String p = buf.toString();
         for (final Map.Entry<String, KeyDef> e: scope.keyDefinition.entrySet()) {
             final KeyDef oldKeyDef = e.getValue();
-            final KeyDef newKeyDef = new KeyDef(p + oldKeyDef.keys, oldKeyDef.href, oldKeyDef.scope, oldKeyDef.source, oldKeyDef.element);
+            final KeyDef newKeyDef = new KeyDef(p + oldKeyDef.keys, oldKeyDef.href, oldKeyDef.scope, oldKeyDef.format, oldKeyDef.source, oldKeyDef.element);
             if (!keys.containsKey(newKeyDef.keys)) {
                 keys.put(newKeyDef.keys, newKeyDef);
             }
@@ -280,7 +282,7 @@ public final class KeyrefReader implements AbstractReader {
             }
             final Element res = mergeMetadata(keyRefDef.element, elem);
             res.removeAttribute(ATTRIBUTE_NAME_KEYREF);
-            return new KeyDef(keyDef.keys, keyRefDef.href, keyRefDef.scope, keyRefDef.source, res);
+            return new KeyDef(keyDef.keys, keyRefDef.href, keyRefDef.scope, keyRefDef.format, keyRefDef.source, res);
         } else {
             return keyDef;
         }

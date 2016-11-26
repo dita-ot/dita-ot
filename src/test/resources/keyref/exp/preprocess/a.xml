@@ -39,12 +39,12 @@
       <link keyref="scope-external" class="- topic/link " href="http://www.example.com/" format="html" scope="external"/>
     </linklist>
     <linklist class="- topic/linklist ">
-      <link keyref="scope-local" href="a.xml" format="html" class="- topic/link "/>
+      <link keyref="scope-local" href="a.xml" class="- topic/link " type="topic"><?ditaot gentext?><linktext class="- topic/linktext ">a</linktext></link>
       <link keyref="scope-peer" href="b.xml" class="- topic/link " scope="peer"><?ditaot usertext?><linktext class="- topic/linktext ">b</linktext></link>
       <link keyref="scope-external" href="http://www.example.com/" class="- topic/link " format="html" scope="external"/>
     </linklist>
     <linklist class="- topic/linklist ">
-      <link keyref="scope-local" href="a.xml" format="html" class="- topic/link "/>
+      <link keyref="scope-local" href="a.xml" class="- topic/link " type="topic"><?ditaot gentext?><linktext class="- topic/linktext ">a</linktext></link>
       <!--link keyref="scope-peer" href="b.xml" scope="local" format="dita" class="- topic/link "><?ditaot usertext?><linktext class="- topic/linktext ">b</linktext></link-->
       <!--link keyref="scope-external" href="http://www.example.com/" scope="local" format="dita" class="- topic/link "/-->
     </linklist>

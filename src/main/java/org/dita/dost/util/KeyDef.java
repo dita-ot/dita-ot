@@ -38,6 +38,7 @@ public class KeyDef {
     private static final String ATTRIBUTE_SOURCE = "source";
     private static final String ATTRIBUTE_HREF = "href";
     private static final String ATTRIBUTE_SCOPE = "scope";
+    private static final String ATTRIBUTE_FORMAT = "format";
     private static final String ATTRIBUTE_KEYS = "keys";
     private static final String ELEMENT_KEYDEF = "keydef";
     
@@ -47,7 +48,8 @@ public class KeyDef {
     public final String scope;
     public final URI source;
     public final Element element;
-    
+    public final String format;
+
     /**
      * Construct new key definition.
      * 
@@ -56,11 +58,12 @@ public class KeyDef {
      * @param scope link scope, may be {@code null}
      * @param source key definition source, may be {@code null}
      */
-    public KeyDef(final String keys, final URI href, final String scope, final URI source, final Element element) {
+    public KeyDef(final String keys, final URI href, final String scope, final String format, final URI source, final Element element) {
         //assert href.isAbsolute();
         this.keys = keys;
         this.href = href == null || href.toString().isEmpty() ? null : href;
         this.scope = scope == null ? ATTR_SCOPE_VALUE_LOCAL : scope;
+        this.format = format == null ? ATTR_FORMAT_VALUE_DITA : format;
         this.source = source;
         this.element = element;
     }
@@ -104,6 +107,9 @@ public class KeyDef {
                 if (k.scope != null) {
                     keydef.writeAttribute(ATTRIBUTE_SCOPE, k.scope);
                 }
+                if (k.format != null) {
+                    keydef.writeAttribute(ATTRIBUTE_FORMAT, k.format);
+                }
                 if (k.source != null) {
                     keydef.writeAttribute(ATTRIBUTE_SOURCE, k.source.toString());
                 }
@@ -133,6 +139,7 @@ public class KeyDef {
         result = prime * result + ((href == null) ? 0 : href.hashCode());
         result = prime * result + ((keys == null) ? 0 : keys.hashCode());
         result = prime * result + ((scope == null) ? 0 : scope.hashCode());
+        result = prime * result + ((format == null) ? 0 : format.hashCode());
         result = prime * result + ((source == null) ? 0 : source.hashCode());
         return result;
     }
@@ -168,6 +175,13 @@ public class KeyDef {
                 return false;
             }
         } else if (!scope.equals(other.scope)) {
+            return false;
+        }
+        if (format == null) {
+            if (other.format != null) {
+                return false;
+            }
+        } else if (!format.equals(other.format)) {
             return false;
         }
         if (source == null) {
