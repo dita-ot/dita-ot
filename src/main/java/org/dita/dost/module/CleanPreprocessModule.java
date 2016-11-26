@@ -46,7 +46,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
         init();
 
-        final URI base = job.getInputDir();
+        final URI base = getBaseDir();
         final Collection<FileInfo> fis = job.getFileInfo().stream()
                 .collect(Collectors.toList());
         final Collection<FileInfo> res = new ArrayList<>(fis.size());
@@ -95,6 +95,20 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         }
 
         return null;
+    }
+
+    private URI getBaseDir() {
+        String baseDir = job.getInputDir().toString();
+
+        final Collection<FileInfo> fis = job.getFileInfo();
+        for (final FileInfo fi : fis) {
+            final String res = fi.result.resolve(".").toString();
+            if (!res.equals(baseDir) && baseDir.startsWith(res)) {
+                baseDir = res;
+            }
+        }
+
+        return URI.create(baseDir);
     }
 
     private void init() {
