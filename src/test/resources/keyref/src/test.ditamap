@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map title="Key reference test" id="test">
-  <topicref href="a.xml"/>
-  
+  <topicref keys="scope-local" href="a.xml"/>
+  <topicref keys="scope-peer" href="b.xml" scope="peer" navtitle="b" />
+  <topicref keys="scope-external" href="http://www.example.com/" format="html" scope="external"/>
+
   <topicref keyref="topicref"/>
   <navref keyref="navref"/>  
 

@@ -403,6 +403,13 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 }
                                 final URI targetOutput = normalizeHrefValue(relativeTarget, elementId, topicId);
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
+
+                                if (keyDef.scope != null && !keyDef.scope.equals(ATTR_SCOPE_VALUE_LOCAL)) {
+                                    XMLUtils.addOrSetAttribute(resAtts, ATTRIBUTE_NAME_SCOPE, keyDef.scope);
+                                } else {
+                                    XMLUtils.removeAttribute(resAtts, ATTRIBUTE_NAME_SCOPE);
+                                }
+
                                 // TODO: This should be a separate SAX filter
                                 if (!ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
                                     final URI f = currentFile.resolve(targetOutput);
