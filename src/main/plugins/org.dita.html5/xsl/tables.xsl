@@ -13,7 +13,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
                 version="2.0"
-                exclude-result-prefixes="xs dita-ot table">
+                exclude-result-prefixes="xs dita-ot dita2html ditamsg table">
 
   <!-- XML Exchange Table Model Document Type Definition default is all -->
   <xsl:variable name="table.frame-default" select="'all'"/>
