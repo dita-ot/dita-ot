@@ -15,6 +15,10 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="plugin:org.dita.html5:xsl/dita2html5Impl.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/map2html5Impl.xsl"/>  
   
+  <dita:extension id="dita.xsl.html5.cover" 
+    behavior="org.dita.dost.platform.ImportXSLAction" 
+    xmlns:dita="http://dita-ot.sourceforge.net"/>
+  
   <xsl:template match="*[contains(@class, ' map/map ')]">
     <xsl:apply-templates select="." mode="root_element"/>
   </xsl:template>
