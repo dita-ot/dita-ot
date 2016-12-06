@@ -8,19 +8,25 @@
 
 package org.dita.dost.module;
 
+import com.google.common.collect.ImmutableMap;
 import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.module.KeyrefModule.ResolveTask;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo.Builder;
+import org.dita.dost.util.KeyDef;
+import org.dita.dost.util.KeyScope;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import static java.net.URI.create;
+import static java.util.Collections.emptyList;
 import static org.dita.dost.TestUtils.createTempDir;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class KeyrefModuleTest {
 
@@ -37,12 +43,23 @@ public class KeyrefModuleTest {
 
     @Test
     public void testAdjustResourceRenames() {
-        final List<ResolveTask> src = new ArrayList<>();
+        final List<ResolveTask> src = Collections.singletonList(new ResolveTask(
+                new KeyScope("scope",
+                        ImmutableMap.<String, KeyDef>builder()
+                                .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
+                                .build(),
+                        emptyList()),
+                new Builder().uri(create("target.dita")).build(),
+                new Builder().uri(create("target-1.dita")).build()));
         final List<ResolveTask> act = module.adjustResourceRenames(src);
 
-        final List<ResolveTask> exp = new ArrayList<>();
+        final KeyScope exp = new KeyScope("scope",
+                ImmutableMap.<String, KeyDef>builder()
+                        .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
+                        .build(),
+                emptyList());
 
-        assertEquals(exp, act);
+        assertEquals(exp, act.get(0).scope);
     }
 
 }

@@ -159,7 +159,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         final KeyScope scope;
         final FileInfo in;
         final FileInfo out;
-        private ResolveTask(final KeyScope scope, final FileInfo in, final FileInfo out) {
+        ResolveTask(final KeyScope scope, final FileInfo in, final FileInfo out) {
             assert scope != null;
             this.scope = scope;
             assert in != null;
