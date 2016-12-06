@@ -96,6 +96,7 @@ public final class KeyrefReader implements AbstractReader {
      * Read key definitions
      * 
      * @param filename absolute URI to DITA map with key definitions
+     * @param doc key definition DITA map
      */
     public void read(final URI filename, final Document doc) throws DITAOTException {
         currentFile = filename;

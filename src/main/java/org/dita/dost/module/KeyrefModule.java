@@ -133,6 +133,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     /** Collect topics for key reference processing and modify map to reflect new file names. */
+    // FIXME multple topirefs in a single scope result in redundant copies, allow duplicates inside scope
     private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) {
         final List<ResolveTask> res = new ArrayList<>();
         res.add(new ResolveTask(rootScope, job.getFileInfo(job.getInputMap()), null));
@@ -144,11 +145,17 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 res.add(processTopic(f, rootScope, f.isResourceOnly));
             }
         }
-        return res;
+        return adjustResourceRenames(res);
+    }
+
+    List<ResolveTask> adjustResourceRenames(final List<ResolveTask> renames) {
+
+
+        return renames;
     }
 
     /** Tuple class for key reference processing info. */
-    private static class ResolveTask {
+    static class ResolveTask {
         final KeyScope scope;
         final FileInfo in;
         final FileInfo out;
