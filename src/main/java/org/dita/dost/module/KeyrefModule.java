@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.*;
@@ -149,10 +150,37 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     List<ResolveTask> adjustResourceRenames(final List<ResolveTask> renames) {
+        final Map<KeyScope, List<ResolveTask>> scopes = renames.stream().collect(Collectors.groupingBy(rt -> rt.scope));
 
+        for (final Map.Entry<KeyScope, List<ResolveTask>> group : scopes.entrySet()) {
+            final KeyScope scope = group.getKey();
+            final Map<URI, URI> rewrites = new HashMap<>();
+            group.getValue().forEach(t -> rewrites.put(t.in.uri, t.out.uri));
+            final KeyScope res = rewriteScopeTargets(scope, rewrites);
+        }
 
         return renames;
     }
+
+    KeyScope rewriteScopeTargets(KeyScope scope, Map<URI, URI> rewrites) {
+        final Map<String, KeyDef> newKeys = new HashMap<>();
+        for (Map.Entry<String, KeyDef> key : scope.keyDefinition.entrySet()) {
+            final KeyDef oldKey = key.getValue();
+            URI href = oldKey.href;
+            if (href != null && rewrites.containsKey(href)) {
+                // FIXME handle fragment
+                href = rewrites.get(href);
+            }
+            final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element);
+            newKeys.put(key.getKey(), newKey);
+        }
+        return new KeyScope(scope.name,
+                newKeys,
+                scope.childScopes.values().stream()
+                        .map(c -> rewriteScopeTargets(c, rewrites))
+                        .collect(Collectors.toList()));
+    }
+
 
     /** Tuple class for key reference processing info. */
     static class ResolveTask {

@@ -20,8 +20,10 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static java.net.URI.create;
 import static java.util.Collections.emptyList;
@@ -55,11 +57,32 @@ public class KeyrefModuleTest {
 
         final KeyScope exp = new KeyScope("scope",
                 ImmutableMap.<String, KeyDef>builder()
-                        .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
+                        .put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
                         .build(),
                 emptyList());
 
         assertEquals(exp, act.get(0).scope);
+    }
+
+    @Test
+    public void testRewriteScopeTargets() {
+        final KeyScope src = new KeyScope("scope",
+                ImmutableMap.<String, KeyDef>builder()
+                        .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
+                        .build(),
+                emptyList());
+        final Map<URI, URI> rewrites = ImmutableMap.<URI, URI>builder()
+                .put(create("target.dita"), create("target-1.dita"))
+                .build();
+        final KeyScope act = module.rewriteScopeTargets(src, rewrites);
+
+        final KeyScope exp = new KeyScope("scope",
+                ImmutableMap.<String, KeyDef>builder()
+                        .put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
+                        .build(),
+                emptyList());
+
+        assertEquals(exp, act);
     }
 
 }
