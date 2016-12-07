@@ -152,14 +152,19 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     List<ResolveTask> adjustResourceRenames(final List<ResolveTask> renames) {
         final Map<KeyScope, List<ResolveTask>> scopes = renames.stream().collect(Collectors.groupingBy(rt -> rt.scope));
 
+        final List<ResolveTask> res = new ArrayList<>();
         for (final Map.Entry<KeyScope, List<ResolveTask>> group : scopes.entrySet()) {
             final KeyScope scope = group.getKey();
+            final List<ResolveTask> tasks = group.getValue();
             final Map<URI, URI> rewrites = new HashMap<>();
-            group.getValue().forEach(t -> rewrites.put(t.in.uri, t.out.uri));
-            final KeyScope res = rewriteScopeTargets(scope, rewrites);
+            tasks.stream()
+                    .filter(t -> t.out != null)
+                    .forEach(t -> rewrites.put(t.in.uri, t.out.uri));
+            final KeyScope resScope = rewriteScopeTargets(scope, rewrites);
+            tasks.stream().map(t -> new ResolveTask(resScope, t.in, t.out)).forEach(res::add);
         }
 
-        return renames;
+        return res;
     }
 
     KeyScope rewriteScopeTargets(KeyScope scope, Map<URI, URI> rewrites) {
