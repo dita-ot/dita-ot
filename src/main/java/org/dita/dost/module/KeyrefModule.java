@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.*;
@@ -133,6 +134,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     /** Collect topics for key reference processing and modify map to reflect new file names. */
+    // FIXME multple topirefs in a single scope result in redundant copies, allow duplicates inside scope
     private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) {
         final List<ResolveTask> res = new ArrayList<>();
         res.add(new ResolveTask(rootScope, job.getFileInfo(job.getInputMap()), null));
@@ -144,15 +146,52 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 res.add(processTopic(f, rootScope, f.isResourceOnly));
             }
         }
+        return adjustResourceRenames(res);
+    }
+
+    List<ResolveTask> adjustResourceRenames(final List<ResolveTask> renames) {
+        final Map<KeyScope, List<ResolveTask>> scopes = renames.stream().collect(Collectors.groupingBy(rt -> rt.scope));
+
+        final List<ResolveTask> res = new ArrayList<>();
+        for (final Map.Entry<KeyScope, List<ResolveTask>> group : scopes.entrySet()) {
+            final KeyScope scope = group.getKey();
+            final List<ResolveTask> tasks = group.getValue();
+            final Map<URI, URI> rewrites = new HashMap<>();
+            tasks.stream()
+                    .filter(t -> t.out != null)
+                    .forEach(t -> rewrites.put(t.in.uri, t.out.uri));
+            final KeyScope resScope = rewriteScopeTargets(scope, rewrites);
+            tasks.stream().map(t -> new ResolveTask(resScope, t.in, t.out)).forEach(res::add);
+        }
+
         return res;
     }
 
+    KeyScope rewriteScopeTargets(KeyScope scope, Map<URI, URI> rewrites) {
+        final Map<String, KeyDef> newKeys = new HashMap<>();
+        for (Map.Entry<String, KeyDef> key : scope.keyDefinition.entrySet()) {
+            final KeyDef oldKey = key.getValue();
+            URI href = oldKey.href;
+            if (href != null && rewrites.containsKey(stripFragment(href))) {
+                href = setFragment(rewrites.get(stripFragment(href)), href.getFragment());
+            }
+            final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element);
+            newKeys.put(key.getKey(), newKey);
+        }
+        return new KeyScope(scope.name,
+                newKeys,
+                scope.childScopes.values().stream()
+                        .map(c -> rewriteScopeTargets(c, rewrites))
+                        .collect(Collectors.toList()));
+    }
+
+
     /** Tuple class for key reference processing info. */
-    private static class ResolveTask {
+    static class ResolveTask {
         final KeyScope scope;
         final FileInfo in;
         final FileInfo out;
-        private ResolveTask(final KeyScope scope, final FileInfo in, final FileInfo out) {
+        ResolveTask(final KeyScope scope, final FileInfo in, final FileInfo out) {
             assert scope != null;
             this.scope = scope;
             assert in != null;

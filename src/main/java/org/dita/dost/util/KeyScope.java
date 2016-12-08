@@ -7,9 +7,9 @@
  */
 package org.dita.dost.util;
 
-import static java.util.Collections.*;
-
 import java.util.*;
+
+import static java.util.Collections.unmodifiableMap;
 
 /**
  * Immutable key store for keys and child key scopes.
@@ -26,7 +26,7 @@ public class KeyScope {
         this.name = name;
         this.keyDefinition = unmodifiableMap(keyDefinition);
         final Map<String, KeyScope> cs = new HashMap<>();
-        for (final KeyScope scope: childScopes) {
+        for (final KeyScope scope : childScopes) {
             cs.put(scope.name, scope);
         }
         this.childScopes = unmodifiableMap(cs);
@@ -48,4 +48,23 @@ public class KeyScope {
         return childScopes.get(scope);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        KeyScope keyScope = (KeyScope) o;
+
+        if (name != null ? !name.equals(keyScope.name) : keyScope.name != null) return false;
+        if (!keyDefinition.equals(keyScope.keyDefinition)) return false;
+        return childScopes.equals(keyScope.childScopes);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + keyDefinition.hashCode();
+        result = 31 * result + childScopes.hashCode();
+        return result;
+    }
 }
