@@ -71,6 +71,7 @@ public class KeyrefModuleTest {
         final KeyScope src = new KeyScope("scope",
                 ImmutableMap.<String, KeyDef>builder()
                         .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
+                        .put("element", new KeyDef("element", create("target.dita#target/element"), null, null, null, null))
                         .build(),
                 emptyList());
         final Map<URI, URI> rewrites = ImmutableMap.<URI, URI>builder()
@@ -81,6 +82,7 @@ public class KeyrefModuleTest {
         final KeyScope exp = new KeyScope("scope",
                 ImmutableMap.<String, KeyDef>builder()
                         .put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
+                        .put("element", new KeyDef("element", create("target-1.dita#target/element"), null, null, null, null))
                         .build(),
                 emptyList());
 

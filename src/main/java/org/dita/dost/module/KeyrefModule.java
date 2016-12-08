@@ -172,9 +172,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         for (Map.Entry<String, KeyDef> key : scope.keyDefinition.entrySet()) {
             final KeyDef oldKey = key.getValue();
             URI href = oldKey.href;
-            if (href != null && rewrites.containsKey(href)) {
-                // FIXME handle fragment
-                href = rewrites.get(href);
+            if (href != null && rewrites.containsKey(stripFragment(href))) {
+                href = setFragment(rewrites.get(stripFragment(href)), href.getFragment());
             }
             final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element);
             newKeys.put(key.getKey(), newKey);
