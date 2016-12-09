@@ -98,7 +98,7 @@ public final class KeyrefReader implements AbstractReader {
      * @param filename absolute URI to DITA map with key definitions
      * @param doc key definition DITA map
      */
-    public void read(final URI filename, final Document doc) throws DITAOTException {
+    public void read(final URI filename, final Document doc) {
         currentFile = filename;
         rootScope = null;
         // TODO: use KeyScope implementation that retains order
@@ -249,7 +249,7 @@ public final class KeyrefReader implements AbstractReader {
     }
 
     /** Resolve intermediate key references. */
-    private KeyScope resolveIntermediate(final KeyScope scope) throws DITAOTException {
+    private KeyScope resolveIntermediate(final KeyScope scope) {
         final Map<String, KeyDef> keys = new HashMap<>(scope.keyDefinition);
         for (final Map.Entry<String, KeyDef> e: scope.keyDefinition.entrySet()) {
             final KeyDef res = resolveIntermediate(scope, e.getValue(), Arrays.asList(e.getValue()));

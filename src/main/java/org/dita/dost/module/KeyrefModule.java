@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static java.util.stream.Collectors.toMap;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
@@ -156,10 +157,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         for (final Map.Entry<KeyScope, List<ResolveTask>> group : scopes.entrySet()) {
             final KeyScope scope = group.getKey();
             final List<ResolveTask> tasks = group.getValue();
-            final Map<URI, URI> rewrites = new HashMap<>();
-            tasks.stream()
+            final Map<URI, URI> rewrites = tasks.stream()
                     .filter(t -> t.out != null)
-                    .forEach(t -> rewrites.put(t.in.uri, t.out.uri));
+                    .collect(toMap(
+                            t -> t.in.uri,
+                            t -> t.out.uri
+                    ));
             final KeyScope resScope = rewriteScopeTargets(scope, rewrites);
             tasks.stream().map(t -> new ResolveTask(resScope, t.in, t.out)).forEach(res::add);
         }
