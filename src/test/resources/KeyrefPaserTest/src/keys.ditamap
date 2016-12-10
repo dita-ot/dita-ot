@@ -466,4 +466,7 @@
       </topicmeta>
     </keydef>
   </topicgroup>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="scope-local" href="a.xml"/>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="scope-peer" href="b.xml" scope="peer"/>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="scope-external" href="http://www.example.com/" format="html" scope="external"/>
 </map>

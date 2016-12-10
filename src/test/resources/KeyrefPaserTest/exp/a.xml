@@ -4,6 +4,21 @@
   <title class="- topic/title ">Keyref</title>
   <related-links class="- topic/related-links ">
     <link class="- topic/link " keyref="empty"/>
+    <linklist class="- topic/linklist ">
+      <link keyref="scope-local" class="- topic/link " href="a.xml"/>
+      <link keyref="scope-peer" class="- topic/link " href="b.xml" scope="peer"/>
+      <link keyref="scope-external" class="- topic/link " href="http://www.example.com/" format="html" scope="external"/>
+    </linklist>
+    <linklist class="- topic/linklist ">
+      <link keyref="scope-local" href="a.xml" class="- topic/link "/>
+      <link keyref="scope-peer" href="b.xml" class="- topic/link " scope="peer"/>
+      <link keyref="scope-external" href="http://www.example.com/" class="- topic/link " format="html" scope="external"/>
+    </linklist>
+    <linklist class="- topic/linklist ">
+      <link keyref="scope-local" href="a.xml" class="- topic/link "/>
+      <link keyref="scope-peer" href="b.xml" scope="peer" class="- topic/link "/>
+      <link keyref="scope-external" href="http://www.example.com/" format="html" scope="external" class="- topic/link "/>
+    </linklist>
   </related-links>
   <topic class="- topic/topic "
     domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
@@ -84,26 +99,26 @@
     id="link" ditaarch:DITAArchVersion="1.2">
     <title class="- topic/title ">With href</title>
     <prolog class="- topic/prolog ">
-      <author class="- topic/author " format="dead" href="a.xml" keyref="author_link" scope="external" type="dead">
+      <author class="- topic/author " href="a.xml" keyref="author_link" type="dead">
         <keyword class="- topic/keyword ">author keyword</keyword>
       </author>
-      <source class="- topic/source " format="dead" href="a.xml" keyref="source_link" scope="external" type="dead">
+      <source class="- topic/source " href="a.xml" keyref="source_link" type="dead">
         <keyword class="- topic/keyword ">source keyword</keyword>
       </source>
-      <publisher class="- topic/publisher " format="dead" href="a.xml" keyref="publisher_link" scope="external" type="dead">
+      <publisher class="- topic/publisher " href="a.xml" keyref="publisher_link" type="dead">
         <keyword class="- topic/keyword ">publisher keyword</keyword>
       </publisher>
-      <data class="- topic/data " format="dead" href="a.xml" keyref="data_link" scope="external" type="dead">
+      <data class="- topic/data " href="a.xml" keyref="data_link" type="dead">
         <keyword class="- topic/keyword ">data keyword</keyword>
       </data>
-      <data-about class="- topic/data-about " format="dead" href="a.xml" keyref="data-about_link" scope="external" type="dead">
+      <data-about class="- topic/data-about " href="a.xml" keyref="data-about_link" type="dead">
         <data class="- topic/data ">data-about data-about</data>
       </data-about>
     </prolog>
     <body class="- topic/body ">
       <image class="- topic/image " href="b.gif" keyref="image_link" placement="inline" scope="external"/>
       <p class="- topic/p ">
-        <xref class="- topic/xref " format="dead" href="a.xml" keyref="xref_link" scope="external" type="dead">
+        <xref class="- topic/xref " href="a.xml" keyref="xref_link" type="dead">
           <keyword class="- topic/keyword ">xref keyword</keyword>
         </xref>
         <cite class="- topic/cite " href="a.xml" keyref="cite_link">cite keyword</cite>
@@ -122,7 +137,7 @@
           <dd class="- topic/dd "/>
         </dlentry>
       </dl>
-      <lq class="- topic/lq " format="dead" href="a.xml" keyref="lq_link" scope="external" type="dead">
+      <lq class="- topic/lq " href="a.xml" keyref="lq_link" type="dead">
         <keyword class="- topic/keyword ">lq keyword</keyword>
       </lq>
       <p class="- topic/p ">
@@ -147,7 +162,7 @@
       </object>
     </body>
     <related-links class="- topic/related-links ">
-      <link class="- topic/link " format="dead" href="a.xml" keyref="link_link" scope="external" type="dead">
+      <link class="- topic/link " href="a.xml" keyref="link_link" type="dead">
         <linktext class="- topic/linktext ">
           <keyword class="- topic/keyword ">link keyword</keyword>
         </linktext>

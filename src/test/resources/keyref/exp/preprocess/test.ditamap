@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?path2project ?>
 <map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.2" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         " id="test" title="Key reference test">
-  <topicref class="- map/topicref " href="a.xml" type="topic">
+  <topicref class="- map/topicref " keys="scope-local" href="a.xml" type="topic">
     <topicmeta class="- map/topicmeta ">
       <navtitle class="- topic/navtitle ">a</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">a</linktext>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " keys="scope-peer" href="b.xml" scope="peer" navtitle="b" >
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">b</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">b</linktext>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " keys="scope-external" href="http://www.example.com/" format="html" scope="external">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">http://www.example.com/</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">http://www.example.com/</linktext>
     </topicmeta>
   </topicref>
   <topicref class="- map/topicref " href="b.xml" keyref="topicref" navtitle="b" scope="peer">

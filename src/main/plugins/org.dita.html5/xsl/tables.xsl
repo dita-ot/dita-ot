@@ -13,7 +13,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
                 version="2.0"
-                exclude-result-prefixes="xs dita-ot table">
+                exclude-result-prefixes="xs dita-ot dita2html ditamsg table">
 
   <!-- XML Exchange Table Model Document Type Definition default is all -->
   <xsl:variable name="table.frame-default" select="'all'"/>
@@ -558,14 +558,6 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/entry ')]" mode="css-class">
     <xsl:variable name="colsep" as="attribute(colsep)?" select="table:get-entry-colsep(.)"/>
     <xsl:variable name="rowsep" as="attribute(rowsep)?" select="table:get-entry-rowsep(.)"/>
-
-    <xsl:apply-templates select="." mode="legacy-css-class">
-      <xsl:with-param name="colsep" as="xs:integer"
-        select="xs:integer(($colsep, $table.colsep-default)[1])"/>
-      <xsl:with-param name="rowsep" as="xs:integer"
-        select="xs:integer(($rowsep, $table.rowsep-default)[1])"/>
-    </xsl:apply-templates>
-
     <xsl:apply-templates mode="#current" select="
       table:get-entry-align(.), $colsep, $rowsep, @valign
     "/>

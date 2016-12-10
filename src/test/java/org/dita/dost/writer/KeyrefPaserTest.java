@@ -174,7 +174,7 @@ public class KeyrefPaserTest {
             final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
             doc.appendChild(doc.importNode(elem, true));
             keys.put(elem.getAttribute("keys"), elem);
-            final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")), null, null, elem);
+            final KeyDef keyDef = new KeyDef(elem.getAttribute("keys"), new URI(elem.getAttribute("href")), null, null, null, elem);
             keymap.put(keyDef.keys, keyDef);
         }
         return new KeyScope(keymap);
