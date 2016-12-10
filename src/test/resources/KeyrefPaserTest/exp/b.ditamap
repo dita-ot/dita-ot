@@ -81,7 +81,7 @@
     <navref class="- map/navref " keyref="navref"/>
   </topicgroup>
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
-    <topicref class="- map/topicref " format="dead" href="a.xml" keyref="topicref_link" scope="external" type="dead"/>
+    <topicref class="- map/topicref " href="a.xml" keyref="topicref_link" type="dead"/>
     <topicref class="- map/topicref " href="a.xml" keyref="author_link"/>
     <topicref class="- map/topicref " href="a.xml" keyref="data_link"/>
     <topicref class="- map/topicref " href="a.xml" keyref="data-about_link"/>

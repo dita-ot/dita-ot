@@ -35,5 +35,20 @@
   </body>
   <related-links>
     <link keyref="link"/>
+    <linklist>
+      <link keyref="scope-local"/>
+      <link keyref="scope-peer"/>
+      <link keyref="scope-external"/>
+    </linklist>
+    <linklist>
+      <link keyref="scope-local" href="http://www.example.com/" format="html" scope="external"/>
+      <link keyref="scope-peer" href="a.xml"/>
+      <link keyref="scope-external" href="a.xml"/>
+    </linklist>
+    <linklist>
+      <link keyref="scope-local" href="http://www.example.com/" format="html" scope="external"/>
+      <link keyref="scope-peer" href="a.xml" scope="local" format="dita"/>
+      <link keyref="scope-external" href="a.xml" scope="local" format="dita"/>
+    </linklist>
   </related-links>
 </topic>

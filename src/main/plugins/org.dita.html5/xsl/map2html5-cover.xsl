@@ -11,10 +11,6 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:import href="plugin:org.dita.html5:xsl/map2html5-coverImpl.xsl"/>
 
-  <dita:extension id="dita.xsl.html5.cover" 
-      behavior="org.dita.dost.platform.ImportXSLAction" 
-      xmlns:dita="http://dita-ot.sourceforge.net"/>
-
   <xsl:output method="html"
               encoding="UTF-8"
               doctype-system="about:legacy-compat"

@@ -7,8 +7,8 @@
  */
 package org.dita.dost.writer;
 
-import org.dita.dost.util.Job;
-import org.dita.dost.util.URLUtils;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
+import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -32,8 +32,11 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
 
     private final Map<URI, Integer> topicrefCount = new HashMap<>();
     private final Deque<Boolean> ignoreStack = new ArrayDeque<>();
-    /** Generated copy-to mappings, key is target topic and value is source topic. */
-    public final Map<URI, URI> copyToMap = new HashMap<>();
+    /**
+     * Generated copy-to mappings, key is target topic and value is source topic.
+     */
+    public final Map<FileInfo, FileInfo> copyToMap = new HashMap<>();
+    private TempFileNameScheme tempFileNameScheme;
 
     // ContentHandler methods
 
@@ -60,16 +63,16 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
                 if (count > 1) { // not only reference to this topic
                     final String copyTo = res.getValue(ATTRIBUTE_NAME_COPY_TO);
                     if (copyTo == null) { // skip we there is already a copy-to
-                        final URI generatedCopyTo = generateCopyToTarget(href, count);
+                        final FileInfo srcFi = job.getFileInfo(currentFile.resolve(stripFragment(href)));
+                        final FileInfo dstFi = generateCopyToTarget(srcFi, count);
+                        copyToMap.put(dstFi, srcFi);
 
-                        final URI source = currentFile.resolve(file);
-                        final URI target = currentFile.resolve(stripFragment(generatedCopyTo));
-                        final URI relSource = getRelativePath(job.getInputDir(), source);
-                        final URI relTarget = getRelativePath(job.getInputDir(), target);
-                        copyToMap.put(relTarget, relSource);
+                        final URI dstTempAbs = job.tempDirURI.resolve(dstFi.uri);
+                        final URI targetRel = getRelativePath(currentFile, dstTempAbs);
+                        final URI target = setFragment(targetRel, href.getFragment());
 
                         final AttributesImpl buf = new AttributesImpl(atts);
-                        XMLUtils.addOrSetAttribute(buf, ATTRIBUTE_NAME_COPY_TO, generatedCopyTo.toString());
+                        XMLUtils.addOrSetAttribute(buf, ATTRIBUTE_NAME_COPY_TO, target.toString());
                         res = buf;
                     }
                 }
@@ -86,9 +89,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
         ignoreStack.pop();
     }
 
-    private URI generateCopyToTarget(final URI src, final int count) {
-        final URI path = stripFragment(src);
-        final String fragment = src.getFragment();
+    private FileInfo generateCopyToTarget(final FileInfo srcFi, final int count) {
         for (int i = 0; ; i++) {
             final StringBuilder ext = new StringBuilder();
             ext.append('_');
@@ -98,13 +99,20 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
                 ext.append(Integer.toString(i));
             }
             ext.append('.');
-            ext.append(getExtension(path.toString()));
-            final URI dst = toURI(replaceExtension(path.toString(), ext.toString()));
-            final URI target = URLUtils.getRelativePath(job.getInputDir().resolve("dummy"), currentFile.resolve(dst));
-            if (job.getFileInfo(target) == null) {
-                return setFragment(dst, fragment);
+            ext.append(getExtension(srcFi.result.toString()));
+
+            final URI dstResult = toURI(replaceExtension(srcFi.result.toString(), ext.toString()));
+            final URI dstTemp = tempFileNameScheme.generateTempFileName(dstResult);
+            if (job.getFileInfo(dstTemp) == null) {
+                return new FileInfo.Builder(srcFi)
+                        .uri(dstTemp)
+                        .result(dstResult)
+                        .build();
             }
         }
     }
 
+    public void setTempFileNameScheme(TempFileNameScheme tempFileNameScheme) {
+        this.tempFileNameScheme = tempFileNameScheme;
+    }
 }

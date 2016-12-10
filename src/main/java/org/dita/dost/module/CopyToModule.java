@@ -13,7 +13,10 @@ import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.CopyToReader;
-import org.dita.dost.util.*;
+import org.dita.dost.util.Constants;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ForceUniqueFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -25,7 +28,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
-import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.Generate;
@@ -61,7 +63,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             init(input);
 
             processMap();
-            final Map<URI, URI> copyToMap = getCopyToMap();
+            final Map<FileInfo, FileInfo> copyToMap = getCopyToMap();
             performCopytoTask(copyToMap);
 
             job.write();
@@ -100,6 +102,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             forceUniqueFilter.setLogger(logger);
             forceUniqueFilter.setJob(job);
             forceUniqueFilter.setCurrentFile(fileToParse);
+            forceUniqueFilter.setTempFileNameScheme(tempFileNameScheme);
             pipe.add(forceUniqueFilter);
         }
 
@@ -116,22 +119,26 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
      *
      * @return target to source map of URIs relative to temporary directory
      */
-    private Map<URI, URI> getCopyToMap() {
-        final Map<URI, URI> copyToMap = new HashMap<>();
+    private Map<FileInfo, FileInfo> getCopyToMap() {
+        final Map<FileInfo, FileInfo> copyToMap = new HashMap<>();
 
         if (forceUnique) {
-            copyToMap.putAll(forceUniqueFilter.copyToMap);
+            forceUniqueFilter.copyToMap.forEach((dstFi, srcFi) -> {
+                job.add(dstFi);
+                copyToMap.put(dstFi, srcFi);
+            });
         }
 
-        for (final Map.Entry<URI, URI> e: reader.getCopyToMap().entrySet()) {
+        for (final Map.Entry<URI, URI> e : reader.getCopyToMap().entrySet()) {
             final URI target = job.tempDirURI.relativize(e.getKey());
+            final FileInfo targetFi = job.getFileInfo(target);
             final URI source = job.tempDirURI.relativize(e.getValue());
+            final FileInfo sourceFi = job.getFileInfo(source);
             // Filter copy-to where target is used directly.
-            final FileInfo fileInfo = job.getFileInfo(target);
-            if (fileInfo != null && fileInfo.src != null) {
+            if (targetFi != null && targetFi.src != null) {
                 continue;
             }
-            copyToMap.put(target, source);
+            copyToMap.put(targetFi, sourceFi);
         }
 
         return copyToMap;
@@ -142,10 +149,10 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
      *
      * @param copyToMap target to source map of URIs relative to temporary directory
      */
-    private void performCopytoTask(final Map<URI, URI> copyToMap) {
-        for (final Map.Entry<URI, URI> entry: copyToMap.entrySet()) {
-            final URI copytoTarget = entry.getKey();
-            final URI copytoSource = entry.getValue();
+    private void performCopytoTask(final Map<FileInfo, FileInfo> copyToMap) {
+        for (final Map.Entry<FileInfo, FileInfo> entry : copyToMap.entrySet()) {
+            final URI copytoTarget = entry.getKey().uri;
+            final URI copytoSource = entry.getValue().uri;
             final URI srcFile = job.tempDirURI.resolve(copytoSource);
             final URI targetFile = job.tempDirURI.resolve(copytoTarget);
 
@@ -158,6 +165,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
                 final FileInfo src = job.getFileInfo(copytoSource);
                 assert src != null;
                 final FileInfo dst = job.getFileInfo(copytoTarget);
+                assert dst != null;
                 final URI dstTemp = tempFileNameScheme.generateTempFileName(dst.result);
                 final FileInfo res = new FileInfo.Builder(src)
                         .result(dst.result)
@@ -168,11 +176,11 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         }
     }
 
-
     /**
      * Copy files and replace workdir PI contents.
-     * @param src source URI in temporary directory
-     * @param target target URI in temporary directory
+     *
+     * @param src                  source URI in temporary directory
+     * @param target               target URI in temporary directory
      * @param copytoTargetFilename target URI relative to temporary directory
      * @param inputMapInTemp
      */
@@ -182,8 +190,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         assert !copytoTargetFilename.isAbsolute();
         assert inputMapInTemp.isAbsolute();
         final File workdir = new File(target).getParentFile();
-        if (!workdir.exists() && ! workdir.mkdirs()) {
-            logger.error("Failed to create copy-to target directory " +  workdir.toURI());
+        if (!workdir.exists() && !workdir.mkdirs()) {
+            logger.error("Failed to create copy-to target directory " + workdir.toURI());
             return;
         }
         final File path2project = getPathtoProject(copytoTargetFilename, target, inputMapInTemp, job);
@@ -286,9 +294,9 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
     /**
      * Get path to base directory
      *
-     * @param filename relative input file path from base directory
+     * @param filename      relative input file path from base directory
      * @param traceFilename absolute input file
-     * @param inputMap absolute path to start file
+     * @param inputMap      absolute path to start file
      * @return path to base directory, {@code null} if not available
      */
     // TODO return URI
@@ -306,8 +314,10 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
             return toFile(URLUtils.getRelativePath(filename));
         }
     }
+
     /**
      * Just for the overflowing files.
+     *
      * @param overflowingFile overflowingFile
      * @return relative system path to out which ends in {@link File#separator File.separator}
      */
@@ -328,10 +338,10 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
      * Check if path falls outside start document directory
      *
      * @param filePathName absolute path to test
-     * @param inputMap absolute input map path
+     * @param inputMap     absolute input map path
      * @return {@code true} if outside start directory, otherwise {@code false}
      */
-    private static boolean isOutFile(final URI filePathName, final URI inputMap){
+    private static boolean isOutFile(final URI filePathName, final URI inputMap) {
         final URI relativePath = URLUtils.getRelativePath(inputMap, filePathName);
         return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
     }

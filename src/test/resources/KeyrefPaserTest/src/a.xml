@@ -4,6 +4,21 @@
   <title class="- topic/title ">Keyref</title>
   <related-links class="- topic/related-links ">
     <link class="- topic/link " href="a.xml" keyref="empty"/>
+    <linklist class="- topic/linklist ">
+      <link class="- topic/link " keyref="scope-local"/>
+      <link class="- topic/link " keyref="scope-peer"/>
+      <link class="- topic/link " keyref="scope-external"/>
+    </linklist>
+    <linklist class="- topic/linklist ">
+      <link class="- topic/link " keyref="scope-local" href="http://www.example.com/" format="html" scope="external"/>
+      <link class="- topic/link " keyref="scope-peer" href="a.xml"/>
+      <link class="- topic/link " keyref="scope-external" href="a.xml"/>
+    </linklist>
+    <linklist class="- topic/linklist ">
+      <link class="- topic/link " keyref="scope-local" href="http://www.example.com/" format="html" scope="external"/>
+      <link class="- topic/link " keyref="scope-peer" href="a.xml" scope="local" format="dita"/>
+      <link class="- topic/link " keyref="scope-external" href="a.xml" scope="local" format="dita"/>
+    </linklist>
   </related-links>
   <topic class="- topic/topic "
     domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
