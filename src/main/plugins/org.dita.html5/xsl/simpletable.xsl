@@ -14,7 +14,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
                 xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable"
                 version="2.0"
-                exclude-result-prefixes="xs dita2html dita-ot table simpletable">
+                exclude-result-prefixes="xs dita2html ditamsg dita-ot table simpletable">
 
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="generate-table-summary-attribute">
     <!-- Override this to use a local convention for setting table's @summary attribute,
