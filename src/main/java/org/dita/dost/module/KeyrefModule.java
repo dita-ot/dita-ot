@@ -183,7 +183,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
         return new KeyScope(scope.name,
                 newKeys,
-                scope.childScopes.values().stream()
+                scope.childScopes.stream()
                         .map(c -> rewriteScopeTargets(c, rewrites))
                         .collect(Collectors.toList()));
     }

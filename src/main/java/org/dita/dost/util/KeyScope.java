@@ -9,6 +9,7 @@ package org.dita.dost.util;
 
 import java.util.*;
 
+import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
 
 /**
@@ -20,16 +21,12 @@ public class KeyScope {
 
     public final String name;
     public final Map<String, KeyDef> keyDefinition;
-    public final Map<String, KeyScope> childScopes;
+    public final List<KeyScope> childScopes;
 
     public KeyScope(final String name, final Map<String, KeyDef> keyDefinition, final List<KeyScope> childScopes) {
         this.name = name;
         this.keyDefinition = unmodifiableMap(keyDefinition);
-        final Map<String, KeyScope> cs = new HashMap<>();
-        for (final KeyScope scope : childScopes) {
-            cs.put(scope.name, scope);
-        }
-        this.childScopes = unmodifiableMap(cs);
+        this.childScopes = unmodifiableList(new ArrayList(childScopes));
     }
 
     public KeyScope(final Map<String, KeyDef> keyDefinition) {
@@ -45,7 +42,7 @@ public class KeyScope {
     }
 
     public KeyScope getChildScope(final String scope) {
-        return childScopes.get(scope);
+        return childScopes.stream().filter(s -> s.name.equals(scope)).findFirst().orElse(null);
     }
 
     @Override
