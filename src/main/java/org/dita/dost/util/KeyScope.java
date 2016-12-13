@@ -19,18 +19,20 @@ import static java.util.Collections.unmodifiableMap;
  */
 public class KeyScope {
 
+    public final String id;
     public final String name;
     public final Map<String, KeyDef> keyDefinition;
     public final List<KeyScope> childScopes;
 
-    public KeyScope(final String name, final Map<String, KeyDef> keyDefinition, final List<KeyScope> childScopes) {
+    public KeyScope(final String id, final String name, final Map<String, KeyDef> keyDefinition, final List<KeyScope> childScopes) {
+        this.id = id;
         this.name = name;
         this.keyDefinition = unmodifiableMap(keyDefinition);
         this.childScopes = unmodifiableList(new ArrayList(childScopes));
     }
 
     public KeyScope(final Map<String, KeyDef> keyDefinition) {
-        this(null, keyDefinition, Collections.<KeyScope>emptyList());
+        this(null, null, keyDefinition, Collections.<KeyScope>emptyList());
     }
 
     public KeyDef get(final String key) {

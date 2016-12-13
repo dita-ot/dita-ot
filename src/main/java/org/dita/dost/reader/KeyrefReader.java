@@ -115,7 +115,7 @@ public final class KeyrefReader implements AbstractReader {
         if (scopes.size() == 1 && scopes.get(0).name == null) {
             return scopes.get(0);
         } else {
-            return new KeyScope(null, Collections.<String, KeyDef>emptyMap(), scopes);
+            return new KeyScope("#root", null, Collections.<String, KeyDef>emptyMap(), scopes);
         }
     }
     private List<KeyScope> readScopes(final Element root) {
@@ -125,14 +125,35 @@ public final class KeyrefReader implements AbstractReader {
         readChildScopes(root, childScopes);
         final String keyscope = root.getAttribute(ATTRIBUTE_NAME_KEYSCOPE).trim();
         if (keyscope.isEmpty()) {
-            return asList(new KeyScope(null, keyDefs, childScopes));
+            return asList(new KeyScope("#root", null, keyDefs, childScopes));
         } else {
             final List<KeyScope> res = new ArrayList<>();
             for (final String scope: keyscope.split("\\s+")) {
-                res.add(new KeyScope(scope, keyDefs, childScopes));
+                res.add(new KeyScope(generateId(root, scope), scope, keyDefs, childScopes));
             }
             return res;
         }
+    }
+
+    private String generateId(final Element root, final String scope) {
+        final StringBuilder res = new StringBuilder();
+        Element elem = root;
+        while (elem != null) {
+            res.append(elem.getNodeName()).append('[');
+            int position = 0;
+            for (Node n = elem; n != null; position++) {
+                n = n.getPreviousSibling();
+            }
+            res.append(Integer.toString(position)).append(']');
+            final Node p = elem.getParentNode();
+            if (p != null && p.getNodeType() == Node.ELEMENT_NODE) {
+                elem = (Element) p;
+            } else {
+                elem = null;
+            }
+        }
+        res.append('.').append(scope);
+        return res.toString();
     }
 
     private void readChildScopes(final Element elem, final List<KeyScope> childScopes) {
@@ -207,7 +228,7 @@ public final class KeyrefReader implements AbstractReader {
     private KeyScope cascadeChildKeys(final KeyScope rootScope) {
         final Map<String, KeyDef> res = new HashMap<>(rootScope.keyDefinition);
         cascadeChildKeys(rootScope, res, "");
-        return new KeyScope(rootScope.name, res, new ArrayList<>(rootScope.childScopes));
+        return new KeyScope(rootScope.id, rootScope.name, res, new ArrayList<>(rootScope.childScopes));
     }
     private void cascadeChildKeys(final KeyScope scope, final Map<String, KeyDef> keys, final String prefix) {
         final StringBuilder buf = new StringBuilder(prefix);
@@ -244,7 +265,7 @@ public final class KeyrefReader implements AbstractReader {
                 final KeyScope resChild = inheritParentKeys(child, resKeys);
                 resChildren.add(resChild);
             }
-            return new KeyScope(current.name, resKeys, resChildren);
+            return new KeyScope(current.id, current.name, resKeys, resChildren);
         }
     }
 
@@ -260,7 +281,7 @@ public final class KeyrefReader implements AbstractReader {
             final KeyScope resolvedChild = resolveIntermediate(child);
             children.add(resolvedChild);
         }
-        return new KeyScope(scope.name, keys, children);
+        return new KeyScope(scope.id, scope.name, keys, children);
     }
 
     private KeyDef resolveIntermediate(final KeyScope scope, final KeyDef keyDef, final List<KeyDef> circularityTracker) {

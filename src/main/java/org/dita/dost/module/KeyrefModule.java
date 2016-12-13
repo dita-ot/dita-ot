@@ -227,7 +227,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element);
             newKeys.put(key.getKey(), newKey);
         }
-        return new KeyScope(scope.name,
+        return new KeyScope(scope.id, scope.name,
                 newKeys,
                 scope.childScopes.stream()
                         .map(c -> rewriteScopeTargets(c, rewrites))
