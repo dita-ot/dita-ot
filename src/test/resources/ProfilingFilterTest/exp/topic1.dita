@@ -13,7 +13,7 @@
     <foreign class="- topic/foreign ">
       <p platform="windows" class="- topic/p ">Foreign Windows</p>
     </foreign>
-    <!--p hardware-platform="" class="- topic/p ">Empty hardware-platform</p-->
+    <p hardware-platform="" class="- topic/p ">Empty hardware-platform</p>
     <!--p hardware-platform="arm" class="- topic/p ">ARM hardware-platform</p-->
   </body>
   <!--topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic " domains="(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d) a(props hardware-platform)" id="topic_zzt_wwn_l4" ditaarch:DITAArchVersion="1.2"
