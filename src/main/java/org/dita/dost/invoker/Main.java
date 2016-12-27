@@ -391,8 +391,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     private static void printMessage(final Throwable t) {
         final String message = t.getMessage();
         if (message != null && !message.trim().isEmpty()) {
-            System.err.println("Error: " + message);
+            printErrorMessage("Error: " + message);
         }
+    }
+
+    private static void printErrorMessage(final String msg) {
+        System.err.print(DefaultLogger.ANSI_RED);
+        System.err.print("Error: " + msg);
+        System.err.println(DefaultLogger.ANSI_RESET);
     }
 
     /**
@@ -608,7 +614,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             } else if (arg.startsWith("-") || arg.startsWith("/")) {
                 // we don't have any more args to recognize!
                 final String msg = "Error: Unknown argument: " + arg;
-                System.err.println(msg);
+                printErrorMessage(msg);
                 printUsage();
                 throw new BuildException("");
             } else {
@@ -650,13 +656,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         } else {
             if (!definedProps.containsKey("transtype")) {
-                System.err.println("Error: Transformation type not defined");
+                printErrorMessage("Error: Transformation type not defined");
                 printUsage();
                 throw new BuildException("");
                 //justPrintUsage = true;
             }
             if (!definedProps.containsKey("args.input")) {
-                System.err.println("Error: Input file not defined");
+                printErrorMessage("Error: Input file not defined");
                 printUsage();
                 throw new BuildException("");
                 //justPrintUsage = true;
@@ -1145,10 +1151,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 } catch (final Throwable t) {
                     // yes, I know it is bad style to catch Throwable,
                     // but if we don't, we lose valuable information
-                    System.err.println("Caught an exception while logging the" + " end of the build.  Exception was:");
+                    printErrorMessage("Caught an exception while logging the" + " end of the build.  Exception was:");
                     t.printStackTrace();
                     if (error != null) {
-                        System.err.println("There has been an error prior to" + " that:");
+                        printErrorMessage("There has been an error prior to" + " that:");
                         error.printStackTrace();
                     }
                     throw new BuildException(t);
@@ -1219,7 +1225,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
                 logger = (BuildLogger) ClasspathUtils.newInstance(loggerClassname, Main.class.getClassLoader(),
                         BuildLogger.class);
             } catch (final BuildException e) {
-                System.err.println("The specified logger class " + loggerClassname + " could not be used because "
+                printErrorMessage("The specified logger class " + loggerClassname + " could not be used because "
                         + e.getMessage());
                 throw new RuntimeException();
             }
