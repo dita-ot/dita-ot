@@ -74,6 +74,8 @@ import static org.dita.dost.util.XMLUtils.toList;
  */
 public class Main extends org.apache.tools.ant.Main implements AntMain {
 
+    private boolean useColor;
+
     private static abstract class Argument {
         final String property;
 
@@ -388,17 +390,21 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
      * @param t Throwable to print the message of. Must not be <code>null</code>
      *            .
      */
-    private static void printMessage(final Throwable t) {
+    private void printMessage(final Throwable t) {
         final String message = t.getMessage();
         if (message != null && !message.trim().isEmpty()) {
             printErrorMessage("Error: " + message);
         }
     }
 
-    private static void printErrorMessage(final String msg) {
-        System.err.print(DefaultLogger.ANSI_RED);
-        System.err.print("Error: " + msg);
-        System.err.println(DefaultLogger.ANSI_RESET);
+    private void printErrorMessage(final String msg) {
+        if (useColor) {
+            System.err.print(DefaultLogger.ANSI_RED);
+            System.err.print("Error: " + msg);
+            System.err.println(DefaultLogger.ANSI_RESET);
+        } else {
+            System.err.println("Error: " + msg);
+        }
     }
 
     /**
@@ -543,6 +549,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         boolean justPrintUsage = false;
         boolean justPrintVersion = false;
         boolean justPrintDiagnostics = false;
+        useColor = Boolean.parseBoolean(Configuration.configuration.getOrDefault("cli.color", "true"));
 
         final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
         while (!args.isEmpty()) {
@@ -753,6 +760,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             final File logFile = new File(value);
             logTo = new PrintStream(new FileOutputStream(logFile));
             isLogFileUsed = true;
+            useColor = false;
         } catch (final IOException ioe) {
             final String msg = "Cannot write on the specified log file. "
                     + "Make sure the path exists and you have write " + "permissions.";
@@ -1231,6 +1239,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             }
         } else {
             logger = new DefaultLogger();
+            ((DefaultLogger) logger).useColor(useColor);
         }
 
         logger.setMessageOutputLevel(msgOutputLevel);

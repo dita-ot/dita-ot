@@ -83,6 +83,7 @@ class DefaultLogger implements BuildLogger {
 
     /** Whether or not to use emacs-style output */
     private boolean emacsMode = false;
+    private boolean useColor = false;
 
     // CheckStyle:VisibilityModifier ON
 
@@ -143,6 +144,10 @@ class DefaultLogger implements BuildLogger {
     @Override
     public void setEmacsMode(final boolean emacsMode) {
         this.emacsMode = emacsMode;
+    }
+
+    public void useColor(final boolean useColor) {
+        this.useColor = useColor;
     }
 
     /**
@@ -357,7 +362,7 @@ class DefaultLogger implements BuildLogger {
      *            implementation.)
      */
     private void printMessage(final String message, final PrintStream stream, final int priority) {
-        if (priority == Project.MSG_ERR) {
+        if (useColor && priority == Project.MSG_ERR) {
             stream.print(ANSI_RED);
             stream.print(message);
             stream.println(ANSI_RESET);
