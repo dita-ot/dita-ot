@@ -549,7 +549,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         boolean justPrintUsage = false;
         boolean justPrintVersion = false;
         boolean justPrintDiagnostics = false;
-        useColor = Boolean.parseBoolean(Configuration.configuration.getOrDefault("cli.color", "true"));
+        useColor = getUseColor();
 
         final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
         while (!args.isEmpty()) {
@@ -751,6 +751,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             System.setErr(err);
         }
         readyToRun = true;
+    }
+
+    private boolean getUseColor() {
+        final String os = System.getProperty("os.name");
+        if (os != null && os.startsWith("Windows")) {
+            return false;
+        }
+        return Boolean.parseBoolean(Configuration.configuration.getOrDefault("cli.color", "true"));
     }
 
     private PrintStream handleArgLogFile(Deque<String> args) {
