@@ -97,14 +97,18 @@ public class ForceUniqueFilterTest {
                 createFileInfo("test.dita", "test_3.dita"),
                 createFileInfo("test.dita", "test.dita"),
                 createFileInfo("test.dita", "test_2.dita"),
-                createFileInfo("test.dita", "test.dita")
+                createFileInfo("test.dita", "test.dita"),
+                createFileInfo(null, "copy-to_2.dita"),
+                createFileInfo(null, "copy-to.dita")
         )), f.copyToMap);
     }
 
     private FileInfo createFileInfo(final String src, final String tmp) {
-        return new Builder()
-                .src(srcDir.toURI().resolve(src))
-                .uri(URI.create(tmp))
+        final Builder builder = new Builder();
+        if (src != null) {
+            builder.src(srcDir.toURI().resolve(src));
+        }
+        return builder.uri(URI.create(tmp))
                 .result(srcDir.toURI().resolve(tmp))
                 .build();
     }
