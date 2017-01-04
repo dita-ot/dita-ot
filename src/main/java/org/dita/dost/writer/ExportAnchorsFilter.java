@@ -26,7 +26,7 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
 
     /** Basedir of the current parsing file */
     private URI currentDir = null;
-    private Deque<String> stack = new ArrayDeque<>();
+    private Deque<String> stack = new LinkedList<>();
     /** Flag to show whether a file has <exportanchors> tag */
     private boolean hasExport = false;
     private final List<ExportAnchor> exportAnchors = new ArrayList<>();
@@ -101,52 +101,54 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
 			throws SAXException {
 	    final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
         stack.addFirst(classValue);
-        if (rootClass == null) {
-            rootClass = new DitaClass(classValue);
-        }
-        if (TOPIC_TOPIC.matches(classValue)) {
-            topicId = atts.getValue(ATTRIBUTE_NAME_ID);
-            final String filename = currentFile.toString() + QUESTION;
-            for (final ExportAnchor e: exportAnchors) {
-                if (e.topicids.contains(filename)) {
-                    e.topicids.add(topicId);
-                    e.topicids.remove(filename);
-                }
+        if (classValue != null) {
+            if (rootClass == null) {
+                rootClass = new DitaClass(classValue);
             }
-        } else if (MAP_TOPICREF.matches(classValue)) {
-            parseAttribute(atts);
-        } else if (MAP_MAP.matches(classValue)) {
-            if (rootFilePath.equals(currentFile)) {
-                String pluginId = atts.getValue(ATTRIBUTE_NAME_ID);
-                if (pluginId == null) {
-                    pluginId = "org.sample.help.doc";
+            if (TOPIC_TOPIC.matches(classValue)) {
+                topicId = atts.getValue(ATTRIBUTE_NAME_ID);
+                final String filename = currentFile.toString() + QUESTION;
+                for (final ExportAnchor e : exportAnchors) {
+                    if (e.topicids.contains(filename)) {
+                        e.topicids.add(topicId);
+                        e.topicids.remove(filename);
+                    }
                 }
-                final Set<String> set = StringUtils.restoreSet(pluginId, COMMA);
-                pluginMap.put("pluginId", set);
-            }
-        } else if (DELAY_D_EXPORTANCHORS.matches(classValue)) {
-            hasExport = true;
-            if (MAP_MAP.matches(rootClass)) {
-                currentExportAnchor = new ExportAnchor(topicHref);
-                currentExportAnchor.topicids.add(topicId);
-            } else if (rootClass == null || TOPIC_TOPIC.matches(rootClass)) {
-                currentExportAnchor = new ExportAnchor(currentFile);
-                currentExportAnchor.topicids.add(topicId);
-                shouldAppendEndTag = true;
-            }
-        } else if (DELAY_D_ANCHORKEY.matches(classValue)) {
-            // TODO in topic file is no keys
-            final String keyref = atts.getValue(ATTRIBUTE_NAME_KEYREF);
-            currentExportAnchor.keys.add(keyref);
-        } else if (DELAY_D_ANCHORID.matches(classValue)) {
-            final String id = atts.getValue(ATTRIBUTE_NAME_ID);
-            if (MAP_MAP.matches(rootClass)) {
-                if (!topicId.equals(id)) {
-                    currentExportAnchor.ids.add(id);
+            } else if (MAP_TOPICREF.matches(classValue)) {
+                parseAttribute(atts);
+            } else if (MAP_MAP.matches(classValue)) {
+                if (rootFilePath.equals(currentFile)) {
+                    String pluginId = atts.getValue(ATTRIBUTE_NAME_ID);
+                    if (pluginId == null) {
+                        pluginId = "org.sample.help.doc";
+                    }
+                    final Set<String> set = StringUtils.restoreSet(pluginId, COMMA);
+                    pluginMap.put("pluginId", set);
                 }
-            } else if (rootClass == null || TOPIC_TOPIC.matches(rootClass)) {
-                if (!topicId.equals(id)) {
-                    currentExportAnchor.ids.add(id);
+            } else if (DELAY_D_EXPORTANCHORS.matches(classValue)) {
+                hasExport = true;
+                if (MAP_MAP.matches(rootClass)) {
+                    currentExportAnchor = new ExportAnchor(topicHref);
+                    currentExportAnchor.topicids.add(topicId);
+                } else if (rootClass == null || TOPIC_TOPIC.matches(rootClass)) {
+                    currentExportAnchor = new ExportAnchor(currentFile);
+                    currentExportAnchor.topicids.add(topicId);
+                    shouldAppendEndTag = true;
+                }
+            } else if (DELAY_D_ANCHORKEY.matches(classValue)) {
+                // TODO in topic file is no keys
+                final String keyref = atts.getValue(ATTRIBUTE_NAME_KEYREF);
+                currentExportAnchor.keys.add(keyref);
+            } else if (DELAY_D_ANCHORID.matches(classValue)) {
+                final String id = atts.getValue(ATTRIBUTE_NAME_ID);
+                if (MAP_MAP.matches(rootClass)) {
+                    if (!topicId.equals(id)) {
+                        currentExportAnchor.ids.add(id);
+                    }
+                } else if (rootClass == null || TOPIC_TOPIC.matches(rootClass)) {
+                    if (!topicId.equals(id)) {
+                        currentExportAnchor.ids.add(id);
+                    }
                 }
             }
         }
@@ -197,13 +199,15 @@ public final class ExportAnchorsFilter extends AbstractXMLFilter {
 	public void endElement(final String uri, final String localName, final String qName)
 			throws SAXException {
         final String classValue = stack.removeFirst();
-        if ((MAP_TOPICMETA.matches(classValue) || TOPIC_PROLOG.matches(classValue))
-                && hasExport) {
-            if (MAP_MAP.matches(rootClass)) {
-                exportAnchors.add(currentExportAnchor);
-                currentExportAnchor = null;
+        if (classValue != null) {
+            if ((MAP_TOPICMETA.matches(classValue) || TOPIC_PROLOG.matches(classValue))
+                    && hasExport) {
+                if (MAP_MAP.matches(rootClass)) {
+                    exportAnchors.add(currentExportAnchor);
+                    currentExportAnchor = null;
+                }
+                hasExport = false;
             }
-            hasExport = false;
         }
 
 	    getContentHandler().endElement(uri, localName, qName);
