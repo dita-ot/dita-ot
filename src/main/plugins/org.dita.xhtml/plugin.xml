@@ -20,10 +20,6 @@ See the accompanying LICENSE file for applicable license.
       <val>yes</val>
       <val default="true">no</val>
     </param>
-    <param name="args.breadcrumbs" desc="Specifies whether to generate breadcrumb links." type="enum">
-      <val>yes</val>
-      <val default="true">no</val>
-    </param>
     <param name="args.copycss" desc="Specifies whether to copy the custom .css file to the output directory." type="enum">
       <val>yes</val>
       <val default="true">no</val>

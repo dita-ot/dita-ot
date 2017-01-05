@@ -125,7 +125,7 @@ public final class FilterUtils {
                 final String propName = propList[propListIndex];
                 String propValue = atts.getValue(propName);
 
-                while (propValue == null && propListIndex > 0) {
+                while ((propValue == null || propValue.trim().isEmpty()) && propListIndex > 0) {
                     propListIndex--;
                     propValue = getLabelValue(propName, atts.getValue(propList[propListIndex]));
                 }

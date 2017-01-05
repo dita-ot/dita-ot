@@ -638,6 +638,54 @@ public final class Job {
                     '}';
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            FileInfo fileInfo = (FileInfo) o;
+
+            if (hasConref != fileInfo.hasConref) return false;
+            if (isChunked != fileInfo.isChunked) return false;
+            if (hasLink != fileInfo.hasLink) return false;
+            if (isResourceOnly != fileInfo.isResourceOnly) return false;
+            if (isTarget != fileInfo.isTarget) return false;
+            if (isConrefPush != fileInfo.isConrefPush) return false;
+            if (hasKeyref != fileInfo.hasKeyref) return false;
+            if (hasCoderef != fileInfo.hasCoderef) return false;
+            if (isSubjectScheme != fileInfo.isSubjectScheme) return false;
+            if (isSubtarget != fileInfo.isSubtarget) return false;
+            if (isFlagImage != fileInfo.isFlagImage) return false;
+            if (isOutDita != fileInfo.isOutDita) return false;
+            if (src != null ? !src.equals(fileInfo.src) : fileInfo.src != null) return false;
+            if (!uri.equals(fileInfo.uri)) return false;
+            if (!file.equals(fileInfo.file)) return false;
+            if (result != null ? !result.equals(fileInfo.result) : fileInfo.result != null) return false;
+            return format != null ? format.equals(fileInfo.format) : fileInfo.format == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result1 = src != null ? src.hashCode() : 0;
+            result1 = 31 * result1 + uri.hashCode();
+            result1 = 31 * result1 + file.hashCode();
+            result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
+            result1 = 31 * result1 + (format != null ? format.hashCode() : 0);
+            result1 = 31 * result1 + (hasConref ? 1 : 0);
+            result1 = 31 * result1 + (isChunked ? 1 : 0);
+            result1 = 31 * result1 + (hasLink ? 1 : 0);
+            result1 = 31 * result1 + (isResourceOnly ? 1 : 0);
+            result1 = 31 * result1 + (isTarget ? 1 : 0);
+            result1 = 31 * result1 + (isConrefPush ? 1 : 0);
+            result1 = 31 * result1 + (hasKeyref ? 1 : 0);
+            result1 = 31 * result1 + (hasCoderef ? 1 : 0);
+            result1 = 31 * result1 + (isSubjectScheme ? 1 : 0);
+            result1 = 31 * result1 + (isSubtarget ? 1 : 0);
+            result1 = 31 * result1 + (isFlagImage ? 1 : 0);
+            result1 = 31 * result1 + (isOutDita ? 1 : 0);
+            return result1;
+        }
+
         public interface Filter<T> {
             
             boolean accept(T f);

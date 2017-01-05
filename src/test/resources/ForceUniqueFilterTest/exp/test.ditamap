@@ -13,4 +13,6 @@
       </relcell>
     </relrow>
   </reltable>
+  <topicref class="- map/topicref " href="test2.dita" copy-to="copy-to.dita"/>
+  <topicref class="- map/topicref " href="test3.dita" copy-to="copy-to_2.dita"/>
 </map>
