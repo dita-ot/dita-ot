@@ -81,7 +81,7 @@ See the accompanying LICENSE file for applicable license.
     <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
     <fail message="dita.temp.dir property must be an absolute path: ${dita.temp.dir}">
       <condition>
-        <isabsolute path="${dita.temp.dir}"/>
+        <not><isabsolute path="${dita.temp.dir}"/></not>
       </condition>
     </fail>
     <property name="output.dir" location="${basedir}/out" />
