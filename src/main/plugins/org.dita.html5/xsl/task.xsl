@@ -13,7 +13,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 version="2.0"
-                exclude-result-prefixes="xs dita-ot">
+                exclude-result-prefixes="xs dita-ot related-links dita2html ditamsg ">
   
   <!-- Determines whether to generate titles for task sections. Values are YES and NO. -->
   <xsl:param name="GENERATE-TASK-LABELS" select="'NO'"/>

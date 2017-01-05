@@ -5,4 +5,6 @@
   
   <prop action="exclude" att="platform" val="windows"/>
   <prop action="include" att="platform" />
+
+  <prop action="exclude"/>
 </val>

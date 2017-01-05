@@ -48,33 +48,32 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
         Attributes res = atts;
         if (ignoreStack.peek() && MAP_TOPICREF.matches(res)) {
             final URI href = toURI(res.getValue(ATTRIBUTE_NAME_HREF));
+            final URI copyTo = toURI(res.getValue(ATTRIBUTE_NAME_COPY_TO));
+            final URI source = copyTo != null ? copyTo : href;
             final String scope = res.getValue(ATTRIBUTE_NAME_SCOPE);
             final String format = res.getValue(ATTRIBUTE_NAME_FORMAT);
             // FIXME: handle cascading
             final String processingRole = res.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
-            if (href != null &&
+            if (source != null &&
                     (scope == null || scope.equals(ATTR_SCOPE_VALUE_LOCAL)) &&
                     (format == null || format.equals(ATTR_FORMAT_VALUE_DITA)) &&
                     (processingRole == null || processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_NORMAL))) {
-                final URI file = stripFragment(href);
+                final URI file = stripFragment(source);
                 Integer count = topicrefCount.containsKey(file) ? topicrefCount.get(file) : 0;
                 count++;
                 topicrefCount.put(file, count);
                 if (count > 1) { // not only reference to this topic
-                    final String copyTo = res.getValue(ATTRIBUTE_NAME_COPY_TO);
-                    if (copyTo == null) { // skip we there is already a copy-to
-                        final FileInfo srcFi = job.getFileInfo(currentFile.resolve(stripFragment(href)));
-                        final FileInfo dstFi = generateCopyToTarget(srcFi, count);
-                        copyToMap.put(dstFi, srcFi);
+                    final FileInfo srcFi = job.getFileInfo(currentFile.resolve(stripFragment(source)));
+                    final FileInfo dstFi = generateCopyToTarget(srcFi, count);
+                    copyToMap.put(dstFi, srcFi);
 
-                        final URI dstTempAbs = job.tempDirURI.resolve(dstFi.uri);
-                        final URI targetRel = getRelativePath(currentFile, dstTempAbs);
-                        final URI target = setFragment(targetRel, href.getFragment());
+                    final URI dstTempAbs = job.tempDirURI.resolve(dstFi.uri);
+                    final URI targetRel = getRelativePath(currentFile, dstTempAbs);
+                    final URI target = setFragment(targetRel, href.getFragment());
 
-                        final AttributesImpl buf = new AttributesImpl(atts);
-                        XMLUtils.addOrSetAttribute(buf, ATTRIBUTE_NAME_COPY_TO, target.toString());
-                        res = buf;
-                    }
+                    final AttributesImpl buf = new AttributesImpl(atts);
+                    XMLUtils.addOrSetAttribute(buf, ATTRIBUTE_NAME_COPY_TO, target.toString());
+                    res = buf;
                 }
             }
         }

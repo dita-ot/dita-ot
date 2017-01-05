@@ -201,7 +201,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if="args.xhtml.classattr"/>
         <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if="args.hide.parent.link"/>
         <param name="include.rellinks" expression="${include.rellinks}"/>
-        <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if="args.breadcrumbs"/>
         <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
         <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
