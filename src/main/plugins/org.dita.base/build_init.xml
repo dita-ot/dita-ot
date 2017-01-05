@@ -64,19 +64,24 @@ See the accompanying LICENSE file for applicable license.
       </xslt>
     </sequential>
   </macrodef>
-  
-  <tstamp>
-    <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
-  </tstamp>
-  <property name="base.temp.dir" location="${basedir}/temp"/>
-  <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
-  <property name="output.dir" location="${basedir}/out" />
-  <property environment="env" />
-  <!-- property values end -->
 
   <target name="build-init"
-          depends="check-arg,
-                   log-arg" />
+          depends="init-properties,
+                   check-arg,
+                   log-arg"/>
+
+  <target name="init-properties">
+    <property name="default.language" value="en"/>
+    <property name="generate-debug-attributes" value="true"/>
+    <property name="processing-mode" value="lax"/>
+    <tstamp>
+      <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
+    </tstamp>
+    <property name="base.temp.dir" location="${basedir}/temp"/>
+    <property name="dita.temp.dir" location="${base.temp.dir}${file.separator}temp${current.date}" />
+    <property name="output.dir" location="${basedir}/out" />
+    <property environment="env" />
+  </target>
 
   <!-- property value validation begin -->
   <target name="check-arg"
