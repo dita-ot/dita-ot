@@ -105,6 +105,12 @@ See the accompanying LICENSE file for applicable license.
         <isset property="out.ext"/>
       </not>
     </condition>
+    <condition property="dita.input.valfile" value="${args.filter}">
+      <and>
+        <isset property="args.filter"/>
+        <not><isset property="dita.input.valfile"/></not>
+      </and>
+    </condition>
     <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <!-- Set to "true" if you get out-of-memory errors during preprocess
     while processing very large (thousands of files) document sets. -->
