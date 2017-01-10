@@ -109,7 +109,10 @@ See the accompanying LICENSE file for applicable license.
 
     <dita-ot-fail id="DOTA012W">
       <condition>
-        <isset property="dita.input.valfile" />
+        <and>
+          <isset property="dita.input.valfile" />
+          <not><isset property="args.filter"/></not>
+        </and>
       </condition>
       <param name="1" value="dita.input.valfile"/>
       <param name="2" value="args.filter"/>
