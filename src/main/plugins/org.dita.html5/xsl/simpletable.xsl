@@ -36,9 +36,11 @@ See the accompanying LICENSE file for applicable license.
       </xsl:for-each>
     </xsl:variable>
     <xsl:variable name="col-widths-sum" select="sum($col-widths)"/>
-    <xsl:for-each select="$col-widths">      
-      <col style="width:{(. div $col-widths-sum) * 100}%"/>
-    </xsl:for-each>    
+    <colgroup>
+      <xsl:for-each select="$col-widths">
+        <col style="width:{(. div $col-widths-sum) * 100}%"/>
+      </xsl:for-each>
+    </colgroup>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="dita2html:get-max-entry-count" as="xs:integer">
