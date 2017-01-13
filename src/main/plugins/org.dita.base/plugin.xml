@@ -150,6 +150,7 @@ See the accompanying LICENSE file for applicable license.
       <val>true</val>
       <val default="true">false</val>
     </param>
+    <param name="default.language" desc="Specifies the default language for source documents." type="string"/>
   </transtype>
   <feature extension="dita.image.extensions" value=".gif"/>
   <feature extension="dita.image.extensions" value=".eps"/>
