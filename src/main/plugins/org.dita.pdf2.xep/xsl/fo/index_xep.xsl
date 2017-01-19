@@ -139,21 +139,23 @@ See the accompanying LICENSE file for applicable license.
         </fo:table>
       </xsl:when>
       <xsl:otherwise>
-        <fo:block xsl:use-attribute-sets="index-indents">
-          <xsl:if test="count(ancestor::opentopic-index:index.entry) > 0">
-            <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
-          </xsl:if>
-          <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
-          <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
-            <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
-          <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
-            <xsl:apply-templates select="." mode="make-index-ref">
-              <xsl:with-param name="idxs" select="opentopic-index:refID"/>
-              <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
-              <xsl:with-param name="no-page" select="$isNoPage"/>
-            </xsl:apply-templates>
-          </xsl:if>
-        </fo:block>
+        <fo:block-container>
+          <fo:block xsl:use-attribute-sets="index-indents">
+            <xsl:if test="count(ancestor::opentopic-index:index.entry) > 0">
+              <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
+            </xsl:if>
+            <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
+            <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
+              <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
+            <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
+              <xsl:apply-templates select="." mode="make-index-ref">
+                <xsl:with-param name="idxs" select="opentopic-index:refID"/>
+                <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
+                <xsl:with-param name="no-page" select="$isNoPage"/>
+              </xsl:apply-templates>
+            </xsl:if>
+          </fo:block>
+        </fo:block-container>
         <!--fo:block xsl:use-attribute-sets="index.entry__content">
           <xsl:apply-templates mode="index-postprocess"/>
         </fo:block-->
