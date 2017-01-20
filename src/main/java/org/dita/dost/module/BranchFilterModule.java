@@ -354,6 +354,9 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 //                final FileInfo fi = new FileInfo.Builder(srcFileInfo).uri(dstUri).build();
 //                 TODO: Maybe Job should be updated earlier?
 //                job.add(fi);
+                // Moving the job.add step here from processAttributes doesn't include all branch topics
+                // I think to fix #2576 we need to iterate over job and remove targets that are filtered
+                // but I don't know how.
                 logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
                 final ProfilingFilter writer = new ProfilingFilter();
                 writer.setLogger(logger);
@@ -594,7 +597,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                     elem.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
                 }
 
-                job.add(dstFileInfo);
+                job.add(dstFileInfo); // ADDS TOPICS FOR PROCESSING THAT SHOULD BE FILTERED
             }
         }
 
