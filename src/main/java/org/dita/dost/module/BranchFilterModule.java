@@ -141,6 +141,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         logger.debug("Filter existing topics");
         filterTopics(doc.getDocumentElement(), Collections.emptyList());
 
+//      THE MAP THAT GETS WRITTEN AT THIS POINT REFLECTS CORRECT FILTERING OF prod-b-info-a.dita
         logger.debug("Writing " + currentFile);
         Result result = null;
         try {
@@ -593,7 +594,13 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                     elem.removeAttribute(ATTRIBUTE_NAME_COPY_TO);
                 }
 
+                // dstTemp IS THE SAME FOR BOTH OLD AND NEW METHODS
+                // dstFileInfo NOT DIFFERENT FOR prod-b-info-a.dita
+                // SO POSSIBLY A LATER FILTERING STEP REMOVED THIS TOPIC
+                // BEFORE THE job.add(dstFileInfo); STEP WAS ADDED
+                // Removing the following step doesn't process the branches at all
                 job.add(dstFileInfo);
+                
             }
         }
 
