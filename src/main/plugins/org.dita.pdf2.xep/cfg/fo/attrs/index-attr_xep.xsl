@@ -11,7 +11,7 @@ See the accompanying LICENSE file for applicable license.
                 version="2.0">
 
   <xsl:attribute-set name="index.see-also-entry__content">
-    <xsl:attribute name="start-indent">18pt + from-parent(start-indent)</xsl:attribute>
+    <xsl:attribute name="start-indent"><xsl:value-of select="$index.indent"/> + from-parent(start-indent)</xsl:attribute>
   </xsl:attribute-set>
   
 </xsl:stylesheet>
