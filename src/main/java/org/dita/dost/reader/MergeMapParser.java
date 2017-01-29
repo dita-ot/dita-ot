@@ -87,6 +87,8 @@ public final class MergeMapParser extends XMLFilterImpl {
             s.getTransformer().setOutputProperty(OMIT_XML_DECLARATION , "yes");
             s.setResult(new StreamResult(topicBuffer));
             topicParser.setContentHandler(s);
+        } catch (final RuntimeException e){
+            throw e;
         }catch (final Exception e){
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -197,24 +199,25 @@ public final class MergeMapParser extends XMLFilterImpl {
                     if (copyToValue != null && !copyToValue.toString().isEmpty()) {
                         attValue = copyToValue;
                     }
+                    final URI absTarget = dirPath.toURI().resolve(attValue);
                     XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, ohref.toString());
-                    if (util.isVisited(attValue)) {
-                        attValue = toURI(SHARP + util.getIdValue(attValue));
+                    if (util.isVisited(absTarget)) {
+                        attValue = toURI(SHARP + util.getIdValue(absTarget));
                     } else {
                         //parse the topic
                         final URI p = stripFragment(attValue).normalize();
-                        util.visit(p);
-                        final File f = new File(dirPath, toFile(p).getPath());
+                        util.visit(absTarget);
+                        final File f = new File(stripFragment(absTarget));
                         if (f.exists()) {
                             topicParser.parse(toFile(p).getPath(), dirPath);
                             final String fileId = topicParser.getFirstTopicId();
-                            util.addId(attValue, fileId);
+                            util.addId(absTarget, fileId);
                             if (attValue.getFragment() != null) {
-                                util.addId(stripFragment(attValue), fileId);
+                                util.addId(stripFragment(absTarget), fileId);
                             }
                             final URI firstTopicId = toURI(SHARP + fileId);
-                            if (util.getIdValue(attValue) != null) {
-                                attValue = toURI(SHARP + util.getIdValue(attValue));
+                            if (util.getIdValue(absTarget) != null) {
+                                attValue = toURI(SHARP + util.getIdValue(absTarget));
                             } else {
                                 attValue = firstTopicId;
                             }
@@ -244,8 +247,9 @@ public final class MergeMapParser extends XMLFilterImpl {
                         element = FileUtils.getRelativeUnixPath(new File(dirPath,"a.ditamap").getAbsolutePath(),
                                                                    new File(tempdir, element).getAbsolutePath());
                     }
-                    if (!util.isVisited(toURI(element))) {
-                        util.visit(toURI(element));
+                    final URI abs = job.tempDirURI.resolve(f.uri);
+                    if (!util.isVisited(abs)) {
+                        util.visit(abs);
                         if (!f.isResourceOnly){
                             //ensure the file exists
                             final File file = new File(dirPath, element);
@@ -259,6 +263,8 @@ public final class MergeMapParser extends XMLFilterImpl {
                     }
                 }
             }
+        } catch (final RuntimeException e){
+            throw e;
         }catch (final Exception e){
             logger.error(e.getMessage(), e) ;
         }

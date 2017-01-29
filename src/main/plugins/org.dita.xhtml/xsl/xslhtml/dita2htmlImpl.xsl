@@ -1982,7 +1982,7 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <!-- Most elements don't get a class attribute. -->
-<xsl:template match="*" mode="get-output-class"/>
+<xsl:template match="node() | @*" mode="get-output-class"/>
   
 <!-- Get the ancestry of the current element (name only, not module) -->
 <xsl:template match="*" mode="get-element-ancestry">

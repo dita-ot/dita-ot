@@ -57,6 +57,8 @@ public final class MergeTopicParser extends XMLFilterImpl {
             reader = XMLUtils.getXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
@@ -148,7 +150,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
             URI absolutePath = dirPath.toURI().resolve(pathFromMap);
             XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_OHREF, pathFromMap.toString());
             if (util.findId(absolutePath)) {
-                retAttValue = toURI(SHARP + util.getIdValue(pathFromMap));
+                retAttValue = toURI(SHARP + util.getIdValue(absolutePath));
             } else {
                 final String fileId = MergeUtils.getFirstTopicId(absolutePath, dirPath, false);
                 final URI key = setFragment(absolutePath, fileId);
@@ -184,6 +186,8 @@ public final class MergeTopicParser extends XMLFilterImpl {
             reader.setErrorHandler(new DITAOTXMLErrorHandler(f.getAbsolutePath(), logger));
             logger.info("Processing " + f.getAbsolutePath());
             reader.parse(f.toURI().toString());
+        } catch (final RuntimeException e) {
+            throw e;
         } catch (final Exception e) {
             throw new RuntimeException("Failed to parse " + filename + ": " + e.getMessage(), e);
         }

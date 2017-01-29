@@ -31,7 +31,9 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
 -->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:opentopic-index="http://www.idiominc.com/opentopic/index" xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  exclude-result-prefixes="opentopic-index" version="2.0">
 
     <xsl:attribute-set name="__index__label">
         <xsl:attribute name="space-before">20pt</xsl:attribute>
@@ -63,16 +65,18 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute-set name="index.term">
     </xsl:attribute-set>
 
+  <xsl:variable name="index.indent" select="'18pt'"/>
+
     <xsl:attribute-set name="index-indents">
         <xsl:attribute name="end-indent">5pt</xsl:attribute>
         <xsl:attribute name="last-line-end-indent">0pt</xsl:attribute>
-        <xsl:attribute name="start-indent">36pt</xsl:attribute>
-        <xsl:attribute name="text-indent">-36pt</xsl:attribute>
+        <xsl:attribute name="start-indent"><xsl:value-of select="$index.indent"/> * 2</xsl:attribute>
+        <xsl:attribute name="text-indent">-<xsl:value-of select="$index.indent"/> * 2</xsl:attribute>
         <xsl:attribute name="font-size">9pt</xsl:attribute>
     </xsl:attribute-set>
     
     <xsl:attribute-set name="index.entry__content">
-        <xsl:attribute name="start-indent">18pt</xsl:attribute>
+        <xsl:attribute name="start-indent" select="$index.indent"/>
     </xsl:attribute-set>
 
   <xsl:attribute-set name="index.see-also-entry__content" use-attribute-sets="index.entry__content">
