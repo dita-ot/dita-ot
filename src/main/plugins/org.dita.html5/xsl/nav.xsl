@@ -238,6 +238,9 @@ See the accompanying LICENSE file for applicable license.
                         (not(@format) or @format = 'dita' or @format = 'ditamap') ">
           <xsl:value-of select="@copy-to"/>
         </xsl:when>
+        <xsl:when test="contains(@chunk, 'to-content')">
+          <xsl:value-of select="substring-before(@href,'#')"/>
+        </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="@href"/>
         </xsl:otherwise>
