@@ -37,6 +37,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static javax.xml.XMLConstants.XML_NS_PREFIX;
@@ -48,6 +49,7 @@ import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.toFile;
+import static org.dita.dost.util.XMLUtils.toList;
 
 /**
  * Integrator is the main class to control and excute the integration of the
@@ -84,6 +86,7 @@ public final class Integrator {
 
     public static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
     public static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-]+)?)?)?");
+    public static final String CONF_PARSER_FORMAT = "parser.";
 
     /** Plugin table which contains detected plugins. */
     private final Map<String, Features> pluginTable;
@@ -361,14 +364,20 @@ public final class Integrator {
 
     private Map<String, String> getParserConfiguration() {
         final Map<String, String> res = new HashMap<>();
-        final NodeList features = pluginsDoc.getElementsByTagName(FEATURE_ELEM);
-        for (int i = 0; i < features.getLength(); i++) {
-            final Element feature = (Element) features.item(i);
+        final List<Element> features = toList(pluginsDoc.getElementsByTagName(FEATURE_ELEM));
+        for (final Element feature : features) {
             if (feature.getAttribute(FEATURE_ID_ATTR).equals("dita.parser")) {
-                final NodeList parsers = feature.getElementsByTagName("parser");
-                for (int j = 0; j < parsers.getLength(); j++) {
-                    final Element parser = (Element) parsers.item(j);
-                    res.put("parser." + parser.getAttribute("format"), parser.getAttribute("class"));
+                final List<Element> parsers = toList(feature.getElementsByTagName("parser"));
+                for (final Element parser : parsers) {
+                    final String format = parser.getAttribute("format");
+                    res.put(CONF_PARSER_FORMAT + format, parser.getAttribute("class"));
+                    final List<Element> fs = toList(parser.getElementsByTagName("feature"));
+                    final List<String> fsv = fs.stream()
+                            .map(f -> f.getAttribute("name") + "=" + f.getAttribute("value"))
+                            .collect(Collectors.toList());
+                    if (!fsv.isEmpty()) {
+                        res.put(CONF_PARSER_FORMAT + format + ".features", fsv.stream().collect(Collectors.joining(PARAM_VALUE_SEPARATOR)));
+                    }
                 }
             }
         }

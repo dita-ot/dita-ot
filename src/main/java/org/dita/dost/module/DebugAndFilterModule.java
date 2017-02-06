@@ -58,30 +58,23 @@ import org.xml.sax.ext.LexicalHandler;
  * 
  * @author Zhang, Yuan Peng
  */
-public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
+public final class DebugAndFilterModule extends SourceReaderModule {
 
     private Mode processingMode;
     /** Generate {@code xtrf} and {@code xtrc} attributes */
     private boolean genDebugInfo;
     /** Absolute input map path. */
     private URI inputMap;
-    /** use grammar pool cache */
-    private boolean gramcache = true;
     private boolean setSystemId;
     /** Profiling is enabled. */
     private boolean profilingEnabled;
-    private boolean validate;
     private String transtype;
-    /** Absolute DITA-OT base path. */
-    private File ditaDir;
     private File ditavalFile;
     private FilterUtils filterUtils;
     /** Absolute path to current destination file. */
     private File outputFile;
     private Map<String, Map<String, Set<String>>> validateMap;
     private Map<String, Map<String, String>> defaultValueMap;
-    /** XMLReader instance for parsing dita file */
-    private XMLReader reader;
     /** Absolute path to current source file. */
     private URI currentFile;
     private Map<URI, Set<URI>> dic;
@@ -209,20 +202,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         }
     }
 
-    private XMLReader getXmlReader(final String format) throws SAXException {
-        for (final Map.Entry<String, String> e: parserMap.entrySet()) {
-            if (format != null && format.equals(e.getKey())) {
-                try {
-                    return (XMLReader) this.getClass().forName(e.getValue()).newInstance();
-                } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
-                    throw new SAXException(ex);
-                }
-            }
-        }
-        return reader;
-    }
-
-
     private void init() throws IOException, DITAOTException, SAXException {
         // Output subject schemas
         outputSubjectScheme();
@@ -250,35 +229,6 @@ public final class DebugAndFilterModule extends AbstractPipelineModuleImpl {
         initXmlReader();
 
         initFilters();
-    }
-    /**
-     * Init xml reader used for pipeline parsing.
-     */
-     private void initXmlReader() throws SAXException {
-        CatalogUtils.setDitaDir(ditaDir);
-        reader = XMLUtils.getXMLReader();
-        if (validate) {
-            reader.setFeature(FEATURE_VALIDATION, true);
-            try {
-                reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
-            } catch (final SAXNotRecognizedException e) {
-                // Not Xerces, ignore exception
-            }
-        }
-        reader.setFeature(FEATURE_NAMESPACE, true);
-        final CatalogResolver resolver = CatalogUtils.getCatalogResolver();
-        reader.setEntityResolver(resolver);
-        if (gramcache) {
-            final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
-            try {
-                reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
-                logger.info("Using Xerces grammar pool for DTD and schema caching.");
-            } catch (final NoClassDefFoundError e) {
-                logger.debug("Xerces not available, not using grammar caching");
-            } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
-                logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-            }
-        }
     }
 
     /**
