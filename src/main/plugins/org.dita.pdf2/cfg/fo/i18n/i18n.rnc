@@ -3,6 +3,8 @@
 # Copyright 2011 Jarno Elovirta
 #
 # See the accompanying LICENSE file for applicable license.
+datatypes xs = "http://www.w3.org/2001/XMLSchema-datatypes"
+
 configuration =
   ## Character set configuration
   element configuration {
@@ -20,10 +22,15 @@ character-set =
   element character-set {
     (character | character-range)*
   }
+## Allowed characters for configuration
+char =
+  xs:string {
+    pattern = "[\x{0009}\x{000A}\x{000D}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]"
+  }
 character =
   ## Character
   element character {
-    text
+    char
   }
 character-range =
   ## Character range
@@ -32,13 +39,13 @@ character-range =
     element start {
       ## Include character in range
       attribute include { "yes" | "no" },
-      text
+      char
     },
     ## Range end character
     element end {
       ## Include character in range
       attribute include { "yes" | "no" },
-      text
+      char
     }
   }
 start = configuration
