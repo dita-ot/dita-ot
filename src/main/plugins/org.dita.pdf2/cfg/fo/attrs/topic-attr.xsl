@@ -192,19 +192,14 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute-set name="topic__shortdesc" use-attribute-sets="body">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="section" use-attribute-sets="base-font">
-        <xsl:attribute name="line-height"><xsl:value-of select="$default-line-height"/></xsl:attribute>
+    <xsl:attribute-set name="section">
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="section__content">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="example" use-attribute-sets="base-font common.border">
-        <xsl:attribute name="line-height"><xsl:value-of select="$default-line-height"/></xsl:attribute>
+    <xsl:attribute-set name="example">
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
-        <xsl:attribute name="start-indent">36pt + from-parent(start-indent)</xsl:attribute>
-        <xsl:attribute name="end-indent">36pt</xsl:attribute>
-        <xsl:attribute name="padding">5pt</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="example__content">
     </xsl:attribute-set>
