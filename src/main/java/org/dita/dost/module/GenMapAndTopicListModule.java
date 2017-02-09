@@ -260,6 +260,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         }
         ditavalFile = toFile(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
         validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
+        if (!validate) {
+            final String msg = MessageUtils.getInstance().getMessage("DOTJ037W").toString();
+            logger.warn(msg);
+        }
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
         setSystemid = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
