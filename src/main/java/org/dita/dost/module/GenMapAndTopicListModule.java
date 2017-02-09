@@ -8,6 +8,7 @@
  */
 package org.dita.dost.module;
 
+import static java.util.Collections.EMPTY_MAP;
 import static org.dita.dost.reader.GenListModuleReader.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Configuration.*;
@@ -59,6 +60,7 @@ import org.dita.dost.writer.ExportAnchorsFilter.ExportAnchor;
 import org.dita.dost.writer.ProfilingFilter;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * This class extends AbstractPipelineModule, used to generate map and topic
@@ -68,7 +70,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * @author Wu, Zhi Qiang
  */
-public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
+public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     public static final String ELEMENT_STUB = "stub";
     /** Generate {@code xtrf} and {@code xtrc} attributes */
@@ -137,8 +139,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /** Absolute basedir for processing */
     private URI baseInputDir;
 
-    /** Absolute ditadir for processing */
-    private File ditaDir;
     /** Profiling is enabled. */
     private boolean profilingEnabled;
     /** Absolute path for filter file. */
@@ -146,12 +146,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     /** Number of directory levels base directory is adjusted. */
     private int uplevels = 0;
 
-    /** XMLReader instance for parsing dita file */
-    private XMLReader reader;
     private GenListModuleReader listFilter;
     private KeydefFilter keydefFilter;
     private ExportAnchorsFilter exportAnchorsFilter;
-    private boolean xmlValidate = true;
     private ContentHandler nullHandler;
     private FilterUtils filterUtils;
     private TempFileNameScheme tempFileNameScheme;
@@ -168,9 +165,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private final Map<URI, Set<URI>> schemeDictionary;
     private final Map<URI, URI> copyTo = new HashMap<>();
     private String transtype;
-
-    /** use grammar pool cache */
-    private boolean gramcache = true;
 
     private boolean setSystemid = true;
 
@@ -218,7 +212,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             parseInputParameters(input);
 
             initFilters();
-            initXMLReader(ditaDir, xmlValidate);
+            initXmlReader();
             
             addToWaitList(new Reference(rootFile));
             processWaitList();
@@ -258,43 +252,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         
         nullHandler = new DefaultHandler();
     }
-
-    /**
-     * Init xml reader used for pipeline parsing.
-     * 
-     * @param ditaDir absolute path to DITA-OT directory
-     * @param validate whether validate input file
-     * @throws SAXException parsing exception
-     */
-    private void initXMLReader(final File ditaDir, final boolean validate) throws SAXException {
-        reader = XMLUtils.getXMLReader();
-        // to check whether the current parsing file's href value is out of inputmap.dir
-        reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        if (validate) {
-            reader.setFeature(FEATURE_VALIDATION, true);
-            try {
-                reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
-            } catch (final SAXNotRecognizedException e) {
-                // Not Xerces, ignore exception
-            }
-        } else {
-            final String msg = MessageUtils.getInstance().getMessage("DOTJ037W").toString();
-            logger.warn(msg);
-        }
-        if (gramcache) {
-            final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
-            try {
-                reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
-                logger.info("Using Xerces grammar pool for DTD and schema caching.");
-            } catch (final NoClassDefFoundError e) {
-                logger.debug("Xerces not available, not using grammar caching");
-            } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
-                logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-            }
-        }
-        CatalogUtils.setDitaDir(ditaDir);
-        reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-    }
     
     private void parseInputParameters(final AbstractPipelineInput input) {
         ditaDir = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
@@ -302,7 +259,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
         }
         ditavalFile = toFile(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
-        xmlValidate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
+        validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
+        if (!validate) {
+            final String msg = MessageUtils.getInstance().getMessage("DOTJ037W").toString();
+            logger.warn(msg);
+        }
         transtype = input.getAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
         setSystemid = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAN_SETSYSTEMID));
@@ -486,7 +447,7 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         }
 
         if (!listFilter.isValidInput() && currentFile.equals(rootFile)) {
-            if (xmlValidate) {
+            if (validate) {
                 // stop the build if all content in the input file was filtered out.
                 throw new DITAOTException(MessageUtils.getInstance().getMessage("DOTJ022F", params).toString());
             } else {
@@ -499,19 +460,6 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         listFilter.reset();
         keydefFilter.reset();
 
-    }
-
-    private XMLReader getXmlReader(final String format) throws SAXException {
-        for (final Map.Entry<String, String> e: parserMap.entrySet()) {
-            if (format != null && format.equals(e.getKey())) {
-                try {
-                    return (XMLReader) this.getClass().forName(e.getValue()).newInstance();
-                } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
-                    throw new SAXException(ex);
-                }
-            }
-        }
-        return reader;
     }
 
     /**
