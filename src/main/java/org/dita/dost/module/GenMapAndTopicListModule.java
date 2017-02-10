@@ -173,6 +173,9 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
     private boolean gramcache = true;
 
     private boolean setSystemid = true;
+    /** Formats for source topics */
+    // XXX This is a hack to retain format. A better solution would be to keep the format with the source URI
+    private Map<URI, String> sourceFormat = new HashMap<>();
 
     /**
      * Create a new instance and do the initialization.
@@ -597,14 +600,8 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         if (listFilter.isDitaTopic()) {
             if (ref.format != null && !ref.format.equals(ATTR_FORMAT_VALUE_DITA)) {
                 assert currentFile.getFragment() == null;
-                final URI f = currentFile.normalize();
-                if (!fileinfos.containsKey(f)) {
-                    final FileInfo i = new FileInfo.Builder()
-                            //.uri(tempFileNameScheme.generateTempFileName(currentFile))
-                            .src(currentFile)
-                            .format(ref.format)
-                            .build();
-                    fileinfos.put(i.src, i);
+                if (!sourceFormat.containsKey(currentFile)) {
+                    sourceFormat.put(currentFile, ref.format);
                 }
             }
             fullTopicSet.add(currentFile);
@@ -786,7 +783,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
         for (final URI file: fullTopicSet) {
             final FileInfo ff = getOrCreateFileInfo(fileinfos, file);
             if (ff.format == null) {
-                ff.format = ATTR_FORMAT_VALUE_DITA;
+                if (sourceFormat.containsKey(ff.src)) {
+                    ff.format = sourceFormat.get(ff.src);
+                } else {
+                    ff.format = ATTR_FORMAT_VALUE_DITA;
+                }
             }
         }
         for (final URI file: fullMapSet) {
@@ -796,7 +797,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             }
         }
         for (final URI file: hrefTopicSet) {
-            getOrCreateFileInfo(fileinfos, file).hasLink = true;
+            final FileInfo f = getOrCreateFileInfo(fileinfos, file);
+            f.hasLink = true;
+            if (f.format == null && sourceFormat.containsKey(f.src)) {
+                f.format = sourceFormat.get(f.src);
+            }
         }
         for (final URI file: conrefSet) {
             getOrCreateFileInfo(fileinfos, file).hasConref = true;
@@ -813,7 +818,11 @@ public final class GenMapAndTopicListModule extends AbstractPipelineModuleImpl {
             getOrCreateFileInfo(fileinfos, file).format = ATTR_FORMAT_VALUE_HTML;
         }
         for (final URI file: hrefTargetSet) {
-            getOrCreateFileInfo(fileinfos, file).isTarget = true;
+            final FileInfo f = getOrCreateFileInfo(fileinfos, file);
+            f.isTarget = true;
+            if (f.format == null && sourceFormat.containsKey(f.src)) {
+                f.format = sourceFormat.get(f.src);
+            }
         }
         for (final URI file: schemeSet) {
             getOrCreateFileInfo(fileinfos, file).isSubjectScheme = true;
