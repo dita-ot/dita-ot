@@ -16,6 +16,7 @@ import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.module.AbstractPipelineModule;
+import org.dita.dost.module.ModuleFactory;
 import org.dita.dost.module.XmlFilterModule;
 import org.dita.dost.module.XmlFilterModule.FilterPair;
 import org.dita.dost.module.XsltModule;
@@ -45,6 +46,7 @@ import static org.dita.dost.util.Constants.*;
  */
 public final class ExtensibleAntInvoker extends Task {
     
+    private final ModuleFactory factory = ModuleFactory.instance();
     /** Pipeline. */
     private final PipelineFacade pipeline;
     /** Pipeline attributes and parameters */
@@ -218,8 +220,12 @@ public final class ExtensibleAntInvoker extends Task {
                             pipelineInput.setAttribute(p.getName(), p.getValue());
                         }
                     }
+                    final AbstractPipelineModule module = factory.createModule(m.getImplementation());
+                    if (!m.fileInfoFilters.isEmpty()) {
+                        module.setFileInfoFilter(combine(m.fileInfoFilters));
+                    }
                     start = System.currentTimeMillis();
-                    pipeline.execute(m.getImplementation(), pipelineInput);
+                    pipeline.execute(module, pipelineInput);
                     end = System.currentTimeMillis();
                 }
                 logger.debug("Module processing took " + (end - start) + " ms");
@@ -309,6 +315,7 @@ public final class ExtensibleAntInvoker extends Task {
        
         public final List<Param> params = new ArrayList<>();
         private Class<? extends AbstractPipelineModule> cls;
+        public final Collection<FileInfoFilter> fileInfoFilters = new ArrayList<>();
         
         public void setClass(final Class<? extends AbstractPipelineModule> cls) {
             this.cls = cls;
@@ -318,6 +325,10 @@ public final class ExtensibleAntInvoker extends Task {
             params.add(p);
         }
         
+        public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
+            fileInfoFilters.add(fileInfoFilter);
+        }
+
         public Class<? extends AbstractPipelineModule> getImplementation() {
             return cls;
         }
@@ -334,7 +345,6 @@ public final class ExtensibleAntInvoker extends Task {
         private File destDir;
         private File in;
         private File out;
-        private final Collection<FileInfoFilter> fileInfoFilters = new ArrayList<>();
         private final List<IncludesFile> includes = new ArrayList<>();
         private final List<IncludesFile> excludes = new ArrayList<>();
         private Mapper mapper;
@@ -406,10 +416,6 @@ public final class ExtensibleAntInvoker extends Task {
         
         public void addConfiguredMapper(final Mapper mapper) {
             this.mapper = mapper;
-        }
-
-        public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
-            fileInfoFilters.add(fileInfoFilter);
         }
 
         public void addConfiguredIncludesFile(final IncludesFile includesFile) {

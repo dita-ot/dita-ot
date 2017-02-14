@@ -28,14 +28,15 @@ public abstract class AbstractPipelineModuleImpl implements AbstractPipelineModu
     public void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
     }
-    
+
     @Override
     public void setJob(final Job job) {
         this.job = job;
     }
-    
+
     abstract public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException;
 
+    @Override
     public void setFileInfoFilter(Filter<FileInfo> fileInfoFilter) {
         this.fileInfoFilter = fileInfoFilter;
     }
