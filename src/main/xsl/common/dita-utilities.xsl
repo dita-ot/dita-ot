@@ -140,13 +140,13 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <xsl:template match="variable" mode="processVariableBody">
-    <xsl:param name="params"/>
+    <xsl:param name="params" as="node()*"/>
     
     <xsl:for-each select="node()">
       <xsl:choose>
         <xsl:when test="self::param">
-          <xsl:variable name="param-name" select="@ref-name"/>
-          <xsl:copy-of select="$params[name() = $param-name]/node()"/>
+          <xsl:variable name="param-name" select="@ref-name" as="xs:string"/>
+          <xsl:copy-of select="$params/descendant-or-self::*[name() = $param-name]/node()"/>
         </xsl:when>
         <xsl:when test="self::variableref">
           <xsl:call-template name="getVariable">
