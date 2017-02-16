@@ -17,6 +17,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.Job.FileInfo.Filter;
 import org.dita.dost.writer.ImageMetadataFilter;
 
 /**
@@ -48,10 +49,11 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
         final ImageMetadataFilter writer = new ImageMetadataFilter(outputDir, job);
         writer.setLogger(logger);
         writer.setJob(job);
-        for (final FileInfo f: job.getFileInfo()) {
-            if (!f.isResourceOnly && ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
-                writer.write(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
-            }
+        final Filter<FileInfo> filter = fileInfoFilter != null
+                ? fileInfoFilter
+                : f -> !f.isResourceOnly && ATTR_FORMAT_VALUE_DITA.equals(f.format);
+        for (final FileInfo f: job.getFileInfo(filter)) {
+            writer.write(new File(job.tempDir, f.file.getPath()).getAbsoluteFile());
         }
 
         storeImageFormat(writer.getImages(), outputDir);
