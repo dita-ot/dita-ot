@@ -56,4 +56,21 @@ public class ProcessorTest {
                 .run();
     }
 
+
+    @Test(expected = org.dita.dost.exception.DITAOTException.class)
+    public void testBroken() throws DITAOTException {
+        final File mapFile;
+        final File out;
+        try {
+            mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/broken.dita").toURI());
+            out = tmpDir.newFolder("out");
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        p.setInput(mapFile)
+                .setOutput(out)
+                .setLogger(NOPLogger.NOP_LOGGER)
+                .run();
+    }
+
 }
