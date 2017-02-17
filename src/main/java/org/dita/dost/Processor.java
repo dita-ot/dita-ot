@@ -3,6 +3,7 @@ package org.dita.dost;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.LoggerListener;
 import org.slf4j.Logger;
 
@@ -125,9 +126,9 @@ public final class Processor {
     /**
      * Run process
      *
-     * @throws BuildException if processing failed
+     * @throws DITAOTException if processing failed
      */
-    public void run() {
+    public void run() throws DITAOTException {
         if (!args.containsKey("args.input")) {
             throw new IllegalStateException();
         }
@@ -152,7 +153,7 @@ public final class Processor {
             targets.addElement(project.getDefaultTarget());
             project.executeTargets(targets);
         } catch (final BuildException e) {
-            throw e;
+            throw new DITAOTException(e);
         } finally {
             System.setOut(savedOut);
             System.setErr(savedErr);

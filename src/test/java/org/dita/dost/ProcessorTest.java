@@ -1,5 +1,6 @@
 package org.dita.dost;
 
+import org.dita.dost.exception.DITAOTException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -7,6 +8,8 @@ import org.junit.rules.TemporaryFolder;
 import org.slf4j.helpers.NOPLogger;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import static org.junit.Assert.fail;
 
@@ -38,10 +41,17 @@ public class ProcessorTest {
     }
 
     @Test
-    public void testRun() throws Exception {
-        final File mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/test.ditamap").toURI());
+    public void testRun() throws DITAOTException {
+        final File mapFile;
+        final File out;
+        try {
+            mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/test.ditamap").toURI());
+            out = tmpDir.newFolder("out");
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
+        }
         p.setInput(mapFile)
-                .setOutput(tmpDir.newFolder("out"))
+                .setOutput(out)
                 .setLogger(NOPLogger.NOP_LOGGER)
                 .run();
     }
