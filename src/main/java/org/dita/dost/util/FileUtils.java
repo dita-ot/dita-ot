@@ -623,7 +623,6 @@ public final class FileUtils {
      * @param directory the file to consider as the parent
      * @param child the file to consider as the child
      * @return true is the candidate leaf is under by the specified composite, otherwise false
-     * @throws IOException
      */
     public static boolean directoryContains(final File directory, final File child) {
         final File d = new File(normalize(directory.getAbsolutePath()));

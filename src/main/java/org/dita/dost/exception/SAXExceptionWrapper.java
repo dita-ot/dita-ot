@@ -22,7 +22,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
 
     /** Generated serial id. */
     private static final long serialVersionUID = -8266265000662519966L;
-    /** Message & location. */
+    /** Message &amp; location. */
     String messageWithLocation;
     /** SAX parse exception. */
     private SAXParseException saxParseException;

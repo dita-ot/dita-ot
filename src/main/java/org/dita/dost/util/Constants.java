@@ -941,7 +941,7 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_NAME = "name";
     /**type attribute value subjectScheme.*/
     public static final String ATTR_TYPE_VALUE_SUBJECT_SCHEME = "subjectScheme";
-    /**store how many scheme files a ditamap file used in form of Map<String, Set<String>>.*/
+    /**store how many scheme files a ditamap file used in form of {@code Map&lt;String, Set&lt;String>>}.*/
     public static final String FILE_NAME_SUBJECT_DICTIONARY = "subject_scheme.dictionary";
     /**export.xml to store exported elements.*/
     public static final String FILE_NAME_EXPORT_XML = "export.xml";

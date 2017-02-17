@@ -64,7 +64,7 @@ public final class XMLUtils {
      * @param elem root element
      * @param cls DITA class to match elements
      * @param deep {@code true} to read descendants, {@code false} to read only direct children
-     * @raturn list of matching elements
+     * @return list of matching elements
      */
     public static List<Element> getChildElements(final Element elem, final DitaClass cls, final boolean deep) {
         final NodeList children = deep ? elem.getElementsByTagName("*") : elem.getChildNodes();
@@ -83,7 +83,7 @@ public final class XMLUtils {
      *
      * @param elem root element
      * @param cls DITA class to match elements
-     * @raturn list of matching elements
+     * @return list of matching elements
      */
     public static List<Element> getChildElements(final Element elem, final DitaClass cls) {
         return getChildElements(elem, cls, false);
@@ -93,7 +93,7 @@ public final class XMLUtils {
      * List child elements elements.
      *
      * @param elem root element
-     * @raturn list of matching elements
+     * @return list of matching elements
      */
     public static List<Element> getChildElements(final Element elem) {
         return getChildElements(elem, false);
@@ -104,7 +104,7 @@ public final class XMLUtils {
      *
      * @param elem root element
      * @param deep {@code true} to read descendants, {@code false} to read only direct children
-     * @raturn list of matching elements
+     * @return list of matching elements
      */
     public static List<Element> getChildElements(final Element elem, final boolean deep) {
         final NodeList children = deep ? elem.getElementsByTagName("*") : elem.getChildNodes();

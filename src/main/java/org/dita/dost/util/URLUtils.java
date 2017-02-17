@@ -417,7 +417,7 @@ public final class URLUtils {
     /**
      * Convert URI reference to system file path.
      * 
-     * @filename URI to convert to system file path, may be relative or absolute
+     * @param filename URI to convert to system file path, may be relative or absolute
      * @return file path, {@code null} if input was {@code null}
      */
     public static File toFile(final URI filename) {
@@ -454,7 +454,7 @@ public final class URLUtils {
 
     /**
      * Covert file reference to URI. The difference between this method and
-     * {@link java.net.URI(java.io.File)} constructor is that this
+     * {@link java.io.File#File(URI)})} constructor is that this
      * method doesn't make the URI absolute.
      * 
      * @param file system path to convert to a URI, may be {@code null}
@@ -505,7 +505,6 @@ public final class URLUtils {
      * @param directory the file to consider as the parent
      * @param child the file to consider as the child
      * @return true is the candidate leaf is under by the specified composite, otherwise false
-     * @throws IOException
      */
     public static boolean directoryContains(final URI directory, final URI child) {
         final String d = directory.normalize().toString();
