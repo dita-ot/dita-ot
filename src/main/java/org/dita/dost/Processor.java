@@ -1,5 +1,6 @@
 package org.dita.dost;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
@@ -8,6 +9,7 @@ import org.dita.dost.log.LoggerListener;
 import org.slf4j.Logger;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ public final class Processor {
     private File ditaDir;
     private Map<String, String> args;
     private Logger logger;
+    private boolean cleanOnFailure = true;
 
     Processor(final File ditaDir, final String transtype, final Map<String, String> args) {
         this.ditaDir = ditaDir;
@@ -124,6 +127,17 @@ public final class Processor {
     }
 
     /**
+     * Clean temporary directory when process fails. By default temporary directory is always cleaned.
+     *
+     * @param cleanOnFailure clean on failure
+     * @return this Process object
+     */
+    public Processor cleanOnFailure(final boolean cleanOnFailure) {
+        this.cleanOnFailure = cleanOnFailure;
+        return this;
+    }
+
+    /**
      * Run process
      *
      * @throws DITAOTException if processing failed
@@ -132,6 +146,9 @@ public final class Processor {
         if (!args.containsKey("args.input")) {
             throw new IllegalStateException();
         }
+        final File tempDir = getTempDir();
+        args.put("dita.temp.dir", tempDir.getAbsolutePath());
+
         final PrintStream savedErr = System.err;
         final PrintStream savedOut = System.out;
         try {
@@ -150,14 +167,39 @@ public final class Processor {
             }
             ProjectHelper.configureProject(project, buildFile);
             final Vector<String> targets = new Vector<>();
-            targets.addElement(project.getDefaultTarget());
+//            targets.addElement(project.getDefaultTarget());
+            targets.addElement("dita2" + args.get("transtype"));
             project.executeTargets(targets);
+            try {
+                FileUtils.forceDelete(tempDir);
+            } catch (final IOException ex) {
+                logger.error("Failed to delete temporary directory " + tempDir);
+            }
         } catch (final BuildException e) {
+            if (cleanOnFailure) {
+                try {
+                    FileUtils.forceDelete(tempDir);
+                } catch (final IOException ex) {
+                    logger.error("Failed to delete temporary directory " + tempDir);
+                }
+            }
             throw new DITAOTException(e);
         } finally {
             System.setOut(savedOut);
             System.setErr(savedErr);
         }
+    }
+
+    private File getTempDir() {
+        final File baseTempDir = new File(args.get("base.temp.dir"));
+        File tempDir;
+        for (int i = 0; i < 10; i++) {
+            tempDir = new File(baseTempDir, Long.toString(System.currentTimeMillis()));
+            if (!tempDir.exists()) {
+                return tempDir;
+            }
+        }
+        throw new RuntimeException("Unable to create temporary directory");
     }
 
 }
