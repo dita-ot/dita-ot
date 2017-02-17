@@ -70,6 +70,7 @@ public final class Integrator {
     private static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
     /** Feature name for print transformation types. */
     private static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
+    private static final String FEAT_TRANSTYPES = "dita.conductor.transtype.check";
     private static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
     private static final String ELEM_PLUGINS = "plugins";
 
@@ -259,6 +260,14 @@ public final class Integrator {
         // extensions
         configuration.put(CONF_SUPPORTED_HTML_EXTENSIONS, readExtensions(FEAT_HTML_EXTENSIONS));
         configuration.put(CONF_SUPPORTED_RESOURCE_EXTENSIONS, readExtensions(FEAT_RESOURCE_EXTENSIONS));
+
+        // transtypes
+        final String transtypes = featureTable.entrySet().stream()
+                .filter(e -> e.getKey().equals(FEAT_TRANSTYPES))
+                .flatMap(e -> e.getValue().stream())
+                .distinct()
+                .collect(Collectors.joining(CONF_LIST_SEPARATOR));
+        configuration.put(CONF_TRANSTYPES, transtypes);
 
         // print transtypes
         final Set<String> printTranstypes = new HashSet<>();

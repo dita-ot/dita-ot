@@ -1,5 +1,7 @@
 package org.dita.dost;
 
+import org.dita.dost.util.Configuration;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
@@ -51,6 +53,9 @@ public final class ProcessorFactory {
     public Processor newProcessor(final String transtype) {
         if (ditaDir == null) {
             throw new IllegalStateException();
+        }
+        if (!Configuration.transtypes.contains(transtype)) {
+            throw new IllegalArgumentException("Transtype " + transtype + " not supported");
         }
         return new Processor(ditaDir, transtype, Collections.unmodifiableMap(args));
     }

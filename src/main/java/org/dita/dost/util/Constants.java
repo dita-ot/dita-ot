@@ -962,6 +962,7 @@ public final class Constants {
     public static final String CONF_SUPPORTED_RESOURCE_EXTENSIONS = "supported_resource_extensions";
     /** Property name for print transtypes. */
     public static final String CONF_PRINT_TRANSTYPES = "print_transtypes";
+    public static final String CONF_TRANSTYPES = "transtypes";
     /** Property name for template files. */
     public static final String CONF_TEMPLATES = "templates";
     /** Plugin configuration file name. */

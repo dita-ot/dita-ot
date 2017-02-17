@@ -132,6 +132,23 @@ public final class Configuration {
         printTranstype = Collections.unmodifiableList(types);
     }
 
+    /** List of transtypes. */
+    public static final List<String> transtypes;
+    static {
+        final List<String> types = new ArrayList<>();
+        final String printTranstypes = Configuration.configuration.get(CONF_TRANSTYPES);
+        if (printTranstypes != null) {
+            if (printTranstypes.trim().length() > 0) {
+                for (final String transtype: printTranstypes.split(CONF_LIST_SEPARATOR)) {
+                    types.add(transtype.trim());
+                }
+            }
+        } else {
+            logger.error("Failed to read transtypes from configuration, using empty list.");
+        }
+        transtypes = Collections.unmodifiableList(types);
+    }
+
     /** Map of plug-in resource directories. */
     public static final Map<String, File> pluginResourceDirs;
     static {
