@@ -27,7 +27,8 @@ public class ProcessorTest {
             ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
         }
         final ProcessorFactory pf = ProcessorFactory.newInstance(new File(ditaDir));
-        pf.setTempDir(tmpDir.newFolder("tmp"));
+//        pf.setTempDir(tmpDir.newFolder("tmp"));
+        pf.setTempDir(new File("/Volumes/tmp/test/temp"));
         p = pf.newProcessor("html5");
     }
 

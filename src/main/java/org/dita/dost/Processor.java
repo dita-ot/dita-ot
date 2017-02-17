@@ -1,5 +1,9 @@
 package org.dita.dost;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.core.FileAppender;
 import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -10,7 +14,6 @@ import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -148,16 +151,20 @@ public final class Processor {
         }
         final File tempDir = getTempDir();
         args.put("dita.temp.dir", tempDir.getAbsolutePath());
+        boolean cleanTemp = true;
 
-        final PrintStream savedErr = System.err;
-        final PrintStream savedOut = System.out;
+        final ch.qos.logback.classic.Logger debugLogger = openDebugLogger(tempDir);
+
         try {
             final File buildFile = new File(ditaDir, "build.xml");
             final Project project = new Project();
             project.setCoreLoader(this.getClass().getClassLoader());
+
             if (logger != null) {
                 project.addBuildListener(new LoggerListener(logger));
             }
+            project.addBuildListener(new LoggerListener(debugLogger));
+
             project.fireBuildStarted();
             project.init();
             project.setBaseDir(ditaDir);
@@ -170,24 +177,46 @@ public final class Processor {
 //            targets.addElement(project.getDefaultTarget());
             targets.addElement("dita2" + args.get("transtype"));
             project.executeTargets(targets);
-            try {
-                FileUtils.forceDelete(tempDir);
-            } catch (final IOException ex) {
-                logger.error("Failed to delete temporary directory " + tempDir);
-            }
         } catch (final BuildException e) {
-            if (cleanOnFailure) {
+            cleanTemp = cleanOnFailure;
+            throw new DITAOTException(e);
+        } finally {
+            closeDebugLogger(debugLogger);
+            if (cleanTemp) {
                 try {
                     FileUtils.forceDelete(tempDir);
                 } catch (final IOException ex) {
                     logger.error("Failed to delete temporary directory " + tempDir);
                 }
             }
-            throw new DITAOTException(e);
-        } finally {
-            System.setOut(savedOut);
-            System.setErr(savedErr);
         }
+    }
+
+    private ch.qos.logback.classic.Logger openDebugLogger(File tempDir) {
+        final LoggerContext loggerContext = new LoggerContext();
+
+        final FileAppender fileAppender = new FileAppender();
+        fileAppender.setFile(new File(tempDir.getAbsolutePath() + ".log").getAbsolutePath());
+        fileAppender.setContext(loggerContext);
+        fileAppender.setAppend(false);
+        fileAppender.setImmediateFlush(true);
+
+        final PatternLayoutEncoder encoder = new PatternLayoutEncoder();
+        encoder.setContext(loggerContext);
+        encoder.setPattern("%-4relative [%-5level] %msg%n");
+        encoder.start();
+
+        fileAppender.setEncoder(encoder);
+        fileAppender.start();
+
+        final ch.qos.logback.classic.Logger debugLogger = loggerContext.getLogger(getClass().getCanonicalName() + "_"  + System.currentTimeMillis());
+        debugLogger.addAppender(fileAppender);
+        debugLogger.setLevel(Level.DEBUG);
+        return debugLogger;
+    }
+
+    private void closeDebugLogger(ch.qos.logback.classic.Logger debugLogger) {
+        debugLogger.detachAndStopAllAppenders();
     }
 
     private File getTempDir() {
@@ -196,7 +225,17 @@ public final class Processor {
         for (int i = 0; i < 10; i++) {
             tempDir = new File(baseTempDir, Long.toString(System.currentTimeMillis()));
             if (!tempDir.exists()) {
-                return tempDir;
+                try {
+                    FileUtils.forceMkdir(tempDir);
+                    return tempDir;
+                } catch (IOException e) {
+                    // Ignore
+                }
+            }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                // Ignore
             }
         }
         throw new RuntimeException("Unable to create temporary directory");
