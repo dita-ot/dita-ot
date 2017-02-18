@@ -32,12 +32,11 @@ dependencies {
     compile group: 'org.apache.ant', name: 'ant-launcher', version:'1.9.7'
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.23'
-    runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.9.7'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.1'
+    runtime group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.9.7'
     testCompile group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'xmlunit', name: 'xmlunit', version:'1.6'
-    testCompile group: 'org.slf4j', name: 'slf4j-simple', version:'1.7.23'
 }
 
 jar.archiveName = "${project.name}.jar"

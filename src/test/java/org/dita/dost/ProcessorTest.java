@@ -1,24 +1,28 @@
 package org.dita.dost;
 
+import org.apache.tools.ant.BuildException;
 import org.dita.dost.exception.DITAOTException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.slf4j.helpers.NOPLogger;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class ProcessorTest {
 
     @Rule
-    public final TemporaryFolder tmpDir = new TemporaryFolder();
+    public final TemporaryFolder tempDirGenerator = new TemporaryFolder();
 
     private Processor p;
+    private File tempDir;
 
     @Before
     public void setUp() throws Exception {
@@ -27,8 +31,9 @@ public class ProcessorTest {
             ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
         }
         final ProcessorFactory pf = ProcessorFactory.newInstance(new File(ditaDir));
-//        pf.setTempDir(tmpDir.newFolder("tmp"));
-        pf.setTempDir(new File("/Volumes/tmp/test/temp"));
+
+        tempDir = tempDirGenerator.newFolder("tmp");
+        pf.setTempDir(tempDir);
         p = pf.newProcessor("html5");
     }
 
@@ -47,13 +52,12 @@ public class ProcessorTest {
         final File out;
         try {
             mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/test.ditamap").toURI());
-            out = tmpDir.newFolder("out");
+            out = tempDirGenerator.newFolder("out");
         } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
         p.setInput(mapFile)
                 .setOutput(out)
-                .setLogger(NOPLogger.NOP_LOGGER)
                 .run();
     }
 
@@ -64,14 +68,39 @@ public class ProcessorTest {
         final File out;
         try {
             mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/broken.dita").toURI());
-            out = tmpDir.newFolder("out");
+            out = tempDirGenerator.newFolder("out");
         } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
-        p.setInput(mapFile)
-                .setOutput(out)
-                .setLogger(NOPLogger.NOP_LOGGER)
-                .run();
+        try {
+            p.setInput(mapFile)
+                    .setOutput(out)
+                    .run();
+        } catch (Exception e) {
+            assertTrue(tempDir.exists());
+            throw e;
+        }
+    }
+
+    @Test(expected = org.dita.dost.exception.DITAOTException.class)
+    public void testCleanTempOnFailure() throws DITAOTException {
+        final File mapFile;
+        final File out;
+        try {
+            mapFile = new File(getClass().getClassLoader().getResource("ProcessorTest/broken.dita").toURI());
+            out = tempDirGenerator.newFolder("out");
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            p.setInput(mapFile)
+                    .setOutput(out)
+                    .cleanOnFailure(false)
+                    .run();
+        } catch (BuildException e) {
+            assertFalse(tempDir.exists());
+            throw e;
+        }
     }
 
 }
