@@ -107,7 +107,12 @@ public final class Configuration {
 
     /** Processing mode */
     public enum Mode {
-        STRICT, SKIP, LAX
+        /** Processing fails on error. */
+        STRICT,
+        /** Processing continues after error and will not attempt error recovery */
+        SKIP,
+        /** Processing continues after error with error recovery */
+        LAX
     }
     
     /** Private constructor to disallow instance creation. */

@@ -10,6 +10,8 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.LoggerListener;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.util.Configuration.Mode;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -44,7 +46,10 @@ public final class Processor {
      */
     public Processor setInput(final File input) {
         if (!input.isAbsolute()) {
-            throw new IllegalArgumentException("Input file path must be absolute");
+            throw new IllegalArgumentException("Input file path must be absolute: " + input);
+        }
+        if (!input.isFile()) {
+            throw new IllegalArgumentException("Input file is not a file: " + input);
         }
         setInput(input.toURI());
         return this;
@@ -58,7 +63,7 @@ public final class Processor {
      */
     public Processor setInput(final URI input) {
         if (!input.isAbsolute()) {
-            throw new IllegalArgumentException("Input file URI must be absolute");
+            throw new IllegalArgumentException("Input file URI must be absolute: " + input);
         }
         args.put("args.input", input.toString());
         return this;
@@ -70,9 +75,12 @@ public final class Processor {
      * @param output absolute output directory
      * @return this Process object
      */
-    public Processor setOutput(final File output) {
+    public Processor setOutputDir(final File output) {
         if (!output.isAbsolute()) {
-            throw new IllegalArgumentException("Output directory path must be absolute");
+            throw new IllegalArgumentException("Output directory path must be absolute: " + output);
+        }
+        if (output.exists() && !output.isDirectory()) {
+            throw new IllegalArgumentException("Output directory exists and is not a directory: " + output);
         }
         args.put("output.dir", output.getAbsolutePath());
         return this;
@@ -84,12 +92,12 @@ public final class Processor {
      * @param output absolute output directory URI
      * @return this Process object
      */
-    public Processor setOutput(final URI output) {
+    public Processor setOutputDir(final URI output) {
         if (!output.isAbsolute()) {
-            throw new IllegalArgumentException("Output directory URI must be absolute");
+            throw new IllegalArgumentException("Output directory URI must be absolute: " + output);
         }
         if (!output.getScheme().equals("file")) {
-            throw new IllegalArgumentException("Only file scheme allowed as output directory URI");
+            throw new IllegalArgumentException("Only file scheme allowed as output directory URI: " + output);
         }
         args.put("output.dir", output.toString());
         return this;
@@ -141,13 +149,27 @@ public final class Processor {
     }
 
     /**
+     * Set error recovery mode.
+     *
+     * @param mode processing mode
+     * @return this Process object
+     */
+    public Processor setMode(final Mode mode) {
+        args.put("processing-mode", mode.toString().toLowerCase());
+        return this;
+    }
+
+    /**
      * Run process
      *
      * @throws DITAOTException if processing failed
      */
     public void run() throws DITAOTException {
         if (!args.containsKey("args.input")) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Input file not set");
+        }
+        if (!args.containsKey("output.dir")) {
+            throw new IllegalStateException("Output directory not set");
         }
         final File tempDir = getTempDir();
         args.put("dita.temp.dir", tempDir.getAbsolutePath());

@@ -57,7 +57,7 @@ public class ProcessorTest {
             throw new RuntimeException(e);
         }
         p.setInput(mapFile)
-                .setOutput(out)
+                .setOutputDir(out)
                 .run();
     }
 
@@ -74,7 +74,7 @@ public class ProcessorTest {
         }
         try {
             p.setInput(mapFile)
-                    .setOutput(out)
+                    .setOutputDir(out)
                     .run();
         } catch (Exception e) {
             assertTrue(tempDir.exists());
@@ -94,7 +94,7 @@ public class ProcessorTest {
         }
         try {
             p.setInput(mapFile)
-                    .setOutput(out)
+                    .setOutputDir(out)
                     .cleanOnFailure(false)
                     .run();
         } catch (BuildException e) {
