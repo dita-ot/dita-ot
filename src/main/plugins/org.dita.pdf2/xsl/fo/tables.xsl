@@ -485,12 +485,12 @@ See the accompanying LICENSE file for applicable license.
                     provisional-distance-between-starts="{concat($charoff, '%')}">
                     <fo:list-item>
                         <fo:list-item-label end-indent="label-end()">
-                            <fo:block text-align="right">
+                            <fo:block text-align="end">
                                 <xsl:copy-of select="$text-before"/>
                             </fo:block>
                         </fo:list-item-label>
                         <fo:list-item-body start-indent="body-start()">
-                            <fo:block text-align="left">
+                            <fo:block text-align="start">
                                 <xsl:copy-of select="$text-after"/>
                             </fo:block>
                         </fo:list-item-body>

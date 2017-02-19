@@ -44,6 +44,6 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__glossary__def">
-        <xsl:attribute name="margin-left"><xsl:value-of select="$side-col-width"/></xsl:attribute>
+        <xsl:attribute name="start-indent" select="$side-col-width"/>
     </xsl:attribute-set>
 </xsl:stylesheet>

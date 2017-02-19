@@ -110,7 +110,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="link__shortdesc" use-attribute-sets="base-font">
-        <xsl:attribute name="margin-left">15pt</xsl:attribute>
+        <xsl:attribute name="start-indent">15pt</xsl:attribute>
         <xsl:attribute name="space-after">5pt</xsl:attribute>
     </xsl:attribute-set>
 

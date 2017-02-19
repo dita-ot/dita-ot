@@ -37,8 +37,8 @@ See the accompanying LICENSE file for applicable license.
     version="2.0">
 
     <xsl:attribute-set name="tm">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="tm__content">
@@ -69,8 +69,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:attribute-set name="topic.title__content">
         <xsl:attribute name="line-height">100%</xsl:attribute>
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     </xsl:attribute-set>
 
@@ -85,8 +85,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic.topic.title__content">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic.topic.topic.title" use-attribute-sets="common.title">
@@ -205,8 +205,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="desc">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="prolog" use-attribute-sets="base-font">
@@ -222,7 +222,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:attribute-set name="lq" use-attribute-sets="base-font common.border">
         <xsl:attribute name="space-before">10pt</xsl:attribute>
-        <xsl:attribute name="padding-left">6pt</xsl:attribute>
+        <xsl:attribute name="padding-start">6pt</xsl:attribute>
         <xsl:attribute name="start-indent">92pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
         <xsl:attribute name="text-align">start</xsl:attribute>
@@ -231,7 +231,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute-set name="lq_simple" use-attribute-sets="base-font common.border">
         <xsl:attribute name="space-before">10pt</xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
-        <xsl:attribute name="padding-left">6pt</xsl:attribute>
+        <xsl:attribute name="padding-start">6pt</xsl:attribute>
         <xsl:attribute name="start-indent">92pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
         <xsl:attribute name="text-align">start</xsl:attribute>
@@ -253,13 +253,13 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="q">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="figgroup">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="note" use-attribute-sets="common.block">
@@ -278,7 +278,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="note__image__entry">
-        <xsl:attribute name="padding-right">5pt</xsl:attribute>
+        <xsl:attribute name="padding-end">5pt</xsl:attribute>
         <xsl:attribute name="start-indent">0pt</xsl:attribute>
     </xsl:attribute-set>
 
@@ -287,8 +287,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="note__label">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
@@ -345,12 +345,12 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__border__right" use-attribute-sets="common.border__right">
-      <xsl:attribute name="padding-right">6pt</xsl:attribute>
+      <xsl:attribute name="padding-end">6pt</xsl:attribute>
       <xsl:attribute name="end-indent">6pt + from-parent(end-indent)</xsl:attribute>
     </xsl:attribute-set>
   
     <xsl:attribute-set name="__border__left" use-attribute-sets="common.border__left">
-      <xsl:attribute name="padding-left">6pt</xsl:attribute>
+      <xsl:attribute name="padding-start">6pt</xsl:attribute>
       <xsl:attribute name="start-indent">6pt + from-parent(start-indent)</xsl:attribute>
     </xsl:attribute-set>
 
@@ -396,30 +396,30 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="keyword">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="term">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
         <xsl:attribute name="font-style">italic</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="ph">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="boolean">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
         <xsl:attribute name="color">green</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="state">
-        <xsl:attribute name="border-left-width">0pt</xsl:attribute>
-        <xsl:attribute name="border-right-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-start-width">0pt</xsl:attribute>
+        <xsl:attribute name="border-end-width">0pt</xsl:attribute>
         <xsl:attribute name="color">red</xsl:attribute>
     </xsl:attribute-set>
 
