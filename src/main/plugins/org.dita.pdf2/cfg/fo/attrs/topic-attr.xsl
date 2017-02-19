@@ -220,36 +220,18 @@ See the accompanying LICENSE file for applicable license.
         <xsl:attribute name="text-indent">0em</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="lq" use-attribute-sets="base-font common.border">
-        <xsl:attribute name="space-before">10pt</xsl:attribute>
-        <xsl:attribute name="padding-start">6pt</xsl:attribute>
-        <xsl:attribute name="start-indent">92pt</xsl:attribute>
-        <xsl:attribute name="end-indent">92pt</xsl:attribute>
-        <xsl:attribute name="text-align">start</xsl:attribute>
+    <xsl:attribute-set name="lq" use-attribute-sets="common.block">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="lq_simple" use-attribute-sets="base-font common.border">
-        <xsl:attribute name="space-before">10pt</xsl:attribute>
-        <xsl:attribute name="space-after">10pt</xsl:attribute>
-        <xsl:attribute name="padding-start">6pt</xsl:attribute>
-        <xsl:attribute name="start-indent">92pt</xsl:attribute>
-        <xsl:attribute name="end-indent">92pt</xsl:attribute>
-        <xsl:attribute name="text-align">start</xsl:attribute>
+    <xsl:attribute-set name="lq_simple" use-attribute-sets="common.block">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq_link" use-attribute-sets="base-font common.link">
-        <xsl:attribute name="space-after">10pt</xsl:attribute>
-        <xsl:attribute name="end-indent">92pt</xsl:attribute>
         <xsl:attribute name="text-align">end</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="lq_title" use-attribute-sets="base-font">
-        <xsl:attribute name="space-after">10pt</xsl:attribute>
-        <xsl:attribute name="end-indent">92pt</xsl:attribute>
+    <xsl:attribute-set name="lq_title">
         <xsl:attribute name="text-align">end</xsl:attribute>
-        <xsl:attribute name="font-weight">bold</xsl:attribute>
-        <xsl:attribute name="font-style">italic</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="q">
