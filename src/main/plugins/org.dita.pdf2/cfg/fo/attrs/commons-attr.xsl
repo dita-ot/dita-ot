@@ -85,7 +85,6 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:attribute-set name="common.link">
     <xsl:attribute name="color">blue</xsl:attribute>
-    <xsl:attribute name="font-style">italic</xsl:attribute>
   </xsl:attribute-set>
 
     <xsl:attribute-set name="__unresolved__conref">

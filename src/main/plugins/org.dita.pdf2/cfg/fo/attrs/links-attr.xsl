@@ -36,6 +36,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute-set name="linklist">
     </xsl:attribute-set>
 
+  <xsl:attribute-set name="linklist.title" use-attribute-sets="common.title">
+    <xsl:attribute name="font-weight">bold</xsl:attribute>
+  </xsl:attribute-set>
+
     <xsl:attribute-set name="linkpool">
     </xsl:attribute-set>
 
@@ -88,6 +92,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:attribute-set name="related-links.ol.li__content" use-attribute-sets="ol.li__content">
   </xsl:attribute-set>
 
+  <!-- FIXME: is this obsolete? -->
     <xsl:attribute-set name="related-links.title">
     <xsl:attribute name="font-weight">bold</xsl:attribute>
   </xsl:attribute-set>
