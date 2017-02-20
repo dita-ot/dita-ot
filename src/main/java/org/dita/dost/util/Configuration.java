@@ -107,7 +107,12 @@ public final class Configuration {
 
     /** Processing mode */
     public enum Mode {
-        STRICT, SKIP, LAX
+        /** Processing fails on error. */
+        STRICT,
+        /** Processing continues after error and will not attempt error recovery */
+        SKIP,
+        /** Processing continues after error with error recovery */
+        LAX
     }
     
     /** Private constructor to disallow instance creation. */
@@ -130,6 +135,23 @@ public final class Configuration {
             types.add(TRANS_TYPE_PDF);
         }
         printTranstype = Collections.unmodifiableList(types);
+    }
+
+    /** List of transtypes. */
+    public static final List<String> transtypes;
+    static {
+        final List<String> types = new ArrayList<>();
+        final String printTranstypes = Configuration.configuration.get(CONF_TRANSTYPES);
+        if (printTranstypes != null) {
+            if (printTranstypes.trim().length() > 0) {
+                for (final String transtype: printTranstypes.split(CONF_LIST_SEPARATOR)) {
+                    types.add(transtype.trim());
+                }
+            }
+        } else {
+            logger.error("Failed to read transtypes from configuration, using empty list.");
+        }
+        transtypes = Collections.unmodifiableList(types);
     }
 
     /** Map of plug-in resource directories. */
