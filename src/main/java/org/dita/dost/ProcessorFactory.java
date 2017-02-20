@@ -37,7 +37,7 @@ public final class ProcessorFactory {
      *
      * @param tmp absolute directory for temporary directories
      */
-    public void setTempDir(final File tmp) {
+    public void setBaseTempDir(final File tmp) {
         if (!tmp.isAbsolute()) {
             throw new IllegalArgumentException("Temporary directory must be absolute");
         }

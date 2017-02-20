@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -33,7 +31,7 @@ public class ProcessorTest {
         final ProcessorFactory pf = ProcessorFactory.newInstance(new File(ditaDir));
 
         tempDir = tempDirGenerator.newFolder("tmp");
-        pf.setTempDir(tempDir);
+        pf.setBaseTempDir(tempDir);
         p = pf.newProcessor("html5");
     }
 
@@ -59,6 +57,8 @@ public class ProcessorTest {
         p.setInput(mapFile)
                 .setOutputDir(out)
                 .run();
+
+        assertEquals(1, tempDir.listFiles(f -> f.isFile() && f.getName().endsWith(".log")).length);
     }
 
 
@@ -75,9 +75,11 @@ public class ProcessorTest {
         try {
             p.setInput(mapFile)
                     .setOutputDir(out)
+                    .createDebugLog(false)
                     .run();
         } catch (Exception e) {
-            assertTrue(tempDir.exists());
+            assertEquals(0, tempDir.listFiles(f -> f.isDirectory()).length);
+            assertEquals(0, tempDir.listFiles(f -> f.isFile() && f.getName().endsWith(".log")).length);
             throw e;
         }
     }
@@ -98,7 +100,9 @@ public class ProcessorTest {
                     .cleanOnFailure(false)
                     .run();
         } catch (BuildException e) {
-            assertFalse(tempDir.exists());
+            assertEquals(1, tempDir.listFiles(f -> f.isDirectory()).length);
+            assertEquals(1, tempDir.listFiles(f -> f.isFile() && f.getName().endsWith(".log")).length);
+
             throw e;
         }
     }

@@ -1,12 +1,10 @@
 package org.dita.dost;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
-import org.dita.dost.ProcessorFactory;
 import org.junit.Test;
 
 import java.io.File;
+
+import static org.junit.Assert.assertNotNull;
 
 public class ProcessorFactoryTest {
 

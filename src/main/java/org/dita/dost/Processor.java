@@ -10,7 +10,6 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.LoggerListener;
-import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Configuration.Mode;
 import org.slf4j.Logger;
 
@@ -30,6 +29,7 @@ public final class Processor {
     private Map<String, String> args;
     private Logger logger;
     private boolean cleanOnFailure = true;
+    private boolean createDebugLog = true;
 
     Processor(final File ditaDir, final String transtype, final Map<String, String> args) {
         this.ditaDir = ditaDir;
@@ -149,6 +149,19 @@ public final class Processor {
     }
 
     /**
+     * Write a debug log to temporary directory. The name of the debug log is temporary file with {@code .log} extension.
+     * By default debug log is generated
+     *
+     * @param createDebugLog create debug log
+     * @return this Process object
+     */
+    public Processor createDebugLog(final boolean createDebugLog) {
+        this.createDebugLog = createDebugLog;
+        return this;
+    }
+
+
+    /**
      * Set error recovery mode.
      *
      * @param mode processing mode
@@ -175,7 +188,7 @@ public final class Processor {
         args.put("dita.temp.dir", tempDir.getAbsolutePath());
         boolean cleanTemp = true;
 
-        final ch.qos.logback.classic.Logger debugLogger = openDebugLogger(tempDir);
+        final ch.qos.logback.classic.Logger debugLogger = createDebugLog ? openDebugLogger(tempDir) : null;
 
         try {
             final File buildFile = new File(ditaDir, "build.xml");
@@ -185,7 +198,9 @@ public final class Processor {
             if (logger != null) {
                 project.addBuildListener(new LoggerListener(logger));
             }
-            project.addBuildListener(new LoggerListener(debugLogger));
+            if (debugLogger != null) {
+                project.addBuildListener(new LoggerListener(debugLogger));
+            }
 
             project.fireBuildStarted();
             project.init();
@@ -203,7 +218,9 @@ public final class Processor {
             cleanTemp = cleanOnFailure;
             throw new DITAOTException(e);
         } finally {
-            closeDebugLogger(debugLogger);
+            if (debugLogger != null) {
+                closeDebugLogger(debugLogger);
+            }
             if (cleanTemp) {
                 try {
                     FileUtils.forceDelete(tempDir);
