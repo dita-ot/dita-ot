@@ -258,60 +258,42 @@ See the accompanying LICENSE file for applicable license.
   
   <!--  Rights - prolog/copyright -->
   <xsl:template match="*[contains(@class,' topic/copyright ')]" mode="gen-metadata">
-    <meta name="copyright">
+    <meta name="rights">
       <xsl:attribute name="content">
-       <xsl:choose>
-         <!-- ./copyrholder/text() -->
-         <xsl:when test="*[contains(@class,' topic/copyrholder ')]/text()">
-           <xsl:value-of select="normalize-space(*[contains(@class,' topic/copyrholder ')])"/>
-         </xsl:when>
-         <xsl:otherwise>
-           <xsl:text>(C) </xsl:text>
-           <xsl:call-template name="getVariable">
-            <xsl:with-param name="id" select="'Copyright'"/>
-           </xsl:call-template>
-         </xsl:otherwise>
-       </xsl:choose>
-       <!-- copyryear -->
-       <xsl:for-each select="*[contains(@class,' topic/copyryear ')]">
-        <xsl:text> </xsl:text><xsl:value-of select="@year"/>
-       </xsl:for-each>
+        <xsl:text>&#xA9; </xsl:text>
+        <xsl:apply-templates select="*[contains(@class,' topic/copyryear ')][1]" mode="gen-metadata"/>
+        <xsl:text> </xsl:text>
+        <xsl:if test="*[contains(@class,' topic/copyrholder ')]">
+          <xsl:value-of select="*[contains(@class,' topic/copyrholder ')]"/>
+        </xsl:if>                
       </xsl:attribute>
-      <xsl:choose>
-        <xsl:when test="@type = 'secondary'">
-          <xsl:attribute name="type">secondary</xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="type">primary</xsl:attribute>
-        </xsl:otherwise>
-      </xsl:choose>
     </meta>
-    <meta name="DC.Rights.Owner">
-      <xsl:attribute name="content">
-           <xsl:choose>
-         <xsl:when test="*[contains(@class,' topic/copyrholder ')]/text()">
-           <xsl:value-of select="normalize-space(*[contains(@class,' topic/copyrholder ')])"/>
-         </xsl:when>
-         <xsl:otherwise>
-           <xsl:text>(C) </xsl:text>
-           <xsl:call-template name="getVariable">
-            <xsl:with-param name="id" select="'Copyright'"/>
-           </xsl:call-template>
-         </xsl:otherwise>
-       </xsl:choose>
-       <xsl:for-each select="*[contains(@class,' topic/copyryear ')]">
-        <xsl:text> </xsl:text><xsl:value-of select="@year"/>
-       </xsl:for-each>
-      </xsl:attribute>
-      <xsl:choose>
-        <xsl:when test="@type = 'secondary'">
-          <xsl:attribute name="type">secondary</xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="type">primary</xsl:attribute>
-        </xsl:otherwise>
-      </xsl:choose>
-    </meta>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/copyryear ')]" mode="gen-metadata">
+    <xsl:param name="previous" select="/.."/>
+    <xsl:param name="open-sequence" select="false()"/>
+    <xsl:variable name="next" select="following-sibling::*[contains(@class,' topic/copyryear ')][1]"/>
+    <xsl:variable name="begin-sequence" select="@year + 1 = number($next/@year)"/>
+    <xsl:choose>
+      <xsl:when test="$begin-sequence">
+        <xsl:if test="not($open-sequence)">
+          <xsl:value-of select="@year"/>
+          <xsl:text>&#x2013;</xsl:text>
+        </xsl:if>
+      </xsl:when>
+      <xsl:when test="$next">
+        <xsl:value-of select="@year"/>
+        <xsl:text>, </xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@year"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="$next" mode="gen-metadata">
+      <xsl:with-param name="previous" select="."/>
+      <xsl:with-param name="open-sequence" select="$begin-sequence"/>
+    </xsl:apply-templates>
   </xsl:template>
   
   <!-- Usage Rights - prolog/permissions -->
