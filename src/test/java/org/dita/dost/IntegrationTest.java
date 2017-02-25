@@ -867,6 +867,21 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .warnCount(1)
                 .test();
     }
+    @Test
+    public void testlang_preprocess2() throws Throwable {
+        builder().name("lang")
+                .transtype(XHTML)
+                .targets(
+                        "dita2xhtml.init",
+                        "build-init",
+                        "preprocess2",
+                        "xhtml.topics",
+                        "dita.map.xhtml")
+                .input(Paths.get("lang.ditamap"))
+                .put("validate", "false")
+                .warnCount(2)
+                .test();
+    }
 
     @Test
     public void testmapref() throws Throwable {

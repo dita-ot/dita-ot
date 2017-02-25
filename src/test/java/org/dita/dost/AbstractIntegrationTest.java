@@ -39,6 +39,7 @@ public class AbstractIntegrationTest {
 
     private String name;
     private Transtype transtype;
+    private String[] targets;
     private Path input;
     private Map<String, Object> args = new HashMap<>();
     private int warnCount = 0;
@@ -55,6 +56,11 @@ public class AbstractIntegrationTest {
 
     public AbstractIntegrationTest transtype(Transtype transtype) {
         this.transtype = transtype;
+        return this;
+    }
+
+    public AbstractIntegrationTest targets(String... targets) {
+        this.targets = targets;
         return this;
     }
 
@@ -163,7 +169,7 @@ public class AbstractIntegrationTest {
 
         List<TestListener.Message> log = null;
         try {
-            log = runOt(testDir, transtype, tempDir, outDir, params);
+            log = runOt(testDir, transtype, tempDir, outDir, params, targets);
             assertEquals("Warn message count does not match expected",
                     warnCount,
                     countMessages(log, Project.MSG_WARN));
@@ -313,7 +319,7 @@ public class AbstractIntegrationTest {
      * @throws Exception if conversion failed
      */
     private List<TestListener.Message> runOt(final File srcDir, final Transtype transtype, final File tempBaseDir, final File resBaseDir,
-                                             final Map<String, String> args) throws Exception {
+                                             final Map<String, String> args, final String[] targets) throws Exception {
         final File tempDir = new File(tempBaseDir, transtype.toString());
         final File resDir = new File(resBaseDir, transtype.toString());
         deleteDirectory(resDir);
@@ -347,20 +353,24 @@ public class AbstractIntegrationTest {
 
             project.setKeepGoingMode(false);
             ProjectHelper.configureProject(project, buildFile);
-            final Vector<String> targets = new Vector<>();
-            switch (transtype) {
-                case PREPROCESS:
-                    targets.addElement("build-init");
-                    targets.addElement("preprocess");
-                    break;
-                case PREPROCESS2:
-                    targets.addElement("build-init");
-                    targets.addElement("preprocess2");
-                    break;
-                default:
-                    targets.addElement(project.getDefaultTarget());
+            final Vector<String> ts = new Vector<>();
+            if (targets != null) {
+                ts.addAll(Arrays.asList(targets));
+            } else {
+                switch (transtype) {
+                    case PREPROCESS:
+                        ts.addElement("build-init");
+                        ts.addElement("preprocess");
+                        break;
+                    case PREPROCESS2:
+                        ts.addElement("build-init");
+                        ts.addElement("preprocess2");
+                        break;
+                    default:
+                        ts.addElement("dita2" + transtype.toString().toLowerCase());
+                }
             }
-            project.executeTargets(targets);
+            project.executeTargets(ts);
 
             return listener.messages;
         } finally {
