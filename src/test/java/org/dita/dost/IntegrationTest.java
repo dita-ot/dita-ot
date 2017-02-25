@@ -864,7 +864,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(XHTML)
                 .input(Paths.get("lang.ditamap"))
                 .put("validate", "false")
-                .warnCount(2)
+                .warnCount(1)
                 .test();
     }
 
