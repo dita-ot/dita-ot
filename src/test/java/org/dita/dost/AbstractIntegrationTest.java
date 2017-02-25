@@ -37,6 +37,11 @@ import static org.junit.Assert.assertArrayEquals;
 
 public class AbstractIntegrationTest {
 
+    /**
+     * Message codes where duplicates are ignored in message count.
+     */
+    private static final String[] ignoreDuplicates = new String[]{"DOTJ037W"};
+
     private String name;
     private Transtype transtype;
     private String[] targets;
@@ -239,8 +244,19 @@ public class AbstractIntegrationTest {
 
     private int countMessages(final List<TestListener.Message> messages, final int level) {
         int count = 0;
+        final Set<String> duplicates = new HashSet<>();
+        messages:
         for (final TestListener.Message m : messages) {
             if (m.level == level) {
+                for (final String code : ignoreDuplicates) {
+                    if (m.message.contains(code)) {
+                        if (duplicates.contains(code)) {
+                            continue messages;
+                        } else {
+                            duplicates.add(code);
+                        }
+                    }
+                }
                 count++;
             }
         }

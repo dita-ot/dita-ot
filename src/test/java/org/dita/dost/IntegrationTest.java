@@ -229,7 +229,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS2)
                 .input(Paths.get("main.ditamap"))
                 .put("validate", "false")
-                .warnCount(2)
+                .warnCount(1)
                 .test();
     }
 
@@ -382,7 +382,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .put("transtype", "preprocess")
                 .put("dita.ext", ".dita")
                 .put("validate", "false")
-                .warnCount(2)
+                .warnCount(1)
                 .test();
     }
 
@@ -401,7 +401,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .transtype(PREPROCESS2)
                 .input(Paths.get("lang-common1.dita"))
                 .put("validate", "false")
-                .warnCount(2)
+                .warnCount(1)
                 .test();
     }
 
@@ -879,7 +879,7 @@ public class IntegrationTest extends AbstractIntegrationTest {
                         "dita.map.xhtml")
                 .input(Paths.get("lang.ditamap"))
                 .put("validate", "false")
-                .warnCount(2)
+                .warnCount(1)
                 .test();
     }
 
