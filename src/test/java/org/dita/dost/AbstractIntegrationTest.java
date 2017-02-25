@@ -90,7 +90,27 @@ public class AbstractIntegrationTest {
     }
 
     enum Transtype {
-        PREPROCESS, XHTML, ECLIPSEHELP, HTMLHELP, PREPROCESS2;
+        PREPROCESS("xhtml", true,
+                "build-init", "preprocess"),
+        XHTML("xhtml", false,
+                "dita2xhtml"),
+        ECLIPSEHELP("eclipsehelp", false,
+                "dita2eclipsehelp"),
+        HTMLHELP("htmlhelp", false,
+                "dita2htmlhelp"),
+        PREPROCESS2("xhtml", true,
+                "build-init", "preprocess2"),
+        XHTML_WITH_PREPROCESS2("xhtml", false,
+                "dita2xhtml.init", "build-init", "preprocess2", "xhtml.topics", "dita.map.xhtml");
+
+        final String name;
+        final boolean compareTemp;
+        final String[] targets;
+        Transtype(String name, boolean compareTemp, String... targets) {
+            this.name = name;
+            this.compareTemp = compareTemp;
+            this.targets = targets;
+        }
 
         @Override
         public String toString() {
@@ -181,7 +201,7 @@ public class AbstractIntegrationTest {
             assertEquals("Error message count does not match expected",
                     errorCount,
                     countMessages(log, Project.MSG_ERR));
-            final File actDir = transtype == Transtype.PREPROCESS ? tempDir : outDir;
+            final File actDir = transtype.compareTemp ? tempDir : outDir;
             compare(expDir, actDir);
         } catch (final RuntimeException e) {
             throw e;
@@ -352,7 +372,7 @@ public class AbstractIntegrationTest {
             System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
             project.fireBuildStarted();
             project.init();
-            project.setUserProperty("transtype", transtype == Transtype.PREPROCESS ? Transtype.XHTML.toString() : transtype.toString());
+            project.setUserProperty("transtype", transtype.name);
             if (transtype.equals("pdf") || transtype.equals("pdf2")) {
                 project.setUserProperty("pdf.formatter", "fop");
                 project.setUserProperty("fop.formatter.output-format", "text/plain");
@@ -373,18 +393,7 @@ public class AbstractIntegrationTest {
             if (targets != null) {
                 ts.addAll(Arrays.asList(targets));
             } else {
-                switch (transtype) {
-                    case PREPROCESS:
-                        ts.addElement("build-init");
-                        ts.addElement("preprocess");
-                        break;
-                    case PREPROCESS2:
-                        ts.addElement("build-init");
-                        ts.addElement("preprocess2");
-                        break;
-                    default:
-                        ts.addElement("dita2" + transtype.toString().toLowerCase());
-                }
+                ts.addAll(Arrays.asList(transtype.targets));
             }
             project.executeTargets(ts);
 

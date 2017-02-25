@@ -42,7 +42,7 @@ dependencies {
 jar.archiveName = "${project.name}.jar"
 
 test {
-    exclude '**/IntegrationTest.class'
+    exclude '**/IntegrationTest*.class'
 }
 
 // Integration test
@@ -63,7 +63,7 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
     minHeapSize = "128m"
     maxHeapSize = "1024m"
     systemProperties = integrationTestSystemProperties
-    include '**/IntegrationTest.class'
+    include '**/IntegrationTest*.class'
 }
 
 // Install
