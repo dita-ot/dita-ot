@@ -342,6 +342,17 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         logger.info("Processing " + currentFile + " to " + outputFile.toURI());
         final String[] params = { currentFile.toString() };
 
+        // Verify stub for current file is in Job
+        final FileInfo fi = job.getFileInfo(currentFile);
+        if (fi == null) {
+            final FileInfo stub = new FileInfo.Builder()
+                    .src(currentFile)
+                    .uri(rel)
+                    .result(currentFile)
+                    .build();
+            job.add(stub);
+        }
+
 //        InputSource in = null;
         Result out = null;
         try {

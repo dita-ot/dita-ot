@@ -60,8 +60,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     private File outputFile;
     /** Foreign/unknown nesting level. */
     private int foreignLevel;
-    /** File infos by src. */
-    private Map<URI, FileInfo> fileInfoMap;
+//    /** File infos by src. */
+//    private Map<URI, FileInfo> fileInfoMap;
     private TempFileNameScheme tempFileNameScheme;
 
     public DitaWriterFilter() {
@@ -86,10 +86,10 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
-        fileInfoMap = new HashMap<>();
-        for (final FileInfo f: job.getFileInfo()) {
-            fileInfoMap.put(f.result, f);
-        }
+//        fileInfoMap = new HashMap<>();
+//        for (final FileInfo f: job.getFileInfo()) {
+//            fileInfoMap.put(f.result, f);
+//        }
     }
 
     // ContentHandler methods
@@ -223,9 +223,9 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             }
             if (attValue.toString().length() != 0) {
                 final URI current = currentFile.resolve(attValue);
-                final FileInfo f = fileInfoMap.get(current);
+                final FileInfo f = job.getFileInfo(current);
                 if (f != null) {
-                    final FileInfo cfi = fileInfoMap.get(currentFile);
+                    final FileInfo cfi = job.getFileInfo(currentFile);
                     final URI currrentFileTemp = job.tempDirURI.resolve(cfi.uri);
                     final URI targetTemp = job.tempDirURI.resolve(f.uri);
                     attValue = getRelativePath(currrentFileTemp, targetTemp);
