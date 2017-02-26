@@ -1242,7 +1242,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final StringBuilder msg = new StringBuilder();
         msg.append("Usage: dita -i <file> -f <name> [options]\n");
         msg.append("   or: dita --propertyfile=<file> [options]\n");
-        msg.append("   or: dita --install[=<file>]\n");
+        msg.append("   or: dita --install [<file>]\n");
         msg.append("   or: dita --uninstall <id>\n");
         msg.append("   or: dita --help\n");
         msg.append("   or: dita --version\n");
@@ -1250,9 +1250,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         msg.append("  -i <file>, --input=<file>   input file\n");
         msg.append("  -f <name>, --format=<name>  output format (transformation type)\n");
         msg.append("  --propertyfile=<name>       load all properties from file\n");
-        msg.append("  --install=[<file>]          install plug-in from a ZIP file\n");
+        msg.append("  --install [<file>]          install plug-in from a ZIP file\n");
         msg.append("  --install                   reload plugins\n");
-        msg.append("  --uninstall=<id>            uninstall plug-in with the ID\n");
+        msg.append("  --uninstall <id>            uninstall plug-in with the ID\n");
         msg.append("  -h, --help                  print this message\n");
         msg.append("  --version                   print version information and exit\n");
         msg.append("Options: \n");
