@@ -66,7 +66,8 @@ See the accompanying LICENSE file for applicable license.
               select="key('refid-by-value', @value)
                       [empty(ancestor-or-self::opentopic-index:index.entry[@end-range])]
                       [empty(ancestor::opentopic-index:index.groups)]
-                      [empty(ancestor::*[@no-page eq 'true'])]"/>
+                      [empty(ancestor::*[@no-page eq 'true'])]
+                      [ancestor::*[contains(@class,' topic/topic ')]]"/>
           </xsl:for-each>
         </xsl:variable>
 

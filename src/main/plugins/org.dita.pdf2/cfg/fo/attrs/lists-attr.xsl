@@ -56,7 +56,6 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:attribute-set name="ul.li__label">
         <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
         <xsl:attribute name="end-indent">label-end()</xsl:attribute>
     </xsl:attribute-set>
 
@@ -86,7 +85,6 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:attribute-set name="ol.li__label">
         <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
         <xsl:attribute name="end-indent">label-end()</xsl:attribute>
     </xsl:attribute-set>
 
@@ -115,7 +113,6 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:attribute-set name="sl.sli__label">
         <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
         <xsl:attribute name="end-indent">label-end()</xsl:attribute>
     </xsl:attribute-set>
 

@@ -8,7 +8,7 @@ See the accompanying LICENSE file for applicable license.
 -->
 <project xmlns:dita="http://dita-ot.sourceforge.net" name="DOST" default="init">
   
-  <property file="${basedir}/local.properties"/>
+  <property file="${dita.dir}/local.properties"/>
   
   <!-- Initialize DITA-OT base directory -->
   <dirname property="ant.file.DOST.dir" file="${ant.file.DOST}" />
