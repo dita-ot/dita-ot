@@ -53,30 +53,32 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         for (final FileInfo fi : fis) {
             try {
                 final FileInfo.Builder builder = new FileInfo.Builder(fi);
-                final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
-                if (srcFile.exists()) {
-                    final URI rel = base.relativize(fi.result);
-                    final File destFile = new File(job.tempDirURI.resolve(rel));
-                    final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
-                    if (fi.format != null && fi.format.equals("coderef")) {
-                        logger.debug("Skip coderef");
-                    } else if (!processingPipe.isEmpty()) {
-                        logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
-                        transform(srcFile.toURI(), destFile.toURI(), processingPipe);
-                        if (!srcFile.equals(destFile)) {
-                            logger.debug("Deleting " + srcFile.toURI());
-                            FileUtils.deleteQuietly(srcFile);
+                final URI rel = base.relativize(fi.result);
+                builder.uri(rel);
+                if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
+                    logger.info("Skip format " + fi.format);
+                } else {
+                    final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
+                    if (srcFile.exists()) {
+                        final File destFile = new File(job.tempDirURI.resolve(rel));
+                        final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
+                        if (!processingPipe.isEmpty()) {
+                            logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
+                            transform(srcFile.toURI(), destFile.toURI(), processingPipe);
+                            if (!srcFile.equals(destFile)) {
+                                logger.debug("Deleting " + srcFile.toURI());
+                                FileUtils.deleteQuietly(srcFile);
+                            }
+                        } else if (!srcFile.equals(destFile)) {
+                            logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
+                            FileUtils.moveFile(srcFile, destFile);
                         }
-                    } else if (!srcFile.equals(destFile)) {
-                        logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
-                        FileUtils.moveFile(srcFile, destFile);
-                    }
-                    builder.uri(rel);
 
-                    // start map
-                    if (fi.src.equals(job.getInputFile())) {
-                        job.setProperty(INPUT_DITAMAP_URI, rel.toString());
-                        job.setProperty(INPUT_DITAMAP, toFile(rel).getPath());
+                        // start map
+                        if (fi.src.equals(job.getInputFile())) {
+                            job.setProperty(INPUT_DITAMAP_URI, rel.toString());
+                            job.setProperty(INPUT_DITAMAP, toFile(rel).getPath());
+                        }
                     }
                 }
                 res.add(builder.build());
@@ -103,6 +105,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         final Collection<FileInfo> fis = job.getFileInfo();
         for (final FileInfo fi : fis) {
             final String res = fi.result.resolve(".").toString();
+            // FIXME, adjust in a loop  
             if (!res.equals(baseDir) && baseDir.startsWith(res)) {
                 baseDir = res;
             }
