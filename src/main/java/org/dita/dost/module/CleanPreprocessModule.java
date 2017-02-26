@@ -35,7 +35,7 @@ import static org.dita.dost.util.XMLUtils.transform;
 /**
  * Move temporary files not based on output URI to match output URI structure.
  *
- * @since 2.4
+ * @since 2.5
  */
 public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 

@@ -51,7 +51,7 @@ import static org.dita.dost.util.XMLUtils.*;
  *   <li>Rewrite duplicate generated copy-to targets</li>
  * </ol>
  *
- * @since 2.4
+ * @since 2.5
  */
 public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
 

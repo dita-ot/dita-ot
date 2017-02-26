@@ -51,7 +51,7 @@ import static org.dita.dost.util.XMLUtils.getChildElements;
  *   <li>Filter topics that were not branch generated</li>
  * </ol>
  *
- * @since 2.4
+ * @since 2.5
  */
 public final class TopicBranchFilterModule extends AbstractPipelineModuleImpl {
 

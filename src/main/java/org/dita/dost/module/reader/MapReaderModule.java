@@ -29,7 +29,7 @@ import static org.dita.dost.util.Constants.*;
 /**
  * Module for reading and serializing topics into temporary directory.
  *
- * @since 2.4
+ * @since 2.5
  */
 public final class MapReaderModule extends AbstractReaderModule {
 

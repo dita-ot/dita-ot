@@ -60,7 +60,7 @@ import static org.dita.dost.util.XMLUtils.close;
 /**
  * Base class for document reader and serializer.
  *
- * @since 2.4
+ * @since 2.5
  */
 public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
