@@ -101,10 +101,12 @@ task cleanDistTemp(type: Delete) {
     delete distTempDir
 }
 
-task initDist(dependsOn: [jar, cleanDistTemp]) << {
-    distTempDir.mkdirs()
-    println "distVersion: ${distVersion}"
-    println "distFileName: ${distFileName}"
+task initDist(dependsOn: [jar, cleanDistTemp]) {
+    doLast {
+        distTempDir.mkdirs()
+        println "distVersion: ${distVersion}"
+        println "distFileName: ${distFileName}"
+    }
 }
 
 task copyDistTemp(type: Copy, dependsOn: initDist) {
@@ -166,10 +168,12 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task updateConfiguration() << {
-    if (project.hasProperty('commit') && !commit.empty) {
-        ant.propertyfile(file: "${distTempDir}/lib/configuration.properties") {
-            entry(key: "otversion", operation: "=", value: "${distVersion}")
+task updateConfiguration() {
+    doLast {
+        if (project.hasProperty('commit') && !commit.empty) {
+            ant.propertyfile(file: "${distTempDir}/lib/configuration.properties") {
+                entry(key: "otversion", operation: "=", value: "${distVersion}")
+            }
         }
     }
 }
@@ -243,8 +247,10 @@ task distTarGz(type: Tar, dependsOn: [jar, generateDocs]) {
     }
     archiveName "dita-ot-${distFileName}.tar.gz"
 }
-task dist(dependsOn: [distZip]) << {
-    // NOOP
+task dist(dependsOn: [distZip]) {
+    doLast {
+        // NOOP
+    }
 }
 
 test {
