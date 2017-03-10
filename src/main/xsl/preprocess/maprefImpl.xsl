@@ -134,7 +134,7 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:sequence select="$file//*[contains(@class,' map/topicref ')][@id = $element-id]"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:sequence select="$file/*/*[contains(@class,' map/topicref ')] |
+                  <xsl:sequence select="$file/*/*[contains(@class,' map/topicref ') or contains(@class,' map/navref ') or contains(@class,' map/anchor ')] |
                                         $file/*/processing-instruction()"/>
                 </xsl:otherwise>
               </xsl:choose>
