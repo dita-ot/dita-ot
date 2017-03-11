@@ -112,6 +112,13 @@ See the accompanying LICENSE file for applicable license.
         <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
       </module>
     </pipeline>
+    <!-- TODO replace with direct resource collection availability test -->
+    <job-helper file="fullditamap.list" property="fullditamaplist"/>
+    <property name="fullditamapfile" value="fullditamap.list"/>
+    <condition property="noMap">
+      <length file="${dita.temp.dir}/${fullditamapfile}" length="0"/>
+    </condition>
+    <delete file="${dita.temp.dir}/${fullditamapfile}"/>
   </target>
 
   <target name="map-mapref"
@@ -149,6 +156,7 @@ See the accompanying LICENSE file for applicable license.
     description="Resolve input map files keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
       <module class="org.dita.dost.module.KeyrefModule">
+        <ditaFileset format="ditamap"/>
         <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
