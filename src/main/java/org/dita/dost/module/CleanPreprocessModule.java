@@ -56,7 +56,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                 final URI rel = base.relativize(fi.result);
                 builder.uri(rel);
                 if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
-                    logger.info("Skip format " + fi.format);
+                    logger.debug("Skip format " + fi.format);
                 } else {
                     final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
                     if (srcFile.exists()) {
@@ -99,19 +99,55 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         return null;
     }
 
-    private URI getBaseDir() {
-        String baseDir = job.getInputDir().toString();
+    /** Get common base directory for all files */
+    URI getBaseDir() {
+        URI baseDir = job.getInputDir();
 
         final Collection<FileInfo> fis = job.getFileInfo();
         for (final FileInfo fi : fis) {
-            final String res = fi.result.resolve(".").toString();
-            // FIXME, adjust in a loop  
-            if (!res.equals(baseDir) && baseDir.startsWith(res)) {
-                baseDir = res;
-            }
+            final URI res = fi.result.resolve(".");
+            baseDir = getCommonBase(baseDir, res);
         }
 
-        return URI.create(baseDir);
+        return baseDir;
+    }
+
+    URI getCommonBase(final URI left, final URI right) {
+        assert left.isAbsolute();
+        assert right.isAbsolute();
+        if (!left.getScheme().equals(right.getScheme())) {
+            throw new IllegalArgumentException("Argument schemes do not match");
+        }
+        final URI l = left.resolve(".");
+        final URI r = right.resolve(".");
+        final String lp = l.getPath();
+        final String rp = r.getPath();
+        if (lp.equals(rp)) {
+            return l;
+        }
+        if (lp.startsWith(rp)) {
+            return r;
+        }
+        if (rp.startsWith(lp)) {
+            return l;
+        }
+        final String[] la = left.getPath().split("/");
+        final String[] ra = right.getPath().split("/");
+        int i = 0;
+        final int len = Math.min(la.length, ra.length);
+        for (; i < len; i++) {
+            if (la[i].equals(ra[i])) {
+                //
+            } else {
+                final int common = Math.max(0, i);
+                final String path = Arrays.asList(la)
+                        .subList(0, common)
+                        .stream()
+                        .collect(Collectors.joining("/")) + "/";
+                return URLUtils.setPath(left, path);
+            }
+        }
+        return null;
     }
 
     private void init() {
