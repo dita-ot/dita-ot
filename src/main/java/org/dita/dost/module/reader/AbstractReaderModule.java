@@ -669,12 +669,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
      */
     void handleConref() {
         // Get pure conref targets
-        final Set<URI> pureConrefTargets = new HashSet<>(128);
+        final Set<URI> pureConrefTargets = new HashSet<>(conrefTargetSet.size());
         for (final URI target: conrefTargetSet) {
             if (!nonConrefCopytoTargetSet.contains(target)) {
                 pureConrefTargets.add(target);
             }
         }
+        pureConrefTargets.remove(rootFile);
         conrefTargetSet = pureConrefTargets;
 
         // Remove pure conref targets from fullTopicSet
