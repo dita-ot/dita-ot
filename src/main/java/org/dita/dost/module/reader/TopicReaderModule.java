@@ -83,7 +83,11 @@ public final class TopicReaderModule extends AbstractReaderModule {
         if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
             getStartDocuments().stream().forEach(this::addToWaitList);
         } else {
-            addToWaitList(new Reference(job.getInputFile()));
+            if (fi.format == null) {
+                fi.format = ATTR_FORMAT_VALUE_DITA;
+                job.add(fi);
+            }
+            addToWaitList(new Reference(job.getInputFile(), fi.format));
         }
     }
 
