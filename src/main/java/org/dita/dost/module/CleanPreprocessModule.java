@@ -47,6 +47,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         init();
 
         final URI base = getBaseDir();
+        job.setProperty(INPUT_DIR_URI, base.toString());
         final Collection<FileInfo> fis = job.getFileInfo().stream()
                 .collect(Collectors.toList());
         final Collection<FileInfo> res = new ArrayList<>(fis.size());
