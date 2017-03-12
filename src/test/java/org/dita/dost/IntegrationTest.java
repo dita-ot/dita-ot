@@ -449,8 +449,104 @@ public class IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testcontrol_value_file() throws Throwable {
-        test("control_value_file");
+    public void testcontrolValueFile1() throws Throwable {
+        builder().name("map13_filter1")
+                .transtype(preprocess)
+                .input(Paths.get("map13.ditamap"))
+                .put("args.filter", Paths.get("filter1.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile2() throws Throwable {
+        builder().name("map13_filter2")
+                .transtype(preprocess)
+                .input(Paths.get("map13.ditamap"))
+                .put("args.filter", Paths.get("filter2.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile3() throws Throwable {
+        builder().name("map13_filter3")
+                .transtype(preprocess)
+                .input(Paths.get("map13.ditamap"))
+                .put("args.filter", Paths.get("filter3.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile4() throws Throwable {
+        builder().name("map31_filter_multi")
+                .transtype(preprocess)
+                .input(Paths.get("map31.ditamap"))
+                .put("args.filter", Paths.get("filter_multi.ditaval"))
+                .warnCount(1)
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile5() throws Throwable {
+        builder().name("map32_filter_multi")
+                .transtype(preprocess)
+                .input(Paths.get("map32.ditamap"))
+                .put("args.filter", Paths.get("filter_multi.ditaval"))
+                .warnCount(1)
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile6() throws Throwable {
+        builder().name("map33_filter2")
+                .transtype(preprocess)
+                .input(Paths.get("map33.ditamap"))
+                .put("args.filter", Paths.get("filter2.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile7() throws Throwable {
+        builder().name("map33_filter3")
+                .transtype(preprocess)
+                .input(Paths.get("map33.ditamap"))
+                .put("args.filter", Paths.get("filter3.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile8() throws Throwable {
+        builder().name("map13_flag")
+                .transtype(xhtml)
+                .input(Paths.get("map13.ditamap"))
+                .put("args.filter", Paths.get("flag.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile9() throws Throwable {
+        builder().name("map13_flag2")
+                .transtype(xhtml)
+                .input(Paths.get("map13.ditamap"))
+                .put("args.filter", Paths.get("flag2.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile10() throws Throwable {
+        builder().name("map33_flag")
+                .transtype(xhtml)
+                .input(Paths.get("map33.ditamap"))
+                .put("args.filter", Paths.get("flag.ditaval"))
+                .test();
+    }
+
+    @Test
+    public void testcontrolValueFile11() throws Throwable {
+        builder().name("map33_flag2")
+                .transtype(xhtml)
+                .input(Paths.get("map33.ditamap"))
+                .put("args.filter", Paths.get("flag2.ditaval"))
+                .test();
     }
 
     @Test

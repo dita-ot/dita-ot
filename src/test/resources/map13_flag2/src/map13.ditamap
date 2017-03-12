@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/map.dtd">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>map13: A hierarchy of CVF(correct value of platform attribute)</title>
+    <topicref href="baseOSHierarchy.ditamap" format="ditamap"  type="subjectScheme"></topicref>
+    <topicref href="topic4.dita"></topicref>
+</map>
+
