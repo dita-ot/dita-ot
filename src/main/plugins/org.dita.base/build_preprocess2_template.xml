@@ -38,7 +38,7 @@ See the accompanying LICENSE file for applicable license.
                   topic-flag-module,
                   
                   clean-preprocess,
-                  copy-files,
+                  copy-files2,
 
                   {depend.preprocess.post}">
     <!-- Deprecated since 2.4 -->
@@ -464,6 +464,21 @@ See the accompanying LICENSE file for applicable license.
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
     </pipeline>
+  </target>
+
+  <target name="copy-files2" description="Copy files to the output directory"
+          dita:depends="{depend.preprocess.copy-files.pre},copy-image2,copy-html,copy-flag"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          unless="preprocess.copy-files.skip" />
+
+  <target name="copy-image2"
+          unless="preprocess.copy-image.skip"
+          dita:depends="{depend.preprocess.copy-image.pre}"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          description="Copy image files">
+    <copy todir="${output.dir}" failonerror="false">
+      <dita-fileset format="image" />
+    </copy>
   </target>
   
 </project>
