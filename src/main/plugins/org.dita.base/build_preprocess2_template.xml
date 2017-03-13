@@ -45,7 +45,7 @@ See the accompanying LICENSE file for applicable license.
     <property name="user.input.file.listfile" value="usr.input.file.list"/>
   </target>
 
-  <target name="topic-preprocess"
+  <!--target name="topic-preprocess"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
           description="Preprocess topic"
           dita:depends="{depend.preprocess.pre},
@@ -65,9 +65,9 @@ See the accompanying LICENSE file for applicable license.
                   copy-files,
 
                   {depend.preprocess.post}">
-    <!-- Deprecated since 2.4 -->
+    <!- - Deprecated since 2.4 - ->
     <property name="user.input.file.listfile" value="usr.input.file.list"/>
-  </target>
+  </target-->
   
   <target name="preprocess2.init">
     <dita-ot-fail id="DOTA002F">
