@@ -202,7 +202,9 @@ public final class ExtensibleAntInvoker extends Task {
                 } else if (m instanceof SaxPipe) {
                     final SaxPipe fm = (SaxPipe) m;
                     final XmlFilterModule module = new XmlFilterModule();
-                    module.setFileInfoFilter(combine(fm.getFormat()));
+                    final List<FileInfoFilter> predicates = new ArrayList<>(fm.getFormat());
+                    predicates.addAll(m.fileInfoFilters);
+                    module.setFileInfoFilter(combine(predicates));
                     try {
                         module.setProcessingPipe(fm.getFilters());
                     } catch (final InstantiationException | IllegalAccessException e) {
@@ -316,7 +318,7 @@ public final class ExtensibleAntInvoker extends Task {
         public final List<Param> params = new ArrayList<>();
         private Class<? extends AbstractPipelineModule> cls;
         public final Collection<FileInfoFilter> fileInfoFilters = new ArrayList<>();
-        
+
         public void setClass(final Class<? extends AbstractPipelineModule> cls) {
             this.cls = cls;
         }
@@ -324,7 +326,7 @@ public final class ExtensibleAntInvoker extends Task {
         public void addConfiguredParam(final Param p) {
             params.add(p);
         }
-        
+
         public void addConfiguredDitaFileset(final FileInfoFilter fileInfoFilter) {
             fileInfoFilters.add(fileInfoFilter);
         }
@@ -415,7 +417,11 @@ public final class ExtensibleAntInvoker extends Task {
         }
         
         public void addConfiguredMapper(final Mapper mapper) {
-            this.mapper = mapper;
+            if (this.mapper != null) {
+                throw new BuildException("Cannot define more than one mapper");
+            } else {
+                this.mapper = mapper;
+            }
         }
 
         public void addConfiguredIncludesFile(final IncludesFile includesFile) {
@@ -455,7 +461,7 @@ public final class ExtensibleAntInvoker extends Task {
             return new Filter<FileInfo>() {
                 @Override
                 public boolean accept(FileInfo f) {
-                    return (format == null || format.equals(f.format)) &&
+                    return (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
                             (hasConref == null || f.hasConref == hasConref) &&
                             (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
                 }

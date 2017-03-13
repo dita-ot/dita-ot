@@ -8,6 +8,7 @@
 package org.dita.dost.module;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -83,7 +84,9 @@ public class TestTopicMergeModule {
     {
         final TopicMergeModule topicmergemodule = new TopicMergeModule();
         topicmergemodule.setLogger(new TestUtils.TestLogger());
-        topicmergemodule.setJob(new Job(temporaryDir));
+        final Job job = new Job(temporaryDir);
+        job.setProperty(INPUT_DITAMAP_URI, "test.ditamap");
+        topicmergemodule.setJob(job);
         topicmergemodule.execute(pipelineInput);
         
         assertXMLEqual(new InputSource(ditalistfile.toURI().toString()),

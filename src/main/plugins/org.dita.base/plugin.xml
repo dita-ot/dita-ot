@@ -173,6 +173,7 @@ See the accompanying LICENSE file for applicable license.
   <template file="../../catalog-dita_template.xml"/>
   <template file="../../build_template.xml"/>
   <template file="build_preprocess_template.xml"/>
+  <template file="build_preprocess2_template.xml"/>
   <template file="../../resources/messages_template.xml"/>
   <template file="../../xsl/common/allstrings_template.xml"/>
   <template file="../../xsl/common/strings_template.xml"/>

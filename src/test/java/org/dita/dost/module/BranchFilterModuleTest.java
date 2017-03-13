@@ -91,18 +91,18 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         TestUtils.forceDelete(tempDir);
     }
 
-    @Test
-    public void testSplitBranches() throws ParserConfigurationException, IOException, SAXException {
-        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-
-        final Document act = builder.parse(new File(tempDir, "input.ditamap"));
-        currentFile = new File(tempDir, "input.ditamap").toURI();
-        setJob(job);
-        splitBranches(act.getDocumentElement(), Branch.EMPTY);
-
-        final Document exp = builder.parse(new File(expDir, "input_splitBranches.ditamap"));
-        assertXMLEqual(exp, act);
-    }
+//    @Test
+//    public void testSplitBranches() throws ParserConfigurationException, IOException, SAXException {
+//        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+//
+//        final Document act = builder.parse(new File(tempDir, "input.ditamap"));
+//        currentFile = new File(tempDir, "input.ditamap").toURI();
+//        setJob(job);
+//        splitBranches(act.getDocumentElement(), Branch.EMPTY);
+//
+//        final Document exp = builder.parse(new File(expDir, "input_splitBranches.ditamap"));
+//        assertXMLEqual(exp, act);
+//    }
 
     @Test
     public void testProcessMap() throws SAXException, IOException {

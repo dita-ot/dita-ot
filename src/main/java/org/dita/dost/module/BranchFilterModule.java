@@ -55,7 +55,7 @@ import static org.dita.dost.util.XMLUtils.*;
  *
  * @since 2.2
  */
-class BranchFilterModule extends AbstractPipelineModuleImpl {
+public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
     private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
@@ -475,19 +475,19 @@ class BranchFilterModule extends AbstractPipelineModuleImpl {
     /** Immutable branch definition. */
     public static class Branch {
         /** Empty root branch */
-        static final Branch EMPTY = new Branch();
-        final Optional<String> resourcePrefix;
-        final Optional<String> resourceSuffix;
-        final Optional<String> keyscopePrefix;
-        final Optional<String> keyscopeSuffix;
+        public static final Branch EMPTY = new Branch();
+        public final Optional<String> resourcePrefix;
+        public final Optional<String> resourceSuffix;
+        public final Optional<String> keyscopePrefix;
+        public final Optional<String> keyscopeSuffix;
         private Branch() {
             this.resourcePrefix = Optional.empty();
             this.resourceSuffix = Optional.empty();
             this.keyscopePrefix = Optional.empty();
             this.keyscopeSuffix = Optional.empty();
         }
-        Branch(final Optional<String> resourcePrefix, final Optional<String> resourceSuffix,
-               final Optional<String> keyscopePrefix, final Optional<String> keyscopeSuffix) {
+        public Branch(final Optional<String> resourcePrefix, final Optional<String> resourceSuffix,
+                      final Optional<String> keyscopePrefix, final Optional<String> keyscopeSuffix) {
 //            final URI prefix = toURI(resourcePrefix).normalize();
 //            if (prefix.toString().startsWith("..")) {
 //                throw new Exception("ERROR: Resource prefix may not start with ..");
@@ -501,7 +501,7 @@ class BranchFilterModule extends AbstractPipelineModuleImpl {
         public String toString() {
             return "{" + resourcePrefix + "," + resourceSuffix + ";" + keyscopePrefix + ", " + keyscopeSuffix + "}";
         }
-        private Branch merge(final Element ditavalref) {
+        public Branch merge(final Element ditavalref) {
             return new Branch(
                 getPrefix(ditavalref, this.resourcePrefix),
                 getSuffix(ditavalref, this.resourceSuffix),

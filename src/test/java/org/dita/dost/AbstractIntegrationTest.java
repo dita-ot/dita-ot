@@ -37,8 +37,14 @@ import static org.junit.Assert.assertArrayEquals;
 
 public class AbstractIntegrationTest {
 
+    /**
+     * Message codes where duplicates are ignored in message count.
+     */
+    private static final String[] ignoreDuplicates = new String[]{"DOTJ037W"};
+
     private String name;
     private Transtype transtype;
+    private String[] targets;
     private Path input;
     private Map<String, Object> args = new HashMap<>();
     private int warnCount = 0;
@@ -55,6 +61,11 @@ public class AbstractIntegrationTest {
 
     public AbstractIntegrationTest transtype(Transtype transtype) {
         this.transtype = transtype;
+        return this;
+    }
+
+    public AbstractIntegrationTest targets(String... targets) {
+        this.targets = targets;
         return this;
     }
 
@@ -79,7 +90,27 @@ public class AbstractIntegrationTest {
     }
 
     enum Transtype {
-        PREPROCESS, XHTML, ECLIPSEHELP, HTMLHELP;
+        PREPROCESS("xhtml", true,
+                "build-init", "preprocess"),
+        XHTML("xhtml", false,
+                "dita2xhtml"),
+        ECLIPSEHELP("eclipsehelp", false,
+                "dita2eclipsehelp"),
+        HTMLHELP("htmlhelp", false,
+                "dita2htmlhelp"),
+        PREPROCESS2("xhtml", true,
+                "build-init", "preprocess2"),
+        XHTML_WITH_PREPROCESS2("xhtml", false,
+                "dita2xhtml.init", "build-init", "preprocess2", "xhtml.topics", "dita.map.xhtml");
+
+        final String name;
+        final boolean compareTemp;
+        final String[] targets;
+        Transtype(String name, boolean compareTemp, String... targets) {
+            this.name = name;
+            this.compareTemp = compareTemp;
+            this.targets = targets;
+        }
 
         @Override
         public String toString() {
@@ -163,14 +194,14 @@ public class AbstractIntegrationTest {
 
         List<TestListener.Message> log = null;
         try {
-            log = runOt(testDir, transtype, tempDir, outDir, params);
+            log = runOt(testDir, transtype, tempDir, outDir, params, targets);
             assertEquals("Warn message count does not match expected",
                     warnCount,
                     countMessages(log, Project.MSG_WARN));
             assertEquals("Error message count does not match expected",
                     errorCount,
                     countMessages(log, Project.MSG_ERR));
-            final File actDir = transtype == Transtype.PREPROCESS ? tempDir : outDir;
+            final File actDir = transtype.compareTemp ? tempDir : outDir;
             compare(expDir, actDir);
         } catch (final RuntimeException e) {
             throw e;
@@ -233,8 +264,19 @@ public class AbstractIntegrationTest {
 
     private int countMessages(final List<TestListener.Message> messages, final int level) {
         int count = 0;
+        final Set<String> duplicates = new HashSet<>();
+        messages:
         for (final TestListener.Message m : messages) {
             if (m.level == level) {
+                for (final String code : ignoreDuplicates) {
+                    if (m.message.contains(code)) {
+                        if (duplicates.contains(code)) {
+                            continue messages;
+                        } else {
+                            duplicates.add(code);
+                        }
+                    }
+                }
                 count++;
             }
         }
@@ -313,7 +355,7 @@ public class AbstractIntegrationTest {
      * @throws Exception if conversion failed
      */
     private List<TestListener.Message> runOt(final File srcDir, final Transtype transtype, final File tempBaseDir, final File resBaseDir,
-                                             final Map<String, String> args) throws Exception {
+                                             final Map<String, String> args, final String[] targets) throws Exception {
         final File tempDir = new File(tempBaseDir, transtype.toString());
         final File resDir = new File(resBaseDir, transtype.toString());
         deleteDirectory(resDir);
@@ -330,7 +372,7 @@ public class AbstractIntegrationTest {
             System.setErr(new PrintStream(new DemuxOutputStream(project, true)));
             project.fireBuildStarted();
             project.init();
-            project.setUserProperty("transtype", transtype == Transtype.PREPROCESS ? Transtype.XHTML.toString() : transtype.toString());
+            project.setUserProperty("transtype", transtype.name);
             if (transtype.equals("pdf") || transtype.equals("pdf2")) {
                 project.setUserProperty("pdf.formatter", "fop");
                 project.setUserProperty("fop.formatter.output-format", "text/plain");
@@ -342,20 +384,18 @@ public class AbstractIntegrationTest {
             project.setUserProperty("dita.dir", ditaDir.getAbsolutePath());
             project.setUserProperty("output.dir", resDir.getAbsolutePath());
             project.setUserProperty("dita.temp.dir", tempDir.getAbsolutePath());
+            project.setUserProperty("clean.temp", "no");
             args.entrySet().forEach(e -> project.setUserProperty(e.getKey(), e.getValue()));
 
             project.setKeepGoingMode(false);
             ProjectHelper.configureProject(project, buildFile);
-            final Vector<String> targets = new Vector<>();
-            switch (transtype) {
-                case PREPROCESS:
-                    targets.addElement("build-init");
-                    targets.addElement("preprocess");
-                    break;
-                default:
-                    targets.addElement(project.getDefaultTarget());
+            final Vector<String> ts = new Vector<>();
+            if (targets != null) {
+                ts.addAll(Arrays.asList(targets));
+            } else {
+                ts.addAll(Arrays.asList(transtype.targets));
             }
-            project.executeTargets(targets);
+            project.executeTargets(ts);
 
             return listener.messages;
         } finally {

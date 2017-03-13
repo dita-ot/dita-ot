@@ -21,6 +21,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.function.Predicate;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
@@ -95,6 +96,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     private URI primaryDitamap;
     private boolean isRootElement = true;
     private DitaClass rootClass = null;
+    private Predicate<String> formatFilter;
 
     /**
      * Set output utilities.
@@ -396,40 +398,41 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         if (foreignLevel > 0) {
             foreignLevel++;
-            return;
         } else if (TOPIC_FOREIGN.matches(classValue) || TOPIC_UNKNOWN.matches(classValue)) {
             foreignLevel++;
         }
 
-        if (classValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
-            logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).setLocation(atts).toString());
-        }
-
-        if (TOPIC_TOPIC.matches(classValue) || MAP_MAP.matches(classValue)) {
-            final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
-            if (domains == null) {
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).setLocation(atts).toString());
+        if (foreignLevel == 0) {
+            if (classValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).setLocation(atts).toString());
             }
-        }
 
-        if ((MAP_MAP.matches(classValue)) || (TOPIC_TITLE.matches(classValue))) {
-            isValidInput = true;
-        }
+            if (TOPIC_TOPIC.matches(classValue) || MAP_MAP.matches(classValue)) {
+                final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
+                if (domains == null) {
+                    logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).setLocation(atts).toString());
+                }
+            }
 
-        parseConrefAttr(atts);
-        if (PR_D_CODEREF.matches(classValue)) {
-            parseCoderef(atts);
-        } else if (TOPIC_OBJECT.matches(classValue)) {
-            parseObject(atts);
-        } else if (MAP_TOPICREF.matches(classValue)) {
-            parseAttribute(atts, ATTRIBUTE_NAME_HREF);
-            parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
-        } else {
-            parseAttribute(atts, ATTRIBUTE_NAME_HREF);
+            if ((MAP_MAP.matches(classValue)) || (TOPIC_TITLE.matches(classValue))) {
+                isValidInput = true;
+            }
+
+            parseConrefAttr(atts);
+            if (PR_D_CODEREF.matches(classValue)) {
+                parseCoderef(atts);
+            } else if (TOPIC_OBJECT.matches(classValue)) {
+                parseObject(atts);
+            } else if (MAP_TOPICREF.matches(classValue)) {
+                parseAttribute(atts, ATTRIBUTE_NAME_HREF);
+                parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
+            } else {
+                parseAttribute(atts, ATTRIBUTE_NAME_HREF);
+            }
+            parseConactionAttr(atts);
+            parseConkeyrefAttr(atts);
+            parseKeyrefAttr(atts);
         }
-        parseConactionAttr(atts);
-        parseConkeyrefAttr(atts);
-        parseKeyrefAttr(atts);
 
         getContentHandler().startElement(uri, localName, qName, atts);
     }
@@ -513,7 +516,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         if (foreignLevel > 0) {
             foreignLevel--;
-            return;
+            assert foreignLevel >= 0;
         }
 
         getContentHandler().endElement(uri, localName, qName);
@@ -569,7 +572,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
             }
         }
 
-        if (isFormatDita(attrFormat)) {
+        if (isFormatDita(attrFormat)) { // && formatFilter.test(attrFormat)
             if (ATTRIBUTE_NAME_HREF.equals(attrName)) {
                 if (followLinks()) {
                     hrefTargets.add(filename);
@@ -721,6 +724,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
                 addToOutFilesSet(filename);
             }
         }
+    }
+
+    public void setFormatFilter(Predicate<String> formatFilter) {
+        this.formatFilter = formatFilter;
     }
 
     /**

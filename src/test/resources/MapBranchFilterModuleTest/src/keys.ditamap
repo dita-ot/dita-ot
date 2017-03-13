@@ -1,0 +1,35 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+  ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">DITA Topic Map</title>
+  <topicref class="- map/topicref " href="install.dita" keys="install">
+    <ditavalref href="linux.ditaval" class="+ map/topicref ditavalref-d/ditavalref "/>
+    <ditavalref href="mac.ditaval" class="+ map/topicref ditavalref-d/ditavalref ">
+      <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+        <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix ">mac</dvrResourceSuffix>
+        <dvrKeyscopePrefix class="+ topic/data ditavalref-d/dvrKeyscopePrefix ">mac</dvrKeyscopePrefix>
+      </ditavalmeta>
+    </ditavalref>
+    <ditavalref href="win.ditaval" class="+ map/topicref ditavalref-d/ditavalref ">
+      <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+        <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix ">win</dvrResourceSuffix>
+        <dvrKeyscopePrefix class="+ topic/data ditavalref-d/dvrKeyscopePrefix ">win</dvrKeyscopePrefix>
+      </ditavalmeta>
+    </ditavalref>
+    <topicref class="- map/topicref " href="perform-install.dita" keys="perform-install"/> 
+    <topicref class="- map/topicref " href="configure.dita" keys="configure">
+      <ditavalref href="novice.ditaval" class="+ map/topicref ditavalref-d/ditavalref ">
+        <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+          <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix ">novice</dvrResourceSuffix>
+          <dvrKeyscopePrefix class="+ topic/data ditavalref-d/dvrKeyscopePrefix ">novice</dvrKeyscopePrefix>
+        </ditavalmeta>
+      </ditavalref>
+      <ditavalref href="advanced.ditaval" class="+ map/topicref ditavalref-d/ditavalref ">
+        <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+          <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix ">admin</dvrResourceSuffix>
+          <dvrKeyscopePrefix class="+ topic/data ditavalref-d/dvrKeyscopePrefix ">admin</dvrKeyscopePrefix>
+        </ditavalmeta>
+      </ditavalref>
+    </topicref>
+  </topicref>
+</map>

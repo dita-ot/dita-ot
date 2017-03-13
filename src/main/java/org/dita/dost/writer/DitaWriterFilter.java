@@ -9,6 +9,8 @@
 package org.dita.dost.writer;
 
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.GenMapAndTopicListModule;
+import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -58,9 +60,16 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     private File outputFile;
     /** Foreign/unknown nesting level. */
     private int foreignLevel;
-    /** File infos by src. */
-    private Map<URI, FileInfo> fileInfoMap;
+//    /** File infos by src. */
+//    private Map<URI, FileInfo> fileInfoMap;
+    private TempFileNameScheme tempFileNameScheme;
 
+    public DitaWriterFilter() {
+    }
+
+    public void setTempFileNameScheme(TempFileNameScheme tempFileNameScheme) {
+        this.tempFileNameScheme = tempFileNameScheme;
+    }
 
     /**
      * Set default value map.
@@ -77,10 +86,10 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void setJob(final Job job) {
         super.setJob(job);
-        fileInfoMap = new HashMap<>();
-        for (final FileInfo f: job.getFileInfo()) {
-            fileInfoMap.put(f.result, f);
-        }
+//        fileInfoMap = new HashMap<>();
+//        for (final FileInfo f: job.getFileInfo()) {
+//            fileInfoMap.put(f.result, f);
+//        }
     }
 
     // ContentHandler methods
@@ -96,7 +105,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
 
     @Override
     public void startDocument() throws SAXException {
-        final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(toFile(job.getInputDir().resolve("dummy")), toFile(currentFile)),
+        // XXX May be require fixup
+        final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
                 toFile(currentFile),
                 toFile(job.getInputFile()),
                 job);
@@ -213,12 +223,17 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             }
             if (attValue.toString().length() != 0) {
                 final URI current = currentFile.resolve(attValue);
-                final FileInfo f = fileInfoMap.get(current);
+                final FileInfo f = job.getFileInfo(current);
                 if (f != null) {
-                    final FileInfo cfi = fileInfoMap.get(currentFile);
+                    final FileInfo cfi = job.getFileInfo(currentFile);
                     final URI currrentFileTemp = job.tempDirURI.resolve(cfi.uri);
                     final URI targetTemp = job.tempDirURI.resolve(f.uri);
                     attValue = getRelativePath(currrentFileTemp, targetTemp);
+                } else if (tempFileNameScheme != null) {
+                    final URI currrentFileTemp = job.tempDirURI.resolve(tempFileNameScheme.generateTempFileName(currentFile));
+                    final URI targetTemp = job.tempDirURI.resolve(tempFileNameScheme.generateTempFileName(current));
+                    final URI relativePath = getRelativePath(currrentFileTemp, targetTemp);
+                    attValue = relativePath;
                 } else {
                     attValue = getRelativePath(currentFile, current);
                 }

@@ -123,7 +123,6 @@ See the accompanying LICENSE file for applicable license.
     <job-helper file="conref.list" property="conreflist"/>
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-helper file="flagimage.list" property="flagimagelist"/>
     <job-helper file="fullditamap.list" property="fullditamaplist"/>
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
     <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
@@ -149,7 +148,6 @@ See the accompanying LICENSE file for applicable license.
     <property name="conreffile" value="conref.list"/>
     <!-- Deprecated since 2.1 -->
     <property name="imagefile" value="image.list"/>
-    <property name="flagimagefile" value="flagimage.list"/>
     <!-- Deprecated since 2.1 -->
     <property name="htmlfile" value="html.list"/>
     <property name="hreftargetsfile" value="hreftargets.list"/>
@@ -177,6 +175,8 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Profile filtering." taskname="profile"
               inputmap="${args.input}">
       <module class="org.dita.dost.module.FilterModule">
+        <ditaFileset format="dita"/>
+        <ditaFileset format="ditamap"/>
         <!--param name="ditadir" location="${dita.dir}"/-->
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
         <!--param name="inputdir" location="${args.input.dir}" if="args.input.dir"/-->
@@ -220,7 +220,10 @@ See the accompanying LICENSE file for applicable license.
     unless="preprocess.conrefpush.skip"
     description="Resolve conref push">
     <pipeline message="Resolve conref push." taskname="conref-push">
-      <module class="org.dita.dost.module.ConrefPushModule"/>
+      <module class="org.dita.dost.module.ConrefPushModule">
+        <ditaFileset format="dita"/>
+        <ditaFileset format="ditamap"/>
+      </module>
     </pipeline>
     <job-helper file="conref.list" property="conreflist"/>
   </target>
@@ -543,7 +546,6 @@ See the accompanying LICENSE file for applicable license.
     <job-helper file="conref.list" property="conreflist"/>
     <job-helper file="conreftargets.list" property="conreftargetslist"/>
     <job-helper file="copytosource.list" property="copytosourcelist"/>
-    <job-helper file="flagimage.list" property="flagimagelist"/>
     <job-helper file="fullditamap.list" property="fullditamaplist"/>
     <job-helper file="fullditamapandtopic.list" property="fullditamapandtopiclist"/>
     <job-helper file="fullditatopic.list" property="fullditatopiclist"/>
@@ -597,6 +599,8 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-flag.skip"
     description="Copy flag files">
+    <property name="flagimagefile" value="flagimage.list"/>
+    <job-helper file="flagimage.list" property="flagimagelist"/>
     <dita-ot-copy todir="${output.dir}" includesfile="${dita.temp.dir}/${flagimagefile}" relativepaths="${relflagimagelist}" />
   </target>
   

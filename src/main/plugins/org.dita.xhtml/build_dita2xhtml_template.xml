@@ -60,7 +60,7 @@ See the accompanying LICENSE file for applicable license.
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
         classpathref="dost.class.path"
         style="${args.xhtml.toc.xsl}">
-        <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+        <!--excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/-->
         <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
         <param name="contenttarget" expression="${args.xhtml.contenttarget}" if="args.xhtml.contenttarget"/>
         <param name="CSS" expression="${args.css.file}" if="args.css.file" />
@@ -85,7 +85,7 @@ See the accompanying LICENSE file for applicable license.
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${args.xhtml.toc.xsl}">
-        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+        	<!--excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/-->
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="contenttarget" expression="${args.xhtml.contenttarget}" if="args.xhtml.contenttarget"/>
             <param name="CSS" expression="${args.css.file}" if="args.css.file" />

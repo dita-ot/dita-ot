@@ -22,8 +22,8 @@
 <p class="- topic/p ">Xref to the concept in this file: <xref class="- topic/xref " href="#concept"></xref>. Now do it again, <xref class="- topic/xref " href="#concept">with link text</xref>.</p>
 <p class="- topic/p ">Xref to the fig in this topic: <xref class="- topic/xref " href="#topic/fig"></xref>. Now do it again, <xref class="- topic/xref " href="#topic/fig">with link text</xref>.</p>
 <p class="- topic/p ">Xref to the table in this topic: <xref class="- topic/xref " href="#topic/table"></xref>. Now do it again, <xref class="- topic/xref " href="#topic/table">with link text</xref>.</p>
-<p class="- topic/p ">Xref to an external website: <xref class="- topic/xref " format="html" href="http://www.ibm.com"></xref>. Now do it again, <xref class="- topic/xref " format="html" href="http://www.ibm.com">with link text</xref>.</p>
-<p class="- topic/p ">Xref to an external website with an anchor: <xref class="- topic/xref " format="html" href="http://www.ibm.com/index.html#anchor"></xref>. Now do it again, <xref class="- topic/xref " format="html" href="http://www.ibm.com/index.html#anchor">with link text</xref>.</p>
+<p class="- topic/p ">Xref to an external website: <xref class="- topic/xref " format="html" href="http://www.ibm.com" scope="external"></xref>. Now do it again, <xref class="- topic/xref " format="html" href="http://www.ibm.com" scope="external">with link text</xref>.</p>
+<p class="- topic/p ">Xref to an external website with an anchor: <xref class="- topic/xref " format="html" href="http://www.ibm.com/index.html#anchor" scope="external"></xref>. Now do it again, <xref class="- topic/xref " format="html" href="http://www.ibm.com/index.html#anchor" scope="external">with link text</xref>.</p>
 <fig class="- topic/fig " id="fig"><title class="- topic/title ">figure title</title>
 <p class="- topic/p ">test <q class="- topic/q ">quote</q> in a figure</p>
 </fig>

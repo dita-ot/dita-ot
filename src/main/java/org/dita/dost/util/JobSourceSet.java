@@ -8,6 +8,7 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 import static org.dita.dost.util.URLUtils.*;
 
 import org.apache.tools.ant.Project;
@@ -47,7 +48,7 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
             for (final Job.FileInfo f : job.getFileInfo(new Job.FileInfo.Filter<Job.FileInfo>() {
                 @Override
                 public boolean accept(final Job.FileInfo f) {
-                    return (format == null || format.equals(f.format)) &&
+                    return (format == null || (format.equals(f.format)/* || (format.equals(ATTR_FORMAT_VALUE_DITA) && f.format == null)*/)) &&
                             (hasConref == null || f.hasConref == hasConref) &&
                             (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
                 }

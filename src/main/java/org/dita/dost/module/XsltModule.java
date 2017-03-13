@@ -59,22 +59,6 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 	private FileNameMapper mapper;
     
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
-    	logger.info("Transforming into " + destDir.getAbsolutePath());
-        final TransformerFactory tf = TransformerFactory.newInstance();
-        tf.setURIResolver(xmlcatalog);
-        try {
-            templates = tf.newTemplates(new StreamSource(style));
-        } catch (TransformerConfigurationException e) {
-            throw new RuntimeException("Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(), e);
-        }
-        XMLReader parser;
-		try {
-			parser = XMLUtils.getXMLReader();
-		} catch (final SAXException e) {
-			throw new RuntimeException("Failed to create XML reader: " + e.getMessage(), e);
-		}
-        parser.setEntityResolver(xmlcatalog);
-        
         if (fileInfoFilter != null) {
             final Collection<Job.FileInfo> res = job.getFileInfo(fileInfoFilter);
             includes = new ArrayList<>(res.size());
@@ -83,6 +67,25 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             }
             baseDir = job.tempDir;
         }
+        if (includes.isEmpty()) {
+            return null;
+        }
+
+        logger.info("Transforming into " + destDir.getAbsolutePath());
+        final TransformerFactory tf = TransformerFactory.newInstance();
+        tf.setURIResolver(xmlcatalog);
+        try {
+            templates = tf.newTemplates(new StreamSource(style));
+        } catch (TransformerConfigurationException e) {
+            throw new RuntimeException("Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(), e);
+        }
+        XMLReader parser;
+        try {
+            parser = XMLUtils.getXMLReader();
+        } catch (final SAXException e) {
+            throw new RuntimeException("Failed to create XML reader: " + e.getMessage(), e);
+        }
+        parser.setEntityResolver(xmlcatalog);
 
     	Transformer t = null;
         for (final File include: includes) {

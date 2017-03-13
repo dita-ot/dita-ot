@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN" "file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/concept.dtd">
+<concept id="concept6" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>Test product attribute</title>
+    <conbody>
+        <p audience="programmer">audience value is programmer within p tag</p>
+        <p>
+            <note audience="admin">admin (within note tag)</note>
+            <b audience="pm">pm (within b tag)</b>
+            <data audience="user">user (within data tag)</data>
+            <lq  audience="audiences">audiences (within lq tag)</lq>
+            <indexterm audience="admin">admin (within indexterm tag)</indexterm>
+        </p>
+        <pre audience="pm">audience value is pm within pre tag</pre>
+        <codeblock product="user" audience="">audience value is user within codeblock tag</codeblock>
+    </conbody>
+</concept>
+

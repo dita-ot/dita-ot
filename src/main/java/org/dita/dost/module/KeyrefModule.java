@@ -77,13 +77,26 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input)
             throws DITAOTException {
-        final Collection<FileInfo> fis = new HashSet(job.getFileInfo(new Filter<FileInfo>() {
-            @Override
-            public boolean accept(final FileInfo f) {
-                return f.hasKeyref;
-            }
-        }));
+        if (fileInfoFilter == null) {
+            fileInfoFilter = new Filter<FileInfo>() {
+                @Override
+                public boolean accept(FileInfo f) {
+                    return f.format == null || f.format.equals(ATTR_FORMAT_VALUE_DITA) || f.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
+                }
+            };
+        }
+        final Collection<FileInfo> fis = job.getFileInfo(fileInfoFilter).stream()
+                .filter(f -> f.hasKeyref)
+                .collect(Collectors.toSet());
         if (!fis.isEmpty()) {
+            try {
+                final String cls = Optional
+                        .ofNullable(job.getProperty("temp-file-name-scheme"))
+                        .orElse(configuration.get("temp-file-name-scheme"));
+                tempFileNameScheme = (GenMapAndTopicListModule.TempFileNameScheme) getClass().forName(cls).newInstance();
+            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             tempFileNameScheme.setBaseDir(job.getInputDir());
             initFilters();
 
@@ -147,7 +160,14 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 res.add(processTopic(f, rootScope, f.isResourceOnly));
             }
         }
-        return adjustResourceRenames(res);
+
+        if (fileInfoFilter != null) {
+            return adjustResourceRenames(res.stream()
+                    .filter(rs -> fileInfoFilter.accept(rs.in))
+                    .collect(Collectors.toList()));
+        } else {
+            return adjustResourceRenames(res);
+        }
     }
 
     List<ResolveTask> adjustResourceRenames(final List<ResolveTask> renames) {
