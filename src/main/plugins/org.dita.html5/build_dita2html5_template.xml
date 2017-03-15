@@ -102,7 +102,7 @@ See the accompanying LICENSE file for applicable license.
     <!-- end to check and init css relevant parameters -->
     <condition property="out.ext" value=".html">
       <not>
-        <isset property="out.ext"/>
+        <isset property="args.outext"/>
       </not>
     </condition>
     <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
