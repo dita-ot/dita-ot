@@ -105,7 +105,6 @@ See the accompanying LICENSE file for applicable license.
         <isset property="out.ext"/>
       </not>
     </condition>
-    <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <!-- Set to "true" if you get out-of-memory errors during preprocess
     while processing very large (thousands of files) document sets. -->
     <condition property="dita.html5.reloadstylesheet" value="false">
@@ -179,6 +178,7 @@ See the accompanying LICENSE file for applicable license.
   <macrodef name="html5.topics">
     <element name="params" optional="true" implicit="true"/>
     <sequential>
+      <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
       <pipeline message="Convert DITA topic to HTML5" taskname="xslt">
       <xslt basedir="${dita.temp.dir}"
             destdir="${output.dir}"
