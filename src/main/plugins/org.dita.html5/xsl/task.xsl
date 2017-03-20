@@ -184,6 +184,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:otherwise>
           <!-- First step in a series of steps -->
           <xsl:element name="{$list-type}">
+            <xsl:call-template name="commonattributes"/>
             <xsl:if test="$list-type='ol' and preceding-sibling::*[contains(@class,' task/step ')]">
               <!-- Restart numbering for ordered steps that were interrupted by stepsection.
                    The start attribute is valid in XHTML 1.0 Transitional, but not for XHTML 1.0 Strict.
