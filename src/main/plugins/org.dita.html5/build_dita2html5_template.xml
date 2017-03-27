@@ -102,10 +102,9 @@ See the accompanying LICENSE file for applicable license.
     <!-- end to check and init css relevant parameters -->
     <condition property="out.ext" value=".html">
       <not>
-        <isset property="out.ext"/>
+        <isset property="args.outext"/>
       </not>
     </condition>
-    <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
     <!-- Set to "true" if you get out-of-memory errors during preprocess
     while processing very large (thousands of files) document sets. -->
     <condition property="dita.html5.reloadstylesheet" value="false">
@@ -128,6 +127,7 @@ See the accompanying LICENSE file for applicable license.
       </filterchain>
     </loadfile>
     <makeurl property="html5.map.url" file="${dita.temp.dir}/${html5.map}"/>
+    <makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>    
   </target>
 
   <target name="html5.image-metadata"
@@ -182,7 +182,7 @@ See the accompanying LICENSE file for applicable license.
       <pipeline message="Convert DITA topic to HTML5" taskname="xslt">
       <xslt basedir="${dita.temp.dir}"
             destdir="${output.dir}"
-            reloadstylesheet="${dita.xhtml.reloadstylesheet}"
+            reloadstylesheet="${dita.html5.reloadstylesheet}"
             classpathref="dost.class.path"
             extension="${out.ext}"
             style="${args.xsl}"
@@ -198,7 +198,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
         <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>
         <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl"/>
-        <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if="args.xhtml.classattr"/>
+        <param name="PRESERVE-DITA-CLASS" expression="${args.html5.classattr}" if="args.html5.classattr"/>
         <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if="args.hide.parent.link"/>
         <param name="include.rellinks" expression="${include.rellinks}"/>
         <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
@@ -227,6 +227,7 @@ See the accompanying LICENSE file for applicable license.
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${args.html5.toc.xsl}">
+        <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="contenttarget" expression="${args.html5.contenttarget}" if="args.html5.contenttarget"/>
         <param name="CSS" expression="${args.css.file}" if="args.css.file"/>

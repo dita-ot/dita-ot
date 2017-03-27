@@ -220,7 +220,7 @@ public final class NormalizeTableFilter extends AbstractXMLFilter {
                 }
                 if (atts.getValue(ATTRIBUTE_NAME_NAMEEND) != null) {
                     XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL + getEndNumber(atts, columnNumber));
-                    XMLUtils.addOrSetAttribute(res, DITA_NAMESPACE, ATTR_MORECOLS, DITA_OT_PREFIX + ":" + ATTR_MORECOLS, "CDATA", Integer.toString(getEndNumber(atts, columnNumber) - columnNumber));
+                    XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_MORECOLS, DITA_OT_PREFIX + ":" + ATTR_MORECOLS, "CDATA", Integer.toString(getEndNumber(atts, columnNumber) - columnNumber));
                 }
                 // Add extensions
                 XMLUtils.addOrSetAttribute(res, DITA_OT_NS, ATTR_X, DITA_OT_PREFIX + ":" + ATTR_X, "CDATA", Integer.toString(columnNumber));
