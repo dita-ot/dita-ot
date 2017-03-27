@@ -42,12 +42,12 @@ See the accompanying LICENSE file for applicable license.
 <str name="Tip">Vihje</str>
 <str name="Fastpath">Pikaohje</str>
 <str name="Important">Tärkeää</str>
-<str name="Attention">Huomautus</str>
+<str name="Attention">Huomio</str>
 <str name="Caution">Varoitus</str>
 <str name="Danger">VAARA</str>
 <str name="Remember">Muistutus</str>
 <str name="Restriction">Rajoitus</str>
-<str name="Warning">Huomautus</str>
+<str name="Warning">Varoitus</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Sisältö</str>
