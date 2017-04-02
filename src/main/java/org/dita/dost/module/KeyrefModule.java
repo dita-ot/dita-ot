@@ -9,7 +9,6 @@
 package org.dita.dost.module;
 
 import static java.util.stream.Collectors.toMap;
-import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.*;
 import static org.dita.dost.util.URLUtils.*;
@@ -19,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
@@ -135,7 +135,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     }
 
     /** Collect topics for key reference processing and modify map to reflect new file names. */
-    // FIXME multple topirefs in a single scope result in redundant copies, allow duplicates inside scope
     private List<ResolveTask> collectProcessingTopics(final Collection<FileInfo> fis, final KeyScope rootScope, final Document doc) {
         final List<ResolveTask> res = new ArrayList<>();
         res.add(new ResolveTask(rootScope, job.getFileInfo(job.getInputMap()), null));
@@ -147,9 +146,26 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 res.add(processTopic(f, rootScope, f.isResourceOnly));
             }
         }
-        return adjustResourceRenames(res);
+        final List<ResolveTask> deduped = removeDuplicateResolveTargets(res);
+        return adjustResourceRenames(deduped);
     }
 
+    /** Remove duplicate sources within the same scope */
+    private List<ResolveTask> removeDuplicateResolveTargets(List<ResolveTask> renames) {
+        return renames.stream()
+                .collect(Collectors.groupingBy(
+                        rt -> rt.scope,
+                        Collectors.toMap(
+                                rt -> rt.in.uri,
+                                Function.identity(),
+                                (rt1, rt2) -> rt1
+                        )
+                )).values().stream()
+                .flatMap(m -> m.values().stream())
+                .collect(Collectors.toList());
+    }
+
+    /** Adjust key targets per rewrites */
     List<ResolveTask> adjustResourceRenames(final List<ResolveTask> renames) {
         final Map<KeyScope, List<ResolveTask>> scopes = renames.stream().collect(Collectors.groupingBy(rt -> rt.scope));
 
@@ -158,6 +174,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             final KeyScope scope = group.getKey();
             final List<ResolveTask> tasks = group.getValue();
             final Map<URI, URI> rewrites = tasks.stream()
+                    // FIXME this should be filtered out earlier
                     .filter(t -> t.out != null)
                     .collect(toMap(
                             t -> t.in.uri,
@@ -224,6 +241,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 final URI href = stripFragment(job.getInputMap().resolve(hrefNode.getValue()));
                 final FileInfo fi = job.getFileInfo(href);
                 if (fi != null && fi.hasKeyref) {
+                    if (usage.getOrDefault(fi.uri, 0) != 0
+                            && res.stream().filter(rt -> rt.scope.equals(s) && rt.in.uri.equals(fi.uri))
+                                    .findAny().isPresent()) {
+                        logger.debug("Ignore duplicate rewrite for " + fi.uri + " in scope " + s);
+                        continue;
+                    }
                     final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly);
                     res.add(resolveTask);
                     final Integer used = usage.get(fi.uri);
