@@ -220,8 +220,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
     }
 
-   /** Recursively walk map and process topics that have keyrefs. */
-    private void walkMap(final Element elem, final KeyScope scope, final List<ResolveTask> res) {
+    /** Recursively walk map and process topics that have keyrefs. */
+    void walkMap(final Element elem, final KeyScope scope, final List<ResolveTask> res) {
         List<KeyScope> ss = Collections.singletonList(scope);
         if (elem.getAttributeNode(ATTRIBUTE_NAME_KEYSCOPE) != null) {
             ss = new ArrayList<>();
@@ -241,18 +241,22 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
                 final URI href = stripFragment(job.getInputMap().resolve(hrefNode.getValue()));
                 final FileInfo fi = job.getFileInfo(href);
                 if (fi != null && fi.hasKeyref) {
-                    if (usage.getOrDefault(fi.uri, 0) != 0
-                            && res.stream().filter(rt -> rt.scope.equals(s) && rt.in.uri.equals(fi.uri))
-                                    .findAny().isPresent()) {
-                        logger.debug("Ignore duplicate rewrite for " + fi.uri + " in scope " + s);
-                        continue;
-                    }
-                    final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly);
-                    res.add(resolveTask);
-                    final Integer used = usage.get(fi.uri);
-                    if (used > 1) {
-                        final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
-                        hrefNode.setValue(value.toString());
+                    final int count = usage.getOrDefault(fi.uri, 0);
+                    final Optional<ResolveTask> existing = res.stream().filter(rt -> rt.scope.equals(s) && rt.in.uri.equals(fi.uri)).findAny();
+                    if (count != 0 && existing.isPresent()) {
+                        final ResolveTask resolveTask = existing.get();
+                        if (resolveTask.out != null) {
+                            final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                            hrefNode.setValue(value.toString());
+                        }
+                    } else {
+                        final ResolveTask resolveTask = processTopic(fi, s, isResourceOnly);
+                        res.add(resolveTask);
+                        final Integer used = usage.get(fi.uri);
+                        if (used > 1) {
+                            final URI value = tempFileNameScheme.generateTempFileName(resolveTask.out.result);
+                            hrefNode.setValue(value.toString());
+                        }
                     }
                 }
             }
