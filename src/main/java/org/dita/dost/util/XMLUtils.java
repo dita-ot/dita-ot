@@ -119,10 +119,10 @@ public final class XMLUtils {
     }
     
     /**
-     * Checks if the closest DITA ancestor <foreign> or <unknown>
+     * Checks if the closest DITA ancestor {@code <foreign>} or {@code <unknown>}
      * 
      * @param classes stack of class attributes for open elements
-     * @return true if closest DITA ancestor is <foreign> or <unknown>, otherwise false
+     * @return true if closest DITA ancestor is {@code <foreign>} or {@code <unknown>}, otherwise false
      */
     public static boolean nonDitaContext(final Deque<DitaClass> classes) {
         final Iterator<DitaClass> it = classes.iterator();
