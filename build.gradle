@@ -202,7 +202,18 @@ task cleanGenerateDocs(type: Delete) {
 }
 cleanGenerateDocs.mustRunAfter generateDocs
 
-task distZip(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs]) {
+task generateJavadocs(type: Javadoc) {
+    classpath = sourceSets.main.compileClasspath
+    source = sourceSets.main.allJava
+    include "**/org/dita/dost/*.*"
+    include "**/org/dita/dost/exception/DITAOTException.*"
+    include "**/org/dita/dost/util/Configuration.*"
+    options.addStringOption("public")
+    title = "${project.description} ${project.version}"
+    destinationDir = file("${distTempDir}/doc/api")
+}
+
+task distZip(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs, generateJavadocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
@@ -224,7 +235,7 @@ task distZip(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs]) {
     }
     archiveName "dita-ot-${distFileName}.zip"
 }
-task distTarGz(type: Tar, dependsOn: [jar, generateDocs]) {
+task distTarGz(type: Tar, dependsOn: [jar, generateDocs, generateJavadocs]) {
     compression = Compression.GZIP
     into("dita-ot-${distVersion}") {
         from (distTempDir ) {
