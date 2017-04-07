@@ -12,6 +12,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.GenMapAndTopicListModule;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.StringUtils;
@@ -23,12 +24,15 @@ import org.dita.dost.module.DebugAndFilterModule;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.nonDitaContext;
 import static org.dita.dost.reader.GenListModuleReader.*;
 
 
@@ -58,8 +62,10 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     private Map<String, Map<String, String>> defaultValueMap;
     /** Absolute path to current destination file. */
     private File outputFile;
-    /** Foreign/unknown nesting level. */
-    private int foreignLevel;
+    /** DITA class values for open elements **/
+    private final Deque<DitaClass> classes = new LinkedList<>();
+    /** File infos by src. */
+    private Map<URI, FileInfo> fileInfoMap;
 //    /** File infos by src. */
 //    private Map<URI, FileInfo> fileInfoMap;
     private TempFileNameScheme tempFileNameScheme;
@@ -97,14 +103,14 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
-        if (foreignLevel > 0) {
-            foreignLevel--;
-        }
+    	classes.pop();
         getContentHandler().endElement(uri, localName, qName);
     }
 
     @Override
     public void startDocument() throws SAXException {
+    	classes.clear();
+    	
         // XXX May be require fixup
         final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
                 toFile(currentFile),
@@ -132,18 +138,11 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
                              final Attributes atts) throws SAXException {
-        if (foreignLevel > 0) {
-            foreignLevel++;
-        } else if (foreignLevel == 0) {
-            final String attrValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-            if (attrValue == null && !ELEMENT_NAME_DITA.equals(localName)) {
-                logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
-            }
-            if (attrValue != null &&
-                    (TOPIC_FOREIGN.matches(attrValue) ||
-                            TOPIC_UNKNOWN.matches(attrValue))) {
-                foreignLevel = 1;
-            }
+    	final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
+    	if (cls.isValid()) {
+        	classes.addFirst(cls);
+        }else {
+        	classes.addFirst(null);
         }
 
         final AttributesImpl res = new AttributesImpl();

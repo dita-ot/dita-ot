@@ -8,6 +8,7 @@
 package org.dita.dost.reader;
 
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -30,10 +31,10 @@ import static org.dita.dost.util.URLUtils.*;
  */
 public final class CopyToReader extends AbstractXMLFilter {
 
-    /** Map of copy-to target to souce */
+    /** Map of copy-to target to source */
     private final Map<URI, URI> copyToMap = new HashMap<>(16);
-    /** foreign/unknown nesting level */
-    private int foreignLevel = 0;
+    /** DITA class values for open elements **/
+    private final Deque<DitaClass> classes = new LinkedList<>();
     /** chunk nesting level */
     private int chunkLevel = 0;
     /** Stack for @processing-role value */
@@ -63,7 +64,7 @@ public final class CopyToReader extends AbstractXMLFilter {
      * Reset the internal variables.
      */
     public void reset() {
-        foreignLevel = 0;
+        classes.clear();
         chunkLevel = 0;
         copyToMap.clear();
         processRoleStack.clear();
@@ -86,11 +87,12 @@ public final class CopyToReader extends AbstractXMLFilter {
         processRoleStack.push(processingRole);
 
         final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-
-        if (foreignLevel > 0) {
-            foreignLevel++;
-        } else if (TOPIC_FOREIGN.matches(classValue) || TOPIC_UNKNOWN.matches(classValue)) {
-            foreignLevel++;
+        
+        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
+        if (cls.isValid()) {
+        	classes.addFirst(cls);
+        }else {
+        	classes.addFirst(null);
         }
 
         if (chunkLevel > 0) {
@@ -109,10 +111,8 @@ public final class CopyToReader extends AbstractXMLFilter {
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         processRoleStack.pop();
-
-        if (foreignLevel > 0) {
-            foreignLevel--;
-        }
+        classes.pop();
+        
         if (chunkLevel > 0) {
             chunkLevel--;
         }

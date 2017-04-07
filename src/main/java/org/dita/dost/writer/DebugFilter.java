@@ -11,10 +11,13 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.DitaClass;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -35,7 +38,7 @@ public final class DebugFilter extends AbstractXMLFilter {
 
 	private Locator locator;
 	private final Map<String, Integer> counterMap = new HashMap<>();
-	private int foreignLevel;
+	private final Deque<DitaClass> classes = new LinkedList<>();
 
 	// Locator methods
     
@@ -46,21 +49,20 @@ public final class DebugFilter extends AbstractXMLFilter {
     }
 	
 	// SAX methods
+	@Override
+    public void startDocument() throws SAXException {
+        classes.clear();
+        getContentHandler().startDocument();
+    }
 	
 	@Override
 	public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
 			throws SAXException {
-	    if (foreignLevel > 0) {
-            foreignLevel++;
-        } else if (foreignLevel == 0) {
-            final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
-            if (TOPIC_FOREIGN.matches(classValue) || TOPIC_UNKNOWN.matches(classValue)) {
-                foreignLevel = 1;
-            }
-        }
+		final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : null;
+        classes.addFirst(cls);
 	    
 		final AttributesImpl res = new AttributesImpl(atts);
-		if (foreignLevel <= 1){
+		if (cls!=null && !ELEMENT_NAME_DITA.equals(localName)) {
     		XMLUtils.addOrSetAttribute(res, ATTRIBUTE_NAME_XTRF, currentFile.toString());
     		
             Integer nextValue;
@@ -86,9 +88,7 @@ public final class DebugFilter extends AbstractXMLFilter {
 	@Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
-        if (foreignLevel > 0){
-            foreignLevel--;
-        }
+        classes.pop();
         super.endElement(uri, localName, qName);
 	}
 	
