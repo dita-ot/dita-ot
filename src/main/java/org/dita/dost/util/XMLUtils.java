@@ -125,18 +125,18 @@ public final class XMLUtils {
      * @return true if closest DITA ancestor is <foreign> or <unknown>, otherwise false
      */
     public static boolean nonDitaContext(final Deque<DitaClass> classes) {
-    	final Iterator<DitaClass> it = classes.iterator();
-    	it.next(); // Skip first, because we're checking if current element is inside non-DITA context
-    	while (it.hasNext()) {
-    		final DitaClass cls = it.next();
-    		if (cls != null && cls.isValid() && 
-    				(TOPIC_FOREIGN.matches(cls) || TOPIC_UNKNOWN.matches(cls))) {
-    			return true;
-    		} else if (cls != null && cls.isValid()) {
-    			return false;
-    		}
-    	}
-    	return false;
+        final Iterator<DitaClass> it = classes.iterator();
+        it.next(); // Skip first, because we're checking if current element is inside non-DITA context
+        while (it.hasNext()) {
+            final DitaClass cls = it.next();
+            if (cls != null && cls.isValid() &&
+                    (TOPIC_FOREIGN.matches(cls) || TOPIC_UNKNOWN.matches(cls))) {
+                return true;
+            } else if (cls != null && cls.isValid()) {
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
@@ -633,25 +633,25 @@ public final class XMLUtils {
      * Convenience builder for {@link org.xml.sax.Attributes SAX Attributes}.
      */
     public static final class AttributesBuilder {
-    	
-    	final AttributesImpl atts;
-    	
-    	/**
-    	 * Construct empty attributes builder.
-    	 */
-    	public AttributesBuilder() {
-    		atts = new AttributesImpl();
-    	}
-    	
-    	/**
-    	 * Construct attributes builder with initial attribute set.
-    	 * 
-    	 * @param atts initial attributes
-    	 */
-    	public AttributesBuilder(final Attributes atts) {
-    		this.atts = new AttributesImpl(atts);
-    	}
-    	
+
+        final AttributesImpl atts;
+
+        /**
+         * Construct empty attributes builder.
+         */
+        public AttributesBuilder() {
+            atts = new AttributesImpl();
+        }
+
+        /**
+         * Construct attributes builder with initial attribute set.
+         *
+         * @param atts initial attributes
+         */
+        public AttributesBuilder(final Attributes atts) {
+            this.atts = new AttributesImpl(atts);
+        }
+
         /**
          * Add or set attribute.
          * 
@@ -683,7 +683,7 @@ public final class XMLUtils {
         public AttributesBuilder add(final String localName, final String value) {
             return add(NULL_NS_URI, localName, localName, "CDATA", value);
         }
-    	
+
         /**
          * Add or set attribute. Convenience method for {@link #add(String, String, String, String, String)}.
          * 
@@ -725,10 +725,10 @@ public final class XMLUtils {
          * Returns a newly-created Attributes based on the contents of the builder.
          * @return new attributes
          */
-    	public Attributes build() {
-    		return new AttributesImpl(atts);
-    	}
-    	
+        public Attributes build() {
+            return new AttributesImpl(atts);
+        }
+
     }
 
     /**

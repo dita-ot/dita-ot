@@ -65,8 +65,8 @@ public final class XMLGrammarPoolImplUtils extends XMLGrammarPoolImpl {
         if (desc instanceof XSDDescription) {
 //            final String systemId = ((XSDDescription) desc).getLiteralSystemId();
 //            return systemId == null ? 0 : systemId.hashCode();
-        	// return -1 for XSD grammar hashcode because we want to disable XSD grammar caching
-        	return -1;
+            // return -1 for XSD grammar hashcode because we want to disable XSD grammar caching
+            return -1;
         } else {
             return desc.hashCode();
         }

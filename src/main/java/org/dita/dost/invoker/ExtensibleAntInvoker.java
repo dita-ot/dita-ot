@@ -279,8 +279,8 @@ public final class ExtensibleAntInvoker extends Task {
     }
     
     private Set<File> readListFile(final List<IncludesFile> includes, final DITAOTAntLogger logger) {
-    	final Set<File> inc = new HashSet<>();
-    	for (final IncludesFile i: includes) {
+        final Set<File> inc = new HashSet<>();
+        for (final IncludesFile i: includes) {
             if (!isValid(getProject(), i.ifProperty, null)) {
                 continue;
             }
@@ -300,7 +300,7 @@ public final class ExtensibleAntInvoker extends Task {
                 }
             }
         }
-    	return inc;
+        return inc;
     }
     
     public static boolean isValid(final Project project, final String ifProperty, final String unlessProperty) {
@@ -373,23 +373,23 @@ public final class ExtensibleAntInvoker extends Task {
         }
         
         public void setClasspathref(final String classpath) {
-        	// Ignore classpathref attribute
+            // Ignore classpathref attribute
         }
         
         public void setExtension(final String extension) {
-        	// Ignore extension attribute
+            // Ignore extension attribute
         }
         
         public void setReloadstylesheet(final boolean reloadstylesheet) {
-        	this.reloadstylesheet = reloadstylesheet;
+            this.reloadstylesheet = reloadstylesheet;
         }
         
         public void setIn(final File in) {
-        	this.in = in;
+            this.in = in;
         }
         
         public void setOut(final File out) {
-        	this.out = out;
+            this.out = out;
         }
         
         public void setIncludesfile(final File includesfile) {

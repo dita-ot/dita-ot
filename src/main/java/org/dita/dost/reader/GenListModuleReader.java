@@ -399,46 +399,46 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
         if (cls.isValid()) {
-			classes.addFirst(cls);
-		} else {
-			classes.addFirst(null);
-		}
+            classes.addFirst(cls);
+        } else {
+            classes.addFirst(null);
+        }
 
         if (!cls.isValid() && !ELEMENT_NAME_DITA.equals(localName)) {
-        	if (nonDitaContext(classes)) {
-        		// Normal case for bad class: in non DITA context, no message
-        	} else if (atts.getValue(ATTRIBUTE_NAME_CLASS) == null) { // Missing @class
-        		logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).setLocation(atts).toString());
-        	} else { // Invalid DITA @class
-        		logger.info(MessageUtils.getInstance().getMessage("DOTJ070I", atts.getValue(ATTRIBUTE_NAME_CLASS), localName).setLocation(atts).toString());
-        	}
+            if (nonDitaContext(classes)) {
+                // Normal case for bad class: in non DITA context, no message
+            } else if (atts.getValue(ATTRIBUTE_NAME_CLASS) == null) { // Missing @class
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).setLocation(atts).toString());
+            } else { // Invalid DITA @class
+                logger.info(MessageUtils.getInstance().getMessage("DOTJ070I", atts.getValue(ATTRIBUTE_NAME_CLASS), localName).setLocation(atts).toString());
+            }
         } else {
 
-        	if (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls)) {
-        		final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
-        		if (domains == null) {
-        			logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).setLocation(atts).toString());
-        		}
-        	}
+            if (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls)) {
+                final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
+                if (domains == null) {
+                    logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).setLocation(atts).toString());
+                }
+            }
 
-        	if ((MAP_MAP.matches(cls)) || (TOPIC_TITLE.matches(cls))) {
-        		isValidInput = true;
-        	}
+            if ((MAP_MAP.matches(cls)) || (TOPIC_TITLE.matches(cls))) {
+                isValidInput = true;
+            }
 
-        	parseConrefAttr(atts);
-        	if (PR_D_CODEREF.matches(cls)) {
-        		parseCoderef(atts);
-        	} else if (TOPIC_OBJECT.matches(cls)) {
-        		parseObject(atts);
-        	} else if (MAP_TOPICREF.matches(cls)) {
-        		parseAttribute(atts, ATTRIBUTE_NAME_HREF);
-        		parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
-        	} else {
-        		parseAttribute(atts, ATTRIBUTE_NAME_HREF);
-        	}
-        	parseConactionAttr(atts);
-        	parseConkeyrefAttr(atts);
-        	parseKeyrefAttr(atts);
+            parseConrefAttr(atts);
+            if (PR_D_CODEREF.matches(cls)) {
+                parseCoderef(atts);
+            } else if (TOPIC_OBJECT.matches(cls)) {
+                parseObject(atts);
+            } else if (MAP_TOPICREF.matches(cls)) {
+                parseAttribute(atts, ATTRIBUTE_NAME_HREF);
+                parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
+            } else {
+                parseAttribute(atts, ATTRIBUTE_NAME_HREF);
+            }
+            parseConactionAttr(atts);
+            parseConkeyrefAttr(atts);
+            parseKeyrefAttr(atts);
         }
 
         getContentHandler().startElement(uri, localName, qName, atts);

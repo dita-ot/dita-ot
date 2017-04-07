@@ -52,66 +52,66 @@ public final class ConrefPushParser extends AbstractXMLFilter {
     private Stack<String> idStack = null;
 
     /**topicSpecSet is used to store all kinds of names for elements which is
-	specialized from <topic>. It is useful in endElement(...) because we don't
-	know the value of class attribute of the element when processing its end
-	tag. That's why we need to store the element's name to the set when we first
-	met it in startElement(...).*/
+    specialized from <topic>. It is useful in endElement(...) because we don't
+    know the value of class attribute of the element when processing its end
+    tag. That's why we need to store the element's name to the set when we first
+    met it in startElement(...).*/
     private Set<String> topicSpecSet = null;
 
     /**boolean isReplaced show whether current content is replace
-	because of "pushreplace" action in conref push. If the current
-	content is replaced, the output will neglect it until isReplaced
-	is turned off*/
+    because of "pushreplace" action in conref push. If the current
+    content is replaced, the output will neglect it until isReplaced
+    is turned off*/
     private boolean isReplaced = false;
 
     /**int level is used the count the level number to the element which
-	is the starting point that is neglected because of "pushreplace" action
-	The initial value of level is 0. It will add one if element level
-	increases in startElement(....) and minus one if level decreases in
-	endElement(...). When it turns out to be 0 again, boolean isReplaced
-	needs to be turn off.*/
+    is the starting point that is neglected because of "pushreplace" action
+    The initial value of level is 0. It will add one if element level
+    increases in startElement(....) and minus one if level decreases in
+    endElement(...). When it turns out to be 0 again, boolean isReplaced
+    needs to be turn off.*/
     private int level = 0;
 
     /**boolean hasPushafter show whether there is something we need to write
-	after the current element. If so the counter levelForPushAfter should
-	count the levels to make sure we insert the push content after the right
-	end tag.*/
+    after the current element. If so the counter levelForPushAfter should
+    count the levels to make sure we insert the push content after the right
+    end tag.*/
     private boolean hasPushafter = false;
 
     /**int levelForPushAfter is used to count the levels to the element which
-	is the starting point for "pushafter" action. It will add one in startElement(...)
-	and minus one in endElement(...). When it turns out to be 0 again, we
-	should append the push content right after the current end tag.*/
+    is the starting point for "pushafter" action. It will add one in startElement(...)
+    and minus one in endElement(...). When it turns out to be 0 again, we
+    should append the push content right after the current end tag.*/
     private int levelForPushAfter = 0;
 
     /**levelForPushAfterStack is used to store the history value of levelForPushAfter
-	It is possible that we have pushafter action for both parent and child element.
-	In this case, we need to push the parent's value of levelForPushAfter to Stack
-	before initializing levelForPushAfter for child element. When we finished
-	pushafter action for child element, we need to restore the original value for
-	parent. As to "pushreplace" action, we don't need this because if we replaced the
-	parent, the replacement of child is meaningless.*/
+    It is possible that we have pushafter action for both parent and child element.
+    In this case, we need to push the parent's value of levelForPushAfter to Stack
+    before initializing levelForPushAfter for child element. When we finished
+    pushafter action for child element, we need to restore the original value for
+    parent. As to "pushreplace" action, we don't need this because if we replaced the
+    parent, the replacement of child is meaningless.*/
     private Stack<Integer> levelForPushAfterStack = null;
 
     /**contentForPushAfter is used to store the content that will push after the end
-	tag of the element when levelForPushAfter is decreased to zero. This is useful
-	to "pushafter" action because we don't know the value of id when processing the
-	end tag of an element. That's why we need to store the content for push after
-	into variable in startElement(...)*/
+    tag of the element when levelForPushAfter is decreased to zero. This is useful
+    to "pushafter" action because we don't know the value of id when processing the
+    end tag of an element. That's why we need to store the content for push after
+    into variable in startElement(...)*/
     private DocumentFragment contentForPushAfter = null;
 
     /**contentForPushAfterStack is used to store the history value of contentForPushAfter
-	It is possible that we have pushafter action for both parent and child element.
-	In this case, we need to push the parent's value of contentForPushAfter to Stack
-	before getting value contentForPushAfter for child element from movetable. When we
-	finished pushafter action for child element, we need to restore the original value for
-	parent. */
+    It is possible that we have pushafter action for both parent and child element.
+    In this case, we need to push the parent's value of contentForPushAfter to Stack
+    before getting value contentForPushAfter for child element from movetable. When we
+    finished pushafter action for child element, we need to restore the original value for
+    parent. */
     private Stack<DocumentFragment> contentForPushAfterStack = null;
 
     /**if the pushcontent has @conref, it should be paid attention to it. Because the current
-	file may not contain any @conref attribute, it will not resolved by the conref.xsl,
-	while it may contain @conref after pushing. So the dita.list file should be updated, if
-	the pushcontent has @conref.*/
+    file may not contain any @conref attribute, it will not resolved by the conref.xsl,
+    while it may contain @conref after pushing. So the dita.list file should be updated, if
+    the pushcontent has @conref.*/
     private boolean hasConref = false;
     private boolean hasKeyref = false;
     /**tempDir.*/

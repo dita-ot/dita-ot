@@ -97,17 +97,17 @@ public final class EclipseIndexWriter extends AbstractExtendDitaWriter {
         } finally {
             if (serializer != null) {
                 try {
-                	serializer.close();
+                    serializer.close();
                 } catch (final XMLStreamException e) {
                     logger.error(e.getMessage(), e) ;
-				}
+                }
             }
             if (out != null) {
                 try {
-                	out.close();
+                    out.close();
                 } catch (final IOException e) {
                     logger.error(e.getMessage(), e) ;
-				}
+                }
             }
         }
     }

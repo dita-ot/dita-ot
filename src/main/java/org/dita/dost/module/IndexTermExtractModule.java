@@ -157,8 +157,8 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                 try {
                     /*if(!new File(job.tempDir, target).exists()){
                         logger.logWarn("Cannot find file "+ target);
-						continue;
-					}*/
+                        continue;
+                    }*/
                     inputStream = new FileInputStream(
                             new File(target));
                     xmlReader.parse(new InputSource(inputStream));
@@ -189,8 +189,8 @@ final class IndexTermExtractModule extends AbstractPipelineModuleImpl {
                 try {
                     /*if(!new File(job.tempDir, ditamap).exists()){
                         logger.logWarn("Cannot find file "+ ditamap);
-						continue;
-					}*/
+                        continue;
+                    }*/
                     inputStream = new FileInputStream(new File(ditamap));
                     xmlReader.parse(new InputSource(inputStream));
                     inputStream.close();

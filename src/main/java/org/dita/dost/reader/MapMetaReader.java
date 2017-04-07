@@ -390,7 +390,7 @@ public final class MapMetaReader extends AbstractDomFilter {
      * @return map of metadata by topic path
      */
     public Map<URI, Map<String, Element>> getMapping() {
-    	return Collections.unmodifiableMap(resultTable);
+        return Collections.unmodifiableMap(resultTable);
     } 
 
 }

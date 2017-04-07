@@ -103,14 +103,14 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void endElement(final String uri, final String localName, final String qName)
             throws SAXException {
-    	classes.pop();
+        classes.pop();
         getContentHandler().endElement(uri, localName, qName);
     }
 
     @Override
     public void startDocument() throws SAXException {
-    	classes.clear();
-    	
+        classes.clear();
+
         // XXX May be require fixup
         final File path2Project = DebugAndFilterModule.getPathtoProject(getRelativePath(toFile(job.getInputFile()), toFile(currentFile)),
                 toFile(currentFile),
@@ -138,11 +138,11 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     @Override
     public void startElement(final String uri, final String localName, final String qName,
                              final Attributes atts) throws SAXException {
-    	final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
-    	if (cls.isValid()) {
-        	classes.addFirst(cls);
+        final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
+        if (cls.isValid()) {
+            classes.addFirst(cls);
         }else {
-        	classes.addFirst(null);
+            classes.addFirst(null);
         }
 
         final AttributesImpl res = new AttributesImpl();

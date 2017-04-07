@@ -56,7 +56,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     private String filedirparameter;
     private boolean reloadstylesheet;
     private XMLCatalog xmlcatalog;
-	private FileNameMapper mapper;
+    private FileNameMapper mapper;
     
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
         if (fileInfoFilter != null) {
@@ -87,30 +87,30 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
         }
         parser.setEntityResolver(xmlcatalog);
 
-    	Transformer t = null;
+        Transformer t = null;
         for (final File include: includes) {
-        	if (reloadstylesheet || t == null) {
+            if (reloadstylesheet || t == null) {
                 logger.info("Loading stylesheet " + style.getAbsolutePath());
-	            try {
-	                t = templates.newTransformer();
+                try {
+                    t = templates.newTransformer();
                     if (Configuration.DEBUG) {
                         t.setURIResolver(new XMLUtils.DebugURIResolver(xmlcatalog));
                     }
-	            } catch (final TransformerConfigurationException e) {
-	                throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
-	            }
-        	}
+                } catch (final TransformerConfigurationException e) {
+                    throw new DITAOTException("Failed to create Transformer: " + e.getMessage(), e);
+                }
+            }
             final File in = new File(baseDir, include.getPath());
             File out = new File(destDir, include.getPath());
             if (mapper != null) {
-            	final String[] outs = mapper.mapFileName(include.getPath());
-            	if (outs == null) {
-            		continue;
-            	}
-            	if (outs.length > 1) {
-            		throw new RuntimeException("XSLT module only support one to one output mapping");
-            	}
-            	out = new File(destDir, outs[0]);
+                final String[] outs = mapper.mapFileName(include.getPath());
+                if (outs == null) {
+                    continue;
+                }
+                if (outs.length > 1) {
+                    throw new RuntimeException("XSLT module only support one to one output mapping");
+                }
+                out = new File(destDir, outs[0]);
             }
             final boolean same = in.getAbsolutePath().equals(out.getAbsolutePath());
             final File tmp = same ? new File(out.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis())) : out; 
@@ -123,20 +123,20 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
                 t.setParameter(filenameparameter, include.getName());
             }
             if (filedirparameter != null) {
-            	final String v = include.getParent() != null ? include.getParent() : ".";
+                final String v = include.getParent() != null ? include.getParent() : ".";
                 logger.debug("Set parameter " + filedirparameter + " to '" + v + "'");
                 t.setParameter(filedirparameter, v);
             }
             if (same) {
-	            logger.info("Processing " + in.getAbsolutePath());
-	            logger.debug("Processing " + in.getAbsolutePath() + " to " + tmp.getAbsolutePath());
+                logger.info("Processing " + in.getAbsolutePath());
+                logger.debug("Processing " + in.getAbsolutePath() + " to " + tmp.getAbsolutePath());
             } else {
-            	logger.info("Processing " + in.getAbsolutePath() + " to " + tmp.getAbsolutePath());
+                logger.info("Processing " + in.getAbsolutePath() + " to " + tmp.getAbsolutePath());
             }
             final Source source = new SAXSource(parser, new InputSource(in.toURI().toString()));
             try {
-            	if (!tmp.getParentFile().exists() && !tmp.getParentFile().mkdirs()) {
-                	throw new IOException("Failed to create directory " + tmp.getParent());
+                if (!tmp.getParentFile().exists() && !tmp.getParentFile().mkdirs()) {
+                    throw new IOException("Failed to create directory " + tmp.getParent());
                 }
                 t.transform(source, new StreamResult(tmp));
                 if (same) {
@@ -158,7 +158,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     }
     
     public void setStyle(final File style) {
-    	this.style = style;
+        this.style = style;
     }
 
     public void setParam(final String key, final String value) {
@@ -186,23 +186,23 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     }
     
     public void setReloadstylesheet(final boolean reloadstylesheet) {
-    	this.reloadstylesheet = reloadstylesheet;
+        this.reloadstylesheet = reloadstylesheet;
     }
 
-	public void setSource(final File in) {
-		this.in = in;
-	}
+    public void setSource(final File in) {
+        this.in = in;
+    }
 
-	public void setResult(final File out) {
-		this.out = out;
-	}
+    public void setResult(final File out) {
+        this.out = out;
+    }
 
-	public void setXMLCatalog(final XMLCatalog xmlcatalog) {
-		this.xmlcatalog = xmlcatalog;
-	}
+    public void setXMLCatalog(final XMLCatalog xmlcatalog) {
+        this.xmlcatalog = xmlcatalog;
+    }
 
-	public void setMapper(final FileNameMapper mapper) {
-		this.mapper = mapper;
-	}
+    public void setMapper(final FileNameMapper mapper) {
+        this.mapper = mapper;
+    }
     
 }

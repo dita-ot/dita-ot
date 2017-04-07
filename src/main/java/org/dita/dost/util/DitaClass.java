@@ -185,7 +185,7 @@ public final class DitaClass {
      * @return {@code true} if uses valid DITA class syntax, otherwise {@code false} 
      */
     public boolean isValid () {
-    	return validDitaClass;
+        return validDitaClass;
     }
 
 }

@@ -75,11 +75,11 @@ public final class URLUtils {
      * @return the newly decoded string
      */
     public static String decode(final String s) {
-    	try {
-    		return URLDecoder.decode(s, UTF8);
-		} catch (final UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+        try {
+            return URLDecoder.decode(s, UTF8);
+        } catch (final UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     /**
@@ -274,9 +274,9 @@ public final class URLUtils {
     /**
      * Convert a file name to url.
      * @param fileName -
-     * 				The file name string.
+     *                 The file name string.
      * @return string -
-     * 				URL
+     *                 URL
      */
     public static String getURL(final String fileName){
 
@@ -379,7 +379,7 @@ public final class URLUtils {
             try {
                 bytes = path.substring(i).getBytes("UTF-8");
             } catch (final java.io.UnsupportedEncodingException e) {
-            	throw new RuntimeException(e);
+                throw new RuntimeException(e);
             }
             len = bytes.length;
 

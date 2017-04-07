@@ -90,9 +90,9 @@ public final class CopyToReader extends AbstractXMLFilter {
         
         final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
         if (cls.isValid()) {
-        	classes.addFirst(cls);
+            classes.addFirst(cls);
         }else {
-        	classes.addFirst(null);
+            classes.addFirst(null);
         }
 
         if (chunkLevel > 0) {

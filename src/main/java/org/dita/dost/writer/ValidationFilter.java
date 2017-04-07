@@ -29,19 +29,19 @@ import org.xml.sax.helpers.AttributesImpl;
 public final class ValidationFilter extends AbstractXMLFilter {
 
     private final MessageUtils messageUtils = MessageUtils.getInstance();
-	private final Set<String> topicIds = new HashSet<>();
-	private Map<String, Map<String, Set<String>>> validateMap = null;
-	private Locator locator;
+    private final Set<String> topicIds = new HashSet<>();
+    private Map<String, Map<String, Set<String>>> validateMap = null;
+    private Locator locator;
     /** Deque of domains attibute values */
-	private final Deque<String[][]> domains = new LinkedList<>();
+    private final Deque<String[][]> domains = new LinkedList<>();
     private Mode processingMode;
 
     /**
-	 * Create new profiling filter.
-	 */
-	public ValidationFilter() {
-		super();
-	}
+     * Create new profiling filter.
+     */
+    public ValidationFilter() {
+        super();
+    }
 
     /**
      * Set valid attribute values.
@@ -58,39 +58,39 @@ public final class ValidationFilter extends AbstractXMLFilter {
         this.processingMode = processingMode;
     }
 
-	// Locator methods
+    // Locator methods
     
-	@Override
+    @Override
     public void setDocumentLocator(final Locator locator) {
         this.locator = locator;
         super.setDocumentLocator(locator);
     }
-	
-	// SAX methods
 
-	@Override
-	public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
-			throws SAXException {
-	    String d = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
-	    if (d != null) {
-	        domains.addFirst(StringUtils.getExtProps(d));
-	    } else {
-	        domains.addFirst(domains.peekFirst());
-	    } 
-		AttributesImpl modified = null;
-		modified = validateLang(atts, null);
-		modified = validateId(localName, atts, modified);
-		modified = validateHref(atts, modified);
+    // SAX methods
+
+    @Override
+    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+            throws SAXException {
+        String d = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
+        if (d != null) {
+            domains.addFirst(StringUtils.getExtProps(d));
+        } else {
+            domains.addFirst(domains.peekFirst());
+        }
+        AttributesImpl modified = null;
+        modified = validateLang(atts, null);
+        modified = validateId(localName, atts, modified);
+        modified = validateHref(atts, modified);
         modified = processFormatDitamap(atts, modified);
-		validateKeys(atts);
-		validateKeyscope(atts);
-		validateAttributeValues(qName, atts);
-		validateAttributeGeneralization(atts);
+        validateKeys(atts);
+        validateKeyscope(atts);
+        validateAttributeValues(qName, atts);
+        validateAttributeGeneralization(atts);
 
-		super.startElement(uri, localName, qName, modified != null ? modified : atts);
-	}
+        super.startElement(uri, localName, qName, modified != null ? modified : atts);
+    }
 
-	@Override
+    @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         domains.removeFirst();
         super.endElement(uri, localName, qName);
@@ -99,34 +99,34 @@ public final class ValidationFilter extends AbstractXMLFilter {
     // Validation methods
 
     /**
-	 * Validate and fix {@code xml:lang} attribute.
-	 * 
-	 * @return modified attributes, {@code null} if there have been no changes 
-	 */
+     * Validate and fix {@code xml:lang} attribute.
+     *
+     * @return modified attributes, {@code null} if there have been no changes
+     */
     private AttributesImpl validateLang(final Attributes atts, final AttributesImpl modified) throws SAXException {
         AttributesImpl res = modified;
         final String lang = atts.getValue(XML_NS_URI, "lang");
-		if (lang != null) {
-			final int i = lang.indexOf('_');
-			if (i != -1) {
-				if (processingMode == Mode.STRICT) {
-					throw new SAXException(messageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
-				}
+        if (lang != null) {
+            final int i = lang.indexOf('_');
+            if (i != -1) {
+                if (processingMode == Mode.STRICT) {
+                    throw new SAXException(messageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
+                }
                 logger.error(messageUtils.getMessage("DOTJ056E", lang).setLocation(locator).toString());
-				if (processingMode == Mode.LAX) {
-					if (res == null) {
-						res = new AttributesImpl(atts);
-					}
-					res.setValue(res.getIndex(XML_NS_URI, "lang"), lang.replace('_', '-'));
-				}					
-			}
-		}
+                if (processingMode == Mode.LAX) {
+                    if (res == null) {
+                        res = new AttributesImpl(atts);
+                    }
+                    res.setValue(res.getIndex(XML_NS_URI, "lang"), lang.replace('_', '-'));
+                }
+            }
+        }
         return res;
     }
 
-	/**
-	 * Validate {@code id} attribute for uniqueness.
-	 */
+    /**
+     * Validate {@code id} attribute for uniqueness.
+     */
     private AttributesImpl validateId(final String localName, final Attributes atts, final AttributesImpl modified) throws SAXException {
         AttributesImpl res = modified;
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
@@ -155,34 +155,34 @@ public final class ValidationFilter extends AbstractXMLFilter {
         } else if (TOPIC_RESOURCEID.matches(cls) || DELAY_D_ANCHORID.matches(cls)) {
             // not considered a normal element ID
         } else {
-			final String id = atts.getValue(ATTRIBUTE_NAME_ID);
-			if (id != null) {
-				if (topicIds.contains(id)) {
-					if (processingMode == Mode.STRICT) {
-						throw new SAXException(messageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());
-					} else {
-						logger.warn(messageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());			
-					}
-				}
-				topicIds.add(id);
-			}
-		}
+            final String id = atts.getValue(ATTRIBUTE_NAME_ID);
+            if (id != null) {
+                if (topicIds.contains(id)) {
+                    if (processingMode == Mode.STRICT) {
+                        throw new SAXException(messageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());
+                    } else {
+                        logger.warn(messageUtils.getMessage("DOTJ057E", id).setLocation(locator).toString());
+                    }
+                }
+                topicIds.add(id);
+            }
+        }
         return res;
     }
 
-	/**
-	 * Validate and fix {@code href} attribute for URI validity.
-	 * 
-	 * @return modified attributes, {@code null} if there have been no changes
-	 */
+    /**
+     * Validate and fix {@code href} attribute for URI validity.
+     *
+     * @return modified attributes, {@code null} if there have been no changes
+     */
     private AttributesImpl validateHref(final Attributes atts, final AttributesImpl modified) {
         AttributesImpl res = modified;
         final String href = atts.getValue(ATTRIBUTE_NAME_HREF);
-		if (href != null) {
-			try {
-				new URI(href);
-			} catch (final URISyntaxException e) {
-				switch (processingMode) {
+        if (href != null) {
+            try {
+                new URI(href);
+            } catch (final URISyntaxException e) {
+                switch (processingMode) {
                 case STRICT:
                     throw new RuntimeException(messageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ": " + e.getMessage(), e);
                 case SKIP:
@@ -192,8 +192,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     try {
                         final String u = new URI(URLUtils.clean(href.trim())).toASCIIString();
                         if (res == null) {
-							res = new AttributesImpl(atts);
-						}
+                            res = new AttributesImpl(atts);
+                        }
                         res.setValue(res.getIndex(ATTRIBUTE_NAME_HREF), u);
                         logger.error(messageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_HREF, href).setLocation(locator) + ", using '" + u + "'.");
                     } catch (final URISyntaxException e1) {
@@ -201,12 +201,12 @@ public final class ValidationFilter extends AbstractXMLFilter {
                     }
                     break;
                 }
-			}
-		}
-		return res;
+            }
+        }
+        return res;
     }
-		
-	/**
+
+    /**
      * Validate attribute values
      * 
      * @param qName element name
@@ -305,7 +305,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
         }
         return true;
     }
-	
+
     /**
      * Validate attribute generalization. A single element may not contain both generalized and specialized values for the same attribute.
      * 
