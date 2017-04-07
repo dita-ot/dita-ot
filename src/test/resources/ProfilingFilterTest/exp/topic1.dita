@@ -11,7 +11,9 @@
     <p class="- topic/p " platform="osx">OS X platform</p>
     <p class="- topic/p " platform="windows osx">Windows and OS X platform</p>
     <foreign class="- topic/foreign ">
-      <p platform="windows" class="- topic/p ">Foreign Windows</p>
+      <para platform="windows">non-DITA para, should not filter</para>
+      <para class="notdita" platform="windows">another non-DITA para, should not filter</para>
+      <!--<p platform="windows" class="- topic/p ">Foreign Windows</p>-->
     </foreign>
     <p hardware-platform="" class="- topic/p ">Empty hardware-platform</p>
     <!--p hardware-platform="arm" class="- topic/p ">ARM hardware-platform</p-->

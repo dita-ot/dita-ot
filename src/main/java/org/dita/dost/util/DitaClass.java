@@ -29,6 +29,8 @@ public final class DitaClass {
     // Variables
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+    private static final Pattern VALID_DITA_CLASS = Pattern.compile("(\\+|-)\\s+(topic|map)/\\S+\\s+" +
+                                                         "([\\S[^/]]+/\\S+\\s+)*");
 
     /** Module/type pair for the most specialized type, with a single preceding and following space character. */
     public final String matcher;
@@ -36,6 +38,8 @@ public final class DitaClass {
     public final String localName;
     /** Normalized specialization hierarchy string. */
     private final String stringValue;
+    /** Does this class value use valid DITA class syntax */
+    private boolean validDitaClass = false;
 
     // Constructors
 
@@ -54,6 +58,7 @@ public final class DitaClass {
             sb.append(s).append(' ');
         }
         stringValue = sb.toString();
+        validDitaClass = VALID_DITA_CLASS.matcher(stringValue).matches();
     }
 
     /**
@@ -172,6 +177,15 @@ public final class DitaClass {
             return matches(((Element) node).getAttribute(ATTRIBUTE_NAME_CLASS));
         }
         return false;
+    }
+    
+    /**
+     * Test if the current DitaClass is a valid DITA class value
+     * 
+     * @return {@code true} if uses valid DITA class syntax, otherwise {@code false} 
+     */
+    public boolean isValid () {
+    	return validDitaClass;
     }
 
 }

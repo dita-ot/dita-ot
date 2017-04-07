@@ -117,6 +117,27 @@ public final class XMLUtils {
         }
         return res;
     }
+    
+    /**
+     * Checks if the closest DITA ancestor <foreign> or <unknown>
+     * 
+     * @param classes stack of class attributes for open elements
+     * @return true if closest DITA ancestor is <foreign> or <unknown>, otherwise false
+     */
+    public static boolean nonDitaContext(final Deque<DitaClass> classes) {
+    	final Iterator<DitaClass> it = classes.iterator();
+    	it.next(); // Skip first, because we're checking if current element is inside non-DITA context
+    	while (it.hasNext()) {
+    		final DitaClass cls = it.next();
+    		if (cls != null && cls.isValid() && 
+    				(TOPIC_FOREIGN.matches(cls) || TOPIC_UNKNOWN.matches(cls))) {
+    			return true;
+    		} else if (cls != null && cls.isValid()) {
+    			return false;
+    		}
+    	}
+    	return false;
+    }
 
     /**
      * Get specific element node from child nodes.

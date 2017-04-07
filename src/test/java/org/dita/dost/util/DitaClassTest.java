@@ -91,5 +91,18 @@ public class DitaClassTest {
         assertTrue(new DitaClass("- foo/bar baz/qux ").matches(elem));
         assertFalse(new DitaClass("- bar/baz ").matches(elem));
     }
+    
+    @Test
+    public void testValidDitaClass() {
+        assertTrue(new DitaClass("- topic/p ").isValid());
+        assertTrue(new DitaClass("+ topic/p topic-d/domain_element ").isValid());
+        assertTrue(new DitaClass("+ topic/p topic-d/domain_element   ex+d/x ").isValid());
+        assertTrue(new DitaClass("- map/topicref ").isValid());
+        assertTrue(new DitaClass("+ map/topicref map-d/domain_element ").isValid());
+        assertFalse(new DitaClass("").isValid());
+        assertFalse(new DitaClass("invalid syntax").isValid());
+        assertFalse(new DitaClass("- close/but/invalid ").isValid());
+        assertFalse(new DitaClass("- also\\invalid ").isValid());
+    }
 
 }

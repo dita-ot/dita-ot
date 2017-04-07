@@ -8,14 +8,18 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.nonDitaContext;
 
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -25,8 +29,8 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 
 	/** when exclude is true the tag will be excluded. */
 	private boolean exclude;
-	/** foreign/unknown nesting level */
-	private int foreignLevel;
+	/** DITA class values for open elements **/
+    private final Deque<DitaClass> classes = new LinkedList<>();
 	/** level is used to count the element level in the filtering */
 	private int level;
 	/** Contains the attribution specialization paths for {@code props} attribute */
@@ -68,23 +72,19 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	@Override
 	public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
 			throws SAXException {
-		if (foreignLevel > 0) {
-			foreignLevel++;
-		} else if (foreignLevel == 0) {
-			final String classAttr = atts.getValue(ATTRIBUTE_NAME_CLASS);
-			if (classAttr == null && !ELEMENT_NAME_DITA.equals(localName)) {
-				logger.info(MessageUtils.getInstance().getMessage("DOTJ030I", localName).toString());
-			}
-			if (classAttr != null && (TOPIC_TOPIC.matches(classAttr) || MAP_MAP.matches(classAttr))) {
-				final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
-				if (domains == null) {
-					logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
-				} else {
-					props = StringUtils.getExtProps(domains);
-				}
-			}
-			if (classAttr != null && (TOPIC_FOREIGN.matches(classAttr) || TOPIC_UNKNOWN.matches(classAttr))) {
-				foreignLevel = 1;
+		final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null ? new DitaClass(atts.getValue(ATTRIBUTE_NAME_CLASS)) : new DitaClass("");
+		if (cls.isValid()) {
+			classes.addFirst(cls);
+		} else {
+			classes.addFirst(null);
+		}
+		
+        if (cls.isValid() && (TOPIC_TOPIC.matches(cls) || MAP_MAP.matches(cls))) {
+			final String domains = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
+			if (domains == null) {
+				logger.info(MessageUtils.getInstance().getMessage("DOTJ029I", localName).toString());
+			} else {
+				props = StringUtils.getExtProps(domains);
 			}
 		}
 
@@ -92,7 +92,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 			// If it is the start of a child of an excluded tag, level increase
 			level++;
 		} else { // exclude shows whether it's excluded by filtering
-			if (foreignLevel <= 1 && filterUtils.needExclude(atts, props)) {
+			if (cls.isValid() && filterUtils.needExclude(atts, props)) {
 				exclude = true;
 				level = 0;
 			} else {
@@ -109,9 +109,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	@Override
 	public void endElement(final String uri, final String localName, final String qName)
 			throws SAXException {
-		if (foreignLevel > 0) {
-			foreignLevel--;
-		}
+		classes.pop();
         lastElementExcluded = exclude;
 		if (exclude) {
 			if (level > 0) {
@@ -175,7 +173,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 	@Override
 	public void startDocument() throws SAXException {
 		exclude = false;
-		foreignLevel = 0;
+		classes.clear();
 		level = 0;
 		props = null;
         getContentHandler().startDocument();
