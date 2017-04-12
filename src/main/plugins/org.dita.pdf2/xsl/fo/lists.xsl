@@ -38,12 +38,6 @@ See the accompanying LICENSE file for applicable license.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="2.0">
 
-    <xsl:template match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
-      <fo:block xsl:use-attribute-sets="linklist.title">
-        <xsl:apply-templates/>
-      </fo:block>
-    </xsl:template>
-
     <!--Lists-->
     <xsl:template match="*[contains(@class, ' topic/ul ')]">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
