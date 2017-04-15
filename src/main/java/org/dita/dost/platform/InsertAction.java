@@ -22,6 +22,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * InsertAction implements IAction and insert the resource
@@ -44,7 +45,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
         fileNameSet = new LinkedHashSet<>(16);
         paramTable = new Hashtable<>();
         try {
-            reader = XMLUtils.getXMLReader();
+            reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);

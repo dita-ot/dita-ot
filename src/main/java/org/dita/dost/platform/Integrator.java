@@ -23,6 +23,7 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -118,7 +119,7 @@ public final class Integrator {
         featureTable = new Hashtable<>(16);
         extensionPoints = new HashSet<>();
         try {
-            reader = XMLUtils.getXMLReader();
+            reader = XMLReaderFactory.createXMLReader();
         } catch (final Exception e) {
             throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
         }
