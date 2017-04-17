@@ -2,6 +2,8 @@
 <plugin id="org.dita.pdf2">
   <!-- extension points -->
   <extension-point id="dita.xsl.xslfo" name="PDF XSLT import"/>
+  <extension-point id="dita.xsl.xslfo.flagging-preprocess" name="PDF flagging preprocess import"/>
+  <extension-point id="dita.xsl.xslfo.i18n-postprocess" name="PDF I18N postprocess import"/>
   <extension-point id="org.dita.pdf2.xsl.topicmerge" name="PDF2 topic merge XSLT import"/>
   <extension-point id="depend.org.dita.pdf2.format.pre" name="Formatting pre-target"/>
   <extension-point id="depend.org.dita.pdf2.format" name="Formatting target"/>
@@ -16,6 +18,8 @@
   <feature extension="dita.xsl.messages" file="resource/messages.xml"/>
   <template file="build_template.xml"/>
   <template file="cfg/catalog_template.xml"/>
+  <template file="xsl/fo/flagging-preprocess_template.xsl"/>
+  <template file="xsl/fo/i18n-postprocess_template.xsl"/>
   <template file="xsl/fo/topic2fo_shell_template.xsl"/>
   <template file="xsl/fo/topic2fo_shell_axf_template.xsl"/>
   <template file="xsl/fo/topic2fo_shell_fop_template.xsl"/>

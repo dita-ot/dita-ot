@@ -12,6 +12,11 @@
    <xsl:import href="../../../../xsl/common/dita-utilities.xsl"/>
    <xsl:import href="../../../../xsl/common/output-message.xsl"/>
 
+   <dita:extension id="dita.xsl.xslfo.flagging-preprocess"
+     behavior="org.dita.dost.platform.ImportXSLAction"
+     xmlns:dita="http://dita-ot.sourceforge.net"
+   />
+
    <!--preserve the doctype-->
    <xsl:output method="xml" encoding="UTF-8" indent="no"></xsl:output>
 
