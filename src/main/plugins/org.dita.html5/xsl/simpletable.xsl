@@ -27,9 +27,16 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="." mode="dita2html:get-max-entry-count"/>
     </xsl:variable>
     <xsl:variable name="col-widths" as="xs:double*">
-      <xsl:variable name="widths" select="tokenize(normalize-space(@relcolwidth), '\s+')" as="xs:string*"/>
+      <xsl:variable name="widths" select="tokenize(normalize-space(translate(@relcolwidth, '*', '')), '\s+')" as="xs:string*"/>
       <xsl:for-each select="$widths">
-        <xsl:sequence select="xs:double(substring(., 1, string-length(.) - 1))"/>
+        <xsl:choose>
+          <xsl:when test=". castable as xs:double">
+            <xsl:sequence select="xs:double(.)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:sequence select="xs:double(1)"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
       <xsl:for-each select="1 to ($col-count - count($widths))">
         <xsl:sequence select="xs:double(1)"/>
@@ -104,7 +111,7 @@ See the accompanying LICENSE file for applicable license.
       <!-- If there is a header, get the ID from the head cell in this column.
              Go up to simpletable, into the row, to the entry at column $thiscolnum -->
       <xsl:variable name="header">
-        <xsl:if test="parent::*/parent::*/*[contains(@class, ' topic/sthead ')]">
+        <xsl:if test="parent::*/parent::*/*[contains(@class, ' topic/sthead ')]/*[contains(@class, ' topic/stentry ')][number($thiscolnum)]">
           <xsl:value-of select="dita-ot:generate-html-id(parent::*/parent::*/*[contains(@class, ' topic/sthead ')]/*[contains(@class, ' topic/stentry ')][number($thiscolnum)])"/>
         </xsl:if>
       </xsl:variable>
