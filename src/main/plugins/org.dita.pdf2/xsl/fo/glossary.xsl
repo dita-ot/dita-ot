@@ -9,7 +9,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
-                extension-element-prefixes="ot-placeholder"
+                exclude-result-prefixes="ot-placeholder"
                 version="2.0">
 
   <xsl:template match="ot-placeholder:glossarylist" name="createGlossary">

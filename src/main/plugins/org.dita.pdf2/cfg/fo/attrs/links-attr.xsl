@@ -35,6 +35,11 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:attribute-set name="linklist">
     </xsl:attribute-set>
+  
+  <xsl:attribute-set name="linklist.title">
+    <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+  </xsl:attribute-set>
 
   <xsl:attribute-set name="linklist.title" use-attribute-sets="common.title">
     <xsl:attribute name="font-weight">bold</xsl:attribute>

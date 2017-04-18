@@ -91,7 +91,7 @@ See the accompanying LICENSE file for applicable license.
     "/>
   </xsl:function>
 
-  <xsl:function name="table:get-entry-colspec" as="element()">
+  <xsl:function name="table:get-entry-colspec" as="element()?">
     <xsl:param name="entry" as="element()"/>
 
     <xsl:sequence select="
