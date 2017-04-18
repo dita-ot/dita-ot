@@ -9,6 +9,7 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.XMLUtils.withLogger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -244,7 +245,7 @@ public final class DelayConrefUtils {
         final TransformerFactory tf = TransformerFactory.newInstance();
         Transformer t = null;
         try {
-            t = tf.newTransformer();
+            t = withLogger(tf.newTransformer(), logger);
             t.setOutputProperty(OutputKeys.INDENT, "yes");
             t.setOutputProperty(OutputKeys.METHOD, "xml");
             t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");

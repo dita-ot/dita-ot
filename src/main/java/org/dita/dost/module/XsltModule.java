@@ -31,6 +31,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.dita.dost.util.XMLUtils.withLogger;
+
 /**
  * XSLT processing module.
  * 
@@ -92,7 +94,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             if (reloadstylesheet || t == null) {
                 logger.info("Loading stylesheet " + style.getAbsolutePath());
                 try {
-                    t = templates.newTransformer();
+                    t = withLogger(templates.newTransformer(), logger);
                     if (Configuration.DEBUG) {
                         t.setURIResolver(new XMLUtils.DebugURIResolver(xmlcatalog));
                     }
@@ -204,5 +206,5 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     public void setMapper(final FileNameMapper mapper) {
         this.mapper = mapper;
     }
-    
+
 }

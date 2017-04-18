@@ -8,6 +8,7 @@
 package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Configuration;
@@ -36,6 +37,13 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
 
     private Configuration.Mode processingMode;
     private boolean resolveCoderef;
+    private final XMLUtils xmlUtils = new XMLUtils();
+
+    @Override
+    public void setLogger(final DITAOTLogger logger) {
+        super.setLogger(logger);
+        xmlUtils.setLogger(logger);
+    }
 
     /**
      * Process topic files for same topic fragments identifiers.
@@ -60,7 +68,7 @@ final class TopicFragmentModule extends AbstractPipelineModuleImpl {
             final URI file = job.tempDirURI.resolve(f.uri);
             logger.info("Processing " + file);
             try {
-                XMLUtils.transform(file, getProcessingPipe(file));
+                xmlUtils.transform(file, getProcessingPipe(file));
             } catch (final DITAOTException e) {
                 logger.error("Failed to process same topic fragment identifiers: " + e.getMessage(), e);
             }

@@ -20,7 +20,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -33,6 +32,7 @@ import java.util.Map;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.withLogger;
 
 /**
  * MoveLinksModule implements move links step in preprocess. It reads the map links
@@ -62,7 +62,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
             doc = XMLUtils.getDocumentBuilder().newDocument();
             final TransformerFactory transformerFactory = TransformerFactory.newInstance();
             transformerFactory.setURIResolver(CatalogUtils.getCatalogResolver());
-            final Transformer transformer = transformerFactory.newTransformer(new StreamSource(styleFile));
+            final Transformer transformer = withLogger(transformerFactory.newTransformer(new StreamSource(styleFile)), logger);
             transformer.setURIResolver(CatalogUtils.getCatalogResolver());
             if (input.getAttribute("include.rellinks") != null) {
                 transformer.setParameter("include.rellinks", input.getAttribute("include.rellinks"));
