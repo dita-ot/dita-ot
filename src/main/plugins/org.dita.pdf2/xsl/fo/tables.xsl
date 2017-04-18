@@ -435,8 +435,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template name="processEntryContent">
-      <xsl:variable name="entryNumber" select="@dita-ot:x" as="xs:integer"/>
-        <xsl:variable name="colspec" select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = $entryNumber]"/>
+      <xsl:variable name="entryNumber" select="@dita-ot:x" as="xs:integer?"/>
+        <xsl:variable name="colspec" select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/colspec ')][position() = $entryNumber]" as="element()?"/>
         <xsl:variable name="char" as="xs:string?">
             <xsl:choose>
                 <xsl:when test="@char">

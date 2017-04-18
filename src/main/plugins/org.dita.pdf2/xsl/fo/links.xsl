@@ -628,6 +628,12 @@ See the accompanying LICENSE file for applicable license.
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
+    <fo:block xsl:use-attribute-sets="linklist.title">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/linkinfo ')]">
         <fo:block xsl:use-attribute-sets="linkinfo">
