@@ -213,7 +213,7 @@ task generateJavadocs(type: Javadoc) {
     destinationDir = file("${distTempDir}/doc/api")
 }
 
-task distZip(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+task dist(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs, generateJavadocs]) {
     into("dita-ot-${distVersion}") {
         from (distTempDir) {
             exclude "bin/dita"
@@ -234,34 +234,6 @@ task distZip(type: Zip, dependsOn: [jar, generateDocs, cleanGenerateDocs, genera
         }
     }
     archiveName "dita-ot-${distFileName}.zip"
-}
-task distTarGz(type: Tar, dependsOn: [jar, generateDocs, generateJavadocs]) {
-    compression = Compression.GZIP
-    into("dita-ot-${distVersion}") {
-        from (distTempDir ) {
-            exclude "bin/dita"
-            exclude "bin/dita.bat"
-            // legacy build scripts
-            exclude "startcmd.*"
-            exclude "bin/ant"
-            exclude "bin/ant.*"
-        }
-        from (distTempDir) {
-            fileMode = 0755
-            include "bin/dita"
-            include "bin/dita.bat"
-            // legacy build scripts
-            include "startcmd.*"
-            include "bin/ant"
-            include "bin/ant.*"
-        }
-    }
-    archiveName "dita-ot-${distFileName}.tar.gz"
-}
-task dist(dependsOn: [distZip]) {
-    doLast {
-        // NOOP
-    }
 }
 
 test {
