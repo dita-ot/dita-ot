@@ -14,17 +14,12 @@ import org.dita.dost.util.Job;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -42,9 +37,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
     private final File resourceDir = TestUtils.getResourceDir(BranchFilterModuleTest.class);
     private final File expDir = new File(resourceDir, "exp");
     private File tempDir;
-    private Job job;
 
-    
     @Before
     public void setUp() throws Exception {
         tempDir = TestUtils.createTempDir(getClass());
@@ -53,20 +46,22 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         TestUtils.resetXMLUnit();
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreComments(true);
+    }
 
-        job = new Job(tempDir);
+    private Job getJob() throws IOException {
+        final Job job = new Job(tempDir);
         job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
         job.add(new Job.FileInfo.Builder()
                 .src(new File(tempDir, "input.ditamap").toURI())
                 .result(new File(tempDir, "input.ditamap").toURI())
-                .uri(new URI("input.ditamap"))
+                .uri(URI.create("input.ditamap"))
                 .format(ATTR_FORMAT_VALUE_DITAMAP)
                 .build());
         for (final String uri: Arrays.asList("linux.ditaval", "novice.ditaval", "advanced.ditaval", "mac.ditaval", "win.ditaval")) {
             job.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
                     .result(new File(tempDir, uri).toURI())
-                    .uri(new URI(uri))
+                    .uri(URI.create(uri))
                     .format(ATTR_FORMAT_VALUE_DITAVAL)
                     .build());
         }
@@ -74,16 +69,17 @@ public class BranchFilterModuleTest extends BranchFilterModule {
             job.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
                     .result(new File(tempDir, uri).toURI())
-                    .uri(new URI(uri))
+                    .uri(URI.create(uri))
                     .format(ATTR_FORMAT_VALUE_DITA)
                     .build());
         }
         for (final String uri: Arrays.asList("installation-procedure.dita", "getting-started.dita")) {
             job.add(new Job.FileInfo.Builder()
                     .result(new File(tempDir, uri).toURI())
-                    .uri(new URI(uri))
+                    .uri(URI.create(uri))
                     .build());
         }
+        return job;
     }
 
     @After
@@ -105,8 +101,9 @@ public class BranchFilterModuleTest extends BranchFilterModule {
 //    }
 
     @Test
-    public void testProcessMap() throws SAXException, IOException {
+    public void testProcessMap() throws IOException, SAXException {
         final BranchFilterModule m = new BranchFilterModule();
+        final Job job = getJob();
         m.setJob(job);
         m.setLogger(new DITAOTJavaLogger());
         
@@ -152,23 +149,57 @@ public class BranchFilterModuleTest extends BranchFilterModule {
     private static final Optional<String> ABSENT_STRING = Optional.empty();
     
     @Test
-    public void testGenerateCopyTo() throws URISyntaxException {
-        assertEquals(new URI("foo.bar"), generateCopyTo(new URI("foo.bar"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("baz-foo.bar"), generateCopyTo(new URI("foo.bar"), new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("foo-baz.bar"), generateCopyTo(new URI("foo.bar"), new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("qux-foo-baz.bar"), generateCopyTo(new URI("foo.bar"), new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("sub.dir/foo.bar"), generateCopyTo(new URI("sub.dir/foo.bar"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("sub.dir/baz-foo.bar"), generateCopyTo(new URI("sub.dir/foo.bar"), new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("sub.dir/foo-baz.bar"), generateCopyTo(new URI("sub.dir/foo.bar"), new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("sub.dir/qux-foo-baz.bar"), generateCopyTo(new URI("sub.dir/foo.bar"), new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("foo"), generateCopyTo(new URI("foo"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("baz-foo"), generateCopyTo(new URI("foo"), new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("foo-baz"), generateCopyTo(new URI("foo"), new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("qux-foo-baz"), generateCopyTo(new URI("foo"), new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("sub.dir/foo"), generateCopyTo(new URI("sub.dir/foo"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("sub.dir/baz-foo"), generateCopyTo(new URI("sub.dir/foo"), new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("sub.dir/foo-baz"), generateCopyTo(new URI("sub.dir/foo"), new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
-        assertEquals(new URI("sub.dir/qux-foo-baz"), generateCopyTo(new URI("sub.dir/foo"), new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
+    public void testGenerateCopyTo() {
+        assertEquals(URI.create("foo.bar"), generateCopyTo(URI.create("foo.bar"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("baz-foo.bar"), generateCopyTo(URI.create("foo.bar"), new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("foo-baz.bar"), generateCopyTo(URI.create("foo.bar"), new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("qux-foo-baz.bar"), generateCopyTo(URI.create("foo.bar"), new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("sub.dir/foo.bar"), generateCopyTo(URI.create("sub.dir/foo.bar"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("sub.dir/baz-foo.bar"), generateCopyTo(URI.create("sub.dir/foo.bar"), new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("sub.dir/foo-baz.bar"), generateCopyTo(URI.create("sub.dir/foo.bar"), new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("sub.dir/qux-foo-baz.bar"), generateCopyTo(URI.create("sub.dir/foo.bar"), new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("foo"), generateCopyTo(URI.create("foo"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("baz-foo"), generateCopyTo(URI.create("foo"), new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("foo-baz"), generateCopyTo(URI.create("foo"), new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("qux-foo-baz"), generateCopyTo(URI.create("foo"), new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("sub.dir/foo"), generateCopyTo(URI.create("sub.dir/foo"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("sub.dir/baz-foo"), generateCopyTo(URI.create("sub.dir/foo"), new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("sub.dir/foo-baz"), generateCopyTo(URI.create("sub.dir/foo"), new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
+        assertEquals(URI.create("sub.dir/qux-foo-baz"), generateCopyTo(URI.create("sub.dir/foo"), new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
+    }
+
+    @Test
+    public void testDuplicateTopic() throws IOException, SAXException {
+        final BranchFilterModule m = new BranchFilterModule();
+        final Job job = new Job(tempDir);
+        job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
+        job.add(new Job.FileInfo.Builder()
+                .src(new File(tempDir, "test.ditamap").toURI())
+                .result(new File(tempDir, "test.ditamap").toURI())
+                .uri(URI.create("test.ditamap"))
+                .format(ATTR_FORMAT_VALUE_DITAMAP)
+                .build());
+        for (final String uri: Arrays.asList("test.ditaval", "test2.ditaval")) {
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(tempDir, uri).toURI())
+                    .result(new File(tempDir, uri).toURI())
+                    .uri(URI.create(uri))
+                    .format(ATTR_FORMAT_VALUE_DITAVAL)
+                    .build());
+        }
+        for (final String uri: Arrays.asList("t1.xml")) {
+            job.add(new Job.FileInfo.Builder()
+                    .src(new File(tempDir, uri).toURI())
+                    .result(new File(tempDir, uri).toURI())
+                    .uri(URI.create(uri))
+                    .format(ATTR_FORMAT_VALUE_DITA)
+                    .build());
+        }
+        m.setJob(job);
+        m.setLogger(new DITAOTJavaLogger());
+
+        m.processMap(toURI("test.ditamap"));
+        assertEquals(4, job.getFileInfo().size());
     }
 
 }
