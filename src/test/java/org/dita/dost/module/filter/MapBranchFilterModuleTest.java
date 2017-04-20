@@ -26,10 +26,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static junit.framework.Assert.assertEquals;
@@ -192,20 +189,38 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
         assertEquals(URI.create("sub.dir/qux-foo-baz"), generateCopyTo(URI.create("sub.dir/foo"), new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)));
     }
 
-
     @Test
     public void testDuplicateTopic() throws IOException, SAXException {
         final MapBranchFilterModule m = new MapBranchFilterModule();
         final Job job = new Job(tempDir);
         job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
-        job.add(new Job.FileInfo.Builder()
+        job.addAll(getDuplicateTopicFileInfos());
+        m.setJob(job);
+        m.setLogger(new DITAOTJavaLogger());
+
+        m.processMap(job.getFileInfo(URI.create("test.ditamap")));
+
+        final Set<FileInfo> exp = getDuplicateTopicFileInfos();
+        exp.add(new Job.FileInfo.Builder()
+                .src(new File(tempDir, "t1.xml").toURI())
+                .result(new File(tempDir, "t1-1.xml").toURI())
+                .uri(URI.create("t1-1.xml"))
+                .format(ATTR_FORMAT_VALUE_DITA)
+                .build());
+
+        assertEquals(exp, new HashSet<>(job.getFileInfo()));
+    }
+
+    private Set<Job.FileInfo> getDuplicateTopicFileInfos() {
+        final Set<Job.FileInfo> res = new HashSet<>();
+        res.add(new Job.FileInfo.Builder()
                 .src(new File(tempDir, "test.ditamap").toURI())
                 .result(new File(tempDir, "test.ditamap").toURI())
                 .uri(URI.create("test.ditamap"))
                 .format(ATTR_FORMAT_VALUE_DITAMAP)
                 .build());
         for (final String uri: Arrays.asList("test.ditaval", "test2.ditaval")) {
-            job.add(new Job.FileInfo.Builder()
+            res.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
                     .result(new File(tempDir, uri).toURI())
                     .uri(URI.create(uri))
@@ -213,18 +228,14 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
                     .build());
         }
         for (final String uri: Arrays.asList("t1.xml")) {
-            job.add(new Job.FileInfo.Builder()
+            res.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
                     .result(new File(tempDir, uri).toURI())
                     .uri(URI.create(uri))
                     .format(ATTR_FORMAT_VALUE_DITA)
                     .build());
         }
-        m.setJob(job);
-        m.setLogger(new DITAOTJavaLogger());
-
-        m.processMap(job.getFileInfo(URI.create("test.ditamap")));
-        assertEquals(4, job.getFileInfo().size());
+        return res;
     }
 
 }

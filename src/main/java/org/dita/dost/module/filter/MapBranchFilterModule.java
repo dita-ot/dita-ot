@@ -203,6 +203,22 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
                         } else {
                             attr.getOwnerElement().setAttribute(BRANCH_COPY_TO, gen);
                         }
+
+                        final URI dstUri = map.resolve(gen);
+                        if (dstUri != null) {
+                            final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(attr.getValue()));
+                            if (hrefFileInfo != null) {
+                                final URI newResult = addSuffix(hrefFileInfo.result, suffix);
+                                final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo)
+                                        .uri(dstUri)
+                                        .result(newResult);
+                                if (hrefFileInfo.format == null) {
+                                    dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
+                                }
+                                final FileInfo dstFileInfo = dstBuilder.build();
+                                job.add(dstFileInfo);
+                            }
+                        }
                     }
                     i++;
                 }
@@ -234,6 +250,11 @@ public class MapBranchFilterModule extends AbstractPipelineModuleImpl {
         return idx != -1
                 ? (href.substring(0, idx) + suffix + href.substring(idx))
                 : (href + suffix);
+    }
+
+    /** Add suffix to file name */
+    private static URI addSuffix(final URI href, final String suffix) {
+        return URI.create(addSuffix(href.toString(), suffix));
     }
 
     /** Get all topicrefs */

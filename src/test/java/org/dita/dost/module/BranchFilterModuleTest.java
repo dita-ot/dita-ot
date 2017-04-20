@@ -20,16 +20,12 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static junit.framework.Assert.assertEquals;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.Assert.assertNotNull;
 
 public class BranchFilterModuleTest extends BranchFilterModule {
@@ -107,7 +103,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         m.setJob(job);
         m.setLogger(new DITAOTJavaLogger());
         
-        m.processMap(toURI("input.ditamap"));
+        m.processMap(URI.create("input.ditamap"));
         assertXMLEqual(new InputSource(new File(expDir, "input.ditamap").toURI().toString()),
                 new InputSource(new File(tempDir, "input.ditamap").toURI().toString()));
 
@@ -173,14 +169,33 @@ public class BranchFilterModuleTest extends BranchFilterModule {
         final BranchFilterModule m = new BranchFilterModule();
         final Job job = new Job(tempDir);
         job.setProperty(INPUT_DIR_URI, tempDir.toURI().toString());
-        job.add(new Job.FileInfo.Builder()
+        job.addAll(getDuplicateTopicFileInfos());
+        m.setJob(job);
+        m.setLogger(new DITAOTJavaLogger());
+
+        m.processMap(URI.create("test.ditamap"));
+
+        final Set<Job.FileInfo> exp = getDuplicateTopicFileInfos();
+        exp.add(new Job.FileInfo.Builder()
+                .src(new File(tempDir, "t1.xml").toURI())
+                .result(new File(tempDir, "t1-1.xml").toURI())
+                .uri(URI.create("t1-1.xml"))
+                .format(ATTR_FORMAT_VALUE_DITA)
+                .build());
+
+        assertEquals(exp, new HashSet<>(job.getFileInfo()));
+    }
+
+    private Set<Job.FileInfo> getDuplicateTopicFileInfos() {
+        final Set<Job.FileInfo> res = new HashSet<>();
+        res.add(new Job.FileInfo.Builder()
                 .src(new File(tempDir, "test.ditamap").toURI())
                 .result(new File(tempDir, "test.ditamap").toURI())
                 .uri(URI.create("test.ditamap"))
                 .format(ATTR_FORMAT_VALUE_DITAMAP)
                 .build());
         for (final String uri: Arrays.asList("test.ditaval", "test2.ditaval")) {
-            job.add(new Job.FileInfo.Builder()
+            res.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
                     .result(new File(tempDir, uri).toURI())
                     .uri(URI.create(uri))
@@ -188,18 +203,14 @@ public class BranchFilterModuleTest extends BranchFilterModule {
                     .build());
         }
         for (final String uri: Arrays.asList("t1.xml")) {
-            job.add(new Job.FileInfo.Builder()
+            res.add(new Job.FileInfo.Builder()
                     .src(new File(tempDir, uri).toURI())
                     .result(new File(tempDir, uri).toURI())
                     .uri(URI.create(uri))
                     .format(ATTR_FORMAT_VALUE_DITA)
                     .build());
         }
-        m.setJob(job);
-        m.setLogger(new DITAOTJavaLogger());
-
-        m.processMap(toURI("test.ditamap"));
-        assertEquals(4, job.getFileInfo().size());
+        return res;
     }
 
 }
