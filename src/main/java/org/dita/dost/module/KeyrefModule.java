@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.GenMapAndTopicListModule.TempFileNameScheme;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.TopicFragmentFilter;
@@ -56,6 +57,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final Set<URI> normalProcessingRole = new HashSet<>();
     final Map<URI, Integer> usage = new HashMap<>();
     private TopicFragmentFilter topicFragmentFilter;
+    private XMLUtils xmlUtils = new XMLUtils();
 
     @Override
     public void setJob(final Job job) {
@@ -66,6 +68,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             throw new RuntimeException(e);
         }
         tempFileNameScheme.setBaseDir(job.getInputDir());
+    }
+
+    @Override
+    public void setLogger(final DITAOTLogger logger) {
+        super.setLogger(logger);
+        xmlUtils.setLogger(logger);
     }
 
     /**
@@ -355,12 +363,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             if (r.out != null) {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri) +
                         " to " + job.tempDirURI.resolve(r.out.uri));
-                XMLUtils.transform(new File(job.tempDir, r.in.file.getPath()),
+                xmlUtils.transform(new File(job.tempDir, r.in.file.getPath()),
                                    new File(job.tempDir, r.out.file.getPath()),
                                    filters);
             } else {
                 logger.info("Processing " + job.tempDirURI.resolve(r.in.uri));
-                XMLUtils.transform(new File(job.tempDir, r.in.file.getPath()), filters);
+                xmlUtils.transform(new File(job.tempDir, r.in.file.getPath()), filters);
             }
             // validate resource-only list
             normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());

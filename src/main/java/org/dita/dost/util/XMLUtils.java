@@ -23,7 +23,12 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import net.sf.saxon.Controller;
+import net.sf.saxon.event.MessageWarner;
+import net.sf.saxon.trans.XPathException;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.LoggingErrorListener;
 import org.w3c.dom.*;
 
 import org.xml.sax.*;
@@ -43,11 +48,16 @@ public final class XMLUtils {
         factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
     }
+    private DITAOTLogger logger;
+    private final TransformerFactory transformerFactory;
 
-    private static final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    public XMLUtils() {
+        transformerFactory = TransformerFactory.newInstance();
+    }
 
-    /** Private constructor to make class uninstantiable. */
-    private XMLUtils() {}
+    public void setLogger(final DITAOTLogger logger) {
+        this.logger = logger;
+    }
 
     /** Convert DOM NodeList to List. */
     public static <T> List<T> toList(final NodeList nodes) {
@@ -56,6 +66,21 @@ public final class XMLUtils {
             res.add((T) nodes.item(i));
         }
         return res;
+    }
+
+    public static Transformer withLogger(final Transformer transformer, final DITAOTLogger logger) {
+        transformer.setErrorListener(new LoggingErrorListener(logger));
+        if (transformer instanceof Controller) {
+            final MessageWarner mw = new MessageWarner();
+            // XXX https://sourceforge.net/p/saxon/discussion/94027/thread/adad0e12/
+            try {
+                mw.setWriter(new StringWriter());
+            } catch (final XPathException e) {
+                throw new RuntimeException(e);
+            }
+            ((Controller) transformer).setMessageEmitter(mw);
+        }
+        return transformer;
     }
 
     /**
@@ -347,7 +372,7 @@ public final class XMLUtils {
      * @param input absolute URI to transform and replace
      * @param filters XML filters to transform file with, may be an empty list
      */
-    public static void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
+    public void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
         assert input.isAbsolute();
         if (!input.getScheme().equals("file")) {
             throw new IllegalArgumentException("Only file URI scheme supported: " + input);
@@ -362,7 +387,7 @@ public final class XMLUtils {
      * @param inputFile file to transform and replace
      * @param filters XML filters to transform file with, may be an empty list
      */
-    public static void transform(final File inputFile, final List<XMLFilter> filters) throws DITAOTException {
+    public void transform(final File inputFile, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
         transformFile(inputFile, outputFile, filters);
         try {
@@ -382,7 +407,7 @@ public final class XMLUtils {
      * @param outputFile output file
      * @param filters XML filters to transform file with, may be an empty list
      */
-    public static void transform(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
+    public void transform(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
         if (inputFile.equals(outputFile)) {
             transform(inputFile, filters);
         } else {
@@ -390,14 +415,17 @@ public final class XMLUtils {
         }
     }
 
-    private static void transformFile(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
+    private void transformFile(final File inputFile, final File outputFile, final List<XMLFilter> filters) throws DITAOTException {
         if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
             throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
         }
 
         try (final InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
              final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-            final Transformer transformer = transformerFactory.newTransformer();
+            Transformer transformer = transformerFactory.newTransformer();
+            if (logger != null) {
+                transformer = withLogger(transformer, logger);
+            }
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
@@ -424,7 +452,7 @@ public final class XMLUtils {
      * @param output output file
      * @param filters XML filters to transform file with, may be an empty list
      */
-    public static void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+    public void transform(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
         if (input.equals(output)) {
             transform(input, filters);
         } else {
@@ -432,7 +460,7 @@ public final class XMLUtils {
         }
     }
 
-    private static void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+    private void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
         final File outputFile = new File(output);
         if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
             throw new DITAOTException("Failed to create output directory " + outputFile.getParentFile().getAbsolutePath());
@@ -441,7 +469,10 @@ public final class XMLUtils {
         InputSource src = null;
         StreamResult result = null;
         try {
-            final Transformer transformer = transformerFactory.newTransformer();
+            Transformer transformer = transformerFactory.newTransformer();
+            if (logger != null) {
+                transformer = withLogger(transformer, logger);
+            }
             XMLReader reader = getXMLReader();
             for (final XMLFilter filter : filters) {
                 // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler

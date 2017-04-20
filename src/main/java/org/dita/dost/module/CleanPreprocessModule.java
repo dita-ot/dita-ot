@@ -10,6 +10,7 @@ package org.dita.dost.module;
 
 import org.apache.commons.io.FileUtils;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
-import static org.dita.dost.util.XMLUtils.transform;
+import org.dita.dost.util.XMLUtils;
 
 /**
  * Move temporary files not based on output URI to match output URI structure.
@@ -41,6 +42,13 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     private final LinkFilter filter = new LinkFilter();
     private final MapCleanFilter mapFilter = new MapCleanFilter();
+    private final XMLUtils xmlUtils = new XMLUtils();
+
+    @Override
+    public void setLogger(final DITAOTLogger logger) {
+        super.setLogger(logger);
+        xmlUtils.setLogger(logger);
+    }
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -65,7 +73,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
                         final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
                         if (!processingPipe.isEmpty()) {
                             logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
-                            transform(srcFile.toURI(), destFile.toURI(), processingPipe);
+                            xmlUtils.transform(srcFile.toURI(), destFile.toURI(), processingPipe);
                             if (!srcFile.equals(destFile)) {
                                 logger.debug("Deleting " + srcFile.toURI());
                                 FileUtils.deleteQuietly(srcFile);

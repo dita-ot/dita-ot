@@ -31,6 +31,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
 public abstract class AbstractXMLFilter extends XMLFilterImpl implements AbstractWriter {
 
     protected DITAOTLogger logger;
+    protected final XMLUtils xmlUtils = new XMLUtils();
     Job job;
     /** Absolute temporary directory URI to file being processed */
     protected URI currentFile;
@@ -39,12 +40,13 @@ public abstract class AbstractXMLFilter extends XMLFilterImpl implements Abstrac
     @Override
     public void write(final File filename) throws DITAOTException {
         assert filename.isAbsolute();
-        XMLUtils.transform(filename, Collections.singletonList((XMLFilter) this));
+        xmlUtils.transform(filename, Collections.singletonList((XMLFilter) this));
     }
 
     @Override
     public final void setLogger(final DITAOTLogger logger) {
         this.logger = logger;
+        xmlUtils.setLogger(logger);
     }
 
     @Override

@@ -8,6 +8,7 @@
 package org.dita.dost.module;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job.FileInfo;
@@ -27,7 +28,14 @@ import java.util.List;
  */
 public final class XmlFilterModule extends AbstractPipelineModuleImpl {
 
+    private final XMLUtils xmlUtils = new XMLUtils();
     private List<FilterPair> pipe;
+
+    @Override
+    public void setLogger(final DITAOTLogger logger) {
+        super.setLogger(logger);
+        xmlUtils.setLogger(logger);
+    }
 
     /**
      * Filter files through XML filters.
@@ -43,7 +51,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
             final URI file = job.tempDirURI.resolve(f.uri);
             logger.info("Processing " + file);
             try {
-                XMLUtils.transform(file, getProcessingPipe(f));
+                xmlUtils.transform(file, getProcessingPipe(f));
             } catch (final DITAOTException e) {
                 logger.error("Failed to process XML filter: " + e.getMessage(), e);
             }

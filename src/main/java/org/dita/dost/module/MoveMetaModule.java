@@ -10,6 +10,7 @@ package org.dita.dost.module;
 
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.withLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,7 +96,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
                 final TransformerFactory tf = TransformerFactory.newInstance();
                 final CatalogResolver xmlCatalog = CatalogUtils.getCatalogResolver();
                 tf.setURIResolver(xmlCatalog);
-                final Transformer t = tf.newTransformer(new StreamSource(styleFile));
+                final Transformer t = withLogger(tf.newTransformer(new StreamSource(styleFile)), logger);
                 final URIResolver resolver;
                 if (Configuration.DEBUG) {
                     resolver = new DebugURIResolver(xmlCatalog);

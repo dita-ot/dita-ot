@@ -60,6 +60,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     private static final String SKIP_FILTER = "skip-filter";
     private static final String BRANCH_COPY_TO = "filter-copy-to";
 
+    private final XMLUtils xmlUtils;
     private final DocumentBuilder builder;
     private final DitaValReader ditaValReader;
     private TempFileNameScheme tempFileNameScheme;
@@ -73,12 +74,14 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         builder = XMLUtils.getDocumentBuilder();
         ditaValReader = new DitaValReader();
         ditaValReader.initXMLReader(true);
+        xmlUtils = new XMLUtils();
     }
     
     @Override
     public void setLogger(final DITAOTLogger logger) {
         super.setLogger(logger);
         ditaValReader.setLogger(logger);
+        xmlUtils.setLogger(logger);
     }
 
     @Override
@@ -345,7 +348,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
                     logger.error("Failed to create directory " + dstDirUri);
                 }
                 try {
-                    XMLUtils.transform(srcAbsUri,
+                    xmlUtils.transform(srcAbsUri,
                                        dstAbsUri,
                                        pipe);
                 } catch (final DITAOTException e) {
@@ -387,7 +390,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
             logger.info("Filtering " + srcAbsUri);
             try {
-                XMLUtils.transform(toFile(srcAbsUri),
+                xmlUtils.transform(toFile(srcAbsUri),
                         pipe);
             } catch (final DITAOTException e) {
                 logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
