@@ -774,11 +774,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Get the link text from a specific topic. -->
   <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="topicpull:resolvelinktext">  
     
-    <xsl:variable name="target-text">
+    <xsl:variable name="target-text" as="xs:string*">
       <xsl:apply-templates
         select="*[contains(@class, ' topic/title ')]" mode="text-only"/>
     </xsl:variable>
-    <xsl:value-of select="normalize-space($target-text)"/>    
+    <xsl:value-of select="normalize-space(string-join($target-text, ''))"/>    
   </xsl:template>
   
   <!-- Get link text for arbitrary block elements inside a topic. Assumes that the
@@ -843,11 +843,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     
     <xsl:choose>
       <xsl:when test="$targetElement/*[contains(@class, ' topic/title ')]">
-        <xsl:variable name="target-text">
+        <xsl:variable name="target-text" as="xs:string*">
           <xsl:apply-templates
             select="$targetElement/*[contains(@class, ' topic/title ')]" mode="text-only"/>
         </xsl:variable>
-        <xsl:value-of select="normalize-space($target-text)"/>
+        <xsl:value-of select="normalize-space(string-join($target-text, ''))"/>
       </xsl:when>
       <!-- if can't retrieve, don't create the linktext - defer to the final output process, which will massage the file name-->
       <xsl:otherwise>
@@ -1095,11 +1095,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:template match="*[contains(@class, ' topic/dlentry ')][*[contains(@class,' topic/dt ')]]"
     mode="topicpull:resolvelinktext">
     
-    <xsl:variable name="target-text" as="node()*">
+    <xsl:variable name="target-text" as="xs:string*">
       <xsl:apply-templates
         select="*[contains(@class,' topic/dt ')][1]" mode="text-only"/>
     </xsl:variable>
-    <xsl:value-of select="normalize-space($target-text)"/>
+    <xsl:value-of select="normalize-space(string-join($target-text, ''))"/>
   </xsl:template>
   
   <!--getting the shortdesc for a link; called from main mode template for link/xref, 
