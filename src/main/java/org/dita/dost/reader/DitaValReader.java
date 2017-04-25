@@ -54,6 +54,7 @@ public final class DitaValReader extends AbstractXMLReader {
 
     private boolean setSystemid = true;
 
+    
     /**
      * Default constructor of DitaValReader class.
      */
@@ -147,6 +148,10 @@ public final class DitaValReader extends AbstractXMLReader {
             if (f.isAbsolute()) {
                 imageList.add(f);
                 relFlagImageList.add(getRelativePath(ditaVal, f));
+            } else if (atts.getValue(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI) != null) {
+                final URI imageuri = URI.create(atts.getValue(DITA_OT_NAMESPACE, ATTRIBUTE_NAME_IMAGEREF_URI));
+                imageList.add(imageuri);
+                relFlagImageList.add(f);
             } else {
                 imageList.add(ditaVal.resolve(f));
                 relFlagImageList.add(f);

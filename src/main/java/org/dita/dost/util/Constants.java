@@ -670,6 +670,8 @@ public final class Constants {
     public static final String ATTRIBUTE_NAME_CLASSID = "classid";
     /**imageref attribute.*/
     public static final String ATTRIBUTE_NAME_IMAGEREF = "imageref";
+    /**generated imagerefuri attribute.*/
+    public static final String ATTRIBUTE_NAME_IMAGEREF_URI = "imagerefuri";
     /**start attribute.*/
     public static final String ATTRIBUTE_NAME_START="start";
     /**conref attribute.*/
@@ -742,6 +744,8 @@ public final class Constants {
     //store the scheme files refered by a scheme file in the form of Map<String Set<String>>
     /** Constant for generated property file name(subrelation.xml).*/
     public static final String FILE_NAME_SUBJECT_RELATION = "subrelation.xml";
+    /** Constant for generated DITAVAL file name(ditaot.generated.ditaval).*/
+    public static final String FILE_NAME_MERGED_DITAVAL = "ditaot.generated.ditaval";
 
     /** Property name for input file system path. Deprecated since 2.2 */
     @Deprecated
@@ -767,6 +771,8 @@ public final class Constants {
     public static final String ANT_INVOKER_PARAM_INPUTMAP = "inputmap";
     /**Constants for common params used in ant invoker(ditaval).*/
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";
+    /**Constants for common params used in ant invoker(mergedditaval)*/
+    public static final String ANT_INVOKER_PARAM_MERGEDDITAVAL = "mergedditaval";
     /**Constants for common params used in ant invoker(maplinks).*/
     public static final String ANT_INVOKER_PARAM_MAPLINKS = "maplinks";
     /** Argument name for enabling profiling. */
@@ -903,6 +909,7 @@ public final class Constants {
     /**ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION.*/
     public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = XMLNS_ATTRIBUTE + ":ditaarch";
     public static final String DITA_NAMESPACE = "http://dita.oasis-open.org/architecture/2005/";
+    public static final String DITA_OT_NAMESPACE = "http://dita-ot.sourceforge.net";
 
     /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE.*/
     public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE = " subjectScheme/";

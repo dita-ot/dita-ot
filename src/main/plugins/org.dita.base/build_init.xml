@@ -106,31 +106,13 @@ See the accompanying LICENSE file for applicable license.
     <!-- end to check input parameters -->
 
     <!-- begin to init required parameters -->
-
-    <dita-ot-fail id="DOTA012W">
-      <condition>
-        <isset property="dita.input.valfile" />
-      </condition>
-      <param name="1" value="dita.input.valfile"/>
-      <param name="2" value="args.filter"/>
-    </dita-ot-fail>
-    <condition property="dita.input.valfile" value="${args.filter}">
-      <and>
-        <isset property="args.filter"/>
-        <not><isset property="dita.input.valfile"/></not>
-      </and>
+    
+    <condition property="skip.ditaval.preprocess" value="true">
+      <not>
+          <isset property="args.filter"/>
+      </not>
     </condition>
-    <dita-ot-fail id="DOTA013F">
-      <condition>
-        <and>
-          <isset property="args.filter" />
-          <not>
-            <available file="${args.filter}" type="file" />
-          </not>
-        </and>
-      </condition>
-      <param name="1" location="${args.filter}"/>
-    </dita-ot-fail>
+    
     <condition property="filter-stage" value="early">
       <not>
         <isset property="filter-stage"/>
