@@ -212,15 +212,13 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="to"/>
     <xsl:choose>
       <xsl:when test="contains($text, $from)">
-        <xsl:value-of>
-          <xsl:sequence select="substring-before($text, $from)[string-length(.) gt 0]"/>
-          <xsl:copy-of select="$to"/>
-          <xsl:call-template name="replace">
-            <xsl:with-param name="text" select="substring-after($text, $from)[string-length(.) gt 0]"/>
-            <xsl:with-param name="from" select="$from"/>
-            <xsl:with-param name="to" select="$to"/>
-          </xsl:call-template>
-        </xsl:value-of>
+        <xsl:sequence select="substring-before($text, $from)[string-length(.) gt 0]"/>
+        <xsl:copy-of select="$to"/>
+        <xsl:call-template name="replace">
+          <xsl:with-param name="text" select="substring-after($text, $from)[string-length(.) gt 0]"/>
+          <xsl:with-param name="from" select="$from"/>
+          <xsl:with-param name="to" select="$to"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:sequence select="$text"/>
