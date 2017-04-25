@@ -18,7 +18,7 @@
         <x:param name="from" select="'bar'"/>
         <x:param name="to" select="'baz'"/>
       </x:call>
-      <x:expect label="all">baz</x:expect>
+      <x:expect label="all" select="'baz'"/>
     </x:scenario>
     <x:scenario label="beginning">
       <x:call template="replace">
@@ -26,7 +26,7 @@
         <x:param name="from" select="'bar'"/>
         <x:param name="to" select="'baz'"/>
       </x:call>
-      <x:expect label="first token changed">baz foo</x:expect>
+      <x:expect label="first token changed" select="'baz', ' foo'"/>
     </x:scenario>
     <x:scenario label="ending">
       <x:call template="replace">
@@ -34,7 +34,7 @@
         <x:param name="from" select="'bar'"/>
         <x:param name="to" select="'baz'"/>
       </x:call>
-      <x:expect label="last token changed">foo baz</x:expect>
+      <x:expect label="last token changed" select="'foo ', 'baz'"/>
     </x:scenario>
     <x:scenario label="multiple">
       <x:call template="replace">
@@ -42,7 +42,7 @@
         <x:param name="from" select="'bar'"/>
         <x:param name="to" select="'baz'"/>
       </x:call>
-      <x:expect label="all changed">foo baz foo baz foo baz</x:expect>
+      <x:expect label="all changed" select="'foo ', 'baz', ' foo ', 'baz', ' foo ', 'baz'"/>
     </x:scenario>
   </x:scenario>
 
