@@ -1265,20 +1265,14 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/lines ')]//text()">
-    <xsl:variable name="linetext2" as="xs:string">
-      <xsl:value-of>
-       <xsl:call-template name="replace">
-         <xsl:with-param name="text" select="string(.)"/>
-         <xsl:with-param name="from" select="'  '"/>
-         <xsl:with-param name="to" select="'&#xA0;&#xA0;'"/>
-       </xsl:call-template>
-      </xsl:value-of>
-    </xsl:variable>
-    <xsl:call-template name="replace">
-      <xsl:with-param name="text" select="$linetext2"/>
-      <xsl:with-param name="from" select="'&#xA;'"/>
-      <xsl:with-param name="to" as="element()"><br/></xsl:with-param>
-    </xsl:call-template>
+    <xsl:analyze-string select="replace(., '  ', '&#xA0;&#xA0;')" regex="&#xA;">
+      <xsl:matching-substring>
+        <br/>
+      </xsl:matching-substring>
+      <xsl:non-matching-substring>
+        <xsl:value-of select="."/>
+      </xsl:non-matching-substring>
+    </xsl:analyze-string>
   </xsl:template>
 
   <!-- =========== FIGURE =========== -->
