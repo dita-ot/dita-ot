@@ -247,8 +247,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/steps ')]/*[contains(@class, ' task/step ')]">
-        <!-- Switch to variable for the count rather than xsl:number, so that step specializations are also counted -->
-        <xsl:variable name="actual-step-count" select="number(count(preceding-sibling::*[contains(@class, ' task/step ')])+1)"/>
+        <xsl:variable name="format">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Step Format'"/>
+          </xsl:call-template>
+        </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="steps.step">
             <fo:list-item-label xsl:use-attribute-sets="steps.step__label">
                 <fo:block xsl:use-attribute-sets="steps.step__label__content">
@@ -257,10 +260,10 @@ See the accompanying LICENSE file for applicable license.
                     </fo:inline>
                     <xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
                         <xsl:call-template name="getVariable">
-                            <xsl:with-param name="id" select="'Ordered List Number'"/>
-                            <xsl:with-param name="params">
+                            <xsl:with-param name="id" select="'Step Number'"/>
+                            <xsl:with-param name="params" as="element()*">
                                 <number>
-                                    <xsl:value-of select="$actual-step-count"/>
+                                    <xsl:number format="{$format}" count="*[contains(@class, ' task/step ')]"/>
                                 </number>
                             </xsl:with-param>
                         </xsl:call-template>
@@ -334,13 +337,25 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/substeps ')]/*[contains(@class, ' task/substep ')]">
+        <xsl:variable name="format">
+          <xsl:call-template name="getVariable">
+            <xsl:with-param name="id" select="'Substep Format'"/>
+          </xsl:call-template>
+        </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="substeps.substep">
             <fo:list-item-label xsl:use-attribute-sets="substeps.substep__label">
                 <fo:block xsl:use-attribute-sets="substeps.substep__label__content">
                     <fo:inline>
                         <xsl:call-template name="commonattributes"/>
                     </fo:inline>
-                    <xsl:number format="a) "/>
+                    <xsl:call-template name="getVariable">
+                      <xsl:with-param name="id" select="'Substep Number'"/>
+                      <xsl:with-param name="params" as="element()*">
+                        <number>
+                          <xsl:number format="{$format}"/>
+                        </number>
+                      </xsl:with-param>
+                    </xsl:call-template>
                 </fo:block>
             </fo:list-item-label>
             <fo:list-item-body xsl:use-attribute-sets="substeps.substep__body">

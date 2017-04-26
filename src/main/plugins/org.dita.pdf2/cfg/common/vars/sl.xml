@@ -160,6 +160,10 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Task Example"></variable>
   <!-- Postreq was "Kaj storiti zatem", changing to common string, currently "Kako naprej?" -->
   <variable id="Task Postreq"></variable>
+    <variable id="Step Number"><param ref-name="number"/>. </variable>
+    <variable id="Step Format">1</variable>
+    <variable id="Substep Number"><param ref-name="number"/>) </variable>
+    <variable id="Substep Format">a</variable>
   <variable id="Glossary odd footer"/>
   <variable id="Glossary even footer"/>
   <variable id="Glossary odd header"><param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>

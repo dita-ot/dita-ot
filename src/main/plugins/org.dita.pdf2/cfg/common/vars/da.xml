@@ -356,6 +356,10 @@ See the accompanying LICENSE file for applicable license.
     <variable id="Task Result"></variable>
     <variable id="Task Example"></variable>
     <variable id="Task Postreq"></variable>
+    <variable id="Step Number"><param ref-name="number"/>. </variable>
+    <variable id="Step Format">1</variable>
+    <variable id="Substep Number"><param ref-name="number"/>) </variable>
+    <variable id="Substep Format">a</variable>
     
     <!--Glossary Variables-->
     <!-- The footer that appears on the odd-numbered glossary pages. -->
