@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<val>
+    <prop action="include" att="otherprops" val="subinclude" />
+    <prop action="exclude" att="otherprops" val="subexclude" />
+    <prop action="flag" att="otherprops" val="subflag" >
+        <startflag imageref="delta2.gif">
+            <alt-text>This is an image in second ditaval:</alt-text>
+        </startflag>
+    </prop>
+</val>
