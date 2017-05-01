@@ -397,7 +397,9 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
         if (!fs.isEmpty() && skipFilter == null
                 && !href.isEmpty()
-                && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))) {
+                && !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))
+                && !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(topicref.getAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE))
+                && isDitaFormat(topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT))) {
             final List<XMLFilter> pipe = new ArrayList<>();
             // TODO: replace multiple profiling filters with a merged filter utils
             for (final FilterUtils f : fs) {
