@@ -261,7 +261,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         if (!ditaDir.isAbsolute()) {
             throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
         }
-        ditavalFile = toFile(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
+        ditavalFile = new File(job.tempDir, FILE_NAME_MERGED_DITAVAL);
         validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));
         if (!validate) {
             final String msg = MessageUtils.getInstance().getMessage("DOTJ037W").toString();
@@ -322,12 +322,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         profilingEnabled = true;
         if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {
             profilingEnabled = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED));
-        }
-        if (profilingEnabled) {
-            if (ditavalFile != null && !ditavalFile.isAbsolute()) {
-                // XXX Shouldn't this be resolved to current directory, not Ant script base directory?
-                ditavalFile = new File(basedir, ditavalFile.getPath()).getAbsoluteFile();
-            }
         }
 
         // create the keydef file for scheme files
@@ -656,7 +650,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
      */
     private FilterUtils parseFilterFile() {
         Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap;
-        if (ditavalFile != null) {
+        if (ditavalFile.exists()) {
             final DitaValReader ditaValReader = new DitaValReader();
             ditaValReader.setLogger(logger);
             ditaValReader.initXMLReader(setSystemid);

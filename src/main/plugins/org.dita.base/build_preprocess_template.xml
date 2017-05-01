@@ -20,6 +20,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="preprocess"
     dita:depends="{depend.preprocess.pre},
                   preprocess.init,
+                  ditaval-merge,
                   gen-list,
                   debug-filter,
                   mapref,
@@ -67,6 +68,17 @@ See the accompanying LICENSE file for applicable license.
       <fileset dir="${dita.temp.dir}"/>
     </delete>
   </target>
+  
+  <target name="ditaval-merge" unless="skip.ditaval.preprocess"
+    dita:depends="{depend.preprocess.ditaval-merge.pre}"
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+    description="Merge DITAVAL files into temporary file">
+    <pipeline message="Preprocess and merge ditavals" taskname="ditaval-merge">
+      <module class="org.dita.dost.module.MergeDitavalModule">
+        <param name="ditaval" location="${args.filter}" if="args.filter"/>
+      </module>
+    </pipeline>
+  </target>
 
   <!-- gen-list
       Create the manifest files listing which files are referenced by the input file (even indirectly). -->
@@ -80,7 +92,6 @@ See the accompanying LICENSE file for applicable license.
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
         <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
         <param name="ditadir" location="${dita.dir}"/>
-        <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
         <param name="validate" value="${validate}"/>
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
@@ -107,7 +118,6 @@ See the accompanying LICENSE file for applicable license.
     description="Debug and filter input files" >
     <pipeline message="Debug and filtering." taskname="filter">
       <module class="org.dita.dost.module.DebugAndFilterModule">
-        <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
         <param name="ditadir" location="${dita.dir}"/>
         <param name="validate" value="${validate}"/>
         <param name="transtype" value="${transtype}"/>
@@ -137,7 +147,7 @@ See the accompanying LICENSE file for applicable license.
     <job-helper file="resourceonly.list" property="resourceonlylist"/>    
     <job-helper file="subjectscheme.list" property="subjectschemelist"/>
     <job-helper file="subtargets.list" property="subtargetslist"/>
-    <job-helper file="user.input.file.list" property="user.input.file"/>
+    <job-helper file="user.input.file.list" property="user.input.file"/>    
     <job-property dir="${dita.temp.dir}"/>
     <property name="outditafilesfile" value="outditafiles.list"/>
     <property name="fullditamapandtopicfile" value="fullditamapandtopic.list"/>
@@ -475,10 +485,10 @@ See the accompanying LICENSE file for applicable license.
       dita:extension="depends org.dita.dost.platform.InsertDependsAction"
       description="Add flagging information to topics" 
       unless="preprocess.flagging.skip">
-    <makeurl file="${args.filter}" property="dita.input.filterfile.url" validate="no"></makeurl>
     <condition property="dita.preprocess.reloadstylesheet.flag-module" value="${dita.preprocess.reloadstylesheet}">
       <not><isset property="dita.preprocess.reloadstylesheet.flag-module"></isset></not>
     </condition>
+    <makeurl property="dita.input.filterfile.url" file="${dita.input.valfile}"/>
     <pipeline message="Add flagging information to topics" taskname="preprocess_flag">
       <xslt basedir="${dita.temp.dir}" 
           reloadstylesheet="${dita.preprocess.reloadstylesheet.flag-module}" 

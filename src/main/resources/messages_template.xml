@@ -338,6 +338,11 @@ See the accompanying LICENSE file for applicable license.
     <response>The element will be processed as an unknown or non-DITA element.</response>
   </message>
 
+  <message id="DOTJ071E" type="ERROR">
+    <reason>Cannot find the specified DITAVAL '%1'.</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
     
   <!-- Start of XSL Messages -->  

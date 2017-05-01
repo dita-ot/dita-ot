@@ -10,8 +10,12 @@ package org.dita.dost;
 
 import org.junit.Test;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
+import static java.util.Arrays.asList;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
 public class IntegrationTest extends AbstractIntegrationTest {
@@ -739,6 +743,25 @@ public class IntegrationTest extends AbstractIntegrationTest {
                 .input(Paths.get("simplemap.ditamap"))
                 .put("args.filter", Paths.get("filter.ditaval"))
                 .put("clean.temp", "no")
+                .test();
+    }
+
+    @Test
+    public void testfilterlist() throws Throwable {
+        final Path testDir = Paths.get("src", "test", "resources", "filterlist", "src");
+        final String filters = asList(
+                Paths.get("filter1.ditaval"),
+                Paths.get("subdir", "filter2.ditaval"),
+                Paths.get("missing.ditaval"))
+                .stream()
+                .map(path -> testDir.resolve(path).toAbsolutePath().toString())
+                .collect(Collectors.joining(File.pathSeparator));
+        builder().name("filterlist")
+                .transtype(xhtml)
+                .input(Paths.get("simplemap.ditamap"))
+                .put("args.filter", filters)
+                .put("clean.temp", "no")
+                .errorCount(1)
                 .test();
     }
 

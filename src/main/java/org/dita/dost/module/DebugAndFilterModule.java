@@ -216,7 +216,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             filterReader.setJob(job);
             filterReader.initXMLReader(setSystemId);
             Map<FilterKey, Action> filterMap;
-            if (ditavalFile != null) {
+            if (ditavalFile != null && ditavalFile.exists()) {
                 filterReader.read(ditavalFile.getAbsoluteFile());
                 filterMap = filterReader.getFilterMap();
             } else {
@@ -301,12 +301,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
             profilingEnabled = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED));
         }
         if (profilingEnabled) {
-            if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
-                ditavalFile = new File(input.getAttribute(ANT_INVOKER_PARAM_DITAVAL));
-                if (!ditavalFile.isAbsolute()) {
-                    ditavalFile = new File(baseDir, ditavalFile.getPath()).getAbsoluteFile();
-                }
-            }
+            ditavalFile = new File(job.tempDir, FILE_NAME_MERGED_DITAVAL);
         }
         gramcache = "yes".equalsIgnoreCase(input.getAttribute(ANT_INVOKER_EXT_PARAM_GRAMCACHE));
         validate = Boolean.valueOf(input.getAttribute(ANT_INVOKER_EXT_PARAM_VALIDATE));

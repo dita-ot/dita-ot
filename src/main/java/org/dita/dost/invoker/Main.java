@@ -135,6 +135,19 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
     }
 
+    private static class AbsoluteFileListArgument extends Argument {
+        AbsoluteFileListArgument(final String property) {
+            super(property);
+        }
+
+        @Override
+        String getValue(final String value) {
+            return Arrays.stream(value.split(File.pathSeparator))
+                    .map(oneFile -> new File(oneFile).getAbsolutePath())
+                    .collect(Collectors.joining(File.pathSeparator));
+        }
+    }
+
     private static class FileOrUriArgument extends Argument {
         FileOrUriArgument(final String property) {
             super(property);
@@ -174,7 +187,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ARGUMENTS.put("--input", new FileOrUriArgument("args.input"));
         ARGUMENTS.put("-o", new AbsoluteFileArgument("output.dir"));
         ARGUMENTS.put("--output", new AbsoluteFileArgument("output.dir"));
-        ARGUMENTS.put("--filter", new AbsoluteFileArgument("args.filter"));
+        ARGUMENTS.put("--filter", new AbsoluteFileListArgument("args.filter"));
         ARGUMENTS.put("-t", new AbsoluteFileArgument(ANT_TEMP_DIR));
         ARGUMENTS.put("--temp", new AbsoluteFileArgument(ANT_TEMP_DIR));
         addSingleHyphenOptions(ARGUMENTS);
@@ -1265,7 +1278,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         final StringBuilder msg = new StringBuilder();
         msg.append("Usage: dita -i <file> -f <name> [options]\n");
         msg.append("   or: dita --propertyfile=<file> [options]\n");
-        msg.append("   or: dita --install [<file>]\n");
+        msg.append("   or: dita --install [=<file>]\n");
         msg.append("   or: dita --uninstall <id>\n");
         msg.append("   or: dita --help\n");
         msg.append("   or: dita --version\n");
@@ -1286,7 +1299,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         // msg.append("                         diagnose or report problems." +
         // lSep);
         // msg.append("  -quiet, -q             be extra quiet" + lSep);
-        msg.append("  --filter=<file>             filter and flagging file\n");
+        msg.append("  --filter=<files>            filter and flagging files\n");
         msg.append("  -t, --temp=<dir>            temporary directory\n");
         msg.append("  -v, --verbose               verbose logging\n");
         msg.append("  -d, --debug                 print debugging information\n");
