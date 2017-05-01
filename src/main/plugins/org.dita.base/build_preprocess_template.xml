@@ -73,16 +73,9 @@ See the accompanying LICENSE file for applicable license.
     dita:depends="{depend.preprocess.ditaval-merge.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Merge DITAVAL files into temporary file">
-    <makeurl property="mergedditaval.url" file="${dita.input.valfile}" validate="false"/>
-    <pipeline message="Preprocess and merge ditavals" taskname="ditaval-merge"
-      inputmap="${args.input}">
+    <pipeline message="Preprocess and merge ditavals" taskname="ditaval-merge">
       <module class="org.dita.dost.module.MergeDitavalModule">
-        <param name="inputdir" location="${args.input.dir}" if="args.input.dir"/>
-        <param name="ditadir" location="${dita.dir}"/>
         <param name="ditaval" location="${args.filter}" if="args.filter"/>
-        <param name="outputdir" location="${output.dir}"/>
-        <param name="generate-debug-attributes" value="${generate-debug-attributes}" if="generate-debug-attributes"/>
-        <param name="processing-mode" value="${processing-mode}" if="processing-mode"/>
       </module>
     </pipeline>
   </target>
