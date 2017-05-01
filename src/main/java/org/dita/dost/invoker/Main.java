@@ -140,21 +140,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
             super(property);
         }
 
-        /**
-         * TODO: This should really use a stream that's mapped and then collected with a joiner.
-         *  Something like:
-         *  Arrays.stream(value.split(File.pathSeparator))
-         *    .map(oneFile -> new File(oneFile).getAbsolutePath())
-         *    .collect(Collectors.joiner(File.pathSeparator))
-         */
         @Override
         String getValue(final String value) {
-            String allPaths = "";
-            final String[] allFiles = value.split(File.pathSeparator);
-            for (final String oneFile : allFiles) {
-                allPaths += new File(oneFile).getAbsolutePath() + File.pathSeparator;
-            }
-            return allPaths;
+            return Arrays.stream(value.split(File.pathSeparator))
+                    .map(oneFile -> new File(oneFile).getAbsolutePath())
+                    .collect(Collectors.joining(File.pathSeparator));
         }
     }
 
