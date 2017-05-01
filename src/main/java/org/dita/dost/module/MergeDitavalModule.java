@@ -45,7 +45,7 @@ import org.xml.sax.*;
  * 
  * @author robander
  */
-public final class MergeDitavalModule extends SourceReaderModule {
+public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
 
     public static final String ELEMENT_STUB = "stub";
     public static final String ATTRIBUTE_IMAGEREF = "imageref";
@@ -54,31 +54,8 @@ public final class MergeDitavalModule extends SourceReaderModule {
     private static final String DITA_OT_NS_PREFIX = "dita-ot";
     private static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
 
-
-    /** Absolute basedir for processing */
-    private URI baseInputDir;
-
     /** Absolute paths for filter files. */
-    private List<File> ditavalFiles;
-    /** Number of directory levels base directory is adjusted. */
-    private int uplevels = 0;
-
-    private MergeDitavalModule listFilter;
-
-    /** Absolute path to input file. */
-    private URI rootFile;
-
-    /**
-     * Create a new instance and do the initialization.
-     * 
-     * @throws ParserConfigurationException
-     *             never throw such exception
-     * @throws SAXException
-     *             never throw such exception
-     */
-    public MergeDitavalModule() throws SAXException, ParserConfigurationException {
-        ditavalFiles = new LinkedList<>();
-    }
+    private List<File> ditavalFiles = new LinkedList<>();
 
     @Override
     public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -89,10 +66,6 @@ public final class MergeDitavalModule extends SourceReaderModule {
         try {
             parseInputParameters(input);
 
-            initFilters();
-            initXmlReader();
-
-            updateBaseDirectory();
             setMergedProperty();
             writeMergedDitaval();
         } catch (final DITAOTException e) {
@@ -104,65 +77,8 @@ public final class MergeDitavalModule extends SourceReaderModule {
         return null;
     }
 
-    /**
-     * Initialize reusable filters.
-     * 
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     */
-    private void initFilters() throws SAXException, ParserConfigurationException {
-        listFilter = new MergeDitavalModule();
-        listFilter.setLogger(logger);
-        listFilter.setJob(job);
-    }
-
     private void parseInputParameters(final AbstractPipelineInput input) {
-        ditaDir = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_DITADIR));
-        if (!ditaDir.isAbsolute()) {
-            throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
-        }
-
-        // Set the OutputDir
-        final File path = toFile(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
-        if (path.isAbsolute()) {
-            job.setOutputDir(path);
-        } else {
-            throw new IllegalArgumentException("Output directory " + path + " must be absolute");
-        }
-
         final File basedir = toFile(input.getAttribute(ANT_INVOKER_PARAM_BASEDIR));
-
-        final URI ditaInputDir = toURI(input.getAttribute(ANT_INVOKER_EXT_PARAM_INPUTDIR));
-        if (ditaInputDir != null) {
-            if (ditaInputDir.isAbsolute()) {
-                baseInputDir = ditaInputDir;
-            } else if (ditaInputDir.getPath() != null && ditaInputDir.getPath().startsWith(URI_SEPARATOR)) {
-                baseInputDir = setScheme(ditaInputDir, "file");
-            } else {
-                // XXX Shouldn't this be resolved to current directory, not Ant
-                // script base directory?
-                baseInputDir = basedir.toURI().resolve(ditaInputDir);
-            }
-            assert baseInputDir.isAbsolute();
-        }
-
-        final URI ditaInput = toURI(input.getAttribute(ANT_INVOKER_PARAM_INPUTMAP));
-        if (ditaInput.isAbsolute()) {
-            rootFile = ditaInput;
-        } else if (ditaInput.getPath() != null && ditaInput.getPath().startsWith(URI_SEPARATOR)) {
-            rootFile = setScheme(ditaInput, "file");
-        } else if (baseInputDir != null) {
-            rootFile = baseInputDir.resolve(ditaInput);
-        } else {
-            rootFile = basedir.toURI().resolve(ditaInput);
-        }
-        assert rootFile.isAbsolute();
-
-        if (baseInputDir == null) {
-            baseInputDir = rootFile.resolve(".");
-        }
-        assert baseInputDir.isAbsolute();
-
         if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
             final String[] allDitavalFiles = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL).split(File.pathSeparator);
             for (final String oneDitavalFile : allDitavalFiles) {
@@ -176,28 +92,16 @@ public final class MergeDitavalModule extends SourceReaderModule {
                 } else {
                     usingDitavalInput = basedir.toURI().resolve(ditavalInput);
                 }
-                if (toFile(usingDitavalInput).exists()) {
-                    ditavalFiles.add(toFile(usingDitavalInput));
+                if (new File(usingDitavalInput).exists()) {
+                    ditavalFiles.add(new File(usingDitavalInput));
                 } else {
                     logger.error(
                             MessageUtils.getInstance().getMessage("DOTJ071E", usingDitavalInput.toString()).toString());
                 }
             }
         }
-
-        // Set the mapDir
-        job.setInputFile(rootFile);
     }
 
-    /**
-     * Update base directory and prefix based on uplevels.
-     */
-    private void updateBaseDirectory() {
-        for (int i = uplevels; i > 0; i--) {
-            baseInputDir = baseInputDir.resolve("..");
-        }
-    }
-    
     /**
      * Set external property with the name of the merged file.
      */
@@ -206,6 +110,7 @@ public final class MergeDitavalModule extends SourceReaderModule {
     }
 
     private void writeMergedDitaval() throws DITAOTException {
+        final DocumentBuilder ditavalbuilder = XMLUtils.getDocumentBuilder();
         XMLStreamWriter export = null;
         try (OutputStream exportStream = new FileOutputStream(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL))) {
             export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
@@ -213,7 +118,6 @@ public final class MergeDitavalModule extends SourceReaderModule {
             export.writeStartElement("val");
             export.writeNamespace(DITA_OT_NS_PREFIX, DITA_OT_NS);
             for (File curDitaVal : ditavalFiles) {
-                final DocumentBuilder ditavalbuilder = XMLUtils.getDocumentBuilder();
                 final Document doc = ditavalbuilder.parse(curDitaVal);
                 final Element ditavalRoot = doc.getDocumentElement();
                 final NodeList rootChildren = ditavalRoot.getChildNodes();
