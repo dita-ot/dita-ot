@@ -59,7 +59,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="dita.map.htmlhelp.hhp" depends="dita.map.htmlhelp.init"
           description="Build HTMLHelp HHP file">
     <local name="htmlhelp.hhp.output.dir"/>
-    <condition property="htmlhelp.hhp.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
+    <condition property="htmlhelp.hhp.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
       <isset property="inner.transform"/>
     </condition>
     <xslt basedir="${dita.temp.dir}"
@@ -82,7 +82,7 @@ See the accompanying LICENSE file for applicable license.
           description="Build HTMLHelp HHP file">
     <dita-ot-echo id="DOTX070W"><param name="1" value="dita.out.map.htmlhelp.hhp"/></dita-ot-echo>
     <xslt basedir="${dita.temp.dir}"
-          destdir="${output.dir}"
+          destdir="${dita.output.dir}"
           includesfile="${dita.temp.dir}/${user.input.file.listfile}"
           classpathref="dost.class.path"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
@@ -98,7 +98,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="dita.map.htmlhelp.hhc" depends="dita.map.htmlhelp.init"
           description="Build HTMLHelp HHC file">
     <local name="htmlhelp.hhc.output.dir"/>
-    <condition property="htmlhelp.hhc.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
+    <condition property="htmlhelp.hhc.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
       <isset property="inner.transform"/>
     </condition>
     <xslt basedir="${dita.temp.dir}"
@@ -119,7 +119,7 @@ See the accompanying LICENSE file for applicable license.
           description="Build HTMLHelp HHC file">
     <dita-ot-echo id="DOTX070W"><param name="1" value="dita.out.map.htmlhelp.hhc"/></dita-ot-echo>
     <xslt basedir="${dita.temp.dir}"
-          destdir="${output.dir}"
+          destdir="${dita.output.dir}"
           includesfile="${dita.temp.dir}/${user.input.file.listfile}"
           classpathref="dost.class.path"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
@@ -133,7 +133,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="dita.map.htmlhelp.hhk" depends="dita.map.htmlhelp.init"
           description="Build HTMLHelp HHK file">
     <local name="htmlhelp.hhk.output.dir"/>
-    <condition property="htmlhelp.hhk.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
+    <condition property="htmlhelp.hhk.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
       <isset property="inner.transform"/>
     </condition>
     <pipeline message="Extract index term." tempdir="${dita.temp.dir}" inputmap="${user.input.file}">
@@ -153,7 +153,7 @@ See the accompanying LICENSE file for applicable license.
     <dita-ot-echo id="DOTX070W"><param name="1" value="dita.out.map.htmlhelp.hhk"/></dita-ot-echo>
     <pipeline message="Extract index term." tempdir="${dita.temp.dir}" inputmap="${user.input.file}">
       <module class="org.dita.dost.module.IndexTermExtractModule">
-        <param name="output" location="${output.dir}/${dita.map.filename.root}.hhk"/>
+        <param name="output" location="${dita.output.dir}/${dita.map.filename.root}.hhk"/>
         <param name="targetext" value="${out.ext}"/>
         <param name="indextype" value="htmlhelp"/>
         <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
@@ -172,15 +172,15 @@ See the accompanying LICENSE file for applicable license.
                 basedir="${basedir}"
                 tempdir="${dita.temp.dir}"
                 inputmap="${user.input.file}"
-                outputdir="${output.dir}"/>
+                outputdir="${dita.output.dir}"/>
     <convert-lang message="Convert Language"
                   basedir="${basedir}"
-                  outputdir="${output.dir}"
+                  outputdir="${dita.output.dir}"
                   langcode="${htmlhelp.locale}"/>
   </target>
 
   <target name="compile.HTML.Help" if="HTMLHelpCompiler" description="Compile HTMLHelp output">
-    <condition property="compile.dir" value="${output.dir}">
+    <condition property="compile.dir" value="${dita.output.dir}">
       <isset property="inner.transform"/>
     </condition>
     <condition property="compile.dir" value="${dita.map.output.dir}">

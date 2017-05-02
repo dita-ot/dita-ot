@@ -85,6 +85,9 @@ See the accompanying LICENSE file for applicable license.
       </condition>
     </fail>
     <property name="output.dir" location="${basedir}/out" />
+    <condition property="dita.output.dir" value="${dita.temp.dir}${file.separator}${temp.output.dir.name}" else="${output.dir}">
+      <isset property="temp.output.dir.name"/>
+    </condition>
     <property environment="env" />
   </target>
 

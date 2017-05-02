@@ -51,7 +51,7 @@ See the accompanying LICENSE file for applicable license.
     <element name="params" optional="true" implicit="true"/>
     <sequential>
       <local name="xhtml.toc.output.dir"/>
-      <condition property="xhtml.toc.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
+      <condition property="xhtml.toc.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
        <isset property="inner.transform"/>
       </condition>      
       <xslt
@@ -81,7 +81,7 @@ See the accompanying LICENSE file for applicable license.
         <dita-ot-echo id="DOTX070W"><param name="1" value="dita.out.map.xhtml.toc"/></dita-ot-echo>
         <xslt
               basedir="${dita.temp.dir}"
-              destdir="${output.dir}"
+              destdir="${dita.output.dir}"
               includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${args.xhtml.toc.xsl}">
@@ -112,7 +112,7 @@ See the accompanying LICENSE file for applicable license.
         <isset property="args.css.present"/>
       </and>
     </condition>
-    <property name="user.csspath.real" location="${output.dir}/${user.csspath}"/>
+    <property name="user.csspath.real" location="${dita.output.dir}/${user.csspath}"/>
     <mkdir dir="${user.csspath.real}"/>
     <!-- Always copy system default css files -->
     <copy todir="${user.csspath.real}">

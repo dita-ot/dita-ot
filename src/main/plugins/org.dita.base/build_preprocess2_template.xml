@@ -103,7 +103,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
         <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
-        <param name="outputdir" location="${output.dir}"/>
+        <param name="outputdir" location="${dita.output.dir}"/>
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
@@ -239,7 +239,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
         <param name="onlytopicinmap" value="${onlytmopic.in.map}"/>
-        <param name="outputdir" location="${output.dir}"/>
+        <param name="outputdir" location="${dita.output.dir}"/>
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
@@ -436,7 +436,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"/>
         <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
         <param name="BASEDIR" expression="${basedir}"/>
-        <param name="OUTPUTDIR" expression="${output.dir}"/>
+        <param name="OUTPUTDIR" expression="${dita.output.dir}"/>
         <param name="defaultLanguage" expression="${default.language}"/>
         <dita:extension id="dita.preprocess.flag-module.param" behavior="org.dita.dost.platform.InsertAction"/>
         <xmlcatalog refid="dita.catalog"/>
@@ -476,7 +476,7 @@ See the accompanying LICENSE file for applicable license.
           dita:depends="{depend.preprocess.copy-image.pre}"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
           description="Copy image files">
-    <copy todir="${output.dir}" failonerror="false">
+    <copy todir="${dita.output.dir}" failonerror="false">
       <dita-fileset format="image" />
     </copy>
   </target>
