@@ -478,7 +478,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
             for (int i = 0; i < branches.size(); i++) {
                 final Element branch = branches.get(i);
                 final Element ditavalref = ditavalRefs.get(i);
-                branch.insertBefore(ditavalref, branch.getFirstChild());
+                branch.appendChild(ditavalref);
                 final Branch currentFilter = filter.merge(ditavalref);
                 processAttributes(branch, currentFilter);
                 final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, Optional.empty(), Optional.empty());
