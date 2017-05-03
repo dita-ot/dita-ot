@@ -29,6 +29,9 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project. 
 See the accompanying LICENSE file for applicable license.
 -->
+
+<!-- 20170503 SCH: Add support for troubleshooting elements. -->
+
 <vars xmlns="http://www.idiominc.com/opentopic/vars">
 
     <!-- 
@@ -367,6 +370,14 @@ See the accompanying LICENSE file for applicable license.
     <variable id="Task Result"></variable>
     <variable id="Task Example"></variable>
     <variable id="Task Postreq"></variable>
+    
+    <!--Labels for troubleshooting sections, now reused from common-->
+    <variable id="Troubleshooting Condition">Condition or error</variable>
+    <variable id="Troubleshooting Cause">Cause</variable>
+    <variable id="Troubleshooting Remedy">Resolution</variable>
+    <variable id="Troubleshooting responsibleParty">Required personnel</variable>
+    <variable id="Troubleshooting Step">Trouble?</variable>
+    <variable id="Troubleshooting Task">Trouble with this task?</variable>
     
     <!--Glossary Variables-->
     <!-- The footer that appears on the odd-numbered glossary pages. -->

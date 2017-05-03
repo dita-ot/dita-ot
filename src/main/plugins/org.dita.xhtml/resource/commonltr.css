@@ -152,6 +152,7 @@ dt.prereq {
   margin-top: 1em;
   margin-bottom: 1em;
 }
+
 div.tasklabel {
   margin-top: 1em;
   margin-bottom: 1em;
@@ -161,6 +162,21 @@ h3.tasklabel,
 h4.tasklabel,
 h5.tasklabel,
 h6.tasklabel {
+  font-size: 100%;
+}
+
+div.troubleSolution {
+  border-top: solid 1px;
+}
+div.troubleshootinglabel {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+h2.troubleshooting,
+h3.troubleshooting,
+h4.troubleshooting,
+h5.troubleshooting,
+h6.troubleshooting {
   font-size: 100%;
 }
 /* All note formats have the same default presentation */
