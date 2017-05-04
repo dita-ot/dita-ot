@@ -127,6 +127,8 @@ See the accompanying LICENSE file for applicable license.
           </xsl:for-each>
         </fo:marker>
       </xsl:if>
+      <fo:block>
+        <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/prolog ')]"/>
         <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
@@ -135,6 +137,7 @@ See the accompanying LICENSE file for applicable license.
         <!--xsl:apply-templates select="." mode="buildRelationships"/-->
         <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
         <xsl:apply-templates select="." mode="topicEpilog"/>
+      </fo:block>
     </xsl:template>
 
     <!-- Hook that allows common end-of-topic processing (after nested topics). -->
