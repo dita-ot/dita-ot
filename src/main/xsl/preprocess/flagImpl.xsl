@@ -27,7 +27,8 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   version="2.0"  
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-  exclude-result-prefixes="xs ditamsg">
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  exclude-result-prefixes="xs ditamsg dita-ot">
 
  <!-- ========== Flagging with flags & revisions ========== -->
 
@@ -153,6 +154,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
         <startflag>
           <xsl:copy-of select="startflag/@*"/>
           <xsl:apply-templates select="startflag/@imageref" mode="adjust-imageref"/>
+          <xsl:apply-templates select="startflag/@imageref" mode="original-imageref"/>
           <xsl:copy-of select="startflag/*"/>
         </startflag>
       </xsl:if>
@@ -174,6 +176,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
         <endflag>
           <xsl:copy-of select="endflag/@*"/>
           <xsl:apply-templates select="endflag/@imageref" mode="adjust-imageref"/>
+          <xsl:apply-templates select="endflag/@imageref" mode="original-imageref"/>
           <xsl:copy-of select="endflag/*"/>
         </endflag>
       </xsl:if>
@@ -219,6 +222,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
          <startflag>
            <xsl:copy-of select="startflag/@*"/>
            <xsl:apply-templates select="startflag/@imageref" mode="adjust-imageref"/>
+           <xsl:apply-templates select="startflag/@imageref" mode="original-imageref"/>
            <xsl:copy-of select="startflag/*"/>
          </startflag>
        </xsl:when>
@@ -249,6 +253,7 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
           <endflag>
             <xsl:copy-of select="endflag/@*"/>
             <xsl:apply-templates select="endflag/@imageref" mode="adjust-imageref"/>
+            <xsl:apply-templates select="endflag/@imageref" mode="original-imageref"/>
             <xsl:copy-of select="endflag/*"/>
           </endflag>
         </xsl:when>
@@ -318,6 +323,12 @@ LOOK FOR FIXME TO FIX SCHEMEDEF STUFF
         <xsl:value-of select="."/>
       </xsl:attribute>
     </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="@imageref" mode="original-imageref">
+    <xsl:attribute name="dita-ot:original-imageref">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
   </xsl:template>
 
 

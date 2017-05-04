@@ -15,14 +15,14 @@ See the accompanying LICENSE file for applicable license.
   <!-- For reference, flagging info as it appears in the topics: -->
   <!--<ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop ">
     <prop action="flag" att="audience" val="p">
-      <startflag imageref="yukface.jpg"><alt-text>Start P</alt-text></startflag>
+      <startflag imageref="yukface.jpg" dita-ot:original-imageref="yukface.jpg"><alt-text>Start P</alt-text></startflag>
     </prop>
     <prop action="flag" att="audience" backcolor="aqua" color="blue" style="italics" val="meep"/>
     <revprop action="flag" backcolor="maroon" changebar="|" color="olive" style="underline" val="testrev"/>
   </ditaval-startprop>
   <ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
     <prop action="flag" att="audience" val="p">
-      <endflag imageref="smileface.jpg"><alt-text>End P</alt-text></endflag>
+      <endflag imageref="smileface.jpg" dita-ot:original-imageref="smileface.jpg"><alt-text>End P</alt-text></endflag>
     </prop>
   </ditaval-endprop>
   -->
@@ -164,6 +164,11 @@ See the accompanying LICENSE file for applicable license.
         <xsl:variable name="flags" as="element()*">
           <xsl:for-each select=".//startflag|.//endflag">
             <xsl:choose>
+              <xsl:when test="@dita-ot:original-imageref">
+                <image class="+ topic/image ditaot-d/flagimage " href="{@dita-ot:original-imageref}" placement="inline">
+                  <alt class="- topic/alt "><xsl:value-of select="alt-text"/></alt>
+                </image>
+              </xsl:when>
               <xsl:when test="@imageref">
                 <image class="+ topic/image ditaot-d/flagimage " href="{@imageref}" placement="inline">
                   <alt class="- topic/alt "><xsl:value-of select="alt-text"/></alt>
