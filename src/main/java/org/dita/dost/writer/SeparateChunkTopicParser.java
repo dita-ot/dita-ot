@@ -32,6 +32,7 @@ import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.StringUtils.isEmptyString;
 import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
@@ -296,6 +297,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         final String id = atts.getValue(ATTRIBUTE_NAME_ID);
         final AttributesImpl attsMod = new AttributesImpl(atts);
         final String xmlLang = atts.getValue(ATTRIBUTE_NAME_XML_LANG);
+        final String currentLang;
 
 
         if (skip && skipLevel > 0) {
@@ -303,16 +305,17 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         }
 
         if (xmlLang != null) {
-            lang.push(xmlLang);
+            currentLang = xmlLang;
         }
         else {
             if (lang.size() > 0) {
-                lang.push(lang.peek());
+                currentLang = lang.peek();
             }
             else {
-                lang.push("");
+                currentLang = "";
             }
         }
+        lang.push(currentLang);
 
         try {
             if (TOPIC_TOPIC.matches(cls)) {
@@ -326,8 +329,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     outputFile = generateOutputFilename(id);
                     output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), UTF8);
 
-                    if(atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 ) {
-                        attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "NMTOKEN", lang.peek() );
+                    if(atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 && !isEmptyString(currentLang)) {
+                        attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "NMTOKEN", currentLang );
                     }
 //                    final FileInfo fi = generateFileInfo(outputFile);
 //                    job.add(fi);
@@ -376,7 +379,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
 
                 processSelect(id);
             }
-
+https://navalny.com/
             if (include) {
                 includelevel++;
                 final Attributes resAtts = processAttributes(attsMod);
