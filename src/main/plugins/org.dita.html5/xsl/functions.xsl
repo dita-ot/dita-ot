@@ -95,7 +95,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="entry" as="element()"/>
 
     <xsl:sequence select="
-      table:get-current-table($entry)/*/*[contains(@class, ' topic/colspec ')]
+      table:get-current-tgroup($entry)/*[contains(@class, ' topic/colspec ')]
       [@colname eq $entry/@colname]
     "/>
   </xsl:function>
