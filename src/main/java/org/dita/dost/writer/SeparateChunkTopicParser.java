@@ -18,6 +18,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.AttributesImpl;
 
 import javax.xml.parsers.DocumentBuilder;
 import java.io.*;
@@ -25,7 +26,6 @@ import java.net.URI;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
-import java.util.Stack;
 
 import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.moveFile;
@@ -53,6 +53,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     private Element topicDoc = null;
     final Deque<Writer> outputStack = new ArrayDeque<>();
     final Deque<Element> stubStack = new ArrayDeque<>();
+    final Deque<String> lang = new ArrayDeque<>();
 
     /**
      * Constructor.
@@ -293,9 +294,24 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
             throws SAXException {
         final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
         final String id = atts.getValue(ATTRIBUTE_NAME_ID);
+        final AttributesImpl attsMod = new AttributesImpl(atts);
+        final String xmlLang = atts.getValue(ATTRIBUTE_NAME_XML_LANG);
+
 
         if (skip && skipLevel > 0) {
             skipLevel++;
+        }
+
+        if (xmlLang != null) {
+            lang.push(xmlLang);
+        }
+        else {
+            if (lang.size() > 0) {
+                lang.push(lang.peek());
+            }
+            else {
+                lang.push("");
+            }
         }
 
         try {
@@ -310,6 +326,9 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     outputFile = generateOutputFilename(id);
                     output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), UTF8);
 
+                    if(atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 ) {
+                        attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "NMTOKEN", lang.peek() );
+                    }
 //                    final FileInfo fi = generateFileInfo(outputFile);
 //                    job.add(fi);
 
@@ -360,7 +379,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
 
             if (include) {
                 includelevel++;
-                final Attributes resAtts = processAttributes(atts);
+                final Attributes resAtts = processAttributes(attsMod);
                 writeStartElement(output, qName, resAtts);
             }
         } catch (final IOException e) {
@@ -400,6 +419,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                 stub = stubStack.pop();
             }
         }
+
+        lang.pop();
     }
 
 }
