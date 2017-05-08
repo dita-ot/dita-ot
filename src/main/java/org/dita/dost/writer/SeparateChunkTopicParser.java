@@ -379,7 +379,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
 
                 processSelect(id);
             }
-https://navalny.com/
+
             if (include) {
                 includelevel++;
                 final Attributes resAtts = processAttributes(attsMod);
