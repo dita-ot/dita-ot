@@ -40,7 +40,7 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="dita.topic.troff" unless="noTopic" if="old.transform"
     description="Build troff output from dita inner and outer topics,which will adjust the directory.">
-    <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
+    <xslt basedir="${dita.temp.dir}" destdir="${dita.output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension="${out.ext}"
       classpathref="dost.class.path"
       style="${troff.step2.xsl}">
@@ -57,7 +57,7 @@ See the accompanying LICENSE file for applicable license.
     description="Build troff output from inner dita topics">
 	<echo level="info">the ditmapoutputdir is ${dita.map.output.dir}</echo>
     <!-- step 2 -->
-    <xslt basedir="${dita.temp.dir}" destdir="${output.dir}"
+    <xslt basedir="${dita.temp.dir}" destdir="${dita.output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension="${out.ext}"
       classpathref="dost.class.path"
       style="${troff.step2.xsl}">

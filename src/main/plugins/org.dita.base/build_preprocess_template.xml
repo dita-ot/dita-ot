@@ -96,7 +96,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="generatecopyouter" value="${generate.copy.outer}"/>
         <param name="outercontrol" value="${outer.control}"/>
         <param name="onlytopicinmap" value="${onlytopic.in.map}"/>
-        <param name="outputdir" location="${output.dir}"/>
+        <param name="outputdir" location="${dita.output.dir}"/>
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
@@ -167,7 +167,7 @@ See the accompanying LICENSE file for applicable license.
     <property name="copytosourcefile" value="copytosource.list"/>
     <property name="subtargetsfile" value="subtargets.list"/>
     <property name="resourceonlyfile" value="resourceonly.list"/>
-    <dirname property="_dita.map.output.dir" file="${output.dir}/${user.input.file}" />
+    <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
     <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
     <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
     <condition property="noMap">
@@ -190,7 +190,7 @@ See the accompanying LICENSE file for applicable license.
         <!--param name="ditadir" location="${dita.dir}"/-->
         <param name="ditaval" location="${dita.input.valfile}" if="dita.input.valfile"/>
         <!--param name="inputdir" location="${args.input.dir}" if="args.input.dir"/-->
-        <!--param name="outputdir" location="${output.dir}"/-->
+        <!--param name="outputdir" location="${dita.output.dir}"/-->
         <!--param name="setsystemid" value="${args.xml.systemid.set}"/-->
         <param name="transtype" value="${transtype}"/>
       </module>
@@ -500,7 +500,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="FILTERFILEURL" expression="${dita.input.filterfile.url}"/>
         <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
         <param name="BASEDIR" expression="${basedir}"/>
-        <param name="OUTPUTDIR" expression="${output.dir}"/>
+        <param name="OUTPUTDIR" expression="${dita.output.dir}"/>
         <!-- Deprecated since 2.4 -->
         <param name="DBG" expression="${args.debug}" if="args.debug"/>
         <param name="defaultLanguage" expression="${default.language}"/>
@@ -586,7 +586,7 @@ See the accompanying LICENSE file for applicable license.
     dita:depends="{depend.preprocess.copy-image.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
     description="Copy image files">
-    <condition property="copy-image.todir" value="${output.dir}/${uplevels}" else="${output.dir}">
+    <condition property="copy-image.todir" value="${dita.output.dir}/${uplevels}" else="${dita.output.dir}">
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
     <copy todir="${copy-image.todir}" failonerror="false">
@@ -599,7 +599,7 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-html.skip"
     description="Copy html files">
-    <copy todir="${output.dir}" failonerror="false">
+    <copy todir="${dita.output.dir}" failonerror="false">
       <dita-fileset format="html" />
     </copy>
   </target>
@@ -611,7 +611,7 @@ See the accompanying LICENSE file for applicable license.
     description="Copy flag files">
     <property name="flagimagefile" value="flagimage.list"/>
     <job-helper file="flagimage.list" property="flagimagelist"/>
-    <dita-ot-copy todir="${output.dir}" includesfile="${dita.temp.dir}/${flagimagefile}" relativepaths="${relflagimagelist}" />
+    <dita-ot-copy todir="${dita.output.dir}" includesfile="${dita.temp.dir}/${flagimagefile}" relativepaths="${relflagimagelist}" />
   </target>
   
   <target name="copy-flag-check">

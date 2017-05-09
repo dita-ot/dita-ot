@@ -99,7 +99,7 @@ See the accompanying LICENSE file for applicable license.
             description="Build EclipseHelp TOC file">
         <xslt
               basedir="${dita.temp.dir}"
-              destdir="${output.dir}"
+              destdir="${dita.output.dir}"
               includesfile="${dita.temp.dir}/${fullditamapfile}"
               extension=".xml"
               classpathref="dost.class.path"
@@ -117,7 +117,7 @@ See the accompanying LICENSE file for applicable license.
         description="Build EclipseHelp TOC file">
         <xslt
             basedir="${dita.temp.dir}"
-            destdir="${output.dir}"
+            destdir="${dita.output.dir}"
             includesfile="${dita.temp.dir}/${fullditamapfile}"
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2eclipse.xsl">
@@ -141,7 +141,7 @@ See the accompanying LICENSE file for applicable license.
             tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}">
     	    <module class="org.dita.dost.module.IndexTermExtractModule">
-            <param name="output" location="${output.dir}/${user.input.file}"/>
+            <param name="output" location="${dita.output.dir}/${user.input.file}"/>
             <param name="targetext" value="${out.ext}"/>
             <param name="indextype" value="eclipsehelp"/>
             <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
@@ -162,7 +162,7 @@ See the accompanying LICENSE file for applicable license.
             tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}">
           <module class="org.dita.dost.module.IndexTermExtractModule">
-            <param name="output" location="${output.dir}/index.xml"/>
+            <param name="output" location="${dita.output.dir}/index.xml"/>
             <param name="targetext" value="${out.ext}"/>
             <param name="indextype" value="eclipsehelp"/>
             <param name="indexclass" value="${dita.eclipsehelp.index.class}"/>
@@ -205,7 +205,7 @@ See the accompanying LICENSE file for applicable license.
         description="Build Eclipsehelp plugin file">
         <xslt
             in="${dita.temp.dir}/${user.input.file}"
-            out="${output.dir}/plugin.xml"
+            out="${dita.output.dir}/plugin.xml"
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
             <param name="TOCROOT" expression="${dita.map.filename.root}" />
@@ -302,7 +302,7 @@ See the accompanying LICENSE file for applicable license.
     description="Create eclipse plugin.properties file">
     <xslt
       in="${dita.temp.dir}/${user.input.file}"
-      out="${output.dir}/plugin.properties"
+      out="${dita.output.dir}/plugin.properties"
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <outputproperty value="text" name="method"/>
@@ -324,7 +324,7 @@ See the accompanying LICENSE file for applicable license.
     description="Create eclipse plugin.properties file">
     <xslt
       in="${dita.temp.dir}/${user.input.file}"
-      out="${output.dir}/plugin.properties"
+      out="${dita.output.dir}/plugin.properties"
       classpathref="dost.class.path"
       style="${dita.plugin.org.dita.eclipsehelp.dir}/xsl/map2plugin.xsl">
       <outputproperty value="text" name="method"/>
@@ -364,8 +364,8 @@ See the accompanying LICENSE file for applicable license.
     if="old.transform">
     <defaultexcludes add="**/META-INF/**"/>
     <defaultexcludes add="**/nl/**"/>
-  	<delete file="${output.dir}/plugin.xml"/>
-  	<delete file="${output.dir}/plugincustomization.ini"/>
+  	<delete file="${dita.output.dir}/plugin.xml"/>
+  	<delete file="${dita.output.dir}/plugincustomization.ini"/>
     <move todir="${dita.map.output.dir}/${fragment.dirname}" includeemptydirs="yes">
       <fileset dir="${dita.map.output.dir}" defaultexcludes="yes">
         <exclude name="helpData.xml"/>
@@ -379,7 +379,7 @@ See the accompanying LICENSE file for applicable license.
       	<exclude name="plugincustomization.ini"/>
       </fileset>
     </move>
-  	<move file="${output.dir}/plugin.properties" tofile="${output.dir}/plugin_${fragment.property.name}.properties" failonerror="no"/>
+  	<move file="${dita.output.dir}/plugin.properties" tofile="${dita.output.dir}/plugin_${fragment.property.name}.properties" failonerror="no"/>
 
   	
   </target>
@@ -388,10 +388,10 @@ See the accompanying LICENSE file for applicable license.
     if="inner.transform">
     <defaultexcludes add="**/META-INF/**"/>
     <defaultexcludes add="**/nl/**"/>
-  	<delete file="${output.dir}/plugin.xml"/>
-  	<delete file="${output.dir}/plugincustomization.ini"/>
-    <move todir="${output.dir}/${fragment.dirname}" includeemptydirs="yes">
-      <fileset dir="${output.dir}" defaultexcludes="yes">
+  	<delete file="${dita.output.dir}/plugin.xml"/>
+  	<delete file="${dita.output.dir}/plugincustomization.ini"/>
+    <move todir="${dita.output.dir}/${fragment.dirname}" includeemptydirs="yes">
+      <fileset dir="${dita.output.dir}" defaultexcludes="yes">
         <exclude name="helpData.xml"/>
       	<exclude name="plugin.properties"/>
       	<exclude name="plugin_${fragment.property.name}.properties"/>
@@ -403,7 +403,7 @@ See the accompanying LICENSE file for applicable license.
       	<exclude name="plugincustomization.ini"/>
       </fileset>
     </move>
-  	<move file="${output.dir}/plugin.properties" tofile="${output.dir}/plugin_${fragment.property.name}.properties" failonerror="no"/>
+  	<move file="${dita.output.dir}/plugin.properties" tofile="${dita.output.dir}/plugin_${fragment.property.name}.properties" failonerror="no"/>
   </target>
   
   <!--<target name="dita.map.eclipse"
@@ -450,7 +450,7 @@ See the accompanying LICENSE file for applicable license.
 	
 	<target name="copy-plugin-files">
 	  	<!-- Look for files that override behavior in Eclipse plugins -->
-	  	<copy todir="${output.dir}">
+	  	<copy todir="${dita.output.dir}">
 	  	      <fileset dir="${user.input.dir}">
 	  	      	<include name="disabled_book.css"/>
 	  	        <include name="narrow_book.css"/>

@@ -51,7 +51,7 @@ See the accompanying LICENSE file for applicable license.
             depends="dita.map.javahelp.init"
             description="Build JavaHelp TOC file">
         <local name="javahelp.toc.output.dir"/>
-        <condition property="javahelp.toc.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
+        <condition property="javahelp.toc.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
           <isset property="inner.transform"/>
         </condition>
         <xslt
@@ -73,7 +73,7 @@ See the accompanying LICENSE file for applicable license.
         description="Build JavaHelp TOC file">
         <xslt
             basedir="${dita.temp.dir}"
-            destdir="${output.dir}"
+            destdir="${dita.output.dir}"
             includesfile="${dita.temp.dir}/${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelptoc.xsl">
@@ -90,7 +90,7 @@ See the accompanying LICENSE file for applicable license.
             depends="dita.map.javahelp.init"
             description="Build JavaHelp Map file">
         <local name="javahelp.map.output.dir"/>
-        <condition property="javahelp.map.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
+        <condition property="javahelp.map.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
           <isset property="inner.transform"/>
         </condition>
         <xslt
@@ -112,7 +112,7 @@ See the accompanying LICENSE file for applicable license.
         description="Build JavaHelp Map file">
         <xslt
             basedir="${dita.temp.dir}"
-            destdir="${output.dir}"
+            destdir="${dita.output.dir}"
             includesfile="${dita.temp.dir}/${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpmap.xsl">
@@ -129,7 +129,7 @@ See the accompanying LICENSE file for applicable license.
             depends="dita.map.javahelp.init, dita.map.javahelp.map"
             description="Build JavaHelp Set file">
         <local name="javahelp.set.output.dir"/>
-        <condition property="javahelp.set.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
+        <condition property="javahelp.set.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
           <isset property="inner.transform"/>
         </condition>
         <xslt
@@ -142,7 +142,7 @@ See the accompanying LICENSE file for applicable license.
             <param name="javahelpmap" expression="${args.javahelp.map}" />
             <param name="javahelptoc" expression="${args.javahelp.toc}" />
         	<param name="basedir" expression="${basedir}"/>
-        	<param name="outputdir" expression="${output.dir}"/>
+        	<param name="outputdir" expression="${dita.output.dir}"/>
             <mergemapper to="${dita.map.filename.root}_helpset.hs"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
@@ -154,7 +154,7 @@ See the accompanying LICENSE file for applicable license.
         description="Build JavaHelp Set file">
         <xslt
             basedir="${dita.temp.dir}"
-            destdir="${output.dir}"
+            destdir="${dita.output.dir}"
             includesfile="${dita.temp.dir}/${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpset.xsl">
@@ -162,7 +162,7 @@ See the accompanying LICENSE file for applicable license.
             <param name="javahelpmap" expression="${args.javahelp.map}" />
             <param name="javahelptoc" expression="${args.javahelp.toc}" />
         	<param name="basedir" expression="${basedir}"/>
-        	<param name="outputdir" expression="${output.dir}"/>
+        	<param name="outputdir" expression="${dita.output.dir}"/>
             <mapper type="glob"
                 from="${user.input.file}"
                 to="${dita.map.filename.root}_helpset.hs" />
@@ -173,7 +173,7 @@ See the accompanying LICENSE file for applicable license.
     <target name="dita.map.javahelp.index"
             description="Build JavaHelp Index file">
         <local name="javahelp.index.output.dir"/>
-        <condition property="javahelp.index.output.dir" value="${output.dir}" else="${_dita.map.output.dir}">
+        <condition property="javahelp.index.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
           <isset property="inner.transform"/>
         </condition>
         <pipeline message="Extract index term."
@@ -195,7 +195,7 @@ See the accompanying LICENSE file for applicable license.
             tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}">
           <module class="org.dita.dost.module.IndexTermExtractModule">
-            <param name="output" location="${output.dir}/${dita.map.filename.root}.xml"/>
+            <param name="output" location="${dita.output.dir}/${dita.map.filename.root}.xml"/>
             <param name="targetext" value=".html"/>
             <param name="indextype" value="javahelp"/>
             <param name="encoding" value="${args.dita.locale}" if="args.dita.locale"/>
@@ -210,7 +210,7 @@ See the accompanying LICENSE file for applicable license.
         <condition property="compile.dir" value="${dita.map.output.dir}">
             <isset property="old.transform"/>
         </condition>
-        <condition property="compile.dir" value="${output.dir}">
+        <condition property="compile.dir" value="${dita.output.dir}">
             <isset property="inner.transform"/>
         </condition>
         <delete dir="${compile.dir}/JavaHelpSearch" />
