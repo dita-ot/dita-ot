@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+<dita id="unique_1" oid="GENERATED-DITA-ID">
 <?foo?><?foo bar?><?foo <&?>
 <concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
   class="- topic/topic concept/concept "
   domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
-  id="unique_1" oid="topic" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
+  id="unique_2" oid="topic" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
   <title class="- topic/title ">Test</title>
   <conbody class="- topic/body  concept/conbody ">
     <p class="- topic/p ">&lt;&amp;</p>
@@ -11,21 +12,21 @@
     <p class="- topic/p " id="a">A</p>
     <p class="- topic/p " id="b">B</p>
     <p class="- topic/p " id="a">A2</p>
-    <xref class="- topic/xref " href="#unique_2/a" ohref="test.xml#topic2/a"/>
+    <xref class="- topic/xref " href="#unique_3/a" ohref="test.xml#topic2/a"/>
     <xref class="- topic/xref " href="http://example.com/test.xml"/>
     <xref class="- topic/xref " href="#topic2/a" scope="peer"/>
     <xref class="- topic/xref " href="#topic2/a" format="html"/>
-    <xref class="- topic/xref " ohref="test2.xml" href="#unique_3"/>
-    <xref class="- topic/xref " ohref="test2.xml#concept" href="#unique_4"/>
-    <xref class="- topic/xref " ohref="test.xml#åäö" href="#unique_5"/>
-    <xref class="- topic/xref " ohref="test.xml#åäö" href="#unique_5"/>
+    <xref class="- topic/xref " ohref="test2.xml" href="#unique_4"/>
+    <xref class="- topic/xref " ohref="test2.xml#concept" href="#unique_5"/>
+    <xref class="- topic/xref " ohref="test.xml#åäö" href="#unique_6"/>
+    <xref class="- topic/xref " ohref="test.xml#åäö" href="#unique_6"/>
     <foreign class="- topic/foreign ">
       <foo xmlns="http://example.com/foo" xmlns:bar="http://example.com/bar" bar:foo="baz"/>
     </foreign>
   </conbody>
   <concept class="- topic/topic concept/concept "
     domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
-    id="unique_2" oid="topic2" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
+    id="unique_3" oid="topic2" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
     <title class="- topic/title ">Test 2</title>
     <conbody class="- topic/body  concept/conbody ">
       <p class="- topic/p " id="a">A</p>
@@ -33,22 +34,23 @@
   </concept>
   <concept class="- topic/topic concept/concept "
     domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
-    id="unique_2" oid="topic2" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
+    id="unique_3" oid="topic2" ditaarch:DITAArchVersion="1.2" xml:lang="en-us">
     <title class="- topic/title ">Test 2</title>
   </concept>
   <concept class="- topic/topic concept/concept "
     domains="(topic concept) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d)"
-    id="unique_5" oid="åäö" ditaarch:DITAArchVersion="1.2" xml:lang="en-us"><!-- non-ASCII ID -->
+    id="unique_6" oid="åäö" ditaarch:DITAArchVersion="1.2" xml:lang="en-us"><!-- non-ASCII ID -->
     <title class="- topic/title ">Unicode</title>
   </concept>
   <related-links class="- topic/related-link ">
-    <link class="- topic/link " href="#unique_2/a" ohref="test.xml#topic2/a"/>
+    <link class="- topic/link " href="#unique_3/a" ohref="test.xml#topic2/a"/>
     <link class="- topic/link " href="#topic2/a" scope="peer"/>
     <link class="- topic/link " href="#topic2/a" format="html"/>
-    <link class="- topic/link " ohref="test.xml#åäö/a" href="#unique_5/a"/>
-    <link class="- topic/link " ohref="test.xml#åäö" href="#unique_5"/>
+    <link class="- topic/link " ohref="test.xml#åäö/a" href="#unique_6/a"/>
+    <link class="- topic/link " ohref="test.xml#åäö" href="#unique_6"/>
     <link class="- topic/link " href="#åäö" scope="peer"/>
     <link class="- topic/link " href="#åäö" format="html"/>
     
   </related-links>
 </concept>
+</dita>

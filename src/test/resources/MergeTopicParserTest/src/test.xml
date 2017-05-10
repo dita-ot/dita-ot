@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<dita><!-- remove dita elements -->
+<!-- 2.5: do not remove dita elements -->
+<dita>
 <?foo?><?foo bar?><?foo <&?>
 <concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
   class="- topic/topic concept/concept "
