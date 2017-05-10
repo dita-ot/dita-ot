@@ -26,6 +26,7 @@ import java.net.URI;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.LinkedList;
 
 import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.moveFile;
@@ -53,7 +54,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     private Element topicDoc = null;
     final Deque<Writer> outputStack = new ArrayDeque<>();
     final Deque<Element> stubStack = new ArrayDeque<>();
-    final Deque<String> lang = new ArrayDeque<>();
+    final Deque<String> lang = new LinkedList<>();
 
     /**
      * Constructor.
@@ -309,7 +310,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         else if (!lang.isEmpty()) {
             currentLang = lang.peek();
         } else {
-            currentLang = "";
+            currentLang = null;
         }
         lang.push(currentLang);
 
@@ -325,7 +326,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     outputFile = generateOutputFilename(id);
                     output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), UTF8);
 
-                    if(atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 && !currentLang.isEmpty()) {
+                    if(atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 && currentLang != null) {
                         attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "CDATA", currentLang );
                     }
 //                    final FileInfo fi = generateFileInfo(outputFile);
