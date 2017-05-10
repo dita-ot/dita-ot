@@ -586,7 +586,7 @@ See the accompanying LICENSE file for applicable license.
     dita:depends="{depend.preprocess.copy-image.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
     description="Copy image files">
-    <condition property="copy-image.todir" value="${dita.output.dir}/${uplevels}" else="${dita.output.dir}">
+    <condition property="copy-image.todir" value="${_dita.map.output.dir}/${uplevels}" else="${dita.output.dir}">
       <equals arg1="${generate.copy.outer}" arg2="1"/>      
     </condition>
     <copy todir="${copy-image.todir}" failonerror="false">
@@ -599,7 +599,10 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.copy-html.skip"
     description="Copy html files">
-    <copy todir="${dita.output.dir}" failonerror="false">
+    <condition property="copy-html.todir" value="${_dita.map.output.dir}/${uplevels}" else="${dita.output.dir}">
+      <equals arg1="${generate.copy.outer}" arg2="1"/>      
+    </condition>
+    <copy todir="${copy-html.todir}" failonerror="false">
       <dita-fileset format="html" />
     </copy>
   </target>
