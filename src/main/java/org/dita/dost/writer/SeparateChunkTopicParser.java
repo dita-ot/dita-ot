@@ -32,7 +32,6 @@ import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.StringUtils.isEmptyString;
 import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
@@ -307,13 +306,10 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         if (xmlLang != null) {
             currentLang = xmlLang;
         }
-        else {
-            if (lang.size() > 0) {
-                currentLang = lang.peek();
-            }
-            else {
-                currentLang = "";
-            }
+        else if (!lang.isEmpty()) {
+            currentLang = lang.peek();
+        } else {
+            currentLang = "";
         }
         lang.push(currentLang);
 
@@ -329,8 +325,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
                     outputFile = generateOutputFilename(id);
                     output = new OutputStreamWriter(new FileOutputStream(new File(outputFile)), UTF8);
 
-                    if(atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 && !isEmptyString(currentLang)) {
-                        attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "NMTOKEN", currentLang );
+                    if(atts.getIndex(ATTRIBUTE_NAME_XML_LANG) < 0 && !currentLang.isEmpty()) {
+                        attsMod.addAttribute("", ATTRIBUTE_NAME_LANG, ATTRIBUTE_NAME_XML_LANG, "CDATA", currentLang );
                     }
 //                    final FileInfo fi = generateFileInfo(outputFile);
 //                    job.add(fi);
