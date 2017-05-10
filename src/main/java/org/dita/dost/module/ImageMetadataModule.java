@@ -10,6 +10,7 @@ package org.dita.dost.module;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 
@@ -57,6 +58,12 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
         }
 
         storeImageFormat(writer.getImages(), outputDir);
+
+        try {
+            job.write();
+        } catch (IOException e) {
+            throw new DITAOTException("Failed to serialize job configuration: " + e.getMessage(), e);
+        }
 
         return null;
     }
