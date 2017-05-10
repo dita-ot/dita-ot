@@ -110,12 +110,6 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- begin to init required parameters -->
     
-    <condition property="skip.ditaval.preprocess" value="true">
-      <not>
-          <isset property="args.filter"/>
-      </not>
-    </condition>
-    
     <condition property="filter-stage" value="early">
       <not>
         <isset property="filter-stage"/>
