@@ -467,7 +467,9 @@ See the accompanying LICENSE file for applicable license.
         <param name="TABLELINK" expression="${args.tablelink.style}" if="args.tablelink.style" />
         <param name="FIGURELINK" expression="${args.figurelink.style}" if="args.figurelink.style" />
         <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
+        <!-- Deprecated since 2.5 -->
         <param name="defaultLanguage" expression="${default.language}"/>
+        <param name="remove-broken-links" expression="${remove-broken-links}" if="remove-broken-links"/>
         <dita:extension id="dita.preprocess.topicpull.param" behavior="org.dita.dost.platform.InsertAction"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>

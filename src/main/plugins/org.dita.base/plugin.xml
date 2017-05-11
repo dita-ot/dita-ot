@@ -153,6 +153,10 @@ See the accompanying LICENSE file for applicable license.
       <val default="true">false</val>
     </param>
     <param name="default.language" desc="Specifies the default language for source documents." type="string"/>
+    <param name="remove-broken-links" desc="Remove broken related links." type="enum">
+      <val>true</val>
+      <val default="true">false</val>
+    </param>
   </transtype>
   <feature extension="dita.image.extensions" value=".gif"/>
   <feature extension="dita.image.extensions" value=".eps"/>

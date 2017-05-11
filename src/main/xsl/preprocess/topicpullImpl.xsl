@@ -66,7 +66,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Recognized values are 'NUMBER' (Table 5) and 'TITLE' (Table Caption) -->
   <xsl:param name="TABLELINK">NUMBER</xsl:param>
   <xsl:param name="FIGURELINK">NUMBER</xsl:param>
-  
+  <xsl:param name="remove-broken-links" as="xs:string?"/>
   <!-- Check whether the onlytopicinmap is turned on -->
   <xsl:param name="ONLYTOPICINMAP" select="'false'"/>
   
@@ -309,66 +309,78 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:if test="@href=''">
       <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
     </xsl:if>
+        
+    <xsl:variable name="targetElement" as="element()?" select="dita-ot:getTargetElement(.)"/>
     
-
-    <xsl:copy>
-      <!--copy existing explicit attributes-->
-      <xsl:apply-templates select="@*"/>
-      <!--copy inheritable attributes that aren't already explicitly defined-->
-      <!--@type|@format|@scope|@importance|@role-->
-
-      <!--need to create type, format, scope variables regardless of whether they exist, for passing as a parameter to getstuff template-->
-      <xsl:variable name="type" as="xs:string?" select="dita-ot:get-link-target-type(.)"/>
-      
-      <xsl:variable name="format" as="xs:string?" select="dita-ot:get-link-format(.)"/>
-      <xsl:variable name="scope" as="xs:string?" select="dita-ot:get-link-scope(.)"/>
-      
-      <xsl:if test="empty(@type) and $type">
-        <xsl:attribute name="type" select="$type"/>
-      </xsl:if>
-      <xsl:if test="empty(@format) and $format">
-        <xsl:attribute name="format" select="$format"/>
-      </xsl:if>
-      <xsl:if test="empty(@scope) and $scope">
-        <xsl:attribute name="scope" select="$scope"/>
-      </xsl:if>
-
-      <xsl:if test="empty(@importance)">
-        <xsl:variable name="importance" as="xs:string?"
-          select="dita-ot:get-inherited-attribute-value(., 'importance', ())"/>
-        <xsl:if test="exists($importance)">
-          <xsl:attribute name="importance" select="$importance"/>
-        </xsl:if>
-      </xsl:if>
-      <xsl:if test="empty(@role)">
-        <xsl:variable name="role" as="xs:string?"
-          select="dita-ot:get-inherited-attribute-value(., 'role', ())"/>
-        <xsl:if test="exists($role)">
-          <xsl:attribute name="role" select="$role"/>
-        </xsl:if>
-      </xsl:if>
-
-      <xsl:choose>
-        <xsl:when test="@type and *[contains(@class, ' topic/linktext ')] and *[contains(@class, ' topic/desc ')]">
-          <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
-          <xsl:apply-templates/>
-        </xsl:when>
-        <xsl:otherwise>
-          <!--grab type, text and metadata, as long there's an href to grab from, otherwise error-->
+    <xsl:choose>
+      <xsl:when test="$remove-broken-links = 'true' and empty($targetElement)">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="id" select="'DOTX073I'"/>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy>
+          <!--copy existing explicit attributes-->
+          <xsl:apply-templates select="@*"/>
+          <!--copy inheritable attributes that aren't already explicitly defined-->
+          <!--@type|@format|@scope|@importance|@role-->
+    
+          <!--need to create type, format, scope variables regardless of whether they exist, for passing as a parameter to getstuff template-->
+          <xsl:variable name="type" as="xs:string?" select="dita-ot:get-link-target-type(.)"/>
+          
+          <xsl:variable name="format" as="xs:string?" select="dita-ot:get-link-format(.)"/>
+          <xsl:variable name="scope" as="xs:string?" select="dita-ot:get-link-scope(.)"/>
+          
+          <xsl:if test="empty(@type) and $type">
+            <xsl:attribute name="type" select="$type"/>
+          </xsl:if>
+          <xsl:if test="empty(@format) and $format">
+            <xsl:attribute name="format" select="$format"/>
+          </xsl:if>
+          <xsl:if test="empty(@scope) and $scope">
+            <xsl:attribute name="scope" select="$scope"/>
+          </xsl:if>
+    
+          <xsl:if test="empty(@importance)">
+            <xsl:variable name="importance" as="xs:string?"
+              select="dita-ot:get-inherited-attribute-value(., 'importance', ())"/>
+            <xsl:if test="exists($importance)">
+              <xsl:attribute name="importance" select="$importance"/>
+            </xsl:if>
+          </xsl:if>
+          <xsl:if test="empty(@role)">
+            <xsl:variable name="role" as="xs:string?"
+              select="dita-ot:get-inherited-attribute-value(., 'role', ())"/>
+            <xsl:if test="exists($role)">
+              <xsl:attribute name="role" select="$role"/>
+            </xsl:if>
+          </xsl:if>
+    
           <xsl:choose>
-            <xsl:when test="@href=''"/>
-            <xsl:when test="@href">
-              <xsl:apply-templates select="." mode="topicpull:get-stuff">
-                <xsl:with-param name="localtype" select="$type" as="xs:string?"/>
-              </xsl:apply-templates>
+            <xsl:when test="@type and *[contains(@class, ' topic/linktext ')] and *[contains(@class, ' topic/desc ')]">
+              <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
+              <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:apply-templates select="." mode="ditamsg:missing-href"/>
+              <!--grab type, text and metadata, as long there's an href to grab from, otherwise error-->
+              <xsl:choose>
+                <xsl:when test="@href=''"/>
+                <xsl:when test="@href">
+                  <xsl:apply-templates select="." mode="topicpull:get-stuff">
+                    <xsl:with-param name="localtype" select="$type" as="xs:string?"/>
+                    <xsl:with-param name="targetElement" select="$targetElement" as="element()?"/>
+                  </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:apply-templates select="." mode="ditamsg:missing-href"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:copy>
+        </xsl:copy>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- 2007.03.13: Update inheritance to check specific elements and attributes.
@@ -538,9 +550,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
        If specified locally, use the local value, otherwise retrieve from target. -->
   <xsl:template match="*" mode="topicpull:get-stuff">
     <xsl:param name="localtype" as="xs:string?"/>
-  
-  
-    <xsl:variable name="targetElement" as="element()?"
+    <xsl:param name="targetElement" as="element()?"
       select="dita-ot:getTargetElement(.)"/>
     
     <xsl:choose>
