@@ -247,9 +247,6 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/xref ')]" name="topic.xref">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
 
     <xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
     <xsl:variable name="element" select="key('key_anchor',$destination, $root)[1]"/>
@@ -264,6 +261,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:variable>
 
     <fo:basic-link xsl:use-attribute-sets="xref">
+      <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="buildBasicLinkDestination">
         <xsl:with-param name="scope" select="@scope"/>
         <xsl:with-param name="format" select="@format"/>
@@ -309,7 +307,7 @@ See the accompanying LICENSE file for applicable license.
                       <xsl:with-param name="element" select="$element"/>
                   </xsl:call-template>
             </xsl:if>
-    </xsl:if>
+      </xsl:if>
 
     </xsl:template>
 
@@ -405,11 +403,9 @@ See the accompanying LICENSE file for applicable license.
       <fo:list-block xsl:use-attribute-sets="related-links.ul">
         <xsl:for-each select="$children[generate-id(.) = generate-id(key('link', related-links:link(.))[1])]">
           <fo:list-item xsl:use-attribute-sets="related-links.ul.li">
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="related-links.ul.li__label">
               <fo:block xsl:use-attribute-sets="related-links.ul.li__label__content">
-                <fo:inline>
-                  <xsl:call-template name="commonattributes"/>
-                </fo:inline>
                 <xsl:call-template name="getVariable">
                   <xsl:with-param name="id" select="'Unordered List bullet'"/>
                 </xsl:call-template>
@@ -436,11 +432,9 @@ See the accompanying LICENSE file for applicable license.
       <fo:list-block xsl:use-attribute-sets="related-links.ol">
         <xsl:for-each select="($children[generate-id(.) = generate-id(key('link', related-links:link(.))[1])])">
           <fo:list-item xsl:use-attribute-sets="related-links.ol.li">
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="related-links.ol.li__label">
               <fo:block xsl:use-attribute-sets="related-links.ol.li__label__content">
-                <fo:inline>
-                  <xsl:call-template name="commonattributes"/>
-                </fo:inline>
                 <xsl:call-template name="getVariable">
                   <xsl:with-param name="id" select="'Ordered List Number'"/>
                   <xsl:with-param name="params">

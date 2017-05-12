@@ -64,12 +64,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' topic/ul ')]/*[contains(@class, ' topic/li ')]">
         <xsl:variable name="depth" select="count(ancestor::*[contains(@class, ' topic/ul ')])"/>
         <fo:list-item xsl:use-attribute-sets="ul.li">
-            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="ul.li__label">
                 <fo:block xsl:use-attribute-sets="ul.li__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
                     <xsl:call-template name="getVariable">
                         <xsl:with-param name="id" select="concat('Unordered List bullet ', $depth)"/>
                     </xsl:call-template>
@@ -91,12 +88,9 @@ See the accompanying LICENSE file for applicable license.
           </xsl:call-template>
         </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="ol.li">
-          <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="ol.li__label">
                 <fo:block xsl:use-attribute-sets="ol.li__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
                     <xsl:call-template name="getVariable">
                         <xsl:with-param name="id" select="concat('Ordered List Number ', $depth)"/>
                         <xsl:with-param name="params" as="element()*">
@@ -135,12 +129,9 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/sl ')]/*[contains(@class, ' topic/sli ')]">
         <fo:list-item xsl:use-attribute-sets="sl.sli">
-          <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="sl.sli__label">
                 <fo:block xsl:use-attribute-sets="sl.sli__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
                 </fo:block>
             </fo:list-item-label>
             <fo:list-item-body xsl:use-attribute-sets="sl.sli__body">
