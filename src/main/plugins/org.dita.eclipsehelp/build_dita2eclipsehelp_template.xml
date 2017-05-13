@@ -6,7 +6,7 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2eclipsehelp">
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="dita2eclipsehelp" xmlns:if="ant:if">
 	
   <target name="dita.eclipsehelp.init">
     <property name="html-version" value="xhtml"/>
@@ -14,6 +14,9 @@ See the accompanying LICENSE file for applicable license.
       <not>
         <isset property="args.xsl" />
       </not>
+    </condition>
+    <condition property="temp.output.dir.name" value="temp_jar_dir">
+      <isset property="args.eclipsehelp.jar.name"/>
     </condition>
   </target>
 	
@@ -26,15 +29,19 @@ See the accompanying LICENSE file for applicable license.
 	
     <target name="dita2eclipsehelp"
             unless="noMap"
-        depends="build-init, dita.eclipsehelp.init, preprocess, 
+        depends="dita.eclipsehelp.init, build-init, preprocess, 
                  xhtml.topics,
-                 copy-css">
-      <antcall target="dita.map.eclipse"></antcall>
+                 copy-css,
+                 dita.map.eclipse,
+                 build.eclipse.jar">
     </target>
 
   <target name="dita.map.eclipse"
-    depends=" dita.map.eclipse.init, copy-plugin-files, dita.map.eclipse.fragment.language.init, dita.map.eclipse.fragment.language.country.init, dita.map.eclipse.fragment.error">
-    
+    depends="dita.map.eclipse.init, 
+    copy-plugin-files, 
+    dita.map.eclipse.fragment.language.init, 
+    dita.map.eclipse.fragment.language.country.init, 
+    dita.map.eclipse.fragment.error">
   </target>
 	
 	<target name="dita.map.eclipse.init" if="eclipse.plugin"
@@ -462,5 +469,11 @@ See the accompanying LICENSE file for applicable license.
 	  		  
 	  	</copy>
 	</target>
-
+  
+  <target name="build.eclipse.jar">
+    <jar destfile="${output.dir}/${args.eclipsehelp.jar.name}" basedir="${dita.output.dir}" if:set="args.eclipsehelp.jar.name">
+      <include name="**/*"/>
+    </jar>
+  </target>
+  
 </project>
