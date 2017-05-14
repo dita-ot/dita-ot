@@ -6,7 +6,7 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<project xmlns:dita="http://dita-ot.sourceforge.net" name="ditaot-preprocess">
+<project xmlns:dita="http://dita-ot.sourceforge.net" name="ditaot-preprocess" xmlns:if="ant:if">
 
   <!-- Set to "true" if you get out-of-memory errors during preprocess
        while processing very large (thousands of files) document sets. -->
@@ -69,13 +69,13 @@ See the accompanying LICENSE file for applicable license.
     </delete>
   </target>
   
-  <target name="ditaval-merge" unless="skip.ditaval.preprocess"
+  <target name="ditaval-merge"
     dita:depends="{depend.preprocess.ditaval-merge.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Merge DITAVAL files into temporary file">
-    <pipeline message="Preprocess and merge ditavals" taskname="ditaval-merge">
+    <pipeline message="Preprocess and merge ditavals" taskname="ditaval-merge" if:set="args.filter">
       <module class="org.dita.dost.module.MergeDitavalModule">
-        <param name="ditaval" location="${args.filter}" if="args.filter"/>
+        <param name="ditaval" value="${args.filter}"/>
       </module>
     </pipeline>
   </target>
