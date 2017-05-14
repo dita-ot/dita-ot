@@ -46,14 +46,14 @@ See the accompanying LICENSE file for applicable license.
       </xsl:apply-templates>
     </xsl:variable>
 
-    <xsl:variable name="class">
+    <xsl:variable name="class" as="xs:string*">
       <xsl:if test="$outputclass">
         <xsl:sequence select="data($outputclass)"/>
       </xsl:if>
       <xsl:next-match/>
     </xsl:variable>
 
-    <xsl:if test="$class[text()]">
+    <xsl:if test="exists($class)">
       <xsl:attribute name="class" select="string-join($class, ' ')"/>
     </xsl:if>
   </xsl:template>
