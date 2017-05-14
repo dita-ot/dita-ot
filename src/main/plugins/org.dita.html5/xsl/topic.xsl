@@ -214,11 +214,11 @@ See the accompanying LICENSE file for applicable license.
   <!-- child topics get a div wrapper and fall through -->
   <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="child.topic" name="child.topic">
     <xsl:param name="nestlevel" as="xs:integer">
-      <xsl:choose>
-        <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
-        <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 9">9</xsl:when>
-        <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
-      </xsl:choose>
+        <xsl:choose>
+            <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
+            <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 9">9</xsl:when>
+            <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
+        </xsl:choose>
     </xsl:param>
     <article class="nested{$nestlevel}">
       <xsl:attribute name="aria-labelledby">
@@ -229,29 +229,29 @@ See the accompanying LICENSE file for applicable license.
       </xsl:call-template>
     </article>
   </xsl:template>
-
+  
   <xsl:template name="gen-topic">
     <xsl:param name="nestlevel" as="xs:integer">
-      <xsl:choose>
-        <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
-        <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 9">9</xsl:when>
-        <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
-      </xsl:choose>
+        <xsl:choose>
+            <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
+            <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 9">9</xsl:when>
+            <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
+        </xsl:choose>
     </xsl:param>
-    <xsl:choose>
-      <xsl:when test="parent::dita and not(preceding-sibling::*)">
-        <!-- Do not reset xml:lang if it is already set on <html> -->
-        <!-- Moved outputclass to the body tag -->
-        <!-- Keep ditaval based styling at this point (replace DITA-OT 1.6 and earlier call to gen-style) -->
-        <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="commonattributes">
-          <xsl:with-param name="default-output-class" select="concat('nested', $nestlevel)"/>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:call-template name="gen-toc-id"/>
+   <xsl:choose>
+     <xsl:when test="parent::dita and not(preceding-sibling::*)">
+       <!-- Do not reset xml:lang if it is already set on <html> -->
+       <!-- Moved outputclass to the body tag -->
+       <!-- Keep ditaval based styling at this point (replace DITA-OT 1.6 and earlier call to gen-style) -->
+       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@outputclass" mode="add-ditaval-style"/>
+     </xsl:when>
+     <xsl:otherwise>
+       <xsl:call-template name="commonattributes">
+         <xsl:with-param name="default-output-class" select="concat('nested', $nestlevel)"/>
+       </xsl:call-template>
+     </xsl:otherwise>
+   </xsl:choose>
+   <xsl:call-template name="gen-toc-id"/>
     <xsl:call-template name="setidaname"/>
     <xsl:apply-templates/>
   </xsl:template>
@@ -263,18 +263,18 @@ See the accompanying LICENSE file for applicable license.
        If desired, somebody could pass in the value to manually set the heading level -->
   <xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]">
     <xsl:param name="headinglevel" as="xs:integer">
-      <xsl:choose>
-        <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 6">6</xsl:when>
-        <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
-      </xsl:choose>
+        <xsl:choose>
+            <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 6">6</xsl:when>
+            <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
+        </xsl:choose>
     </xsl:param>
     <xsl:element name="h{$headinglevel}">
-      <xsl:attribute name="class">topictitle<xsl:value-of select="$headinglevel"/></xsl:attribute>
-      <xsl:call-template name="commonattributes">
-        <xsl:with-param name="default-output-class">topictitle<xsl:value-of select="$headinglevel"/></xsl:with-param>
-      </xsl:call-template>
-      <xsl:attribute name="id"><xsl:apply-templates select="." mode="return-aria-label-id"/></xsl:attribute>
-      <xsl:apply-templates/>
+        <xsl:attribute name="class">topictitle<xsl:value-of select="$headinglevel"/></xsl:attribute>
+        <xsl:call-template name="commonattributes">
+          <xsl:with-param name="default-output-class">topictitle<xsl:value-of select="$headinglevel"/></xsl:with-param>
+        </xsl:call-template>
+        <xsl:attribute name="id"><xsl:apply-templates select="." mode="return-aria-label-id"/></xsl:attribute>
+        <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
   
