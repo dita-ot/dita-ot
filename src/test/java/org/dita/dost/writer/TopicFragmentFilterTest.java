@@ -42,7 +42,7 @@ public class TopicFragmentFilterTest {
     
     @Before
     public void setUp() throws Exception {
-        tempDir = TestUtils.createTempDir(KeyrefPaserTest.class);
+        tempDir = TestUtils.createTempDir(TopicFragmentFilterTest.class);
         TestUtils.resetXMLUnit();
         XMLUnit.setIgnoreWhitespace(true);
         XMLUnit.setIgnoreComments(true);
