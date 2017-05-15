@@ -7,22 +7,29 @@
  */
 package org.dita.dost.writer;
 
-import static org.apache.commons.io.FileUtils.*;
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-
-import java.io.File;
-import java.io.IOException;
-
+import com.google.common.io.Files;
 import org.custommonkey.xmlunit.XMLUnit;
+import org.dita.dost.TestUtils;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.Job.FileInfo.Builder;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.net.URI.create;
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
+import static org.dita.dost.util.Constants.PR_D_CODEREF;
 
 public class CoderefResolverTest {
 
@@ -40,6 +47,7 @@ public class CoderefResolverTest {
     public void testWrite() throws DITAOTException, SAXException, IOException {
         final File f = new File(tempDir, "test.dita");
         copyFile(new File(srcDir, "test.dita"), f);
+        Files.write("dummy", new File(tempDir, "topic.dita"), Charset.forName("UTF-8"));
         copyFile(new File(srcDir, "code.xml"), new File(tempDir, "code.xml"));
         copyFile(new File(srcDir, "utf-8.xml"), new File(tempDir, "utf-8.xml"));
         copyFile(new File(srcDir, "plain.txt"), new File(tempDir, "plain.txt"));
@@ -47,7 +55,22 @@ public class CoderefResolverTest {
 
         final CoderefResolver filter = new CoderefResolver();
         filter.setLogger(new TestUtils.TestLogger());
-        filter.setJob(new Job(tempDir));
+        final Job job = new Job(tempDir);
+        job.addAll(Stream.of("test.dita", "topic.dita")
+                .map(p -> new Builder()
+                        .uri(create(p))
+                        .src(new File(srcDir, p).toURI())
+                        .format(ATTR_FORMAT_VALUE_DITA)
+                        .build())
+                .collect(Collectors.toList()));
+        job.addAll(Stream.of("code.xml", "utf-8.xml", "plain.txt", "range.txt")
+                .map(p -> new Builder()
+                        .uri(create(p))
+                        .src(new File(srcDir, p).toURI())
+                        .format(PR_D_CODEREF.localName)
+                        .build())
+                .collect(Collectors.toList()));
+        filter.setJob(job);
         filter.write(f.getAbsoluteFile());
 
         TestUtils.resetXMLUnit();

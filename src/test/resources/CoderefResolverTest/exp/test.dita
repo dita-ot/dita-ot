@@ -47,5 +47,13 @@ first
 second
 third
 fourth</codeblock>
+    <codeblock class="+ topic/pre pr-d/codeblock " xml:space="preserve">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE topic PUBLIC &quot;-//OASIS//DTD DITA Topic//EN&quot; &quot;topic.dtd&quot;&gt;
+&lt;topic id=&quot;topic&quot;&gt;
+  &lt;title&gt;Coderef topic test&lt;/title&gt;
+  &lt;body&gt;
+    &lt;p&gt;amp: &amp;amp; less-than: &amp;lt;&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/topic&gt;</codeblock>
   </body>
 </topic>
