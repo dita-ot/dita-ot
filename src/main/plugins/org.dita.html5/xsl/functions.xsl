@@ -35,8 +35,14 @@ See the accompanying LICENSE file for applicable license.
   <xsl:function name="dita-ot:get-prefixed-id" as="xs:string">
     <xsl:param name="element" as="element()"/>
     <xsl:param name="id" as="xs:string"/>
-    
-    <xsl:sequence select="dita-ot:generate-id($element/ancestor::*[contains(@class, ' topic/topic ')][1]/@id, $id)"/>
+    <xsl:choose>
+      <xsl:when test="contains($element/@class, ' topic/topic')">
+        <xsl:value-of select="$element/@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="dita-ot:generate-id($element/ancestor::*[contains(@class, ' topic/topic ')][1]/@id, $id)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:function>
 
   <xsl:function name="dita-ot:generate-stable-id" as="xs:string">
