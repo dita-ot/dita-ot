@@ -54,7 +54,7 @@ See the accompanying LICENSE file for applicable license.
  */
 public class IndexPreprocessorTask
 extends Task {
-    //	private String input = null;
+    //    private String input = null;
     private String input = "";
     private String output = "";
     private String catalogs = null;

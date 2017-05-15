@@ -76,12 +76,12 @@ See the accompanying LICENSE file for applicable license.
   <target name="tocjsDefaultFrameset" if="dita.plugin.com.sophos.tocjs.copydefaults">
       <!-- Create the default frameset itself -->
       <xslt
-		basedir="${dita.temp.dir}"
-		destdir="${dita.output.dir}"
+    basedir="${dita.temp.dir}"
+    destdir="${dita.output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
         extension="${out.ext}"
-		style="${dita.plugin.com.sophos.tocjs.dir}${file.separator}xsl${file.separator}frameset.xsl">
-  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+    style="${dita.plugin.com.sophos.tocjs.dir}${file.separator}xsl${file.separator}frameset.xsl">
+        <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="CSSPATH" expression="${CSSPATH}" if="csspath"/>
         <xmlcatalog refid="dita.catalog"/>

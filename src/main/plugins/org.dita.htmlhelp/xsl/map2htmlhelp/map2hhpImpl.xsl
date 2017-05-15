@@ -256,7 +256,7 @@ Default topic=</xsl:text>
   <xsl:param name="pathFromMaplist"/>
   <xsl:variable name="thisFilename">
     <xsl:if test="@href and not ((ancestor-or-self::*/@type)[last()]='external') and not((ancestor-or-self::*/@scope)[last()]='external')
-    			  and not(@processing-role='resource-only')">
+            and not(@processing-role='resource-only')">
       <xsl:choose>
         <!-- For dita files, change the extension; for HTML files, output the name as-is. Use the copy-to value first. -->
         <xsl:when test="@copy-to and (not(@format) or @format = 'dita')">

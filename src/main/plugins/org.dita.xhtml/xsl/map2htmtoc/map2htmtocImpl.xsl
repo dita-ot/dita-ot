@@ -44,7 +44,7 @@ See the accompanying LICENSE file for applicable license.
   <html><xsl:value-of select="$newline"/>
   <head><xsl:value-of select="$newline"/>
     <xsl:if test="string-length($contenttarget)>0 and
-	        $contenttarget!='NONE'">
+          $contenttarget!='NONE'">
       <base target="{$contenttarget}"/>
       <xsl:value-of select="$newline"/>
     </xsl:if>

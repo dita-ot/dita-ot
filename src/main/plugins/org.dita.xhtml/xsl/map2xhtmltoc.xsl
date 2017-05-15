@@ -11,16 +11,16 @@ See the accompanying LICENSE file for applicable license.
 <!-- Map to XHTML -->
 <xsl:stylesheet version="2.0"
 
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!--main map to xhtml converter-->
 <xsl:import href="map2htmltoc.xsl"/>
 
 
 <xsl:output method="xhtml" encoding="UTF-8"
-	indent="no"
-	doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
-	doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
+  indent="no"
+  doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+  doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
 
   <xsl:include href="dita2xhtml-util.xsl"/>
 

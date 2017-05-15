@@ -583,7 +583,7 @@ See the accompanying LICENSE file for applicable license.
     <desc class="- topic/desc ">
       <!-- get child node and text -->
       <xsl:copy-of select="node()"/>
-    </desc>	
+    </desc>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' map/topicmeta ')]">

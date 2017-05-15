@@ -138,7 +138,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           </xsl:if>
           <xsl:if test="(:not(@processing-role) and :)not($parent-processing-role='resource-only')">
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">processing-role</xsl:with-param></xsl:apply-templates>
-      	  </xsl:if>
+          </xsl:if>
           <xsl:if test="(:not(@print) and :)$print!='#none#'">
             <xsl:attribute name="print"><xsl:value-of select="$print"/></xsl:attribute>
           </xsl:if>

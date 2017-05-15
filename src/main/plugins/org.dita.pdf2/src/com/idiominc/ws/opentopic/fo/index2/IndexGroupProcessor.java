@@ -112,7 +112,7 @@ public final class IndexGroupProcessor {
                 for (final String key : new ArrayList<String>(indexMap.keySet())) {
                     if (key.length() > 0) {
                         final String value = getValue((IndexEntry) indexMap.get(key));
-                        //						final char c = value.charAt(0);
+                        //                        final char c = value.charAt(0);
                         if (configEntry.isInRange(value,collator)) {
                             final IndexEntry entry = (IndexEntry) indexMap.remove(key);
                             group.addEntry(entry);
@@ -135,9 +135,9 @@ public final class IndexGroupProcessor {
                 }
             }
             /*
-			if (group.getEntries().length > 0) {
-				result.add(group);
-			}
+            if (group.getEntries().length > 0) {
+                result.add(group);
+            }
              */
         }
 
@@ -151,7 +151,7 @@ public final class IndexGroupProcessor {
               for (final String key : new ArrayList<String>(indexMap.keySet())) {
                     if (key.length() > 0) {
                         final String value = getValue((IndexEntry) indexMap.get(key));
-                        //						final char c = value.charAt(0);
+                        //                        final char c = value.charAt(0);
                         logger.info(MessageUtils.getInstance().getMessage("PDFJ003I", value).toString());
                         final IndexEntry entry = (IndexEntry) indexMap.remove(key);
                         group.addEntry(entry);

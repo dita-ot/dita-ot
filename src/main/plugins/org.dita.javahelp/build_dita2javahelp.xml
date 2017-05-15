@@ -60,7 +60,7 @@ See the accompanying LICENSE file for applicable license.
               includesfile="${dita.temp.dir}/${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelptoc.xsl">
-        	<excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
+          <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mergemapper to="${args.javahelp.toc}.xml"/>
           <xmlcatalog refid="dita.catalog"/>
@@ -77,7 +77,7 @@ See the accompanying LICENSE file for applicable license.
             includesfile="${dita.temp.dir}/${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelptoc.xsl">
-        	<excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
+          <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"
                 from="${user.input.file}"
@@ -99,7 +99,7 @@ See the accompanying LICENSE file for applicable license.
               includesfile="${dita.temp.dir}/${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpmap.xsl">
-        	<excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
+          <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mergemapper to="${args.javahelp.map}.jhm"/>
           <xmlcatalog refid="dita.catalog"/>
@@ -116,7 +116,7 @@ See the accompanying LICENSE file for applicable license.
             includesfile="${dita.temp.dir}/${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpmap.xsl">
-        	<excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
+          <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"
                 from="${user.input.file}"
@@ -138,11 +138,11 @@ See the accompanying LICENSE file for applicable license.
               includesfile="${dita.temp.dir}/${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpset.xsl">
-        	<excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
+          <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="javahelpmap" expression="${args.javahelp.map}" />
             <param name="javahelptoc" expression="${args.javahelp.toc}" />
-        	<param name="basedir" expression="${basedir}"/>
-        	<param name="outputdir" expression="${dita.output.dir}"/>
+          <param name="basedir" expression="${basedir}"/>
+          <param name="outputdir" expression="${dita.output.dir}"/>
             <mergemapper to="${dita.map.filename.root}_helpset.hs"/>
           <xmlcatalog refid="dita.catalog"/>
         </xslt>
@@ -158,11 +158,11 @@ See the accompanying LICENSE file for applicable license.
             includesfile="${dita.temp.dir}/${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.plugin.org.dita.javahelp.dir}/xsl/map2javahelpset.xsl">
-        	<excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
+          <excludesfile name="${dita.temp.dir}/${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="javahelpmap" expression="${args.javahelp.map}" />
             <param name="javahelptoc" expression="${args.javahelp.toc}" />
-        	<param name="basedir" expression="${basedir}"/>
-        	<param name="outputdir" expression="${dita.output.dir}"/>
+          <param name="basedir" expression="${basedir}"/>
+          <param name="outputdir" expression="${dita.output.dir}"/>
             <mapper type="glob"
                 from="${user.input.file}"
                 to="${dita.map.filename.root}_helpset.hs" />

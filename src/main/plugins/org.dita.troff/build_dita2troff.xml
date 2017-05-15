@@ -27,7 +27,7 @@ See the accompanying LICENSE file for applicable license.
       extension=".dita"
       classpathref="dost.class.path"
       style="${troff-ast.xsl}">
-    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="defaultLanguage" expression="${default.language}"/>
       <mapper type="glob" from="*" to="*.ast" />
       <xmlcatalog refid="dita.catalog"/>
@@ -44,7 +44,7 @@ See the accompanying LICENSE file for applicable license.
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension="${out.ext}"
       classpathref="dost.class.path"
       style="${troff.step2.xsl}">
-    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <mapper classname="org.dita.dost.util.JobMapper" to="${out.ext}"/>
@@ -55,13 +55,13 @@ See the accompanying LICENSE file for applicable license.
   <!--The new solution which divides the whole process into the inner and outer steps  -->
     <target name="dita.inner.topic.troff" unless="noTopic" if="inner.transform"
     description="Build troff output from inner dita topics">
-	<echo level="info">the ditmapoutputdir is ${dita.map.output.dir}</echo>
+  <echo level="info">the ditmapoutputdir is ${dita.map.output.dir}</echo>
     <!-- step 2 -->
     <xslt basedir="${dita.temp.dir}" destdir="${dita.output.dir}"
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension="${out.ext}"
       classpathref="dost.class.path"
       style="${troff.step2.xsl}">
-    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="OUTFORMAT" expression="${troff.outformat}" if="troff.outformat"/>
       <mapper classname="org.dita.dost.util.JobMapper" to="${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>

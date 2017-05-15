@@ -15,7 +15,7 @@ See the accompanying LICENSE file for applicable license.
   <xmlcatalog id="dita.catalog">
     <catalogpath path="${dita.plugin.org.dita.base.dir}/catalog-dita.xml"/>
   </xmlcatalog>
-	
+
   <!-- Deprecated -->
   <path id="dost.jar.path" refid="dost.class.path"/>
 
@@ -38,11 +38,11 @@ See the accompanying LICENSE file for applicable license.
     classname="org.dita.dost.util.DITAOTCopy">
     <classpath refid="dost.class.path" />
   </taskdef>
-	
+
   <taskdef name="job-property" classname="org.dita.dost.platform.JobPropertyTask">
     <classpath refid="dost.class.path"/>
   </taskdef>
-	
+
   <typedef name="isabsolute"
     classname="org.dita.dost.util.IsAbsolute">
     <classpath refid="dost.class.path" />
@@ -136,20 +136,20 @@ See the accompanying LICENSE file for applicable license.
         <contains string="${args.outext}" substring="." />
       </and>
     </condition>
-  	
-  	<condition property="args.grammar.cache"
-  	      value="yes">
-  		      <not>
-  		        <isset property="args.grammar.cache" />
-  		      </not>
-  	</condition> 	
-  	
-  	<condition property="args.xml.systemid.set"
-  	      value="yes">
-  		      <not>
-  		        <isset property="args.xml.systemid.set" />
-  		      </not>
-  	</condition>
+
+    <condition property="args.grammar.cache"
+          value="yes">
+            <not>
+              <isset property="args.grammar.cache" />
+            </not>
+    </condition>
+
+    <condition property="args.xml.systemid.set"
+          value="yes">
+            <not>
+              <isset property="args.xml.systemid.set" />
+            </not>
+    </condition>
     <!-- end to init required parameters -->
 
     <!-- create required directories -->
@@ -162,13 +162,13 @@ See the accompanying LICENSE file for applicable license.
         <isset property="args.logdir" />
       </not>
     </condition>
-  	
-  	<!-- Validate the xml file or not,default is validation(true)-->
-  	<condition property="validate" value="true">
-  	   <not>
-  		 <isset property="validate" />
-  	   </not>
-  	</condition>
+
+    <!-- Validate the xml file or not,default is validation(true)-->
+    <condition property="validate" value="true">
+       <not>
+       <isset property="validate" />
+       </not>
+    </condition>
     
     <!-- Related links to output: none, all, nofamily -->
     <condition property="include.rellinks" value="">
@@ -189,37 +189,37 @@ See the accompanying LICENSE file for applicable license.
         <not><isset property="args.rellinks"/></not>
       </or>
     </condition>
-  	
-  	<!--solution for the output control-->
-  	<condition property="generate.copy.outer" value="1">
-  	   <not>
-  		 <isset property="generate.copy.outer" />
-  	   </not>
-  	</condition>
-  	
-  	<condition property="onlytopic.in.map" value="false">
-  	   <not>
-  		 <isset property="onlytopic.in.map" />
-  	   </not>
-	</condition>
-  	<!--
-  	default value : warn
-	fail     :1a) Fail quickly if files are going to be generated/copied outside of that directory
-	warn  :1b) Complete if files will be generated/copied outside, but log a warning
-	quiet  :1c) Quietly finish with only those files (no warning or error)
-  	-->
-  	<condition property="outer.control" value="warn">
-  	   <not>
-  		 <isset property="outer.control" />
-  	   </not>
-  	</condition>
-  	
+
+    <!--solution for the output control-->
+    <condition property="generate.copy.outer" value="1">
+       <not>
+       <isset property="generate.copy.outer" />
+       </not>
+    </condition>
+
+    <condition property="onlytopic.in.map" value="false">
+       <not>
+       <isset property="onlytopic.in.map" />
+       </not>
+  </condition>
+    <!--
+    default value : warn
+  fail     :1a) Fail quickly if files are going to be generated/copied outside of that directory
+  warn  :1b) Complete if files will be generated/copied outside, but log a warning
+  quiet  :1c) Quietly finish with only those files (no warning or error)
+    -->
+    <condition property="outer.control" value="warn">
+       <not>
+       <isset property="outer.control" />
+       </not>
+    </condition>
+
     <condition property="inner.transform">
-	 	   <equals arg1="${generate.copy.outer}" arg2="1"/>
-  	</condition>
-  	
-  	<condition property="old.transform">
-    	<equals arg1="${generate.copy.outer}" arg2="3"></equals>
+        <equals arg1="${generate.copy.outer}" arg2="1"/>
+    </condition>
+
+    <condition property="old.transform">
+      <equals arg1="${generate.copy.outer}" arg2="3"></equals>
     </condition>
     
     <condition property="conserve-memory" value="false">
@@ -275,8 +275,8 @@ See the accompanying LICENSE file for applicable license.
     <echo level="info">* XSLT processor = ${xslt.parser}</echo>
     <echo level="info">* collator = ${collator}</echo>
     <echo level="info">*****************************************************************</echo>
-  	<echoproperties regex="^(arg|preprocess|dita)" taskname="echo" failonerror="false"/>
-  	<echo level="info">*****************************************************************</echo>
+    <echoproperties regex="^(arg|preprocess|dita)" taskname="echo" failonerror="false"/>
+    <echo level="info">*****************************************************************</echo>
   </target>
 
 </project>

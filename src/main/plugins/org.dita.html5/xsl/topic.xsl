@@ -407,7 +407,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:call-template name="setidaname"/>
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
       <xsl:apply-templates select="." mode="dita2html:section-heading"/>
-      <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))] | text() | comment() | processing-instruction()"/>	
+      <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))] | text() | comment() | processing-instruction()"/>
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
     </div>
   </xsl:template>
@@ -1977,7 +1977,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/section ')]/*[contains(@class, ' topic/title ')] | 
-  	*[contains(@class, ' topic/example ')]/*[contains(@class, ' topic/title ')]" name="topic.section_title">
+    *[contains(@class, ' topic/example ')]/*[contains(@class, ' topic/title ')]" name="topic.section_title">
     <xsl:param name="headLevel">
       <xsl:variable name="headCount" select="count(ancestor::*[contains(@class, ' topic/topic ')])+1"/>
       <xsl:choose>
