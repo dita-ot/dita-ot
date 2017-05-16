@@ -11,9 +11,10 @@ See the accompanying LICENSE file for applicable license.
     version="2.0">
 
     <xsl:template match="*[contains(@class,' ut-d/imagemap ')]">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
+        <xsl:variable name="attributes" as="attribute()*"><xsl:call-template name="commonattributes"/></xsl:variable>
+        <xsl:if test="exists($attributes)">
+            <fo:inline><xsl:sequence select="$attributes"/></fo:inline>
+        </xsl:if>
         <xsl:apply-templates select="*[contains(@class,' topic/image ')]"/>
         <fo:list-block xsl:use-attribute-sets="ol">
             <xsl:apply-templates select="*[contains(@class,' ut-d/area ')]"/>

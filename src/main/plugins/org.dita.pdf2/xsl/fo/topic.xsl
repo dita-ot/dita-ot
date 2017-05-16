@@ -1342,9 +1342,6 @@ See the accompanying LICENSE file for applicable license.
     </xsl:function>
 
     <xsl:template match="*[contains(@class,' topic/fn ')]">
-        <!--<fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>-->
       <xsl:variable name="id" select="dita-ot:getFootnoteInternalID(.)" as="xs:string"/>
       <xsl:variable name="callout" as="xs:string">
         <xsl:apply-templates select="." mode="callout"/>
@@ -1397,9 +1394,6 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/indexterm ')]">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
         <xsl:apply-templates/>
     </xsl:template>
 

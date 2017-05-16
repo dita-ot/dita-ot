@@ -253,12 +253,9 @@ See the accompanying LICENSE file for applicable license.
           </xsl:call-template>
         </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="steps.step">
-            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="steps.step__label">
                 <fo:block xsl:use-attribute-sets="steps.step__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
                     <xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
                         <xsl:call-template name="getVariable">
                             <xsl:with-param name="id" select="'Step Number'"/>
@@ -283,12 +280,9 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/steps-unordered ')]/*[contains(@class, ' task/step ')]">
         <fo:list-item xsl:use-attribute-sets="steps-unordered.step">
-            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="steps-unordered.step__label">
                 <fo:block xsl:use-attribute-sets="steps-unordered.step__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
                     <xsl:call-template name="getVariable">
                         <xsl:with-param name="id" select="'Unordered List bullet'"/>
                     </xsl:call-template>
@@ -306,6 +300,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' task/step ')]" mode="onestep">
     <fo:block xsl:use-attribute-sets="steps.step__content--onestep">
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
@@ -313,12 +308,9 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/stepsection ')]">
         <fo:list-item xsl:use-attribute-sets="stepsection">
-            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="stepsection__label">
               <fo:block xsl:use-attribute-sets="stepsection__label__content">
-                  <fo:inline>
-                      <xsl:call-template name="commonattributes"/>
-                  </fo:inline>
               </fo:block>
             </fo:list-item-label>
 
@@ -346,12 +338,9 @@ See the accompanying LICENSE file for applicable license.
           </xsl:call-template>
         </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="substeps.substep">
-            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="substeps.substep__label">
                 <fo:block xsl:use-attribute-sets="substeps.substep__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
                     <xsl:call-template name="getVariable">
                       <xsl:with-param name="id" select="'Substep Number'"/>
                       <xsl:with-param name="params" as="element()*">
@@ -380,12 +369,9 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/choice ')]">
         <fo:list-item xsl:use-attribute-sets="choices.choice">
-            <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="flag-attributes"/>
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="choices.choice__label">
                 <fo:block xsl:use-attribute-sets="choices.choice__label__content">
-                    <fo:inline>
-                        <xsl:call-template name="commonattributes"/>
-                    </fo:inline>
                     <xsl:call-template name="getVariable">
                         <xsl:with-param name="id" select="'Unordered List bullet'"/>
                     </xsl:call-template>

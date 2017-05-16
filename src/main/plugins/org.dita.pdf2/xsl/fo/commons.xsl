@@ -104,7 +104,7 @@ See the accompanying LICENSE file for applicable license.
             </xsl:apply-templates>
         </fo:block>
     </xsl:template>
-
+ 
     <xsl:template name="startPageNumbering" as="attribute()*">
         <!--BS: uncomment if you need reset page numbering at first chapter-->
 <!--
