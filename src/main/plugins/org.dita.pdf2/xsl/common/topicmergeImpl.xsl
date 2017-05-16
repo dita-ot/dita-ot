@@ -46,25 +46,103 @@ See the accompanying LICENSE file for applicable license.
   <!-- Deprecated since 2.3 -->
   <xsl:variable name="msgprefix" select="'PDFX'"/>
   <xsl:variable name="separator" select="'_Connect_42_'"/>
+    
+  <xsl:variable name="originalMap" as="element()"
+    select="/dita-merge/*[contains(@class,' map/map ')][1]"/>
 
     <xsl:output indent="no"/>
 
-    <xsl:key name="topic" match="dita-merge/*[contains(@class,' topic/topic ')]" use="concat('#',@id)"/>
-    <xsl:key name="topic" match="dita-merge/dita" use="concat('#',*[contains(@class, ' topic/topic ')][1]/@id)"/>
+    <xsl:key name="topic" match="dita-merge/*[contains(@class,' topic/topic ')]|dita-merge/dita/*" use="concat('#',@id)"/>
     <xsl:key name="topicref" match="//*[contains(@class,' map/topicref ')]" use="generate-id()"/>
 
-<!--
   <xsl:template match="/">
-    <xsl:copy-of select="."/>
+    <xsl:variable name="updatedMap"  as="document-node()">
+      <xsl:document>
+        <xsl:choose>
+          <xsl:when test="/dita-merge/dita">
+            <xsl:apply-templates select="/dita-merge" mode="resolve-root-dita">
+              <xsl:with-param name="ditaDocs" as="element()">
+                <root><xsl:sequence select="/dita-merge/dita"/>
+                </root>
+              </xsl:with-param>
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:sequence select="/*"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:document>
+    </xsl:variable>
+    <xsl:apply-templates select="$updatedMap/*"/>
   </xsl:template>
--->
 
-  <xsl:template match="dita-merge">
+
+    <xsl:template match="dita-merge">
         <xsl:variable name="map" select="(*[contains(@class,' map/map ')])[1]"/>
         <xsl:element name="{name($map)}">
           <xsl:copy-of select="$map/@*"/>
           <xsl:apply-templates select="$map" mode="build-tree"/>
         </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class,' map/topicref ')][@first_topic_id]" mode="resolve-root-dita">
+      <xsl:param name="ditaDocs" as="element()+"/>
+      <xsl:variable name="topicId" select="substring-after(@first_topic_id,'#')"/>
+      <xsl:choose>
+        <xsl:when test="$ditaDocs/*[@id=$topicId]">
+          <xsl:variable name="topicref" select="." as="element()"/>
+          <xsl:for-each select="$ditaDocs/*[@id=$topicId]/*[contains(@class,' topic/topic ')]">
+            <xsl:variable name="updateTopicTarget" select="concat('#',@id)" as="xs:string"/>
+            <xsl:variable name="lastTopic" select="position() eq last()" as="xs:boolean"/>
+            <xsl:for-each select="$topicref">
+              <xsl:copy>
+                <xsl:copy-of select="@* except (@href, @first_topic_id)"/>
+                <xsl:attribute name="first_topic_id" select="$updateTopicTarget"/>
+                <xsl:attribute name="href" select="$updateTopicTarget"/>
+                <xsl:choose>
+                  <xsl:when test="$lastTopic">
+                    <xsl:apply-templates select="*|comment()|processing-instruction()" mode="resolve-root-dita">
+                      <xsl:with-param name="ditaDocs" select="$ditaDocs" as="element()+"/>
+                    </xsl:apply-templates>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:sequence select="*[contains(@class,' map/topicmeta ')]"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:copy>
+            </xsl:for-each>
+          </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:copy>
+            <xsl:apply-templates select="@*|node()" mode="resolve-root-dita">
+              <xsl:with-param name="ditaDocs" select="$ditaDocs" as="element()+"/>
+            </xsl:apply-templates>
+          </xsl:copy>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="@href[starts-with(.,'#')]" mode="resolve-root-dita">
+      <xsl:param name="ditaDocs" as="element()+"/>
+      <xsl:variable name="topicId" select="substring-after(.,'#')"/>
+      <xsl:choose>
+        <xsl:when test="$ditaDocs/*[@id=$topicId]">
+          <xsl:attribute name="href" select="concat('#',$ditaDocs/*[@id=$topicId]/*[1]/@id)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:sequence select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="@*|node()" mode="resolve-root-dita">
+      <xsl:param name="ditaDocs" as="element()+"/>
+      <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="resolve-root-dita">
+          <xsl:with-param name="ditaDocs" select="$ditaDocs" as="element()+"/>
+        </xsl:apply-templates>
+      </xsl:copy>
     </xsl:template>
 
     <xsl:template match="dita-merge/*[contains(@class,' map/map ')]" mode="build-tree">
@@ -158,7 +236,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' map/topicref ') and @print='no']" priority="6"/>
-    <xsl:template match="*[contains(@class,' topic/topic ')] | dita-merge/dita">
+    <xsl:template match="*[contains(@class,' topic/topic ')]">
 
         <xsl:param name="parentId"/>
       <xsl:variable name="idcount">

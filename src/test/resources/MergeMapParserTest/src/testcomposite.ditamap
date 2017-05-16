@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(map mapgroup-d)"
+  ditaarch:DITAArchVersion="1.3">
+  <topicref class="- map/topicref " href="testdita1.xml"/>
+  <topicref class="- map/topicref " href="testdita2.xml#second"/>
+</map>
