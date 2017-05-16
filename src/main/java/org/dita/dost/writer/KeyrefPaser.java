@@ -375,7 +375,6 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 String elementId = "";
                 if (slashIndex != -1) {
                     keyName = keyrefValue.substring(0, slashIndex);
-                    elementId = keyrefValue.substring(slashIndex);
                 }
 
                 keyDef = definitionMap.get(keyName);
@@ -385,7 +384,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                 if (keyDef != null) {
                     if (currentElement != null) {
                         final NamedNodeMap attrs = elem.getAttributes();
-                        final URI href = keyDef.href;
+                        URI href = keyDef.href;
 
                         if (href != null && !href.toString().isEmpty()) {
                             if (TOPIC_IMAGE.matches(currentElement.type)) {
@@ -396,11 +395,33 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                                 XMLUtils.addOrSetAttribute(resAtts, refAttr, targetOutput.toString());
                             } else if (isLocalDita(elem) && keyDef.source != null) {
                                 valid = true;
+                                String hrefPath = keyDef.href.toString();
+                                String keyrefPath = keyrefValue.equals(keyName) ? "" : keyrefValue.substring(keyName.length() + 1);
+                                if (!keyrefPath.isEmpty()) {
+                                    if (!hrefPath.contains(SHARP)) {
+                                        hrefPath += SHARP;
+                                    } else {
+                                        hrefPath += SLASH;
+                                    }
+                                }
+                                hrefPath += keyrefPath;
+                                href = URLUtils.toURI(hrefPath);
+                                String topicId = null;
                                 final URI target = keyDef.source.resolve(href);
                                 final File topicFile = toFile(currentFile.resolve(stripFragment(target)));
                                 final URI relativeTarget = URLUtils.getRelativePath(currentFile, topicFile.toURI());
-                                String topicId = null;
-                                if (relativeTarget.getFragment() == null && !"".equals(elementId)) {
+                                final String fragment = href.getFragment();
+                                if (fragment != null) {
+                                    final int keyrefPathSlashIndex = fragment.indexOf(SLASH);
+                                    if (keyrefPathSlashIndex != -1) {
+                                        topicId = fragment.substring(0, keyrefPathSlashIndex);
+                                        elementId = fragment.substring(keyrefPathSlashIndex);
+                                    }
+                                    else {
+                                        topicId = fragment;
+                                    }
+                                }
+                                else if (!"".equals(elementId)) {
                                     topicId = getFirstTopicId(topicFile);
                                 }
                                 final URI targetOutput = normalizeHrefValue(relativeTarget, elementId, topicId);
@@ -592,12 +613,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
      * Insert topic id into href
      */
     private static URI normalizeHrefValue(final URI fileName, final String tail, final String topicId) {
-        //Insert first topic id only when topicid is not set in keydef
-        //and keyref has elementid
-        if (fileName.getFragment() == null && !"".equals(tail)) {
-            return setFragment(fileName, topicId + tail);
+        if (topicId == null) {
+            return fileName;
         }
-        return toURI(fileName + tail);
+            return setFragment(fileName, topicId + tail);
     }
 
     // Inner classes -----------------------------------------------------------
