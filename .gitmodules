@@ -2,3 +2,6 @@
 	path = src/main/docsrc
 	url = https://github.com/dita-ot/docs.git
 
+[submodule "src/main/samples"]
+	path = src/main/samples
+	url = https://github.com/shaneataylor/samples
