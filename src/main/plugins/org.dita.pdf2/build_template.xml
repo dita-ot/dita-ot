@@ -51,6 +51,7 @@ with those set forth herein.
       <param name="1" location="${args.xsl.pdf}"/>
     </dita-ot-fail>
     
+    <property name="preprocess.topicpull.skip" value="true"/>
     <property name="preprocess.copy-image.skip" value="true"/>
     
     <condition property="args.rellinks" value="nofamily">

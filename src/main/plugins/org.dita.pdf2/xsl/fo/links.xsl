@@ -98,7 +98,7 @@ See the accompanying LICENSE file for applicable license.
          used to build link contents (using full FO syntax, not just the text). -->
     <!-- Process any cross reference or link with author-specified text. 
          The specified text is used as the link text. -->
-    <xsl:template match="*[processing-instruction()[name()='ditaot'][.='usertext']]" mode="insertReferenceTitle">
+    <xsl:template match="*[exists(node())]" mode="insertReferenceTitle">
         <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()"/>
     </xsl:template>
 
@@ -114,11 +114,6 @@ See the accompanying LICENSE file for applicable license.
         <xsl:variable name="referenceContent">
             <xsl:choose>
                 <xsl:when test="not($element) or ($destination = '')">
-                    <xsl:text>#none#</xsl:text>
-                </xsl:when>
-                <xsl:when test="contains($element/@class,' topic/li ') and 
-                                contains($element/parent::*/@class,' topic/ol ')">
-                    <!-- SF Bug 1839827: This causes preprocessor text to be used for links to OL/LI -->
                     <xsl:text>#none#</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -227,6 +222,14 @@ See the accompanying LICENSE file for applicable license.
             <xsl:with-param name="id" select="'List item'"/>
         </xsl:call-template>
     </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/ol ')]/*[contains(@class,' topic/li ')]" mode="retrieveReferenceTitle"
+    priority="2">
+    <xsl:number
+      level="multiple"
+      count="*[contains(@class,' topic/ol ')]/*[contains(@class,' topic/li ')]"
+      format="1.a.i.1.a.i.1.a.i"/>
+  </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/fn ')]" mode="retrieveReferenceTitle">
     <xsl:call-template name="getVariable">
@@ -247,74 +250,68 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/xref ')]" name="topic.xref">
-        <fo:inline>
-            <xsl:call-template name="commonattributes"/>
-        </fo:inline>
-
     <xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
     <xsl:variable name="element" select="key('key_anchor',$destination, $root)[1]"/>
-
-    <xsl:variable name="referenceTitle" as="node()*">
-      <xsl:apply-templates select="." mode="insertReferenceTitle">
-        <xsl:with-param name="href" select="@href"/>
-        <xsl:with-param name="titlePrefix" select="''"/>
-        <xsl:with-param name="destination" select="$destination"/>
-        <xsl:with-param name="element" select="$element"/>
-      </xsl:apply-templates>
-    </xsl:variable>
-
-    <fo:basic-link xsl:use-attribute-sets="xref">
-      <xsl:call-template name="buildBasicLinkDestination">
-        <xsl:with-param name="scope" select="@scope"/>
-        <xsl:with-param name="format" select="@format"/>
-        <xsl:with-param name="href" select="@href"/>
-      </xsl:call-template>
-
       <xsl:choose>
-        <xsl:when test="not(@scope = 'external' or not(empty(@format) or  @format = 'dita')) and exists($referenceTitle)">
-          <xsl:copy-of select="$referenceTitle"/>
-        </xsl:when>
-        <xsl:when test="not(@scope = 'external' or not(empty(@format) or  @format = 'dita'))">
-          <xsl:call-template name="insertPageNumberCitation">
-            <xsl:with-param name="isTitleEmpty" select="true()"/>
-            <xsl:with-param name="destination" select="$destination"/>
-            <xsl:with-param name="element" select="$element"/>
-          </xsl:call-template>
+        <xsl:when test="$element/self::*[contains(@class, ' topic/fn ')]">
+          <xsl:call-template name="xref.fn"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="*[not(contains(@class,' topic/desc '))] | text()">
-              <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))] | text()" />
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="@href"/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:variable name="referenceTitle" as="node()*">
+            <xsl:apply-templates select="." mode="insertReferenceTitle">
+              <xsl:with-param name="href" select="@href"/>
+              <xsl:with-param name="titlePrefix" select="''"/>
+              <xsl:with-param name="destination" select="$destination"/>
+              <xsl:with-param name="element" select="$element"/>
+            </xsl:apply-templates>
+          </xsl:variable>
+          <fo:inline>
+            <xsl:call-template name="commonattributes"/>
+          </fo:inline>
+          <fo:basic-link xsl:use-attribute-sets="xref">
+            <xsl:call-template name="buildBasicLinkDestination">
+              <xsl:with-param name="scope" select="@scope"/>
+              <xsl:with-param name="format" select="@format"/>
+              <xsl:with-param name="href" select="@href"/>
+            </xsl:call-template>
+
+            <xsl:choose>
+              <xsl:when test="not(@scope = 'external' or not(empty(@format) or @format = 'dita')) and exists($referenceTitle)">
+                <xsl:copy-of select="$referenceTitle"/>
+              </xsl:when>
+              <xsl:when test="not(@scope = 'external' or not(empty(@format) or @format = 'dita'))">
+                <xsl:call-template name="insertPageNumberCitation">
+                  <xsl:with-param name="isTitleEmpty" select="true()"/>
+                  <xsl:with-param name="destination" select="$destination"/>
+                  <xsl:with-param name="element" select="$element"/>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:when test="exists((* | text()) except *[contains(@class,' topic/desc ')])">
+                <xsl:apply-templates select="(* | text()) except *[contains(@class,' topic/desc ')]" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="@href"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </fo:basic-link>
+          <xsl:if test="not(@scope = 'external' or
+                            not(empty(@format) or
+                            @format = 'dita')) and
+                        exists($referenceTitle) and
+                        empty(node()) and
+                        not($element/self::*[contains(@class, ' topic/fn ')])">
+            <xsl:call-template name="insertPageNumberCitation">
+              <xsl:with-param name="destination" select="$destination"/>
+              <xsl:with-param name="element" select="$element"/>
+            </xsl:call-template>
+          </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
-    </fo:basic-link>
-
-    <!--
-        Disable because of the CQ#8102 bug
-        <xsl:if test="*[contains(@class,' topic/desc ')]">
-          <xsl:call-template name="insertLinkDesc"/>
-        </xsl:if>
-    -->
-
-      <xsl:if test="not(@scope = 'external' or not(empty(@format) or  @format = 'dita')) and exists($referenceTitle) and not($element[contains(@class, ' topic/fn ')])">
-            <!-- SourceForge bug 1880097: should not include page number when xref includes author specified text -->
-            <xsl:if test="not(processing-instruction()[name()='ditaot'][.='usertext'])">
-                <xsl:call-template name="insertPageNumberCitation">
-                    <xsl:with-param name="destination" select="$destination"/>
-                      <xsl:with-param name="element" select="$element"/>
-                  </xsl:call-template>
-            </xsl:if>
-    </xsl:if>
-
     </xsl:template>
 
     <!-- xref to footnote makes a callout. -->
-    <xsl:template match="*[contains(@class,' topic/xref ')][@type='fn']" priority="2">
+    <xsl:template match="*[contains(@class, ' topic/xref ')][@type='fn']" priority="2"
+      name="xref.fn">
         <xsl:variable name="href-fragment" select="substring-after(@href, '#')"/>
         <xsl:variable name="elemId" select="substring-after($href-fragment, '/')"/>
         <xsl:variable name="topicId" select="substring-before($href-fragment, '/')"/>
