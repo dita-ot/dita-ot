@@ -416,19 +416,6 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>  
   
   <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="grab-group-title" as="xs:string?">
-    <xsl:variable name="file-origin">
-      <xsl:call-template name="get-file-uri">
-        <xsl:with-param name="href" select="@href"/>
-        <xsl:with-param name="file-prefix" select="$file-prefix"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="file">
-      <xsl:call-template name="replace-blank">
-        <xsl:with-param name="file-origin">
-          <xsl:value-of select="$file-origin"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:variable>
     <xsl:choose>
       <xsl:when test="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')][not(title = '')]">
         <xsl:value-of select="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')]"/>
@@ -439,10 +426,25 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="@navtitle and not(@navtitle = '')">
         <xsl:value-of select="@navtitle"/>
       </xsl:when>
-      <xsl:when test="document($file,/)//*[contains(@class, ' topic/title ')]">
-        <xsl:value-of select="document($file,/)//*[contains(@class, ' topic/title ')][1]"/>
+      <xsl:when test="@href">
+        <xsl:variable name="file-origin">
+          <xsl:call-template name="get-file-uri">
+            <xsl:with-param name="href" select="@href"/>
+            <xsl:with-param name="file-prefix" select="$file-prefix"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="file">
+          <xsl:call-template name="replace-blank">
+            <xsl:with-param name="file-origin">
+              <xsl:value-of select="$file-origin"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="document($file,/)//*[contains(@class, ' topic/title ')]">
+          <xsl:value-of select="document($file,/)//*[contains(@class, ' topic/title ')][1]"/>
+        </xsl:if>
       </xsl:when>
-    </xsl:choose>
+     </xsl:choose>
   </xsl:template>
   
   <!-- Override this moded template to add your own kinds of links. -->
