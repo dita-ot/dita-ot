@@ -67,6 +67,7 @@ public class KeyrefPaserTest {
         TestUtils.normalize(new File(srcDir, "a.xml"), new File(tempDir, "a.xml"));
         TestUtils.normalize(new File(srcDir, "b.ditamap"), new File(tempDir, "b.ditamap"));
         TestUtils.normalize(new File(srcDir, "subdir" + File.separator + "c.ditamap"), new File(tempDir, "subdir" + File.separator + "c.ditamap"));
+        TestUtils.normalize(new File(srcDir, "id.xml"), new File(tempDir, "id.xml"));
         resolver = CatalogUtils.getCatalogResolver();
 
         TestUtils.resetXMLUnit();
@@ -90,6 +91,19 @@ public class KeyrefPaserTest {
 
         assertXMLEqual(new InputSource(new File(expDir, "a.xml").toURI().toString()),
                 new InputSource(new File(tempDir, "a.xml").toURI().toString()));
+    }
+
+    @Test
+    public void testFragment() throws Exception {
+        final KeyrefPaser parser = new KeyrefPaser();
+        parser.setLogger(new TestUtils.TestLogger());
+        parser.setJob(new Job(tempDir));
+        parser.setKeyDefinition(keyDefinition);
+        parser.setCurrentFile(new File(tempDir, "id.xml").toURI());
+        parser.write(new File(tempDir, "id.xml"));
+
+        assertXMLEqual(new InputSource(new File(expDir, "id.xml").toURI().toString()),
+                new InputSource(new File(tempDir, "id.xml").toURI().toString()));
     }
 
     @Test

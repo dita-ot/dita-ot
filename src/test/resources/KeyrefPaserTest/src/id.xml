@@ -1,0 +1,24 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  id="a" ditaarch:DITAArchVersion="1.2">
+  <title class="- topic/title ">Keyref</title>
+  <body class="- topic/body ">
+    <p class="- topic/p " id="p">Root paragraph</p>
+  </body>
+  <topic class="- topic/topic "
+    domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+    id="nolink" ditaarch:DITAArchVersion="1.2">
+    <title class="- topic/title ">Without href</title>
+    <body class="- topic/body ">
+      <p class="- topic/p " id="p"/>
+    </body>
+  </topic>
+  <related-links class="- topic/related-links ">
+    <link class="- topic/link " keyref="root"/>
+    <link class="- topic/link " keyref="root-with-id"/>
+    <link class="- topic/link " keyref="nested-with-id"/>
+    <link class="- topic/link " keyref="root/p"/>
+    <link class="- topic/link " keyref="root-with-id/p"/>
+    <link class="- topic/link " keyref="nested-with-id/p"/>
+  </related-links>
+</topic>
