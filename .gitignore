@@ -20,6 +20,7 @@ src/main/plugins/org.dita.eclipsehelp/build_dita2eclipsehelp.xml
 src/main/plugins/org.dita.eclipsehelp/xsl/map2eclipse.xsl
 src/main/plugins/org.dita.eclipsehelp/xsl/map2plugin.xsl
 src/main/plugins/org.dita.html5/.sass-cache
+src/main/plugins/org.dita.html5/build/
 src/main/plugins/org.dita.html5/build_dita2html5.xml
 src/main/plugins/org.dita.html5/css/commonltr.css
 src/main/plugins/org.dita.html5/css/commonrtl.css
