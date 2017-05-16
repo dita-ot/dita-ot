@@ -152,7 +152,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
             if (util.findId(absolutePath)) {
                 retAttValue = toURI(SHARP + util.getIdValue(absolutePath));
             } else {
-                final String fileId = MergeUtils.getFirstTopicId(absolutePath, dirPath, false);
+                final String fileId = MergeUtils.getFirstTopicId(absolutePath, false);
                 final URI key = setFragment(absolutePath, fileId);
                 if (util.findId(key)) {
                     util.addId(absolutePath, util.getIdValue(key));

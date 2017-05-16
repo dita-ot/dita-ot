@@ -123,17 +123,14 @@ public final class MergeUtils {
     }
 
     /**
-     * 
      * Get the first topic id.
-     * @param path file path
-     * @param dir file dir
+     *
+     * @param file file URI
      * @param useCatalog whether use catalog file for validation
      * @return topic id
      */
-    public static String getFirstTopicId(final URI path, final File dir, final boolean useCatalog){
-        if (path == null && dir == null) {
-            return null;
-        }
+    public static String getFirstTopicId(final URI file, final boolean useCatalog){
+        assert file.isAbsolute();
         final DITAOTLogger logger = new DITAOTJavaLogger();
         final StringBuilder firstTopicId = new StringBuilder();
         final TopicIdParser parser = new TopicIdParser(firstTopicId);
@@ -143,7 +140,7 @@ public final class MergeUtils {
             if (useCatalog) {
                 reader.setEntityResolver(CatalogUtils.getCatalogResolver());
             }
-            reader.parse(dir.toURI().resolve(path).toString());
+            reader.parse(file.toString());
         } catch (final Exception e) {
             logger.error(e.getMessage(), e) ;
         }

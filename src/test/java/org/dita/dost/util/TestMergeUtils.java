@@ -99,8 +99,8 @@ public class TestMergeUtils {
     @Test
     public void testGetFirstTopicId() {
         //assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
-        assertEquals("task", MergeUtils.getFirstTopicId(toURI("stub.xml"), srcDir.getAbsoluteFile(), false));
-        assertEquals("task", MergeUtils.getFirstTopicId(toURI("stub.xml"), srcDir.getAbsoluteFile(), true));
+        assertEquals("task", MergeUtils.getFirstTopicId(srcDir.toURI().resolve("stub.xml"), false));
+        assertEquals("task", MergeUtils.getFirstTopicId(srcDir.toURI().resolve("stub.xml"), true));
     }
 
 }

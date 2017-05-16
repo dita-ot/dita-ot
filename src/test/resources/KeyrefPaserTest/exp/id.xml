@@ -15,10 +15,10 @@
   </topic>
   <related-links class="- topic/related-links ">
     <link class="- topic/link " keyref="root" href="a.xml"/>
-    <link class="- topic/link " keyref="root-with-id" href="a.xml"/>
-    <link class="- topic/link " keyref="nested-with-id" href="a.xml"/>
+    <link class="- topic/link " keyref="root-with-id" href="a.xml#a"/>
+    <link class="- topic/link " keyref="nested-with-id" href="a.xml#nolink"/>
     <link class="- topic/link " keyref="root/p" href="a.xml#a/p"/>
     <link class="- topic/link " keyref="root-with-id/p" href="a.xml#a/p"/>
-    <link class="- topic/link " keyref="nested-with-id/p" href="a.xml#a/p"/>
+    <link class="- topic/link " keyref="nested-with-id/p" href="a.xml#nolink/p"/>
   </related-links>
 </topic>

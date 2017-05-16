@@ -397,8 +397,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
                             } else if (isLocalDita(elem) && keyDef.source != null) {
                                 valid = true;
                                 final URI target = keyDef.source.resolve(href);
-                                final File topicFile = toFile(currentFile.resolve(stripFragment(target)));
-                                final URI relativeTarget = URLUtils.getRelativePath(currentFile, topicFile.toURI());
+                                final URI topicFile = currentFile.resolve(stripFragment(target));
+                                final URI relativeTarget = setFragment(URLUtils.getRelativePath(currentFile, topicFile), target.getFragment());
                                 String topicId = null;
                                 if (relativeTarget.getFragment() == null && !"".equals(elementId)) {
                                     topicId = getFirstTopicId(topicFile);
@@ -582,10 +582,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     /**
      * Get first topic id
      */
-    private String getFirstTopicId(final File topicFile) {
-        final File path = topicFile.getParentFile();
-        final URI name = toURI(topicFile.getName());
-        return MergeUtils.getFirstTopicId(name, path, false);
+    private String getFirstTopicId(final URI topicFile) {
+        return MergeUtils.getFirstTopicId(topicFile, false);
     }
     
     /**
